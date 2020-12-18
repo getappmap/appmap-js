@@ -5,6 +5,11 @@
 npm install
 ```
 
+## Running Storybook
+```
+npm run storybook
+```
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve
