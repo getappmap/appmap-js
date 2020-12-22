@@ -36,21 +36,25 @@ export default {
 </script>
 
 <style scoped lang="scss">
-h3 {
-  font-size: 1.2rem;
-  color: #e3e5e8;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid #343742;
-}
+.selection-details {
+  background-color: $gray2;
 
-h4 {
-  margin-bottom: 1rem;
-  color: #e3e5e8;
-}
+  h3 {
+    font-size: 1.2rem;
+    color: #e3e5e8;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #343742;
+  }
 
-.content {
-  padding: 0 2rem;
+  h4 {
+    margin-bottom: 1rem;
+    color: #e3e5e8;
+  }
+
+  .content {
+    padding: 0 2rem;
+  }
 }
 </style>
