@@ -1,12 +1,12 @@
 import { shallowMount } from '@vue/test-utils';
-import HelloWorld from '@/components/HelloWorld.vue';
+import ApplandButton from '@/components/ApplandButton.vue';
 
-describe('HelloWorld.vue', () => {
-  it('renders props.msg when passed', () => {
-    const msg = 'new message';
-    const wrapper = shallowMount(HelloWorld, {
-      propsData: { msg },
+describe('ApplandButton.vue', () => {
+  it('renders props.label when passed', () => {
+    const label = 'hello world';
+    const wrapper = shallowMount(ApplandButton, {
+      propsData: { label },
     });
-    expect(wrapper.text()).toMatch(msg);
+    expect(wrapper.text()).toMatch(label);
   });
 });

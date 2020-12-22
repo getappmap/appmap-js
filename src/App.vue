@@ -1,16 +1,17 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <ComponentDiagram/>
+    <h1>Welcome to Your Vue.js App</h1>
+    <diagram-component />
   </div>
 </template>
 
 <script>
-import ComponentDiagram from '@/components/ComponentDiagram.vue';
+import DiagramComponent from '@/components/DiagramComponent.vue';
 
 export default {
   name: 'App',
-  components: { ComponentDiagram },
+  components: { DiagramComponent },
 };
 </script>
 
