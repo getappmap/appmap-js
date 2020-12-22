@@ -17,7 +17,17 @@ module.exports = {
 
     config.module.rules.push({
       test: /\.scss$/,
-      loaders: ['style-loader', 'css-loader', 'sass-loader'],
+      use: [
+        'style-loader',
+        'css-loader',
+        'sass-loader',
+        {
+          loader: 'sass-resources-loader',
+          options: {
+            resources: [ './src/scss/appland.scss' ],
+          },
+        },
+      ],
       include: path.resolve(__dirname, '../')
     });
 

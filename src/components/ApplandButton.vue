@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'Button',
+  name: 'appland-button',
   props: {
     label: {
       type: String,

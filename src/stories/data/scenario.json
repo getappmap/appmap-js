@@ -1,0 +1,2082 @@
+{
+    "events": [
+        {
+            "id": 1,
+            "path": "app/models/user.rb",
+            "event": "call",
+            "lineno": 119,
+            "static": false,
+            "receiver": {
+                "class": "User",
+                "value": "#<User:0x00005635054665c8>",
+                "object_id": 47392860877540
+            },
+            "method_id": "set_defaults",
+            "thread_id": 47392722082140,
+            "parameters": [],
+            "defined_class": "User"
+        },
+        {
+            "id": 2,
+            "event": "return",
+            "elapsed": 0.000029253,
+            "parent_id": 1,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "TrueClass",
+                "value": "true",
+                "object_id": 20
+            }
+        },
+        {
+            "id": 3,
+            "path": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb",
+            "event": "call",
+            "lineno": 455,
+            "static": false,
+            "receiver": {
+                "class": "ActiveSupport::Logger",
+                "value": "#<ActiveSupport::Logger:0x00005634f936cf70>",
+                "object_id": 47392759703480
+            },
+            "method_id": "add",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "severity",
+                    "class": "Integer",
+                    "value": "0",
+                    "object_id": 1
+                },
+                {
+                    "kind": "opt",
+                    "name": "message",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                },
+                {
+                    "kind": "opt",
+                    "name": "progname",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[35m (0.2ms)\u001b[0m  \u001b[1m\u001b[35mSAVEPOINT active_record_1\u001b[0m",
+                    "object_id": 47392860891960
+                }
+            ],
+            "defined_class": "Logger"
+        },
+        {
+            "id": 4,
+            "path": "/home/travis/.rvm/gems/ruby-2.6.6/gems/appmap-0.34.2/lib/appmap/hook/method.rb",
+            "event": "call",
+            "lineno": 44,
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "args",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[35m (0.2ms)\u001b[0m  \u001b[1m\u001b[35mSAVEPOINT active_record_1\u001b[0m\n",
+                    "object_id": 47392860890220
+                },
+                {
+                    "kind": "block",
+                    "name": "block",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 5,
+            "path": "IO#write",
+            "event": "call",
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "arg",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[35m (0.2ms)\u001b[0m  \u001b[1m\u001b[35mSAVEPOINT active_record_1\u001b[0m\n",
+                    "object_id": 47392860890220
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 6,
+            "event": "return",
+            "elapsed": 0.000033946,
+            "parent_id": 5,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "64",
+                "object_id": 129
+            }
+        },
+        {
+            "id": 7,
+            "event": "return",
+            "elapsed": 0.000120625,
+            "parent_id": 4,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "64",
+                "object_id": 129
+            }
+        },
+        {
+            "id": 8,
+            "event": "return",
+            "elapsed": 0.00026804,
+            "parent_id": 3,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "TrueClass",
+                "value": "true",
+                "object_id": 20
+            }
+        },
+        {
+            "id": 9,
+            "event": "call",
+            "sql_query": {
+                "sql": "SAVEPOINT active_record_1",
+                "normalized": true,
+                "database_type": "postgres",
+                "normalized_sql": "SAVEPOINT active_record_1",
+                "server_version": 100013
+            },
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 10,
+            "event": "return",
+            "elapsed": 0.000646419,
+            "parent_id": 9,
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 11,
+            "path": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb",
+            "event": "call",
+            "lineno": 455,
+            "static": false,
+            "receiver": {
+                "class": "ActiveSupport::Logger",
+                "value": "#<ActiveSupport::Logger:0x00005634f936cf70>",
+                "object_id": 47392759703480
+            },
+            "method_id": "add",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "severity",
+                    "class": "Integer",
+                    "value": "0",
+                    "object_id": 1
+                },
+                {
+                    "kind": "opt",
+                    "name": "message",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                },
+                {
+                    "kind": "opt",
+                    "name": "progname",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mUser Exists? (0.4ms)\u001b[0m  \u001b[1m\u001b[34mSELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = $",
+                    "object_id": 47392861290740
+                }
+            ],
+            "defined_class": "Logger"
+        },
+        {
+            "id": 12,
+            "path": "/home/travis/.rvm/gems/ruby-2.6.6/gems/appmap-0.34.2/lib/appmap/hook/method.rb",
+            "event": "call",
+            "lineno": 44,
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "args",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mUser Exists? (0.4ms)\u001b[0m  \u001b[1m\u001b[34mSELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = $",
+                    "object_id": 47392861305320
+                },
+                {
+                    "kind": "block",
+                    "name": "block",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 13,
+            "path": "IO#write",
+            "event": "call",
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "arg",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mUser Exists? (0.4ms)\u001b[0m  \u001b[1m\u001b[34mSELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = $",
+                    "object_id": 47392861305320
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 14,
+            "event": "return",
+            "elapsed": 0.000032324,
+            "parent_id": 13,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "168",
+                "object_id": 337
+            }
+        },
+        {
+            "id": 15,
+            "event": "return",
+            "elapsed": 0.000114244,
+            "parent_id": 12,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "168",
+                "object_id": 337
+            }
+        },
+        {
+            "id": 16,
+            "event": "return",
+            "elapsed": 0.000212148,
+            "parent_id": 11,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "TrueClass",
+                "value": "true",
+                "object_id": 20
+            }
+        },
+        {
+            "id": 17,
+            "event": "call",
+            "sql_query": {
+                "sql": "SELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = $1 LIMIT $2",
+                "normalized": true,
+                "database_type": "postgres",
+                "normalized_sql": "SELECT $3 AS one FROM \"users\" WHERE \"users\".\"email\" = $1 LIMIT $2",
+                "server_version": 100013
+            },
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 18,
+            "event": "return",
+            "elapsed": 0.00076625,
+            "parent_id": 17,
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 19,
+            "path": "app/models/user.rb",
+            "event": "call",
+            "lineno": 110,
+            "static": false,
+            "receiver": {
+                "class": "User",
+                "value": "#<User:0x00005635054665c8>",
+                "object_id": 47392860877540
+            },
+            "method_id": "oauth_enabled?",
+            "thread_id": 47392722082140,
+            "parameters": [],
+            "defined_class": "User"
+        },
+        {
+            "id": 20,
+            "event": "return",
+            "elapsed": 0.000027085,
+            "parent_id": 19,
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 21,
+            "path": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb",
+            "event": "call",
+            "lineno": 455,
+            "static": false,
+            "receiver": {
+                "class": "ActiveSupport::Logger",
+                "value": "#<ActiveSupport::Logger:0x00005634f936cf70>",
+                "object_id": 47392759703480
+            },
+            "method_id": "add",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "severity",
+                    "class": "Integer",
+                    "value": "0",
+                    "object_id": 1
+                },
+                {
+                    "kind": "opt",
+                    "name": "message",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                },
+                {
+                    "kind": "opt",
+                    "name": "progname",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mUser Load (0.3ms)\u001b[0m  \u001b[1m\u001b[34mSELECT \"users\".* FROM \"users\" WHERE \"users\".\"uid\" = $1 OR",
+                    "object_id": 47392861666340
+                }
+            ],
+            "defined_class": "Logger"
+        },
+        {
+            "id": 22,
+            "path": "/home/travis/.rvm/gems/ruby-2.6.6/gems/appmap-0.34.2/lib/appmap/hook/method.rb",
+            "event": "call",
+            "lineno": 44,
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "args",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mUser Load (0.3ms)\u001b[0m  \u001b[1m\u001b[34mSELECT \"users\".* FROM \"users\" WHERE \"users\".\"uid\" = $1 OR",
+                    "object_id": 47392861664580
+                },
+                {
+                    "kind": "block",
+                    "name": "block",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 23,
+            "path": "IO#write",
+            "event": "call",
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "arg",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mUser Load (0.3ms)\u001b[0m  \u001b[1m\u001b[34mSELECT \"users\".* FROM \"users\" WHERE \"users\".\"uid\" = $1 OR",
+                    "object_id": 47392861664580
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 24,
+            "event": "return",
+            "elapsed": 0.000031369,
+            "parent_id": 23,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "186",
+                "object_id": 373
+            }
+        },
+        {
+            "id": 25,
+            "event": "return",
+            "elapsed": 0.00011386,
+            "parent_id": 22,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "186",
+                "object_id": 373
+            }
+        },
+        {
+            "id": 26,
+            "event": "return",
+            "elapsed": 0.000214656,
+            "parent_id": 21,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "TrueClass",
+                "value": "true",
+                "object_id": 20
+            }
+        },
+        {
+            "id": 27,
+            "event": "call",
+            "sql_query": {
+                "sql": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"uid\" = $1 ORDER BY \"users\".\"id\" ASC LIMIT $2",
+                "normalized": true,
+                "database_type": "postgres",
+                "normalized_sql": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"uid\" = $1 ORDER BY \"users\".\"id\" ASC LIMIT $2",
+                "server_version": 100013
+            },
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 28,
+            "event": "return",
+            "elapsed": 0.000679732,
+            "parent_id": 27,
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 29,
+            "path": "app/models/user.rb",
+            "event": "call",
+            "lineno": 114,
+            "static": false,
+            "receiver": {
+                "class": "User",
+                "value": "#<User:0x00005635054665c8>",
+                "object_id": 47392860877540
+            },
+            "method_id": "remove_leading_trailing_whitespace",
+            "thread_id": 47392722082140,
+            "parameters": [],
+            "defined_class": "User"
+        },
+        {
+            "id": 30,
+            "event": "return",
+            "elapsed": 0.000025546,
+            "parent_id": 29,
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 31,
+            "path": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb",
+            "event": "call",
+            "lineno": 455,
+            "static": false,
+            "receiver": {
+                "class": "ActiveSupport::Logger",
+                "value": "#<ActiveSupport::Logger:0x00005634f936cf70>",
+                "object_id": 47392759703480
+            },
+            "method_id": "add",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "severity",
+                    "class": "Integer",
+                    "value": "0",
+                    "object_id": 1
+                },
+                {
+                    "kind": "opt",
+                    "name": "message",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                },
+                {
+                    "kind": "opt",
+                    "name": "progname",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mUser Create (0.5ms)\u001b[0m  \u001b[1m\u001b[32mINSERT INTO \"users\" (\"email\", \"encrypted_password\", \"cr",
+                    "object_id": 47392862065020
+                }
+            ],
+            "defined_class": "Logger"
+        },
+        {
+            "id": 32,
+            "path": "/home/travis/.rvm/gems/ruby-2.6.6/gems/appmap-0.34.2/lib/appmap/hook/method.rb",
+            "event": "call",
+            "lineno": 44,
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "args",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mUser Create (0.5ms)\u001b[0m  \u001b[1m\u001b[32mINSERT INTO \"users\" (\"email\", \"encrypted_password\", \"cr",
+                    "object_id": 47392862063260
+                },
+                {
+                    "kind": "block",
+                    "name": "block",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 33,
+            "path": "IO#write",
+            "event": "call",
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "arg",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mUser Create (0.5ms)\u001b[0m  \u001b[1m\u001b[32mINSERT INTO \"users\" (\"email\", \"encrypted_password\", \"cr",
+                    "object_id": 47392862063260
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 34,
+            "event": "return",
+            "elapsed": 0.000031573,
+            "parent_id": 33,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "462",
+                "object_id": 925
+            }
+        },
+        {
+            "id": 35,
+            "event": "return",
+            "elapsed": 0.000122103,
+            "parent_id": 32,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "462",
+                "object_id": 925
+            }
+        },
+        {
+            "id": 36,
+            "event": "return",
+            "elapsed": 0.000219409,
+            "parent_id": 31,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "TrueClass",
+                "value": "true",
+                "object_id": 20
+            }
+        },
+        {
+            "id": 37,
+            "event": "call",
+            "sql_query": {
+                "sql": "INSERT INTO \"users\" (\"email\", \"encrypted_password\", \"created_at\", \"updated_at\", \"name\", \"uid\") VALUES ($1, $2, $3, $4, $5, $6) RETURNING \"id\"",
+                "normalized": true,
+                "database_type": "postgres",
+                "normalized_sql": "INSERT INTO \"users\" (\"email\", \"encrypted_password\", \"created_at\", \"updated_at\", \"name\", \"uid\") VALUES ($1, $2, $3, $4, $5, $6) RETURNING \"id\"",
+                "server_version": 100013
+            },
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 38,
+            "event": "return",
+            "elapsed": 0.000859127,
+            "parent_id": 37,
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 39,
+            "path": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb",
+            "event": "call",
+            "lineno": 455,
+            "static": false,
+            "receiver": {
+                "class": "ActiveSupport::Logger",
+                "value": "#<ActiveSupport::Logger:0x00005634f936cf70>",
+                "object_id": 47392759703480
+            },
+            "method_id": "add",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "severity",
+                    "class": "Integer",
+                    "value": "0",
+                    "object_id": 1
+                },
+                {
+                    "kind": "opt",
+                    "name": "message",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                },
+                {
+                    "kind": "opt",
+                    "name": "progname",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mPasswordHistory Exists? (0.4ms)\u001b[0m  \u001b[1m\u001b[34mSELECT 1 AS one FROM \"password_histories\" W",
+                    "object_id": 47392862415580
+                }
+            ],
+            "defined_class": "Logger"
+        },
+        {
+            "id": 40,
+            "path": "/home/travis/.rvm/gems/ruby-2.6.6/gems/appmap-0.34.2/lib/appmap/hook/method.rb",
+            "event": "call",
+            "lineno": 44,
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "args",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mPasswordHistory Exists? (0.4ms)\u001b[0m  \u001b[1m\u001b[34mSELECT 1 AS one FROM \"password_histories\" W",
+                    "object_id": 47392862413520
+                },
+                {
+                    "kind": "block",
+                    "name": "block",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 41,
+            "path": "IO#write",
+            "event": "call",
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "arg",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mPasswordHistory Exists? (0.4ms)\u001b[0m  \u001b[1m\u001b[34mSELECT 1 AS one FROM \"password_histories\" W",
+                    "object_id": 47392862413520
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 42,
+            "event": "return",
+            "elapsed": 0.000036707,
+            "parent_id": 41,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "326",
+                "object_id": 653
+            }
+        },
+        {
+            "id": 43,
+            "event": "return",
+            "elapsed": 0.000116376,
+            "parent_id": 40,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "326",
+                "object_id": 653
+            }
+        },
+        {
+            "id": 44,
+            "event": "return",
+            "elapsed": 0.000217482,
+            "parent_id": 39,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "TrueClass",
+                "value": "true",
+                "object_id": 20
+            }
+        },
+        {
+            "id": 45,
+            "event": "call",
+            "sql_query": {
+                "sql": "SELECT 1 AS one FROM \"password_histories\" WHERE \"password_histories\".\"encrypted_password\" = $1 AND \"password_histories\".\"user_id\" = $2 LIMIT $3",
+                "normalized": true,
+                "database_type": "postgres",
+                "normalized_sql": "SELECT $4 AS one FROM \"password_histories\" WHERE \"password_histories\".\"encrypted_password\" = $1 AND \"password_histories\".\"user_id\" = $2 LIMIT $3",
+                "server_version": 100013
+            },
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 46,
+            "event": "return",
+            "elapsed": 0.00078293,
+            "parent_id": 45,
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 47,
+            "path": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb",
+            "event": "call",
+            "lineno": 455,
+            "static": false,
+            "receiver": {
+                "class": "ActiveSupport::Logger",
+                "value": "#<ActiveSupport::Logger:0x00005634f936cf70>",
+                "object_id": 47392759703480
+            },
+            "method_id": "add",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "severity",
+                    "class": "Integer",
+                    "value": "0",
+                    "object_id": 1
+                },
+                {
+                    "kind": "opt",
+                    "name": "message",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                },
+                {
+                    "kind": "opt",
+                    "name": "progname",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mPasswordHistory Create (1.6ms)\u001b[0m  \u001b[1m\u001b[32mINSERT INTO \"password_histories\" (\"user_id\",",
+                    "object_id": 47392757512920
+                }
+            ],
+            "defined_class": "Logger"
+        },
+        {
+            "id": 48,
+            "path": "/home/travis/.rvm/gems/ruby-2.6.6/gems/appmap-0.34.2/lib/appmap/hook/method.rb",
+            "event": "call",
+            "lineno": 44,
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "args",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mPasswordHistory Create (1.6ms)\u001b[0m  \u001b[1m\u001b[32mINSERT INTO \"password_histories\" (\"user_id\",",
+                    "object_id": 47392758143480
+                },
+                {
+                    "kind": "block",
+                    "name": "block",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 49,
+            "path": "IO#write",
+            "event": "call",
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "arg",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[36mPasswordHistory Create (1.6ms)\u001b[0m  \u001b[1m\u001b[32mINSERT INTO \"password_histories\" (\"user_id\",",
+                    "object_id": 47392758143480
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 50,
+            "event": "return",
+            "elapsed": 0.000047759,
+            "parent_id": 49,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "329",
+                "object_id": 659
+            }
+        },
+        {
+            "id": 51,
+            "event": "return",
+            "elapsed": 0.000152997,
+            "parent_id": 48,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "329",
+                "object_id": 659
+            }
+        },
+        {
+            "id": 52,
+            "event": "return",
+            "elapsed": 0.000328046,
+            "parent_id": 47,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "TrueClass",
+                "value": "true",
+                "object_id": 20
+            }
+        },
+        {
+            "id": 53,
+            "event": "call",
+            "sql_query": {
+                "sql": "INSERT INTO \"password_histories\" (\"user_id\", \"encrypted_password\", \"created_at\") VALUES ($1, $2, $3) RETURNING \"id\"",
+                "normalized": true,
+                "database_type": "postgres",
+                "normalized_sql": "INSERT INTO \"password_histories\" (\"user_id\", \"encrypted_password\", \"created_at\") VALUES ($1, $2, $3) RETURNING \"id\"",
+                "server_version": 100013
+            },
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 54,
+            "event": "return",
+            "elapsed": 0.002390963,
+            "parent_id": 53,
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 55,
+            "path": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb",
+            "event": "call",
+            "lineno": 455,
+            "static": false,
+            "receiver": {
+                "class": "ActiveSupport::Logger",
+                "value": "#<ActiveSupport::Logger:0x00005634f936cf70>",
+                "object_id": 47392759703480
+            },
+            "method_id": "add",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "severity",
+                    "class": "Integer",
+                    "value": "0",
+                    "object_id": 1
+                },
+                {
+                    "kind": "opt",
+                    "name": "message",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                },
+                {
+                    "kind": "opt",
+                    "name": "progname",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[35m (0.5ms)\u001b[0m  \u001b[1m\u001b[34mSELECT COUNT(*) FROM \"password_histories\" WHERE \"password_historie",
+                    "object_id": 47392815204160
+                }
+            ],
+            "defined_class": "Logger"
+        },
+        {
+            "id": 56,
+            "path": "/home/travis/.rvm/gems/ruby-2.6.6/gems/appmap-0.34.2/lib/appmap/hook/method.rb",
+            "event": "call",
+            "lineno": 44,
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "args",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[35m (0.5ms)\u001b[0m  \u001b[1m\u001b[34mSELECT COUNT(*) FROM \"password_histories\" WHERE \"password_historie",
+                    "object_id": 47392815257220
+                },
+                {
+                    "kind": "block",
+                    "name": "block",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 57,
+            "path": "IO#write",
+            "event": "call",
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "arg",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[35m (0.5ms)\u001b[0m  \u001b[1m\u001b[34mSELECT COUNT(*) FROM \"password_histories\" WHERE \"password_historie",
+                    "object_id": 47392815257220
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 58,
+            "event": "return",
+            "elapsed": 0.000042152,
+            "parent_id": 57,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "141",
+                "object_id": 283
+            }
+        },
+        {
+            "id": 59,
+            "event": "return",
+            "elapsed": 0.000136165,
+            "parent_id": 56,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "141",
+                "object_id": 283
+            }
+        },
+        {
+            "id": 60,
+            "event": "return",
+            "elapsed": 0.000259245,
+            "parent_id": 55,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "TrueClass",
+                "value": "true",
+                "object_id": 20
+            }
+        },
+        {
+            "id": 61,
+            "event": "call",
+            "sql_query": {
+                "sql": "SELECT COUNT(*) FROM \"password_histories\" WHERE \"password_histories\".\"user_id\" = $1",
+                "normalized": true,
+                "database_type": "postgres",
+                "normalized_sql": "SELECT COUNT(*) FROM \"password_histories\" WHERE \"password_histories\".\"user_id\" = $1",
+                "server_version": 100013
+            },
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 62,
+            "event": "return",
+            "elapsed": 0.001075757,
+            "parent_id": 61,
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 63,
+            "path": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb",
+            "event": "call",
+            "lineno": 455,
+            "static": false,
+            "receiver": {
+                "class": "ActiveSupport::Logger",
+                "value": "#<ActiveSupport::Logger:0x00005634f936cf70>",
+                "object_id": 47392759703480
+            },
+            "method_id": "add",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "severity",
+                    "class": "Integer",
+                    "value": "0",
+                    "object_id": 1
+                },
+                {
+                    "kind": "opt",
+                    "name": "message",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                },
+                {
+                    "kind": "opt",
+                    "name": "progname",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[35m (0.3ms)\u001b[0m  \u001b[1m\u001b[35mRELEASE SAVEPOINT active_record_1\u001b[0m",
+                    "object_id": 47392820156760
+                }
+            ],
+            "defined_class": "Logger"
+        },
+        {
+            "id": 64,
+            "path": "/home/travis/.rvm/gems/ruby-2.6.6/gems/appmap-0.34.2/lib/appmap/hook/method.rb",
+            "event": "call",
+            "lineno": 44,
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "args",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[35m (0.3ms)\u001b[0m  \u001b[1m\u001b[35mRELEASE SAVEPOINT active_record_1\u001b[0m\n",
+                    "object_id": 47392820176740
+                },
+                {
+                    "kind": "block",
+                    "name": "block",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 65,
+            "path": "IO#write",
+            "event": "call",
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "arg",
+                    "class": "String",
+                    "value": "  \u001b[1m\u001b[35m (0.3ms)\u001b[0m  \u001b[1m\u001b[35mRELEASE SAVEPOINT active_record_1\u001b[0m\n",
+                    "object_id": 47392820176740
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 66,
+            "event": "return",
+            "elapsed": 0.000040298,
+            "parent_id": 65,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "72",
+                "object_id": 145
+            }
+        },
+        {
+            "id": 67,
+            "event": "return",
+            "elapsed": 0.000129103,
+            "parent_id": 64,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "72",
+                "object_id": 145
+            }
+        },
+        {
+            "id": 68,
+            "event": "return",
+            "elapsed": 0.00024371,
+            "parent_id": 63,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "TrueClass",
+                "value": "true",
+                "object_id": 20
+            }
+        },
+        {
+            "id": 69,
+            "event": "call",
+            "sql_query": {
+                "sql": "RELEASE SAVEPOINT active_record_1",
+                "normalized": true,
+                "database_type": "postgres",
+                "normalized_sql": "RELEASE SAVEPOINT active_record_1",
+                "server_version": 100013
+            },
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 70,
+            "event": "return",
+            "elapsed": 0.000785894,
+            "parent_id": 69,
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 71,
+            "path": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb",
+            "event": "call",
+            "lineno": 455,
+            "static": false,
+            "receiver": {
+                "class": "ActiveSupport::Logger",
+                "value": "#<ActiveSupport::Logger:0x00005634f936cf70>",
+                "object_id": 47392759703480
+            },
+            "method_id": "add",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "severity",
+                    "class": "Integer",
+                    "value": "1",
+                    "object_id": 3
+                },
+                {
+                    "kind": "opt",
+                    "name": "message",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                },
+                {
+                    "kind": "opt",
+                    "name": "progname",
+                    "class": "String",
+                    "value": "Processing by AlliesController#remove as HTML",
+                    "object_id": 47392825795080
+                }
+            ],
+            "defined_class": "Logger"
+        },
+        {
+            "id": 72,
+            "path": "/home/travis/.rvm/gems/ruby-2.6.6/gems/appmap-0.34.2/lib/appmap/hook/method.rb",
+            "event": "call",
+            "lineno": 44,
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "args",
+                    "class": "String",
+                    "value": "Processing by AlliesController#remove as HTML\n",
+                    "object_id": 47392825855640
+                },
+                {
+                    "kind": "block",
+                    "name": "block",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 73,
+            "path": "IO#write",
+            "event": "call",
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "arg",
+                    "class": "String",
+                    "value": "Processing by AlliesController#remove as HTML\n",
+                    "object_id": 47392825855640
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 74,
+            "event": "return",
+            "elapsed": 0.000039683,
+            "parent_id": 73,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "46",
+                "object_id": 93
+            }
+        },
+        {
+            "id": 75,
+            "event": "return",
+            "elapsed": 0.000130109,
+            "parent_id": 72,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "46",
+                "object_id": 93
+            }
+        },
+        {
+            "id": 76,
+            "event": "return",
+            "elapsed": 0.000244531,
+            "parent_id": 71,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "TrueClass",
+                "value": "true",
+                "object_id": 20
+            }
+        },
+        {
+            "id": 77,
+            "path": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb",
+            "event": "call",
+            "lineno": 455,
+            "static": false,
+            "receiver": {
+                "class": "ActiveSupport::Logger",
+                "value": "#<ActiveSupport::Logger:0x00005634f936cf70>",
+                "object_id": 47392759703480
+            },
+            "method_id": "add",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "severity",
+                    "class": "Integer",
+                    "value": "1",
+                    "object_id": 3
+                },
+                {
+                    "kind": "opt",
+                    "name": "message",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                },
+                {
+                    "kind": "opt",
+                    "name": "progname",
+                    "class": "String",
+                    "value": "  Parameters: {\"ally_id\"=>\"19\"}",
+                    "object_id": 47392826050300
+                }
+            ],
+            "defined_class": "Logger"
+        },
+        {
+            "id": 78,
+            "path": "/home/travis/.rvm/gems/ruby-2.6.6/gems/appmap-0.34.2/lib/appmap/hook/method.rb",
+            "event": "call",
+            "lineno": 44,
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "args",
+                    "class": "String",
+                    "value": "  Parameters: {\"ally_id\"=>\"19\"}\n",
+                    "object_id": 47392826114960
+                },
+                {
+                    "kind": "block",
+                    "name": "block",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 79,
+            "path": "IO#write",
+            "event": "call",
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "arg",
+                    "class": "String",
+                    "value": "  Parameters: {\"ally_id\"=>\"19\"}\n",
+                    "object_id": 47392826114960
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 80,
+            "event": "return",
+            "elapsed": 0.000029067,
+            "parent_id": 79,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "32",
+                "object_id": 65
+            }
+        },
+        {
+            "id": 81,
+            "event": "return",
+            "elapsed": 0.000103512,
+            "parent_id": 78,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "32",
+                "object_id": 65
+            }
+        },
+        {
+            "id": 82,
+            "event": "return",
+            "elapsed": 0.000192449,
+            "parent_id": 77,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "TrueClass",
+                "value": "true",
+                "object_id": 20
+            }
+        },
+        {
+            "id": 83,
+            "event": "call",
+            "message": [
+                {
+                    "name": "ally_id",
+                    "class": "String",
+                    "value": "19",
+                    "object_id": 47392825732460
+                },
+                {
+                    "name": "controller",
+                    "class": "String",
+                    "value": "allies",
+                    "object_id": 47392801388280
+                },
+                {
+                    "name": "action",
+                    "class": "String",
+                    "value": "remove",
+                    "object_id": 47392825590320
+                }
+            ],
+            "thread_id": 47392722082140,
+            "http_server_request": {
+                "path_info": "/allies/remove",
+                "request_method": "DELETE",
+                "normalized_path_info": "/allies/remove"
+            }
+        },
+        {
+            "id": 84,
+            "path": "app/controllers/concerns/page_redirect_concern.rb",
+            "event": "call",
+            "lineno": 9,
+            "static": false,
+            "receiver": {
+                "class": "AlliesController",
+                "value": "#<AlliesController:0x00005635038d5ef8>",
+                "object_id": 47392846425980
+            },
+            "method_id": "if_not_signed_in",
+            "thread_id": 47392722082140,
+            "parameters": [],
+            "defined_class": "PageRedirectConcern"
+        },
+        {
+            "id": 85,
+            "event": "return",
+            "elapsed": 0.000116866,
+            "parent_id": 84,
+            "thread_id": 47392722082140
+        },
+        {
+            "id": 86,
+            "path": "app/controllers/allies_controller.rb",
+            "event": "call",
+            "lineno": 25,
+            "static": false,
+            "receiver": {
+                "class": "AlliesController",
+                "value": "#<AlliesController:0x00005635038d5ef8>",
+                "object_id": 47392846425980
+            },
+            "method_id": "remove",
+            "thread_id": 47392722082140,
+            "parameters": [],
+            "defined_class": "AlliesController"
+        },
+        {
+            "id": 87,
+            "path": "app/controllers/concerns/page_redirect_concern.rb",
+            "event": "call",
+            "lineno": 15,
+            "static": false,
+            "receiver": {
+                "class": "AlliesController",
+                "value": "#<AlliesController:0x00005635038d5ef8>",
+                "object_id": 47392846425980
+            },
+            "method_id": "redirect_to_path",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "path",
+                    "class": "String",
+                    "value": "/allies",
+                    "object_id": 47392826870320
+                }
+            ],
+            "defined_class": "PageRedirectConcern"
+        },
+        {
+            "id": 88,
+            "path": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb",
+            "event": "call",
+            "lineno": 455,
+            "static": false,
+            "receiver": {
+                "class": "ActiveSupport::Logger",
+                "value": "#<ActiveSupport::Logger:0x00005634f936cf70>",
+                "object_id": 47392759703480
+            },
+            "method_id": "add",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "severity",
+                    "class": "Integer",
+                    "value": "1",
+                    "object_id": 3
+                },
+                {
+                    "kind": "opt",
+                    "name": "message",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                },
+                {
+                    "kind": "opt",
+                    "name": "progname",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "Logger"
+        },
+        {
+            "id": 89,
+            "path": "/home/travis/.rvm/gems/ruby-2.6.6/gems/appmap-0.34.2/lib/appmap/hook/method.rb",
+            "event": "call",
+            "lineno": 44,
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "args",
+                    "class": "String",
+                    "value": "Redirected to http://test.host/allies\n",
+                    "object_id": 47392826978380
+                },
+                {
+                    "kind": "block",
+                    "name": "block",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 90,
+            "path": "IO#write",
+            "event": "call",
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "arg",
+                    "class": "String",
+                    "value": "Redirected to http://test.host/allies\n",
+                    "object_id": 47392826978380
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 91,
+            "event": "return",
+            "elapsed": 0.000033541,
+            "parent_id": 90,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "38",
+                "object_id": 77
+            }
+        },
+        {
+            "id": 92,
+            "event": "return",
+            "elapsed": 0.000119437,
+            "parent_id": 89,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "38",
+                "object_id": 77
+            }
+        },
+        {
+            "id": 93,
+            "event": "return",
+            "elapsed": 0.000224917,
+            "parent_id": 88,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "TrueClass",
+                "value": "true",
+                "object_id": 20
+            }
+        },
+        {
+            "id": 94,
+            "event": "return",
+            "elapsed": 0.000624416,
+            "parent_id": 87,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "String",
+                "value": "<html><body>You are being <a href=\"http://test.host/allies\">redirected</a>.</body></html>",
+                "object_id": 47392826926040
+            }
+        },
+        {
+            "id": 95,
+            "event": "return",
+            "elapsed": 0.001020897,
+            "parent_id": 86,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "String",
+                "value": "<html><body>You are being <a href=\"http://test.host/allies\">redirected</a>.</body></html>",
+                "object_id": 47392826926040
+            }
+        },
+        {
+            "id": 96,
+            "path": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb",
+            "event": "call",
+            "lineno": 455,
+            "static": false,
+            "receiver": {
+                "class": "ActiveSupport::Logger",
+                "value": "#<ActiveSupport::Logger:0x00005634f936cf70>",
+                "object_id": 47392759703480
+            },
+            "method_id": "add",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "severity",
+                    "class": "Integer",
+                    "value": "1",
+                    "object_id": 3
+                },
+                {
+                    "kind": "opt",
+                    "name": "message",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                },
+                {
+                    "kind": "opt",
+                    "name": "progname",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "Logger"
+        },
+        {
+            "id": 97,
+            "path": "/home/travis/.rvm/gems/ruby-2.6.6/gems/appmap-0.34.2/lib/appmap/hook/method.rb",
+            "event": "call",
+            "lineno": 44,
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "args",
+                    "class": "String",
+                    "value": "Completed 302 Found in 2ms (ActiveRecord: 0.0ms | Allocations: 988)\n",
+                    "object_id": 47392827177480
+                },
+                {
+                    "kind": "block",
+                    "name": "block",
+                    "class": "NilClass",
+                    "value": null,
+                    "object_id": 8
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 98,
+            "path": "IO#write",
+            "event": "call",
+            "static": false,
+            "receiver": {
+                "class": "File",
+                "value": "#<File:0x00005634f936fd38>",
+                "object_id": 47392759709340
+            },
+            "method_id": "write",
+            "thread_id": 47392722082140,
+            "parameters": [
+                {
+                    "kind": "rest",
+                    "name": "arg",
+                    "class": "String",
+                    "value": "Completed 302 Found in 2ms (ActiveRecord: 0.0ms | Allocations: 988)\n",
+                    "object_id": 47392827177480
+                }
+            ],
+            "defined_class": "IO"
+        },
+        {
+            "id": 99,
+            "event": "return",
+            "elapsed": 0.000029963,
+            "parent_id": 98,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "68",
+                "object_id": 137
+            }
+        },
+        {
+            "id": 100,
+            "event": "return",
+            "elapsed": 0.000107943,
+            "parent_id": 97,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "Integer",
+                "value": "68",
+                "object_id": 137
+            }
+        },
+        {
+            "id": 101,
+            "event": "return",
+            "elapsed": 0.000234775,
+            "parent_id": 96,
+            "thread_id": 47392722082140,
+            "return_value": {
+                "class": "TrueClass",
+                "value": "true",
+                "object_id": 20
+            }
+        },
+        {
+            "id": 102,
+            "event": "return",
+            "elapsed": 0.002183657,
+            "parent_id": 83,
+            "thread_id": 47392722082140,
+            "http_server_response": {
+                "status": 302
+            }
+        }
+    ],
+    "version": "1.2",
+    "classMap": [
+        {
+            "name": "app/models",
+            "type": "package",
+            "children": [
+                {
+                    "name": "User",
+                    "type": "class",
+                    "children": [
+                        {
+                            "name": "set_defaults",
+                            "type": "function",
+                            "static": false,
+                            "location": "app/models/user.rb:119",
+                            "display_name": "Set Defaults For User",
+                            "labels": [
+                                "action"
+                            ]
+                        },
+                        {
+                            "name": "oauth_enabled?",
+                            "type": "function",
+                            "static": false,
+                            "location": "app/models/user.rb:110",
+                            "display_name": "Is User Oauth Enabled?",
+                            "labels": [
+                                "getter"
+                            ]
+                        },
+                        {
+                            "name": "remove_leading_trailing_whitespace",
+                            "type": "function",
+                            "static": false,
+                            "location": "app/models/user.rb:114",
+                            "display_name": "Remove Leading Trailing Whitespace For User",
+                            "labels": [
+                                "action"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "logger",
+            "type": "package",
+            "children": [
+                {
+                    "name": "Logger",
+                    "type": "class",
+                    "children": [
+                        {
+                            "name": "add",
+                            "type": "function",
+                            "labels": [
+                                "log",
+                                "io"
+                            ],
+                            "static": false,
+                            "location": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb:455",
+                            "display_name": "Add Logger",
+                            "computed_labels": [
+                                "action"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "io",
+            "type": "package",
+            "children": [
+                {
+                    "name": "IO",
+                    "type": "class",
+                    "children": [
+                        {
+                            "name": "write",
+                            "type": "function",
+                            "labels": [
+                                "io"
+                            ],
+                            "static": false,
+                            "location": "/home/travis/.rvm/gems/ruby-2.6.6/gems/appmap-0.34.2/lib/appmap/hook/method.rb:44",
+                            "display_name": "Write Io",
+                            "computed_labels": [
+                                "action"
+                            ]
+                        },
+                        {
+                            "name": "write",
+                            "type": "function",
+                            "labels": [
+                                "io"
+                            ],
+                            "static": false,
+                            "location": "IO#write",
+                            "display_name": null,
+                            "computed_labels": null
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "app/controllers",
+            "type": "package",
+            "children": [
+                {
+                    "name": "PageRedirectConcern",
+                    "type": "class",
+                    "children": [
+                        {
+                            "name": "if_not_signed_in",
+                            "type": "function",
+                            "static": false,
+                            "location": "app/controllers/concerns/page_redirect_concern.rb:9",
+                            "display_name": "Get Page Redirect Concern If Not Signed In",
+                            "labels": [
+                                "getter"
+                            ]
+                        },
+                        {
+                            "name": "redirect_to_path",
+                            "type": "function",
+                            "static": false,
+                            "location": "app/controllers/concerns/page_redirect_concern.rb:15",
+                            "display_name": "Get Redirect To Path",
+                            "labels": [
+                                "setter"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "AlliesController",
+                    "type": "class",
+                    "children": [
+                        {
+                            "name": "remove",
+                            "type": "function",
+                            "static": false,
+                            "location": "app/controllers/allies_controller.rb:25",
+                            "display_name": "Remove Allies",
+                            "labels": [
+                                "action"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "app": "ifme",
+        "git": {
+            "branch": "appland",
+            "commit": "4a4bdb7c7f1b8022be7cdc98d6fb9ce69621eb26",
+            "repository": "https://github.com/land-of-apps/ifme.git"
+        },
+        "name": "AlliesController DELETE #remove when user is logged in deletes the allyship",
+        "client": {
+            "url": "https://github.com/applandinc/appmap-ruby",
+            "name": "appmap",
+            "version": "0.34.2"
+        },
+        "feature": "AlliesController DELETE #remove",
+        "language": {
+            "name": "ruby",
+            "engine": "ruby",
+            "version": "2.6.6"
+        },
+        "recorder": {
+            "name": "rspec"
+        },
+        "frameworks": [
+            {
+                "name": "rails",
+                "version": "6.0.3.2"
+            },
+            {
+                "name": "rspec",
+                "version": "3.9.2"
+            }
+        ],
+        "feature_group": "Allies"
+    }
+}

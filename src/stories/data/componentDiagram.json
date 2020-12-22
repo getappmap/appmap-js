@@ -1,0 +1,1425 @@
+{
+    "packages": [
+        "app/controllers",
+        "app/services",
+        "logger",
+        "SQL",
+        "json",
+        "app/models",
+        "app/helpers",
+        "io",
+        "openssl",
+        "app/mailers",
+        "net/http",
+        "HTTP"
+    ],
+    "class_package": {
+        "AlliesController": "app/controllers",
+        "PageRedirectConcern": "app/controllers",
+        "AllyshipCreator": "app/services",
+        "CarePlanContactsConcern": "app/controllers",
+        "Logger": "logger",
+        "SQL": "SQL",
+        "CarePlanContactsController": "app/controllers",
+        "JSON::Ext::Generator::State": "json",
+        "CategoriesController": "app/controllers",
+        "Shared": "app/controllers",
+        "SharedBasicConcern": "app/controllers",
+        "CollectionPageSetupConcern": "app/controllers",
+        "CommentController": "app/controllers",
+        "Meeting": "app/models",
+        "CommentNotificationsService": "app/services",
+        "CommentViewersService": "app/services",
+        "GroupsController": "app/controllers",
+        "Groups::MembershipsController": "app/controllers",
+        "GroupMember": "app/models",
+        "LocalesController": "app/controllers",
+        "User": "app/models",
+        "MedicationsController": "app/controllers",
+        "MedicationRefillHelper": "app/helpers",
+        "MeetingsController": "app/controllers",
+        "Group": "app/models",
+        "MeetingNotificationsService": "app/services",
+        "Meetings::GoogleCalendarEventController": "app/controllers",
+        "MomentsController": "app/controllers",
+        "MomentsHelper": "app/helpers",
+        "MoodsController": "app/controllers",
+        "PagesConcern": "app/controllers",
+        "JSON::Ext::Parser": "json",
+        "PagesController": "app/controllers",
+        "Medium": "app/services",
+        "ProfileController": "app/controllers",
+        "ProfileHelper": "app/helpers",
+        "ReportsController": "app/controllers",
+        "AllyConcern": "app/models",
+        "SearchController": "app/controllers",
+        "IO": "io",
+        "StrategiesConcern": "app/controllers",
+        "StrategiesController": "app/controllers",
+        "ApplicationMailerHelper": "app/helpers",
+        "NotificationMailerHelper": "app/helpers",
+        "AssetsHelper": "app/helpers",
+        "Digest::Instance": "openssl",
+        "CategoriesHelper": "app/helpers",
+        "FormHelper": "app/helpers",
+        "CommentsFormHelper": "app/helpers",
+        "CommentsHelper": "app/helpers",
+        "TimeAgo": "app/services",
+        "GroupNotificationHelper": "app/helpers",
+        "GroupsHelper": "app/helpers",
+        "MeetingsHelper": "app/helpers",
+        "MomentsFormHelper": "app/helpers",
+        "MoodsHelper": "app/helpers",
+        "StrategiesHelper": "app/helpers",
+        "Moment": "app/models",
+        "ResourceRecommendations": "app/services",
+        "MomentsStatsHelper": "app/helpers",
+        "MostFocusHelper": "app/helpers",
+        "StoriesHelper": "app/helpers",
+        "ReminderHelper": "app/helpers",
+        "Medication": "app/models",
+        "Strategy": "app/models",
+        "StrategiesFormHelper": "app/helpers",
+        "TagsHelper": "app/helpers",
+        "ViewersHelper": "app/helpers",
+        "ApplicationMailer": "app/mailers",
+        "AllyNotifications::NewAllyRequest": "app/mailers",
+        "NotificationMailer": "app/mailers",
+        "ReportMailer": "app/mailers",
+        "Allyship": "app/models",
+        "Comment": "app/models",
+        "PasswordValidator": "app/models",
+        "Allyships::AllianceNotifier": "app/services",
+        "CloudinaryService": "app/services",
+        "GroupNotifier": "app/services",
+        "MedicationReminders": "app/services",
+        "Net::HTTP": "net/http",
+        "MomentKeywords": "app/services",
+        "ProfilePicture": "app/services",
+        "DELETE /allies/remove": "HTTP",
+        "DELETE /comment/delete": "HTTP",
+        "DELETE /groups/:group_id/membership/:member_id": "HTTP",
+        "DELETE /medications/:id": "HTTP",
+        "DELETE /meetings/:id": "HTTP",
+        "DELETE /moments/:id": "HTTP",
+        "DELETE /strategies/:id": "HTTP",
+        "GET /about": "HTTP",
+        "GET /de": "HTTP",
+        "GET /groups": "HTTP",
+        "GET /:locale": "HTTP",
+        "GET /meetings/:id": "HTTP",
+        "GET /meetings/join": "HTTP",
+        "GET /moments": "HTTP",
+        "GET /pages/home": "HTTP",
+        "GET /profile": "HTTP",
+        "GET /resources": "HTTP",
+        "GET /search": "HTTP",
+        "GET /strategies/:id/edit": "HTTP",
+        "PATCH /meetings/:id": "HTTP",
+        "POST /allies/add": "HTTP",
+        "POST /care_plan_contacts/create": "HTTP",
+        "POST /categories": "HTTP",
+        "POST /categories/quick_create": "HTTP",
+        "POST /medications": "HTTP",
+        "POST /meetings": "HTTP",
+        "POST /meetings/:meeting_id/google_calendar_event": "HTTP",
+        "POST /moods/premade": "HTTP",
+        "POST /profile/remove_ban": "HTTP",
+        "POST /reports": "HTTP",
+        "POST /strategies": "HTTP",
+        "PUT /groups/:id": "HTTP",
+        "PUT /medications/:id": "HTTP"
+    },
+    "package_classes": {
+        "app/controllers": [
+            "AlliesController",
+            "PageRedirectConcern",
+            "CarePlanContactsConcern",
+            "CarePlanContactsController",
+            "CategoriesController",
+            "Shared",
+            "SharedBasicConcern",
+            "CollectionPageSetupConcern",
+            "CommentController",
+            "GroupsController",
+            "Groups::MembershipsController",
+            "LocalesController",
+            "MedicationsController",
+            "MeetingsController",
+            "Meetings::GoogleCalendarEventController",
+            "MomentsController",
+            "MoodsController",
+            "PagesConcern",
+            "PagesController",
+            "ProfileController",
+            "ReportsController",
+            "SearchController",
+            "StrategiesConcern",
+            "StrategiesController"
+        ],
+        "app/services": [
+            "AllyshipCreator",
+            "CommentNotificationsService",
+            "CommentViewersService",
+            "MeetingNotificationsService",
+            "Medium",
+            "TimeAgo",
+            "ResourceRecommendations",
+            "Allyships::AllianceNotifier",
+            "CloudinaryService",
+            "GroupNotifier",
+            "MedicationReminders",
+            "MomentKeywords",
+            "ProfilePicture"
+        ],
+        "logger": [
+            "Logger"
+        ],
+        "SQL": [
+            "SQL"
+        ],
+        "json": [
+            "JSON::Ext::Generator::State",
+            "JSON::Ext::Parser"
+        ],
+        "app/models": [
+            "Meeting",
+            "GroupMember",
+            "User",
+            "Group",
+            "AllyConcern",
+            "Moment",
+            "Medication",
+            "Strategy",
+            "Allyship",
+            "Comment",
+            "PasswordValidator"
+        ],
+        "app/helpers": [
+            "MedicationRefillHelper",
+            "MomentsHelper",
+            "ProfileHelper",
+            "ApplicationMailerHelper",
+            "NotificationMailerHelper",
+            "AssetsHelper",
+            "CategoriesHelper",
+            "FormHelper",
+            "CommentsFormHelper",
+            "CommentsHelper",
+            "GroupNotificationHelper",
+            "GroupsHelper",
+            "MeetingsHelper",
+            "MomentsFormHelper",
+            "MoodsHelper",
+            "StrategiesHelper",
+            "MomentsStatsHelper",
+            "MostFocusHelper",
+            "StoriesHelper",
+            "ReminderHelper",
+            "StrategiesFormHelper",
+            "TagsHelper",
+            "ViewersHelper"
+        ],
+        "io": [
+            "IO"
+        ],
+        "openssl": [
+            "Digest::Instance"
+        ],
+        "app/mailers": [
+            "ApplicationMailer",
+            "AllyNotifications::NewAllyRequest",
+            "NotificationMailer",
+            "ReportMailer"
+        ],
+        "net/http": [
+            "Net::HTTP"
+        ],
+        "HTTP": [
+            "DELETE /allies/remove",
+            "DELETE /comment/delete",
+            "DELETE /groups/:group_id/membership/:member_id",
+            "DELETE /medications/:id",
+            "DELETE /meetings/:id",
+            "DELETE /moments/:id",
+            "DELETE /strategies/:id",
+            "GET /about",
+            "GET /de",
+            "GET /groups",
+            "GET /:locale",
+            "GET /meetings/:id",
+            "GET /meetings/join",
+            "GET /moments",
+            "GET /pages/home",
+            "GET /profile",
+            "GET /resources",
+            "GET /search",
+            "GET /strategies/:id/edit",
+            "PATCH /meetings/:id",
+            "POST /allies/add",
+            "POST /care_plan_contacts/create",
+            "POST /categories",
+            "POST /categories/quick_create",
+            "POST /medications",
+            "POST /meetings",
+            "POST /meetings/:meeting_id/google_calendar_event",
+            "POST /moods/premade",
+            "POST /profile/remove_ban",
+            "POST /reports",
+            "POST /strategies",
+            "PUT /groups/:id",
+            "PUT /medications/:id"
+        ]
+    },
+    "controller_packages": [
+        "app/controllers",
+        "logger",
+        "SQL",
+        "app/models"
+    ],
+    "package_calls": {
+        "app/controllers": [
+            "app/controllers",
+            "app/services",
+            "logger",
+            "SQL",
+            "json",
+            "app/models",
+            "app/helpers",
+            "io"
+        ],
+        "app/helpers": [
+            "app/helpers",
+            "io",
+            "openssl",
+            "logger",
+            "SQL",
+            "app/models",
+            "app/services"
+        ],
+        "app/mailers": [
+            "app/helpers",
+            "app/mailers",
+            "logger",
+            "json",
+            "SQL"
+        ],
+        "app/models": [
+            "app/models",
+            "logger",
+            "SQL",
+            "app/mailers",
+            "json",
+            "openssl"
+        ],
+        "app/services": [
+            "app/models",
+            "app/services",
+            "logger",
+            "SQL",
+            "app/mailers",
+            "json",
+            "openssl",
+            "net/http"
+        ],
+        "HTTP": [
+            "app/controllers",
+            "logger",
+            "SQL",
+            "app/models"
+        ],
+        "io": [
+            "io"
+        ],
+        "json": [
+            "json"
+        ],
+        "logger": [
+            "io",
+            "net/http"
+        ],
+        "net/http": [
+            "io",
+            "net/http"
+        ]
+    },
+    "class_calls": {
+        "AlliesController": [
+            "PageRedirectConcern",
+            "AllyshipCreator"
+        ],
+        "CarePlanContactsConcern": [
+            "Logger",
+            "SQL"
+        ],
+        "CarePlanContactsController": [
+            "CarePlanContactsConcern",
+            "JSON::Ext::Generator::State"
+        ],
+        "CategoriesController": [
+            "Shared",
+            "SharedBasicConcern",
+            "Logger"
+        ],
+        "CollectionPageSetupConcern": [
+            "CollectionPageSetupConcern",
+            "Logger",
+            "SQL"
+        ],
+        "CommentController": [
+            "Meeting",
+            "CommentNotificationsService",
+            "CommentViewersService",
+            "JSON::Ext::Generator::State",
+            "Logger",
+            "SQL"
+        ],
+        "GroupsController": [
+            "JSON::Ext::Generator::State"
+        ],
+        "Groups::MembershipsController": [
+            "GroupMember",
+            "Logger",
+            "SQL"
+        ],
+        "LocalesController": [
+            "User",
+            "Logger",
+            "SQL"
+        ],
+        "MedicationsController": [
+            "MedicationsController",
+            "PageRedirectConcern",
+            "MedicationRefillHelper",
+            "Logger",
+            "SQL"
+        ],
+        "MeetingsController": [
+            "PageRedirectConcern",
+            "Group",
+            "Meeting",
+            "MeetingNotificationsService",
+            "Logger",
+            "SQL"
+        ],
+        "Meetings::GoogleCalendarEventController": [
+            "Meeting",
+            "User",
+            "Logger"
+        ],
+        "MomentsController": [
+            "CollectionPageSetupConcern",
+            "PageRedirectConcern",
+            "MomentsHelper",
+            "Logger",
+            "SQL"
+        ],
+        "MoodsController": [
+            "PageRedirectConcern",
+            "Shared"
+        ],
+        "PageRedirectConcern": [
+            "PageRedirectConcern",
+            "User",
+            "Logger",
+            "SQL"
+        ],
+        "PagesConcern": [
+            "PagesConcern",
+            "JSON::Ext::Parser"
+        ],
+        "PagesController": [
+            "PagesConcern",
+            "Medium",
+            "JSON::Ext::Parser"
+        ],
+        "ProfileController": [
+            "ProfileHelper"
+        ],
+        "ReportsController": [
+            "AllyConcern",
+            "Logger",
+            "SQL"
+        ],
+        "SearchController": [
+            "IO"
+        ],
+        "Shared": [
+            "PageRedirectConcern",
+            "JSON::Ext::Generator::State",
+            "Logger",
+            "SQL"
+        ],
+        "SharedBasicConcern": [
+            "Shared"
+        ],
+        "StrategiesConcern": [
+            "Logger"
+        ],
+        "StrategiesController": [
+            "PageRedirectConcern",
+            "Shared",
+            "StrategiesConcern",
+            "AllyConcern",
+            "Logger",
+            "SQL"
+        ],
+        "ApplicationMailerHelper": [
+            "ApplicationMailerHelper",
+            "NotificationMailerHelper"
+        ],
+        "AssetsHelper": [
+            "IO",
+            "Digest::Instance"
+        ],
+        "CategoriesHelper": [
+            "FormHelper"
+        ],
+        "CommentsFormHelper": [
+            "FormHelper",
+            "Logger",
+            "SQL"
+        ],
+        "CommentsHelper": [
+            "User",
+            "CommentViewersService",
+            "TimeAgo",
+            "Logger",
+            "SQL"
+        ],
+        "FormHelper": [
+            "FormHelper"
+        ],
+        "GroupNotificationHelper": [
+            "NotificationMailerHelper"
+        ],
+        "GroupsHelper": [
+            "GroupsHelper",
+            "Logger",
+            "SQL"
+        ],
+        "MedicationRefillHelper": [
+            "User",
+            "Logger",
+            "SQL"
+        ],
+        "MeetingsHelper": [
+            "User",
+            "Logger",
+            "SQL"
+        ],
+        "MomentsFormHelper": [
+            "CategoriesHelper",
+            "FormHelper",
+            "MoodsHelper",
+            "StrategiesHelper",
+            "Moment",
+            "Logger",
+            "SQL"
+        ],
+        "MomentsHelper": [
+            "Moment",
+            "ResourceRecommendations",
+            "Logger",
+            "SQL"
+        ],
+        "MomentsStatsHelper": [
+            "User",
+            "Logger",
+            "SQL"
+        ],
+        "MoodsHelper": [
+            "FormHelper"
+        ],
+        "MostFocusHelper": [
+            "User",
+            "Logger",
+            "SQL"
+        ],
+        "NotificationMailerHelper": [
+            "NotificationMailerHelper",
+            "Logger",
+            "SQL"
+        ],
+        "ProfileHelper": [
+            "StoriesHelper"
+        ],
+        "ReminderHelper": [
+            "Medication",
+            "Strategy"
+        ],
+        "StoriesHelper": [
+            "AllyConcern",
+            "User",
+            "Logger",
+            "SQL"
+        ],
+        "StrategiesFormHelper": [
+            "CategoriesHelper",
+            "Strategy"
+        ],
+        "StrategiesHelper": [
+            "FormHelper",
+            "StrategiesFormHelper",
+            "Logger",
+            "SQL"
+        ],
+        "TagsHelper": [
+            "Logger",
+            "SQL"
+        ],
+        "ViewersHelper": [
+            "Logger",
+            "SQL"
+        ],
+        "ApplicationMailer": [
+            "ApplicationMailerHelper",
+            "GroupNotificationHelper",
+            "NotificationMailerHelper",
+            "AllyNotifications::NewAllyRequest",
+            "Logger"
+        ],
+        "NotificationMailer": [
+            "ApplicationMailer",
+            "JSON::Ext::Parser",
+            "Logger",
+            "SQL"
+        ],
+        "ReportMailer": [
+            "Logger"
+        ],
+        "AllyConcern": [
+            "AllyConcern",
+            "Logger",
+            "SQL"
+        ],
+        "Allyship": [
+            "Allyship",
+            "Logger",
+            "SQL"
+        ],
+        "Comment": [
+            "NotificationMailer",
+            "Comment",
+            "JSON::Ext::Generator::State",
+            "Logger",
+            "Digest::Instance",
+            "SQL"
+        ],
+        "Group": [
+            "Logger",
+            "SQL"
+        ],
+        "GroupMember": [
+            "Logger",
+            "SQL"
+        ],
+        "Meeting": [
+            "Logger",
+            "SQL"
+        ],
+        "Moment": [
+            "Logger",
+            "SQL"
+        ],
+        "PasswordValidator": [
+            "User"
+        ],
+        "User": [
+            "User",
+            "Logger",
+            "SQL"
+        ],
+        "AllyshipCreator": [
+            "Allyship",
+            "AllyshipCreator",
+            "Allyships::AllianceNotifier",
+            "Logger",
+            "SQL"
+        ],
+        "Allyships::AllianceNotifier": [
+            "NotificationMailer",
+            "Allyships::AllianceNotifier",
+            "JSON::Ext::Generator::State",
+            "Logger",
+            "Digest::Instance",
+            "SQL"
+        ],
+        "CloudinaryService": [
+            "Digest::Instance"
+        ],
+        "CommentNotificationsService": [
+            "Logger",
+            "SQL"
+        ],
+        "CommentViewersService": [
+            "CommentViewersService",
+            "Logger",
+            "SQL"
+        ],
+        "GroupNotifier": [
+            "JSON::Ext::Generator::State",
+            "Logger",
+            "Digest::Instance",
+            "SQL"
+        ],
+        "MedicationReminders": [
+            "Logger",
+            "SQL"
+        ],
+        "Medium": [
+            "JSON::Ext::Parser",
+            "Net::HTTP"
+        ],
+        "MeetingNotificationsService": [
+            "MeetingNotificationsService",
+            "Logger",
+            "SQL"
+        ],
+        "MomentKeywords": [
+            "Logger",
+            "SQL"
+        ],
+        "ProfilePicture": [
+            "ProfilePicture",
+            "JSON::Ext::Generator::State"
+        ],
+        "ResourceRecommendations": [
+            "MomentKeywords",
+            "JSON::Ext::Parser"
+        ],
+        "TimeAgo": [
+            "TimeAgo"
+        ],
+        "DELETE /allies/remove": [
+            "AlliesController",
+            "PageRedirectConcern",
+            "Logger"
+        ],
+        "DELETE /comment/delete": [
+            "CommentController",
+            "PageRedirectConcern",
+            "Logger"
+        ],
+        "DELETE /groups/:group_id/membership/:member_id": [
+            "Groups::MembershipsController",
+            "PageRedirectConcern",
+            "Logger"
+        ],
+        "DELETE /medications/:id": [
+            "MedicationsController",
+            "PageRedirectConcern",
+            "Logger",
+            "SQL"
+        ],
+        "DELETE /meetings/:id": [
+            "MeetingsController",
+            "PageRedirectConcern",
+            "Logger",
+            "SQL"
+        ],
+        "DELETE /moments/:id": [
+            "MomentsController",
+            "PageRedirectConcern",
+            "Logger",
+            "SQL"
+        ],
+        "DELETE /strategies/:id": [
+            "PageRedirectConcern",
+            "StrategiesController",
+            "Logger",
+            "SQL"
+        ],
+        "GET /about": [
+            "PagesController",
+            "Logger"
+        ],
+        "GET /de": [
+            "LocalesController",
+            "User",
+            "Logger",
+            "SQL"
+        ],
+        "GET /groups": [
+            "PageRedirectConcern",
+            "Logger"
+        ],
+        "GET /:locale": [
+            "LocalesController",
+            "Logger"
+        ],
+        "GET /meetings/:id": [
+            "MeetingsController",
+            "PageRedirectConcern",
+            "Logger",
+            "SQL"
+        ],
+        "GET /meetings/join": [
+            "MeetingsController",
+            "PageRedirectConcern",
+            "Logger"
+        ],
+        "GET /moments": [
+            "MomentsController",
+            "PageRedirectConcern",
+            "Logger"
+        ],
+        "GET /pages/home": [
+            "PagesController",
+            "Logger"
+        ],
+        "GET /profile": [
+            "PageRedirectConcern",
+            "ProfileController",
+            "Logger"
+        ],
+        "GET /resources": [
+            "PagesController",
+            "Logger"
+        ],
+        "GET /search": [
+            "PageRedirectConcern",
+            "SearchController",
+            "Logger"
+        ],
+        "GET /strategies/:id/edit": [
+            "PageRedirectConcern",
+            "StrategiesController",
+            "Logger",
+            "SQL"
+        ],
+        "PATCH /meetings/:id": [
+            "PageRedirectConcern",
+            "Logger",
+            "SQL"
+        ],
+        "POST /allies/add": [
+            "AlliesController",
+            "PageRedirectConcern",
+            "Logger"
+        ],
+        "POST /care_plan_contacts/create": [
+            "CarePlanContactsController",
+            "PageRedirectConcern",
+            "Logger"
+        ],
+        "POST /categories": [
+            "CategoriesController",
+            "PageRedirectConcern",
+            "Logger"
+        ],
+        "POST /categories/quick_create": [
+            "CategoriesController",
+            "PageRedirectConcern",
+            "Logger"
+        ],
+        "POST /medications": [
+            "MedicationsController",
+            "PageRedirectConcern",
+            "Logger"
+        ],
+        "POST /meetings": [
+            "MeetingsController",
+            "PageRedirectConcern",
+            "Logger"
+        ],
+        "POST /meetings/:meeting_id/google_calendar_event": [
+            "Meetings::GoogleCalendarEventController",
+            "PageRedirectConcern",
+            "Meeting",
+            "Logger",
+            "SQL"
+        ],
+        "POST /moods/premade": [
+            "MoodsController",
+            "PageRedirectConcern",
+            "Logger"
+        ],
+        "POST /profile/remove_ban": [
+            "PageRedirectConcern",
+            "ProfileController",
+            "Logger"
+        ],
+        "POST /reports": [
+            "PageRedirectConcern",
+            "ReportsController",
+            "Logger"
+        ],
+        "POST /strategies": [
+            "PageRedirectConcern",
+            "StrategiesController",
+            "Logger"
+        ],
+        "PUT /groups/:id": [
+            "GroupsController",
+            "PageRedirectConcern",
+            "Logger",
+            "SQL"
+        ],
+        "PUT /medications/:id": [
+            "MedicationsController",
+            "PageRedirectConcern",
+            "Logger",
+            "SQL"
+        ],
+        "IO": [
+            "IO"
+        ],
+        "JSON::Ext::Generator::State": [
+            "JSON::Ext::Generator::State"
+        ],
+        "Logger": [
+            "IO",
+            "Net::HTTP"
+        ],
+        "Net::HTTP": [
+            "IO",
+            "Net::HTTP"
+        ]
+    },
+    "class_callers": {
+        "PageRedirectConcern": [
+            "AlliesController",
+            "MedicationsController",
+            "MeetingsController",
+            "MomentsController",
+            "MoodsController",
+            "PageRedirectConcern",
+            "Shared",
+            "StrategiesController",
+            "DELETE /allies/remove",
+            "DELETE /comment/delete",
+            "DELETE /groups/:group_id/membership/:member_id",
+            "DELETE /medications/:id",
+            "DELETE /meetings/:id",
+            "DELETE /moments/:id",
+            "DELETE /strategies/:id",
+            "GET /groups",
+            "GET /meetings/:id",
+            "GET /meetings/join",
+            "GET /moments",
+            "GET /profile",
+            "GET /search",
+            "GET /strategies/:id/edit",
+            "PATCH /meetings/:id",
+            "POST /allies/add",
+            "POST /care_plan_contacts/create",
+            "POST /categories",
+            "POST /categories/quick_create",
+            "POST /medications",
+            "POST /meetings",
+            "POST /meetings/:meeting_id/google_calendar_event",
+            "POST /moods/premade",
+            "POST /profile/remove_ban",
+            "POST /reports",
+            "POST /strategies",
+            "PUT /groups/:id",
+            "PUT /medications/:id"
+        ],
+        "AllyshipCreator": [
+            "AlliesController",
+            "AllyshipCreator"
+        ],
+        "Logger": [
+            "CarePlanContactsConcern",
+            "CategoriesController",
+            "CollectionPageSetupConcern",
+            "CommentController",
+            "Groups::MembershipsController",
+            "LocalesController",
+            "MedicationsController",
+            "MeetingsController",
+            "Meetings::GoogleCalendarEventController",
+            "MomentsController",
+            "PageRedirectConcern",
+            "ReportsController",
+            "Shared",
+            "StrategiesConcern",
+            "StrategiesController",
+            "CommentsFormHelper",
+            "CommentsHelper",
+            "GroupsHelper",
+            "MedicationRefillHelper",
+            "MeetingsHelper",
+            "MomentsFormHelper",
+            "MomentsHelper",
+            "MomentsStatsHelper",
+            "MostFocusHelper",
+            "NotificationMailerHelper",
+            "StoriesHelper",
+            "StrategiesHelper",
+            "TagsHelper",
+            "ViewersHelper",
+            "ApplicationMailer",
+            "NotificationMailer",
+            "ReportMailer",
+            "AllyConcern",
+            "Allyship",
+            "Comment",
+            "Group",
+            "GroupMember",
+            "Meeting",
+            "Moment",
+            "User",
+            "AllyshipCreator",
+            "Allyships::AllianceNotifier",
+            "CommentNotificationsService",
+            "CommentViewersService",
+            "GroupNotifier",
+            "MedicationReminders",
+            "MeetingNotificationsService",
+            "MomentKeywords",
+            "DELETE /allies/remove",
+            "DELETE /comment/delete",
+            "DELETE /groups/:group_id/membership/:member_id",
+            "DELETE /medications/:id",
+            "DELETE /meetings/:id",
+            "DELETE /moments/:id",
+            "DELETE /strategies/:id",
+            "GET /about",
+            "GET /de",
+            "GET /groups",
+            "GET /:locale",
+            "GET /meetings/:id",
+            "GET /meetings/join",
+            "GET /moments",
+            "GET /pages/home",
+            "GET /profile",
+            "GET /resources",
+            "GET /search",
+            "GET /strategies/:id/edit",
+            "PATCH /meetings/:id",
+            "POST /allies/add",
+            "POST /care_plan_contacts/create",
+            "POST /categories",
+            "POST /categories/quick_create",
+            "POST /medications",
+            "POST /meetings",
+            "POST /meetings/:meeting_id/google_calendar_event",
+            "POST /moods/premade",
+            "POST /profile/remove_ban",
+            "POST /reports",
+            "POST /strategies",
+            "PUT /groups/:id",
+            "PUT /medications/:id"
+        ],
+        "SQL": [
+            "CarePlanContactsConcern",
+            "CollectionPageSetupConcern",
+            "CommentController",
+            "Groups::MembershipsController",
+            "LocalesController",
+            "MedicationsController",
+            "MeetingsController",
+            "MomentsController",
+            "PageRedirectConcern",
+            "ReportsController",
+            "Shared",
+            "StrategiesController",
+            "CommentsFormHelper",
+            "CommentsHelper",
+            "GroupsHelper",
+            "MedicationRefillHelper",
+            "MeetingsHelper",
+            "MomentsFormHelper",
+            "MomentsHelper",
+            "MomentsStatsHelper",
+            "MostFocusHelper",
+            "NotificationMailerHelper",
+            "StoriesHelper",
+            "StrategiesHelper",
+            "TagsHelper",
+            "ViewersHelper",
+            "NotificationMailer",
+            "AllyConcern",
+            "Allyship",
+            "Comment",
+            "Group",
+            "GroupMember",
+            "Meeting",
+            "Moment",
+            "User",
+            "AllyshipCreator",
+            "Allyships::AllianceNotifier",
+            "CommentNotificationsService",
+            "CommentViewersService",
+            "GroupNotifier",
+            "MedicationReminders",
+            "MeetingNotificationsService",
+            "MomentKeywords",
+            "DELETE /medications/:id",
+            "DELETE /meetings/:id",
+            "DELETE /moments/:id",
+            "DELETE /strategies/:id",
+            "GET /de",
+            "GET /meetings/:id",
+            "GET /strategies/:id/edit",
+            "PATCH /meetings/:id",
+            "POST /meetings/:meeting_id/google_calendar_event",
+            "PUT /groups/:id",
+            "PUT /medications/:id"
+        ],
+        "CarePlanContactsConcern": [
+            "CarePlanContactsController"
+        ],
+        "JSON::Ext::Generator::State": [
+            "CarePlanContactsController",
+            "CommentController",
+            "GroupsController",
+            "Shared",
+            "Comment",
+            "Allyships::AllianceNotifier",
+            "GroupNotifier",
+            "ProfilePicture",
+            "JSON::Ext::Generator::State"
+        ],
+        "Shared": [
+            "CategoriesController",
+            "MoodsController",
+            "SharedBasicConcern",
+            "StrategiesController"
+        ],
+        "SharedBasicConcern": [
+            "CategoriesController"
+        ],
+        "CollectionPageSetupConcern": [
+            "CollectionPageSetupConcern",
+            "MomentsController"
+        ],
+        "Meeting": [
+            "CommentController",
+            "MeetingsController",
+            "Meetings::GoogleCalendarEventController",
+            "POST /meetings/:meeting_id/google_calendar_event"
+        ],
+        "CommentNotificationsService": [
+            "CommentController"
+        ],
+        "CommentViewersService": [
+            "CommentController",
+            "CommentsHelper",
+            "CommentViewersService"
+        ],
+        "GroupMember": [
+            "Groups::MembershipsController"
+        ],
+        "User": [
+            "LocalesController",
+            "Meetings::GoogleCalendarEventController",
+            "PageRedirectConcern",
+            "CommentsHelper",
+            "MedicationRefillHelper",
+            "MeetingsHelper",
+            "MomentsStatsHelper",
+            "MostFocusHelper",
+            "StoriesHelper",
+            "PasswordValidator",
+            "User",
+            "GET /de"
+        ],
+        "MedicationsController": [
+            "MedicationsController",
+            "DELETE /medications/:id",
+            "POST /medications",
+            "PUT /medications/:id"
+        ],
+        "MedicationRefillHelper": [
+            "MedicationsController"
+        ],
+        "Group": [
+            "MeetingsController"
+        ],
+        "MeetingNotificationsService": [
+            "MeetingsController",
+            "MeetingNotificationsService"
+        ],
+        "MomentsHelper": [
+            "MomentsController"
+        ],
+        "PagesConcern": [
+            "PagesConcern",
+            "PagesController"
+        ],
+        "JSON::Ext::Parser": [
+            "PagesConcern",
+            "PagesController",
+            "NotificationMailer",
+            "Medium",
+            "ResourceRecommendations"
+        ],
+        "Medium": [
+            "PagesController"
+        ],
+        "ProfileHelper": [
+            "ProfileController"
+        ],
+        "AllyConcern": [
+            "ReportsController",
+            "StrategiesController",
+            "StoriesHelper",
+            "AllyConcern"
+        ],
+        "IO": [
+            "SearchController",
+            "AssetsHelper",
+            "IO",
+            "Logger",
+            "Net::HTTP"
+        ],
+        "StrategiesConcern": [
+            "StrategiesController"
+        ],
+        "ApplicationMailerHelper": [
+            "ApplicationMailerHelper",
+            "ApplicationMailer"
+        ],
+        "NotificationMailerHelper": [
+            "ApplicationMailerHelper",
+            "GroupNotificationHelper",
+            "NotificationMailerHelper",
+            "ApplicationMailer"
+        ],
+        "Digest::Instance": [
+            "AssetsHelper",
+            "Comment",
+            "Allyships::AllianceNotifier",
+            "CloudinaryService",
+            "GroupNotifier"
+        ],
+        "FormHelper": [
+            "CategoriesHelper",
+            "CommentsFormHelper",
+            "FormHelper",
+            "MomentsFormHelper",
+            "MoodsHelper",
+            "StrategiesHelper"
+        ],
+        "TimeAgo": [
+            "CommentsHelper",
+            "TimeAgo"
+        ],
+        "GroupsHelper": [
+            "GroupsHelper"
+        ],
+        "CategoriesHelper": [
+            "MomentsFormHelper",
+            "StrategiesFormHelper"
+        ],
+        "MoodsHelper": [
+            "MomentsFormHelper"
+        ],
+        "StrategiesHelper": [
+            "MomentsFormHelper"
+        ],
+        "Moment": [
+            "MomentsFormHelper",
+            "MomentsHelper"
+        ],
+        "ResourceRecommendations": [
+            "MomentsHelper"
+        ],
+        "StoriesHelper": [
+            "ProfileHelper"
+        ],
+        "Medication": [
+            "ReminderHelper"
+        ],
+        "Strategy": [
+            "ReminderHelper",
+            "StrategiesFormHelper"
+        ],
+        "StrategiesFormHelper": [
+            "StrategiesHelper"
+        ],
+        "GroupNotificationHelper": [
+            "ApplicationMailer"
+        ],
+        "AllyNotifications::NewAllyRequest": [
+            "ApplicationMailer"
+        ],
+        "ApplicationMailer": [
+            "NotificationMailer"
+        ],
+        "Allyship": [
+            "Allyship",
+            "AllyshipCreator"
+        ],
+        "NotificationMailer": [
+            "Comment",
+            "Allyships::AllianceNotifier"
+        ],
+        "Comment": [
+            "Comment"
+        ],
+        "Allyships::AllianceNotifier": [
+            "AllyshipCreator",
+            "Allyships::AllianceNotifier"
+        ],
+        "Net::HTTP": [
+            "Medium",
+            "Logger",
+            "Net::HTTP"
+        ],
+        "ProfilePicture": [
+            "ProfilePicture"
+        ],
+        "MomentKeywords": [
+            "ResourceRecommendations"
+        ],
+        "AlliesController": [
+            "DELETE /allies/remove",
+            "POST /allies/add"
+        ],
+        "CommentController": [
+            "DELETE /comment/delete"
+        ],
+        "Groups::MembershipsController": [
+            "DELETE /groups/:group_id/membership/:member_id"
+        ],
+        "MeetingsController": [
+            "DELETE /meetings/:id",
+            "GET /meetings/:id",
+            "GET /meetings/join",
+            "POST /meetings"
+        ],
+        "MomentsController": [
+            "DELETE /moments/:id",
+            "GET /moments"
+        ],
+        "StrategiesController": [
+            "DELETE /strategies/:id",
+            "GET /strategies/:id/edit",
+            "POST /strategies"
+        ],
+        "PagesController": [
+            "GET /about",
+            "GET /pages/home",
+            "GET /resources"
+        ],
+        "LocalesController": [
+            "GET /de",
+            "GET /:locale"
+        ],
+        "ProfileController": [
+            "GET /profile",
+            "POST /profile/remove_ban"
+        ],
+        "SearchController": [
+            "GET /search"
+        ],
+        "CarePlanContactsController": [
+            "POST /care_plan_contacts/create"
+        ],
+        "CategoriesController": [
+            "POST /categories",
+            "POST /categories/quick_create"
+        ],
+        "Meetings::GoogleCalendarEventController": [
+            "POST /meetings/:meeting_id/google_calendar_event"
+        ],
+        "MoodsController": [
+            "POST /moods/premade"
+        ],
+        "ReportsController": [
+            "POST /reports"
+        ],
+        "GroupsController": [
+            "PUT /groups/:id"
+        ]
+    },
+    "class_locations": {
+        "IO": "IO#read",
+        "User": "app/models/user.rb",
+        "Group": "app/models/group.rb",
+        "Digest::Instance": "Digest",
+        "JSON::Ext::Parser": "JSON",
+        "Moment": "app/models/moment.rb",
+        "Comment": "app/models/comment.rb",
+        "Meeting": "app/models/meeting.rb",
+        "Support": "app/models/support.rb",
+        "Medium": "app/services/medium.rb",
+        "Allyship": "app/models/allyship.rb",
+        "Strategy": "app/models/strategy.rb",
+        "TimeAgo": "app/services/time_ago.rb",
+        "Medication": "app/models/medication.rb",
+        "FormHelper": "app/helpers/form_helper.rb",
+        "PagesHelper": "app/helpers/pages_helper.rb",
+        "TagsHelper": "app/helpers/tags_helper.rb",
+        "GroupMember": "app/models/group_member.rb",
+        "AssetsHelper": "app/helpers/assets_helper.rb",
+        "GroupsHelper": "app/helpers/groups_helper.rb",
+        "HeaderHelper": "app/helpers/header_helper.rb",
+        "MoodsHelper": "app/helpers/moods_helper.rb",
+        "ReportMailer": "app/mailers/report_mailer.rb",
+        "StoriesHelper": "app/helpers/stories_helper.rb",
+        "CommentsHelper": "app/helpers/comments_helper.rb",
+        "MeetingsHelper": "app/helpers/meetings_helper.rb",
+        "MomentsHelper": "app/helpers/moments_helper.rb",
+        "ProfileHelper": "app/helpers/profile_helper.rb",
+        "ReminderHelper": "app/helpers/reminder_helper.rb",
+        "ViewersHelper": "app/helpers/viewers_helper.rb",
+        "GroupNotifier": "app/services/group_notifier.rb",
+        "MomentKeywords": "app/services/moment_keywords.rb",
+        "CategoriesHelper": "app/helpers/categories_helper.rb",
+        "MostFocusHelper": "app/helpers/most_focus_helper.rb",
+        "ProfilePicture": "app/services/profile_picture.rb",
+        "ApplicationHelper": "app/helpers/application_helper.rb",
+        "StrategiesHelper": "app/helpers/strategies_helper.rb",
+        "AllyshipCreator": "app/services/allyship_creator.rb",
+        "JSON::Ext::Generator::State": "JSON",
+        "MomentsFormHelper": "app/helpers/moments_form_helper.rb",
+        "ApplicationMailer": "app/mailers/application_mailer.rb",
+        "CalendarUploader": "app/services/calendar_uploader.rb",
+        "Shared": "app/controllers/concerns/shared.rb",
+        "CommentsFormHelper": "app/helpers/comments_form_helper.rb",
+        "DashboardNavHelper": "app/helpers/dashboard_nav_helper.rb",
+        "MomentsStatsHelper": "app/helpers/moments_stats_helper.rb",
+        "NotificationMailer": "app/mailers/notification_mailer.rb",
+        "AllyConcern": "app/models/concerns/ally_concern.rb",
+        "CloudinaryService": "app/services/cloudinary_service.rb",
+        "MoodsController": "app/controllers/moods_controller.rb",
+        "PagesController": "app/controllers/pages_controller.rb",
+        "SearchController": "app/controllers/search_controller.rb",
+        "NotificationsHelper": "app/helpers/notifications_helper.rb",
+        "MedicationReminders": "app/services/medication_reminders.rb",
+        "AlliesController": "app/controllers/allies_controller.rb",
+        "GroupsController": "app/controllers/groups_controller.rb",
+        "LocalesController": "app/controllers/locales_controller.rb",
+        "ProfileController": "app/controllers/profile_controller.rb",
+        "ReportsController": "app/controllers/reports_controller.rb",
+        "StrategiesFormHelper": "app/helpers/strategies_form_helper.rb",
+        "CommentController": "app/controllers/comment_controller.rb",
+        "MeetingsController": "app/controllers/meetings_controller.rb",
+        "MomentsController": "app/controllers/moments_controller.rb",
+        "MedicationRefillHelper": "app/helpers/medication_refill_helper.rb",
+        "ApplicationMailerHelper": "app/helpers/application_mailer_helper.rb",
+        "CommentViewersService": "app/services/comment_viewers_service.rb",
+        "CategoriesController": "app/controllers/categories_controller.rb",
+        "StrategiesController": "app/controllers/strategies_controller.rb",
+        "GroupNotificationHelper": "app/helpers/group_notification_helper.rb",
+        "PasswordValidator": "app/models/concerns/password_validator.rb",
+        "ResourceRecommendations": "app/services/resource_recommendations.rb",
+        "PagesConcern": "app/controllers/concerns/pages_concern.rb",
+        "MedicationsController": "app/controllers/medications_controller.rb",
+        "NotificationMailerHelper": "app/helpers/notification_mailer_helper.rb",
+        "Allyships::AllianceNotifier": "app/services/allyships/alliance_notifier.rb",
+        "CommentNotificationsService": "app/services/comment_notifications_service.rb",
+        "MeetingNotificationsService": "app/services/meeting_notifications_service.rb",
+        "StrategiesConcern": "app/controllers/concerns/strategies_concern.rb",
+        "CarePlanContactsController": "app/controllers/care_plan_contacts_controller.rb",
+        "SharedBasicConcern": "app/controllers/concerns/shared_basic_concern.rb",
+        "PageRedirectConcern": "app/controllers/concerns/page_redirect_concern.rb",
+        "Groups::MembershipsController": "app/controllers/groups/memberships_controller.rb",
+        "AllyNotifications::NewAllyRequest": "app/mailers/ally_notifications/new_ally_request.rb",
+        "CarePlanContactsConcern": "app/controllers/concerns/care_plan_contacts_concern.rb",
+        "AllyNotifications::AcceptedAllyRequest": "app/mailers/ally_notifications/accepted_ally_request.rb",
+        "CollectionPageSetupConcern": "app/controllers/concerns/collection_page_setup_concern.rb",
+        "Meetings::GoogleCalendarEventController": "app/controllers/meetings/google_calendar_event_controller.rb",
+        "Logger": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/logger.rb",
+        "Net::HTTP": "/home/travis/.rvm/rubies/ruby-2.6.6/lib/ruby/2.6.0/net/http.rb"
+    },
+    "source_control": {
+        "url": "https://github.com/land-of-apps/ifme.git",
+        "commit": "4a4bdb7c7f1b8022be7cdc98d6fb9ce69621eb26"
+    }
+}
