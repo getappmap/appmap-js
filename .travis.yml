@@ -1,0 +1,24 @@
+language: node_js
+os: linux
+dist: xenial
+node_js: [ 14 ]
+
+install:
+- npm install
+
+script:
+- npm run test:unit
+- npm run test:e2e -- --headless
+
+deploy:
+- provider: script
+  skip_cleanup: true
+  script: npm run chromatic
+  on:
+    all_branches: true
+    condition: $TRAVIS_BRANCH != "main"
+- provider: script
+  skip_cleanup: true
+  script: npm run chromatic -- --auto-accept-changes
+  on:
+    branch: main
