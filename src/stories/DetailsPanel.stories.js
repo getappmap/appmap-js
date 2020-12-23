@@ -1,8 +1,8 @@
-import DetailsPanel from '@/components/DetailsPanel.vue';
+import VDetailsPanel from '@/components/DetailsPanel.vue';
 
 export default {
   title: 'AppLand/UI',
-  component: DetailsPanel,
+  component: VDetailsPanel,
   argTypes: {},
   args: {
     title: 'test',
@@ -12,6 +12,6 @@ export default {
 
 export const detailsPanel = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { DetailsPanel },
-  template: '<DetailsPanel v-bind="$props" />',
+  components: { VDetailsPanel },
+  template: '<v-details-panel v-bind="$props" />',
 });

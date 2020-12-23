@@ -1,13 +1,13 @@
 <template v-slot:diagram>
-  <div class="appland-diagram-flow" :key="renderKey" />
+  <div class="diagram-flow" :key="renderKey" />
 </template>
 
 <script>
-import { buildAppMap } from '@appland/models';
+import { CallTree } from '@appland/models';
 import { FlowView } from '@appland/diagrams';
 
 export default {
-  name: 'diagram-flow',
+  name: 'v-diagram-flow',
 
   props: {
     theme: {
@@ -19,18 +19,9 @@ export default {
       type: Boolean,
       default: true,
     },
-    data: {
+    callTree: {
       type: Object,
-      default: () => ({}),
-    },
-  },
-
-  computed: {
-    appmap() {
-      return buildAppMap()
-        .source(this.data)
-        .normalize()
-        .build();
+      default: () => new CallTree(),
     },
   },
 
@@ -57,8 +48,9 @@ export default {
         },
       });
 
-      flowView.setCallTree(this.appmap.callTree);
+      flowView.setCallTree(this.callTree);
       flowView.render();
+      flowView.on('selectedEvent', (e) => this.$store.selectEvent(e));
     },
   },
 
@@ -73,13 +65,10 @@ export default {
 </script>
 
 <style lang="scss">
-  .appland-diagram-flow {
+  .diagram-flow {
     @import '~@appland/diagrams/dist/@appland/diagrams';
 
-    grid-column-start: 2;
-    grid-column-end: 3;
-    border-left: 1px solid #343742;
-    width: 100%;
-    overflow: scroll;
+    max-height: 100vh;
+    max-width: 100vw;
   }
 </style>

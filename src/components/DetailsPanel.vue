@@ -1,26 +1,37 @@
 <template>
-  <div id="component-details" class="selection-details">
-    <h3>{{title}}</h3>
-    <div class="content">
-      <h4>{{subtitle}}</h4>
+  <div class="details-panel">
+    <h3 class="details-panel__title">{{title}}</h3>
+    <div class="details-panel__content">
+      <h4 class="details-panel__subtitle">{{objectName}}</h4>
 
-      <div class="lists">
-        <details-panel-list title="Functions" />
-        <details-panel-list title="Source location" />
-        <details-panel-list title="HTTP server requests" />
-        <details-panel-list title="SQL queries" />
+      <div class="details-panel__details">
+        <component :is="detailsType" :objectDescriptor="objectDescriptor.object"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import DetailsPanelList from '@/components/DetailsPanelList.vue';
+import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
+import VDetailsPanelDatabase from '@/components/DetailsPanelDatabase.vue';
+import VDetailsPanelEdge from '@/components/DetailsPanelEdge.vue';
+import VDetailsPanelEvent from '@/components/DetailsPanelEvent.vue';
+import VDetailsPanelHttp from '@/components/DetailsPanelHttp.vue';
+import VDetailsPanelNull from '@/components/DetailsPanelNull.vue';
+import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
+import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
 
 export default {
-  name: 'details-panel',
+  name: 'v-details-panel',
   components: {
-    DetailsPanelList,
+    VDetailsPanelClass,
+    VDetailsPanelDatabase,
+    VDetailsPanelEdge,
+    VDetailsPanelEvent,
+    VDetailsPanelHttp,
+    VDetailsPanelNull,
+    VDetailsPanelPackage,
+    VDetailsPanelRoute,
   },
   props: {
     title: {
@@ -28,18 +39,43 @@ export default {
       default: 'Component details',
     },
     subtitle: String,
+    objectDescriptor: {
+      type: Object,
+      required: true,
+      validator: (value) => (typeof value.kind !== 'undefined'
+        && typeof value.object !== 'undefined'),
+    },
   },
-  updated() {
-    console.log('updating');
+
+  computed: {
+    objectName() {
+      if (!this.objectDescriptor.value) {
+        return '';
+      }
+
+      const { name, type } = this.objectDescriptor.value;
+      return `${type} ${name}`;
+    },
+
+    detailsType() {
+      const kind = this.objectDescriptor.kind || 'null';
+      return `v-details-panel-${kind}`;
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
-.selection-details {
+.details-panel {
+  display: inline-block;
+  min-width: 280px;
+  width: 100%;
+  height: 100%;
+  color: $gray6;
   background-color: $gray2;
+  word-break: break-word;
 
-  h3 {
+  &__title {
     font-size: 1.2rem;
     color: #e3e5e8;
     text-transform: uppercase;
@@ -48,13 +84,17 @@ export default {
     border-bottom: 1px solid #343742;
   }
 
-  h4 {
+  &__subtitle {
     margin-bottom: 1rem;
     color: #e3e5e8;
   }
 
-  .content {
+  &__content {
     padding: 0 2rem;
+  }
+
+  &__details {
+
   }
 }
 </style>

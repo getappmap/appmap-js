@@ -1,20 +1,26 @@
-import DiagramFlow from '@/components/DiagramFlow.vue';
+import { buildAppMap } from '@appland/models';
+import VDiagramFlow from '@/components/DiagramFlow.vue';
 import mockupData from '@/stories/data/scenario.json';
+
+const { callTree } = buildAppMap()
+  .source(mockupData)
+  .normalize()
+  .build();
 
 export default {
   title: 'AppLand/Diagrams',
-  component: DiagramFlow,
+  component: VDiagramFlow,
   argTypes: {
     theme: { control: { type: 'select', options: ['dark', 'light'] } },
-    data: { table: { disable: true } },
+    callTree: { table: { disable: true } },
   },
   args: {
-    data: mockupData,
+    callTree,
   },
 };
 
 export const diagramFlow = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { DiagramFlow },
-  template: '<DiagramFlow v-bind="$props" />',
+  components: { VDiagramFlow },
+  template: '<v-diagram-flow v-bind="$props" />',
 });

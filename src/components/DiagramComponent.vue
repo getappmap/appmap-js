@@ -1,12 +1,13 @@
 <template>
-  <div class="appland-diagram-component" :key="renderKey" />
+  <div class="diagram-component" :key="renderKey" />
 </template>
 
 <script>
+import { SELECT_OBJECT } from '@/store/vsCode';
 import { ComponentDiagram } from '@appland/diagrams';
 
 export default {
-  name: 'diagram-component',
+  name: 'v-diagram-component',
   props: {
     theme: {
       type: String,
@@ -39,13 +40,30 @@ export default {
 
   methods: {
     renderDiagram() {
-      const diagram = new ComponentDiagram(this.$el, {
-        theme: this.theme,
-        zoom: {
-          controls: this.zoomButtons,
-        },
+      this.$nextTick(() => {
+        const diagram = new ComponentDiagram(this.$el, {
+          theme: this.theme,
+          zoom: {
+            controls: this.zoomButtons,
+          },
+        });
+        diagram.render(this.data);
+        diagram
+          .on('highlight', (nodeIds) => {
+            if (!nodeIds || !nodeIds.length) {
+              this.selectObject(null, null);
+            } else {
+              this.selectObject('component', { id: nodeIds[0] });
+            }
+          })
+          .on('edge', ([from, to]) => this.selectObject('edge', { from, to }));
       });
-      diagram.render(this.data);
+    },
+
+    selectObject(kind, data) {
+      if (this.$store) {
+        this.$store.commit(SELECT_OBJECT, { kind, data });
+      }
     },
   },
 
@@ -60,13 +78,9 @@ export default {
 </script>
 
 <style lang="scss">
-  .appland-diagram-component {
+  .diagram-component {
     @import '~@appland/diagrams/dist/@appland/diagrams';
-
-    grid-column-start: 2;
-    grid-column-end: 3;
-    border-left: 1px solid #343742;
     width: 100%;
-    overflow: scroll;
+    height: 100%;
   }
 </style>
