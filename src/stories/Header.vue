@@ -21,9 +21,9 @@
         <h1>Acme</h1>
       </div>
       <div>
-        <appland-button size="small" @onClick="onLogout" label="Log out" v-if="user" />
-        <appland-button size="small" @onClick="onLogin" label="Log in" v-if="!user" />
-        <appland-button primary size="small" @onClick="onCreateAccount" label="Sign up" v-if="!user" />
+        <v-button size="small" @onClick="onLogout" label="Log out" v-if="user" />
+        <v-button size="small" @onClick="onLogin" label="Log in" v-if="!user" />
+        <v-button primary size="small" @onClick="onCreateAccount" label="Sign up" v-if="!user" />
       </div>
     </div>
   </header>
@@ -31,12 +31,12 @@
 
 <script>
 import './header.css';
-import ApplandButton from '@/components/ApplandButton.vue';
+import VButton from '@/components/Button.vue';
 
 export default {
   name: 'my-header',
 
-  components: { ApplandButton },
+  components: { VButton },
 
   props: {
     user: {

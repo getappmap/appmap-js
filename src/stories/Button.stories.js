@@ -1,8 +1,8 @@
-import ApplandButton from '@/components/ApplandButton.vue';
+import VButton from '@/components/Button.vue';
 
 export default {
   title: 'AppLand/UI/Button',
-  component: ApplandButton,
+  component: VButton,
   argTypes: {
     kind: { control: { type: 'select', options: ['primary', 'secondary', 'ghost'] } },
     size: { control: { type: 'select', options: ['small', 'medium', 'large'] } },
@@ -11,8 +11,8 @@ export default {
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { ApplandButton },
-  template: '<appland-button @onClick="onClick" v-bind="$props" />',
+  components: { VButton },
+  template: '<v-button @onClick="onClick" v-bind="$props" />',
 });
 
 export const Primary = Template.bind({});

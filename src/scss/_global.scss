@@ -19,18 +19,20 @@ body {
   overflow: hidden;
 }
 
+*/
 a {
   color: $blue;
   transition: $transition;
+  text-decoration: none;
+
   &:hover {
-    text-decoration: none;
     color: lighten($blue, 13);
   }
   &:focus {
     outline: none;
   }
 }
-*/
+
 
 #appland {
   display: grid;

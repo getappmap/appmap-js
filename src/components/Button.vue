@@ -16,7 +16,7 @@ export default {
       type: String,
       default: 'primary',
       validator(value) {
-        return ['primary', 'secondary', 'ghost'].indexOf(value) !== 1;
+        return ['primary', 'secondary', 'ghost'].indexOf(value) !== -1;
       },
     },
     size: {
@@ -34,7 +34,7 @@ export default {
 
   computed: {
     classes() {
-      return [`--${this.size}`, `--${this.kind}`];
+      return ['btn', `btn--${this.size}`, `btn--${this.kind}`];
     },
   },
 
@@ -47,30 +47,35 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  button {
+  .btn {
     border-radius: 8px;
     border-style: none;
-    color: #EAEAEA;
+    color: $gray6;
     padding: 0.5em 1em;
     text-align: center;
 
     &:disabled {
-      background-color: #EAEAEA;
-      color: #808B98;
+      background-color: $gray6;
+      color: $gray4;
     }
 
-    &.--primary { background-color: #FF07AA; }
-    &.--secondary { background-color: #4362B1; }
-    &.--ghost {
+    &--primary { background-color: $hotpink; }
+    &--secondary { background-color: $blue; }
+    &--ghost {
       background-color: inherit;
-      border: 1px solid #808B98;
+      border: 1px solid $gray4;
       border-style: solid;
-      color: #808B98;
-      &:disabled { border-color: #EAEAEA; }
+      color: $gray4;
+
+      &:disabled {
+        background-color: inherit;
+        border-color: $gray6;
+        color: $gray6;
+      }
     }
 
-    &.--large { font-size: 18px; }
-    &.--medium { font-size: 14px; }
-    &.--small { font-size: 12px; }
+    &--large { font-size: 18px; }
+    &--medium { font-size: 14px; }
+    &--small { font-size: 12px; }
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="detail-list">
+  <div class="v-details-panel-list">
     <h5>{{title}}</h5>
     <ul>
       <li>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'details-panel-list',
+  name: 'v-details-panel-list',
   props: {
     title: String,
     items: {
@@ -23,7 +23,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .detail-list {
+  .v-details-panel-list {
     list-style-type: none;
     padding: 0;
     margin-bottom: 2.5rem;
