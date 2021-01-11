@@ -43,8 +43,7 @@ export default {
     width: 50%;
 
     &:hover {
-      background-color: darken($blue, 10);
-      color: $white;
+      color: lighten($blue, 10);
     }
 
 
@@ -56,6 +55,9 @@ export default {
       background-color: $blue;
       cursor: default;
       color: $white;
+      &:hover {
+        color: $white;
+      }
     }
   }
 </style>

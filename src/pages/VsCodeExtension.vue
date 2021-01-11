@@ -74,7 +74,7 @@ export default {
 
   #app {
     display: grid;
-    grid-template-columns: 24em auto;
+    grid-template-columns: 25% auto;
     grid-template-rows: max(1fr, 100%);
     height: 100vh;
 
