@@ -1,17 +1,17 @@
 <template>
   <div id="app">
     <div class="column column--left">
-      <v-details-panel :objectDescriptor="selectedObject" />
+      <v-details-panel :object-descriptor="selectedObject" />
     </div>
 
     <div class="column column--right">
     <v-tabs>
       <v-tab name="Component diagram">
-        <v-diagram-component :data="appMap.components" />
+        <v-diagram-component :component-data="components" />
       </v-tab>
 
       <v-tab name="Flow view">
-        <v-diagram-flow :call-tree="appMap.callTree" />
+        <v-diagram-flow :call-tree="callTree" />
       </v-tab>
     </v-tabs>
     </div>
@@ -19,12 +19,12 @@
 </template>
 
 <script>
-import { store, SET_APPMAP_DATA } from '@/store/vsCode';
-import VDetailsPanel from '@/components/DetailsPanel.vue';
-import VDiagramComponent from '@/components/DiagramComponent.vue';
-import VDiagramFlow from '@/components/DiagramFlow.vue';
-import VTabs from '@/components/Tabs.vue';
-import VTab from '@/components/Tab.vue';
+import { store, SET_APPMAP_DATA } from '../store/vsCode';
+import VDetailsPanel from '../components/DetailsPanel.vue';
+import VDiagramComponent from '../components/DiagramComponent.vue';
+import VDiagramFlow from '../components/DiagramFlow.vue';
+import VTabs from '../components/Tabs.vue';
+import VTab from '../components/Tab.vue';
 
 export default {
   name: 'VSCodeExtension',
@@ -40,12 +40,16 @@ export default {
   store,
 
   computed: {
-    appMap() {
-      return this.$store.state.appMap;
-    },
-
     selectedObject() {
       return this.$store.state.selectedObject;
+    },
+
+    components() {
+      return this.$store.state.appMap.components;
+    },
+
+    callTree() {
+      return this.$store.state.appMap.callTree;
     },
   },
 

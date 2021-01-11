@@ -18,7 +18,7 @@ export default {
       type: Boolean,
       default: true,
     },
-    data: {
+    componentData: {
       type: Object,
       default: () => ({}),
     },
@@ -47,7 +47,7 @@ export default {
             controls: this.zoomButtons,
           },
         });
-        diagram.render(this.data);
+        diagram.render(this.componentData);
         diagram
           .on('highlight', (nodeIds) => {
             if (!nodeIds || !nodeIds.length) {

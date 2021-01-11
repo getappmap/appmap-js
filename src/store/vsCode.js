@@ -33,7 +33,13 @@ export const store = new Vuex.Store({
       switch (kind) {
         case 'component': {
           const { id } = data;
-          if (id) {
+          if (id === 'HTTP') {
+            selectedObject.kind = 'http';
+            selectedObject.object = null;
+          } else if (id === 'Database') {
+            selectedObject.kind = 'database';
+            selectedObject.object = null;
+          } else if (id) {
             const matches = state.appMap.classMap.search(data.id);
             const object = matches[0] || null;
             if (object) {
@@ -58,7 +64,7 @@ export const store = new Vuex.Store({
               });
 
               if (httpEvents.length > 0) {
-                selectedObject.kind = 'http';
+                selectedObject.kind = 'route';
                 selectedObject.object = httpEvents;
               }
             }

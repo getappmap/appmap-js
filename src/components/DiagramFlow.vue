@@ -35,7 +35,6 @@ export default {
     // If a prop changes, update the render key, causing a full re-render.
     $props: {
       handler() { this.renderKey += 1; },
-      deep: true,
     },
   },
 

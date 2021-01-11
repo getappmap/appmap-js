@@ -1,16 +1,40 @@
 <template>
   <div class="details-panel-route">
-    route
+    <v-details-panel-list title="Events" :items="events"/>
   </div>
 </template>
 
 <script>
-// import DetailsPanelList from '@/components/DetailsPanelList.vue';
+import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
   name: 'v-details-panel-route',
+  props: {
+    objectDescriptor: {
+      type: Array,
+      required: true,
+    },
+  },
+
   components: {
-    // DetailsPanelList,
+    VDetailsPanelList,
+  },
+
+  computed: {
+    events() {
+      return this.objectDescriptor.map((e) => {
+        /* eslint-disable camelcase */
+        const {
+          path_info,
+          request_method,
+        } = e.http_server_request;
+
+        return {
+          text: `${request_method} ${path_info}`,
+        };
+        /* eslint-enable camelcase */
+      });
+    },
   },
 };
 </script>

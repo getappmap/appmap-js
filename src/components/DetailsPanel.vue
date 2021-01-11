@@ -5,7 +5,7 @@
       <h4 class="details-panel__subtitle">{{objectName}}</h4>
 
       <div class="details-panel__details">
-        <component :is="detailsType" :objectDescriptor="objectDescriptor.object"/>
+        <component :is="detailsType" :object-descriptor="$store.state.selectedObject.object"/>
       </div>
     </div>
   </div>
@@ -39,27 +39,25 @@ export default {
       default: 'Component details',
     },
     subtitle: String,
-    objectDescriptor: {
-      type: Object,
-      required: true,
-      validator: (value) => (typeof value.kind !== 'undefined'
-        && typeof value.object !== 'undefined'),
-    },
   },
 
   computed: {
     objectName() {
-      if (!this.objectDescriptor.value) {
+      if (!this.selectedObject.value) {
         return '';
       }
 
-      const { name, type } = this.objectDescriptor.value;
+      const { name, type } = this.selectedObject.value;
       return `${type} ${name}`;
     },
 
     detailsType() {
-      const kind = this.objectDescriptor.kind || 'null';
+      const kind = this.selectedObject.kind || 'null';
       return `v-details-panel-${kind}`;
+    },
+
+    selectedObject() {
+      return this.$store.state.selectedObject;
     },
   },
 };

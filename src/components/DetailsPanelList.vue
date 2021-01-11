@@ -1,9 +1,9 @@
 <template>
-  <div class="v-details-panel-list">
+  <div class="v-details-panel-list" v-if="items.length > 0">
     <h5>{{title}}</h5>
     <ul>
-      <li>
-        <a href="javascript: void(0)">#show</a>
+      <li v-for="(item, index) in items" :key="index">
+        <a href="javascript: void(0)">{{item.text}}</a>
       </li>
     </ul>
   </div>
