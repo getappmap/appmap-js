@@ -1,9 +1,13 @@
 <template>
   <div class="details-panel">
-    <h3 class="details-panel__title">{{title}}</h3>
-    <a href="#" v-if="canGoBack" @click.prevent="goBack">Back</a>
-    <div class="details-panel__details">
-      <component :is="detailsType" :object-descriptor="objectDescriptor"/>
+    <h3 class="details-panel__title">
+      <img src="../assets/appland-logo.svg" />
+    </h3>
+    <div class="details-panel__content">
+      <div class="details-panel__details">
+        <a href="#" v-if="canGoBack" @click.prevent="goBack">Back</a>
+        <component :is="detailsType" :object-descriptor="objectDescriptor"/>
+      </div>
     </div>
   </div>
 </template>
@@ -88,16 +92,37 @@ export default {
   word-break: break-word;
   border-right: 1px solid $gray3;
 
-  &__title {
-    font-size: .9rem;
-    font-weight: 400;
-    color: $white;
-    text-transform: uppercase;
+  .details-panel__title {
+    padding: 2rem;
     margin: 0;
-    padding: .5rem 2rem;
-    border-bottom: 1px solid darken($gray2,10);
-    letter-spacing: .75px;
-    background-color: darken($gray2,05);
+    img {
+      max-width: 10rem;
+    }
+  }
+
+  // &__title {
+  //   font-size: .9rem;
+  //   font-weight: 400;
+  //   color: $white;
+  //   text-transform: uppercase;
+  //   margin: 0;
+  //   padding: .5rem 2rem;
+  //   border-bottom: 1px solid darken($gray2,10);
+  //   letter-spacing: .75px;
+  //   background-color: darken($gray2,05);
+  // }
+
+  &__subtitle {
+    margin-bottom: 1rem;
+    color: $white;
+  }
+
+  &__content {
+    padding: 0;
+  }
+
+  &__details {
+
   }
 }
 </style>

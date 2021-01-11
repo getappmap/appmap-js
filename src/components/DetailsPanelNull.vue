@@ -3,7 +3,6 @@
     <div id="intro-details" class="welcome">
       <div class="content">
         <div class="intro">
-          <img src="../assets/appland-logo.svg" />
           <p>Select a component in the diagram to see its details here. Here, we’ll show you any relevant information about your code as you navigate through your appmaps.</p>
         </div>
         <div class="components_events">
@@ -59,7 +58,7 @@ export default {
   color: $appland-text;
   font-size: .9rem;
   line-height: 1.2rem;
-  padding: 0 2rem;
+  padding: 0 2rem 2rem 2rem;
   h3 {
     color: $white;
     margin-bottom: .25rem;
@@ -70,7 +69,7 @@ export default {
   .intro {
     img {
       max-width: 13rem;
-      margin: 1rem 0;
+      margin: 0 0 1.25rem 0;
     }
   }
   .legend {
@@ -80,6 +79,7 @@ export default {
       li {
         display: flex;
         flex-direction: row;
+        margin: .5rem 0;
         p {
           margin: 0;
         }
