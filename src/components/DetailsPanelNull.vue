@@ -3,11 +3,17 @@
     <div id="intro-details" class="welcome">
       <div class="content">
         <div class="intro">
-          <p>Select a component in the diagram to see its details here. Here, we’ll show you any relevant information about your code as you navigate through your appmaps.</p>
+          <p>
+            Select a component in the diagram to see its details here. Here, we’ll show you any
+            relevant information about your code as you navigate through your appmaps.
+          </p>
         </div>
         <div class="components_events">
           <h3>Components & Events</h3>
-        <p>The UML-inspired diagrams display your key application components, and how they are inter-related during application execution.</p>
+          <p>
+            The UML-inspired diagrams display your key application components, and how they are
+            inter-related during application execution.
+          </p>
         </div>
         <div class="right_click">
           <h3>Right-click</h3>

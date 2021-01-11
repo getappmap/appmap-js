@@ -44,7 +44,6 @@ export default {
       color: lighten($blue, 10);
     }
 
-
     &:focus {
       outline: none;
     }

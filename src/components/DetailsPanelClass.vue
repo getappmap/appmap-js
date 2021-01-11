@@ -8,7 +8,7 @@
         </li>
       </ul>
     </div>
-    
+
     <v-details-panel-list title="Functions" :items="functions"/>
     <v-details-panel-list title="Inbound connections" :items="inboundConnections"/>
     <v-details-panel-list title="Outbound connections" :items="outboundConnections"/>
