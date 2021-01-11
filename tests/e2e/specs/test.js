@@ -3,6 +3,7 @@
 describe('My First Test', () => {
   it('Visits the app root url', () => {
     cy.visit('/');
-    cy.contains('h1', 'Welcome to Your Vue.js App');
+    cy.get('.node.class[data-parent-type=http]');
+    cy.contains('.class.label', 'DELETE /allies/remove');
   });
 });
