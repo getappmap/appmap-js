@@ -3,13 +3,17 @@
     <h5>{{title}}</h5>
     <ul>
       <li v-for="(item, index) in items" :key="index">
-        <a href="javascript: void(0)">{{item.text}}</a>
+        <a href="#" @click.prevent="selectItem(item)">
+          {{item.text}}
+        </a>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { SELECT_OBJECT } from '@/store/vsCode';
+
 export default {
   name: 'v-details-panel-list',
   props: {
@@ -17,6 +21,15 @@ export default {
     items: {
       type: Array,
       default: () => [],
+    },
+  },
+  methods: {
+    selectItem(item) {
+      if (!this.$store || !item.kind || !item.object) {
+        return;
+      }
+
+      this.$store.commit(SELECT_OBJECT, { kind: item.kind, data: item.object });
     },
   },
 };

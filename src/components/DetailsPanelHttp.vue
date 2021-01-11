@@ -1,17 +1,47 @@
 <template>
   <div class="details-panel-http">
-    http
+    <v-details-panel-list title="Routes" :items="routes" />
   </div>
 </template>
 
 <script>
-// import DetailsPanelList from '@/components/DetailsPanelList.vue';
+import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
   name: 'v-details-panel-http',
   components: {
-    // DetailsPanelList,
+    VDetailsPanelList,
   },
+  computed: {
+    routes() {
+      const routeEvents = this.$store.state.appMap.events
+        .filter((e) => e.isCall() && e.http_server_request)
+        .reduce((map, e) => {
+          /* eslint-disable camelcase */
+          /* eslint-disable no-param-reassign */
+          const { request_method, path_info } = e.http_server_request;
+          const key = `${request_method} ${path_info}`;
+          let events = map[key];
+
+          if (!events) {
+            events = [];
+            map[key] = events;
+          }
+
+          events.push(e);
+          return map;
+          /* eslint-enable no-param-reassign */
+          /* eslint-enable camelcase */
+        }, {});
+
+      return Object.entries(routeEvents)
+        .map(([route, events]) => ({
+          kind: 'route',
+          text: route,
+          object: events,
+        }));
+    }
+  }
 };
 </script>
 

@@ -42,7 +42,7 @@ export const store = new Vuex.Store({
           if (id === 'HTTP') {
             selectedObject.kind = 'http';
             selectedObject.object = null;
-          } else if (id === 'Database') {
+          } else if (id === 'SQL') {
             selectedObject.kind = 'database';
             selectedObject.object = null;
           } else if (id) {

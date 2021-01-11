@@ -30,7 +30,9 @@ export default {
         .map((e) => e.codeObject.classOf));
 
       return Array.from(classIds).map((classId) => ({
+        kind: 'class',
         text: classId,
+        object: this.$store.state.appMap.classMap.search(classId)[0],
       }));
     },
 
@@ -48,7 +50,9 @@ export default {
 
       return [...new Set(parentObjects)]
         .map((obj) => ({
+          kind: 'package',
           text: obj.id,
+          object: obj,
         }));
     },
 
@@ -64,7 +68,9 @@ export default {
 
       return [...new Set(childrenObjects)]
         .map((obj) => ({
+          kind: 'package',
           text: obj.id,
+          object: obj,
         }));
     },
   },

@@ -6,6 +6,7 @@
 
 <script>
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
+import { SELECT_OBJECT } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel-route',
@@ -30,7 +31,9 @@ export default {
         } = e.http_server_request;
 
         return {
+          kind: 'event',
           text: `${request_method} ${path_info}`,
+          object: e,
         };
         /* eslint-enable camelcase */
       });

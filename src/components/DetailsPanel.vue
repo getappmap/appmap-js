@@ -13,6 +13,7 @@ import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
 import VDetailsPanelDatabase from '@/components/DetailsPanelDatabase.vue';
 import VDetailsPanelEdge from '@/components/DetailsPanelEdge.vue';
 import VDetailsPanelEvent from '@/components/DetailsPanelEvent.vue';
+import VDetailsPanelFunction from '@/components/DetailsPanelFunction.vue';
 import VDetailsPanelHttp from '@/components/DetailsPanelHttp.vue';
 import VDetailsPanelNull from '@/components/DetailsPanelNull.vue';
 import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
@@ -26,6 +27,7 @@ export default {
     VDetailsPanelDatabase,
     VDetailsPanelEdge,
     VDetailsPanelEvent,
+    VDetailsPanelFunction,
     VDetailsPanelHttp,
     VDetailsPanelNull,
     VDetailsPanelPackage,
@@ -43,6 +45,15 @@ export default {
   },
 
   computed: {
+    objectName() {
+      if (!this.selectedObject || !this.selectedObject.object) {
+        return '';
+      }
+
+      const { name, type } = this.selectedObject.object;
+      return `${type} ${name}`;
+    },
+
     detailsType() {
       let kind = 'null';
       if (this.selectedObject && this.selectedObject.kind) {
