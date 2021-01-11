@@ -1,10 +1,9 @@
 <template>
   <div class="details-panel">
     <v-section :title="title">
-      <h4 class="details-panel__subtitle">{{objectName}}</h4>
-
+      <a href="#" v-if="canGoBack" @click.prevent="goBack">Back</a>
       <div class="details-panel__details">
-        <component :is="detailsType" :object-descriptor="$store.state.selectedObject.object"/>
+        <component :is="detailsType" :object-descriptor="objectDescriptor"/>
       </div>
     </v-section>
   </div>
