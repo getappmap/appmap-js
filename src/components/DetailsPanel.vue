@@ -34,10 +34,6 @@ export default {
     VDetailsPanelRoute,
   },
   props: {
-    title: {
-      type: String,
-      default: 'Component details',
-    },
     subtitle: String,
     selectedObject: {
       type: Object,
@@ -90,15 +86,18 @@ export default {
   color: $gray6;
   background-color: $gray2;
   word-break: break-word;
-  border-right: 2px solid $gray3;
+  border-right: 1px solid $gray3;
 
   &__title {
-    font-size: 1.2rem;
+    font-size: .9rem;
+    font-weight: 400;
     color: $white;
     text-transform: uppercase;
-    margin: 0 0 1rem 0;
-    padding: 1.5rem 2rem;
-    border-bottom: 1px solid $gray3;
+    margin: 0;
+    padding: .5rem 2rem;
+    border-bottom: 1px solid darken($gray2,10);
+    letter-spacing: .75px;
+    background-color: darken($gray2,05);
   }
 }
 </style>

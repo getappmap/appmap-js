@@ -1,10 +1,11 @@
 <template>
   <div class="details-panel-null">
     <div id="intro-details" class="welcome">
-      <h3 class="block-heading">Welcome to AppLand!</h3>
-      <div class="content intro">
-        <p>Select a component in the diagram to see its details here. Here, we’ll show you any relevant information about your code as you navigate through your appmaps.</p>
-        <p>Check the extension page for full details on what is possible with AppLand.</p>
+      <div class="content">
+        <div class="intro">
+          <img src="../assets/appland-logo.svg" />
+          <p>Select a component in the diagram to see its details here. Here, we’ll show you any relevant information about your code as you navigate through your appmaps.</p>
+        </div>
         <div class="components_events">
           <h3>Components & Events</h3>
         <p>The UML-inspired diagrams display your key application components, and how they are inter-related during application execution.</p>
@@ -54,6 +55,60 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.details-null {
+#intro-details {
+  color: $appland-text;
+  font-size: .9rem;
+  line-height: 1.2rem;
+  padding: 0 2rem;
+  h3 {
+    color: $white;
+    margin-bottom: .25rem;
+  }
+  p {
+    margin-top: 0;
+  }
+  .intro {
+    img {
+      max-width: 13rem;
+      margin: 1rem 0;
+    }
+  }
+  .legend {
+    ul {
+      padding: 0;
+      list-style-type: none;
+      li {
+        display: flex;
+        flex-direction: row;
+        p {
+          margin: 0;
+        }
+        align-items: flex-start;
+      }
+      .icon {
+        display: inline-block;
+        height: 1rem;
+        width: 2rem;
+        margin-right: .5rem;
+        margin-top: .3rem;
+        &.class-pkg {
+          background-color: $teal;
+        }
+        &.class {
+          background-color: $blue;
+        }
+        &.dynamic {
+          background-image: url("../assets/arrow-right.svg");
+          background-repeat: no-repeat;
+        }
+        &.web-service {
+          background-color: $web-services;
+        }
+        &.database {
+          background-color: $royal;
+        }
+      }
+    }
+  }
 }
 </style>

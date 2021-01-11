@@ -43,7 +43,7 @@ export default {
 
     h5 {
       color: $gray4;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       margin-bottom: 0.5rem;
       font-weight: 500;
       line-height: 1.2;

@@ -28,8 +28,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  $bg-color: $gray4;
-
   .tab-btn {
     appearance: none;
     border: 0;
