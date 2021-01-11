@@ -39,25 +39,35 @@ export default {
   .v-details-panel-list {
     list-style-type: none;
     padding: 0;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
 
     h5 {
-      color: #808b98;
-      font-size: 1.25rem;
+      color: $gray4;
+      font-size: 1.2rem;
       margin-bottom: 0.5rem;
       font-weight: 500;
       line-height: 1.2;
+      padding: 0 2rem;
     }
 
     ul {
       list-style-type: none;
       padding: 0;
-      margin-bottom: 2.5rem;
+      margin-bottom: 1.5rem;
       margin-top: 0;
 
       li {
         border-bottom: 1px solid #343742;
-        padding: .25rem 0;
+        padding: .5rem 2rem;
+        transition: $transition;
+
+        &:hover {
+          background-color: $blue;
+          border-color: $blue;
+          a {
+            color: $white;
+          }
+        }
 
         &:first-of-type {
           border-top: 1px solid #343742;

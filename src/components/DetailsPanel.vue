@@ -83,21 +83,22 @@ export default {
 <style scoped lang="scss">
 .details-panel {
   display: inline-block;
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   min-width: 280px;
   width: 100%;
   height: 100%;
   color: $gray6;
   background-color: $gray2;
   word-break: break-word;
-  padding: 0 2rem;
+  border-right: 2px solid $gray3;
 
   &__title {
     font-size: 1.2rem;
-    color: #e3e5e8;
+    color: $white;
     text-transform: uppercase;
-    margin-bottom: 1rem;
+    margin: 0 0 1rem 0;
     padding: 1.5rem 2rem;
-    border-bottom: 1px solid #343742;
+    border-bottom: 1px solid $gray3;
   }
 }
 </style>
