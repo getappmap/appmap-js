@@ -5,7 +5,7 @@
     </h3>
     <div class="details-panel__content">
       <div class="details-panel__details">
-        <a href="#" v-if="canGoBack" @click.prevent="goBack">Back</a>
+        <a class="back-btn" href="#" v-if="canGoBack" @click.prevent="goBack">Back</a>
         <component :is="detailsType" :object-descriptor="objectDescriptor"/>
       </div>
     </div>
@@ -92,25 +92,13 @@ export default {
   word-break: break-word;
   border-right: 1px solid $gray3;
 
-  .details-panel__title {
+  &__title {
     padding: 2rem;
     margin: 0;
     img {
       max-width: 10rem;
     }
   }
-
-  // &__title {
-  //   font-size: .9rem;
-  //   font-weight: 400;
-  //   color: $white;
-  //   text-transform: uppercase;
-  //   margin: 0;
-  //   padding: .5rem 2rem;
-  //   border-bottom: 1px solid darken($gray2,10);
-  //   letter-spacing: .75px;
-  //   background-color: darken($gray2,05);
-  // }
 
   &__subtitle {
     margin-bottom: 1rem;
@@ -122,7 +110,9 @@ export default {
   }
 
   &__details {
-
+    .back-btn {
+      padding: 0 2rem;
+    }
   }
 }
 </style>

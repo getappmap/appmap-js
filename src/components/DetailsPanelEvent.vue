@@ -2,12 +2,12 @@
   <div class="details-panel-event">
     <h3>{{name}}</h3>
 
-    <div v-if="hasSql">
+    <div class="sql-code" v-if="hasSql">
       <code>{{this.objectDescriptor.sql.sql}}</code>
     </div>
 
     <div v-if="hasParameters">
-      <h3>Parameters</h3>
+      <h4>Parameters</h4>
       <ul>
         <li v-for="(param, index) in objectDescriptor.parameters" :key="index">
           <strong>{{param.name}}</strong>
@@ -17,7 +17,7 @@
     </div>
 
     <div v-if="hasMessage">
-      <h3>Parameters</h3>
+      <h4>Parameters</h4>
       <ul>
         <li v-for="(param, index) in objectDescriptor.message" :key="index">
           <i>[{{param.class}}]</i>
@@ -108,6 +108,37 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.details-event {
+.details-panel-event {
+  h3 {
+    padding: 0 2rem;
+  }
+  h4 {
+    margin: 0;
+    padding: .5rem 2rem;
+    font-size: 1.3rem;
+    border-bottom: 1px solid $gray3;
+  }
+  .sql-code {
+    padding: 0 2rem;
+  }
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+    width: 100%;
+    li {
+      width: 100%;
+      border-bottom: 1px solid $gray3;
+      padding: .5rem 2rem;
+      transition: $transition;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      a {
+        margin: 0 2rem;
+        width: 100%;
+      }
+    }
+  }
 }
 </style>
