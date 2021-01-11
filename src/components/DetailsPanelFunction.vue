@@ -1,21 +1,32 @@
 <template>
   <div class="details-panel-function">
-    function
+    <v-details-panel-list title="Events" :items="events" />
   </div>
 </template>
 
 <script>
-// import DetailsPanelList from '@/components/DetailsPanelList.vue';
+import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
   name: 'v-details-panel-function',
   components: {
-    // DetailsPanelList,
+    VDetailsPanelList,
   },
   props: {
     objectDescriptor: {
       type: Object,
       required: true,
+    },
+  },
+  computed: {
+    events() {
+      return this.$store.state.appMap.events
+        .filter((e) => e.isCall() && e.codeObject === this.objectDescriptor)
+        .map((e) => ({
+          kind: 'event',
+          text: e.codeObject.id,
+          object: e,
+        }));
     },
   },
 };

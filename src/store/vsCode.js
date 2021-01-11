@@ -6,28 +6,34 @@ Vue.use(Vuex);
 
 export const SELECT_OBJECT = 'selectObject';
 export const SET_APPMAP_DATA = 'setAppMapData';
-
-const initialState = {
-  appMap: new AppMap(),
-  selectedObject: {
-    kind: null,
-    object: null,
-  },
-};
+export const POP_OBJECT_STACK = 'popObjectStack';
 
 export const store = new Vuex.Store({
-  state: { ...initialState },
+  state: {
+    appMap: new AppMap(),
+    selectionStack: [],
+  },
+
+  getters: {
+    selectedObject(state) {
+      return state.selectionStack[state.selectionStack.length - 1];
+    },
+    canPopStack(state) {
+      return state.selectionStack.length > 1;
+    },
+  },
 
   mutations: {
     [SET_APPMAP_DATA](state, data) {
-      state.selectedObject = { ...initialState.selectedObject };
+      state.selectionStack = [];
       state.appMap = buildAppMap()
         .source(data)
         .normalize()
         .build();
     },
+
     [SELECT_OBJECT](state, selection) {
-      const selectedObject = { ...initialState.selectedObject };
+      const selectedObject = { kind: null, object: null };
       const { kind, data } = selection;
 
       switch (kind) {
@@ -36,7 +42,7 @@ export const store = new Vuex.Store({
           if (id === 'HTTP') {
             selectedObject.kind = 'http';
             selectedObject.object = null;
-          } else if (id === 'Database') {
+          } else if (id === 'SQL') {
             selectedObject.kind = 'database';
             selectedObject.object = null;
           } else if (id) {
@@ -77,7 +83,17 @@ export const store = new Vuex.Store({
         }
       }
 
-      state.selectedObject = selectedObject;
+      if (selection.clearStack) {
+        state.selectionStack = [];
+      }
+
+      if (selectedObject.kind) {
+        state.selectionStack.push(selectedObject);
+      }
+    },
+
+    [POP_OBJECT_STACK](state) {
+      state.selectionStack.pop();
     },
   },
 });

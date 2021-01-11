@@ -32,7 +32,9 @@ export default {
 
     functions() {
       return this.objectDescriptor.children.map((obj) => ({
+        kind: 'function',
         text: obj.name,
+        object: obj,
       }));
     },
 
@@ -48,7 +50,9 @@ export default {
 
       return [...new Set(parentObjects)]
         .map((obj) => ({
+          kind: 'function',
           text: obj.id,
+          object: obj,
         }));
     },
 
@@ -62,7 +66,9 @@ export default {
 
       return [...new Set(childrenObjects)]
         .map((obj) => ({
+          kind: 'function',
           text: obj.id,
+          object: obj,
         }));
     },
   },

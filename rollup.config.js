@@ -40,11 +40,9 @@ const baseConfig = {
         preprocessOptions: {
           scss: {
             importer: [
-              function (url, _prev) {
-                return {
-                  file: url.replace(/^~/, `${path.resolve(__dirname, 'node_modules')}/`),
-                };
-              },
+              (url) => ({
+                file: url.replace(/^~/, `${path.resolve(__dirname, 'node_modules')}/`),
+              }),
             ],
           },
         },

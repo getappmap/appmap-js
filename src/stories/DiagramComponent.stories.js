@@ -1,15 +1,18 @@
 import VDiagramComponent from '@/components/DiagramComponent.vue';
-import mockupData from '@/stories/data/componentDiagram.json';
+import scenario from '@/stories/data/scenario.json';
+import { buildAppMap } from '@appland/models';
+
+const appMap = buildAppMap().source(scenario).normalize().build();
 
 export default {
   title: 'AppLand/Diagrams',
   component: VDiagramComponent,
   argTypes: {
     theme: { control: { type: 'select', options: ['dark', 'light'] } },
-    data: { table: { disable: true } },
+    componentData: { table: { disable: true } },
   },
   args: {
-    data: mockupData,
+    componentData: appMap.components,
   },
 };
 
@@ -18,6 +21,6 @@ export const diagramComponent = (args, { argTypes }) => ({
   components: { VDiagramComponent },
   template: '<v-diagram-component v-bind="$props" />',
   args: {
-    data: mockupData,
+    componentData: appMap.components,
   },
 });

@@ -1,16 +1,27 @@
 <template>
   <div class="details-panel-database">
-    database
+    <v-details-panel-list title="Queries" :items="queries" />
   </div>
 </template>
 
 <script>
-// import DetailsPanelList from '@/components/DetailsPanelList.vue';
+import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
   name: 'v-details-panel-database',
   components: {
-    // DetailsPanelList,
+    VDetailsPanelList,
+  },
+  computed: {
+    queries() {
+      return this.$store.state.appMap.events
+        .filter((e) => e.isCall() && e.sql)
+        .map((e) => ({
+          kind: 'event',
+          text: e.sql.sql,
+          object: e,
+        }));
+    },
   },
 };
 </script>

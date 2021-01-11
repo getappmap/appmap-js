@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="column column--left">
-      <v-details-panel :object-descriptor="selectedObject" />
+      <v-details-panel :selected-object="selectedObject" />
     </div>
 
     <div class="column column--right">
@@ -41,7 +41,7 @@ export default {
 
   computed: {
     selectedObject() {
-      return this.$store.state.selectedObject;
+      return this.$store.getters.selectedObject;
     },
 
     components() {

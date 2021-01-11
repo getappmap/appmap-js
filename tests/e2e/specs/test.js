@@ -3,7 +3,7 @@
 describe('My First Test', () => {
   it('Visits the app root url', () => {
     cy.visit('/');
-    cy.get('.node.class[data-parent-type=http]');
-    cy.contains('.class.label', 'DELETE /allies/remove');
+    cy.get('.node.http');
+    cy.contains('.label.http', 'HTTP server requests');
   });
 });
