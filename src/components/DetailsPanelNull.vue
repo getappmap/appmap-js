@@ -11,11 +11,11 @@
         </div>
         <div class="right_click">
           <h3>Right-click</h3>
-          <p>Right-click nodes in the diagram to expand, collapse, and reset the diagram elements.</p>
+          <p>Expand, collapse, and reset the diagram elements.</p>
         </div>
         <div class="filters">
           <h3>Filters</h3>
-          <p>Use our powerful filters bring focus to a narrow area of youyr interest.</p>
+          <p>Bring focus to a narrow area of interest.</p>
         </div>
         <div class="legend">
           <ul>

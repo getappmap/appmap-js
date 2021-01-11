@@ -24,6 +24,7 @@
         align-items: flex-start;
       }
       .icon {
+        display: inline-block;
         height: 1rem;
         width: 2rem;
         margin-right: .5rem;
@@ -35,9 +36,10 @@
           background-color: $blue;
         }
         &.dynamic {
-          background-color: $royal;
+          background-image: url("../assets/arrow-right.svg");
+          background-repeat: no-repeat;
         }
-        &.web-services {
+        &.web-service {
           background-color: $web-services;
         }
         &.database {
