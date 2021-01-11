@@ -1,5 +1,8 @@
+import Vue from 'vue';
 import Vuex from 'vuex';
 import { AppMap, buildAppMap } from '@appland/models';
+
+Vue.use(Vuex);
 
 export const SELECT_OBJECT = 'selectObject';
 export const SET_APPMAP_DATA = 'setAppMapData';
