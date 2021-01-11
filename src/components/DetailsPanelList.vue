@@ -44,10 +44,10 @@ export default {
     h5 {
       color: $gray4;
       font-size: 1.1rem;
-      margin-bottom: 0.5rem;
       font-weight: 500;
       line-height: 1.2;
       padding: 0 2rem;
+      margin: 0;
     }
 
     ul {
