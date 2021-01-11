@@ -1,14 +1,17 @@
 <template>
   <div class="details-panel">
-    <h3 class="details-panel__title">{{title}}</h3>
-    <a href="#" v-if="canGoBack" @click.prevent="goBack">Back</a>
-    <div class="details-panel__details">
-      <component :is="detailsType" :object-descriptor="objectDescriptor"/>
-    </div>
+    <v-section :title="title">
+      <h4 class="details-panel__subtitle">{{objectName}}</h4>
+
+      <div class="details-panel__details">
+        <component :is="detailsType" :object-descriptor="$store.state.selectedObject.object"/>
+      </div>
+    </v-section>
   </div>
 </template>
 
 <script>
+import VSection from '@/components/Section.vue';
 import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
 import VDetailsPanelDatabase from '@/components/DetailsPanelDatabase.vue';
 import VDetailsPanelEdge from '@/components/DetailsPanelEdge.vue';
@@ -32,6 +35,7 @@ export default {
     VDetailsPanelNull,
     VDetailsPanelPackage,
     VDetailsPanelRoute,
+    VSection,
   },
   props: {
     title: {
@@ -82,7 +86,6 @@ export default {
 
 <style scoped lang="scss">
 .details-panel {
-  display: inline-block;
   min-width: 280px;
   width: 100%;
   height: 100%;
@@ -92,12 +95,11 @@ export default {
   padding: 0 2rem;
 
   &__title {
-    font-size: 1.2rem;
-    color: #e3e5e8;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    padding: 1.5rem 2rem;
-    border-bottom: 1px solid #343742;
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+    color: $gray6;
+    background-color: $black;
+    text-align: center;
   }
 }
 </style>

@@ -28,14 +28,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  $bg-color: $gray4;
-
   .tab-btn {
+    flex: 1;
     appearance: none;
-    border: 2px solid $gray3;
-    background-color: $bg-color;
-    padding: 0.5em 1em;
-    margin-left: 2px;
+    border: none;
+    background-color: $black;
+    padding: 0.4rem 1rem;
+    text-align: center;
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: $gray4;
     cursor: pointer;
 
     &:focus {
@@ -44,10 +47,10 @@ export default {
     }
 
     &--active {
+      color: white;
+      background-color: $blue;
       cursor: default;
-
-      border-bottom: 2px solid lighten($bg-color, 20%);
-      background-color: lighten($bg-color, 20%);
+      pointer-events: none;
     }
   }
 </style>

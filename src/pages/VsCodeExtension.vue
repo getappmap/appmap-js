@@ -5,6 +5,8 @@
     </div>
 
     <div class="column column--right">
+    <v-section title="Filters">
+    </v-section>
     <v-tabs>
       <v-tab name="Component diagram">
         <v-diagram-component :component-data="components" />
@@ -23,6 +25,7 @@ import { store, SET_APPMAP_DATA } from '../store/vsCode';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramFlow from '../components/DiagramFlow.vue';
+import VSection from '../components/Section.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 
@@ -33,6 +36,7 @@ export default {
     VDetailsPanel,
     VDiagramComponent,
     VDiagramFlow,
+    VSection,
     VTabs,
     VTab,
   },
@@ -80,9 +84,9 @@ export default {
 
     .column {
       &--left {
+        border-right: 2px solid #424750;
         grid-column: 1;
         width: 100%;
-        overflow: scroll;
       }
 
       &--right {
