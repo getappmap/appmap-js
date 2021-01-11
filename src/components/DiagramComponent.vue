@@ -62,7 +62,7 @@ export default {
 
     selectObject(kind, data) {
       if (this.$store) {
-        this.$store.commit(SELECT_OBJECT, { kind, data });
+        this.$store.commit(SELECT_OBJECT, { kind, data, clearStack: true });
       }
     },
   },
