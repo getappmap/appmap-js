@@ -1,10 +1,10 @@
 import { shallowMount } from '@vue/test-utils';
-import ApplandButton from '@/components/ApplandButton.vue';
+import Button from '@/components/Button.vue';
 
-describe('ApplandButton.vue', () => {
+describe('Button.vue', () => {
   it('renders props.label when passed', () => {
     const label = 'hello world';
-    const wrapper = shallowMount(ApplandButton, {
+    const wrapper = shallowMount(Button, {
       propsData: { label },
     });
     expect(wrapper.text()).toMatch(label);
