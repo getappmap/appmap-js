@@ -128,7 +128,8 @@ export default {
       return appMap
         .events
         .filter((e) => eventMatchesIdentifier(from, e))
-        .filter((e) => e.children && e.children.filter((child) => eventMatchesIdentifier(to, child)))
+        .filter((e) => e.children
+          && e.children.filter((child) => eventMatchesIdentifier(to, child)))
         .map((e) => ({
           kind: 'event',
           text: eventName(e),

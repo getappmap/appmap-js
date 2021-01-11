@@ -18,7 +18,7 @@ const plugin = {
 // To auto-install on non-es builds, when vue is found
 // eslint-disable-next-line no-redeclare
 /* global window, global */
-if ('false' === process.env.ES_BUILD) {
+if (process.env.ES_BUILD === 'false') {
   let GlobalVue = null;
   if (typeof window !== 'undefined') {
     GlobalVue = window.Vue;

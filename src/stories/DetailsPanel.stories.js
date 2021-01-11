@@ -52,7 +52,8 @@ export const Event = Template.bind({});
 Event.args = {
   selectedObject: {
     kind: 'event',
-    object: store.state.appMap.events.find((e) => e.isCall() && e.codeObject && e.parameters.length > 3),
+    object: store.state.appMap.events.find((e) => e.isCall()
+      && e.codeObject && e.parameters.length > 3),
   },
 };
 
@@ -73,7 +74,6 @@ HTTP.args = {
 };
 
 export const Null = Template.bind({});
-
 
 export const Package = Template.bind({});
 Package.args = {

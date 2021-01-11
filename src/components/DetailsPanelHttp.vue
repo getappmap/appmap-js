@@ -40,8 +40,8 @@ export default {
           text: route,
           object: events,
         }));
-    }
-  }
+    },
+  },
 };
 </script>
 

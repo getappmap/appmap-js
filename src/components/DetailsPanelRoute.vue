@@ -6,7 +6,6 @@
 
 <script>
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
-import { SELECT_OBJECT } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel-route',
