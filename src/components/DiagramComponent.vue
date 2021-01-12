@@ -24,6 +24,8 @@ export default {
     },
   },
 
+  diagram: null,
+
   data() {
     return {
       renderKey: 0,
@@ -57,6 +59,7 @@ export default {
             }
           })
           .on('edge', ([from, to]) => this.selectObject('edge', { from, to }));
+        this.diagram = diagram;
       });
     },
 
@@ -69,6 +72,12 @@ export default {
 
   mounted() {
     this.renderDiagram();
+
+    this.$root.$on('component_diagram_clear', () => {
+      this.diagram.clearHighlights();
+      this.diagram.clearFocus();
+      this.diagram.render(this.componentData);
+    });
   },
 
   updated() {

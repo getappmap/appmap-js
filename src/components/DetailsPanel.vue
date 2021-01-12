@@ -1,7 +1,12 @@
 <template>
   <div class="details-panel">
     <v-section :title="title">
-      <a href="#" v-if="canGoBack" @click.prevent="goBack">Back</a>
+      <div class="row" v-if="canBeCleared">
+        <a class="link" href="#" @click.prevent="clearSelection">Clear selection</a>
+      </div>
+      <div class="row" v-if="canGoBack">
+        <a class="link" href="#" @click.prevent="goBack">Back</a>
+      </div>
       <div class="details-panel__details">
         <component :is="detailsType" :object-descriptor="objectDescriptor"/>
       </div>
@@ -10,7 +15,6 @@
 </template>
 
 <script>
-import VSection from '@/components/Section.vue';
 import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
 import VDetailsPanelDatabase from '@/components/DetailsPanelDatabase.vue';
 import VDetailsPanelEdge from '@/components/DetailsPanelEdge.vue';
@@ -20,6 +24,7 @@ import VDetailsPanelHttp from '@/components/DetailsPanelHttp.vue';
 import VDetailsPanelNull from '@/components/DetailsPanelNull.vue';
 import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
 import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
+import VSection from '@/components/Section.vue';
 import { POP_OBJECT_STACK } from '@/store/vsCode';
 
 export default {
@@ -70,12 +75,19 @@ export default {
       return this.selectedObject ? this.selectedObject.object : null;
     },
 
+    canBeCleared() {
+      return this.selectedObject && this.selectedObject.object;
+    },
+
     canGoBack() {
       return this.$store.getters.canPopStack;
     },
   },
 
   methods: {
+    clearSelection() {
+      this.$root.$emit('component_diagram_clear');
+    },
     goBack() {
       this.$store.commit(POP_OBJECT_STACK);
     },
@@ -100,5 +112,16 @@ export default {
     background-color: $black;
     text-align: center;
   }
+}
+
+.row {
+  display: block;
+  width: 100%;
+  padding: .5rem;
+}
+
+.link {
+  color: $blue;
+  text-decoration: none;
 }
 </style>
