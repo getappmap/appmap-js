@@ -110,25 +110,6 @@ export default {
   }
 
   &__details {
-    .back-btn {
-      display: inline-block;
-      border: 1px solid lighten($gray3,05);
-      border-radius: $border-radius;
-      margin-bottom: 1rem;
-      margin-left: 2rem;
-      padding: .5rem 1rem .5rem .9rem;
-      letter-spacing: .5px;
-      color: $gray4;
-      text-transform: uppercase;
-      font-size: .8rem;
-      &:before {
-        content: "◄ ";
-      }
-      &:hover {
-        background-color: darken($gray2,03);
-        border-color: darken($gray2,03);
-      }
-    }
   }
 }
 </style>

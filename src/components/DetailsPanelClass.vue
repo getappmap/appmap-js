@@ -3,11 +3,9 @@
     <div class="details-panel-header">
       <h4 class="details-type">Class</h4>
       <h4>{{objectDescriptor.name}}</h4>
-      <ul>
-        <li>
-          <a :href="sourceUrl">View source</a>
-        </li>
-      </ul>
+      <div class="ghost-link">
+        <a :href="sourceUrl">View source</a>
+      </div>
     </div>
 
     <v-details-panel-list title="Functions" :items="functions"/>

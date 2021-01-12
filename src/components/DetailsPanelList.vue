@@ -38,7 +38,7 @@ export default {
 <style scoped lang="scss">
   .v-details-panel-list {
     list-style-type: none;
-    padding: 0 2rem;
+    padding: 0;
     margin-bottom: 1.5rem;
 
     h5 {
@@ -46,7 +46,7 @@ export default {
       font-size: 1.1rem;
       font-weight: 500;
       line-height: 1.2;
-      padding: 0;
+      padding: 0 2rem;
       margin: 0 0 .25rem 0;
     }
 
@@ -59,7 +59,7 @@ export default {
 
       li {
         border-bottom: 1px solid $gray3;
-        padding: .5rem 0;
+        padding: .5rem 2rem;
         transition: $transition;
 
         &:hover {
