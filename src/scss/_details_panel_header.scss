@@ -1,0 +1,19 @@
+.details-panel-header {
+  margin-bottom: 1rem;
+  padding: 0 2rem;
+  h4 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 400;
+    letter-spacing: .5px;
+  }
+  .details-type {
+    color: $gray4;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    border-bottom: 0;
+    font-size: .9rem;
+    font-weight: 500;
+    margin-bottom: .2rem;
+  }
+}

@@ -1,10 +1,11 @@
 <template>
   <div class="details-panel-class">
-    <div class="panel-heading">
+    <div class="details-panel-header">
+      <h4 class="details-type">Class</h4>
+      <h4>{{objectDescriptor.name}}</h4>
       <ul>
-        <h4>Class {{objectDescriptor.name}}</h4>
         <li>
-           <a :href="sourceUrl">View source</a>
+          <a :href="sourceUrl">View source</a>
         </li>
       </ul>
     </div>
@@ -84,14 +85,6 @@ export default {
 
 <style scoped lang="scss">
 .details-panel-class {
-  h4 {
-    margin: 0;
-    padding: .5rem 2rem;
-    font-size: 1.3rem;
-    border-bottom: 1px solid $gray3;
-    font-weight: 400;
-    letter-spacing: .5px;
-  }
   ul {
     list-style-type: none;
     padding: 0;
@@ -99,11 +92,9 @@ export default {
     width: 100%;
     li {
       width: 100%;
-      border-bottom: 1px solid $gray3;
       padding: .5rem 0;
       transition: $transition;
       a {
-        margin: 0 2rem;
         width: 100%;
       }
       &:hover {

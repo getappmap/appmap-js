@@ -1,13 +1,16 @@
 <template>
   <div class="details-panel-event">
-    <h3>{{name}}</h3>
+    <div class="details-panel-header">
+      <h4 class="details-type">Event</h4>
+      <h4>{{name}}</h4>
+    </div>
 
     <div class="sql-code" v-if="hasSql">
       <code>{{this.objectDescriptor.sql.sql}}</code>
     </div>
 
-    <div v-if="hasParameters">
-      <h4>Parameters</h4>
+    <div class="event-params" v-if="hasParameters">
+      <h5>Parameters</h5>
       <ul>
         <li v-for="(param, index) in objectDescriptor.parameters" :key="index">
           <strong>{{param.name}}</strong>
@@ -16,8 +19,8 @@
       </ul>
     </div>
 
-    <div v-if="hasMessage">
-      <h4>Parameters</h4>
+    <div class="event-params" v-if="hasMessage">
+      <h5>Parameters</h5>
       <ul>
         <li v-for="(param, index) in objectDescriptor.message" :key="index">
           <i>[{{param.class}}]</i>
@@ -112,14 +115,18 @@ export default {
   h3 {
     padding: 0 2rem;
   }
-  h4 {
-    margin: 0;
-    padding: .5rem 2rem;
-    font-size: 1.3rem;
-    border-bottom: 1px solid $gray3;
-  }
   .sql-code {
     padding: 0 2rem;
+  }
+  .event-params {
+    padding: 0 2rem;
+    h5 {
+      color: lighten($gray4,15);
+      font-size: 1.1rem;
+      font-weight: 500;
+      line-height: 1.2;
+      margin: 0 0 .25rem 0;
+    }
   }
   ul {
     list-style-type: none;
@@ -129,7 +136,7 @@ export default {
     li {
       width: 100%;
       border-bottom: 1px solid $gray3;
-      padding: .5rem 2rem;
+      padding: .5rem 0;
       transition: $transition;
       display: flex;
       flex-direction: row;

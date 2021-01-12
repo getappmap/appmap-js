@@ -1,5 +1,9 @@
 <template>
   <div class="details-panel-function">
+    <div class="details-panel-header">
+      <h4 class="details-type">Function</h4>
+      <h4>{{objectDescriptor.name}}</h4>
+    </div>
     <v-details-panel-list title="Events" :items="events" />
   </div>
 </template>
@@ -33,6 +37,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.details-function {
+.details-panel-function {
+  
 }
 </style>

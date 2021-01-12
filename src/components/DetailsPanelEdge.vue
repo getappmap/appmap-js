@@ -1,7 +1,10 @@
 <template>
   <div class="details-panel-edge">
-    <h3>Edge</h3>
-    <p>{{objectDescriptor.from}} to {{objectDescriptor.to}}</p>
+    <div class="details-panel-header">
+      <h4 class="details-type">Edge</h4>
+      <h4>{{objectDescriptor.from}} to {{objectDescriptor.to}}</h4>
+    </div>
+    
     <v-details-panel-list title="Events" :items="events" />
   </div>
 </template>
@@ -142,7 +145,14 @@ export default {
 
 <style scoped lang="scss">
 .details-panel-edge {
-  padding: 0 2rem;
-  color: $gray4;
+  padding: 0;
+  h5 {
+    color: lighten($gray4,15);
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.2;
+    padding: 0 2rem;
+    margin: 0 0 .25rem 0;
+  }
 }
 </style>

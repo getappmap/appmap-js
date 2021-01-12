@@ -1,7 +1,7 @@
 <template>
   <div class="details-panel">
     <h3 class="details-panel__title">
-      <a href="/" class="home-link"><img src="../assets/appland-logo.svg" /></a>
+      <img src="../assets/appland-logo.svg" />
     </h3>
     <div class="details-panel__content">
       <div class="details-panel__details">
