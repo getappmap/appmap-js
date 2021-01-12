@@ -2,7 +2,6 @@
   <div class="details-panel-database">
     <div class="details-panel-header">
       <h4 class="details-type">Database</h4>
-      <!-- <h4>{{name}}</h4> -->
     </div>
 
     <v-details-panel-list title="Queries" :items="queries" />

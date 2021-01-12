@@ -2,7 +2,6 @@
   <div class="details-panel-http">
     <div class="details-panel-header">
       <h4 class="details-type">HTTP</h4>
-      <!-- <h4>{{name}}</h4> -->
     </div>
     <v-details-panel-list title="Routes" :items="routes" />
   </div>
