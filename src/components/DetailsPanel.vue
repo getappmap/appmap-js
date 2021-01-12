@@ -88,7 +88,7 @@ export default {
   width: 100%;
   height: 100%;
   color: $gray6;
-  background-color: $gray2;
+  background-color: #1E1E1E;//$gray2;
   word-break: break-word;
   border-right: 1px solid $gray3;
 

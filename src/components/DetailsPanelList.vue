@@ -55,8 +55,6 @@ export default {
       padding: 0;
       margin-bottom: 1.5rem;
       margin-top: 0;
-      background-color: $gray2;
-
       li {
         border-bottom: 1px solid $gray3;
         padding: .5rem 2rem;

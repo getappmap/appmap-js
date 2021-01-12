@@ -66,8 +66,11 @@ export default {
 <style lang="scss">
   .diagram-flow {
     @import '~@appland/diagrams/dist/@appland/diagrams';
-
     max-height: 100vh;
     max-width: 100vw;
+    .appmap.appmap--theme-dark {
+      background-color:$vs-code-gray1;
+      overflow: hidden;
+    }
   }
 </style>
