@@ -28,26 +28,33 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  $bg-color: $gray4;
-
   .tab-btn {
     appearance: none;
-    border: 2px solid $gray3;
-    background-color: $bg-color;
-    padding: 0.5em 1em;
-    margin-left: 2px;
+    border: 0;
+    background-color: $gray2;
     cursor: pointer;
+    color: $gray4;
+    font-size: 1rem;
+    padding: 0.5em 1em;
+    margin: 0;
+    transition: $transition;
+    width: 50%;
+
+    &:hover {
+      color: lighten($blue, 10);
+    }
 
     &:focus {
-      outline-style: solid;
-      outline-color: transparent;
+      outline: none;
     }
 
     &--active {
+      background-color: $blue;
       cursor: default;
-
-      border-bottom: 2px solid lighten($bg-color, 20%);
-      background-color: lighten($bg-color, 20%);
+      color: $white;
+      &:hover {
+        color: $white;
+      }
     }
   }
 </style>

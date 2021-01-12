@@ -63,7 +63,7 @@ export default {
     height: 100%;
 
     &__header {
-      border-bottom: 2px solid $gray3;
+      border: 0;
     }
 
     &__content {

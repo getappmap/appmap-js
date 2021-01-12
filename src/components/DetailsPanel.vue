@@ -1,9 +1,13 @@
 <template>
   <div class="details-panel">
-    <h3 class="details-panel__title">{{title}}</h3>
-    <a href="#" v-if="canGoBack" @click.prevent="goBack">Back</a>
-    <div class="details-panel__details">
-      <component :is="detailsType" :object-descriptor="objectDescriptor"/>
+    <h3 class="details-panel__title">
+      <img src="../assets/appland-logo.svg" />
+    </h3>
+    <div class="details-panel__content">
+      <div class="details-panel__details">
+        <a class="back-btn" href="#" v-if="canGoBack" @click.prevent="goBack">Back</a>
+        <component :is="detailsType" :object-descriptor="objectDescriptor"/>
+      </div>
     </div>
   </div>
 </template>
@@ -34,10 +38,6 @@ export default {
     VDetailsPanelRoute,
   },
   props: {
-    title: {
-      type: String,
-      default: 'Component details',
-    },
     subtitle: String,
     selectedObject: {
       type: Object,
@@ -83,21 +83,36 @@ export default {
 <style scoped lang="scss">
 .details-panel {
   display: inline-block;
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   min-width: 280px;
   width: 100%;
   height: 100%;
   color: $gray6;
   background-color: $gray2;
   word-break: break-word;
-  padding: 0 2rem;
+  border-right: 1px solid $gray3;
 
   &__title {
-    font-size: 1.2rem;
-    color: #e3e5e8;
-    text-transform: uppercase;
+    padding: 2rem;
+    margin: 0;
+    img {
+      max-width: 10rem;
+    }
+  }
+
+  &__subtitle {
     margin-bottom: 1rem;
-    padding: 1.5rem 2rem;
-    border-bottom: 1px solid #343742;
+    color: $white;
+  }
+
+  &__content {
+    padding: 0;
+  }
+
+  &__details {
+    .back-btn {
+      padding: 0 2rem;
+    }
   }
 }
 </style>

@@ -141,6 +141,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.details-edge {
+.details-panel-edge {
+  padding: 0 2rem;
+  color: $gray4;
 }
 </style>
