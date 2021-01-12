@@ -7,11 +7,15 @@ Vue.use(Vuex);
 export const SELECT_OBJECT = 'selectObject';
 export const SET_APPMAP_DATA = 'setAppMapData';
 export const POP_OBJECT_STACK = 'popObjectStack';
+export const SET_VIEW = 'setView';
+export const VIEW_COMPONENT = 'viewComponent';
+export const VIEW_FLOW = 'viewFlow';
 
 export const store = new Vuex.Store({
   state: {
     appMap: new AppMap(),
     selectionStack: [],
+    currentView: VIEW_COMPONENT,
   },
 
   getters: {
@@ -94,6 +98,10 @@ export const store = new Vuex.Store({
 
     [POP_OBJECT_STACK](state) {
       state.selectionStack.pop();
+    },
+
+    [SET_VIEW](state, view) {
+      state.currentView = view;
     },
   },
 });

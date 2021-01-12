@@ -45,6 +45,7 @@ export default {
       }
 
       this.activeTab = tab;
+      this.$emit('activateTab', tab);
     },
   },
 

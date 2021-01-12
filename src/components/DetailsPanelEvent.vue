@@ -5,6 +5,14 @@
       </template>
     </v-details-panel-header>
 
+    <a
+      href="#"
+      @click.prevent="viewEvent"
+      v-if="shouldDisplayViewEvent"
+      class="details-panel-event__view-event">
+      Show event in flow view
+    </a>
+
     <div class="sql-code" v-if="hasSql">
       <code>{{this.objectDescriptor.sql.sql}}</code>
     </div>
@@ -30,6 +38,16 @@
       </ul>
     </div>
 
+    <div v-if="hasReturnValue">
+      <h4>Return value</h4>
+      <ul>
+        <li>
+          <strong>{{objectDescriptor.returnValue.name}}</strong>
+          <code>{{objectDescriptor.returnValue.value}}</code>
+        </li>
+      </ul>
+    </div>
+
     <v-details-panel-list title="Caller" :items="caller" />
     <v-details-panel-list title="Children" :items="children" />
   </div>
@@ -38,6 +56,7 @@
 <script>
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
+import { SET_VIEW, VIEW_FLOW } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel-event',
@@ -84,6 +103,10 @@ export default {
       return Boolean(this.objectDescriptor.sql);
     },
 
+    hasReturnValue() {
+      return Boolean(this.objectDescriptor.returnValue);
+    },
+
     caller() {
       const { parent } = this.objectDescriptor;
       const val = [];
@@ -108,12 +131,28 @@ export default {
           object: e,
         })))];
     },
+
+    shouldDisplayViewEvent() {
+      return this.$store.state.currentView !== VIEW_FLOW;
+    },
+  },
+
+  methods: {
+    viewEvent() {
+      this.$store.commit(SET_VIEW, VIEW_FLOW);
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
 .details-panel-event {
+  &__view-event {
+    display: inline-block;
+    padding: 0 2rem;
+    margin-bottom: 1rem;
+  }
+
   h3 {
     padding: 0 2rem;
   }
