@@ -38,6 +38,6 @@ export default {
 
 <style scoped lang="scss">
 .details-panel-function {
-  
+
 }
 </style>

@@ -4,7 +4,7 @@
       <h4 class="details-type">Edge</h4>
       <h4>{{objectDescriptor.from}} to {{objectDescriptor.to}}</h4>
     </div>
-    
+
     <v-details-panel-list title="Events" :items="events" />
   </div>
 </template>
