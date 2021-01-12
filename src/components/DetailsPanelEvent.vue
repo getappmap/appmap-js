@@ -11,7 +11,7 @@
 
     <div class="event-params" v-if="hasParameters">
       <h5>Parameters</h5>
-      <ul>
+      <ul class="table-01">
         <li v-for="(param, index) in objectDescriptor.parameters" :key="index">
           <strong>{{param.name}}</strong>
           <code>{{param.value}}</code>
@@ -21,7 +21,7 @@
 
     <div class="event-params" v-if="hasMessage">
       <h5>Parameters</h5>
-      <ul>
+      <ul class="table-01">
         <li v-for="(param, index) in objectDescriptor.message" :key="index">
           <i>[{{param.class}}]</i>
           <strong>{{param.name}}</strong>
@@ -120,6 +120,7 @@ export default {
   }
   .event-params {
     padding: 0 2rem;
+    color: $gray4;
     h5 {
       color: lighten($gray4,15);
       font-size: 1.1rem;
@@ -127,11 +128,16 @@ export default {
       line-height: 1.2;
       margin: 0 0 .25rem 0;
     }
+    .table-01 {
+      font-size: 14px;
+      font-family: sans-serif;
+      font-weight: 500;
+    }
   }
   ul {
     list-style-type: none;
     padding: 0;
-    margin: 0 0 1rem 0;
+    margin: 0 0 1.5rem 0;
     width: 100%;
     li {
       width: 100%;

@@ -1,5 +1,9 @@
 <template>
   <div class="details-panel-package">
+    <div class="details-panel-header">
+      <h4 class="details-type">Package</h4>
+      <!-- <h4>{{name}}</h4> -->
+    </div>
     <v-details-panel-list title="Classes" :items="classes"/>
     <v-details-panel-list title="Inbound connections" :items="inboundConnections"/>
     <v-details-panel-list title="Outbound connections" :items="outboundConnections"/>
