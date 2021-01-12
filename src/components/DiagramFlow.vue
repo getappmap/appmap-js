@@ -5,6 +5,8 @@
 <script>
 import { CallTree } from '@appland/models';
 import { FlowView } from '@appland/diagrams';
+import { SELECT_OBJECT } from '@/store/vsCode';
+import { panToNode } from '@appland/diagrams/src/js/util'; // HACK
 
 export default {
   name: 'v-diagram-flow',
@@ -28,6 +30,7 @@ export default {
   data() {
     return {
       renderKey: 0,
+      flowView: null,
     };
   },
 
@@ -36,20 +39,48 @@ export default {
     $props: {
       handler() { this.renderKey += 1; },
     },
+
+    '$store.getters.selectedObject': {
+      handler() {
+        this.highlightSelectedEvent();
+      },
+    },
   },
 
   methods: {
+    selectEvent(event) {
+      if (this.$store) {
+        this.$store.commit(SELECT_OBJECT, {
+          kind: 'event',
+          data: event,
+          clearStack: true,
+        });
+      }
+    },
+
     renderDiagram() {
-      const flowView = new FlowView(this.$el, {
+      this.flowView = new FlowView(this.$el, {
         theme: this.theme,
         zoom: {
           controls: this.zoomButtons,
         },
       });
 
-      flowView.setCallTree(this.callTree);
-      flowView.render();
-      flowView.on('selectedEvent', (e) => this.$store.selectEvent(e));
+      this.flowView.setCallTree(this.callTree);
+      this.flowView.render();
+      this.callTree.on('selectedEvent', (e) => this.selectEvent(e.input));
+      this.highlightSelectedEvent();
+    },
+
+    highlightSelectedEvent() {
+      const { selectedObject } = this.$store.getters;
+      if (selectedObject && selectedObject.kind === 'event') {
+        const { id } = selectedObject.object;
+        this.flowView.highlight(id);
+
+        const element = this.$el.querySelector(`.node[data-node-id="${id}"]`);
+        panToNode(this.flowView.container.containerController, element);
+      }
     },
   },
 
