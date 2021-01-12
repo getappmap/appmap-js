@@ -2,6 +2,7 @@
   <div class="details-panel-package">
     <div class="details-panel-header">
       <h4 class="details-type">Package</h4>
+      <h4>{{objectDescriptor.name}}</h4>
     </div>
     <v-details-panel-list title="Classes" :items="classes"/>
     <v-details-panel-list title="Inbound connections" :items="inboundConnections"/>
