@@ -3,7 +3,10 @@
     <h5>{{title}}</h5>
     <ul>
       <li v-for="(item, index) in items" :key="index">
-        <a href="#" @click.prevent="selectItem(item)">
+        <a v-if="item.kind === 'link'" :href="item.link">
+          {{item.text}}
+        </a>
+        <a v-else href="#" @click.prevent="selectItem(item)">
           {{item.text}}
         </a>
       </li>

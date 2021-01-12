@@ -1,10 +1,10 @@
 <template>
   <div class="details-panel-class">
-    <h4>Class {{objectDescriptor.name}}</h4>
-    <a :href="sourceUrl">View source</a>
+    <h4>{{objectDescriptor.name}}</h4>
     <v-details-panel-list title="Functions" :items="functions"/>
     <v-details-panel-list title="Inbound connections" :items="inboundConnections"/>
     <v-details-panel-list title="Outbound connections" :items="outboundConnections"/>
+    <v-details-panel-list title="Source location" :items="sourceUrl"/>
   </div>
 </template>
 
@@ -27,7 +27,11 @@ export default {
   computed: {
     sourceUrl() {
       const [location] = this.objectDescriptor.classLocations();
-      return `vscode://${location}`;
+      return [{
+        kind: 'link',
+        link: location,
+        text: location,
+      }];
     },
 
     functions() {

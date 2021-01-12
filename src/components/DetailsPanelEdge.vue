@@ -1,7 +1,6 @@
 <template>
   <div class="details-panel-edge">
-    <h3>Edge</h3>
-    <p>{{objectDescriptor.from}} to {{objectDescriptor.to}}</p>
+    <p>{{objectDescriptor.from}} -> {{objectDescriptor.to}}</p>
     <v-details-panel-list title="Events" :items="events" />
   </div>
 </template>
