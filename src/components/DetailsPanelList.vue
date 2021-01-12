@@ -42,12 +42,12 @@ export default {
     margin-bottom: 1.5rem;
 
     h5 {
-      color: $gray4;
+      color: lighten($gray4,15);
       font-size: 1.1rem;
       font-weight: 500;
       line-height: 1.2;
       padding: 0 2rem;
-      margin: 0;
+      margin: 0 0 .25rem 0;
     }
 
     ul {
@@ -58,7 +58,7 @@ export default {
       background-color: $gray2;
 
       li {
-        border-bottom: 1px solid #343742;
+        border-bottom: 1px solid $gray3;
         padding: .5rem 2rem;
         transition: $transition;
 
@@ -71,11 +71,11 @@ export default {
         }
 
         &:first-of-type {
-          border-top: 1px solid #343742;
+          border-top: 1px solid $gray3;
         }
 
         a {
-          color: #4362b1;
+          color: $blue;
           text-decoration: none;
         }
       }

@@ -1,7 +1,7 @@
 <template>
   <div class="details-panel">
     <h3 class="details-panel__title">
-      <img src="../assets/appland-logo.svg" />
+      <a href="/" class="home-link"><img src="../assets/appland-logo.svg" /></a>
     </h3>
     <div class="details-panel__content">
       <div class="details-panel__details">
@@ -111,7 +111,23 @@ export default {
 
   &__details {
     .back-btn {
-      padding: 0 2rem;
+      display: inline-block;
+      border: 1px solid lighten($gray3,05);
+      border-radius: $border-radius;
+      margin-bottom: 1rem;
+      margin-left: 2rem;
+      padding: .5rem 1rem .5rem .9rem;
+      letter-spacing: .5px;
+      color: $gray4;
+      text-transform: uppercase;
+      font-size: .8rem;
+      &:before {
+        content: "◄ ";
+      }
+      &:hover {
+        background-color: darken($gray2,03);
+        border-color: darken($gray2,03);
+      }
     }
   }
 }

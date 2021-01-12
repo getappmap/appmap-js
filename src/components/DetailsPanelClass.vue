@@ -89,6 +89,8 @@ export default {
     padding: .5rem 2rem;
     font-size: 1.3rem;
     border-bottom: 1px solid $gray3;
+    font-weight: 400;
+    letter-spacing: .5px;
   }
   ul {
     list-style-type: none;
