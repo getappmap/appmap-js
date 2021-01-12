@@ -21,6 +21,11 @@ export const store = new Vuex.Store({
     canPopStack(state) {
       return state.selectionStack.length > 1;
     },
+    prevSelectedObject(state) {
+      return state.selectionStack.length > 1
+        ? state.selectionStack[state.selectionStack.length - 2]
+        : null;
+    },
   },
 
   mutations: {

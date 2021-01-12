@@ -1,13 +1,16 @@
 <template>
   <div class="details-panel">
     <v-section :title="title">
-      <div class="row" v-if="canBeCleared">
-        <a class="link" href="#" @click.prevent="clearSelection">Clear selection</a>
+      <div class="block" v-if="canBeCleared">
+        <a class="link" href="#" @click.prevent="clearSelection">
+          <v-icon name="clear"></v-icon> Clear selection</a>
       </div>
-      <div class="row" v-if="canGoBack">
-        <a class="link" href="#" @click.prevent="goBack">Back</a>
+      <div class="block" v-if="canGoBack">
+        <a class="link" href="#" @click.prevent="goBack">
+          <v-icon name="arrow-left"></v-icon> Back to <b>{{prevSelectedObject.object.name}}</b>
+        </a>
       </div>
-      <div class="details-panel__details">
+      <div class="block">
         <component :is="detailsType" :object-descriptor="objectDescriptor"/>
       </div>
     </v-section>
@@ -24,6 +27,7 @@ import VDetailsPanelHttp from '@/components/DetailsPanelHttp.vue';
 import VDetailsPanelNull from '@/components/DetailsPanelNull.vue';
 import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
 import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
+import VIcon from '@/components/Icon.vue';
 import VSection from '@/components/Section.vue';
 import { POP_OBJECT_STACK } from '@/store/vsCode';
 
@@ -39,6 +43,7 @@ export default {
     VDetailsPanelNull,
     VDetailsPanelPackage,
     VDetailsPanelRoute,
+    VIcon,
     VSection,
   },
   props: {
@@ -82,6 +87,10 @@ export default {
     canGoBack() {
       return this.$store.getters.canPopStack;
     },
+
+    prevSelectedObject() {
+      return this.$store.getters.prevSelectedObject;
+    },
   },
 
   methods: {
@@ -103,7 +112,6 @@ export default {
   color: $gray6;
   background-color: $gray2;
   word-break: break-word;
-  padding: 0 2rem;
 
   &__title {
     padding: 0.4rem 1rem;
@@ -114,14 +122,19 @@ export default {
   }
 }
 
-.row {
+.block {
   display: block;
   width: 100%;
-  padding: .5rem;
+  padding: .5rem 1rem;
 }
 
 .link {
+  font-size: 0.75rem;
   color: $blue;
   text-decoration: none;
+
+  .icon {
+    margin-right: .5rem;
+  }
 }
 </style>
