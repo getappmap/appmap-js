@@ -42,7 +42,7 @@ export default {
     margin-bottom: 1.5rem;
 
     h5 {
-      color: $base03; 
+      color: $base03;
       font-size: 1.1rem;
       font-weight: 500;
       line-height: 1.2;
