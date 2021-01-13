@@ -91,6 +91,7 @@ export default {
   background-color: #1E1E1E;//$gray2;
   word-break: break-word;
   border-right: 1px solid $gray3;
+  overflow: scroll;
 
   &__title {
     padding: 2rem;
