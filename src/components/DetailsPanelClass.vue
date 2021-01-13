@@ -2,7 +2,7 @@
   <div class="details-panel-class">
     <v-details-panel-header object-type="Class" :title="objectDescriptor.name">
       <template v-slot:links>
-        <a :href="sourceUrl">View source</a>
+        <a href="#" @click.prevent="viewSource">View source</a>
       </template>
     </v-details-panel-header>
 
@@ -107,6 +107,12 @@ export default {
           text: e.sql.sql,
           object: e,
         }));
+    },
+  },
+
+  methods: {
+    viewSource() {
+      this.$root.$emit('viewSource', this.objectDescriptor.locations[0]);
     },
   },
 };

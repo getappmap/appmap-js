@@ -1,6 +1,10 @@
 <template>
   <div>
-    <v-details-panel-header object-type="Function" :title="objectDescriptor.name" />
+    <v-details-panel-header object-type="Function" :title="objectDescriptor.name">
+      <template v-slot:links>
+        <a href="#" @click.prevent="viewSource">View source</a>
+      </template>
+    </v-details-panel-header>
     <v-details-panel-list title="Events" :items="eventObjects" />
     <v-details-panel-list title="Queries" :items="queries" />
   </div>
@@ -49,6 +53,12 @@ export default {
           text: e.sql.sql,
           object: e,
         }));
+    },
+  },
+
+  methods: {
+    viewSource() {
+      this.$root.$emit('viewSource', this.objectDescriptor.location);
     },
   },
 };
