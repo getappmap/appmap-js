@@ -38,7 +38,7 @@
     </div>
 
     <div class="event-params" v-if="hasReturnValue">
-      <h4>Return value</h4>
+      <h5>Return value</h5>
       <ul class="table-01">
         <li>
           <i>{{objectDescriptor.returnValue.class}}</i>
