@@ -2,16 +2,15 @@
   <div class="details-panel-event">
     <v-details-panel-header object-type="Event" :title="name">
       <template v-slot:links>
+        <a
+          href="#"
+          @click.prevent="viewEvent"
+          v-if="shouldDisplayViewEvent"
+          class="details-panel-event__view-event">
+          Show in flow view
+        </a>
       </template>
     </v-details-panel-header>
-
-    <a
-      href="#"
-      @click.prevent="viewEvent"
-      v-if="shouldDisplayViewEvent"
-      class="details-panel-event__view-event">
-      Show event in flow view
-    </a>
 
     <div class="sql-code" v-if="hasSql">
       <code>{{this.objectDescriptor.sql.sql}}</code>
@@ -31,18 +30,18 @@
       <h5>Parameters</h5>
       <ul class="table-01">
         <li v-for="(param, index) in objectDescriptor.message" :key="index">
-          <i>[{{param.class}}]</i>
+          <i>{{param.class}}</i>
           <strong>{{param.name}}</strong>
           <code>{{param.value}}</code>
         </li>
       </ul>
     </div>
 
-    <div v-if="hasReturnValue">
+    <div class="event-params" v-if="hasReturnValue">
       <h4>Return value</h4>
-      <ul>
+      <ul class="table-01">
         <li>
-          <strong>{{objectDescriptor.returnValue.name}}</strong>
+          <i>{{objectDescriptor.returnValue.class}}</i>
           <code>{{objectDescriptor.returnValue.value}}</code>
         </li>
       </ul>

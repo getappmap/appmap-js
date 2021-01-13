@@ -12,7 +12,7 @@ import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
-  name: 'v-details-panel-null',
+  name: 'v-details-panel-package',
   props: {
     objectDescriptor: {
       type: Object,

@@ -1,11 +1,8 @@
-import { buildAppMap } from '@appland/models';
 import VDiagramFlow from '@/components/DiagramFlow.vue';
-import mockupData from '@/stories/data/scenario.json';
+import scenario from '@/stories/data/scenario.json';
+import { store, SET_APPMAP_DATA } from '@/store/vsCode';
 
-const { callTree } = buildAppMap()
-  .source(mockupData)
-  .normalize()
-  .build();
+store.commit(SET_APPMAP_DATA, scenario);
 
 export default {
   title: 'AppLand/Diagrams',
@@ -15,7 +12,7 @@ export default {
     callTree: { table: { disable: true } },
   },
   args: {
-    callTree,
+    callTree: store.state.appMap.callTree,
   },
 };
 
@@ -23,4 +20,5 @@ export const diagramFlow = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiagramFlow },
   template: '<v-diagram-flow v-bind="$props" />',
+  store,
 });

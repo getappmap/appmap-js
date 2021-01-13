@@ -1,8 +1,8 @@
 import VDiagramComponent from '@/components/DiagramComponent.vue';
 import scenario from '@/stories/data/scenario.json';
-import { buildAppMap } from '@appland/models';
+import { store, SET_APPMAP_DATA } from '@/store/vsCode';
 
-const appMap = buildAppMap().source(scenario).normalize().build();
+store.commit(SET_APPMAP_DATA, scenario);
 
 export default {
   title: 'AppLand/Diagrams',
@@ -12,7 +12,7 @@ export default {
     componentData: { table: { disable: true } },
   },
   args: {
-    componentData: appMap.components,
+    componentData: store.state.appMap.components,
   },
 };
 
@@ -20,7 +20,5 @@ export const diagramComponent = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiagramComponent },
   template: '<v-diagram-component v-bind="$props" />',
-  args: {
-    componentData: appMap.components,
-  },
+  store,
 });

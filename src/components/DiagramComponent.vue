@@ -174,6 +174,7 @@ export default {
 
     renderDiagram() {
       this.$nextTick(() => {
+        this.highlightHandler = null;
         this.componentDiagram = new ComponentDiagram(this.$el, {
           theme: this.theme,
           zoom: {

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { AppMap, buildAppMap } from '@appland/models';
+import { fullyQualifiedFunctionName } from '@appland/diagrams/src/js/util'; // HACK
 
 Vue.use(Vuex);
 
@@ -34,6 +35,10 @@ export const store = new Vuex.Store({
         .source(data)
         .normalize()
         .build();
+
+      state.appMap.callTree.rootEvent.forEach((e) => {
+        e.displayName = fullyQualifiedFunctionName(e.input);
+      });
     },
 
     [SELECT_OBJECT](state, selection) {
