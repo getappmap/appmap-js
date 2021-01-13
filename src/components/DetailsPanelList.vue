@@ -73,7 +73,7 @@ export default {
         }
 
         a {
-          color: $blue;
+          color: $base11;
           text-decoration: none;
         }
       }
