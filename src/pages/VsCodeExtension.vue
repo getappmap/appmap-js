@@ -124,7 +124,6 @@ export default {
       &--left {
         grid-column: 1;
         width: 100%;
-        overflow: scroll;
         background-color: $gray2;
       }
 
