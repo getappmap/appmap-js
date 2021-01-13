@@ -1,10 +1,12 @@
 <template>
-  <div class="details-panel-route">
+  <div>
+    <v-details-panel-header object-type="Route" :title="routeName" />
     <v-details-panel-list title="Events" :items="events"/>
   </div>
 </template>
 
 <script>
+import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
@@ -18,6 +20,7 @@ export default {
 
   components: {
     VDetailsPanelList,
+    VDetailsPanelHeader,
   },
 
   computed: {
@@ -37,11 +40,17 @@ export default {
         /* eslint-enable camelcase */
       });
     },
+
+    routeName() {
+      if (!this.events.length) {
+        return '';
+      }
+
+      return this.events[0].text;
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
-.details-route {
-}
 </style>

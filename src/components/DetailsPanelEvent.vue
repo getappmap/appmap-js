@@ -1,9 +1,9 @@
 <template>
   <div class="details-panel-event">
-    <div class="details-panel-header">
-      <h4 class="details-type">Event</h4>
-      <h4>{{name}}</h4>
-    </div>
+    <v-details-panel-header object-type="Event" :title="name">
+      <template v-slot:links>
+      </template>
+    </v-details-panel-header>
 
     <div class="sql-code" v-if="hasSql">
       <code>{{this.objectDescriptor.sql.sql}}</code>
@@ -36,12 +36,14 @@
 </template>
 
 <script>
+import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
   name: 'v-details-panel-event',
   components: {
     VDetailsPanelList,
+    VDetailsPanelHeader,
   },
   props: {
     objectDescriptor: {

@@ -1,20 +1,19 @@
 <template>
-  <div class="details-panel-database">
-    <div class="details-panel-header">
-      <h4 class="details-type">Database</h4>
-    </div>
-
+  <div>
+    <v-details-panel-header object-type="Database" />
     <v-details-panel-list title="Queries" :items="queries" />
   </div>
 </template>
 
 <script>
+import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
   name: 'v-details-panel-database',
   components: {
     VDetailsPanelList,
+    VDetailsPanelHeader,
   },
   computed: {
     queries() {
@@ -31,6 +30,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.details-database {
-}
 </style>

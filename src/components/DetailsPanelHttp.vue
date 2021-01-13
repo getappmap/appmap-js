@@ -1,19 +1,19 @@
 <template>
-  <div class="details-panel-http">
-    <div class="details-panel-header">
-      <h4 class="details-type">HTTP server requests</h4>
-    </div>
+  <div>
+    <v-details-panel-header object-type="HTTP server requests" />
     <v-details-panel-list title="Routes" :items="routes" />
   </div>
 </template>
 
 <script>
+import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
   name: 'v-details-panel-http',
   components: {
     VDetailsPanelList,
+    VDetailsPanelHeader,
   },
   computed: {
     routes() {
@@ -49,6 +49,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.details-http {
-}
 </style>

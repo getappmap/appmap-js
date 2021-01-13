@@ -1,12 +1,10 @@
 <template>
   <div class="details-panel-class">
-    <div class="details-panel-header">
-      <h4 class="details-type">Class</h4>
-      <h4>{{objectDescriptor.name}}</h4>
-      <div class="ghost-link">
+    <v-details-panel-header object-type="Class" :title="objectDescriptor.name">
+      <template v-slot:links>
         <a :href="sourceUrl">View source</a>
-      </div>
-    </div>
+      </template>
+    </v-details-panel-header>
 
     <v-details-panel-list title="Functions" :items="functions"/>
     <v-details-panel-list title="Inbound connections" :items="inboundConnections"/>
@@ -15,11 +13,13 @@
 </template>
 
 <script>
+import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
   name: 'v-details-panel-class',
   components: {
+    VDetailsPanelHeader,
     VDetailsPanelList,
   },
 
@@ -83,6 +83,12 @@ export default {
 
 <style scoped lang="scss">
 .details-panel-class {
+  h4 {
+    margin: 0;
+    padding: .5rem 2rem;
+    font-size: 1.3rem;
+    border-bottom: 1px solid $gray3;
+  }
   ul {
     list-style-type: none;
     padding: 0;
@@ -90,9 +96,11 @@ export default {
     width: 100%;
     li {
       width: 100%;
+      border-bottom: 1px solid $gray3;
       padding: .5rem 0;
       transition: $transition;
       a {
+        margin: 0 2rem;
         width: 100%;
       }
       &:hover {

@@ -109,7 +109,24 @@ export default {
     padding: 0;
   }
 
-  &__details {
+  .back-btn {
+    display: inline-block;
+    border: 1px solid lighten($gray3,05);
+    border-radius: $border-radius;
+    margin-bottom: 1rem;
+    margin-left: 2rem;
+    padding: .25rem .6rem .25rem .5rem;
+    letter-spacing: .5px;
+    color: $gray4;
+    text-transform: uppercase;
+    font-size: .8rem;
+    &:before {
+      content: "◄ ";
+    }
+    &:hover {
+      background-color: darken($vs-code-gray1,03);
+      border-color: darken($vs-code-gray1,03);
+    }
   }
 }
 </style>

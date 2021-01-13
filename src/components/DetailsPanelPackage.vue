@@ -1,9 +1,6 @@
 <template>
-  <div class="details-panel-package">
-    <div class="details-panel-header">
-      <h4 class="details-type">Package</h4>
-      <h4>{{objectDescriptor.name}}</h4>
-    </div>
+  <div>
+    <v-details-panel-header object-type="Package" :title="objectDescriptor.name" />
     <v-details-panel-list title="Classes" :items="classes"/>
     <v-details-panel-list title="Inbound connections" :items="inboundConnections"/>
     <v-details-panel-list title="Outbound connections" :items="outboundConnections"/>
@@ -11,6 +8,7 @@
 </template>
 
 <script>
+import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
@@ -24,6 +22,7 @@ export default {
 
   components: {
     VDetailsPanelList,
+    VDetailsPanelHeader,
   },
 
   computed: {
@@ -82,6 +81,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.details-package {
-}
 </style>
