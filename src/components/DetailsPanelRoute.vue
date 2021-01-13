@@ -2,6 +2,7 @@
   <div>
     <v-details-panel-header object-type="Route" :title="routeName" />
     <v-details-panel-list title="Events" :items="events"/>
+    <v-details-panel-list title="Outbound connections" :items="outboundConnections"/>
   </div>
 </template>
 
@@ -39,6 +40,22 @@ export default {
         };
         /* eslint-enable camelcase */
       });
+    },
+
+    outboundConnections() {
+      const childrenObjects = this.objectDescriptor
+        .map((e) => e.children)
+        .flat()
+        .filter(Boolean)
+        .map((e) => e.codeObject)
+        .filter(Boolean);
+
+      return [...new Set(childrenObjects)]
+        .map((obj) => ({
+          kind: 'function',
+          text: obj.id,
+          object: obj,
+        }));
     },
 
     routeName() {

@@ -9,6 +9,7 @@
     <v-details-panel-list title="Functions" :items="functions"/>
     <v-details-panel-list title="Inbound connections" :items="inboundConnections"/>
     <v-details-panel-list title="Outbound connections" :items="outboundConnections"/>
+    <v-details-panel-list title="Queries" :items="outboundConnections"/>
   </div>
 </template>
 
@@ -54,27 +55,52 @@ export default {
         .map((e) => (e.parent ? e.parent.codeObject : null))
         .filter(Boolean);
 
-      return [...new Set(parentObjects)]
+      const connections = [...new Set(this.events.map((e) => e.parent))]
+        .filter((e) => e && e.http_server_request)
+        .map((e) => {
+          /* eslint-disable camelcase */
+          const {
+            path_info,
+            request_method,
+          } = e.http_server_request;
+
+          return {
+            kind: 'route',
+            text: `${request_method} ${path_info}`,
+            object: e,
+          };
+          /* eslint-enable camelcase */
+        });
+
+      [...new Set(parentObjects)]
         .map((obj) => ({
           kind: 'function',
           text: obj.id,
           object: obj,
-        }));
+        }))
+        .forEach((obj) => connections.push(obj));
+
+      return connections;
     },
 
     outboundConnections() {
-      const childrenObjects = this.events
+      return this.events
         .map((e) => e.children)
         .flat()
         .filter(Boolean)
         .map((e) => e.codeObject)
         .filter(Boolean);
+    },
 
-      return [...new Set(childrenObjects)]
-        .map((obj) => ({
-          kind: 'function',
-          text: obj.id,
-          object: obj,
+    queries() {
+      return this.events
+        .map((e) => e.children)
+        .flat()
+        .filter((e) => e && e.sql)
+        .map((e) => ({
+          kind: 'query',
+          text: e.sql.sql,
+          object: e,
         }));
     },
   },
