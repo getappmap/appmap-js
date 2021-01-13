@@ -159,19 +159,23 @@ export default {
     padding: 0 2rem;
   }
   .event-params {
-    padding: 0 2rem;
-    color: $gray4;
+    padding: 0;
+    color: $base11;
     h5 {
-      color: lighten($gray4,15);
+      color: $base03;
       font-size: 1.1rem;
       font-weight: 500;
       line-height: 1.2;
       margin: 0 0 .25rem 0;
+      padding: 0 2rem;
     }
     .table-01 {
       font-size: 14px;
       font-family: sans-serif;
       font-weight: 500;
+      li {
+        padding: .5rem 2rem;
+      }
     }
   }
   ul {

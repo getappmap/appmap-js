@@ -42,7 +42,7 @@ export default {
     margin-bottom: 1.5rem;
 
     h5 {
-      color: lighten($gray4,15);
+      color: $base03; //lighten($gray4,15);
       font-size: 1.1rem;
       font-weight: 500;
       line-height: 1.2;
