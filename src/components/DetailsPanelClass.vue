@@ -38,10 +38,19 @@ export default {
     },
 
     functions() {
+      const { events } = this.$store.state.appMap;
+      const functionCallsCount = events
+        .filter((e) => e.isCall() && e.codeObject && e.codeObject.parent === this.objectDescriptor)
+        .reduce((acc, e) => {
+          acc[e.methodId] = acc[e.methodId] + 1 || 1;
+          return acc;
+        }, {});
+
       return this.objectDescriptor.children.map((obj) => ({
         kind: 'function',
         text: obj.name,
         object: obj,
+        count: functionCallsCount[obj.name],
       }));
     },
 
