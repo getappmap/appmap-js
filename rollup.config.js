@@ -4,6 +4,7 @@ import vue from 'rollup-plugin-vue';
 import alias from '@rollup/plugin-alias';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
+import image from '@rollup/plugin-image';
 import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import minimist from 'minimist';
@@ -92,6 +93,7 @@ if (!argv.format || argv.format === 'es') {
       }),
       ...baseConfig.plugins.preVue,
       vue(baseConfig.plugins.vue),
+      image(),
       babel({
         ...baseConfig.plugins.babel,
         presets: [
@@ -131,6 +133,7 @@ if (!argv.format || argv.format === 'cjs') {
           optimizeSSR: true,
         },
       }),
+      image(),
       babel(baseConfig.plugins.babel),
       commonjs(),
     ],
@@ -154,6 +157,7 @@ if (!argv.format || argv.format === 'iife') {
       replace(baseConfig.plugins.replace),
       ...baseConfig.plugins.preVue,
       vue(baseConfig.plugins.vue),
+      image(),
       babel(baseConfig.plugins.babel),
       commonjs(),
       terser({
