@@ -40,9 +40,9 @@ export default {
 
 <style scoped lang="scss">
   .v-details-panel-list {
+    margin: 2rem 0;
     list-style-type: none;
     padding: 0;
-    margin-bottom: 2.5rem;
 
     h5 {
       color: #808b98;

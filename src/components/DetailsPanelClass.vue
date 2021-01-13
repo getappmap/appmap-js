@@ -29,7 +29,7 @@ export default {
       const [location] = this.objectDescriptor.classLocations();
       return [{
         kind: 'link',
-        link: location,
+        link: `vscode://${location}`,
         text: location,
       }];
     },
