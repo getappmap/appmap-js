@@ -1,16 +1,19 @@
 <template>
-  <div class="details-panel-function">
+  <div>
+    <v-details-panel-header object-type="Function" :title="objectDescriptor.name" />
     <v-details-panel-list title="Events" :items="events" />
   </div>
 </template>
 
 <script>
+import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
   name: 'v-details-panel-function',
   components: {
     VDetailsPanelList,
+    VDetailsPanelHeader,
   },
   props: {
     objectDescriptor: {
@@ -33,6 +36,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.details-function {
-}
 </style>

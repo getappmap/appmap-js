@@ -83,6 +83,7 @@ export default {
         grid-column: 1;
         width: 100%;
         overflow: scroll;
+        background-color: $gray2;
       }
 
       &--right {

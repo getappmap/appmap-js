@@ -82,5 +82,10 @@ export default {
     @import '~@appland/diagrams/dist/@appland/diagrams';
     width: 100%;
     height: 100%;
+    .appmap.appmap--theme-dark {
+      background-color: $vs-code-gray1;
+      overflow: hidden;
+    }
+
   }
 </style>

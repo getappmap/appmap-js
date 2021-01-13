@@ -31,7 +31,7 @@ export default {
   .tab-btn {
     appearance: none;
     border: 0;
-    background-color: $gray2;
+    background-color: $vs-code-gray2;
     cursor: pointer;
     color: $gray4;
     font-size: 1rem;

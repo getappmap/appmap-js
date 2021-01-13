@@ -1,5 +1,5 @@
 <template>
-  <div class="details-panel-null">
+  <div>
     <div id="intro-details" class="welcome">
       <div class="content">
         <div class="intro">

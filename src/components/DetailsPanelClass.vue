@@ -1,13 +1,10 @@
 <template>
   <div class="details-panel-class">
-    <div class="panel-heading">
-      <ul>
-        <h4>Class {{objectDescriptor.name}}</h4>
-        <li>
-           <a :href="sourceUrl">View source</a>
-        </li>
-      </ul>
-    </div>
+    <v-details-panel-header object-type="Class" :title="objectDescriptor.name">
+      <template v-slot:links>
+        <a :href="sourceUrl">View source</a>
+      </template>
+    </v-details-panel-header>
 
     <v-details-panel-list title="Functions" :items="functions"/>
     <v-details-panel-list title="Inbound connections" :items="inboundConnections"/>
@@ -16,11 +13,13 @@
 </template>
 
 <script>
+import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
   name: 'v-details-panel-class',
   components: {
+    VDetailsPanelHeader,
     VDetailsPanelList,
   },
 
