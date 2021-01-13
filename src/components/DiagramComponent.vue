@@ -95,6 +95,7 @@ export default {
     highlightSelectedComponent() {
       const { selectedObject } = this.$store.getters;
       if (!selectedObject) {
+        this.componentDiagram.highlight(null);
         return;
       }
 

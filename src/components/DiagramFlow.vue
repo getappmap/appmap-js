@@ -82,6 +82,8 @@ export default {
 
         const element = this.$el.querySelector(`.node[data-node-id="${id}"]`);
         panToNode(this.flowView.container.containerController, element);
+      } else {
+        this.flowView.highlight(null);
       }
     },
   },

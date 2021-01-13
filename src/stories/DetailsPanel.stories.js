@@ -17,7 +17,18 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDetailsPanel },
-  template: '<v-details-panel v-bind="$props" />',
+  template: `
+    <v-details-panel v-bind="$props">
+      <template v-slot:buttons>
+        <a class="clear-btn" href="#" @click.prevent>
+          Clear selection
+        </a>
+        <a class="back-btn" href="#" @click.prevent>
+          Back to <b>ApplicationController</b>
+        </a>
+      </template>
+    </v-details-panel>
+  `,
   store,
 });
 

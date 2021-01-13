@@ -53,4 +53,23 @@ context('Component Diagram', () => {
   it('nothing is highlighted by default', () => {
     cy.get('.nodes .node.highlight').should('not.exist');
   });
+
+  it('clears when "Clear selection" button was clicked', () => {
+    cy.visit(
+      'http://localhost:6006/iframe.html?id=pages--vs-code-extension&viewMode=story',
+    );
+
+    cy.get('.nodes .node[data-id="HTTP"]')
+      .click()
+      .should('have.class', 'highlight');
+
+    cy.get('.details-panel__buttons .clear-btn')
+      .contains('Clear selection')
+      .click();
+
+    cy.get('.nodes .node[data-id="HTTP"]').should(
+      'not.have.class',
+      'highlight',
+    );
+  });
 });

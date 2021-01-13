@@ -8,6 +8,7 @@ Vue.use(Vuex);
 export const SELECT_OBJECT = 'selectObject';
 export const SET_APPMAP_DATA = 'setAppMapData';
 export const POP_OBJECT_STACK = 'popObjectStack';
+export const CLEAR_OBJECT_STACK = 'clearObjectStack';
 export const SET_VIEW = 'setView';
 export const VIEW_COMPONENT = 'viewComponent';
 export const VIEW_FLOW = 'viewFlow';
@@ -25,6 +26,11 @@ export const store = new Vuex.Store({
     },
     canPopStack(state) {
       return state.selectionStack.length > 1;
+    },
+    prevSelectedObject(state) {
+      return state.selectionStack.length > 1
+        ? state.selectionStack[state.selectionStack.length - 2]
+        : null;
     },
   },
 
@@ -100,6 +106,10 @@ export const store = new Vuex.Store({
 
     [POP_OBJECT_STACK](state) {
       state.selectionStack.pop();
+    },
+
+    [CLEAR_OBJECT_STACK](state) {
+      state.selectionStack = [];
     },
 
     [SET_VIEW](state, view) {

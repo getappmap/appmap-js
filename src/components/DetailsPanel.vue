@@ -4,12 +4,10 @@
       <img src="../assets/appland-logo.svg" />
     </h3>
     <div class="details-panel__content">
-      <div class="details-panel__details">
-        <a class="back-btn" href="#" v-if="canGoBack" @click.prevent="goBack"
-          >Back</a
-        >
-        <component :is="detailsType" :object-descriptor="objectDescriptor" />
+      <div class="details-panel__buttons">
+        <slot name="buttons" />
       </div>
+      <component :is="detailsType" :object-descriptor="objectDescriptor" />
     </div>
   </div>
 </template>
@@ -24,7 +22,6 @@ import VDetailsPanelHttp from '@/components/DetailsPanelHttp.vue';
 import VDetailsPanelNull from '@/components/DetailsPanelNull.vue';
 import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
 import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
-import { POP_OBJECT_STACK } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel',
@@ -68,16 +65,6 @@ export default {
     objectDescriptor() {
       return this.selectedObject ? this.selectedObject.object : null;
     },
-
-    canGoBack() {
-      return this.$store.getters.canPopStack;
-    },
-  },
-
-  methods: {
-    goBack() {
-      this.$store.commit(POP_OBJECT_STACK);
-    },
   },
 };
 </script>
@@ -110,6 +97,33 @@ export default {
 
   &__content {
     padding: 0;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .clear-btn {
+    display: inline-block;
+    border: 1px solid lighten($gray3, 05);
+    border-radius: $border-radius;
+    margin-bottom: 1rem;
+    margin-left: 2rem;
+    padding: 0.25rem 0.6rem 0.25rem 0.5rem;
+    letter-spacing: 0.5px;
+    color: $gray4;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    &:before {
+      content: '✖ ';
+    }
+    &:hover {
+      background-color: darken($vs-code-gray1, 03);
+      border-color: darken($vs-code-gray1, 03);
+    }
   }
 
   .back-btn {
