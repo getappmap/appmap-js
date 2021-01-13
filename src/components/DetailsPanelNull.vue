@@ -66,7 +66,7 @@ export default {
   line-height: 1.2rem;
   padding: 0 2rem 2rem 2rem;
   h3 {
-    color: $white;
+    color: $base03;
     margin-bottom: .25rem;
   }
   p {

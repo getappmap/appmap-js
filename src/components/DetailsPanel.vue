@@ -88,9 +88,10 @@ export default {
   width: 100%;
   height: 100%;
   color: $gray6;
-  background-color: #1E1E1E;//$gray2;
+  background-color: $vs-code-gray1;
   word-break: break-word;
-  border-right: 1px solid $gray3;
+  border-right: 1px solid $base15;
+  overflow: scroll;
 
   &__title {
     padding: 2rem;
@@ -111,7 +112,7 @@ export default {
 
   .back-btn {
     display: inline-block;
-    border: 1px solid lighten($gray3,05);
+    border: 1px solid $base15;
     border-radius: $border-radius;
     margin-bottom: 1rem;
     margin-left: 2rem;
@@ -124,7 +125,7 @@ export default {
       content: "◄ ";
     }
     &:hover {
-      background-color: darken($vs-code-gray1,03);
+      background-color: darken($vs-code-gray1,05);
       border-color: darken($vs-code-gray1,03);
     }
   }

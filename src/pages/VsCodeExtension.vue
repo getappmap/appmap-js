@@ -114,17 +114,21 @@ export default {
     box-sizing: border-box;
   }
 
+  code {
+    color: $teal;
+  }
+
   #app {
     display: grid;
     grid-template-columns: 25% auto;
     grid-template-rows: max(1fr, 100%);
     height: 100vh;
+    color: $base11;
 
     .column {
       &--left {
         grid-column: 1;
         width: 100%;
-        overflow: scroll;
         background-color: $gray2;
       }
 

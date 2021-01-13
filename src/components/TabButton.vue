@@ -33,11 +33,12 @@ export default {
     border: 0;
     background-color: $vs-code-gray2;
     cursor: pointer;
-    color: $gray4;
+    color: $base03;
     font-size: 1rem;
     padding: 0.5em 1em;
     margin: 0;
     transition: $transition;
+    letter-spacing: .5px;
     width: 50%;
 
     &:hover {
