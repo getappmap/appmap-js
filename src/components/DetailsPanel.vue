@@ -112,7 +112,7 @@ export default {
 
   .back-btn {
     display: inline-block;
-    border: 1px solid lighten($gray3,05);
+    border: 1px solid $base15;
     border-radius: $border-radius;
     margin-bottom: 1rem;
     margin-left: 2rem;
@@ -125,7 +125,7 @@ export default {
       content: "◄ ";
     }
     &:hover {
-      background-color: darken($vs-code-gray1,03);
+      background-color: darken($vs-code-gray1,05);
       border-color: darken($vs-code-gray1,03);
     }
   }

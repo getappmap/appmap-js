@@ -57,16 +57,16 @@ export default {
     margin: 1rem 0;
     a {
       padding: .25rem .7rem;
-      border: 1px solid lighten($gray3,05);
+      border: 1px solid $base15;
       border-radius: $border-radius;
       letter-spacing: .5px;
       color: $gray4;
       text-transform: uppercase;
       font-size: .8rem;
       &:hover {
-        background-color: darken($vs-code-gray2,05);
-        border-radius: $border-radius;
-        border-color: darken($vs-code-gray2,03);
+        background-color: darken($vs-code-gray1,05);
+        border-color: darken($vs-code-gray1,05);
+        color: $gray4;
       }
     }
   }
