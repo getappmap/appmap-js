@@ -9,6 +9,13 @@
           class="details-panel-event__view-event">
           Show in flow view
         </a>
+        <a
+          href="#"
+          v-if="location !== null"
+          @click.prevent="viewSource"
+          ref="viewSource">
+          View source
+        </a>
       </template>
     </v-details-panel-header>
 
@@ -134,11 +141,23 @@ export default {
     shouldDisplayViewEvent() {
       return this.$store.state.currentView !== VIEW_FLOW;
     },
+
+    location() {
+      let loc = null;
+      if (this.objectDescriptor.codeObject) {
+        loc = this.objectDescriptor.codeObject.location || null;
+      }
+      return loc;
+    },
   },
 
   methods: {
     viewEvent() {
       this.$store.commit(SET_VIEW, VIEW_FLOW);
+    },
+
+    viewSource() {
+      this.$root.$emit('viewSource', this.location);
     },
   },
 };
