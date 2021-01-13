@@ -189,7 +189,7 @@ export default {
       padding: .5rem 0;
       transition: $transition;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: space-between;
       a {
         margin: 0 2rem;
