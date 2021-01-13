@@ -54,6 +54,7 @@ export default {
       color: $gray4;
       text-transform: uppercase;
       font-size: .8rem;
+      white-space: nowrap;
       &:hover {
         background-color: darken($vs-code-gray2,05);
         border-radius: $border-radius;
