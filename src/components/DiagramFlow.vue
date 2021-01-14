@@ -31,6 +31,7 @@ export default {
     return {
       renderKey: 0,
       flowView: null,
+      selectingEvent: false,
     };
   },
 
@@ -52,6 +53,7 @@ export default {
   methods: {
     selectEvent(event) {
       if (this.$store) {
+        this.selectingEvent = true;
         this.$store.commit(SELECT_OBJECT, {
           kind: 'event',
           data: event,
@@ -75,6 +77,13 @@ export default {
     },
 
     highlightSelectedEvent() {
+      if (this.selectingEvent) {
+        // This guard prevents us from calling `flowView.highlight` twice and instantly hiding any
+        // visible poppers
+        this.selectingEvent = false;
+        return;
+      }
+
       const { selectedObject } = this.$store.getters;
       if (selectedObject && selectedObject.kind === 'event') {
         const { id } = selectedObject.object;
