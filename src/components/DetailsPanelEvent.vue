@@ -91,7 +91,9 @@ export default {
       }
 
       if (this.objectDescriptor.sql) {
-        return 'SQL';
+        const event = this.$store.state.appMap.rootEvent
+          .find((e) => e.input.id === this.objectDescriptor.id);
+        return event && event.displayName ? event.displayName : 'SQL';
       }
 
       const { methodId, definedClass, isStatic } = this.objectDescriptor;
