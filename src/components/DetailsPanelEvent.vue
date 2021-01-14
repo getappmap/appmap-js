@@ -20,7 +20,7 @@
     </v-details-panel-header>
 
     <div class="sql-code" v-if="hasSql">
-      <code>{{this.objectDescriptor.sql.sql}}</code>
+      <pre>{{formattedSQL}}</pre>
     </div>
 
     <div class="event-params" v-if="hasParameters">
@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import sqlFormatter from 'sql-formatter';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import { SET_VIEW, VIEW_FLOW } from '@/store/vsCode';
@@ -149,6 +150,10 @@ export default {
       }
       return loc;
     },
+
+    formattedSQL() {
+      return sqlFormatter.format(this.objectDescriptor.sql.sql);
+    },
   },
 
   methods: {
@@ -175,6 +180,7 @@ export default {
     padding: 0 2rem;
   }
   .sql-code {
+    margin-bottom: 1.5rem;
     padding: 0 2rem;
   }
   .event-params {
