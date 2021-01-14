@@ -23,4 +23,25 @@ describe('DetailsPanelEvent.vue', () => {
     const [[location]] = rootWrapper.emitted().viewSource;
     expect(location).toBe(event.codeObject.location);
   });
+
+  it('HTTP events display response values', () => {
+    const event = store.state.appMap.events.find(
+      (e) => e.http_server_response && e.http_server_response.mime_type,
+    ).callEvent;
+
+    const wrapper = mount(DetailsPanelEvent, {
+      propsData: {
+        objectDescriptor: event,
+      },
+      store,
+    });
+
+    /* eslint-disable camelcase */
+    const { mime_type, status } = event.returnEvent.http_server_response;
+
+    expect(wrapper.text()).toContain('HTTP response');
+    expect(wrapper.text()).toContain(mime_type);
+    expect(wrapper.text()).toContain(status);
+    /* eslint-enable camelcase */
+  });
 });
