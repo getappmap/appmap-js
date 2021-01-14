@@ -75,6 +75,7 @@ export default {
   list-style-type: none;
   padding: 0;
   margin-bottom: 1.5rem;
+  font-size: 1rem;
 
   h5 {
     color: $base03;
@@ -82,7 +83,7 @@ export default {
     font-weight: 500;
     line-height: 1.2;
     padding: 0 2rem;
-    margin: 0 0 1rem 0;
+    margin: 0 0 0.25rem 0;
   }
 
   ul {
@@ -90,19 +91,25 @@ export default {
     padding: 0;
     margin-bottom: 1.5rem;
     margin-top: 0;
-
     li {
       border-bottom: 1px solid $gray3;
+      padding: 0.5rem 2rem;
       transition: $transition;
-
       &:hover {
         background-color: $blue;
         border-color: $blue;
+<<<<<<< HEAD
         button {
           color: $white;
+=======
+        a {
+          color: $base03;
+>>>>>>> 0432507... Styling and filtering placeholder
         }
       }
+    }
 
+<<<<<<< HEAD
       &:first-of-type {
         border-top: 1px solid $gray3;
       }
@@ -137,6 +144,16 @@ export default {
           white-space: nowrap;
         }
       }
+=======
+    &:first-of-type {
+      border-top: 1px solid $gray3;
+    }
+
+    a {
+      color: $gray4;
+      text-decoration: none;
+      transition: $transition;
+>>>>>>> 0432507... Styling and filtering placeholder
     }
   }
 }

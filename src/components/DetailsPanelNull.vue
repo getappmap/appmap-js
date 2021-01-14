@@ -62,8 +62,8 @@ export default {
 <style scoped lang="scss">
 #intro-details {
   color: $appland-text;
-  font-size: 0.9rem;
-  line-height: 1.2rem;
+  font-size: 1rem;
+  line-height: 1.4rem;
   padding: 0 2rem 2rem 2rem;
   h3 {
     color: $base03;

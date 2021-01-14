@@ -42,7 +42,7 @@ export default {
     border-bottom: 0;
     font-size: 0.9rem;
     font-weight: 500;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.5rem;
   }
   &__details-name {
     color: $base03;
@@ -50,7 +50,7 @@ export default {
     border-bottom: 0;
     font-size: 1.5rem;
     font-weight: 500;
-    margin-bottom: 0.8rem;
+    margin-bottom: 1rem;
     margin-top: 0.5rem;
   }
 }
