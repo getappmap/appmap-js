@@ -15,7 +15,7 @@ export default {
     theme: {
       type: String,
       default: 'dark',
-      validator: (value) => (['dark', 'light'].indexOf(value) !== -1),
+      validator: (value) => ['dark', 'light'].indexOf(value) !== -1,
     },
     zoomButtons: {
       type: Boolean,
@@ -37,7 +37,9 @@ export default {
   watch: {
     // If a prop changes, update the render key, causing a full re-render.
     $props: {
-      handler() { this.renderKey += 1; },
+      handler() {
+        this.renderKey += 1;
+      },
     },
 
     '$store.getters.selectedObject': {
@@ -95,13 +97,13 @@ export default {
 </script>
 
 <style lang="scss">
-  .diagram-flow {
-    @import '~@appland/diagrams/dist/@appland/diagrams';
-    max-height: 100vh;
-    max-width: 100vw;
-    .appmap.appmap--theme-dark {
-      background-color:$vs-code-gray1;
-      overflow: hidden;
-    }
+.diagram-flow {
+  @import '~@appland/diagrams/dist/@appland/diagrams';
+  max-height: 100vh;
+  max-width: 100vw;
+  .appmap.appmap--theme-dark {
+    background-color: $vs-code-gray1;
+    overflow: hidden;
   }
+}
 </style>

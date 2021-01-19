@@ -1,7 +1,10 @@
 <template>
   <div>
     <v-details-panel-header object-type="Database" />
-    <v-details-panel-list title="Inbound connections" :items="inboundConnections"/>
+    <v-details-panel-list
+      title="Inbound connections"
+      :items="inboundConnections"
+    />
     <v-details-panel-list title="Queries" :items="queries" />
   </div>
 </template>
@@ -18,8 +21,7 @@ export default {
   },
   computed: {
     events() {
-      return this.$store.state.appMap.events
-        .filter((e) => e.isCall() && e.sql);
+      return this.$store.state.appMap.events.filter((e) => e.isCall() && e.sql);
     },
 
     inboundConnections() {
@@ -31,10 +33,7 @@ export default {
         .filter((e) => e && e.http_server_request)
         .map((e) => {
           /* eslint-disable camelcase */
-          const {
-            path_info,
-            request_method,
-          } = e.http_server_request;
+          const { path_info, request_method } = e.http_server_request;
 
           return {
             kind: 'route',
@@ -68,5 +67,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

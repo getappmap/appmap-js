@@ -1,6 +1,9 @@
 <template>
   <div>
-    <v-details-panel-header object-type="Function" :title="objectDescriptor.name">
+    <v-details-panel-header
+      object-type="Function"
+      :title="objectDescriptor.name"
+    >
       <template v-slot:links>
         <a href="#" @click.prevent="viewSource">View source</a>
       </template>
@@ -28,23 +31,24 @@ export default {
   },
   computed: {
     events() {
-      return this.$store.state.appMap.events
-        .filter((e) => e.isCall() && e.codeObject && e.codeObject.id === this.objectDescriptor.id);
+      return this.$store.state.appMap.events.filter(
+        (e) =>
+          e.isCall() &&
+          e.codeObject &&
+          e.codeObject.id === this.objectDescriptor.id,
+      );
     },
 
     eventObjects() {
-      return this
-        .events
-        .map((e) => ({
-          kind: 'event',
-          text: e.codeObject.id,
-          object: e,
-        }));
+      return this.events.map((e) => ({
+        kind: 'event',
+        text: e.codeObject.id,
+        object: e,
+      }));
     },
 
     queries() {
-      return this
-        .events
+      return this.events
         .map((e) => e.children)
         .flat()
         .filter((e) => e && e.isCall() && e.sql)
@@ -64,5 +68,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

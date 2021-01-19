@@ -4,8 +4,12 @@ export default {
   title: 'AppLand/UI/Button',
   component: VButton,
   argTypes: {
-    kind: { control: { type: 'select', options: ['primary', 'secondary', 'ghost'] } },
-    size: { control: { type: 'select', options: ['small', 'medium', 'large'] } },
+    kind: {
+      control: { type: 'select', options: ['primary', 'secondary', 'ghost'] },
+    },
+    size: {
+      control: { type: 'select', options: ['small', 'medium', 'large'] },
+    },
   },
 };
 

@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .tab-content {
-    height: inherit;
-  }
+.tab-content {
+  height: inherit;
+}
 </style>

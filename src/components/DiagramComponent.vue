@@ -33,7 +33,7 @@ export default {
     theme: {
       type: String,
       default: 'dark',
-      validator: (value) => (['dark', 'light'].indexOf(value) !== -1),
+      validator: (value) => ['dark', 'light'].indexOf(value) !== -1,
     },
     zoomButtons: {
       type: Boolean,
@@ -56,7 +56,9 @@ export default {
   watch: {
     // If a prop changes, update the render key, causing a full re-render.
     $props: {
-      handler() { this.renderKey += 1; },
+      handler() {
+        this.renderKey += 1;
+      },
       deep: true,
     },
 
@@ -182,7 +184,9 @@ export default {
           },
         });
         this.componentDiagram.render(this.componentData);
-        this.componentDiagram.on('edge', ([from, to]) => this.selectObject('edge', { from, to }));
+        this.componentDiagram.on('edge', ([from, to]) =>
+          this.selectObject('edge', { from, to }),
+        );
         this.bindHighlightHandler();
         this.highlightSelectedComponent();
       });
@@ -206,14 +210,13 @@ export default {
 </script>
 
 <style lang="scss">
-  .diagram-component {
-    @import '~@appland/diagrams/dist/@appland/diagrams';
-    width: 100%;
-    height: 100%;
-    .appmap.appmap--theme-dark {
-      background-color: $vs-code-gray1;
-      overflow: hidden;
-    }
-
+.diagram-component {
+  @import '~@appland/diagrams/dist/@appland/diagrams';
+  width: 100%;
+  height: 100%;
+  .appmap.appmap--theme-dark {
+    background-color: $vs-code-gray1;
+    overflow: hidden;
   }
+}
 </style>

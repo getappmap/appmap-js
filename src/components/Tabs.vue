@@ -6,7 +6,8 @@
         :key="tab.name"
         :label="tab.name"
         :is-active="activeTab === tab"
-        @click.native="activateTab(tab)">
+        @click.native="activateTab(tab)"
+      >
       </v-tab-button>
     </div>
     <div class="tabs__content">
@@ -59,17 +60,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .tabs {
+.tabs {
+  width: 100%;
+  height: 100%;
+
+  &__header {
+    border: 0;
+  }
+
+  &__content {
     width: 100%;
     height: 100%;
-
-    &__header {
-      border: 0;
-    }
-
-    &__content {
-      width: 100%;
-      height: 100%;
-    }
   }
+}
 </style>

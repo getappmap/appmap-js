@@ -6,10 +6,16 @@
       </template>
     </v-details-panel-header>
 
-    <v-details-panel-list title="Functions" :items="functions"/>
-    <v-details-panel-list title="Inbound connections" :items="inboundConnections"/>
-    <v-details-panel-list title="Outbound connections" :items="outboundConnections"/>
-    <v-details-panel-list title="Queries" :items="queries"/>
+    <v-details-panel-list title="Functions" :items="functions" />
+    <v-details-panel-list
+      title="Inbound connections"
+      :items="inboundConnections"
+    />
+    <v-details-panel-list
+      title="Outbound connections"
+      :items="outboundConnections"
+    />
+    <v-details-panel-list title="Queries" :items="queries" />
   </div>
 </template>
 
@@ -41,7 +47,9 @@ export default {
       const { events } = this.$store.state.appMap;
       const { id } = this.objectDescriptor;
       const functionCallsCount = events
-        .filter((e) => e.isCall() && e.codeObject && e.codeObject.parent.id === id)
+        .filter(
+          (e) => e.isCall() && e.codeObject && e.codeObject.parent.id === id,
+        )
         .reduce((acc, e) => {
           acc[e.methodId] = acc[e.methodId] + 1 || 1;
           return acc;
@@ -56,8 +64,9 @@ export default {
     },
 
     events() {
-      return this.$store.state.appMap.events
-        .filter((e) => e.codeObject && e.codeObject.parent === this.objectDescriptor);
+      return this.$store.state.appMap.events.filter(
+        (e) => e.codeObject && e.codeObject.parent === this.objectDescriptor,
+      );
     },
 
     inboundConnections() {
@@ -69,10 +78,7 @@ export default {
         .filter((e) => e && e.http_server_request)
         .map((e) => {
           /* eslint-disable camelcase */
-          const {
-            path_info,
-            request_method,
-          } = e.http_server_request;
+          const { path_info, request_method } = e.http_server_request;
 
           return {
             kind: 'route',
@@ -132,7 +138,7 @@ export default {
 .details-panel-class {
   h4 {
     margin: 0;
-    padding: .5rem 2rem;
+    padding: 0.5rem 2rem;
     font-size: 1.3rem;
     border-bottom: 1px solid $gray3;
   }
@@ -144,7 +150,7 @@ export default {
     li {
       width: 100%;
       border-bottom: 1px solid $gray3;
-      padding: .5rem 0;
+      padding: 0.5rem 0;
       transition: $transition;
       a {
         margin: 0 2rem;

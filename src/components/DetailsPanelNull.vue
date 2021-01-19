@@ -4,15 +4,16 @@
       <div class="content">
         <div class="intro">
           <p>
-            Select a component in the diagram to see its details here. Here, we’ll show you any
-            relevant information about your code as you navigate through your appmaps.
+            Select a component in the diagram to see its details here. Here,
+            we’ll show you any relevant information about your code as you
+            navigate through your appmaps.
           </p>
         </div>
         <div class="components_events">
           <h3>Components & Events</h3>
           <p>
-            The UML-inspired diagrams display your key application components, and how they are
-            inter-related during application execution.
+            The UML-inspired diagrams display your key application components,
+            and how they are inter-related during application execution.
           </p>
         </div>
         <div class="right_click">
@@ -53,7 +54,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'v-details-panel-null',
 };
@@ -62,12 +62,12 @@ export default {
 <style scoped lang="scss">
 #intro-details {
   color: $appland-text;
-  font-size: .9rem;
+  font-size: 0.9rem;
   line-height: 1.2rem;
   padding: 0 2rem 2rem 2rem;
   h3 {
     color: $base03;
-    margin-bottom: .25rem;
+    margin-bottom: 0.25rem;
   }
   p {
     margin-top: 0;
@@ -85,7 +85,7 @@ export default {
       li {
         display: flex;
         flex-direction: row;
-        margin: .5rem 0;
+        margin: 0.5rem 0;
         p {
           margin: 0;
         }
@@ -95,8 +95,8 @@ export default {
         display: inline-block;
         height: 1rem;
         width: 2rem;
-        margin-right: .5rem;
-        margin-top: .3rem;
+        margin-right: 0.5rem;
+        margin-top: 0.3rem;
         &.class-pkg {
           background-color: $teal;
         }
@@ -104,7 +104,7 @@ export default {
           background-color: $blue;
         }
         &.dynamic {
-          background-image: url("../assets/arrow-right.svg");
+          background-image: url('../assets/arrow-right.svg');
           background-repeat: no-repeat;
         }
         &.web-service {

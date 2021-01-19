@@ -1,9 +1,18 @@
 <template>
   <div>
-    <v-details-panel-header object-type="Package" :title="objectDescriptor.name" />
-    <v-details-panel-list title="Classes" :items="classes"/>
-    <v-details-panel-list title="Inbound connections" :items="inboundConnections"/>
-    <v-details-panel-list title="Outbound connections" :items="outboundConnections"/>
+    <v-details-panel-header
+      object-type="Package"
+      :title="objectDescriptor.name"
+    />
+    <v-details-panel-list title="Classes" :items="classes" />
+    <v-details-panel-list
+      title="Inbound connections"
+      :items="inboundConnections"
+    />
+    <v-details-panel-list
+      title="Outbound connections"
+      :items="outboundConnections"
+    />
   </div>
 </template>
 
@@ -28,9 +37,11 @@ export default {
   computed: {
     classes() {
       const packageName = this.objectDescriptor.id;
-      const classIds = new Set(this.$store.state.appMap.events
-        .filter((e) => e.codeObject && e.codeObject.packageOf === packageName)
-        .map((e) => e.codeObject.classOf));
+      const classIds = new Set(
+        this.$store.state.appMap.events
+          .filter((e) => e.codeObject && e.codeObject.packageOf === packageName)
+          .map((e) => e.codeObject.classOf),
+      );
 
       return Array.from(classIds).map((classId) => ({
         kind: 'class',
@@ -40,8 +51,10 @@ export default {
     },
 
     events() {
-      return this.$store.state.appMap.events
-        .filter((e) => e.codeObject && e.codeObject.parent.parent === this.objectDescriptor);
+      return this.$store.state.appMap.events.filter(
+        (e) =>
+          e.codeObject && e.codeObject.parent.parent === this.objectDescriptor,
+      );
     },
 
     inboundConnections() {
@@ -51,12 +64,11 @@ export default {
         .map((obj) => obj.parent.parent)
         .filter((obj) => obj !== this.objectDescriptor);
 
-      return [...new Set(parentObjects)]
-        .map((obj) => ({
-          kind: 'package',
-          text: obj.id,
-          object: obj,
-        }));
+      return [...new Set(parentObjects)].map((obj) => ({
+        kind: 'package',
+        text: obj.id,
+        object: obj,
+      }));
     },
 
     outboundConnections() {
@@ -69,16 +81,14 @@ export default {
         .map((obj) => obj.parent.parent)
         .filter((obj) => obj !== this.objectDescriptor);
 
-      return [...new Set(childrenObjects)]
-        .map((obj) => ({
-          kind: 'package',
-          text: obj.id,
-          object: obj,
-        }));
+      return [...new Set(childrenObjects)].map((obj) => ({
+        kind: 'package',
+        text: obj.id,
+        object: obj,
+      }));
     },
   },
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

@@ -5,8 +5,10 @@
     </h3>
     <div class="details-panel__content">
       <div class="details-panel__details">
-        <a class="back-btn" href="#" v-if="canGoBack" @click.prevent="goBack">Back</a>
-        <component :is="detailsType" :object-descriptor="objectDescriptor"/>
+        <a class="back-btn" href="#" v-if="canGoBack" @click.prevent="goBack"
+          >Back</a
+        >
+        <component :is="detailsType" :object-descriptor="objectDescriptor" />
       </div>
     </div>
   </div>
@@ -116,17 +118,17 @@ export default {
     border-radius: $border-radius;
     margin-bottom: 1rem;
     margin-left: 2rem;
-    padding: .25rem .6rem .25rem .5rem;
-    letter-spacing: .5px;
+    padding: 0.25rem 0.6rem 0.25rem 0.5rem;
+    letter-spacing: 0.5px;
     color: $gray4;
     text-transform: uppercase;
-    font-size: .8rem;
+    font-size: 0.8rem;
     &:before {
-      content: "◄ ";
+      content: '◄ ';
     }
     &:hover {
-      background-color: darken($vs-code-gray1,05);
-      border-color: darken($vs-code-gray1,03);
+      background-color: darken($vs-code-gray1, 05);
+      border-color: darken($vs-code-gray1, 03);
     }
   }
 }
