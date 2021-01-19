@@ -52,8 +52,9 @@ export const Event = Template.bind({});
 Event.args = {
   selectedObject: {
     kind: 'event',
-    object: store.state.appMap.events.find((e) => e.isCall()
-      && e.codeObject && e.parameters.length > 3),
+    object: store.state.appMap.events.find(
+      (e) => e.isCall() && e.codeObject && e.parameters.length > 3,
+    ),
   },
 };
 
@@ -87,7 +88,9 @@ export const Route = Template.bind({});
 Route.args = {
   selectedObject: {
     kind: 'route',
-    object: store.state.appMap.events
-      .filter((e) => e.http_server_request && e.http_server_request.path_info === '/admin'),
+    object: store.state.appMap.events.filter(
+      (e) =>
+        e.http_server_request && e.http_server_request.path_info === '/admin',
+    ),
   },
 };

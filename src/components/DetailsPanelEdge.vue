@@ -77,21 +77,20 @@ export default {
         return { kind: type, id };
       }
 
-      const events = appMap.events
-        .filter((e) => {
-          /* eslint-disable camelcase */
-          if (e.isReturn()) {
-            return false;
-          }
-
-          if (e.http_server_request) {
-            const { path_info, request_method } = e.http_server_request;
-            return identifier === `${request_method} ${path_info}`;
-          }
-
+      const events = appMap.events.filter((e) => {
+        /* eslint-disable camelcase */
+        if (e.isReturn()) {
           return false;
-          /* eslint-enable camelcase */
-        });
+        }
+
+        if (e.http_server_request) {
+          const { path_info, request_method } = e.http_server_request;
+          return identifier === `${request_method} ${path_info}`;
+        }
+
+        return false;
+        /* eslint-enable camelcase */
+      });
 
       if (events.length > 0) {
         return {
@@ -130,11 +129,13 @@ export default {
       const { appMap } = this.$store.state;
       const { from, to } = this.objectDescriptor;
 
-      return appMap
-        .events
+      return appMap.events
         .filter((e) => eventMatchesIdentifier(from, e))
-        .filter((e) => e.children
-          && e.children.filter((child) => eventMatchesIdentifier(to, child)))
+        .filter(
+          (e) =>
+            e.children &&
+            e.children.filter((child) => eventMatchesIdentifier(to, child)),
+        )
         .map((e) => ({
           kind: 'event',
           text: eventName(e),
@@ -149,12 +150,12 @@ export default {
 .details-panel-edge {
   padding: 0;
   h5 {
-    color: lighten($gray4,15);
+    color: lighten($gray4, 15);
     font-size: 1.1rem;
     font-weight: 500;
     line-height: 1.2;
     padding: 0 2rem;
-    margin: 0 0 .25rem 0;
+    margin: 0 0 0.25rem 0;
   }
 }
 </style>

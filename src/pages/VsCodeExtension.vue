@@ -5,15 +5,19 @@
     </div>
 
     <div class="column column--right">
-    <v-tabs @activateTab="onChangeTab" ref="tabs">
-        <v-tab name="Component diagram" :is-active="isViewingComponent" :ref="VIEW_COMPONENT">
+      <v-tabs @activateTab="onChangeTab" ref="tabs">
+        <v-tab
+          name="Component diagram"
+          :is-active="isViewingComponent"
+          :ref="VIEW_COMPONENT"
+        >
           <v-diagram-component :component-data="components" />
         </v-tab>
 
         <v-tab name="Flow view" :is-active="isViewingFlow" :ref="VIEW_FLOW">
           <v-diagram-flow :call-tree="callTree" />
         </v-tab>
-    </v-tabs>
+      </v-tabs>
     </div>
   </div>
 </template>
@@ -104,42 +108,43 @@ export default {
 </script>
 
 <style lang="scss">
-  html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-  }
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
 
-  * {
-    box-sizing: border-box;
-  }
+* {
+  box-sizing: border-box;
+}
 
-  code {
-    color: $teal;
-  }
+code {
+  color: $teal;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 25% auto;
-    grid-template-rows: max(1fr, 100%);
-    height: 100vh;
-    color: $base11;
+#app {
+  display: grid;
+  grid-template-columns: 25% auto;
+  grid-template-rows: max(1fr, 100%);
+  height: 100vh;
+  color: $base11;
 
-    .column {
-      &--left {
-        grid-column: 1;
-        width: 100%;
-        background-color: $gray2;
-      }
+  .column {
+    &--left {
+      grid-column: 1;
+      width: 100%;
+      background-color: $gray2;
+    }
 
-      &--right {
-        grid-column-start: 2;
-        grid-column-end: 3;
-        width: 100%;
-        min-width: 250px;
-        word-break: break-all;
-        overflow: hidden;
-      }
+    &--right {
+      grid-column-start: 2;
+      grid-column-end: 3;
+      width: 100%;
+      min-width: 250px;
+      word-break: break-all;
+      overflow: hidden;
     }
   }
+}
 </style>

@@ -1,11 +1,13 @@
 <template>
   <div class="v-details-panel-list" v-if="items.length > 0">
-    <h5>{{title}}</h5>
+    <h5>{{ title }}</h5>
     <ul>
       <li v-for="(item, index) in items" :key="index">
         <a class="list-item" href="#" @click.prevent="selectItem(item)">
-          {{item.text}}
-          <span class="list-item__count" v-if="item.count">{{item.count}}</span>
+          {{ item.text }}
+          <span class="list-item__count" v-if="item.count">{{
+            item.count
+          }}</span>
         </a>
       </li>
     </ul>
@@ -37,62 +39,62 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .v-details-panel-list {
+.v-details-panel-list {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+
+  h5 {
+    color: $base03;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.2;
+    padding: 0 2rem;
+    margin: 0 0 1rem 0;
+  }
+
+  ul {
     list-style-type: none;
     padding: 0;
     margin-bottom: 1.5rem;
+    margin-top: 0;
 
-    h5 {
-      color: $base03;
-      font-size: 1.1rem;
-      font-weight: 500;
-      line-height: 1.2;
-      padding: 0 2rem;
-      margin: 0 0 1rem 0;
-    }
+    li {
+      border-bottom: 1px solid $gray3;
+      transition: $transition;
 
-    ul {
-      list-style-type: none;
-      padding: 0;
-      margin-bottom: 1.5rem;
-      margin-top: 0;
-
-      li {
-        border-bottom: 1px solid $gray3;
-        transition: $transition;
-
-        &:hover {
-          background-color: $blue;
-          border-color: $blue;
-          a {
-            color: $white;
-          }
+      &:hover {
+        background-color: $blue;
+        border-color: $blue;
+        a {
+          color: $white;
         }
+      }
 
-        &:first-of-type {
-          border-top: 1px solid $gray3;
-        }
+      &:first-of-type {
+        border-top: 1px solid $gray3;
+      }
 
-        .list-item {
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-          padding: .5rem 2rem;
-          color: $blue;
-          text-decoration: none;
+      .list-item {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 0.5rem 2rem;
+        color: $blue;
+        text-decoration: none;
 
-          &__count {
-            margin-left: auto;
-            border-radius: .5rem;
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            font-size: .8rem;
-            line-height: 1;
-            color: white;
-            background-color: $gray4;
-          }
+        &__count {
+          margin-left: auto;
+          border-radius: 0.5rem;
+          display: inline-block;
+          padding: 0.25rem 0.5rem;
+          font-size: 0.8rem;
+          line-height: 1;
+          color: white;
+          background-color: $gray4;
         }
       }
     }
   }
+}
 </style>

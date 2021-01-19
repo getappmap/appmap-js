@@ -18,7 +18,6 @@ pnpm-debug.log*
 
 # Editor directories and files
 .idea
-.vscode
 *.suo
 *.ntvs*
 *.njsproj
@@ -27,3 +26,4 @@ pnpm-debug.log*
 
 package-lock.json
 build-storybook.log*
+.eslintcache

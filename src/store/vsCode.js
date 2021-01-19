@@ -31,10 +31,7 @@ export const store = new Vuex.Store({
   mutations: {
     [SET_APPMAP_DATA](state, data) {
       state.selectionStack = [];
-      state.appMap = buildAppMap()
-        .source(data)
-        .normalize()
-        .build();
+      state.appMap = buildAppMap().source(data).normalize().build();
 
       state.appMap.callTree.rootEvent.forEach((e) => {
         e.displayName = fullyQualifiedFunctionName(e.input);

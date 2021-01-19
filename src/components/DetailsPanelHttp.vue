@@ -37,16 +37,14 @@ export default {
           /* eslint-enable camelcase */
         }, {});
 
-      return Object.entries(routeEvents)
-        .map(([route, events]) => ({
-          kind: 'route',
-          text: route,
-          object: events,
-        }));
+      return Object.entries(routeEvents).map(([route, events]) => ({
+        kind: 'route',
+        text: route,
+        object: events,
+      }));
     },
   },
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

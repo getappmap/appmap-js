@@ -7,7 +7,9 @@ store.commit(SET_APPMAP_DATA, scenario);
 
 describe('DetailsPanelEvent.vue', () => {
   it('view source emits an event from root', () => {
-    const event = store.state.appMap.events.find((e) => e.isCall() && e.codeObject);
+    const event = store.state.appMap.events.find(
+      (e) => e.isCall() && e.codeObject,
+    );
     const wrapper = mount(DetailsPanelEvent, {
       propsData: {
         objectDescriptor: event,
@@ -15,9 +17,7 @@ describe('DetailsPanelEvent.vue', () => {
       store,
     });
 
-    wrapper
-      .findComponent({ ref: 'viewSource' })
-      .trigger('click');
+    wrapper.findComponent({ ref: 'viewSource' }).trigger('click');
 
     const rootWrapper = createWrapper(wrapper.vm.$root);
     const [[location]] = rootWrapper.emitted().viewSource;

@@ -1,8 +1,11 @@
 <template>
   <div>
     <v-details-panel-header object-type="Route" :title="routeName" />
-    <v-details-panel-list title="Events" :items="events"/>
-    <v-details-panel-list title="Outbound connections" :items="outboundConnections"/>
+    <v-details-panel-list title="Events" :items="events" />
+    <v-details-panel-list
+      title="Outbound connections"
+      :items="outboundConnections"
+    />
   </div>
 </template>
 
@@ -28,10 +31,7 @@ export default {
     events() {
       return this.objectDescriptor.map((e) => {
         /* eslint-disable camelcase */
-        const {
-          path_info,
-          request_method,
-        } = e.http_server_request;
+        const { path_info, request_method } = e.http_server_request;
 
         return {
           kind: 'event',
@@ -50,12 +50,11 @@ export default {
         .map((e) => e.codeObject)
         .filter(Boolean);
 
-      return [...new Set(childrenObjects)]
-        .map((obj) => ({
-          kind: 'function',
-          text: obj.id,
-          object: obj,
-        }));
+      return [...new Set(childrenObjects)].map((obj) => ({
+        kind: 'function',
+        text: obj.id,
+        object: obj,
+      }));
     },
 
     routeName() {
@@ -69,5 +68,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

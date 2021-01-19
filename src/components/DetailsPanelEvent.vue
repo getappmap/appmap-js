@@ -6,29 +6,31 @@
           href="#"
           @click.prevent="viewEvent"
           v-if="shouldDisplayViewEvent"
-          class="details-panel-event__view-event">
+          class="details-panel-event__view-event"
+        >
           Show in flow view
         </a>
         <a
           href="#"
           v-if="location !== null"
           @click.prevent="viewSource"
-          ref="viewSource">
+          ref="viewSource"
+        >
           View source
         </a>
       </template>
     </v-details-panel-header>
 
     <div class="sql-code" v-if="hasSql">
-      <pre>{{formattedSQL}}</pre>
+      <pre>{{ formattedSQL }}</pre>
     </div>
 
     <div class="event-params" v-if="hasParameters">
       <h5>Parameters</h5>
       <ul class="table-01">
         <li v-for="(param, index) in objectDescriptor.parameters" :key="index">
-          <strong>{{param.name}}</strong>
-          <code>{{param.value}}</code>
+          <strong>{{ param.name }}</strong>
+          <code>{{ param.value }}</code>
         </li>
       </ul>
     </div>
@@ -37,9 +39,9 @@
       <h5>Parameters</h5>
       <ul class="table-01">
         <li v-for="(param, index) in objectDescriptor.message" :key="index">
-          <i>{{param.class}}</i>
-          <strong>{{param.name}}</strong>
-          <code>{{param.value}}</code>
+          <i>{{ param.class }}</i>
+          <strong>{{ param.name }}</strong>
+          <code>{{ param.value }}</code>
         </li>
       </ul>
     </div>
@@ -48,8 +50,8 @@
       <h5>Return value</h5>
       <ul class="table-01">
         <li>
-          <i>{{objectDescriptor.returnValue.class}}</i>
-          <code>{{objectDescriptor.returnValue.value}}</code>
+          <i>{{ objectDescriptor.returnValue.class }}</i>
+          <code>{{ objectDescriptor.returnValue.value }}</code>
         </li>
       </ul>
     </div>
@@ -85,14 +87,18 @@ export default {
 
       if (this.objectDescriptor.http_server_request) {
         /* eslint-disable camelcase */
-        const { request_method, path_info } = this.objectDescriptor.http_server_request;
+        const {
+          request_method,
+          path_info,
+        } = this.objectDescriptor.http_server_request;
         return `${request_method} ${path_info}`;
         /* eslint-enable camelcase */
       }
 
       if (this.objectDescriptor.sql) {
-        const event = this.$store.state.appMap.rootEvent
-          .find((e) => e.input.id === this.objectDescriptor.id);
+        const event = this.$store.state.appMap.rootEvent.find(
+          (e) => e.input.id === this.objectDescriptor.id,
+        );
         return event && event.displayName ? event.displayName : 'SQL';
       }
 
@@ -101,11 +107,16 @@ export default {
     },
 
     hasParameters() {
-      return this.objectDescriptor.parameters && this.objectDescriptor.parameters.length;
+      return (
+        this.objectDescriptor.parameters &&
+        this.objectDescriptor.parameters.length
+      );
     },
 
     hasMessage() {
-      return this.objectDescriptor.message && this.objectDescriptor.message.length;
+      return (
+        this.objectDescriptor.message && this.objectDescriptor.message.length
+      );
     },
 
     hasSql() {
@@ -132,13 +143,17 @@ export default {
     },
 
     children() {
-      return [...new Set(this.objectDescriptor.children
-        .filter((e) => e.codeObject)
-        .map((e) => ({
-          kind: 'event',
-          text: `${e.codeObject.id} (${e.id})`,
-          object: e,
-        })))];
+      return [
+        ...new Set(
+          this.objectDescriptor.children
+            .filter((e) => e.codeObject)
+            .map((e) => ({
+              kind: 'event',
+              text: `${e.codeObject.id} (${e.id})`,
+              object: e,
+            })),
+        ),
+      ];
     },
 
     shouldDisplayViewEvent() {
@@ -193,7 +208,7 @@ export default {
       font-size: 1.1rem;
       font-weight: 500;
       line-height: 1.2;
-      margin: 0 0 .25rem 0;
+      margin: 0 0 0.25rem 0;
       padding: 0 2rem;
     }
     .table-01 {
@@ -201,7 +216,7 @@ export default {
       font-family: sans-serif;
       font-weight: 500;
       li {
-        padding: .5rem 2rem;
+        padding: 0.5rem 2rem;
       }
     }
   }
@@ -213,7 +228,7 @@ export default {
     li {
       width: 100%;
       border-bottom: 1px solid $gray3;
-      padding: .5rem 0;
+      padding: 0.5rem 0;
       transition: $transition;
       display: flex;
       flex-direction: column;
