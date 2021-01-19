@@ -3,8 +3,9 @@
     <h5>{{title}}</h5>
     <ul>
       <li v-for="(item, index) in items" :key="index">
-        <a href="#" @click.prevent="selectItem(item)">
+        <a class="list-item" href="#" @click.prevent="selectItem(item)">
           {{item.text}}
+          <span class="list-item__count" v-if="item.count">{{item.count}}</span>
         </a>
       </li>
     </ul>
@@ -47,7 +48,7 @@ export default {
       font-weight: 500;
       line-height: 1.2;
       padding: 0 2rem;
-      margin: 0 0 .25rem 0;
+      margin: 0 0 1rem 0;
     }
 
     ul {
@@ -55,9 +56,9 @@ export default {
       padding: 0;
       margin-bottom: 1.5rem;
       margin-top: 0;
+
       li {
         border-bottom: 1px solid $gray3;
-        padding: .5rem 2rem;
         transition: $transition;
 
         &:hover {
@@ -72,9 +73,24 @@ export default {
           border-top: 1px solid $gray3;
         }
 
-        a {
-          color: $base11;
+        .list-item {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          padding: .5rem 2rem;
+          color: $blue;
           text-decoration: none;
+
+          &__count {
+            margin-left: auto;
+            border-radius: .5rem;
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: .8rem;
+            line-height: 1;
+            color: white;
+            background-color: $gray4;
+          }
         }
       }
     }
