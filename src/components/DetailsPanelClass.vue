@@ -39,8 +39,9 @@ export default {
 
     functions() {
       const { events } = this.$store.state.appMap;
+      const { id } = this.objectDescriptor;
       const functionCallsCount = events
-        .filter((e) => e.isCall() && e.codeObject && e.codeObject.parent === this.objectDescriptor)
+        .filter((e) => e.isCall() && e.codeObject && e.codeObject.parent.id === id)
         .reduce((acc, e) => {
           acc[e.methodId] = acc[e.methodId] + 1 || 1;
           return acc;
