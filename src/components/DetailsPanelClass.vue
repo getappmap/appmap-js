@@ -23,6 +23,32 @@
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
+function groupEvents(array) {
+  const arr = Array.from(array);
+  const firstItemIndex = {};
+
+  arr.forEach((item, index) => {
+    if (!firstItemIndex[item.kind]) {
+      firstItemIndex[item.kind] = {};
+    }
+
+    /* eslint-disable */
+    if (!~Object.keys(firstItemIndex[item.kind]).indexOf(item.text)) {
+      firstItemIndex[item.kind][item.text] = index;
+    } else {
+      if (!arr[firstItemIndex[item.kind][item.text]]['count']) {
+        arr[firstItemIndex[item.kind][item.text]]['count'] = 1;
+      }
+
+      arr[firstItemIndex[item.kind][item.text]]['count'] += 1;
+      arr[index] = null;
+    }
+    /* eslint-enable */
+  });
+
+  return arr.filter(Boolean);
+}
+
 export default {
   name: 'v-details-panel-class',
   components: {
@@ -96,11 +122,11 @@ export default {
         }))
         .forEach((obj) => connections.push(obj));
 
-      return connections;
+      return groupEvents(connections);
     },
 
     outboundConnections() {
-      return this.events
+      const connections = this.events
         .map((e) => e.children)
         .flat()
         .filter(Boolean)
@@ -111,6 +137,8 @@ export default {
           text: obj.id,
           object: obj,
         }));
+
+      return groupEvents(connections);
     },
 
     queries() {

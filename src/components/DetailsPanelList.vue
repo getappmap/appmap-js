@@ -92,6 +92,7 @@ export default {
           line-height: 1;
           color: white;
           background-color: $gray4;
+          white-space: nowrap;
         }
       }
     }
