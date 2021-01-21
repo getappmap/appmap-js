@@ -1,0 +1,183 @@
+.appmap__component-diagram {
+  font-size: 75%;
+
+  &:not(:root) {
+    overflow: visible;
+  }
+
+  .node {
+    &.highlight {
+      rect, circle, ellipse, path, polygon {
+        stroke-width: 3px;
+      }
+    }
+
+    .label {
+      font-size: inherit;
+      font-weight: 700;
+      line-height: 1;
+    }
+  }
+
+  .edgePath {
+    path {
+      stroke-width: 3px;
+    }
+
+    & > path {
+      fill: none;
+    }
+
+    marker path {
+      stroke-width: 1px;
+      stroke-dasharray: 1px, 0px;
+    }
+  }
+
+  .nodeLabels {
+    pointer-events: none;
+
+    .package {
+      &.dim { opacity: 1 }
+    }
+  }
+
+  @each $scheme, $colors in $themes {
+  .appmap--theme-#{$scheme} & {
+    $bg: map-get($colors, 'background');
+    $edge: map-get($colors, 'edge');
+    $highlight: map-get($colors, 'highlight');
+    $highlight-inbound: map-get($colors, 'highlight-inbound');
+    $labelLight: map-get($colors, 'label-light');
+    $labelDark: map-get($colors, 'label-dark');
+    $http: map-get($colors, 'color-http');
+    $package: map-get($colors, 'color-package');
+    $class: map-get($colors, 'color-class');
+    $database: map-get($colors, 'color-database');
+    $io: map-get($colors, 'color-io');
+    $dim-opacity: 10%;
+
+    .node {
+      &.dim {
+        .label {
+          fill: mix($labelLight, $bg, $weight: $dim-opacity);
+        }
+      }
+      &.package {
+        fill: $package;
+
+        .label { fill: $labelDark; }
+        &.dim { fill: mix($package, $bg, $weight: $dim-opacity); }
+      }
+      &.class {
+        fill: $class;
+        &.dim { fill: mix($class, $bg, $weight: $dim-opacity); }
+      }
+      &.database {
+        fill: $database;
+
+        path { stroke: $labelDark; }
+        &.dim > path { fill: mix($database, $bg, $weight: $dim-opacity); }
+      }
+      &.http {
+        fill: $http;
+        &.dim { fill: mix($http, $bg, $weight: $dim-opacity); }
+      }
+      &.class[data-parent-type='http']{
+        fill: $http;
+        &.dim { fill: mix($http, $bg, $weight: $dim-opacity); }
+      }
+      &.io {
+        fill: $io;
+
+        &.dim { fill: mix($io, $bg, $weight: $dim-opacity); }
+      }
+
+      .label {
+        fill: $labelLight;
+      }
+
+      &.highlight {
+        rect, circle, ellipse, path, polygon {
+          stroke: $highlight;
+        }
+      }
+    }
+
+    .cluster {
+      rect {
+        fill: transparent;
+        stroke: $highlight;
+        stroke-width: 0;
+      }
+
+      &--bordered rect {
+        stroke-width: 2;
+      }
+
+      &--package rect {
+        stroke: $package;
+      }
+
+      &--http rect {
+        stroke: $http;
+      }
+
+      &--database rect {
+        stroke: $database;
+      }
+    }
+
+    .edgePath {
+      &.highlight {
+        path { stroke: $highlight; }
+        marker { fill: $highlight; }
+      }
+
+      &.highlight--inbound {
+        path { stroke: $highlight-inbound; }
+        marker { fill: $highlight-inbound; }
+      }
+
+      &.dim {
+        marker { fill: mix($edge, $bg, $weight: $dim-opacity); }
+        path { stroke: mix($edge, $bg, $weight: $dim-opacity); }
+      }
+
+      path {
+        stroke: $edge;
+      }
+
+      &:not(.highlight):not(.dim):hover {
+        path {
+          stroke: lighten($edge, 30%);
+        }
+
+        marker {
+          fill: lighten($edge, 30%);
+        }
+      }
+
+      marker {
+        fill: $edge;
+      }
+    }
+
+    .nodeLabels {
+      fill: $labelLight;
+
+      .dim {
+        opacity: $dim-opacity;
+      }
+
+      .package {
+        fill: $labelDark;
+      }
+
+      .label__children-count {
+        fill-opacity: .7;
+      }
+    }
+  }
+}
+}

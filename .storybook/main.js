@@ -18,7 +18,7 @@ module.exports = {
         {
           loader: 'sass-resources-loader',
           options: {
-            resources: ['./src/scss/appland.scss'],
+            resources: ['./src/scss/vue.scss'],
           },
         },
       ],
