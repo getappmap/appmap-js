@@ -7,4 +7,4 @@ to structure this file.
 
 ## [0.1.0]
 
-- Initial release oflibrary
+- Initial release of library
