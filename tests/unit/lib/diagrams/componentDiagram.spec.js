@@ -1,5 +1,6 @@
 import { ComponentDiagram } from '@/lib/diagrams';
-import mockData from '../../fixtures/fullModel.json';
+import { buildAppMap } from '../../../../src/lib';
+import mockData from '../../fixtures/many_requests_scenario.json';
 import DOMMatrix from '../../support/domMatrix';
 
 SVGElement.prototype.getBBox = () => ({
@@ -12,17 +13,21 @@ SVGElement.prototype.getScreenCTM = () => new DOMMatrix();
 
 describe('Component Diagram', () => {
   let componentDiagram;
+  const appMap = buildAppMap(mockData).normalize().build();
   beforeEach(() => {
     const root = document.createElement('div');
     root.setAttribute('id', 'diagram');
     document.body.appendChild(root);
 
     componentDiagram = new ComponentDiagram(root);
-    componentDiagram.render(mockData);
+    componentDiagram.render(appMap.classMap);
   });
 
   it('can highlight multiple nodes', () => {
-    const highlightedNodes = ['POST /applications', 'SQL'];
+    const nodes = ['POST /applications', 'SQL'];
+    const highlightedNodes = appMap.classMap.codeObjects.filter((obj) =>
+      nodes.includes(obj.name),
+    );
     componentDiagram.highlight(highlightedNodes);
 
     highlightedNodes.forEach((id) =>

@@ -13,8 +13,8 @@
           </a>
           <a class="back-btn" href="#" v-if="canGoBack" @click.prevent="goBack">
             Back to
-            <b v-if="prevSelectedObject.object">
-              {{ prevSelectedObject.object.name }}
+            <b v-if="prevSelectedObject">
+              {{ prevSelectedObject.name }}
             </b>
             <b v-else>previous</b>
           </a>

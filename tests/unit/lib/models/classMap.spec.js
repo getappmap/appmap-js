@@ -1,4 +1,5 @@
 import { ClassMap, buildAppMap } from '@/lib/models';
+import { CodeObjectType } from '@/lib/models/codeObject';
 import scenario from '../../fixtures/user_page_scenario.appmap.json';
 import httpScenario from '../../fixtures/many_requests_scenario.json';
 
@@ -82,29 +83,37 @@ describe('ClassMap', () => {
     it('creates HTTP code objects properly', () => {
       const httpEvent = events.find((e) => e.httpServerRequest);
       const { codeObject } = httpEvent;
-      expect(codeObject.type).toEqual('route');
+      expect(codeObject.type).toEqual(CodeObjectType.ROUTE);
       expect(codeObject.name).toEqual(httpEvent.route);
       expect(codeObject.static).toEqual(undefined);
 
       const { parent } = codeObject;
-      expect(parent.type).toEqual('HTTP');
+      expect(parent.type).toEqual(CodeObjectType.HTTP);
       expect(parent.name).toEqual('HTTP server requests');
       expect(parent.children).toHaveLength(uniqueRoutes.length);
-      expect(classMap.httpObject().children).toHaveLength(uniqueRoutes.length);
+      expect(classMap.httpObject.children).toHaveLength(uniqueRoutes.length);
+    });
+
+    it('guarantees routes are represented by a single parent', () => {
+      const uniqueParents = new Set(
+        classMap.httpObject.children.map((obj) => obj.parent),
+      );
+
+      expect(uniqueParents.size).toEqual(1);
     });
 
     it('adds root level code objects', () => {
-      ['HTTP', 'SQL'].forEach((type) => {
+      [CodeObjectType.HTTP, CodeObjectType.DATABASE].forEach((type) => {
         const objects = classMap.roots.filter((obj) => obj.type === type);
         expect(objects).toHaveLength(1);
       });
     });
 
     it('adds many children to existing code objects', () => {
-      const http = classMap.roots.find((e) => e.type === 'HTTP');
+      const { httpObject } = classMap;
 
       uniqueRoutes.forEach((route) => {
-        const routeObject = http.children.find(
+        const routeObject = httpObject.children.find(
           (obj) => obj.type === 'route' && obj.name === route,
         );
 
@@ -119,7 +128,7 @@ describe('ClassMap', () => {
     it('provides access to sql events', () => {
       const totalSqlEvents = events.filter((e) => e.isCall() && e.sql).length;
 
-      const sql = classMap.sqlObject();
+      const sql = classMap.sqlObject;
       expect(sql).toBeTruthy();
 
       const numSqlEvents = sql.children.map((child) => child.events).flat()
@@ -133,13 +142,9 @@ describe('ClassMap', () => {
         (e) => e.isCall() && e.httpServerRequest,
       ).length;
 
-      const http = classMap.httpObject();
+      const http = classMap.httpObject;
       expect(http).toBeTruthy();
-
-      const numHttpEvents = http.children.map((child) => child.events).flat()
-        .length;
-
-      expect(numHttpEvents).toEqual(totalHttpRoutes);
+      expect(http.allEvents).toHaveLength(totalHttpRoutes);
     });
 
     it('dynamically created code objects', () => {

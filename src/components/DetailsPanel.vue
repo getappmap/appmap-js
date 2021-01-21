@@ -7,7 +7,7 @@
       <div class="details-panel__buttons">
         <slot name="buttons" />
       </div>
-      <component :is="detailsType" :object-descriptor="objectDescriptor" />
+      <component :is="detailsType" :object="selectedObject" />
     </div>
   </div>
 </template>
@@ -22,6 +22,7 @@ import VDetailsPanelHttp from '@/components/DetailsPanelHttp.vue';
 import VDetailsPanelNull from '@/components/DetailsPanelNull.vue';
 import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
 import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
+import { Event } from '@/lib/models';
 
 export default {
   name: 'v-details-panel',
@@ -44,26 +45,16 @@ export default {
   },
 
   computed: {
-    objectName() {
-      if (!this.selectedObject || !this.selectedObject.object) {
-        return '';
-      }
-
-      const { name, type } = this.selectedObject.object;
-      return `${type} ${name}`;
-    },
-
     detailsType() {
       let kind = 'null';
-      if (this.selectedObject && this.selectedObject.kind) {
-        kind = this.selectedObject.kind;
+      window.e = Event;
+      if (this.selectedObject && this.selectedObject.type) {
+        kind = this.selectedObject.type;
+      } else if (this.selectedObject instanceof Event) {
+        kind = 'event';
       }
 
       return `v-details-panel-${kind}`;
-    },
-
-    objectDescriptor() {
-      return this.selectedObject ? this.selectedObject.object : null;
     },
   },
 };

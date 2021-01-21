@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import { CallTree } from '@/lib/models';
+import { CallTree, Event } from '@/lib/models';
 import { FlowView } from '@/lib/diagrams';
 import { panToNode } from '@/lib/diagrams/util';
-import { SELECT_OBJECT } from '@/store/vsCode';
+import { CLEAR_OBJECT_STACK, SELECT_OBJECT } from '@/store/vsCode';
 
 export default {
   name: 'v-diagram-flow',
@@ -53,12 +53,8 @@ export default {
   methods: {
     selectEvent(event) {
       if (this.$store) {
-        this.selectingEvent = true;
-        this.$store.commit(SELECT_OBJECT, {
-          kind: 'event',
-          data: event,
-          clearStack: true,
-        });
+        this.$store.commit(CLEAR_OBJECT_STACK);
+        this.$store.commit(SELECT_OBJECT, event);
       }
     },
 
@@ -85,8 +81,8 @@ export default {
       }
 
       const { selectedObject } = this.$store.getters;
-      if (selectedObject && selectedObject.kind === 'event') {
-        const { id } = selectedObject.object;
+      if (selectedObject && selectedObject instanceof Event) {
+        const { id } = selectedObject;
         this.flowView.highlight(id);
 
         const element = this.$el.querySelector(`.node[data-node-id="${id}"]`);

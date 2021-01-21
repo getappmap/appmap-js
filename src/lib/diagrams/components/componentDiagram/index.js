@@ -1,159 +1,33 @@
 import * as d3 from 'd3';
 import deepmerge from 'deepmerge';
 
-import { hashify, getRepositoryUrl, getEventTarget } from '../../util';
-import { EventSource } from '../../../models';
-import Container from '../../helpers/container/index';
+import { EventSource } from '@/lib/models';
+import { CodeObjectType } from '@/lib/models/codeObject';
+import { getEventTarget } from '@/lib/diagrams/util';
+import Container from '@/lib/diagrams/helpers/container/index';
 import Graph from './graph/index';
 
 export const DEFAULT_TARGET_COUNT = 1;
-const IDEAL_CHILD_COUNT = 1;
 
-function setChildrenCount(obj, model) {
-  /* eslint-disable no-param-reassign */
-  const childrenCount = new Set(model.package_classes[obj.id]).size;
-  if (childrenCount && childrenCount > 1) {
-    obj.label = `${obj.id} (${childrenCount})`;
-  }
-  /* eslint-disable no-param-reassign */
+function codeObjectFromNode(node, classMap) {
+  const { id, type } = node.dataset;
+  return classMap.codeObjects.find((obj) => obj.id === id && obj.type === type);
 }
 
-function mixedDiagram(graphDefinition, targetNodeCount = DEFAULT_TARGET_COUNT) {
-  if (
-    !graphDefinition ||
-    !graphDefinition.package_calls ||
-    graphDefinition.package_calls.length === 0
-  ) {
-    return {};
-  }
-
-  /* eslint-disable camelcase */
-  const {
-    class_calls,
-    class_callers,
-    class_package,
-    packages,
-    package_calls,
-    package_classes,
-  } = graphDefinition;
-  /* eslint-enable camelcase */
-
-  const diagramCalls = { ...package_calls }; // eslint-disable-line camelcase
-  const score = (packageName) => {
-    let result = 0;
-    // Other score factors can be added here.
-
-    // Adjust for an 'ideal' number of children.
-    const childCount = package_classes[packageName].length;
-    const childrenFactor = Math.abs(IDEAL_CHILD_COUNT - childCount);
-    result += childrenFactor;
-    return result;
-  };
-
-  const sortedPackages = [...packages].sort((a, b) => score(b) - score(a));
-  const diagramSize = () => new Set(Object.entries(diagramCalls).flat(2)).size;
-
-  while (diagramSize() < targetNodeCount) {
-    if (sortedPackages.length === 0) {
-      break;
-    }
-
-    const pkg = sortedPackages.pop();
-    const classes = package_classes[pkg];
-
-    // 1. This package is being replaced with its classes, so remove the node
-    // edges in which this package was the source
-    delete diagramCalls[pkg];
-
-    // 2. Remove all calls to this package as well
-    Object.values(diagramCalls).forEach((set) => set.delete(pkg));
-
-    // 3. Add all the calls to each class in this package. The parent should be
-    // the package (if it's present in the call graph), or the class.
-    classes.forEach((cls) => {
-      const classCallers = class_callers[cls] || [];
-      classCallers.forEach((caller) => {
-        const parent = diagramCalls[caller] ? caller : class_package[caller];
-        if (parent === pkg) {
-          return;
-        }
-
-        if (!diagramCalls[parent]) {
-          diagramCalls[parent] = new Set();
-        }
-
-        diagramCalls[parent].add(cls);
-      });
-    });
-
-    // 4. Add the calls made by the classes in this package. If the calls are
-    // made to a class which is collapsed into a package, call the package.
-    // Later, if that package is expanded, step 2 will replace the call to the
-    // package with a call to the class.
-    classes.forEach((cls) => {
-      const classCalls = class_calls[cls] || [];
-      classCalls.forEach((callee) => {
-        const calleePackage = class_package[callee];
-        const child = diagramCalls[calleePackage] ? calleePackage : callee;
-        if (child === pkg) {
-          return;
-        }
-
-        if (!diagramCalls[cls]) {
-          diagramCalls[cls] = new Set();
-        }
-
-        diagramCalls[cls].add(child);
-      });
-    });
-  }
-
-  const entries = Object.entries(diagramCalls).map(([k, vs]) => [k, [...vs]]);
-  const edges = entries
-    .map(([k, vs]) => vs.map((v) => [k, v]))
-    .flat()
-    .filter(([v, w]) => v !== w);
-  const nodes = Object.values(
-    edges.flat(2).reduce((obj, id) => {
-      obj[id] = {
-        id,
-        type: packages.has(id) ? 'package' : 'class',
-      };
-      setChildrenCount(obj[id], graphDefinition);
-      return obj;
-    }, {}),
-  );
-
-  return { edges, nodes };
-}
-
-function activeNodes(graph, model, list, fn) {
-  if (list) {
-    list.forEach((classId) => {
-      if (graph.node(classId)) {
-        fn(classId);
-        return;
-      }
-
-      const classPackage = model.class_package[classId];
-      if (graph.node(classPackage)) {
-        fn(classPackage);
-      }
-    });
-  }
-}
-
-function bindEvents(componentDiagram) {
+function bindEvents(componentDiagram, classMap) {
   const svg = componentDiagram.element.node();
 
   svg.addEventListener('click', (event) => {
     const node = getEventTarget(event.target, svg, 'g.nodes g.node');
     if (!node) {
+      componentDiagram.emit('click', null);
       return;
     }
 
     event.stopPropagation();
-    componentDiagram.highlight(node.dataset.id);
+    const codeObject = codeObjectFromNode(node, classMap);
+    componentDiagram.highlight(codeObject);
+    componentDiagram.emit('click', codeObject);
   });
 
   svg.addEventListener('dblclick', (event) => {
@@ -163,7 +37,7 @@ function bindEvents(componentDiagram) {
     }
 
     event.stopPropagation();
-    componentDiagram.focus(node.dataset.id);
+    componentDiagram.focus(codeObjectFromNode(node, classMap));
   });
 
   svg.addEventListener('click', (event) => {
@@ -178,13 +52,17 @@ function bindEvents(componentDiagram) {
     edge.parentNode.classList.add('highlight');
     d3.select(svg).selectAll('.edgePath.highlight').raise();
 
-    componentDiagram.emit('edge', [
-      edge.parentNode.dataset.from,
-      edge.parentNode.dataset.to,
-    ]);
+    const { to, from } = edge.parentElement.dataset;
+    const { codeObjectTo, codeObjectFrom } = componentDiagram.graph.edge(
+      from,
+      to,
+    );
+
+    componentDiagram.emit('edge', { to: codeObjectTo, from: codeObjectFrom });
   });
 }
 
+const expandableTypes = [CodeObjectType.PACKAGE, CodeObjectType.HTTP];
 const COMPONENT_OPTIONS = {
   contextMenu(componentDiagram) {
     return [
@@ -192,35 +70,82 @@ const COMPONENT_OPTIONS = {
         item
           .text('Set as root')
           .selector('.nodes .node')
-          .transform((e) => e.dataset.id)
+          .transform(
+            (e) => componentDiagram.graph.node(e.dataset.id).codeObject,
+          )
           .on('execute', (id) => componentDiagram.makeRoot(id)),
       (item) =>
         item
           .text('Expand')
           .selector('g.node')
-          .transform((e) => e.dataset.id)
-          .condition((id) => componentDiagram.hasPackage(id))
+          .transform(
+            (e) => componentDiagram.graph.node(e.dataset.id).codeObject,
+          )
+          .condition((obj) => expandableTypes.includes(obj.type))
           .on('execute', (id) => componentDiagram.expand(id)),
       (item) =>
         item
           .text('Collapse')
           .selector('g.node')
-          .transform((e) => e.dataset.id)
-          .condition((id) => !componentDiagram.hasPackage(id))
+          .transform(
+            (e) => componentDiagram.graph.node(e.dataset.id).codeObject,
+          )
+          .condition((obj) => !expandableTypes.includes(obj.type))
           .on('execute', (id) => componentDiagram.collapse(id)),
       (item) =>
         item
           .text('View source')
           .selector('g.node.class')
-          .transform((e) => componentDiagram.sourceLocation(e.dataset.id))
-          .on('execute', (repoUrl) => window.open(repoUrl)),
+          .transform((e) => {
+            const node = componentDiagram.graph.node(e.dataset.id);
+            return node.codeObject.locations[0];
+          })
+          .on('execute', (location) =>
+            componentDiagram.emit('viewSource', location),
+          ),
       (item) =>
         item.text('Reset view').on('execute', () => {
-          componentDiagram.render(componentDiagram.initialModel);
+          componentDiagram.render(componentDiagram.classMap);
         }),
     ];
   },
 };
+
+// These functions clearly need an API abstraction, I'm just not sure what that is yet. -DB
+function inboundEdges(...codeObjects) {
+  return codeObjects
+    .map((obj) =>
+      obj.inboundConnections
+        .map((connection) => [connection, ...connection.ancestors()])
+        .flat()
+        .map((connection) => ({
+          from: connection,
+          to: obj,
+        })),
+    )
+    .flat()
+    .filter((edge) => edge.to !== edge.from);
+}
+
+function outboundEdges(...codeObjects) {
+  return codeObjects
+    .map((obj) =>
+      obj.outboundConnections
+        .map((connection) => [connection, ...connection.ancestors()])
+        .flat()
+        .map((connection) => ({
+          from: obj,
+          to: connection,
+        })),
+    )
+    .flat()
+    .filter((edge) => edge.to !== edge.from);
+}
+
+function allEdges(...codeObjects) {
+  // Grab all the connections and build edges for every ancestor of that connection.
+  return [...outboundEdges(...codeObjects), ...inboundEdges(...codeObjects)];
+}
 
 export default class ComponentDiagram extends EventSource {
   constructor(container, options = {}) {
@@ -268,46 +193,40 @@ export default class ComponentDiagram extends EventSource {
     );
   }
 
-  render(data) {
-    if (!data || typeof data !== 'object') {
+  render(classMap) {
+    if (!classMap) {
       return;
     }
 
-    if (!this.initialModel) {
-      this.initialModel = { ...data };
-    }
-
-    this.currentDiagramModel = hashify(data);
-
+    this.classMap = classMap;
     this.graph = new Graph(this.element.node(), {
       animation: {
         duration: 600,
       },
     });
 
-    const { nodes, edges } = mixedDiagram(
-      this.currentDiagramModel,
-      this.targetCount,
+    const codeObjects = classMap.roots.reduce((objects, obj) => {
+      const children = [
+        ...obj.classes,
+        ...obj.children.filter((child) => child.type === CodeObjectType.ROUTE),
+      ];
+      if (children.length === 1) {
+        objects.push(children[0]);
+      } else {
+        objects.push(obj);
+      }
+
+      return objects;
+    }, []);
+    const edges = outboundEdges(...codeObjects);
+
+    codeObjects.forEach((codeObject) =>
+      this.graph.setNodeFromCodeObject(codeObject),
     );
-    nodes.forEach((node) => {
-      this.graph.setNode(node);
-    });
-    edges.forEach(([start, end]) => this.graph.setEdge(start, end));
+    edges.forEach((edge) => this.graph.setEdge(edge.from, edge.to));
 
     this.graph.render();
-
-    bindEvents(this);
-
-    // expand nodes with 1 child
-    Object.entries(this.currentDiagramModel.package_classes).forEach(
-      ([nodeId, children]) => {
-        const nodeChildren = new Set(children);
-        if (nodeChildren.size === 1) {
-          this.expand(nodeId, false);
-        }
-      },
-    );
-
+    bindEvents(this, classMap);
     this.emit('postrender');
   }
 
@@ -319,35 +238,20 @@ export default class ComponentDiagram extends EventSource {
     }
   }
 
-  highlight(nodes) {
+  highlight(...codeObjects) {
     this.clearHighlights(true);
 
-    let nodesIds = [];
+    const highlightedCodeObjects = codeObjects
+      .map((obj) => this.graph.highlightNode(obj.id))
+      .filter(Boolean);
 
-    if (Array.isArray(nodes)) {
-      nodesIds = nodes;
-    } else if (typeof nodes === 'string') {
-      nodesIds = [nodes];
+    if (highlightedCodeObjects.length) {
+      this.scrollTo(highlightedCodeObjects);
     }
 
-    let wasHighlighted = false;
+    this.emit('highlight', highlightedCodeObjects);
 
-    nodesIds.forEach((id) => {
-      if (!this.graph.highlightNode(id)) {
-        return;
-      }
-
-      wasHighlighted = true;
-    });
-
-    if (wasHighlighted) {
-      this.scrollTo(nodes);
-      this.emit('highlight', nodesIds);
-    } else {
-      this.emit('highlight', null);
-    }
-
-    return wasHighlighted;
+    return highlightedCodeObjects.length > 0;
   }
 
   clearFocus() {
@@ -356,29 +260,21 @@ export default class ComponentDiagram extends EventSource {
     this.emit('focus', null);
   }
 
-  focus(id) {
+  focus(codeObject) {
     this.graph.clearFocus();
-    this.graph.focus(id);
+    this.graph.focus(codeObject.id);
 
-    this.scrollTo(id);
+    this.scrollTo(codeObject);
 
-    this.emit('focus', id);
+    this.emit('focus', codeObject);
   }
 
-  scrollTo(nodes) {
-    let nodesIds = [];
-
-    if (Array.isArray(nodes)) {
-      nodesIds = nodes;
-    } else if (typeof nodes === 'string') {
-      nodesIds = [nodes];
-    }
-
+  scrollTo(...codeObjects) {
     const { containerController } = this.container;
 
     const scrollOptions = this.graph.scrollToNodes(
       containerController.element,
-      nodesIds,
+      codeObjects.map((obj) => obj.id),
     );
 
     if (scrollOptions) {
@@ -388,109 +284,74 @@ export default class ComponentDiagram extends EventSource {
         containerController.translateTo(scrollOptions.x, scrollOptions.y);
       }, 200);
 
-      this.emit('scrollTo', nodesIds);
+      this.emit('scrollTo', codeObjects);
     }
   }
 
-  expand(nodeId, scrollToSubclasses = true) {
-    const subclasses = Array.from(
-      new Set(this.currentDiagramModel.package_classes[nodeId]),
-    );
-    if (subclasses.length === 0 || subclasses[0] === nodeId) {
-      return;
-    }
+  expand(codeObject, scrollToSubclasses = true) {
+    const { id } = codeObject;
+    const children = [
+      ...codeObject.classes,
+      ...codeObject.children.filter((obj) => obj.type === CodeObjectType.ROUTE),
+    ];
 
-    const clusterId = `${nodeId}-cluster`;
+    // TODO.
+    // This cluster logic feels misplaced. Are we missing an abstraction in Graph?
+    const clusterId = `${id}-cluster`;
     const clusterNode = {
       id: clusterId,
       type: 'cluster',
-      children: subclasses.length,
+      label: id,
+      children: children.length,
+      class: codeObject.type,
     };
 
     this.graph.setNode(clusterNode);
+    children.forEach((obj) => this.graph.setNodeFromCodeObject(obj, clusterId));
 
-    subclasses.forEach((cls) => {
-      this.graph.setNode({ id: cls, type: 'class' }, clusterId);
+    allEdges(...children).forEach(({ from, to }) =>
+      this.graph.setEdge(from, to),
+    );
 
-      const model = this.currentDiagramModel;
-      activeNodes(this.graph.graph, model, model.class_calls[cls], (id) => {
-        if (cls !== id) {
-          this.graph.setEdge(cls, id);
-        }
-      });
-
-      activeNodes(this.graph.graph, model, model.class_callers[cls], (id) => {
-        if (cls !== id) {
-          this.graph.setEdge(id, cls);
-        }
-      });
-    });
-
-    this.graph.expand(nodeId, clusterId);
+    this.graph.expand(id, clusterId);
 
     if (scrollToSubclasses) {
-      this.scrollTo(subclasses);
+      this.scrollTo(children);
     }
 
-    this.emit('expand', nodeId);
+    this.emit('expand', codeObject);
   }
 
-  collapse(nodeId, scrollToPackage = true) {
-    const pkg = this.currentDiagramModel.class_package[nodeId];
-    if (!pkg) {
-      return;
-    }
+  collapse(codeObject, scrollToPackage = true) {
+    const codeObjectPackage = codeObject.packageObject || codeObject.parent;
+    const { id } = codeObjectPackage;
+    this.graph.removeNode(`${id}-cluster`);
 
-    const pkgClasses = this.currentDiagramModel.package_classes[pkg];
-    if (!pkgClasses) {
-      return;
-    }
+    [
+      ...codeObjectPackage.classes,
+      ...codeObjectPackage.children.filter(
+        (obj) => obj.type === CodeObjectType.ROUTE,
+      ),
+    ].forEach((child) => this.graph.removeNode(child.id));
 
-    this.graph.removeNode(`${pkg}-cluster`);
+    this.graph.setNodeFromCodeObject(codeObjectPackage);
 
-    const obj = { id: pkg, type: 'package' };
-    setChildrenCount(obj, this.currentDiagramModel);
-    this.graph.setNode(obj);
-
-    pkgClasses.forEach((id) => {
-      this.graph.removeNode(id);
-
-      const model = this.currentDiagramModel;
-      activeNodes(this.graph.graph, model, model.class_calls[id], (cls) => {
-        if (cls !== pkg) {
-          this.graph.setEdge(pkg, cls);
-        }
-      });
-
-      activeNodes(this.graph.graph, model, model.class_callers[id], (cls) => {
-        if (cls !== pkg) {
-          this.graph.setEdge(cls, pkg);
-        }
-      });
-    });
+    allEdges(codeObjectPackage).forEach(({ to, from }) =>
+      this.graph.setEdge(from, to),
+    );
 
     this.graph.collapse();
 
     if (scrollToPackage) {
-      this.scrollTo(pkg);
+      this.scrollTo(codeObjectPackage);
     }
 
-    this.emit('collapse', pkg);
+    this.emit('collapse', codeObjectPackage);
   }
 
-  makeRoot(nodeId) {
-    this.graph.makeRoot(nodeId);
-    this.scrollTo(nodeId);
-  }
-
-  sourceLocation(nodeId) {
-    const path = this.currentDiagramModel.class_locations[nodeId];
-    if (!path) {
-      return null;
-    }
-
-    const { url, commit } = this.currentDiagramModel.source_control;
-    return getRepositoryUrl(url, path, commit);
+  makeRoot(codeObject) {
+    this.graph.makeRoot(codeObject);
+    this.scrollTo(codeObject);
   }
 
   hasPackage(packageId) {

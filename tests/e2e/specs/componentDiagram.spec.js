@@ -12,14 +12,14 @@ context('Component Diagram', () => {
   });
 
   it('does not expand too many nodes', () => {
-    cy.get('.nodes g.node').should('have.length', 9);
+    cy.get('.nodes g.node').should('have.length', 8);
   });
 
   it('node "Spree::BackendConfiguration" should be expanded', () => {
     cy.get('.nodes .node.package[data-id="lib"]').should('not.exist');
-    cy.get('.nodes .node.class[data-id="Spree::BackendConfiguration"]').should(
-      'exist',
-    );
+    cy.get(
+      '.nodes .node.class[data-id="lib/Spree::BackendConfiguration"]',
+    ).should('exist');
   });
 
   it('package "app/controllers" should be expanded and have border', () => {
@@ -33,13 +33,13 @@ context('Component Diagram', () => {
   });
 
   it('node "SQL" can be highlighted', () => {
-    cy.get('.nodes .node[data-id="SQL"]')
+    cy.get('.nodes .node[data-type="database"]')
       .click()
       .should('have.class', 'highlight');
   });
 
   it('node "SQL" can be focused', () => {
-    cy.get('.nodes .node[data-id="SQL"]')
+    cy.get('.nodes .node[data-type="database"]')
       .dblclick()
       .should('have.class', 'highlight');
 

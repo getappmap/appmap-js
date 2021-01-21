@@ -1,8 +1,11 @@
 import VDetailsPanel from '@/components/DetailsPanel.vue';
 import scenario from '@/stories/data/scenario.json';
 import { store, SET_APPMAP_DATA } from '@/store/vsCode';
+import { CodeObjectType } from '@/lib/models/codeObject';
 
 store.commit(SET_APPMAP_DATA, scenario);
+
+const { classMap } = store.state.appMap;
 
 export default {
   title: 'AppLand/UI/DetailsPanel',
@@ -34,74 +37,51 @@ const Template = (args, { argTypes }) => ({
 
 export const Class = Template.bind({});
 Class.args = {
-  selectedObject: {
-    kind: 'class',
-    object: store.state.appMap.classMap.search('RootController')[0],
-  },
+  selectedObject: classMap.search('RootController')[0],
 };
 
 export const Database = Template.bind({});
 Database.args = {
-  selectedObject: {
-    kind: 'database',
-    object: null,
-  },
+  selectedObject: classMap.roots.find(
+    (obj) => obj.type === CodeObjectType.DATABASE,
+  ),
 };
 
 export const Edge = Template.bind({});
 Edge.args = {
   selectedObject: {
-    kind: 'edge',
-    object: {
-      from: 'app/controllers',
-      to: 'SQL',
-    },
+    type: 'edge',
+    from: classMap.roots.find((obj) => obj.id === 'app/controllers'),
+    to: classMap.roots.find((obj) => obj.type === CodeObjectType.DATABASE),
   },
 };
 
 export const Event = Template.bind({});
 Event.args = {
-  selectedObject: {
-    kind: 'event',
-    object: store.state.appMap.events.find(
-      (e) => e.isCall() && e.codeObject && e.parameters.length > 3,
-    ),
-  },
+  selectedObject: store.state.appMap.events.find(
+    (e) => e.isCall() && e.parameters && e.parameters.length > 3,
+  ),
 };
 
 export const Function = Template.bind({});
 Function.args = {
-  selectedObject: {
-    kind: 'function',
-    object: store.state.appMap.events.find((e) => e.codeObject).codeObject,
-  },
+  selectedObject: store.state.appMap.events.find((e) => e.codeObject)
+    .codeObject,
 };
 
 export const HTTP = Template.bind({});
 HTTP.args = {
-  selectedObject: {
-    kind: 'http',
-    object: null,
-  },
+  selectedObject: classMap.httpObject,
 };
 
 export const Null = Template.bind({});
 
 export const Package = Template.bind({});
 Package.args = {
-  selectedObject: {
-    kind: 'package',
-    object: store.state.appMap.classMap.search('app/controllers')[0],
-  },
+  selectedObject: classMap.search('app/controllers')[0],
 };
 
 export const Route = Template.bind({});
 Route.args = {
-  selectedObject: {
-    kind: 'route',
-    object: store.state.appMap.events.filter(
-      (e) =>
-        e.http_server_request && e.http_server_request.path_info === '/admin',
-    ),
-  },
+  selectedObject: classMap.httpObject.children[0],
 };

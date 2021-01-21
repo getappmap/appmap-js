@@ -1,5 +1,15 @@
 import { addHiddenProperty } from './util';
 
+export const CodeObjectType = {
+  DATABASE: 'database',
+  QUERY: 'query',
+  HTTP: 'http',
+  ROUTE: 'route',
+  PACKAGE: 'package',
+  CLASS: 'class',
+  FUNCTION: 'function',
+};
+
 export default class CodeObject {
   constructor(data, parent) {
     this.data = { ...data };
@@ -20,7 +30,7 @@ export default class CodeObject {
   get id() {
     const tokens = this.buildId();
 
-    if (this.parent && this.type === 'function') {
+    if (this.parent && this.type === CodeObjectType.FUNCTION) {
       const separator = this.static ? '.' : '#';
       tokens[tokens.length - 2] = separator;
     }
@@ -57,9 +67,9 @@ export default class CodeObject {
   // returned. For a function, the path and line number is returned.
   get locations() {
     switch (this.type) {
-      case 'class':
+      case CodeObjectType.CLASS:
         return Array.from(this.classLocations()).sort();
-      case 'function':
+      case CodeObjectType.FUNCTION:
         return [this.location];
       default:
         return [];
@@ -68,7 +78,7 @@ export default class CodeObject {
 
   get packageOf() {
     return [this, ...this.ancestors()]
-      .filter((obj) => obj.type === 'package')
+      .filter((obj) => obj.type === CodeObjectType.PACKAGE)
       .map((obj) => obj.name)
       .reverse()
       .join('/');
@@ -76,18 +86,45 @@ export default class CodeObject {
 
   get classOf() {
     return [this, ...this.ancestors()]
-      .filter((obj) => obj.type === 'class')
+      .filter((obj) => obj.type === CodeObjectType.CLASS)
       .map((obj) => obj.name)
       .reverse()
       .join('::');
   }
 
   get classObject() {
-    return [this, ...this.ancestors()].find((obj) => obj.type === 'class');
+    return [this, ...this.ancestors()].find(
+      (obj) => obj.type === CodeObjectType.CLASS,
+    );
   }
 
   get packageObject() {
-    return [this, ...this.ancestors()].find((obj) => obj.type === 'package');
+    return [this, ...this.ancestors()].find(
+      (obj) => obj.type === CodeObjectType.PACKAGE,
+    );
+  }
+
+  get functions() {
+    if (this.type === CodeObjectType.CLASS) {
+      // getting the functions of a class should not return functions of nested classes
+      return this.children.filter(
+        (obj) => obj.type === CodeObjectType.FUNCTION,
+      );
+    }
+
+    return this.descendants().filter(
+      (obj) => obj.type === CodeObjectType.FUNCTION,
+    );
+  }
+
+  get classes() {
+    return [this, ...this.descendants()].filter(
+      (obj) => obj.type === CodeObjectType.CLASS && obj.functions.length,
+    );
+  }
+
+  get allEvents() {
+    return [this, ...this.descendants()].map((obj) => obj.events).flat();
   }
 
   descendants() {
@@ -128,10 +165,10 @@ export default class CodeObject {
 
       let separator;
       switch (this.parent.type) {
-        case 'package':
+        case CodeObjectType.PACKAGE:
           separator = '/';
           break;
-        case 'class':
+        case CodeObjectType.CLASS:
           separator = '::';
           break;
         default:
@@ -146,7 +183,7 @@ export default class CodeObject {
   classLocations(paths = new Set()) {
     this.children.forEach((child) => child.classLocations(paths));
 
-    if (this.type === 'function') {
+    if (this.type === CodeObjectType.FUNCTION) {
       const tokens = this.data.location.split(':', 2);
       paths.add(tokens[0]);
     }
@@ -159,7 +196,7 @@ export default class CodeObject {
       type: this.data.type,
     };
 
-    if (this.data.type === 'function') {
+    if (this.data.type === CodeObjectType.FUNCTION) {
       obj.static = this.data.static;
       obj.location = this.data.location;
     }
@@ -176,33 +213,33 @@ export default class CodeObject {
 
     if (event.httpServerRequest) {
       Object.assign(data, {
-        type: 'HTTP',
+        type: CodeObjectType.HTTP,
         name: 'HTTP server requests',
         children: [
           {
-            type: 'route',
+            type: CodeObjectType.ROUTE,
             name: event.route,
           },
         ],
       });
     } else if (event.sqlQuery) {
       Object.assign(data, {
-        type: 'SQL',
+        type: CodeObjectType.DATABASE,
         name: 'Database',
         children: [
           {
-            type: 'query',
+            type: CodeObjectType.QUERY,
             name: event.sqlQuery,
           },
         ],
       });
     } else {
       Object.assign(data, {
-        type: 'class',
+        type: CodeObjectType.CLASS,
         name: event.definedClass,
         children: [
           {
-            type: 'function',
+            type: CodeObjectType.FUNCTION,
             name: event.methodId,
             static: event.isStatic,
             location: '',
@@ -222,5 +259,37 @@ export default class CodeObject {
     }
 
     return data;
+  }
+
+  get inboundConnections() {
+    return this.allEvents
+      .filter((e) => e.parent)
+      .map((e) => e.parent.codeObject);
+  }
+
+  get outboundConnections() {
+    return this.allEvents
+      .map((e) => e.children)
+      .flat()
+      .map((e) => e.codeObject);
+  }
+
+  get sqlQueries() {
+    return this.allEvents
+      .map((e) => e.children)
+      .flat()
+      .filter((e) => e.sql)
+      .map((e) => e.codeObject);
+  }
+
+  get prettyName() {
+    switch (this.type) {
+      case CodeObjectType.FUNCTION:
+        return `${this.classOf}${this.static ? '.' : '#'}${this.name}`;
+      case CodeObjectType.CLASS:
+        return this.classOf;
+      default:
+        return this.name;
+    }
   }
 }
