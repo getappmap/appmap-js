@@ -1,0 +1,50 @@
+.appmap__context-menu {
+  $bg-color: $gray2;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  user-select: none;
+
+  .dropdown-menu {
+    background-color: $bg-color;
+    box-shadow: 4px 4px 1px $black;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+
+    p {
+      display: block;
+      margin: 0;
+      padding: 0.25rem 1.5rem;
+      color: $gray4;
+      white-space: nowrap;
+      font-style: italic;
+    }
+
+    .dropdown-item {
+      display: block;
+      border: 0;
+      width: 100%;
+      padding: .25rem 1.5rem;
+      color: $gray6;
+      cursor: pointer;
+      white-space: nowrap;
+      background-color: transparent;
+
+      &:hover {
+        color: $white;
+        background-color: adjust-color($bg-color, $lightness: 10%);
+        text-decoration: none;
+      }
+    }
+  }
+}

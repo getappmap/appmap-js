@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import { CallTree } from '@appland/models';
-import { FlowView } from '@appland/diagrams';
+import { CallTree } from '@/lib/models';
+import { FlowView } from '@/lib/diagrams';
+import { panToNode } from '@/lib/diagrams/util';
 import { SELECT_OBJECT } from '@/store/vsCode';
-import { panToNode } from '@appland/diagrams/src/js/util'; // HACK
 
 export default {
   name: 'v-diagram-flow',
@@ -97,8 +97,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '@/scss/diagrams/style';
 .diagram-flow {
-  @import '~@appland/diagrams/dist/@appland/diagrams';
   max-height: 100vh;
   max-width: 100vw;
   .appmap.appmap--theme-dark {

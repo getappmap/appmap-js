@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { AppMap, buildAppMap } from '@appland/models';
-import { fullyQualifiedFunctionName } from '@appland/diagrams/src/js/util'; // HACK
+import { AppMap, buildAppMap } from '@/lib/models';
+import { fullyQualifiedFunctionName } from '@/lib/util'; // HACK
 
 Vue.use(Vuex);
 

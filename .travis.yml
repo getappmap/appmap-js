@@ -1,26 +1,44 @@
 language: node_js
 os: linux
 dist: xenial
-node_js: [ 14 ]
+node_js: [14]
+
+cache:
+  npm: true
+  directories:
+    - $HOME/.cache
+
+addons:
+  apt:
+    packages:
+      # Ubuntu 16+ does not install this dependency by default, so we need to install it ourselves
+      - libgconf-2-4
 
 install:
-- npm install
+  - npm install
 
 script:
-- npm run lint --no-fix
-- npm run build
-- npm run test:unit
-- npm run test:e2e -- --headless
+  - npm run lint --no-fix
+  - npm run build
+  - npm run test
 
 deploy:
-- provider: script
-  skip_cleanup: true
-  script: npm run chromatic
-  on:
-    all_branches: true
-    condition: $TRAVIS_BRANCH != "main"
-- provider: script
-  skip_cleanup: true
-  script: npm run chromatic -- --auto-accept-changes
-  on:
-    branch: main
+  - provider: script
+    skip_cleanup: true
+    script: npm run chromatic
+    on:
+      all_branches: true
+      condition: $TRAVIS_BRANCH != "main"
+  - provider: script
+    skip_cleanup: true
+    script: npm run chromatic -- --auto-accept-changes
+    on:
+      branch: main
+  - provider: npm
+    skip_cleanup: true
+    email: release@app.land
+    tag: next
+    api_key:
+      secure: 'GavN9JfvL0i18NDziRDGsIO2/VmpIyOnqY/EzbVidQ0i6UXEpFqNTTIOVZHj+1MWAz7lhqOtt8pE14EvXzmWkBQbVe4P1YAHBiSEGBsa5rTRP3TC2kg0DIksfhHhRjbwjHwXAvdveGp+1PZ3XOfCMyKxWglumu1408jSdRmmp8kfnQ1JzEDyRjfYc7P47kPV1JPCQDjPK3idkYtvyuzgnf+MxFjEUpNflZSNjLoLLon9HhQJh4TQh98Cp/8cWwGuAZZwhSzX9D1cprqwGs3seQHXod+KmmuC9uvGzM5Srh4OxjmGwuw1zMG2ykCqxHNk2PKoJ+Q1M5yu6C4VVGVIc2657NCot+PMRIrYxu1DhSNYATHssyh6uJRqtoWs5xbeKOM1nQ9Dcqr65lPWiqpx1mbPK63dAlnnt21yuiRBDDVmmVY4Jj6ZeEphXoPHfg08uB4FsAq7+pQq8ahpZNdTYjuR5nH4xLv4oyH8IPQKq8qKNhECbBXtuiLfjP8aTx+ZfN4Cdm1oDRaJ+BvzoU2NKaoLXbr7L7taYXreFP3eQyTYe8fH5hzNEUBUQJDqg6+8YA4SW+U1VtOLFpxeu6vWfxbRa6etaPLPJvmEp32LnAhu2p3RVRYB4iSr7F/XcR6VJ58fYVIGdrH1tJyau1qw4lnXBSTsoUzuBF4E6/KFat4='
+    on:
+      branch: main

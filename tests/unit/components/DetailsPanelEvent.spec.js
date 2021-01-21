@@ -8,7 +8,7 @@ store.commit(SET_APPMAP_DATA, scenario);
 describe('DetailsPanelEvent.vue', () => {
   it('view source emits an event from root', () => {
     const event = store.state.appMap.events.find(
-      (e) => e.isCall() && e.codeObject,
+      (e) => e.isCall() && e.codeObject && e.codeObject.location,
     );
     const wrapper = mount(DetailsPanelEvent, {
       propsData: {

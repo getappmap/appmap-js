@@ -19,7 +19,7 @@ const esbrowserslist = fs
 const argv = minimist(process.argv.slice(2));
 
 const baseConfig = {
-  input: 'src/lib.js',
+  input: 'src/index.js',
   plugins: {
     preVue: [
       alias({
@@ -36,17 +36,16 @@ const baseConfig = {
     vue: {
       css: true,
       data: {
-        scss: () => '@import "src/scss/appland.scss";',
+        scss: () => '@import "src/scss/vue";',
       },
       style: {
         preprocessOptions: {
           scss: {
             importer: [
               (url) => ({
-                file: url.replace(
-                  /^~/,
-                  `${path.resolve(__dirname, 'node_modules')}/`,
-                ),
+                file: url
+                  .replace(/^~/, `${path.resolve(__dirname, 'node_modules')}/`)
+                  .replace(/^@/, `${path.resolve(__dirname, 'src')}/`),
               }),
             ],
           },
@@ -68,6 +67,12 @@ const baseConfig = {
 const external = [
   // list external dependencies, exactly the way it is written in the import statement.
   // eg. 'jquery'
+  'd3',
+  'deepmerge',
+  'sql-formatter',
+  'd3-flame-graph',
+  'dagre',
+  'vuex',
   'vue',
 ];
 
@@ -86,7 +91,7 @@ if (!argv.format || argv.format === 'es') {
     ...baseConfig,
     external,
     output: {
-      file: 'dist/components.esm.js',
+      file: 'dist/appmap.esm.js',
       format: 'esm',
       exports: 'named',
     },
@@ -121,9 +126,9 @@ if (!argv.format || argv.format === 'cjs') {
     external,
     output: {
       compact: true,
-      file: 'dist/components.ssr.js',
+      file: 'dist/appmap.ssr.js',
       format: 'cjs',
-      name: 'components',
+      name: 'appmap',
       exports: 'named',
       globals,
     },
@@ -151,9 +156,9 @@ if (!argv.format || argv.format === 'iife') {
     external,
     output: {
       compact: true,
-      file: 'dist/components.min.js',
+      file: 'dist/appmap.min.js',
       format: 'iife',
-      name: 'components',
+      name: 'appmap',
       exports: 'named',
       globals,
     },

@@ -1,0 +1,319 @@
+.appmap__flow-view {
+  > * {
+    width: max-content;
+  }
+
+  > svg {
+    z-index: -1;
+  }
+
+  li {
+    align-items: start;
+    display: flex;
+  }
+
+  svg {
+    position: absolute;
+    overflow: inherit;
+    vertical-align: inherit;
+  }
+
+  &-popper {
+    position: absolute;
+    background: $black;
+    color: $white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    max-width: 24rem;
+    word-break: break-all;
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: 1px solid $white;
+    pointer-events: none;
+    top: 0;
+
+    &[data-show] {
+      opacity: 1;
+    }
+
+    &[data-placement^='left'] > #arrow {
+      top: 50%;
+      transform: translateY(-50%);
+      right: -5px;
+
+      &:before {
+        border-left: 0;
+        border-bottom: 0;
+      }
+    }
+
+    &[data-placement^='right'] > #arrow {
+      top: 50%;
+      transform: translateY(-50%);
+      left: -5px;
+
+      &:before {
+        border-right: 0;
+        border-top: 0;
+      }
+    }
+
+    #arrow,
+    #arrow::before {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      z-index: -1;
+    }
+
+    #arrow::before {
+      content: '';
+      transform: rotate(45deg);
+      background: $black;
+      border: 1px solid $white;
+    }
+  }
+
+  .sql {
+    white-space: pre;
+    font-family: 'IBM Plex Mono', monospace;
+    padding: 1em;
+    margin-top: -1.5em;
+    max-width: 100ex;
+    max-height: 30em;
+    overflow: auto;
+  }
+
+  .modal-content {
+    background-color: #111;
+    color: #a1a1a1;
+  }
+
+  .modal-header {
+    border-bottom: 1px solid #222;
+  }
+
+  .modal-footer {
+    border-top: 1px solid #222;
+  }
+
+  .node {
+    display: inline-block;
+    border-radius: 0;
+    margin: 1em;
+    box-shadow: 0.2em 0.2em 10px 0px rgba(0, 0, 0, .6);
+    font-size: .8rem;
+
+    &.highlight {
+      outline-width: 4px;
+      outline-style: solid;
+    }
+
+    .header {
+      text-align: center;
+      font-weight: 800;
+      width: 100%;
+      padding: 0 2em;
+      background-color: rgba(0,0,0,0.25);
+      border-radius: 0;
+
+      p {
+        display: inline;
+        margin: 0 auto;
+        min-width: 100%;
+        max-width: 15em;
+        word-break: break-word;
+      }
+    }
+
+    .io {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      margin: 1em 0;
+
+      .connector {
+        display: inline-block;
+        cursor: pointer;
+        margin: 0 0.5em;
+        height: 1.5em;
+        width: 1.5em;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 117 90"><path fill="white" d="m 10 0 h 65 a 16 16 0 0 1 10 5 l 30 35 a 8 8 0 0 1 0 10 l -30 35 a 16 16 0 0 1 -10 5 h -65 a 10 10 0 0 1 -10 -10 v -70 a 10 10 0 0 1 10 -10"/></svg>') no-repeat center;
+        opacity: .23;
+
+        &.in-use {
+          opacity: 1;
+        }
+      }
+
+      .item {
+        cursor: pointer;
+        transition: color 0.3s cubic-bezier(0.25, 0.5, 0.25, 1);
+
+        &:hover { color: $white; }
+
+        &::before,
+        &::after {
+          content: '';
+          margin: 0 .5em;
+          display: inline-block;
+          border-radius: 50%;
+          width: .8em;
+          height: .8em;
+        }
+      }
+
+      .column {
+        flex: 1 0 auto;
+
+        &.left {
+          text-align: left;
+          margin-right: 1em;
+
+          .item::after {
+            display: none;
+          }
+        }
+
+        &.right {
+          text-align: right;
+          margin-left: 1em;
+
+          .item::before {
+            display: none;
+          }
+        }
+      }
+    }
+
+    /*Scrollbars inside of node
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+      background-color: $gray1;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner {
+      background: $gray1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: $blue;
+    }
+  }
+
+  .exception {
+    .header::after {
+      content: '';
+      margin-top: 2px;
+      margin-right: -1.75em;
+      width: 1em;
+      height: 1em;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="rgb(235,223,144)" d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"/></svg>') no-repeat center;
+      float: right;
+    }
+  }
+
+  .connection {
+    fill: none;
+    position: absolute;
+    z-index: 0;
+
+    &.node-connection {
+      stroke-width: 2px;
+    }
+  }
+
+  @each $scheme, $colors in $themes {
+    .appmap--theme-#{$scheme} & {
+      $highlight: map-get($colors, 'highlight');
+      $col-int: map-get($colors, 'col-int');
+      $col-string: map-get($colors, 'col-string');
+      $col-bool: map-get($colors, 'col-bool');
+      $col-float: map-get($colors, 'col-float');
+      $col-object: map-get($colors, 'col-object');
+      $node-color: map-get($colors, 'node-color');
+      $node-background: map-get($colors, 'node-background');
+      $node-header: map-get($colors, 'node-header');
+      $node-connection: map-get($colors, 'node-connection');
+      $node-event: map-get($colors, 'node-event');
+      $node-sql: map-get($colors, 'node-sql');
+      $node-static: map-get($colors, 'node-static');
+      $node-non-static: map-get($colors, 'node-non-static');
+
+      .sql {
+        &::-moz-selection {
+          background-color: $highlight;
+          color: #fff;
+        };
+        &::selection {
+          background-color: $highlight;
+          color: #fff;
+        }
+      }
+
+      .node {
+        color: $node-color;
+        background-color: $node-background;
+
+        &.highlight {
+          outline-color: $highlight;
+        }
+
+        .header {
+          color: $node-header;
+
+          &[data-type='event'] { background-color: $node-event; }
+          &[data-type='sql'] { background-color: $node-sql; }
+          &[data-type='static'] { background-color: $node-static; }
+          &[data-type='non-static'] { background-color: $node-non-static; }
+        }
+
+        .io {
+          .item {
+            &[data-type='int']::before,
+            &[data-type='int']::after {
+              background: $col-int;
+            }
+
+            &[data-type='string']::before,
+            &[data-type='string']::after {
+              background: $col-string;
+            }
+
+            &[data-type='bool']::before,
+            &[data-type='bool']::after {
+              background: $col-bool;
+            }
+
+            &[data-type='float']::before,
+            &[data-type='float']::after {
+              background: $col-float;
+            }
+
+            &[data-type='object']::before,
+            &[data-type='object']::after {
+              background: $col-object;
+            }
+          }
+        }
+      }
+
+      .connection {
+        &.node-connection {
+          stroke: $node-connection;
+        }
+
+        &.type-int { stroke: $col-int; }
+        &.type-bool { stroke: $col-bool; }
+        &.type-float { stroke: $col-float; }
+        &.type-string { stroke: $col-string; }
+        &.type-object { stroke: $col-object; }
+      }
+    }
+  }
+}

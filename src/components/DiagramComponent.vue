@@ -4,7 +4,7 @@
 
 <script>
 import { SELECT_OBJECT } from '@/store/vsCode';
-import { ComponentDiagram } from '@appland/diagrams';
+import { ComponentDiagram } from '@/lib/diagrams';
 
 function collectAncestors(obj) {
   let currentObj = obj.parent;
@@ -210,8 +210,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '@/scss/diagrams/style';
 .diagram-component {
-  @import '~@appland/diagrams/dist/@appland/diagrams';
   width: 100%;
   height: 100%;
   .appmap.appmap--theme-dark {
