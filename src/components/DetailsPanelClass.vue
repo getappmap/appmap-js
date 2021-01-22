@@ -96,46 +96,28 @@ export default {
     },
 
     inboundConnections() {
-      const parentObjects = this.events
-        .map((e) => (e.parent ? e.parent.codeObject : null))
-        .filter(Boolean);
-
-      const connections = [...new Set(this.events.map((e) => e.parent))]
-        .filter((e) => e && e.http_server_request)
-        .map((e) => {
-          /* eslint-disable camelcase */
-          const { path_info, request_method } = e.http_server_request;
-
-          return {
-            kind: 'route',
-            text: `${request_method} ${path_info}`,
-            object: e,
-          };
-          /* eslint-enable camelcase */
-        });
-
-      [...new Set(parentObjects)]
-        .map((obj) => ({
-          kind: 'function',
-          text: obj.id,
-          object: obj,
-        }))
-        .forEach((obj) => connections.push(obj));
+      const connections = this.events
+        .map((e) => e.parent)
+        .filter(Boolean)
+        .map((parent) => ({
+          kind: parent.codeObject.type,
+          text: parent.toString(),
+          count: 1,
+          object: parent.codeObject,
+        }));
 
       return groupEvents(connections);
     },
 
     outboundConnections() {
       const connections = this.events
-        .map((e) => e.children)
+        .map((e) => e.children || [])
         .flat()
-        .filter(Boolean)
-        .map((e) => e.codeObject)
-        .filter(Boolean)
-        .map((obj) => ({
-          kind: 'function',
-          text: obj.id,
-          object: obj,
+        .map((child) => ({
+          kind: child.codeObject.type,
+          text: child.toString(),
+          count: 1,
+          object: child.codeObject,
         }));
 
       return groupEvents(connections);
