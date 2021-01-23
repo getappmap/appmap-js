@@ -1,4 +1,4 @@
-import { buildAppMap } from '@/lib/models';
+import { buildAppMap, Event } from '@/lib/models';
 import scenario from '../../fixtures/large_scenario.json';
 import httpScenario from '../../fixtures/many_requests_scenario.json';
 
@@ -13,6 +13,7 @@ describe('Event', () => {
       const callStack = event.callStack();
 
       expect(callStack.length).toEqual(3);
+      expect(callStack[0]).toBeInstanceOf(Event);
       expect(callStack[0].methodId).toEqual('takeLeadership');
       expect(callStack[1].methodId).toEqual('recover');
       expect(callStack[2].methodId).toEqual('getTasks');
@@ -25,6 +26,7 @@ describe('Event', () => {
       const ancestors = event.ancestors();
 
       expect(ancestors.length).toEqual(1);
+      expect(ancestors[0]).toBeInstanceOf(Event);
       expect(ancestors[0].methodId).toEqual('takeLeadership');
     });
 
@@ -35,6 +37,7 @@ describe('Event', () => {
       const descendants = event.descendants();
 
       expect(descendants.length).toEqual(1);
+      expect(descendants[0]).toBeInstanceOf(Event);
       expect(descendants[0].methodId).toEqual('getTasks');
     });
   });
