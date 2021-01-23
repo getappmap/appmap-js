@@ -1,4 +1,4 @@
-import { buildAppMap, CodeObject, Event, EventNavigator } from '@/lib/models';
+import { buildAppMap, EventNavigator } from '@/lib/models';
 import largeScenario from '../../fixtures/large_scenario.json';
 import apiKeyScenario from '../../fixtures/revoke_api_key.appmap.json';
 

@@ -75,7 +75,7 @@ export default class EventNavigator {
     }
   }
 
-  *descendants() {
+  *descendants(filterFn = () => true) {
     if (this.event.children.length === 0) {
       return;
     }
@@ -89,7 +89,9 @@ export default class EventNavigator {
 
     while (queueIndex < queue.length) {
       const event = queue[queueIndex][childIndex];
-      yield new EventNavigator(event);
+      if (filterFn(event)) {
+        yield new EventNavigator(event);
+      }
       if (childIndex === queue[queueIndex].length - 1) {
         queueIndex += 1;
         childIndex = 0;
@@ -100,6 +102,10 @@ export default class EventNavigator {
         queue.push(event.children);
       }
     }
+  }
+
+  hasLabel(label) {
+    return this.hasLabels([label]);
   }
 
   hasLabels(...searchLabels) {
