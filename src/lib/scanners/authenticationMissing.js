@@ -1,16 +1,9 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable max-classes-per-file */
 import { EventNavigator } from '../models';
-
-export class Error {
-  constructor(scope) {
-    this.scope = scope;
-  }
-
-  toString() {
-    return `No authentication provider found in ${this.scope.route}`;
-  }
-}
+import { isFalsey } from '../util';
+import { PROVIDER_AUTHENTICATION, PUBLIC } from './labels';
+import ScanError from './scanError';
 
 export class Authenticator {
   constructor(event) {
@@ -23,7 +16,9 @@ export class Authenticator {
 }
 
 function providesAuthentication(event) {
-  return event.hasLabel('provider.authentication');
+  return (
+    event.hasLabel(PROVIDER_AUTHENTICATION) && !isFalsey(event.returnValue)
+  );
 }
 
 class Scope {
@@ -38,7 +33,10 @@ class Scope {
     for (const event of this.event.descendants(providesAuthentication)) {
       return new Authenticator(event);
     }
-    return null;
+    return new ScanError(
+      `No authentication provider found in ${this.event.route}`,
+      this.event,
+    );
   }
 }
 
@@ -47,7 +45,7 @@ function isAcceptedRoute(event) {
     return false;
   }
 
-  if (event.codeObject.labels.includes('public')) {
+  if (event.codeObject.labels.includes(PUBLIC)) {
     return false;
   }
 
