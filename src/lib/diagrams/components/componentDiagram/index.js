@@ -334,7 +334,12 @@ export default class ComponentDiagram extends EventSource {
 
     nodesIds.forEach((id) => {
       if (!this.graph.highlightNode(id)) {
-        return;
+        if (this.currentDiagramModel.class_package[id]) {
+          this.expand(this.currentDiagramModel.class_package[id]);
+          this.graph.highlightNode(id);
+        } else {
+          return;
+        }
       }
 
       wasHighlighted = true;
