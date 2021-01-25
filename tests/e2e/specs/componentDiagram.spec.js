@@ -26,7 +26,7 @@ context('Component Diagram', () => {
     cy.get('.node.package[data-id="app/controllers"]').rightclick();
 
     cy.get('a.dropdown-item').contains('Expand').click();
-    cy.get('.clusters .cluster[data-id="app/controllers-cluster"]').should(
+    cy.get('.clusters .cluster[data-id="app/controllers"]').should(
       'have.class',
       'cluster--bordered',
     );

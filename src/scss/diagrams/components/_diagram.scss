@@ -162,6 +162,12 @@
         &--database rect {
           stroke: $database;
         }
+
+        .label {
+          fill: $labelLight;
+          font-size: 1rem;
+          font-weight: 700;
+        }
       }
 
       .edgePath {
