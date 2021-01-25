@@ -17,7 +17,8 @@ export class Authenticator {
 
 function providesAuthentication(event) {
   return (
-    event.hasLabel(PROVIDER_AUTHENTICATION) && !isFalsey(event.returnValue)
+    event.codeObject.labels?.has(PROVIDER_AUTHENTICATION) &&
+    !isFalsey(event.returnValue)
   );
 }
 
@@ -29,23 +30,27 @@ class Scope {
   /**
    * Finds the labeled authenticator within the scope.
    */
-  evaulate() {
+  *evaluate() {
     for (const event of this.event.descendants(providesAuthentication)) {
-      return new Authenticator(event);
+      yield new Authenticator(event.event);
     }
-    return new ScanError(
-      `No authentication provider found in ${this.event.route}`,
-      this.event,
+    yield new ScanError(
+      `No authentication provider found in ${this.event.event.route}`,
+      this.event.event,
     );
   }
 }
 
 function isAcceptedRoute(event) {
+  if (!event.isCall()) {
+    return false;
+  }
+
   if (!event.httpServerRequest) {
     return false;
   }
 
-  if (event.codeObject.labels.includes(PUBLIC)) {
+  if (event.codeObject.labels?.has(PUBLIC)) {
     return false;
   }
 
@@ -57,13 +62,16 @@ function isAcceptedRoute(event) {
 }
 
 export class AuthenticationMissing {
-  constructor(event) {
-    this.event = new EventNavigator(event);
+  constructor(events) {
+    this.events = events;
   }
 
   *scopes() {
-    for (const scope of this.event.descendants(isAcceptedRoute)) {
-      yield new Scope(scope);
+    for (let index = 0; index < this.events.length; index += 1) {
+      const evt = this.events[index];
+      if (isAcceptedRoute(evt)) {
+        yield new Scope(new EventNavigator(evt));
+      }
     }
   }
 }
