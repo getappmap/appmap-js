@@ -20,6 +20,7 @@ export default class ClusterGroup {
 
     this.element = createSVGElement('g', classes.join(' '));
     this.element.dataset.id = node.id;
+    this.element.dataset.type = node.class;
 
     setElementPosition(this, node.x, node.y);
 

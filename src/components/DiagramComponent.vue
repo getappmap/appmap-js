@@ -68,11 +68,15 @@ export default {
       // TODO.
       // We're attempting to highlight any visible component within the hierarchy. We should instead
       // make the selected object visible via expand/collapse.
-      this.componentDiagram.highlight(
-        ...codeObject.ancestors(),
-        codeObject,
-        ...codeObject.descendants(),
-      );
+      if (this.componentDiagram.hasObject(codeObject)) {
+        this.componentDiagram.highlight(codeObject);
+      } else {
+        this.componentDiagram.highlight(
+          ...codeObject.ancestors(),
+          codeObject,
+          ...codeObject.descendants(),
+        );
+      }
     },
 
     renderDiagram() {

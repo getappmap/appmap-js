@@ -117,12 +117,15 @@ export default class Graph {
     const idFrom = codeObjectFrom.id;
     const idTo = codeObjectTo.id;
 
-    if (
-      codeObjectFrom === codeObjectTo ||
-      this.graph.edge(idFrom, idTo) ||
-      !this.graph.node(idTo) ||
-      !this.graph.node(idFrom)
-    ) {
+    if (codeObjectFrom === codeObjectTo || this.graph.edge(idFrom, idTo)) {
+      return;
+    }
+
+    if (!this.graph.node(idTo) || this.graph.children(idTo).length) {
+      return;
+    }
+
+    if (!this.graph.node(idFrom) || this.graph.children(idFrom).length) {
       return;
     }
 
@@ -204,7 +207,17 @@ export default class Graph {
 
   highlightNode(id) {
     const highlightedNode = this.graph.node(id);
-    if (!highlightedNode || highlightedNode.element.classList.contains('dim')) {
+    if (!highlightedNode) {
+      return null;
+    }
+
+    const children = this.graph.children(id);
+    if (highlightedNode.type === 'cluster') {
+      children.forEach((childId) => this.highlightNode(childId));
+      return highlightedNode.codeObject;
+    }
+
+    if (highlightedNode.element.classList.contains('dim')) {
       return null;
     }
 
@@ -266,7 +279,9 @@ export default class Graph {
     });
   }
 
-  expand(id) {
+  expand(codeObject, children) {
+    const { id } = codeObject;
+
     this.graph.edges().forEach(({ v, w }) => {
       if (v === id || w === id) {
         const edge = this.graph.edge(v, w);
@@ -278,7 +293,18 @@ export default class Graph {
     });
 
     this.removeNode(id);
-    this.render();
+
+    const clusterNode = {
+      id,
+      type: 'cluster',
+      label: id,
+      children: children.length,
+      class: codeObject.type,
+      codeObject,
+    };
+
+    this.setNode(clusterNode);
+    children.forEach((obj) => this.setNodeFromCodeObject(obj, id));
   }
 
   collapse() {

@@ -9,8 +9,8 @@ import Graph from './graph/index';
 
 export const DEFAULT_TARGET_COUNT = 1;
 
-function codeObjectFromNode(node, classMap) {
-  const { id, type } = node.dataset;
+function codeObjectFromElement(element, classMap) {
+  const { id, type } = element.dataset;
   return classMap.codeObjects.find((obj) => obj.id === id && obj.type === type);
 }
 
@@ -20,12 +20,11 @@ function bindEvents(componentDiagram, classMap) {
   svg.addEventListener('click', (event) => {
     const node = getEventTarget(event.target, svg, 'g.nodes g.node');
     if (!node) {
-      componentDiagram.emit('click', null);
       return;
     }
 
     event.stopPropagation();
-    const codeObject = codeObjectFromNode(node, classMap);
+    const codeObject = codeObjectFromElement(node, classMap);
     componentDiagram.highlight(codeObject);
     componentDiagram.emit('click', codeObject);
   });
@@ -37,7 +36,7 @@ function bindEvents(componentDiagram, classMap) {
     }
 
     event.stopPropagation();
-    componentDiagram.focus(codeObjectFromNode(node, classMap));
+    componentDiagram.focus(codeObjectFromElement(node, classMap));
   });
 
   svg.addEventListener('click', (event) => {
@@ -59,6 +58,18 @@ function bindEvents(componentDiagram, classMap) {
     );
 
     componentDiagram.emit('edge', { to: codeObjectTo, from: codeObjectFrom });
+  });
+
+  svg.addEventListener('click', (event) => {
+    const cluster = getEventTarget(event.target, svg, 'g.cluster');
+    if (!cluster) {
+      return;
+    }
+
+    event.stopPropagation();
+    const codeObject = codeObjectFromElement(cluster, classMap);
+    componentDiagram.highlight(codeObject);
+    componentDiagram.emit('click', codeObject);
   });
 }
 
@@ -90,8 +101,20 @@ const COMPONENT_OPTIONS = {
           .transform(
             (e) => componentDiagram.graph.node(e.dataset.id).codeObject,
           )
-          .condition((obj) => !expandableTypes.includes(obj.type))
+          .condition(
+            (obj) =>
+              !expandableTypes.includes(obj.type) &&
+              obj.type !== CodeObjectType.DATABASE,
+          )
           .on('execute', (id) => componentDiagram.collapse(id)),
+      (item) =>
+        item
+          .text('Collapse')
+          .selector('g.cluster')
+          .transform(
+            (e) => componentDiagram.graph.node(e.dataset.id).codeObject,
+          )
+          .on('execute', (obj) => componentDiagram.collapse(obj)),
       (item) =>
         item
           .text('View source')
@@ -170,6 +193,7 @@ export default class ComponentDiagram extends EventSource {
       'click',
       (event) => {
         if (!event.target.classList.contains('dropdown-item')) {
+          this.emit('click', null);
           this.clearHighlights();
         }
 
@@ -242,6 +266,7 @@ export default class ComponentDiagram extends EventSource {
     this.clearHighlights(true);
 
     const highlightedCodeObjects = codeObjects
+      .filter(Boolean)
       .map((obj) => this.graph.highlightNode(obj.id))
       .filter(Boolean);
 
@@ -289,31 +314,20 @@ export default class ComponentDiagram extends EventSource {
   }
 
   expand(codeObject, scrollToSubclasses = true) {
-    const { id } = codeObject;
     const children = [
       ...codeObject.classes,
       ...codeObject.children.filter((obj) => obj.type === CodeObjectType.ROUTE),
     ];
 
-    // TODO.
-    // This cluster logic feels misplaced. Are we missing an abstraction in Graph?
-    const clusterId = `${id}-cluster`;
-    const clusterNode = {
-      id: clusterId,
-      type: 'cluster',
-      label: id,
-      children: children.length,
-      class: codeObject.type,
-    };
-
-    this.graph.setNode(clusterNode);
-    children.forEach((obj) => this.graph.setNodeFromCodeObject(obj, clusterId));
-
+    this.graph.expand(codeObject, children);
     allEdges(...children).forEach(({ from, to }) =>
       this.graph.setEdge(from, to),
     );
 
-    this.graph.expand(id, clusterId);
+    // HACK.
+    // The child graph should really be doing this, but there's no way to add the edges before
+    // rendering without bloating the API any further.
+    this.graph.render();
 
     if (scrollToSubclasses) {
       this.scrollTo(children);
@@ -323,9 +337,10 @@ export default class ComponentDiagram extends EventSource {
   }
 
   collapse(codeObject, scrollToPackage = true) {
-    const codeObjectPackage = codeObject.packageObject || codeObject.parent;
-    const { id } = codeObjectPackage;
-    this.graph.removeNode(`${id}-cluster`);
+    const codeObjectPackage =
+      codeObject.packageObject || codeObject.parent || codeObject;
+
+    this.graph.removeNode(codeObjectPackage.id);
 
     [
       ...codeObjectPackage.classes,
@@ -356,5 +371,9 @@ export default class ComponentDiagram extends EventSource {
 
   hasPackage(packageId) {
     return this.currentDiagramModel.packages.has(packageId);
+  }
+
+  hasObject(codeObject) {
+    return Boolean(this.graph.node(codeObject.id));
   }
 }

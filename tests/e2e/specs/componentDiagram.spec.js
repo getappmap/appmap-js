@@ -1,3 +1,5 @@
+import { CodeObjectType } from '../../../src/lib/models/codeObject';
+
 context('Component Diagram', () => {
   beforeEach(() => {
     cy.visit(
@@ -59,7 +61,7 @@ context('Component Diagram', () => {
       'http://localhost:6006/iframe.html?id=pages--vs-code-extension&viewMode=story',
     );
 
-    cy.get('.nodes .node[data-id="HTTP"]')
+    cy.get(`.nodes .node[data-type="${CodeObjectType.HTTP}"]`)
       .click()
       .should('have.class', 'highlight');
 
@@ -67,7 +69,7 @@ context('Component Diagram', () => {
       .contains('Clear selection')
       .click();
 
-    cy.get('.nodes .node[data-id="HTTP"]').should(
+    cy.get(`.nodes .node[data-type="${CodeObjectType.HTTP}"]`).should(
       'not.have.class',
       'highlight',
     );
