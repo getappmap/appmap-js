@@ -1,7 +1,25 @@
 <template>
   <div id="app">
     <div class="column column--left">
-      <v-details-panel :selected-object="selectedObject" />
+      <v-details-panel :selected-object="selectedObject">
+        <template v-slot:buttons>
+          <a
+            class="clear-btn"
+            href="#"
+            v-if="selectedObject"
+            @click.prevent="clearSelection"
+          >
+            Clear selection
+          </a>
+          <a class="back-btn" href="#" v-if="canGoBack" @click.prevent="goBack">
+            Back to
+            <b v-if="prevSelectedObject.object">
+              {{ prevSelectedObject.object.name }}
+            </b>
+            <b v-else>previous</b>
+          </a>
+        </template>
+      </v-details-panel>
     </div>
 
     <div class="column column--right">
@@ -11,11 +29,14 @@
           :is-active="isViewingComponent"
           :ref="VIEW_COMPONENT"
         >
-          <v-diagram-component :component-data="components" />
+          <v-diagram-component
+            ref="componentDiagram"
+            :component-data="components"
+          />
         </v-tab>
 
         <v-tab name="Flow view" :is-active="isViewingFlow" :ref="VIEW_FLOW">
-          <v-diagram-flow :call-tree="callTree" />
+          <v-diagram-flow ref="diagramFlow" :call-tree="callTree" />
         </v-tab>
       </v-tabs>
     </div>
@@ -34,6 +55,8 @@ import {
   SET_VIEW,
   VIEW_COMPONENT,
   VIEW_FLOW,
+  POP_OBJECT_STACK,
+  CLEAR_OBJECT_STACK,
 } from '../store/vsCode';
 
 export default {
@@ -85,6 +108,14 @@ export default {
     isViewingFlow() {
       return this.$store.state.currentView === VIEW_FLOW;
     },
+
+    prevSelectedObject() {
+      return this.$store.getters.prevSelectedObject;
+    },
+
+    canGoBack() {
+      return this.$store.getters.canPopStack;
+    },
   },
 
   methods: {
@@ -102,6 +133,14 @@ export default {
 
       const viewKey = Object.keys(this.$refs)[index];
       this.$store.commit(SET_VIEW, viewKey);
+    },
+
+    clearSelection() {
+      this.$store.commit(CLEAR_OBJECT_STACK);
+    },
+
+    goBack() {
+      this.$store.commit(POP_OBJECT_STACK);
     },
   },
 };
