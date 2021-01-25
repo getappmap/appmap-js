@@ -46,6 +46,16 @@
       </ul>
     </div>
 
+    <div class="event-params" v-if="httpServerResponse">
+      <h5>HTTP response</h5>
+      <ul class="table-01">
+        <li v-for="(v, k) in httpServerResponse" :key="k">
+          <strong>{{ k }}</strong>
+          <code>{{ v }}</code>
+        </li>
+      </ul>
+    </div>
+
     <div class="event-params" v-if="hasReturnValue">
       <h5>Return value</h5>
       <ul class="table-01">
@@ -117,6 +127,17 @@ export default {
       return (
         this.objectDescriptor.message && this.objectDescriptor.message.length
       );
+    },
+
+    httpServerResponse() {
+      // TODO.
+      // The API should have an accessor for this
+      const { returnEvent } = this.objectDescriptor;
+      if (returnEvent) {
+        return returnEvent.http_server_response || null;
+      }
+
+      return null;
     },
 
     hasSql() {

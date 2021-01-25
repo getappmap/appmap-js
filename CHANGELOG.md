@@ -8,6 +8,7 @@ to structure this file.
 ## [Unreleased]
 
 - Fix poppers not appearing in the flow view
+- HTTP server responses are now visible in the event details panel
 
 ## [0.1.0]
 
