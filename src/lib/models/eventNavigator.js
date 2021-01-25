@@ -76,7 +76,7 @@ export default class EventNavigator {
   }
 
   *descendants(filterFn = () => true) {
-    if (this.event.children.length === 0) {
+    if (!this.event.children || this.event.children.length === 0) {
       return;
     }
 
