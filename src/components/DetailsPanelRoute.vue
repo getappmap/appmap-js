@@ -17,7 +17,7 @@ export default {
   name: 'v-details-panel-route',
   props: {
     objectDescriptor: {
-      type: Array,
+      type: Object,
       required: true,
     },
   },
@@ -29,7 +29,7 @@ export default {
 
   computed: {
     events() {
-      return this.objectDescriptor.map((e) => {
+      return this.objectDescriptor.events.map((e) => {
         /* eslint-disable camelcase */
         const { path_info, request_method } = e.http_server_request;
 
@@ -43,7 +43,7 @@ export default {
     },
 
     outboundConnections() {
-      const childrenObjects = this.objectDescriptor
+      const childrenObjects = this.objectDescriptor.events
         .map((e) => e.children)
         .flat()
         .filter(Boolean)
