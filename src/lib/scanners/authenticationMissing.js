@@ -33,6 +33,7 @@ class Scope {
   *evaluate() {
     for (const event of this.event.descendants(providesAuthentication)) {
       yield new Authenticator(event.event);
+      return;
     }
     yield new ScanError(
       `No authentication provider found in ${this.event.event.route}`,
