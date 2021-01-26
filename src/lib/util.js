@@ -18,6 +18,16 @@ export function isFalsey(valueObj) {
   return false;
 }
 
+export function isCommand(event) {
+  if (event.http_server_request) {
+    return true;
+  }
+  if (event.codeObject?.labels.has('command')) {
+    return true;
+  }
+  return false;
+}
+
 export function capitalizeString(str) {
   if (typeof str !== 'string') {
     return '';
