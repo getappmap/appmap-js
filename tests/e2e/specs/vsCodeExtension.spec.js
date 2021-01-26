@@ -304,4 +304,23 @@ context('VS Code Extension', () => {
       'highlight',
     );
   });
+
+  it('highlights only the first ancestor available if the selected object is not visible', () => {
+    cy.get('.node[data-id="app/helpers"]').rightclick();
+
+    cy.get('.dropdown-menu').contains('Expand').click();
+
+    cy.get(
+      '.node[data-id="app/helpers/Spree::Admin::NavigationHelper"]',
+    ).click();
+
+    cy.get('.v-details-panel-list')
+      .contains('Functions')
+      .parent()
+      .within(() => {
+        cy.get('a.list-item').first().click();
+      });
+
+    cy.get('.edgePath.highlight').should('have.length', 1);
+  });
 });

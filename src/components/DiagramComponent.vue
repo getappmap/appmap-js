@@ -71,11 +71,13 @@ export default {
       if (this.componentDiagram.hasObject(codeObject)) {
         this.componentDiagram.highlight(codeObject);
       } else {
-        this.componentDiagram.highlight(
-          ...codeObject.ancestors(),
-          codeObject,
+        const visibleObject = [
           ...codeObject.descendants(),
-        );
+          codeObject,
+          ...codeObject.ancestors(),
+        ].find((obj) => this.componentDiagram.hasObject(obj));
+
+        this.componentDiagram.highlight(visibleObject);
       }
     },
 
