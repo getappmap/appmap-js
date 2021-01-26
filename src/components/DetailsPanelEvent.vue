@@ -8,7 +8,7 @@
           v-if="shouldDisplayViewEvent"
           class="details-panel-event__view-event"
         >
-          Show in flow view
+          Show in Trace
         </a>
         <a
           href="#"
