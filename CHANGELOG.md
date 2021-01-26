@@ -5,7 +5,7 @@ All notable changes to the "appmap" extension will be documented in this file.
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how
 to structure this file.
 
-## [Unreleased]
+## [0.2.0]
 
 - 'Reset view' can be selected from the context menu from anywhere in the
   viewport
