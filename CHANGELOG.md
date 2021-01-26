@@ -5,6 +5,11 @@ All notable changes to the "appmap" extension will be documented in this file.
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how
 to structure this file.
 
+## [0.2.2]
+
+- Selecting a function will no longer select all the classes in an expanded
+  package
+
 ## [0.2.1]
 
 - Remove a visual artifact in trace nodes
