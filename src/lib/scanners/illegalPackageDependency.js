@@ -2,7 +2,6 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable import/prefer-default-export */
 
-import { i } from 'mathjs';
 import { EventNavigator } from '../models';
 import { isCommand } from '../util';
 import ScanError from './scanError';

@@ -72,7 +72,11 @@ function isAcceptedRoute(event) {
   return true;
 }
 
+/**
+ * Ensures non-public routes have authentication.
+ */
 export class AuthenticationMissing {
+  // eslint-disable-next-line class-methods-use-this
   *scopes(events) {
     for (let index = 0; index < events.length; index += 1) {
       const evt = events[index];
