@@ -25,7 +25,7 @@
     <div class="column column--right">
       <v-tabs @activateTab="onChangeTab" ref="tabs">
         <v-tab
-          name="Component diagram"
+          name="Dependency Map"
           :is-active="isViewingComponent"
           :ref="VIEW_COMPONENT"
         >
@@ -35,7 +35,7 @@
           />
         </v-tab>
 
-        <v-tab name="Flow view" :is-active="isViewingFlow" :ref="VIEW_FLOW">
+        <v-tab name="Trace" :is-active="isViewingFlow" :ref="VIEW_FLOW">
           <v-diagram-flow ref="diagramFlow" :call-tree="callTree" />
         </v-tab>
       </v-tabs>
