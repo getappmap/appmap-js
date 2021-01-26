@@ -34,6 +34,9 @@ class Scope {
   }
 }
 
+/**
+ * Forbids SQL queries from the view layer.
+ */
 export class QueryFromView {
   // eslint-disable-next-line class-methods-use-this
   *scopes(event) {
