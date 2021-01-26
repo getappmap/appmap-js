@@ -1,5 +1,3 @@
-import { CodeObjectType } from '../../../src/lib/models/codeObject';
-
 context('Component Diagram', () => {
   beforeEach(() => {
     cy.visit(
@@ -56,22 +54,11 @@ context('Component Diagram', () => {
     cy.get('.nodes .node.highlight').should('not.exist');
   });
 
-  it('clears when "Clear selection" button was clicked', () => {
-    cy.visit(
-      'http://localhost:6006/iframe.html?id=pages--vs-code-extension&viewMode=story',
-    );
+  it('allows reset view anywhere in the viewport', () => {
+    cy.get('.appmap').rightclick({
+      position: 'topLeft',
+    });
 
-    cy.get(`.nodes .node[data-type="${CodeObjectType.HTTP}"]`)
-      .click()
-      .should('have.class', 'highlight');
-
-    cy.get('.details-panel__buttons .clear-btn')
-      .contains('Clear selection')
-      .click();
-
-    cy.get(`.nodes .node[data-type="${CodeObjectType.HTTP}"]`).should(
-      'not.have.class',
-      'highlight',
-    );
+    cy.get('.dropdown-menu').contains('Reset view');
   });
 });
