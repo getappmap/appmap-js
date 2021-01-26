@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="column column--left">
+    <div class="main-column main-column--left">
       <v-details-panel :selected-object="selectedObject">
         <template v-slot:buttons>
           <a
@@ -22,7 +22,7 @@
       </v-details-panel>
     </div>
 
-    <div class="column column--right">
+    <div class="main-column main-column--right">
       <v-tabs @activateTab="onChangeTab" ref="tabs">
         <v-tab
           name="Dependency Map"
@@ -169,7 +169,7 @@ code {
   height: 100vh;
   color: $base11;
 
-  .column {
+  .main-column {
     overflow-y: scroll;
 
     &--left {
