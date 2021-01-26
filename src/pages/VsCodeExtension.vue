@@ -170,6 +170,8 @@ code {
   color: $base11;
 
   .column {
+    overflow-y: scroll;
+
     &--left {
       grid-column: 1;
       width: 100%;

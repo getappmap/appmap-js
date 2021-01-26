@@ -10,6 +10,8 @@ to structure this file.
 - 'Reset view' can be selected from the context menu from anywhere in the
   viewport
 - Packages are now visible when expanded
+- Fix an issue where long vertical columns could cause the diagrams to center
+  out of the visible space.
 - Fix poppers not appearing in the flow view
 - HTTP server responses are now visible in the event details panel
 
