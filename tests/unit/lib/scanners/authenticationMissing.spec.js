@@ -7,7 +7,7 @@ import apiKeyScenario from '../../fixtures/revoke_api_key.appmap.json';
 
 const apiKeyAppMap = buildAppMap().source(apiKeyScenario).normalize().build();
 
-describe('EventNavigator', () => {
+describe('Scanner', () => {
   function scanAuthenticationMissing(event) {
     const scan = new AuthenticationMissing([event]);
     const errors = [];
