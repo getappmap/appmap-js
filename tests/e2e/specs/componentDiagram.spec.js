@@ -53,4 +53,12 @@ context('Component Diagram', () => {
   it('nothing is highlighted by default', () => {
     cy.get('.nodes .node.highlight').should('not.exist');
   });
+
+  it('allows reset view anywhere in the viewport', () => {
+    cy.get('.appmap').rightclick({
+      position: 'topLeft',
+    });
+
+    cy.get('.dropdown-menu').contains('Reset view');
+  });
 });

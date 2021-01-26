@@ -64,10 +64,15 @@ function show(contextMenu, clickEvent) {
 
   // Remove ancestors of the container element, we don't need to iterate any
   // further than that.
-  const path = clickEvent.composedPath().slice(
-    0,
-    clickEvent.composedPath().findIndex((e) => e === contextMenu.activeArea),
-  );
+  const activeAreaIndex = clickEvent
+    .composedPath()
+    .findIndex((e) => e === contextMenu.activeArea);
+
+  if (activeAreaIndex === -1) {
+    return;
+  }
+
+  const path = clickEvent.composedPath().slice(0, activeAreaIndex + 1);
 
   contextMenu.items.forEach((item) => {
     const match = path.find((e) => item.match(e));
