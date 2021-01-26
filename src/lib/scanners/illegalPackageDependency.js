@@ -2,8 +2,25 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable import/prefer-default-export */
 
+import { i } from 'mathjs';
 import { EventNavigator } from '../models';
 import { isCommand } from '../util';
+import ScanError from './scanError';
+
+function packageName(event) {
+  const { packageObject } = event.codeObject;
+  if (packageObject) {
+    return packageObject.name;
+  }
+  if (event.httpServerRequest) {
+    return 'HTTP';
+  }
+  if (event.sqlQuery) {
+    return 'SQL';
+  }
+
+  throw new Error(`Unknown package for ${event.toString()}`);
+}
 
 class Target {
   constructor(event, config) {
@@ -12,22 +29,23 @@ class Target {
   }
 
   /**
-   * Check and see if any of the inbound or outbound calls are from
-   * a non-whitelisted package.
+   * Check and see if the inbound call is from a non-whitelisted package.
    */
   // eslint-disable-next-line require-yield
   *evaluate() {
     this.validateDependency(this.event.parent);
-    if (this.event.children) {
-      for (let index = 0; index < this.event.children.length; index += 1) {
-        const child = this.event.children[index];
-        this.validateDependency(child);
-      }
-    }
   }
 
   *validateDependency(event) {
-    if (!this.config.allowedDependencies.include(event.packageName)) {
+    const invokerPackageName = packageName(event);
+    if (!this.config.allowedDependencies.include(invokerPackageName)) {
+      yield new ScanError(
+        `${this.event.toString()} invoked by disallowed package ${invokerPackageName} on event ${
+          event.toString
+        }`,
+        event,
+      );
+    } else {
       yield event;
     }
   }
@@ -40,21 +58,6 @@ class Scope {
   }
 
   *targets() {
-    function packageName(event) {
-      const { packageObject } = event.codeObject;
-      if (packageObject) {
-        return packageObject.name;
-      }
-      if (event.httpServerRequest) {
-        return 'HTTP';
-      }
-      if (event.sqlQuery) {
-        return 'SQL';
-      }
-
-      throw new Error(`Unknown package for ${event.toString()}`);
-    }
-
     for (const descendant of this.event.descendants(
       (evt) => packageName(evt) === this.config.packageName,
     )) {
