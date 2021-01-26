@@ -289,4 +289,19 @@ context('VS Code Extension', () => {
     cy.get('.appmap__flow-view .node').should('have.length', 248);
     cy.get('.node.highlight .header[data-type="sql"]').should('be.visible');
   });
+
+  it('clears when "Clear selection" button was clicked', () => {
+    cy.get(`.nodes .node[data-type="${CodeObjectType.HTTP}"]`)
+      .click()
+      .should('have.class', 'highlight');
+
+    cy.get('.details-panel__buttons .clear-btn')
+      .contains('Clear selection')
+      .click();
+
+    cy.get(`.nodes .node[data-type="${CodeObjectType.HTTP}"]`).should(
+      'not.have.class',
+      'highlight',
+    );
+  });
 });
