@@ -7,6 +7,8 @@ to structure this file.
 
 ## [Unreleased]
 
+- 'Reset view' can be selected from the context menu from anywhere in the
+  viewport
 - Packages are now visible when expanded
 - Fix poppers not appearing in the flow view
 - HTTP server responses are now visible in the event details panel
