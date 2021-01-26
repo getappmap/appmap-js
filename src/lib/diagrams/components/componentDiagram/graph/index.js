@@ -3,15 +3,12 @@ import deepmerge from 'deepmerge';
 
 import Geometry from '../../../helpers/geometry';
 
-import {
-  createSVGElement,
-  findTraversableNodesAndEdges,
-  prepareNode,
-} from './util';
+import { createSVGElement, findTraversableNodesAndEdges } from './util';
 import ClusterGroup from './groups/clusterGroup';
 import NodeGroup from './groups/nodeGroup';
 import LabelGroup from './groups/labelGroup';
 import EdgeGroup from './groups/edgeGroup';
+import { CodeObjectType } from '../../../../models/codeObject';
 
 const NODE_PADDING_HORIZONTAL = 15;
 const NODE_PADDING_VERTICAL = 10;
@@ -45,8 +42,39 @@ export default class Graph {
       .setDefaultEdgeLabel(() => ({}));
   }
 
+  setNodeFromCodeObject(codeObject, parentId = null) {
+    let label = codeObject.prettyName;
+
+    if (
+      codeObject.type === CodeObjectType.PACKAGE ||
+      codeObject.type === CodeObjectType.HTTP
+    ) {
+      const numChildren = [
+        ...codeObject.classes,
+        ...codeObject.children.filter(
+          (obj) => obj.type === CodeObjectType.ROUTE,
+        ),
+      ].length;
+
+      label += ` (${numChildren})`;
+    }
+
+    const node = {
+      codeObject,
+      label,
+      id: codeObject.id,
+      class: codeObject.type,
+      shape: codeObject.type,
+    };
+    this.setNode(node, parentId);
+  }
+
   setNode(data, parentId = null) {
-    const node = prepareNode(data);
+    const node = { ...data };
+    if (this.graph.node(node.id)) {
+      return;
+    }
+
     // create dummy <g class="node"> with label to determine label width
     const dummyNodeGroup = createSVGElement('g', 'node');
     const labelGroup = new LabelGroup(node.label, true);
@@ -59,11 +87,6 @@ export default class Graph {
     node.labelHeight = labelBBox.height;
     node.width = labelBBox.width + NODE_PADDING_HORIZONTAL * 2;
     node.height = labelBBox.height + NODE_PADDING_VERTICAL * 2;
-
-    const parent = this.graph.node(parentId);
-    if (parent && parent.id === 'HTTP-cluster') {
-      node.class = 'http';
-    }
 
     this.graph.setNode(node.id, node);
 
@@ -90,18 +113,26 @@ export default class Graph {
     this.graph.removeNode(id);
   }
 
-  setEdge(start, end) {
-    if (start !== end) {
-      if (!this.graph.node(start)) {
-        this.setNode({ id: start, type: 'class' });
-      }
+  setEdge(codeObjectFrom, codeObjectTo) {
+    const idFrom = codeObjectFrom.id;
+    const idTo = codeObjectTo.id;
 
-      if (!this.graph.node(end)) {
-        this.setNode({ id: end, type: 'class' });
-      }
-
-      this.graph.setEdge(start, end);
+    if (codeObjectFrom === codeObjectTo || this.graph.edge(idFrom, idTo)) {
+      return;
     }
+
+    if (!this.graph.node(idTo) || this.graph.children(idTo).length) {
+      return;
+    }
+
+    if (!this.graph.node(idFrom) || this.graph.children(idFrom).length) {
+      return;
+    }
+
+    this.graph.setEdge(idFrom, idTo, {
+      codeObjectTo,
+      codeObjectFrom,
+    });
   }
 
   render() {
@@ -143,8 +174,14 @@ export default class Graph {
         edge.group.move(edge.points);
       } else {
         const edgeGroup = new EdgeGroup(edge.points, this.options.animation);
+        const fromNode = this.graph.node(v);
+        const toNode = this.graph.node(w);
+
         edgeGroup.element.dataset.from = v;
+        edgeGroup.element.dataset.fromType = fromNode.codeObject.type;
+
         edgeGroup.element.dataset.to = w;
+        edgeGroup.element.dataset.toType = toNode.codeObject.type;
 
         edge.group = edgeGroup;
         edge.element = edgeGroup.element;
@@ -169,12 +206,22 @@ export default class Graph {
   }
 
   highlightNode(id) {
-    const highligthedNode = this.graph.node(id);
-    if (!highligthedNode || highligthedNode.element.classList.contains('dim')) {
-      return false;
+    const highlightedNode = this.graph.node(id);
+    if (!highlightedNode) {
+      return null;
     }
 
-    highligthedNode.element.classList.add('highlight');
+    const children = this.graph.children(id);
+    if (highlightedNode.type === 'cluster') {
+      children.forEach((childId) => this.highlightNode(childId));
+      return highlightedNode.codeObject;
+    }
+
+    if (highlightedNode.element.classList.contains('dim')) {
+      return null;
+    }
+
+    highlightedNode.element.classList.add('highlight');
 
     this.graph.nodeEdges(id).forEach((e) => {
       const edge = this.graph.edge(e).element;
@@ -192,7 +239,7 @@ export default class Graph {
       }
     });
 
-    return true;
+    return highlightedNode.codeObject;
   }
 
   clearFocus() {
@@ -232,7 +279,9 @@ export default class Graph {
     });
   }
 
-  expand(id) {
+  expand(codeObject, children) {
+    const { id } = codeObject;
+
     this.graph.edges().forEach(({ v, w }) => {
       if (v === id || w === id) {
         const edge = this.graph.edge(v, w);
@@ -245,7 +294,17 @@ export default class Graph {
 
     this.removeNode(id);
 
-    this.render();
+    const clusterNode = {
+      id,
+      type: 'cluster',
+      label: id,
+      children: children.length,
+      class: codeObject.type,
+      codeObject,
+    };
+
+    this.setNode(clusterNode);
+    children.forEach((obj) => this.setNodeFromCodeObject(obj, id));
   }
 
   collapse() {
@@ -305,10 +364,10 @@ export default class Graph {
     };
   }
 
-  makeRoot(id) {
+  makeRoot(codeObject) {
     const visitedNodes = new Set();
     const visitedEdges = new Set();
-    const queue = [id];
+    const queue = [codeObject.id];
 
     while (queue.length > 0) {
       const currentId = queue.pop();
@@ -331,5 +390,13 @@ export default class Graph {
     });
 
     this.render();
+  }
+
+  edge(to, from) {
+    return this.graph.edge(to, from);
+  }
+
+  node(id) {
+    return this.graph.node(id);
   }
 }

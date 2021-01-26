@@ -1,13 +1,13 @@
 <template>
-  <div class="v-details-panel-list" v-if="items.length > 0">
+  <div class="v-details-panel-list" v-if="items && items.length > 0">
     <h5>{{ title }}</h5>
     <ul>
-      <li v-for="(item, index) in items" :key="index">
+      <li v-for="(item, index) in filteredItems" :key="index">
         <a class="list-item" href="#" @click.prevent="selectItem(item)">
-          {{ item.text }}
-          <span class="list-item__count" v-if="item.count">{{
-            item.count
-          }}</span>
+          {{ nameOf(item.object) }}
+          <span class="list-item__count" v-if="uniqueItems && item.count > 1">
+            {{ item.count }}
+          </span>
         </a>
       </li>
     </ul>
@@ -25,14 +25,46 @@ export default {
       type: Array,
       default: () => [],
     },
+    uniqueItems: {
+      type: Boolean,
+      default: true,
+    },
+    nameKey: {
+      type: String,
+    },
   },
   methods: {
-    selectItem(item) {
-      if (!this.$store || !item.kind || !item.object) {
-        return;
+    nameOf(item) {
+      if (this.nameKey) {
+        return item[this.nameKey];
       }
 
-      this.$store.commit(SELECT_OBJECT, { kind: item.kind, data: item.object });
+      return item.prettyName || item.name || item.toString();
+    },
+    selectItem(item) {
+      if (this.$store) {
+        this.$store.commit(SELECT_OBJECT, item.object);
+      }
+    },
+  },
+  computed: {
+    filteredItems() {
+      if (!this.uniqueItems) {
+        return this.items.map((item) => ({ object: item }));
+      }
+
+      return Object.values(
+        this.items.reduce((memo, item) => {
+          const { id } = item;
+          let memoElement = memo[id];
+          if (!memoElement) {
+            memoElement = { object: item, count: 0 };
+            memo[id] = memoElement; // eslint-disable-line no-param-reassign
+          }
+          memoElement.count += 1;
+          return memo;
+        }, {}),
+      );
     },
   },
 };
@@ -92,6 +124,7 @@ export default {
           line-height: 1;
           color: white;
           background-color: $gray4;
+          white-space: nowrap;
         }
       }
     }

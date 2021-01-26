@@ -15,6 +15,7 @@ export default class NodeGroup {
   constructor(node, animationOptions = {}) {
     this.element = createSVGElement('g', `node ${node.class}`);
     this.element.dataset.id = node.id;
+    this.element.dataset.type = node.codeObject.type;
     this.element.setAttribute('opacity', 0);
 
     setElementPosition(this, node.x, node.y);

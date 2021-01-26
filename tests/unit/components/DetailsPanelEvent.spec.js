@@ -12,7 +12,7 @@ describe('DetailsPanelEvent.vue', () => {
     );
     const wrapper = mount(DetailsPanelEvent, {
       propsData: {
-        objectDescriptor: event,
+        object: event,
       },
       store,
     });
@@ -31,7 +31,7 @@ describe('DetailsPanelEvent.vue', () => {
 
     const wrapper = mount(DetailsPanelEvent, {
       propsData: {
-        objectDescriptor: event,
+        object: event,
       },
       store,
     });

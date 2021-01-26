@@ -1,26 +1,31 @@
-import CodeObject from './codeObject';
+import CodeObject, { CodeObjectType } from './codeObject';
 
 // Recursively add a code object to an array
 // If the code object exists in the array already, add its children to the
 // existing code object instead.
-function addCodeObject(codeObjectArray, codeObject) {
-  if (!codeObjectArray || !Array.isArray(codeObjectArray)) {
+function addCodeObject(codeObjectArray, codeObject, parent = null) {
+  if (
+    !codeObjectArray ||
+    !Array.isArray(codeObjectArray) ||
+    !codeObject ||
+    !(codeObject instanceof CodeObject)
+  ) {
     return;
   }
 
-  if (!codeObject || !(codeObject instanceof CodeObject)) {
-    return;
-  }
-
+  // TODO.
+  // This ignores static/non-static function collisions and function overloads, though this method
+  // is never currently called in a context where those edge cases exist.
   const existingObject = codeObjectArray.find(
     (obj) => obj.type === codeObject.type && obj.name === codeObject.name,
   );
 
   if (!existingObject) {
+    codeObject.parent = parent; // eslint-disable-line no-param-reassign
     codeObjectArray.push(codeObject);
   } else {
     codeObject.children.forEach((child) =>
-      addCodeObject(existingObject.children, child),
+      addCodeObject(existingObject.children, child, existingObject),
     );
   }
 }
@@ -87,13 +92,13 @@ export default class ClassMap {
   }
 
   // Returns the root HTTP code object if it exists
-  httpObject() {
-    return this.root('HTTP');
+  get httpObject() {
+    return this.root(CodeObjectType.HTTP);
   }
 
   // Returns the root SQL code object if it exists
-  sqlObject() {
-    return this.root('SQL');
+  get sqlObject() {
+    return this.root(CodeObjectType.DATABASE);
   }
 
   // Binds an event array to code objects and vice versa. This allows use of

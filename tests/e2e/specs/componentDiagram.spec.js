@@ -1,3 +1,5 @@
+import { CodeObjectType } from '../../../src/lib/models/codeObject';
+
 context('Component Diagram', () => {
   beforeEach(() => {
     cy.visit(
@@ -12,34 +14,34 @@ context('Component Diagram', () => {
   });
 
   it('does not expand too many nodes', () => {
-    cy.get('.nodes g.node').should('have.length', 9);
+    cy.get('.nodes g.node').should('have.length', 8);
   });
 
   it('node "Spree::BackendConfiguration" should be expanded', () => {
     cy.get('.nodes .node.package[data-id="lib"]').should('not.exist');
-    cy.get('.nodes .node.class[data-id="Spree::BackendConfiguration"]').should(
-      'exist',
-    );
+    cy.get(
+      '.nodes .node.class[data-id="lib/Spree::BackendConfiguration"]',
+    ).should('exist');
   });
 
   it('package "app/controllers" should be expanded and have border', () => {
     cy.get('.node.package[data-id="app/controllers"]').rightclick();
 
     cy.get('a.dropdown-item').contains('Expand').click();
-    cy.get('.clusters .cluster[data-id="app/controllers-cluster"]').should(
+    cy.get('.clusters .cluster[data-id="app/controllers"]').should(
       'have.class',
       'cluster--bordered',
     );
   });
 
   it('node "SQL" can be highlighted', () => {
-    cy.get('.nodes .node[data-id="SQL"]')
+    cy.get('.nodes .node[data-type="database"]')
       .click()
       .should('have.class', 'highlight');
   });
 
   it('node "SQL" can be focused', () => {
-    cy.get('.nodes .node[data-id="SQL"]')
+    cy.get('.nodes .node[data-type="database"]')
       .dblclick()
       .should('have.class', 'highlight');
 
@@ -59,7 +61,7 @@ context('Component Diagram', () => {
       'http://localhost:6006/iframe.html?id=pages--vs-code-extension&viewMode=story',
     );
 
-    cy.get('.nodes .node[data-id="HTTP"]')
+    cy.get(`.nodes .node[data-type="${CodeObjectType.HTTP}"]`)
       .click()
       .should('have.class', 'highlight');
 
@@ -67,7 +69,7 @@ context('Component Diagram', () => {
       .contains('Clear selection')
       .click();
 
-    cy.get('.nodes .node[data-id="HTTP"]').should(
+    cy.get(`.nodes .node[data-type="${CodeObjectType.HTTP}"]`).should(
       'not.have.class',
       'highlight',
     );

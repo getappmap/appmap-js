@@ -1,5 +1,8 @@
 import Rect from '../shapes/rect';
 import { getAnimationStep, createSVGElement } from '../util';
+import LabelGroup from './labelGroup';
+
+const PADDING = 4;
 
 function setElementPosition(nodeGroup, x, y) {
   /* eslint-disable no-param-reassign */
@@ -10,24 +13,33 @@ function setElementPosition(nodeGroup, x, y) {
 
 export default class ClusterGroup {
   constructor(node) {
-    let clusterType = 'cluster--package';
-    if (node.id === 'HTTP-cluster') {
-      clusterType = 'cluster--http';
-    } else if (node.id === 'SQL-cluster') {
-      clusterType = 'cluster--database';
+    const classes = ['cluster'];
+    if (node.children > 1) {
+      classes.push(`cluster--${node.class}`, 'cluster--bordered');
     }
 
-    const classBordered = node.children > 1 ? 'cluster--bordered' : '';
-
-    this.element = createSVGElement(
-      'g',
-      `node ${node.class} ${clusterType} ${classBordered}`,
-    );
+    this.element = createSVGElement('g', classes.join(' '));
     this.element.dataset.id = node.id;
+    this.element.dataset.type = node.class;
 
     setElementPosition(this, node.x, node.y);
 
-    this.element.appendChild(Rect(node.width, node.height));
+    const rect = Rect(node.width, node.height);
+    this.label = new LabelGroup(node.label);
+    this.element.appendChild(rect);
+    this.element.appendChild(this.label.element);
+
+    requestAnimationFrame(() => {
+      const {
+        width: labelWidth,
+        height: labelHeight,
+      } = this.label.element.getBBox();
+      const { width: rectWidth, height: rectHeight } = rect.getBBox();
+      const w = Math.max(labelWidth + PADDING, rectWidth);
+      const h = Math.max(labelHeight + PADDING, rectHeight);
+
+      this.resize(w, h);
+    });
   }
 
   move(x, y) {
@@ -64,6 +76,10 @@ export default class ClusterGroup {
     rect.setAttribute('y', -(height / 2));
     rect.setAttribute('width', width);
     rect.setAttribute('height', height);
+
+    const dX = -width * 0.5 + PADDING;
+    const dY = -height * 0.5;
+    this.label.element.style.transform = `translate(${dX}px, ${dY}px)`;
   }
 
   remove() {
