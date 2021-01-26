@@ -22,7 +22,7 @@ function providesAuthentication(event) {
   );
 }
 
-class Scope {
+class Target {
   constructor(event) {
     this.event = event;
   }
@@ -39,6 +39,16 @@ class Scope {
       `No authentication provider found in ${this.event.event.route}`,
       this.event.event,
     );
+  }
+}
+
+class Scope {
+  constructor(event) {
+    this.event = event;
+  }
+
+  *targets() {
+    yield new Target(this.event);
   }
 }
 
@@ -63,13 +73,9 @@ function isAcceptedRoute(event) {
 }
 
 export class AuthenticationMissing {
-  constructor(events) {
-    this.events = events;
-  }
-
-  *scopes() {
-    for (let index = 0; index < this.events.length; index += 1) {
-      const evt = this.events[index];
+  *scopes(events) {
+    for (let index = 0; index < events.length; index += 1) {
+      const evt = events[index];
       if (isAcceptedRoute(evt)) {
         yield new Scope(new EventNavigator(evt));
       }

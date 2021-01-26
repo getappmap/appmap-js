@@ -35,12 +35,9 @@ class Scope {
 }
 
 export class QueryFromView {
-  constructor(event) {
-    this.event = new EventNavigator(event);
-  }
-
-  *scopes() {
-    for (const scope of this.event.descendants(
+  // eslint-disable-next-line class-methods-use-this
+  *scopes(event) {
+    for (const scope of new EventNavigator(event).descendants(
       (evt) => evt.httpServerRequest,
     )) {
       yield new Scope(scope);
