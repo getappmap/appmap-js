@@ -259,6 +259,28 @@ context('VS Code Extension', () => {
         .should('contain.text', 'Spree::BackendConfiguration#menu_items');
     });
 
+    it('class can navigate to query', () => {
+      cy.get(`.node[data-id="app/controllers"]`).click();
+
+      cy.get('.v-details-panel-list')
+        .contains('Classes')
+        .parent()
+        .within(() => {
+          cy.get('.list-item').contains('OrdersController').click();
+        });
+
+      cy.get('.v-details-panel-list')
+        .contains('Queries')
+        .parent()
+        .within(() => {
+          cy.get('.list-item').first().click();
+        });
+
+      cy.get('.details-panel-header')
+        .should('contain.text', 'Event')
+        .should('contain.text', 'SQL Select');
+    });
+
     it('edge can navigate to event', () => {
       cy.get(
         `.edgePath[data-from="HTTP server requests"][data-to="app/helpers"]`
