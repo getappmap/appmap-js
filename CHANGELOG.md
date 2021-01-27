@@ -15,6 +15,8 @@ to structure this file.
 
 - Expanding and collapsing a package will retain the highlight
 - Now displaying package leafs instead of root level packages
+- Fixed query links from a class opening an empty details panel
+- Query events details no longer use the raw SQL as the title for the panel
 
 ## [0.2.2]
 
