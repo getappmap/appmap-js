@@ -65,19 +65,21 @@ export default {
         return;
       }
 
-      // TODO.
-      // We're attempting to highlight any visible component within the hierarchy. We should instead
-      // make the selected object visible via expand/collapse.
       if (this.componentDiagram.hasObject(codeObject)) {
+        if (this.componentDiagram.isExpanded(codeObject)) {
+          this.componentDiagram.collapse(codeObject);
+        }
+
         this.componentDiagram.highlight(codeObject);
       } else {
-        const visibleObject = [
-          ...codeObject.descendants(),
-          codeObject,
-          ...codeObject.ancestors(),
-        ].find((obj) => this.componentDiagram.hasObject(obj));
+        const visibleObjectParent = [...codeObject.ancestors()].find((obj) =>
+          this.componentDiagram.hasObject(obj),
+        );
 
-        this.componentDiagram.highlight(visibleObject);
+        if (visibleObjectParent) {
+          this.componentDiagram.expand(visibleObjectParent);
+          this.componentDiagram.highlight(codeObject);
+        }
       }
     },
 

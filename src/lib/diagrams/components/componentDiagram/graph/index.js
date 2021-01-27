@@ -279,6 +279,11 @@ export default class Graph {
     });
   }
 
+  isExpanded(nodeId) {
+    const node = this.graph.node(nodeId);
+    return node && node.type === 'cluster';
+  }
+
   expand(codeObject, children) {
     const { id } = codeObject;
 

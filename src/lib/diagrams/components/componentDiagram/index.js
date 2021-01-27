@@ -369,8 +369,8 @@ export default class ComponentDiagram extends EventSource {
     this.scrollTo(codeObject);
   }
 
-  hasPackage(packageId) {
-    return this.currentDiagramModel.packages.has(packageId);
+  isExpanded(codeObject) {
+    return this.graph.isExpanded(codeObject.id);
   }
 
   hasObject(codeObject) {
