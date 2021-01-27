@@ -115,6 +115,9 @@ export default {
       background-color: darken($vs-code-gray1, 03);
       border-color: darken($vs-code-gray1, 03);
     }
+    &:focus {
+      outline: none;
+    }
   }
 
   .back-btn {
