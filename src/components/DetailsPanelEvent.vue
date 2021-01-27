@@ -1,6 +1,6 @@
 <template>
   <div class="details-panel-event">
-    <v-details-panel-header object-type="Event" :title="object.toString()">
+    <v-details-panel-header object-type="Event" :title="title">
       <template v-slot:links>
         <button
           href="#"
@@ -76,6 +76,7 @@ import sqlFormatter from 'sql-formatter';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import { SET_VIEW, VIEW_FLOW } from '@/store/vsCode';
+import { getSqlLabel } from '@/lib/util';
 
 export default {
   name: 'v-details-panel-event',
@@ -90,6 +91,14 @@ export default {
     },
   },
   computed: {
+    title() {
+      if (this.object.sqlQuery) {
+        return getSqlLabel(this.object);
+      }
+
+      return this.object.toString();
+    },
+
     hasParameters() {
       return this.object.parameters && this.object.parameters.length;
     },
