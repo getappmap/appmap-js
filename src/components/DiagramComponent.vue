@@ -61,7 +61,11 @@ export default {
         codeObject = selectedObject.codeObject;
       }
 
-      if (!(codeObject instanceof CodeObject)) {
+      // since we don't have functions and queries on diagram - we won't highlight it
+      if (
+        !(codeObject instanceof CodeObject) ||
+        ['function', 'query'].includes(codeObject.type)
+      ) {
         return;
       }
 
