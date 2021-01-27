@@ -93,7 +93,8 @@ export default {
 
         this.componentDiagram
           .on('click', (codeObject) => this.selectObject(codeObject))
-          .on('edge', (edge) => this.selectObject({ ...edge, type: 'edge' }));
+          .on('edge', (edge) => this.selectObject({ ...edge, type: 'edge' }))
+          .on('collapse', () => this.highlightSelectedComponent());
         this.highlightSelectedComponent();
       });
     },

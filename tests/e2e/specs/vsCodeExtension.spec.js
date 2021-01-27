@@ -323,4 +323,51 @@ context('VS Code Extension', () => {
 
     cy.get('.edgePath.highlight').should('have.length', 1);
   });
+
+  it('highlight is retained when expanding and collapsing a package', () => {
+    cy.get('.node[data-id="app/helpers"]')
+      .click()
+      .should('have.class', 'highlight')
+      .rightclick();
+
+    cy.get('.dropdown-menu').contains('Expand').click();
+
+    cy.get('.node[data-id^="app/helpers"]').should('have.class', 'highlight');
+    cy.get('.edgePath.highlight').should('have.length', 3);
+
+    cy.get('.cluster[data-id="app/helpers"]')
+      .click({
+        position: 'bottomLeft',
+      })
+      .should('have.class', 'highlight')
+      .rightclick({
+        position: 'bottomLeft',
+      });
+
+    cy.get('.dropdown-item:not([style*="display"])')
+      .contains('Collapse')
+      .click();
+
+    cy.get('.node[data-id="app/helpers"]').should('have.class', 'highlight');
+  });
+
+  it('highlight is retained collapsing a package and a child is selected', () => {
+    cy.get('.node[data-id="app/helpers"]').rightclick();
+
+    cy.get('.dropdown-menu').contains('Expand').click();
+
+    cy.get('.node[data-id="app/helpers/Spree::Admin::OrdersHelper"]')
+      .click()
+      .should('have.class', 'highlight');
+
+    cy.get('.cluster[data-id="app/helpers"]').rightclick({
+      position: 'bottomLeft',
+    });
+
+    cy.get('.dropdown-item:not([style*="display"])')
+      .contains('Collapse')
+      .click();
+
+    cy.get('.node[data-id="app/helpers"]').should('have.class', 'highlight');
+  });
 });
