@@ -161,9 +161,10 @@ context('VS Code Extension', () => {
 
     // Go back to the component diagram
     cy.get('.tabs .tab-btn').first().click();
-    cy.get(`.node[data-type="${CodeObjectType.HTTP}"]`)
-      .click()
-      .should('have.class', 'highlight');
+    cy.get(`.node[data-id="HTTP server requests->GET /admin/orders"]`).should(
+      'have.class',
+      'highlight',
+    );
   });
 
   it('the current event is highlighted upon opening the flow view', () => {
@@ -305,7 +306,22 @@ context('VS Code Extension', () => {
     );
   });
 
-  it('highlights only the first ancestor available if the selected object is not visible', () => {
+  it('expands/collapses package when child class was selected previously and package has been selected again', () => {
+    cy.get('.node[data-id="app/helpers"]').click();
+
+    cy.get('.v-details-panel-list').within(() => {
+      cy.get('a.list-item').first().click();
+    });
+
+    cy.get('.cluster[data-id="app/helpers"]').should('have.length', 1);
+
+    cy.get('.details-panel__buttons .back-btn').click();
+
+    cy.get('.cluster[data-id="app/helpers"]').should('have.length', 0);
+    cy.get('.node[data-id="app/helpers"]').should('have.length', 1);
+  });
+
+  it('highlights class when child function was selected', () => {
     cy.get('.node[data-id="app/helpers"]').rightclick();
 
     cy.get('.dropdown-menu').contains('Expand').click();
