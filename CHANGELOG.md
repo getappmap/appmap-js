@@ -5,6 +5,10 @@ All notable changes to the "appmap" extension will be documented in this file.
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how
 to structure this file.
 
+## [0.2.3]
+
+- Expanding and collapsing a package will retain the highlight
+
 ## [0.2.2]
 
 - Selecting a function will no longer select all the classes in an expanded
