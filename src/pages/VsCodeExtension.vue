@@ -12,10 +12,10 @@
           </v-details-button>
           <v-details-button icon="back" v-if="canGoBack" @click.native="goBack">
             Back to
-            <b v-if="prevSelectedObject">
+            <b v-if="prevSelectedObject && prevSelectedObject.name">
               {{ prevSelectedObject.name }}
             </b>
-            <b v-else>previous</b>
+            <span v-else>previous</span>
           </v-details-button>
         </template>
       </v-details-panel>

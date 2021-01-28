@@ -39,6 +39,7 @@ export default {
   font: inherit;
   font-size: 0.8rem;
   cursor: pointer;
+  outline: none;
 
   &:hover {
     background-color: darken($vs-code-gray1, 03);
