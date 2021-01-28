@@ -8,6 +8,7 @@ to structure this file.
 ## [0.2.3]
 
 - Expanding and collapsing a package will retain the highlight
+- Now displaying package leafs instead of root level packages
 
 ## [0.2.2]
 
