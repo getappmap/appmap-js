@@ -574,7 +574,6 @@ export default class FlowView extends EventSource {
   }
 
   highlight(eventId) {
-    this.hidePopper();
     this.nodeGroup
       .selectAll('.node')
       .classed('highlight', false)
