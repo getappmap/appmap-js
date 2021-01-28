@@ -49,12 +49,7 @@ export default class Graph {
       codeObject.type === CodeObjectType.PACKAGE ||
       codeObject.type === CodeObjectType.HTTP
     ) {
-      const numChildren = [
-        ...codeObject.classes,
-        ...codeObject.children.filter(
-          (obj) => obj.type === CodeObjectType.ROUTE,
-        ),
-      ].length;
+      const numChildren = codeObject.childLeafs().length;
 
       label += ` (${numChildren})`;
     }
