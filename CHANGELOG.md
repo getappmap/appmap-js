@@ -5,6 +5,12 @@ All notable changes to the "appmap" extension will be documented in this file.
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how
 to structure this file.
 
+## [0.2.4]
+
+- If a component diagram node is not associated with any events, don't render it
+- Fix an issue where HTTP events in the trace view would not be named
+  appropriately
+
 ## [0.2.3]
 
 - Expanding and collapsing a package will retain the highlight
