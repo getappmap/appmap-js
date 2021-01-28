@@ -234,14 +234,20 @@ export default class ComponentDiagram extends EventSource {
       .flat()
       .reduce((objects, obj) => {
         const children = obj.childLeafs();
+
         if (
           children.length === 1 &&
           children[0].type !== CodeObjectType.QUERY
         ) {
-          objects.push(children[0]);
+          // Make sure this object isn't empty
+          const eventCount = obj.allEvents.length;
+          if (eventCount > 0) {
+            objects.push(children[0]);
+          }
         } else {
           objects.push(obj);
         }
+
         return objects;
       }, []);
     const edges = outboundEdges(...codeObjects);
