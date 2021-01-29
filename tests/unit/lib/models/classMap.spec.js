@@ -27,7 +27,7 @@ describe('ClassMap', () => {
         'app/controllers',
       ]);
       expect(
-        Array.from(new Set(userPageClassMap.roots.map((co) => co.location))),
+        Array.from(new Set(userPageClassMap.roots.map((co) => co.location)))
       ).toEqual([undefined]);
     });
 
@@ -38,21 +38,21 @@ describe('ClassMap', () => {
 
     it('class should have locations list', () => {
       const userClass = userPageClassMap.codeObjectFromId(
-        'app/models/User::Show',
+        'app/models/User::Show'
       );
       expect(userClass.locations).toEqual(['app/models/user.rb']);
     });
 
     it('function should have locations list', () => {
       const userClass = userPageClassMap.codeObjectFromId(
-        'app/models/User::Show#accept_eula?',
+        'app/models/User::Show#accept_eula?'
       );
       expect(userClass.locations).toEqual(['app/models/user.rb:109']);
     });
 
     it('function can be looked up by location', () => {
       const userClass = userPageClassMap.codeObjectsAtLocation(
-        'app/models/user.rb:109',
+        'app/models/user.rb:109'
       );
       expect(userClass.map((co) => co.id)).toEqual([
         'app/models/User::Show#accept_eula?',
@@ -61,7 +61,7 @@ describe('ClassMap', () => {
 
     it('function can provide class name', () => {
       const userClass = userPageClassMap.codeObjectsAtLocation(
-        'app/models/user.rb:109',
+        'app/models/user.rb:109'
       );
       expect(userClass.map((co) => co.classOf)).toEqual(['User::Show']);
     });
@@ -98,7 +98,7 @@ describe('ClassMap', () => {
 
     it('guarantees routes are represented by a single parent', () => {
       const uniqueParents = new Set(
-        classMap.httpObject.children.map((obj) => obj.parent),
+        classMap.httpObject.children.map((obj) => obj.parent)
       );
 
       expect(uniqueParents.size).toEqual(1);
@@ -116,7 +116,7 @@ describe('ClassMap', () => {
 
       uniqueRoutes.forEach((route) => {
         const routeObject = httpObject.children.find(
-          (obj) => obj.type === 'route' && obj.name === route,
+          (obj) => obj.type === 'route' && obj.name === route
         );
 
         const numEvents = events.filter((e) => e.isCall() && e.route === route)
@@ -141,7 +141,7 @@ describe('ClassMap', () => {
 
     it('provides access to http events', () => {
       const totalHttpRoutes = events.filter(
-        (e) => e.isCall() && e.httpServerRequest,
+        (e) => e.isCall() && e.httpServerRequest
       ).length;
 
       const http = classMap.httpObject;
@@ -166,10 +166,10 @@ describe('ClassMap', () => {
       console.log(classMap.roots);
 
       expect(roots[0].id).toEqual(
-        'org/springframework/samples/petclinic/model',
+        'org/springframework/samples/petclinic/model'
       );
       expect(roots[1].id).toEqual(
-        'org/springframework/samples/petclinic/owner',
+        'org/springframework/samples/petclinic/owner'
       );
       expect(roots[2].id).toEqual('org/springframework/mock/web');
       expect(roots[3].id).toEqual('HTTP server requests');

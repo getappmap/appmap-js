@@ -41,7 +41,7 @@ export default class NodeGroup {
     const labelGroup = new LabelGroup(node.label);
     labelGroup.element.setAttribute(
       'transform',
-      `translate(-${node.labelWidth / 2},-${node.labelHeight / 2})`,
+      `translate(-${node.labelWidth / 2},-${node.labelHeight / 2})`
     );
     this.element.appendChild(labelGroup.element);
   }

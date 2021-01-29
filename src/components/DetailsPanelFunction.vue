@@ -35,7 +35,7 @@ export default {
   computed: {
     events() {
       return this.$store.state.appMap.events.filter(
-        (e) => e.isCall() && e.codeObject && e.codeObject.id === this.object.id,
+        (e) => e.isCall() && e.codeObject && e.codeObject.id === this.object.id
       );
     },
 
@@ -49,7 +49,7 @@ export default {
 
     outboundCalls() {
       return this.object.outboundConnections.filter(
-        (obj) => obj.type !== CodeObjectType.QUERY,
+        (obj) => obj.type !== CodeObjectType.QUERY
       );
     },
 

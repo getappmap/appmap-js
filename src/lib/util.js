@@ -155,7 +155,7 @@ export function getRepositoryUrl(
   url,
   path,
   commit = 'master',
-  lineNumber = null,
+  lineNumber = null
 ) {
   if (url && path) {
     const d = { url, path, lineNumber, commit };
