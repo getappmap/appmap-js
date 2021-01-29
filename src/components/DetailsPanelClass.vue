@@ -19,7 +19,7 @@
       title="Outbound connections"
       :items="outboundConnections"
     />
-    <v-details-panel-list title="Queries" :items="object.sqlQueries" />
+    <v-details-panel-list title="Queries" :items="queries" />
   </div>
 </template>
 
@@ -49,6 +49,12 @@ export default {
       return this.object.outboundConnections.filter(
         (obj) => obj.type !== CodeObjectType.QUERY
       );
+    },
+
+    queries() {
+      // We don't currently have a panel for query objects.
+      // Instead, link to the query events.
+      return this.object.sqlQueries.map((obj) => obj.events).flat();
     },
   },
 
