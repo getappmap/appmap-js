@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import './header.css';
 import VButton from '@/components/Button.vue';
 
 export default {
