@@ -5,6 +5,10 @@ All notable changes to the "appmap" extension will be documented in this file.
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how
 to structure this file.
 
+## [0.2.4]
+
+- "View source" from the context menu properly propagates the view source event
+
 ## [0.2.3]
 
 - If a component diagram node is not associated with any events, don't render it
