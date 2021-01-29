@@ -2,7 +2,7 @@
   <div class="details-panel-class">
     <v-details-panel-header object-type="Class" :title="object.name">
       <template v-slot:links>
-        <a href="#" @click.prevent="viewSource">View source</a>
+        <button @click.prevent="viewSource">View source</button>
       </template>
     </v-details-panel-header>
 

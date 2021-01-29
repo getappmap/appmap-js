@@ -55,7 +55,9 @@ export default {
   }
   &__ghost-link {
     margin: 1rem 0;
-    a {
+    button {
+      cursor: pointer;
+      background: transparent;
       padding: 0.25rem 0.7rem;
       border: 1px solid $base15;
       border-radius: $border-radius;
@@ -68,6 +70,9 @@ export default {
         background-color: darken($vs-code-gray1, 05);
         border-color: darken($vs-code-gray1, 05);
         color: $gray4;
+      }
+      &:focus {
+        outline: 0;
       }
     }
   }

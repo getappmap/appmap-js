@@ -207,7 +207,7 @@ context('VS Code Extension', () => {
       .contains('Classes')
       .parent()
       .within(() => {
-        cy.get('a.list-item').contains('OrdersHelper').click();
+        cy.get('.list-item').contains('OrdersHelper').click();
       });
 
     cy.get('.details-panel-header')
@@ -222,7 +222,7 @@ context('VS Code Extension', () => {
       .contains('Functions')
       .parent()
       .within(() => {
-        cy.get('a.list-item').contains('menu_items').click();
+        cy.get('.list-item').contains('menu_items').click();
       });
 
     cy.get('.details-panel-header')
@@ -237,7 +237,7 @@ context('VS Code Extension', () => {
       .contains('Functions')
       .parent()
       .within(() => {
-        cy.get('a.list-item').contains('menu_items').click();
+        cy.get('.list-item').contains('menu_items').click();
       });
 
     cy.get('.details-panel-header')
@@ -248,7 +248,7 @@ context('VS Code Extension', () => {
       .contains('Events')
       .parent()
       .within(() => {
-        cy.get('a.list-item').first().click();
+        cy.get('.list-item').first().click();
       });
 
     cy.get('.details-panel-header')
@@ -265,7 +265,7 @@ context('VS Code Extension', () => {
       .contains('Events')
       .parent()
       .within(() => {
-        cy.get('a.list-item').contains('BaseHelper#admin_layout').click();
+        cy.get('.list-item').contains('BaseHelper#admin_layout').click();
       });
 
     cy.get('.details-panel-header')
@@ -280,10 +280,10 @@ context('VS Code Extension', () => {
       .contains('Queries')
       .parent()
       .within(() => {
-        cy.get('a.list-item').first().click();
+        cy.get('.list-item').first().click();
       });
 
-    cy.get('.details-panel-header a').contains('Show in').click();
+    cy.get('.details-panel-header button').contains('Show in').click();
 
     cy.get('.diagram-flow').should('be.visible');
     cy.get('.appmap__flow-view .node').should('have.length', 248);
@@ -318,9 +318,56 @@ context('VS Code Extension', () => {
       .contains('Functions')
       .parent()
       .within(() => {
-        cy.get('a.list-item').first().click();
+        cy.get('.list-item').first().click();
       });
 
     cy.get('.edgePath.highlight').should('have.length', 1);
+  });
+
+  it('highlight is retained when expanding and collapsing a package', () => {
+    cy.get('.node[data-id="app/helpers"]')
+      .click()
+      .should('have.class', 'highlight')
+      .rightclick();
+
+    cy.get('.dropdown-menu').contains('Expand').click();
+
+    cy.get('.node[data-id^="app/helpers"]').should('have.class', 'highlight');
+    cy.get('.edgePath.highlight').should('have.length', 3);
+
+    cy.get('.cluster[data-id="app/helpers"]')
+      .click({
+        position: 'bottomLeft',
+      })
+      .should('have.class', 'highlight')
+      .rightclick({
+        position: 'bottomLeft',
+      });
+
+    cy.get('.dropdown-item:not([style*="display"])')
+      .contains('Collapse')
+      .click();
+
+    cy.get('.node[data-id="app/helpers"]').should('have.class', 'highlight');
+  });
+
+  it('highlight is retained collapsing a package and a child is selected', () => {
+    cy.get('.node[data-id="app/helpers"]').rightclick();
+
+    cy.get('.dropdown-menu').contains('Expand').click();
+
+    cy.get('.node[data-id="app/helpers/Spree::Admin::OrdersHelper"]')
+      .click()
+      .should('have.class', 'highlight');
+
+    cy.get('.cluster[data-id="app/helpers"]').rightclick({
+      position: 'bottomLeft',
+    });
+
+    cy.get('.dropdown-item:not([style*="display"])')
+      .contains('Collapse')
+      .click();
+
+    cy.get('.node[data-id="app/helpers"]').should('have.class', 'highlight');
   });
 });

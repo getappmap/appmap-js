@@ -314,6 +314,7 @@ export default class ComponentDiagram extends EventSource {
   }
 
   expand(codeObject, scrollToSubclasses = true) {
+    const nodeWasHighlighted = this.isHighlighted(codeObject);
     const children = [
       ...codeObject.classes,
       ...codeObject.children.filter((obj) => obj.type === CodeObjectType.ROUTE),
@@ -333,14 +334,20 @@ export default class ComponentDiagram extends EventSource {
       this.scrollTo(children);
     }
 
+    if (nodeWasHighlighted) {
+      this.graph.highlightNode(codeObject.id);
+    }
+
     this.emit('expand', codeObject);
   }
 
   collapse(codeObject, scrollToPackage = true) {
     const codeObjectPackage =
       codeObject.packageObject || codeObject.parent || codeObject;
+    const nodeWasHighlighted = this.isHighlighted(codeObjectPackage);
+    const { id } = codeObjectPackage;
 
-    this.graph.removeNode(codeObjectPackage.id);
+    this.graph.removeNode(id);
 
     [
       ...codeObjectPackage.classes,
@@ -361,6 +368,10 @@ export default class ComponentDiagram extends EventSource {
       this.scrollTo(codeObjectPackage);
     }
 
+    if (nodeWasHighlighted) {
+      this.graph.highlightNode(id);
+    }
+
     this.emit('collapse', codeObjectPackage);
   }
 
@@ -375,5 +386,11 @@ export default class ComponentDiagram extends EventSource {
 
   hasObject(codeObject) {
     return Boolean(this.graph.node(codeObject.id));
+  }
+
+  isHighlighted(codeObject) {
+    const { id } = codeObject;
+    const element = this.element.node().querySelector(`[data-id="${id}"]`);
+    return element && element.classList.contains('highlight');
   }
 }

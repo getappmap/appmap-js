@@ -154,6 +154,7 @@ export default class Graph {
       if (node.type === 'cluster') {
         const clusterGroup = new ClusterGroup(node);
         node.group = clusterGroup;
+        node.element = clusterGroup.element;
         this.clustersGroup.appendChild(clusterGroup.element);
       } else {
         const nodeGroup = new NodeGroup(node, this.options.animation);
@@ -214,7 +215,6 @@ export default class Graph {
     const children = this.graph.children(id);
     if (highlightedNode.type === 'cluster') {
       children.forEach((childId) => this.highlightNode(childId));
-      return highlightedNode.codeObject;
     }
 
     if (highlightedNode.element.classList.contains('dim')) {

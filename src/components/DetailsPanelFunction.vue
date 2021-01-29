@@ -2,7 +2,7 @@
   <div>
     <v-details-panel-header object-type="Function" :title="object.name">
       <template v-slot:links>
-        <a href="#" @click.prevent="viewSource">View source</a>
+        <button @click.prevent="viewSource">View source</button>
       </template>
     </v-details-panel-header>
     <v-details-panel-list title="Events" :items="object.events" />

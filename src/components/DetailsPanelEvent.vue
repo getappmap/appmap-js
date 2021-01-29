@@ -2,22 +2,22 @@
   <div class="details-panel-event">
     <v-details-panel-header object-type="Event" :title="object.toString()">
       <template v-slot:links>
-        <a
+        <button
           href="#"
           @click.prevent="viewEvent"
           v-if="shouldDisplayViewEvent"
           class="details-panel-event__view-event"
         >
           Show in Trace
-        </a>
-        <a
+        </button>
+        <button
           href="#"
           v-if="location !== null"
           @click.prevent="viewSource"
           ref="viewSource"
         >
           View source
-        </a>
+        </button>
       </template>
     </v-details-panel-header>
 
