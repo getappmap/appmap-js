@@ -5,6 +5,10 @@ All notable changes to the "appmap" extension will be documented in this file.
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how
 to structure this file.
 
+## [0.2.5]
+
+- Expanded packages use their short name
+
 ## [0.2.4]
 
 - "View source" from the context menu properly propagates the view source event
