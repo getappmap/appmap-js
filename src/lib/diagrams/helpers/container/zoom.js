@@ -51,7 +51,7 @@ function createDOM(viewportZoom) {
   controls.buttonZoomIn.addEventListener('click', () => {
     viewportZoom.zoomScale = Math.min(
       1.0,
-      viewportZoom.zoomScale + viewportZoom.step,
+      viewportZoom.zoomScale + viewportZoom.step
     );
     viewportZoom.emit('zoom', viewportZoom.zoomScale);
   });
@@ -59,7 +59,7 @@ function createDOM(viewportZoom) {
   controls.buttonZoomOut.addEventListener('click', () => {
     viewportZoom.zoomScale = Math.max(
       0.0,
-      viewportZoom.zoomScale - viewportZoom.step,
+      viewportZoom.zoomScale - viewportZoom.step
     );
     viewportZoom.emit('zoom', viewportZoom.zoomScale);
   });
@@ -122,9 +122,8 @@ export default class ContainerZoom extends EventSource {
     container.on('move', (transform) =>
       updateZoom(
         this,
-        (transform.k - options.minRatio) /
-          (options.maxRatio - options.minRatio),
-      ),
+        (transform.k - options.minRatio) / (options.maxRatio - options.minRatio)
+      )
     );
   }
 }

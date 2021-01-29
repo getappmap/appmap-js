@@ -8,7 +8,7 @@ const scenarioData = {
 };
 
 export default {
-  title: 'Pages',
+  title: 'Pages/VS Code',
   component: VVsCodeExtension,
   argTypes: {
     scenario: {
@@ -21,7 +21,7 @@ export default {
   },
 };
 
-export const vsCodeExtension = (args, { argTypes }) => ({
+export const extension = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VVsCodeExtension },
   template: '<v-vs-code-extension v-bind="$props" ref="vsCode" />',

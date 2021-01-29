@@ -193,7 +193,7 @@ export default class Timeline extends EventSource {
       .map((child) => child.data.id);
 
     const selectedEvents = events.filter((d) =>
-      selectedIds.includes(d.data.id),
+      selectedIds.includes(d.data.id)
     );
 
     selectedEvents.selectAll('rect').style('opacity', null);
@@ -286,7 +286,7 @@ export default class Timeline extends EventSource {
           d &&
           d.data &&
           d.depth === node.depth &&
-          (direction < 0 ? node.x0 > d.x0 : node.x0 < d.x0),
+          (direction < 0 ? node.x0 > d.x0 : node.x0 < d.x0)
       )
       .data();
 

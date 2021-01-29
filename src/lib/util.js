@@ -155,7 +155,7 @@ export function getRepositoryUrl(
   url,
   path,
   commit = 'master',
-  lineNumber = null,
+  lineNumber = null
 ) {
   if (url && path) {
     const d = { url, path, lineNumber, commit };
@@ -232,14 +232,12 @@ const splitCamelCase = (str) => {
 // Builds the fully qualified function name of a function (static or instance) within a
 // fully qualified class name.
 export function fullyQualifiedFunctionName(event) {
-  /* eslint-disable camelcase */
-  const { defined_class, method_id } = event;
-  if (defined_class && method_id) {
-    return [defined_class, method_id].join(event.static ? '.' : '#');
+  const label = getLabel(event);
+  if (label) {
+    return label;
   }
 
-  return getLabel(event);
-  /* eslint-enable camelcase */
+  return event.toString();
 }
 
 // tokenizeIdentifier returns tokens of an identifier split by non-alphanumeric and camel casing

@@ -44,7 +44,7 @@ export default class Components {
 
       if (cls.type === 'function') {
         const locationKey = [cls.location || '<path>:<line>', cls.name].join(
-          '#',
+          '#'
         );
         const className = fqClassName.join('::');
         const packageName = fqPackageName.join('/');

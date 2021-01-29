@@ -8,7 +8,7 @@ store.commit(SET_APPMAP_DATA, scenario);
 describe('DetailsPanelEvent.vue', () => {
   it('view source emits an event from root', () => {
     const event = store.state.appMap.events.find(
-      (e) => e.isCall() && e.codeObject && e.codeObject.location,
+      (e) => e.isCall() && e.codeObject && e.codeObject.location
     );
     const wrapper = mount(DetailsPanelEvent, {
       propsData: {
@@ -26,7 +26,7 @@ describe('DetailsPanelEvent.vue', () => {
 
   it('HTTP events display response values', () => {
     const event = store.state.appMap.events.find(
-      (e) => e.http_server_response && e.http_server_response.mime_type,
+      (e) => e.http_server_response && e.http_server_response.mime_type
     ).callEvent;
 
     const wrapper = mount(DetailsPanelEvent, {

@@ -17,7 +17,7 @@ function addCodeObject(codeObjectArray, codeObject, parent = null) {
   // This ignores static/non-static function collisions and function overloads, though this method
   // is never currently called in a context where those edge cases exist.
   const existingObject = codeObjectArray.find(
-    (obj) => obj.type === codeObject.type && obj.name === codeObject.name,
+    (obj) => obj.type === codeObject.type && obj.name === codeObject.name
   );
 
   if (!existingObject) {
@@ -25,7 +25,7 @@ function addCodeObject(codeObjectArray, codeObject, parent = null) {
     codeObjectArray.push(codeObject);
   } else {
     codeObject.children.forEach((child) =>
-      addCodeObject(existingObject.children, child, existingObject),
+      addCodeObject(existingObject.children, child, existingObject)
     );
   }
 }
@@ -68,7 +68,7 @@ export default class ClassMap {
   search(query) {
     const queryLower = query.toLowerCase();
     return this.codeObjects.filter(
-      (co) => co.id.toLowerCase().indexOf(queryLower) !== -1,
+      (co) => co.id.toLowerCase().indexOf(queryLower) !== -1
     );
   }
 
@@ -82,7 +82,7 @@ export default class ClassMap {
 
   codeObjectFromEvent(event) {
     return this.codeObjects.find(
-      (co) => co.id.indexOf(event.toString()) !== -1,
+      (co) => co.id.indexOf(event.toString()) !== -1
     );
   }
 

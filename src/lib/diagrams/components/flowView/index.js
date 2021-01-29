@@ -92,7 +92,7 @@ function buildCurveCommands(x1, y1, x2, y2) {
 
 function getNodeElementPosition(nodeId, selector) {
   const elem = document.querySelector(
-    `.node[data-node-id='${nodeId}'] ${selector}`,
+    `.node[data-node-id='${nodeId}'] ${selector}`
   );
   if (!elem) return null;
 
@@ -109,7 +109,7 @@ function getNodeElementPosition(nodeId, selector) {
 function getConnectionPosition(nodeId, type) {
   return getNodeElementPosition(
     nodeId,
-    `.connector[data-connection-type="${type}"]`,
+    `.connector[data-connection-type="${type}"]`
   );
 }
 
@@ -272,7 +272,7 @@ function getScopedObjects(behaviorNode) {
 
   const ancestors = parent.ancestors();
   ancestors.forEach((ancestor) =>
-    recordScopedObjects(objectsInScope, ancestor),
+    recordScopedObjects(objectsInScope, ancestor)
   );
 
   return objectsInScope;
@@ -386,7 +386,7 @@ export default class FlowView extends EventSource {
     document.addEventListener('click', () => this.hidePopper());
 
     this.on('popper', (element) =>
-      lazyPanToElement(this.container.containerController, element, 10),
+      lazyPanToElement(this.container.containerController, element, 10)
     );
   }
 
@@ -519,7 +519,7 @@ export default class FlowView extends EventSource {
         .selectAll(':scope > li')
         .data(
           (d) => d.children || [],
-          (d) => d.data.behavior.id,
+          (d) => d.data.behavior.id
         )
         .join(bind);
     }
