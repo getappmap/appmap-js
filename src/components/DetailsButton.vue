@@ -1,6 +1,11 @@
 <template>
-  <button type="button" :class="className">
-    <slot />
+  <button type="button" class="details-btn">
+    <i :class="iconClass" v-if="icon" />
+
+    <!-- Wrap the slot in a single object for better alignment -->
+    <span>
+      <slot />
+    </span>
   </button>
 </template>
 
@@ -15,12 +20,8 @@ export default {
   },
 
   computed: {
-    className() {
-      const classNames = ['details-btn'];
-      if (this.icon) {
-        classNames.push(`details-btn--icon-${this.icon}`);
-      }
-      return classNames;
+    iconClass() {
+      return `icon icon--${this.icon}`;
     },
   },
 };
@@ -28,7 +29,7 @@ export default {
 
 <style scoped lang="scss">
 .details-btn {
-  display: inline-block;
+  display: flex;
   border: 1px solid lighten($gray3, 05);
   border-radius: $border-radius;
   padding: 0.25rem 0.6rem 0.25rem 0.5rem;
@@ -40,6 +41,8 @@ export default {
   font-size: 0.8rem;
   cursor: pointer;
   outline: none;
+  text-align: left;
+  align-items: center;
 
   &:hover {
     background-color: darken($vs-code-gray1, 03);
@@ -49,12 +52,16 @@ export default {
   & + & {
     margin-top: 1rem;
   }
+}
 
-  &.details-btn--icon-clear:before {
+.icon {
+  margin-right: 0.5em;
+
+  &--clear:before {
     content: '✖ ';
   }
 
-  &.details-btn--icon-back:before {
+  &--back:before {
     content: '◄ ';
   }
 }
