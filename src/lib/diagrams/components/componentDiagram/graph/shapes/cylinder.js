@@ -11,7 +11,7 @@ export default function Cylinder(width, height) {
   path.setAttribute('d', shape);
   path.setAttribute(
     'transform',
-    `translate(${-width / 2}, ${-(height / 2 + ry)})`,
+    `translate(${-width / 2}, ${-(height / 2 + ry)})`
   );
 
   return path;

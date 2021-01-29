@@ -1,23 +1,20 @@
 <template>
   <div class="details-panel-event">
-    <v-details-panel-header object-type="Event" :title="object.toString()">
+    <v-details-panel-header object-type="Event" :title="title">
       <template v-slot:links>
-        <a
-          href="#"
-          @click.prevent="viewEvent"
+        <v-details-button
           v-if="shouldDisplayViewEvent"
-          class="details-panel-event__view-event"
+          @click.native="viewEvent"
         >
           Show in Trace
-        </a>
-        <a
-          href="#"
+        </v-details-button>
+        <v-details-button
           v-if="location !== null"
-          @click.prevent="viewSource"
+          @click.native="viewSource"
           ref="viewSource"
         >
           View source
-        </a>
+        </v-details-button>
       </template>
     </v-details-panel-header>
 
@@ -73,13 +70,16 @@
 
 <script>
 import sqlFormatter from 'sql-formatter';
+import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import { SET_VIEW, VIEW_FLOW } from '@/store/vsCode';
+import { getSqlLabel } from '@/lib/util';
 
 export default {
   name: 'v-details-panel-event',
   components: {
+    VDetailsButton,
     VDetailsPanelList,
     VDetailsPanelHeader,
   },
@@ -90,6 +90,14 @@ export default {
     },
   },
   computed: {
+    title() {
+      if (this.object.sqlQuery) {
+        return getSqlLabel(this.object);
+      }
+
+      return this.object.toString();
+    },
+
     hasParameters() {
       return this.object.parameters && this.object.parameters.length;
     },
@@ -145,12 +153,6 @@ export default {
 
 <style scoped lang="scss">
 .details-panel-event {
-  &__view-event {
-    display: inline-block;
-    padding: 0 2rem;
-    margin-bottom: 1rem;
-  }
-
   h3 {
     padding: 0 2rem;
   }

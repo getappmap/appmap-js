@@ -94,13 +94,13 @@ export default class CodeObject {
 
   get classObject() {
     return [this, ...this.ancestors()].find(
-      (obj) => obj.type === CodeObjectType.CLASS,
+      (obj) => obj.type === CodeObjectType.CLASS
     );
   }
 
   get packageObject() {
     return [this, ...this.ancestors()].find(
-      (obj) => obj.type === CodeObjectType.PACKAGE,
+      (obj) => obj.type === CodeObjectType.PACKAGE
     );
   }
 
@@ -108,18 +108,18 @@ export default class CodeObject {
     if (this.type === CodeObjectType.CLASS) {
       // getting the functions of a class should not return functions of nested classes
       return this.children.filter(
-        (obj) => obj.type === CodeObjectType.FUNCTION,
+        (obj) => obj.type === CodeObjectType.FUNCTION
       );
     }
 
     return this.descendants().filter(
-      (obj) => obj.type === CodeObjectType.FUNCTION,
+      (obj) => obj.type === CodeObjectType.FUNCTION
     );
   }
 
   get classes() {
     return [this, ...this.descendants()].filter(
-      (obj) => obj.type === CodeObjectType.CLASS && obj.functions.length,
+      (obj) => obj.type === CodeObjectType.CLASS && obj.functions.length
     );
   }
 
@@ -150,6 +150,50 @@ export default class CodeObject {
     }
 
     return parents;
+  }
+
+  // Leafs retrieves the leaf objects for the current type that contain children of another type. It
+  // is useful for retrieving children without worrying about types or deeply nested objects.
+  //
+  // For example, the leafs of the package "com" may be:
+  // - com.myorg.myapp
+  // - com.myorg.myapp.api
+  //
+  // Whereas its children would only contain "myorg", and its descendants would include functions
+  // and classes from any other nested package.
+  leafs() {
+    const { type } = this;
+    const queue = [this];
+    const leafArray = [];
+
+    while (queue.length) {
+      const obj = queue.pop();
+      const childrenOfType = obj.children.filter(
+        (child) => child.type === type
+      );
+
+      // If this object has children of another type, consider it a leaf.
+      // For example, a package containing a class.
+      if (childrenOfType.length) {
+        queue.push(...childrenOfType);
+      }
+
+      // If, however, this object has a variety of child types, it's both a leaf and a parent
+      if (
+        (!obj.children.length && obj.type === type) ||
+        childrenOfType.length !== obj.children.length
+      ) {
+        leafArray.push(obj);
+      }
+    }
+
+    return leafArray;
+  }
+
+  // Returns leafs of all children. Similar to the `classes` accessor, but returns children of any
+  // type.
+  childLeafs() {
+    return this.children.map((child) => child.leafs()).flat();
   }
 
   visit(fn, stack = []) {
@@ -288,6 +332,8 @@ export default class CodeObject {
         return `${this.classOf}${this.static ? '.' : '#'}${this.name}`;
       case CodeObjectType.CLASS:
         return this.classOf;
+      case CodeObjectType.PACKAGE:
+        return this.packageOf;
       default:
         return this.name;
     }

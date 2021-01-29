@@ -91,50 +91,11 @@ export default {
   }
 
   &__buttons {
+    padding: 0 2rem 1rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-  }
-
-  .clear-btn {
-    display: inline-block;
-    border: 1px solid lighten($gray3, 05);
-    border-radius: $border-radius;
-    margin-bottom: 1rem;
-    margin-left: 2rem;
-    padding: 0.25rem 0.6rem 0.25rem 0.5rem;
-    letter-spacing: 0.5px;
-    color: $gray4;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    &:before {
-      content: '✖ ';
-    }
-    &:hover {
-      background-color: darken($vs-code-gray1, 03);
-      border-color: darken($vs-code-gray1, 03);
-    }
-  }
-
-  .back-btn {
-    display: inline-block;
-    border: 1px solid $base15;
-    border-radius: $border-radius;
-    margin-bottom: 1rem;
-    margin-left: 2rem;
-    padding: 0.25rem 0.6rem 0.25rem 0.5rem;
-    letter-spacing: 0.5px;
-    color: $gray4;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    &:before {
-      content: '◄ ';
-    }
-    &:hover {
-      background-color: darken($vs-code-gray1, 05);
-      border-color: darken($vs-code-gray1, 03);
-    }
   }
 }
 </style>

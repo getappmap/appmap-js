@@ -54,7 +54,7 @@ function bindEvents(componentDiagram, classMap) {
     const { to, from } = edge.parentElement.dataset;
     const { codeObjectTo, codeObjectFrom } = componentDiagram.graph.edge(
       from,
-      to,
+      to
     );
 
     componentDiagram.emit('edge', { to: codeObjectTo, from: codeObjectFrom });
@@ -82,7 +82,7 @@ const COMPONENT_OPTIONS = {
           .text('Set as root')
           .selector('.nodes .node')
           .transform(
-            (e) => componentDiagram.graph.node(e.dataset.id).codeObject,
+            (e) => componentDiagram.graph.node(e.dataset.id).codeObject
           )
           .on('execute', (id) => componentDiagram.makeRoot(id)),
       (item) =>
@@ -90,7 +90,7 @@ const COMPONENT_OPTIONS = {
           .text('Expand')
           .selector('g.node')
           .transform(
-            (e) => componentDiagram.graph.node(e.dataset.id).codeObject,
+            (e) => componentDiagram.graph.node(e.dataset.id).codeObject
           )
           .condition((obj) => expandableTypes.includes(obj.type))
           .on('execute', (id) => componentDiagram.expand(id)),
@@ -99,12 +99,12 @@ const COMPONENT_OPTIONS = {
           .text('Collapse')
           .selector('g.node')
           .transform(
-            (e) => componentDiagram.graph.node(e.dataset.id).codeObject,
+            (e) => componentDiagram.graph.node(e.dataset.id).codeObject
           )
           .condition(
             (obj) =>
               !expandableTypes.includes(obj.type) &&
-              obj.type !== CodeObjectType.DATABASE,
+              obj.type !== CodeObjectType.DATABASE
           )
           .on('execute', (id) => componentDiagram.collapse(id)),
       (item) =>
@@ -112,7 +112,7 @@ const COMPONENT_OPTIONS = {
           .text('Collapse')
           .selector('g.cluster')
           .transform(
-            (e) => componentDiagram.graph.node(e.dataset.id).codeObject,
+            (e) => componentDiagram.graph.node(e.dataset.id).codeObject
           )
           .on('execute', (obj) => componentDiagram.collapse(obj)),
       (item) =>
@@ -124,7 +124,7 @@ const COMPONENT_OPTIONS = {
             return node.codeObject.locations[0];
           })
           .on('execute', (location) =>
-            componentDiagram.emit('viewSource', location),
+            componentDiagram.emit('viewSource', location)
           ),
       (item) =>
         item.text('Reset view').on('execute', () => {
@@ -144,7 +144,7 @@ function inboundEdges(...codeObjects) {
         .map((connection) => ({
           from: connection,
           to: obj,
-        })),
+        }))
     )
     .flat()
     .filter((edge) => edge.to !== edge.from);
@@ -159,7 +159,7 @@ function outboundEdges(...codeObjects) {
         .map((connection) => ({
           from: obj,
           to: connection,
-        })),
+        }))
     )
     .flat()
     .filter((edge) => edge.to !== edge.from);
@@ -200,7 +200,7 @@ export default class ComponentDiagram extends EventSource {
         if (this.container.containerController.contextMenu) {
           this.container.containerController.contextMenu.close();
         }
-      },
+      }
     );
 
     this.container.containerController.element.addEventListener('move', () => {
@@ -213,7 +213,7 @@ export default class ComponentDiagram extends EventSource {
       'dblclick',
       () => {
         this.clearFocus();
-      },
+      }
     );
   }
 
@@ -229,23 +229,31 @@ export default class ComponentDiagram extends EventSource {
       },
     });
 
-    const codeObjects = classMap.roots.reduce((objects, obj) => {
-      const children = [
-        ...obj.classes,
-        ...obj.children.filter((child) => child.type === CodeObjectType.ROUTE),
-      ];
-      if (children.length === 1) {
-        objects.push(children[0]);
-      } else {
-        objects.push(obj);
-      }
+    const codeObjects = classMap.roots
+      .map((root) => root.leafs())
+      .flat()
+      .reduce((objects, obj) => {
+        const children = obj.childLeafs();
 
-      return objects;
-    }, []);
+        if (
+          children.length === 1 &&
+          children[0].type !== CodeObjectType.QUERY
+        ) {
+          // Make sure this object isn't empty
+          const eventCount = obj.allEvents.length;
+          if (eventCount > 0) {
+            objects.push(children[0]);
+          }
+        } else {
+          objects.push(obj);
+        }
+
+        return objects;
+      }, []);
     const edges = outboundEdges(...codeObjects);
 
     codeObjects.forEach((codeObject) =>
-      this.graph.setNodeFromCodeObject(codeObject),
+      this.graph.setNodeFromCodeObject(codeObject)
     );
     edges.forEach((edge) => this.graph.setEdge(edge.from, edge.to));
 
@@ -299,7 +307,7 @@ export default class ComponentDiagram extends EventSource {
 
     const scrollOptions = this.graph.scrollToNodes(
       containerController.element,
-      codeObjects.map((obj) => obj.id),
+      codeObjects.map((obj) => obj.id)
     );
 
     if (scrollOptions) {
@@ -314,14 +322,12 @@ export default class ComponentDiagram extends EventSource {
   }
 
   expand(codeObject, scrollToSubclasses = true) {
-    const children = [
-      ...codeObject.classes,
-      ...codeObject.children.filter((obj) => obj.type === CodeObjectType.ROUTE),
-    ];
+    const nodeWasHighlighted = this.isHighlighted(codeObject);
+    const children = codeObject.children.map((child) => child.leafs()).flat();
 
     this.graph.expand(codeObject, children);
     allEdges(...children).forEach(({ from, to }) =>
-      this.graph.setEdge(from, to),
+      this.graph.setEdge(from, to)
     );
 
     // HACK.
@@ -333,32 +339,39 @@ export default class ComponentDiagram extends EventSource {
       this.scrollTo(children);
     }
 
+    if (nodeWasHighlighted) {
+      this.graph.highlightNode(codeObject.id);
+    }
+
     this.emit('expand', codeObject);
   }
 
   collapse(codeObject, scrollToPackage = true) {
     const codeObjectPackage =
       codeObject.packageObject || codeObject.parent || codeObject;
+    const nodeWasHighlighted = this.isHighlighted(codeObjectPackage);
+    const { id } = codeObjectPackage;
 
-    this.graph.removeNode(codeObjectPackage.id);
+    this.graph.removeNode(id);
 
-    [
-      ...codeObjectPackage.classes,
-      ...codeObjectPackage.children.filter(
-        (obj) => obj.type === CodeObjectType.ROUTE,
-      ),
-    ].forEach((child) => this.graph.removeNode(child.id));
+    codeObjectPackage
+      .childLeafs()
+      .forEach((child) => this.graph.removeNode(child.id));
 
     this.graph.setNodeFromCodeObject(codeObjectPackage);
 
     allEdges(codeObjectPackage).forEach(({ to, from }) =>
-      this.graph.setEdge(from, to),
+      this.graph.setEdge(from, to)
     );
 
     this.graph.collapse();
 
     if (scrollToPackage) {
       this.scrollTo(codeObjectPackage);
+    }
+
+    if (nodeWasHighlighted) {
+      this.graph.highlightNode(id);
     }
 
     this.emit('collapse', codeObjectPackage);
@@ -375,5 +388,11 @@ export default class ComponentDiagram extends EventSource {
 
   hasObject(codeObject) {
     return Boolean(this.graph.node(codeObject.id));
+  }
+
+  isHighlighted(codeObject) {
+    const { id } = codeObject;
+    const element = this.element.node().querySelector(`[data-id="${id}"]`);
+    return element && element.classList.contains('highlight');
   }
 }

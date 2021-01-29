@@ -2,7 +2,9 @@
   <div class="details-panel-class">
     <v-details-panel-header object-type="Class" :title="object.name">
       <template v-slot:links>
-        <a href="#" @click.prevent="viewSource">View source</a>
+        <v-details-button @click.native="viewSource">
+          View source
+        </v-details-button>
       </template>
     </v-details-panel-header>
 
@@ -19,11 +21,12 @@
       title="Outbound connections"
       :items="outboundConnections"
     />
-    <v-details-panel-list title="Queries" :items="object.sqlQueries" />
+    <v-details-panel-list title="Queries" :items="queries" />
   </div>
 </template>
 
 <script>
+import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import { CodeObjectType } from '@/lib/models/codeObject';
@@ -31,6 +34,7 @@ import { CodeObjectType } from '@/lib/models/codeObject';
 export default {
   name: 'v-details-panel-class',
   components: {
+    VDetailsButton,
     VDetailsPanelHeader,
     VDetailsPanelList,
   },
@@ -49,6 +53,12 @@ export default {
       return this.object.outboundConnections.filter(
         (obj) => obj.type !== CodeObjectType.QUERY,
       );
+    },
+
+    queries() {
+      // We don't currently have a panel for query objects.
+      // Instead, link to the query events.
+      return this.object.sqlQueries.map((obj) => obj.events).flat();
     },
   },
 

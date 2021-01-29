@@ -1,0 +1,1245 @@
+{
+    "events": [
+        {
+            "id": 1,
+            "path": "src/main/java/org/springframework/web/filter/OncePerRequestFilter.java",
+            "event": "call",
+            "lineno": 91,
+            "static": false,
+            "message": [
+                {
+                    "kind": "req",
+                    "name": "date",
+                    "class": "java.lang.String",
+                    "value": "2020-09-12",
+                    "object_id": 1713864906
+                },
+                {
+                    "kind": "req",
+                    "name": "description",
+                    "class": "java.lang.String",
+                    "value": "routine check up",
+                    "object_id": 1522361550
+                },
+                {
+                    "kind": "req",
+                    "name": "petId",
+                    "class": "java.lang.String",
+                    "value": "9",
+                    "object_id": 801870463
+                },
+                {
+                    "kind": "req",
+                    "name": "ownerId",
+                    "class": "java.lang.String",
+                    "value": "7",
+                    "object_id": 709319113
+                },
+                {
+                    "kind": "req",
+                    "name": "petId",
+                    "class": "java.lang.String",
+                    "value": "9",
+                    "object_id": 611526333
+                }
+            ],
+            "method_id": "doFilter",
+            "thread_id": 556,
+            "defined_class": "org.springframework.web.filter.OncePerRequestFilter",
+            "http_server_request": {
+                "protocol": "HTTP/1.1",
+                "path_info": "/owners/7/pets/9/visits/new",
+                "request_method": "POST",
+                "normalized_path_info": "/owners/:ownerId/pets/:petId/visits/new",
+                "client_normalized_path_info": "/owners/:ownerId/pets/:petId/visits/new"
+            }
+        },
+        {
+            "id": 2,
+            "path": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java",
+            "event": "call",
+            "lineno": 59,
+            "static": false,
+            "receiver": {
+                "class": "org.springframework.samples.petclinic.owner.VisitController",
+                "value": "org.springframework.samples.petclinic.owner.VisitController@eb0d286",
+                "object_id": 246469254
+            },
+            "method_id": "setAllowedFields",
+            "thread_id": 556,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "dataBinder",
+                    "class": "org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder",
+                    "value": "org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder@4f9594d9",
+                    "object_id": 1335203033
+                }
+            ],
+            "defined_class": "org.springframework.samples.petclinic.owner.VisitController"
+        },
+        {
+            "id": 3,
+            "path": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java",
+            "event": "return",
+            "lineno": 59,
+            "static": false,
+            "method_id": "setAllowedFields",
+            "parent_id": 2,
+            "thread_id": 556,
+            "defined_class": "org.springframework.samples.petclinic.owner.VisitController"
+        },
+        {
+            "id": 4,
+            "path": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java",
+            "event": "call",
+            "lineno": 74,
+            "static": false,
+            "receiver": {
+                "class": "org.springframework.samples.petclinic.owner.VisitController",
+                "value": "org.springframework.samples.petclinic.owner.VisitController@eb0d286",
+                "object_id": 246469254
+            },
+            "method_id": "loadPetWithVisit",
+            "thread_id": 556,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "petId",
+                    "class": "java.lang.Integer",
+                    "value": "9",
+                    "object_id": 1916011657
+                },
+                {
+                    "kind": "req",
+                    "name": "model",
+                    "class": "org.springframework.validation.support.BindingAwareModelMap",
+                    "value": "{}",
+                    "object_id": 1073920961
+                }
+            ],
+            "defined_class": "org.springframework.samples.petclinic.owner.VisitController"
+        },
+        {
+            "id": 5,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/AbstractPoolBackedDataSource.java",
+            "event": "call",
+            "lineno": 140,
+            "static": false,
+            "receiver": {
+                "class": "com.mchange.v2.c3p0.ComboPooledDataSource",
+                "value": "com.mchange.v2.c3p0.ComboPooledDataSource[ identityToken -> 1hge136ac1x0f595mu1co1|68e7e7a0, dataSourceName -> 1hge136ac1x0f595mu1co1|68e7e7a0 ]",
+                "object_id": 1760028576
+            },
+            "method_id": "getConnection",
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource"
+        },
+        {
+            "id": 6,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "call",
+            "lineno": 208,
+            "static": false,
+            "receiver": {
+                "class": "com.mchange.v2.c3p0.impl.NewPooledConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewPooledConnection@51bc8c24",
+                "object_id": 1371311140
+            },
+            "method_id": "getConnection",
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 7,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "return",
+            "lineno": 208,
+            "static": false,
+            "method_id": "getConnection",
+            "parent_id": 6,
+            "thread_id": 556,
+            "return_value": {
+                "class": "com.mchange.v2.c3p0.impl.NewProxyConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewProxyConnection@1c8f9233 [wrapping: com.mysql.cj.jdbc.ConnectionImpl@73b21a5d]",
+                "object_id": 479171123
+            },
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 8,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/AbstractPoolBackedDataSource.java",
+            "event": "return",
+            "lineno": 140,
+            "static": false,
+            "method_id": "getConnection",
+            "parent_id": 5,
+            "thread_id": 556,
+            "return_value": {
+                "class": "com.mchange.v2.c3p0.impl.NewProxyConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewProxyConnection@1c8f9233 [wrapping: com.mysql.cj.jdbc.ConnectionImpl@73b21a5d]",
+                "object_id": 479171123
+            },
+            "defined_class": "com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource"
+        },
+        {
+            "id": 9,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewProxyConnection.java",
+            "event": "call",
+            "lineno": 536,
+            "static": false,
+            "method_id": "prepareStatement",
+            "sql_query": {
+                "sql": "SELECT `PET`.`ID` AS `ID`, `PET`.`type_id` AS `type_id`, `PET`.`NAME` AS `NAME`, `PET`.`owner_id` AS `owner_id`, `PET`.`BIRTH_DATE` AS `BIRTH_DATE` FROM `PET` WHERE `PET`.`ID` = ?",
+                "normalized": false,
+                "database_type": "MySQL",
+                "normalized_sql": "SELECT `PET`.`ID` AS `ID`, `PET`.`type_id` AS `type_id`, `PET`.`NAME` AS `NAME`, `PET`.`owner_id` AS `owner_id`, `PET`.`BIRTH_DATE` AS `BIRTH_DATE` FROM `PET` WHERE `PET`.`ID` = ?"
+            },
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewProxyConnection"
+        },
+        {
+            "id": 10,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewProxyConnection.java",
+            "event": "return",
+            "lineno": 536,
+            "static": false,
+            "method_id": "prepareStatement",
+            "parent_id": 9,
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewProxyConnection"
+        },
+        {
+            "id": 11,
+            "path": "src/main/java/org/springframework/samples/petclinic/owner/Pet.java",
+            "event": "call",
+            "lineno": 65,
+            "static": false,
+            "receiver": {
+                "class": "org.springframework.samples.petclinic.owner.Pet",
+                "value": "Pet{id=9, name='Lucky', birthDate=1999-08-06, type=5, owner=7}",
+                "object_id": 2075628489
+            },
+            "method_id": "getOwner",
+            "thread_id": 556,
+            "defined_class": "org.springframework.samples.petclinic.owner.Pet"
+        },
+        {
+            "id": 12,
+            "path": "src/main/java/org/springframework/samples/petclinic/owner/Pet.java",
+            "event": "return",
+            "lineno": 65,
+            "static": false,
+            "method_id": "getOwner",
+            "parent_id": 11,
+            "thread_id": 556,
+            "return_value": {
+                "class": "java.lang.Integer",
+                "value": "7",
+                "object_id": 1929919778
+            },
+            "defined_class": "org.springframework.samples.petclinic.owner.Pet"
+        },
+        {
+            "id": 13,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/AbstractPoolBackedDataSource.java",
+            "event": "call",
+            "lineno": 140,
+            "static": false,
+            "receiver": {
+                "class": "com.mchange.v2.c3p0.ComboPooledDataSource",
+                "value": "com.mchange.v2.c3p0.ComboPooledDataSource[ identityToken -> 1hge136ac1x0f595mu1co1|68e7e7a0, dataSourceName -> 1hge136ac1x0f595mu1co1|68e7e7a0 ]",
+                "object_id": 1760028576
+            },
+            "method_id": "getConnection",
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource"
+        },
+        {
+            "id": 14,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "call",
+            "lineno": 208,
+            "static": false,
+            "receiver": {
+                "class": "com.mchange.v2.c3p0.impl.NewPooledConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewPooledConnection@5cdab556",
+                "object_id": 1557837142
+            },
+            "method_id": "getConnection",
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 15,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "return",
+            "lineno": 208,
+            "static": false,
+            "method_id": "getConnection",
+            "parent_id": 14,
+            "thread_id": 556,
+            "return_value": {
+                "class": "com.mchange.v2.c3p0.impl.NewProxyConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewProxyConnection@1e3beb11 [wrapping: com.mysql.cj.jdbc.ConnectionImpl@5ff6377d]",
+                "object_id": 507243281
+            },
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 16,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/AbstractPoolBackedDataSource.java",
+            "event": "return",
+            "lineno": 140,
+            "static": false,
+            "method_id": "getConnection",
+            "parent_id": 13,
+            "thread_id": 556,
+            "return_value": {
+                "class": "com.mchange.v2.c3p0.impl.NewProxyConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewProxyConnection@1e3beb11 [wrapping: com.mysql.cj.jdbc.ConnectionImpl@5ff6377d]",
+                "object_id": 507243281
+            },
+            "defined_class": "com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource"
+        },
+        {
+            "id": 17,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewProxyConnection.java",
+            "event": "call",
+            "lineno": 536,
+            "static": false,
+            "method_id": "prepareStatement",
+            "sql_query": {
+                "sql": "SELECT `OWNER`.`ID` AS `ID`, `OWNER`.`CITY` AS `CITY`, `OWNER`.`ADDRESS` AS `ADDRESS`, `OWNER`.`LAST_NAME` AS `LAST_NAME`, `OWNER`.`TELEPHONE` AS `TELEPHONE`, `OWNER`.`FIRST_NAME` AS `FIRST_NAME` FROM `OWNER` WHERE `OWNER`.`ID` = ?",
+                "normalized": false,
+                "database_type": "MySQL",
+                "normalized_sql": "SELECT `OWNER`.`ID` AS `ID`, `OWNER`.`CITY` AS `CITY`, `OWNER`.`ADDRESS` AS `ADDRESS`, `OWNER`.`LAST_NAME` AS `LAST_NAME`, `OWNER`.`TELEPHONE` AS `TELEPHONE`, `OWNER`.`FIRST_NAME` AS `FIRST_NAME` FROM `OWNER` WHERE `OWNER`.`ID` = ?"
+            },
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewProxyConnection"
+        },
+        {
+            "id": 18,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewProxyConnection.java",
+            "event": "return",
+            "lineno": 536,
+            "static": false,
+            "method_id": "prepareStatement",
+            "parent_id": 17,
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewProxyConnection"
+        },
+        {
+            "id": 19,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/AbstractPoolBackedDataSource.java",
+            "event": "call",
+            "lineno": 140,
+            "static": false,
+            "receiver": {
+                "class": "com.mchange.v2.c3p0.ComboPooledDataSource",
+                "value": "com.mchange.v2.c3p0.ComboPooledDataSource[ identityToken -> 1hge136ac1x0f595mu1co1|68e7e7a0, dataSourceName -> 1hge136ac1x0f595mu1co1|68e7e7a0 ]",
+                "object_id": 1760028576
+            },
+            "method_id": "getConnection",
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource"
+        },
+        {
+            "id": 20,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "call",
+            "lineno": 208,
+            "static": false,
+            "receiver": {
+                "class": "com.mchange.v2.c3p0.impl.NewPooledConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewPooledConnection@5cdab556",
+                "object_id": 1557837142
+            },
+            "method_id": "getConnection",
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 21,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "return",
+            "lineno": 208,
+            "static": false,
+            "method_id": "getConnection",
+            "parent_id": 20,
+            "thread_id": 556,
+            "return_value": {
+                "class": "com.mchange.v2.c3p0.impl.NewProxyConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewProxyConnection@433e2251 [wrapping: com.mysql.cj.jdbc.ConnectionImpl@5ff6377d]",
+                "object_id": 1128145489
+            },
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 22,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/AbstractPoolBackedDataSource.java",
+            "event": "return",
+            "lineno": 140,
+            "static": false,
+            "method_id": "getConnection",
+            "parent_id": 19,
+            "thread_id": 556,
+            "return_value": {
+                "class": "com.mchange.v2.c3p0.impl.NewProxyConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewProxyConnection@433e2251 [wrapping: com.mysql.cj.jdbc.ConnectionImpl@5ff6377d]",
+                "object_id": 1128145489
+            },
+            "defined_class": "com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource"
+        },
+        {
+            "id": 23,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewProxyConnection.java",
+            "event": "call",
+            "lineno": 536,
+            "static": false,
+            "method_id": "prepareStatement",
+            "sql_query": {
+                "sql": "select * from visit where pet_id = ?",
+                "normalized": true,
+                "database_type": "MySQL",
+                "normalized_sql": "select * from visit where pet_id = ?"
+            },
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewProxyConnection"
+        },
+        {
+            "id": 24,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewProxyConnection.java",
+            "event": "return",
+            "lineno": 536,
+            "static": false,
+            "method_id": "prepareStatement",
+            "parent_id": 23,
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewProxyConnection"
+        },
+        {
+            "id": 25,
+            "path": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java",
+            "event": "return",
+            "lineno": 74,
+            "static": false,
+            "method_id": "loadPetWithVisit",
+            "parent_id": 4,
+            "thread_id": 556,
+            "return_value": {
+                "class": "org.springframework.samples.petclinic.visit.Visit",
+                "value": "Visit{id=null, date=2020-10-05, description='null', petId=null}",
+                "object_id": 483593247
+            },
+            "defined_class": "org.springframework.samples.petclinic.owner.VisitController"
+        },
+        {
+            "id": 26,
+            "path": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java",
+            "event": "call",
+            "lineno": 59,
+            "static": false,
+            "receiver": {
+                "class": "org.springframework.samples.petclinic.owner.VisitController",
+                "value": "org.springframework.samples.petclinic.owner.VisitController@eb0d286",
+                "object_id": 246469254
+            },
+            "method_id": "setAllowedFields",
+            "thread_id": 556,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "dataBinder",
+                    "class": "org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder",
+                    "value": "org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder@7ff20493",
+                    "object_id": 2146567315
+                }
+            ],
+            "defined_class": "org.springframework.samples.petclinic.owner.VisitController"
+        },
+        {
+            "id": 27,
+            "path": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java",
+            "event": "return",
+            "lineno": 59,
+            "static": false,
+            "method_id": "setAllowedFields",
+            "parent_id": 26,
+            "thread_id": 556,
+            "defined_class": "org.springframework.samples.petclinic.owner.VisitController"
+        },
+        {
+            "id": 28,
+            "path": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java",
+            "event": "call",
+            "lineno": 53,
+            "static": false,
+            "receiver": {
+                "class": "org.springframework.samples.petclinic.visit.Visit",
+                "value": "Visit{id=null, date=2020-10-05, description='null', petId=null}",
+                "object_id": 483593247
+            },
+            "method_id": "getDate",
+            "thread_id": 556,
+            "defined_class": "org.springframework.samples.petclinic.visit.Visit"
+        },
+        {
+            "id": 29,
+            "path": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java",
+            "event": "return",
+            "lineno": 53,
+            "static": false,
+            "method_id": "getDate",
+            "parent_id": 28,
+            "thread_id": 556,
+            "return_value": {
+                "class": "java.time.LocalDate",
+                "value": "2020-10-05",
+                "object_id": 92802791
+            },
+            "defined_class": "org.springframework.samples.petclinic.visit.Visit"
+        },
+        {
+            "id": 30,
+            "path": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java",
+            "event": "call",
+            "lineno": 57,
+            "static": false,
+            "receiver": {
+                "class": "org.springframework.samples.petclinic.visit.Visit",
+                "value": "Visit{id=null, date=2020-09-12, description='null', petId=null}",
+                "object_id": 483593247
+            },
+            "method_id": "setDate",
+            "thread_id": 556,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "date",
+                    "class": "java.time.LocalDate",
+                    "value": "2020-09-12",
+                    "object_id": 1540092183
+                }
+            ],
+            "defined_class": "org.springframework.samples.petclinic.visit.Visit"
+        },
+        {
+            "id": 31,
+            "path": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java",
+            "event": "return",
+            "lineno": 57,
+            "static": false,
+            "method_id": "setDate",
+            "parent_id": 30,
+            "thread_id": 556,
+            "defined_class": "org.springframework.samples.petclinic.visit.Visit"
+        },
+        {
+            "id": 32,
+            "path": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java",
+            "event": "call",
+            "lineno": 61,
+            "static": false,
+            "receiver": {
+                "class": "org.springframework.samples.petclinic.visit.Visit",
+                "value": "Visit{id=null, date=2020-09-12, description='null', petId=null}",
+                "object_id": 483593247
+            },
+            "method_id": "getDescription",
+            "thread_id": 556,
+            "defined_class": "org.springframework.samples.petclinic.visit.Visit"
+        },
+        {
+            "id": 33,
+            "path": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java",
+            "event": "return",
+            "lineno": 61,
+            "static": false,
+            "method_id": "getDescription",
+            "parent_id": 32,
+            "thread_id": 556,
+            "defined_class": "org.springframework.samples.petclinic.visit.Visit"
+        },
+        {
+            "id": 34,
+            "path": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java",
+            "event": "call",
+            "lineno": 65,
+            "static": false,
+            "receiver": {
+                "class": "org.springframework.samples.petclinic.visit.Visit",
+                "value": "Visit{id=null, date=2020-09-12, description='routine check up', petId=null}",
+                "object_id": 483593247
+            },
+            "method_id": "setDescription",
+            "thread_id": 556,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "description",
+                    "class": "java.lang.String",
+                    "value": "routine check up",
+                    "object_id": 1522361550
+                }
+            ],
+            "defined_class": "org.springframework.samples.petclinic.visit.Visit"
+        },
+        {
+            "id": 35,
+            "path": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java",
+            "event": "return",
+            "lineno": 65,
+            "static": false,
+            "method_id": "setDescription",
+            "parent_id": 34,
+            "thread_id": 556,
+            "defined_class": "org.springframework.samples.petclinic.visit.Visit"
+        },
+        {
+            "id": 36,
+            "path": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java",
+            "event": "call",
+            "lineno": 69,
+            "static": false,
+            "receiver": {
+                "class": "org.springframework.samples.petclinic.visit.Visit",
+                "value": "Visit{id=null, date=2020-09-12, description='routine check up', petId=null}",
+                "object_id": 483593247
+            },
+            "method_id": "getPetId",
+            "thread_id": 556,
+            "defined_class": "org.springframework.samples.petclinic.visit.Visit"
+        },
+        {
+            "id": 37,
+            "path": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java",
+            "event": "return",
+            "lineno": 69,
+            "static": false,
+            "method_id": "getPetId",
+            "parent_id": 36,
+            "thread_id": 556,
+            "defined_class": "org.springframework.samples.petclinic.visit.Visit"
+        },
+        {
+            "id": 38,
+            "path": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java",
+            "event": "call",
+            "lineno": 73,
+            "static": false,
+            "receiver": {
+                "class": "org.springframework.samples.petclinic.visit.Visit",
+                "value": "Visit{id=null, date=2020-09-12, description='routine check up', petId=9}",
+                "object_id": 483593247
+            },
+            "method_id": "setPetId",
+            "thread_id": 556,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "petId",
+                    "class": "java.lang.Integer",
+                    "value": "9",
+                    "object_id": 1916011657
+                }
+            ],
+            "defined_class": "org.springframework.samples.petclinic.visit.Visit"
+        },
+        {
+            "id": 39,
+            "path": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java",
+            "event": "return",
+            "lineno": 73,
+            "static": false,
+            "method_id": "setPetId",
+            "parent_id": 38,
+            "thread_id": 556,
+            "defined_class": "org.springframework.samples.petclinic.visit.Visit"
+        },
+        {
+            "id": 40,
+            "path": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java",
+            "event": "call",
+            "lineno": 92,
+            "static": false,
+            "receiver": {
+                "class": "org.springframework.samples.petclinic.owner.VisitController",
+                "value": "org.springframework.samples.petclinic.owner.VisitController@eb0d286",
+                "object_id": 246469254
+            },
+            "method_id": "processNewVisitForm",
+            "thread_id": 556,
+            "parameters": [
+                {
+                    "kind": "req",
+                    "name": "visit",
+                    "class": "org.springframework.samples.petclinic.visit.Visit",
+                    "value": "Visit{id=null, date=2020-09-12, description='routine check up', petId=9}",
+                    "object_id": 483593247
+                },
+                {
+                    "kind": "req",
+                    "name": "result",
+                    "class": "org.springframework.validation.BeanPropertyBindingResult",
+                    "value": "org.springframework.validation.BeanPropertyBindingResult: 0 errors",
+                    "object_id": 1610399109
+                }
+            ],
+            "defined_class": "org.springframework.samples.petclinic.owner.VisitController"
+        },
+        {
+            "id": 41,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/AbstractPoolBackedDataSource.java",
+            "event": "call",
+            "lineno": 140,
+            "static": false,
+            "receiver": {
+                "class": "com.mchange.v2.c3p0.ComboPooledDataSource",
+                "value": "com.mchange.v2.c3p0.ComboPooledDataSource[ identityToken -> 1hge136ac1x0f595mu1co1|68e7e7a0, dataSourceName -> 1hge136ac1x0f595mu1co1|68e7e7a0 ]",
+                "object_id": 1760028576
+            },
+            "method_id": "getConnection",
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource"
+        },
+        {
+            "id": 42,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "call",
+            "lineno": 208,
+            "static": false,
+            "receiver": {
+                "class": "com.mchange.v2.c3p0.impl.NewPooledConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewPooledConnection@5cdab556",
+                "object_id": 1557837142
+            },
+            "method_id": "getConnection",
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 43,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "return",
+            "lineno": 208,
+            "static": false,
+            "method_id": "getConnection",
+            "parent_id": 42,
+            "thread_id": 556,
+            "return_value": {
+                "class": "com.mchange.v2.c3p0.impl.NewProxyConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewProxyConnection@4f14f593 [wrapping: com.mysql.cj.jdbc.ConnectionImpl@5ff6377d]",
+                "object_id": 1326773651
+            },
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 44,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/AbstractPoolBackedDataSource.java",
+            "event": "return",
+            "lineno": 140,
+            "static": false,
+            "method_id": "getConnection",
+            "parent_id": 41,
+            "thread_id": 556,
+            "return_value": {
+                "class": "com.mchange.v2.c3p0.impl.NewProxyConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewProxyConnection@4f14f593 [wrapping: com.mysql.cj.jdbc.ConnectionImpl@5ff6377d]",
+                "object_id": 1326773651
+            },
+            "defined_class": "com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource"
+        },
+        {
+            "id": 45,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewProxyConnection.java",
+            "event": "call",
+            "lineno": 230,
+            "static": false,
+            "method_id": "prepareStatement",
+            "sql_query": {
+                "sql": "INSERT INTO `VISIT` (`DATE`, `DESCRIPTION`, `PET_ID`) VALUES (?, ?, ?)",
+                "normalized": false,
+                "database_type": "MySQL",
+                "normalized_sql": "INSERT INTO `VISIT` (`DATE`, `DESCRIPTION`, `PET_ID`) VALUES (?, ?, ?)"
+            },
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewProxyConnection"
+        },
+        {
+            "id": 46,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewProxyConnection.java",
+            "event": "return",
+            "lineno": 230,
+            "static": false,
+            "method_id": "prepareStatement",
+            "parent_id": 45,
+            "thread_id": 556,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewProxyConnection"
+        },
+        {
+            "id": 47,
+            "path": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java",
+            "event": "return",
+            "lineno": 92,
+            "static": false,
+            "method_id": "processNewVisitForm",
+            "parent_id": 40,
+            "thread_id": 556,
+            "return_value": {
+                "class": "java.lang.String",
+                "value": "redirect:/owners/{ownerId}",
+                "object_id": 1188712385
+            },
+            "defined_class": "org.springframework.samples.petclinic.owner.VisitController"
+        },
+        {
+            "id": 48,
+            "path": "src/main/java/org/springframework/web/filter/OncePerRequestFilter.java",
+            "event": "return",
+            "lineno": 91,
+            "static": false,
+            "method_id": "doFilter",
+            "parent_id": 1,
+            "thread_id": 556,
+            "defined_class": "org.springframework.web.filter.OncePerRequestFilter",
+            "http_server_response": {
+                "status": 302
+            }
+        },
+        {
+            "id": 49,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "call",
+            "lineno": 208,
+            "static": false,
+            "receiver": {
+                "class": "com.mchange.v2.c3p0.impl.NewPooledConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewPooledConnection@51bc8c24",
+                "object_id": 1371311140
+            },
+            "method_id": "getConnection",
+            "thread_id": 353,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 50,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "return",
+            "lineno": 208,
+            "static": false,
+            "method_id": "getConnection",
+            "parent_id": 49,
+            "thread_id": 353,
+            "return_value": {
+                "class": "com.mchange.v2.c3p0.impl.NewProxyConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewProxyConnection@5aaea47c [wrapping: null]",
+                "object_id": 1521394812
+            },
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 51,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "call",
+            "lineno": 208,
+            "static": false,
+            "receiver": {
+                "class": "com.mchange.v2.c3p0.impl.NewPooledConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewPooledConnection@5cdab556",
+                "object_id": 1557837142
+            },
+            "method_id": "getConnection",
+            "thread_id": 352,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 52,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "return",
+            "lineno": 208,
+            "static": false,
+            "method_id": "getConnection",
+            "parent_id": 51,
+            "thread_id": 352,
+            "return_value": {
+                "class": "com.mchange.v2.c3p0.impl.NewProxyConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewProxyConnection@579eed0f [wrapping: null]",
+                "object_id": 1470033167
+            },
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 53,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "call",
+            "lineno": 208,
+            "static": false,
+            "receiver": {
+                "class": "com.mchange.v2.c3p0.impl.NewPooledConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewPooledConnection@5cdab556",
+                "object_id": 1557837142
+            },
+            "method_id": "getConnection",
+            "thread_id": 353,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 54,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "return",
+            "lineno": 208,
+            "static": false,
+            "method_id": "getConnection",
+            "parent_id": 53,
+            "thread_id": 353,
+            "return_value": {
+                "class": "com.mchange.v2.c3p0.impl.NewProxyConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewProxyConnection@47a0683c [wrapping: null]",
+                "object_id": 1201694780
+            },
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 55,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "call",
+            "lineno": 208,
+            "static": false,
+            "receiver": {
+                "class": "com.mchange.v2.c3p0.impl.NewPooledConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewPooledConnection@5cdab556",
+                "object_id": 1557837142
+            },
+            "method_id": "getConnection",
+            "thread_id": 352,
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        },
+        {
+            "id": 56,
+            "path": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java",
+            "event": "return",
+            "lineno": 208,
+            "static": false,
+            "method_id": "getConnection",
+            "parent_id": 55,
+            "thread_id": 352,
+            "return_value": {
+                "class": "com.mchange.v2.c3p0.impl.NewProxyConnection",
+                "value": "com.mchange.v2.c3p0.impl.NewProxyConnection@346f3e4c [wrapping: null]",
+                "object_id": 879705676
+            },
+            "defined_class": "com.mchange.v2.c3p0.impl.NewPooledConnection"
+        }
+    ],
+    "version": "1.2",
+    "classMap": [
+        {
+            "name": "org",
+            "type": "package",
+            "children": [
+                {
+                    "name": "springframework",
+                    "type": "package",
+                    "children": [
+                        {
+                            "name": "samples",
+                            "type": "package",
+                            "children": [
+                                {
+                                    "name": "petclinic",
+                                    "type": "package",
+                                    "children": [
+                                        {
+                                            "name": "owner",
+                                            "type": "package",
+                                            "children": [
+                                                {
+                                                    "name": "Pet",
+                                                    "type": "class",
+                                                    "static": false,
+                                                    "children": [
+                                                        {
+                                                            "name": "getOwner",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/org/springframework/samples/petclinic/owner/Pet.java:65",
+                                                            "display_name": "Get Owner",
+                                                            "labels": [
+                                                                "getter"
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "location": "src/main/java/org/springframework/samples/petclinic/owner/Pet.java"
+                                                },
+                                                {
+                                                    "name": "VisitController",
+                                                    "type": "class",
+                                                    "static": false,
+                                                    "children": [
+                                                        {
+                                                            "name": "loadPetWithVisit",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java:74",
+                                                            "display_name": "Load Pet With Visit",
+                                                            "labels": [
+                                                                "action"
+                                                            ]
+                                                        },
+                                                        {
+                                                            "name": "setAllowedFields",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java:59",
+                                                            "display_name": "Set Allowed Fields For Visit",
+                                                            "labels": [
+                                                                "action"
+                                                            ]
+                                                        },
+                                                        {
+                                                            "name": "processNewVisitForm",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java:92",
+                                                            "display_name": "Process New Visit Form",
+                                                            "labels": [
+                                                                "action"
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "location": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "visit",
+                                            "type": "package",
+                                            "children": [
+                                                {
+                                                    "name": "Visit",
+                                                    "type": "class",
+                                                    "static": false,
+                                                    "children": [
+                                                        {
+                                                            "name": "setDate",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java:57",
+                                                            "display_name": "Set Date",
+                                                            "labels": [
+                                                                "setter"
+                                                            ]
+                                                        },
+                                                        {
+                                                            "name": "getPetId",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java:69",
+                                                            "display_name": "Get Pet Id",
+                                                            "labels": [
+                                                                "getter"
+                                                            ]
+                                                        },
+                                                        {
+                                                            "name": "setPetId",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java:73",
+                                                            "display_name": "Set Pet Id For Visit",
+                                                            "labels": [
+                                                                "action"
+                                                            ]
+                                                        },
+                                                        {
+                                                            "name": "getDescription",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java:61",
+                                                            "display_name": "Get Description",
+                                                            "labels": [
+                                                                "getter"
+                                                            ]
+                                                        },
+                                                        {
+                                                            "name": "setDescription",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java:65",
+                                                            "display_name": "Set Description",
+                                                            "labels": [
+                                                                "setter"
+                                                            ]
+                                                        },
+                                                        {
+                                                            "name": "getDate",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java:53",
+                                                            "display_name": "Get Date",
+                                                            "labels": [
+                                                                "getter"
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "location": "src/main/java/org/springframework/samples/petclinic/visit/Visit.java"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "web",
+                            "type": "package",
+                            "children": [
+                                {
+                                    "name": "filter",
+                                    "type": "package",
+                                    "children": [
+                                        {
+                                            "name": "OncePerRequestFilter",
+                                            "type": "class",
+                                            "static": false,
+                                            "children": [
+                                                {
+                                                    "name": "doFilter",
+                                                    "type": "function",
+                                                    "static": false,
+                                                    "location": "src/main/java/org/springframework/web/filter/OncePerRequestFilter.java:91",
+                                                    "display_name": "Do Filter",
+                                                    "labels": [
+                                                        "action"
+                                                    ]
+                                                }
+                                            ],
+                                            "location": "src/main/java/org/springframework/web/filter/OncePerRequestFilter.java"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "com",
+            "type": "package",
+            "children": [
+                {
+                    "name": "mchange",
+                    "type": "package",
+                    "children": [
+                        {
+                            "name": "v2",
+                            "type": "package",
+                            "children": [
+                                {
+                                    "name": "c3p0",
+                                    "type": "package",
+                                    "children": [
+                                        {
+                                            "name": "impl",
+                                            "type": "package",
+                                            "children": [
+                                                {
+                                                    "name": "AbstractPoolBackedDataSource",
+                                                    "type": "class",
+                                                    "static": false,
+                                                    "children": [
+                                                        {
+                                                            "name": "getConnection",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/com/mchange/v2/c3p0/impl/AbstractPoolBackedDataSource.java:140",
+                                                            "display_name": "Get Connection",
+                                                            "labels": [
+                                                                "getter"
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "location": "src/main/java/com/mchange/v2/c3p0/impl/AbstractPoolBackedDataSource.java"
+                                                },
+                                                {
+                                                    "name": "NewPooledConnection",
+                                                    "type": "class",
+                                                    "static": false,
+                                                    "children": [
+                                                        {
+                                                            "name": "getConnection",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java:208",
+                                                            "display_name": "Get Connection",
+                                                            "labels": [
+                                                                "getter"
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "location": "src/main/java/com/mchange/v2/c3p0/impl/NewPooledConnection.java"
+                                                },
+                                                {
+                                                    "name": "NewProxyConnection",
+                                                    "type": "class",
+                                                    "static": false,
+                                                    "children": [
+                                                        {
+                                                            "name": "prepareStatement",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/com/mchange/v2/c3p0/impl/NewProxyConnection.java:536",
+                                                            "display_name": "Get New Proxy Connection Prepare Statement",
+                                                            "labels": [
+                                                                "getter"
+                                                            ]
+                                                        },
+                                                        {
+                                                            "name": "prepareStatement",
+                                                            "type": "function",
+                                                            "static": false,
+                                                            "location": "src/main/java/com/mchange/v2/c3p0/impl/NewProxyConnection.java:230",
+                                                            "display_name": "Get New Proxy Connection Prepare Statement",
+                                                            "labels": [
+                                                                "getter"
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "location": "src/main/java/com/mchange/v2/c3p0/impl/NewProxyConnection.java"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "app": "spring-petclinic",
+        "git": {
+            "branch": "master",
+            "commit": "0f5992e7392405700473699cac3543a862d6e1fd",
+            "repository": "https://github.com/spring-petclinic/spring-petclinic-data-jdbc.git"
+        },
+        "name": "Create Visit For Pet",
+        "client": {
+            "url": "https://github.com/appland/appmap-java",
+            "name": "appmap-java"
+        },
+        "language": {
+            "name": "java",
+            "engine": "OpenJDK 64-Bit Server VM",
+            "version": "11.0.8+11"
+        },
+        "recorder": {
+            "name": "remote_recording"
+        },
+        "framework": {},
+        "recording": {}
+    }
+}

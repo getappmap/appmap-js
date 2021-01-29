@@ -2,75 +2,77 @@ import { ClassMap, buildAppMap } from '@/lib/models';
 import { CodeObjectType } from '@/lib/models/codeObject';
 import scenario from '../../fixtures/user_page_scenario.appmap.json';
 import httpScenario from '../../fixtures/many_requests_scenario.json';
-
-const userPageClassMap = new ClassMap(scenario.classMap);
+import petClinicScenario from '../../fixtures/spring_petclinic.json';
 
 describe('ClassMap', () => {
-  it('should have root ids', () => {
-    expect(userPageClassMap.roots.map((co) => co.id)).toEqual([
-      'json',
-      'net/http',
-      'openssl',
-      'app/models',
-      'app/controllers',
-    ]);
-  });
+  describe('', () => {
+    const userPageClassMap = new ClassMap(scenario.classMap);
 
-  it('should have root names', () => {
-    expect(userPageClassMap.roots.map((co) => co.name)).toEqual([
-      'json',
-      'net/http',
-      'openssl',
-      'app/models',
-      'app/controllers',
-    ]);
-    expect(
-      Array.from(new Set(userPageClassMap.roots.map((co) => co.location))),
-    ).toEqual([undefined]);
-  });
+    it('should have root ids', () => {
+      expect(userPageClassMap.roots.map((co) => co.id)).toEqual([
+        'json',
+        'net/http',
+        'openssl',
+        'app/models',
+        'app/controllers',
+      ]);
+    });
 
-  it('package should not have a locations list', () => {
-    const modelsPackage = userPageClassMap.codeObjectFromId('app/models');
-    expect(modelsPackage.locations).toEqual([]);
-  });
+    it('should have root names', () => {
+      expect(userPageClassMap.roots.map((co) => co.name)).toEqual([
+        'json',
+        'net/http',
+        'openssl',
+        'app/models',
+        'app/controllers',
+      ]);
+      expect(
+        Array.from(new Set(userPageClassMap.roots.map((co) => co.location)))
+      ).toEqual([undefined]);
+    });
 
-  it('class should have locations list', () => {
-    const userClass = userPageClassMap.codeObjectFromId(
-      'app/models/User::Show',
-    );
-    expect(userClass.locations).toEqual(['app/models/user.rb']);
-  });
+    it('package should not have a locations list', () => {
+      const modelsPackage = userPageClassMap.codeObjectFromId('app/models');
+      expect(modelsPackage.locations).toEqual([]);
+    });
 
-  it('function should have locations list', () => {
-    const userClass = userPageClassMap.codeObjectFromId(
-      'app/models/User::Show#accept_eula?',
-    );
-    expect(userClass.locations).toEqual(['app/models/user.rb:109']);
-  });
+    it('class should have locations list', () => {
+      const userClass = userPageClassMap.codeObjectFromId(
+        'app/models/User::Show'
+      );
+      expect(userClass.locations).toEqual(['app/models/user.rb']);
+    });
 
-  it('function can be looked up by location', () => {
-    const userClass = userPageClassMap.codeObjectsAtLocation(
-      'app/models/user.rb:109',
-    );
-    expect(userClass.map((co) => co.id)).toEqual([
-      'app/models/User::Show#accept_eula?',
-    ]);
-  });
+    it('function should have locations list', () => {
+      const userClass = userPageClassMap.codeObjectFromId(
+        'app/models/User::Show#accept_eula?'
+      );
+      expect(userClass.locations).toEqual(['app/models/user.rb:109']);
+    });
 
-  it('function can provide class name', () => {
-    const userClass = userPageClassMap.codeObjectsAtLocation(
-      'app/models/user.rb:109',
-    );
-    expect(userClass.map((co) => co.classOf)).toEqual(['User::Show']);
-  });
+    it('function can be looked up by location', () => {
+      const userClass = userPageClassMap.codeObjectsAtLocation(
+        'app/models/user.rb:109'
+      );
+      expect(userClass.map((co) => co.id)).toEqual([
+        'app/models/User::Show#accept_eula?',
+      ]);
+    });
 
-  it('serializes properly', () => {
-    const undefinedElement = userPageClassMap
-      .toJSON()
-      .find((obj) => obj === null);
-    expect(undefinedElement).toBeUndefined();
-  });
+    it('function can provide class name', () => {
+      const userClass = userPageClassMap.codeObjectsAtLocation(
+        'app/models/user.rb:109'
+      );
+      expect(userClass.map((co) => co.classOf)).toEqual(['User::Show']);
+    });
 
+    it('serializes properly', () => {
+      const undefinedElement = userPageClassMap
+        .toJSON()
+        .find((obj) => obj === null);
+      expect(undefinedElement).toBeUndefined();
+    });
+  });
   describe('bindEvents', () => {
     const classMap = new ClassMap(httpScenario.classMap);
     const events = buildAppMap().source(httpScenario).collectEvents();
@@ -96,7 +98,7 @@ describe('ClassMap', () => {
 
     it('guarantees routes are represented by a single parent', () => {
       const uniqueParents = new Set(
-        classMap.httpObject.children.map((obj) => obj.parent),
+        classMap.httpObject.children.map((obj) => obj.parent)
       );
 
       expect(uniqueParents.size).toEqual(1);
@@ -114,7 +116,7 @@ describe('ClassMap', () => {
 
       uniqueRoutes.forEach((route) => {
         const routeObject = httpObject.children.find(
-          (obj) => obj.type === 'route' && obj.name === route,
+          (obj) => obj.type === 'route' && obj.name === route
         );
 
         const numEvents = events.filter((e) => e.isCall() && e.route === route)
@@ -139,7 +141,7 @@ describe('ClassMap', () => {
 
     it('provides access to http events', () => {
       const totalHttpRoutes = events.filter(
-        (e) => e.isCall() && e.httpServerRequest,
+        (e) => e.isCall() && e.httpServerRequest
       ).length;
 
       const http = classMap.httpObject;
@@ -153,6 +155,25 @@ describe('ClassMap', () => {
         .filter((obj) => obj.type === 'class' || obj.type === 'package');
 
       expect(dynamicObjects).toHaveLength(0);
+    });
+  });
+
+  describe('leafs', () => {
+    const { classMap } = buildAppMap(petClinicScenario).build();
+
+    it('resolves correct root level objects', () => {
+      const roots = classMap.roots.map((root) => root.leafs()).flat();
+      console.log(classMap.roots);
+
+      expect(roots[0].id).toEqual(
+        'org/springframework/samples/petclinic/model'
+      );
+      expect(roots[1].id).toEqual(
+        'org/springframework/samples/petclinic/owner'
+      );
+      expect(roots[2].id).toEqual('org/springframework/mock/web');
+      expect(roots[3].id).toEqual('HTTP server requests');
+      expect(roots).toHaveLength(4);
     });
   });
 });

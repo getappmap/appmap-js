@@ -3,21 +3,20 @@
     <div class="main-column main-column--left">
       <v-details-panel :selected-object="selectedObject">
         <template v-slot:buttons>
-          <a
-            class="clear-btn"
-            href="#"
+          <v-details-button
+            icon="clear"
             v-if="selectedObject"
-            @click.prevent="clearSelection"
+            @click.native="clearSelection"
           >
             Clear selection
-          </a>
-          <a class="back-btn" href="#" v-if="canGoBack" @click.prevent="goBack">
+          </v-details-button>
+          <v-details-button icon="back" v-if="canGoBack" @click.native="goBack">
             Back to
-            <b v-if="prevSelectedObject">
+            <b v-if="prevSelectedObject && prevSelectedObject.name">
               {{ prevSelectedObject.name }}
             </b>
-            <b v-else>previous</b>
-          </a>
+            <span v-else>previous</span>
+          </v-details-button>
         </template>
       </v-details-panel>
     </div>
@@ -44,7 +43,9 @@
 </template>
 
 <script>
+import { Event } from '@/lib/models';
 import VDetailsPanel from '../components/DetailsPanel.vue';
+import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramFlow from '../components/DiagramFlow.vue';
 import VTabs from '../components/Tabs.vue';
@@ -64,6 +65,7 @@ export default {
 
   components: {
     VDetailsPanel,
+    VDetailsButton,
     VDiagramComponent,
     VDiagramFlow,
     VTabs,
@@ -84,6 +86,13 @@ export default {
       handler(view) {
         this.onChangeTab(this.$refs[view]);
         this.$refs.tabs.activateTab(this.$refs[view]);
+      },
+    },
+    '$store.getters.selectedObject': {
+      handler(selectedObject) {
+        if (selectedObject && !(selectedObject instanceof Event)) {
+          this.setView(VIEW_COMPONENT);
+        }
       },
     },
   },
@@ -131,8 +140,11 @@ export default {
         return;
       }
 
-      const viewKey = Object.keys(this.$refs)[index];
-      this.$store.commit(SET_VIEW, viewKey);
+      this.setView(Object.keys(this.$refs)[index]);
+    },
+
+    setView(view) {
+      this.$store.commit(SET_VIEW, view);
     },
 
     clearSelection() {

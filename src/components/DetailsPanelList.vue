@@ -3,12 +3,12 @@
     <h5>{{ title }}</h5>
     <ul>
       <li v-for="(item, index) in filteredItems" :key="index">
-        <a class="list-item" href="#" @click.prevent="selectItem(item)">
+        <button class="list-item" @click.prevent="selectItem(item)">
           {{ nameOf(item.object) }}
           <span class="list-item__count" v-if="uniqueItems && item.count > 1">
             {{ item.count }}
           </span>
-        </a>
+        </button>
       </li>
     </ul>
   </div>
@@ -63,7 +63,7 @@ export default {
           }
           memoElement.count += 1;
           return memo;
-        }, {}),
+        }, {})
       );
     },
   },
@@ -98,7 +98,7 @@ export default {
       &:hover {
         background-color: $blue;
         border-color: $blue;
-        a {
+        button {
           color: $white;
         }
       }
@@ -108,12 +108,22 @@ export default {
       }
 
       .list-item {
-        display: flex;
+        display: inline-flex;
+        width: 100%;
         justify-content: flex-start;
         align-items: center;
         padding: 0.5rem 2rem;
         color: $blue;
         text-decoration: none;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        font-size: 1rem;
+
+        &:focus {
+          outline: 0;
+        }
 
         &__count {
           margin-left: auto;

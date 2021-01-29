@@ -49,12 +49,7 @@ export default class Graph {
       codeObject.type === CodeObjectType.PACKAGE ||
       codeObject.type === CodeObjectType.HTTP
     ) {
-      const numChildren = [
-        ...codeObject.classes,
-        ...codeObject.children.filter(
-          (obj) => obj.type === CodeObjectType.ROUTE,
-        ),
-      ].length;
+      const numChildren = codeObject.childLeafs().length;
 
       label += ` (${numChildren})`;
     }
@@ -154,6 +149,7 @@ export default class Graph {
       if (node.type === 'cluster') {
         const clusterGroup = new ClusterGroup(node);
         node.group = clusterGroup;
+        node.element = clusterGroup.element;
         this.clustersGroup.appendChild(clusterGroup.element);
       } else {
         const nodeGroup = new NodeGroup(node, this.options.animation);
@@ -214,7 +210,6 @@ export default class Graph {
     const children = this.graph.children(id);
     if (highlightedNode.type === 'cluster') {
       children.forEach((childId) => this.highlightNode(childId));
-      return highlightedNode.codeObject;
     }
 
     if (highlightedNode.element.classList.contains('dim')) {
@@ -251,7 +246,7 @@ export default class Graph {
   focus(id) {
     const [visitedNodes, visitedEdges] = findTraversableNodesAndEdges(
       this.graph,
-      id,
+      id
     );
 
     this.graph.nodes().forEach((nodeId) => {

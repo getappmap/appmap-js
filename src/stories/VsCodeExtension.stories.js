@@ -1,16 +1,34 @@
 import VVsCodeExtension from '@/pages/VsCodeExtension.vue';
-import scenarioData from './data/scenario.json';
+import defaultScenario from './data/scenario.json';
+import petClinicScenario from './data/java_scenario.json';
 
-export default {
-  title: 'Pages',
-  component: VVsCodeExtension,
+const scenarioData = {
+  default: defaultScenario,
+  'pet-clinic': petClinicScenario,
 };
 
-export const vsCodeExtension = (args, { argTypes }) => ({
+export default {
+  title: 'Pages/VS Code',
+  component: VVsCodeExtension,
+  argTypes: {
+    scenario: {
+      control: {
+        type: 'select',
+        options: Object.keys(scenarioData),
+      },
+      defaultValue: 'default',
+    },
+  },
+};
+
+export const extension = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VVsCodeExtension },
   template: '<v-vs-code-extension v-bind="$props" ref="vsCode" />',
   mounted() {
-    this.$refs.vsCode.loadData(scenarioData);
+    const scenario = scenarioData[args.scenario];
+    if (scenario) {
+      this.$refs.vsCode.loadData(scenario);
+    }
   },
 });

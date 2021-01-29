@@ -2,7 +2,9 @@
   <div>
     <v-details-panel-header object-type="Function" :title="object.name">
       <template v-slot:links>
-        <a href="#" @click.prevent="viewSource">View source</a>
+        <v-details-button @click.native="viewSource">
+          View source
+        </v-details-button>
       </template>
     </v-details-panel-header>
     <v-details-panel-list title="Events" :items="object.events" />
@@ -16,6 +18,7 @@
 </template>
 
 <script>
+import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import { CodeObjectType } from '@/lib/models/codeObject';
@@ -23,6 +26,7 @@ import { CodeObjectType } from '@/lib/models/codeObject';
 export default {
   name: 'v-details-panel-function',
   components: {
+    VDetailsButton,
     VDetailsPanelList,
     VDetailsPanelHeader,
   },
