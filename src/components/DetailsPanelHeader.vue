@@ -53,28 +53,5 @@ export default {
     margin-bottom: 0.8rem;
     margin-top: 0.5rem;
   }
-  &__ghost-link {
-    margin: 1rem 0;
-    button {
-      cursor: pointer;
-      background: transparent;
-      padding: 0.25rem 0.7rem;
-      border: 1px solid $base15;
-      border-radius: $border-radius;
-      letter-spacing: 0.5px;
-      color: $gray4;
-      text-transform: uppercase;
-      font-size: 0.8rem;
-      white-space: nowrap;
-      &:hover {
-        background-color: darken($vs-code-gray1, 05);
-        border-color: darken($vs-code-gray1, 05);
-        color: $gray4;
-      }
-      &:focus {
-        outline: 0;
-      }
-    }
-  }
 }
 </style>

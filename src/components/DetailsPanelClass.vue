@@ -2,7 +2,9 @@
   <div class="details-panel-class">
     <v-details-panel-header object-type="Class" :title="object.name">
       <template v-slot:links>
-        <button @click.prevent="viewSource">View source</button>
+        <v-details-button @click.native="viewSource">
+          View source
+        </v-details-button>
       </template>
     </v-details-panel-header>
 
@@ -24,6 +26,7 @@
 </template>
 
 <script>
+import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import { CodeObjectType } from '@/lib/models/codeObject';
@@ -31,6 +34,7 @@ import { CodeObjectType } from '@/lib/models/codeObject';
 export default {
   name: 'v-details-panel-class',
   components: {
+    VDetailsButton,
     VDetailsPanelHeader,
     VDetailsPanelList,
   },
@@ -47,7 +51,7 @@ export default {
       // Queries will appear in outbound connections, but we have a separate section for queries so
       // filter them out of this list
       return this.object.outboundConnections.filter(
-        (obj) => obj.type !== CodeObjectType.QUERY
+        (obj) => obj.type !== CodeObjectType.QUERY,
       );
     },
 

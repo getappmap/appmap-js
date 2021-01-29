@@ -2,7 +2,9 @@
   <div>
     <v-details-panel-header object-type="Function" :title="object.name">
       <template v-slot:links>
-        <button @click.prevent="viewSource">View source</button>
+        <v-details-button @click.native="viewSource">
+          View source
+        </v-details-button>
       </template>
     </v-details-panel-header>
     <v-details-panel-list title="Events" :items="object.events" />
@@ -16,6 +18,7 @@
 </template>
 
 <script>
+import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import { CodeObjectType } from '@/lib/models/codeObject';
@@ -23,6 +26,7 @@ import { CodeObjectType } from '@/lib/models/codeObject';
 export default {
   name: 'v-details-panel-function',
   components: {
+    VDetailsButton,
     VDetailsPanelList,
     VDetailsPanelHeader,
   },
@@ -35,7 +39,7 @@ export default {
   computed: {
     events() {
       return this.$store.state.appMap.events.filter(
-        (e) => e.isCall() && e.codeObject && e.codeObject.id === this.object.id
+        (e) => e.isCall() && e.codeObject && e.codeObject.id === this.object.id,
       );
     },
 
@@ -49,7 +53,7 @@ export default {
 
     outboundCalls() {
       return this.object.outboundConnections.filter(
-        (obj) => obj.type !== CodeObjectType.QUERY
+        (obj) => obj.type !== CodeObjectType.QUERY,
       );
     },
 

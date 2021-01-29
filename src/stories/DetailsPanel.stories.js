@@ -1,4 +1,5 @@
 import VDetailsPanel from '@/components/DetailsPanel.vue';
+import VDetailsButton from '@/components/DetailsButton.vue';
 import scenario from '@/stories/data/scenario.json';
 import { store, SET_APPMAP_DATA } from '@/store/vsCode';
 import { CodeObjectType } from '@/lib/models/codeObject';
@@ -19,16 +20,16 @@ export default {
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { VDetailsPanel },
+  components: { VDetailsPanel, VDetailsButton },
   template: `
     <v-details-panel v-bind="$props">
       <template v-slot:buttons>
-        <a class="clear-btn" href="#" @click.prevent>
+        <v-details-button>
           Clear selection
-        </a>
-        <a class="back-btn" href="#" @click.prevent>
+        </v-details-button>
+        <v-details-button>
           Back to <b>ApplicationController</b>
-        </a>
+        </v-details-button>
       </template>
     </v-details-panel>
   `,
