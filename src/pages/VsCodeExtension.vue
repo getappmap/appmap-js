@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { Event } from '@/lib/models';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramFlow from '../components/DiagramFlow.vue';
@@ -84,6 +85,13 @@ export default {
       handler(view) {
         this.onChangeTab(this.$refs[view]);
         this.$refs.tabs.activateTab(this.$refs[view]);
+      },
+    },
+    '$store.getters.selectedObject': {
+      handler(selectedObject) {
+        if (selectedObject && !(selectedObject instanceof Event)) {
+          this.setView(VIEW_COMPONENT);
+        }
       },
     },
   },
@@ -131,8 +139,11 @@ export default {
         return;
       }
 
-      const viewKey = Object.keys(this.$refs)[index];
-      this.$store.commit(SET_VIEW, viewKey);
+      this.setView(Object.keys(this.$refs)[index]);
+    },
+
+    setView(view) {
+      this.$store.commit(SET_VIEW, view);
     },
 
     clearSelection() {
