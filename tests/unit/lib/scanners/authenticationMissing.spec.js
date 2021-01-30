@@ -2,28 +2,11 @@
 import { buildAppMap } from '@/lib/models';
 import { PROVIDER_AUTHENTICATION, scan } from '../../../../src/lib';
 import { AuthenticationMissing } from '../../../../src/lib/scanners/authenticationMissing';
-import ScanError from '../../../../src/lib/scanners/scanError';
 import apiKeyScenario from '../../fixtures/revoke_api_key.appmap.json';
 
 const apiKeyAppMap = buildAppMap().source(apiKeyScenario).normalize().build();
 
 describe('Scanner', () => {
-  function scanAuthenticationMissing(event) {
-    const scan = new AuthenticationMissing();
-    const errors = [];
-    const authenticators = [];
-    for (const scope of scan.scopes()) {
-      for (const authn of scope.evaluate()) {
-        if (authn instanceof ScanError) {
-          errors.push(authn);
-        } else {
-          authenticators.push(authn);
-        }
-      }
-    }
-    return { errors, authenticators };
-  }
-
   test('authentication provider not found', () => {
     const scanEvent = apiKeyAppMap.events[6];
     const { targets, matches, errors } = scan(new AuthenticationMissing())([

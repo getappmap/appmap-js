@@ -5,6 +5,16 @@ import { isFalsey } from '../util';
 import { PROVIDER_AUTHENTICATION, PUBLIC } from './labels';
 import ScanError from './scanError';
 
+export class Public {
+  constructor(event) {
+    this.event = event;
+  }
+
+  toString() {
+    return `${this.event.toString()} is public`;
+  }
+}
+
 export class Authenticator {
   constructor(event) {
     this.event = event;
@@ -13,6 +23,10 @@ export class Authenticator {
   toString() {
     return `Authentication is provided by ${this.event.toString()}`;
   }
+}
+
+function isPublic(event) {
+  return event.codeObject.labels?.has(PUBLIC);
 }
 
 function providesAuthentication(event) {
@@ -27,12 +41,24 @@ class Target {
     this.event = event;
   }
 
+  toString() {
+    return this.event.toString();
+  }
+
   /**
    * Finds the labeled authenticator within the scope.
    */
+  // eslint-disable-next-line require-yield
   *evaluate() {
-    for (const event of this.event.descendants(providesAuthentication)) {
-      yield new Authenticator(event.event);
+    const pub = this.event.descendants(isPublic).next();
+    if (pub.value) {
+      yield new Public(pub);
+      return;
+    }
+
+    const authenticator = this.event.descendants(providesAuthentication).next();
+    if (authenticator.value) {
+      yield new Authenticator(authenticator.value.event);
       return;
     }
     yield new ScanError(
@@ -45,6 +71,10 @@ class Target {
 class Scope {
   constructor(event) {
     this.event = event;
+  }
+
+  toString() {
+    return this.event.toString();
   }
 
   *targets() {
@@ -61,11 +91,7 @@ function isAcceptedRoute(event) {
     return false;
   }
 
-  if (event.codeObject.labels?.has(PUBLIC)) {
-    return false;
-  }
-
-  if (event.httpServerResponse.statusCode >= 300) {
+  if (event.httpServerResponse.status >= 300) {
     return false;
   }
 
@@ -76,6 +102,11 @@ function isAcceptedRoute(event) {
  * Ensures non-public routes have authentication.
  */
 export class AuthenticationMissing {
+  // eslint-disable-next-line class-methods-use-this
+  toString() {
+    return 'Authentication is required';
+  }
+
   // eslint-disable-next-line class-methods-use-this
   *scopes(events) {
     for (let index = 0; index < events.length; index += 1) {

@@ -7,6 +7,10 @@ import { MVC_VIEW } from './labels';
 import ScanError from './scanError';
 
 class Target {
+  toString() {
+    return 'Target';
+  }
+
   *evaluate() {
     for (const event of this.event.descendants((evt) => evt.sql_query)) {
       yield new ScanError(
@@ -20,6 +24,10 @@ class Target {
 class Scope {
   constructor(event) {
     this.event = event;
+  }
+
+  toString() {
+    return this.event.toString();
   }
 
   /**
