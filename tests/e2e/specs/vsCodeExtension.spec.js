@@ -164,9 +164,10 @@ context('VS Code Extension', () => {
 
       // Go back to the component diagram
       cy.get('.tabs .tab-btn').first().click();
-      cy.get(`.node[data-type="${CodeObjectType.HTTP}"]`)
-        .click()
-        .should('have.class', 'highlight');
+      cy.get(`.node[data-id="HTTP server requests->GET /admin/orders"]`).should(
+        'have.class',
+        'highlight',
+      );
     });
 
     it('the current event is highlighted upon opening the flow view', () => {
