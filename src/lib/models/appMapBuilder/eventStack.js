@@ -47,7 +47,7 @@ export default class EventStack {
         }
       } else {
         throw new Error(
-          `return #${event.id} is missing call #${event.parent_id}`
+          `return #${event.id} is missing call #${event.parent_id}`,
         );
       }
     }

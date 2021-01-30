@@ -63,7 +63,7 @@ export default {
           }
           memoElement.count += 1;
           return memo;
-        }, {})
+        }, {}),
       );
     },
   },

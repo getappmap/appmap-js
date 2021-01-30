@@ -1,7 +1,7 @@
 context('Flow View', () => {
   beforeEach(() => {
     cy.visit(
-      'http://localhost:6006/iframe.html?id=appland-diagrams--diagram-flow&viewMode=story'
+      'http://localhost:6006/iframe.html?id=appland-diagrams--diagram-flow&viewMode=story',
     );
   });
 
@@ -12,7 +12,7 @@ context('Flow View', () => {
   it('displays poppers', () => {
     cy.get('.column.left .item.has-data').first().click();
     cy.get('.appmap__flow-view-popper[data-placement="left"]').should(
-      'be.visible'
+      'be.visible',
     );
   });
 });

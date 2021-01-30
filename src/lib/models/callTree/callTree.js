@@ -25,7 +25,7 @@ export default class CallTree extends EventSource {
         e,
         e.returnEvent,
         parent,
-        functionLabels(e)
+        functionLabels(e),
       );
       parent.addChild(callNode);
       stack.push(callNode);
