@@ -329,6 +329,16 @@ context('VS Code Extension', () => {
       );
     });
 
+    it('expands package when child was selected from panel', () => {
+      cy.get('.node[data-id="app/helpers"]').click();
+
+      cy.get('.v-details-panel-list').within(() => {
+        cy.get('.list-item').first().click();
+      });
+
+      cy.get('.cluster[data-id="app/helpers"]').should('have.length', 1);
+    });
+
     it('highlights only the first ancestor available if the selected object is not visible', () => {
       cy.get('.node[data-id="app/helpers"]').rightclick();
 
