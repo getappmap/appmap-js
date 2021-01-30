@@ -27,6 +27,10 @@ class Target {
     this.config = config;
   }
 
+  toString() {
+    return this.event.toString();
+  }
+
   /**
    * Check and see if the inbound call is from a non-whitelisted package.
    */
@@ -56,6 +60,10 @@ class Scope {
     this.config = config;
   }
 
+  toString() {
+    return this.event.toString();
+  }
+
   *targets() {
     for (const descendant of this.event.descendants(
       (evt) => packageName(evt) === this.config.packageName,
@@ -72,6 +80,12 @@ export class IllegalPackageDependency {
   constructor(packageName, allowedDependencies) {
     this.packageName = packageName;
     this.allowedDependencies = allowedDependencies;
+  }
+
+  toString() {
+    return `${
+      this.packageName
+    } may only be called from ${this.allowedDependencies.join(', ')}`;
   }
 
   /**
