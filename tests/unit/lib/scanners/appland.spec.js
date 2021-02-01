@@ -4,9 +4,7 @@ import fs from 'fs';
 import { join } from 'path';
 import applandScans from '../../../../src/lib/scanners/appland';
 
-const appmapDir =
-  process.env.APPMAP_DIR ||
-  '/Users/kgilpin/source/appland/appmap-js/../appland/tmp/appmap/rspec';
+const appmapDir = join(__dirname, '../../fixtures/appland');
 
 describe('AppLand scanner', () => {
   test('all appmaps are valid', async () => {
