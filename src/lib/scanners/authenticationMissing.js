@@ -91,7 +91,7 @@ function isAcceptedRoute(event) {
     return false;
   }
 
-  if (event.httpServerResponse.status >= 300) {
+  if (event.httpServerResponse && event.httpServerResponse.status >= 300) {
     return false;
   }
 
