@@ -37,12 +37,12 @@ describe('AppLand scanner', () => {
       .filter((result) => result)
       .forEach((result) => {
         const { filename, results } = result;
-        console.log(filename);
         results.forEach((entry) => {
           const { errors } = entry;
           if (errors.length === 0) {
             return;
           }
+          console.log(filename);
           console.log(entry.scanner.toString());
           console.log(entry.targets.map((e) => e.toString()).join(', '));
           console.log(entry.matches.map((e) => e.toString()).join(', '));
