@@ -13,7 +13,6 @@
 
   &__content {
     display: inline-block;
-    will-change: transform;
   }
 
   @each $scheme, $colors in $themes {
