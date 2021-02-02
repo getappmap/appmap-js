@@ -49,7 +49,7 @@ export default class EventSorter {
     // every event.
     const stacks = [...this.finalizedStacks];
     Object.values(this.activeStacks).forEach((s) =>
-      stacks.splice(s.id, 0, s.events)
+      stacks.splice(s.id, 0, s.events),
     );
 
     return stacks.reduce((chunks, stack) => {

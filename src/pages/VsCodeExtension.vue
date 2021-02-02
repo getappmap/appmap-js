@@ -21,32 +21,8 @@
       </v-details-panel>
     </div>
 
-<<<<<<< HEAD
     <div class="main-column main-column--right">
-=======
-    <div class="column column--right">
-      <div class="search-wrap">
-        <div id="search">
-          <h3 class="block-heading">Filters</h3>
-          <div id="filter-input">
-            <input
-              type="text"
-              size="80"
-              placeholder="Filter the diagram by package, class or function"
-              autocomplete="off"
-            />
-          </div>
-        </div>
-        <div id="search-results">
-          <ul>
-            <li>user::name</li>
-            <li>filter::name</li>
-            <li>lorem::ipsum</li>
-          </ul>
-        </div>
-      </div>
-
->>>>>>> 0432507... Styling and filtering placeholder
+      <v-search-panel />
       <v-tabs @activateTab="onChangeTab" ref="tabs">
         <v-tab
           name="Dependency Map"
@@ -73,6 +49,7 @@ import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramFlow from '../components/DiagramFlow.vue';
+import VSearchPanel from '../components/SearchPanel.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import {
@@ -93,6 +70,7 @@ export default {
     VDetailsButton,
     VDiagramComponent,
     VDiagramFlow,
+    VSearchPanel,
     VTabs,
     VTab,
   },
@@ -212,8 +190,7 @@ code {
     &--left {
       grid-column: 1;
       width: 100%;
-      background-color: $vs-code-gray1;
-      height: 100vh;
+      background-color: $gray2;
     }
 
     &--right {
@@ -223,68 +200,6 @@ code {
       min-width: 250px;
       word-break: break-all;
       overflow: hidden;
-      display: grid;
-      grid-template-rows: auto 1fr;
-    }
-  }
-
-  //Search
-  .search-wrap {
-    background-color: $vs-code-gray1;
-    font-family: sans-serif;
-    color: $base03;
-    font-size: 1rem;
-    font-weight: 500;
-    margin: 0;
-    transition: $transition;
-    display: flex;
-    flex-direction: column;
-  }
-  #search {
-    padding: 1.5rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    h3 {
-      color: $base03;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      margin: 0;
-    }
-  }
-  #filter-input {
-    width: 90%;
-    input {
-      font-size: 0.9rem;
-      letter-spacing: 0.5px;
-      width: 100%;
-    }
-  }
-  #search-results {
-    background-color: var(--vs-code-gray1);
-    //margin-bottom: 1rem;
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      li {
-        color: var(--base11);
-        border-bottom: 1px solid var(--base15);
-        padding: 0.5rem 2rem;
-        transition: $transition;
-        &:hover {
-          background-color: $blue;
-          color: $base03;
-          border-color: $blue;
-          cursor: pointer;
-        }
-        &:first-of-type {
-          border-top: 1px solid var(--base15);
-        }
-        &:last-of-type {
-          border-bottom: 1px solid var(--vs-code-gray2);
-        }
-      }
     }
   }
 }

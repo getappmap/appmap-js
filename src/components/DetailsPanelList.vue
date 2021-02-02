@@ -63,7 +63,7 @@ export default {
           }
           memoElement.count += 1;
           return memo;
-        }, {})
+        }, {}),
       );
     },
   },
@@ -98,18 +98,11 @@ export default {
       &:hover {
         background-color: $blue;
         border-color: $blue;
-<<<<<<< HEAD
         button {
           color: $white;
-=======
-        a {
-          color: $base03;
->>>>>>> 0432507... Styling and filtering placeholder
         }
       }
-    }
 
-<<<<<<< HEAD
       &:first-of-type {
         border-top: 1px solid $gray3;
       }
@@ -144,16 +137,6 @@ export default {
           white-space: nowrap;
         }
       }
-=======
-    &:first-of-type {
-      border-top: 1px solid $gray3;
-    }
-
-    a {
-      color: $gray4;
-      text-decoration: none;
-      transition: $transition;
->>>>>>> 0432507... Styling and filtering placeholder
     }
   }
 }

@@ -11,7 +11,7 @@ describe('Components model', () => {
     expect(components.packages.has('app/models')).toEqual(true);
     expect(components.packages.has('SQL')).toEqual(true);
     expect(components.package_classes.HTTP.has('PUT /applications/5')).toEqual(
-      true
+      true,
     );
     expect(components.package_classes['app/controllers'].size).toEqual(2);
     expect(components.package_classes['app/models'].size).toEqual(7);

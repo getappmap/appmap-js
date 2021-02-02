@@ -8,7 +8,7 @@ describe('Event', () => {
 
     test('callStack', () => {
       const event = appMap.events.find(
-        (e) => e.isCall() && e.methodId === 'getTasks'
+        (e) => e.isCall() && e.methodId === 'getTasks',
       );
       const callStack = event.callStack();
 
@@ -20,7 +20,7 @@ describe('Event', () => {
 
     test('ancestors', () => {
       const event = appMap.events.find(
-        (e) => e.isCall() && e.methodId === 'recover'
+        (e) => e.isCall() && e.methodId === 'recover',
       );
       const ancestors = event.ancestors();
 
@@ -30,7 +30,7 @@ describe('Event', () => {
 
     test('descendants', () => {
       const event = appMap.events.find(
-        (e) => e.isCall() && e.methodId === 'recover'
+        (e) => e.isCall() && e.methodId === 'recover',
       );
       const descendants = event.descendants();
 
@@ -45,7 +45,7 @@ describe('Event', () => {
     test('get sqlQuery', () => {
       const query = 'SELECT COUNT(*) FROM "spree_stores"';
       const event = appMap.events.find(
-        (e) => e.sql_query && e.sql_query.sql === query
+        (e) => e.sql_query && e.sql_query.sql === query,
       );
 
       expect(query).toEqual(event.sqlQuery);
@@ -54,7 +54,7 @@ describe('Event', () => {
     test('get route', () => {
       const event = appMap.events.find(
         (e) =>
-          e.http_server_request && e.http_server_request.path_info === '/admin'
+          e.http_server_request && e.http_server_request.path_info === '/admin',
       );
 
       expect(event.route).toEqual('GET /admin');

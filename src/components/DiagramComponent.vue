@@ -96,7 +96,7 @@ export default {
           .on('edge', (edge) => this.selectObject({ ...edge, type: 'edge' }))
           .on('collapse', () => this.highlightSelectedComponent())
           .on('viewSource', (location) =>
-            this.$root.$emit('viewSource', location)
+            this.$root.$emit('viewSource', location),
           );
         this.highlightSelectedComponent();
       });

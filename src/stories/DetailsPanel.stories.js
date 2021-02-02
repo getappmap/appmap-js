@@ -44,7 +44,7 @@ Class.args = {
 export const Database = Template.bind({});
 Database.args = {
   selectedObject: classMap.roots.find(
-    (obj) => obj.type === CodeObjectType.DATABASE
+    (obj) => obj.type === CodeObjectType.DATABASE,
   ),
 };
 
@@ -60,7 +60,7 @@ Edge.args = {
 export const Event = Template.bind({});
 Event.args = {
   selectedObject: store.state.appMap.events.find(
-    (e) => e.isCall() && e.parameters && e.parameters.length > 3
+    (e) => e.isCall() && e.parameters && e.parameters.length > 3,
   ),
 };
 
