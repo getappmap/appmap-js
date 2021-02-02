@@ -1,4 +1,6 @@
 .appmap__flow-view {
+  will-change: transform;
+
   > * {
     width: max-content;
   }
