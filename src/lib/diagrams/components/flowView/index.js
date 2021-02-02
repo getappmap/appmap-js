@@ -91,9 +91,8 @@ function buildCurveCommands(x1, y1, x2, y2) {
 }
 
 function getNodeElementPosition(nodeId, selector) {
-  const elem = document
-    .querySelector(`.node[data-node-id='${nodeId}']`)
-    .querySelector(`${selector}`);
+  const node = document.querySelector(`.node[data-node-id='${nodeId}']`);
+  const elem = node ? node.querySelector(`${selector}`) : null;
 
   if (!elem) return null;
 
