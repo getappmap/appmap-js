@@ -70,7 +70,7 @@ export default {
         this.componentDiagram.highlight(codeObject);
       } else {
         const visibleObjectParent = [...codeObject.ancestors()].find((obj) =>
-          this.componentDiagram.hasObject(obj),
+          this.componentDiagram.hasObject(obj)
         );
 
         if (visibleObjectParent) {
@@ -105,7 +105,7 @@ export default {
           .on('collapse', () => this.highlightSelectedComponent(false))
           .on('expand', () => this.highlightSelectedComponent(false))
           .on('viewSource', (location) =>
-            this.$root.$emit('viewSource', location),
+            this.$root.$emit('viewSource', location)
           );
         this.highlightSelectedComponent();
       });

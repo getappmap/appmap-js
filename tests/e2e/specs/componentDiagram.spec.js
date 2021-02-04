@@ -1,7 +1,7 @@
 context('Component Diagram', () => {
   beforeEach(() => {
     cy.visit(
-      'http://localhost:6006/iframe.html?id=appland-diagrams--diagram-component&viewMode=story',
+      'http://localhost:6006/iframe.html?id=appland-diagrams--diagram-component&viewMode=story'
     );
   });
 
@@ -18,7 +18,7 @@ context('Component Diagram', () => {
   it('node "Spree::BackendConfiguration" should be expanded', () => {
     cy.get('.nodes .node.package[data-id="lib"]').should('not.exist');
     cy.get(
-      '.nodes .node.class[data-id="lib/Spree::BackendConfiguration"]',
+      '.nodes .node.class[data-id="lib/Spree::BackendConfiguration"]'
     ).should('exist');
   });
 
@@ -28,7 +28,7 @@ context('Component Diagram', () => {
     cy.get('a.dropdown-item').contains('Expand').click();
     cy.get('.clusters .cluster[data-id="app/controllers"]').should(
       'have.class',
-      'cluster--bordered',
+      'cluster--bordered'
     );
   });
 
@@ -45,7 +45,7 @@ context('Component Diagram', () => {
 
     cy.get('.nodes .node.package[data-id="app/helpers"]').should(
       'have.class',
-      'dim',
+      'dim'
     );
     cy.get('.edgePaths .edgePath.dim').should('have.length', 6);
   });

@@ -246,7 +246,7 @@ export default class Graph {
   focus(id) {
     const [visitedNodes, visitedEdges] = findTraversableNodesAndEdges(
       this.graph,
-      id,
+      id
     );
 
     this.graph.nodes().forEach((nodeId) => {

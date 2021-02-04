@@ -62,7 +62,7 @@ export default class Container extends EventSource {
             const { minRatio, maxRatio } = this.options.zoom;
             this.scaleTo((maxRatio - minRatio) * k + minRatio);
             this.active = true;
-          },
+          }
         );
       }
 
@@ -93,7 +93,7 @@ export default class Container extends EventSource {
             (this.options.pan.boundary.overlap -
               this.contentElement.offsetWidth) *
               transform.k,
-            offsetWidth - this.options.pan.boundary.overlap * transform.k,
+            offsetWidth - this.options.pan.boundary.overlap * transform.k
           );
 
           transform.y = clamp(
@@ -101,7 +101,7 @@ export default class Container extends EventSource {
             (this.options.pan.boundary.overlap -
               this.contentElement.offsetHeight) *
               transform.k,
-            offsetHeight - this.options.pan.boundary.overlap * transform.k,
+            offsetHeight - this.options.pan.boundary.overlap * transform.k
           );
 
           this.contentElement.style.transform = `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`;
@@ -142,16 +142,16 @@ export default class Container extends EventSource {
     const { minRatio, maxRatio } = this.options.zoom;
     const desiredRatio = Math.min(
       clientHeight / targetHeight,
-      clientWidth / targetWidth,
+      clientWidth / targetWidth
     );
     const initialScale = Math.max(
       Math.min(Math.max(desiredRatio, minRatio), maxRatio),
-      0.8,
+      0.8
     );
     const transformMatrix = d3.zoomIdentity
       .translate(
         (clientWidth - targetWidth * initialScale) * 0.5,
-        (clientHeight - targetHeight * initialScale) * 0.5,
+        (clientHeight - targetHeight * initialScale) * 0.5
       )
       .scale(initialScale);
 
