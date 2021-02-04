@@ -4,7 +4,7 @@ context('VS Code Extension', () => {
   context('Ruby appmap', () => {
     beforeEach(() => {
       cy.visit(
-        'http://localhost:6006/iframe.html?id=pages-vs-code--extension&viewMode=story',
+        'http://localhost:6006/iframe.html?id=pages-vs-code--extension&viewMode=story'
       );
     });
 
@@ -23,7 +23,7 @@ context('VS Code Extension', () => {
 
       cy.get('.details-panel-header').should(
         'contain.text',
-        'HTTP server requests',
+        'HTTP server requests'
       );
 
       cy.get('.v-details-panel-list')
@@ -33,7 +33,7 @@ context('VS Code Extension', () => {
           'contain.text',
           'GET /admin',
           'GET /admin/orders',
-          'GET /admin/orders/:id/edit',
+          'GET /admin/orders/:id/edit'
         );
     });
 
@@ -51,7 +51,7 @@ context('VS Code Extension', () => {
           'contain.text',
           'Classes',
           'Inbound connections',
-          'Outbound connections',
+          'Outbound connections'
         )
         .children()
         .should(
@@ -61,7 +61,7 @@ context('VS Code Extension', () => {
           'GET /admin',
           'GET /admin/orders',
           'GET /admin/orders/:id/edit',
-          'SELECT',
+          'SELECT'
         );
     });
 
@@ -76,7 +76,7 @@ context('VS Code Extension', () => {
         'contain.text',
         'Class',
         'SecurityUtils',
-        'View source',
+        'View source'
       );
 
       cy.get('.v-details-panel-list')
@@ -114,7 +114,7 @@ context('VS Code Extension', () => {
       cy.get('#intro-details').should('be.visible');
 
       cy.get(
-        '.edgePath[data-from="HTTP server requests"][data-to="app/helpers"]',
+        '.edgePath[data-from="HTTP server requests"][data-to="app/helpers"]'
       )
         .click()
         .should('have.class', 'highlight');
@@ -166,7 +166,7 @@ context('VS Code Extension', () => {
       cy.get('.tabs .tab-btn').first().click();
       cy.get(`.node[data-id="HTTP server requests->GET /admin/orders"]`).should(
         'have.class',
-        'highlight',
+        'highlight'
       );
     });
 
@@ -284,7 +284,7 @@ context('VS Code Extension', () => {
 
     it('edge can navigate to event', () => {
       cy.get(
-        `.edgePath[data-from="HTTP server requests"][data-to="app/helpers"]`,
+        `.edgePath[data-from="HTTP server requests"][data-to="app/helpers"]`
       ).click();
 
       cy.get('.v-details-panel-list')
@@ -325,7 +325,7 @@ context('VS Code Extension', () => {
 
       cy.get(`.nodes .node[data-type="${CodeObjectType.HTTP}"]`).should(
         'not.have.class',
-        'highlight',
+        'highlight'
       );
     });
 
@@ -345,7 +345,7 @@ context('VS Code Extension', () => {
       cy.get('.dropdown-menu').contains('Expand').click();
 
       cy.get(
-        '.node[data-id="app/helpers/Spree::Admin::NavigationHelper"]',
+        '.node[data-id="app/helpers/Spree::Admin::NavigationHelper"]'
       ).click();
 
       cy.get('.v-details-panel-list')
@@ -404,18 +404,37 @@ context('VS Code Extension', () => {
 
       cy.get('.node[data-id="app/helpers"]').should('have.class', 'highlight');
     });
+
+    it('highlight is restored from a function', () => {
+      cy.get(`.node[data-id="lib/Spree::BackendConfiguration"]`).click();
+
+      cy.get('.v-details-panel-list')
+        .contains('Functions')
+        .parent()
+        .within(() => {
+          cy.get('.list-item').contains('menu_items').click();
+        });
+
+      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').first().click();
+
+      cy.get('.node[data-id="lib/Spree::BackendConfiguration"]').should(
+        'have.class',
+        'highlight'
+      );
+    });
   });
 
   context('Java appmap', () => {
     beforeEach(() => {
       cy.visit(
-        'http://localhost:6006/iframe.html?id=pages-vs-code--extension-java&viewMode=story',
+        'http://localhost:6006/iframe.html?id=pages-vs-code--extension-java&viewMode=story'
       );
     });
 
     it('does not show objects without any events', () => {
       cy.get(
-        '.node[data-id="org/springframework/web/filter/OncePerRequestFilter"]',
+        '.node[data-id="org/springframework/web/filter/OncePerRequestFilter"]'
       ).should('not.exist');
     });
 
@@ -423,7 +442,7 @@ context('VS Code Extension', () => {
       cy.get('.tabs .tab-btn').last().click();
       cy.get('.node[data-event-id="1"]').should(
         'contain.text',
-        'POST /owners/7/pets/9/visits/new',
+        'POST /owners/7/pets/9/visits/new'
       );
     });
   });
