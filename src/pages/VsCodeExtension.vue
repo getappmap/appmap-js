@@ -110,12 +110,16 @@ export default {
       return this.$store.state.appMap.callTree;
     },
 
+    currentView() {
+      return this.$store.state.currentView;
+    },
+
     isViewingComponent() {
-      return this.$store.state.currentView === VIEW_COMPONENT;
+      return this.currentView === VIEW_COMPONENT;
     },
 
     isViewingFlow() {
-      return this.$store.state.currentView === VIEW_FLOW;
+      return this.currentView === VIEW_FLOW;
     },
 
     prevSelectedObject() {
@@ -144,7 +148,9 @@ export default {
     },
 
     setView(view) {
-      this.$store.commit(SET_VIEW, view);
+      if (this.currentView !== view) {
+        this.$store.commit(SET_VIEW, view);
+      }
     },
 
     clearSelection() {
