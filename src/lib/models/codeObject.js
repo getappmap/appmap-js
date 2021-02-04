@@ -94,13 +94,13 @@ export default class CodeObject {
 
   get classObject() {
     return [this, ...this.ancestors()].find(
-      (obj) => obj.type === CodeObjectType.CLASS
+      (obj) => obj.type === CodeObjectType.CLASS,
     );
   }
 
   get packageObject() {
     return [this, ...this.ancestors()].find(
-      (obj) => obj.type === CodeObjectType.PACKAGE
+      (obj) => obj.type === CodeObjectType.PACKAGE,
     );
   }
 
@@ -108,18 +108,18 @@ export default class CodeObject {
     if (this.type === CodeObjectType.CLASS) {
       // getting the functions of a class should not return functions of nested classes
       return this.children.filter(
-        (obj) => obj.type === CodeObjectType.FUNCTION
+        (obj) => obj.type === CodeObjectType.FUNCTION,
       );
     }
 
     return this.descendants().filter(
-      (obj) => obj.type === CodeObjectType.FUNCTION
+      (obj) => obj.type === CodeObjectType.FUNCTION,
     );
   }
 
   get classes() {
     return [this, ...this.descendants()].filter(
-      (obj) => obj.type === CodeObjectType.CLASS && obj.functions.length
+      (obj) => obj.type === CodeObjectType.CLASS && obj.functions.length,
     );
   }
 
@@ -169,7 +169,7 @@ export default class CodeObject {
     while (queue.length) {
       const obj = queue.pop();
       const childrenOfType = obj.children.filter(
-        (child) => child.type === type
+        (child) => child.type === type,
       );
 
       // If this object has children of another type, consider it a leaf.

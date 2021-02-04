@@ -32,7 +32,7 @@ export default {
       // Queries will appear in outbound connections, but we have a separate section for queries so
       // filter them out of this list
       return this.object.outboundConnections.filter(
-        (obj) => obj.type !== CodeObjectType.QUERY
+        (obj) => obj.type !== CodeObjectType.QUERY,
       );
     },
     queryEvents() {

@@ -6,6 +6,7 @@
 import { CLEAR_OBJECT_STACK, SELECT_OBJECT } from '@/store/vsCode';
 import { ComponentDiagram } from '@/lib/diagrams';
 import { CodeObject, Event } from '@/lib/models';
+import { CodeObjectType } from '@/lib/models/codeObject';
 
 export default {
   name: 'v-diagram-component',
@@ -49,7 +50,7 @@ export default {
   },
 
   methods: {
-    highlightSelectedComponent() {
+    highlightSelectedComponent(expandParent = true) {
       const { selectedObject } = this.$store.getters;
       if (!selectedObject) {
         this.componentDiagram.highlight(null);
@@ -65,19 +66,26 @@ export default {
         return;
       }
 
-      // TODO.
-      // We're attempting to highlight any visible component within the hierarchy. We should instead
-      // make the selected object visible via expand/collapse.
       if (this.componentDiagram.hasObject(codeObject)) {
         this.componentDiagram.highlight(codeObject);
       } else {
-        const visibleObject = [
-          ...codeObject.descendants(),
-          codeObject,
-          ...codeObject.ancestors(),
-        ].find((obj) => this.componentDiagram.hasObject(obj));
+        const visibleObjectParent = [...codeObject.ancestors()].find((obj) =>
+          this.componentDiagram.hasObject(obj),
+        );
 
-        this.componentDiagram.highlight(visibleObject);
+        if (visibleObjectParent) {
+          const parentCanExpand = [
+            CodeObjectType.PACKAGE,
+            CodeObjectType.HTTP,
+          ].includes(visibleObjectParent.type);
+
+          if (expandParent && parentCanExpand) {
+            this.componentDiagram.expand(visibleObjectParent);
+            this.componentDiagram.highlight(codeObject);
+          } else {
+            this.componentDiagram.highlight(visibleObjectParent);
+          }
+        }
       }
     },
 
@@ -94,9 +102,10 @@ export default {
         this.componentDiagram
           .on('click', (codeObject) => this.selectObject(codeObject))
           .on('edge', (edge) => this.selectObject({ ...edge, type: 'edge' }))
-          .on('collapse', () => this.highlightSelectedComponent())
+          .on('collapse', () => this.highlightSelectedComponent(false))
+          .on('expand', () => this.highlightSelectedComponent(false))
           .on('viewSource', (location) =>
-            this.$root.$emit('viewSource', location)
+            this.$root.$emit('viewSource', location),
           );
         this.highlightSelectedComponent();
       });

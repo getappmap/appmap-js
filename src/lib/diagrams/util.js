@@ -26,7 +26,7 @@ export function lazyPanToElement(viewport, element, padding = 0) {
 
   let { x, y } = Geometry.delta(
     viewport.element.getBoundingClientRect(),
-    element.getBoundingClientRect()
+    element.getBoundingClientRect(),
   );
 
   // Apply padding
@@ -46,7 +46,7 @@ function nodeFullyVisible(viewport, node) {
   if (!node) return false;
   return Geometry.contains(
     viewport.element.getBoundingClientRect(),
-    node.getBoundingClientRect()
+    node.getBoundingClientRect(),
   );
 }
 

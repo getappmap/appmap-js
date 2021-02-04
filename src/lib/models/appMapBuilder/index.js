@@ -49,7 +49,7 @@ class AppMapBuilder extends EventSource {
       this.data = JSON.parse(data);
     } else {
       throw new Error(
-        `got invalid type ${dataType}, expected object or string`
+        `got invalid type ${dataType}, expected object or string`,
       );
     }
 
@@ -195,7 +195,7 @@ class AppMapBuilder extends EventSource {
 
           const name = eventName(classMap, e);
           return !exclusions.has(name);
-        })
+        }),
       );
     });
   }
@@ -208,7 +208,7 @@ class AppMapBuilder extends EventSource {
         return transformedChunk.map((stack) => {
           const transformedStack = transform(this.transforms.stack, stack);
           return transformedStack.map((event) =>
-            transform(this.transforms.event, event)
+            transform(this.transforms.event, event),
           );
         });
       })
