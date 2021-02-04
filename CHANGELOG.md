@@ -5,6 +5,12 @@ All notable changes to the "appmap" extension will be documented in this file.
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how
 to structure this file.
 
+## [0.2.6]
+
+- Fixed an issue where returning back to a function call could result in an
+  infinite loop
+- Packages now expand automatically when navigating through the details panel
+
 ## [0.2.5]
 
 - Expanded packages use their short name
