@@ -85,7 +85,7 @@ export default {
         const { id } = selectedObject;
         this.flowView.highlight(id);
 
-        const element = this.$el.querySelector(`.node[data-node-id="${id}"]`);
+        const element = this.$el.querySelector(`#traceNode${id}`);
         panToNode(this.flowView.container.containerController, element);
       } else {
         this.flowView.highlight(null);
