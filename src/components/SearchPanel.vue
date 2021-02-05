@@ -1,29 +1,44 @@
 <template>
   <div class="search">
-    <div class="search__form">
-      <input
-        class="search__input"
-        type="text"
-        placeholder="Filter the diagram by package, class or function"
-        autocomplete="off"
-      />
-    </div>
-    <div class="search__results">
+    <form class="search__form" @submit.prevent="onFormSubmit" ref="form">
+      <div class="search__input-container">
+        <input
+          ref="input"
+          class="search__input"
+          type="text"
+          placeholder="Filter the diagram by package, class or function"
+          autocomplete="off"
+          @input="onInputInput"
+          @blur="onInputBlur"
+        />
+        <div class="search__suggestions" hidden ref="suggestions">
+          <ul class="search__suggestions-list">
+            <li class="search__suggestions-item">test</li>
+            <li class="search__suggestions-item">test</li>
+            <li class="search__suggestions-item">test</li>
+            <li class="search__suggestions-item">test</li>
+          </ul>
+        </div>
+      </div>
+    </form>
+    <div class="search__results" v-if="filterList.length">
       <ul class="search__results-list">
-        <li class="search__results-item">
-          <span>user::name</span>
-          <button class="search__results-item-btn" type="button">×</button>
-        </li>
-        <li class="search__results-item">
-          <span>user::name</span>
-          <button class="search__results-item-btn" type="button">×</button>
-        </li>
-        <li class="search__results-item">
-          <span>user::name</span>
-          <button class="search__results-item-btn" type="button">×</button>
+        <li
+          class="search__results-item"
+          v-for="(item, index) in filterList"
+          :key="index"
+        >
+          <span>{{ item.name }}</span>
+          <button
+            class="search__results-item-btn"
+            type="button"
+            @click="deleteItem(index)"
+          >
+            ×
+          </button>
         </li>
       </ul>
-      <button class="search__results-clear-all" type="button">
+      <button class="search__results-clear-all" type="button" @click="clearAll">
         × Clear all
       </button>
     </div>
@@ -31,12 +46,58 @@
 </template>
 
 <script>
+import { SET_FILTERED_OBJECTS } from '../store/vsCode';
+
 export default {
   name: 'v-search-panel',
   props: {
-    subtitle: String,
-    selectedObject: {
+    appmap: {
       type: Object,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      filterList: [],
+    };
+  },
+
+  methods: {
+    onInputInput() {
+      const inputStr = this.$refs.input.value;
+
+      if (inputStr.length > 3) {
+        this.$refs.suggestions.removeAttribute('hidden');
+      } else {
+        this.$refs.suggestions.setAttribute('hidden', '');
+      }
+    },
+
+    onInputBlur() {
+      setTimeout(() => {
+        this.$refs.input.value = '';
+        this.$refs.suggestions.setAttribute('hidden', '');
+      }, 100);
+    },
+
+    onFormSubmit() {
+      this.filterList.push({
+        name: this.$refs.input.value,
+      });
+      this.$refs.input.value = '';
+      this.$refs.suggestions.setAttribute('hidden', '');
+      this.$store.commit(SET_FILTERED_OBJECTS, this.filterList);
+    },
+
+    deleteItem(index) {
+      this.filterList.splice(index, 1);
+      this.$store.commit(SET_FILTERED_OBJECTS, this.filterList);
+    },
+
+    clearAll() {
+      this.filterList = [];
+      this.$store.commit(SET_FILTERED_OBJECTS, this.filterList);
     },
   },
 };
@@ -56,24 +117,64 @@ export default {
   display: flex;
   flex-direction: column;
 
-  &__form {
-    margin-bottom: 1rem;
+  &__input-container {
+    position: relative;
+    border: 1px solid $base15;
+    border-radius: $border-radius;
   }
 
   &__input {
-    border: 1px solid $base15;
+    position: relative;
+    border: none;
     border-radius: $border-radius;
     padding: 0.5rem 1rem;
     font: inherit;
     font-size: 0.9rem;
     letter-spacing: 0.5px;
     width: 100%;
-    background-color: transparent;
+    height: 2rem;
+    background-color: $vs-code-gray1;
     color: $gray5;
     outline: none;
+    z-index: 10;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__suggestions {
+    position: absolute;
+    top: 2rem;
+    left: -1px;
+    right: -1px;
+    margin-top: -6px;
+    z-index: 5;
+    border: 1px solid $base15;
+    border-radius: 0 0 $border-radius $border-radius;
+    padding-top: 6px;
+    background: $base15;
+
+    &-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    &-item {
+      border-radius: $border-radius;
+      padding: 0.3rem 1rem;
+      cursor: pointer;
+
+      &:hover,
+      &:active {
+        background: darken($base15, 5);
+      }
+    }
   }
 
   &__results {
+    margin-top: 1rem;
     display: flex;
 
     &-list {

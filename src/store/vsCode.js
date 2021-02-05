@@ -10,6 +10,7 @@ export const SET_APPMAP_DATA = 'setAppMapData';
 export const POP_OBJECT_STACK = 'popObjectStack';
 export const CLEAR_OBJECT_STACK = 'clearObjectStack';
 export const SET_VIEW = 'setView';
+export const SET_FILTERED_OBJECTS = 'setFilteredObjects';
 export const VIEW_COMPONENT = 'viewComponent';
 export const VIEW_FLOW = 'viewFlow';
 
@@ -18,6 +19,7 @@ export const store = new Vuex.Store({
     appMap: new AppMap(),
     selectionStack: [],
     currentView: VIEW_COMPONENT,
+    filteredObjects: [],
   },
 
   getters: {
@@ -62,6 +64,10 @@ export const store = new Vuex.Store({
 
     [SET_VIEW](state, view) {
       state.currentView = view;
+    },
+
+    [SET_FILTERED_OBJECTS](state, list) {
+      state.filteredObjects = list;
     },
   },
 });

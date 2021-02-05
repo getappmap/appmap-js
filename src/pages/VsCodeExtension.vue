@@ -22,7 +22,7 @@
     </div>
 
     <div class="main-column main-column--right">
-      <v-search-panel />
+      <v-search-panel :appmap="components" />
       <v-tabs @activateTab="onChangeTab" ref="tabs">
         <v-tab
           name="Dependency Map"
@@ -96,6 +96,11 @@ export default {
         if (selectedObject && !(selectedObject instanceof Event)) {
           this.setView(VIEW_COMPONENT);
         }
+      },
+    },
+    '$store.state.filteredObjects': {
+      handler(filteredObjects) {
+        console.log('filtered objects:', filteredObjects);
       },
     },
   },
