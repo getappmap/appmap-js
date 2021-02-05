@@ -177,6 +177,17 @@ export default {
       font-weight: 500;
       li {
         padding: 0.5rem 2rem;
+        display: grid;
+        grid-auto-columns: 1fr;
+        width: 100%;
+        width: 100%;
+        display: grid;
+        grid-auto-flow: column;
+        i,
+        strong,
+        code {
+          padding: 0.25rem 0;
+        }
       }
     }
   }
@@ -190,9 +201,6 @@ export default {
       border-bottom: 1px solid $gray3;
       padding: 0.5rem 0;
       transition: $transition;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
       a {
         margin: 0 2rem;
         width: 100%;

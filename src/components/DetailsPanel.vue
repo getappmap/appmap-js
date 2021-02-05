@@ -76,8 +76,25 @@ export default {
   &__title {
     padding: 2rem;
     margin: 0;
+    background: rgb(17, 17, 17);
+    background: -moz-linear-gradient(
+      180deg,
+      rgba(17, 17, 17, 1) 0%,
+      rgba(30, 30, 30, 1) 93%
+    );
+    background: -webkit-linear-gradient(
+      180deg,
+      rgba(17, 17, 17, 1) 0%,
+      rgba(30, 30, 30, 1) 93%
+    );
+    background: linear-gradient(
+      180deg,
+      rgba(17, 17, 17, 1) 0%,
+      rgba(30, 30, 30, 1) 93%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#111111",endColorstr="#1e1e1e",GradientType=1);
     img {
-      max-width: 10rem;
+      max-width: 9rem;
     }
   }
 

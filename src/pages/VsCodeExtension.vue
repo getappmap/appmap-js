@@ -22,6 +22,7 @@
     </div>
 
     <div class="main-column main-column--right">
+      <v-search-panel />
       <v-tabs @activateTab="onChangeTab" ref="tabs">
         <v-tab
           name="Dependency Map"
@@ -48,6 +49,7 @@ import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramFlow from '../components/DiagramFlow.vue';
+import VSearchPanel from '../components/SearchPanel.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import {
@@ -68,6 +70,7 @@ export default {
     VDetailsButton,
     VDiagramComponent,
     VDiagramFlow,
+    VSearchPanel,
     VTabs,
     VTab,
   },
@@ -193,7 +196,8 @@ code {
     &--left {
       grid-column: 1;
       width: 100%;
-      background-color: $gray2;
+      background-color: $vs-code-gray1;
+      height: 100vh;
     }
 
     &--right {
