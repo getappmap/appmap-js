@@ -84,6 +84,7 @@
     "sass-resources-loader": "^2.1.1",
     "semantic-release": "^17.3.8",
     "start-server-and-test": "^1.11.7",
+    "vue-svg-loader": "^0.16.0",
     "vue-template-compiler": "^2.6.11"
   },
   "lint-staged": {
