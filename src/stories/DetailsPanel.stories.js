@@ -1,9 +1,10 @@
 import VDetailsPanel from '@/components/DetailsPanel.vue';
 import VDetailsButton from '@/components/DetailsButton.vue';
 import scenario from '@/stories/data/scenario.json';
-import { store, SET_APPMAP_DATA } from '@/store/vsCode';
+import { buildStore, SET_APPMAP_DATA } from '@/store/vsCode';
 import { CodeObjectType } from '@/lib/models/codeObject';
 
+const store = buildStore();
 store.commit(SET_APPMAP_DATA, scenario);
 
 const { classMap } = store.state.appMap;

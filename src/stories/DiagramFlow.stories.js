@@ -1,12 +1,13 @@
 import VDiagramFlow from '@/components/DiagramFlow.vue';
 import scenario from '@/stories/data/scenario.json';
-import { store, SET_APPMAP_DATA } from '@/store/vsCode';
+import { buildStore, SET_APPMAP_DATA } from '@/store/vsCode';
 import './scss/fullscreen.scss';
 
+const store = buildStore();
 store.commit(SET_APPMAP_DATA, scenario);
 
 export default {
-  title: 'AppLand/Diagrams',
+  title: 'AppLand/Diagrams/Flow',
   component: VDiagramFlow,
   argTypes: {
     theme: { control: { type: 'select', options: ['dark', 'light'] } },
@@ -17,7 +18,7 @@ export default {
   },
 };
 
-export const diagramFlow = (args, { argTypes }) => ({
+export const flow = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiagramFlow },
   template: '<v-diagram-flow v-bind="$props" />',

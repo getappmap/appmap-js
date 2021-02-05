@@ -1,12 +1,13 @@
 import VDiagramComponent from '@/components/DiagramComponent.vue';
 import scenario from '@/stories/data/scenario.json';
-import { store, SET_APPMAP_DATA } from '@/store/vsCode';
+import { buildStore, SET_APPMAP_DATA } from '@/store/vsCode';
 import './scss/fullscreen.scss';
 
+const store = buildStore();
 store.commit(SET_APPMAP_DATA, scenario);
 
 export default {
-  title: 'AppLand/Diagrams',
+  title: 'AppLand/Diagrams/Component',
   component: VDiagramComponent,
   argTypes: {
     theme: { control: { type: 'select', options: ['dark', 'light'] } },
@@ -14,7 +15,7 @@ export default {
   args: {},
 };
 
-export const diagramComponent = (args, { argTypes }) => ({
+export const component = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiagramComponent },
   template: '<v-diagram-component v-bind="$props" />',
