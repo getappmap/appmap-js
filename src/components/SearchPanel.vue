@@ -1,6 +1,6 @@
 <template>
   <div class="search">
-    <form class="search__form" @submit.prevent="onFormSubmit" ref="form">
+    <div class="search__form" ref="form">
       <div class="search__input-container">
         <input
           ref="input"
@@ -9,18 +9,34 @@
           placeholder="Filter the diagram by package, class or function"
           autocomplete="off"
           @input="onInputInput"
-          @blur="onInputBlur"
         />
-        <div class="search__suggestions" hidden ref="suggestions">
-          <ul class="search__suggestions-list">
-            <li class="search__suggestions-item">test</li>
-            <li class="search__suggestions-item">test</li>
-            <li class="search__suggestions-item">test</li>
-            <li class="search__suggestions-item">test</li>
-          </ul>
+        <div class="search__suggestions" hidden ref="suggestions" @click.stop>
+          <div
+            class="search__suggestions-block"
+            v-for="group in suggestionsList"
+            :key="group.title"
+          >
+            <p class="search__suggestions-block-title">{{ group.title }}</p>
+            <ul class="search__suggestions-list">
+              <li
+                class="search__suggestions-item"
+                v-for="item in group.items"
+                :key="item"
+                @click="addItem(item)"
+              >
+                {{ item }}
+              </li>
+            </ul>
+          </div>
+          <div
+            class="search__suggestions-block"
+            v-if="suggestionsList.length == 0"
+          >
+            No results found
+          </div>
         </div>
       </div>
-    </form>
+    </div>
     <div class="search__results" v-if="filterList.length">
       <ul class="search__results-list">
         <li
@@ -60,33 +76,39 @@ export default {
   data() {
     return {
       filterList: [],
+      suggestionsList: [],
+      suggestionsTimeout: null,
     };
   },
 
   methods: {
     onInputInput() {
-      const inputStr = this.$refs.input.value;
+      const inputStr = this.$refs.input.value.trim();
 
-      if (inputStr.length > 3) {
-        this.$refs.suggestions.removeAttribute('hidden');
+      window.clearTimeout(this.suggestionsTimeout);
+
+      if (inputStr.length > 2) {
+        this.suggestionsTimeout = window.setTimeout(() => {
+          this.makeSuggestions(inputStr);
+          this.$refs.suggestions.removeAttribute('hidden');
+        }, 300);
       } else {
         this.$refs.suggestions.setAttribute('hidden', '');
       }
     },
 
-    onInputBlur() {
-      setTimeout(() => {
-        this.$refs.input.value = '';
-        this.$refs.suggestions.setAttribute('hidden', '');
-      }, 100);
-    },
-
-    onFormSubmit() {
-      this.filterList.push({
-        name: this.$refs.input.value,
-      });
+    clearInput() {
+      window.clearTimeout(this.suggestionsTimeout);
       this.$refs.input.value = '';
       this.$refs.suggestions.setAttribute('hidden', '');
+    },
+
+    addItem(id) {
+      this.clearInput();
+
+      this.filterList.push({
+        name: id,
+      });
       this.$store.commit(SET_FILTERED_OBJECTS, this.filterList);
     },
 
@@ -99,6 +121,48 @@ export default {
       this.filterList = [];
       this.$store.commit(SET_FILTERED_OBJECTS, this.filterList);
     },
+
+    makeSuggestions(inputStr) {
+      const regex = new RegExp(inputStr.toLowerCase(), 'ig');
+      const filtered = {
+        package: {
+          title: 'Packages',
+          items: new Set(),
+        },
+        class: {
+          title: 'Classes',
+          items: new Set(),
+        },
+        function: {
+          title: 'Functions',
+          items: new Set(),
+        },
+      };
+
+      this.appmap.classMap.codeObjects.forEach((obj) => {
+        switch (obj.type) {
+          case 'package':
+          case 'class':
+          case 'function':
+            if (regex.test(obj.id)) {
+              filtered[obj.type].items.add(obj.id);
+            }
+            break;
+          default:
+            break;
+        }
+      });
+
+      this.suggestionsList = Object.values(filtered).filter(
+        (group) => group.items.size
+      );
+    },
+  },
+
+  mounted() {
+    document.addEventListener('click', () => {
+      this.clearInput();
+    });
   },
 };
 </script>
@@ -109,7 +173,7 @@ export default {
   font-family: sans-serif;
   color: $base03;
   font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
   margin: 0;
   padding: 1.5rem 2rem;
@@ -129,7 +193,6 @@ export default {
     border-radius: $border-radius;
     padding: 0.5rem 1rem;
     font: inherit;
-    font-size: 0.9rem;
     letter-spacing: 0.5px;
     width: 100%;
     height: 2rem;
@@ -150,10 +213,22 @@ export default {
     right: -1px;
     margin-top: -6px;
     z-index: 5;
+    max-height: 50vh;
+    overflow: auto;
     border: 1px solid $base15;
     border-radius: 0 0 $border-radius $border-radius;
     padding-top: 6px;
     background: $base15;
+
+    &-block {
+      margin: 1rem;
+
+      &-title {
+        margin: 0 0 0.3rem;
+        text-transform: uppercase;
+        border-bottom: 1px solid $base03;
+      }
+    }
 
     &-list {
       margin: 0;
@@ -163,7 +238,7 @@ export default {
 
     &-item {
       border-radius: $border-radius;
-      padding: 0.3rem 1rem;
+      padding: 0.3rem;
       cursor: pointer;
 
       &:hover,
@@ -176,6 +251,7 @@ export default {
   &__results {
     margin-top: 1rem;
     display: flex;
+    align-items: flex-start;
 
     &-list {
       flex: 1;

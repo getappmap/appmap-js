@@ -22,7 +22,7 @@
     </div>
 
     <div class="main-column main-column--right">
-      <v-search-panel :appmap="components" />
+      <v-search-panel :appmap="appMap" />
       <v-tabs @activateTab="onChangeTab" ref="tabs">
         <v-tab
           name="Dependency Map"
@@ -108,6 +108,10 @@ export default {
   computed: {
     selectedObject() {
       return this.$store.getters.selectedObject;
+    },
+
+    appMap() {
+      return this.$store.state.appMap;
     },
 
     components() {
