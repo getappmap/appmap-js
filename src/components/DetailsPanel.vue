@@ -1,7 +1,7 @@
 <template>
   <div class="details-panel">
     <h3 class="details-panel__title">
-      <img src="../assets/appland-logo.svg" />
+      <ApplandLogo />
     </h3>
     <div class="details-panel__content">
       <div class="details-panel__buttons">
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import ApplandLogo from '@/assets/appland-logo.svg';
 import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
 import VDetailsPanelDatabase from '@/components/DetailsPanelDatabase.vue';
 import VDetailsPanelEdge from '@/components/DetailsPanelEdge.vue';
@@ -27,6 +28,7 @@ import { Event } from '@/lib/models';
 export default {
   name: 'v-details-panel',
   components: {
+    ApplandLogo,
     VDetailsPanelClass,
     VDetailsPanelDatabase,
     VDetailsPanelEdge,
@@ -76,7 +78,8 @@ export default {
   &__title {
     padding: 2rem;
     margin: 0;
-    img {
+
+    svg {
       max-width: 10rem;
     }
   }
