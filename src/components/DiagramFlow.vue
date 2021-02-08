@@ -82,13 +82,20 @@ export default {
 
       const { selectedObject } = this.$store.getters;
       if (selectedObject && selectedObject instanceof Event) {
-        const { id } = selectedObject;
-        this.flowView.highlight(id);
-
-        const element = this.$el.querySelector(`.node[data-node-id="${id}"]`);
-        panToNode(this.flowView.container.containerController, element);
+        this.flowView.highlight(selectedObject.id);
+        this.panToSelectedEvent();
       } else {
         this.flowView.highlight(null);
+      }
+    },
+
+    panToSelectedEvent() {
+      const { selectedObject } = this.$store.getters;
+      if (selectedObject && selectedObject instanceof Event) {
+        const element = this.$el.querySelector(
+          `.node[data-node-id="${selectedObject.id}"]`
+        );
+        panToNode(this.flowView.container.containerController, element);
       }
     },
   },
@@ -99,6 +106,10 @@ export default {
 
   updated() {
     this.renderDiagram();
+  },
+
+  activated() {
+    this.panToSelectedEvent();
   },
 };
 </script>

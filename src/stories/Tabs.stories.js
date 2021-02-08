@@ -1,22 +1,30 @@
 import VTabs from '@/components/Tabs.vue';
-import VTab from '@/components/Tab.vue';
+import VTabButton from '../components/TabButton.vue';
 
 export default {
   title: 'AppLand/Layouts',
   component: VTabs,
   argTypes: {},
   args: {
-    tabs: ['Tab one', 'Tab two'],
+    tabs: [
+      { key: 'tab1', name: 'Tab One', isActive: true },
+      { key: 'tab2', name: 'Tab Two', isActive: false },
+    ],
   },
 };
 
 export const tabs = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { VTabs, VTab },
+  components: { VTabButton, VTabs },
+  data: () => ({ isActiveTab: true }),
   template: `
-    <v-tabs>
-      <v-tab name="Tab one">Tab content #1</v-tab>
-      <v-tab name="Tab two">... and tab content #2</v-tab>
+    <v-tabs :tabs="tabs">
+      <keep-alive>
+        <v-tab-button
+          v-if="isActiveTab"
+          label="Dummy Button"
+        />
+      </keep-alive>
     </v-tabs>
   `,
 });

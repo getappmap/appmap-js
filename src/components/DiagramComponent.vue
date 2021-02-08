@@ -86,25 +86,23 @@ export default {
     },
 
     renderDiagram() {
-      this.$nextTick(() => {
-        this.componentDiagram = new ComponentDiagram(this.$el, {
-          theme: this.theme,
-          zoom: {
-            controls: this.zoomButtons,
-          },
-        });
-        this.componentDiagram.render(this.$store.state.appMap.classMap);
-
-        this.componentDiagram
-          .on('click', (codeObject) => this.selectObject(codeObject))
-          .on('edge', (edge) => this.selectObject({ ...edge, type: 'edge' }))
-          .on('collapse', () => this.highlightSelectedComponent(false))
-          .on('expand', () => this.highlightSelectedComponent(false))
-          .on('viewSource', (location) =>
-            this.$root.$emit('viewSource', location)
-          );
-        this.highlightSelectedComponent();
+      this.componentDiagram = new ComponentDiagram(this.$el, {
+        theme: this.theme,
+        zoom: {
+          controls: this.zoomButtons,
+        },
       });
+      this.componentDiagram.render(this.$store.state.appMap.classMap);
+
+      this.componentDiagram
+        .on('click', (codeObject) => this.selectObject(codeObject))
+        .on('edge', (edge) => this.selectObject({ ...edge, type: 'edge' }))
+        .on('collapse', () => this.highlightSelectedComponent(false))
+        .on('expand', () => this.highlightSelectedComponent(false))
+        .on('viewSource', (location) =>
+          this.$root.$emit('viewSource', location)
+        );
+      this.highlightSelectedComponent();
     },
 
     selectObject(object) {
@@ -121,6 +119,13 @@ export default {
 
   updated() {
     this.renderDiagram();
+  },
+
+  activated() {
+    if (this.componentDiagram) {
+      this.componentDiagram.render(this.$store.state.appMap.classMap);
+      this.highlightSelectedComponent();
+    }
   },
 };
 </script>

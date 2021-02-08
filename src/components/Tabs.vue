@@ -3,12 +3,11 @@
     <div class="tabs__header">
       <v-tab-button
         v-for="tab in tabs"
-        :key="tab.name"
+        :key="tab.key"
         :label="tab.name"
-        :is-active="activeTab === tab"
-        @click.native="activateTab(tab)"
-      >
-      </v-tab-button>
+        :is-active="tab.isActive"
+        @click.native="activateTab(tab.key)"
+      />
     </div>
     <div class="tabs__content">
       <slot />
@@ -24,37 +23,17 @@ export default {
 
   components: { VTabButton },
 
-  data() {
-    return {
-      activeTab: null,
-      tabs: [],
-    };
-  },
-
-  methods: {
-    activateTab(tab) {
-      if (tab === this.activateTab) {
-        return;
-      }
-
-      if (this.activeTab) {
-        this.activeTab.setActive(false);
-      }
-
-      if (tab) {
-        tab.setActive(true);
-      }
-
-      this.activeTab = tab;
-      this.$emit('activateTab', tab);
+  props: {
+    tabs: {
+      type: Array,
+      required: true,
     },
   },
 
-  mounted() {
-    this.$nextTick(() => {
-      this.tabs = this.$children.filter((c) => c.$options.name === 'v-tab');
-      this.activateTab(this.tabs[0]);
-    });
+  methods: {
+    activateTab(tabKey) {
+      this.$emit('activateTab', tabKey);
+    },
   },
 };
 </script>

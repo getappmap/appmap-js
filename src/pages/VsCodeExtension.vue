@@ -22,18 +22,14 @@
     </div>
 
     <div class="main-column main-column--right">
-      <v-tabs @activateTab="onChangeTab" ref="tabs">
-        <v-tab
-          name="Dependency Map"
-          :is-active="isViewingComponent"
-          :ref="VIEW_COMPONENT"
-        >
-          <v-diagram-component ref="componentDiagram" />
-        </v-tab>
-
-        <v-tab name="Trace" :is-active="isViewingFlow" :ref="VIEW_FLOW">
-          <v-diagram-flow ref="diagramFlow" :call-tree="callTree" />
-        </v-tab>
+      <v-tabs @activateTab="setView" :tabs="tabs">
+        <keep-alive>
+          <v-diagram-component
+            v-if="isViewingComponent"
+            :component-data="components"
+          />
+          <v-diagram-flow v-if="isViewingFlow" :call-tree="callTree" />
+        </keep-alive>
       </v-tabs>
     </div>
   </div>
@@ -46,7 +42,6 @@ import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramFlow from '../components/DiagramFlow.vue';
 import VTabs from '../components/Tabs.vue';
-import VTab from '../components/Tab.vue';
 import {
   store,
   SET_APPMAP_DATA,
@@ -66,7 +61,6 @@ export default {
     VDiagramComponent,
     VDiagramFlow,
     VTabs,
-    VTab,
   },
 
   store,
@@ -81,8 +75,7 @@ export default {
   watch: {
     '$store.state.currentView': {
       handler(view) {
-        this.onChangeTab(this.$refs[view]);
-        this.$refs.tabs.activateTab(this.$refs[view]);
+        this.setView(view);
       },
     },
     '$store.getters.selectedObject': {
@@ -95,6 +88,21 @@ export default {
   },
 
   computed: {
+    tabs() {
+      return [
+        {
+          key: VIEW_COMPONENT,
+          name: 'Dependency Map',
+          isActive: this.isViewingComponent,
+        },
+        {
+          key: VIEW_FLOW,
+          name: 'Trace',
+          isActive: this.isViewingFlow,
+        },
+      ];
+    },
+
     selectedObject() {
       return this.$store.getters.selectedObject;
     },
@@ -127,17 +135,6 @@ export default {
   methods: {
     loadData(data) {
       this.$store.commit(SET_APPMAP_DATA, data);
-    },
-
-    onChangeTab(tab) {
-      // tabs are referenced by their view key
-      const index = Object.values(this.$refs).findIndex((ref) => ref === tab);
-      if (index === -1) {
-        // There's no ref set up for this tab
-        return;
-      }
-
-      this.setView(Object.keys(this.$refs)[index]);
     },
 
     setView(view) {
