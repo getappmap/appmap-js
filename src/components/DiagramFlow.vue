@@ -106,8 +106,8 @@ export default {
 <style lang="scss">
 @import '@/scss/diagrams/style';
 .diagram-flow {
-  max-height: 100vh;
-  max-width: 100vw;
+  width: 100%;
+  height: 100%;
   .appmap.appmap--theme-dark {
     background-color: $vs-code-gray1;
     overflow: hidden;
