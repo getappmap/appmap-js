@@ -4,8 +4,12 @@
       {{ title }}
     </div>
     <div class="trace-node__body">
-      <node-connection class="connection-icon connection-icon--connected" />
       <node-connection
+        ref="flowIn"
+        class="connection-icon connection-icon--connected"
+      />
+      <node-connection
+        ref="flowOut"
         :class="outboundConnectionClasses"
         @click.prevent="$emit('expandChildren')"
       />
@@ -79,6 +83,10 @@ $bg-color: $gray2;
   display: inline-block;
   box-shadow: 0.2em 0.2em 10px 0px rgb(0 0 0 / 60%);
   color: #bababa;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 
   &__header {
     text-align: center;
