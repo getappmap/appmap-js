@@ -10,7 +10,7 @@
           </p>
         </div>
         <div class="components_events">
-          <h3>Components & Events</h3>
+          <h3>Dependency Map & Trace</h3>
           <p>
             The UML-inspired diagrams display your key application components,
             and how they are inter-related during application execution.
