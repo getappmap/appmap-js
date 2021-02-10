@@ -1,6 +1,7 @@
 import VVsCodeExtension from '@/pages/VsCodeExtension.vue';
 import defaultScenario from './data/scenario.json';
 import petClinicScenario from './data/java_scenario.json';
+import './scss/fullscreen.scss';
 
 const scenarioData = {
   default: defaultScenario,
