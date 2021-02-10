@@ -1,12 +1,9 @@
 <template>
-  <svg
-    xlmns="http://www.w3.org/2000/svg"
-    class="connections"
-    :width="1"
-    :height="1"
-  >
-    <path class="edge" v-for="(path, i) in paths" :key="i" :d="path" />
-  </svg>
+  <span class="connection">
+    <svg xlmns="http://www.w3.org/2000/svg" class="connection__svg">
+      <path class="connection__path" :d="pathCommand" />
+    </svg>
+  </span>
 </template>
 
 <script>
@@ -25,7 +22,6 @@ export default {
       default: 'top left',
       validator: (value) => {
         const [v, h] = value.split(/\s+?/);
-        window.console.log(v, h);
         return (
           ['top', 'center', 'bottom'].indexOf(v) !== -1 &&
           ['left', 'center', 'right'].indexOf(h) !== -1
@@ -54,10 +50,9 @@ export default {
       default: 0,
     },
   },
-
   data() {
     return {
-      paths: [],
+      pathCommand: '',
       vAlign: this.align.split(/\s+?/)[0],
       hAlign: this.align.split(/\s+?/)[1],
     };
@@ -66,6 +61,7 @@ export default {
     async renderPaths() {
       const { x: originX, y: originY } = this.$el.getBoundingClientRect();
       const element = await this.elementFrom;
+      console.assert(element);
       const { x, y, width: w, height: h } = element.getBoundingClientRect();
 
       let offsetX = originX;
@@ -85,30 +81,38 @@ export default {
       const fX = x - offsetX + this.x;
       const fY = y - offsetY + this.y;
       if (this.shape === 'hook') {
-        this.paths.push(curveCommands(fX, fY, this.width, this.height));
+        this.pathCommand = curveCommands(fX, fY, this.width, this.height);
       } else if (this.shape === 'line-v') {
-        this.paths.push(`m${fX} ${fY} v${this.height}`);
+        this.pathCommand = `m${fX} ${fY} v${this.height}`;
       } else if (this.shape === 'line-h') {
-        this.paths.push(`m${fX} ${fY} h${this.width}`);
+        this.pathCommand = `m${fX} ${fY} h${this.width}`;
       }
     },
   },
   mounted() {
     this.renderPaths();
   },
+  updated() {
+    this.renderPaths();
+  },
 };
 </script>
 
 <style scoped lang="scss">
-.connections {
+.connection {
   overflow: visible;
   position: relative;
-}
+  pointer-events: none;
 
-.edge {
-  fill: none;
-  stroke: $gray2;
-  stroke-width: 3px;
-  position: absolute;
+  &__svg {
+    position: absolute;
+    overflow: visible;
+  }
+
+  &__path {
+    fill: none;
+    stroke: $gray2;
+    stroke-width: 4px;
+  }
 }
 </style>

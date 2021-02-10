@@ -1,51 +1,60 @@
 <template>
-  <div class="trace__event-block">
-    <template v-if="hasParent()">
+  <div class="event-block">
+    <template v-if="hasParent">
       <v-trace-path
-        v-if="i > 0"
-        :element-from="collectInputs(i)"
-        align="center left"
-      />
-      <v-trace-path
-        v-else
-        :element-from="collectInputs(i)"
+        v-if="isFirstChild"
+        :element-from="collectInputs()"
         shape="line-h"
         align="center left"
         :width="100"
         :x="-100"
       />
+
+      <v-trace-path
+        v-else
+        :element-from="collectInputs()"
+        align="center left"
+        :x="-2"
+        :width="48"
+      />
     </template>
 
     <v-trace-node
       :event="event"
-      @expandChildren="toggleVisibility(i)"
-      ref="nodes"
+      @expandChildren="toggleVisibility()"
+      ref="node"
     />
 
-    <template v-if="expanded[i]">
+    <template v-if="expanded && event.children.length > 1">
       <v-trace-path
-        :element-from="getOutput(i)"
+        :element-from="getOutput()"
         :width="-50"
         :height="-50"
         align="center right"
       />
       <v-trace-path
-        :element-from="getOutput(i)"
-        :width="5"
-        :height="height"
+        :element-from="getOutput()"
+        :width="4"
+        :height="verticalHeight"
+        :v-if="verticalHeight > 0"
         shape="line-v"
         align="center right"
         :x="50"
-        :y="50"
+        :y="45"
+        :key="verticalHeight"
       />
     </template>
 
     <v-trace
-      :parent="this"
-      :parent-event-index="i"
+      v-if="expanded"
       :events="event.children"
-      v-if="expanded[i]"
       ref="children"
+      @updated="onUpdate()"
+    />
+    <v-trace-summary
+      v-else-if="event.children.length > 0"
+      :event="event"
+      @click="toggleVisibility()"
     />
   </div>
 </template>
@@ -54,78 +63,97 @@
 import { Event } from '@/lib/models';
 import VTraceNode from './TraceNode.vue';
 import VTracePath from './TracePath.vue';
+import VTraceSummary from './TraceSummary.vue';
 
 export default {
   name: 'v-trace-event-block',
   components: {
+    'v-trace': () => import('./Trace.vue'),
     VTraceNode,
     VTracePath,
+    VTraceSummary,
   },
   props: {
     event: {
       type: Event,
       required: true,
     },
-    parentEventIndex: {
-      type: Number,
-    },
   },
   data() {
     return {
-      expanded: this.events.map((e) =>
-        this.cacheState ? e.$hidden.expanded || false : false
-      ),
+      expanded: this.cacheState ? this.event.$hidden.expanded || false : false,
+      height: 0,
     };
   },
   methods: {
-    toggleVisibility(i) {
-      const isExpanded = !this.expanded[i];
-      this.$set(this.expanded, i, isExpanded);
+    toggleVisibility() {
+      this.expanded = !this.expanded;
 
       // Cache the expanded state on the event
       if (this.cacheState) {
-        this.events[i].$hidden.expanded = isExpanded;
+        this.event.$hidden.expanded = this.expanded;
       }
     },
-    async collectInputs(i) {
+    async collectInputs() {
       return new Promise((resolve) => {
         this.$nextTick(() => {
-          const { nodes } = this.$refs;
-          resolve(nodes[i].$refs.flowIn);
+          const { node } = this.$refs;
+          resolve(node.$refs.flowIn);
         });
       });
     },
-    async getOutput(i) {
-      return new Promise((resolve) =>
-        resolve(this.$refs.nodes[i].$refs.flowOut)
-      );
+    async getOutput() {
+      return new Promise((resolve) => resolve(this.$refs.node.$refs.flowOut));
     },
-    hasParent() {
-      return typeof this.parentEventIndex !== 'undefined';
+    onUpdate() {
+      const { children } = this.$refs;
+      if (!children) {
+        return;
+      }
+
+      const nodes = children.nodes();
+      if (!nodes) {
+        return;
+      }
+
+      if (nodes.length > 1) {
+        const { y: yA } = nodes[0].$el.getBoundingClientRect();
+        const { y: yB } = nodes[nodes.length - 1].$el.getBoundingClientRect();
+        this.height = yB - yA;
+        console.log(this.event + ' set height to ' + this.height);
+      }
+
+      this.$emit('updated');
     },
   },
   computed: {
-    height() {
-      return this.$el.height;
+    hasParent() {
+      return this.event.parent;
     },
+    isFirstChild() {
+      return this.$parent.$children[0] === this;
+    },
+    verticalHeight() {
+      return Math.max(this.height - 75, 0);
+    },
+  },
+  updated() {
+    this.onUpdate();
   },
 };
 </script>
 
 <style lang="scss">
-.trace {
-  & > &__event-block {
-    margin-left: 5rem;
+.event-block {
+  display: flex;
+  flex-shrink: 0;
+  align-items: start;
+  margin-bottom: 1rem;
+  & > * {
+    flex: inherit;
   }
-
-  &__event-block {
-    display: flex;
-    flex-shrink: 0;
-    align-items: start;
-    margin-bottom: 1rem;
-    & > * {
-      flex: inherit;
-    }
+  & > .trace {
+    margin-left: 74px;
   }
 }
 </style>

@@ -1,71 +1,22 @@
 <template>
-  <span class="trace">
-    <div
-      class="trace__event-block"
-      v-for="(event, i) in events"
+  <div class="trace">
+    <v-trace-event-block
+      v-for="event in events"
       :key="event.id"
-      :ref="eventBlocks"
-    >
-      <template v-if="hasParent()">
-        <v-trace-path
-          v-if="i > 0"
-          :element-from="collectInputs(i)"
-          align="center left"
-        />
-        <v-trace-path
-          v-else
-          :element-from="collectInputs(i)"
-          shape="line-h"
-          align="center left"
-          :width="100"
-          :x="-100"
-        />
-      </template>
-
-      <v-trace-node
-        :event="event"
-        @expandChildren="toggleVisibility(i)"
-        ref="nodes"
-      />
-
-      <template v-if="expanded[i]">
-        <v-trace-path
-          :element-from="getOutput(i)"
-          :width="-50"
-          :height="-50"
-          align="center right"
-        />
-        <v-trace-path
-          :element-from="getOutput(i)"
-          :width="5"
-          :height="height"
-          shape="line-v"
-          align="center right"
-          :x="50"
-          :y="50"
-        />
-      </template>
-
-      <v-trace
-        :parent="this"
-        :parent-event-index="i"
-        :events="event.children"
-        v-if="expanded[i]"
-        ref="children"
-      />
-    </div>
-  </span>
+      :event="event"
+      @updated="$emit('updated')"
+      ref="nodes"
+    />
+  </div>
 </template>
 
 <script>
-import VTraceNode from './TraceNode.vue';
-import VTracePath from './TracePath.vue';
+import VTraceEventBlock from './TraceEventBlock.vue';
 
 export default {
   name: 'v-trace',
   components: {
-    VTraceNode,
-    VTracePath,
+    VTraceEventBlock,
   },
   props: {
     events: {
@@ -119,6 +70,9 @@ export default {
     hasParent() {
       return typeof this.parentEventIndex !== 'undefined';
     },
+    nodes() {
+      return this.$refs.nodes;
+    },
   },
   computed: {
     height() {
@@ -130,18 +84,6 @@ export default {
 
 <style lang="scss">
 .trace {
-  & > &__event-block {
-    margin-left: 5rem;
-  }
-
-  &__event-block {
-    display: flex;
-    flex-shrink: 0;
-    align-items: start;
-    margin-bottom: 1rem;
-    & > * {
-      flex: inherit;
-    }
-  }
+  display: inline-block;
 }
 </style>

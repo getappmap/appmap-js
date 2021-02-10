@@ -28,10 +28,10 @@ import VTraceNodeBodySql from './TraceNodeBodySql.vue';
 export default {
   name: 'v-trace-node',
   components: {
+    NodeConnection,
     VTraceNodeBodyDefault,
     VTraceNodeBodyHttp,
     VTraceNodeBodySql,
-    NodeConnection,
   },
   props: {
     event: {

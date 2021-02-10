@@ -199,7 +199,9 @@ function eventToBehavior(e) {
     if (type === 'object') {
       id = returnValue.class;
     }
-
+    if (!id) {
+      debugger;
+    }
     behavior.out.push({
       name: formatParameter(id),
       type,
