@@ -423,6 +423,32 @@ context('VS Code Extension', () => {
         'highlight'
       );
     });
+
+    it('list of node parents is shown', () => {
+      cy.get(
+        `.node[data-id="active_support/ActiveSupport::SecurityUtils"]`
+      ).click();
+
+      cy.get('.details-panel-header__parent').should('have.length', 2);
+
+      cy.get('.v-details-panel-list')
+        .contains('Functions')
+        .parent()
+        .within(() => {
+          cy.get('.list-item').contains('secure_compare').click();
+        });
+
+      cy.get('.details-panel-header__parent').should('have.length', 3);
+
+      cy.get('.v-details-panel-list')
+        .contains('Events')
+        .parent()
+        .within(() => {
+          cy.get('.list-item').first().click();
+        });
+
+      cy.get('.details-panel-header__parent').should('have.length', 4);
+    });
   });
 
   context('Java appmap', () => {
