@@ -1,32 +1,25 @@
 ## [1.0.1](https://github.com/applandinc/appmap-js/compare/v1.0.0...v1.0.1) (2021-02-11)
 
-
 ### Bug Fixes
 
-* component diagram is rendered properly ([ef48da7](https://github.com/applandinc/appmap-js/commit/ef48da75b0f7752bcde18f10e7c3e7c9eeb4e6c5))
+- component diagram is rendered properly
+  ([ef48da7](https://github.com/applandinc/appmap-js/commit/ef48da75b0f7752bcde18f10e7c3e7c9eeb4e6c5))
 
-# Change Log
-
-All notable changes to the "appmap" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how
-to structure this file.
-
-## [0.2.6]
+## 0.2.6
 
 - Fixed an issue where returning back to a function call could result in an
   infinite loop
 - Packages now expand automatically when navigating through the details panel
 
-## [0.2.5]
+## 0.2.5
 
 - Expanded packages use their short name
 
-## [0.2.4]
+## 0.2.4
 
 - "View source" from the context menu properly propagates the view source event
 
-## [0.2.3]
+## 0.2.3
 
 - If a component diagram node is not associated with any events, don't render it
 - Fix an issue where HTTP events in the trace view would not be named
@@ -36,16 +29,16 @@ to structure this file.
 - Fixed query links from a class opening an empty details panel
 - Query events details no longer use the raw SQL as the title for the panel
 
-## [0.2.2]
+## 0.2.2
 
 - Selecting a function will no longer select all the classes in an expanded
   package
 
-## [0.2.1]
+## 0.2.1
 
 - Remove a visual artifact in trace nodes
 
-## [0.2.0]
+## 0.2.0
 
 - 'Reset view' can be selected from the context menu from anywhere in the
   viewport
@@ -55,6 +48,6 @@ to structure this file.
 - Fix poppers not appearing in the flow view
 - HTTP server responses are now visible in the event details panel
 
-## [0.1.0]
+## 0.1.0
 
 - Initial release of library
