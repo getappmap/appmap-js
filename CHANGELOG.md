@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/applandinc/appmap-js/compare/v1.0.0...v1.0.1) (2021-02-11)
+
+
+### Bug Fixes
+
+* component diagram is rendered properly ([ef48da7](https://github.com/applandinc/appmap-js/commit/ef48da75b0f7752bcde18f10e7c3e7c9eeb4e6c5))
+
 # Change Log
 
 All notable changes to the "appmap" extension will be documented in this file.
