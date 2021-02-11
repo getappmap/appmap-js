@@ -60,10 +60,14 @@ export default {
 
       if (this.object) {
         if (this.object.event && this.object.codeObject) {
-          result = [
-            this.object.codeObject,
-            ...this.object.codeObject.ancestors(),
-          ];
+          if (this.object.sql_query) {
+            result = [...this.object.codeObject.ancestors()];
+          } else {
+            result = [
+              this.object.codeObject,
+              ...this.object.codeObject.ancestors(),
+            ];
+          }
         } else {
           result = [...this.object.ancestors()];
         }
