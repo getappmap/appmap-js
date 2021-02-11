@@ -28,10 +28,7 @@
           :is-active="isViewingComponent"
           :ref="VIEW_COMPONENT"
         >
-          <v-diagram-component
-            ref="componentDiagram"
-            :component-data="components"
-          />
+          <v-diagram-component ref="componentDiagram" />
         </v-tab>
 
         <v-tab name="Trace" :is-active="isViewingFlow" :ref="VIEW_FLOW">
@@ -100,10 +97,6 @@ export default {
   computed: {
     selectedObject() {
       return this.$store.getters.selectedObject;
-    },
-
-    components() {
-      return this.$store.state.appMap.components;
     },
 
     callTree() {

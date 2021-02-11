@@ -20,10 +20,6 @@ export default {
       type: Boolean,
       default: true,
     },
-    componentData: {
-      type: Object,
-      default: () => ({}),
-    },
   },
 
   data() {
