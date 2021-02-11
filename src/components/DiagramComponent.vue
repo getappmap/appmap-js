@@ -38,6 +38,13 @@ export default {
       deep: true,
     },
 
+    '$store.state.appMap': {
+      handler() {
+        this.renderKey += 1;
+        this.renderDiagram();
+      },
+    },
+
     '$store.getters.selectedObject': {
       handler() {
         this.highlightSelectedComponent();

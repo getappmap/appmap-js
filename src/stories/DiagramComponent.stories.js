@@ -10,11 +10,8 @@ export default {
   component: VDiagramComponent,
   argTypes: {
     theme: { control: { type: 'select', options: ['dark', 'light'] } },
-    componentData: { table: { disable: true } },
   },
-  args: {
-    componentData: store.state.appMap.components,
-  },
+  args: {},
 };
 
 export const diagramComponent = (args, { argTypes }) => ({
