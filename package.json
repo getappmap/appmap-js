@@ -1,6 +1,6 @@
 {
   "name": "@appland/appmap",
-  "version": "0.2.6",
+  "version": "0.0.0-development",
   "main": "dist/appmap.esm.js",
   "module": "dist/appmap.esm.js",
   "scripts": {
@@ -14,12 +14,14 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "chromatic": "chromatic --exit-zero-on-changes",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "semantic-release": "semantic-release"
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "npm run lint && npm test"
+      "pre-push": "npm run lint && npm test",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "files": [
@@ -39,6 +41,8 @@
     "@babel/core": "^7.12.10",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.1",
     "@babel/preset-env": "^7.9.5",
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "@rollup/plugin-alias": "^2.2.0",
     "@rollup/plugin-commonjs": "^11.1.0",
     "@rollup/plugin-image": "^2.0.6",
@@ -76,6 +80,7 @@
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "sass-resources-loader": "^2.1.1",
+    "semantic-release": "^17.3.8",
     "start-server-and-test": "^1.11.7",
     "vue-template-compiler": "^2.6.11"
   },
@@ -83,5 +88,12 @@
     "*.{js,md,json,vue}": [
       "prettier --write"
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/applandinc/appmap-js.git"
+  },
+  "publishConfig": {
+    "access": "restricted"
   }
 }
