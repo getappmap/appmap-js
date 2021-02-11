@@ -94,6 +94,6 @@
     "url": "https://github.com/applandinc/appmap-js.git"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   }
 }
