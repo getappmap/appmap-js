@@ -1,6 +1,5 @@
 import ClassMap from './classMap';
 import CallTree from './callTree/callTree';
-import Components from './components';
 
 export default class AppMap {
   constructor(data) {
@@ -10,7 +9,6 @@ export default class AppMap {
       ...data,
     };
 
-    this.components = new Components(this.data);
     this.classMap = new ClassMap(this.data.classMap);
     this.callTree = new CallTree(this.events);
     this.classMap.bindEvents(this.events);
