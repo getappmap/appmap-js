@@ -1,5 +1,5 @@
 import VDiagramFlow from '@/components/DiagramFlow.vue';
-import scenario from '@/stories/data/new.json';
+import scenario from '@/stories/data/scenario.json';
 import { buildStore, SET_APPMAP_DATA } from '@/store/vsCode';
 import './scss/fullscreen.scss';
 
