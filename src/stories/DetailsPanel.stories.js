@@ -67,8 +67,7 @@ Event.args = {
 
 export const Function = Template.bind({});
 Function.args = {
-  selectedObject: store.state.appMap.events.find((e) => e.codeObject)
-    .codeObject,
+  selectedObject: store.state.appMap.events.find((e) => e.methodId).codeObject,
 };
 
 export const HTTP = Template.bind({});
