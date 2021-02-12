@@ -8,13 +8,10 @@
 
 <script>
 import { Event } from '@/lib/models';
-import VTracePath from './TracePath.vue';
 
 export default {
   name: 'v-trace-summary',
-  components: {
-    VTracePath,
-  },
+  components: {},
   props: {
     event: {
       type: Event,

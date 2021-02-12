@@ -120,7 +120,7 @@ export default {
         const { y: yA } = nodes[0].$el.getBoundingClientRect();
         const { y: yB } = nodes[nodes.length - 1].$el.getBoundingClientRect();
         this.height = yB - yA;
-        console.log(this.event + ' set height to ' + this.height);
+        console.log(`${this.event} set height to ${this.height}`);
       }
 
       this.$emit('updated');
