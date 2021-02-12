@@ -4,6 +4,7 @@ import { buildStore, SET_APPMAP_DATA } from '@/store/vsCode';
 import './scss/fullscreen.scss';
 
 const store = buildStore();
+store.commit(SET_APPMAP_DATA, scenario);
 
 export default {
   title: 'AppLand/Diagrams/Flow',
@@ -21,8 +22,5 @@ export const flow = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiagramFlow },
   template: '<v-diagram-flow v-bind="$props" />',
-  mounted() {
-    store.commit(SET_APPMAP_DATA, scenario);
-  },
   store,
 });
