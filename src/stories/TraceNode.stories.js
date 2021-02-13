@@ -1,6 +1,6 @@
 import VTraceNode from '@/components/trace/TraceNode.vue';
 import { buildAppMap } from '@/lib/models';
-import scenario from './data/scenario_large.json';
+import scenario from './data/scenario.json';
 
 const appMap = buildAppMap(scenario).build();
 
