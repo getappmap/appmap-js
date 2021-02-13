@@ -9,7 +9,6 @@ export default function plugin(options = {}) {
   const filter = createFilter(options.include, options.exclude);
   return {
     async transform(content, id) {
-      console.log(extname(id), id);
       if (extname(id) !== '.svg' || !filter(id)) {
         return null;
       }
