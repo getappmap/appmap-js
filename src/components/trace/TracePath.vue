@@ -60,8 +60,10 @@ export default {
   methods: {
     async renderPaths() {
       const { x: originX, y: originY } = this.$el.getBoundingClientRect();
-      const element = await this.elementFrom;
+      let element = await this.elementFrom;
+      element = element.$el || element;
       console.assert(element);
+      console.log(element);
       const { x, y, width: w, height: h } = element.getBoundingClientRect();
 
       let offsetX = originX;

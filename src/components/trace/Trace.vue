@@ -27,63 +27,25 @@ export default {
       type: Boolean,
       default: false,
     },
-    verticalOrigin: {
-      type: Number,
-    },
-    parent: {
-      type: Object,
-    },
-    parentEventIndex: {
-      type: Number,
-    },
-  },
-  data() {
-    return {
-      expanded: this.events.map((e) =>
-        this.cacheState ? e.$hidden.expanded || false : false
-      ),
-    };
   },
   methods: {
-    toggleVisibility(i) {
-      const isExpanded = !this.expanded[i];
-      this.$set(this.expanded, i, isExpanded);
-
-      // Cache the expanded state on the event
-      if (this.cacheState) {
-        this.events[i].$hidden.expanded = isExpanded;
-      }
-    },
-    async collectInputs(i) {
-      return new Promise((resolve) => {
-        this.$nextTick(() => {
-          const { nodes } = this.$refs;
-          resolve(nodes[i].$refs.flowIn);
-        });
-      });
-    },
-    async getOutput(i) {
-      return new Promise((resolve) =>
-        resolve(this.$refs.nodes[i].$refs.flowOut)
-      );
-    },
-    hasParent() {
-      return typeof this.parentEventIndex !== 'undefined';
-    },
     nodes() {
       return this.$refs.nodes;
-    },
-  },
-  computed: {
-    height() {
-      return this.$el.height;
     },
   },
 };
 </script>
 
 <style lang="scss">
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: local('IBM Plex Mono'),
+    url(../../assets/fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf)
+      format('truetype');
+}
 .trace {
   display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
 }
 </style>

@@ -1,9 +1,16 @@
 import VTrace from '@/components/trace/Trace.vue';
-import scenario from '@/stories/data/scenario_large.json';
+import scenario from '@/stories/data/scenario.json';
 import { buildStore, SET_APPMAP_DATA } from '@/store/vsCode';
 
 const store = buildStore();
 store.commit(SET_APPMAP_DATA, scenario);
+
+let events = store.state.appMap.events.filter(
+  (e) => e.isCall() && e.httpServerRequest
+);
+if (events.length === 0) {
+  events = store.state.appMap.events.filter((e) => e.isCall() && !e.parent);
+}
 
 export default {
   title: 'AppLand/Diagrams/Trace',
@@ -12,7 +19,7 @@ export default {
     events: { table: { disable: true } },
   },
   args: {
-    events: [store.state.appMap.events[0]],
+    events,
   },
 };
 

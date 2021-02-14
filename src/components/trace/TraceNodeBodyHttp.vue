@@ -4,16 +4,14 @@
       <v-trace-node-port
         v-for="(input, index) in inputs"
         :key="index"
-        :value="input.value"
-        :text="input.name"
+        :parameterObject="input"
       />
     </template>
     <template v-slot:right>
       <v-trace-node-port
         v-for="(output, index) in outputs"
         :key="index"
-        :value="output.value"
-        :text="output.name"
+        :parameterObject="output"
         type="output"
       />
     </template>

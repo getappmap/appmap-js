@@ -51,11 +51,23 @@
       ref="children"
       @updated="onUpdate()"
     />
-    <v-trace-summary
-      v-else-if="event.children.length > 0"
-      :event="event"
-      @click="toggleVisibility()"
-    />
+    <template v-else-if="!expanded && event.children.length > 0">
+      <v-trace-path
+        shape="line-h"
+        :width="16"
+        :height="4"
+        :elementFrom="getRef('summary')"
+        align="bottom left"
+        :y="-11"
+        key="summary"
+      />
+      <v-trace-summary
+        v-if="!expanded && event.children.length > 0"
+        :event="event"
+        @click="toggleVisibility()"
+        ref="summary"
+      />
+    </template>
   </div>
 </template>
 
@@ -87,7 +99,8 @@ export default {
   },
   methods: {
     toggleVisibility() {
-      this.expanded = !this.expanded;
+      // this.expanded = !this.expanded;
+      this.$set(this, 'expanded', !this.expanded);
 
       // Cache the expanded state on the event
       if (this.cacheState) {
@@ -103,7 +116,14 @@ export default {
       });
     },
     async getOutput() {
-      return new Promise((resolve) => resolve(this.$refs.node.$refs.flowOut));
+      return new Promise((resolve) =>
+        this.$nextTick(() => resolve(this.$refs.node.$refs.flowOut))
+      );
+    },
+    async getRef(ref) {
+      return new Promise((resolve) =>
+        this.$nextTick(() => resolve(this.$refs[ref]))
+      );
     },
     onUpdate() {
       const { children } = this.$refs;
@@ -139,6 +159,11 @@ export default {
   },
   updated() {
     this.onUpdate();
+  },
+  mounted() {
+    // setTimeout(() => {
+    //   this.expanded = true;
+    // }, 16);
   },
 };
 </script>

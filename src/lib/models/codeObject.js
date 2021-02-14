@@ -1,4 +1,4 @@
-import { addHiddenProperty } from './util';
+import { addHiddenProperty, getSqlLabelFromString } from './util';
 
 export const CodeObjectType = {
   DATABASE: 'database',
@@ -334,6 +334,8 @@ export default class CodeObject {
         return this.classOf;
       case CodeObjectType.PACKAGE:
         return this.packageOf;
+      case CodeObjectType.QUERY:
+        return getSqlLabelFromString(this.name);
       default:
         return this.name;
     }

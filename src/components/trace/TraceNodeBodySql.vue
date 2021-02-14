@@ -25,5 +25,11 @@ export default {
 
 <style scoped lang="scss">
 .trace-node__body--sql {
+  white-space: pre;
+  padding: 1em;
+  margin-top: -1.5em;
+  max-width: 100ex;
+  max-height: 30em;
+  overflow: auto;
 }
 </style>

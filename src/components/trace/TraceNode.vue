@@ -67,18 +67,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@font-face {
-  font-family: 'IBM Plex Mono';
-  src: local('IBM Plex Mono'),
-    url(../../assets/fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf)
-      format('truetype');
-}
-
 $bg-color: $gray2;
 
 .trace-node {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.8rem;
   background-color: $bg-color;
   display: inline-block;
   box-shadow: 0.2em 0.2em 10px 0px rgb(0 0 0 / 60%);

@@ -4,16 +4,14 @@
       <v-trace-node-port
         v-for="(input, index) in inputs"
         :key="index"
-        :value="input.value"
-        :text="input.name"
+        :parameterObject="input"
       />
     </template>
     <template v-slot:right>
       <v-trace-node-port
         v-for="(output, index) in outputs"
         :key="index"
-        :value="output.value"
-        text="Return value"
+        :parameterObject="output"
         type="output"
       />
     </template>
@@ -40,13 +38,28 @@ export default {
   },
   computed: {
     inputs() {
-      return this.event.parameters;
+      const inputArray = [];
+      const { receiver } = this.event;
+      if (receiver) {
+        inputArray.push({
+          ...receiver,
+          name: 'self',
+        });
+      }
+      inputArray.push(...this.event.parameters);
+      return inputArray;
     },
     outputs() {
       const outputObjects = [];
       const { returnValue } = this.event;
       if (returnValue) {
-        outputObjects.push(returnValue);
+        const tokens = returnValue.class.split(/[^\w\d]+/);
+        let name = tokens[tokens.length - 1];
+        if (!name) {
+          name = returnValue.class;
+        }
+
+        outputObjects.push({ ...returnValue, name });
       }
       return outputObjects;
     },

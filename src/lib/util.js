@@ -61,13 +61,8 @@ const sqlLabels = new Set([
   'xa',
 ]);
 
-export function getSqlLabel(event) {
-  if (hasProp(event, 'sql_query') === false) {
-    return null;
-  }
-
-  const sql = event.sql_query.normalized_sql || event.sql_query.sql || '';
-  const sqlChars = [...sql.trimLeft()];
+export function getSqlLabelFromString(sqlString) {
+  const sqlChars = [...sqlString.trimLeft()];
   if (sqlChars.length > 0 && sqlChars[0] === '(') {
     // if the query is wrapped in parenthesis, drop the opening parenthesis
     // it doesn't matter if we leave a hanging closing parenthesis.
@@ -112,6 +107,15 @@ export function getSqlLabel(event) {
   }
 
   return ['SQL', capitalizeString(queryType) || null].join(' ');
+}
+export function getSqlLabel(event) {
+  if (hasProp(event, 'sql_query') === false) {
+    return null;
+  }
+
+  return getSqlLabelFromString(
+    event.sql_query.normalized_sql || event.sql_query.sql || ''
+  );
 }
 
 export function getLabel(event) {
