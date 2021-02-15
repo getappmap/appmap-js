@@ -1,5 +1,5 @@
 <template>
-  <div class="trace-node" ref="traceNode" @click="highlight">
+  <div :class="classes" @click="selectNode">
     <div :class="`trace-node__header trace-node__header--${eventType}`">
       {{ title }}
     </div>
@@ -20,6 +20,7 @@
 
 <script>
 import { Event } from '@/lib/models';
+import { CLEAR_OBJECT_STACK, SELECT_OBJECT } from '@/store/vsCode';
 import NodeConnection from '@/assets/node_connection.svg';
 import VTraceNodeBodyDefault from './TraceNodeBodyDefault.vue';
 import VTraceNodeBodyHttp from './TraceNodeBodyHttp.vue';
@@ -55,6 +56,15 @@ export default {
 
       return 'default';
     },
+    classes() {
+      const classes = ['trace-node'];
+
+      if (this.$store && this.$store.getters.selectedObject === this.event) {
+        classes.push('highlight');
+      }
+
+      return classes;
+    },
     outboundConnectionClasses() {
       return {
         'connection-icon': true,
@@ -65,12 +75,11 @@ export default {
   },
 
   methods: {
-    highlight() {
-      document
-        .querySelectorAll('.trace-node.highlight')
-        .forEach((tn) => tn.classList.remove('highlight'));
-
-      this.$refs.traceNode.classList.add('highlight');
+    selectNode() {
+      if (this.$store) {
+        this.$store.commit(CLEAR_OBJECT_STACK);
+        this.$store.commit(SELECT_OBJECT, this.event);
+      }
     },
   },
 };
