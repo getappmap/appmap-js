@@ -105,6 +105,7 @@ export default {
   overflow: visible;
   position: relative;
   pointer-events: none;
+  z-index: -1;
 
   &__svg {
     position: absolute;

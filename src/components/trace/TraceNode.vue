@@ -1,5 +1,5 @@
 <template>
-  <div class="trace-node">
+  <div class="trace-node" ref="traceNode" @click="highlight">
     <div :class="`trace-node__header trace-node__header--${eventType}`">
       {{ title }}
     </div>
@@ -63,6 +63,16 @@ export default {
       };
     },
   },
+
+  methods: {
+    highlight() {
+      document
+        .querySelectorAll('.trace-node.highlight')
+        .forEach((tn) => tn.classList.remove('highlight'));
+
+      this.$refs.traceNode.classList.add('highlight');
+    },
+  },
 };
 </script>
 
@@ -78,6 +88,10 @@ $bg-color: $gray2;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+
+  &.highlight {
+    outline: 4px solid $hotpink;
+  }
 
   &__header {
     text-align: center;
