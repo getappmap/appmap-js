@@ -63,7 +63,7 @@ export default {
       let element = await this.elementFrom;
       element = element.$el || element;
       console.assert(element);
-      console.log(element);
+
       const { x, y, width: w, height: h } = element.getBoundingClientRect();
 
       let offsetX = originX;
