@@ -45,8 +45,11 @@ export default class Container extends EventSource {
       theme = DEFAULT_THEME;
     }
 
-    this.element = element || document.createElement('div');
-    this.element.className = `appmap appmap--theme-${theme}`;
+    this.element = element;
+    if (!element) {
+      this.element = document.createElement('div');
+      this.element.className = `appmap appmap--theme-${theme}`;
+    }
 
     this.contentElement = contentElement || document.createElement('div');
     this.contentElement.className = 'appmap__content';

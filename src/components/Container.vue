@@ -32,5 +32,6 @@ export default {
 
 <style scoped lang="scss">
 .container {
+  overflow: hidden;
 }
 </style>
