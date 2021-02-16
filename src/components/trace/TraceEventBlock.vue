@@ -154,7 +154,7 @@ export default {
       return this.$parent.$children[0] === this;
     },
     verticalHeight() {
-      return Math.max(this.height - 75, 0);
+      return Math.max(this.height, 0);
     },
   },
   updated() {

@@ -1,6 +1,8 @@
 <template>
-  <div ref="el">
-    <slot />
+  <div class="container">
+    <div ref="containerContent">
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -9,29 +11,26 @@ import Container from '@/lib/diagrams/helpers/container';
 
 export default {
   name: 'v-container',
-
-  props: {
-    options: {
-      type: Object,
-      required: false,
-    },
-  },
-
   methods: {
-    initContainer() {
-      const childrenNodes = this.$children.map(($child) => $child.$el);
-      const container = new Container(this.$refs.el, this.options);
-
-      childrenNodes.forEach((child) => container.appendChild(child));
+    buildContainer() {
+      return new Container(
+        this.$el,
+        {
+          pan: { momentum: true },
+          zoom: { controls: true },
+        },
+        this.$el,
+        this.$refs.containerContent
+      );
     },
   },
-
   mounted() {
-    this.initContainer();
-  },
-
-  updated() {
-    this.initContainer();
+    this.buildContainer();
   },
 };
 </script>
+
+<style scoped lang="scss">
+.container {
+}
+</style>

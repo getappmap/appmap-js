@@ -1,4 +1,5 @@
 import VTrace from '@/components/trace/Trace.vue';
+import VContainer from '@/components/Container.vue';
 import scenario from '@/stories/data/scenario.json';
 import { buildStore, SET_APPMAP_DATA } from '@/store/vsCode';
 
@@ -25,7 +26,7 @@ export default {
 
 export const trace = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { VTrace },
-  template: '<v-trace v-bind="$props" />',
+  components: { VTrace, VContainer },
+  template: '<v-container><v-trace v-bind="$props" /></v-container>',
   store,
 });

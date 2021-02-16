@@ -12,7 +12,7 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VTraceNode },
-  template: '<v-trace-node v-bind="$props" />',
+  template: `<v-trace-node v-bind="$props" />`,
 });
 
 export const eventDefault = Template.bind({});

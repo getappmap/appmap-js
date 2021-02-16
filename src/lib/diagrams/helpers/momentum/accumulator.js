@@ -1,4 +1,4 @@
-const STALE_TIME = 0.33; // seconds
+const STALE_TIME = 0.63; // seconds
 
 function removeStaleSamples(accumulator) {
   let lastTime = Date.now();

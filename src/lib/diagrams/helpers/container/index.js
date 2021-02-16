@@ -32,10 +32,8 @@ const defaultOptions = {
 const clamp = (x, min, max) => Math.min(Math.max(x, min), max);
 
 export default class Container extends EventSource {
-  constructor(parent, options = {}) {
+  constructor(parent, options = {}, element = null, contentElement = null) {
     super();
-
-    const parentElement = d3.select(parent).node();
 
     this.options = deepmerge(defaultOptions, options);
 
@@ -45,14 +43,22 @@ export default class Container extends EventSource {
       theme = DEFAULT_THEME;
     }
 
-    this.element = document.createElement('div');
+    this.element = element || document.createElement('div');
     this.element.className = `appmap appmap--theme-${theme}`;
 
-    this.contentElement = document.createElement('div');
+    this.contentElement = contentElement || document.createElement('div');
     this.contentElement.className = 'appmap__content';
     this.contentElement.containerController = this;
-    this.element.appendChild(this.contentElement);
-    parentElement.appendChild(this.element);
+
+    if (!this.contentElement.parentElement) {
+      this.element.appendChild(this.contentElement);
+    }
+
+    let { parentElement } = this.element;
+    if (!parentElement) {
+      parentElement = d3.select(parent).node();
+      parentElement.appendChild(this.element);
+    }
 
     if (this.options.zoom) {
       if (this.options.zoom.controls) {

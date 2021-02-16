@@ -1,20 +1,24 @@
 <template>
-  <div class="port">
-    <component :is="portType" :class="iconClass" v-if="type === 'input'" />
-    <span class="label">{{ label }}</span>
-    <component :is="portType" :class="iconClass" v-if="type === 'output'" />
-  </div>
+  <v-popper :placement="popperPlacement" :text="this.parameterObject.value">
+    <div class="port">
+      <component :is="portType" :class="iconClass" v-if="type === 'input'" />
+      <span class="label">{{ label }}</span>
+      <component :is="portType" :class="iconClass" v-if="type === 'output'" />
+    </div>
+  </v-popper>
 </template>
 
 <script>
 import PortConnected from '@/assets/port_connected.svg';
 import PortDisconnected from '@/assets/port_disconnected.svg';
+import VPopper from '@/components/Popper.vue';
 
 export default {
   name: 'v-trace-node-port',
   components: {
     PortConnected,
     PortDisconnected,
+    VPopper,
   },
   props: {
     type: {
@@ -78,11 +82,13 @@ export default {
           return 'object';
       }
     },
-
     portType() {
       return this.parameterObject.value
         ? 'port-connected'
         : 'port-disconnected';
+    },
+    popperPlacement() {
+      return this.type === 'input' ? 'left' : 'right';
     },
   },
 };

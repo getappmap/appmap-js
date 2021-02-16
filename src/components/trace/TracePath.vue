@@ -1,7 +1,11 @@
 <template>
   <span class="connection">
-    <svg xlmns="http://www.w3.org/2000/svg" class="connection__svg">
-      <path class="connection__path" :d="pathCommand" />
+    <svg xlmns="http://www.w3.org/2000/svg" class="connection__svg" ref="svg">
+      <path
+        :transform="`translate(${x}, ${y})`"
+        class="connection__path"
+        :d="pathCommand"
+      />
     </svg>
   </span>
 </template>
@@ -58,13 +62,24 @@ export default {
     };
   },
   methods: {
+    transformPoint(point) {
+      const { svg } = this.$refs;
+      const p = svg.createSVGPoint();
+      p.x = point.x;
+      p.y = point.y;
+      return p.matrixTransform(svg.getScreenCTM().inverse());
+    },
     async renderPaths() {
-      const { x: originX, y: originY } = this.$el.getBoundingClientRect();
+      const { x: originX, y: originY } = this.transformPoint(
+        this.$el.getBoundingClientRect()
+      );
       let element = await this.elementFrom;
       element = element.$el || element;
       console.assert(element);
 
-      const { x, y, width: w, height: h } = element.getBoundingClientRect();
+      const { x, y } = this.transformPoint(element.getBoundingClientRect());
+      const w = element.clientWidth;
+      const h = element.clientHeight;
 
       let offsetX = originX;
       let offsetY = originY;
@@ -80,12 +95,15 @@ export default {
         offsetX -= w * 0.5;
       }
 
-      const fX = x - offsetX + this.x;
-      const fY = y - offsetY + this.y;
+      const fX = x - offsetX;
+      const fY = y - offsetY;
       if (this.shape === 'hook') {
         this.pathCommand = curveCommands(fX, fY, this.width, this.height);
       } else if (this.shape === 'line-v') {
-        this.pathCommand = `m${fX} ${fY} v${this.height}`;
+        // HACK.
+        // Beware of magic number 75
+        const scale = 1 / this.$refs.svg.getScreenCTM().a;
+        this.pathCommand = `m${fX} ${fY} v${this.height * scale - 75}`;
       } else if (this.shape === 'line-h') {
         this.pathCommand = `m${fX} ${fY} h${this.width}`;
       }
