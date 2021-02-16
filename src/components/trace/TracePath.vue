@@ -135,7 +135,7 @@ export default {
 
   &__path {
     fill: none;
-    stroke: $gray2;
+    stroke: $gray4;
     stroke-width: 4px;
   }
 }
