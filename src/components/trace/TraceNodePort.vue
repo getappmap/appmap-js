@@ -1,5 +1,5 @@
 <template>
-  <v-popper :placement="popperPlacement" :text="this.parameterObject.value">
+  <v-popper :placement="popperPlacement" :text="popperText">
     <div class="port">
       <component :is="portType" :class="iconClass" v-if="type === 'input'" />
       <span class="label">{{ label }}</span>
@@ -39,6 +39,17 @@ export default {
     };
   },
   computed: {
+    popperText() {
+      if (
+        !this.parameterObject ||
+        this.parameterObject.value === null ||
+        typeof this.parameterObject.value === 'undefined'
+      ) {
+        return 'null';
+      }
+
+      return this.parameterObject.value.toString();
+    },
     iconClass() {
       return `icon icon--type-${this.dataType}`;
     },
