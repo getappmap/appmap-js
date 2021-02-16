@@ -14,7 +14,7 @@ export default {
   methods: {
     buildContainer() {
       return new Container(
-        this.$el,
+        null,
         {
           pan: { momentum: true },
           zoom: { controls: true },

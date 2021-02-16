@@ -31,6 +31,8 @@ const defaultOptions = {
 
 const clamp = (x, min, max) => Math.min(Math.max(x, min), max);
 
+// TODO
+// Retire this class in favor of a Vue component
 export default class Container extends EventSource {
   constructor(parent, options = {}, element = null, contentElement = null) {
     super();
@@ -54,8 +56,8 @@ export default class Container extends EventSource {
       this.element.appendChild(this.contentElement);
     }
 
-    let { parentElement } = this.element;
-    if (!parentElement) {
+    let parentElement = element;
+    if (parent) {
       parentElement = d3.select(parent).node();
       parentElement.appendChild(this.element);
     }
