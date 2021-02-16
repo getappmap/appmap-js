@@ -128,6 +128,9 @@ export default {
     onUpdate() {
       const { children } = this.$refs;
       if (!children) {
+        // we've likely been collapsed
+        // inform our ancestors
+        this.$emit('updated');
         return;
       }
 
