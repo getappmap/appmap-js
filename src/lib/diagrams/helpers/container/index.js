@@ -127,8 +127,6 @@ export default class Container extends EventSource {
 
       d3.select(this.element).call(this.zoom).on('dblclick.zoom', null);
     }
-
-    return this.contentElement;
   }
 
   setContextMenu(componentController) {
