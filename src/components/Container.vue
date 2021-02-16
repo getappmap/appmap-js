@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div ref="containerContent">
+    <div ref="containerContent" style="transform: translate(0px, 0px)">
       <slot />
     </div>
   </div>

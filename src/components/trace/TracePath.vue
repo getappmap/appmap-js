@@ -74,6 +74,12 @@ export default {
         this.$el.getBoundingClientRect()
       );
       let element = await this.elementFrom;
+      if (!this.$refs.svg) {
+        // because this is an async method, it's possible the ref
+        // is removed from underneath us
+        return;
+      }
+
       element = element.$el || element;
       console.assert(element);
 
@@ -110,9 +116,6 @@ export default {
     },
   },
   mounted() {
-    this.renderPaths();
-  },
-  updated() {
     this.renderPaths();
   },
 };
