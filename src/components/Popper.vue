@@ -51,6 +51,8 @@ export default {
     z-index: 2147483647;
     transform: translateY(-20%);
     word-wrap: break-word;
+    word-break: normal;
+    text-align: initial;
 
     &--left {
       right: 100%;
