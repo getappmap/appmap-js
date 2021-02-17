@@ -167,16 +167,13 @@ export default class Container extends EventSource {
     this.transform = transformMatrix;
   }
 
-  centerContents() {
-    const {
-      offsetWidth: targetWidth,
-      offsetHeight: targetHeight,
-    } = this.contentElement;
+  centerX(verticalPadding = 0) {
+    const { offsetWidth: targetWidth } = this.contentElement;
     const { clientWidth } = this.element.parentNode;
 
     const transformMatrix = d3.zoomIdentity.translate(
-      (clientWidth + targetWidth) * 0.5,
-      targetHeight
+      clientWidth * 0.5 - targetWidth * 0.5,
+      verticalPadding
     );
 
     this.transform = transformMatrix;

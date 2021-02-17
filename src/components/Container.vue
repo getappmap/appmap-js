@@ -25,7 +25,7 @@ export default {
       lazyPanToElement(this.container, element, 10);
     },
     centerContents() {
-      this.container.centerContents();
+      this.container.centerX(10);
     },
   },
   mounted() {
