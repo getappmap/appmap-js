@@ -46,7 +46,11 @@ export default {
           name: 'self',
         });
       }
-      inputArray.push(...this.event.parameters);
+
+      if (Array.isArray(this.event.parameters)) {
+        inputArray.push(...this.event.parameters);
+      }
+
       return inputArray;
     },
     outputs() {
