@@ -99,6 +99,18 @@ export default {
       height: 0,
     };
   },
+  watch: {
+    '$store.getters.selectedObject': {
+      handler() {
+        if (
+          !this.expanded &&
+          this.$store.getters.selectedObject.parent === this.event
+        ) {
+          this.toggleVisibility();
+        }
+      },
+    },
+  },
   methods: {
     toggleVisibility() {
       this.expanded = !this.expanded;
