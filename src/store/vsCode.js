@@ -13,55 +13,59 @@ export const SET_VIEW = 'setView';
 export const VIEW_COMPONENT = 'viewComponent';
 export const VIEW_FLOW = 'viewFlow';
 
-export const store = new Vuex.Store({
-  state: {
-    appMap: new AppMap(),
-    selectionStack: [],
-    currentView: VIEW_COMPONENT,
-  },
-
-  getters: {
-    selectedObject(state) {
-      return state.selectionStack[state.selectionStack.length - 1];
-    },
-    canPopStack(state) {
-      return state.selectionStack.length > 1;
-    },
-    prevSelectedObject(state) {
-      return state.selectionStack.length > 1
-        ? state.selectionStack[state.selectionStack.length - 2]
-        : null;
-    },
-  },
-
-  mutations: {
-    [SET_APPMAP_DATA](state, data) {
-      state.selectionStack = [];
-      state.appMap = buildAppMap().source(data).normalize().build();
-
-      state.appMap.callTree.rootEvent.forEach((e) => {
-        e.displayName = fullyQualifiedFunctionName(e.input);
-      });
+export function buildStore() {
+  return new Vuex.Store({
+    state: {
+      appMap: new AppMap(),
+      selectionStack: [],
+      currentView: VIEW_COMPONENT,
     },
 
-    [SELECT_OBJECT](state, selection) {
-      if (Array.isArray(selection)) {
-        state.selectionStack.push(...selection);
-      } else {
-        state.selectionStack.push(selection);
-      }
+    getters: {
+      selectedObject(state) {
+        return state.selectionStack[state.selectionStack.length - 1];
+      },
+      canPopStack(state) {
+        return state.selectionStack.length > 1;
+      },
+      prevSelectedObject(state) {
+        return state.selectionStack.length > 1
+          ? state.selectionStack[state.selectionStack.length - 2]
+          : null;
+      },
     },
 
-    [POP_OBJECT_STACK](state) {
-      state.selectionStack.pop();
-    },
+    mutations: {
+      [SET_APPMAP_DATA](state, data) {
+        state.selectionStack = [];
+        state.appMap = buildAppMap().source(data).normalize().build();
 
-    [CLEAR_OBJECT_STACK](state) {
-      state.selectionStack = [];
-    },
+        state.appMap.callTree.rootEvent.forEach((e) => {
+          e.displayName = fullyQualifiedFunctionName(e.input);
+        });
+      },
 
-    [SET_VIEW](state, view) {
-      state.currentView = view;
+      [SELECT_OBJECT](state, selection) {
+        if (Array.isArray(selection)) {
+          state.selectionStack.push(...selection);
+        } else {
+          state.selectionStack.push(selection);
+        }
+      },
+
+      [POP_OBJECT_STACK](state) {
+        state.selectionStack.pop();
+      },
+
+      [CLEAR_OBJECT_STACK](state) {
+        state.selectionStack = [];
+      },
+
+      [SET_VIEW](state, view) {
+        state.currentView = view;
+      },
     },
-  },
-});
+  });
+}
+
+export const store = buildStore();

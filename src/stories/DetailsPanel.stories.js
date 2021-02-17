@@ -1,9 +1,10 @@
 import VDetailsPanel from '@/components/DetailsPanel.vue';
 import VDetailsButton from '@/components/DetailsButton.vue';
 import scenario from '@/stories/data/scenario.json';
-import { store, SET_APPMAP_DATA } from '@/store/vsCode';
+import { buildStore, SET_APPMAP_DATA } from '@/store/vsCode';
 import { CodeObjectType } from '@/lib/models/codeObject';
 
+const store = buildStore();
 store.commit(SET_APPMAP_DATA, scenario);
 
 const { classMap } = store.state.appMap;
@@ -66,8 +67,7 @@ Event.args = {
 
 export const Function = Template.bind({});
 Function.args = {
-  selectedObject: store.state.appMap.events.find((e) => e.codeObject)
-    .codeObject,
+  selectedObject: store.state.appMap.events.find((e) => e.methodId).codeObject,
 };
 
 export const HTTP = Template.bind({});

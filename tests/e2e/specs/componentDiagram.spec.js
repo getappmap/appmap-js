@@ -1,7 +1,7 @@
 context('Component Diagram', () => {
   beforeEach(() => {
     cy.visit(
-      'http://localhost:6006/iframe.html?id=appland-diagrams--diagram-component&viewMode=story'
+      'http://localhost:6006/iframe.html?id=appland-diagrams-component--component&viewMode=story'
     );
   });
 

@@ -163,7 +163,6 @@ describe('ClassMap', () => {
 
     it('resolves correct root level objects', () => {
       const roots = classMap.roots.map((root) => root.leafs()).flat();
-      console.log(classMap.roots);
 
       expect(roots[0].id).toEqual(
         'org/springframework/samples/petclinic/model'

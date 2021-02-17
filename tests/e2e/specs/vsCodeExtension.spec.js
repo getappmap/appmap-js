@@ -136,10 +136,10 @@ context('VS Code Extension', () => {
       cy.get('.tabs .tab-btn').last().click();
 
       // Verify the flow view renders as expected
-      cy.get('.diagram-flow').should('be.visible');
-      cy.get('.appmap__flow-view .node').should('have.length', 248);
+      cy.get('.trace').should('be.visible');
+      cy.get('.trace .trace-node').should('have.length', 4);
 
-      cy.get('.node[data-event-id="9"]').click();
+      cy.get('.trace-node[data-event-id="9"]').click();
       cy.get('.details-panel-header')
         .should('contain.text', 'Event')
         .should('contain.text', 'GET /admin/orders');
@@ -189,7 +189,10 @@ context('VS Code Extension', () => {
         .should('contain.text', 'Event')
         .should('contain.text', 'GET /admin');
 
-      cy.get('.node[data-event-id="1"]').should('have.class', 'highlight');
+      cy.get('.trace-node[data-event-id="1"]').should(
+        'have.class',
+        'highlight'
+      );
     });
 
     it('http server requests can navigate to route', () => {
@@ -311,9 +314,11 @@ context('VS Code Extension', () => {
 
       cy.get('.details-panel-header button').contains('Show in').click();
 
-      cy.get('.diagram-flow').should('be.visible');
-      cy.get('.appmap__flow-view .node').should('have.length', 248);
-      cy.get('.node.highlight .header[data-type="sql"]').should('be.visible');
+      cy.get('.trace').should('be.visible');
+      cy.get('.trace .trace-node').should('have.length', 38);
+      cy.get('.trace-node.highlight')
+        .should('be.visible')
+        .should('contain.text', 'SQL Select');
     });
 
     it('clears when "Clear selection" button was clicked', () => {
@@ -440,9 +445,9 @@ context('VS Code Extension', () => {
 
     it('HTTP events are properly named', () => {
       cy.get('.tabs .tab-btn').last().click();
-      cy.get('.node[data-event-id="1"]').should(
+      cy.get('.trace-node[data-event-id="1"]').should(
         'contain.text',
-        'POST /owners/7/pets/9/visits/new'
+        'POST /owners/:ownerId/pets/:petId/visits/new'
       );
     });
   });

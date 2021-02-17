@@ -1,7 +1,7 @@
 context('Flow View', () => {
   beforeEach(() => {
     cy.visit(
-      'http://localhost:6006/iframe.html?id=appland-diagrams--diagram-flow&viewMode=story'
+      'http://localhost:6006/iframe.html?id=appland-diagrams-flow--flow&viewMode=story'
     );
   });
 

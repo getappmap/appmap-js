@@ -33,7 +33,7 @@ export default {
 
   methods: {
     activateTab(tab) {
-      if (tab === this.activateTab) {
+      if (tab === this.activeTab) {
         return;
       }
 

@@ -197,7 +197,9 @@ function eventToBehavior(e) {
     if (type === 'object') {
       id = returnValue.class;
     }
-
+    if (!id) {
+      debugger;
+    }
     behavior.out.push({
       name: formatParameter(id),
       type,
@@ -364,7 +366,7 @@ export default class FlowView extends EventSource {
 
     this.element = document.createElement('div');
     this.element.className = 'appmap__flow-view';
-    this.container.appendChild(this.element);
+    this.container.contentElement.appendChild(this.element);
 
     this.svg = d3
       .select(this.element)
@@ -384,7 +386,7 @@ export default class FlowView extends EventSource {
     document.addEventListener('click', () => this.hidePopper());
 
     this.on('popper', (element) =>
-      lazyPanToElement(this.container.containerController, element, 10)
+      lazyPanToElement(this.container, element, 10)
     );
   }
 
@@ -392,7 +394,7 @@ export default class FlowView extends EventSource {
     this.callTree = callTree;
 
     this.callTree.on('selectedEvent', (event) => {
-      panToNode(this.container.containerController, event.element);
+      panToNode(this.container, event.element);
       this.highlight(event ? event.id : null);
     });
 

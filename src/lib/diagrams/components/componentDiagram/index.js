@@ -177,44 +177,38 @@ export default class ComponentDiagram extends EventSource {
     const componentDiagramOptions = deepmerge(COMPONENT_OPTIONS, options);
 
     this.container = new Container(container, componentDiagramOptions);
-    this.container.containerController.setContextMenu(this);
+    this.container.setContextMenu(this);
 
     this.targetCount = DEFAULT_TARGET_COUNT;
     this.element = d3
-      .select(this.container)
+      .select(this.container.contentElement)
       .append('svg')
       .attr('class', 'appmap__component-diagram');
 
     this.on('postrender', () => {
-      this.container.containerController.fitViewport(this.container);
+      this.container.fitViewport(this.container.contentElement);
     });
 
-    this.container.containerController.element.addEventListener(
-      'click',
-      (event) => {
-        if (!event.target.classList.contains('dropdown-item')) {
-          this.emit('click', null);
-          this.clearHighlights();
-        }
-
-        if (this.container.containerController.contextMenu) {
-          this.container.containerController.contextMenu.close();
-        }
+    this.container.element.addEventListener('click', (event) => {
+      if (!event.target.classList.contains('dropdown-item')) {
+        this.emit('click', null);
+        this.clearHighlights();
       }
-    );
 
-    this.container.containerController.element.addEventListener('move', () => {
-      if (this.container.containerController.contextMenu) {
-        this.container.containerController.contextMenu.close();
+      if (this.container.contextMenu) {
+        this.container.contextMenu.close();
       }
     });
 
-    this.container.containerController.element.addEventListener(
-      'dblclick',
-      () => {
-        this.clearFocus();
+    this.container.element.addEventListener('move', () => {
+      if (this.container.contextMenu) {
+        this.container.contextMenu.close();
       }
-    );
+    });
+
+    this.container.element.addEventListener('dblclick', () => {
+      this.clearFocus();
+    });
   }
 
   render(classMap) {
@@ -303,18 +297,16 @@ export default class ComponentDiagram extends EventSource {
   }
 
   scrollTo(...codeObjects) {
-    const { containerController } = this.container;
-
     const scrollOptions = this.graph.scrollToNodes(
-      containerController.element,
+      this.container.element,
       codeObjects.map((obj) => obj.id)
     );
 
     if (scrollOptions) {
-      containerController.scaleTo(scrollOptions.scale);
+      this.container.scaleTo(scrollOptions.scale);
 
       setTimeout(() => {
-        containerController.translateTo(scrollOptions.x, scrollOptions.y);
+        this.container.translateTo(scrollOptions.x, scrollOptions.y);
       }, 200);
 
       this.emit('scrollTo', codeObjects);

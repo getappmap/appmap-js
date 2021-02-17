@@ -32,7 +32,7 @@
         </v-tab>
 
         <v-tab name="Trace" :is-active="isViewingFlow" :ref="VIEW_FLOW">
-          <v-diagram-flow ref="diagramFlow" :call-tree="callTree" />
+          <v-diagram-trace ref="diagramFlow" :events="rootEvents" />
         </v-tab>
       </v-tabs>
     </div>
@@ -44,7 +44,7 @@ import { Event } from '@/lib/models';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
-import VDiagramFlow from '../components/DiagramFlow.vue';
+import VDiagramTrace from '../components/DiagramTrace.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import {
@@ -64,7 +64,7 @@ export default {
     VDetailsPanel,
     VDetailsButton,
     VDiagramComponent,
-    VDiagramFlow,
+    VDiagramTrace,
     VTabs,
     VTab,
   },
@@ -95,6 +95,17 @@ export default {
   },
 
   computed: {
+    rootEvents() {
+      const { appMap } = this.$store.state;
+      let events = appMap.events.filter(
+        (e) => e.isCall() && e.httpServerRequest
+      );
+      if (events.length === 0) {
+        events = appMap.events.filter((e) => e.isCall() && !e.parent);
+      }
+      return events;
+    },
+
     selectedObject() {
       return this.$store.getters.selectedObject;
     },
@@ -196,6 +207,7 @@ code {
       min-width: 250px;
       word-break: break-all;
       overflow: hidden;
+      background-color: $vs-code-gray1;
     }
   }
 }

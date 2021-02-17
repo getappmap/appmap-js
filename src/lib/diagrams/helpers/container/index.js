@@ -31,11 +31,11 @@ const defaultOptions = {
 
 const clamp = (x, min, max) => Math.min(Math.max(x, min), max);
 
+// TODO
+// Retire this class in favor of a Vue component
 export default class Container extends EventSource {
-  constructor(parent, options = {}) {
+  constructor(parent, options = {}, element = null, contentElement = null) {
     super();
-
-    const parentElement = d3.select(parent).node();
 
     this.options = deepmerge(defaultOptions, options);
 
@@ -45,14 +45,25 @@ export default class Container extends EventSource {
       theme = DEFAULT_THEME;
     }
 
-    this.element = document.createElement('div');
-    this.element.className = `appmap appmap--theme-${theme}`;
+    this.element = element;
+    if (!element) {
+      this.element = document.createElement('div');
+      this.element.className = `appmap appmap--theme-${theme}`;
+    }
 
-    this.contentElement = document.createElement('div');
+    this.contentElement = contentElement || document.createElement('div');
     this.contentElement.className = 'appmap__content';
     this.contentElement.containerController = this;
-    this.element.appendChild(this.contentElement);
-    parentElement.appendChild(this.element);
+
+    if (!this.contentElement.parentElement) {
+      this.element.appendChild(this.contentElement);
+    }
+
+    let parentElement = element;
+    if (parent) {
+      parentElement = d3.select(parent).node();
+      parentElement.appendChild(this.element);
+    }
 
     if (this.options.zoom) {
       if (this.options.zoom.controls) {
@@ -116,8 +127,6 @@ export default class Container extends EventSource {
 
       d3.select(this.element).call(this.zoom).on('dblclick.zoom', null);
     }
-
-    return this.contentElement;
   }
 
   setContextMenu(componentController) {
@@ -154,6 +163,22 @@ export default class Container extends EventSource {
         (clientHeight - targetHeight * initialScale) * 0.5
       )
       .scale(initialScale);
+
+    this.transform = transformMatrix;
+  }
+
+  centerX(verticalPadding = 0) {
+    if (!this.element || !this.element.parentNode || !this.contentElement) {
+      return;
+    }
+
+    const { offsetWidth: targetWidth } = this.contentElement;
+    const { clientWidth } = this.element.parentNode;
+
+    const transformMatrix = d3.zoomIdentity.translate(
+      clientWidth * 0.5 - targetWidth * 0.5,
+      verticalPadding
+    );
 
     this.transform = transformMatrix;
   }
