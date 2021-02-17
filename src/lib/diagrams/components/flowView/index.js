@@ -368,7 +368,7 @@ export default class FlowView extends EventSource {
 
     this.element = document.createElement('div');
     this.element.className = 'appmap__flow-view';
-    this.container.appendChild(this.element);
+    this.container.contentElement.appendChild(this.element);
 
     this.svg = d3
       .select(this.element)
