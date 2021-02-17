@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/applandinc/appmap-js/compare/v1.0.1...v1.1.0) (2021-02-17)
+
+
+### Features
+
+* interactive trace view ([#69](https://github.com/applandinc/appmap-js/issues/69)) ([69ad221](https://github.com/applandinc/appmap-js/commit/69ad2211d00f4c86a5c7308c6961a7fc17963a3f))
+
 ## [1.0.1](https://github.com/applandinc/appmap-js/compare/v1.0.0...v1.0.1) (2021-02-11)
 
 ### Bug Fixes
