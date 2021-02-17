@@ -15,7 +15,7 @@ import VContainer from '@/components/Container.vue';
 import { CLEAR_OBJECT_STACK } from '@/store/vsCode';
 
 export default {
-  name: 'v-diagram-flow',
+  name: 'v-diagram-trace',
 
   components: {
     VTrace,

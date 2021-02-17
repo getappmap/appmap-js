@@ -168,6 +168,10 @@ export default class Container extends EventSource {
   }
 
   centerX(verticalPadding = 0) {
+    if (!this.element || !this.element.parentNode || !this.contentElement) {
+      return;
+    }
+
     const { offsetWidth: targetWidth } = this.contentElement;
     const { clientWidth } = this.element.parentNode;
 
