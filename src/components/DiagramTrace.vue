@@ -31,12 +31,7 @@ export default {
   watch: {
     '$store.getters.selectedObject': {
       handler() {
-        const { container } = this.$refs;
-        this.$nextTick(() =>
-          container.lazyPanToElement(
-            document.querySelector('.trace-node.highlight')
-          )
-        );
+        this.focusHighlighted();
       },
     },
   },
@@ -58,8 +53,24 @@ export default {
         const { container } = this.$refs;
         const { $el } = node.$parent;
         container.lazyPanToElement($el.querySelector('.trace > *'));
-      }, 100);
+      }, 16);
     },
+
+    focusHighlighted() {
+      setTimeout(() => {
+        const { container } = this.$refs;
+        const element = document.querySelector('.trace-node.highlight');
+        if (!element) {
+          return;
+        }
+
+        container.panToElement(element);
+      }, 16);
+    },
+  },
+
+  mounted() {
+    this.focusHighlighted();
   },
 };
 </script>

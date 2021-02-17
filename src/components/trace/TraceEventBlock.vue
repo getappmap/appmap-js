@@ -171,6 +171,22 @@ export default {
   updated() {
     this.onUpdate();
   },
+  mounted() {
+    console.log('!');
+    if (!this.$store || !this.$store.getters) {
+      return;
+    }
+
+    const { selectedObject } = this.$store.getters;
+    if (!selectedObject || !(selectedObject instanceof Event)) {
+      return;
+    }
+
+    const ancestors = selectedObject.ancestors();
+    if (ancestors.includes(this.event)) {
+      this.expanded = true;
+    }
+  },
 };
 </script>
 

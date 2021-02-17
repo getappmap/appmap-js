@@ -315,10 +315,10 @@ context('VS Code Extension', () => {
       cy.get('.details-panel-header button').contains('Show in').click();
 
       cy.get('.trace').should('be.visible');
-      cy.get('.trace .trace-node').should('have.length', 248);
-      cy.get('.trace-node.highlight .header[data-type="sql"]').should(
-        'be.visible'
-      );
+      cy.get('.trace .trace-node').should('have.length', 38);
+      cy.get('.trace-node.highlight')
+        .should('be.visible')
+        .should('contain.text', 'SQL Select');
     });
 
     it('clears when "Clear selection" button was clicked', () => {
