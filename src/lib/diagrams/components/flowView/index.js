@@ -91,18 +91,16 @@ function buildCurveCommands(x1, y1, x2, y2) {
 }
 
 function getNodeElementPosition(nodeId, selector) {
-  const elem = document.querySelector(
-    `.node[data-node-id='${nodeId}'] ${selector}`
-  );
+  const node = document.getElementById(`traceNode${nodeId}`);
+  const elem = node ? node.querySelector(`${selector}`) : null;
+
   if (!elem) return null;
 
-  const { offsetLeft, offsetTop, offsetHeight, offsetWidth } = elem;
-
   return {
-    left: offsetLeft,
-    right: offsetLeft + offsetWidth,
-    x: offsetLeft + offsetWidth / 2,
-    y: offsetTop + offsetHeight / 2,
+    left: elem.offsetLeft,
+    right: elem.offsetLeft + elem.offsetWidth,
+    x: elem.offsetLeft + elem.offsetWidth / 2,
+    y: elem.offsetTop + elem.offsetHeight / 2,
   };
 }
 
@@ -429,7 +427,7 @@ export default class FlowView extends EventSource {
         .datum((d) => d.data.behavior)
         .classed('node', true)
         .classed('exception', (d) => d.exceptions.length > 0)
-        .attr('data-node-id', (d) => d.id)
+        .attr('id', (d) => `traceNode${d.id}`)
         .attr('data-event-id', (d) => d.event_id)
         .on('dblclick', (d) => this.emit('dblclick', d.data))
         .on('click', (d) => {
@@ -539,38 +537,42 @@ export default class FlowView extends EventSource {
       /* eslint-enable no-param-reassign */
     });
 
-    this.linkGroup
-      .selectAll('.node-connection')
-      .data(nodeConnections)
-      .enter()
-      .append('path')
-      .classed('connection', true)
-      .classed('node-connection', true)
-      .attr('d', (d) => {
-        const output = getConnectionPosition(d.source, 'output');
-        const input = getConnectionPosition(d.target, 'input');
-        if (!(output && input)) {
-          return null;
-        }
-        return buildCurveCommands(output.right, output.y, input.left, input.y);
-      });
+    let linkGroupBody = '';
 
-    this.linkGroup
-      .selectAll('.port-connection')
-      .data(portConnections)
-      .enter()
-      .append('path')
-      .attr('class', (d) => `type-${d.type}`)
-      .classed('connection', true)
-      .classed('port-connection', true)
-      .attr('d', (d) => {
-        const output = getPortPosition(d.output.nodeId, d.output.portId);
-        const input = getPortPosition(d.input.nodeId, d.input.portId);
-        if (!(output && input)) {
-          return null;
-        }
-        return buildCurveCommands(output.right, output.y, input.left, input.y);
-      });
+    nodeConnections.forEach((conn) => {
+      const output = getConnectionPosition(conn.source, 'output');
+      const input = getConnectionPosition(conn.target, 'input');
+
+      if (!(output && input)) {
+        return;
+      }
+
+      linkGroupBody += `<path class="connection node-connection" d="${buildCurveCommands(
+        output.right,
+        output.y,
+        input.left,
+        input.y
+      )}"/>`;
+    });
+
+    portConnections.forEach((conn) => {
+      const output = getPortPosition(conn.output.nodeId, conn.output.portId);
+      const input = getPortPosition(conn.input.nodeId, conn.input.portId);
+
+      if (!(output && input)) {
+        return;
+      }
+
+      const typeClass = `type-${conn.type}`;
+      linkGroupBody += `<path class="connection port-connection type-${typeClass}" d="${buildCurveCommands(
+        output.right,
+        output.y,
+        input.left,
+        input.y
+      )}"/>`;
+    });
+
+    this.linkGroup.html(linkGroupBody);
   }
 
   highlight(eventId) {
