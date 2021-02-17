@@ -32,9 +32,7 @@
         </v-tab>
 
         <v-tab name="Trace" :is-active="isViewingFlow" :ref="VIEW_FLOW">
-          <v-container>
-            <v-trace ref="diagramFlow" :events="rootEvents" />
-          </v-container>
+          <v-diagram-trace ref="diagramFlow" :events="rootEvents" />
         </v-tab>
       </v-tabs>
     </div>
@@ -46,8 +44,7 @@ import { Event } from '@/lib/models';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
-import VContainer from '../components/Container.vue';
-import VTrace from '../components/trace/Trace.vue';
+import VDiagramTrace from '../components/DiagramTrace.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import {
@@ -67,8 +64,7 @@ export default {
     VDetailsPanel,
     VDetailsButton,
     VDiagramComponent,
-    VContainer,
-    VTrace,
+    VDiagramTrace,
     VTabs,
     VTab,
   },

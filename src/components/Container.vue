@@ -8,24 +8,37 @@
 
 <script>
 import Container from '@/lib/diagrams/helpers/container';
+import { panToNode, lazyPanToElement } from '@/lib/diagrams/util';
 
 export default {
   name: 'v-container',
+  data() {
+    return {
+      container: null,
+    };
+  },
   methods: {
-    buildContainer() {
-      return new Container(
-        null,
-        {
-          pan: { momentum: true },
-          zoom: { controls: true },
-        },
-        this.$el,
-        this.$refs.containerContent
-      );
+    panToElement(element) {
+      panToNode(this.container, element);
+    },
+    lazyPanToElement(element) {
+      lazyPanToElement(this.container, element, 10);
+    },
+    centerContents() {
+      this.container.centerContents();
     },
   },
   mounted() {
-    this.buildContainer();
+    this.container = new Container(
+      null,
+      {
+        pan: { momentum: true },
+        zoom: { controls: true },
+      },
+      this.$el,
+      this.$refs.containerContent
+    );
+    this.centerContents();
   },
 };
 </script>
@@ -33,5 +46,7 @@ export default {
 <style scoped lang="scss">
 .container {
   overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
 </style>

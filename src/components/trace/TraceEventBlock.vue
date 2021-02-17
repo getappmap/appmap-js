@@ -50,6 +50,8 @@
       :events="event.children"
       ref="children"
       @updated="onUpdate()"
+      @expand="(e) => $emit('expand', e)"
+      @collapse="(e) => $emit('collapse', e)"
     />
     <template v-else-if="!expanded && event.children.length > 0">
       <v-trace-path
@@ -99,13 +101,20 @@ export default {
   },
   methods: {
     toggleVisibility() {
-      // this.expanded = !this.expanded;
-      this.$set(this, 'expanded', !this.expanded);
+      this.expanded = !this.expanded;
 
       // Cache the expanded state on the event
       if (this.cacheState) {
         this.event.$hidden.expanded = this.expanded;
       }
+
+      this.$nextTick(() => {
+        if (this.expanded) {
+          this.$emit('expand', this.$refs.node);
+        } else {
+          this.$emit('collapse', this.$refs.node);
+        }
+      });
     },
     async collectInputs() {
       return new Promise((resolve) => {

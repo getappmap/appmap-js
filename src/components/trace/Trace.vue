@@ -5,6 +5,8 @@
       :key="event.id"
       :event="event"
       @updated="$emit('updated')"
+      @expand="(e) => $emit('expand', e)"
+      @collapse="(e) => $emit('collapse', e)"
       ref="nodes"
     />
   </div>

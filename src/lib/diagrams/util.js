@@ -60,7 +60,9 @@ export function panToNode(viewport, node) {
   let target;
   // If a node is already selected and visible, pan so that
   // the new selection will be in the same place.
-  const highlightedNode = viewport.element.querySelector('.node.highlight');
+  const highlightedNode = viewport.element.querySelector(
+    '.trace-node.highlight'
+  );
   if (nodeFullyVisible(viewport, highlightedNode)) {
     const xform = d3.zoomTransform(highlightedNode);
 

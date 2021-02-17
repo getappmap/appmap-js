@@ -11,7 +11,7 @@
       <node-connection
         ref="flowOut"
         :class="outboundConnectionClasses"
-        @click.prevent="$emit('expandChildren')"
+        @click.stop="$emit('expandChildren')"
       />
       <component :is="`v-trace-node-body-${eventType}`" :event="event" />
     </div>
