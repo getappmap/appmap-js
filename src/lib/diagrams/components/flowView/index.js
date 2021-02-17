@@ -388,7 +388,7 @@ export default class FlowView extends EventSource {
     document.addEventListener('click', () => this.hidePopper());
 
     this.on('popper', (element) =>
-      lazyPanToElement(this.container.containerController, element, 10)
+      lazyPanToElement(this.container, element, 10)
     );
   }
 
@@ -396,7 +396,7 @@ export default class FlowView extends EventSource {
     this.callTree = callTree;
 
     this.callTree.on('selectedEvent', (event) => {
-      panToNode(this.container.containerController, event.element);
+      panToNode(this.container, event.element);
       this.highlight(event ? event.id : null);
     });
 
