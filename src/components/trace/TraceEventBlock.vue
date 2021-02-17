@@ -184,7 +184,6 @@ export default {
     this.onUpdate();
   },
   mounted() {
-    console.log('!');
     if (!this.$store || !this.$store.getters) {
       return;
     }
