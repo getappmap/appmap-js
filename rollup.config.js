@@ -97,6 +97,7 @@ if (!argv.format || argv.format === 'es') {
       vue(baseConfig.plugins.vue),
       image({ exclude: ['**/*.svg'] }),
       commonjs(),
+      terser(),
     ],
   };
   buildFormats.push(esConfig);
