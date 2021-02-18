@@ -1,4 +1,3 @@
-import fs from 'fs';
 import path from 'path';
 import vue from 'rollup-plugin-vue';
 import alias from '@rollup/plugin-alias';
@@ -10,15 +9,7 @@ import { terser } from 'rollup-plugin-terser';
 import minimist from 'minimist';
 import svg from './build/rollup-vue-svg';
 
-// Get browserslist config and remove ie from es build targets
-const esbrowserslist = fs
-  .readFileSync('./.browserslistrc')
-  .toString()
-  .split('\n')
-  .filter((entry) => entry && entry.substring(0, 2) !== 'ie');
-
 const argv = minimist(process.argv.slice(2));
-
 const baseConfig = {
   input: 'src/index.js',
   plugins: {
@@ -105,18 +96,8 @@ if (!argv.format || argv.format === 'es') {
       svg(),
       vue(baseConfig.plugins.vue),
       image({ exclude: ['**/*.svg'] }),
-      babel({
-        ...baseConfig.plugins.babel,
-        presets: [
-          [
-            '@babel/preset-env',
-            {
-              targets: esbrowserslist,
-            },
-          ],
-        ],
-      }),
       commonjs(),
+      terser(),
     ],
   };
   buildFormats.push(esConfig);
