@@ -1,3 +1,11 @@
+## [1.1.1](https://github.com/applandinc/appmap-js/compare/v1.1.0...v1.1.1) (2021-02-18)
+
+
+### Bug Fixes
+
+* drop babel from ESM bundle ([fdc9ccb](https://github.com/applandinc/appmap-js/commit/fdc9ccb6ec2258e17c75a89c82dba304e5611bbb))
+* Trace retains esModule flag after transformation ([22bfc84](https://github.com/applandinc/appmap-js/commit/22bfc8446d55e43fc997e6859f82182654bd37d0))
+
 # [1.1.0](https://github.com/applandinc/appmap-js/compare/v1.0.1...v1.1.0) (2021-02-17)
 
 
