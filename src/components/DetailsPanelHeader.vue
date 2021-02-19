@@ -8,10 +8,7 @@
         @click="selectObject(item)"
       >
         <div class="details-panel-header__parent-icon">
-          <NodeTypePackageIcon v-if="item.type === 'package'" />
-          <NodeTypeClassIcon v-if="item.type === 'class'" />
-          <NodeTypeFunctionIcon v-if="item.type === 'function'" />
-          <NodeTypeRouteIcon v-if="item.type === 'route'" />
+          <component :is="`v-node-type-${item.type}-icon`" />
         </div>
         {{ item.name }}
       </div>
@@ -25,20 +22,22 @@
 </template>
 
 <script>
-import NodeTypePackageIcon from '@/assets/node-types/package.svg';
-import NodeTypeClassIcon from '@/assets/node-types/class.svg';
-import NodeTypeFunctionIcon from '@/assets/node-types/function.svg';
-import NodeTypeRouteIcon from '@/assets/node-types/route.svg';
+import VNodeTypePackageIcon from '@/assets/node-types/package.svg';
+import VNodeTypeClassIcon from '@/assets/node-types/class.svg';
+import VNodeTypeFunctionIcon from '@/assets/node-types/function.svg';
+import VNodeTypeHttpIcon from '@/assets/node-types/http.svg';
 import { SELECT_OBJECT } from '@/store/vsCode';
+import { Event } from '@/lib/models';
+import { CodeObjectType } from '@/lib/models/codeObject';
 
 export default {
   name: 'v-details-panel-header',
 
   components: {
-    NodeTypePackageIcon,
-    NodeTypeClassIcon,
-    NodeTypeFunctionIcon,
-    NodeTypeRouteIcon,
+    VNodeTypePackageIcon,
+    VNodeTypeClassIcon,
+    VNodeTypeFunctionIcon,
+    VNodeTypeHttpIcon,
   },
 
   props: {
@@ -56,22 +55,30 @@ export default {
 
   computed: {
     parents() {
-      let result = [];
-      if (this.object) {
-        if (this.object.event && this.object.codeObject) {
-          if (this.object.sql_query) {
-            result = [...this.object.codeObject.ancestors()];
-          } else {
-            result = [
-              this.object.codeObject,
-              ...this.object.codeObject.ancestors(),
-            ];
-          }
-        } else {
-          result = [...this.object.ancestors()];
+      let codeObject;
+      if (this.object instanceof Event) {
+        codeObject = this.object.codeObject;
+      } else {
+        codeObject = this.object;
+      }
+
+      const result = [];
+      if (codeObject) {
+        result.push(
+          codeObject.packageObject,
+          codeObject.classObject,
+          codeObject
+        );
+
+        if (
+          codeObject.type === CodeObjectType.ROUTE ||
+          codeObject.type === CodeObjectType.QUERY
+        ) {
+          result.push(codeObject.parent);
         }
       }
-      return result.reverse();
+
+      return result.filter((obj) => obj && obj !== this.object);
     },
   },
   methods: {
