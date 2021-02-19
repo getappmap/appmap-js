@@ -48,7 +48,9 @@ function createDOM(viewportZoom) {
   viewportZoom.container.appendChild(controlsContainer);
   viewportZoom.element = controlsContainer;
 
-  controls.buttonZoomIn.addEventListener('click', () => {
+  controls.buttonZoomIn.addEventListener('click', (event) => {
+    event.stopPropagation();
+
     viewportZoom.zoomScale = Math.min(
       1.0,
       viewportZoom.zoomScale + viewportZoom.step
@@ -56,7 +58,9 @@ function createDOM(viewportZoom) {
     viewportZoom.emit('zoom', viewportZoom.zoomScale);
   });
 
-  controls.buttonZoomOut.addEventListener('click', () => {
+  controls.buttonZoomOut.addEventListener('click', (event) => {
+    event.stopPropagation();
+
     viewportZoom.zoomScale = Math.max(
       0.0,
       viewportZoom.zoomScale - viewportZoom.step
@@ -65,6 +69,8 @@ function createDOM(viewportZoom) {
   });
 
   controls.zoomBar.addEventListener('click', (event) => {
+    event.stopPropagation();
+
     if (event.target !== controls.zoomBar) {
       return false;
     }
