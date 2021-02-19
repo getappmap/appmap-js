@@ -26,6 +26,7 @@ import VNodeTypePackageIcon from '@/assets/node-types/package.svg';
 import VNodeTypeClassIcon from '@/assets/node-types/class.svg';
 import VNodeTypeFunctionIcon from '@/assets/node-types/function.svg';
 import VNodeTypeHttpIcon from '@/assets/node-types/http.svg';
+import VNodeTypeRouteIcon from '@/assets/node-types/route.svg';
 import { SELECT_OBJECT } from '@/store/vsCode';
 import { Event } from '@/lib/models';
 import { CodeObjectType } from '@/lib/models/codeObject';
@@ -38,6 +39,7 @@ export default {
     VNodeTypeClassIcon,
     VNodeTypeFunctionIcon,
     VNodeTypeHttpIcon,
+    VNodeTypeRouteIcon,
   },
 
   props: {
