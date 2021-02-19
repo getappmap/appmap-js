@@ -1,6 +1,10 @@
 <template>
   <div class="details-panel-class">
-    <v-details-panel-header object-type="Class" :title="object.name">
+    <v-details-panel-header
+      object-type="Class"
+      :object="object"
+      :title="object.name"
+    >
       <template v-slot:links>
         <v-details-button @click.native="viewSource">
           View source

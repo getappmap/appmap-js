@@ -1,6 +1,10 @@
 <template>
   <div>
-    <v-details-panel-header object-type="Route" :title="object.name" />
+    <v-details-panel-header
+      object-type="Route"
+      :object="object"
+      :title="object.name"
+    />
     <v-details-panel-list title="Events" :items="object.events" />
     <v-details-panel-list
       title="Outbound connections"
