@@ -106,6 +106,7 @@
     "semantic-release": "^17.3.8",
     "start-server-and-test": "^1.11.7",
     "svg-to-vue": "^0.7.0",
+    "vue-jest": "^3.0.7",
     "vue-svg-loader": "^0.16.0",
     "vue-template-compiler": "^2.6.11"
   },
