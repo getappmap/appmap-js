@@ -1,5 +1,5 @@
 <template>
-  <div :class="classes" @click="selectNode" :data-event-id="event.id">
+  <div :class="classes" @click.stop="selectNode" :data-event-id="event.id">
     <div :class="`trace-node__header trace-node__header--${eventType}`">
       {{ title }}
     </div>
