@@ -50,6 +50,7 @@ export const __esModule = true; // eslint-disable-line no-underscore-dangle
       format('truetype');
 }
 .trace {
+  width: max-content;
   display: inline-block;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.8rem;
