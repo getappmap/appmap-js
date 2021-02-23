@@ -63,7 +63,7 @@ class Target {
     }
     yield new ScanError(
       `No authentication provider found in ${this.event.event.route}`,
-      this.event.event,
+      this.event.event
     );
   }
 }

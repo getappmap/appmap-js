@@ -10,7 +10,7 @@ describe('IllegalPackageDependency', () => {
   test('guards access to the SQL package', () => {
     // Alternatively, 'app/controllers', ['HTTP']
     const { targets, matches, errors } = scan(
-      new IllegalPackageDependency('SQL', ['app/models']),
+      new IllegalPackageDependency('SQL', ['app/models'])
     )(apiKeyAppMap.events);
     expect(targets).not.toEqual([]);
     expect(matches).toEqual([]);

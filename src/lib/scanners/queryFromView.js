@@ -7,6 +7,7 @@ import { MVC_VIEW } from './labels';
 import ScanError from './scanError';
 
 class Target {
+  // eslint-disable-next-line class-methods-use-this
   toString() {
     return 'Target';
   }
@@ -15,7 +16,7 @@ class Target {
     for (const event of this.event.descendants((evt) => evt.sql_query)) {
       yield new ScanError(
         `Query ${event.toString()} performed from view`,
-        event,
+        event
       );
     }
   }
@@ -35,7 +36,7 @@ class Scope {
    */
   *targets() {
     for (const event of this.event.descendants((evt) =>
-      evt.hasLabel(MVC_VIEW),
+      evt.hasLabel(MVC_VIEW)
     )) {
       yield new Target(event);
     }
@@ -49,7 +50,7 @@ export class QueryFromView {
   // eslint-disable-next-line class-methods-use-this
   *scopes(event) {
     for (const scope of new EventNavigator(event).descendants(
-      (evt) => evt.httpServerRequest,
+      (evt) => evt.httpServerRequest
     )) {
       yield new Scope(scope);
     }

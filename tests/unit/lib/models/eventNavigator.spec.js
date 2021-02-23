@@ -8,7 +8,7 @@ const apiKeyAppMap = buildAppMap().source(apiKeyScenario).normalize().build();
 describe('EventNavigator', () => {
   test('ancestors', () => {
     const event = largeAppMap.events.find(
-      (e) => e.isCall() && e.methodId === 'recover',
+      (e) => e.isCall() && e.methodId === 'recover'
     );
     const ancestors = new EventNavigator(event).ancestors();
     const evt = ancestors.next();
@@ -20,7 +20,7 @@ describe('EventNavigator', () => {
 
   test('precedingSiblings', () => {
     const event = apiKeyAppMap.events.find(
-      (e) => e.isCall() && e.methodId === 'touch',
+      (e) => e.isCall() && e.methodId === 'touch'
     );
     const precedingSiblings = new EventNavigator(event).precedingSiblings();
 
@@ -34,7 +34,7 @@ describe('EventNavigator', () => {
 
   test('followingSiblings', () => {
     const event = apiKeyAppMap.events.find(
-      (e) => e.isCall() && e.methodId === 'touch',
+      (e) => e.isCall() && e.methodId === 'touch'
     );
     const followingSiblings = new EventNavigator(event).followingSiblings();
 
@@ -48,7 +48,7 @@ describe('EventNavigator', () => {
 
   test('inspecting labels on yielded events', () => {
     const event = apiKeyAppMap.events.find(
-      (e) => e.isCall() && e.methodId === 'authenticate',
+      (e) => e.isCall() && e.methodId === 'authenticate'
     );
     const self = new EventNavigator(event).self();
 
@@ -59,7 +59,7 @@ describe('EventNavigator', () => {
 
   test('descendants', () => {
     const event = largeAppMap.events.find(
-      (e) => e.isCall() && e.methodId === 'recover',
+      (e) => e.isCall() && e.methodId === 'recover'
     );
     const descendants = new EventNavigator(event).descendants();
 
@@ -69,7 +69,7 @@ describe('EventNavigator', () => {
 
   test('chaining axis generators', () => {
     const event = apiKeyAppMap.events.find(
-      (e) => e.isCall() && e.methodId === 'authenticate',
+      (e) => e.isCall() && e.methodId === 'authenticate'
     );
     const followingSiblings = new EventNavigator(event).followingSiblings();
 

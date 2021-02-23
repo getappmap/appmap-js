@@ -15,7 +15,7 @@ export default function applandScans() {
   // eslint-disable-next-line func-names
   return function (events) {
     // eslint-disable-next-line prefer-arrow-callback
-    return scanners.reduce(function (accumulator, scanner) {
+    return scanners.reduce((accumulator, scanner) => {
       const { targets, matches, errors } = scan(scanner)(events);
       accumulator.push({ scanner, targets, matches, errors });
       return accumulator;

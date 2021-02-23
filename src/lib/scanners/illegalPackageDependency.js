@@ -6,7 +6,7 @@ import { EventNavigator } from '../models';
 import { isCommand } from '../util';
 import ScanError from './scanError';
 
-function packageName(event) {
+function buildPackageName(event) {
   const { packageObject } = event.codeObject;
   if (packageObject) {
     return packageObject.name;
@@ -40,13 +40,13 @@ class Target {
   }
 
   *validateDependency(event) {
-    const invokerPackageName = packageName(event);
+    const invokerPackageName = buildPackageName(event);
     if (!this.config.allowedDependencies.include(invokerPackageName)) {
       yield new ScanError(
         `${this.event.toString()} invoked by disallowed package ${invokerPackageName} on event ${
           event.toString
         }`,
-        event,
+        event
       );
     } else {
       yield event;
@@ -66,7 +66,7 @@ class Scope {
 
   *targets() {
     for (const descendant of this.event.descendants(
-      (evt) => packageName(evt) === this.config.packageName,
+      (evt) => buildPackageName(evt) === this.config.packageName
     )) {
       yield new Target(descendant, this.config);
     }
