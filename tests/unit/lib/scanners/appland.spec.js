@@ -12,23 +12,24 @@ describe('AppLand scanner', () => {
       .readdirSync(appmapDir)
       .filter((filename) => filename.endsWith('.appmap.json'));
     const scans = applandScans();
-    const scanners = fileNames.map((filename) => {
-      return new Promise((resolve, reject) => {
-        try {
-          const appmapData = JSON.parse(
-            fs.readFileSync(join(appmapDir, filename)),
-          );
-          if (!appmapData.events) {
-            resolve();
+    const scanners = fileNames.map(
+      (filename) =>
+        new Promise((resolve, reject) => {
+          try {
+            const appmapData = JSON.parse(
+              fs.readFileSync(join(appmapDir, filename))
+            );
+            if (!appmapData.events) {
+              resolve();
+            }
+            const appmap = buildAppMap().source(appmapData).normalize().build();
+            const results = scans(appmap.events);
+            resolve({ filename, results });
+          } catch (e) {
+            reject(e);
           }
-          const appmap = buildAppMap().source(appmapData).normalize().build();
-          const results = scans(appmap.events);
-          resolve({ filename, results });
-        } catch (e) {
-          reject(e);
-        }
-      });
-    });
+        })
+    );
 
     const allResults = await Promise.all(scanners);
     allResults

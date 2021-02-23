@@ -18,13 +18,13 @@ describe('Scanner', () => {
     expect(errors).not.toEqual([]);
     expect(errors.length).toEqual(1);
     expect(errors[0].message).toEqual(
-      `No authentication provider found in DELETE /api/api_keys`,
+      `No authentication provider found in DELETE /api/api_keys`
     );
   });
 
   test('authentication provider is found', () => {
     const authenticator = apiKeyAppMap.events.find(
-      (e) => e.isCall() && e.methodId === 'authenticate',
+      (e) => e.isCall() && e.methodId === 'authenticate'
     );
     authenticator.codeObject.data.labels = new Set([PROVIDER_AUTHENTICATION]);
 
