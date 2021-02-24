@@ -205,7 +205,7 @@ export default {
 .event-block {
   display: flex;
   flex-shrink: 0;
-  align-items: start;
+  align-items: flex-start;
   margin-bottom: 1rem;
   & > * {
     flex: inherit;
