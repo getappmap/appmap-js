@@ -28,11 +28,19 @@
           :is-active="isViewingComponent"
           :ref="VIEW_COMPONENT"
         >
-          <v-diagram-component ref="componentDiagram" />
+          <KeepAliveGlobal>
+            <v-diagram-component ref="componentDiagram" :key="VIEW_COMPONENT" />
+          </KeepAliveGlobal>
         </v-tab>
 
         <v-tab name="Trace" :is-active="isViewingFlow" :ref="VIEW_FLOW">
-          <v-diagram-trace ref="diagramFlow" :events="rootEvents" />
+          <KeepAliveGlobal>
+            <v-diagram-trace
+              ref="diagramFlow"
+              :events="rootEvents"
+              :key="VIEW_FLOW"
+            />
+          </KeepAliveGlobal>
         </v-tab>
       </v-tabs>
     </div>
@@ -40,6 +48,7 @@
 </template>
 
 <script>
+import KeepAliveGlobal from 'vue-keep-alive-global';
 import { Event } from '@/lib/models';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
@@ -61,6 +70,7 @@ export default {
   name: 'VSCodeExtension',
 
   components: {
+    KeepAliveGlobal,
     VDetailsPanel,
     VDetailsButton,
     VDiagramComponent,

@@ -100,6 +100,10 @@ export default {
   updated() {
     this.renderDiagram();
   },
+
+  activated() {
+    this.panToSelectedEvent();
+  },
 };
 </script>
 

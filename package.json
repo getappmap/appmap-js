@@ -34,6 +34,7 @@
     "deepmerge": "^4.2.2",
     "sql-formatter": "^2.3.3",
     "vue": "^2.6.11",
+    "vue-keep-alive-global": "^0.1.1",
     "vuex": "^3.6.0"
   },
   "devDependencies": {
