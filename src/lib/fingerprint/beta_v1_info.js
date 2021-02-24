@@ -55,13 +55,13 @@ class Canonicalize {
   }
 
   static functionCall(event) {
-    if (!event.labels || event.labels.length === 0) {
+    if (event.codeObject.labels.size === 0) {
       return null;
     }
 
     return {
       kind: 'function',
-      labels: event.codeObject.labels,
+      labels: [...event.codeObject.labels],
     };
   }
 }
