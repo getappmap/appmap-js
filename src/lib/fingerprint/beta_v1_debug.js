@@ -43,7 +43,7 @@ class Canonicalize {
     return {
       kind: 'function',
       function: event.codeObject.id,
-      labels: event.codeObject.labels,
+      labels: [...event.codeObject.labels],
     };
   }
 }

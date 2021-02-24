@@ -7,6 +7,6 @@
  * Highly transient values such as object ids and thread ids are always discarded.
  */
 export default async function (algorithmName, appmap) {
-  const algorithm = await import(`./${algorithmName}.js`);
+  const algorithm = await import(`./${algorithmName}`);
   return algorithm.default(appmap);
 }

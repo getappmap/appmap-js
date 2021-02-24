@@ -30,10 +30,7 @@ class Canonicalize {
   }
 
   static sql() {
-    // TODO: Include the tables that are present in the query?
-    return {
-      kind: 'sql',
-    };
+    return null;
   }
 
   static httpServerRequest(event) {
@@ -45,13 +42,13 @@ class Canonicalize {
   }
 
   static functionCall(event) {
-    if (!event.labels || event.labels.length === 0) {
+    if (event.codeObject.labels.size === 0) {
       return null;
     }
 
     return {
       kind: 'function',
-      labels: event.labels,
+      labels: [...event.codeObject.labels],
     };
   }
 }
