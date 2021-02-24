@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { buildAppMap } from '@/lib/models';
-import canonicalize from '../../../../src/lib/fingerprint/canonicalize';
+import canonicalize from '../../../../src/lib/models/fingerprint/canonicalize';
 import apiKeyScenario from '../../fixtures/revoke_api_key.appmap.json';
 
 const apiKeyAppMap = buildAppMap().source(apiKeyScenario).normalize().build();

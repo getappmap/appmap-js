@@ -1,4 +1,4 @@
-import { compareEvents, notNull, uniqueEvents } from './algorithms';
+import { buildTree, compareEvents, notNull, uniqueEvents } from './algorithms';
 
 /**
  * At INFO level, the order of labeled function calls matters. SQL query strings
@@ -11,6 +11,7 @@ class Canonicalize {
 
   execute() {
     const queries = this.appmap.events
+      .filter((event) => event.isCall())
       .filter((event) => event.sql)
       .map(Canonicalize.sql)
       .sort(compareEvents)
@@ -18,13 +19,16 @@ class Canonicalize {
       .filter(notNull);
 
     const events = this.appmap.events
+      .filter((event) => event.isCall())
       .filter((event) => !event.sql)
       .map(Canonicalize.transform)
       .filter(notNull);
 
+    const tree = buildTree(events);
+
     return {
       sql: queries,
-      events,
+      events: tree,
     };
   }
 
@@ -48,6 +52,8 @@ class Canonicalize {
 
   static httpServerRequest(event) {
     return {
+      id: event.id,
+      parent_id: event.parent?.id,
       kind: 'http_server_request',
       route: event.route,
       status: event.httpServerResponse.status,
@@ -60,6 +66,8 @@ class Canonicalize {
     }
 
     return {
+      id: event.id,
+      parent_id: event.parent?.id,
       kind: 'function',
       labels: [...event.codeObject.labels],
     };

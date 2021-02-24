@@ -11,6 +11,7 @@ class Canonicalize {
 
   execute() {
     return this.appmap.events
+      .filter((event) => event.isCall())
       .map(Canonicalize.transform)
       .filter(notNull)
       .sort(compareEvents)

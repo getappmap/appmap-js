@@ -1,3 +1,5 @@
+import { buildTree } from './algorithms';
+
 /**
  * At DEBUG level, the order of labeled function calls matters, and all function class
  * and method names are retained. SQL queries are also retained in order.
@@ -8,7 +10,10 @@ class Canonicalize {
   }
 
   execute() {
-    return this.appmap.events.map(Canonicalize.transform);
+    const events = this.appmap.events
+      .filter((event) => event.isCall())
+      .map(Canonicalize.transform);
+    return buildTree(events);
   }
 
   static transform(event) {
@@ -24,6 +29,8 @@ class Canonicalize {
 
   static sql(event) {
     return {
+      id: event.id,
+      parent_id: event.parent?.id,
       kind: 'sql',
       sql: event.sqlQuery,
     };
@@ -31,6 +38,8 @@ class Canonicalize {
 
   static httpServerRequest(event) {
     return {
+      id: event.id,
+      parent_id: event.parent?.id,
       kind: 'http_server_request',
       mime_type: event.httpServerResponse.mime_type,
       parameters: event.httpServerRequest.message,
@@ -41,6 +50,8 @@ class Canonicalize {
 
   static functionCall(event) {
     return {
+      id: event.id,
+      parent_id: event.parent?.id,
       kind: 'function',
       function: event.codeObject.id,
       labels: [...event.codeObject.labels],
