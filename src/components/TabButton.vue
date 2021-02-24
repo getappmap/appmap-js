@@ -30,27 +30,38 @@ export default {
 <style scoped lang="scss">
 .tab-btn {
   appearance: none;
-  border: 0;
-  background-color: $vs-code-gray2;
+  border: 1px solid $base13;
+  border-radius: $border-radius;
+  background-color: transparent;
+  background-origin: border-box;
+  background-clip: border-box;
+  background-position: -1px 0;
+  background-size: calc(100% + 2px);
   cursor: pointer;
-  color: $base03;
-  font-size: 1rem;
-  padding: 0.5em 1em;
+  color: $base11;
+  font-size: 0.75rem;
+  padding: 0.5rem 1.5rem;
   margin: 0;
   transition: $transition;
   letter-spacing: 0.5px;
-  width: 50%;
 
-  &:hover {
-    color: lighten($blue, 10);
+  &:hover,
+  &:active {
+    color: $white;
   }
 
   &:focus {
     outline: none;
   }
 
+  & + & {
+    margin-left: 0.75rem;
+  }
+
   &--active {
-    background-color: $blue;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-color: transparent;
+    background-image: $general;
     cursor: default;
     color: $white;
     &:hover {
