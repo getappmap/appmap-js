@@ -1,3 +1,5 @@
+#! /usr/bin/env npx -p @babel/core -p @babel/node babel-node
+
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs';
@@ -23,7 +25,7 @@ class FingerprintCommand {
 
   // eslint-disable-next-line class-methods-use-this
   fingerprint(file) {
-    fs.readFile(file, (err, data) => {
+    fs.readFile(file, async (err, data) => {
       if (err) {
         console.log(err);
         return;
@@ -39,19 +41,24 @@ class FingerprintCommand {
       const fingerprints = [];
       appmapData.metadata.fingerprints = fingerprints;
       const appmap = appMapBuilder().source(appmapData).normalize().build();
-      algorithms.forEach((algorithmName) => {
-        const canonicalForm = canonicalize(algorithmName, appmap);
-        const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
-        const fingerprintDigest = createHash('sha256')
-          .update(canonicalJSON)
-          .digest('hex');
-        fingerprints.push({
-          appmap_digest: appmapDigest,
-          canonicalization_algorithm: algorithmName,
-          digest: fingerprintDigest,
-          fingerprint_algorithm: 'sha256',
-        });
-      });
+
+      // eslint-disable-next-line prefer-arrow-callback
+      // eslint-disable-next-line func-names
+      await Promise.all(
+        algorithms.map(async (algorithmName) => {
+          const canonicalForm = await canonicalize(algorithmName, appmap);
+          const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
+          const fingerprintDigest = createHash('sha256')
+            .update(canonicalJSON)
+            .digest('hex');
+          fingerprints.push({
+            appmap_digest: appmapDigest,
+            canonicalization_algorithm: algorithmName,
+            digest: fingerprintDigest,
+            fingerprint_algorithm: 'sha256',
+          });
+        })
+      );
 
       fs.writeFile(file, JSON.stringify(appmapData, null, 2), (writeErr) => {
         if (writeErr) {
