@@ -1,3 +1,16 @@
+# [1.2.0](https://github.com/applandinc/appmap-js/compare/v1.1.2...v1.2.0) (2021-02-25)
+
+
+### Bug Fixes
+
+* use 'flex-start' value instead of 'start' for 'align-items' CSS property ([aea90fd](https://github.com/applandinc/appmap-js/commit/aea90fddc7cee12aa7385058c227cb3172742177))
+
+
+### Features
+
+* new tabs design ([c946f2c](https://github.com/applandinc/appmap-js/commit/c946f2c98d3da400ceb6df6cc4afb24d1be726c0))
+* switch between tabs without re-render ([c862571](https://github.com/applandinc/appmap-js/commit/c8625719d1a735dcefb60761378cd0b35988f13f))
+
 ## [1.1.2](https://github.com/applandinc/appmap-js/compare/v1.1.1...v1.1.2) (2021-02-22)
 
 
