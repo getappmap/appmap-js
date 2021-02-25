@@ -72,5 +72,9 @@ export default {
   mounted() {
     this.focusHighlighted();
   },
+
+  activated() {
+    this.focusHighlighted();
+  },
 };
 </script>

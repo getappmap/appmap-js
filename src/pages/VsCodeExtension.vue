@@ -32,7 +32,11 @@
         </v-tab>
 
         <v-tab name="Trace" :is-active="isViewingFlow" :ref="VIEW_FLOW">
-          <v-diagram-trace ref="diagramFlow" :events="rootEvents" />
+          <v-diagram-trace
+            ref="diagramFlow"
+            :events="rootEvents"
+            :name="VIEW_FLOW"
+          />
         </v-tab>
       </v-tabs>
     </div>

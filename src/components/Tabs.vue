@@ -65,7 +65,7 @@ export default {
   height: 100%;
 
   &__header {
-    border: 0;
+    padding: 1.5rem;
   }
 
   &__content {

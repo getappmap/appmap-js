@@ -75,6 +75,7 @@
 
 <script>
 import { Event } from '@/lib/models';
+import { VIEW_FLOW } from '@/store/vsCode';
 import VTraceNode from './TraceNode.vue';
 import VTracePath from './TracePath.vue';
 import VTraceSummary from './TraceSummary.vue';
@@ -102,9 +103,16 @@ export default {
   watch: {
     '$store.getters.selectedObject': {
       handler() {
+        const { state, getters } = this.$store;
+        if (!state || !getters || state.currentView !== VIEW_FLOW) {
+          return;
+        }
+
+        const { selectedObject } = getters;
         if (
           !this.expanded &&
-          this.$store.getters.selectedObject.parent === this.event
+          selectedObject &&
+          selectedObject.parent === this.event
         ) {
           this.toggleVisibility();
         }
@@ -168,6 +176,21 @@ export default {
 
       this.$emit('updated');
     },
+    expandSelectedObject() {
+      if (!this.$store || !this.$store.getters) {
+        return;
+      }
+
+      const { selectedObject } = this.$store.getters;
+      if (!selectedObject || !(selectedObject instanceof Event)) {
+        return;
+      }
+
+      const ancestors = selectedObject.ancestors();
+      if (ancestors.includes(this.event)) {
+        this.expanded = true;
+      }
+    },
   },
   computed: {
     hasParent() {
@@ -184,19 +207,10 @@ export default {
     this.onUpdate();
   },
   mounted() {
-    if (!this.$store || !this.$store.getters) {
-      return;
-    }
-
-    const { selectedObject } = this.$store.getters;
-    if (!selectedObject || !(selectedObject instanceof Event)) {
-      return;
-    }
-
-    const ancestors = selectedObject.ancestors();
-    if (ancestors.includes(this.event)) {
-      this.expanded = true;
-    }
+    this.expandSelectedObject();
+  },
+  activated() {
+    this.expandSelectedObject();
   },
 };
 </script>
@@ -205,7 +219,7 @@ export default {
 .event-block {
   display: flex;
   flex-shrink: 0;
-  align-items: start;
+  align-items: flex-start;
   margin-bottom: 1rem;
   & > * {
     flex: inherit;

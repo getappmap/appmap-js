@@ -1,12 +1,20 @@
 <template>
-  <div v-if="isActive" class="tab-content">
-    <slot />
-  </div>
+  <keep-alive>
+    <v-tab-content v-if="isActive">
+      <slot />
+    </v-tab-content>
+  </keep-alive>
 </template>
 
 <script>
+import VTabContent from './TabContent.vue';
+
 export default {
   name: 'v-tab',
+
+  components: {
+    VTabContent,
+  },
 
   props: {
     name: {

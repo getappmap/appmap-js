@@ -129,6 +129,13 @@ export default {
   updated() {
     this.renderDiagram();
   },
+
+  activated() {
+    if (this.componentDiagram) {
+      this.componentDiagram.render(this.$store.state.appMap.classMap);
+      this.highlightSelectedComponent();
+    }
+  },
 };
 </script>
 
