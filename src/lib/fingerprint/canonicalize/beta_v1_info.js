@@ -1,8 +1,8 @@
-import { buildTree } from './algorithms';
+import { buildTree, compareEvents, notNull, uniqueEvents } from '../algorithms';
 
 /**
- * At DEBUG level, the order of labeled function calls matters, and all function class
- * and method names are retained. SQL queries are also retained in order.
+ * At INFO level, the order of labeled function calls matters. SQL query strings
+ * are collected, sorted and made unique.
  */
 class Canonicalize {
   constructor(appmap) {
@@ -10,10 +10,26 @@ class Canonicalize {
   }
 
   execute() {
+    const queries = this.appmap.events
+      .filter((event) => event.isCall())
+      .filter((event) => event.sql)
+      .map(Canonicalize.sql)
+      .sort(compareEvents)
+      .map(uniqueEvents())
+      .filter(notNull);
+
     const events = this.appmap.events
       .filter((event) => event.isCall())
-      .map(Canonicalize.transform);
-    return buildTree(events);
+      .filter((event) => !event.sql)
+      .map(Canonicalize.transform)
+      .filter(notNull);
+
+    const tree = buildTree(events);
+
+    return {
+      sql: queries,
+      events: tree,
+    };
   }
 
   static transform(event) {
@@ -29,8 +45,6 @@ class Canonicalize {
 
   static sql(event) {
     return {
-      id: event.id,
-      parent_id: event.parent?.id,
       kind: 'sql',
       sql: event.sqlQuery,
     };
@@ -41,19 +55,20 @@ class Canonicalize {
       id: event.id,
       parent_id: event.parent?.id,
       kind: 'http_server_request',
-      mime_type: event.httpServerResponse.mime_type,
-      parameters: event.httpServerRequest.message,
       route: event.route,
       status: event.httpServerResponse.status,
     };
   }
 
   static functionCall(event) {
+    if (event.codeObject.labels.size === 0) {
+      return null;
+    }
+
     return {
       id: event.id,
       parent_id: event.parent?.id,
       kind: 'function',
-      function: event.codeObject.id,
       labels: [...event.codeObject.labels],
     };
   }

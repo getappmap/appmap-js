@@ -1,3 +1,19 @@
+import fs from 'fs';
+import { join as joinPath } from 'path';
+
+// eslint-disable-next-line func-names
+export const algorithms = (function () {
+  const fullPath = (file) => joinPath(__dirname, 'canonicalize', file);
+  const isFile = (file) => fs.statSync(fullPath(file)).isFile();
+  const isJS = (file) => file.endsWith('.js');
+
+  return fs
+    .readdirSync(joinPath(__dirname, 'canonicalize'))
+    .filter(isFile)
+    .filter(isJS)
+    .map((file) => file.slice(0, file.length - 3));
+})();
+
 /**
  * Process an appmap into a canonical form which can be fingerprinted
  * by converting it to a byte sequence such as YAML or JSON.
@@ -6,8 +22,13 @@
  * according a defined set of rules. Some events are compacted and others are ignored.
  * Highly transient values such as object ids and thread ids are always discarded.
  */
-export default async function (algorithmName, appmap) {
-  const algorithm = await import(`./${algorithmName}`);
+export async function canonicalize(algorithmName, appmap) {
+  console.log(algorithms);
+  if (algorithms.indexOf(algorithmName) === -1) {
+    throw new Error(`Invalid canonicalization algorithm: ${algorithmName}`);
+  }
+
+  const algorithm = await import(`./canonicalize/${algorithmName}`);
 
   // TODO: In the Trace view, when an event list contains HTTP server requests there is
   // special treatment. The displayed tree roots are the HTTP server requests, and other
