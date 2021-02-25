@@ -105,27 +105,23 @@ if (!argv.format || argv.format === 'es') {
 
 if (!argv.format || argv.format === 'cjs') {
   const umdConfig = {
-    ...baseConfig,
-    external,
+    input: 'src/node.js',
+    external: [],
     output: {
       compact: true,
-      file: 'dist/appmap.ssr.js',
+      file: 'dist/appmap.node.js',
       format: 'cjs',
       name: 'appmap',
       exports: 'named',
-      globals,
     },
     plugins: [
       replace(baseConfig.plugins.replace),
-      ...baseConfig.plugins.preVue,
-      vue({
-        ...baseConfig.plugins.vue,
-        template: {
-          ...baseConfig.plugins.vue.template,
-          optimizeSSR: true,
+      alias({
+        resolve: ['.js', '.jsx', '.ts', '.tsx'],
+        entries: {
+          '@': path.resolve(__dirname, 'src'),
         },
       }),
-      image(),
       babel(baseConfig.plugins.babel),
       commonjs(),
     ],
