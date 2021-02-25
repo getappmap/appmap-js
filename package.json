@@ -39,6 +39,7 @@
     "d3-flame-graph": "^4.0.6",
     "dagre": "^0.8.5",
     "deepmerge": "^4.2.2",
+    "oboe": "^2.1.5",
     "sql-formatter": "^2.3.3",
     "sql-highlight": "^3.3.3",
     "vue": "^2.6.11",
