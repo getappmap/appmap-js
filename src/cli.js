@@ -1,13 +1,13 @@
-#! /usr/bin/env npx -p @babel/core -p @babel/node babel-node
+#! /usr/bin/env node
 /* eslint-disable max-classes-per-file */
 
-import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
-import { createReadStream, readFile, writeFile, promises as fsp } from 'fs';
-import { join as joinPath } from 'path';
-import { createHash } from 'crypto';
-import oboe from 'oboe';
-
+const yargs = require('yargs');
+const { hideBin } = require('yargs/helpers');
+const fsp = require('fs').promises;
+const { join: joinPath } = require('path');
+const { createHash } = require('crypto');
+const oboe = require('oboe');
+const { createReadStream, readFile, writeFile } = require('fs');
 const {
   algorithms,
   canonicalize,
