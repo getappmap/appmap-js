@@ -5,6 +5,7 @@
   "module": "dist/appmap.esm.js",
   "scripts": {
     "serve": "vue-cli-service serve",
+    "cli": "./src/cli.js",
     "build": "cross-env NODE_ENV=production rollup --config rollup.config.js --format es",
     "watch": "cross-env NODE_ENV=production rollup --watch --config rollup.config.js --format es",
     "test:unit": "vue-cli-service test:unit",
@@ -16,6 +17,9 @@
     "chromatic": "chromatic --exit-zero-on-changes",
     "cypress": "cypress open",
     "semantic-release": "semantic-release"
+  },
+  "bin": {
+    "appmap-js": "./src/cli.js"
   },
   "husky": {
     "hooks": {
@@ -35,7 +39,8 @@
     "sql-formatter": "^2.3.3",
     "sql-highlight": "^3.3.3",
     "vue": "^2.6.11",
-    "vuex": "^3.6.0"
+    "vuex": "^3.6.0",
+    "yargs": "^16.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -52,6 +57,7 @@
     "@storybook/addon-essentials": "^6.1.14",
     "@storybook/addon-links": "^6.1.14",
     "@storybook/vue": "^6.1.14",
+    "@types/yargs": "^16.0.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-e2e-cypress": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
