@@ -27,6 +27,8 @@ import VNodeTypeClassIcon from '@/assets/node-types/class.svg';
 import VNodeTypeFunctionIcon from '@/assets/node-types/function.svg';
 import VNodeTypeHttpIcon from '@/assets/node-types/http.svg';
 import VNodeTypeRouteIcon from '@/assets/node-types/route.svg';
+import VNodeTypeDatabaseIcon from '@/assets/node-types/database.svg';
+import VNodeTypeQueryIcon from '@/assets/node-types/query.svg';
 import { SELECT_OBJECT } from '@/store/vsCode';
 import { Event } from '@/lib/models';
 import { CodeObjectType } from '@/lib/models/codeObject';
@@ -40,6 +42,8 @@ export default {
     VNodeTypeFunctionIcon,
     VNodeTypeHttpIcon,
     VNodeTypeRouteIcon,
+    VNodeTypeDatabaseIcon,
+    VNodeTypeQueryIcon,
   },
 
   props: {
@@ -76,7 +80,7 @@ export default {
           codeObject.type === CodeObjectType.ROUTE ||
           codeObject.type === CodeObjectType.QUERY
         ) {
-          result.push(codeObject.parent);
+          result.unshift(codeObject.parent);
         }
       }
 
