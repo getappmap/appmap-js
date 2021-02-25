@@ -5,7 +5,7 @@
   "module": "dist/appmap.esm.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "cli": "babel-node src/cli.js",
+    "cli": "./src/cli.js",
     "build": "cross-env NODE_ENV=production rollup --config rollup.config.js --format es",
     "watch": "cross-env NODE_ENV=production rollup --watch --config rollup.config.js --format es",
     "test:unit": "vue-cli-service test:unit",
