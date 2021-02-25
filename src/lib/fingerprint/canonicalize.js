@@ -22,13 +22,13 @@ export const algorithms = (function () {
  * according a defined set of rules. Some events are compacted and others are ignored.
  * Highly transient values such as object ids and thread ids are always discarded.
  */
-export async function canonicalize(algorithmName, appmap) {
+export function canonicalize(algorithmName, appmap) {
   console.log(algorithms);
   if (algorithms.indexOf(algorithmName) === -1) {
     throw new Error(`Invalid canonicalization algorithm: ${algorithmName}`);
   }
 
-  const algorithm = await import(`./canonicalize/${algorithmName}`);
+  const algorithm = import(`./canonicalize/${algorithmName}`);
 
   // TODO: In the Trace view, when an event list contains HTTP server requests there is
   // special treatment. The displayed tree roots are the HTTP server requests, and other
