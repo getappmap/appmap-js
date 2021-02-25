@@ -33,13 +33,11 @@ class FingerprintCommand {
       const appmapDataWithoutMetadata = JSON.parse(data.toString());
       delete appmapDataWithoutMetadata.metadata;
       const appmapDigest = createHash('sha256')
-        .update(appmapDataWithoutMetadata)
+        .update(JSON.stringify(appmapDataWithoutMetadata, null, 2))
         .digest('hex');
 
       const fingerprints = [];
-      appmapData.metadata.fingerprints = {
-        fingerprints,
-      };
+      appmapData.metadata.fingerprints = fingerprints;
       const appmap = appMapBuilder().source(appmapData).normalize().build();
       algorithms.forEach((algorithmName) => {
         const canonicalForm = canonicalize(algorithmName, appmap);
@@ -55,7 +53,11 @@ class FingerprintCommand {
         });
       });
 
-      fs.writeFile(file, JSON.stringify(appmapData, null, 2));
+      fs.writeFile(file, JSON.stringify(appmapData, null, 2), (writeErr) => {
+        if (writeErr) {
+          throw new Error(writeErr.message);
+        }
+      });
     });
   }
 
