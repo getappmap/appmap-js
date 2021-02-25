@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-#!/usr/bin/env node
-
-const yargs = require('yargs');
-const { hideBin } = require('yargs/helpers');
-const fs = require('fs');
-const { join: joinPath } = require('path');
-const { createHash } = require('crypto');
-const {
-  algorithms,
-  canonicalize,
-  buildAppMap,
-} = require('../dist/appmap.node');
-=======
 #! /usr/bin/env npx -p @babel/core -p @babel/node babel-node
 /* eslint-disable max-classes-per-file */
 
@@ -21,9 +7,12 @@ import { createReadStream, readFile, writeFile, promises as fsp } from 'fs';
 import { join as joinPath } from 'path';
 import { createHash } from 'crypto';
 import oboe from 'oboe';
-import { algorithms, canonicalize } from './lib/fingerprint/canonicalize';
-import appMapBuilder from './lib/models/appMapBuilder';
->>>>>>> 9345d8a... Start adding diff command
+
+const {
+  algorithms,
+  canonicalize,
+  buildAppMap,
+} = require('../dist/appmap.node');
 
 let verbose = false;
 
@@ -66,11 +55,7 @@ class FingerprintCommand {
 
   // eslint-disable-next-line class-methods-use-this
   fingerprint(file) {
-<<<<<<< HEAD
-    fs.readFile(file, (err, data) => {
-=======
     readFile(file, async (err, data) => {
->>>>>>> 9345d8a... Start adding diff command
       if (err) {
         console.log(err);
         return;
