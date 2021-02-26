@@ -1,4 +1,6 @@
 #! /usr/bin/env node
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable func-names */
 /* eslint-disable max-classes-per-file */
 
 const yargs = require('yargs');
@@ -99,6 +101,40 @@ class FingerprintCommand {
   }
 }
 
+/**
+ * appMapCatalog creates a lookup table of all the AppMap names in a directory (recursively).
+ *
+ * @param {string} directory path to the directory.
+ */
+async function appMapCatalog(directory) {
+  const scenariosByName = {};
+  const appMapFiles = [];
+  await listAppMapFiles(directory, (file) => {
+    appMapFiles.push(file);
+  });
+
+  await Promise.all(
+    appMapFiles.map(function (fileName) {
+      return new Promise(function (resolve, reject) {
+        oboe(createReadStream(fileName))
+          .node({
+            // eslint-disable-next-line func-names
+            'metadata.name': function (name) {
+              if (verbose) {
+                console.log(`Loading AppMap ${name} into catalog`);
+              }
+              scenariosByName[name] = fileName;
+              this.abort();
+              resolve();
+            },
+          })
+          .fail(reject);
+      });
+    })
+  );
+
+  return scenariosByName;
+}
 class DiffCommand {
   baseDir(dir) {
     this.baseDir = dir;
@@ -114,34 +150,28 @@ class DiffCommand {
     if (!this.workingDir) {
       throw new Error('Working directory must be specified');
     }
+    // TODO: Other modes of loading the base data, such as from a remote server, can be supported
+    // in the future.
+    if (!this.baseDir) {
+      throw new Error('Base directory must be specified');
+    }
 
-    const appMapFiles = [];
-    await listAppMapFiles(this.workingDir, (file) => {
-      appMapFiles.push(file);
-    });
+    const workingCatalog = await appMapCatalog(this.workingDir);
+    const baseCatalog = await appMapCatalog(this.baseDir);
 
-    const scenariosByName = {};
-    // eslint-disable-next-line prefer-arrow-callback
-    await Promise.all(
-      appMapFiles.map(function (fileName) {
-        // eslint-disable-next-line prefer-arrow-callback
-        return new Promise(function (resolve, reject) {
-          oboe(createReadStream(fileName))
-            .node({
-              // eslint-disable-next-line func-names
-              'metadata.name': function (name) {
-                console.log(name);
-                scenariosByName[name] = fileName;
-                this.abort();
-                resolve();
-              },
-            })
-            .fail(reject);
-        });
-      })
+    const workingAppMapNames = new Set(Object.keys(workingCatalog));
+    const baseAppMapNames = new Set(Object.keys(baseCatalog));
+    const newAppMaps = new Set(
+      [...workingAppMapNames].filter((x) => !baseAppMapNames.has(x))
+    );
+    const removedAppMaps = new Set(
+      [...baseAppMapNames].filter((x) => !workingAppMapNames.has(x))
     );
 
-    console.log(scenariosByName);
+    console.log(`New AppMaps: ${JSON.stringify([...newAppMaps].sort())}`);
+    console.log(
+      `Removed AppMaps: ${JSON.stringify([...removedAppMaps].sort())}`
+    );
 
     console.log('TODO: Perform diff');
   }
