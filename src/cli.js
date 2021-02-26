@@ -152,6 +152,9 @@ class DiffCommand {
     return this;
   }
 
+  /**
+   * Gets the names of all AppMaps which are added in the working set.
+   */
   async added() {
     // eslint-disable-next-line no-underscore-dangle
     await this._loadCatalogs();
@@ -161,6 +164,10 @@ class DiffCommand {
     );
   }
 
+  /**
+   * Gets the names of all AppMaps which are present in the base set but not present
+   * in the working set.
+   */
   async removed() {
     // eslint-disable-next-line no-underscore-dangle
     await this._loadCatalogs();
@@ -168,6 +175,45 @@ class DiffCommand {
     return new Set(
       [...this.baseAppMapNames].filter((x) => !this.workingAppMapNames.has(x))
     );
+  }
+
+  /**
+   * Gets the names of all AppMaps which have present in both sets, but whose fingerprints
+   * have changed.
+   *
+   * @param {string} algorithmName Name of the canonicalization algorithm to use for the
+   * comparison.
+   */
+  changed(algorithmName) {
+    const result = [];
+    Object.keys(this.workingCatalog)
+      .filter((name) => this.baseCatalog[name])
+      .forEach((name) => {
+        const base = this.baseCatalog[name];
+        const working = this.workingCatalog[name];
+        if (!base.metadata.fingerprints || !working.metadata.fingerprints) {
+          console.warn('No metadata.fingerprints found on AppMap');
+          return;
+        }
+
+        const baseFingerprint = base.metadata.fingerprints.find(
+          (fingerprint) =>
+            fingerprint.canonicalization_algorithm === algorithmName
+        );
+        const workingFingerprint = working.metadata.fingerprints.find(
+          (fingerprint) =>
+            fingerprint.canonicalization_algorithm === algorithmName
+        );
+        if (!baseFingerprint || !workingFingerprint) {
+          console.warn(`No ${algorithmName} fingerprint found on AppMap`);
+          return;
+        }
+
+        if (baseFingerprint.digest !== workingFingerprint.digest) {
+          result.push(name);
+        }
+      });
+    return result;
   }
 
   // eslint-disable-next-line no-underscore-dangle
@@ -224,6 +270,11 @@ yargs(hideBin(process.argv))
       console.log(
         yaml.dump({
           added: [...(await diff.added())].sort(),
+          changed: {
+            error: diff.changed('beta_v1_error'),
+            info: diff.changed('beta_v1_info'),
+            debug: diff.changed('beta_v1_debug'),
+          },
           removed: [...(await diff.removed())].sort(),
         })
       );
