@@ -153,6 +153,7 @@ class DiffCommand {
   }
 
   async added() {
+    // eslint-disable-next-line no-underscore-dangle
     await this._loadCatalogs();
 
     return new Set(
@@ -161,6 +162,7 @@ class DiffCommand {
   }
 
   async removed() {
+    // eslint-disable-next-line no-underscore-dangle
     await this._loadCatalogs();
 
     return new Set(
