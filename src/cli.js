@@ -102,9 +102,10 @@ class FingerprintCommand {
 }
 
 /**
- * appMapCatalog creates a lookup table of all the AppMap names in a directory (recursively).
+ * appMapCatalog creates a lookup table of all the AppMap metadata in a directory (recursively).
  *
  * @param {string} directory path to the directory.
+ * @returns {Object<String,Metadata>} Map of AppMap names to metadata objects.
  */
 async function appMapCatalog(directory) {
   const scenariosByName = {};
@@ -116,17 +117,21 @@ async function appMapCatalog(directory) {
   await Promise.all(
     appMapFiles.map(function (fileName) {
       return new Promise(function (resolve, reject) {
+        const entry = {
+          fileName: null,
+          metadata: null,
+        };
+
         oboe(createReadStream(fileName))
-          .node({
-            // eslint-disable-next-line func-names
-            'metadata.name': function (name) {
-              if (verbose) {
-                console.log(`Loading AppMap ${name} into catalog`);
-              }
-              scenariosByName[name] = fileName;
-              this.abort();
-              resolve();
-            },
+          .on('node', 'metadata', function (node) {
+            if (verbose) {
+              console.log(`Loading AppMap ${node.name} into catalog`);
+              console.log(node.fingerprints);
+            }
+            entry.fileName = fileName;
+            entry.metadata = node;
+            scenariosByName[node.name] = entry;
+            resolve();
           })
           .fail(reject);
       });
