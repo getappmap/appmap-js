@@ -1,1 +1,1 @@
-export { algorithms, canonicalize } from './canonicalize';
+export * from './canonicalize';
