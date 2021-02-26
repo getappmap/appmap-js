@@ -41,10 +41,10 @@ class Canonicalize {
       id: event.id,
       parent_id: event.parent?.id,
       kind: 'http_server_request',
-      mime_type: event.httpServerResponse.mime_type,
-      parameters: event.httpServerRequest.message,
+      mime_type: event.httpServerResponse?.mime_type,
+      parameters: event.httpServerRequest?.message,
       route: event.route,
-      status: event.httpServerResponse.status,
+      status: event.httpServerResponse?.status,
     };
   }
 

@@ -44,7 +44,7 @@ export function buildTree(events) {
     }
 
     let parent = eventsById[parentId];
-    while (!parent) {
+    while (!parent && parentId >= 0) {
       parentId -= 1;
       parent = eventsById[parentId];
     }

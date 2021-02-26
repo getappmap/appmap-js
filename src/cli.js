@@ -1,4 +1,6 @@
 #! /usr/bin/env node
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable func-names */
 /* eslint-disable max-classes-per-file */
@@ -6,11 +8,12 @@
 const yargs = require('yargs');
 const { hideBin } = require('yargs/helpers');
 const fsp = require('fs').promises;
+const asyncUtils = require('async');
 const { join: joinPath } = require('path');
 const { createHash } = require('crypto');
 const oboe = require('oboe');
 const yaml = require('js-yaml');
-const { createReadStream, readFile, writeFile } = require('fs');
+const { createReadStream } = require('fs');
 const {
   algorithms,
   canonicalize,
@@ -33,12 +36,13 @@ async function listAppMapFiles(directory, fn) {
         const stat = await fsp.stat(path);
         if (stat.isDirectory()) {
           await listAppMapFiles(path, fn);
-          return;
         }
 
         if (file.endsWith('.appmap.json')) {
-          fn(path);
+          await fn(path);
         }
+
+        return null;
       })
   );
 }
@@ -50,55 +54,67 @@ class FingerprintCommand {
 
   async execute() {
     if (verbose) {
-      console.info(`Fingerprinting appmaps in ${this.dir}`);
+      console.info(`Fingerprinting appmaps in ${this.directory}`);
     }
 
-    await this.files(this.fingerprint.bind(this));
+    // Trying to process all these files at the same time simply runs node out of memory.
+    const files = [];
+    await this.files((file) => files.push(file));
+
+    asyncUtils.mapLimit(
+      files,
+      5,
+      async function (file) {
+        await this.fingerprint(file);
+      }.bind(this)
+    );
   }
 
   // eslint-disable-next-line class-methods-use-this
-  fingerprint(file) {
-    readFile(file, async (err, data) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
+  async fingerprint(file) {
+    if (verbose) {
+      console.info(`Fingerprinting ${file}`);
+    }
 
-      const appmapData = JSON.parse(data.toString());
-      const appmapDataWithoutMetadata = JSON.parse(data.toString());
-      delete appmapDataWithoutMetadata.metadata;
-      const appmapDigest = createHash('sha256')
-        .update(JSON.stringify(appmapDataWithoutMetadata, null, 2))
+    const data = await fsp.readFile(file);
+    if (verbose) {
+      console.log(`Read ${data.length} bytes`);
+    }
+
+    const appmapData = JSON.parse(data.toString());
+    const appmapDataWithoutMetadata = JSON.parse(data.toString());
+    delete appmapDataWithoutMetadata.metadata;
+    const appmapDigest = createHash('sha256')
+      .update(JSON.stringify(appmapDataWithoutMetadata, null, 2))
+      .digest('hex');
+
+    const fingerprints = [];
+    appmapData.metadata.fingerprints = fingerprints;
+    const appmap = buildAppMap(appmapData).normalize().build();
+
+    Object.keys(algorithms).forEach((algorithmName) => {
+      const canonicalForm = canonicalize(algorithmName, appmap);
+      const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
+      const fingerprintDigest = createHash('sha256')
+        .update(canonicalJSON)
         .digest('hex');
-
-      const fingerprints = [];
-      appmapData.metadata.fingerprints = fingerprints;
-      const appmap = buildAppMap(appmapData).normalize().build();
-
-      Object.keys(algorithms).forEach((algorithmName) => {
-        const canonicalForm = canonicalize(algorithmName, appmap);
-        const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
-        const fingerprintDigest = createHash('sha256')
-          .update(canonicalJSON)
-          .digest('hex');
-        fingerprints.push({
-          appmap_digest: appmapDigest,
-          canonicalization_algorithm: algorithmName,
-          digest: fingerprintDigest,
-          fingerprint_algorithm: 'sha256',
-        });
-      });
-
-      writeFile(file, JSON.stringify(appmapData, null, 2), (writeErr) => {
-        if (writeErr) {
-          throw new Error(writeErr.message);
-        }
+      if (verbose) {
+        console.log(`Computed digest for ${algorithmName}`);
+      }
+      fingerprints.push({
+        appmap_digest: appmapDigest,
+        canonicalization_algorithm: algorithmName,
+        digest: fingerprintDigest,
+        fingerprint_algorithm: 'sha256',
       });
     });
+
+    await fsp.writeFile(`${file}.tmp`, JSON.stringify(appmapData, null, 2));
+    await fsp.rename(`${file}.tmp`, file);
   }
 
-  files(fn) {
-    listAppMapFiles(this.directory, fn);
+  async files(fn) {
+    return listAppMapFiles(this.directory, fn);
   }
 }
 
@@ -156,7 +172,6 @@ class DiffCommand {
    * Gets the names of all AppMaps which are added in the working set.
    */
   async added() {
-    // eslint-disable-next-line no-underscore-dangle
     await this._loadCatalogs();
 
     return new Set(
@@ -169,7 +184,6 @@ class DiffCommand {
    * in the working set.
    */
   async removed() {
-    // eslint-disable-next-line no-underscore-dangle
     await this._loadCatalogs();
 
     return new Set(
@@ -184,7 +198,9 @@ class DiffCommand {
    * @param {string} algorithmName Name of the canonicalization algorithm to use for the
    * comparison.
    */
-  changed(algorithmName) {
+  async changed(algorithmName) {
+    await this._loadCatalogs();
+
     const result = [];
     Object.keys(this.workingCatalog)
       .filter((name) => this.baseCatalog[name])
@@ -267,23 +283,33 @@ yargs(hideBin(process.argv))
       }
 
       const diff = new DiffCommand().baseDir(baseDir).workingDir(workingDir);
-      console.log(
-        yaml.dump({
-          added: [...(await diff.added())].sort(),
-          changed: {
-            error: diff.changed('beta_v1_error'),
-            info: diff.changed('beta_v1_info'),
-            debug: diff.changed('beta_v1_debug'),
-          },
-          removed: [...(await diff.removed())].sort(),
-        })
-      );
+      let changeLevel = null;
+      let changeResult = null;
+      const levels = ['error', 'info', 'debug'];
+      for (let i = 0; i < levels.length; i += 1) {
+        const list = await diff.changed(`beta_v1_${levels[i]}`);
+        if (list.length > 0) {
+          changeLevel = levels[i];
+          changeResult = list;
+          break;
+        }
+      }
+      const diffObject = {
+        added: [...(await diff.added())].sort(),
+      };
+      if (changeLevel) {
+        diffObject.changed = {};
+        diffObject.changed[changeLevel] = changeResult;
+      }
+      diffObject.removed = [...(await diff.removed())].sort();
+
+      console.log(yaml.dump(diffObject));
       /*
       console.log(
-        `Added AppMaps: ${JSON.stringify([...(await diff.added())].sort())}`
+        `Added AppMaps: ${ JSON.stringify([...(await diff.added())].sort()) }`
       );
       console.log(
-        `Removed AppMaps: ${JSON.stringify([...(await diff.removed())].sort())}`
+        `Removed AppMaps: ${ JSON.stringify([...(await diff.removed())].sort()) }`
       );
       */
     }
