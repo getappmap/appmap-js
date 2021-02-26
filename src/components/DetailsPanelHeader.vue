@@ -70,11 +70,13 @@ export default {
 
       const result = [];
       if (codeObject) {
-        result.push(
-          codeObject.packageObject,
-          codeObject.classObject,
-          codeObject
-        );
+        if (codeObject.type !== CodeObjectType.QUERY) {
+          result.push(
+            codeObject.packageObject,
+            codeObject.classObject,
+            codeObject
+          );
+        }
 
         if (
           codeObject.type === CodeObjectType.ROUTE ||
