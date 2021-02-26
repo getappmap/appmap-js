@@ -151,7 +151,24 @@ class DiffCommand {
     return this;
   }
 
-  async execute() {
+  async added() {
+    await this._loadCatalogs();
+
+    return new Set(
+      [...this.workingAppMapNames].filter((x) => !this.baseAppMapNames.has(x))
+    );
+  }
+
+  async removed() {
+    await this._loadCatalogs();
+
+    return new Set(
+      [...this.baseAppMapNames].filter((x) => !this.workingAppMapNames.has(x))
+    );
+  }
+
+  // eslint-disable-next-line no-underscore-dangle
+  async _loadCatalogs() {
     if (!this.workingDir) {
       throw new Error('Working directory must be specified');
     }
@@ -161,24 +178,11 @@ class DiffCommand {
       throw new Error('Base directory must be specified');
     }
 
-    const workingCatalog = await appMapCatalog(this.workingDir);
-    const baseCatalog = await appMapCatalog(this.baseDir);
+    this.workingCatalog = await appMapCatalog(this.workingDir);
+    this.baseCatalog = await appMapCatalog(this.baseDir);
 
-    const workingAppMapNames = new Set(Object.keys(workingCatalog));
-    const baseAppMapNames = new Set(Object.keys(baseCatalog));
-    const newAppMaps = new Set(
-      [...workingAppMapNames].filter((x) => !baseAppMapNames.has(x))
-    );
-    const removedAppMaps = new Set(
-      [...baseAppMapNames].filter((x) => !workingAppMapNames.has(x))
-    );
-
-    console.log(`New AppMaps: ${JSON.stringify([...newAppMaps].sort())}`);
-    console.log(
-      `Removed AppMaps: ${JSON.stringify([...removedAppMaps].sort())}`
-    );
-
-    console.log('TODO: Perform diff');
+    this.workingAppMapNames = new Set(Object.keys(this.workingCatalog));
+    this.baseAppMapNames = new Set(Object.keys(this.baseCatalog));
   }
 }
 
@@ -195,7 +199,7 @@ yargs(hideBin(process.argv))
         describe: 'directory containing work-in-progress AppMaps',
       });
     },
-    (argv) => {
+    async function (argv) {
       verbose = argv.verbose;
 
       let baseDir;
@@ -213,7 +217,13 @@ yargs(hideBin(process.argv))
         throw new Error('Location of work-in-progress AppMaps is required');
       }
 
-      new DiffCommand().baseDir(baseDir).workingDir(workingDir).execute();
+      const diff = new DiffCommand().baseDir(baseDir).workingDir(workingDir);
+      console.log(
+        `Added AppMaps: ${JSON.stringify([...(await diff.added())].sort())}`
+      );
+      console.log(
+        `Removed AppMaps: ${JSON.stringify([...(await diff.removed())].sort())}`
+      );
     }
   )
   .command(
