@@ -9,6 +9,7 @@ const fsp = require('fs').promises;
 const { join: joinPath } = require('path');
 const { createHash } = require('crypto');
 const oboe = require('oboe');
+const yaml = require('js-yaml');
 const { createReadStream, readFile, writeFile } = require('fs');
 const {
   algorithms,
@@ -219,11 +220,19 @@ yargs(hideBin(process.argv))
 
       const diff = new DiffCommand().baseDir(baseDir).workingDir(workingDir);
       console.log(
+        yaml.dump({
+          added: [...(await diff.added())].sort(),
+          removed: [...(await diff.removed())].sort(),
+        })
+      );
+      /*
+      console.log(
         `Added AppMaps: ${JSON.stringify([...(await diff.added())].sort())}`
       );
       console.log(
         `Removed AppMaps: ${JSON.stringify([...(await diff.removed())].sort())}`
       );
+      */
     }
   )
   .command(
