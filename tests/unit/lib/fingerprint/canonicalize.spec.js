@@ -10,7 +10,7 @@ const apiKeyAppMap = buildAppMap().source(apiKeyScenario).normalize().build();
 
 describe('Canonicalize', () => {
   test('lists available algorithms', () => {
-    expect(algorithms).toBeArray();
+    expect(Object.keys(algorithms)).toInclude('beta_v1_debug');
   });
 
   test('ERROR level', async () => {
