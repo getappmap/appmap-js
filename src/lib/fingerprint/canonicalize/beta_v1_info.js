@@ -56,7 +56,7 @@ class Canonicalize {
       parent_id: event.parent?.id,
       kind: 'http_server_request',
       route: event.route,
-      status: event.httpServerResponse.status,
+      status: event.httpServerResponse?.status,
     };
   }
 

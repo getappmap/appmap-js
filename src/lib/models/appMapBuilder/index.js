@@ -53,7 +53,7 @@ class AppMapBuilder extends EventSource {
       );
     }
 
-    this.data.events
+    (this.data.events || [])
       .map((e) => new Event(e))
       .forEach((e) => this.sorter.add(e));
 
