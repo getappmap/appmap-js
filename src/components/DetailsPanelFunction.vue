@@ -14,6 +14,11 @@
     />
     <v-details-panel-list title="Outbound Calls" :items="outboundCalls" />
     <v-details-panel-list title="Queries" :items="queryEvents" />
+    <v-details-panel-list
+      title="Labels"
+      :items="Array.from(object.labels)"
+      :uniqueItems="false"
+    />
   </div>
 </template>
 
