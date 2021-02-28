@@ -1,4 +1,10 @@
-import { buildTree, compareEvents, notNull, uniqueEvents } from '../algorithms';
+import {
+  buildTree,
+  compareEvents,
+  normalizeSQL,
+  notNull,
+  uniqueEvents,
+} from '../algorithms';
 
 /**
  * At INFO level, the order of labeled function calls matters. SQL query strings
@@ -46,7 +52,7 @@ class Canonicalize {
   static sql(event) {
     return {
       kind: 'sql',
-      sql: event.sqlQuery,
+      sql: normalizeSQL(event.sqlQuery),
     };
   }
 
