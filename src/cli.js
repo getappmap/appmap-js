@@ -12,6 +12,7 @@ const asyncUtils = require('async');
 const { join: joinPath } = require('path');
 const { createHash } = require('crypto');
 const oboe = require('oboe');
+const { diffJson } = require('diff');
 const yaml = require('js-yaml');
 const { createReadStream } = require('fs');
 const {
@@ -45,6 +46,13 @@ async function listAppMapFiles(directory, fn) {
         return null;
       })
   );
+}
+
+async function loadAppMap(filePath) {
+  return buildAppMap()
+    .source(JSON.parse(await fsp.readFile(filePath)))
+    .normalize()
+    .build();
 }
 
 class FingerprintCommand {
@@ -147,7 +155,13 @@ async function appMapCatalog(directory) {
             }
             entry.fileName = fileName;
             entry.metadata = node;
-            scenariosByName[node.name] = entry;
+            if (scenariosByName[node.name]) {
+              console.warn(
+                `AppMap name ${node.name} is not unique in the mapset`
+              );
+            } else {
+              scenariosByName[node.name] = entry;
+            }
             resolve();
           })
           .fail(reject);
@@ -169,13 +183,23 @@ class DiffCommand {
   }
 
   /**
+   * Limits the diff computation to a specific AppMaps.
+   *
+   * @param {string[]} names
+   */
+  setAppMapNames(names) {
+    this.appMapNames = new Set(names);
+    return this;
+  }
+
+  /**
    * Gets the names of all AppMaps which are added in the working set.
    */
   async added() {
     await this._loadCatalogs();
 
-    return new Set(
-      [...this.workingAppMapNames].filter((x) => !this.baseAppMapNames.has(x))
+    return [...this.workingAppMapNames].filter(
+      (x) => !this.baseAppMapNames.has(x)
     );
   }
 
@@ -186,8 +210,8 @@ class DiffCommand {
   async removed() {
     await this._loadCatalogs();
 
-    return new Set(
-      [...this.baseAppMapNames].filter((x) => !this.workingAppMapNames.has(x))
+    return [...this.baseAppMapNames].filter(
+      (x) => !this.workingAppMapNames.has(x)
     );
   }
 
@@ -204,6 +228,7 @@ class DiffCommand {
     const result = [];
     Object.keys(this.workingCatalog)
       .filter((name) => this.baseCatalog[name])
+      .filter(this._includesAppMap.bind(this))
       .forEach((name) => {
         const base = this.baseCatalog[name];
         const working = this.workingCatalog[name];
@@ -232,6 +257,10 @@ class DiffCommand {
     return result;
   }
 
+  _includesAppMap(name) {
+    return !this.appMapNames || this.appMapNames.has(name);
+  }
+
   // eslint-disable-next-line no-underscore-dangle
   async _loadCatalogs() {
     if (!this.workingDir) {
@@ -246,17 +275,47 @@ class DiffCommand {
     this.workingCatalog = await appMapCatalog(this.workingDir);
     this.baseCatalog = await appMapCatalog(this.baseDir);
 
-    this.workingAppMapNames = new Set(Object.keys(this.workingCatalog));
-    this.baseAppMapNames = new Set(Object.keys(this.baseCatalog));
+    this.workingAppMapNames = new Set(
+      Object.keys(this.workingCatalog).filter(this._includesAppMap.bind(this))
+    );
+    this.baseAppMapNames = new Set(
+      Object.keys(this.baseCatalog).filter(this._includesAppMap.bind(this))
+    );
+  }
+}
+
+class DetailedDiff {
+  constructor(algorithm, baseAppMap, workingAppMap) {
+    this.algorithm = algorithm;
+    this.baseAppMap = baseAppMap;
+    this.workingAppMap = workingAppMap;
+  }
+
+  async diff() {
+    const canonicalizeAppMap = (appmap) => {
+      const canonicalForm = canonicalize(this.algorithm, appmap);
+      return JSON.stringify(canonicalForm, null, 2);
+    };
+    const baseDoc = canonicalizeAppMap(this.baseAppMap);
+    const workingDoc = canonicalizeAppMap(this.workingAppMap);
+    return diffJson(baseDoc, workingDoc);
   }
 }
 
 // eslint-disable-next-line no-unused-expressions
 yargs(hideBin(process.argv))
   .command(
-    'diff [base-dir] [working-dir]',
-    'Perform software design diff',
+    'diff',
+    'Compute the difference between two mapsets',
     (args) => {
+      args.option('name', {
+        describe: 'indicate a specific AppMap to of compare',
+      });
+      args.option('show-diff', {
+        describe:
+          'compute the diff of the canonicalized forms of each changed AppMap',
+        boolean: true,
+      });
       args.option('base-dir', {
         describe: 'directory containing base version AppMaps',
       });
@@ -269,6 +328,7 @@ yargs(hideBin(process.argv))
 
       let baseDir;
       let workingDir;
+      const { showDiff } = argv;
 
       // eslint-disable-next-line prefer-const
       baseDir = argv.baseDir;
@@ -283,35 +343,63 @@ yargs(hideBin(process.argv))
       }
 
       const diff = new DiffCommand().baseDir(baseDir).workingDir(workingDir);
-      let changeLevel = null;
-      let changeResult = null;
-      const levels = ['error', 'info', 'debug'];
-      for (let i = 0; i < levels.length; i += 1) {
-        const list = await diff.changed(`beta_v1_${levels[i]}`);
-        if (list.length > 0) {
-          changeLevel = levels[i];
-          changeResult = list;
-          break;
-        }
+      if (argv.name) {
+        diff.setAppMapNames([argv.name]);
       }
+
       const diffObject = {
         added: [...(await diff.added())].sort(),
+        changed: [],
       };
-      if (changeLevel) {
-        diffObject.changed = {};
-        diffObject.changed[changeLevel] = changeResult;
-      }
+
+      const cumulativeChangedAppMaps = new Set();
+      const changed = await Promise.all(
+        Object.keys(algorithms)
+          .map(function (algorithm) {
+            return async function () {
+              const rawList = await diff.changed(algorithm);
+              const changedAppMaps = rawList.filter(
+                (name) => !cumulativeChangedAppMaps.has(name)
+              );
+              changedAppMaps.forEach((name) =>
+                cumulativeChangedAppMaps.add(name)
+              );
+              const changeResult = {
+                algorithm,
+                changed: [],
+              };
+              if (changedAppMaps.length > 0) {
+                if (showDiff) {
+                  changeResult.changed = await Promise.all(
+                    changedAppMaps.map(
+                      // eslint-disable-next-line prettier/prettier
+                      async function (name) {
+                        return {
+                          name,
+                          diff: await new DetailedDiff(
+                            algorithm,
+                            await loadAppMap(diff.baseCatalog[name].fileName),
+                            await loadAppMap(diff.workingCatalog[name].fileName)
+                          ).diff(),
+                        };
+                      }
+                    )
+                  );
+                } else {
+                  changeResult.changed = changedAppMaps.map((name) => ({
+                    name,
+                  }));
+                }
+              }
+              return changeResult;
+            };
+          })
+          .map((func) => func())
+      );
+      diffObject.changed = changed;
       diffObject.removed = [...(await diff.removed())].sort();
 
       console.log(yaml.dump(diffObject));
-      /*
-      console.log(
-        `Added AppMaps: ${ JSON.stringify([...(await diff.added())].sort()) }`
-      );
-      console.log(
-        `Removed AppMaps: ${ JSON.stringify([...(await diff.removed())].sort()) }`
-      );
-      */
     }
   )
   .command(

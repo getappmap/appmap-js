@@ -1,4 +1,4 @@
-import { buildTree } from '../algorithms';
+import { buildTree, normalizeSQL } from '../algorithms';
 
 /**
  * At DEBUG level, the order of labeled function calls matters, and all function class
@@ -32,7 +32,7 @@ class Canonicalize {
       id: event.id,
       parent_id: event.parent?.id,
       kind: 'sql',
-      sql: event.sqlQuery,
+      sql: normalizeSQL(event.sqlQuery),
     };
   }
 

@@ -24,6 +24,33 @@ export function uniqueEvents() {
   };
 }
 
+/**
+ * It's essential to normalize SQL to remove trivial differences like WHERE clauses on
+ * generated id values, timestamps, etc.
+ *
+ * @param {string} sql
+ */
+export function normalizeSQL(sql) {
+  const selectRegex = new RegExp('selects+(.*)sfroms(.*)(?:s+where|^)', 'i');
+  const insertRegex = new RegExp(
+    'inserts+into(.*)svaluess(.*)(?:s+values|^)',
+    'i'
+  );
+
+  const selectMatch = selectRegex.exec(sql);
+  if (selectMatch) {
+    return selectMatch.map((m) => m.toString());
+  }
+
+  const insertMatch = insertRegex.exec(sql);
+  if (insertMatch) {
+    return insertMatch.map((m) => m.toString());
+  }
+
+  console.warn(`Unparseable: ${sql}`);
+  return 'Unparseable';
+}
+
 export function buildTree(events) {
   const eventsById = events
     .filter((event) => event.id)
