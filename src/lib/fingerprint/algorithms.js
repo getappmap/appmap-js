@@ -31,20 +31,15 @@ export function uniqueEvents() {
  * @param {string} sql
  */
 export function normalizeSQL(sql) {
-  const selectRegex = new RegExp('selects+(.*)sfroms(.*)(?:s+where|^)', 'i');
-  const insertRegex = new RegExp(
-    'inserts+into(.*)svaluess(.*)(?:s+values|^)',
-    'i'
-  );
-
-  const selectMatch = selectRegex.exec(sql);
-  if (selectMatch) {
-    return selectMatch.map((m) => m.toString());
-  }
-
-  const insertMatch = insertRegex.exec(sql);
-  if (insertMatch) {
-    return insertMatch.map((m) => m.toString());
+  const sqlLower = sql.toLowerCase();
+  const stopWords = ['where', 'limit', 'order by', 'group by', 'values', 'set'];
+  const stopWordLocations = stopWords
+    .map((word) => sqlLower.indexOf(` ${word}`))
+    .filter((index) => index !== -1)
+    .sort();
+  if (stopWordLocations.length > 0) {
+    const subSQL = sql.slice(0, stopWordLocations[0] - 1);
+    return subSQL.replace(/\s([\w_]+)\(\s+'?[w\d]+'?)\s+)(?:\s|^)/g, '$1(...)');
   }
 
   console.warn(`Unparseable: ${sql}`);

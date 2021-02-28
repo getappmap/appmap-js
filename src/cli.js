@@ -12,7 +12,7 @@ const asyncUtils = require('async');
 const { join: joinPath } = require('path');
 const { createHash } = require('crypto');
 const oboe = require('oboe');
-const { diffJson } = require('diff');
+const { diffLines } = require('diff');
 const yaml = require('js-yaml');
 const { createReadStream } = require('fs');
 const {
@@ -294,11 +294,11 @@ class DetailedDiff {
   async diff() {
     const canonicalizeAppMap = (appmap) => {
       const canonicalForm = canonicalize(this.algorithm, appmap);
-      return JSON.stringify(canonicalForm, null, 2);
+      return yaml.dump(canonicalForm);
     };
     const baseDoc = canonicalizeAppMap(this.baseAppMap);
     const workingDoc = canonicalizeAppMap(this.workingAppMap);
-    return diffJson(baseDoc, workingDoc);
+    return diffLines(baseDoc, workingDoc);
   }
 }
 
