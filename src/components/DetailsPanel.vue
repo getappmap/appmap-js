@@ -8,6 +8,10 @@
         <slot name="buttons" />
       </div>
       <component :is="detailsType" :object="selectedObject" />
+      <v-details-panel-labels
+        v-if="selectedObject && selectedObject.labels"
+        :items="Array.from(selectedObject.labels)"
+      />
     </div>
   </div>
 </template>
@@ -23,6 +27,7 @@ import VDetailsPanelHttp from '@/components/DetailsPanelHttp.vue';
 import VDetailsPanelNull from '@/components/DetailsPanelNull.vue';
 import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
 import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
+import VDetailsPanelLabels from '@/components/DetailsPanelLabels.vue';
 import { Event } from '@/lib/models';
 
 export default {
@@ -38,6 +43,7 @@ export default {
     VDetailsPanelNull,
     VDetailsPanelPackage,
     VDetailsPanelRoute,
+    VDetailsPanelLabels,
   },
   props: {
     subtitle: String,
