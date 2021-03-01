@@ -2,7 +2,12 @@
   <div class="v-details-panel-labels" v-if="items && items.length > 0">
     <h5>Labels</h5>
     <ul class="labels">
-      <li class="labels__item" v-for="(item, index) in items" :key="index">
+      <li
+        class="labels__item"
+        v-for="(item, index) in items"
+        :key="index"
+        @click.stop="selectLabel(item)"
+      >
         {{ item }}
       </li>
     </ul>
@@ -10,7 +15,7 @@
 </template>
 
 <script>
-// import { SELECT_OBJECT } from '@/store/vsCode';
+import { SELECT_LABEL } from '../store/vsCode';
 
 export default {
   name: 'v-details-panel-labels',
@@ -21,20 +26,8 @@ export default {
     },
   },
   methods: {
-    nameOf(item) {
-      if (this.nameKey) {
-        return item[this.nameKey];
-      }
-
-      return item.prettyName || item.name || item.toString();
-    },
-    selectItem(item) {
-      return item;
-      /*
-      if (this.$store) {
-        this.$store.commit(SELECT_OBJECT, item.object);
-      }
-      */
+    selectLabel(label) {
+      this.$store.commit(SELECT_LABEL, label);
     },
   },
 };

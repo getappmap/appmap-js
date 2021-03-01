@@ -1,5 +1,6 @@
 import ClassMap from './classMap';
 import CallTree from './callTree/callTree';
+import { buildLabels } from './util';
 
 export default class AppMap {
   constructor(data) {
@@ -12,6 +13,8 @@ export default class AppMap {
     this.classMap = new ClassMap(this.data.classMap);
     this.callTree = new CallTree(this.events);
     this.classMap.bindEvents(this.events);
+
+    this.labels = buildLabels(this.classMap, this.events);
 
     // Establish event linked list references
     let previousEvent;

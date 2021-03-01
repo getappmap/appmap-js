@@ -1,18 +1,30 @@
 <template>
   <ul class="trace-node__labels">
-    <li class="trace-node__label" v-for="label in labels" :key="label">
+    <li
+      class="trace-node__label"
+      v-for="label in labels"
+      :key="label"
+      @click.stop="selectLabel(label)"
+    >
       {{ label }}
     </li>
   </ul>
 </template>
 
 <script>
+import { SELECT_LABEL } from '../../store/vsCode';
+
 export default {
   name: 'v-trace-node-labels',
   props: {
     labels: {
       type: Array,
       required: true,
+    },
+  },
+  methods: {
+    selectLabel(label) {
+      this.$store.commit(SELECT_LABEL, label);
     },
   },
 };
