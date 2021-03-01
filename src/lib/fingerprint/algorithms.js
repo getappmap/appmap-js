@@ -39,7 +39,10 @@ export function normalizeSQL(sql) {
     .sort();
   if (stopWordLocations.length > 0) {
     const subSQL = sql.slice(0, stopWordLocations[0] - 1);
-    return subSQL.replace(/\s([\w_]+)\(\s+'?[w\d]+'?)\s+)(?:\s|^)/g, '$1(...)');
+    return subSQL.replace(
+      /\s([\w_]+)\(\s+'?[w\d]+'?\)\s+\)(?:\s|^)/g,
+      '$1(...)'
+    );
   }
 
   console.warn(`Unparseable: ${sql}`);

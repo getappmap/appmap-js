@@ -58,6 +58,12 @@ async function loadAppMap(filePath) {
 class FingerprintCommand {
   constructor(directory) {
     this.directory = directory;
+    this.print = false;
+  }
+
+  setPrint(print) {
+    this.print = print;
+    return this;
   }
 
   async execute() {
@@ -100,22 +106,29 @@ class FingerprintCommand {
     appmapData.metadata.fingerprints = fingerprints;
     const appmap = buildAppMap(appmapData).normalize().build();
 
-    Object.keys(algorithms).forEach((algorithmName) => {
-      const canonicalForm = canonicalize(algorithmName, appmap);
-      const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
-      const fingerprintDigest = createHash('sha256')
-        .update(canonicalJSON)
-        .digest('hex');
-      if (verbose) {
-        console.log(`Computed digest for ${algorithmName}`);
-      }
-      fingerprints.push({
-        appmap_digest: appmapDigest,
-        canonicalization_algorithm: algorithmName,
-        digest: fingerprintDigest,
-        fingerprint_algorithm: 'sha256',
-      });
-    });
+    await Promise.all(
+      Object.keys(algorithms).map(async (algorithmName) => {
+        const canonicalForm = canonicalize(algorithmName, appmap);
+        const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
+
+        if (this.print) {
+          await fsp.writeFile(`${file}.${algorithmName}`, canonicalJSON);
+        }
+
+        const fingerprintDigest = createHash('sha256')
+          .update(canonicalJSON)
+          .digest('hex');
+        if (verbose) {
+          console.log(`Computed digest for ${algorithmName}`);
+        }
+        fingerprints.push({
+          appmap_digest: appmapDigest,
+          canonicalization_algorithm: algorithmName,
+          digest: fingerprintDigest,
+          fingerprint_algorithm: 'sha256',
+        });
+      })
+    );
 
     await fsp.writeFile(`${file}.tmp`, JSON.stringify(appmapData, null, 2));
     await fsp.rename(`${file}.tmp`, file);
@@ -233,7 +246,7 @@ class DiffCommand {
         const base = this.baseCatalog[name];
         const working = this.workingCatalog[name];
         if (!base.metadata.fingerprints || !working.metadata.fingerprints) {
-          console.warn('No metadata.fingerprints found on AppMap');
+          console.warn(`No metadata.fingerprints found on AppMap ${name}`);
           return;
         }
 
@@ -246,7 +259,9 @@ class DiffCommand {
             fingerprint.canonicalization_algorithm === algorithmName
         );
         if (!baseFingerprint || !workingFingerprint) {
-          console.warn(`No ${algorithmName} fingerprint found on AppMap`);
+          console.warn(
+            `No ${algorithmName} fingerprint found on AppMap ${name}`
+          );
           return;
         }
 
@@ -406,6 +421,10 @@ yargs(hideBin(process.argv))
     'fingerprint [directory]',
     'Compute and apply fingerprints for all appmaps in a directory',
     (args) => {
+      args.option('print', {
+        describe: 'print the canonicalized forms of the AppMap',
+        boolean: true,
+      });
       args.positional('directory', {
         describe: 'directory to recursively process',
         default: 'tmp/appmap',
@@ -414,7 +433,7 @@ yargs(hideBin(process.argv))
     (argv) => {
       verbose = argv.verbose;
 
-      new FingerprintCommand(argv.directory).execute();
+      new FingerprintCommand(argv.directory).setPrint(argv.print).execute();
     }
   )
   .option('verbose', {
