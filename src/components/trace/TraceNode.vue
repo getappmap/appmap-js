@@ -14,7 +14,10 @@
         @click.stop="$emit('expandChildren')"
       />
       <component :is="`v-trace-node-body-${eventType}`" :event="event" />
-      <v-trace-node-labels v-if="event.labels" :labels="event.labels" />
+      <v-trace-node-labels
+        v-if="event.labels.size"
+        :labels="Array.from(event.labels)"
+      />
     </div>
   </div>
 </template>
