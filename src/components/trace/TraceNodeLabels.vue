@@ -1,9 +1,9 @@
 <template>
-  <div class="trace-node__labels">
-    <div class="trace-node__label" v-for="label in labels" :key="label">
+  <ul class="trace-node__labels">
+    <li class="trace-node__label" v-for="label in labels" :key="label">
       {{ label }}
-    </div>
-  </div>
+    </li>
+  </ul>
 </template>
 
 <script>
@@ -20,7 +20,9 @@ export default {
 
 <style scoped lang="scss">
 .trace-node__labels {
+  list-style-type: none;
   margin: 0.5rem 0 -0.25rem -0.25rem;
+  padding: 0;
   display: flex;
   flex-wrap: wrap;
 }
