@@ -428,6 +428,35 @@ context('VS Code Extension', () => {
         'highlight'
       );
     });
+
+    it('shows label details', () => {
+      cy.get('.node.package[data-id="openssl"]').click();
+
+      cy.get('.v-details-panel-list')
+        .contains('Classes')
+        .parent()
+        .within(() => {
+          cy.get('.list-item').contains('Instance').click();
+        });
+
+      cy.get('.v-details-panel-list')
+        .contains('Functions')
+        .parent()
+        .within(() => {
+          cy.get('.list-item').contains('digest').click();
+        });
+
+      cy.get('.v-details-panel-labels').within(() => {
+        cy.get('.labels__item').contains('security').click();
+      });
+
+      cy.get('.v-details-panel-list')
+        .contains('Functions')
+        .parent()
+        .within(() => {
+          cy.get('.list-item').should('have.length', 5);
+        });
+    });
   });
 
   context('Java appmap', () => {
