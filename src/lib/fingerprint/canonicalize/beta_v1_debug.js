@@ -1,33 +1,13 @@
-import { buildTree, normalizeSQL } from '../algorithms';
+/* eslint-disable class-methods-use-this */
+import { normalizeSQL } from '../algorithms';
+import Base from './base';
 
 /**
  * At DEBUG level, the order of labeled function calls matters, and all function class
  * and method names are retained. SQL queries are also retained in order.
  */
-class Canonicalize {
-  constructor(appmap) {
-    this.appmap = appmap;
-  }
-
-  execute() {
-    const events = this.appmap.events
-      .filter((event) => event.isCall())
-      .map(Canonicalize.transform);
-    return buildTree(events);
-  }
-
-  static transform(event) {
-    if (event.sql) {
-      return Canonicalize.sql(event);
-    }
-    if (event.httpServerRequest) {
-      return Canonicalize.httpServerRequest(event);
-    }
-
-    return Canonicalize.functionCall(event);
-  }
-
-  static sql(event) {
+class Canonicalize extends Base {
+  sql(event) {
     return {
       id: event.id,
       parent_id: event.parent?.id,
@@ -36,7 +16,7 @@ class Canonicalize {
     };
   }
 
-  static httpServerRequest(event) {
+  httpServerRequest(event) {
     return {
       id: event.id,
       parent_id: event.parent?.id,
@@ -48,7 +28,7 @@ class Canonicalize {
     };
   }
 
-  static functionCall(event) {
+  functionCall(event) {
     return {
       id: event.id,
       parent_id: event.parent?.id,

@@ -1,53 +1,68 @@
-import { compareEvents, notNull, uniqueEvents } from '../algorithms';
+/* eslint-disable class-methods-use-this */
+import { normalizeSQL } from '../algorithms';
+import Base from './base';
 
 /**
  * At ERROR level, the order of events is not important, and the amount of data
  * retained about events is minimal.
  */
-class Canonicalize {
-  constructor(appmap) {
-    this.appmap = appmap;
-  }
-
-  execute() {
-    return this.appmap.events
-      .filter((event) => event.isCall())
-      .map(Canonicalize.transform)
-      .filter(notNull)
-      .sort(compareEvents)
-      .map(uniqueEvents())
-      .filter(notNull);
-  }
-
-  static transform(event) {
-    if (event.sql) {
-      return Canonicalize.sql();
+class Canonicalize extends Base {
+  /**
+   *
+   * @param {Event} event
+   */
+  sql(event) {
+    const normalizedSQL = normalizeSQL(event.sqlQuery);
+    if (typeof normalizedSQL === 'string') {
+      const sqlLower = event.sqlQuery.toLowerCase();
+      if (
+        sqlLower.indexOf('insert') !== -1 ||
+        sqlLower.indexOf('update') !== -1
+      ) {
+        return {
+          id: event.id,
+          parent_id: event.parent?.id,
+          kind: 'sql',
+          sql: normalizeSQL(event.sqlQuery),
+        };
+      }
+    } else if (normalizedSQL) {
+      let actions = [];
+      if (normalizedSQL.action) {
+        actions.push(normalizedSQL.action);
+      }
+      if (normalizedSQL.actions) {
+        actions = actions.concat(normalizedSQL.actions);
+      }
+      if (
+        ['insert', 'update', 'delete'].filter((x) => actions.includes(x))
+          .length > 0
+      ) {
+        return normalizedSQL;
+      }
     }
-    if (event.httpServerRequest) {
-      return Canonicalize.httpServerRequest(event);
-    }
 
-    return Canonicalize.functionCall(event);
-  }
-
-  static sql() {
     return null;
   }
 
-  static httpServerRequest(event) {
+  httpServerRequest(event) {
     return {
+      id: event.id,
+      parent_id: event.parent?.id,
       kind: 'http_server_request',
       route: event.route,
       status: event.httpServerResponse?.status,
     };
   }
 
-  static functionCall(event) {
+  functionCall(event) {
     if (event.codeObject.labels.size === 0) {
       return null;
     }
 
     return {
+      id: event.id,
+      parent_id: event.parent?.id,
       kind: 'function',
       labels: [...event.codeObject.labels],
     };

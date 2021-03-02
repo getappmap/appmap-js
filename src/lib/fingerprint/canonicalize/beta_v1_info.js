@@ -1,62 +1,22 @@
-import {
-  buildTree,
-  compareEvents,
-  normalizeSQL,
-  notNull,
-  uniqueEvents,
-} from '../algorithms';
+/* eslint-disable class-methods-use-this */
+import { normalizeSQL } from '../algorithms';
+import Base from './base';
 
 /**
  * At INFO level, the order of labeled function calls matters. SQL query strings
  * are collected, sorted and made unique.
  */
-class Canonicalize {
-  constructor(appmap) {
-    this.appmap = appmap;
-  }
-
-  execute() {
-    const queries = this.appmap.events
-      .filter((event) => event.isCall())
-      .filter((event) => event.sql)
-      .map(Canonicalize.sql)
-      .sort(compareEvents)
-      .map(uniqueEvents())
-      .filter(notNull);
-
-    const events = this.appmap.events
-      .filter((event) => event.isCall())
-      .filter((event) => !event.sql)
-      .map(Canonicalize.transform)
-      .filter(notNull);
-
-    const tree = buildTree(events);
-
+class Canonicalize extends Base {
+  sql(event) {
     return {
-      sql: queries,
-      events: tree,
-    };
-  }
-
-  static transform(event) {
-    if (event.sql) {
-      return Canonicalize.sql(event);
-    }
-    if (event.httpServerRequest) {
-      return Canonicalize.httpServerRequest(event);
-    }
-
-    return Canonicalize.functionCall(event);
-  }
-
-  static sql(event) {
-    return {
+      id: event.id,
+      parent_id: event.parent?.id,
       kind: 'sql',
       sql: normalizeSQL(event.sqlQuery),
     };
   }
 
-  static httpServerRequest(event) {
+  httpServerRequest(event) {
     return {
       id: event.id,
       parent_id: event.parent?.id,
@@ -66,7 +26,7 @@ class Canonicalize {
     };
   }
 
-  static functionCall(event) {
+  functionCall(event) {
     if (event.codeObject.labels.size === 0) {
       return null;
     }

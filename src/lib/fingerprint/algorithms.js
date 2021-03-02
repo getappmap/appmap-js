@@ -1,3 +1,6 @@
+/* eslint-disable no-inner-declarations */
+import sqliteParser from 'sqlite-parser';
+
 // eslint-disable-next-line import/prefer-default-export
 export function notNull(event) {
   return event !== null && event !== undefined;
@@ -24,13 +27,118 @@ export function uniqueEvents() {
   };
 }
 
-/**
- * It's essential to normalize SQL to remove trivial differences like WHERE clauses on
- * generated id values, timestamps, etc.
- *
- * @param {string} sql
- */
-export function normalizeSQL(sql) {
+function parseNormalizeSQL(sql) {
+  const parseSQL = sql.replace(/\s+returning\s+\*/i, '');
+  try {
+    const ast = sqliteParser(parseSQL);
+    const actions = [];
+    const columns = [];
+    const tables = [];
+
+    function parse(statement) {
+      const tokens = ['type', 'variant']
+        .map((propertyName) => statement[propertyName])
+        .filter((value) => value);
+
+      const key = tokens.join('.');
+      // eslint-disable-next-line no-use-before-define
+      let parser = parsers[key];
+      if (!parser) {
+        // eslint-disable-next-line no-use-before-define
+        parser = parseStatement;
+      }
+
+      const parserList = Array.isArray(parser) ? parser : [parser];
+      parserList.forEach((prs) => prs(statement));
+    }
+
+    function parseStatement(statement) {
+      const reservedWords = ['type', 'variant', 'name', 'value'];
+      Object.keys(statement)
+        .filter((property) => !reservedWords.includes(property))
+        .map((propertyName) => statement[propertyName])
+        .forEach((property) => {
+          if (Array.isArray(property)) {
+            property.forEach(parse);
+          } else if (typeof property === 'object') {
+            parse(property);
+          } else if (
+            typeof property === 'string' ||
+            typeof property === 'boolean'
+          ) {
+            // pass
+          } else {
+            console.warn(
+              `Unrecognized subexpression: ${typeof property} ${property}`
+            );
+          }
+        });
+    }
+
+    function parseList(listElements, statement) {
+      listElements.forEach((listElement) => {
+        const subExpression = statement[listElement];
+        if (Array.isArray(subExpression)) {
+          subExpression.forEach(parse);
+        } else if (typeof subExpression === 'object') {
+          parse(subExpression);
+        } else {
+          console.warn(`Unrecognized subexpression: ${subExpression}`);
+        }
+      });
+    }
+    const nop = () => {};
+    function parseIdentifierExpression(statement) {
+      if (statement.format === 'table') {
+        tables.push(statement.name);
+      }
+      parseList(['columns'], statement);
+    }
+    function recordAction(action) {
+      return () => {
+        actions.push(action);
+      };
+    }
+
+    const parsers = {
+      'literal.text': nop,
+      'literal.decimal': nop,
+      'identifier.star': (statement) => columns.push(statement.name),
+      'identifier.column': (statement) => columns.push(statement.name),
+      'identifier.table': (statement) => tables.push(statement.name),
+      'identifier.expression': parseIdentifierExpression,
+      'statement.select': [recordAction('select'), parseStatement],
+      'statement.insert': [recordAction('insert'), parseStatement],
+      'statement.update': [recordAction('update'), parseStatement],
+      'statement.delete': [recordAction('delete'), parseStatement],
+    };
+
+    parse(ast);
+
+    function unique(list) {
+      return [...new Set(list)];
+    }
+    const uniqueActions = unique(actions).sort();
+
+    const result = {};
+    if (uniqueActions.length === 1) {
+      // eslint-disable-next-line prefer-destructuring
+      result.action = uniqueActions[0];
+    } else if (actions.length > 0) {
+      result.actions = uniqueActions;
+    }
+
+    return Object.assign(result, {
+      tables: unique(tables).sort(),
+      columns: unique(columns).sort(),
+    });
+  } catch (e) {
+    // console.warn(`Unable to parse ${parseSQL} : ${e.message}`);
+    return null;
+  }
+}
+
+function dumbNormalizeSQL(sql) {
   const sqlLower = sql.toLowerCase();
   const stopWords = ['where', 'limit', 'order by', 'group by', 'values', 'set'];
   const stopWordLocations = stopWords
@@ -47,6 +155,16 @@ export function normalizeSQL(sql) {
 
   console.warn(`Unparseable: ${sql}`);
   return 'Unparseable';
+}
+
+/**
+ * It's essential to normalize SQL to remove trivial differences like WHERE clauses on
+ * generated id values, timestamps, etc.
+ *
+ * @param {string} sql
+ */
+export function normalizeSQL(sql) {
+  return parseNormalizeSQL(sql) || dumbNormalizeSQL(sql);
 }
 
 export function buildTree(events) {
