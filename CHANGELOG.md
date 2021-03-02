@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/applandinc/appmap-js/compare/v1.2.0...v1.3.0) (2021-03-02)
+
+
+### Features
+
+* add support for event and code object labels ([26123ba](https://github.com/applandinc/appmap-js/commit/26123bae7a4924bf606871eb1e6363f28f063b02))
+
 # [1.2.0](https://github.com/applandinc/appmap-js/compare/v1.1.2...v1.2.0) (2021-02-25)
 
 
