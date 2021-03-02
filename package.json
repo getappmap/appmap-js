@@ -31,7 +31,8 @@
     }
   },
   "files": [
-    "dist/appmap.esm.js"
+    "dist/appmap.esm.js",
+    "dist/appmap.node.js"
   ],
   "dependencies": {
     "async": "^3.2.0",
