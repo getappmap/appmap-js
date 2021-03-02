@@ -1,5 +1,5 @@
 <template v-slot:diagram>
-  <v-container @click="clearSelection" ref="container">
+  <v-container @click.native="clearSelection" ref="container">
     <v-trace
       :events="events"
       ref="trace"

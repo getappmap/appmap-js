@@ -66,7 +66,7 @@
       <v-trace-summary
         v-if="!expanded && event.children.length > 0"
         :event="event"
-        @click="toggleVisibility()"
+        @click.native.stop="toggleVisibility()"
         ref="summary"
       />
     </template>
