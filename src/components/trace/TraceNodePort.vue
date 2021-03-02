@@ -117,6 +117,7 @@ export default {
 }
 
 .label {
+  margin: 0 0.25rem;
   line-height: 1em;
 }
 

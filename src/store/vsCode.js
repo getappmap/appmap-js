@@ -6,6 +6,7 @@ import { fullyQualifiedFunctionName } from '@/lib/util'; // HACK
 Vue.use(Vuex);
 
 export const SELECT_OBJECT = 'selectObject';
+export const SELECT_LABEL = 'selectLabel';
 export const SET_APPMAP_DATA = 'setAppMapData';
 export const POP_OBJECT_STACK = 'popObjectStack';
 export const CLEAR_OBJECT_STACK = 'clearObjectStack';
@@ -19,6 +20,7 @@ export function buildStore() {
       appMap: new AppMap(),
       selectionStack: [],
       currentView: VIEW_COMPONENT,
+      selectedLabel: null,
     },
 
     getters: {
@@ -32,6 +34,9 @@ export function buildStore() {
         return state.selectionStack.length > 1
           ? state.selectionStack[state.selectionStack.length - 2]
           : null;
+      },
+      selectedLabel(state) {
+        return state.selectedLabel;
       },
     },
 
@@ -51,6 +56,7 @@ export function buildStore() {
         } else {
           state.selectionStack.push(selection);
         }
+        state.selectedLabel = null;
       },
 
       [POP_OBJECT_STACK](state) {
@@ -59,6 +65,12 @@ export function buildStore() {
 
       [CLEAR_OBJECT_STACK](state) {
         state.selectionStack = [];
+        state.selectedLabel = null;
+      },
+
+      [SELECT_LABEL](state, label) {
+        state.selectionStack = [];
+        state.selectedLabel = label;
       },
 
       [SET_VIEW](state, view) {

@@ -7,13 +7,23 @@
       <div class="details-panel__buttons">
         <slot name="buttons" />
       </div>
-      <component :is="detailsType" :object="selectedObject" />
+      <component
+        v-if="!selectedLabel"
+        :is="detailsType"
+        :object="selectedObject"
+      />
+      <v-details-panel-labels
+        v-if="selectedObject && selectedObject.labels"
+        :items="Array.from(selectedObject.labels)"
+      />
+      <v-details-label v-if="selectedLabel" :label="selectedLabel" />
     </div>
   </div>
 </template>
 
 <script>
 import ApplandLogo from '@/assets/appland-logo.svg';
+import VDetailsLabel from '@/components/DetailsLabel.vue';
 import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
 import VDetailsPanelDatabase from '@/components/DetailsPanelDatabase.vue';
 import VDetailsPanelEdge from '@/components/DetailsPanelEdge.vue';
@@ -23,12 +33,14 @@ import VDetailsPanelHttp from '@/components/DetailsPanelHttp.vue';
 import VDetailsPanelNull from '@/components/DetailsPanelNull.vue';
 import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
 import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
+import VDetailsPanelLabels from '@/components/DetailsPanelLabels.vue';
 import { Event } from '@/lib/models';
 
 export default {
   name: 'v-details-panel',
   components: {
     ApplandLogo,
+    VDetailsLabel,
     VDetailsPanelClass,
     VDetailsPanelDatabase,
     VDetailsPanelEdge,
@@ -38,11 +50,15 @@ export default {
     VDetailsPanelNull,
     VDetailsPanelPackage,
     VDetailsPanelRoute,
+    VDetailsPanelLabels,
   },
   props: {
     subtitle: String,
     selectedObject: {
       type: Object,
+    },
+    selectedLabel: {
+      type: String,
     },
   },
 

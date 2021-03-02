@@ -15,6 +15,7 @@ export default class Event {
     }
 
     addHiddenProperty(this, 'linkedEvent');
+    addHiddenProperty(this, 'labels');
     addHiddenProperty(this, 'next');
     addHiddenProperty(this, 'previous');
 
@@ -64,6 +65,11 @@ export default class Event {
 
   get parameters() {
     return this.callEvent.$hidden.parameters;
+  }
+
+  get labels() {
+    const eventLabels = this.callEvent.$hidden.labels || [];
+    return new Set([...eventLabels, ...this.callEvent.codeObject.labels]);
   }
 
   get message() {
@@ -128,6 +134,12 @@ export default class Event {
   set parameters(value) {
     if (hasProp(this.$hidden, 'parameters')) {
       this.$hidden.parameters = value;
+    }
+  }
+
+  set labels(value) {
+    if (hasProp(this.$hidden, 'labels')) {
+      this.$hidden.labels = value;
     }
   }
 

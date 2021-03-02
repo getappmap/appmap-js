@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <div class="main-column main-column--left">
-      <v-details-panel :selected-object="selectedObject">
+      <v-details-panel
+        :selected-object="selectedObject"
+        :selected-label="selectedLabel"
+      >
         <template v-slot:buttons>
           <v-details-button
             icon="clear"
@@ -112,6 +115,10 @@ export default {
 
     selectedObject() {
       return this.$store.getters.selectedObject;
+    },
+
+    selectedLabel() {
+      return this.$store.getters.selectedLabel;
     },
 
     callTree() {
