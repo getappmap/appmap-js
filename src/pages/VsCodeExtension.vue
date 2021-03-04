@@ -208,7 +208,7 @@ code {
   color: $base11;
 
   .main-column {
-    overflow-y: scroll;
+    overflow-y: auto;
 
     &--left {
       grid-column: 1;
