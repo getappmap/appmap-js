@@ -1,7 +1,7 @@
+import { AppMap } from '@/lib/models';
 import betaV1Error from './canonicalize/beta_v1_error';
 import betaV1Info from './canonicalize/beta_v1_info';
 import betaV1Debug from './canonicalize/beta_v1_debug';
-import { AppMap } from '../../../dist/appmap.node';
 
 export const algorithms = {
   beta_v1_error: betaV1Error,
@@ -33,9 +33,9 @@ function httpServerRequestsOnly(appmap) {
     return appmap;
   }
 
-  const data = { ...appmap.data };
-  data.events = selectedEvents;
-  return new AppMap(data);
+  const httpOnly = appmap.shallowCopy();
+  httpOnly.data.events = selectedEvents;
+  return httpOnly;
 }
 
 /**

@@ -51,6 +51,15 @@ export default class AppMap {
     return this.data.events;
   }
 
+  shallowCopy() {
+    const copy = new AppMap({});
+    copy.data.events = this.data.events;
+    copy.data.metadata = this.data.metadata;
+    copy.classMap = this.classMap;
+    copy.callTree = this.callTree;
+    return copy;
+  }
+
   toJSON() {
     return {
       ...this.data,
