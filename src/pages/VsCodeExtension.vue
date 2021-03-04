@@ -42,6 +42,9 @@
           />
         </v-tab>
       </v-tabs>
+      <div class="diagram-instructions">
+        <v-instructions />
+      </div>
     </div>
   </div>
 </template>
@@ -52,6 +55,7 @@ import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
+import VInstructions from '../components/Instructions.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import {
@@ -72,6 +76,7 @@ export default {
     VDetailsButton,
     VDiagramComponent,
     VDiagramTrace,
+    VInstructions,
     VTabs,
     VTab,
   },
@@ -212,6 +217,7 @@ code {
     }
 
     &--right {
+      position: relative;
       grid-column-start: 2;
       grid-column-end: 3;
       width: 100%;
@@ -219,6 +225,12 @@ code {
       word-break: break-all;
       overflow: hidden;
       background-color: $vs-code-gray1;
+
+      .diagram-instructions {
+        position: absolute;
+        right: 1.3rem;
+        bottom: 1.3rem;
+      }
     }
   }
 }
