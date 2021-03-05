@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" tabindex="0">
     <div ref="containerContent" style="transform: translate(0px, 0px)">
       <slot />
     </div>
@@ -48,5 +48,6 @@ export default {
   overflow: hidden;
   height: 100%;
   width: 100%;
+  outline: none;
 }
 </style>
