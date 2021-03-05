@@ -2,6 +2,9 @@
   <div class="details-search">
     <form class="details-search__form">
       <div class="details-search__input-wrap">
+        <span class="details-search__input-prefix">
+          <SearchIcon />
+        </span>
         <input
           class="details-search__input-element"
           type="text"
@@ -39,10 +42,15 @@
 </template>
 
 <script>
+import SearchIcon from '@/assets/search.svg';
 import { SELECT_OBJECT, SELECT_LABEL } from '../store/vsCode';
 
 export default {
   name: 'v-details-search',
+
+  components: {
+    SearchIcon,
+  },
 
   data() {
     return {
@@ -158,21 +166,47 @@ export default {
   }
 
   &__input-wrap {
+    position: relative;
     border-radius: $border-radius;
     padding: 2px;
     background: linear-gradient(to right, #4562b1 0%, #540a9f 100%);
+  }
+
+  &__input-prefix {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-50%);
+    text-align: center;
+    color: $base06;
+
+    svg {
+      position: relative;
+      left: 3px;
+      fill: currentColor;
+    }
   }
 
   &__input-element {
     border: none;
     border-radius: $border-radius;
     width: 100%;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 2rem;
     font: inherit;
     font-size: 0.9rem;
     color: $base06;
     background: $vs-code-gray1;
     outline: none;
+
+    &::-webkit-placeholder,
+    &::-moz-placeholder,
+    &::placeholder {
+      color: $base06;
+    }
   }
 
   &__block {
