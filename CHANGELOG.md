@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/applandinc/appmap-js/compare/v1.3.1...v1.4.0) (2021-03-05)
+
+
+### Features
+
+* keyboard navigation for Trace ([#120](https://github.com/applandinc/appmap-js/issues/120)) ([db2484f](https://github.com/applandinc/appmap-js/commit/db2484ff704a41b81f15f9c5f592a3b878f31a43))
+
 ## [1.3.1](https://github.com/applandinc/appmap-js/compare/v1.3.0...v1.3.1) (2021-03-02)
 
 
