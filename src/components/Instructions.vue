@@ -72,13 +72,17 @@ export default {
 
   data() {
     return {
-      isOpen: true,
+      isOpen: false,
     };
   },
 
   methods: {
     toggle() {
       this.isOpen = !this.isOpen;
+    },
+
+    open() {
+      this.isOpen = true;
     },
 
     close() {

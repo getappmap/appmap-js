@@ -47,7 +47,7 @@
         <ReloadIcon class="diagram-reload__icon" />
       </button>
       <div class="diagram-instructions">
-        <v-instructions />
+        <v-instructions ref="instructions" />
       </div>
     </div>
   </div>
@@ -161,6 +161,10 @@ export default {
   methods: {
     loadData(data) {
       this.$store.commit(SET_APPMAP_DATA, data);
+    },
+
+    showInstructions() {
+      this.$refs.instructions.open();
     },
 
     onChangeTab(tab) {
