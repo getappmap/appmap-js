@@ -127,7 +127,7 @@ export default {
             this.objects.http.data.push(codeObject);
             break;
           case 'query':
-            this.objects.sql.data.push(codeObject);
+            codeObject.events.forEach((e) => this.objects.sql.data.push(e));
             break;
           default:
             break;
@@ -142,6 +142,7 @@ export default {
       switch (type) {
         case 'http':
         case 'code':
+        case 'sql':
           this.$store.commit(SELECT_OBJECT, object);
           break;
         case 'labels':
