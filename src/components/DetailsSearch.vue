@@ -233,42 +233,67 @@ export default {
     }
 
     &-item {
+      position: relative;
       border-radius: $border-radius;
       padding: 0.3rem 1rem;
       color: $base03;
       cursor: pointer;
+      overflow: hidden;
+      z-index: 0;
 
-      .details-search__block--http & {
-        background: linear-gradient(90deg, #c61c38 0%, #a62036 100%);
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 100%;
+        transition: transform 0.3s ease-in-out;
+        z-index: -1;
+      }
 
-        &:hover {
-          background: linear-gradient(90deg, #a62036 0%, #6b1a27 100%);
-        }
+      &:hover::before {
+        transform: translateX(-50%);
+      }
+
+      .details-search__block--http &::before {
+        background: linear-gradient(
+          to right,
+          #c61c38 0%,
+          #a62036 50%,
+          #6b1a27 100%
+        );
       }
 
       .details-search__block--labels & {
         color: $base19;
-        background: linear-gradient(90deg, #bbbbbb 0%, #999999 100%);
 
-        &:hover {
-          background: linear-gradient(90deg, #999999 0%, #696262 100%);
+        &::before {
+          background: linear-gradient(
+            to right,
+            #bbbbbb 0%,
+            #999999 50%,
+            #696262 100%
+          );
         }
       }
 
-      .details-search__block--code & {
-        background: linear-gradient(90deg, #4362b1 0%, #2a4b9f 100%);
-
-        &:hover {
-          background: linear-gradient(90deg, #2a4b9f 0%, #182d63 100%);
-        }
+      .details-search__block--code &::before {
+        background: linear-gradient(
+          to right,
+          #4362b1 0%,
+          #2a4b9f 50%,
+          #182d63 100%
+        );
       }
 
-      .details-search__block--sql & {
-        background: linear-gradient(90deg, #9c2fba 0%, #702286 100%);
-
-        &:hover {
-          background: linear-gradient(90deg, #702286 0%, #521b61 100%);
-        }
+      .details-search__block--sql &::before {
+        background: linear-gradient(
+          to right,
+          #9c2fba 0%,
+          #702286 50%,
+          #521b61 100%
+        );
       }
 
       &:not(:last-child) {
