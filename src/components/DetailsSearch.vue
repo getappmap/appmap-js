@@ -114,8 +114,22 @@ export default {
     },
   },
 
-  created() {
-    this.initObjects = (appMap) => {
+  methods: {
+    selectObject(type, object) {
+      switch (type) {
+        case 'http':
+        case 'code':
+        case 'sql':
+          this.$store.commit(SELECT_OBJECT, object);
+          break;
+        case 'labels':
+          this.$store.commit(SELECT_LABEL, object);
+          break;
+        default:
+          break;
+      }
+    },
+    initObjects(appMap) {
       appMap.classMap.codeObjects.forEach((codeObject) => {
         switch (codeObject.type) {
           case 'package':
@@ -134,24 +148,13 @@ export default {
         }
       });
       this.objects.labels.data = Object.keys(appMap.labels);
-    };
+    },
   },
 
-  methods: {
-    selectObject(type, object) {
-      switch (type) {
-        case 'http':
-        case 'code':
-        case 'sql':
-          this.$store.commit(SELECT_OBJECT, object);
-          break;
-        case 'labels':
-          this.$store.commit(SELECT_LABEL, object);
-          break;
-        default:
-          break;
-      }
-    },
+  mounted() {
+    if (this.$store.state) {
+      this.initObjects(this.$store.state.appMap);
+    }
   },
 };
 </script>
