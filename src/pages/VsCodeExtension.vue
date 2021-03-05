@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :key="renderKey">
     <div class="main-column main-column--left">
       <v-details-panel
         :selected-object="selectedObject"
@@ -42,16 +42,25 @@
           />
         </v-tab>
       </v-tabs>
+      <button class="diagram-reload" @click="resetDiagram">
+        <span class="diagram-reload__text">Clear</span>
+        <ReloadIcon class="diagram-reload__icon" />
+      </button>
+      <div class="diagram-instructions">
+        <v-instructions ref="instructions" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { Event } from '@/lib/models';
+import ReloadIcon from '@/assets/reload.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
+import VInstructions from '../components/Instructions.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import {
@@ -68,10 +77,12 @@ export default {
   name: 'VSCodeExtension',
 
   components: {
+    ReloadIcon,
     VDetailsPanel,
     VDetailsButton,
     VDiagramComponent,
     VDiagramTrace,
+    VInstructions,
     VTabs,
     VTab,
   },
@@ -80,6 +91,7 @@ export default {
 
   data() {
     return {
+      renderKey: 0,
       VIEW_COMPONENT,
       VIEW_FLOW,
     };
@@ -151,6 +163,10 @@ export default {
       this.$store.commit(SET_APPMAP_DATA, data);
     },
 
+    showInstructions() {
+      this.$refs.instructions.open();
+    },
+
     onChangeTab(tab) {
       // tabs are referenced by their view key
       const index = Object.values(this.$refs).findIndex((ref) => ref === tab);
@@ -174,6 +190,12 @@ export default {
 
     goBack() {
       this.$store.commit(POP_OBJECT_STACK);
+    },
+
+    resetDiagram() {
+      this.clearSelection();
+
+      this.renderKey += 1;
     },
   },
 };
@@ -203,7 +225,7 @@ code {
   color: $base11;
 
   .main-column {
-    overflow-y: scroll;
+    overflow-y: auto;
 
     &--left {
       grid-column: 1;
@@ -212,6 +234,7 @@ code {
     }
 
     &--right {
+      position: relative;
       grid-column-start: 2;
       grid-column-end: 3;
       width: 100%;
@@ -219,6 +242,58 @@ code {
       word-break: break-all;
       overflow: hidden;
       background-color: $vs-code-gray1;
+
+      .diagram-reload {
+        position: absolute;
+        top: 1.8rem;
+        right: 1.3rem;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem;
+        background: transparent;
+        color: $gray4;
+        font: inherit;
+        font-family: $appland-text-font-family;
+        font-size: 0.8rem;
+        outline: none;
+        line-height: 0;
+        appearance: none;
+        cursor: pointer;
+        transition: color 0.3s ease-in;
+
+        &:hover,
+        &:active {
+          color: $gray5;
+          transition-timing-function: ease-out;
+        }
+
+        &__text {
+          margin-right: 0.5rem;
+          letter-spacing: 0.5px;
+          opacity: 0;
+          transition: opacity 0.3s ease-in;
+          text-transform: uppercase;
+        }
+
+        &:hover .diagram-reload__text,
+        &:active .diagram-reload__text {
+          opacity: 1;
+          transition-timing-function: ease-out;
+        }
+
+        &__icon {
+          width: 1rem;
+          height: 1rem;
+          fill: currentColor;
+        }
+      }
+
+      .diagram-instructions {
+        position: absolute;
+        right: 1.3rem;
+        bottom: 1.3rem;
+      }
     }
   }
 }

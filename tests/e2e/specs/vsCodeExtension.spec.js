@@ -14,8 +14,16 @@ context('VS Code Extension', () => {
         .should('contain', 'app/controllers');
     });
 
+    it('clicking info icon opens instructions', () => {
+      cy.get('.instructions__icon').click();
+      cy.get('.instructions__container').should('be.visible');
+
+      cy.get('.instructions__close').click();
+      cy.get('.instructions__container').should('not.be.visible');
+    });
+
     it('clicking HTTP server requests displays the correct data', () => {
-      cy.get('#intro-details').should('be.visible');
+      cy.get('.details-search').should('be.visible');
 
       cy.get(`.node[data-type="${CodeObjectType.HTTP}"]`)
         .click()
@@ -38,7 +46,7 @@ context('VS Code Extension', () => {
     });
 
     it('clicking a package displays the correct data', () => {
-      cy.get('#intro-details').should('be.visible');
+      cy.get('.details-search').should('be.visible');
 
       cy.get('.node[data-id="app/controllers"]')
         .click()
@@ -66,7 +74,7 @@ context('VS Code Extension', () => {
     });
 
     it('clicking a class displays the correct data', () => {
-      cy.get('#intro-details').should('be.visible');
+      cy.get('.details-search').should('be.visible');
 
       cy.get('.node[data-id="active_support/ActiveSupport::SecurityUtils"]')
         .click()
@@ -91,7 +99,7 @@ context('VS Code Extension', () => {
     });
 
     it('clicking the database displays the correct data', () => {
-      cy.get('#intro-details').should('be.visible');
+      cy.get('.details-search').should('be.visible');
 
       cy.get(`.node[data-type="${CodeObjectType.DATABASE}"]`)
         .click()
@@ -111,7 +119,7 @@ context('VS Code Extension', () => {
     });
 
     it('clicking an edge displays the correct data', () => {
-      cy.get('#intro-details').should('be.visible');
+      cy.get('.details-search').should('be.visible');
 
       cy.get(
         '.edgePath[data-from="HTTP server requests"][data-to="app/helpers"]'
@@ -131,7 +139,7 @@ context('VS Code Extension', () => {
     });
 
     it('clicking an event displays the correct data', () => {
-      cy.get('#intro-details').should('be.visible');
+      cy.get('.details-search').should('be.visible');
 
       cy.get('.tabs .tab-btn').last().click();
 
@@ -171,7 +179,7 @@ context('VS Code Extension', () => {
     });
 
     it('the current event is highlighted upon opening the flow view', () => {
-      cy.get('#intro-details').should('be.visible');
+      cy.get('.details-search').should('be.visible');
 
       cy.get(`.node[data-type="${CodeObjectType.HTTP}"]`)
         .click()

@@ -7,8 +7,11 @@
       <div class="details-panel__buttons">
         <slot name="buttons" />
       </div>
+      <keep-alive>
+        <v-details-search v-if="!selectedObject && !selectedLabel" />
+      </keep-alive>
       <component
-        v-if="!selectedLabel"
+        v-if="selectedObject"
         :is="detailsType"
         :object="selectedObject"
       />
@@ -30,10 +33,10 @@ import VDetailsPanelEdge from '@/components/DetailsPanelEdge.vue';
 import VDetailsPanelEvent from '@/components/DetailsPanelEvent.vue';
 import VDetailsPanelFunction from '@/components/DetailsPanelFunction.vue';
 import VDetailsPanelHttp from '@/components/DetailsPanelHttp.vue';
-import VDetailsPanelNull from '@/components/DetailsPanelNull.vue';
 import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
 import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
 import VDetailsPanelLabels from '@/components/DetailsPanelLabels.vue';
+import VDetailsSearch from '@/components/DetailsSearch.vue';
 import { Event } from '@/lib/models';
 
 export default {
@@ -47,10 +50,10 @@ export default {
     VDetailsPanelEvent,
     VDetailsPanelFunction,
     VDetailsPanelHttp,
-    VDetailsPanelNull,
     VDetailsPanelPackage,
     VDetailsPanelRoute,
     VDetailsPanelLabels,
+    VDetailsSearch,
   },
   props: {
     subtitle: String,
@@ -80,7 +83,7 @@ export default {
 
 <style scoped lang="scss">
 .details-panel {
-  display: inline-block;
+  display: block;
   font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   min-width: 280px;
   width: 100%;
@@ -89,7 +92,7 @@ export default {
   background-color: $vs-code-gray1;
   word-break: break-word;
   border-right: 1px solid $base15;
-  overflow: scroll;
+  overflow: auto;
 
   &__title {
     padding: 2rem;
@@ -110,11 +113,14 @@ export default {
   }
 
   &__buttons {
-    padding: 0 2rem 1rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+
+    &:not(:empty) {
+      padding: 0 2rem 1rem;
+    }
   }
 }
 </style>
