@@ -1,6 +1,10 @@
 import { CodeObjectType } from '../../../src/lib/models/codeObject';
 
 context('VS Code Extension', () => {
+  function hideInstructions() {
+    return cy.get('.instructions__close').click();
+  }
+
   context('Ruby appmap', () => {
     beforeEach(() => {
       cy.visit(
@@ -14,8 +18,18 @@ context('VS Code Extension', () => {
         .should('contain', 'app/controllers');
     });
 
+    it('instructions tooltip is shown', () => {
+      cy.get('.instructions__container').should('be.visible');
+
+      cy.get('.instructions__close').click();
+
+      cy.get('.instructions__container').should('not.be.visible');
+    });
+
     it('clicking HTTP server requests displays the correct data', () => {
       cy.get('.details-search').should('be.visible');
+
+      hideInstructions();
 
       cy.get(`.node[data-type="${CodeObjectType.HTTP}"]`)
         .click()
@@ -39,6 +53,8 @@ context('VS Code Extension', () => {
 
     it('clicking a package displays the correct data', () => {
       cy.get('.details-search').should('be.visible');
+
+      hideInstructions();
 
       cy.get('.node[data-id="app/controllers"]')
         .click()
@@ -68,6 +84,8 @@ context('VS Code Extension', () => {
     it('clicking a class displays the correct data', () => {
       cy.get('.details-search').should('be.visible');
 
+      hideInstructions();
+
       cy.get('.node[data-id="active_support/ActiveSupport::SecurityUtils"]')
         .click()
         .should('have.class', 'highlight');
@@ -93,6 +111,8 @@ context('VS Code Extension', () => {
     it('clicking the database displays the correct data', () => {
       cy.get('.details-search').should('be.visible');
 
+      hideInstructions();
+
       cy.get(`.node[data-type="${CodeObjectType.DATABASE}"]`)
         .click()
         .should('have.class', 'highlight');
@@ -113,6 +133,8 @@ context('VS Code Extension', () => {
     it('clicking an edge displays the correct data', () => {
       cy.get('.details-search').should('be.visible');
 
+      hideInstructions();
+
       cy.get(
         '.edgePath[data-from="HTTP server requests"][data-to="app/helpers"]'
       )
@@ -132,6 +154,8 @@ context('VS Code Extension', () => {
 
     it('clicking an event displays the correct data', () => {
       cy.get('.details-search').should('be.visible');
+
+      hideInstructions();
 
       cy.get('.tabs .tab-btn').last().click();
 
@@ -173,6 +197,8 @@ context('VS Code Extension', () => {
     it('the current event is highlighted upon opening the flow view', () => {
       cy.get('.details-search').should('be.visible');
 
+      hideInstructions();
+
       cy.get(`.node[data-type="${CodeObjectType.HTTP}"]`)
         .click()
         .get('.list-item')
@@ -196,6 +222,8 @@ context('VS Code Extension', () => {
     });
 
     it('http server requests can navigate to route', () => {
+      hideInstructions();
+
       cy.get(`.node[data-type="${CodeObjectType.HTTP}"]`)
         .click()
         .get('.list-item')
@@ -208,6 +236,8 @@ context('VS Code Extension', () => {
     });
 
     it('package can navigate to class', () => {
+      hideInstructions();
+
       cy.get(`.node[data-id="app/helpers"]`).click();
 
       cy.get('.v-details-panel-list')
@@ -223,6 +253,8 @@ context('VS Code Extension', () => {
     });
 
     it('class can navigate to function', () => {
+      hideInstructions();
+
       cy.get(`.node[data-id="lib/Spree::BackendConfiguration"]`).click();
 
       cy.get('.v-details-panel-list')
@@ -238,6 +270,8 @@ context('VS Code Extension', () => {
     });
 
     it('function can navigate to event', () => {
+      hideInstructions();
+
       cy.get(`.node[data-id="lib/Spree::BackendConfiguration"]`).click();
 
       cy.get('.v-details-panel-list')
@@ -264,6 +298,8 @@ context('VS Code Extension', () => {
     });
 
     it('class can navigate to query', () => {
+      hideInstructions();
+
       cy.get(`.node[data-id="app/controllers"]`).click();
 
       cy.get('.v-details-panel-list')
@@ -286,6 +322,8 @@ context('VS Code Extension', () => {
     });
 
     it('edge can navigate to event', () => {
+      hideInstructions();
+
       cy.get(
         `.edgePath[data-from="HTTP server requests"][data-to="app/helpers"]`
       ).click();
@@ -303,6 +341,8 @@ context('VS Code Extension', () => {
     });
 
     it('event can navigate directly to flow view', () => {
+      hideInstructions();
+
       cy.get(`.node[data-type="${CodeObjectType.DATABASE}"]`).click();
 
       cy.get('.v-details-panel-list')
@@ -322,6 +362,8 @@ context('VS Code Extension', () => {
     });
 
     it('clears when "Clear selection" button was clicked', () => {
+      hideInstructions();
+
       cy.get(`.nodes .node[data-type="${CodeObjectType.HTTP}"]`)
         .click()
         .should('have.class', 'highlight');
@@ -335,6 +377,8 @@ context('VS Code Extension', () => {
     });
 
     it('expands package when child was selected from panel', () => {
+      hideInstructions();
+
       cy.get('.node[data-id="app/helpers"]').click();
 
       cy.get('.v-details-panel-list').within(() => {
@@ -345,6 +389,8 @@ context('VS Code Extension', () => {
     });
 
     it('highlights only the first ancestor available if the selected object is not visible', () => {
+      hideInstructions();
+
       cy.get('.node[data-id="app/helpers"]').rightclick();
 
       cy.get('.dropdown-menu').contains('Expand').click();
@@ -364,6 +410,8 @@ context('VS Code Extension', () => {
     });
 
     it('highlight is retained when expanding and collapsing a package', () => {
+      hideInstructions();
+
       cy.get('.node[data-id="app/helpers"]')
         .click()
         .should('have.class', 'highlight')
@@ -391,6 +439,8 @@ context('VS Code Extension', () => {
     });
 
     it('highlight is retained collapsing a package and a child is selected', () => {
+      hideInstructions();
+
       cy.get('.node[data-id="app/helpers"]').rightclick();
 
       cy.get('.dropdown-menu').contains('Expand').click();
@@ -411,6 +461,8 @@ context('VS Code Extension', () => {
     });
 
     it('highlight is restored from a function', () => {
+      hideInstructions();
+
       cy.get(`.node[data-id="lib/Spree::BackendConfiguration"]`).click();
 
       cy.get('.v-details-panel-list')
@@ -430,6 +482,8 @@ context('VS Code Extension', () => {
     });
 
     it('shows label details', () => {
+      hideInstructions();
+
       cy.get('.node.package[data-id="openssl"]').click();
 
       cy.get('.v-details-panel-list')
@@ -473,6 +527,8 @@ context('VS Code Extension', () => {
     });
 
     it('HTTP events are properly named', () => {
+      hideInstructions();
+
       cy.get('.tabs .tab-btn').last().click();
       cy.get('.trace-node[data-event-id="1"]').should(
         'contain.text',

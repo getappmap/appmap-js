@@ -56,7 +56,6 @@
         </div>
       </div>
     </section>
-    <div class="instructions__triangle" v-if="isOpen"></div>
   </div>
 </template>
 
