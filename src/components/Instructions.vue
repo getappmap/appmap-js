@@ -7,15 +7,12 @@
       <section class="welcome">
         <h1>Welcome to your AppMap!</h1>
         <p>
-          The UML-inspired diagrams display your key application components,
-          <br />
-          and how they are inter-related during application execution.
+          The UML-inspired diagrams display your key application components, and
+          how they are inter-related during application execution.
         </p>
         <p>
           Select a component in the diagram to see its details here. Here, we’ll
-          <br />
           show you any relevant information about your code as you navigate
-          <br />
           through your appmaps.
         </p>
         <ul>
@@ -114,13 +111,14 @@ export default {
     bottom: 100%;
     margin: 0 0.75rem 1rem 0;
     width: max-content;
-    max-width: 40vw;
-    max-height: 70vh;
+    max-width: 30vw;
+    max-height: 50vh;
     padding: 1.5rem;
     font-size: 0.9rem;
     line-height: 1.2rem;
     color: $gray6;
     background: $black;
+    word-break: break-word;
     overflow: auto;
   }
 
@@ -158,6 +156,7 @@ export default {
         flex-direction: row;
         margin: 0.5rem 0;
         p {
+          flex: 1;
           margin: 0;
         }
         align-items: flex-start;
