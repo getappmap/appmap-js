@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/applandinc/appmap-js/compare/v1.4.0...v1.5.0) (2021-03-05)
+
+
+### Features
+
+* search and filter objects in default details panel ([#122](https://github.com/applandinc/appmap-js/issues/122)) ([9ea7bfe](https://github.com/applandinc/appmap-js/commit/9ea7bfee8b57c2fb2b331053507857d675958d0b))
+
 # [1.4.0](https://github.com/applandinc/appmap-js/compare/v1.3.1...v1.4.0) (2021-03-05)
 
 
