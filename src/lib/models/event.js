@@ -56,7 +56,7 @@ export default class Event {
   }
 
   get children() {
-    return this.$hidden.children;
+    return this.$hidden.children || [];
   }
 
   get codeObject() {
@@ -227,6 +227,17 @@ export default class Event {
     return [this.parameters, this.messages, this.returnValue]
       .flat()
       .filter(Boolean);
+  }
+
+  // TODO.
+  // Incomplete implementation.
+  compare(other) {
+    return (
+      this.event === other.event &&
+      this.definedClass === other.definedClass &&
+      this.methodId === other.methodId &&
+      this.isStatic === other.isStatic
+    );
   }
 
   toString() {
