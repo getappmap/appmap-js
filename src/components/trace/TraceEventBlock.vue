@@ -21,7 +21,9 @@
 
     <v-trace-node
       :event="event"
+      :highlight="event === selectedEvent"
       @expandChildren="toggleVisibility()"
+      @click.native="$emit('clickEvent', event)"
       ref="node"
     />
 
@@ -48,10 +50,12 @@
     <v-trace
       v-if="expanded"
       :events="event.children"
+      :selected-event="selectedEvent"
       ref="children"
       @updated="onUpdate()"
       @expand="(e) => $emit('expand', e)"
       @collapse="(e) => $emit('collapse', e)"
+      @clickEvent="(e) => $emit('clickEvent', e)"
     />
     <template v-else-if="!expanded && event.children.length > 0">
       <v-trace-path
@@ -93,31 +97,13 @@ export default {
       type: Event,
       required: true,
     },
+    selectedEvent: Event,
   },
   data() {
     return {
-      expanded: this.cacheState ? this.event.$hidden.expanded || false : false,
+      expanded: false,
       height: 0,
     };
-  },
-  watch: {
-    '$store.getters.selectedObject': {
-      handler() {
-        const { state, getters } = this.$store;
-        if (!state || !getters || state.currentView !== VIEW_FLOW) {
-          return;
-        }
-
-        const { selectedObject } = getters;
-        if (
-          !this.expanded &&
-          selectedObject &&
-          selectedObject.parent === this.event
-        ) {
-          this.toggleVisibility();
-        }
-      },
-    },
   },
   methods: {
     toggleVisibility() {
@@ -176,18 +162,11 @@ export default {
 
       this.$emit('updated');
     },
-    expandSelectedObject() {
-      if (!this.$store || !this.$store.getters) {
-        return;
-      }
-
-      const { selectedObject } = this.$store.getters;
-      if (!selectedObject || !(selectedObject instanceof Event)) {
-        return;
-      }
-
-      const ancestors = selectedObject.ancestors();
-      if (ancestors.includes(this.event)) {
+    initialize() {
+      if (
+        this.event === this.selectedEvent.parent ||
+        this.selectedEvent.ancestors().includes(this.event)
+      ) {
         this.expanded = true;
       }
     },
@@ -204,13 +183,11 @@ export default {
     },
   },
   updated() {
+    this.initialize();
     this.onUpdate();
   },
   mounted() {
-    this.expandSelectedObject();
-  },
-  activated() {
-    this.expandSelectedObject();
+    this.initialize();
   },
 };
 </script>

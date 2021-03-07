@@ -4,15 +4,18 @@
       v-for="event in events"
       :key="event.id"
       :event="event"
+      :selected-event="selectedEvent"
       @updated="$emit('updated')"
       @expand="(e) => $emit('expand', e)"
       @collapse="(e) => $emit('collapse', e)"
+      @clickEvent="(e) => $emit('clickEvent', e)"
       ref="nodes"
     />
   </div>
 </template>
 
 <script>
+import { Event } from '@/lib/models';
 import VTraceEventBlock from './TraceEventBlock.vue';
 
 export default {
@@ -29,6 +32,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    selectedEvent: Event,
   },
   methods: {
     nodes() {
