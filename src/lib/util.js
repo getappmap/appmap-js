@@ -22,7 +22,7 @@ export function isCommand(event) {
   if (event.http_server_request) {
     return true;
   }
-  if (event.codeObject?.labels.has('command')) {
+  if (event.codeObject.labels.has('command')) {
     return true;
   }
   return false;
