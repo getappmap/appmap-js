@@ -1,5 +1,5 @@
 <template>
-  <div :class="classes" @click.stop="selectNode" :data-event-id="event.id">
+  <div :class="classes" :data-event-id="event.id">
     <div :class="`trace-node__header trace-node__header--${eventType}`">
       {{ title }}
     </div>
@@ -46,7 +46,9 @@ export default {
       required: true,
       validator: (value) => value instanceof Event,
     },
+    highlight: Boolean,
   },
+  // inject: ['$selectedEvent'],
   computed: {
     title() {
       return this.event.codeObject.prettyName;
@@ -63,13 +65,10 @@ export default {
       return 'default';
     },
     classes() {
-      const classes = ['trace-node'];
-
-      if (this.$store && this.$store.getters.selectedObject === this.event) {
-        classes.push('highlight');
-      }
-
-      return classes;
+      return {
+        'trace-node': true,
+        highlight: this.highlight,
+      };
     },
     outboundConnectionClasses() {
       return {
@@ -78,6 +77,9 @@ export default {
         'connection-icon--connected': this.event.children.length > 0,
       };
     },
+    // selectedEvent() {
+    //   return this.$selectedEvent();
+    // },
   },
 
   methods: {

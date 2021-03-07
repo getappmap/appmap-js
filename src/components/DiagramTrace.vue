@@ -2,9 +2,11 @@
   <v-container @click.native="clearSelection" ref="container">
     <v-trace
       :events="events"
+      :selected-event="selectedEvent"
       ref="trace"
       @expand="focusNodeChildren"
       @collapse="focusNode"
+      @clickEvent="onClickEvent"
     />
   </v-container>
 </template>
@@ -28,13 +30,17 @@ export default {
     },
   },
 
-  watch: {
-    '$store.getters.selectedObject': {
-      handler() {
-        this.focusHighlighted();
-      },
-    },
+  data() {
+    return {
+      selectedEvent: this.events[0],
+    };
   },
+
+  // provide() {
+  //   return {
+  //     $selectedEvent: () => this.selectedEvent,
+  //   };
+  // },
 
   methods: {
     clearSelection() {
@@ -59,13 +65,23 @@ export default {
     focusHighlighted() {
       setTimeout(() => {
         const { container } = this.$refs;
-        const element = document.querySelector('.trace-node.highlight');
+        const element = container.$el.querySelector('.trace-node.highlight');
         if (!element) {
           return;
         }
 
         container.panToElement(element);
       }, 16);
+    },
+
+    onClickEvent(event) {
+      this.selectedEvent = event;
+      this.$emit('clickEvent', event);
+      this.focusHighlighted();
+    },
+
+    container() {
+      return this.$refs.container;
     },
   },
 
