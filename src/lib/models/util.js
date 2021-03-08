@@ -66,6 +66,8 @@ const DYNAMIC_FIELDS = new Set([
   'thread_id',
   'elapsed',
   'object_id',
+  'lineno',
+  'path',
 ]);
 
 function getStaticPropValues(obj) {
@@ -258,6 +260,7 @@ export function hashEvent(e) {
   e.parameters.forEach((p) =>
     getStaticPropValues(p).forEach((v) => content.push(v))
   );
+  [...e.labels].forEach((l) => content.push(l));
 
   console.log(sha256(content.join('')).toString());
   return sha256(content.join('')).toString();
