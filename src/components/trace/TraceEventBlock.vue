@@ -164,8 +164,9 @@ export default {
     },
     initialize() {
       if (
-        this.event === this.selectedEvent.parent ||
-        this.selectedEvent.ancestors().includes(this.event)
+        this.selectedEvent &&
+        (this.event === this.selectedEvent.parent ||
+          this.selectedEvent.ancestors().includes(this.event))
       ) {
         this.expanded = true;
       }
