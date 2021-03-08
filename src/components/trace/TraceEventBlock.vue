@@ -23,7 +23,7 @@
       :event="event"
       :highlight="event === selectedEvent"
       @expandChildren="toggleVisibility()"
-      @click.native="$emit('clickEvent', event)"
+      @click.native.stop="$emit('clickEvent', event)"
       ref="node"
     />
 
@@ -79,7 +79,6 @@
 
 <script>
 import { Event } from '@/lib/models';
-import { VIEW_FLOW } from '@/store/vsCode';
 import VTraceNode from './TraceNode.vue';
 import VTracePath from './TracePath.vue';
 import VTraceSummary from './TraceSummary.vue';

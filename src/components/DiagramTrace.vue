@@ -36,12 +36,6 @@ export default {
     };
   },
 
-  // provide() {
-  //   return {
-  //     $selectedEvent: () => this.selectedEvent,
-  //   };
-  // },
-
   methods: {
     clearSelection() {
       if (this.$store) {
@@ -78,6 +72,10 @@ export default {
       this.selectedEvent = event;
       this.$emit('clickEvent', event);
       this.focusHighlighted();
+
+      if (this.$store) {
+        this.$store.commit(SELECT_OBJECT, event);
+      }
     },
 
     container() {
