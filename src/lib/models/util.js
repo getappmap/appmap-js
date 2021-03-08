@@ -214,8 +214,14 @@ export function hashSql(e) {
 
   const normalizedSql = normalizeSQL(sqlQuery);
   const content = [normalizedSql.action];
-  normalizedSql.columns.forEach((c) => content.push(c));
-  normalizedSql.tables.forEach((t) => content.push(t));
+
+  if (normalizeSQL.columns) {
+    normalizedSql.columns.forEach((c) => content.push(c));
+  }
+
+  if (normalizeSQL.tables) {
+    normalizedSql.tables.forEach((t) => content.push(t));
+  }
 
   return sha256(content.join('')).toString();
 }
