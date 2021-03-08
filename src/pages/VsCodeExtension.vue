@@ -38,7 +38,9 @@
           <v-diagram-trace
             ref="diagramFlow"
             :events="rootEvents"
+            :selected-event="selectedEvent"
             :name="VIEW_FLOW"
+            @clickEvent="onClickTraceEvent"
           />
         </v-tab>
       </v-tabs>
@@ -71,6 +73,7 @@ import {
   VIEW_FLOW,
   POP_OBJECT_STACK,
   CLEAR_OBJECT_STACK,
+  SELECT_OBJECT,
 } from '../store/vsCode';
 
 export default {
@@ -127,6 +130,10 @@ export default {
 
     selectedObject() {
       return this.$store.getters.selectedObject;
+    },
+
+    selectedEvent() {
+      return this.selectedObject instanceof Event ? this.selectedObject : null;
     },
 
     selectedLabel() {
@@ -196,6 +203,10 @@ export default {
       this.clearSelection();
 
       this.renderKey += 1;
+    },
+
+    onClickTraceEvent(e) {
+      this.$store.commit(SELECT_OBJECT, e);
     },
   },
 };
