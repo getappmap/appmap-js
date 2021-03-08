@@ -5,7 +5,6 @@
         ref="base"
         :events="getRootEvents(baseAppMap)"
         :selectedEvent="eventBase"
-        @clickEvent="onBaseChangeEvent"
       />
     </div>
 
@@ -14,7 +13,6 @@
         ref="working"
         :events="getRootEvents(workingAppMap)"
         :selectedEvent="eventWorking"
-        @clickEvent="onWorkingChangeEvent"
       />
     </div>
   </div>
@@ -63,14 +61,6 @@ export default {
         events = appMap.events.filter((e) => e.isCall() && !e.parent);
       }
       return events;
-    },
-    onBaseChangeEvent(eventBase) {
-      const { id } = eventBase;
-      this.eventWorking = this.workingAppMap.events.find((e) => e.id === id);
-    },
-    onWorkingChangeEvent(eventWorking) {
-      const { id } = eventWorking;
-      this.eventBase = this.baseAppMap.events.find((e) => e.id === id);
     },
     highlight(kind, data) {
       if (kind === 'changed') {
