@@ -1,4 +1,13 @@
-import { addHiddenProperty, hasProp } from './util';
+import { normalizeSQL } from '@/lib/fingerprint/algorithms';
+import {
+  addHiddenProperty,
+  hasProp,
+  arrayCompare,
+  sqlCompare,
+  httpCompare,
+  setCompare,
+  hashEvent,
+} from './util';
 
 // This class supercedes `CallTree` and `CallNode`. Events are stored in a flat
 // array and can also be traversed like a tree via `parent` and `children`.
@@ -18,6 +27,7 @@ export default class Event {
     addHiddenProperty(this, 'labels');
     addHiddenProperty(this, 'next');
     addHiddenProperty(this, 'previous');
+    addHiddenProperty(this, 'hash');
 
     // Data must be written last, after our properties are configured.
     Object.assign(this, data);
@@ -192,6 +202,13 @@ export default class Event {
     return this.isReturn() ? this : this.$hidden.linkedEvent;
   }
 
+  get hash() {
+    if (!this.$hidden.hash) {
+      this.$hidden.hash = hashEvent(this);
+    }
+    return this.$hidden.hash;
+  }
+
   callStack() {
     const stack = this.ancestors().reverse();
     stack.push(this.callEvent);
@@ -229,9 +246,24 @@ export default class Event {
       .filter(Boolean);
   }
 
-  // TODO.
-  // Incomplete implementation.
+  // Unused. Ugly. Remove me?
   compare(other) {
+    if (!sqlCompare(this, other)) {
+      return false;
+    }
+
+    if (!httpCompare(this, other)) {
+      return false;
+    }
+
+    if (!arrayCompare(this.parameters, other.parameters)) {
+      return false;
+    }
+
+    if (!setCompare(this.labels, other.labels)) {
+      return false;
+    }
+
     return (
       this.event === other.event &&
       this.definedClass === other.definedClass &&

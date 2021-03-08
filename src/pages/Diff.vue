@@ -34,6 +34,12 @@ export default {
     working: [String, Object],
   },
 
+  data() {
+    return {
+      changes: [],
+    };
+  },
+
   computed: {
     baseAppMap() {
       return buildAppMap(this.base).normalize().build();
@@ -41,10 +47,6 @@ export default {
 
     workingAppMap() {
       return buildAppMap(this.working).normalize().build();
-    },
-
-    changes() {
-      return AppMap.getDiff(this.baseAppMap, this.workingAppMap);
     },
   },
 
@@ -74,12 +76,56 @@ export default {
         this.$refs.base.focusHighlighted();
       }
     },
+    setBaseEvent(e) {
+      const { base } = this.$refs;
+      base.selectedEvent = e;
+      base.focusHighlighted();
+    },
+    setWorkingEvent(e) {
+      const { working } = this.$refs;
+      working.selectedEvent = e;
+      working.focusHighlighted();
+    },
+    highlight(kind, data) {
+      if (kind === 'changed') {
+        const [eventBase, eventWorking] = data;
+        this.setBaseEvent(eventBase);
+        this.setWorkingEvent(eventWorking);
+      } else if (kind === 'removed') {
+        this.setBaseEvent(data);
+        this.setWorkingEvent(null);
+      } else if (kind === 'added') {
+        this.setBaseEvent(null);
+        this.setWorkingEvent(data);
+      }
+    },
   },
 
+  // #region For testing purposes only
   mounted() {
+    const diff = AppMap.getDiff(this.baseAppMap, this.workingAppMap);
+    diff.added.forEach((e) => this.changes.push(['added', e]));
+    diff.removed.forEach((e) => this.changes.push(['removed', e]));
+    diff.changed.forEach((events) => this.changes.push(['changed', events]));
+
     console.log('changes:');
-    console.log(this.changes);
+    console.log(diff);
+
+    let i = 0;
+    const highlightChange = () => {
+      const [kind, data] = this.changes[i];
+      console.log(kind, data);
+      this.highlight(kind, data);
+    };
+    document.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        i = (i + 1) % this.changes.length;
+        highlightChange();
+      }
+    });
+    highlightChange();
   },
+  // #endregion
 };
 </script>
 

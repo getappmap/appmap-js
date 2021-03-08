@@ -32,7 +32,7 @@ export default {
 
   data() {
     return {
-      selectedEvent: this.events[0],
+      selectedEvent: null,
     };
   },
 
