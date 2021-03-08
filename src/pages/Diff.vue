@@ -113,6 +113,9 @@ export default {
 
     let i = 0;
     const highlightChange = () => {
+      if (!this.changes.length) {
+        return;
+      }
       const [kind, data] = this.changes[i];
       console.log(kind, data);
       this.highlight(kind, data);
@@ -129,7 +132,8 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+@import '@/scss/diagrams/style';
 html,
 body {
   width: 100%;
