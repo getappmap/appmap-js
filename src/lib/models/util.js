@@ -73,6 +73,7 @@ const DYNAMIC_FIELDS = new Set([
 function getStaticPropValues(obj) {
   return Object.getOwnPropertyNames(obj)
     .filter((k) => typeof obj[k] !== 'object' && !DYNAMIC_FIELDS.has(k))
+    .sort()
     .map((k) => obj[k]);
 }
 
@@ -262,7 +263,6 @@ export function hashEvent(e) {
   );
   [...e.labels].forEach((l) => content.push(l));
 
-  console.log(sha256(content.join('')).toString());
   return sha256(content.join('')).toString();
 }
 
