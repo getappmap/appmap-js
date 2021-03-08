@@ -74,5 +74,9 @@ export function panToNode(viewport, node) {
     ]);
   }
 
-  viewport.translateTo(node.offsetLeft, node.offsetTop, target);
+  viewport.translateTo(
+    node.offsetLeft + node.clientWidth * 0.5,
+    node.offsetTop + node.clientHeight * 0.5,
+    target
+  );
 }
