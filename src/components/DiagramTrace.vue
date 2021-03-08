@@ -6,7 +6,7 @@
       ref="trace"
       @expand="focusNodeChildren"
       @collapse="focusNode"
-      @clickEvent="onClickEvent"
+      @clickEvent="(e) => $emit('clickEvent', e)"
     />
   </v-container>
 </template>
@@ -28,12 +28,7 @@ export default {
     events: {
       type: Array,
     },
-  },
-
-  data() {
-    return {
-      selectedEvent: null,
-    };
+    selectedEvent: Object,
   },
 
   methods: {
@@ -69,13 +64,7 @@ export default {
     },
 
     onClickEvent(event) {
-      this.selectedEvent = event;
       this.$emit('clickEvent', event);
-      this.focusHighlighted();
-
-      if (this.$store) {
-        this.$store.commit(SELECT_OBJECT, event);
-      }
     },
 
     container() {
@@ -149,6 +138,10 @@ export default {
   },
 
   activated() {
+    this.focusHighlighted();
+  },
+
+  updated() {
     this.focusHighlighted();
   },
 };

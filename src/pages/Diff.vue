@@ -4,6 +4,7 @@
       <v-diagram-trace
         ref="base"
         :events="getRootEvents(baseAppMap)"
+        :selectedEvent="eventBase"
         @clickEvent="onBaseChangeEvent"
       />
     </div>
@@ -12,6 +13,7 @@
       <v-diagram-trace
         ref="working"
         :events="getRootEvents(workingAppMap)"
+        :selectedEvent="eventWorking"
         @clickEvent="onWorkingChangeEvent"
       />
     </div>
@@ -37,6 +39,8 @@ export default {
   data() {
     return {
       changes: [],
+      eventBase: null,
+      workingEvent: null,
     };
   },
 
@@ -60,43 +64,25 @@ export default {
       }
       return events;
     },
-    onBaseChangeEvent(event) {
-      const { id } = event;
-      const workingEvent = this.workingAppMap.events.find((e) => e.id === id);
-      if (workingEvent) {
-        this.$refs.working.selectedEvent = workingEvent;
-        this.$refs.working.focusHighlighted();
-      }
+    onBaseChangeEvent(eventBase) {
+      const { id } = eventBase;
+      this.eventWorking = this.workingAppMap.events.find((e) => e.id === id);
     },
-    onWorkingChangeEvent(event) {
-      const { id } = event;
-      const base = this.baseAppMap.events.find((e) => e.id === id);
-      if (base) {
-        this.$refs.base.selectedEvent = base;
-        this.$refs.base.focusHighlighted();
-      }
-    },
-    setBaseEvent(e) {
-      const { base } = this.$refs;
-      base.selectedEvent = e;
-      base.focusHighlighted();
-    },
-    setWorkingEvent(e) {
-      const { working } = this.$refs;
-      working.selectedEvent = e;
-      working.focusHighlighted();
+    onWorkingChangeEvent(eventWorking) {
+      const { id } = eventWorking;
+      this.eventBase = this.baseAppMap.events.find((e) => e.id === id);
     },
     highlight(kind, data) {
       if (kind === 'changed') {
         const [eventBase, eventWorking] = data;
-        this.setBaseEvent(eventBase);
-        this.setWorkingEvent(eventWorking);
+        this.eventBase = eventBase;
+        this.eventWorking = eventWorking;
       } else if (kind === 'removed') {
-        this.setBaseEvent(data);
-        this.setWorkingEvent(null);
+        this.eventBase = data;
+        this.eventWorking = null;
       } else if (kind === 'added') {
-        this.setBaseEvent(null);
-        this.setWorkingEvent(data);
+        this.eventBase = null;
+        this.eventWorking = data;
       }
     },
   },
@@ -132,7 +118,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import '@/scss/diagrams/style';
 html,
 body {
