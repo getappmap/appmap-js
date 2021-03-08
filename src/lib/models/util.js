@@ -218,11 +218,11 @@ export function hashSql(e) {
   const normalizedSql = normalizeSQL(sqlQuery);
   const content = [normalizedSql.action];
 
-  if (normalizeSQL.columns) {
+  if (normalizedSql.columns) {
     normalizedSql.columns.forEach((c) => content.push(c));
   }
 
-  if (normalizeSQL.tables) {
+  if (normalizedSql.tables) {
     normalizedSql.tables.forEach((t) => content.push(t));
   }
 
