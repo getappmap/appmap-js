@@ -1,5 +1,5 @@
+import sha256 from 'crypto-js/sha256';
 import { normalizeSQL } from '../fingerprint/algorithms';
-import { createHash } from 'crypto';
 
 export * from '../util';
 
@@ -203,7 +203,7 @@ export function hashHttp(e) {
   getStaticPropValues(httpServerResponse).forEach((v) => content.push(v));
   getStaticPropValues(httpServerRequest).forEach((v) => content.push(v));
 
-  return createHash('sha256').update(content.join('')).digest('hex');
+  return sha256(content.join('')).toString();
 }
 
 export function hashSql(e) {
@@ -217,7 +217,7 @@ export function hashSql(e) {
   normalizedSql.columns.forEach((c) => content.push(c));
   normalizedSql.tables.forEach((t) => content.push(t));
 
-  return createHash('sha256').update(content.join('')).digest('hex');
+  return sha256(content.join('')).toString();
 }
 
 // Returns a unique 'hash' (or really, a key) tied to the event's core identity: SQL, HTTP, or a
@@ -253,7 +253,8 @@ export function hashEvent(e) {
     getStaticPropValues(p).forEach((v) => content.push(v))
   );
 
-  return createHash('sha256').update(content.join('')).digest('hex');
+  console.log(sha256(content.join('')).toString());
+  return sha256(content.join('')).toString();
 }
 
 // Insert `event` to `arr` with a position determined from `base`. May modify `base` as well as
