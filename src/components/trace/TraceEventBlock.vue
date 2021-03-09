@@ -22,6 +22,7 @@
     <v-trace-node
       :event="event"
       :highlight="event === selectedEvent"
+      :highlight-color="highlightColor"
       @expandChildren="toggleVisibility()"
       @click.native.stop="$emit('clickEvent', event)"
       ref="node"
@@ -51,6 +52,7 @@
       v-if="expanded"
       :events="event.children"
       :selected-event="selectedEvent"
+      :highlight-color="highlightColor"
       ref="children"
       @updated="onUpdate()"
       @expand="(e) => $emit('expand', e)"
@@ -97,6 +99,7 @@ export default {
       required: true,
     },
     selectedEvent: Event,
+    highlightColor: String,
   },
   data() {
     return {

@@ -5,6 +5,7 @@
       :key="event.id"
       :event="event"
       :selected-event="selectedEvent"
+      :highlight-color="highlightColor"
       @updated="$emit('updated')"
       @expand="(e) => $emit('expand', e)"
       @collapse="(e) => $emit('collapse', e)"
@@ -33,6 +34,7 @@ export default {
       default: false,
     },
     selectedEvent: Event,
+    highlightColor: String,
   },
   methods: {
     nodes() {

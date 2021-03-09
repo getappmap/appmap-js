@@ -3,6 +3,7 @@
     <v-trace
       :events="events"
       :selected-event="selectedEvent"
+      :highlight-color="highlightColor"
       ref="trace"
       @expand="focusNodeChildren"
       @collapse="focusNode"
@@ -29,6 +30,10 @@ export default {
       type: Array,
     },
     selectedEvent: Object,
+    highlightColor: {
+      type: String,
+      default: '#ff07aa',
+    },
   },
 
   methods: {

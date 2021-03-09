@@ -5,6 +5,7 @@
         ref="base"
         :events="getRootEvents(baseAppMap)"
         :selectedEvent="eventBase"
+        :highlightColor="highlightColor"
       />
     </div>
 
@@ -13,6 +14,7 @@
         ref="working"
         :events="getRootEvents(workingAppMap)"
         :selectedEvent="eventWorking"
+        :highlightColor="highlightColor"
       />
     </div>
   </div>
@@ -21,6 +23,12 @@
 <script>
 import { buildAppMap, AppMap } from '@/lib/models';
 import VDiagramTrace from '../components/DiagramTrace.vue';
+
+const HIGHLIGHT_COLORS = {
+  added: '#a6e22e',
+  removed: '#cd1414',
+  changed: '#ead656',
+};
 
 export default {
   name: 'VSCodeExtension',
@@ -37,6 +45,7 @@ export default {
   data() {
     return {
       changes: [],
+      changeType: null,
       eventBase: null,
       workingEvent: null,
     };
@@ -49,6 +58,10 @@ export default {
 
     workingAppMap() {
       return buildAppMap(this.working).normalize().build();
+    },
+
+    highlightColor() {
+      return HIGHLIGHT_COLORS[this.changeType];
     },
   },
 
@@ -63,13 +76,14 @@ export default {
       return events;
     },
     highlight(kind, data) {
+      this.changeType = kind;
       if (kind === 'changed') {
         const [eventBase, eventWorking] = data;
         this.eventBase = eventBase;
         this.eventWorking = eventWorking;
       } else if (kind === 'removed') {
-        this.eventBase = data;
         this.eventWorking = null;
+        this.eventBase = data;
       } else if (kind === 'added') {
         this.eventBase = null;
         this.eventWorking = data;

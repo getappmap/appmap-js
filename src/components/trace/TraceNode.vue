@@ -1,5 +1,5 @@
 <template>
-  <div :class="classes" :data-event-id="event.id">
+  <div :class="classes" :style="style" :data-event-id="event.id">
     <div :class="`trace-node__header trace-node__header--${eventType}`">
       {{ title }}
     </div>
@@ -47,6 +47,10 @@ export default {
       validator: (value) => value instanceof Event,
     },
     highlight: Boolean,
+    highlightColor: {
+      type: String,
+      default: '#ff07aa',
+    },
   },
   // inject: ['$selectedEvent'],
   computed: {
@@ -68,6 +72,11 @@ export default {
       return {
         'trace-node': true,
         highlight: this.highlight,
+      };
+    },
+    style() {
+      return {
+        'outline-color': this.highlightColor,
       };
     },
     outboundConnectionClasses() {
