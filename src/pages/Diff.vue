@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <div class="diff-column">
+  <div class="diff">
+    <div class="diff__column">
       <v-diagram-trace
         ref="base"
         :events="getRootEvents(baseAppMap)"
@@ -9,7 +9,7 @@
       />
     </div>
 
-    <div class="diff-column">
+    <div class="diff__column">
       <v-diagram-trace
         ref="working"
         :events="getRootEvents(workingAppMap)"
@@ -122,7 +122,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @import '@/scss/diagrams/style';
 html,
 body {
@@ -139,7 +139,7 @@ code {
   color: $teal;
 }
 
-#app {
+.diff {
   display: grid;
   grid-template-columns: 50%;
   grid-template-rows: max(1fr, 100%);
@@ -147,7 +147,7 @@ code {
   color: $base11;
   background-color: $vs-code-gray1;
 
-  .diff-column {
+  &__column {
     overflow-y: scroll;
     width: 100%;
     grid-row: 1;
