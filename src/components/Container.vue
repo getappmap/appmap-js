@@ -32,7 +32,7 @@ export default {
     this.container = new Container(
       null,
       {
-        pan: { momentum: true },
+        pan: { momentum: true, boundary: { overlap: 0 } },
         zoom: { controls: true },
       },
       this.$el,
