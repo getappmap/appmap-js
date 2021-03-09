@@ -110,6 +110,7 @@ export default class ClassMap {
       return;
     }
 
+    const validCodeObjects = new Set();
     events
       .filter((e) => e.isCall())
       .forEach((e) => {
@@ -125,7 +126,29 @@ export default class ClassMap {
 
         e.codeObject = codeObject;
         codeObject.events.push(e);
+
+        const ancestors = codeObject.ancestors();
+        validCodeObjects.add(codeObject);
+        ancestors.forEach((obj) => validCodeObjects.add(obj));
       });
+
+    this.codeObjects = this.codeObjects.filter((obj) =>
+      validCodeObjects.has(obj)
+    );
+
+    this.roots = this.roots.filter((obj) => validCodeObjects.has(obj));
+
+    Object.keys(this.codeObjectsByLocation).forEach((obj) => {
+      if (!validCodeObjects.has(obj)) {
+        delete this.codeObjectsByLocation[obj];
+      }
+    });
+
+    Object.entries(this.codeObjectsById).forEach(([id, obj]) => {
+      if (!validCodeObjects.has(obj)) {
+        delete this.codeObjectsById[id];
+      }
+    });
   }
 
   toJSON() {
