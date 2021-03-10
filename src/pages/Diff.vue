@@ -6,7 +6,14 @@
         :events="getRootEvents(baseAppMap)"
         :selectedEvent="eventBase"
         :highlightColor="highlightColor"
+        :zoomControls="false"
+        @clickEvent="(e) => log(e.hash)"
       />
+      <!-- <v-overlay
+        @mousedown.native="hideOverlay = true"
+        v-if="eventBase === null && !hideOverlay"
+        :opacity="0"
+      /> -->
     </div>
 
     <div class="diff__column">
@@ -15,14 +22,22 @@
         :events="getRootEvents(workingAppMap)"
         :selectedEvent="eventWorking"
         :highlightColor="highlightColor"
+        :zoomControls="false"
+        @clickEvent="(e) => log(e.hash)"
       />
+      <!-- <v-overlay
+        @mousedown.native="hideOverlay = true"
+        v-if="eventWorking === null && !hideOverlay"
+        :opacity="0"
+      /> -->
     </div>
   </div>
 </template>
 
 <script>
 import { buildAppMap, AppMap } from '@/lib/models';
-import VDiagramTrace from '../components/DiagramTrace.vue';
+import VDiagramTrace from '@/components/DiagramTrace.vue';
+import VOverlay from '@/components/Overlay.vue';
 
 const HIGHLIGHT_COLORS = {
   added: '#a6e22e',
@@ -35,6 +50,7 @@ export default {
 
   components: {
     VDiagramTrace,
+    VOverlay,
   },
 
   props: {
@@ -44,10 +60,11 @@ export default {
 
   data() {
     return {
-      changes: [],
+      allChanges: [],
       changeType: null,
       eventBase: null,
-      workingEvent: null,
+      eventWorking: null,
+      hideOverlay: false,
     };
   },
 
@@ -66,6 +83,9 @@ export default {
   },
 
   methods: {
+    log(...msg) {
+      console.log(...msg);
+    },
     getRootEvents(appMap) {
       let events = appMap.events.filter(
         (e) => e.isCall() && e.httpServerRequest
@@ -77,6 +97,8 @@ export default {
     },
     highlight(kind, data) {
       this.changeType = kind;
+      this.hideOverlay = false;
+
       if (kind === 'changed') {
         const [eventBase, eventWorking] = data;
         this.eventBase = eventBase;
@@ -85,8 +107,8 @@ export default {
         this.eventWorking = null;
         this.eventBase = data;
       } else if (kind === 'added') {
-        this.eventBase = null;
         this.eventWorking = data;
+        this.eventBase = null;
       }
     },
   },
@@ -94,25 +116,39 @@ export default {
   // #region For testing purposes only
   mounted() {
     const diff = AppMap.getDiff(this.baseAppMap, this.workingAppMap);
-    diff.added.forEach((e) => this.changes.push(['added', e]));
-    diff.removed.forEach((e) => this.changes.push(['removed', e]));
-    diff.changed.forEach((events) => this.changes.push(['changed', events]));
+    const allChanges = [];
 
-    console.log('changes:');
-    console.log(diff);
+    // ( change type, event, 0..1 position in appmap )
+    diff.added.forEach((e) =>
+      allChanges.push(['added', e, e.id / this.baseAppMap.events.length])
+    );
+    diff.removed.forEach((e) =>
+      allChanges.push(['removed', e, e.id / this.baseAppMap.events.length])
+    );
+    diff.changed.forEach((events) =>
+      allChanges.push([
+        'changed',
+        events,
+        events[0].id / this.baseAppMap.events.length,
+      ])
+    );
+
+    this.allChanges = allChanges.sort((a, b) => a[2] - b[2]);
+
+    console.log('changes:', diff);
 
     let i = 0;
     const highlightChange = () => {
-      if (!this.changes.length) {
+      if (!this.allChanges.length) {
         return;
       }
-      const [kind, data] = this.changes[i];
+      const [kind, data] = this.allChanges[i];
       console.log(kind, data);
       this.highlight(kind, data);
     };
     document.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
-        i = (i + 1) % this.changes.length;
+        i = (i + 1) % this.allChanges.length;
         highlightChange();
       }
     });
@@ -148,6 +184,7 @@ code {
   background-color: $vs-code-gray1;
 
   &__column {
+    position: relative;
     overflow-y: scroll;
     width: 100%;
     grid-row: 1;

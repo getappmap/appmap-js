@@ -7,6 +7,7 @@ import {
   httpCompare,
   setCompare,
   hashEvent,
+  identityHashEvent,
 } from './util';
 
 // This class supercedes `CallTree` and `CallNode`. Events are stored in a flat
@@ -28,6 +29,7 @@ export default class Event {
     addHiddenProperty(this, 'next');
     addHiddenProperty(this, 'previous');
     addHiddenProperty(this, 'hash');
+    addHiddenProperty(this, 'identityHash');
 
     // Data must be written last, after our properties are configured.
     Object.assign(this, data);
@@ -207,6 +209,13 @@ export default class Event {
       this.$hidden.hash = hashEvent(this);
     }
     return this.$hidden.hash;
+  }
+
+  get identityHash() {
+    if (!this.$hidden.identityHash) {
+      this.$hidden.identityHash = identityHashEvent(this);
+    }
+    return this.$hidden.identityHash;
   }
 
   callStack() {

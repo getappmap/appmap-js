@@ -1,6 +1,11 @@
 import ClassMap from './classMap';
 import CallTree from './callTree/callTree';
-import { buildLabels, hashEvent, hashedPositionalInsert } from './util';
+import {
+  buildLabels,
+  hashEvent,
+  hashedPositionalInsert,
+  resolveDifferences,
+} from './util';
 
 export default class AppMap {
   constructor(data) {
@@ -13,7 +18,6 @@ export default class AppMap {
     this.classMap = new ClassMap(this.data.classMap);
     this.callTree = new CallTree(this.events);
     this.classMap.bindEvents(this.events);
-
     this.labels = buildLabels(this.classMap, this.events);
 
     // Establish event linked list references
@@ -73,17 +77,15 @@ export default class AppMap {
   // Iterate many AppMaps at once as an event tree. This method will follow the deepest branch
   // available, and yield the nodes at that position. Given that the tree structure may differ
   // across AppMaps, it's possible that some nodes will be null.
-  static *multiTreeIterator(baseAppMap, workingAppMaps) {
+  static *multiTreeIterator(baseAppMap, workingAppMap) {
     let baseEvent;
     let workingEvent;
     const baseQueue = baseAppMap.rootEvents();
-    const workingQueue = [];
+    const workingQueue = workingAppMap.rootEvents();
 
-    workingAppMaps
-      .rootEvents()
-      .forEach((e) => hashedPositionalInsert(workingQueue, baseQueue, e));
+    resolveDifferences(baseQueue, workingQueue);
 
-    while (1) {
+    for (;;) {
       baseEvent = baseQueue.shift();
       workingEvent = workingQueue.shift();
 
@@ -92,18 +94,10 @@ export default class AppMap {
         return;
       }
 
-      const baseChildren = [];
-      if (baseEvent) {
-        baseEvent.children.forEach((e) => baseChildren.push(e));
-      }
+      const baseChildren = baseEvent ? [...baseEvent.children] : [];
+      const workingChildren = workingEvent ? [...workingEvent.children] : [];
 
-      const workingChildren = [];
-      if (workingEvent) {
-        workingEvent.children.forEach((e) =>
-          hashedPositionalInsert(workingChildren, baseChildren, e)
-        );
-      }
-
+      resolveDifferences(baseChildren, workingChildren);
       baseChildren.forEach((e) => baseQueue.push(e));
       workingChildren.forEach((e) => workingQueue.push(e));
 
@@ -122,10 +116,6 @@ export default class AppMap {
     let result = iter.next();
     while (!result.done) {
       const [nodeBase, nodeWorking] = result.value;
-      console.log(
-        nodeBase ? nodeBase.toString() : 'null',
-        nodeWorking ? nodeWorking.toString() : 'null'
-      );
 
       if (!nodeBase) {
         changeSummary.added.push(nodeWorking);

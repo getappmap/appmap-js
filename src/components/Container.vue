@@ -12,6 +12,12 @@ import { panToNode, lazyPanToElement } from '@/lib/diagrams/util';
 
 export default {
   name: 'v-container',
+  props: {
+    zoomControls: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data() {
     return {
       container: null,
@@ -33,7 +39,7 @@ export default {
       null,
       {
         pan: { momentum: true, boundary: { overlap: 0 } },
-        zoom: { controls: true },
+        zoom: { controls: this.zoomControls },
       },
       this.$el,
       this.$refs.containerContent

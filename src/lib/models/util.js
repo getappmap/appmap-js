@@ -242,7 +242,7 @@ export function identityHashEvent(e) {
     return 'sql';
   }
 
-  return e.definedClass;
+  return e.toString();
 }
 
 export function hashEvent(e) {
@@ -266,54 +266,52 @@ export function hashEvent(e) {
   return sha256(content.join('')).toString();
 }
 
-// Insert `event` to `arr` with a position determined from `base`. May modify `base` as well as
-// `arr`.
-export function hashedPositionalInsert(arr, base, event) {
-  let index = -1;
-  for (let i = arr.length; i < base.length; i += 1) {
-    if (identityHashEvent(base[i]) === identityHashEvent(event)) {
-      index = i;
-      break;
-    }
-  }
+export function resolveDifferences(arr1, arr2) {
+  let arr1Index = 0;
+  let arr2Index = 0;
 
-  if (index === -1) {
-    const lengthDiff = base.length - arr.length;
-    for (let i = 0; i < lengthDiff; i += 1) {
-      arr.push(null);
+  for (;;) {
+    const a = arr1[arr1Index];
+    const b = arr2[arr2Index];
+    if (!a && !b) {
+      return;
     }
 
-    base.push(null);
-    arr.push(event);
-    return;
+    if (typeof a === 'undefined') {
+      arr1.push(null);
+      arr1Index += 1;
+      arr2Index += 1;
+      continue; // eslint-disable-line no-continue
+    }
+
+    if (typeof b === 'undefined') {
+      arr2.push(null);
+      arr1Index += 1;
+      arr2Index += 1;
+      continue; // eslint-disable-line no-continue
+    }
+
+    const hashA = a.identityHash;
+    const hashB = b.identityHash;
+    if (hashA !== hashB) {
+      let instancesA = 0;
+      for (let i = arr1Index + 1; i < arr1.length; i += 1) {
+        instancesA += arr1[i].identityHash === hashA ? 1 : 0;
+      }
+
+      let instancesB = 0;
+      for (let i = arr2Index + 1; i < arr2.length; i += 1) {
+        instancesB += arr2[i].identityHash === hashA ? 1 : 0;
+      }
+
+      if (instancesA >= instancesB) {
+        arr2.splice(arr2Index, 0, null);
+      } else if (instancesA < instancesB) {
+        arr1.splice(arr1Index, 0, null);
+      } // eslint-disable-line no-continue
+    }
+
+    arr1Index += 1;
+    arr2Index += 1;
   }
-
-  const lengthDiff = index - arr.length;
-  for (let i = 0; i < lengthDiff; i += 1) {
-    arr.push(null);
-  }
-
-  if (lengthDiff < 0) {
-    base.push(null);
-  }
-
-  arr.push(event);
-}
-
-// Does nothing. Might do something later. Most likely, this gets removed before the branch is
-// merged. If you're reading this in the future, whoops!
-//
-// The idea here is each event finds it's desired 'ordinal' in a base array. Given the following
-// array of hashes:
-// base: [ 1, 2, 3, 4, 5, 6]
-// work: [ 1, 9, 7, 8, 5, 6]
-//
-// Matching hashes want to keep the same index. This becomes their 'ordinal'.
-// ordinals: [ 0, ?, ?, ?, 5, 6]
-//
-// When placing an ambiguous ordinal, it helps to know that a subsequent ordinal has a well-known
-// index. This may indicate a change versus a removal and addition. Otherwise, if we deem an
-// ambiguous ordinal a removal, subsequent ordinals must follow suit.
-export function getEventOrdinals(base, events) {
-  events.map((b) => base.findIndex((a) => a.hash === b.hash));
 }

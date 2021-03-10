@@ -1,5 +1,9 @@
 <template v-slot:diagram>
-  <v-container @click.native="clearSelection" ref="container">
+  <v-container
+    @click.native="clearSelection"
+    :zoomControls="zoomControls"
+    ref="container"
+  >
     <v-trace
       :events="events"
       :selected-event="selectedEvent"
@@ -30,6 +34,7 @@ export default {
       type: Array,
     },
     selectedEvent: Object,
+    zoomControls: Boolean,
     highlightColor: {
       type: String,
       default: '#ff07aa',
