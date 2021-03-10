@@ -18,3 +18,4 @@ export default plugin;
 export * from '@/componentExports';
 export * from '@/lib/models';
 export * from '@/lib/diagrams';
+export * from '@/lib/fingerprint';

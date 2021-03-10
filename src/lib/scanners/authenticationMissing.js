@@ -26,12 +26,13 @@ export class Authenticator {
 }
 
 function isPublic(event) {
-  return event.codeObject.labels?.has(PUBLIC);
+  return event.codeObject && event.codeObject.labels.has(PUBLIC);
 }
 
 function providesAuthentication(event) {
   return (
-    event.codeObject.labels?.has(PROVIDER_AUTHENTICATION) &&
+    event.codeObject &&
+    event.codeObject.labels.has(PROVIDER_AUTHENTICATION) &&
     !isFalsey(event.returnValue)
   );
 }

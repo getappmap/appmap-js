@@ -26,9 +26,7 @@ function httpServerRequestsOnly(appmap) {
   });
 
   if (selectedEvents.length === 0) {
-    console.warn(
-      `No http server requests found in appmap ${appmap.data?.metadata?.name}`
-    );
+    console.warn('No http server requests found in appmap');
     return appmap;
   }
 
