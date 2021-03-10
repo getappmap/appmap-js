@@ -6,7 +6,7 @@
   >
     <v-trace
       :events="events"
-      :selected-event="selectedEvent"
+      :selected-events="selectedEvents"
       :highlight-color="highlightColor"
       ref="trace"
       @expand="focusNodeChildren"
@@ -33,11 +33,14 @@ export default {
     events: {
       type: Array,
     },
-    selectedEvent: Object,
+    selectedEvents: {
+      type: Array,
+      default: () => [],
+    },
     zoomControls: Boolean,
     highlightColor: {
       type: String,
-      default: '#ff07aa',
+      default: null,
     },
   },
 

@@ -1,4 +1,3 @@
-import { normalizeSQL } from '@/lib/fingerprint/algorithms';
 import {
   addHiddenProperty,
   hasProp,
@@ -135,6 +134,44 @@ export default class Event {
       return null;
     }
     return sql.normalized_sql || sql.sql;
+  }
+
+  get previousSibling() {
+    const { parent } = this;
+    if (!parent) {
+      return null;
+    }
+
+    const myIndex = parent.children.findIndex((e) => e === this);
+    console.assert(
+      myIndex !== -1,
+      'attempted to locate index of an orphaned event'
+    );
+
+    if (myIndex === 0) {
+      return null;
+    }
+
+    return parent.children[myIndex - 1];
+  }
+
+  get nextSibling() {
+    const { parent } = this;
+    if (!parent) {
+      return null;
+    }
+
+    const myIndex = this.parent.children.findIndex((e) => e === this);
+    console.assert(
+      myIndex !== -1,
+      'attempted to locate index of an orphaned event'
+    );
+
+    if (myIndex === parent.children.length - 1) {
+      return null;
+    }
+
+    return parent.children[myIndex + 1];
   }
 
   set codeObject(value) {

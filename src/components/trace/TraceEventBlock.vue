@@ -1,5 +1,5 @@
 <template>
-  <div class="event-block">
+  <div class="event-block" :style="styles">
     <template v-if="hasParent">
       <v-trace-path
         v-if="isFirstChild"
@@ -21,7 +21,7 @@
 
     <v-trace-node
       :event="event"
-      :highlight="event === selectedEvent"
+      :highlight="selectedEvents.includes(event)"
       :highlight-color="highlightColor"
       @expandChildren="toggleVisibility()"
       @click.native.stop="$emit('clickEvent', event)"
@@ -51,7 +51,7 @@
     <v-trace
       v-if="expanded"
       :events="event.children"
-      :selected-event="selectedEvent"
+      :selected-events="selectedEvents"
       :highlight-color="highlightColor"
       ref="children"
       @updated="onUpdate()"
@@ -81,6 +81,7 @@
 
 <script>
 import { Event } from '@/lib/models';
+import Color from '@/lib/diagrams/helpers/color';
 import VTraceNode from './TraceNode.vue';
 import VTracePath from './TracePath.vue';
 import VTraceSummary from './TraceSummary.vue';
@@ -98,7 +99,10 @@ export default {
       type: Event,
       required: true,
     },
-    selectedEvent: Event,
+    selectedEvents: {
+      type: Array,
+      default: () => [],
+    },
     highlightColor: String,
   },
   data() {
@@ -166,9 +170,12 @@ export default {
     },
     initialize() {
       if (
-        this.selectedEvent &&
-        (this.event === this.selectedEvent.parent ||
-          this.selectedEvent.ancestors().includes(this.event))
+        this.selectedEvents.length &&
+        (this.selectedEvents.map((e) => e.parent).includes(this.event) ||
+          this.selectedEvents
+            .map((e) => e.ancestors())
+            .flat()
+            .includes(this.event))
       ) {
         this.expanded = true;
       }
@@ -183,6 +190,17 @@ export default {
     },
     verticalHeight() {
       return Math.max(this.height, 0);
+    },
+    styles() {
+      let result = {};
+      if (this.highlightColor && this.selectedEvents.includes(this.event)) {
+        const color = Color.rgba(this.highlightColor, 0.4);
+        result = {
+          'background-color': color,
+          outline: `0.5rem solid ${color}`,
+        };
+      }
+      return result;
     },
   },
   updated() {
@@ -201,6 +219,7 @@ export default {
   flex-shrink: 0;
   align-items: flex-start;
   margin-bottom: 1rem;
+
   & > * {
     flex: inherit;
   }

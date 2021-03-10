@@ -1,12 +1,38 @@
 import ClassMap from './classMap';
 import CallTree from './callTree/callTree';
-import {
-  buildLabels,
-  hashEvent,
-  hashedPositionalInsert,
-  resolveDifferences,
-} from './util';
+import { buildLabels, resolveDifferences } from './util';
 
+// merge contiguous changes into a single element (as an array)
+function groupChanges(eventArray) {
+  const events = new Set(eventArray);
+  const seen = new Set();
+  const result = [];
+
+  eventArray.forEach((e) => {
+    if (seen.has(e)) {
+      return;
+    }
+
+    seen.add(e);
+
+    const group = [e];
+    let currentEvent = e;
+    for (;;) {
+      const { nextSibling } = currentEvent;
+      if (nextSibling && events.has(nextSibling)) {
+        group.push(nextSibling);
+        seen.add(nextSibling);
+        currentEvent = nextSibling;
+      } else {
+        break;
+      }
+    }
+
+    result.push(group);
+  });
+
+  return result;
+}
 export default class AppMap {
   constructor(data) {
     this.data = {
@@ -89,17 +115,20 @@ export default class AppMap {
       baseEvent = baseQueue.shift();
       workingEvent = workingQueue.shift();
 
+      // If both are null, every path has been exhausted. We're done.
       if (!baseEvent && !workingEvent) {
-        // every path is exhausted - we're done iterating
         return;
       }
 
-      const baseChildren = baseEvent ? [...baseEvent.children] : [];
-      const workingChildren = workingEvent ? [...workingEvent.children] : [];
+      // Don't bother continuing to iterate through a branch that doesn't exist in the other tree.
+      if (baseEvent && workingEvent) {
+        const baseChildren = baseEvent ? [...baseEvent.children] : [];
+        const workingChildren = workingEvent ? [...workingEvent.children] : [];
 
-      resolveDifferences(baseChildren, workingChildren);
-      baseChildren.forEach((e) => baseQueue.push(e));
-      workingChildren.forEach((e) => workingQueue.push(e));
+        resolveDifferences(baseChildren, workingChildren);
+        baseChildren.forEach((e) => baseQueue.push(e));
+        workingChildren.forEach((e) => workingQueue.push(e));
+      }
 
       yield [baseEvent, workingEvent];
     }
@@ -127,6 +156,9 @@ export default class AppMap {
 
       result = iter.next();
     }
+
+    changeSummary.added = groupChanges(changeSummary.added);
+    changeSummary.removed = groupChanges(changeSummary.removed);
 
     return changeSummary;
   }

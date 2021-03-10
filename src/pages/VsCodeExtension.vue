@@ -38,7 +38,7 @@
           <v-diagram-trace
             ref="diagramFlow"
             :events="rootEvents"
-            :selected-event="selectedEvent"
+            :selected-events="selectedEvent"
             :name="VIEW_FLOW"
             @clickEvent="onClickTraceEvent"
           />
@@ -133,7 +133,7 @@ export default {
     },
 
     selectedEvent() {
-      return this.selectedObject instanceof Event ? this.selectedObject : null;
+      return this.selectedObject instanceof Event ? [this.selectedObject] : [];
     },
 
     selectedLabel() {

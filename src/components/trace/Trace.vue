@@ -4,7 +4,7 @@
       v-for="event in events"
       :key="event.id"
       :event="event"
-      :selected-event="selectedEvent"
+      :selected-events="selectedEvents"
       :highlight-color="highlightColor"
       @updated="$emit('updated')"
       @expand="(e) => $emit('expand', e)"
@@ -33,7 +33,10 @@ export default {
       type: Boolean,
       default: false,
     },
-    selectedEvent: Event,
+    selectedEvents: {
+      type: Array,
+      default: () => [],
+    },
     highlightColor: String,
   },
   methods: {

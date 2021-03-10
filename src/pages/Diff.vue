@@ -4,14 +4,14 @@
       <v-diagram-trace
         ref="base"
         :events="getRootEvents(baseAppMap)"
-        :selectedEvent="eventBase"
+        :selectedEvents="eventsBase"
         :highlightColor="highlightColor"
         :zoomControls="false"
         @clickEvent="(e) => log(e.hash)"
       />
       <!-- <v-overlay
         @mousedown.native="hideOverlay = true"
-        v-if="eventBase === null && !hideOverlay"
+        v-if="eventsBase === null && !hideOverlay"
         :opacity="0"
       /> -->
     </div>
@@ -20,14 +20,14 @@
       <v-diagram-trace
         ref="working"
         :events="getRootEvents(workingAppMap)"
-        :selectedEvent="eventWorking"
+        :selectedEvents="eventsWorking"
         :highlightColor="highlightColor"
         :zoomControls="false"
         @clickEvent="(e) => log(e.hash)"
       />
       <!-- <v-overlay
         @mousedown.native="hideOverlay = true"
-        v-if="eventWorking === null && !hideOverlay"
+        v-if="eventsWorking === null && !hideOverlay"
         :opacity="0"
       /> -->
     </div>
@@ -62,8 +62,8 @@ export default {
     return {
       allChanges: [],
       changeType: null,
-      eventBase: null,
-      eventWorking: null,
+      eventsBase: [],
+      eventsWorking: [],
       hideOverlay: false,
     };
   },
@@ -100,15 +100,15 @@ export default {
       this.hideOverlay = false;
 
       if (kind === 'changed') {
-        const [eventBase, eventWorking] = data;
-        this.eventBase = eventBase;
-        this.eventWorking = eventWorking;
+        const [eventsBase, eventsWorking] = data;
+        this.eventsBase = eventsBase;
+        this.eventsWorking = eventsWorking;
       } else if (kind === 'removed') {
-        this.eventWorking = null;
-        this.eventBase = data;
+        this.eventsWorking = [];
+        this.eventsBase = data;
       } else if (kind === 'added') {
-        this.eventWorking = data;
-        this.eventBase = null;
+        this.eventsWorking = data;
+        this.eventsBase = [];
       }
     },
   },
