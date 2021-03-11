@@ -46,7 +46,7 @@ const HIGHLIGHT_COLORS = {
 };
 
 export default {
-  name: 'VSCodeExtension',
+  name: 'v-diff',
 
   components: {
     VDiagramTrace,
@@ -101,8 +101,8 @@ export default {
 
       if (kind === 'changed') {
         const [eventsBase, eventsWorking] = data;
-        this.eventsBase = eventsBase;
-        this.eventsWorking = eventsWorking;
+        this.eventsBase = [eventsBase];
+        this.eventsWorking = [eventsWorking];
       } else if (kind === 'removed') {
         this.eventsWorking = [];
         this.eventsBase = data;
