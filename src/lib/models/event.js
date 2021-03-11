@@ -12,7 +12,26 @@ import {
 // This class supercedes `CallTree` and `CallNode`. Events are stored in a flat
 // array and can also be traversed like a tree via `parent` and `children`.
 export default class Event {
-  constructor(data) {
+  constructor(obj) {
+    let data = obj;
+
+    if (obj instanceof Event) {
+      data = { ...obj };
+
+      if (obj.$hidden.parameters) {
+        data.parameters = obj.$hidden.parameters.map((p) => ({ ...p }));
+      }
+
+      if (obj.$hidden.message) {
+        data.message = obj.$hidden.message.map((m) => ({ ...m }));
+      }
+
+      if (obj.$hidden.labels) {
+        data.labels = [...obj.$hidden.labels];
+        console.log(data.labels);
+      }
+    }
+
     // Cyclic references shall not be enumerable
     if (data.event === 'call') {
       addHiddenProperty(this, 'parent');
@@ -290,32 +309,6 @@ export default class Event {
     return [this.parameters, this.messages, this.returnValue]
       .flat()
       .filter(Boolean);
-  }
-
-  // Unused. Ugly. Remove me?
-  compare(other) {
-    if (!sqlCompare(this, other)) {
-      return false;
-    }
-
-    if (!httpCompare(this, other)) {
-      return false;
-    }
-
-    if (!arrayCompare(this.parameters, other.parameters)) {
-      return false;
-    }
-
-    if (!setCompare(this.labels, other.labels)) {
-      return false;
-    }
-
-    return (
-      this.event === other.event &&
-      this.definedClass === other.definedClass &&
-      this.methodId === other.methodId &&
-      this.isStatic === other.isStatic
-    );
   }
 
   toString() {

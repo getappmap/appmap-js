@@ -28,7 +28,7 @@
       ref="node"
     />
 
-    <template v-if="expanded && event.children.length > 1">
+    <template v-if="isExpanded && event.children.length > 1">
       <v-trace-path
         :element-from="getOutput()"
         :width="-50"
@@ -49,17 +49,18 @@
     </template>
 
     <v-trace
-      v-if="expanded"
+      v-if="isExpanded"
       :events="event.children"
       :selected-events="selectedEvents"
       :highlight-color="highlightColor"
+      :highlight-all="highlightAll"
       ref="children"
       @updated="onUpdate()"
       @expand="(e) => $emit('expand', e)"
       @collapse="(e) => $emit('collapse', e)"
       @clickEvent="(e) => $emit('clickEvent', e)"
     />
-    <template v-else-if="!expanded && event.children.length > 0">
+    <template v-else-if="!isExpanded && event.children.length > 0">
       <v-trace-path
         shape="line-h"
         :width="16"
@@ -70,7 +71,7 @@
         key="summary"
       />
       <v-trace-summary
-        v-if="!expanded && event.children.length > 0"
+        v-if="!isExpanded && event.children.length > 0"
         :event="event"
         @click.native.stop="toggleVisibility()"
         ref="summary"
@@ -82,6 +83,7 @@
 <script>
 import { Event } from '@/lib/models';
 import Color from '@/lib/diagrams/helpers/color';
+import OnResize from '@/components/mixins/onResize';
 import VTraceNode from './TraceNode.vue';
 import VTracePath from './TracePath.vue';
 import VTraceSummary from './TraceSummary.vue';
@@ -94,6 +96,7 @@ export default {
     VTracePath,
     VTraceSummary,
   },
+  mixins: [OnResize],
   props: {
     event: {
       type: Event,
@@ -104,6 +107,9 @@ export default {
       default: () => [],
     },
     highlightColor: String,
+    highlightAll: Boolean,
+    isFirstChild: Boolean,
+    hasParent: Boolean,
   },
   data() {
     return {
@@ -112,6 +118,44 @@ export default {
     };
   },
   methods: {
+    onResize() {
+      const { children } = this.$refs;
+      if (!children) {
+        return;
+      }
+
+      const nodes = children.nodes();
+      if (!nodes) {
+        return;
+      }
+
+      if (nodes.length > 1) {
+        let topHeight;
+        let bottomHeight;
+        let topNode;
+        let bottomNode;
+
+        for (let i = 0; i < nodes.length; i += 1) {
+          const currentNode = nodes[i];
+          const { offsetTop } = currentNode.$el;
+
+          if (!topNode || topHeight > offsetTop) {
+            topNode = currentNode;
+            topHeight = offsetTop;
+          }
+
+          if (!bottomNode || bottomHeight < offsetTop) {
+            bottomNode = currentNode;
+            bottomHeight = offsetTop;
+          }
+        }
+
+        const { y: yA } = topNode.$el.getBoundingClientRect();
+        const { y: yB } = bottomNode.$el.getBoundingClientRect();
+
+        this.height = yB - yA;
+      }
+    },
     toggleVisibility() {
       this.expanded = !this.expanded;
 
@@ -146,28 +190,6 @@ export default {
         this.$nextTick(() => resolve(this.$refs[ref]))
       );
     },
-    onUpdate() {
-      const { children } = this.$refs;
-      if (!children) {
-        // we've likely been collapsed
-        // inform our ancestors
-        this.$emit('updated');
-        return;
-      }
-
-      const nodes = children.nodes();
-      if (!nodes) {
-        return;
-      }
-
-      if (nodes.length > 1) {
-        const { y: yA } = nodes[0].$el.getBoundingClientRect();
-        const { y: yB } = nodes[nodes.length - 1].$el.getBoundingClientRect();
-        this.height = yB - yA;
-      }
-
-      this.$emit('updated');
-    },
     initialize() {
       if (
         this.selectedEvents.length &&
@@ -182,18 +204,31 @@ export default {
     },
   },
   computed: {
-    hasParent() {
-      return this.event.parent;
+    isExpanded() {
+      return (
+        this.expanded ||
+        (this.selectedEvents.length &&
+          (this.selectedEvents.map((e) => e.parent).includes(this.event) ||
+            this.selectedEvents
+              .map((e) => e.ancestors())
+              .flat()
+              .includes(this.event)))
+      );
     },
-    isFirstChild() {
-      return this.$parent.$children[0] === this;
+    children() {
+      console.log('updating children');
+      return this.event.children;
     },
     verticalHeight() {
       return Math.max(this.height, 0);
     },
     styles() {
       let result = {};
-      if (this.highlightColor && this.selectedEvents.includes(this.event)) {
+      if (
+        this.highlightAll &&
+        this.highlightColor &&
+        this.selectedEvents.includes(this.event)
+      ) {
         const color = Color.rgba(this.highlightColor, 0.4);
         result = {
           'background-color': color,
@@ -203,9 +238,8 @@ export default {
       return result;
     },
   },
-  updated() {
+  async updated() {
     this.initialize();
-    this.onUpdate();
   },
   mounted() {
     this.initialize();

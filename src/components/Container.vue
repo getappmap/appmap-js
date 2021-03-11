@@ -33,6 +33,9 @@ export default {
     centerContents() {
       this.container.centerX(10);
     },
+    clearTransform() {
+      this.container.translateTo(0, 0);
+    },
   },
   mounted() {
     this.container = new Container(

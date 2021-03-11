@@ -1,11 +1,14 @@
 <template>
   <div class="trace">
     <v-trace-event-block
-      v-for="event in events"
+      v-for="(event, i) in events"
       :key="event.id"
       :event="event"
       :selected-events="selectedEvents"
       :highlight-color="highlightColor"
+      :highlight-all="highlightAll"
+      :has-parent="Boolean(event.parent)"
+      :is-first-child="i == 0"
       @updated="$emit('updated')"
       @expand="(e) => $emit('expand', e)"
       @collapse="(e) => $emit('collapse', e)"
@@ -16,7 +19,6 @@
 </template>
 
 <script>
-import { Event } from '@/lib/models';
 import VTraceEventBlock from './TraceEventBlock.vue';
 
 export default {
@@ -38,6 +40,7 @@ export default {
       default: () => [],
     },
     highlightColor: String,
+    highlightAll: Boolean,
   },
   methods: {
     nodes() {

@@ -1,6 +1,6 @@
 import ClassMap from './classMap';
 import CallTree from './callTree/callTree';
-import { buildLabels, resolveDifferences } from './util';
+import { buildLabels, resolveDifferences, getRootEvents } from './util';
 
 // merge contiguous changes into a single element (as an array)
 function groupChanges(eventArray) {
@@ -93,11 +93,7 @@ export default class AppMap {
   // Retrieve an array of root entry point events (currently, just HTTP server requests). If none
   // are found, return all the root nodes which have no caller.
   rootEvents() {
-    let events = this.events.filter((e) => e.isCall() && e.httpServerRequest);
-    if (events.length === 0) {
-      events = this.events.filter((e) => e.isCall() && !e.parent);
-    }
-    return events;
+    return getRootEvents(this.events);
   }
 
   // Iterate many AppMaps at once as an event tree. This method will follow the deepest branch

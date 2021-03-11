@@ -8,6 +8,7 @@
       :events="events"
       :selected-events="selectedEvents"
       :highlight-color="highlightColor"
+      :highlight-all="highlightAll"
       ref="trace"
       @expand="focusNodeChildren"
       @collapse="focusNode"
@@ -42,6 +43,7 @@ export default {
       type: String,
       default: null,
     },
+    highlightAll: Boolean,
   },
 
   methods: {
@@ -76,12 +78,23 @@ export default {
       }, 16);
     },
 
+    focusSelector(selector) {
+      const element = this.$el.querySelector(selector);
+      if (element) {
+        this.$refs.container.panToElement(element);
+      }
+    },
+
     onClickEvent(event) {
       this.$emit('clickEvent', event);
     },
 
     container() {
       return this.$refs.container;
+    },
+
+    clearTransform() {
+      this.$refs.container.clearTransform();
     },
   },
 
