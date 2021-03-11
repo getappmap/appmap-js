@@ -8,7 +8,7 @@
         <template v-slot:buttons>
           <v-details-button
             icon="clear"
-            v-if="selectedObject"
+            v-if="selectedObject || selectedLabel"
             @click.native="clearSelection"
           >
             Clear selection
