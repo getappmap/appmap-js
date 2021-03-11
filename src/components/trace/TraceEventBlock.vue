@@ -23,6 +23,7 @@
       :event="event"
       :highlight="selectedEvents.includes(event)"
       :highlight-color="highlightColor"
+      :highlight-style="highlightStyle"
       @expandChildren="toggleVisibility()"
       @click.native.stop="$emit('clickEvent', event)"
       ref="node"
@@ -54,6 +55,7 @@
       :selected-events="selectedEvents"
       :highlight-color="highlightColor"
       :highlight-all="highlightAll"
+      :highlight-style="highlightStyle"
       ref="children"
       @updated="onUpdate()"
       @expand="(e) => $emit('expand', e)"
@@ -108,6 +110,7 @@ export default {
     },
     highlightColor: String,
     highlightAll: Boolean,
+    highlightStyle: String,
     isFirstChild: Boolean,
     hasParent: Boolean,
   },
@@ -238,7 +241,7 @@ export default {
       return result;
     },
   },
-  async updated() {
+  updated() {
     this.initialize();
   },
   mounted() {

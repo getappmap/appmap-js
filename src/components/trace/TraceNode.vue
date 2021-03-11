@@ -51,8 +51,12 @@ export default {
       type: String,
       default: '#ff07aa',
     },
+    highlightStyle: {
+      type: String,
+      default: 'solid',
+      validator: (value) => ['solid', 'dashed', 'dotted'].indexOf(value) !== -1,
+    },
   },
-  // inject: ['$selectedEvent'],
   computed: {
     title() {
       return this.event.codeObject.prettyName;
@@ -75,8 +79,13 @@ export default {
       };
     },
     style() {
+      if (!this.highlight) {
+        return {};
+      }
+
       return {
         'outline-color': this.highlightColor,
+        'outline-style': this.highlightStyle,
       };
     },
     outboundConnectionClasses() {

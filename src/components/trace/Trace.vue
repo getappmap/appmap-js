@@ -7,6 +7,7 @@
       :selected-events="selectedEvents"
       :highlight-color="highlightColor"
       :highlight-all="highlightAll"
+      :highlight-style="highlightStyle"
       :has-parent="Boolean(event.parent)"
       :is-first-child="i == 0"
       @updated="$emit('updated')"
@@ -41,6 +42,7 @@ export default {
     },
     highlightColor: String,
     highlightAll: Boolean,
+    highlightStyle: String,
   },
   methods: {
     nodes() {

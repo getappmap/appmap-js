@@ -5,7 +5,8 @@
         ref="base"
         :events="eventsBase"
         :selectedEvents="selectedEventsBase"
-        :highlightColor="highlightColor"
+        :highlightColor="highlightConfig.color"
+        :highlightStyle="highlightConfig.style"
         :zoomControls="false"
         :highlightAll="changeType !== 'changed'"
         @clickEvent="(e) => log(e.hash)"
@@ -66,7 +67,8 @@
         ref="working"
         :events="eventsWorking"
         :selectedEvents="selectedEventsWorking"
-        :highlightColor="highlightColor"
+        :highlightColor="highlightConfig.color"
+        :highlightStyle="highlightConfig.style"
         :zoomControls="false"
         :highlightAll="changeType !== 'changed'"
         @clickEvent="(e) => log(this.filterEvent(e))"
@@ -87,10 +89,19 @@ import VDiagramTrace from '@/components/DiagramTrace.vue';
 import VPopperMenu from '@/components/PopperMenu.vue';
 import VCog from '@/assets/cog-solid.svg';
 
-const HIGHLIGHT_COLORS = {
-  added: '#a6e22e',
-  removed: '#cd1414',
-  changed: '#ead656',
+const HIGHLIGHT_CONFIG = {
+  added: {
+    color: '#a6e22e',
+    style: 'solid',
+  },
+  removed: {
+    color: '#cd1414',
+    style: 'solid',
+  },
+  changed: {
+    color: '#ead656',
+    style: 'dashed',
+  },
 };
 
 export default {
@@ -163,8 +174,8 @@ export default {
       return buildAppMap(this.working).normalize().build();
     },
 
-    highlightColor() {
-      return HIGHLIGHT_COLORS[this.changeType];
+    highlightConfig() {
+      return HIGHLIGHT_CONFIG[this.changeType] || {};
     },
 
     filteredBaseAppMap() {

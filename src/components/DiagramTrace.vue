@@ -9,6 +9,7 @@
       :selected-events="selectedEvents"
       :highlight-color="highlightColor"
       :highlight-all="highlightAll"
+      :highlight-style="highlightStyle"
       ref="trace"
       @expand="focusNodeChildren"
       @collapse="focusNode"
@@ -44,6 +45,7 @@ export default {
       default: null,
     },
     highlightAll: Boolean,
+    highlightStyle: String,
   },
 
   methods: {
