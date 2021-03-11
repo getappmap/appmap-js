@@ -241,7 +241,11 @@ export function identityHashEvent(e) {
   const { sqlQuery } = e;
   if (sqlQuery) {
     const queryOps = normalizeSQL(sqlQuery);
-    return sha256([queryOps.action, ...queryOps.tables].join('')).toString();
+    const content = ['sql', queryOps.action, ...queryOps.tables]
+      .filter(Boolean)
+      .join('');
+    console.log(sqlQuery, content);
+    return sha256(content).toString();
   }
 
   return e.toString();
