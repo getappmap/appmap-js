@@ -238,8 +238,10 @@ export function identityHashEvent(e) {
     return 'http';
   }
 
-  if (e.sql) {
-    return 'sql';
+  const { sqlQuery } = e;
+  if (sqlQuery) {
+    const queryOps = normalizeSQL(sqlQuery);
+    return sha256([queryOps.action, ...queryOps.tables].join('')).toString();
   }
 
   return e.toString();
