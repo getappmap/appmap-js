@@ -1,5 +1,5 @@
 <template>
-  <div :class="classes">
+  <div class="details-search" :key="renderKey">
     <form class="details-search__form">
       <div class="details-search__input-wrap">
         <span class="details-search__input-prefix">
@@ -64,6 +64,7 @@ export default {
 
   data() {
     return {
+      renderKey: 0,
       filter: '',
       objects: {
         http: {
@@ -135,6 +136,7 @@ export default {
     '$store.state.appMap': {
       handler(appMap) {
         this.initObjects(appMap);
+        this.renderKey += 1;
       },
     },
   },
