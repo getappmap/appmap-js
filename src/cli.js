@@ -7,154 +7,20 @@
 
 const yargs = require('yargs');
 const { hideBin } = require('yargs/helpers');
-const fsp = require('fs').promises;
-const { queue } = require('async');
-const { join: joinPath } = require('path');
-const { createHash } = require('crypto');
-const oboe = require('oboe');
+const chokidar = require('chokidar');
+const glob = require('glob');
 const { diffLines } = require('diff');
 const yaml = require('js-yaml');
-const { createReadStream } = require('fs');
+const { unlink } = require('fs');
+const { algorithms, canonicalize } = require('../dist/appmap.node');
 const {
-  algorithms,
-  canonicalize,
-  buildAppMap,
-} = require('../dist/appmap.node');
-
-let verbose = false;
-
-async function listAppMapFiles(directory, fn) {
-  if (verbose) {
-    console.log(`Scanning ${directory} for AppMaps`);
-  }
-  const files = await fsp.readdir(directory);
-  await Promise.all(
-    files
-      .filter((file) => file !== '.' && file !== '..')
-      // eslint-disable-next-line prefer-arrow-callback
-      .map(async function (file) {
-        const path = joinPath(directory, file);
-        const stat = await fsp.stat(path);
-        if (stat.isDirectory()) {
-          await listAppMapFiles(path, fn);
-        }
-
-        if (file.endsWith('.appmap.json')) {
-          await fn(path);
-        }
-
-        return null;
-      })
-  );
-}
-
-async function loadAppMap(filePath) {
-  return buildAppMap()
-    .source(JSON.parse(await fsp.readFile(filePath)))
-    .normalize()
-    .build();
-}
-
-class FingerprintQueue {
-  constructor(size = 5, printCanonicalAppMaps = true) {
-    this.size = size;
-    // eslint-disable-next-line no-use-before-define
-    this.handler = new Fingerprinter(printCanonicalAppMaps);
-    this.queue = queue(this.handler.fingerprint.bind(this.handler), this.size);
-    this.queue.pause();
-  }
-
-  async process() {
-    return new Promise((resolve, reject) => {
-      this.queue.drain(resolve);
-      this.queue.error(reject);
-      this.queue.resume();
-    });
-  }
-
-  push(job) {
-    this.queue.push(job);
-  }
-}
-
-class Fingerprinter {
-  constructor(printCanonicalAppMaps) {
-    this.printCanonicalAppMaps = printCanonicalAppMaps;
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async fingerprint(file) {
-    if (verbose) {
-      console.info(`Fingerprinting ${file}`);
-    }
-
-    const data = await fsp.readFile(file);
-    if (verbose) {
-      console.log(`Read ${data.length} bytes`);
-    }
-
-    const appmapData = JSON.parse(data.toString());
-    if (!appmapData.metadata) {
-      if (verbose) {
-        console.info(`${file} has no metadata. Skipping...`);
-      }
-      return;
-    }
-
-    const appmapDataWithoutMetadata = JSON.parse(data.toString());
-    delete appmapDataWithoutMetadata.metadata;
-    const appmapDigest = createHash('sha256')
-      .update(JSON.stringify(appmapDataWithoutMetadata, null, 2))
-      .digest('hex');
-
-    const fingerprints = [];
-    appmapData.metadata.fingerprints = fingerprints;
-    const appmap = buildAppMap(appmapData).normalize().build();
-
-    const baseName = file.substring(0, file.length - '.appmap.json'.length);
-    async function writeFile(name, contents) {
-      await fsp.writeFile(`${name}.tmp`, contents);
-      await fsp.rename(`${name}.tmp`, name);
-    }
-
-    await Promise.all(
-      Object.keys(algorithms).map(async (algorithmName) => {
-        const canonicalForm = canonicalize(algorithmName, appmap);
-        const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
-
-        if (this.printCanonicalAppMaps) {
-          await fsp.writeFile(
-            `${baseName}.canonical.${algorithmName}.json`,
-            canonicalJSON
-          );
-        }
-
-        const fingerprintDigest = createHash('sha256')
-          .update(canonicalJSON)
-          .digest('hex');
-        if (verbose) {
-          console.log(`Computed digest for ${algorithmName}`);
-        }
-        fingerprints.push({
-          appmap_digest: appmapDigest,
-          canonicalization_algorithm: algorithmName,
-          digest: fingerprintDigest,
-          fingerprint_algorithm: 'sha256',
-        });
-      })
-    );
-
-    await writeFile(file, JSON.stringify(appmapData, null, 2));
-    await writeFile(
-      `${baseName}.metadata.json`,
-      JSON.stringify(appmap.metadata, null, 2)
-    );
-    await writeFile(
-      `${baseName}.classMap.json`,
-      JSON.stringify(appmap.classMap, null, 2)
-    );
-  }
-}
+  verbose,
+  listAppMapFiles,
+  loadAppMap,
+  baseName,
+} = require('./lib/cli/utils');
+const appMapCatalog = require('./lib/cli/appMapCatalog');
+const FingerprintQueue = require('./lib/cli/fingerprintQueue');
 
 class FingerprintDirectoryCommand {
   constructor(directory) {
@@ -168,7 +34,7 @@ class FingerprintDirectoryCommand {
   }
 
   async execute() {
-    if (verbose) {
+    if (verbose()) {
       console.info(`Fingerprinting appmaps in ${this.directory}`);
     }
 
@@ -182,51 +48,58 @@ class FingerprintDirectoryCommand {
   }
 }
 
-/**
- * appMapCatalog creates a lookup table of all the AppMap metadata in a directory (recursively).
- *
- * @param {string} directory path to the directory.
- * @returns {Object<String,Metadata>} Map of AppMap names to metadata objects.
- */
-async function appMapCatalog(directory) {
-  const scenariosByName = {};
-  const appMapFiles = [];
-  await listAppMapFiles(directory, (file) => {
-    appMapFiles.push(file);
-  });
+class FingerprintWatchCommand {
+  constructor(directory) {
+    this.directory = directory;
+    this.print = false;
+    this.changedByMe = {};
+  }
 
-  await Promise.all(
-    appMapFiles.map(function (fileName) {
-      return new Promise(function (resolve, reject) {
-        const entry = {
-          fileName: null,
-          metadata: null,
-        };
+  setPrint(print) {
+    this.print = print;
+    return this;
+  }
 
-        oboe(createReadStream(fileName))
-          .on('node', 'metadata', function (node) {
-            if (verbose) {
-              console.log(`Loading AppMap ${node.name} into catalog`);
-              console.log(node.fingerprints);
-            }
-            entry.fileName = fileName;
-            entry.metadata = node;
-            if (scenariosByName[node.name]) {
-              console.warn(
-                `AppMap name ${node.name} is not unique in the mapset`
-              );
-            } else {
-              scenariosByName[node.name] = entry;
-            }
-            resolve();
-          })
-          .fail(reject);
-      });
-    })
-  );
+  execute() {
+    if (verbose()) {
+      console.info(`Watching appmaps in ${this.directory}`);
+    }
 
-  return scenariosByName;
+    this.fpQueue = new FingerprintQueue();
+    this.fpQueue.process();
+    const watcher = chokidar.watch(`${this.directory}/**/*.appmap.json`, {
+      ignoreInitial: true,
+    });
+    watcher
+      .on('add', this.added.bind(this))
+      .on('change', this.changed.bind(this))
+      .on('unlink', this.removed.bind(this));
+  }
+
+  added(file) {
+    console.log(`Watch added: ${file}`);
+    this.fpQueue.push(file);
+  }
+
+  changed(file) {
+    console.log(`Watch changed: ${file}`);
+    if (this.changedByMe[file]) {
+      console.log(`File was changed by me at ${this.changedByMe[file]}`);
+      delete this.changedByMe[file];
+      return;
+    }
+
+    this.changedByMe[file] = new Date();
+    this.fpQueue.push(file);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  removed(file) {
+    console.log(`Watch removed: ${file}`);
+    glob(`${baseName(file)}.*`, unlink);
+  }
 }
+
 class DiffCommand {
   baseDir(dir) {
     this.baseDir = dir;
@@ -382,7 +255,7 @@ yargs(hideBin(process.argv))
       });
     },
     async function (argv) {
-      verbose = argv.verbose;
+      verbose(argv.verbose);
 
       let baseDir;
       let workingDir;
@@ -468,17 +341,27 @@ yargs(hideBin(process.argv))
         describe: 'print the canonicalized forms of the AppMap',
         boolean: true,
       });
+      args.option('watch', {
+        describe: 'watch the directory for changes to appmaps',
+        boolean: true,
+      });
       args.positional('directory', {
         describe: 'directory to recursively process',
         default: 'tmp/appmap',
       });
     },
     (argv) => {
-      verbose = argv.verbose;
+      verbose(argv.verbose);
 
-      new FingerprintDirectoryCommand(argv.directory)
-        .setPrint(argv.print)
-        .execute();
+      if (argv.watch) {
+        new FingerprintWatchCommand(argv.directory)
+          .setPrint(argv.print)
+          .execute();
+      } else {
+        new FingerprintDirectoryCommand(argv.directory)
+          .setPrint(argv.print)
+          .execute();
+      }
     }
   )
   .option('verbose', {
