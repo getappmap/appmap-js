@@ -1,11 +1,12 @@
-import betaV1Error from './canonicalize/beta_v1_error';
-import betaV1Info from './canonicalize/beta_v1_info';
-import betaV1Debug from './canonicalize/beta_v1_debug';
+/* eslint-disable camelcase */
+import major_v1 from './canonicalize/major_v1';
+import minor_v1 from './canonicalize/minor_v1';
+import patch_v1 from './canonicalize/patch_v1';
 
 export const algorithms = {
-  beta_v1_error: betaV1Error,
-  beta_v1_info: betaV1Info,
-  beta_v1_debug: betaV1Debug,
+  major_v1,
+  minor_v1,
+  patch_v1,
 };
 
 function httpServerRequestsOnly(appmap) {
@@ -26,7 +27,7 @@ function httpServerRequestsOnly(appmap) {
   });
 
   if (selectedEvents.length === 0) {
-    console.warn('No http server requests found in appmap');
+    // console.warn('No http server requests found in appmap');
     return appmap;
   }
 

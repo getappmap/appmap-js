@@ -8,7 +8,7 @@
 const yargs = require('yargs');
 const { hideBin } = require('yargs/helpers');
 const fsp = require('fs').promises;
-const asyncUtils = require('async');
+const { queue } = require('async');
 const { join: joinPath } = require('path');
 const { createHash } = require('crypto');
 const oboe = require('oboe');
@@ -55,33 +55,31 @@ async function loadAppMap(filePath) {
     .build();
 }
 
-class FingerprintCommand {
-  constructor(directory) {
-    this.directory = directory;
-    this.print = false;
+class FingerprintQueue {
+  constructor(size = 5, printCanonicalAppMaps = true) {
+    this.size = size;
+    // eslint-disable-next-line no-use-before-define
+    this.handler = new Fingerprinter(printCanonicalAppMaps);
+    this.queue = queue(this.handler.fingerprint.bind(this.handler), this.size);
+    this.queue.pause();
   }
 
-  setPrint(print) {
-    this.print = print;
-    return this;
+  async process() {
+    return new Promise((resolve, reject) => {
+      this.queue.drain(resolve);
+      this.queue.error(reject);
+      this.queue.resume();
+    });
   }
 
-  async execute() {
-    if (verbose) {
-      console.info(`Fingerprinting appmaps in ${this.directory}`);
-    }
+  push(job) {
+    this.queue.push(job);
+  }
+}
 
-    // Trying to process all these files at the same time simply runs node out of memory.
-    const files = [];
-    await this.files((file) => files.push(file));
-
-    asyncUtils.mapLimit(
-      files,
-      5,
-      async function (file) {
-        await this.fingerprint(file);
-      }.bind(this)
-    );
+class Fingerprinter {
+  constructor(printCanonicalAppMaps) {
+    this.printCanonicalAppMaps = printCanonicalAppMaps;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -96,6 +94,13 @@ class FingerprintCommand {
     }
 
     const appmapData = JSON.parse(data.toString());
+    if (!appmapData.metadata) {
+      if (verbose) {
+        console.info(`${file} has no metadata. Skipping...`);
+      }
+      return;
+    }
+
     const appmapDataWithoutMetadata = JSON.parse(data.toString());
     delete appmapDataWithoutMetadata.metadata;
     const appmapDigest = createHash('sha256')
@@ -106,13 +111,22 @@ class FingerprintCommand {
     appmapData.metadata.fingerprints = fingerprints;
     const appmap = buildAppMap(appmapData).normalize().build();
 
+    const baseName = file.substring(0, file.length - '.appmap.json'.length);
+    async function writeFile(name, contents) {
+      await fsp.writeFile(`${name}.tmp`, contents);
+      await fsp.rename(`${name}.tmp`, name);
+    }
+
     await Promise.all(
       Object.keys(algorithms).map(async (algorithmName) => {
         const canonicalForm = canonicalize(algorithmName, appmap);
         const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
 
-        if (this.print) {
-          await fsp.writeFile(`${file}.${algorithmName}`, canonicalJSON);
+        if (this.printCanonicalAppMaps) {
+          await fsp.writeFile(
+            `${baseName}.canonical.${algorithmName}.json`,
+            canonicalJSON
+          );
         }
 
         const fingerprintDigest = createHash('sha256')
@@ -130,8 +144,37 @@ class FingerprintCommand {
       })
     );
 
-    await fsp.writeFile(`${file}.tmp`, JSON.stringify(appmapData, null, 2));
-    await fsp.rename(`${file}.tmp`, file);
+    await writeFile(file, JSON.stringify(appmapData, null, 2));
+    await writeFile(
+      `${baseName}.metadata.json`,
+      JSON.stringify(appmap.metadata, null, 2)
+    );
+    await writeFile(
+      `${baseName}.classMap.json`,
+      JSON.stringify(appmap.classMap, null, 2)
+    );
+  }
+}
+
+class FingerprintDirectoryCommand {
+  constructor(directory) {
+    this.directory = directory;
+    this.print = false;
+  }
+
+  setPrint(print) {
+    this.print = print;
+    return this;
+  }
+
+  async execute() {
+    if (verbose) {
+      console.info(`Fingerprinting appmaps in ${this.directory}`);
+    }
+
+    const fpQueue = new FingerprintQueue();
+    await this.files(fpQueue.push.bind(fpQueue));
+    await fpQueue.process();
   }
 
   async files(fn) {
@@ -433,7 +476,9 @@ yargs(hideBin(process.argv))
     (argv) => {
       verbose = argv.verbose;
 
-      new FingerprintCommand(argv.directory).setPrint(argv.print).execute();
+      new FingerprintDirectoryCommand(argv.directory)
+        .setPrint(argv.print)
+        .execute();
     }
   )
   .option('verbose', {

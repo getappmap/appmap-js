@@ -25,7 +25,7 @@ class Canonicalize extends Base {
         ? event.httpServerResponse.mime_type
         : null,
       parameters: event.httpServerRequest
-        ? event.httpServerResponse.message
+        ? event.httpServerRequest.message
         : null,
       route: event.route,
       status: event.httpServerResponse ? event.httpServerResponse.status : null,
