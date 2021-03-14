@@ -11,7 +11,8 @@ const chokidar = require('chokidar');
 const glob = require('glob');
 const { diffLines } = require('diff');
 const yaml = require('js-yaml');
-const { unlink } = require('fs');
+const { unlink, promises: fsp, readFileSync } = require('fs');
+const { queue } = require('async');
 const { algorithms, canonicalize } = require('../dist/appmap.node');
 const {
   verbose,
@@ -21,6 +22,7 @@ const {
 } = require('./lib/cli/utils');
 const appMapCatalog = require('./lib/cli/appMapCatalog');
 const FingerprintQueue = require('./lib/cli/fingerprintQueue');
+const depends = require('./lib/cli/depends');
 
 class FingerprintDirectoryCommand {
   constructor(directory) {
@@ -52,7 +54,6 @@ class FingerprintWatchCommand {
   constructor(directory) {
     this.directory = directory;
     this.print = false;
-    this.changedByMe = {};
   }
 
   setPrint(print) {
@@ -78,25 +79,23 @@ class FingerprintWatchCommand {
 
   added(file) {
     console.log(`Watch added: ${file}`);
-    this.fpQueue.push(file);
+    this.enqueue(file);
   }
 
   changed(file) {
     console.log(`Watch changed: ${file}`);
-    if (this.changedByMe[file]) {
-      console.log(`File was changed by me at ${this.changedByMe[file]}`);
-      delete this.changedByMe[file];
-      return;
-    }
-
-    this.changedByMe[file] = new Date();
-    this.fpQueue.push(file);
+    this.enqueue(file);
   }
 
   // eslint-disable-next-line class-methods-use-this
   removed(file) {
     console.log(`Watch removed: ${file}`);
     glob(`${baseName(file)}.*`, unlink);
+  }
+
+  enqueue(file) {
+    // Introduce a delay so that the classMap and metadata can be written.
+    setTimeout(() => this.fpQueue.push(file), 250);
   }
 }
 
@@ -334,7 +333,64 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
-    'fingerprint [directory]',
+    'depends [files...]',
+    'Compute the list of AppMap source functions that depend on a list of changed files',
+    (args) => {
+      args.positional('files', {
+        describe: 'list of files that have changed',
+      });
+      args.option('directory', {
+        describe: 'directory to recursively inspect for AppMaps',
+        default: 'tmp/appmap',
+      });
+      args.option('field', {
+        describe: 'print a field from each matching AppMap',
+      });
+      args.option('stdin-files', {
+        describe:
+          'read the list of changed files from stdin, one file per line',
+        boolean: true,
+      });
+    },
+    async (argv) => {
+      verbose(argv.verbose);
+
+      let { files } = argv;
+      if (argv.stdinFiles) {
+        const stdinFileStr = readFileSync(0).toString();
+        const stdinFiles = stdinFileStr.split('\n');
+        files = files.concat(stdinFiles);
+      }
+      if (verbose()) {
+        console.log(`Computing depends on ${files.join(', ')}`);
+        console.log(`Using AppMaps in ${argv.directory}`);
+      }
+
+      const appMapNames = await depends(argv.directory, files);
+      const values = [];
+      if (argv.field) {
+        // eslint-disable-next-line no-inner-declarations
+        async function printField(appMapBaseName) {
+          const data = await fsp.readFile(`${appMapBaseName}.metadata.json`);
+          const metadata = JSON.parse(data);
+          const value = metadata[argv.field];
+          if (value) {
+            values.push(value);
+          } else {
+            console.warn(`No ${field} in ${appMapBaseName}`);
+          }
+        }
+        const q = queue(printField, 5);
+        appMapNames.forEach((name) => q.push(name));
+        await q.drain();
+      } else {
+        appMapNames.forEach((name) => values.push(name));
+      }
+      console.log([...new Set(values)].sort().join('\n'));
+    }
+  )
+  .command(
+    'fingerprint',
     'Compute and apply fingerprints for all appmaps in a directory',
     (args) => {
       args.option('print', {
@@ -345,8 +401,8 @@ yargs(hideBin(process.argv))
         describe: 'watch the directory for changes to appmaps',
         boolean: true,
       });
-      args.positional('directory', {
-        describe: 'directory to recursively process',
+      args.option('directory', {
+        describe: 'directory to recursively inspect for AppMaps',
         default: 'tmp/appmap',
       });
     },

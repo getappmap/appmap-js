@@ -18,6 +18,18 @@ class Fingerprinter {
       console.info(`Fingerprinting ${file}`);
     }
 
+    const classMapFileName = `${baseName(file)}.classMap.json`;
+    const metadataFileName = `${baseName(file)}.metadata.json`;
+
+    const fileStat = await fsp.stat(file, { bigint: true });
+    const classMapStat = await fsp.stat(classMapFileName, { bigint: true });
+    if (fileStat.mtimeNs <= classMapStat.mtimeNs) {
+      if (verbose()) {
+        console.log('Fingerprints appear up to date. Skipping...');
+        return;
+      }
+    }
+
     const data = await fsp.readFile(file);
     if (verbose()) {
       console.log(`Read ${data.length} bytes`);
@@ -42,8 +54,32 @@ class Fingerprinter {
     const appmap = buildAppMap(appmapData).normalize().build();
 
     async function writeFile(name, contents) {
+      async function renameFile() {
+        try {
+          await fsp.rename(`${name}.tmp`, name);
+          return true;
+        } catch (err) {
+          if (err.code !== 'ENOENT') {
+            throw err;
+          }
+          return false;
+        }
+      }
+
+      function delay(t) {
+        return new Promise((resolve) => {
+          setTimeout(resolve, t);
+        });
+      }
+
       await fsp.writeFile(`${name}.tmp`, contents);
-      await fsp.rename(`${name}.tmp`, name);
+      [renameFile, renameFile, renameFile].find(async (fn) => {
+        const result = await fn();
+        if (!result) {
+          await delay(1);
+        }
+        return result;
+      });
     }
 
     await Promise.all(
@@ -74,14 +110,8 @@ class Fingerprinter {
     );
 
     await writeFile(file, JSON.stringify(appmapData, null, 2));
-    await writeFile(
-      `${baseName(file)}.metadata.json`,
-      JSON.stringify(appmap.metadata, null, 2)
-    );
-    await writeFile(
-      `${baseName(file)}.classMap.json`,
-      JSON.stringify(appmap.classMap, null, 2)
-    );
+    await writeFile(metadataFileName, JSON.stringify(appmap.metadata, null, 2));
+    await writeFile(classMapFileName, JSON.stringify(appmap.classMap, null, 2));
   }
 }
 
