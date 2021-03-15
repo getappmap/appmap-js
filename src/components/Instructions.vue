@@ -13,23 +13,22 @@
       <div class="instructions__content">
         <div class="welcome">
           <p>
-            The UML-inspired diagrams display your key application components,
-            and how they are inter-related during application execution.
+            UML-inspired diagrams display your key application components, and
+            how they are inter-related during application execution.
           </p>
           <p>
-            Select a component in the diagram to see its details here. Here,
-            we’ll show you any relevant information about your code as you
-            navigate through your appmaps.
+            Select a node to see its details in the sidebar. Here, we’ll show
+            you any relevant information about your code as you navigate through
+            your appmaps.
           </p>
           <ul>
             <li>
               Right-click nodes to expand, collapse & reset the diagram elements
             </li>
-            <li>
-              Our powerful filters bring focus to a narrow area of your interest
-            </li>
+            <li>Use filters to bring focus to a narrow area of interest</li>
           </ul>
           <div class="legend">
+            <h4>Dependency map legend</h4>
             <ul>
               <li>
                 <div class="icon class-pkg"></div>
