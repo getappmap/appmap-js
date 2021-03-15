@@ -18,16 +18,29 @@ class Fingerprinter {
       console.info(`Fingerprinting ${file}`);
     }
 
-    const classMapFileName = `${baseName(file)}.classMap.json`;
     const metadataFileName = `${baseName(file)}.metadata.json`;
+    const classMapFileName = `${baseName(file)}.classMap.json`;
+    const mtimeFileName = `${baseName(file)}.mtime`;
 
-    const fileStat = await fsp.stat(file, { bigint: true });
-    const classMapStat = await fsp.stat(classMapFileName, { bigint: true });
-    if (fileStat.mtimeNs <= classMapStat.mtimeNs) {
+    let fileStat = await fsp.stat(file);
+    const createdAt = fileStat.ctime.getTime();
+    let recordedCreatedAt = 0;
+    try {
+      const recordedCreatedAtStr = JSON.parse(
+        await fsp.readFile(mtimeFileName)
+      );
+      recordedCreatedAt = parseInt(recordedCreatedAtStr, 10);
+    } catch (err) {
+      if (err.code !== 'ENOENT') {
+        throw err;
+      }
+    }
+
+    if (recordedCreatedAt === createdAt) {
       if (verbose()) {
         console.log('Fingerprints appear up to date. Skipping...');
-        return;
       }
+      return;
     }
 
     const data = await fsp.readFile(file);
@@ -73,6 +86,8 @@ class Fingerprinter {
       }
 
       await fsp.writeFile(`${name}.tmp`, contents);
+      await fsp.rename(`${name}.tmp`, name);
+      /*
       [renameFile, renameFile, renameFile].find(async (fn) => {
         const result = await fn();
         if (!result) {
@@ -80,6 +95,7 @@ class Fingerprinter {
         }
         return result;
       });
+      */
     }
 
     await Promise.all(
@@ -110,6 +126,8 @@ class Fingerprinter {
     );
 
     await writeFile(file, JSON.stringify(appmapData, null, 2));
+    fileStat = await fsp.stat(file);
+    await writeFile(mtimeFileName, `${fileStat.ctime.getTime()}`);
     await writeFile(metadataFileName, JSON.stringify(appmap.metadata, null, 2));
     await writeFile(classMapFileName, JSON.stringify(appmap.classMap, null, 2));
   }

@@ -94,8 +94,9 @@ class FingerprintWatchCommand {
   }
 
   enqueue(file) {
+    this.fpQueue.push(file);
     // Introduce a delay so that the classMap and metadata can be written.
-    setTimeout(() => this.fpQueue.push(file), 250);
+    setTimeout(() => this.fpQueue.push(file), 50);
   }
 }
 

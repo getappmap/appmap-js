@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
-import major_v1 from './canonicalize/major_v1';
-import minor_v1 from './canonicalize/minor_v1';
-import patch_v1 from './canonicalize/patch_v1';
+import update_v1 from './canonicalize/update_v1';
+import info_v1 from './canonicalize/info_v1';
+import trace_v1 from './canonicalize/trace_v1';
 
 export const algorithms = {
-  major_v1,
-  minor_v1,
-  patch_v1,
+  update_v1,
+  info_v1,
+  trace_v1,
 };
 
 function httpServerRequestsOnly(appmap) {
