@@ -19,7 +19,7 @@
     </v-details-panel-header>
 
     <div class="sql-code" v-if="hasSql">
-      <pre>{{ formattedSQL }}</pre>
+      <pre v-html="formattedSQL">{{ formattedSQL }}</pre>
     </div>
 
     <div class="event-params" v-if="hasParameters">
@@ -70,6 +70,7 @@
 
 <script>
 import sqlFormatter from 'sql-formatter';
+import sqlHighlight from 'sql-highlight';
 import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
@@ -135,7 +136,9 @@ export default {
     },
 
     formattedSQL() {
-      return sqlFormatter.format(this.object.sql.sql);
+      return sqlHighlight.highlight(sqlFormatter.format(this.object.sql.sql), {
+        html: true,
+      });
     },
   },
 
@@ -199,5 +202,26 @@ export default {
       }
     }
   }
+}
+</style>
+<style scoped>
+.sql-code {
+  color: #e90;
+}
+.sql-code >>> .sql-hl-keyword {
+  color: #07a;
+}
+.sql-code >>> .sql-hl-function {
+  color: #dd4a68;
+}
+.sql-code >>> .sql-hl-number {
+  color: #905;
+}
+.sql-code >>> .sql-hl-string {
+  color: #690;
+}
+.sql-code >>> .sql-hl-special,
+.sql-code >>> .sql-hl-bracket {
+  color: #999;
 }
 </style>
