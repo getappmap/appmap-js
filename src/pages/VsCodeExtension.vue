@@ -1,6 +1,7 @@
 <template>
   <div id="app" :key="renderKey">
-    <div class="main-column main-column--left">
+    <div class="no-data-notice" v-if="isEmptyAppMap">No data to display.</div>
+    <div class="main-column main-column--left" v-if="!isEmptyAppMap">
       <v-details-panel
         :selected-object="selectedObject"
         :selected-label="selectedLabel"
@@ -24,7 +25,7 @@
       </v-details-panel>
     </div>
 
-    <div class="main-column main-column--right">
+    <div class="main-column main-column--right" v-if="!isEmptyAppMap">
       <v-tabs @activateTab="onChangeTab" ref="tabs">
         <v-tab
           name="Dependency Map"
@@ -91,6 +92,7 @@ export default {
 
   data() {
     return {
+      isEmptyAppMap: false,
       renderKey: 0,
       VIEW_COMPONENT,
       VIEW_FLOW,
@@ -160,7 +162,15 @@ export default {
 
   methods: {
     loadData(data) {
-      this.$store.commit(SET_APPMAP_DATA, data);
+      const hasEvents = Array.isArray(data.events) && data.events.length;
+      const hasClassMap = Array.isArray(data.classMap) && data.classMap.length;
+
+      if (hasEvents && hasClassMap) {
+        this.isEmptyAppMap = false;
+        this.$store.commit(SET_APPMAP_DATA, data);
+      } else {
+        this.isEmptyAppMap = true;
+      }
     },
 
     showInstructions() {
@@ -223,6 +233,17 @@ code {
   grid-template-rows: max(1fr, 100%);
   height: 100vh;
   color: $base11;
+  background-color: $vs-code-gray1;
+
+  .no-data-notice {
+    grid-column: span 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: $appland-text-font-family;
+    font-size: 1.5rem;
+    color: $base03;
+  }
 
   .main-column {
     overflow-y: auto;
@@ -241,7 +262,6 @@ code {
       min-width: 250px;
       word-break: break-all;
       overflow: hidden;
-      background-color: $vs-code-gray1;
 
       .diagram-reload {
         position: absolute;
