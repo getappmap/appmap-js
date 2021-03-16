@@ -8,21 +8,19 @@
 const yargs = require('yargs');
 const { hideBin } = require('yargs/helpers');
 const chokidar = require('chokidar');
-const glob = require('glob');
 const { diffLines } = require('diff');
 const yaml = require('js-yaml');
-const { unlink, promises: fsp, readFileSync } = require('fs');
+const { promises: fsp, readFileSync } = require('fs');
 const { queue } = require('async');
+const process = require('process');
+const readline = require('readline');
+const { join } = require('path');
 const { algorithms, canonicalize } = require('../dist/appmap.node');
-const {
-  verbose,
-  listAppMapFiles,
-  loadAppMap,
-  baseName,
-} = require('./lib/cli/utils');
+const { verbose, listAppMapFiles, loadAppMap } = require('./lib/cli/utils');
 const appMapCatalog = require('./lib/cli/appMapCatalog');
 const FingerprintQueue = require('./lib/cli/fingerprintQueue');
 const depends = require('./lib/cli/depends');
+const { tickStep } = require('d3-array');
 
 class FingerprintDirectoryCommand {
   constructor(directory) {
@@ -54,6 +52,7 @@ class FingerprintWatchCommand {
   constructor(directory) {
     this.directory = directory;
     this.print = false;
+    this.numProcessed = 0;
   }
 
   setPrint(print) {
@@ -67,6 +66,9 @@ class FingerprintWatchCommand {
     }
 
     this.fpQueue = new FingerprintQueue();
+    this.fpQueue.setCounterFn(() => {
+      this.numProcessed += 1;
+    });
     this.fpQueue.process();
     const watcher = chokidar.watch(`${this.directory}/**/*.appmap.json`, {
       ignoreInitial: true,
@@ -78,25 +80,30 @@ class FingerprintWatchCommand {
   }
 
   added(file) {
-    console.log(`Watch added: ${file}`);
+    if (verbose()) {
+      console.log(`AppMap added: ${file}`);
+    }
     this.enqueue(file);
   }
 
   changed(file) {
-    console.log(`Watch changed: ${file}`);
+    if (verbose()) {
+      console.log(`AppMap changed: ${file}`);
+    }
     this.enqueue(file);
   }
 
   // eslint-disable-next-line class-methods-use-this
   removed(file) {
-    console.log(`Watch removed: ${file}`);
-    glob(`${baseName(file)}.*`, unlink);
+    console.warn(`TODO: AppMap removed: ${file}`);
   }
 
   enqueue(file) {
+    // This shouldn't be necessary, but it's passing through the wrong file names.
+    if (!file.includes('.appmap.json')) {
+      return;
+    }
     this.fpQueue.push(file);
-    // Introduce a delay so that the classMap and metadata can be written.
-    setTimeout(() => this.fpQueue.push(file), 50);
   }
 }
 
@@ -370,11 +377,14 @@ yargs(hideBin(process.argv))
       const appMapNames = await depends(argv.directory, files);
       const values = [];
       if (argv.field) {
+        const { field } = argv;
         // eslint-disable-next-line no-inner-declarations
         async function printField(appMapBaseName) {
-          const data = await fsp.readFile(`${appMapBaseName}.metadata.json`);
+          const data = await fsp.readFile(
+            join(appMapBaseName, 'metadata.json')
+          );
           const metadata = JSON.parse(data);
-          const value = metadata[argv.field];
+          const value = metadata[field];
           if (value) {
             values.push(value);
           } else {
@@ -411,9 +421,27 @@ yargs(hideBin(process.argv))
       verbose(argv.verbose);
 
       if (argv.watch) {
-        new FingerprintWatchCommand(argv.directory)
-          .setPrint(argv.print)
-          .execute();
+        const cmd = new FingerprintWatchCommand(argv.directory);
+        cmd.setPrint(argv.print).execute();
+
+        // eslint-disable-next-line no-inner-declarations
+        function printStatus() {
+          process.stdout.write('\x1B[?25l');
+          const consoleLabel = 'AppMaps processed: 0';
+          process.stdout.write(consoleLabel);
+          setInterval(() => {
+            readline.cursorTo(process.stdout, consoleLabel.length - 1);
+            process.stdout.write(`${cmd.numProcessed}`);
+          }, 200);
+
+          process.on('beforeExit', (/* _code */) => {
+            process.stdout.write(`\x1B[?25h`);
+          });
+        }
+
+        if (!argv.verbose) {
+          printStatus();
+        }
       } else {
         new FingerprintDirectoryCommand(argv.directory)
           .setPrint(argv.print)
