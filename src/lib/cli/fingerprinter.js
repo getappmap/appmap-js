@@ -1,6 +1,7 @@
 const { createHash } = require('crypto');
+const { join: joinPath, basename } = require('path');
 const fsp = require('fs').promises;
-const { verbose, baseName } = require('./utils');
+const { verbose, baseName, buildDirectory, renameFile } = require('./utils');
 const {
   algorithms,
   canonicalize,
@@ -10,6 +11,11 @@ const {
 class Fingerprinter {
   constructor(printCanonicalAppMaps) {
     this.printCanonicalAppMaps = printCanonicalAppMaps;
+    this.counterFn = () => {};
+  }
+
+  setCounterFn(counterFn) {
+    this.counterFn = counterFn;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -18,9 +24,8 @@ class Fingerprinter {
       console.info(`Fingerprinting ${file}`);
     }
 
-    const metadataFileName = `${baseName(file)}.metadata.json`;
-    const classMapFileName = `${baseName(file)}.classMap.json`;
-    const mtimeFileName = `${baseName(file)}.mtime`;
+    const indexDir = baseName(file);
+    const mtimeFileName = joinPath(indexDir, 'mtime');
 
     let fileStat = await fsp.stat(file);
     const createdAt = fileStat.ctime.getTime();
@@ -48,7 +53,17 @@ class Fingerprinter {
       console.log(`Read ${data.length} bytes`);
     }
 
-    const appmapData = JSON.parse(data.toString());
+    let appmapData;
+    try {
+      appmapData = JSON.parse(data.toString());
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        // File may be in the process of writing.
+        console.warn(`Error parsing JSON file ${file} : ${err.message}`);
+        return;
+      }
+      throw err;
+    }
     if (!appmapData.metadata) {
       if (verbose()) {
         console.info(`${file} has no metadata. Skipping...`);
@@ -66,70 +81,54 @@ class Fingerprinter {
     appmapData.metadata.fingerprints = fingerprints;
     const appmap = buildAppMap(appmapData).normalize().build();
 
-    async function writeFile(name, contents) {
-      async function renameFile() {
-        try {
-          await fsp.rename(`${name}.tmp`, name);
-          return true;
-        } catch (err) {
-          if (err.code !== 'ENOENT') {
-            throw err;
+    await buildDirectory(indexDir, async (tempDir) => {
+      await Promise.all(
+        Object.keys(algorithms).map(async (algorithmName) => {
+          const canonicalForm = canonicalize(algorithmName, appmap);
+          const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
+
+          if (this.printCanonicalAppMaps) {
+            await fsp.writeFile(
+              joinPath(tempDir, `canonical.${algorithmName}.json`),
+              canonicalJSON
+            );
           }
-          return false;
-        }
-      }
 
-      function delay(t) {
-        return new Promise((resolve) => {
-          setTimeout(resolve, t);
-        });
-      }
+          const fingerprintDigest = createHash('sha256')
+            .update(canonicalJSON)
+            .digest('hex');
+          if (verbose()) {
+            console.log(`Computed digest for ${algorithmName}`);
+          }
+          fingerprints.push({
+            appmap_digest: appmapDigest,
+            canonicalization_algorithm: algorithmName,
+            digest: fingerprintDigest,
+            fingerprint_algorithm: 'sha256',
+          });
+        })
+      );
 
-      await fsp.writeFile(`${name}.tmp`, contents);
-      await fsp.rename(`${name}.tmp`, name);
-      /*
-      [renameFile, renameFile, renameFile].find(async (fn) => {
-        const result = await fn();
-        if (!result) {
-          await delay(1);
-        }
-        return result;
-      });
-      */
-    }
-
-    await Promise.all(
-      Object.keys(algorithms).map(async (algorithmName) => {
-        const canonicalForm = canonicalize(algorithmName, appmap);
-        const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
-
-        if (this.printCanonicalAppMaps) {
-          await fsp.writeFile(
-            `${baseName(file)}.canonical.${algorithmName}.json`,
-            canonicalJSON
-          );
-        }
-
-        const fingerprintDigest = createHash('sha256')
-          .update(canonicalJSON)
-          .digest('hex');
-        if (verbose()) {
-          console.log(`Computed digest for ${algorithmName}`);
-        }
-        fingerprints.push({
-          appmap_digest: appmapDigest,
-          canonicalization_algorithm: algorithmName,
-          digest: fingerprintDigest,
-          fingerprint_algorithm: 'sha256',
-        });
-      })
-    );
-
-    await writeFile(file, JSON.stringify(appmapData, null, 2));
-    fileStat = await fsp.stat(file);
-    await writeFile(mtimeFileName, `${fileStat.ctime.getTime()}`);
-    await writeFile(metadataFileName, JSON.stringify(appmap.metadata, null, 2));
-    await writeFile(classMapFileName, JSON.stringify(appmap.classMap, null, 2));
+      await fsp.writeFile(
+        joinPath(tempDir, 'appmap.json'),
+        JSON.stringify(appmapData, null, 2)
+      );
+      await renameFile(joinPath(tempDir, 'appmap.json'), file);
+      fileStat = await fsp.stat(file);
+      await fsp.writeFile(
+        joinPath(tempDir, 'mtime'),
+        `${fileStat.ctime.getTime()}`
+      );
+      await fsp.writeFile(
+        joinPath(tempDir, 'metadata.json'),
+        JSON.stringify(appmap.metadata, null, 2)
+      );
+      await fsp.writeFile(
+        joinPath(tempDir, 'classMap.json'),
+        JSON.stringify(appmap.classMap, null, 2)
+      );
+    });
+    this.counterFn();
   }
 }
 

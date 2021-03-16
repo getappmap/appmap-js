@@ -1,5 +1,8 @@
 /* eslint-disable func-names */
 const fsp = require('fs').promises;
+const fsExtra = require('fs-extra');
+const os = require('os');
+const path = require('path');
 const { join: joinPath } = require('path');
 const { buildAppMap } = require('../../../dist/appmap.node');
 
@@ -47,9 +50,37 @@ async function loadAppMap(filePath) {
     .build();
 }
 
+const renameFile = async (oldName, newName) => {
+  await fsExtra.move(oldName, newName, { clobber: true });
+};
+
+/**
+ * Builds a directory using a tempdir, which is renamed at the end to
+ * a specified directory name.
+ *
+ * @param {string} dirName
+ * @param {function} fn
+ */
+const buildDirectory = async (dirName, fn) => {
+  const tempDir = await fsp.mkdtemp(
+    (await fsp.realpath(os.tmpdir())) + path.sep
+  );
+  try {
+    await fn(tempDir);
+    await renameFile(tempDir, dirName);
+  } catch (err) {
+    fsExtra.remove(tempDir).catch((e) => {
+      console.warn(`Unable to remove (cleanup) tempdir: ${e.message}`);
+    });
+    throw err;
+  }
+};
+
 module.exports = {
   baseName,
   listAppMapFiles,
   loadAppMap,
   verbose,
+  buildDirectory,
+  renameFile,
 };

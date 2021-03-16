@@ -10,6 +10,10 @@ class FingerprintQueue {
     this.queue.pause();
   }
 
+  setCounterFn(counterFn) {
+    this.handler.setCounterFn(counterFn);
+  }
+
   async process() {
     return new Promise((resolve, reject) => {
       this.queue.drain(resolve);

@@ -1,7 +1,7 @@
 const { queue } = require('async');
 const glob = require('glob');
 const fsp = require('fs').promises;
-const { resolve: resolvePath, basename } = require('path');
+const { resolve: resolvePath, dirname, basename } = require('path');
 const { verbose } = require('./utils');
 
 /**
@@ -22,16 +22,13 @@ async function depends(directory, files) {
   const baseNames = new Set();
 
   async function collectDepends(classMapFile) {
-    if (basename(classMapFile) === 'Inventory.classMap.json') {
+    const dirName = dirname(classMapFile);
+    if (verbose()) {
+      console.log(`Checking ${dirName}`);
+    }
+    if (basename(dirName) === 'Inventory') {
       return;
     }
-    if (verbose()) {
-      console.log(`Checking ${classMapFile}`);
-    }
-    const baseName = classMapFile.slice(
-      0,
-      classMapFile.length - '.classMap.json'.length
-    );
     const classMap = JSON.parse(await fsp.readFile(classMapFile));
 
     // Gets the file path of a location. Location may include a line number or other info
@@ -42,7 +39,7 @@ async function depends(directory, files) {
     // Recurse through the classMap and emit the metadata.source_location if a path match is found.
     const mapNode = (item) => {
       // Short circuit the rest of the search when a match is found.
-      if (baseNames.has(baseName)) {
+      if (baseNames.has(dirName)) {
         return;
       }
 
@@ -55,7 +52,7 @@ async function depends(directory, files) {
               `${item.location} matches an input file. Emitting AppMap ${baseName}`
             );
           }
-          baseNames.add(baseName);
+          baseNames.add(dirName);
           return;
         }
       }
@@ -70,8 +67,9 @@ async function depends(directory, files) {
   q.pause();
   await new Promise((resolve, reject) => {
     // eslint-disable-next-line consistent-return
-    glob(`${directory}/**/*.classMap.json`, (err, classMapFiles) => {
+    glob(`${directory}/**/classMap.json`, (err, classMapFiles) => {
       if (err) {
+        console.warn(err);
         return reject(err);
       }
       classMapFiles.forEach((file) => q.push(file));
