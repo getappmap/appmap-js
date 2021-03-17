@@ -139,7 +139,7 @@ export default {
     margin: 0 0.75rem 1rem 0;
     width: max-content;
     height: max-content;
-    //max-width: 30vw;
+    max-width: 50vw;
     max-height: 50vh;
     padding: 1.5rem;
     color: $gray6;
