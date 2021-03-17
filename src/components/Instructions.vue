@@ -255,18 +255,19 @@ export default {
     .icon {
       height: unset;
       width: unset;
-      &.type-int {
-        &:before {
-          content: '●';
-          color: $col-int;
-        }
-      }
       &.type-string:before,
       &.type-bool:before,
       &.type-float:before,
       &.type-object:before,
       &.type-int:before {
-        font-size: 1rem;
+        font-size: 1.25rem;
+        margin-right: 0.3rem;
+      }
+      &.type-int {
+        &:before {
+          content: '●';
+          color: $col-int;
+        }
       }
       &.type-string {
         &:before {
