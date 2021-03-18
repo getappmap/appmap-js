@@ -18,9 +18,7 @@
       </template>
     </v-details-panel-header>
 
-    <div class="sql-code" v-if="hasSql">
-      <pre>{{ formattedSQL }}</pre>
-    </div>
+    <v-sql-code v-if="hasSql" :sql="object.sql.sql" />
 
     <div class="event-params" v-if="hasParameters">
       <h5>Parameters</h5>
@@ -69,10 +67,10 @@
 </template>
 
 <script>
-import sqlFormatter from 'sql-formatter';
 import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
+import VSqlCode from '@/components/SqlCode.vue';
 import { SET_VIEW, VIEW_FLOW } from '@/store/vsCode';
 import { getSqlLabel } from '@/lib/util';
 
@@ -82,6 +80,7 @@ export default {
     VDetailsButton,
     VDetailsPanelList,
     VDetailsPanelHeader,
+    VSqlCode,
   },
   props: {
     object: {
@@ -133,10 +132,6 @@ export default {
       }
       return loc;
     },
-
-    formattedSQL() {
-      return sqlFormatter.format(this.object.sql.sql);
-    },
   },
 
   methods: {
@@ -154,10 +149,6 @@ export default {
 <style scoped lang="scss">
 .details-panel-event {
   h3 {
-    padding: 0 2rem;
-  }
-  .sql-code {
-    margin-bottom: 1.5rem;
     padding: 0 2rem;
   }
   .event-params {
@@ -199,5 +190,11 @@ export default {
       }
     }
   }
+}
+</style>
+<style scoped>
+.details-panel-event >>> .sql-code {
+  margin-bottom: 1.5rem;
+  padding: 0 2rem;
 }
 </style>

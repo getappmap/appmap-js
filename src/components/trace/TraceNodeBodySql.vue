@@ -1,23 +1,23 @@
 <template>
-  <div class="trace-node__body--sql">{{ sql }}</div>
+  <div class="trace-node__body--sql">
+    <v-sql-code :sql="event.sqlQuery" />
+  </div>
 </template>
 
 <script>
+import VSqlCode from '@/components/SqlCode.vue';
 import { Event } from '@/lib/models';
-import sqlFormatter from 'sql-formatter';
 
 export default {
   name: 'v-trace-node-body-sql',
+  components: {
+    VSqlCode,
+  },
   props: {
     event: {
       type: Object,
       required: true,
       validator: (value) => value instanceof Event,
-    },
-  },
-  computed: {
-    sql() {
-      return sqlFormatter.format(this.event.sqlQuery);
     },
   },
 };

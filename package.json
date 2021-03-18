@@ -33,6 +33,7 @@
     "dagre": "^0.8.5",
     "deepmerge": "^4.2.2",
     "sql-formatter": "^2.3.3",
+    "sql-highlight": "^3.3.3",
     "vue": "^2.6.11",
     "vuex": "^3.6.0"
   },
