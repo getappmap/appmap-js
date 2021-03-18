@@ -114,6 +114,8 @@ import {
   SET_VIEW,
   VIEW_COMPONENT,
   VIEW_FLOW,
+  SELECT_OBJECT,
+  SELECT_LABEL,
   POP_OBJECT_STACK,
   CLEAR_OBJECT_STACK,
   SELECT_OBJECT,
@@ -157,6 +159,15 @@ export default {
         if (selectedObject && !(selectedObject instanceof Event)) {
           this.setView(VIEW_COMPONENT);
         }
+        this.emitSelectedObject(
+          selectedObject instanceof Event ? 'event' : 'obj',
+          selectedObject
+        );
+      },
+    },
+    '$store.getters.selectedLabel': {
+      handler(selectedLabel) {
+        this.emitSelectedObject('label', selectedLabel);
       },
     },
   },
@@ -242,6 +253,57 @@ export default {
       if (this.currentView !== view) {
         this.$store.commit(SET_VIEW, view);
       }
+    },
+
+    emitSelectedObject(type, object) {
+      let objectName = 'null';
+
+      if (object) {
+        objectName = type === 'label' ? object : object.id;
+      }
+
+      this.$root.$emit('selectedObject', `${type}:${objectName}`);
+    },
+
+    setSelectedObject(objectDefinition) {
+      const [type, object] = [...objectDefinition.split(':')];
+
+      /* eslint-disable no-case-declarations */
+      switch (type) {
+        case 'obj':
+          const codeObject = this.$store.state.appMap.classMap.codeObjectFromId(
+            object
+          );
+
+          if (codeObject) {
+            this.$store.commit(SELECT_OBJECT, codeObject);
+          }
+
+          break;
+        case 'event':
+          const eventId = +object;
+          let eventObject = null;
+
+          this.$store.state.appMap.events.some((event) => {
+            if (event.id === eventId) {
+              eventObject = event;
+              return true;
+            }
+            return false;
+          });
+
+          if (eventObject) {
+            this.$store.commit(SELECT_OBJECT, eventObject);
+          }
+
+          break;
+        case 'label':
+          this.$store.commit(SELECT_LABEL, object);
+          break;
+        default:
+          break;
+      }
+      /* eslint-enable no-case-declarations */
     },
 
     clearSelection() {
