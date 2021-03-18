@@ -12,56 +12,75 @@
         </button>
       </div>
       <div class="instructions__content welcome">
-        <p>
-          UML-inspired diagrams display your key application components, and how
-          they are inter-related during application execution.
-        </p>
-        <ul>
-          <li>Select a node to see its details in the sidebar. .</li>
-          <li>
-            Right-click nodes to expand, collapse & reset the diagram elements
-          </li>
-          <li>Use filters to bring focus to a narrow area of interest</li>
-        </ul>
-        <h3>Map Legend</h3>
-        <section class="legends">
-          <div class="legend dependency-map">
-            <h4>Dependency map</h4>
-            <ul>
-              <li>
-                <div class="icon class-pkg"></div>
-                <p>Class packages</p>
-              </li>
-              <li>
-                <div class="icon class"></div>
-                <p>Class</p>
-              </li>
-              <li>
-                <div class="icon dynamic"></div>
-                <p>Dynamic dependencies such as method calls or SQL queries</p>
-              </li>
-              <li>
-                <div class="icon web-service"></div>
-                <p>Web service endpoints/routes</p>
-              </li>
-              <li>
-                <div class="icon database"></div>
-                <p>Databases that persist app data</p>
-              </li>
-            </ul>
-          </div>
-          <div class="legend trace-map">
-            <h4>Trace</h4>
-            <ul>
-              <li class="type-int icon">Integer/Number</li>
-              <li class="type-string icon">String</li>
-              <li class="type-bool icon">Boolean</li>
-              <li class="type-float icon">Float/Decimal</li>
-              <li class="type-object icon">Object/Other</li>
-            </ul>
-          </div>
-        </section>
+        <div class="intro">
+          <p>
+            These UML-inspired diagrams display your key application components,
+            and how they are inter-related during application execution.
+          </p>
+          <ul>
+            <li>
+              When you first open an AppMap, we'll show you the maps we've
+              created, as well as lists of labels and events we've identified in
+              your code.
+            </li>
+            <li>
+              When a node is selected, we'll show you it's details in the
+              sidebar. Use powerful filters bring focus to a narrow area of
+              interest.
+            </li>
+          </ul>
+        </div>
       </div>
+      <section class="instructions-wrap">
+        <div class="dependency-map">
+          <h4>Dependency map</h4>
+          <ul class="feature-list">
+            <li>
+              Right-click nodes to set as root, expand, collapse and reset the
+              diagram elements
+            </li>
+            <li>
+              Clicking an edge between nodes will display associated events
+            </li>
+          </ul>
+          <ul class="legend">
+            <li>
+              <div class="icon class-pkg"></div>
+              <p>Class packages</p>
+            </li>
+            <li>
+              <div class="icon class"></div>
+              <p>Class</p>
+            </li>
+            <li>
+              <div class="icon dynamic"></div>
+              <p>Dynamic dependencies such as method calls or SQL queries</p>
+            </li>
+            <li>
+              <div class="icon web-service"></div>
+              <p>Web service endpoints/routes</p>
+            </li>
+            <li>
+              <div class="icon database"></div>
+              <p>Databases that persist app data</p>
+            </li>
+          </ul>
+        </div>
+        <div class="trace">
+          <h4>Trace</h4>
+          <ul class="feature-list">
+            <li>Use arrow keys to navigate between nodes</li>
+            <li>Expand nodes to see children</li>
+          </ul>
+          <ul class="legend">
+            <li class="type-int icon">Integer/Number</li>
+            <li class="type-string icon">String</li>
+            <li class="type-bool icon">Boolean</li>
+            <li class="type-float icon">Float/Decimal</li>
+            <li class="type-object icon">Object/Other</li>
+          </ul>
+        </div>
+      </section>
     </section>
   </div>
 </template>
@@ -159,7 +178,6 @@ export default {
 
   &__head {
     position: relative;
-    margin-bottom: 1rem;
     display: flex;
     align-items: flex-start;
   }
@@ -181,26 +199,23 @@ export default {
     margin-left: auto;
   }
 }
-.welcome {
-  p {
-    margin: 0 0 0.75rem;
-  }
-  ul {
-    padding-left: 1rem;
-    list-style: disc;
+ul.feature-list {
+  padding-left: 1.25rem;
+  border-bottom: 1px solid $gray2;
+  padding-bottom: 1rem;
+  word-break: break-word;
+  li {
+    margin: 0.3rem 0;
+    line-height: 1.3rem;
   }
 }
-.legends {
+
+.instructions-wrap {
   width: 100%;
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 1fr;
   column-gap: 2rem;
-}
-.legend {
-  h4 {
-    margin: 0;
-  }
-  ul {
+  .legend {
     margin: 0;
     padding: 0;
     list-style-type: none;
@@ -215,10 +230,39 @@ export default {
       align-items: flex-start;
     }
   }
-  border: 1px solid $gray2;
-  padding: 1rem;
-  border-radius: $border-radius;
-  &.dependency-map {
+
+  .dependency-map,
+  .trace {
+    padding: 1rem;
+    border-radius: $border-radius-big;
+    border: 1px solid $gray2;
+    width: 100%;
+    font-size: 0.9rem;
+    h4 {
+      margin: 0;
+      color: $royal;
+      font-size: 1rem;
+    }
+    .legend {
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        li {
+          display: flex;
+          flex-direction: row;
+          margin: 0.5rem 0;
+          p {
+            flex: 1;
+            margin: 0;
+          }
+          align-items: flex-start;
+        }
+      }
+    }
+  }
+
+  .dependency-map {
     padding-right: 1.5rem;
     .icon {
       display: inline-block;
@@ -245,14 +289,8 @@ export default {
     }
   }
 
-  &.trace-map {
-    ul {
-      display: flex;
-      flex-direction: column;
-      li {
-        margin: 0.25rem 0;
-      }
-    }
+  .trace {
+    font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     .icon {
       height: unset;
       width: unset;
