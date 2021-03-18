@@ -1,7 +1,6 @@
 <template>
   <div id="app" :key="renderKey">
-    <div class="no-data-notice" v-if="isEmptyAppMap">No data to display.</div>
-    <div class="main-column main-column--left" v-if="!isEmptyAppMap">
+    <div class="main-column main-column--left">
       <v-details-panel
         :selected-object="selectedObject"
         :selected-label="selectedLabel"
@@ -50,6 +49,29 @@
       <div class="diagram-instructions">
         <v-instructions ref="instructions" />
       </div>
+    </div>
+    <div class="no-data-notice" v-if="isEmptyAppMap">
+      <p class="no-data-notice__title">
+        Sorry, but there's no data to display.
+      </p>
+      <p class="no-data-notice__text">
+        Check our
+        <a
+          href="https://github.com/applandinc/appmap"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          documentation</a
+        >,<br />
+        or ask for help in
+        <a
+          href="https://discord.com/invite/N9VUap6"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Discord</a
+        >.
+      </p>
     </div>
   </div>
 </template>
@@ -235,16 +257,6 @@ code {
   color: $base11;
   background-color: $vs-code-gray1;
 
-  .no-data-notice {
-    grid-column: span 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: $appland-text-font-family;
-    font-size: 1.5rem;
-    color: $base03;
-  }
-
   .main-column {
     overflow-y: auto;
 
@@ -313,6 +325,43 @@ code {
         position: absolute;
         right: 1.3rem;
         bottom: 1.3rem;
+      }
+    }
+  }
+
+  .no-data-notice {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: $appland-text-font-family;
+    line-height: 1.5;
+    color: $base03;
+
+    &__title,
+    &__text {
+      margin: 0;
+    }
+
+    &__title {
+      margin-bottom: 1rem;
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(to right, $royal, $hotpink);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    &__text {
+      a {
+        color: $blue;
+        text-decoration: none;
+
+        &:hover,
+        &:active {
+          color: $lightblue;
+        }
       }
     }
   }
