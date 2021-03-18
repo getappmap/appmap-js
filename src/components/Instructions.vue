@@ -25,8 +25,10 @@
             </li>
             <li>
               When a node is selected, we'll show you it's details in the
-              sidebar. Use powerful filters bring focus to a narrow area of
-              interest.
+              sidebar.
+            </li>
+            <li>
+              Use powerful filters bring focus to a narrow area of interest.
             </li>
           </ul>
         </div>
