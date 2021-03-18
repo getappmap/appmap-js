@@ -159,7 +159,7 @@ export default {
     width: max-content;
     height: max-content;
     max-width: 50vw;
-    max-height: 50vh;
+    max-height: 80vh;
     padding: 1.5rem;
     color: $gray6;
     background: $black;
@@ -336,8 +336,11 @@ ul.feature-list {
   }
 }
 @media (max-width: 1300px) {
-  section.legends {
+  section.instructions-wrap {
     grid-template-columns: 1fr;
+    .dependency-map {
+      margin: 1rem 0;
+    }
     .legend {
       margin-bottom: 1rem;
       &:last-of-type {
