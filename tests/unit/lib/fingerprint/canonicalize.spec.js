@@ -10,21 +10,21 @@ const apiKeyAppMap = buildAppMap().source(apiKeyScenario).normalize().build();
 
 describe('Canonicalize', () => {
   test('lists available algorithms', () => {
-    expect(Object.keys(algorithms)).toInclude('beta_v1_debug');
+    expect(Object.keys(algorithms)).toInclude('trace_v1');
   });
 
-  test('ERROR level', async () => {
-    const normalForm = await canonicalize('beta_v1_error', apiKeyAppMap);
+  test('UPDATE level', async () => {
+    const normalForm = await canonicalize('update_v1', apiKeyAppMap);
     console.log(JSON.stringify(normalForm, null, 2));
   });
 
   test('INFO level', async () => {
-    const normalForm = await canonicalize('beta_v1_info', apiKeyAppMap);
+    const normalForm = await canonicalize('info_v1', apiKeyAppMap);
     console.log(JSON.stringify(normalForm, null, 2));
   });
 
-  test('DEBUG level', async () => {
-    const normalForm = await canonicalize('beta_v1_debug', apiKeyAppMap);
+  test('TRACE level', async () => {
+    const normalForm = await canonicalize('trace_v1', apiKeyAppMap);
     console.log(JSON.stringify(normalForm, null, 2));
   });
 });

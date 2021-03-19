@@ -2,8 +2,7 @@
 const fsp = require('fs').promises;
 const fsExtra = require('fs-extra');
 const os = require('os');
-const path = require('path');
-const { join: joinPath } = require('path');
+const { sep: pathSep, join: joinPath } = require('path');
 const { buildAppMap } = require('../../../dist/appmap.node');
 
 let isVerbose = false;
@@ -63,7 +62,7 @@ const renameFile = async (oldName, newName) => {
  */
 const buildDirectory = async (dirName, fn) => {
   const tempDir = await fsp.mkdtemp(
-    (await fsp.realpath(os.tmpdir())) + path.sep
+    (await fsp.realpath(os.tmpdir())) + pathSep
   );
   try {
     await fn(tempDir);

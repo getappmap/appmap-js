@@ -1,5 +1,5 @@
 const { createHash } = require('crypto');
-const { join: joinPath, basename } = require('path');
+const { join: joinPath } = require('path');
 const fsp = require('fs').promises;
 const { verbose, baseName, buildDirectory, renameFile } = require('./utils');
 const {

@@ -1,10 +1,6 @@
 import {
   addHiddenProperty,
   hasProp,
-  arrayCompare,
-  sqlCompare,
-  httpCompare,
-  setCompare,
   hashEvent,
   identityHashEvent,
 } from './util';

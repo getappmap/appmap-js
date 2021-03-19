@@ -1,7 +1,7 @@
 const { queue } = require('async');
 const glob = require('glob');
 const fsp = require('fs').promises;
-const { resolve: resolvePath, dirname, basename } = require('path');
+const { dirname, basename } = require('path');
 const { verbose } = require('./utils');
 
 /**
@@ -49,7 +49,7 @@ async function depends(directory, files) {
         if (inputFiles.has(filePath)) {
           if (verbose()) {
             console.log(
-              `${item.location} matches an input file. Emitting AppMap ${baseName}`
+              `${item.location} matches an input file. Emitting AppMap ${dirName}`
             );
           }
           baseNames.add(dirName);
