@@ -20,7 +20,6 @@ const { verbose, listAppMapFiles, loadAppMap } = require('./lib/cli/utils');
 const appMapCatalog = require('./lib/cli/appMapCatalog');
 const FingerprintQueue = require('./lib/cli/fingerprintQueue');
 const depends = require('./lib/cli/depends');
-const { tickStep } = require('d3-array');
 
 class FingerprintDirectoryCommand {
   constructor(directory) {
@@ -401,8 +400,8 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
-    'fingerprint',
-    'Compute and apply fingerprints for all appmaps in a directory',
+    'index',
+    'Compute fingerprints and update index files for all appmaps in a directory',
     (args) => {
       args.option('print', {
         describe: 'print the canonicalized forms of the AppMap',
