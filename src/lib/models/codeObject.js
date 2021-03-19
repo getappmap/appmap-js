@@ -340,4 +340,8 @@ export default class CodeObject {
         return this.name;
     }
   }
+
+  get definition() {
+    return encodeURI(`${this.type}:${this.id}`);
+  }
 }

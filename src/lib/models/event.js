@@ -151,6 +151,7 @@ export default class Event {
     return sql.normalized_sql || sql.sql;
   }
 
+<<<<<<< HEAD
   get previousSibling() {
     const { parent } = this;
     if (!parent) {
@@ -187,6 +188,10 @@ export default class Event {
     }
 
     return parent.children[myIndex + 1];
+=======
+  get definition() {
+    return encodeURI(`event:${this.id}`);
+>>>>>>> 8b0e1b1... feat: add object definition for codeObjects and events
   }
 
   set codeObject(value) {

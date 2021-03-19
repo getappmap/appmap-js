@@ -159,15 +159,19 @@ export default {
         if (selectedObject && !(selectedObject instanceof Event)) {
           this.setView(VIEW_COMPONENT);
         }
-        this.emitSelectedObject(
-          selectedObject instanceof Event ? 'event' : 'obj',
-          selectedObject
-        );
+
+        if (selectedObject && selectedObject.definition) {
+          this.emitSelectedObject(selectedObject.definition);
+        } else {
+          this.emitSelectedObject('null');
+        }
       },
     },
     '$store.getters.selectedLabel': {
       handler(selectedLabel) {
-        this.emitSelectedObject('label', selectedLabel);
+        this.emitSelectedObject(
+          selectedLabel ? `label:${selectedLabel}` : 'null'
+        );
       },
     },
   },
@@ -255,31 +259,17 @@ export default {
       }
     },
 
-    emitSelectedObject(type, object) {
-      let objectName = 'null';
-
-      if (object) {
-        objectName = type === 'label' ? object : object.id;
-      }
-
-      this.$root.$emit('selectedObject', `${type}:${objectName}`);
+    emitSelectedObject(definition) {
+      this.$root.$emit('selectedObject', definition);
     },
 
     setSelectedObject(objectDefinition) {
-      const [type, object] = [...objectDefinition.split(':')];
+      const defMatch = objectDefinition.match(/^([a-z]+):(.+)/);
+      const type = defMatch[1];
+      const object = defMatch[2];
 
       /* eslint-disable no-case-declarations */
       switch (type) {
-        case 'obj':
-          const codeObject = this.$store.state.appMap.classMap.codeObjectFromId(
-            object
-          );
-
-          if (codeObject) {
-            this.$store.commit(SELECT_OBJECT, codeObject);
-          }
-
-          break;
         case 'event':
           const eventId = +object;
           let eventObject = null;
@@ -301,6 +291,14 @@ export default {
           this.$store.commit(SELECT_LABEL, object);
           break;
         default:
+          const codeObject = this.$store.state.appMap.classMap.codeObjectFromDefinition(
+            objectDefinition
+          );
+
+          if (codeObject) {
+            this.$store.commit(SELECT_OBJECT, codeObject);
+          }
+
           break;
       }
       /* eslint-enable no-case-declarations */

@@ -86,6 +86,10 @@ export default class ClassMap {
     );
   }
 
+  codeObjectFromDefinition(definition) {
+    return this.codeObjects.find((co) => co.definition === definition);
+  }
+
   // Returns the first root code object of a given type or null if it doesn't exist
   root(type) {
     return this.roots.find((obj) => obj.type === type);
