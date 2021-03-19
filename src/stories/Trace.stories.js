@@ -26,6 +26,20 @@ export default {
 export const trace = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiagramTrace },
-  template: '<v-diagram-trace v-bind="$props" />',
+  template:
+    '<v-diagram-trace v-bind="$props" :selected-events="eventArray" @clickEvent="(e) => selectedEvent = e" />',
+  data() {
+    return {
+      selectedEvent: null,
+    };
+  },
+  computed: {
+    eventArray() {
+      if (this.selectedEvent) {
+        return [this.selectedEvent];
+      }
+      return [];
+    },
+  },
   store,
 });
