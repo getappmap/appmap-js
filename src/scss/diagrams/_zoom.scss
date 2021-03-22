@@ -1,8 +1,8 @@
 .appmap__zoom {
-  position: relative;
+  position: absolute;
   top: 50%;
+  right: 0;
   transform: translate(-50%, -50%);
-  float: right;
   display: flex;
   flex-direction: column;
   align-items: center;
