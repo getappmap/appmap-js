@@ -1,3 +1,11 @@
+# [1.8.0](https://github.com/applandinc/appmap-js/compare/v1.7.0...v1.8.0) (2021-03-22)
+
+
+### Features
+
+* show notice when empty AppMap was opened ([88450ad](https://github.com/applandinc/appmap-js/commit/88450adebe39d33a15eaa7d136a92cab27a34223))
+* styling for "no data" notice ([3ff1371](https://github.com/applandinc/appmap-js/commit/3ff13719f7bffabcc35f996a26db4d589822f6ba))
+
 # [1.7.0](https://github.com/applandinc/appmap-js/compare/v1.6.0...v1.7.0) (2021-03-22)
 
 
