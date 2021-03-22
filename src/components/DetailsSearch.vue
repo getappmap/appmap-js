@@ -28,13 +28,19 @@
           class="details-search__block-item"
           v-for="(item, index) in listItems[type].data"
           :key="index"
-          @click="selectObject(type, item)"
+          @click="selectObject(type, item.object)"
         >
           {{
-            type !== 'sql' && item.prettyName
-              ? item.prettyName
-              : item.name || item
+            type !== 'sql' && item.object.prettyName
+              ? item.object.prettyName
+              : item.object.name || item.object
           }}
+          <span
+            v-if="item.childrenCount > 1"
+            class="details-search__block-item-count"
+          >
+            {{ item.childrenCount }}
+          </span>
         </li>
       </ul>
     </section>
@@ -80,7 +86,7 @@ export default {
           data: [],
         },
         sql: {
-          title: 'SQL',
+          title: 'SQL queries',
           data: [],
         },
       };
@@ -90,34 +96,44 @@ export default {
           return;
         }
 
+        const item = {
+          object: codeObject,
+          childrenCount: codeObject.events ? codeObject.events.length : 0,
+        };
+
         switch (codeObject.type) {
           case 'package':
             if (codeObject.children.length > 1) {
-              items.code.data.push(codeObject);
+              items.code.data.push(item);
             }
             break;
           case 'function':
-            items.code.data.push(codeObject);
+            items.code.data.push(item);
             break;
           case 'class':
             if (codeObject.functions.length) {
-              items.code.data.push(codeObject);
+              items.code.data.push(item);
             }
             break;
           case 'route':
-            items.http.data.push(codeObject);
+            items.http.data.push(item);
             break;
           case 'query':
-            codeObject.events.forEach((e) => items.sql.data.push(e));
+            items.sql.data.push(item);
             break;
           default:
             break;
         }
       });
 
-      items.labels.data = Object.keys(this.appMap.labels).filter((l) =>
-        this.passesFilter(l)
-      );
+      Object.entries(this.appMap.labels).forEach(([label, labelData]) => {
+        if (this.passesFilter(label)) {
+          items.labels.data.push({
+            object: label,
+            childrenCount: labelData.function.length + labelData.event.length,
+          });
+        }
+      });
 
       return items;
     },
@@ -246,7 +262,11 @@ export default {
     &-item {
       position: relative;
       border-radius: $border-radius;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding: 0.3rem 1rem;
+      min-height: 2rem;
       color: $base03;
       cursor: pointer;
       overflow: hidden;
@@ -317,6 +337,18 @@ export default {
 
       &:not(:last-child) {
         margin-bottom: 0.5rem;
+      }
+
+      &-count {
+        margin-left: 1rem;
+        border-radius: 0.5rem;
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+        line-height: 1;
+        color: currentColor;
+        background-color: rgba(0, 0, 0, 0.2);
+        white-space: nowrap;
       }
     }
   }

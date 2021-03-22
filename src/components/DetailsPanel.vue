@@ -41,6 +41,7 @@ import VDetailsPanelEvent from '@/components/DetailsPanelEvent.vue';
 import VDetailsPanelFunction from '@/components/DetailsPanelFunction.vue';
 import VDetailsPanelHttp from '@/components/DetailsPanelHttp.vue';
 import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
+import VDetailsPanelQuery from '@/components/DetailsPanelQuery.vue';
 import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
 import VDetailsPanelLabels from '@/components/DetailsPanelLabels.vue';
 import VDetailsSearch from '@/components/DetailsSearch.vue';
@@ -58,6 +59,7 @@ export default {
     VDetailsPanelFunction,
     VDetailsPanelHttp,
     VDetailsPanelPackage,
+    VDetailsPanelQuery,
     VDetailsPanelRoute,
     VDetailsPanelLabels,
     VDetailsSearch,
@@ -82,7 +84,6 @@ export default {
       } else if (this.selectedObject instanceof Event) {
         kind = 'event';
       }
-
       return `v-details-panel-${kind}`;
     },
   },

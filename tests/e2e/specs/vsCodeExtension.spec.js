@@ -499,6 +499,18 @@ context('VS Code Extension', () => {
 
       cy.get('.details-panel-header__parent').should('have.length', 3);
     });
+
+    it('does not back link to a large query when clicking a query from the search panel', () => {
+      cy.get(
+        '.details-search__block--query > .details-search__block-list > :nth-child(1)'
+      ).click();
+
+      cy.get(':nth-child(1) > .list-item').click();
+
+      cy.get('.details-panel__buttons')
+        .invoke('text')
+        .should('not.match', /SELECT.*FROM/);
+    });
   });
 
   context('Java appmap', () => {
