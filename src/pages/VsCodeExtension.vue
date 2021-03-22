@@ -98,6 +98,7 @@
 <script>
 import { Event } from '@/lib/models';
 import ReloadIcon from '@/assets/reload.svg';
+import DiagramGray from '@/assets/diagram-empty.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
@@ -105,7 +106,6 @@ import VDiagramTrace from '../components/DiagramTrace.vue';
 import VInstructions from '../components/Instructions.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
-import DiagramGray from '@/assets/diagram-empty.svg';
 import {
   store,
   SET_APPMAP_DATA,
