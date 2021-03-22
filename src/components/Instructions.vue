@@ -24,7 +24,7 @@
               your code.
             </li>
             <li>
-              When a node is selected, we'll show you it's details in the
+              When a node is selected, we'll show you its details in the
               sidebar.
             </li>
             <li>
