@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/applandinc/appmap-js/compare/v1.5.0...v1.6.0) (2021-03-22)
+
+
+### Bug Fixes
+
+* fix arrow aligning in instructions legend ([901d169](https://github.com/applandinc/appmap-js/commit/901d169f1b49cf688269af7680b137808614cca6))
+
+
+### Features
+
+* syntax highlight SQL ([#125](https://github.com/applandinc/appmap-js/issues/125)) ([8f87111](https://github.com/applandinc/appmap-js/commit/8f8711156ef536bc935a842e289106dda80dd5b1))
+
 # [1.5.0](https://github.com/applandinc/appmap-js/compare/v1.4.0...v1.5.0) (2021-03-05)
 
 
