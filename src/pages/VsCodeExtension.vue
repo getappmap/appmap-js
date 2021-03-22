@@ -160,17 +160,17 @@ export default {
           this.setView(VIEW_COMPONENT);
         }
 
-        if (selectedObject && selectedObject.definition) {
-          this.emitSelectedObject(selectedObject.definition);
+        if (selectedObject && selectedObject.fqid) {
+          this.emitSelectedObject(selectedObject.fqid);
         } else {
-          this.emitSelectedObject('null');
+          this.emitSelectedObject(null);
         }
       },
     },
     '$store.getters.selectedLabel': {
       handler(selectedLabel) {
         this.emitSelectedObject(
-          selectedLabel ? `label:${selectedLabel}` : 'null'
+          selectedLabel ? `label:${selectedLabel}` : null
         );
       },
     },
@@ -259,14 +259,12 @@ export default {
       }
     },
 
-    emitSelectedObject(definition) {
-      this.$root.$emit('selectedObject', definition);
+    emitSelectedObject(fqid) {
+      this.$root.$emit('selectedObject', fqid);
     },
 
-    setSelectedObject(objectDefinition) {
-      const defMatch = objectDefinition.match(/^([a-z]+):(.+)/);
-      const type = defMatch[1];
-      const object = defMatch[2];
+    setSelectedObject(fqid) {
+      const { type, object } = this.$store.state.appMap.get(fqid);
 
       /* eslint-disable no-case-declarations */
       switch (type) {
@@ -291,8 +289,8 @@ export default {
           this.$store.commit(SELECT_LABEL, object);
           break;
         default:
-          const codeObject = this.$store.state.appMap.classMap.codeObjectFromDefinition(
-            objectDefinition
+          const codeObject = this.$store.state.appMap.classMap.codeObjectFromFQID(
+            fqid
           );
 
           if (codeObject) {
