@@ -40,6 +40,7 @@
             :events="rootEvents"
             :selected-events="selectedEvent"
             :name="VIEW_FLOW"
+            :zoom-controls="true"
             @clickEvent="onClickTraceEvent"
           />
         </v-tab>
