@@ -24,7 +24,7 @@
       </v-details-panel>
     </div>
 
-    <div class="main-column main-column--right">
+    <div class="main-column main-column--right" v-if="!isEmptyAppMap">
       <v-tabs @activateTab="onChangeTab" ref="tabs">
         <v-tab
           name="Dependency Map"
@@ -53,12 +53,54 @@
         <v-instructions ref="instructions" />
       </div>
     </div>
+    <div class="no-data-notice" v-if="isEmptyAppMap">
+      <div class="notice">
+        <p class="no-data-notice__title">
+          Sorry, but there's no data to display :(
+        </p>
+        <ul class="why-me">
+          <strong>Top 3 reasons why this appmap is empty:</strong>
+          <li>
+            appmap.yml did not list packages/modules/folders of your application
+            logic
+          </li>
+          <li>
+            If this AppMap was recorded from a test, the test did not provide
+            sufficient coverage for good data
+          </li>
+          <li>
+            If other manual method was used to record this AppMap, the
+            instrumented code objects were not executed during the recording.
+          </li>
+        </ul>
+        <p class="no-data-notice__text">
+          Check our
+          <a
+            href="https://github.com/applandinc/appmap"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            documentation</a
+          >,<br />
+          or ask for help in
+          <a
+            href="https://discord.com/invite/N9VUap6"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Discord</a
+          >.
+        </p>
+      </div>
+      <DiagramGray class="empty-state-diagram" />
+    </div>
   </div>
 </template>
 
 <script>
 import { Event } from '@/lib/models';
 import ReloadIcon from '@/assets/reload.svg';
+import DiagramGray from '@/assets/diagram-empty.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
@@ -89,12 +131,14 @@ export default {
     VInstructions,
     VTabs,
     VTab,
+    DiagramGray,
   },
 
   store,
 
   data() {
     return {
+      isEmptyAppMap: false,
       renderKey: 0,
       VIEW_COMPONENT,
       VIEW_FLOW,
@@ -168,7 +212,15 @@ export default {
 
   methods: {
     loadData(data) {
-      this.$store.commit(SET_APPMAP_DATA, data);
+      const hasEvents = Array.isArray(data.events) && data.events.length;
+      const hasClassMap = Array.isArray(data.classMap) && data.classMap.length;
+
+      if (hasEvents && hasClassMap) {
+        this.isEmptyAppMap = false;
+        this.$store.commit(SET_APPMAP_DATA, data);
+      } else {
+        this.isEmptyAppMap = true;
+      }
     },
 
     showInstructions() {
@@ -235,6 +287,7 @@ code {
   grid-template-rows: max(1fr, 100%);
   height: 100vh;
   color: $base11;
+  background-color: $vs-code-gray1;
 
   .main-column {
     overflow-y: auto;
@@ -253,7 +306,6 @@ code {
       min-width: 250px;
       word-break: break-all;
       overflow: hidden;
-      background-color: $vs-code-gray1;
 
       .diagram-reload {
         position: absolute;
@@ -305,6 +357,56 @@ code {
         position: absolute;
         right: 1.3rem;
         bottom: 1.3rem;
+      }
+    }
+  }
+
+  .no-data-notice {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: $appland-text-font-family;
+    line-height: 1.5;
+    color: $base03;
+
+    &__title,
+    &__text {
+      margin: 0;
+    }
+
+    &__title {
+      margin-bottom: 1rem;
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(to right, $royal, $hotpink);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    &__text {
+      a {
+        color: $blue;
+        text-decoration: none;
+
+        &:hover,
+        &:active {
+          color: $lightblue;
+        }
+      }
+    }
+
+    .empty-state-diagram {
+      margin-top: 4rem;
+    }
+
+    .why-me {
+      padding: 1rem;
+      strong {
+        margin-left: -1rem;
+        color: $royal;
+        margin-bottom: 0.5rem;
       }
     }
   }

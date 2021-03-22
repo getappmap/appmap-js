@@ -1,5 +1,5 @@
 <template>
-  <div class="details-search">
+  <div :class="classes">
     <form class="details-search__form">
       <div class="details-search__input-wrap">
         <span class="details-search__input-prefix">
@@ -12,6 +12,7 @@
           placeholder="Search..."
           ref="searchInput"
           v-model="filter"
+          :disabled="isEmptyAppMap"
         />
       </div>
     </form>
@@ -36,6 +37,15 @@
               : item.name || item
           }}
         </li>
+      </ul>
+    </section>
+    <section
+      class="details-search__block details-search__block--empty"
+      v-if="isEmptyAppMap"
+    >
+      <h2 class="details-search__block-title">Error</h2>
+      <ul class="details-search__block-list">
+        <li class="details-search__block-item">No data to display</li>
       </ul>
     </section>
   </div>
@@ -77,6 +87,21 @@ export default {
   },
 
   computed: {
+    classes() {
+      const result = ['details-search'];
+
+      if (this.isEmptyAppMap) {
+        result.push('details-search--empty');
+      }
+
+      return result;
+    },
+    isEmptyAppMap() {
+      return (
+        Object.keys(this.objects).filter((k) => !!this.objects[k].data.length)
+          .length === 0
+      );
+    },
     filteredObjects() {
       const filter = this.filter.trim();
       const objects = {};
@@ -182,6 +207,11 @@ export default {
     border-radius: $border-radius;
     padding: 2px;
     background: linear-gradient(to right, #4562b1 0%, #540a9f 100%);
+
+    .details-search--empty & {
+      background: $gray3;
+      pointer-events: none;
+    }
   }
 
   &__input-prefix {
@@ -302,6 +332,14 @@ export default {
           #702286 50%,
           #521b61 100%
         );
+      }
+
+      .details-search__block--empty & {
+        pointer-events: none;
+
+        &::before {
+          background: $gray3;
+        }
       }
 
       &:not(:last-child) {
