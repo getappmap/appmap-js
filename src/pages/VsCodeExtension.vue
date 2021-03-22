@@ -86,7 +86,7 @@
           </li>
           <li>
             If other manual method was used to record this AppMap, the
-            instrumented code objects were not executed during the recording
+            instrumented code objects were not executed during the recording.
           </li>
         </ul>
       </div>
