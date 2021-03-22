@@ -55,6 +55,21 @@
         <p class="no-data-notice__title">
           Sorry, but there's no data to display :(
         </p>
+        <ul class="why-me">
+          <strong>Top 3 reasons why this appmap is empty:</strong>
+          <li>
+            appmap.yml did not list packages/modules/folders of your application
+            logic
+          </li>
+          <li>
+            If this AppMap was recorded from a test, the test did not provide
+            sufficient coverage for good data
+          </li>
+          <li>
+            If other manual method was used to record this AppMap, the
+            instrumented code objects were not executed during the recording.
+          </li>
+        </ul>
         <p class="no-data-notice__text">
           Check our
           <a
@@ -73,22 +88,6 @@
             Discord</a
           >.
         </p>
-
-        <ul class="why-me">
-          <strong>Top 3 reasons why this appmap is empty:</strong>
-          <li>
-            appmap.yml did not list packages/modules/folders of your application
-            logic
-          </li>
-          <li>
-            If this AppMap was recorded from a test, the test did not provide
-            sufficient coverage for good data
-          </li>
-          <li>
-            If other manual method was used to record this AppMap, the
-            instrumented code objects were not executed during the recording.
-          </li>
-        </ul>
       </div>
       <DiagramGray class="empty-state-diagram" />
     </div>
