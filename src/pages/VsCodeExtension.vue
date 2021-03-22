@@ -51,27 +51,46 @@
       </div>
     </div>
     <div class="no-data-notice" v-if="isEmptyAppMap">
-      <p class="no-data-notice__title">
-        Sorry, but there's no data to display.
-      </p>
-      <p class="no-data-notice__text">
-        Check our
-        <a
-          href="https://github.com/applandinc/appmap"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          documentation</a
-        >,<br />
-        or ask for help in
-        <a
-          href="https://discord.com/invite/N9VUap6"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Discord</a
-        >.
-      </p>
+      <div class="notice">
+        <p class="no-data-notice__title">
+          Sorry, but there's no data to display.
+        </p>
+        <p class="no-data-notice__text">
+          Check our
+          <a
+            href="https://github.com/applandinc/appmap"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            documentation</a
+          >,<br />
+          or ask for help in
+          <a
+            href="https://discord.com/invite/N9VUap6"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Discord</a
+          >.
+        </p>
+
+        <ul class="why-me">
+          <strong>Top 3 reasons why this appmap is empty:</strong>
+          <li>
+            appmap.yml did not list packages/modules/folders of your application
+            logic
+          </li>
+          <li>
+            If this AppMap was recorded from a test, the test did not provide
+            sufficient coverage for good data
+          </li>
+          <li>
+            If other manual method was used to record this AppMap, the
+            instrumented code objects were not executed during the recording
+          </li>
+        </ul>
+      </div>
+      <DiagramGray class="empty-state-diagram" />
     </div>
   </div>
 </template>
@@ -86,6 +105,7 @@ import VDiagramTrace from '../components/DiagramTrace.vue';
 import VInstructions from '../components/Instructions.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
+import DiagramGray from '@/assets/diagram-empty.svg';
 import {
   store,
   SET_APPMAP_DATA,
@@ -108,6 +128,7 @@ export default {
     VInstructions,
     VTabs,
     VTab,
+    DiagramGray,
   },
 
   store,
@@ -362,6 +383,19 @@ code {
         &:active {
           color: $lightblue;
         }
+      }
+    }
+
+    .empty-state-diagram {
+      margin-top: 4rem;
+    }
+
+    .why-me {
+      padding: 1rem;
+      strong {
+        margin-left: -1rem;
+        color: $royal;
+        margin-bottom: 0.5rem;
       }
     }
   }
