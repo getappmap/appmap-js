@@ -349,7 +349,7 @@ code {
       font-size: 2rem;
       font-weight: 700;
       background: linear-gradient(to right, $royal, $hotpink);
-      background-clip: text;
+      -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
