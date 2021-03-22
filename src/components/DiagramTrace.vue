@@ -1,10 +1,19 @@
 <template v-slot:diagram>
-  <v-container @click.native="clearSelection" ref="container">
+  <v-container
+    @click.native="clearSelection"
+    :zoomControls="zoomControls"
+    ref="container"
+  >
     <v-trace
       :events="events"
+      :selected-events="selectedEvents"
+      :highlight-color="highlightColor"
+      :highlight-all="highlightAll"
+      :highlight-style="highlightStyle"
       ref="trace"
       @expand="focusNodeChildren"
       @collapse="focusNode"
+      @clickEvent="(e) => $emit('clickEvent', e)"
     />
   </v-container>
 </template>
@@ -26,14 +35,17 @@ export default {
     events: {
       type: Array,
     },
-  },
-
-  watch: {
-    '$store.getters.selectedObject': {
-      handler() {
-        this.focusHighlighted();
-      },
+    selectedEvents: {
+      type: Array,
+      default: () => [],
     },
+    zoomControls: Boolean,
+    highlightColor: {
+      type: String,
+      default: null,
+    },
+    highlightAll: Boolean,
+    highlightStyle: String,
   },
 
   methods: {
@@ -59,13 +71,32 @@ export default {
     focusHighlighted() {
       setTimeout(() => {
         const { container } = this.$refs;
-        const element = document.querySelector('.trace-node.highlight');
+        const element = container.$el.querySelector('.trace-node.highlight');
         if (!element) {
           return;
         }
 
         container.panToElement(element);
       }, 16);
+    },
+
+    focusSelector(selector) {
+      const element = this.$el.querySelector(selector);
+      if (element) {
+        this.$refs.container.panToElement(element);
+      }
+    },
+
+    onClickEvent(event) {
+      this.$emit('clickEvent', event);
+    },
+
+    container() {
+      return this.$refs.container;
+    },
+
+    clearTransform() {
+      this.$refs.container.clearTransform();
     },
   },
 
@@ -135,6 +166,10 @@ export default {
   },
 
   activated() {
+    this.focusHighlighted();
+  },
+
+  updated() {
     this.focusHighlighted();
   },
 };

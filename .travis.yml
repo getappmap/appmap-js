@@ -18,8 +18,8 @@ install:
   - npm install
 
 script:
-  - npm run lint --no-fix
   - npm run build
+  - npm run lint --no-fix
   - npm run test
 
 deploy:
@@ -37,6 +37,6 @@ deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - npx semantic-release
+      - npx semantic-release -b main
     on:
       branch: main

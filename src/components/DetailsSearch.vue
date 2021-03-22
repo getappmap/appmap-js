@@ -133,9 +133,17 @@ export default {
       appMap.classMap.codeObjects.forEach((codeObject) => {
         switch (codeObject.type) {
           case 'package':
-          case 'class':
+            if (codeObject.children.length > 1) {
+              this.objects.code.data.push(codeObject);
+            }
+            break;
           case 'function':
             this.objects.code.data.push(codeObject);
+            break;
+          case 'class':
+            if (codeObject.functions.length) {
+              this.objects.code.data.push(codeObject);
+            }
             break;
           case 'route':
             this.objects.http.data.push(codeObject);

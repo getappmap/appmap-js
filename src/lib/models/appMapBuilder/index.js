@@ -53,7 +53,7 @@ class AppMapBuilder extends EventSource {
       );
     }
 
-    this.data.events
+    (this.data.events || [])
       .map((e) => new Event(e))
       .forEach((e) => this.sorter.add(e));
 
@@ -198,6 +198,28 @@ class AppMapBuilder extends EventSource {
         })
       );
     });
+  }
+
+  removeNoise() {
+    if (!this.data.events) {
+      return this;
+    }
+
+    const hasHttp = Boolean(this.data.events.find((e) => e.httpServerRequest));
+    if (!hasHttp) {
+      // the entire file is noise - do nothing
+      return this;
+    }
+
+    return this.chunk((stacks) =>
+      stacks.filter((stack) => {
+        if (!stack.length) {
+          return false;
+        }
+
+        return Boolean(stack[0].httpServerRequest);
+      })
+    );
   }
 
   collectEvents() {

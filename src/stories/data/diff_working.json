@@ -1,0 +1,488 @@
+{
+  "version": "1.4",
+  "metadata": {
+    "app": "appland/AppLand",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "2.6.6"
+    },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/applandinc/appmap-ruby",
+      "version": "0.41.1"
+    },
+    "frameworks": [
+      {
+        "name": "rails",
+        "version": "5.2.4.2"
+      },
+      {
+        "name": "rspec",
+        "version": "3.9.1"
+      }
+    ],
+    "git": {
+      "repository": "git@github.com:applandinc/appland.git",
+      "branch": "feat/api-mapsets",
+      "commit": "63519fe9a3970a26a79c513c1f52ecd1c31aac21",
+      "status": [],
+      "git_last_annotated_tag": null,
+      "git_last_tag": "v0.20.1",
+      "git_commits_since_last_annotated_tag": null,
+      "git_commits_since_last_tag": 0
+    },
+    "name": "App find! by a foreign user does not find the record",
+    "feature": "App find!",
+    "feature_group": "App",
+    "recorder": {
+      "name": "rspec"
+    },
+    "fingerprints": [
+      {
+        "appmap_digest": "b36220caccec2b0b0aa93514cba3ad4a55e79b1675196fa23131a48f82b26ce5",
+        "canonicalization_algorithm": "beta_v1_error",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "b36220caccec2b0b0aa93514cba3ad4a55e79b1675196fa23131a48f82b26ce5",
+        "canonicalization_algorithm": "beta_v1_info",
+        "digest": "97086451316cc9c97bafe8b1ec734ec0d79e2a8730aac6930def27587a9f2ec1",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "b36220caccec2b0b0aa93514cba3ad4a55e79b1675196fa23131a48f82b26ce5",
+        "canonicalization_algorithm": "beta_v1_debug",
+        "digest": "63f856263c495778df313bce29b4aaf2f2cc9a148a29e7ca471c4b92ecee4423",
+        "fingerprint_algorithm": "sha256"
+      }
+    ]
+  },
+  "classMap": [
+    {
+      "name": "app/models",
+      "type": "package",
+      "children": [
+        {
+          "name": "DAO",
+          "type": "class",
+          "children": [
+            {
+              "name": "User",
+              "type": "class",
+              "children": [
+                {
+                  "name": "validate",
+                  "type": "function",
+                  "location": "app/models/dao/user.rb:20",
+                  "static": false
+                }
+              ]
+            },
+            {
+              "name": "ToModel",
+              "type": "class",
+              "children": [
+                {
+                  "name": "to_model",
+                  "type": "function",
+                  "location": "app/models/dao/to_model.rb:5",
+                  "static": false
+                }
+              ]
+            },
+            {
+              "name": "PublicResource",
+              "type": "class",
+              "children": [
+                {
+                  "name": "coerce",
+                  "type": "function",
+                  "location": "app/models/dao/public_resource.rb:18",
+                  "static": true
+                },
+                {
+                  "name": "scope",
+                  "type": "function",
+                  "location": "app/models/dao/public_resource.rb:26",
+                  "static": true
+                }
+              ]
+            },
+            {
+              "name": "SequelUtil",
+              "type": "class",
+              "children": [
+                {
+                  "name": "build_where_clause",
+                  "type": "function",
+                  "location": "app/models/dao/sequel_util.rb:6",
+                  "static": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "User",
+          "type": "class",
+          "children": [
+            {
+              "name": "Show",
+              "type": "class",
+              "children": [
+                {
+                  "name": "search_scope",
+                  "type": "function",
+                  "location": "app/models/user.rb:80",
+                  "static": false
+                },
+                {
+                  "name": "admin?",
+                  "type": "function",
+                  "location": "app/models/user.rb:106",
+                  "static": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "App",
+          "type": "class",
+          "children": [
+            {
+              "name": "Search",
+              "type": "class",
+              "children": [
+                {
+                  "name": "find!",
+                  "type": "function",
+                  "location": "app/models/app.rb:43",
+                  "static": false
+                },
+                {
+                  "name": "find_by_id!",
+                  "type": "function",
+                  "location": "app/models/app.rb:51",
+                  "static": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Search",
+          "type": "class",
+          "children": [
+            {
+              "name": "filter",
+              "type": "function",
+              "location": "app/models/search.rb:33",
+              "static": false
+            }
+          ]
+        },
+        {
+          "name": "Exceptions",
+          "type": "class",
+          "children": [
+            {
+              "name": "RecordNotFound",
+              "type": "class",
+              "children": [
+                {
+                  "name": "build_message",
+                  "type": "function",
+                  "location": "app/models/exceptions/record_not_found.rb:16",
+                  "static": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": 80283,
+      "event": "call",
+      "thread_id": 70241581473860,
+      "sql_query": {
+        "sql": "INSERT INTO \"users\" (\"login\") VALUES ('10fca879-c0ed-4e5a-8bda-17d3121df614') RETURNING *",
+        "database_type": "postgres",
+        "server_version": 120003
+      }
+    },
+    {
+      "id": 80284,
+      "event": "return",
+      "thread_id": 70241581473860,
+      "parent_id": 80283,
+      "elapsed": 0.001153
+    },
+    {
+      "id": 80285,
+      "event": "call",
+      "thread_id": 70241581473860,
+      "defined_class": "DAO::ToModel",
+      "method_id": "to_model",
+      "path": "app/models/dao/to_model.rb",
+      "lineno": 5,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "DAO::User",
+        "object_id": 70241501638240,
+        "value": "#<DAO::User:0x00007fc4bf81dcc0>"
+      }
+    },
+    {
+      "id": 80286,
+      "event": "return",
+      "thread_id": 70241581473860,
+      "parent_id": 80285,
+      "elapsed": 0.000015,
+      "return_value": {
+        "class": "User::Show",
+        "value": "#<User::Show:0x00007fc4d7255898>",
+        "object_id": 70241699933260
+      }
+    },
+    {
+      "id": 80287,
+      "event": "call",
+      "thread_id": 70241581473860,
+      "defined_class": "User::Show",
+      "method_id": "search_scope",
+      "path": "app/models/user.rb",
+      "lineno": 80,
+      "static": false,
+      "parameters": [
+        {
+          "name": "kind",
+          "class": "Class",
+          "object_id": 70241672073600,
+          "value": "App",
+          "kind": "req"
+        },
+        {
+          "name": "scope",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "User::Show",
+        "object_id": 70241699933260,
+        "value": "#<User::Show:0x00007fc4d7255898>"
+      }
+    },
+    {
+      "id": 80288,
+      "event": "return",
+      "thread_id": 70241581473860,
+      "parent_id": 80287,
+      "elapsed": 0.000012,
+      "return_value": {
+        "class": "App::Search",
+        "value": "#<App::Search:0x00007fc4d72714d0>",
+        "object_id": 70241699990120
+      }
+    },
+    {
+      "id": 80289,
+      "event": "call",
+      "thread_id": 70241581473860,
+      "defined_class": "App::Search",
+      "method_id": "find!",
+      "path": "app/models/app.rb",
+      "lineno": 43,
+      "static": false,
+      "parameters": [
+        {
+          "name": "app",
+          "class": "Integer",
+          "object_id": 17,
+          "value": "8",
+          "kind": "req"
+        },
+        {
+          "name": "org_slug_or_user_login",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "App::Search",
+        "object_id": 70241699990120,
+        "value": "#<App::Search:0x00007fc4d72714d0>"
+      }
+    },
+    {
+      "id": 80290,
+      "event": "call",
+      "thread_id": 70241581473860,
+      "defined_class": "App::Search",
+      "method_id": "find_by_id!",
+      "path": "app/models/app.rb",
+      "lineno": 51,
+      "static": false,
+      "parameters": [
+        {
+          "name": "id",
+          "class": "Integer",
+          "object_id": 17,
+          "value": "8",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "App::Search",
+        "object_id": 70241699990120,
+        "value": "#<App::Search:0x00007fc4d72714d0>"
+      }
+    },
+    {
+      "id": 80303,
+      "event": "call",
+      "thread_id": 70241581473860,
+      "sql_query": {
+        "sql": "SELECT \"apps\".* FROM \"apps2\" WHERE ((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = 9) AND (\"orgs\".\"id\" IS NOT NULL)))) AND (\"id\" = 8)) LIMIT 1",
+        "database_type": "postgres",
+        "server_version": 120003
+      }
+    },
+    {
+      "id": 80304,
+      "event": "return",
+      "thread_id": 70241581473860,
+      "parent_id": 80303,
+      "elapsed": 0.006408
+    },
+    {
+      "id": 80305,
+      "event": "call",
+      "thread_id": 70241581473860,
+      "defined_class": "Exceptions::RecordNotFound",
+      "method_id": "build_message",
+      "path": "app/models/exceptions/record_not_found.rb",
+      "lineno": 16,
+      "static": true,
+      "parameters": [
+        {
+          "name": "kind",
+          "class": "String",
+          "object_id": 70241672051060,
+          "value": "App",
+          "kind": "req"
+        },
+        {
+          "name": "id",
+          "class": "Integer",
+          "object_id": 17,
+          "value": "8",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 70241448609660,
+        "value": "Exceptions::RecordNotFound"
+      }
+    },
+    {
+      "id": 80306,
+      "event": "return",
+      "thread_id": 70241581473860,
+      "parent_id": 80305,
+      "elapsed": 0.00001,
+      "return_value": {
+        "class": "String",
+        "value": "App 8 not found",
+        "object_id": 70241602690000
+      }
+    },
+    {
+      "id": 80307,
+      "event": "return",
+      "thread_id": 70241581473860,
+      "parent_id": 80290,
+      "elapsed": 0.014944,
+      "exceptions": [
+        {
+          "class": "Exceptions::RecordNotFound",
+          "message": "App 8 not found",
+          "object_id": 70241602656040,
+          "path": "/Users/dustin/dev/appland/appland/app/models/app.rb",
+          "lineno": 57
+        }
+      ]
+    },
+    {
+      "id": 80308,
+      "event": "return",
+      "thread_id": 70241581473860,
+      "parent_id": 80289,
+      "elapsed": 0.015059,
+      "exceptions": [
+        {
+          "class": "Exceptions::RecordNotFound",
+          "message": "App 8 not found",
+          "object_id": 70241602656040,
+          "path": "/Users/dustin/dev/appland/appland/app/models/app.rb",
+          "lineno": 57
+        }
+      ]
+    },
+    {
+      "id": 80309,
+      "event": "call",
+      "thread_id": 70241581473860,
+      "defined_class": "User::Show",
+      "method_id": "search_scope",
+      "path": "app/models/user.rb",
+      "lineno": 80,
+      "static": false,
+      "parameters": [
+        {
+          "name": "kind",
+          "class": "Class",
+          "object_id": 70241672073600,
+          "value": "App",
+          "kind": "req"
+        },
+        {
+          "name": "scope",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "User::Show",
+        "object_id": 70241699933260,
+        "value": "#<User::Show:0x00007fc4d7255898>"
+      }
+    },
+    {
+      "id": 80310,
+      "event": "return",
+      "thread_id": 70241581473860,
+      "parent_id": 80309,
+      "elapsed": 0.000012,
+      "return_value": {
+        "class": "App::Search",
+        "value": "#<App::Search:0x00007fc4d72714d0>",
+        "object_id": 70241699990120
+      }
+    }
+  ]
+}

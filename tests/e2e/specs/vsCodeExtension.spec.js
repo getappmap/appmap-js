@@ -1,4 +1,4 @@
-import { CodeObjectType } from '../../../src/lib/models/codeObject';
+// import { CodeObjectType } from '../../../src/lib/models/codeObject';
 
 context('VS Code Extension', () => {
   context('Ruby appmap', () => {
@@ -25,7 +25,7 @@ context('VS Code Extension', () => {
     it('clicking HTTP server requests displays the correct data', () => {
       cy.get('.details-search').should('be.visible');
 
-      cy.get(`.node[data-type="${CodeObjectType.HTTP}"]`)
+      cy.get(`.node[data-type="http"]`)
         .click()
         .should('have.class', 'highlight');
 
@@ -101,7 +101,7 @@ context('VS Code Extension', () => {
     it('clicking the database displays the correct data', () => {
       cy.get('.details-search').should('be.visible');
 
-      cy.get(`.node[data-type="${CodeObjectType.DATABASE}"]`)
+      cy.get(`.node[data-type="database"]`)
         .click()
         .should('have.class', 'highlight');
 
@@ -181,7 +181,7 @@ context('VS Code Extension', () => {
     it('the current event is highlighted upon opening the flow view', () => {
       cy.get('.details-search').should('be.visible');
 
-      cy.get(`.node[data-type="${CodeObjectType.HTTP}"]`)
+      cy.get(`.node[data-type="http"]`)
         .click()
         .get('.list-item')
         .first()
@@ -204,7 +204,7 @@ context('VS Code Extension', () => {
     });
 
     it('http server requests can navigate to route', () => {
-      cy.get(`.node[data-type="${CodeObjectType.HTTP}"]`)
+      cy.get(`.node[data-type="http"]`)
         .click()
         .get('.list-item')
         .first()
@@ -311,7 +311,7 @@ context('VS Code Extension', () => {
     });
 
     it('event can navigate directly to flow view', () => {
-      cy.get(`.node[data-type="${CodeObjectType.DATABASE}"]`).click();
+      cy.get(`.node[data-type="database"]`).click();
 
       cy.get('.v-details-panel-list')
         .contains('Queries')
@@ -330,13 +330,13 @@ context('VS Code Extension', () => {
     });
 
     it('clears when "Clear selection" button was clicked', () => {
-      cy.get(`.nodes .node[data-type="${CodeObjectType.HTTP}"]`)
+      cy.get(`.nodes .node[data-type="http"]`)
         .click()
         .should('have.class', 'highlight');
 
       cy.get('.details-panel__buttons').contains('Clear selection').click();
 
-      cy.get(`.nodes .node[data-type="${CodeObjectType.HTTP}"]`).should(
+      cy.get(`.nodes .node[data-type="http"]`).should(
         'not.have.class',
         'highlight'
       );

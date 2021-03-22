@@ -1,12 +1,19 @@
 <template>
   <div class="trace">
     <v-trace-event-block
-      v-for="event in events"
+      v-for="(event, i) in events"
       :key="event.id"
       :event="event"
+      :selected-events="selectedEvents"
+      :highlight-color="highlightColor"
+      :highlight-all="highlightAll"
+      :highlight-style="highlightStyle"
+      :has-parent="Boolean(event.parent)"
+      :is-first-child="i == 0"
       @updated="$emit('updated')"
       @expand="(e) => $emit('expand', e)"
       @collapse="(e) => $emit('collapse', e)"
+      @clickEvent="(e) => $emit('clickEvent', e)"
       ref="nodes"
     />
   </div>
@@ -29,6 +36,13 @@ export default {
       type: Boolean,
       default: false,
     },
+    selectedEvents: {
+      type: Array,
+      default: () => [],
+    },
+    highlightColor: String,
+    highlightAll: Boolean,
+    highlightStyle: String,
   },
   methods: {
     nodes() {

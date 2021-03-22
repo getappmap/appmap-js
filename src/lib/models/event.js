@@ -1,9 +1,33 @@
-import { addHiddenProperty, hasProp } from './util';
+import {
+  addHiddenProperty,
+  hasProp,
+  hashEvent,
+  identityHashEvent,
+} from './util';
 
 // This class supercedes `CallTree` and `CallNode`. Events are stored in a flat
 // array and can also be traversed like a tree via `parent` and `children`.
 export default class Event {
-  constructor(data) {
+  constructor(obj) {
+    let data = obj;
+
+    if (obj instanceof Event) {
+      data = { ...obj };
+
+      if (obj.$hidden.parameters) {
+        data.parameters = obj.$hidden.parameters.map((p) => ({ ...p }));
+      }
+
+      if (obj.$hidden.message) {
+        data.message = obj.$hidden.message.map((m) => ({ ...m }));
+      }
+
+      if (obj.$hidden.labels) {
+        data.labels = [...obj.$hidden.labels];
+        console.log(data.labels);
+      }
+    }
+
     // Cyclic references shall not be enumerable
     if (data.event === 'call') {
       addHiddenProperty(this, 'parent');
@@ -18,6 +42,8 @@ export default class Event {
     addHiddenProperty(this, 'labels');
     addHiddenProperty(this, 'next');
     addHiddenProperty(this, 'previous');
+    addHiddenProperty(this, 'hash');
+    addHiddenProperty(this, 'identityHash');
 
     // Data must be written last, after our properties are configured.
     Object.assign(this, data);
@@ -56,7 +82,7 @@ export default class Event {
   }
 
   get children() {
-    return this.$hidden.children;
+    return this.$hidden.children || [];
   }
 
   get codeObject() {
@@ -125,6 +151,44 @@ export default class Event {
     return sql.normalized_sql || sql.sql;
   }
 
+  get previousSibling() {
+    const { parent } = this;
+    if (!parent) {
+      return null;
+    }
+
+    const myIndex = parent.children.findIndex((e) => e === this);
+    console.assert(
+      myIndex !== -1,
+      'attempted to locate index of an orphaned event'
+    );
+
+    if (myIndex === 0) {
+      return null;
+    }
+
+    return parent.children[myIndex - 1];
+  }
+
+  get nextSibling() {
+    const { parent } = this;
+    if (!parent) {
+      return null;
+    }
+
+    const myIndex = this.parent.children.findIndex((e) => e === this);
+    console.assert(
+      myIndex !== -1,
+      'attempted to locate index of an orphaned event'
+    );
+
+    if (myIndex === parent.children.length - 1) {
+      return null;
+    }
+
+    return parent.children[myIndex + 1];
+  }
+
   set codeObject(value) {
     if (hasProp(this.$hidden, 'codeObject')) {
       this.$hidden.codeObject = value;
@@ -190,6 +254,20 @@ export default class Event {
 
   get returnEvent() {
     return this.isReturn() ? this : this.$hidden.linkedEvent;
+  }
+
+  get hash() {
+    if (!this.$hidden.hash) {
+      this.$hidden.hash = hashEvent(this);
+    }
+    return this.$hidden.hash;
+  }
+
+  get identityHash() {
+    if (!this.$hidden.identityHash) {
+      this.$hidden.identityHash = identityHashEvent(this);
+    }
+    return this.$hidden.identityHash;
   }
 
   callStack() {

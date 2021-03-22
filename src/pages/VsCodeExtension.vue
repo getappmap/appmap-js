@@ -8,7 +8,7 @@
         <template v-slot:buttons>
           <v-details-button
             icon="clear"
-            v-if="selectedObject"
+            v-if="selectedObject || selectedLabel"
             @click.native="clearSelection"
           >
             Clear selection
@@ -38,7 +38,10 @@
           <v-diagram-trace
             ref="diagramFlow"
             :events="rootEvents"
+            :selected-events="selectedEvent"
             :name="VIEW_FLOW"
+            :zoom-controls="true"
+            @clickEvent="onClickTraceEvent"
           />
         </v-tab>
       </v-tabs>
@@ -71,6 +74,7 @@ import {
   VIEW_FLOW,
   POP_OBJECT_STACK,
   CLEAR_OBJECT_STACK,
+  SELECT_OBJECT,
 } from '../store/vsCode';
 
 export default {
@@ -127,6 +131,10 @@ export default {
 
     selectedObject() {
       return this.$store.getters.selectedObject;
+    },
+
+    selectedEvent() {
+      return this.selectedObject instanceof Event ? [this.selectedObject] : [];
     },
 
     selectedLabel() {
@@ -196,6 +204,10 @@ export default {
       this.clearSelection();
 
       this.renderKey += 1;
+    },
+
+    onClickTraceEvent(e) {
+      this.$store.commit(SELECT_OBJECT, e);
     },
   },
 };

@@ -1,6 +1,33 @@
 export const hasProp = (obj, prop) =>
   Object.prototype.hasOwnProperty.call(obj, prop);
 
+export function isFalsey(valueObj) {
+  if (!valueObj) {
+    return true;
+  }
+  if (valueObj.class === 'FalseClass') {
+    return true;
+  }
+  if (valueObj.class === 'Array' && valueObj.value === '[]') {
+    return true;
+  }
+  if (valueObj.value === '') {
+    return true;
+  }
+
+  return false;
+}
+
+export function isCommand(event) {
+  if (event.http_server_request) {
+    return true;
+  }
+  if (event.codeObject.labels.has('command')) {
+    return true;
+  }
+  return false;
+}
+
 export function capitalizeString(str) {
   if (typeof str !== 'string') {
     return '';
