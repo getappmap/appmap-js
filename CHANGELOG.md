@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/applandinc/appmap-js/compare/v1.6.0...v1.7.0) (2021-03-22)
+
+
+### Features
+
+* AppMap diffing and initial analysis framework ([8706913](https://github.com/applandinc/appmap-js/commit/87069130934e73ecab53db9883b9b90ff2c522ac))
+
 # [1.6.0](https://github.com/applandinc/appmap-js/compare/v1.5.0...v1.6.0) (2021-03-22)
 
 
