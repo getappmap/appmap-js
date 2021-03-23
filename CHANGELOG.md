@@ -1,3 +1,17 @@
+# [1.9.0](https://github.com/applandinc/appmap-js/compare/v1.8.0...v1.9.0) (2021-03-23)
+
+
+### Bug Fixes
+
+* don't show queries in parents list ([ed752dd](https://github.com/applandinc/appmap-js/commit/ed752dd974cb9186370c5a08b5a1f75a33baad61))
+
+
+### Features
+
+* add icon for codeObjects with type "route" ([7b57b31](https://github.com/applandinc/appmap-js/commit/7b57b31ff143739aadfce3cd5d60de5dcdd8495d))
+* add icons for Database and Query objects ([6f28064](https://github.com/applandinc/appmap-js/commit/6f28064a46108b388cf0b8bfb0d4d21405ccc5f1))
+* show class/function/event parents in Details panel ([5f900a2](https://github.com/applandinc/appmap-js/commit/5f900a20cf7bb69f0da35f28edfca10649f10054))
+
 # [1.8.0](https://github.com/applandinc/appmap-js/compare/v1.7.0...v1.8.0) (2021-03-22)
 
 
