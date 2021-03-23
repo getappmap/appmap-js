@@ -86,10 +86,6 @@ export default class ClassMap {
     );
   }
 
-  codeObjectFromFQID(fqid) {
-    return this.codeObjects.find((co) => co.fqid === fqid);
-  }
-
   // Returns the first root code object of a given type or null if it doesn't exist
   root(type) {
     return this.roots.find((obj) => obj.type === type);

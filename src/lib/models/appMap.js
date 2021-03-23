@@ -61,23 +61,6 @@ export default class AppMap {
     delete this.data.classMap;
   }
 
-  /* eslint-disable class-methods-use-this */
-  get(fqid) {
-    const result = {
-      type: null,
-      object: null,
-    };
-
-    const fqidMatch = fqid.match(/^([a-z]+):(.+)/);
-    if (fqidMatch) {
-      result.type = fqidMatch[1]; // eslint-disable-line prefer-destructuring
-      result.object = fqidMatch[2]; // eslint-disable-line prefer-destructuring
-    }
-
-    return result;
-  }
-  /* eslint-enable class-methods-use-this */
-
   get version() {
     return this.data.version;
   }

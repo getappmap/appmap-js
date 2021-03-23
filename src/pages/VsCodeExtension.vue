@@ -263,42 +263,34 @@ export default {
     },
 
     setSelectedObject(fqid) {
-      const { type, object } = this.$store.state.appMap.get(fqid);
-
-      /* eslint-disable no-case-declarations */
-      switch (type) {
-        case 'event':
-          const eventId = +object;
-          let eventObject = null;
-
-          this.$store.state.appMap.events.some((event) => {
-            if (event.id === eventId) {
-              eventObject = event;
-              return true;
-            }
-            return false;
-          });
-
-          if (eventObject) {
-            this.$store.commit(SELECT_OBJECT, eventObject);
-          }
-
-          break;
-        case 'label':
-          this.$store.commit(SELECT_LABEL, object);
-          break;
-        default:
-          const codeObject = this.$store.state.appMap.classMap.codeObjectFromFQID(
-            fqid
-          );
-
-          if (codeObject) {
-            this.$store.commit(SELECT_OBJECT, codeObject);
-          }
-
-          break;
+      const [match, type, object] = fqid.match(/^([a-z]+):(.+)/);
+      if (!match) {
+        return;
       }
-      /* eslint-enable no-case-declarations */
+
+      if (type === 'label') {
+        this.$store.commit(SELECT_LABEL, object);
+        return;
+      }
+
+      const { classMap, events } = this.$store.state.appMap;
+      let selectedObject = null;
+
+      if (type === 'event') {
+        const eventId = parseInt(object, 10);
+
+        if (Number.isNaN(eventId)) {
+          return;
+        }
+
+        selectedObject = events.find((e) => e.id === eventId);
+      } else {
+        selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
+      }
+
+      if (selectedObject) {
+        this.$store.commit(SELECT_OBJECT, selectedObject);
+      }
     },
 
     clearSelection() {

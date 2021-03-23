@@ -342,6 +342,6 @@ export default class CodeObject {
   }
 
   get fqid() {
-    return encodeURI(`${this.type}:${this.id}`);
+    return `${this.type}:${this.id}`;
   }
 }

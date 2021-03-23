@@ -152,7 +152,7 @@ export default class Event {
   }
 
   get fqid() {
-    return encodeURI(`event:${this.id}`);
+    return `event:${this.id}`;
   }
 
   get previousSibling() {
