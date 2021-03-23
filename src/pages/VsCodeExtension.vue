@@ -118,7 +118,6 @@ import {
   SELECT_LABEL,
   POP_OBJECT_STACK,
   CLEAR_OBJECT_STACK,
-  SELECT_OBJECT,
 } from '../store/vsCode';
 
 export default {
