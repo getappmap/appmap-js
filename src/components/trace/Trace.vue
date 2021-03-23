@@ -53,7 +53,7 @@ export default {
 
 // This component is expected to be loaded dynamically as an asynchronous component. As such, we
 // must propagate this flag if the module is transformed to CJS during bundling.
-export const __esModule = true; // eslint-disable-line no-underscore-dangle
+// export const __esModule = true; // eslint-disable-line no-underscore-dangle
 </script>
 
 <style lang="scss">

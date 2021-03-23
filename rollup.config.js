@@ -86,6 +86,7 @@ if (!argv.format || argv.format === 'es') {
       file: 'dist/appmap.esm.js',
       format: 'esm',
       exports: 'named',
+      freeze: false,
     },
     plugins: [
       replace({
