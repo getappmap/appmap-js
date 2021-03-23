@@ -1,6 +1,10 @@
 <template>
   <div>
-    <v-details-panel-header object-type="Package" :title="object.name" />
+    <v-details-panel-header
+      object-type="Package"
+      :object="object"
+      :title="object.name"
+    />
     <v-details-panel-list
       title="Classes"
       :items="object.classes"
