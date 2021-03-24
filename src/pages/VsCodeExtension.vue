@@ -114,9 +114,10 @@ import {
   SET_VIEW,
   VIEW_COMPONENT,
   VIEW_FLOW,
+  SELECT_OBJECT,
+  SELECT_LABEL,
   POP_OBJECT_STACK,
   CLEAR_OBJECT_STACK,
-  SELECT_OBJECT,
 } from '../store/vsCode';
 
 export default {
@@ -157,6 +158,19 @@ export default {
         if (selectedObject && !(selectedObject instanceof Event)) {
           this.setView(VIEW_COMPONENT);
         }
+
+        if (selectedObject && selectedObject.fqid) {
+          this.emitSelectedObject(selectedObject.fqid);
+        } else {
+          this.emitSelectedObject(null);
+        }
+      },
+    },
+    '$store.getters.selectedLabel': {
+      handler(selectedLabel) {
+        this.emitSelectedObject(
+          selectedLabel ? `label:${selectedLabel}` : null
+        );
       },
     },
   },
@@ -241,6 +255,41 @@ export default {
     setView(view) {
       if (this.currentView !== view) {
         this.$store.commit(SET_VIEW, view);
+      }
+    },
+
+    emitSelectedObject(fqid) {
+      this.$root.$emit('selectedObject', fqid);
+    },
+
+    setSelectedObject(fqid) {
+      const [match, type, object] = fqid.match(/^([a-z]+):(.+)/);
+      if (!match) {
+        return;
+      }
+
+      if (type === 'label') {
+        this.$store.commit(SELECT_LABEL, object);
+        return;
+      }
+
+      const { classMap, events } = this.$store.state.appMap;
+      let selectedObject = null;
+
+      if (type === 'event') {
+        const eventId = parseInt(object, 10);
+
+        if (Number.isNaN(eventId)) {
+          return;
+        }
+
+        selectedObject = events.find((e) => e.id === eventId);
+      } else {
+        selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
+      }
+
+      if (selectedObject) {
+        this.$store.commit(SELECT_OBJECT, selectedObject);
       }
     },
 

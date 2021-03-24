@@ -151,6 +151,10 @@ export default class Event {
     return sql.normalized_sql || sql.sql;
   }
 
+  get fqid() {
+    return `event:${this.id}`;
+  }
+
   get previousSibling() {
     const { parent } = this;
     if (!parent) {

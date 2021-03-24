@@ -340,4 +340,8 @@ export default class CodeObject {
         return this.name;
     }
   }
+
+  get fqid() {
+    return `${this.type}:${this.id}`;
+  }
 }
