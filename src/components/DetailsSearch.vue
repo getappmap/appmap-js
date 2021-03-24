@@ -1,5 +1,5 @@
 <template>
-  <div class="details-search">
+  <div :class="classes">
     <form class="details-search__form">
       <div class="details-search__input-wrap">
         <span class="details-search__input-prefix">
