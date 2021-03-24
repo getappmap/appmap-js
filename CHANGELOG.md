@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/applandinc/appmap-js/compare/v1.9.0...v1.10.0) (2021-03-24)
+
+
+### Features
+
+* Add API to set selectedObject from outside the app using FQID ([#128](https://github.com/applandinc/appmap-js/issues/128)) ([2a0f4b1](https://github.com/applandinc/appmap-js/commit/2a0f4b1bb0439ef6ef3055881adf6f290d9bfda5))
+
 # [1.9.0](https://github.com/applandinc/appmap-js/compare/v1.8.0...v1.9.0) (2021-03-23)
 
 
