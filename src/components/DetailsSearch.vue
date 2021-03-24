@@ -1,5 +1,5 @@
 <template>
-  <div class="details-search" :key="renderKey">
+  <div class="details-search">
     <form class="details-search__form">
       <div class="details-search__input-wrap">
         <span class="details-search__input-prefix">
@@ -64,26 +64,7 @@ export default {
 
   data() {
     return {
-      renderKey: 0,
       filter: '',
-      objects: {
-        http: {
-          title: 'HTTP routes',
-          data: [],
-        },
-        labels: {
-          title: 'Labels',
-          data: [],
-        },
-        code: {
-          title: 'Code',
-          data: [],
-        },
-        sql: {
-          title: 'SQL',
-          data: [],
-        },
-      },
     };
   },
 
@@ -102,6 +83,56 @@ export default {
         Object.keys(this.objects).filter((k) => !!this.objects[k].data.length)
           .length === 0
       );
+    },
+    objects() {
+      const { appMap } = this.$store.state;
+      const objects = {
+        http: {
+          title: 'HTTP routes',
+          data: [],
+        },
+        labels: {
+          title: 'Labels',
+          data: [],
+        },
+        code: {
+          title: 'Code',
+          data: [],
+        },
+        sql: {
+          title: 'SQL',
+          data: [],
+        },
+      };
+
+      appMap.classMap.codeObjects.forEach((codeObject) => {
+        switch (codeObject.type) {
+          case 'package':
+            if (codeObject.children.length > 1) {
+              objects.code.data.push(codeObject);
+            }
+            break;
+          case 'function':
+            objects.code.data.push(codeObject);
+            break;
+          case 'class':
+            if (codeObject.functions.length) {
+              objects.code.data.push(codeObject);
+            }
+            break;
+          case 'route':
+            objects.http.data.push(codeObject);
+            break;
+          case 'query':
+            codeObject.events.forEach((e) => objects.sql.data.push(e));
+            break;
+          default:
+            break;
+        }
+      });
+      objects.labels.data = Object.keys(appMap.labels);
+
+      return objects;
     },
     filteredObjects() {
       const filter = this.filter.trim();
@@ -132,15 +163,6 @@ export default {
     },
   },
 
-  watch: {
-    '$store.state.appMap': {
-      handler(appMap) {
-        this.initObjects(appMap);
-        this.renderKey += 1;
-      },
-    },
-  },
-
   methods: {
     selectObject(type, object) {
       switch (type) {
@@ -156,40 +178,6 @@ export default {
           break;
       }
     },
-    initObjects(appMap) {
-      appMap.classMap.codeObjects.forEach((codeObject) => {
-        switch (codeObject.type) {
-          case 'package':
-            if (codeObject.children.length > 1) {
-              this.objects.code.data.push(codeObject);
-            }
-            break;
-          case 'function':
-            this.objects.code.data.push(codeObject);
-            break;
-          case 'class':
-            if (codeObject.functions.length) {
-              this.objects.code.data.push(codeObject);
-            }
-            break;
-          case 'route':
-            this.objects.http.data.push(codeObject);
-            break;
-          case 'query':
-            codeObject.events.forEach((e) => this.objects.sql.data.push(e));
-            break;
-          default:
-            break;
-        }
-      });
-      this.objects.labels.data = Object.keys(appMap.labels);
-    },
-  },
-
-  mounted() {
-    if (this.$store.state) {
-      this.initObjects(this.$store.state.appMap);
-    }
   },
 };
 </script>

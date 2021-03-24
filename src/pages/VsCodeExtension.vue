@@ -229,12 +229,8 @@ export default {
       const hasEvents = Array.isArray(data.events) && data.events.length;
       const hasClassMap = Array.isArray(data.classMap) && data.classMap.length;
 
-      if (hasEvents && hasClassMap) {
-        this.isEmptyAppMap = false;
-        this.$store.commit(SET_APPMAP_DATA, data);
-      } else {
-        this.isEmptyAppMap = true;
-      }
+      this.isEmptyAppMap = !(hasEvents && hasClassMap);
+      this.$store.commit(SET_APPMAP_DATA, data);
     },
 
     showInstructions() {
