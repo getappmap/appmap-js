@@ -157,8 +157,6 @@ export default {
     position: absolute;
     right: 0;
     bottom: 100%;
-    display: flex;
-    flex-direction: column;
     margin: 0 0.75rem 1rem 0;
     width: max-content;
     height: max-content;
@@ -167,17 +165,7 @@ export default {
     padding: 1.5rem;
     color: $gray6;
     background: $black;
-
-    &::after {
-      content: '';
-      border: 0.5rem solid $black;
-      border-left-color: transparent;
-      border-bottom-color: transparent;
-      display: block;
-      position: absolute;
-      right: 0;
-      bottom: -0.8rem;
-    }
+    overflow-y: scroll;
   }
 
   &__head {
