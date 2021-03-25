@@ -46,6 +46,7 @@
             </li>
           </ul>
           <ul class="legend">
+            <h5>Legend</h5>
             <li>
               <div class="icon class-pkg"></div>
               <p>Class packages</p>
@@ -75,6 +76,7 @@
             <li>Expand nodes to see children</li>
           </ul>
           <ul class="legend">
+            <h5>Legend</h5>
             <li class="type-int icon">Integer/Number</li>
             <li class="type-string icon">String</li>
             <li class="type-bool icon">Boolean</li>
@@ -221,6 +223,13 @@ ul.feature-list {
     margin: 0;
     padding: 0;
     list-style-type: none;
+    word-break: break-word;
+    h5 {
+      margin: 0 0 0.4rem 0;
+      color: $gray2;
+      font-size: 1rem;
+      font-weight: 400;
+    }
     li {
       display: flex;
       flex-direction: row;
@@ -293,6 +302,12 @@ ul.feature-list {
 
   .trace {
     font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    .legend {
+      li {
+        line-height: 2rem;
+        margin: 0.2rem 0;
+      }
+    }
     .icon {
       height: unset;
       width: unset;
@@ -303,6 +318,7 @@ ul.feature-list {
       &.type-int:before {
         font-size: 1.25rem;
         margin-right: 0.3rem;
+        font-size: 2rem;
       }
       &.type-int {
         &:before {
