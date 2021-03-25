@@ -164,7 +164,6 @@ export default {
     height: max-content;
     max-width: 50vw;
     max-height: 80vh;
-    overflow: auto;
     padding: 1.5rem;
     color: $gray6;
     background: $black;
@@ -220,6 +219,7 @@ ul.feature-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 2rem;
+  overflow: scroll;
   .legend {
     margin: 0;
     padding: 0;
