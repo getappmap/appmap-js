@@ -164,6 +164,7 @@ export default {
     height: max-content;
     max-width: 50vw;
     max-height: 80vh;
+    overflow: auto;
     padding: 1.5rem;
     color: $gray6;
     background: $black;
