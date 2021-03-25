@@ -11,6 +11,11 @@
         </v-details-button>
       </template>
     </v-details-panel-header>
+    <v-source-code
+      v-if="object.data.source"
+      :comment="object.data.comment"
+      :source="object.data.source"
+    />
     <v-details-panel-list title="Events" :items="object.events" />
     <v-details-panel-list
       title="Inbound Calls"
@@ -25,6 +30,7 @@
 import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
+import VSourceCode from '@/components/SourceCode.vue';
 import { CodeObjectType } from '@/lib/models/codeObject';
 
 export default {
@@ -33,6 +39,7 @@ export default {
     VDetailsButton,
     VDetailsPanelList,
     VDetailsPanelHeader,
+    VSourceCode,
   },
   props: {
     object: {

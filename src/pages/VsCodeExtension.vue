@@ -98,6 +98,7 @@
 </template>
 
 <script>
+import 'highlight.js/styles/hopscotch.css';
 import { Event } from '@/lib/models';
 import ReloadIcon from '@/assets/reload.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';

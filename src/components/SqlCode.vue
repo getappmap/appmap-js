@@ -5,8 +5,8 @@
 </template>
 
 <script>
+import hljs from 'highlight.js';
 import sqlFormatter from 'sql-formatter';
-import sqlHighlight from 'sql-highlight';
 
 export default {
   name: 'v-sql-code',
@@ -20,9 +20,7 @@ export default {
 
   computed: {
     formattedSQL() {
-      return sqlHighlight.highlight(sqlFormatter.format(this.sql), {
-        html: true,
-      });
+      return hljs.highlight('sql', sqlFormatter.format(this.sql)).value;
     },
   },
 };
@@ -31,6 +29,7 @@ export default {
 <style scoped>
 .sql-code {
   color: #e90;
+  line-height: 1.2;
 }
 .sql-code >>> .sql-hl-keyword {
   color: #07a;
