@@ -234,9 +234,11 @@ ul.feature-list {
       display: flex;
       flex-direction: row;
       margin: 0.5rem 0;
+      line-height: 2rem;
       p {
         flex: 1;
         margin: 0;
+        line-height: 1.5rem;
       }
       align-items: flex-start;
     }
@@ -262,7 +264,8 @@ ul.feature-list {
         li {
           display: flex;
           flex-direction: row;
-          margin: 0.5rem 0;
+          margin: 0;
+          line-height: 2rem;
           p {
             flex: 1;
             margin: 0;
@@ -305,7 +308,7 @@ ul.feature-list {
     .legend {
       li {
         line-height: 2rem;
-        margin: 0.2rem 0;
+        margin: 0;
       }
     }
     .icon {
