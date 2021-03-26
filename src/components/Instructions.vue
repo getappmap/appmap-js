@@ -46,6 +46,7 @@
             </li>
           </ul>
           <ul class="legend">
+            <h5>Legend</h5>
             <li>
               <div class="icon class-pkg"></div>
               <p>Class packages</p>
@@ -75,6 +76,7 @@
             <li>Expand nodes to see children</li>
           </ul>
           <ul class="legend">
+            <h5>Legend</h5>
             <li class="type-int icon">Integer/Number</li>
             <li class="type-string icon">String</li>
             <li class="type-bool icon">Boolean</li>
@@ -155,8 +157,6 @@ export default {
     position: absolute;
     right: 0;
     bottom: 100%;
-    display: flex;
-    flex-direction: column;
     margin: 0 0.75rem 1rem 0;
     width: max-content;
     height: max-content;
@@ -165,17 +165,7 @@ export default {
     padding: 1.5rem;
     color: $gray6;
     background: $black;
-
-    &::after {
-      content: '';
-      border: 0.5rem solid $black;
-      border-left-color: transparent;
-      border-bottom-color: transparent;
-      display: block;
-      position: absolute;
-      right: 0;
-      bottom: -0.8rem;
-    }
+    overflow-y: scroll;
   }
 
   &__head {
@@ -217,17 +207,27 @@ ul.feature-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 2rem;
+  overflow: scroll;
   .legend {
     margin: 0;
     padding: 0;
     list-style-type: none;
+    word-break: break-word;
+    h5 {
+      margin: 0 0 0.4rem 0;
+      color: $gray2;
+      font-size: 1rem;
+      font-weight: 400;
+    }
     li {
       display: flex;
       flex-direction: row;
       margin: 0.5rem 0;
+      line-height: 2rem;
       p {
         flex: 1;
         margin: 0;
+        line-height: 1.5rem;
       }
       align-items: flex-start;
     }
@@ -253,7 +253,8 @@ ul.feature-list {
         li {
           display: flex;
           flex-direction: row;
-          margin: 0.5rem 0;
+          margin: 0;
+          line-height: 2rem;
           p {
             flex: 1;
             margin: 0;
@@ -293,6 +294,12 @@ ul.feature-list {
 
   .trace {
     font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    .legend {
+      li {
+        line-height: 2rem;
+        margin: 0;
+      }
+    }
     .icon {
       height: unset;
       width: unset;
@@ -303,6 +310,7 @@ ul.feature-list {
       &.type-int:before {
         font-size: 1.25rem;
         margin-right: 0.3rem;
+        font-size: 2rem;
       }
       &.type-int {
         &:before {
