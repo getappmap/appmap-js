@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/applandinc/appmap-js/compare/v1.10.0...v1.10.1) (2021-03-29)
+
+
+### Bug Fixes
+
+* Improve instructions legibility ([#137](https://github.com/applandinc/appmap-js/issues/137)) ([62f5ea7](https://github.com/applandinc/appmap-js/commit/62f5ea7d6975f8cdb87d719db9bf32dca07f34c3))
+
 # [1.10.0](https://github.com/applandinc/appmap-js/compare/v1.9.0...v1.10.0) (2021-03-24)
 
 
