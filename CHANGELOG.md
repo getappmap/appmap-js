@@ -1,3 +1,10 @@
+## [1.10.2](https://github.com/applandinc/appmap-js/compare/v1.10.1...v1.10.2) (2021-03-31)
+
+
+### Bug Fixes
+
+* make `isEmptyAppMap` property computed ([4c65a0c](https://github.com/applandinc/appmap-js/commit/4c65a0c144acf594fca43b487e19cf32541834cb))
+
 ## [1.10.1](https://github.com/applandinc/appmap-js/compare/v1.10.0...v1.10.1) (2021-03-29)
 
 
