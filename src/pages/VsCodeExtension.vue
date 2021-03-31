@@ -226,13 +226,21 @@ export default {
 
   methods: {
     loadData(data) {
-      const hasEvents = Array.isArray(data.events) && data.events.length;
-      const hasClassMap = Array.isArray(data.classMap) && data.classMap.length;
+      try {
+        const appMapData = typeof data === 'string' ? JSON.parse(data) : data;
+        const hasEvents =
+          Array.isArray(appMapData.events) && appMapData.events.length;
+        const hasClassMap =
+          Array.isArray(appMapData.classMap) && appMapData.classMap.length;
 
-      if (hasEvents && hasClassMap) {
-        this.isEmptyAppMap = false;
-        this.$store.commit(SET_APPMAP_DATA, data);
-      } else {
+        if (hasEvents && hasClassMap) {
+          this.isEmptyAppMap = false;
+          this.$store.commit(SET_APPMAP_DATA, appMapData);
+        } else {
+          this.isEmptyAppMap = true;
+        }
+      } catch (e) {
+        console.error('AppMap JSON parse error!');
         this.isEmptyAppMap = true;
       }
     },
