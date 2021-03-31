@@ -139,7 +139,6 @@ export default {
 
   data() {
     return {
-      isEmptyAppMap: false,
       renderKey: 0,
       VIEW_COMPONENT,
       VIEW_FLOW,
@@ -222,19 +221,21 @@ export default {
     canGoBack() {
       return this.$store.getters.canPopStack;
     },
+
+    isEmptyAppMap() {
+      const { appMap } = this.$store.state;
+      const hasEvents = Array.isArray(appMap.events) && appMap.events.length;
+      const hasClassMap =
+        Array.isArray(appMap.classMap.codeObjects) &&
+        appMap.classMap.codeObjects.length;
+
+      return !hasEvents || !hasClassMap;
+    },
   },
 
   methods: {
     loadData(data) {
-      const hasEvents = Array.isArray(data.events) && data.events.length;
-      const hasClassMap = Array.isArray(data.classMap) && data.classMap.length;
-
-      if (hasEvents && hasClassMap) {
-        this.isEmptyAppMap = false;
-        this.$store.commit(SET_APPMAP_DATA, data);
-      } else {
-        this.isEmptyAppMap = true;
-      }
+      this.$store.commit(SET_APPMAP_DATA, data);
     },
 
     showInstructions() {
