@@ -240,6 +240,7 @@ export default {
 
     showInstructions() {
       this.$refs.instructions.open();
+      this.$root.$emit('showInstructions');
     },
 
     onChangeTab(tab) {
@@ -250,7 +251,9 @@ export default {
         return;
       }
 
-      this.setView(Object.keys(this.$refs)[index]);
+      const viewKey = Object.keys(this.$refs)[index];
+      this.setView(viewKey);
+      this.$root.$emit('changeTab', viewKey);
     },
 
     setView(view) {
@@ -296,6 +299,7 @@ export default {
 
     clearSelection() {
       this.$store.commit(CLEAR_OBJECT_STACK);
+      this.$root.$emit('clearSelection');
     },
 
     goBack() {
