@@ -15,6 +15,7 @@
 
 <script>
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
+import { AppMap } from '@/lib/models';
 
 export default {
   name: 'v-details-label',
@@ -26,10 +27,11 @@ export default {
       type: String,
       required: true,
     },
+    appMap: AppMap,
   },
   computed: {
     labelInfo() {
-      return this.$store.state.appMap.labels[this.label];
+      return this.appMap.labels[this.label] || {};
     },
   },
 };

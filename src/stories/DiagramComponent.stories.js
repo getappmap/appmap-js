@@ -12,7 +12,9 @@ export default {
   argTypes: {
     theme: { control: { type: 'select', options: ['dark', 'light'] } },
   },
-  args: {},
+  args: {
+    classMap: store.state.appMap.classMap,
+  },
 };
 
 export const component = (args, { argTypes }) => ({

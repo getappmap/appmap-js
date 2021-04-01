@@ -15,6 +15,7 @@ export default {
   argTypes: {},
   args: {
     title: 'Details Panel',
+    appMap: store.state.appMap,
   },
   store,
 };

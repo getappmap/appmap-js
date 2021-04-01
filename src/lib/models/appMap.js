@@ -33,6 +33,7 @@ function groupChanges(eventArray) {
 
   return result;
 }
+
 export default class AppMap {
   constructor(data) {
     this.data = {

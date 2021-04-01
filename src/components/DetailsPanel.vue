@@ -8,7 +8,10 @@
         <slot name="buttons" />
       </div>
       <keep-alive>
-        <v-details-search v-if="!selectedObject && !selectedLabel" />
+        <v-details-search
+          v-if="!selectedObject && !selectedLabel"
+          :appMap="appMap"
+        />
       </keep-alive>
       <component
         v-if="selectedObject"
@@ -19,7 +22,11 @@
         v-if="selectedObject && selectedObject.labels"
         :items="Array.from(selectedObject.labels)"
       />
-      <v-details-label v-if="selectedLabel" :label="selectedLabel" />
+      <v-details-label
+        v-if="selectedLabel"
+        :label="selectedLabel"
+        :appMap="appMap"
+      />
     </div>
   </div>
 </template>
@@ -37,7 +44,7 @@ import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
 import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
 import VDetailsPanelLabels from '@/components/DetailsPanelLabels.vue';
 import VDetailsSearch from '@/components/DetailsSearch.vue';
-import { Event } from '@/lib/models';
+import { Event, AppMap } from '@/lib/models';
 
 export default {
   name: 'v-details-panel',
@@ -57,6 +64,7 @@ export default {
   },
   props: {
     subtitle: String,
+    appMap: AppMap,
     selectedObject: {
       type: Object,
     },

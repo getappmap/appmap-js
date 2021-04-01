@@ -18,16 +18,16 @@
     </form>
     <section
       :class="`details-search__block details-search__block--${type}`"
-      v-for="type in Object.keys(filteredObjects)"
+      v-for="type in Object.keys(listItems)"
       :key="type"
     >
       <h2 class="details-search__block-title">
-        {{ filteredObjects[type].title }}
+        {{ listItems[type].title }}
       </h2>
       <ul class="details-search__block-list">
         <li
           class="details-search__block-item"
-          v-for="(item, index) in filteredObjects[type].data"
+          v-for="(item, index) in listItems[type].data"
           :key="index"
           @click="selectObject(type, item)"
         >
@@ -53,6 +53,8 @@
 
 <script>
 import SearchIcon from '@/assets/search.svg';
+import { CodeObject, AppMap } from '@/lib/models';
+import { CodeObjectType } from '@/lib/models/codeObject';
 import { SELECT_OBJECT, SELECT_LABEL } from '../store/vsCode';
 
 export default {
@@ -62,10 +64,33 @@ export default {
     SearchIcon,
   },
 
+  props: {
+    appMap: AppMap,
+  },
+
   data() {
     return {
       filter: '',
-      objects: {
+    };
+  },
+
+  computed: {
+    classes() {
+      const result = ['details-search'];
+
+      if (this.isEmptyAppMap) {
+        result.push('details-search--empty');
+      }
+
+      return result;
+    },
+
+    isEmptyAppMap() {
+      return Object.values(this.listItems).every((v) => v.data.length === 0);
+    },
+
+    listItems() {
+      const items = {
         http: {
           title: 'HTTP routes',
           data: [],
@@ -82,112 +107,84 @@ export default {
           title: 'SQL',
           data: [],
         },
-      },
-    };
-  },
+      };
 
-  computed: {
-    classes() {
-      const result = ['details-search'];
-
-      if (this.isEmptyAppMap) {
-        result.push('details-search--empty');
-      }
-
-      return result;
-    },
-    isEmptyAppMap() {
-      return (
-        Object.keys(this.objects).filter((k) => !!this.objects[k].data.length)
-          .length === 0
-      );
-    },
-    filteredObjects() {
-      const filter = this.filter.trim();
-      const objects = {};
-
-      Object.keys(this.objects).forEach((type) => {
-        objects[type] = {
-          title: this.objects[type].title,
-          data: [],
-        };
-
-        const filteredList = this.objects[type].data.filter((item) => {
-          const objectName =
-            type !== 'sql' && item.prettyName
-              ? item.prettyName
-              : item.name || item;
-          return new RegExp(filter, 'ig').test(objectName);
-        });
-
-        if (filteredList.length) {
-          objects[type].data = filteredList;
-        } else {
-          delete objects[type];
+      this.appMap.classMap.codeObjects.forEach((codeObject) => {
+        if (!this.passesFilter(codeObject)) {
+          return;
         }
-      });
 
-      return objects;
-    },
-  },
-
-  watch: {
-    '$store.state.appMap': {
-      handler(appMap) {
-        this.initObjects(appMap);
-      },
-    },
-  },
-
-  methods: {
-    selectObject(type, object) {
-      switch (type) {
-        case 'http':
-        case 'code':
-        case 'sql':
-          this.$store.commit(SELECT_OBJECT, object);
-          break;
-        case 'labels':
-          this.$store.commit(SELECT_LABEL, object);
-          break;
-        default:
-          break;
-      }
-    },
-    initObjects(appMap) {
-      appMap.classMap.codeObjects.forEach((codeObject) => {
         switch (codeObject.type) {
           case 'package':
             if (codeObject.children.length > 1) {
-              this.objects.code.data.push(codeObject);
+              items.code.data.push(codeObject);
             }
             break;
           case 'function':
-            this.objects.code.data.push(codeObject);
+            items.code.data.push(codeObject);
             break;
           case 'class':
             if (codeObject.functions.length) {
-              this.objects.code.data.push(codeObject);
+              items.code.data.push(codeObject);
             }
             break;
           case 'route':
-            this.objects.http.data.push(codeObject);
+            items.http.data.push(codeObject);
             break;
           case 'query':
-            codeObject.events.forEach((e) => this.objects.sql.data.push(e));
+            codeObject.events.forEach((e) => items.sql.data.push(e));
             break;
           default:
             break;
         }
       });
-      this.objects.labels.data = Object.keys(appMap.labels);
+
+      items.labels.data = Object.keys(this.appMap.labels).filter((l) =>
+        this.passesFilter(l)
+      );
+
+      return items;
+    },
+
+    filterRegex() {
+      const filterString = this.filter.trim();
+      if (filterString === '') {
+        return null;
+      }
+
+      return new RegExp(filterString, 'ig');
     },
   },
 
-  mounted() {
-    if (this.$store.state) {
-      this.initObjects(this.$store.state.appMap);
-    }
+  methods: {
+    selectObject(type, object) {
+      if (type === 'labels') {
+        this.$store.commit(SELECT_LABEL, object);
+      } else {
+        this.$store.commit(SELECT_OBJECT, object);
+      }
+    },
+
+    passesFilter(obj) {
+      const { filterRegex } = this;
+      if (!filterRegex) {
+        // If it's null, we don't need to apply any filtering. Always return true.
+        return true;
+      }
+
+      let filterString = obj;
+
+      if (obj instanceof CodeObject) {
+        filterString =
+          obj.type === CodeObjectType.QUERY ? obj.name : obj.prettyName;
+      }
+
+      if (typeof obj !== 'string') {
+        return false;
+      }
+
+      return !this.filterRegex || this.filterRegex.test(filterString);
+    },
   },
 };
 </script>
