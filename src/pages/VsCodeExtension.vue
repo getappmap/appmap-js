@@ -25,7 +25,7 @@
       </v-details-panel>
     </div>
 
-    <div class="main-column main-column--right" v-if="!isEmptyAppMap">
+    <div class="main-column main-column--right">
       <v-tabs @activateTab="onChangeTab" ref="tabs">
         <v-tab
           name="Dependency Map"
@@ -57,6 +57,7 @@
         <v-instructions ref="instructions" />
       </div>
     </div>
+
     <div class="no-data-notice" v-if="isEmptyAppMap">
       <div class="notice">
         <p class="no-data-notice__title">
@@ -415,14 +416,20 @@ code {
   }
 
   .no-data-notice {
-    grid-column: 2;
     display: flex;
+    position: absolute;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-family: $appland-text-font-family;
     line-height: 1.5;
     color: $base03;
+    background-color: $vs-code-gray1;
+    z-index: 2147483647;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 
     &__title,
     &__text {

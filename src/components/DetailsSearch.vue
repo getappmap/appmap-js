@@ -1,5 +1,5 @@
 <template>
-  <div :class="classes">
+  <div class="details-search">
     <form class="details-search__form">
       <div class="details-search__input-wrap">
         <span class="details-search__input-prefix">
@@ -12,7 +12,6 @@
           placeholder="Search..."
           ref="searchInput"
           v-model="filter"
-          :disabled="isEmptyAppMap"
         />
       </div>
     </form>
@@ -37,15 +36,6 @@
               : item.name || item
           }}
         </li>
-      </ul>
-    </section>
-    <section
-      class="details-search__block details-search__block--empty"
-      v-if="isEmptyAppMap"
-    >
-      <h2 class="details-search__block-title">Error</h2>
-      <ul class="details-search__block-list">
-        <li class="details-search__block-item">No data to display</li>
       </ul>
     </section>
   </div>
@@ -75,20 +65,6 @@ export default {
   },
 
   computed: {
-    classes() {
-      const result = ['details-search'];
-
-      if (this.isEmptyAppMap) {
-        result.push('details-search--empty');
-      }
-
-      return result;
-    },
-
-    isEmptyAppMap() {
-      return Object.values(this.listItems).every((v) => v.data.length === 0);
-    },
-
     listItems() {
       const items = {
         http: {
