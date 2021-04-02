@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/applandinc/appmap-js/compare/v1.10.2...v1.11.0) (2021-04-02)
+
+
+### Features
+
+* Emit user events from the VS Code Extension ([fd6dfd1](https://github.com/applandinc/appmap-js/commit/fd6dfd18a25f1b69a6640ab04f6828fe401dfb27))
+
 ## [1.10.2](https://github.com/applandinc/appmap-js/compare/v1.10.1...v1.10.2) (2021-03-31)
 
 

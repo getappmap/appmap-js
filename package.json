@@ -1,6 +1,6 @@
 {
   "name": "@appland/appmap",
-  "version": "1.10.2",
+  "version": "1.11.0",
   "main": "dist/appmap.esm.js",
   "module": "dist/appmap.esm.js",
   "scripts": {
