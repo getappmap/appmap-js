@@ -31,7 +31,7 @@
           @click="selectObject(type, item.object)"
         >
           {{
-            type !== 'sql' && item.object.prettyName
+            type !== 'query' && item.object.prettyName
               ? item.object.prettyName
               : item.object.name || item.object
           }}
@@ -73,7 +73,7 @@ export default {
   computed: {
     listItems() {
       const items = {
-        http: {
+        route: {
           title: 'HTTP routes',
           data: [],
         },
@@ -81,11 +81,19 @@ export default {
           title: 'Labels',
           data: [],
         },
-        code: {
-          title: 'Code',
+        package: {
+          title: 'Packages',
           data: [],
         },
-        sql: {
+        class: {
+          title: 'Classes',
+          data: [],
+        },
+        function: {
+          title: 'Functions',
+          data: [],
+        },
+        query: {
           title: 'SQL queries',
           data: [],
         },
@@ -103,23 +111,19 @@ export default {
 
         switch (codeObject.type) {
           case 'package':
-            if (codeObject.children.length > 1) {
-              items.code.data.push(item);
+            if (codeObject.childLeafs().length > 1) {
+              items[codeObject.type].data.push(item);
             }
-            break;
-          case 'function':
-            items.code.data.push(item);
             break;
           case 'class':
             if (codeObject.functions.length) {
-              items.code.data.push(item);
+              items[codeObject.type].data.push(item);
             }
             break;
+          case 'function':
           case 'route':
-            items.http.data.push(item);
-            break;
           case 'query':
-            items.sql.data.push(item);
+            items[codeObject.type].data.push(item);
             break;
           default:
             break;
@@ -133,6 +137,20 @@ export default {
             childrenCount: labelData.function.length + labelData.event.length,
           });
         }
+      });
+
+      Object.values(items).forEach((item) => {
+        item.data = item.data.sort((a, b) => {
+          const aStr =
+            a.object instanceof CodeObject
+              ? a.object.prettyName
+              : String(a.object);
+          const bStr =
+            b.object instanceof CodeObject
+              ? b.object.prettyName
+              : String(b.object);
+          return aStr.localeCompare(bStr);
+        });
       });
 
       return items;
@@ -171,7 +189,7 @@ export default {
           obj.type === CodeObjectType.QUERY ? obj.name : obj.prettyName;
       }
 
-      if (typeof obj !== 'string') {
+      if (typeof filterString !== 'string') {
         return false;
       }
 
@@ -287,7 +305,7 @@ export default {
         transform: translateX(-50%);
       }
 
-      .details-search__block--http &::before {
+      .details-search__block--route &::before {
         background: linear-gradient(
           to right,
           #c61c38 0%,
@@ -309,7 +327,9 @@ export default {
         }
       }
 
-      .details-search__block--code &::before {
+      .details-search__block--package &::before,
+      .details-search__block--class &::before,
+      .details-search__block--function &::before {
         background: linear-gradient(
           to right,
           #4362b1 0%,
@@ -318,7 +338,7 @@ export default {
         );
       }
 
-      .details-search__block--sql &::before {
+      .details-search__block--query &::before {
         background: linear-gradient(
           to right,
           #9c2fba 0%,
