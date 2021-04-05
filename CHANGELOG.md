@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/applandinc/appmap-js/compare/v1.11.0...v1.11.1) (2021-04-05)
+
+
+### Bug Fixes
+
+* Filter non-root objects out of the UI ([71189f8](https://github.com/applandinc/appmap-js/commit/71189f8d456760810cf363b7532472fe1f939d4b))
+
 # [1.11.0](https://github.com/applandinc/appmap-js/compare/v1.10.2...v1.11.0) (2021-04-02)
 
 
