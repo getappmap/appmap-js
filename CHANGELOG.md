@@ -1,3 +1,10 @@
+## [1.11.2](https://github.com/applandinc/appmap-js/compare/v1.11.1...v1.11.2) (2021-04-05)
+
+
+### Bug Fixes
+
+* Expose node bundle as `main` in package.json ([4fb9d28](https://github.com/applandinc/appmap-js/commit/4fb9d28fbc9f2959b91d3e17bcffd1512d1120f4))
+
 ## [1.11.1](https://github.com/applandinc/appmap-js/compare/v1.11.0...v1.11.1) (2021-04-05)
 
 
