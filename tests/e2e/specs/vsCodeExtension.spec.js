@@ -186,6 +186,19 @@ context('VS Code Extension', () => {
       );
     });
 
+    it('show child route events count', () => {
+      cy.get('.details-search').should('be.visible');
+
+      cy.get('.details-search__block-item')
+        .contains('GET /admin/orders')
+        .within(() => {
+          cy.get('.details-search__block-item-count').should(
+            'contain.text',
+            '2'
+          );
+        });
+    });
+
     it('the current event is highlighted upon opening the flow view', () => {
       cy.get('.details-search').should('be.visible');
 
