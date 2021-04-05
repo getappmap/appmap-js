@@ -2,6 +2,7 @@
   <div id="app" :key="renderKey">
     <div class="main-column main-column--left">
       <v-details-panel
+        :appMap="filteredAppMap"
         :selected-object="selectedObject"
         :selected-label="selectedLabel"
       >
@@ -24,20 +25,23 @@
       </v-details-panel>
     </div>
 
-    <div class="main-column main-column--right" v-if="!isEmptyAppMap">
+    <div class="main-column main-column--right">
       <v-tabs @activateTab="onChangeTab" ref="tabs">
         <v-tab
           name="Dependency Map"
           :is-active="isViewingComponent"
           :ref="VIEW_COMPONENT"
         >
-          <v-diagram-component ref="componentDiagram" />
+          <v-diagram-component
+            ref="componentDiagram"
+            :class-map="filteredAppMap.classMap"
+          />
         </v-tab>
 
         <v-tab name="Trace" :is-active="isViewingFlow" :ref="VIEW_FLOW">
           <v-diagram-trace
             ref="diagramFlow"
-            :events="rootEvents"
+            :events="filteredAppMap.rootEvents()"
             :selected-events="selectedEvent"
             :name="VIEW_FLOW"
             :zoom-controls="true"
@@ -53,6 +57,7 @@
         <v-instructions ref="instructions" />
       </div>
     </div>
+
     <div class="no-data-notice" v-if="isEmptyAppMap">
       <div class="notice">
         <p class="no-data-notice__title">
@@ -98,7 +103,7 @@
 </template>
 
 <script>
-import { Event } from '@/lib/models';
+import { Event, buildAppMap } from '@/lib/models';
 import ReloadIcon from '@/assets/reload.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
@@ -175,15 +180,18 @@ export default {
   },
 
   computed: {
-    rootEvents() {
+    filteredAppMap() {
       const { appMap } = this.$store.state;
-      let events = appMap.events.filter(
-        (e) => e.isCall() && e.httpServerRequest
-      );
-      if (events.length === 0) {
-        events = appMap.events.filter((e) => e.isCall() && !e.parent);
-      }
-      return events;
+      const events = appMap.rootEvents().reduce((callTree, rootEvent) => {
+        rootEvent.traverse((e) => callTree.push(e));
+        return callTree;
+      }, []);
+
+      return buildAppMap({
+        events,
+        classMap: appMap.classMap.roots.map((c) => ({ ...c.data })),
+        metadata: appMap.metadata,
+      }).build();
     },
 
     selectedObject() {
@@ -196,10 +204,6 @@ export default {
 
     selectedLabel() {
       return this.$store.getters.selectedLabel;
-    },
-
-    callTree() {
-      return this.$store.state.appMap.callTree;
     },
 
     currentView() {
@@ -223,7 +227,7 @@ export default {
     },
 
     isEmptyAppMap() {
-      const { appMap } = this.$store.state;
+      const appMap = this.filteredAppMap;
       const hasEvents = Array.isArray(appMap.events) && appMap.events.length;
       const hasClassMap =
         Array.isArray(appMap.classMap.codeObjects) &&
@@ -416,14 +420,20 @@ code {
   }
 
   .no-data-notice {
-    grid-column: 2;
     display: flex;
+    position: absolute;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-family: $appland-text-font-family;
     line-height: 1.5;
     color: $base03;
+    background-color: $vs-code-gray1;
+    z-index: 2147483647;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 
     &__title,
     &__text {

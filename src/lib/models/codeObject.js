@@ -18,12 +18,12 @@ export default class CodeObject {
       this.data.labels = new Set(this.data.labels);
     }
 
-    this.parent = parent;
     this.children = [];
-    if (this.parent) {
-      this.parent.children.push(this);
+    if (parent) {
+      parent.children.push(this);
     }
 
+    addHiddenProperty(this, 'parent', { value: parent });
     addHiddenProperty(this, 'events', { writable: false, value: [] });
   }
 
@@ -60,6 +60,14 @@ export default class CodeObject {
 
   get events() {
     return this.$hidden.events;
+  }
+
+  get parent() {
+    return this.$hidden.parent;
+  }
+
+  set parent(val) {
+    this.$hidden.parent = val;
   }
 
   // Gets the source locations for this code object. For a package, no source locations are returned

@@ -8,6 +8,14 @@ context('VS Code Extension', () => {
       );
     });
 
+    it('filters out objects that do not originate from an HTTP server request', () => {
+      cy.get('.details-search__block-list').contains('crypto').click();
+      cy.get('.v-details-panel-list')
+        .contains('Events')
+        .parent()
+        .should('not.contain.text', 'OpenSSL::Cipher#encrypt');
+    });
+
     it('renders the component diagram initially', () => {
       cy.get('.appmap__component-diagram .output')
         .children('.nodes')
@@ -462,7 +470,7 @@ context('VS Code Extension', () => {
         .contains('Functions')
         .parent()
         .within(() => {
-          cy.get('.list-item').should('have.length', 5);
+          cy.get('.list-item').should('have.length', 4);
         });
     });
 

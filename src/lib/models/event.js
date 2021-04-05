@@ -176,7 +176,19 @@ export default class Event {
 
   get nextSibling() {
     const { parent } = this;
+
     if (!parent) {
+      let event = this.next;
+
+      // Get the next root level event
+      while (event) {
+        if (event.isCall() && !event.parent) {
+          return event;
+        }
+
+        event = event.next;
+      }
+
       return null;
     }
 
@@ -303,6 +315,31 @@ export default class Event {
     }
 
     return descendantArray;
+  }
+
+  traverse(fn) {
+    let event = this;
+    const boundaryEvent = this.nextSibling;
+    let { onEnter } = fn;
+    let { onExit } = fn;
+
+    if (typeof fn === 'function') {
+      onEnter = fn;
+      onExit = fn;
+    }
+
+    while (event) {
+      if (event.isCall() && onEnter) {
+        onEnter(event);
+      } else if (event.isReturn() && onExit) {
+        onExit(event);
+      }
+
+      event = event.next;
+      if (!event || event === boundaryEvent) {
+        break;
+      }
+    }
   }
 
   dataObjects() {

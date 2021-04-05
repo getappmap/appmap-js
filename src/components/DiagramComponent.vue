@@ -5,7 +5,7 @@
 <script>
 import { CLEAR_OBJECT_STACK, SELECT_OBJECT } from '@/store/vsCode';
 import { ComponentDiagram } from '@/lib/diagrams';
-import { CodeObject, Event } from '@/lib/models';
+import { CodeObject, Event, ClassMap } from '@/lib/models';
 import { CodeObjectType } from '@/lib/models/codeObject';
 
 export default {
@@ -20,6 +20,7 @@ export default {
       type: Boolean,
       default: true,
     },
+    classMap: ClassMap,
   },
 
   data() {
@@ -100,7 +101,7 @@ export default {
             controls: this.zoomButtons,
           },
         });
-        this.componentDiagram.render(this.$store.state.appMap.classMap);
+        this.componentDiagram.render(this.classMap);
 
         this.componentDiagram
           .on('click', (codeObject) => this.selectObject(codeObject))
@@ -132,7 +133,7 @@ export default {
 
   activated() {
     if (this.componentDiagram) {
-      this.componentDiagram.render(this.$store.state.appMap.classMap);
+      this.componentDiagram.render(this.classMap);
       this.highlightSelectedComponent();
     }
   },
