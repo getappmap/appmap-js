@@ -110,7 +110,7 @@ export default {
       .list-item {
         display: inline-flex;
         width: 100%;
-        justify-content: flex-start;
+        justify-content: space-between;
         align-items: center;
         padding: 0.5rem 2rem;
         color: $blue;
@@ -126,7 +126,7 @@ export default {
         }
 
         &__count {
-          margin-left: auto;
+          margin-left: 1rem;
           border-radius: 0.5rem;
           display: inline-block;
           padding: 0.25rem 0.5rem;
