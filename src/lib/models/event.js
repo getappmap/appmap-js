@@ -24,7 +24,6 @@ export default class Event {
 
       if (obj.$hidden.labels) {
         data.labels = [...obj.$hidden.labels];
-        console.log(data.labels);
       }
     }
 
