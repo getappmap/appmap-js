@@ -1,3 +1,10 @@
+## [1.11.3](https://github.com/applandinc/appmap-js/compare/v1.11.2...v1.11.3) (2021-04-06)
+
+
+### Bug Fixes
+
+* Remove an errant console.log statement ([#147](https://github.com/applandinc/appmap-js/issues/147)) ([89778b6](https://github.com/applandinc/appmap-js/commit/89778b64e24bb1bf09f484bdd1d977592390c030))
+
 ## [1.11.2](https://github.com/applandinc/appmap-js/compare/v1.11.1...v1.11.2) (2021-04-05)
 
 
