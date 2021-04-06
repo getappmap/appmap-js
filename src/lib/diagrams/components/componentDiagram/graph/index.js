@@ -306,7 +306,7 @@ export default class Graph {
     this.render();
   }
 
-  scrollToNodes(container, nodes) {
+  getNodesBox(nodes) {
     const nodesBox = {
       top: [],
       left: [],
@@ -322,7 +322,8 @@ export default class Graph {
         return;
       }
 
-      const nodeBox = node.element.getBoundingClientRect();
+      const nodeBox =
+        node.element.getBoundingClientRect() || node.element.getBBox();
       nodesBox.top.push(nodeBox.top);
       nodesBox.left.push(nodeBox.left);
       nodesBox.right.push(nodeBox.right);
@@ -341,6 +342,11 @@ export default class Graph {
     nodesBox.width = nodesBox.right - nodesBox.left;
     nodesBox.height = nodesBox.bottom - nodesBox.top;
 
+    return nodesBox;
+  }
+
+  scrollToNodes(container, nodes) {
+    const nodesBox = this.getNodesBox(nodes);
     const containerBox = container.getBoundingClientRect();
 
     if (Geometry.contains(containerBox, nodesBox)) {

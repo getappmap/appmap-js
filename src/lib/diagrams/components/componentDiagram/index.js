@@ -259,6 +259,8 @@ export default class ComponentDiagram extends EventSource {
   clearHighlights(noEvent = false) {
     this.graph.clearHighlights();
 
+    this.container.scaleTarget = false;
+
     if (!noEvent) {
       this.emit('highlight', null);
     }
@@ -269,12 +271,20 @@ export default class ComponentDiagram extends EventSource {
 
     const highlightedCodeObjects = codeObjects
       .filter(Boolean)
-      .map((obj) => this.graph.highlightNode(obj.id))
+      .map((obj) => this.graph.highlightNode(obj.id ?? obj.name))
       .filter(Boolean);
 
     if (highlightedCodeObjects.length) {
       this.scrollTo(highlightedCodeObjects);
     }
+
+    const hlBox = this.graph.getNodesBox(
+      highlightedCodeObjects.map((obj) => obj.id ?? obj.name)
+    );
+    this.container.scaleTarget = {
+      x: hlBox.width / 2 + hlBox.offsetLeft,
+      y: hlBox.height / 2 + hlBox.offsetTop,
+    };
 
     this.emit('highlight', highlightedCodeObjects);
 

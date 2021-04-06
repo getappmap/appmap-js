@@ -53,6 +53,7 @@ export default {
       if (this.$store) {
         this.$store.commit(CLEAR_OBJECT_STACK);
       }
+      this.$refs.container.clearScaleTarget();
     },
 
     focusNode(node) {
@@ -77,6 +78,7 @@ export default {
         }
 
         container.panToElement(element);
+        container.setScaleTarget(element);
       }, 16);
     },
 

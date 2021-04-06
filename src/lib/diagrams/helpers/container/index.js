@@ -38,6 +38,7 @@ export default class Container extends EventSource {
     super();
 
     this.options = deepmerge(defaultOptions, options);
+    this.scaleTarget = false;
 
     let { theme } = this.options;
 
@@ -71,7 +72,17 @@ export default class Container extends EventSource {
           'zoom',
           (k) => {
             const { minRatio, maxRatio } = this.options.zoom;
-            this.scaleTo((maxRatio - minRatio) * k + minRatio);
+            const scaleLevel = (maxRatio - minRatio) * k + minRatio;
+
+            if (this.scaleTarget && this.scaleTarget.x && this.scaleTarget.y) {
+              this.scaleToAndTranslate(
+                scaleLevel,
+                this.scaleTarget.x,
+                this.scaleTarget.y
+              );
+            } else {
+              this.scaleTo(scaleLevel);
+            }
             this.active = true;
           }
         );
@@ -202,6 +213,16 @@ export default class Container extends EventSource {
       .transition()
       .duration(100)
       .call(this.zoom.scaleTo, k);
+  }
+
+  scaleToAndTranslate(k, x, y) {
+    d3.select(this.element)
+      .transition()
+      .duration(100)
+      .call(this.zoom.scaleTo, k)
+      .transition()
+      .duration(this.options.pan.tweenTime)
+      .call(this.zoom.translateTo, x, y, null);
   }
 
   get transform() {

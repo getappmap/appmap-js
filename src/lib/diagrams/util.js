@@ -80,3 +80,10 @@ export function panToNode(viewport, node) {
     target
   );
 }
+
+export function getElementCenter(node) {
+  return {
+    x: node.offsetLeft + node.clientWidth * 0.5,
+    y: node.offsetTop + node.clientHeight * 0.5,
+  };
+}
