@@ -1,3 +1,15 @@
+# [1.12.0](https://github.com/applandinc/appmap-js/compare/v1.11.3...v1.12.0) (2021-04-06)
+
+
+### Bug Fixes
+
+* Vue now properly loads Trace as a dynamic component ([9547a87](https://github.com/applandinc/appmap-js/commit/9547a870ba0a14b7799de6558624231af8cfa2e3))
+
+
+### Features
+
+* show app loader while AppMap data is loading ([7a85694](https://github.com/applandinc/appmap-js/commit/7a856949d4499ab37e0e83c043de8538a4979e6f))
+
 ## [1.11.3](https://github.com/applandinc/appmap-js/compare/v1.11.2...v1.11.3) (2021-04-06)
 
 
