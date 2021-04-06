@@ -1,5 +1,6 @@
 <template>
-  <div id="app" :key="renderKey">
+  <div id="app" :key="renderKey" :class="classes">
+    <div class="loader"></div>
     <div class="main-column main-column--left">
       <v-details-panel
         :appMap="filteredAppMap"
@@ -58,7 +59,7 @@
       </div>
     </div>
 
-    <div class="no-data-notice" v-if="isEmptyAppMap">
+    <div class="no-data-notice" v-if="isEmptyAppMap && !isLoading">
       <div class="notice">
         <p class="no-data-notice__title">
           Sorry, but there's no data to display :(
@@ -145,6 +146,7 @@ export default {
   data() {
     return {
       renderKey: 0,
+      isLoading: true,
       VIEW_COMPONENT,
       VIEW_FLOW,
     };
@@ -180,6 +182,9 @@ export default {
   },
 
   computed: {
+    classes() {
+      return this.isLoading ? 'app--loading' : '';
+    },
     filteredAppMap() {
       const { appMap } = this.$store.state;
       const events = appMap.rootEvents().reduce((callTree, rootEvent) => {
@@ -240,6 +245,7 @@ export default {
   methods: {
     loadData(data) {
       this.$store.commit(SET_APPMAP_DATA, data);
+      this.isLoading = false;
     },
 
     showInstructions() {
@@ -346,6 +352,38 @@ code {
   height: 100vh;
   color: $base11;
   background-color: $vs-code-gray1;
+
+  &.app--loading {
+    .loader {
+      display: block;
+    }
+    .main-column {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  .loader {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+
+    &:after {
+      content: '';
+      display: block;
+      width: 64px;
+      height: 64px;
+      margin: 8px;
+      border-radius: 50%;
+      border: 6px solid transparent;
+      border-color: $hotpink transparent $hotpink transparent;
+      animation: loader-animation 1.2s linear infinite;
+    }
+  }
 
   .main-column {
     overflow-y: auto;
@@ -473,6 +511,15 @@ code {
         margin-bottom: 0.5rem;
       }
     }
+  }
+}
+
+@keyframes loader-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>
