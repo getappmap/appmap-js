@@ -98,6 +98,16 @@ if (!argv.format || argv.format === 'es') {
       vue(baseConfig.plugins.vue),
       image({ exclude: ['**/*.svg'] }),
       commonjs(),
+
+      // The Trace component is expected to be loaded dynamically as an asynchronous component.
+      // However, because it's no longer a single module (it's bundled into a much larger module),
+      // we must retain the `__esModule` flag in order for Vue to properly perform dynamic loading.
+      //
+      // See the following source:
+      // https://github.com/vuejs/vue/blob/b51430f598b354ed60851bb62885539bd25de3d8/src/core/vdom/helpers/resolve-async-component.js#L18-L28
+      // This may go away after updating to Vue 3?
+      replace({ 'var Trace': 'var Trace = { __esModule: true, //' }),
+
       terser(),
     ],
   };
