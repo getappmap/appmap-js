@@ -19,7 +19,7 @@ const { algorithms, canonicalize } = require('../dist/appmap.node');
 const { verbose, listAppMapFiles, loadAppMap } = require('./lib/cli/utils');
 const appMapCatalog = require('./lib/cli/appMapCatalog');
 const FingerprintQueue = require('./lib/cli/fingerprintQueue');
-const depends = require('./lib/cli/depends');
+const Depends = require('./lib/cli/depends');
 
 class FingerprintDirectoryCommand {
   constructor(directory) {
@@ -340,15 +340,19 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
-    'depends [files...]',
-    'Compute the list of AppMap source functions that depend on a list of changed files',
+    'depends [files]',
+    'Compute a list of AppMaps that are out of date',
     (args) => {
       args.positional('files', {
-        describe: 'list of files that have changed',
+        describe: 'provide an explicit list of dependency files',
       });
-      args.option('directory', {
+      args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
         default: 'tmp/appmap',
+      });
+      args.option('base-dir', {
+        describe: 'directory to prepend to each dependency source file',
+        default: '.',
       });
       args.option('field', {
         describe: 'print a field from each matching AppMap',
@@ -358,6 +362,7 @@ yargs(hideBin(process.argv))
           'read the list of changed files from stdin, one file per line',
         boolean: true,
       });
+      return args.strict();
     },
     async (argv) => {
       verbose(argv.verbose);
@@ -366,14 +371,22 @@ yargs(hideBin(process.argv))
       if (argv.stdinFiles) {
         const stdinFileStr = readFileSync(0).toString();
         const stdinFiles = stdinFileStr.split('\n');
-        files = files.concat(stdinFiles);
-      }
-      if (verbose()) {
-        console.log(`Computing depends on ${files.join(', ')}`);
-        console.log(`Using AppMaps in ${argv.directory}`);
+        files = (files || []).concat(stdinFiles);
+        if (verbose()) {
+          console.log(`Computing depends on ${files.join(', ')}`);
+        }
       }
 
-      const appMapNames = await depends(argv.directory, files);
+      if (verbose()) {
+        console.log(`Testing AppMaps in ${argv.appmapDir}`);
+      }
+
+      let depends = new Depends(argv.appmapDir, argv.baseDir);
+      if (files) {
+        depends = depends.files(files);
+      }
+
+      const appMapNames = await depends.depends();
       const values = [];
       if (argv.field) {
         const { field } = argv;
@@ -411,16 +424,17 @@ yargs(hideBin(process.argv))
         describe: 'watch the directory for changes to appmaps',
         boolean: true,
       });
-      args.option('directory', {
+      args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
         default: 'tmp/appmap',
       });
+      return args.strict();
     },
     (argv) => {
       verbose(argv.verbose);
 
       if (argv.watch) {
-        const cmd = new FingerprintWatchCommand(argv.directory);
+        const cmd = new FingerprintWatchCommand(argv.appmapDir);
         cmd.setPrint(argv.print).execute();
 
         // eslint-disable-next-line no-inner-declarations
@@ -442,7 +456,7 @@ yargs(hideBin(process.argv))
           printStatus();
         }
       } else {
-        new FingerprintDirectoryCommand(argv.directory)
+        new FingerprintDirectoryCommand(argv.appmapDir)
           .setPrint(argv.print)
           .execute();
       }
@@ -453,5 +467,6 @@ yargs(hideBin(process.argv))
     type: 'boolean',
     description: 'Run with verbose logging',
   })
+  .strict()
   .demandCommand()
   .help().argv;

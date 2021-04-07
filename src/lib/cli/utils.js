@@ -1,6 +1,8 @@
 /* eslint-disable func-names */
 const fsp = require('fs').promises;
 const fsExtra = require('fs-extra');
+const { queue } = require('async');
+const glob = require('glob');
 const os = require('os');
 const { sep: pathSep, join: joinPath } = require('path');
 const { buildAppMap } = require('../../../dist/appmap.node');
@@ -15,6 +17,43 @@ function verbose(v = null) {
 
 function baseName(file) {
   return file.substring(0, file.length - '.appmap.json'.length);
+}
+
+async function mtime(fileName) {
+  let fileStat;
+  try {
+    fileStat = await fsp.stat(fileName);
+  } catch (e) {
+    return null;
+  }
+  if (!fileStat.isFile()) {
+    return null;
+  }
+  return fileStat.ctime.getTime();
+}
+
+/**
+ * Call a function with each matching file.
+ *
+ * @param {string} pattern
+ * @param {Function} fn
+ */
+async function processFiles(pattern, fn) {
+  const q = queue(fn, 5);
+  q.pause();
+  await new Promise((resolve, reject) => {
+    // eslint-disable-next-line consistent-return
+    glob(pattern, (err, files) => {
+      if (err) {
+        console.warn(err);
+        return reject(err);
+      }
+      files.forEach((file) => q.push(file));
+      resolve();
+    });
+  });
+  q.resume();
+  await q.drain();
 }
 
 async function listAppMapFiles(directory, fn) {
@@ -79,7 +118,9 @@ module.exports = {
   baseName,
   listAppMapFiles,
   loadAppMap,
+  mtime,
   verbose,
+  processFiles,
   buildDirectory,
   renameFile,
 };

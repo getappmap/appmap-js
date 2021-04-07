@@ -1,85 +1,102 @@
-const { queue } = require('async');
-const glob = require('glob');
 const fsp = require('fs').promises;
-const { dirname, basename } = require('path');
-const { verbose } = require('./utils');
+const { dirname, join: joinPath, isAbsolute, basename } = require('path');
+const { verbose, mtime, processFiles } = require('./utils');
 
-/**
- * Gets a list of AppMap base paths that depend on at least one file from an input list.
- *
- * @param {Array<string>} files
- */
-async function depends(directory, files) {
-  if (verbose()) {
-    console.log(
-      `Scanning ${directory} for AppMaps which depend on something in ${files.join(
-        ', '
-      )}`
-    );
+// Gets the file path of a location. Location may include a line number or other info
+// in addition to the file path.
+const parseFilePath = (location) => location.split(':')[0];
+
+class Depends {
+  constructor(appMapDir) {
+    this.appMapDir = appMapDir;
+    this.baseDir = '.';
   }
-  const inputFiles = new Set();
-  files.forEach(inputFiles.add.bind(inputFiles));
-  const baseNames = new Set();
 
-  async function collectDepends(classMapFile) {
-    const dirName = dirname(classMapFile);
-    if (verbose()) {
-      console.log(`Checking ${dirName}`);
+  /**
+   * Specify an explicit list of files to check as dependencies.
+   * If this option is not used, then all code object locations are examined to
+   * see if the AppMap modification time is before the code object source file
+   * modification time.
+   *
+   * @param {string[]} files
+   * @returns {Depends}
+   */
+  files(files) {
+    if (!Array.isArray(files)) {
+      // eslint-disable-next-line no-param-reassign
+      files = [files];
     }
-    if (basename(dirName) === 'Inventory') {
-      return;
-    }
-    const classMap = JSON.parse(await fsp.readFile(classMapFile));
+    this.testLocations = new Set(files);
+    return this;
+  }
 
-    // Gets the file path of a location. Location may include a line number or other info
-    // in addition to the file path.
-    const parseFilePath = (location) => location.split(':')[0];
+  async depends() {
+    const outOfDateNames = new Set();
 
-    // eslint-disable-next-line max-len
-    // Recurse through the classMap and emit the metadata.source_location if a path match is found.
-    const mapNode = (item) => {
-      // Short circuit the rest of the search when a match is found.
-      if (baseNames.has(dirName)) {
+    async function checkClassMap(fileName) {
+      const indexDir = dirname(fileName);
+      if (basename(indexDir) === 'Inventory') {
         return;
       }
 
-      if (item.location) {
-        const filePath = parseFilePath(item.location);
+      const mtimeFileName = joinPath(indexDir, 'mtime');
+      const createdAt = await mtime(mtimeFileName);
 
-        if (inputFiles.has(filePath)) {
-          if (verbose()) {
-            console.log(
-              `${item.location} matches an input file. Emitting AppMap ${dirName}`
-            );
+      if (verbose()) {
+        console.log(`Checking AppMap ${indexDir}`);
+      }
+
+      const classMap = JSON.parse(await fsp.readFile(fileName));
+      const codeLocations = new Set();
+
+      // Recurse through the classMap and check whether each source location file has been
+      // modified more recently than the AppMap.
+      const collectFilePaths = (item) => {
+        if (item.location) {
+          let filePath = parseFilePath(item.location);
+          if (!isAbsolute(filePath)) {
+            filePath = joinPath(this.baseDir, filePath);
           }
-          baseNames.add(dirName);
-          return;
+          codeLocations.add(filePath);
         }
+        if (item.children) {
+          item.children.forEach(collectFilePaths);
+        }
+      };
+      classMap.forEach(collectFilePaths);
+
+      async function checkFileList(filePath) {
+        return this.testLocations.has(filePath);
       }
-      if (item.children) {
-        item.children.forEach(mapNode);
+
+      async function checkTimestamps(filePath) {
+        const dependencyModifiedAt = await mtime(filePath);
+        return dependencyModifiedAt && createdAt < dependencyModifiedAt;
       }
-    };
-    classMap.forEach(mapNode);
+
+      const testFunction = this.testLocations
+        ? checkFileList.bind(this)
+        : checkTimestamps.bind(this);
+
+      await Promise.all(
+        [...codeLocations].map(async (filePath) => {
+          if (await testFunction(filePath)) {
+            if (verbose()) {
+              console.log(`${filePath} requires rebuild of AppMap ${indexDir}`);
+            }
+            outOfDateNames.add(indexDir);
+          }
+        })
+      );
+    }
+
+    await processFiles(
+      `${this.appMapDir}/**/classMap.json`,
+      checkClassMap.bind(this)
+    );
+
+    return [...outOfDateNames].sort();
   }
-
-  const q = queue(collectDepends, 5);
-  q.pause();
-  await new Promise((resolve, reject) => {
-    // eslint-disable-next-line consistent-return
-    glob(`${directory}/**/classMap.json`, (err, classMapFiles) => {
-      if (err) {
-        console.warn(err);
-        return reject(err);
-      }
-      classMapFiles.forEach((file) => q.push(file));
-      resolve();
-    });
-  });
-  q.resume();
-  await q.drain();
-
-  return [...baseNames].sort();
 }
 
-module.exports = depends;
+module.exports = Depends;
