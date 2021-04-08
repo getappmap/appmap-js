@@ -1,3 +1,10 @@
+## [1.12.1](https://github.com/applandinc/appmap-js/compare/v1.12.0...v1.12.1) (2021-04-08)
+
+
+### Bug Fixes
+
+* Zooming in and out when clicking the zoom buttons focuses on the selected object ([#150](https://github.com/applandinc/appmap-js/issues/150)) ([caaa7c0](https://github.com/applandinc/appmap-js/commit/caaa7c0b5e40d511c05b1fd7bf9fc758d602a0e2))
+
 # [1.12.0](https://github.com/applandinc/appmap-js/compare/v1.11.3...v1.12.0) (2021-04-06)
 
 
