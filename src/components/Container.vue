@@ -8,7 +8,11 @@
 
 <script>
 import Container from '@/lib/diagrams/helpers/container';
-import { panToNode, lazyPanToElement } from '@/lib/diagrams/util';
+import {
+  panToNode,
+  lazyPanToElement,
+  getElementCenter,
+} from '@/lib/diagrams/util';
 
 export default {
   name: 'v-container',
@@ -35,6 +39,12 @@ export default {
     },
     clearTransform() {
       this.container.translateTo(0, 0);
+    },
+    setScaleTarget(element) {
+      this.container.scaleTarget = getElementCenter(element);
+    },
+    clearScaleTarget() {
+      this.container.scaleTarget = false;
     },
   },
   mounted() {
