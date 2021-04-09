@@ -242,7 +242,7 @@ ul.feature-list {
     font-size: 0.9rem;
     h4 {
       margin: 0;
-      color: $royal;
+      color: $hotpink;
       font-size: 1rem;
     }
     .legend {
