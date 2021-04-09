@@ -22,6 +22,10 @@
       font-size: inherit;
       font-weight: 700;
       line-height: 1;
+
+      &__icon {
+        cursor: pointer;
+      }
     }
   }
 
