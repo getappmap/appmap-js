@@ -72,8 +72,8 @@
         <div class="trace">
           <h4>Trace</h4>
           <ul class="feature-list">
-            <li>Use arrow keys to navigate between nodes</li>
-            <li>Expand nodes to see children</li>
+            <li>&nbsp;Use arrow keys to navigate between nodes</li>
+            <li>&nbsp;Expand nodes to see children</li>
           </ul>
           <ul class="legend">
             <h5>Legend</h5>
@@ -165,7 +165,7 @@ export default {
     padding: 1.5rem;
     color: $gray6;
     background: $black;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   &__head {
@@ -191,15 +191,20 @@ export default {
     margin-left: auto;
   }
 }
-ul.feature-list {
-  padding-left: 1.25rem;
-  border-bottom: 1px solid $gray2;
-  padding-bottom: 1rem;
+ul {
+  padding-left: 1rem;
   word-break: break-word;
+  list-style-type: '\002D';
+  list-style-position: inside;
   li {
     margin: 0.3rem 0;
-    line-height: 1.3rem;
   }
+}
+ul.feature-list {
+  border-bottom: 1px solid $gray2;
+  padding-left: 0;
+  padding-bottom: 1rem;
+  line-height: 1.3rem;
 }
 
 .instructions-wrap {
@@ -207,7 +212,7 @@ ul.feature-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 2rem;
-  overflow: scroll;
+  overflow: auto;
   .legend {
     margin: 0;
     padding: 0;
