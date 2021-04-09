@@ -53,7 +53,7 @@
             </li>
             <li>
               <div class="icon class"></div>
-              <p>Class</p>
+              <p>Class / Function</p>
             </li>
             <li>
               <div class="icon dynamic"></div>
@@ -61,11 +61,11 @@
             </li>
             <li>
               <div class="icon web-service"></div>
-              <p>Web service endpoints/routes</p>
+              <p>HTTP requests</p>
             </li>
             <li>
               <div class="icon database"></div>
-              <p>Databases that persist app data</p>
+              <p>SQL queries</p>
             </li>
           </ul>
         </div>
