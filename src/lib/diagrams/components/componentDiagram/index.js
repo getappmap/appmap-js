@@ -18,6 +18,44 @@ function bindEvents(componentDiagram, classMap) {
   const svg = componentDiagram.element.node();
 
   svg.addEventListener('click', (event) => {
+    const expandIcon = getEventTarget(
+      event.target,
+      svg,
+      'g.label .label__icon--expand'
+    );
+    if (!expandIcon) {
+      return;
+    }
+
+    event.stopImmediatePropagation();
+
+    const codeObject = codeObjectFromElement(
+      expandIcon.closest('.node'),
+      classMap
+    );
+    componentDiagram.expand(codeObject);
+  });
+
+  svg.addEventListener('click', (event) => {
+    const collapseIcon = getEventTarget(
+      event.target,
+      svg,
+      'g.label .label__icon--collapse'
+    );
+    if (!collapseIcon) {
+      return;
+    }
+
+    event.stopImmediatePropagation();
+
+    const codeObject = codeObjectFromElement(
+      collapseIcon.closest('.cluster'),
+      classMap
+    );
+    componentDiagram.collapse(codeObject);
+  });
+
+  svg.addEventListener('click', (event) => {
     const node = getEventTarget(event.target, svg, 'g.nodes g.node');
     if (!node) {
       return;
