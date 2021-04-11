@@ -56,6 +56,13 @@ async function processFiles(pattern, fn) {
   await q.drain();
 }
 
+/**
+ * Lists all appmap.json files in a directory, and passes them to a function.
+ * With `await`, `listAppMapFiles` blocks until all the files have been processed.
+ *
+ * @param {string} directory
+ * @param {Function(string)} fn
+ */
 async function listAppMapFiles(directory, fn) {
   if (verbose()) {
     console.log(`Scanning ${directory} for AppMaps`);

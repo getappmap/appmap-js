@@ -15,6 +15,9 @@ const {
 } = require('../../../dist/appmap.node');
 
 class Fingerprinter {
+  /**
+   * @param {boolean} printCanonicalAppMaps
+   */
   constructor(printCanonicalAppMaps) {
     this.printCanonicalAppMaps = printCanonicalAppMaps;
     this.counterFn = () => {};

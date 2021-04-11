@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const fsp = require('fs').promises;
 const { dirname, join: joinPath, isAbsolute, basename } = require('path');
 const { verbose, mtime, processFiles } = require('./utils');
@@ -9,7 +10,12 @@ const parseFilePath = (location) => location.split(':')[0];
 class Depends {
   constructor(appMapDir) {
     this.appMapDir = appMapDir;
-    this.baseDir = '.';
+    this._baseDir = '.';
+  }
+
+  baseDir(baseDir) {
+    this._baseDir = baseDir;
+    return this;
   }
 
   /**
@@ -55,7 +61,7 @@ class Depends {
         if (item.location) {
           let filePath = parseFilePath(item.location);
           if (!isAbsolute(filePath)) {
-            filePath = joinPath(this.baseDir, filePath);
+            filePath = joinPath(this._baseDir, filePath);
           }
           codeLocations.add(filePath);
         }
