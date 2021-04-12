@@ -175,7 +175,7 @@ export default {
     '$store.getters.selectedLabel': {
       handler(selectedLabel) {
         this.emitSelectedObject(
-          selectedLabel ? `label:${selectedLabel}` : null
+          selectedLabel ? `label:${selectedLabel}` : null,
         );
       },
     },
@@ -304,6 +304,30 @@ export default {
 
       if (selectedObject) {
         this.$store.commit(SELECT_OBJECT, selectedObject);
+      }
+    },
+
+    getState() {
+      const state = {
+        currentView: this.currentView,
+      };
+
+      if (this.selectedObject && this.selectedObject.fqid) {
+        state.selectedObject = this.selectedObject.fqid;
+      } else if (this.selectedLabel) {
+        state.selectedObject = `label:${this.selectedLabel}`;
+      }
+
+      return JSON.stringify(state);
+    },
+
+    setState(serializedState) {
+      const state = JSON.parse(serializedState);
+      if (state.currentView) {
+        this.setView(state.currentView);
+      }
+      if (state.selectedObject) {
+        this.setSelectedObject(state.selectedObject);
       }
     },
 
