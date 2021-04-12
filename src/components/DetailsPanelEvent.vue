@@ -9,7 +9,7 @@
           Show in Trace
         </v-details-button>
         <v-details-button
-          v-if="location !== null"
+          v-if="hasSource"
           @click.native="viewSource"
           ref="viewSource"
         >
@@ -107,6 +107,14 @@ export default {
 
     httpServerResponse() {
       return this.object.httpServerResponse;
+    },
+
+    hasSource() {
+      return (
+        !this.hasSql &&
+        !this.object.http_server_request &&
+        this.location !== null
+      );
     },
 
     hasSql() {
