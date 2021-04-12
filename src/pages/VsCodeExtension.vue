@@ -1,7 +1,13 @@
 <template>
-  <div id="app" :key="renderKey" :class="classes">
+  <div
+    id="app"
+    :key="renderKey"
+    :class="classes"
+    @mouseup="stopResizing"
+    @mousemove="makeResizing"
+  >
     <div class="loader"></div>
-    <div class="main-column main-column--left">
+    <div class="main-column main-column--left" ref="mainColumnLeft">
       <v-details-panel
         :appMap="filteredAppMap"
         :selected-object="selectedObject"
@@ -24,6 +30,7 @@
           </v-details-button>
         </template>
       </v-details-panel>
+      <div class="main-column--drag" @mousedown="startResizing"></div>
     </div>
 
     <div class="main-column main-column--right">
@@ -126,6 +133,9 @@ import {
   CLEAR_OBJECT_STACK,
 } from '../store/vsCode';
 
+const MIN_PANEL_WIDTH = 420;
+const MAX_PANEL_WIDTH = window.innerWidth / 2;
+
 export default {
   name: 'VSCodeExtension',
 
@@ -147,6 +157,9 @@ export default {
     return {
       renderKey: 0,
       isLoading: true,
+      isPanelResizing: false,
+      initialPanelWidth: 0,
+      initialClientX: 0,
       VIEW_COMPONENT,
       VIEW_FLOW,
     };
@@ -349,6 +362,26 @@ export default {
     onClickTraceEvent(e) {
       this.$store.commit(SELECT_OBJECT, e);
     },
+
+    startResizing(event) {
+      this.isPanelResizing = true;
+      this.initialPanelWidth = this.$refs.mainColumnLeft.offsetWidth;
+      this.initialClientX = event.clientX;
+    },
+
+    makeResizing(event) {
+      if (this.isPanelResizing) {
+        let newWidth =
+          this.initialPanelWidth + (event.clientX - this.initialClientX);
+        newWidth = Math.max(MIN_PANEL_WIDTH, newWidth);
+        newWidth = Math.min(MAX_PANEL_WIDTH, newWidth);
+        this.$refs.mainColumnLeft.style.width = `${newWidth}px`;
+      }
+    },
+
+    stopResizing() {
+      this.isPanelResizing = false;
+    },
   },
 };
 </script>
@@ -371,8 +404,8 @@ code {
 
 #app {
   display: grid;
-  grid-template-columns: 25% auto;
-  grid-template-rows: max(1fr, 100%);
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 100%;
   height: 100vh;
   color: $base11;
   background-color: $vs-code-gray1;
@@ -410,11 +443,10 @@ code {
   }
 
   .main-column {
-    overflow-y: auto;
-
     &--left {
+      position: relative;
       grid-column: 1;
-      width: 100%;
+      width: 420px;
       background-color: $gray2;
     }
 
@@ -477,6 +509,34 @@ code {
         position: absolute;
         right: 1.3rem;
         bottom: 1.3rem;
+      }
+    }
+
+    .main-column--drag {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 1px;
+      background: transparent;
+      cursor: col-resize;
+      z-index: 100;
+
+      &:hover {
+        background: $gray5;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: -8px;
+        bottom: 0;
+        background-position: 4px 49%;
+        background-repeat: no-repeat;
+        background-image: url("data:image/svg+xml,%3Csvg width='2' height='14' viewBox='0 0 2 14' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23808b98' fill-rule='evenodd'%3E%3Ccircle cx='1' cy='1' r='1'/%3E%3Ccircle cx='1' cy='5' r='1'/%3E%3Ccircle cx='1' cy='9' r='1'/%3E%3Ccircle cx='1' cy='13' r='1'/%3E%3C/g%3E%3C/svg%3E");
+        touch-action: none;
       }
     }
   }
