@@ -244,7 +244,6 @@ export function identityHashEvent(e) {
     const content = ['sql', queryOps.action, ...queryOps.tables]
       .filter(Boolean)
       .join('');
-    console.log(sqlQuery, content);
     return sha256(content).toString();
   }
 

@@ -1,7 +1,13 @@
 const { createHash } = require('crypto');
 const { join: joinPath } = require('path');
 const fsp = require('fs').promises;
-const { verbose, baseName, buildDirectory, renameFile } = require('./utils');
+const {
+  verbose,
+  baseName,
+  buildDirectory,
+  mtime,
+  renameFile,
+} = require('./utils');
 const {
   algorithms,
   canonicalize,
@@ -9,6 +15,9 @@ const {
 } = require('../../../dist/appmap.node');
 
 class Fingerprinter {
+  /**
+   * @param {boolean} printCanonicalAppMaps
+   */
   constructor(printCanonicalAppMaps) {
     this.printCanonicalAppMaps = printCanonicalAppMaps;
     this.counterFn = () => {};
@@ -19,21 +28,18 @@ class Fingerprinter {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async fingerprint(file) {
+  async fingerprint(appMapFileName) {
     if (verbose()) {
-      console.info(`Fingerprinting ${file}`);
+      console.info(`Fingerprinting ${appMapFileName}`);
     }
 
-    const indexDir = baseName(file);
+    const indexDir = baseName(appMapFileName);
     const mtimeFileName = joinPath(indexDir, 'mtime');
+    const appMapCreatedAt = await mtime(appMapFileName);
 
-    let fileStat = await fsp.stat(file);
-    const createdAt = fileStat.ctime.getTime();
     let recordedCreatedAt = 0;
     try {
-      const recordedCreatedAtStr = JSON.parse(
-        await fsp.readFile(mtimeFileName)
-      );
+      const recordedCreatedAtStr = await fsp.readFile(mtimeFileName);
       recordedCreatedAt = parseInt(recordedCreatedAtStr, 10);
     } catch (err) {
       if (err.code !== 'ENOENT') {
@@ -41,14 +47,14 @@ class Fingerprinter {
       }
     }
 
-    if (recordedCreatedAt === createdAt) {
+    if (recordedCreatedAt === appMapCreatedAt) {
       if (verbose()) {
         console.log('Fingerprints appear up to date. Skipping...');
       }
       return;
     }
 
-    const data = await fsp.readFile(file);
+    const data = await fsp.readFile(appMapFileName);
     if (verbose()) {
       console.log(`Read ${data.length} bytes`);
     }
@@ -59,14 +65,16 @@ class Fingerprinter {
     } catch (err) {
       if (err instanceof SyntaxError) {
         // File may be in the process of writing.
-        console.warn(`Error parsing JSON file ${file} : ${err.message}`);
+        console.warn(
+          `Error parsing JSON file ${appMapFileName} : ${err.message}`
+        );
         return;
       }
       throw err;
     }
     if (!appmapData.metadata) {
       if (verbose()) {
-        console.info(`${file} has no metadata. Skipping...`);
+        console.info(`${appMapFileName} has no metadata. Skipping...`);
       }
       return;
     }
@@ -113,12 +121,9 @@ class Fingerprinter {
         joinPath(tempDir, 'appmap.json'),
         JSON.stringify(appmapData, null, 2)
       );
-      await renameFile(joinPath(tempDir, 'appmap.json'), file);
-      fileStat = await fsp.stat(file);
-      await fsp.writeFile(
-        joinPath(tempDir, 'mtime'),
-        `${fileStat.ctime.getTime()}`
-      );
+      await renameFile(joinPath(tempDir, 'appmap.json'), appMapFileName);
+      const appMapIndexedAt = await mtime(appMapFileName);
+      await fsp.writeFile(joinPath(tempDir, 'mtime'), `${appMapIndexedAt}`);
       await fsp.writeFile(
         joinPath(tempDir, 'metadata.json'),
         JSON.stringify(appmap.metadata, null, 2)
