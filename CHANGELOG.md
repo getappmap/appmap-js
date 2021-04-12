@@ -1,3 +1,11 @@
+## [1.12.2](https://github.com/applandinc/appmap-js/compare/v1.12.1...v1.12.2) (2021-04-12)
+
+
+### Bug Fixes
+
+* add node labels in instructions legend ([e66ded1](https://github.com/applandinc/appmap-js/commit/e66ded109954b5eb0b23a38bf0b616f22f4f535b))
+* change color for headers in instructions ([f620c3f](https://github.com/applandinc/appmap-js/commit/f620c3fdfe7e0b4898fbba993cef0dbfc14227a1))
+
 ## [1.12.1](https://github.com/applandinc/appmap-js/compare/v1.12.0...v1.12.1) (2021-04-08)
 
 
