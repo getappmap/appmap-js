@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/applandinc/appmap-js/compare/v1.12.2...v1.13.0) (2021-04-12)
+
+
+### Features
+
+* Add an interface to serialize/deserialize VS Code extension state ([#157](https://github.com/applandinc/appmap-js/issues/157)) ([0db138f](https://github.com/applandinc/appmap-js/commit/0db138f894cbd5392601d888e8b8b8db64aaa596))
+
 ## [1.12.2](https://github.com/applandinc/appmap-js/compare/v1.12.1...v1.12.2) (2021-04-12)
 
 
