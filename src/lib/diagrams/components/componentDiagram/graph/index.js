@@ -72,7 +72,11 @@ export default class Graph {
 
     // create dummy <g class="node"> with label to determine label width
     const dummyNodeGroup = createSVGElement('g', 'node');
-    const labelGroup = new LabelGroup(node.label, true);
+    const labelGroup = new LabelGroup(
+      node.label,
+      ['http', 'package'].includes(node.class) ? 'expand' : false,
+      true
+    );
     dummyNodeGroup.appendChild(labelGroup.element);
     this.nodesGroup.appendChild(dummyNodeGroup);
     const labelBBox = labelGroup.getBBox();

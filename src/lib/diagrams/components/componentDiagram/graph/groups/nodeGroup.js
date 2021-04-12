@@ -38,7 +38,10 @@ export default class NodeGroup {
 
     this.element.appendChild(shape);
 
-    const labelGroup = new LabelGroup(node.label);
+    const labelGroup = new LabelGroup(
+      node.label,
+      ['http', 'package'].includes(node.class) ? 'expand' : false
+    );
     labelGroup.element.setAttribute(
       'transform',
       `translate(-${node.labelWidth / 2},-${node.labelHeight / 2})`
