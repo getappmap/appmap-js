@@ -25,7 +25,7 @@ export default class ClusterGroup {
     setElementPosition(this, node.x, node.y);
 
     const rect = Rect(node.width, node.height);
-    this.label = new LabelGroup(node.label);
+    this.label = new LabelGroup(node.label, 'collapse');
     this.element.appendChild(rect);
     this.element.appendChild(this.label.element);
 
