@@ -1,3 +1,12 @@
+# [1.15.0](https://github.com/applandinc/appmap-js/compare/v1.14.0...v1.15.0) (2021-04-13)
+
+
+### Features
+
+* Show duplicate SQL queries as objects in details panel ([36fa10c](https://github.com/applandinc/appmap-js/commit/36fa10c070189e5bf02537b10c435625a0e9e62b))
+* Show event count for items in the search result panel ([e008662](https://github.com/applandinc/appmap-js/commit/e00866297314450ad5ef0bdbb2f346494b923b0a))
+* Split code objects to package/class/function sections in search panel ([59389c9](https://github.com/applandinc/appmap-js/commit/59389c93a5b245420687a70414c11517d8d6d4df))
+
 # [1.14.0](https://github.com/applandinc/appmap-js/compare/v1.13.0...v1.14.0) (2021-04-13)
 
 
