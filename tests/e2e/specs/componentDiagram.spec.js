@@ -32,6 +32,23 @@ context('Component Diagram', () => {
     );
   });
 
+  it('package "app/controllers" can be expanded/collapsed with single click on icon', () => {
+    cy.get(
+      '.node.package[data-id="app/controllers"] .label__icon--expand'
+    ).click();
+
+    cy.get('.clusters .cluster[data-id="app/controllers"]').should(
+      'have.class',
+      'cluster'
+    );
+
+    cy.get(
+      '.cluster[data-id="app/controllers"] .label__icon--collapse'
+    ).click();
+
+    cy.get('.node.package[data-id="app/controllers"]').should('exist');
+  });
+
   it('node "SQL" can be highlighted', () => {
     cy.get('.nodes .node[data-type="database"]')
       .click()
