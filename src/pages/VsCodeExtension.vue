@@ -192,7 +192,7 @@ export default {
     '$store.getters.selectedLabel': {
       handler(selectedLabel) {
         this.emitSelectedObject(
-          selectedLabel ? `label:${selectedLabel}` : null,
+          selectedLabel ? `label:${selectedLabel}` : null
         );
       },
     },
