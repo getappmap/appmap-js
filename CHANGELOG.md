@@ -1,3 +1,18 @@
+# [1.14.0](https://github.com/applandinc/appmap-js/compare/v1.13.0...v1.14.0) (2021-04-13)
+
+
+### Bug Fixes
+
+* don't display 'View source' button for HTTP and SQL events ([0a7624e](https://github.com/applandinc/appmap-js/commit/0a7624ed2d2c8dd464b44277e7064d4fedf1d122))
+* Don't display 'View source' button for HTTP and SQL events ([#155](https://github.com/applandinc/appmap-js/issues/155)) ([d316fda](https://github.com/applandinc/appmap-js/commit/d316fda8474e270c69029c2fc2b3d88c0d13a7f8))
+
+
+### Features
+
+* Expand and collapse packages by clicking on an icon within the ([39ebdc0](https://github.com/applandinc/appmap-js/commit/39ebdc0f80ffb85b1df17eec6524621e7677dd67))
+* Expand and collapse packages by clicking on an icon within the node ([#156](https://github.com/applandinc/appmap-js/issues/156)) ([67b1cc7](https://github.com/applandinc/appmap-js/commit/67b1cc79d2f3ee057376e52db743509d4e1edf38))
+* make details panel resizable ([46f0e6d](https://github.com/applandinc/appmap-js/commit/46f0e6db5501cd0f7308b5b79b205f4386a7d000))
+
 # [1.13.0](https://github.com/applandinc/appmap-js/compare/v1.12.2...v1.13.0) (2021-04-12)
 
 
