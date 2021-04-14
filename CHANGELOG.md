@@ -1,3 +1,10 @@
+## [1.15.2](https://github.com/applandinc/appmap-js/compare/v1.15.1...v1.15.2) (2021-04-14)
+
+
+### Bug Fixes
+
+* Stop panel resizing when cursor moves outside of app ([#162](https://github.com/applandinc/appmap-js/issues/162)) ([fd2275f](https://github.com/applandinc/appmap-js/commit/fd2275ff3d178f7bf16155da1ed8ec4fd15eea4a))
+
 ## [1.15.1](https://github.com/applandinc/appmap-js/compare/v1.15.0...v1.15.1) (2021-04-14)
 
 
