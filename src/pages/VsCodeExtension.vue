@@ -3,8 +3,9 @@
     id="app"
     :key="renderKey"
     :class="classes"
-    @mouseup="stopResizing"
     @mousemove="makeResizing"
+    @mouseup="stopResizing"
+    @mouseleave="stopResizing"
   >
     <div class="loader"></div>
     <div class="main-column main-column--left" ref="mainColumnLeft">
