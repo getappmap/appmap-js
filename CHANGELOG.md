@@ -1,3 +1,10 @@
+## [1.15.1](https://github.com/applandinc/appmap-js/compare/v1.15.0...v1.15.1) (2021-04-14)
+
+
+### Bug Fixes
+
+* Panel calculates window size during resize ([#161](https://github.com/applandinc/appmap-js/issues/161)) ([0df28af](https://github.com/applandinc/appmap-js/commit/0df28afef44a74b715f315669ae9b682c96429d7))
+
 # [1.15.0](https://github.com/applandinc/appmap-js/compare/v1.14.0...v1.15.0) (2021-04-13)
 
 
