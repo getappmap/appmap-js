@@ -137,9 +137,6 @@ import {
   CLEAR_OBJECT_STACK,
 } from '../store/vsCode';
 
-const MIN_PANEL_WIDTH = 420;
-const MAX_PANEL_WIDTH = window.innerWidth / 2;
-
 export default {
   name: 'VSCodeExtension',
 
@@ -375,10 +372,14 @@ export default {
 
     makeResizing(event) {
       if (this.isPanelResizing) {
+        const MIN_PANEL_WIDTH = 420;
+        const MAX_PANEL_WIDTH = window.innerWidth / 2;
+
         let newWidth =
           this.initialPanelWidth + (event.clientX - this.initialClientX);
         newWidth = Math.max(MIN_PANEL_WIDTH, newWidth);
         newWidth = Math.min(MAX_PANEL_WIDTH, newWidth);
+
         this.$refs.mainColumnLeft.style.width = `${newWidth}px`;
       }
     },
