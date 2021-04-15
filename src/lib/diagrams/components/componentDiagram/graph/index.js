@@ -70,22 +70,24 @@ export default class Graph {
       return;
     }
 
-    // create dummy <g class="node"> with label to determine label width
-    const dummyNodeGroup = createSVGElement('g', 'node');
-    const labelGroup = new LabelGroup(
-      node.label,
-      ['http', 'package'].includes(node.class) ? 'expand' : false,
-      true
-    );
-    dummyNodeGroup.appendChild(labelGroup.element);
-    this.nodesGroup.appendChild(dummyNodeGroup);
-    const labelBBox = labelGroup.getBBox();
-    this.nodesGroup.removeChild(dummyNodeGroup);
+    if (node.type !== 'cluster') {
+      // create dummy <g class="node"> with label to determine label width
+      const dummyNodeGroup = createSVGElement('g', 'node');
+      const labelGroup = new LabelGroup(
+        node.label,
+        ['http', 'package'].includes(node.class) ? 'expand' : false,
+        true
+      );
+      dummyNodeGroup.appendChild(labelGroup.element);
+      this.nodesGroup.appendChild(dummyNodeGroup);
+      const labelBBox = labelGroup.getBBox();
+      this.nodesGroup.removeChild(dummyNodeGroup);
 
-    node.labelWidth = labelBBox.width;
-    node.labelHeight = labelBBox.height;
-    node.width = labelBBox.width + NODE_PADDING_HORIZONTAL * 2;
-    node.height = labelBBox.height + NODE_PADDING_VERTICAL * 2;
+      node.labelWidth = labelBBox.width;
+      node.labelHeight = labelBBox.height;
+      node.width = labelBBox.width + NODE_PADDING_HORIZONTAL * 2;
+      node.height = labelBBox.height + NODE_PADDING_VERTICAL * 2;
+    }
 
     this.graph.setNode(node.id, node);
 

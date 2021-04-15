@@ -78,17 +78,40 @@ export default class LabelGroup {
       this.element.setAttribute('opacity', 0);
     }
 
-    const text = createSVGElement('text');
-    const tspan = createSVGElement('tspan');
-    tspan.setAttribute('space', 'preserve');
-    tspan.setAttribute('dy', '1em');
-    tspan.setAttribute('x', 1 + (icon ? iconSize + 6 : 0));
-    tspan.textContent = label;
-    text.appendChild(tspan);
-    this.element.appendChild(text);
+    this.textElement = createSVGElement('text');
+    this.tspanElement = createSVGElement('tspan');
+    this.tspanElement.setAttribute('space', 'preserve');
+    this.tspanElement.setAttribute('dy', '1em');
+    this.tspanElement.setAttribute('x', 1 + (icon ? iconSize + 6 : 0));
+    this.tspanElement.textContent = label;
+    this.textElement.appendChild(this.tspanElement);
+    this.element.appendChild(this.textElement);
   }
 
   getBBox() {
     return this.element.getBBox();
+  }
+
+  show() {
+    this.element.setAttribute('opacity', 1);
+    return this;
+  }
+
+  hide() {
+    this.element.setAttribute('opacity', 0);
+    return this;
+  }
+
+  cutToWidth(width) {
+    const textEl = this.textElement;
+    const textSpanEl = this.tspanElement;
+    let string = textEl.textContent;
+
+    while (textEl.getComputedTextLength() >= width && string.length > 0) {
+      string = string.slice(0, -1);
+      textSpanEl.textContent = `${string}...`;
+    }
+
+    return this;
   }
 }
