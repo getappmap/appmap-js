@@ -1,18 +1,18 @@
 <template>
   <div class="details-panel-edge">
     <v-details-panel-header object-type="Edge" :title="title" />
-    <v-details-panel-list title="Events" :items="events" />
+    <v-details-panel-list-pairs title="Events" :items="events" />
   </div>
 </template>
 
 <script>
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
-import VDetailsPanelList from '@/components/DetailsPanelList.vue';
+import VDetailsPanelListPairs from '@/components/DetailsPanelListPairs.vue';
 
 export default {
   name: 'v-details-panel-edge',
   components: {
-    VDetailsPanelList,
+    VDetailsPanelListPairs,
     VDetailsPanelHeader,
   },
   props: {
@@ -32,7 +32,8 @@ export default {
       return from.allEvents
         .map((e) => e.children)
         .flat()
-        .filter((e) => e.codeObject.ancestors().includes(to));
+        .filter((e) => e.codeObject.ancestors().includes(to))
+        .map((e) => ({ from: e.parent.codeObject, to: e.codeObject }));
     },
   },
 };
