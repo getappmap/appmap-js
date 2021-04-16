@@ -323,12 +323,14 @@ context('VS Code Extension', () => {
         .contains('Events')
         .parent()
         .within(() => {
-          cy.get('.list-item').contains('BaseHelper#admin_layout').click();
+          cy.get('.list-pair__object')
+            .contains('BaseHelper#admin_layout')
+            .click();
         });
 
       cy.get('.details-panel-header')
-        .should('contain.text', 'Event')
-        .should('contain.text', 'Spree::Admin::BaseHelper#admin_layout');
+        .should('contain.text', 'Function')
+        .should('contain.text', 'admin_layout');
     });
 
     it('event can navigate directly to flow view', () => {
