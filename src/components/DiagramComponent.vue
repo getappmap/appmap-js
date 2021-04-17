@@ -70,6 +70,10 @@ export default {
         return;
       }
 
+      if (codeObject.type === CodeObjectType.FUNCTION) {
+        codeObject = codeObject.classObject;
+      }
+
       if (this.componentDiagram.hasObject(codeObject)) {
         this.componentDiagram.highlight(codeObject);
       } else {
