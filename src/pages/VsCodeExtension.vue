@@ -174,6 +174,18 @@ export default {
         this.$refs.tabs.activateTab(this.$refs[view]);
       },
     },
+    '$store.state.focusedEvent': {
+      handler(event) {
+        if (event) {
+          this.setView(VIEW_FLOW);
+          window.requestAnimationFrame(() => {
+            this.$refs.diagramFlow.focusSelector(
+              `[data-event-id="${event.id}"]`
+            );
+          });
+        }
+      },
+    },
     '$store.getters.selectedObject': {
       handler(selectedObject) {
         if (selectedObject && !(selectedObject instanceof Event)) {

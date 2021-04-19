@@ -11,6 +11,7 @@ export const SET_APPMAP_DATA = 'setAppMapData';
 export const POP_OBJECT_STACK = 'popObjectStack';
 export const CLEAR_OBJECT_STACK = 'clearObjectStack';
 export const SET_VIEW = 'setView';
+export const SET_FOCUSED_EVENT = 'setFocusedEvent';
 export const VIEW_COMPONENT = 'viewComponent';
 export const VIEW_FLOW = 'viewFlow';
 
@@ -21,6 +22,7 @@ export function buildStore() {
       selectionStack: [],
       currentView: VIEW_COMPONENT,
       selectedLabel: null,
+      focusedEvent: null,
     },
 
     getters: {
@@ -61,6 +63,7 @@ export function buildStore() {
           state.selectionStack.push(selection);
         }
         state.selectedLabel = null;
+        state.focusedEvent = null;
       },
 
       [POP_OBJECT_STACK](state) {
@@ -70,15 +73,21 @@ export function buildStore() {
       [CLEAR_OBJECT_STACK](state) {
         state.selectionStack = [];
         state.selectedLabel = null;
+        state.focusedEvent = null;
       },
 
       [SELECT_LABEL](state, label) {
         state.selectionStack = [];
         state.selectedLabel = label;
+        state.focusedEvent = null;
       },
 
       [SET_VIEW](state, view) {
         state.currentView = view;
+      },
+
+      [SET_FOCUSED_EVENT](state, event) {
+        state.focusedEvent = event;
       },
     },
   });

@@ -8,6 +8,14 @@
           <span class="list-item__count" v-if="uniqueItems && item.count > 1">
             {{ item.count }}
           </span>
+          <span
+            class="list-item__event-quickview"
+            v-if="eventQuickview"
+            @click.stop="focusEvent(item)"
+            title="View event in Trace view"
+          >
+            <EyeIcon />
+          </span>
         </button>
       </li>
     </ul>
@@ -15,10 +23,14 @@
 </template>
 
 <script>
-import { SELECT_OBJECT } from '@/store/vsCode';
+import EyeIcon from '@/assets/eye.svg';
+import { SELECT_OBJECT, SET_FOCUSED_EVENT } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel-list',
+  components: {
+    EyeIcon,
+  },
   props: {
     title: String,
     items: {
@@ -32,6 +44,10 @@ export default {
     nameKey: {
       type: String,
     },
+    eventQuickview: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     nameOf(item) {
@@ -44,6 +60,11 @@ export default {
     selectItem(item) {
       if (this.$store) {
         this.$store.commit(SELECT_OBJECT, item.object);
+      }
+    },
+    focusEvent(item) {
+      if (this.$store) {
+        this.$store.commit(SET_FOCUSED_EVENT, item.object);
       }
     },
   },
@@ -135,6 +156,25 @@ export default {
           color: white;
           background-color: $gray4;
           white-space: nowrap;
+        }
+
+        &__event-quickview {
+          margin-left: 1rem;
+          padding: 0.25rem;
+          color: $gray4;
+          line-height: 0;
+          cursor: pointer;
+
+          &:hover,
+          &:active {
+            color: $gray5;
+          }
+
+          svg {
+            width: 1rem;
+            height: 1rem;
+            fill: currentColor;
+          }
         }
       }
     }

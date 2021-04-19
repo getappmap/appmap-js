@@ -120,6 +120,13 @@ export default {
       height: 0,
     };
   },
+  watch: {
+    '$store.state.focusedEvent': {
+      handler() {
+        this.initialize();
+      },
+    },
+  },
   methods: {
     onResize() {
       const { children } = this.$refs;
@@ -194,14 +201,21 @@ export default {
       );
     },
     initialize() {
-      if (
+      const hasSelectedEventInTree =
         this.selectedEvents.length &&
         (this.selectedEvents.map((e) => e.parent).includes(this.event) ||
           this.selectedEvents
             .map((e) => e.ancestors())
             .flat()
-            .includes(this.event))
-      ) {
+            .includes(this.event));
+      const hasFocusedEventInTree =
+        this.$store.state.focusedEvent &&
+        this.$store.state.focusedEvent
+          .ancestors()
+          .map((e) => e.id)
+          .includes(this.event.id);
+
+      if (hasSelectedEventInTree || hasFocusedEventInTree) {
         this.expanded = true;
       }
     },
@@ -219,7 +233,6 @@ export default {
       );
     },
     children() {
-      console.log('updating children');
       return this.event.children;
     },
     verticalHeight() {
