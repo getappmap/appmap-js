@@ -5,6 +5,7 @@
       :key="event.id"
       :event="event"
       :selected-events="selectedEvents"
+      :focused-event="focusedEvent"
       :highlight-color="highlightColor"
       :highlight-all="highlightAll"
       :highlight-style="highlightStyle"
@@ -39,6 +40,10 @@ export default {
     selectedEvents: {
       type: Array,
       default: () => [],
+    },
+    focusedEvent: {
+      type: Object,
+      default: null,
     },
     highlightColor: String,
     highlightAll: Boolean,

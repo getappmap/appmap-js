@@ -40,6 +40,9 @@ export function buildStore() {
       selectedLabel(state) {
         return state.selectedLabel;
       },
+      focusedEvent(state) {
+        return state.focusedEvent;
+      },
     },
 
     mutations: {

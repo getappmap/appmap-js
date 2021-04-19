@@ -56,6 +56,7 @@
             ref="diagramFlow"
             :events="filteredAppMap.rootEvents()"
             :selected-events="selectedEvent"
+            :focused-event="focusedEvent"
             :name="VIEW_FLOW"
             :zoom-controls="true"
             @clickEvent="onClickTraceEvent"
@@ -174,18 +175,6 @@ export default {
         this.$refs.tabs.activateTab(this.$refs[view]);
       },
     },
-    '$store.state.focusedEvent': {
-      handler(event) {
-        if (event) {
-          this.setView(VIEW_FLOW);
-          window.requestAnimationFrame(() => {
-            this.$refs.diagramFlow.focusSelector(
-              `[data-event-id="${event.id}"]`
-            );
-          });
-        }
-      },
-    },
     '$store.getters.selectedObject': {
       handler(selectedObject) {
         if (selectedObject && !(selectedObject instanceof Event)) {
@@ -204,6 +193,18 @@ export default {
         this.emitSelectedObject(
           selectedLabel ? `label:${selectedLabel}` : null
         );
+      },
+    },
+    '$store.getters.focusedEvent': {
+      handler(event) {
+        if (event) {
+          this.setView(VIEW_FLOW);
+          window.requestAnimationFrame(() => {
+            this.$refs.diagramFlow.focusSelector(
+              `[data-event-id="${event.id}"]`
+            );
+          });
+        }
       },
     },
   },
@@ -236,6 +237,10 @@ export default {
 
     selectedLabel() {
       return this.$store.getters.selectedLabel;
+    },
+
+    focusedEvent() {
+      return this.$store.getters.focusedEvent;
     },
 
     currentView() {

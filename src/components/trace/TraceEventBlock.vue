@@ -53,6 +53,7 @@
       v-if="isExpanded"
       :events="event.children"
       :selected-events="selectedEvents"
+      :focused-event="focusedEvent"
       :highlight-color="highlightColor"
       :highlight-all="highlightAll"
       :highlight-style="highlightStyle"
@@ -108,6 +109,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    focusedEvent: {
+      type: Object,
+      default: null,
+    },
     highlightColor: String,
     highlightAll: Boolean,
     highlightStyle: String,
@@ -119,13 +124,6 @@ export default {
       expanded: false,
       height: 0,
     };
-  },
-  watch: {
-    '$store.state.focusedEvent': {
-      handler() {
-        this.initialize();
-      },
-    },
   },
   methods: {
     onResize() {
@@ -201,22 +199,7 @@ export default {
       );
     },
     initialize() {
-      const hasSelectedEventInTree =
-        this.selectedEvents.length &&
-        (this.selectedEvents.map((e) => e.parent).includes(this.event) ||
-          this.selectedEvents
-            .map((e) => e.ancestors())
-            .flat()
-            .includes(this.event));
-      const hasFocusedEventInTree =
-        this.$store &&
-        this.$store.state.focusedEvent &&
-        this.$store.state.focusedEvent
-          .ancestors()
-          .map((e) => e.id)
-          .includes(this.event.id);
-
-      if (hasSelectedEventInTree || hasFocusedEventInTree) {
+      if (this.hasSelectedEventInTree || this.hasFocusedEventInTree) {
         this.expanded = true;
       }
     },
@@ -225,12 +208,8 @@ export default {
     isExpanded() {
       return (
         this.expanded ||
-        (this.selectedEvents.length &&
-          (this.selectedEvents.map((e) => e.parent).includes(this.event) ||
-            this.selectedEvents
-              .map((e) => e.ancestors())
-              .flat()
-              .includes(this.event)))
+        this.hasSelectedEventInTree ||
+        this.hasFocusedEventInTree
       );
     },
     children() {
@@ -253,6 +232,25 @@ export default {
         };
       }
       return result;
+    },
+    hasSelectedEventInTree() {
+      return (
+        this.selectedEvents.length &&
+        (this.selectedEvents.map((e) => e.parent).includes(this.event) ||
+          this.selectedEvents
+            .map((e) => e.ancestors())
+            .flat()
+            .includes(this.event))
+      );
+    },
+    hasFocusedEventInTree() {
+      return (
+        this.focusedEvent &&
+        this.focusedEvent
+          .ancestors()
+          .map((e) => e.id)
+          .includes(this.event.id)
+      );
     },
   },
   updated() {
