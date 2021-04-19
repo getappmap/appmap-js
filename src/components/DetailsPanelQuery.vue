@@ -1,7 +1,11 @@
 <template>
   <div>
     <v-details-panel-header object-type="SQL query" :title="title" />
-    <v-details-panel-list title="Events" :items="object.events" />
+    <v-details-panel-list
+      title="Events"
+      :items="object.events"
+      :event-quickview="true"
+    />
   </div>
 </template>
 
