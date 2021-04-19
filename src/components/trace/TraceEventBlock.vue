@@ -209,6 +209,7 @@ export default {
             .flat()
             .includes(this.event));
       const hasFocusedEventInTree =
+        this.$store &&
         this.$store.state.focusedEvent &&
         this.$store.state.focusedEvent
           .ancestors()
