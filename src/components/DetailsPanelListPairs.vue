@@ -29,11 +29,8 @@ export default {
   },
   methods: {
     nameOf(item) {
-      if (this.nameKey) {
-        return item[this.nameKey];
-      }
-
-      return item.prettyName || item.name || item.toString();
+      const { codeObject } = item;
+      return codeObject.prettyName || codeObject.name || codeObject.toString();
     },
     selectItem(item) {
       if (this.$store) {

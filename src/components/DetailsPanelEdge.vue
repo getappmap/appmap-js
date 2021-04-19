@@ -33,7 +33,7 @@ export default {
         .map((e) => e.children)
         .flat()
         .filter((e) => e.codeObject.ancestors().includes(to))
-        .map((e) => ({ from: e.parent.codeObject, to: e.codeObject }));
+        .map((e) => ({ from: e.parent, to: e }));
     },
   },
 };
