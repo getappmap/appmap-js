@@ -172,6 +172,7 @@ export default {
       handler(view) {
         this.onChangeTab(this.$refs[view]);
         this.$refs.tabs.activateTab(this.$refs[view]);
+        this.$root.$emit('stateChanged', 'currentView');
       },
     },
     '$store.getters.selectedObject': {
@@ -180,18 +181,12 @@ export default {
           this.setView(VIEW_COMPONENT);
         }
 
-        if (selectedObject && selectedObject.fqid) {
-          this.emitSelectedObject(selectedObject.fqid);
-        } else {
-          this.emitSelectedObject(null);
-        }
+        this.$root.$emit('stateChanged', 'selectedObject');
       },
     },
     '$store.getters.selectedLabel': {
-      handler(selectedLabel) {
-        this.emitSelectedObject(
-          selectedLabel ? `label:${selectedLabel}` : null
-        );
+      handler() {
+        this.$root.$emit('stateChanged', 'selectedObject');
       },
     },
   },
@@ -287,41 +282,6 @@ export default {
       }
     },
 
-    emitSelectedObject(fqid) {
-      this.$root.$emit('selectedObject', fqid);
-    },
-
-    setSelectedObject(fqid) {
-      const [match, type, object] = fqid.match(/^([a-z]+):(.+)/);
-      if (!match) {
-        return;
-      }
-
-      if (type === 'label') {
-        this.$store.commit(SELECT_LABEL, object);
-        return;
-      }
-
-      const { classMap, events } = this.$store.state.appMap;
-      let selectedObject = null;
-
-      if (type === 'event') {
-        const eventId = parseInt(object, 10);
-
-        if (Number.isNaN(eventId)) {
-          return;
-        }
-
-        selectedObject = events.find((e) => e.id === eventId);
-      } else {
-        selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
-      }
-
-      if (selectedObject) {
-        this.$store.commit(SELECT_OBJECT, selectedObject);
-      }
-    },
-
     getState() {
       const state = {
         currentView: this.currentView,
@@ -342,7 +302,38 @@ export default {
         this.setView(state.currentView);
       }
       if (state.selectedObject) {
-        this.setSelectedObject(state.selectedObject);
+        const fqid = state.selectedObject;
+        const [match, type, object] = fqid.match(/^([a-z]+):(.+)/);
+
+        if (!match) {
+          return;
+        }
+
+        if (type === 'label') {
+          this.$store.commit(SELECT_LABEL, object);
+          return;
+        }
+
+        const { classMap, events } = this.$store.state.appMap;
+        let selectedObject = null;
+
+        if (type === 'event') {
+          const eventId = parseInt(object, 10);
+
+          if (Number.isNaN(eventId)) {
+            return;
+          }
+
+          selectedObject = events.find((e) => e.id === eventId);
+        } else {
+          selectedObject = classMap.codeObjects.find(
+            (obj) => obj.fqid === fqid
+          );
+        }
+
+        if (selectedObject) {
+          this.$store.commit(SELECT_OBJECT, selectedObject);
+        }
       }
     },
 

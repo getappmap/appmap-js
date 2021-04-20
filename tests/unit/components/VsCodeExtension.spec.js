@@ -19,13 +19,13 @@ describe('VsCodeExtension.vue', () => {
   });
 
   it('sets the selected object by FQID', () => {
-    wrapper.vm.setSelectedObject('label:json');
+    wrapper.vm.setState('{"selectedObject":"label:json"}');
     expect(wrapper.vm.selectedLabel).toMatch('json');
 
-    wrapper.vm.setSelectedObject('event:44');
+    wrapper.vm.setState('{"selectedObject":"event:44"}');
     expect(wrapper.vm.selectedObject.toString()).toMatch('User.find_by_id!');
 
-    wrapper.vm.setSelectedObject('class:app/models/User');
+    wrapper.vm.setState('{"selectedObject":"class:app/models/User"}');
     expect(wrapper.vm.selectedObject.id).toMatch('app/models/User');
   });
 
@@ -33,7 +33,7 @@ describe('VsCodeExtension.vue', () => {
     // Sanity checks
     expect(rootWrapper.emitted().showInstructions).toBeUndefined();
     expect(rootWrapper.emitted().changeTab).toBeArrayOfSize(1);
-    expect(rootWrapper.emitted().selectedObject).toBeArrayOfSize(1);
+    expect(rootWrapper.emitted().selectedObject).toBeUndefined();
     expect(rootWrapper.emitted().clearSelection).toBeUndefined();
 
     wrapper.vm.showInstructions();
@@ -41,9 +41,6 @@ describe('VsCodeExtension.vue', () => {
 
     wrapper.vm.onChangeTab(wrapper.vm.$refs[VIEW_FLOW]);
     expect(rootWrapper.emitted().changeTab[1]).toContain(VIEW_FLOW);
-
-    wrapper.vm.emitSelectedObject('example');
-    expect(rootWrapper.emitted().selectedObject[1]).toContain('example');
 
     wrapper.vm.clearSelection();
     expect(rootWrapper.emitted().clearSelection).toBeArrayOfSize(1);
