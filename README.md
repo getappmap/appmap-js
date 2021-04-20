@@ -18,6 +18,14 @@ Development is typically done while running
 npm run storybook
 ```
 
+### grpc
+
+```
+npm run protoc
+node ./src/lib/server/appmapServer.mjs
+node ./src/lib/client/appmapClient.js
+```
+
 ## Committing
 
 Commits must be made according to the
