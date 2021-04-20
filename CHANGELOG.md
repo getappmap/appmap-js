@@ -1,3 +1,24 @@
+# [2.0.0](https://github.com/applandinc/appmap-js/compare/v1.15.2...v2.0.0) (2021-04-20)
+
+
+* refactor!: Merge state events (#173) ([07a22df](https://github.com/applandinc/appmap-js/commit/07a22df76528e31139f1c372b2833aeee54e7ba7)), closes [#173](https://github.com/applandinc/appmap-js/issues/173)
+
+
+### Bug Fixes
+
+* Highlight functions class on Dependency Map when function was selected in Trace view ([#167](https://github.com/applandinc/appmap-js/issues/167)) ([89521cb](https://github.com/applandinc/appmap-js/commit/89521cb9e4f9d3efc966c171ee3f83ee0aaa044d))
+* Side panel scrollbar is now properly styled ([#163](https://github.com/applandinc/appmap-js/issues/163)) ([69edfde](https://github.com/applandinc/appmap-js/commit/69edfdec9a659938c05f473235930498fb81d2bc))
+
+
+### Features
+
+* Edges now link to both 'from' and 'to' events ([#166](https://github.com/applandinc/appmap-js/issues/166)) ([7a5364c](https://github.com/applandinc/appmap-js/commit/7a5364cf0eca48a0cbcf07e117cd9dc587d13543))
+
+
+### BREAKING CHANGES
+
+* Listeners of the `selectedObject` event should now listen for `stateChange` with data `selectedObject`.
+
 ## [1.15.2](https://github.com/applandinc/appmap-js/compare/v1.15.1...v1.15.2) (2021-04-14)
 
 
