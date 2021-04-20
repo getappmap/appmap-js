@@ -199,7 +199,7 @@ export default {
       handler(event) {
         if (event) {
           this.setView(VIEW_FLOW);
-          window.requestAnimationFrame(() => {
+          this.$nextTick(() => {
             this.$refs.diagramFlow.focusSelector(
               `[data-event-id="${event.id}"]`
             );
