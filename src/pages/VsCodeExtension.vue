@@ -172,7 +172,7 @@ export default {
       handler(view) {
         this.onChangeTab(this.$refs[view]);
         this.$refs.tabs.activateTab(this.$refs[view]);
-        this.$root.$emit('stateChanged');
+        this.$root.$emit('stateChanged', 'currentView');
       },
     },
     '$store.getters.selectedObject': {
@@ -181,12 +181,12 @@ export default {
           this.setView(VIEW_COMPONENT);
         }
 
-        this.$root.$emit('stateChanged');
+        this.$root.$emit('stateChanged', 'selectedObject');
       },
     },
     '$store.getters.selectedLabel': {
       handler() {
-        this.$root.$emit('stateChanged');
+        this.$root.$emit('stateChanged', 'selectedObject');
       },
     },
   },
