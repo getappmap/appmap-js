@@ -329,8 +329,8 @@ context('VS Code Extension', () => {
         });
 
       cy.get('.details-panel-header')
-        .should('contain.text', 'Function')
-        .should('contain.text', 'admin_layout');
+        .should('contain.text', 'Event')
+        .should('contain.text', 'Spree::Admin::BaseHelper#admin_layout');
     });
 
     it('event can navigate directly to flow view', () => {
