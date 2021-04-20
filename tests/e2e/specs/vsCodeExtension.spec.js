@@ -323,7 +323,9 @@ context('VS Code Extension', () => {
         .contains('Events')
         .parent()
         .within(() => {
-          cy.get('.list-item').contains('BaseHelper#admin_layout').click();
+          cy.get('.list-pair__object')
+            .contains('BaseHelper#admin_layout')
+            .click();
         });
 
       cy.get('.details-panel-header')
