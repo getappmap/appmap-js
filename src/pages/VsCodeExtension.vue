@@ -357,6 +357,7 @@ export default {
     },
 
     startResizing(event) {
+      document.body.style.userSelect = 'none';
       this.isPanelResizing = true;
       this.initialPanelWidth = this.$refs.mainColumnLeft.offsetWidth;
       this.initialClientX = event.clientX;
@@ -377,6 +378,7 @@ export default {
     },
 
     stopResizing() {
+      document.body.style.userSelect = '';
       this.isPanelResizing = false;
     },
   },
