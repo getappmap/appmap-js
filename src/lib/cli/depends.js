@@ -58,7 +58,15 @@ class Depends {
     return joinPath(this._baseDir, filePath);
   }
 
-  async depends() {
+  /**
+   * Compute the AppMaps which are out of date with regard to dependency files.
+   * Each result is the name of the AppMap file with the suffix 'appmap.json' stripped.
+   * If a callback is provided, the AppMaps names are yielded as they are detected.
+   *
+   * @param {function} callback
+   * @returns string[]
+   */
+  async depends(callback) {
     const outOfDateNames = new Set();
 
     async function checkClassMap(fileName) {
@@ -123,7 +131,12 @@ class Depends {
                 `${filePath} requires rebuild of AppMap ${indexDir}`
               );
             }
-            outOfDateNames.add(indexDir);
+            if (!outOfDateNames.has(indexDir)) {
+              if (callback) {
+                callback(indexDir);
+              }
+              outOfDateNames.add(indexDir);
+            }
           }
         })
       );

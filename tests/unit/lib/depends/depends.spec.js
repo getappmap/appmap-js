@@ -45,4 +45,12 @@ describe('Depends', () => {
     const depends = await fn.depends();
     expect(depends).toEqual([join(join(appMapDir), 'user_page_scenario')]);
   });
+
+  test('AppMaps will be yielded to a callback function', async () => {
+    const result = [];
+    const fn = new Depends(appMapDir);
+    fn.files = ['app/models/user.rb'];
+    await fn.depends((file) => result.push(file));
+    expect(result).toEqual([join(join(appMapDir), 'user_page_scenario')]);
+  });
 });
