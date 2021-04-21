@@ -23,9 +23,9 @@ describe('Depends', () => {
   });
 
   test('indicates when no dependency is modified', async () => {
-    const depends = await new Depends(appMapDir)
-      .baseDir(join(appMapDir, 'src'))
-      .depends();
+    const fn = new Depends(appMapDir);
+    fn.baseDir = join(__dirname, '../../fixtures/depends/src');
+    const depends = await fn.depends();
     expect(depends).toEqual([]);
   });
 
@@ -33,16 +33,24 @@ describe('Depends', () => {
     const future = now + 1000;
     utimesSync(userModelFilePath, future, future);
 
-    const depends = await new Depends(appMapDir)
-      .baseDir(join(appMapDir, 'src'))
-      .depends();
+    const fn = new Depends(appMapDir);
+    fn.baseDir = join(__dirname, '../../fixtures/depends/src');
+    const depends = await fn.depends();
     expect(depends).toEqual([join(join(appMapDir), 'user_page_scenario')]);
   });
 
   test('indicates dependencies in an explicit list', async () => {
-    const depends = await new Depends(appMapDir)
-      .files(['app/models/user.rb'])
-      .depends();
+    const fn = new Depends(appMapDir);
+    fn.files = ['app/models/user.rb'];
+    const depends = await fn.depends();
     expect(depends).toEqual([join(join(appMapDir), 'user_page_scenario')]);
+  });
+
+  test('AppMaps will be yielded to a callback function', async () => {
+    const result = [];
+    const fn = new Depends(appMapDir);
+    fn.files = ['app/models/user.rb'];
+    await fn.depends((file) => result.push(file));
+    expect(result).toEqual([join(join(appMapDir), 'user_page_scenario')]);
   });
 });

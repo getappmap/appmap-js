@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 const fsp = require('fs').promises;
 const { dirname, join: joinPath, isAbsolute, basename } = require('path');
 const { verbose, mtime, processFiles } = require('./utils');
@@ -8,14 +7,25 @@ const { verbose, mtime, processFiles } = require('./utils');
 const parseFilePath = (location) => location.split(':')[0];
 
 class Depends {
+  /**
+   * @param {string} appMapDir
+   */
   constructor(appMapDir) {
     this.appMapDir = appMapDir;
-    this._baseDir = '.';
+    this.baseDir = '.';
   }
 
-  baseDir(baseDir) {
+  /**
+   * Sets a base directory which will be used to resolve dependency file names.
+   * This is useful when the dependency files of an AppMap are located in a different
+   * directory than the AppMap file. baseDir is only applied to file paths which are
+   * detected in the classMap; it's not applied to file paths which are provided explicitly
+   * via the `files` method.
+   *
+   * @param {string} baseDir
+   */
+  set baseDir(baseDir) {
     this._baseDir = baseDir;
-    return this;
   }
 
   /**
@@ -25,18 +35,38 @@ class Depends {
    * modification time.
    *
    * @param {string[]} files
-   * @returns {Depends}
    */
-  files(files) {
+  set files(files) {
     if (!Array.isArray(files)) {
       // eslint-disable-next-line no-param-reassign
       files = [files];
     }
     this.testLocations = new Set(files);
-    return this;
   }
 
-  async depends() {
+  /**
+   * Prepend the baseDir to filePath, unless filePath is absolute.
+   *
+   * @param {string} filePath
+   * @returns string
+   */
+  applyBaseDir(filePath) {
+    if (isAbsolute(filePath)) {
+      return filePath;
+    }
+
+    return joinPath(this._baseDir, filePath);
+  }
+
+  /**
+   * Compute the AppMaps which are out of date with regard to dependency files.
+   * Each result is the name of the AppMap file with the suffix 'appmap.json' stripped.
+   * If a callback is provided, the AppMaps names are yielded as they are detected.
+   *
+   * @param {function} callback
+   * @returns string[]
+   */
+  async depends(callback) {
     const outOfDateNames = new Set();
 
     async function checkClassMap(fileName) {
@@ -49,20 +79,15 @@ class Depends {
       const createdAt = await mtime(mtimeFileName);
 
       if (verbose()) {
-        console.log(`Checking AppMap ${indexDir}`);
+        console.warn(`Checking AppMap ${indexDir}`);
       }
 
       const classMap = JSON.parse(await fsp.readFile(fileName));
       const codeLocations = new Set();
 
-      // Recurse through the classMap and check whether each source location file has been
-      // modified more recently than the AppMap.
       const collectFilePaths = (item) => {
         if (item.location) {
-          let filePath = parseFilePath(item.location);
-          if (!isAbsolute(filePath)) {
-            filePath = joinPath(this._baseDir, filePath);
-          }
+          const filePath = parseFilePath(item.location);
           codeLocations.add(filePath);
         }
         if (item.children) {
@@ -76,8 +101,22 @@ class Depends {
       }
 
       async function checkTimestamps(filePath) {
-        const dependencyModifiedAt = await mtime(filePath);
+        const dependencyFilePath = this.applyBaseDir(filePath);
+        if (verbose()) {
+          console.warn(`Checking timestamp of : ${dependencyFilePath}`);
+        }
+        const dependencyModifiedAt = await mtime(dependencyFilePath);
         return dependencyModifiedAt && createdAt < dependencyModifiedAt;
+      }
+
+      if (this.testLocations && verbose()) {
+        console.warn(
+          `Checking whether AppMap contains any client-provided file: [ ${[
+            ...this.testLocations,
+          ]
+            .sort()
+            .join(', ')} ]`
+        );
       }
 
       const testFunction = this.testLocations
@@ -88,9 +127,16 @@ class Depends {
         [...codeLocations].map(async (filePath) => {
           if (await testFunction(filePath)) {
             if (verbose()) {
-              console.log(`${filePath} requires rebuild of AppMap ${indexDir}`);
+              console.warn(
+                `${filePath} requires rebuild of AppMap ${indexDir}`
+              );
             }
-            outOfDateNames.add(indexDir);
+            if (!outOfDateNames.has(indexDir)) {
+              if (callback) {
+                callback(indexDir);
+              }
+              outOfDateNames.add(indexDir);
+            }
           }
         })
       );
