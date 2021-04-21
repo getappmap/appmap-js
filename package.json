@@ -8,7 +8,7 @@
     "cli": "node src/cli.js",
     "build:cjs": "cross-env NODE_ENV=production rollup --config rollup.config.js --format cjs",
     "build:esm": "cross-env NODE_ENV=production rollup --config rollup.config.js --format es",
-    "build": "npm run build:cjs && npm run build:esm",
+    "build": "npm run protoc && npm run build:cjs && npm run build:esm",
     "watch:cjs": "cross-env NODE_ENV=production rollup --watch --config rollup.config.js --format cjs",
     "watch:esm": "cross-env NODE_ENV=production rollup --watch --config rollup.config.js --format es",
     "test:unit": "vue-cli-service test:unit",
