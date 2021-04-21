@@ -1,3 +1,17 @@
+# [2.1.0](https://github.com/applandinc/appmap-js/compare/v2.0.0...v2.1.0) (2021-04-21)
+
+
+### Bug Fixes
+
+* Depends base directory is now applied to input files ([e9c3ed7](https://github.com/applandinc/appmap-js/commit/e9c3ed7f000493f6061f535c511821cdb8c01d2a))
+* Depends fields now only display text before the first colon ([c9a5162](https://github.com/applandinc/appmap-js/commit/c9a51628612acf2f34411c494668899c20267050))
+* Depends now writes to stderr instead of stdout ([4d270e3](https://github.com/applandinc/appmap-js/commit/4d270e3514cc6c3b978d107b254d597f85945fc2))
+
+
+### Features
+
+* Depends now yields results as they occur ([7f47bfb](https://github.com/applandinc/appmap-js/commit/7f47bfb2954cbad16a9757c42b87cce0d6b1ea48))
+
 # [2.0.0](https://github.com/applandinc/appmap-js/compare/v1.15.2...v2.0.0) (2021-04-20)
 
 
