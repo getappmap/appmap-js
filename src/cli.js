@@ -401,7 +401,8 @@ yargs(hideBin(process.argv))
           const metadata = JSON.parse(data);
           const value = metadata[field];
           if (value) {
-            values.push(value);
+            const tokens = value.split(':');
+            values.push(tokens[0]);
           } else {
             console.warn(`No ${field} in ${appMapBaseName}`);
           }
