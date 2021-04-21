@@ -65,7 +65,7 @@ async function processFiles(pattern, fn) {
  */
 async function listAppMapFiles(directory, fn) {
   if (verbose()) {
-    console.log(`Scanning ${directory} for AppMaps`);
+    console.warn(`Scanning ${directory} for AppMaps`);
   }
   const files = await fsp.readdir(directory);
   await Promise.all(

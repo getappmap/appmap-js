@@ -30,7 +30,7 @@ class Fingerprinter {
   // eslint-disable-next-line class-methods-use-this
   async fingerprint(appMapFileName) {
     if (verbose()) {
-      console.info(`Fingerprinting ${appMapFileName}`);
+      console.warn(`Fingerprinting ${appMapFileName}`);
     }
 
     const indexDir = baseName(appMapFileName);
@@ -49,14 +49,14 @@ class Fingerprinter {
 
     if (recordedCreatedAt === appMapCreatedAt) {
       if (verbose()) {
-        console.log('Fingerprints appear up to date. Skipping...');
+        console.warn('Fingerprints appear up to date. Skipping...');
       }
       return;
     }
 
     const data = await fsp.readFile(appMapFileName);
     if (verbose()) {
-      console.log(`Read ${data.length} bytes`);
+      console.warn(`Read ${data.length} bytes`);
     }
 
     let appmapData;
@@ -74,7 +74,7 @@ class Fingerprinter {
     }
     if (!appmapData.metadata) {
       if (verbose()) {
-        console.info(`${appMapFileName} has no metadata. Skipping...`);
+        console.warn(`${appMapFileName} has no metadata. Skipping...`);
       }
       return;
     }
@@ -106,7 +106,7 @@ class Fingerprinter {
             .update(canonicalJSON)
             .digest('hex');
           if (verbose()) {
-            console.log(`Computed digest for ${algorithmName}`);
+            console.warn(`Computed digest for ${algorithmName}`);
           }
           fingerprints.push({
             appmap_digest: appmapDigest,

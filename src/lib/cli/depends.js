@@ -49,7 +49,7 @@ class Depends {
       const createdAt = await mtime(mtimeFileName);
 
       if (verbose()) {
-        console.log(`Checking AppMap ${indexDir}`);
+        console.warn(`Checking AppMap ${indexDir}`);
       }
 
       const classMap = JSON.parse(await fsp.readFile(fileName));
@@ -88,7 +88,9 @@ class Depends {
         [...codeLocations].map(async (filePath) => {
           if (await testFunction(filePath)) {
             if (verbose()) {
-              console.log(`${filePath} requires rebuild of AppMap ${indexDir}`);
+              console.warn(
+                `${filePath} requires rebuild of AppMap ${indexDir}`
+              );
             }
             outOfDateNames.add(indexDir);
           }

@@ -34,7 +34,7 @@ class FingerprintDirectoryCommand {
 
   async execute() {
     if (verbose()) {
-      console.info(`Fingerprinting appmaps in ${this.directory}`);
+      console.warn(`Fingerprinting appmaps in ${this.directory}`);
     }
 
     const fpQueue = new FingerprintQueue();
@@ -61,7 +61,7 @@ class FingerprintWatchCommand {
 
   execute() {
     if (verbose()) {
-      console.info(`Watching appmaps in ${this.directory}`);
+      console.warn(`Watching appmaps in ${this.directory}`);
     }
 
     this.fpQueue = new FingerprintQueue();
@@ -80,14 +80,14 @@ class FingerprintWatchCommand {
 
   added(file) {
     if (verbose()) {
-      console.log(`AppMap added: ${file}`);
+      console.warn(`AppMap added: ${file}`);
     }
     this.enqueue(file);
   }
 
   changed(file) {
     if (verbose()) {
-      console.log(`AppMap changed: ${file}`);
+      console.warn(`AppMap changed: ${file}`);
     }
     this.enqueue(file);
   }
@@ -373,12 +373,12 @@ yargs(hideBin(process.argv))
         const stdinFiles = stdinFileStr.split('\n');
         files = (files || []).concat(stdinFiles);
         if (verbose()) {
-          console.log(`Computing depends on ${files.join(', ')}`);
+          console.warn(`Computing depends on ${files.join(', ')}`);
         }
       }
 
       if (verbose()) {
-        console.log(`Testing AppMaps in ${argv.appmapDir}`);
+        console.warn(`Testing AppMaps in ${argv.appmapDir}`);
       }
 
       let depends = new Depends(argv.appmapDir, argv.baseDir);
