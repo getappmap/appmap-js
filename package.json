@@ -20,7 +20,7 @@
     "chromatic": "chromatic --exit-zero-on-changes",
     "cypress": "cypress open",
     "semantic-release": "semantic-release",
-    "protoc": "grpc_tools_node_protoc --js_out=import_style=commonjs,binary:static_codegen/ --grpc_out=grpc_js:static_codegen protos/appmap.proto"
+    "protoc": "npx grpc_tools_node_protoc --js_out=import_style=commonjs,binary:static_codegen/ --grpc_out=grpc_js:static_codegen protos/appmap.proto"
   },
   "bin": {
     "appmap-js": "./src/cli.js"
@@ -94,6 +94,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^6.2.2",
     "geometry-interfaces": "^1.1.4",
+    "grpc-tools": "^1.11.1",
     "husky": "^4.3.8",
     "jest-extended": "^0.11.5",
     "lint-staged": "^10.5.3",
