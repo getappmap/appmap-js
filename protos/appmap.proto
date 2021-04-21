@@ -38,9 +38,8 @@ message CancelIndexResult {
 }
 
 message AppMap {
-  string version          = 1;
-  string file_name        = 2;
-  AppMapMetadata metadata = 3;
+  string file_name        = 1;
+  AppMapMetadata metadata = 2;
 }
 
 message AppMapMetadata {

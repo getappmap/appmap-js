@@ -38,11 +38,14 @@ async function mtime(filePath) {
   return fileStat.ctime.getTime();
 }
 
-// eslint-disable-next-line no-inner-declarations
-async function metadataField(appMapBaseName, field) {
+async function metadata(appMapBaseName) {
   const data = await fsp.readFile(joinPath(appMapBaseName, 'metadata.json'));
-  const metadata = JSON.parse(data);
-  return metadata[field];
+  return JSON.parse(data);
+}
+
+async function metadataField(appMapBaseName, field) {
+  const md = await metadata(appMapBaseName);
+  return md[field];
 }
 
 /**
@@ -139,6 +142,7 @@ module.exports = {
   defaultAppMapDir,
   listAppMapFiles,
   loadAppMap,
+  metadata,
   metadataField,
   mtime,
   verbose,

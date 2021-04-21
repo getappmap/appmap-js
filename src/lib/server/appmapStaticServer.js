@@ -2,16 +2,22 @@ const grpc = require('@grpc/grpc-js');
 const services = require('../../../static_codegen/protos/appmap_grpc_pb');
 const messages = require('../../../static_codegen/protos/appmap_pb');
 const Depends = require('../cli/depends');
-const { verbose, metadataField } = require('../cli/utils');
+const { verbose, metadataField, metadata } = require('../cli/utils');
+
+async function createIndex() {}
+
+async function watchIndex() {}
+
+async function cancelIndex() {}
 
 async function depends(call) {
-  const files = call.request.getFilesList().map((file) => file.getName());
+  const appmapDir = call.request.getIndex().getAppMapDir();
+  const baseDir = call.request.getIndex().getBaseDir();
+  const files = call.request.getFilesList();
   const useModifiedTime = call.request.getUseModifiedTime();
-  const appmapDir = call.request.getAppMapDir();
-  const baseDir = call.request.getBaseDir();
 
   if (verbose()) {
-    console.debug(files, useModifiedTime, appmapDir, baseDir);
+    console.debug(appmapDir, baseDir, files, useModifiedTime);
   }
 
   const dependsFn = new Depends(appmapDir);
@@ -28,19 +34,13 @@ async function depends(call) {
   }
   await Promise.all(
     appmaps.map(async (appMapBaseName) => {
+      const md = await metadata(appMapBaseName);
+      const grpcMd = new messages.AppMapMetadata();
+      grpcMd.setName(md.name);
+      grpcMd.setSourceLocation(md.source_location);
       const appmap = new messages.AppMap();
-      const name = await metadataField(appMapBaseName, 'name');
-      const sourceLocation = await metadataField(
-        appMapBaseName,
-        'source_location'
-      );
-      const file = new messages.File();
-      file.setName(`${appMapBaseName}.appmap.json`);
-      appmap.setFile(file);
-      appmap.setName(name);
-      if (sourceLocation) {
-        appmap.setSourceLocation(sourceLocation);
-      }
+      appmap.setFileName(`${appMapBaseName}.appmap.json`);
+      appmap.setMetadata(grpcMd);
       call.write(appmap);
     })
   );

@@ -41,16 +41,16 @@ describe('AppMapService', () => {
       credentials.createInsecure()
     );
 
+    const index = new messages.Index();
+    index.setAppMapDir(APPMAP_DIR);
     const dependsParams = new messages.DependsParams();
-    dependsParams.setAppMapDir(APPMAP_DIR);
-    const file = new messages.File();
-    file.setName('app/models/user.rb');
-    dependsParams.setFilesList([file]);
+    dependsParams.setFilesList(['app/models/user.rb']);
+    dependsParams.setIndex(index);
     const call = client.depends(dependsParams);
     const result = [];
     return new Promise((resolve, reject) => {
       call.on('data', (appmap) => {
-        result.push(appmap.getFile().getName());
+        result.push(appmap.getFileName());
       });
       call.on('end', (e) => {
         if (e) {

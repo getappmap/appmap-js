@@ -13,13 +13,15 @@ const client = new services.AppMapServiceClient(
 async function main() {
   return new Promise((resolve, reject) => {
     const dependsParams = new messages.DependsParams();
-    dependsParams.setAppMapDir('tests/unit/fixtures/depends');
-    const file = new messages.File();
-    file.setName('app/models/user.rb');
-    dependsParams.setFilesList([file]);
+    const index = new messages.Index();
+    index.setAppMapDir('tests/unit/fixtures/depends');
+    dependsParams.setIndex(index);
+    dependsParams.setFilesList(['app/models/user.rb']);
     const call = client.depends(dependsParams);
     call.on('data', (appmap) => {
-      console.log(appmap.getFile().getName());
+      console.log(appmap.getFileName());
+      console.log(appmap.getMetadata().getName());
+      console.log(appmap.getMetadata().getSourceLocation());
     });
     call.on('end', (e) => {
       if (e) {
