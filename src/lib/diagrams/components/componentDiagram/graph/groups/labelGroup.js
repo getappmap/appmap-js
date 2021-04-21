@@ -107,9 +107,20 @@ export default class LabelGroup {
     const textSpanEl = this.tspanElement;
     let string = textEl.textContent;
 
+    const title = createSVGElement('title');
+    title.textContent = string;
+    this.textElement.appendChild(title);
+
     while (textEl.getComputedTextLength() >= width && string.length > 0) {
-      string = string.slice(0, -1);
-      textSpanEl.textContent = `${string}...`;
+      if (string.includes('/')) {
+        const packagePath = string.split('/');
+        packagePath.shift();
+        string = packagePath.join('/');
+        textSpanEl.textContent = `.../${string}`;
+      } else {
+        string = string.slice(0, -1);
+        textSpanEl.textContent = `${string}...`;
+      }
     }
 
     return this;
