@@ -365,8 +365,8 @@ export default {
 
     makeResizing(event) {
       if (this.isPanelResizing) {
-        const MIN_PANEL_WIDTH = 420;
-        const MAX_PANEL_WIDTH = window.innerWidth / 2;
+        const MIN_PANEL_WIDTH = 280;
+        const MAX_PANEL_WIDTH = window.innerWidth * 0.75;
 
         let newWidth =
           this.initialPanelWidth + (event.clientX - this.initialClientX);
