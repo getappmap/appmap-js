@@ -314,7 +314,7 @@ export default {
           return;
         }
 
-        const { classMap, events } = this.$store.state.appMap;
+        const { classMap, events } = this.filteredAppMap;
         let selectedObject = null;
 
         if (type === 'event') {
