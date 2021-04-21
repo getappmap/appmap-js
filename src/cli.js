@@ -381,9 +381,12 @@ yargs(hideBin(process.argv))
         console.warn(`Testing AppMaps in ${argv.appmapDir}`);
       }
 
-      let depends = new Depends(argv.appmapDir, argv.baseDir);
+      const depends = new Depends(argv.appmapDir);
+      if (argv.baseDir) {
+        depends.baseDir = argv.baseDir;
+      }
       if (files) {
-        depends = depends.files(files);
+        depends.files = files;
       }
 
       const appMapNames = await depends.depends();
