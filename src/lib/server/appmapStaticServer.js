@@ -1,28 +1,90 @@
 const grpc = require('@grpc/grpc-js');
+const { v4: uuidv4 } = require('uuid');
 const services = require('../../../static_codegen/protos/appmap_grpc_pb');
 const messages = require('../../../static_codegen/protos/appmap_pb');
 const Depends = require('../cli/depends');
-const { verbose, metadataField, metadata } = require('../cli/utils');
+const FingerprintWatchCommand = require('../cli/fingerprintWatchCommand');
+const { verbose, metadata } = require('../cli/utils');
 
-async function createIndex() {}
+class Indexer {
+  constructor(appMapDir, baseDir) {
+    this.appMapDir = appMapDir;
+    this.baseDir = baseDir;
+    this.handle = uuidv4();
+  }
 
-async function watchIndex() {}
+  start() {
+    this.fingerprinter = new FingerprintWatchCommand(this.appMapDir);
+    this.fingerprinter.setPrint(true);
+    this.fingerprinter.execute();
+  }
 
-async function cancelIndex() {}
+  shutdown() {
+    this.fingerprinter.shutdown();
+  }
+}
+
+const indexers = {};
+
+function getIndexer(handle, fail) {
+  const indexer = indexers[handle];
+  if (!indexer) {
+    fail(`Indexer ${indexer.getHandle()} not found`);
+    return false;
+  }
+  return indexer;
+}
+
+async function createIndex(call, callback) {
+  const indexer = new Indexer(
+    call.request.getAppMapDir(),
+    call.request.getBaseDir()
+  );
+  indexers[indexer.handle] = indexer;
+  const index = new messages.Index();
+  index.setHandle(indexer.handle);
+  indexer.start();
+  callback(null, index);
+}
+
+async function watchIndex(call) {
+  const indexer = getIndexer(call.request.getHandle(), (err) => call.end(err));
+  if (!indexer) {
+    return;
+  }
+
+  indexer.watch(call);
+}
+
+async function shutdownIndex(call, callback) {
+  const indexer = getIndexer(call.request.getHandle(), callback);
+  if (!indexer) {
+    return;
+  }
+
+  console.log(`Shutting down ${call.request.getHandle()}`);
+  indexer.shutdown();
+  callback(null, new messages.CancelIndexResult());
+}
 
 async function depends(call) {
-  const appmapDir = call.request.getIndex().getAppMapDir();
-  const baseDir = call.request.getIndex().getBaseDir();
+  const indexer = getIndexer(call.request.getIndex().getHandle(), (err) =>
+    call.end(err)
+  );
+  if (!indexer) {
+    return;
+  }
+
   const files = call.request.getFilesList();
   const useModifiedTime = call.request.getUseModifiedTime();
 
   if (verbose()) {
-    console.debug(appmapDir, baseDir, files, useModifiedTime);
+    console.debug(indexer.appMapDir, indexer.baseDir, files, useModifiedTime);
   }
 
-  const dependsFn = new Depends(appmapDir);
-  if (baseDir) {
-    dependsFn.baseDir = baseDir;
+  const dependsFn = new Depends(indexer.appMapDir);
+  if (indexer.baseDir) {
+    dependsFn.baseDir = indexer.baseDir;
   }
   if (!useModifiedTime && files.length > 0) {
     dependsFn.files = files;
@@ -55,6 +117,9 @@ async function depends(call) {
 function Server() {
   const serverObj = new grpc.Server();
   serverObj.addService(services.AppMapServiceService, {
+    createIndex,
+    watchIndex,
+    shutdownIndex,
     depends,
   });
   return serverObj;

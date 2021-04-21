@@ -3,11 +3,11 @@ syntax = "proto3";
 package appmap;
 
 service AppMapService {
-  rpc createIndex(Index) returns (Index) {}
+  rpc createIndex(CreateIndex) returns (Index) {}
 
   rpc watchIndex(Index) returns (stream IndexEvent) {}
 
-  rpc cancelIndex(Index) returns (CancelIndexResult) {}
+  rpc shutdownIndex(Index) returns (CancelIndexResult) {}
 
   rpc depends(DependsParams) returns (stream AppMap) {}
 }
@@ -18,9 +18,13 @@ message DependsParams {
   bool use_modified_time = 3;
 }
 
-message Index {
+message CreateIndex {
   string app_map_dir = 1;
   string base_dir    = 2;
+}
+
+message Index {
+  string handle      = 1;
 }
 
 message IndexEvent {
@@ -34,7 +38,6 @@ message IndexEvent {
 }
 
 message CancelIndexResult {
-  bool canceled = 1;
 }
 
 message AppMap {
