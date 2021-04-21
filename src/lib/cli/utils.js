@@ -15,14 +15,14 @@ function verbose(v = null) {
   return isVerbose;
 }
 
-function baseName(file) {
-  return file.substring(0, file.length - '.appmap.json'.length);
+function baseName(fileName) {
+  return fileName.substring(0, fileName.length - '.appmap.json'.length);
 }
 
-async function mtime(fileName) {
+async function mtime(filePath) {
   let fileStat;
   try {
-    fileStat = await fsp.stat(fileName);
+    fileStat = await fsp.stat(filePath);
   } catch (e) {
     return null;
   }
