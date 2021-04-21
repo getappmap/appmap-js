@@ -4,15 +4,15 @@ const messages = require('../../../static_codegen/protos/appmap_pb');
 const Depends = require('../cli/depends');
 const { verbose } = require('../cli/utils');
 
-verbose(true);
-
 async function depends(call) {
   const files = call.request.getFilesList().map((file) => file.getName());
   const useModifiedTime = call.request.getUseModifiedTime();
   const appmapDir = call.request.getAppMapDir();
   const baseDir = call.request.getBaseDir();
 
-  console.log(files, useModifiedTime, appmapDir, baseDir);
+  if (verbose()) {
+    console.debug(files, useModifiedTime, appmapDir, baseDir);
+  }
 
   const dependsFn = new Depends(appmapDir);
   if (baseDir) {
@@ -23,7 +23,9 @@ async function depends(call) {
   }
 
   const appmaps = await dependsFn.depends();
-  console.log(appmaps);
+  if (verbose()) {
+    console.debug(appmaps);
+  }
   appmaps.forEach((result) => {
     const appmap = new messages.AppMap();
     appmap.setSourceLocation(result);
@@ -35,27 +37,28 @@ async function depends(call) {
 /**
  * Get a new server with the handler functions in this file bound to the methods
  * it serves.
- * @return {Server} The new server object
+ * @return {grpc.Server} The new server object
  */
-function getServer() {
-  const server = new grpc.Server();
-  console.log(services);
-  server.addService(services.AppMapServiceService, {
+function Server() {
+  const serverObj = new grpc.Server();
+  serverObj.addService(services.AppMapServiceService, {
     depends,
   });
-  return server;
+  return serverObj;
 }
 
 if (require.main === module) {
+  verbose(true);
+
   // If this is run as a script, start a server on an unused port
-  const server = getServer();
-  server.bindAsync(
+  const serverObj = Server();
+  serverObj.bindAsync(
     '0.0.0.0:50051',
     grpc.ServerCredentials.createInsecure(),
     () => {
-      server.start();
+      serverObj.start();
     }
   );
 }
 
-exports.getServer = getServer;
+module.exports = Server;
