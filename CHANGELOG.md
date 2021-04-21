@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/applandinc/appmap-js/compare/v2.1.0...v2.1.1) (2021-04-21)
+
+
+### Bug Fixes
+
+* Deserializing extension state uses the filtered AppMap ([#177](https://github.com/applandinc/appmap-js/issues/177)) ([c9c07ee](https://github.com/applandinc/appmap-js/commit/c9c07ee9e27f44ca8b6b9e3cd466a7c0f8b34b0b))
+
 # [2.1.0](https://github.com/applandinc/appmap-js/compare/v2.0.0...v2.1.0) (2021-04-21)
 
 
