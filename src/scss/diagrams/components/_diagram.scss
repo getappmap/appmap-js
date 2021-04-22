@@ -22,11 +22,12 @@
       font-size: inherit;
       font-weight: 700;
       line-height: 1;
-
-      &__icon {
-        cursor: pointer;
-      }
     }
+  }
+
+  .node .label__icon,
+  .cluster .label__icon {
+    cursor: pointer;
   }
 
   .edgePath {

@@ -11,7 +11,11 @@
         </v-details-button>
       </template>
     </v-details-panel-header>
-    <v-details-panel-list title="Events" :items="object.events" />
+    <v-details-panel-list
+      title="Events"
+      :items="object.events"
+      :event-quickview="true"
+    />
     <v-details-panel-list
       title="Inbound Calls"
       :items="object.inboundConnections"

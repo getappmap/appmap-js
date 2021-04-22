@@ -53,6 +53,7 @@
       v-if="isExpanded"
       :events="event.children"
       :selected-events="selectedEvents"
+      :focused-event="focusedEvent"
       :highlight-color="highlightColor"
       :highlight-all="highlightAll"
       :highlight-style="highlightStyle"
@@ -107,6 +108,10 @@ export default {
     selectedEvents: {
       type: Array,
       default: () => [],
+    },
+    focusedEvent: {
+      type: Object,
+      default: null,
     },
     highlightColor: String,
     highlightAll: Boolean,
@@ -194,14 +199,7 @@ export default {
       );
     },
     initialize() {
-      if (
-        this.selectedEvents.length &&
-        (this.selectedEvents.map((e) => e.parent).includes(this.event) ||
-          this.selectedEvents
-            .map((e) => e.ancestors())
-            .flat()
-            .includes(this.event))
-      ) {
+      if (this.hasSelectedEventInTree || this.hasFocusedEventInTree) {
         this.expanded = true;
       }
     },
@@ -210,16 +208,11 @@ export default {
     isExpanded() {
       return (
         this.expanded ||
-        (this.selectedEvents.length &&
-          (this.selectedEvents.map((e) => e.parent).includes(this.event) ||
-            this.selectedEvents
-              .map((e) => e.ancestors())
-              .flat()
-              .includes(this.event)))
+        this.hasSelectedEventInTree ||
+        this.hasFocusedEventInTree
       );
     },
     children() {
-      console.log('updating children');
       return this.event.children;
     },
     verticalHeight() {
@@ -239,6 +232,25 @@ export default {
         };
       }
       return result;
+    },
+    hasSelectedEventInTree() {
+      return (
+        this.selectedEvents.length &&
+        (this.selectedEvents.map((e) => e.parent).includes(this.event) ||
+          this.selectedEvents
+            .map((e) => e.ancestors())
+            .flat()
+            .includes(this.event))
+      );
+    },
+    hasFocusedEventInTree() {
+      return (
+        this.focusedEvent &&
+        this.focusedEvent
+          .ancestors()
+          .map((e) => e.id)
+          .includes(this.event.id)
+      );
     },
   },
   updated() {
