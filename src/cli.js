@@ -16,7 +16,12 @@ const process = require('process');
 const readline = require('readline');
 const { join } = require('path');
 const { algorithms, canonicalize } = require('../dist/appmap.node');
-const { verbose, listAppMapFiles, loadAppMap } = require('./lib/cli/utils');
+const {
+  verbose,
+  defaultAppMapDir,
+  listAppMapFiles,
+  loadAppMap,
+} = require('./lib/cli/utils');
 const appMapCatalog = require('./lib/cli/appMapCatalog');
 const FingerprintQueue = require('./lib/cli/fingerprintQueue');
 const Depends = require('./lib/cli/depends');
@@ -369,6 +374,7 @@ yargs(hideBin(process.argv))
 
       let { files } = argv;
       if (argv.stdinFiles) {
+        // TODO: Fix Error: EAGAIN: resource temporarily unavailable, read
         const stdinFileStr = readFileSync(0).toString();
         const stdinFiles = stdinFileStr.split('\n');
         files = (files || []).concat(stdinFiles);
@@ -430,7 +436,7 @@ yargs(hideBin(process.argv))
       });
       args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
-        default: 'tmp/appmap',
+        default: defaultAppMapDir,
       });
       return args.strict();
     },

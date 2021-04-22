@@ -1,6 +1,6 @@
 const fsp = require('fs').promises;
 const { dirname, join: joinPath, isAbsolute, basename } = require('path');
-const { verbose, mtime, processFiles } = require('./utils');
+const { verbose, defaultAppMapDir, mtime, processFiles } = require('./utils');
 
 // Gets the file path of a location. Location may include a line number or other info
 // in addition to the file path.
@@ -11,8 +11,8 @@ class Depends {
    * @param {string} appMapDir
    */
   constructor(appMapDir) {
-    this.appMapDir = appMapDir;
-    this.baseDir = '.';
+    this.appMapDir = appMapDir || defaultAppMapDir;
+    this._baseDir = null;
   }
 
   /**

@@ -19,7 +19,8 @@
     "build-storybook": "build-storybook",
     "chromatic": "chromatic --exit-zero-on-changes",
     "cypress": "cypress open",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "protoc": "grpc_tools_node_protoc --js_out=import_style=commonjs,binary:static_codegen/ --grpc_out=grpc_js:static_codegen protos/appmap.proto"
   },
   "bin": {
     "appmap-js": "./src/cli.js"
@@ -35,6 +36,8 @@
     "dist/appmap.node.js"
   ],
   "dependencies": {
+    "@grpc/grpc-js": "^1.2.12",
+    "@grpc/proto-loader": "^0.6.1",
     "async": "^3.2.0",
     "chokidar": "^3.5.1",
     "core-js": "^3.6.5",
@@ -46,6 +49,7 @@
     "diff": "^5.0.0",
     "fs-extra": "^9.1.0",
     "glob": "^7.1.6",
+    "google-protobuf": "^3.15.8",
     "js-yaml": "^4.0.0",
     "oboe": "^2.1.5",
     "sql-formatter": "^2.3.3",

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package appmap;
+
+service AppMapService {
+  rpc depends(DependsParams) returns (stream AppMap) {}
+}
+
+message DependsParams {
+  repeated File files      = 1;
+  bool   use_modified_time = 2;
+  string app_map_dir       = 3;
+  string base_dir          = 4;
+}
+
+message File {
+  string name = 1;
+}
+
+message AppMap {
+  File   file = 1;
+  string name = 2;
+  string source_location = 3;
+}

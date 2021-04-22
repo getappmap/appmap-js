@@ -7,6 +7,12 @@ const os = require('os');
 const { sep: pathSep, join: joinPath } = require('path');
 const { buildAppMap } = require('../../../dist/appmap.node');
 
+const DEFAULT_APPMAP_DIR = 'tmp/appmap';
+
+function defaultAppMapDir() {
+  return DEFAULT_APPMAP_DIR;
+}
+
 let isVerbose = false;
 function verbose(v = null) {
   if (v !== null) {
@@ -123,6 +129,7 @@ const buildDirectory = async (dirName, fn) => {
 
 module.exports = {
   baseName,
+  defaultAppMapDir,
   listAppMapFiles,
   loadAppMap,
   mtime,
