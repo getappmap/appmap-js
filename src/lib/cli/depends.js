@@ -1,11 +1,5 @@
 const fsp = require('fs').promises;
-const {
-  dirname,
-  join: joinPath,
-  isAbsolute,
-  basename,
-  resolve,
-} = require('path');
+const { dirname, join: joinPath, isAbsolute, basename } = require('path');
 const { verbose, mtime, processFiles } = require('./utils');
 
 // Gets the file path of a location. Location may include a line number or other info
@@ -103,8 +97,7 @@ class Depends {
       classMap.forEach(collectFilePaths);
 
       async function checkFileList(filePath) {
-        const dependencyFilePath = this.applyBaseDir(filePath);
-        return this.testLocations.has(dependencyFilePath);
+        return this.testLocations.has(filePath);
       }
 
       async function checkTimestamps(filePath) {
