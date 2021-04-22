@@ -103,7 +103,8 @@ class Depends {
       classMap.forEach(collectFilePaths);
 
       async function checkFileList(filePath) {
-        return this.testLocations.has(filePath);
+        const dependencyFilePath = this.applyBaseDir(filePath);
+        return this.testLocations.has(dependencyFilePath);
       }
 
       async function checkTimestamps(filePath) {
