@@ -298,7 +298,7 @@ export default class Graph {
     const clusterNode = {
       id,
       type: 'cluster',
-      label: codeObject.name,
+      label: codeObject.id,
       children: children.length,
       class: codeObject.type,
       codeObject,
