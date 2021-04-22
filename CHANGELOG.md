@@ -1,3 +1,17 @@
+# [2.2.0](https://github.com/applandinc/appmap-js/compare/v2.1.1...v2.2.0) (2021-04-22)
+
+
+### Bug Fixes
+
+* Don't drag contents of the extension when resizing ([af140df](https://github.com/applandinc/appmap-js/commit/af140dfe17be1e2912c75a477be1553534cef0ce))
+* Lengthy label names in the dependency map are now trimmed ([#164](https://github.com/applandinc/appmap-js/issues/164)) ([f86a9b0](https://github.com/applandinc/appmap-js/commit/f86a9b02fcfef7c78cb90aa3602b44cc4d7b5675))
+* Relax size constraints of the left panel ([1d05a9e](https://github.com/applandinc/appmap-js/commit/1d05a9e8a57a7983a4d995bd80826ce1e63ed466))
+
+
+### Features
+
+* Preview events without changing context in the details panel ([#168](https://github.com/applandinc/appmap-js/issues/168)) ([59e4951](https://github.com/applandinc/appmap-js/commit/59e49518d5625ab117ed2ba7b1f6bc7c6ed8b879))
+
 ## [2.1.1](https://github.com/applandinc/appmap-js/compare/v2.1.0...v2.1.1) (2021-04-21)
 
 
