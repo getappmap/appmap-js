@@ -1,5 +1,11 @@
 const fsp = require('fs').promises;
-const { dirname, join: joinPath, isAbsolute, basename } = require('path');
+const {
+  dirname,
+  join: joinPath,
+  isAbsolute,
+  basename,
+  resolve,
+} = require('path');
 const { verbose, mtime, processFiles } = require('./utils');
 
 // Gets the file path of a location. Location may include a line number or other info
