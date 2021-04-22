@@ -78,17 +78,51 @@ export default class LabelGroup {
       this.element.setAttribute('opacity', 0);
     }
 
-    const text = createSVGElement('text');
-    const tspan = createSVGElement('tspan');
-    tspan.setAttribute('space', 'preserve');
-    tspan.setAttribute('dy', '1em');
-    tspan.setAttribute('x', 1 + (icon ? iconSize + 6 : 0));
-    tspan.textContent = label;
-    text.appendChild(tspan);
-    this.element.appendChild(text);
+    this.textElement = createSVGElement('text');
+    this.tspanElement = createSVGElement('tspan');
+    this.tspanElement.setAttribute('space', 'preserve');
+    this.tspanElement.setAttribute('dy', '1em');
+    this.tspanElement.setAttribute('x', 1 + (icon ? iconSize + 6 : 0));
+    this.tspanElement.textContent = label;
+    this.textElement.appendChild(this.tspanElement);
+    this.element.appendChild(this.textElement);
   }
 
   getBBox() {
     return this.element.getBBox();
+  }
+
+  show() {
+    this.element.setAttribute('opacity', 1);
+    return this;
+  }
+
+  hide() {
+    this.element.setAttribute('opacity', 0);
+    return this;
+  }
+
+  cutToWidth(width) {
+    const textEl = this.textElement;
+    const textSpanEl = this.tspanElement;
+    let string = textEl.textContent;
+
+    const title = createSVGElement('title');
+    title.textContent = string;
+    this.textElement.appendChild(title);
+
+    while (textEl.getComputedTextLength() >= width && string.length > 0) {
+      if (string.includes('/')) {
+        const packagePath = string.split('/');
+        packagePath.shift();
+        string = packagePath.join('/');
+        textSpanEl.textContent = `.../${string}`;
+      } else {
+        string = string.slice(0, -1);
+        textSpanEl.textContent = `${string}...`;
+      }
+    }
+
+    return this;
   }
 }

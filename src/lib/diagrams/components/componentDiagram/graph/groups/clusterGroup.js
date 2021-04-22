@@ -3,6 +3,7 @@ import { getAnimationStep, createSVGElement } from '../util';
 import LabelGroup from './labelGroup';
 
 const PADDING = 4;
+const LABEL_RESERVE_SPACE = PADDING * 2 + 30;
 
 function setElementPosition(nodeGroup, x, y) {
   /* eslint-disable no-param-reassign */
@@ -25,20 +26,16 @@ export default class ClusterGroup {
     setElementPosition(this, node.x, node.y);
 
     const rect = Rect(node.width, node.height);
-    this.label = new LabelGroup(node.label, 'collapse');
     this.element.appendChild(rect);
+
+    this.label = new LabelGroup(node.label, 'collapse');
+    this.label.hide();
+    this.moveLabel(node.width, node.height);
     this.element.appendChild(this.label.element);
 
     requestAnimationFrame(() => {
-      const {
-        width: labelWidth,
-        height: labelHeight,
-      } = this.label.element.getBBox();
-      const { width: rectWidth, height: rectHeight } = rect.getBBox();
-      const w = Math.max(labelWidth + PADDING, rectWidth);
-      const h = Math.max(labelHeight + PADDING, rectHeight);
-
-      this.resize(w, h);
+      this.label.cutToWidth(node.width - LABEL_RESERVE_SPACE);
+      this.label.show();
     });
   }
 
@@ -77,6 +74,14 @@ export default class ClusterGroup {
     rect.setAttribute('width', width);
     rect.setAttribute('height', height);
 
+    this.moveLabel(width, height);
+    this.label
+      .hide()
+      .cutToWidth(width - LABEL_RESERVE_SPACE)
+      .show();
+  }
+
+  moveLabel(width, height) {
     const dX = -width * 0.5 + PADDING;
     const dY = -height * 0.5;
     this.label.element.style.transform = `translate(${dX}px, ${dY}px)`;
