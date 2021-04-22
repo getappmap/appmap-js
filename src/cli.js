@@ -10,15 +10,15 @@ const { hideBin } = require('yargs/helpers');
 const chokidar = require('chokidar');
 const { diffLines } = require('diff');
 const yaml = require('js-yaml');
-const { promises: fsp, readFileSync } = require('fs');
+const { readFileSync } = require('fs');
 const { queue } = require('async');
 const process = require('process');
 const readline = require('readline');
-const { join } = require('path');
 const { algorithms, canonicalize } = require('../dist/appmap.node');
 const {
   verbose,
   defaultAppMapDir,
+  metadataField,
   listAppMapFiles,
   loadAppMap,
 } = require('./lib/cli/utils');
@@ -401,11 +401,7 @@ yargs(hideBin(process.argv))
         const { field } = argv;
         // eslint-disable-next-line no-inner-declarations
         async function printField(appMapBaseName) {
-          const data = await fsp.readFile(
-            join(appMapBaseName, 'metadata.json')
-          );
-          const metadata = JSON.parse(data);
-          const value = metadata[field];
+          const value = await metadataField(appMapBaseName, field);
           if (value) {
             const tokens = value.split(':');
             values.push(tokens[0]);

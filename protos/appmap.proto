@@ -3,22 +3,47 @@ syntax = "proto3";
 package appmap;
 
 service AppMapService {
+  rpc createIndex(Index) returns (Index) {}
+
+  rpc watchIndex(Index) returns (stream IndexEvent) {}
+
+  rpc cancelIndex(Index) returns (CancelIndexResult) {}
+
   rpc depends(DependsParams) returns (stream AppMap) {}
 }
 
 message DependsParams {
-  repeated File files      = 1;
-  bool   use_modified_time = 2;
-  string app_map_dir       = 3;
-  string base_dir          = 4;
+  Index index            = 1;
+  repeated string files  = 2;
+  bool use_modified_time = 3;
 }
 
-message File {
-  string name = 1;
+message Index {
+  string app_map_dir = 1;
+  string base_dir    = 2;
+}
+
+message IndexEvent {
+  enum EventName {
+    ADDED   = 0;
+    REMOVED = 1;
+    CHANGED = 2;
+  }
+
+  EventName event = 1;
+}
+
+message CancelIndexResult {
+  bool canceled = 1;
 }
 
 message AppMap {
-  File   file = 1;
-  string name = 2;
-  string source_location = 3;
+  string version          = 1;
+  string file_name        = 2;
+  AppMapMetadata metadata = 3;
+}
+
+message AppMapMetadata {
+  string name            = 1;
+  string source_location = 2;
 }

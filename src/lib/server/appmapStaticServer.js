@@ -2,7 +2,7 @@ const grpc = require('@grpc/grpc-js');
 const services = require('../../../static_codegen/protos/appmap_grpc_pb');
 const messages = require('../../../static_codegen/protos/appmap_pb');
 const Depends = require('../cli/depends');
-const { verbose } = require('../cli/utils');
+const { verbose, metadataField } = require('../cli/utils');
 
 async function depends(call) {
   const files = call.request.getFilesList().map((file) => file.getName());
@@ -26,11 +26,24 @@ async function depends(call) {
   if (verbose()) {
     console.debug(appmaps);
   }
-  appmaps.forEach((result) => {
-    const appmap = new messages.AppMap();
-    appmap.setSourceLocation(result);
-    call.write(appmap);
-  });
+  await Promise.all(
+    appmaps.map(async (appMapBaseName) => {
+      const appmap = new messages.AppMap();
+      const name = await metadataField(appMapBaseName, 'name');
+      const sourceLocation = await metadataField(
+        appMapBaseName,
+        'source_location'
+      );
+      const file = new messages.File();
+      file.setName(`${appMapBaseName}.appmap.json`);
+      appmap.setFile(file);
+      appmap.setName(name);
+      if (sourceLocation) {
+        appmap.setSourceLocation(sourceLocation);
+      }
+      call.write(appmap);
+    })
+  );
   call.end();
 }
 

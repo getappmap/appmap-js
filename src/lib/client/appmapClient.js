@@ -11,7 +11,7 @@ const client = new services.AppMapServiceClient(
  * Run all of the demos in order
  */
 async function main() {
-  await new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const dependsParams = new messages.DependsParams();
     dependsParams.setAppMapDir('tests/unit/fixtures/depends');
     const file = new messages.File();
@@ -19,10 +19,9 @@ async function main() {
     dependsParams.setFilesList([file]);
     const call = client.depends(dependsParams);
     call.on('data', (appmap) => {
-      console.log(appmap.getSourceLocation());
+      console.log(appmap.getFile().getName());
     });
     call.on('end', (e) => {
-      console.warn(e);
       if (e) {
         return reject(e);
       }
@@ -33,5 +32,7 @@ async function main() {
 }
 
 if (require.main === module) {
-  main();
+  main()
+    .then(() => process.exit(0))
+    .catch((err) => console.warn(err) || process.exit(1));
 }

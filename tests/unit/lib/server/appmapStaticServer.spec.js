@@ -50,14 +50,16 @@ describe('AppMapService', () => {
     const result = [];
     return new Promise((resolve, reject) => {
       call.on('data', (appmap) => {
-        result.push(appmap.getSourceLocation());
+        result.push(appmap.getFile().getName());
       });
       call.on('end', (e) => {
         if (e) {
           return reject(e);
         }
 
-        expect(result).toEqual([join(APPMAP_DIR, 'user_page_scenario')]);
+        expect(result).toEqual([
+          join(APPMAP_DIR, 'user_page_scenario.appmap.json'),
+        ]);
 
         return resolve(e);
       });

@@ -38,6 +38,13 @@ async function mtime(filePath) {
   return fileStat.ctime.getTime();
 }
 
+// eslint-disable-next-line no-inner-declarations
+async function metadataField(appMapBaseName, field) {
+  const data = await fsp.readFile(joinPath(appMapBaseName, 'metadata.json'));
+  const metadata = JSON.parse(data);
+  return metadata[field];
+}
+
 /**
  * Call a function with each matching file.
  *
@@ -132,6 +139,7 @@ module.exports = {
   defaultAppMapDir,
   listAppMapFiles,
   loadAppMap,
+  metadataField,
   mtime,
   verbose,
   processFiles,
