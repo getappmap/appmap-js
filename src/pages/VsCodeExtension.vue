@@ -56,6 +56,7 @@
             ref="diagramFlow"
             :events="filteredAppMap.rootEvents()"
             :selected-events="selectedEvent"
+            :focused-event="focusedEvent"
             :name="VIEW_FLOW"
             :zoom-controls="true"
             @clickEvent="onClickTraceEvent"
@@ -189,6 +190,18 @@ export default {
         this.$root.$emit('stateChanged', 'selectedObject');
       },
     },
+    '$store.getters.focusedEvent': {
+      handler(event) {
+        if (event) {
+          this.setView(VIEW_FLOW);
+          this.$nextTick(() => {
+            this.$refs.diagramFlow.focusSelector(
+              `[data-event-id="${event.id}"]`
+            );
+          });
+        }
+      },
+    },
   },
 
   computed: {
@@ -219,6 +232,10 @@ export default {
 
     selectedLabel() {
       return this.$store.getters.selectedLabel;
+    },
+
+    focusedEvent() {
+      return this.$store.getters.focusedEvent;
     },
 
     currentView() {

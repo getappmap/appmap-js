@@ -5,7 +5,11 @@
       :object="object"
       :title="object.name"
     />
-    <v-details-panel-list title="Events" :items="object.events" />
+    <v-details-panel-list
+      title="Events"
+      :items="object.events"
+      :event-quickview="true"
+    />
     <v-details-panel-list
       title="Outbound connections"
       :items="outboundConnections"
