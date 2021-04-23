@@ -9,6 +9,9 @@
         @click.native="activateTab(tab)"
       >
       </v-tab-button>
+      <div class="tabs__notification">
+        <slot name="notification" />
+      </div>
     </div>
     <div class="tabs__content">
       <slot />
@@ -65,7 +68,13 @@ export default {
   height: 100%;
 
   &__header {
+    display: flex;
     padding: 1.5rem;
+  }
+
+  &__notification {
+    flex: 1;
+    margin: 0 8rem 0 1.5rem;
   }
 
   &__content {

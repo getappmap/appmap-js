@@ -4,6 +4,9 @@
       <ApplandLogo />
     </h3>
     <div class="details-panel__content">
+      <div class="details-panel__notification">
+        <slot name="notification" />
+      </div>
       <div class="details-panel__buttons">
         <slot name="buttons" />
       </div>
@@ -130,6 +133,10 @@ export default {
     &:not(:empty) {
       padding: 0 2rem 1rem;
     }
+  }
+
+  &__notification:not(:empty) {
+    padding: 0 2rem 2rem;
   }
 }
 </style>

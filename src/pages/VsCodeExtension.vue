@@ -62,6 +62,15 @@
             @clickEvent="onClickTraceEvent"
           />
         </v-tab>
+        <template v-slot:notification>
+          <v-notification
+            v-if="version"
+            :version="version"
+            :body="versionText"
+            @clickEvent="onNotificationClick"
+            @closeEvent="onNotificationClose"
+          />
+        </template>
       </v-tabs>
       <button class="diagram-reload" @click="resetDiagram">
         <span class="diagram-reload__text">Clear</span>
@@ -125,6 +134,7 @@ import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
 import VInstructions from '../components/Instructions.vue';
+import VNotification from '../components/Notification.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import {
@@ -149,6 +159,7 @@ export default {
     VDiagramComponent,
     VDiagramTrace,
     VInstructions,
+    VNotification,
     VTabs,
     VTab,
     DiagramGray,
@@ -163,6 +174,8 @@ export default {
       isPanelResizing: false,
       initialPanelWidth: 0,
       initialClientX: 0,
+      version: null,
+      versionText: '',
       VIEW_COMPONENT,
       VIEW_FLOW,
     };
@@ -278,6 +291,21 @@ export default {
     showInstructions() {
       this.$refs.instructions.open();
       this.$root.$emit('showInstructions');
+    },
+
+    showVersionNotification(version, versionText = '') {
+      this.version = version;
+      this.versionText = versionText;
+    },
+
+    onNotificationClick() {
+      this.$emit('notificationClick');
+    },
+
+    onNotificationClose() {
+      this.version = null;
+      this.versionText = '';
+      this.$emit('notificationClose');
     },
 
     onChangeTab(tab) {
