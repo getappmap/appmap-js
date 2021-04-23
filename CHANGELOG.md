@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/applandinc/appmap-js/compare/v2.2.0...v2.3.0) (2021-04-23)
+
+
+### Features
+
+* Add a notification bar API to VSCodeExtension ([#180](https://github.com/applandinc/appmap-js/issues/180)) ([6d16317](https://github.com/applandinc/appmap-js/commit/6d163177487668beb720fdf676527876fe5e178f))
+
 # [2.2.0](https://github.com/applandinc/appmap-js/compare/v2.1.1...v2.2.0) (2021-04-22)
 
 
