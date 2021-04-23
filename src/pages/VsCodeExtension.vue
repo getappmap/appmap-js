@@ -67,7 +67,7 @@
             v-if="version"
             :version="version"
             :body="versionText"
-            @clickEvent="onNotificationClick"
+            @openEvent="onNotificationOpen"
             @closeEvent="onNotificationClose"
           />
         </template>
@@ -298,14 +298,14 @@ export default {
       this.versionText = versionText;
     },
 
-    onNotificationClick() {
-      this.$emit('notificationClick');
+    onNotificationOpen() {
+      this.$root.$emit('notificationOpen');
     },
 
     onNotificationClose() {
       this.version = null;
       this.versionText = '';
-      this.$emit('notificationClose');
+      this.$root.$emit('notificationClose');
     },
 
     onChangeTab(tab) {

@@ -7,7 +7,13 @@
       </span>
       <CloseThinIcon class="notification__close" @click.stop="onClose" />
     </div>
-    <div class="notification__body" v-if="isExpanded" v-html="body"></div>
+    <div class="notification__body-container">
+      <div class="notification__body" v-show="isExpanded">
+        <div class="notification__body-document">
+          <iframe class="notification__body-document" :srcdoc="body" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -32,10 +38,12 @@ export default {
       type: String,
       default: '',
     },
-    isExpanded: {
-      type: Boolean,
-      default: false,
-    },
+  },
+
+  data() {
+    return {
+      isExpanded: false,
+    };
   },
 
   computed: {
@@ -52,10 +60,12 @@ export default {
 
   methods: {
     onClick() {
-      if (!this.isExpanded) {
-        this.$emit('clickEvent');
+      this.isExpanded = !this.isExpanded;
+      if (this.isExpanded) {
+        this.$emit('openEvent');
       }
     },
+
     onClose() {
       this.$emit('closeEvent');
     },
@@ -85,6 +95,7 @@ export default {
     align-items: center;
     padding: 0.5rem 1rem;
     cursor: pointer;
+    user-select: none;
   }
 
   svg.notification__arrow {
@@ -100,14 +111,31 @@ export default {
     cursor: pointer;
   }
 
+  &__body-container {
+    position: relative;
+  }
+
   &__body {
-    padding: 0.5rem 1rem;
+    position: absolute;
+    z-index: 2147483647;
+    width: 100%;
+    box-shadow: 0.2em 0.2em 10px 0px rgb(0 0 0 / 60%);
+    background-color: $vs-code-gray1;
+    border-radius: 0 0 $border-radius $border-radius;
+    max-height: 50vh;
+    padding: 0 0.25rem;
+    overflow: hidden;
+  }
+
+  &__body-document {
+    border: none;
+    width: 100%;
+    height: 50vh;
+    overflow: hidden;
   }
 
   &--expanded {
     border-color: $base12;
-    background-color: transparent;
-    color: $gray6;
 
     svg {
       fill: $base12;
@@ -117,15 +145,14 @@ export default {
       border-bottom: 1px solid $base12;
     }
   }
-}
-</style>
-<style scoped>
-.notification__body >>> ul {
-  margin: 0.5rem 0;
-  padding-left: 1rem;
-}
 
-.notification__body >>> ul li:not(:last-child) {
-  margin-bottom: 0.5rem;
+  .notification__body >>> ul {
+    margin: 0.5rem 0;
+    padding-left: 1rem;
+  }
+
+  .notification__body >>> ul li:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
 }
 </style>
