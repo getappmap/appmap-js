@@ -12,6 +12,9 @@ const scenarioData = {
 export default {
   title: 'Pages/VS Code',
   component: VVsCodeExtension,
+  parameters: {
+    chromatic: { delay: 300 },
+  },
   argTypes: {
     scenario: {
       control: {

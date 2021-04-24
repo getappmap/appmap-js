@@ -9,6 +9,9 @@ store.commit(SET_APPMAP_DATA, scenario);
 export default {
   title: 'AppLand/Diagrams/Component',
   component: VDiagramComponent,
+  parameters: {
+    chromatic: { delay: 300 },
+  },
   argTypes: {
     theme: { control: { type: 'select', options: ['dark', 'light'] } },
   },
