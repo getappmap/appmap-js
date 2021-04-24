@@ -24,6 +24,7 @@
       :highlight="selectedEvents.includes(event)"
       :highlight-color="highlightColor"
       :highlight-style="highlightStyle"
+      :focused="focusedEvent === event"
       @expandChildren="toggleVisibility()"
       @click.native.stop="$emit('clickEvent', event)"
       ref="node"
