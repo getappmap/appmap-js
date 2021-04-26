@@ -56,6 +56,10 @@ export default {
       default: 'solid',
       validator: (value) => ['solid', 'dashed', 'dotted'].indexOf(value) !== -1,
     },
+    focused: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     title() {
@@ -76,6 +80,7 @@ export default {
       return {
         'trace-node': true,
         highlight: this.highlight,
+        focused: this.focused,
       };
     },
     style() {
@@ -128,6 +133,11 @@ $bg-color: $gray2;
     outline: 4px solid $hotpink;
   }
 
+  &.focused {
+    outline: 4px solid transparent;
+    animation: node-focused 1s ease-out 0.3s;
+  }
+
   &__header {
     text-align: center;
     font-weight: 800;
@@ -160,6 +170,15 @@ $bg-color: $gray2;
 
   &--connected {
     fill: lighten($bg-color, 35);
+  }
+}
+
+@keyframes node-focused {
+  from {
+    outline-color: $hotpink;
+  }
+  to {
+    outline-color: transparent;
   }
 }
 </style>
