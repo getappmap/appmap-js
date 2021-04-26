@@ -4,6 +4,9 @@ import petClinicScenario from './data/java_scenario.json';
 export default {
   title: 'Pages/VS Code',
   component: VExtension,
+  parameters: {
+    chromatic: { delay: 1000 },
+  },
 };
 
 // Controls cannot be set in the URL params until Storybook 6.2 (next release).

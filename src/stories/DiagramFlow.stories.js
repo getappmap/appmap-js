@@ -9,6 +9,9 @@ store.commit(SET_APPMAP_DATA, scenario);
 export default {
   title: 'AppLand/Diagrams/Flow',
   component: VDiagramFlow,
+  parameters: {
+    chromatic: { delay: 1000 },
+  },
   argTypes: {
     theme: { control: { type: 'select', options: ['dark', 'light'] } },
     callTree: { table: { disable: true } },
