@@ -142,10 +142,6 @@ export default {
     svg {
       fill: $base12;
     }
-
-    .notification__head {
-      //border-bottom: 1px solid $base12;
-    }
   }
 
   .notification__body >>> ul {
