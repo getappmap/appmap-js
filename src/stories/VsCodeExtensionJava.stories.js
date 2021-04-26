@@ -5,7 +5,7 @@ export default {
   title: 'Pages/VS Code',
   component: VExtension,
   parameters: {
-    chromatic: { delay: 300 },
+    chromatic: { delay: 1000 },
   },
 };
 

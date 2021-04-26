@@ -16,7 +16,7 @@ export default {
   title: 'AppLand/Diagrams/Trace',
   component: VDiagramTrace,
   parameters: {
-    chromatic: { delay: 300 },
+    chromatic: { delay: 1000 },
   },
   argTypes: {
     events: { table: { disable: true } },

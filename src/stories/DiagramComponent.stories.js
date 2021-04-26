@@ -10,7 +10,7 @@ export default {
   title: 'AppLand/Diagrams/Component',
   component: VDiagramComponent,
   parameters: {
-    chromatic: { delay: 300 },
+    chromatic: { delay: 1000 },
   },
   argTypes: {
     theme: { control: { type: 'select', options: ['dark', 'light'] } },
