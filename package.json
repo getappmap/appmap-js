@@ -17,7 +17,7 @@
     "lint": "vue-cli-service lint",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "chromatic": "chromatic --exit-zero-on-changes",
+    "chromatic": "chromatic --exit-zero-on-changes --exit-once-uploaded",
     "cypress": "cypress open",
     "semantic-release": "semantic-release"
   },
