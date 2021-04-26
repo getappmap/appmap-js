@@ -80,7 +80,6 @@ export default {
   background-color: $gray6;
   color: $gray2;
   font-size: 0.75rem;
-  font-family: $appland-text-font-family;
   line-height: 1;
   white-space: nowrap;
 
@@ -105,6 +104,7 @@ export default {
   &__title {
     flex: 1;
     margin: 0 0.5rem;
+    font-family: $appland-text-font-family;
   }
 
   &__close {
@@ -120,18 +120,20 @@ export default {
     z-index: 2147483647;
     width: 100%;
     box-shadow: 0.2em 0.2em 10px 0px rgb(0 0 0 / 60%);
-    background-color: $vs-code-gray1;
-    border-radius: 0 0 $border-radius $border-radius;
+    background-color: $white;
+    color: $gray2;
+    border-radius: $border-radius;
     max-height: 50vh;
     padding: 0 0.25rem;
     overflow: hidden;
+    margin-top: 0.5rem;
   }
 
   &__body-document {
     border: none;
     width: 100%;
-    height: 50vh;
-    overflow: hidden;
+    height: 100vh;
+    max-height: 50vh;
   }
 
   &--expanded {
@@ -139,10 +141,6 @@ export default {
 
     svg {
       fill: $base12;
-    }
-
-    .notification__head {
-      border-bottom: 1px solid $base12;
     }
   }
 
