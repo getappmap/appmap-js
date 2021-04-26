@@ -91,9 +91,20 @@ class AppMapBuilder extends EventSource {
       /* eslint-disable no-param-reassign */
       event.id = eventId;
       eventId += 1;
+
       if (event.isCall() && event.returnEvent) {
         event.returnEvent.parent_id = event.id;
       }
+
+      // Normalize status/status_code properties
+      const { httpServerResponse } = event;
+      if (event.isReturn() && httpServerResponse) {
+        if (httpServerResponse.status_code) {
+          httpServerResponse.status = httpServerResponse.status_code;
+          delete httpServerResponse.status_code;
+        }
+      }
+
       return event;
       /* eslint-enable no-param-reassign */
     });
