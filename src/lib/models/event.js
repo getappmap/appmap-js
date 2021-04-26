@@ -106,12 +106,7 @@ export default class Event {
   }
 
   get httpServerResponse() {
-    const response = { ...this.returnEvent.http_server_response };
-    if (response.status_code) {
-      response.status = response.status_code;
-      delete response.status_code;
-    }
-    return response;
+    return this.returnEvent.http_server_response;
   }
 
   get definedClass() {
