@@ -1,3 +1,12 @@
+## [2.3.2](https://github.com/applandinc/appmap-js/compare/v2.3.1...v2.3.2) (2021-04-26)
+
+
+### Bug Fixes
+
+* Fix missing tokens due to syntax highlighting ([#181](https://github.com/applandinc/appmap-js/issues/181)) ([cfd6672](https://github.com/applandinc/appmap-js/commit/cfd6672b0ae407824bbd1b2f6629e80da7475bf2))
+* Normalize http_server_response status codes ([#184](https://github.com/applandinc/appmap-js/issues/184)) ([8aa490d](https://github.com/applandinc/appmap-js/commit/8aa490d7d2865a4e92c0a03498d883326094590a))
+* Trace nodes blink when gaining focus from eye button ([#183](https://github.com/applandinc/appmap-js/issues/183)) ([089fa98](https://github.com/applandinc/appmap-js/commit/089fa98471d3fca6e13616d161d6dcb814fc0ff6))
+
 ## [2.3.1](https://github.com/applandinc/appmap-js/compare/v2.3.0...v2.3.1) (2021-04-26)
 
 
