@@ -1,3 +1,10 @@
+## [2.3.3](https://github.com/applandinc/appmap-js/compare/v2.3.2...v2.3.3) (2021-04-27)
+
+
+### Bug Fixes
+
+* Adjust notification bar to look more clickable ([#186](https://github.com/applandinc/appmap-js/issues/186)) ([73a4546](https://github.com/applandinc/appmap-js/commit/73a45461aa3fa00064544f7978dcd3e1305cfd0f))
+
 ## [2.3.2](https://github.com/applandinc/appmap-js/compare/v2.3.1...v2.3.2) (2021-04-26)
 
 
