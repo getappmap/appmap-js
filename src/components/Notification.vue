@@ -3,7 +3,7 @@
     <div class="notification__head" @click="onClick">
       <ArrowUpIcon class="notification__arrow" />
       <span class="notification__title">
-        You’ve been updated to <b>{{ version }}</b>
+        You’ve been updated to <b>{{ version }}.</b><em>See details.</em>
       </span>
       <CloseThinIcon class="notification__close" @click.stop="onClose" />
     </div>
@@ -82,10 +82,12 @@ export default {
   font-size: 0.75rem;
   line-height: 1;
   white-space: nowrap;
+  transition: $transition;
+  box-shadow: $box-shadow-min;
 
   svg {
-    width: 1rem;
-    height: 1rem;
+    width: 0.75rem;
+    height: 0.75rem;
     fill: $gray2;
   }
 
@@ -105,6 +107,10 @@ export default {
     flex: 1;
     margin: 0 0.5rem;
     font-family: $appland-text-font-family;
+    em {
+      color: $blue;
+      margin-left: 0.5rem;
+    }
   }
 
   &__close {
@@ -142,6 +148,10 @@ export default {
     svg {
       fill: $base12;
     }
+  }
+
+  &:hover {
+    background-color: darken($gray6, 15);
   }
 
   .notification__body >>> ul {
