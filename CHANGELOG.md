@@ -1,3 +1,10 @@
+## [2.3.4](https://github.com/applandinc/appmap-js/compare/v2.3.3...v2.3.4) (2021-04-27)
+
+
+### Bug Fixes
+
+* Remove padding from notification content panel ([fe3c3ec](https://github.com/applandinc/appmap-js/commit/fe3c3ecfed2c2b9f9b3f851f81fd062c6ffe61ee))
+
 ## [2.3.3](https://github.com/applandinc/appmap-js/compare/v2.3.2...v2.3.3) (2021-04-27)
 
 
