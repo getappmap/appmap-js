@@ -130,7 +130,7 @@ export default {
     color: $gray2;
     border-radius: $border-radius;
     max-height: 50vh;
-    padding: 0 0.25rem;
+    padding: 0;
     overflow: hidden;
     margin-top: 0.5rem;
   }
