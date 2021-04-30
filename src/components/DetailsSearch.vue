@@ -315,7 +315,12 @@ export default {
       }
 
       .details-search__block--labels & {
+        display: inline-flex;
         color: $base19;
+
+        &:not(:last-child) {
+          margin-right: 0.5rem;
+        }
 
         &::before {
           background: linear-gradient(
