@@ -44,6 +44,7 @@ export default {
   margin: 0;
   transition: $transition;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 
   &:hover,
   &:active {

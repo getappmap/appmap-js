@@ -450,6 +450,7 @@ code {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: 100%;
+  min-width: 800px;
   height: 100vh;
   color: $base11;
   background-color: $vs-code-gray1;
@@ -499,7 +500,7 @@ code {
       grid-column-start: 2;
       grid-column-end: 3;
       width: 100%;
-      min-width: 250px;
+      min-width: 400px;
       word-break: break-all;
       overflow: hidden;
 
