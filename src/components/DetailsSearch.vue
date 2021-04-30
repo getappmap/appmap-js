@@ -327,7 +327,19 @@ export default {
         }
       }
 
-      .details-search__block--package &::before,
+      .details-search__block--package & {
+        color: $base19;
+
+        &::before {
+          background: linear-gradient(
+            to right,
+            #6fddd6 0%,
+            #23a69e 50%,
+            #0e958d 100%
+          );
+        }
+      }
+
       .details-search__block--class &::before,
       .details-search__block--function &::before {
         background: linear-gradient(
