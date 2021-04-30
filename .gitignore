@@ -1,11 +1,7 @@
 .DS_Store
-node_modules
-/dist
-tmp
-
-/tests/e2e/videos/
-/tests/e2e/screenshots/
-
+**/package-lock.json
+**/node_modules
+**/dist
 
 # local env files
 .env.local
@@ -19,12 +15,12 @@ pnpm-debug.log*
 
 # Editor directories and files
 .idea
+.devcontainer
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-package-lock.json
-build-storybook.log*
-.eslintcache
+*.eslintcache
+*.log

@@ -15,28 +15,26 @@ addons:
       - libgconf-2-4
 
 install:
-  - npm install
+  - yarn install
 
 script:
-  - npm run build
-  - npm run lint --no-fix
-  - npm run test
+  - yarn run ci
 
 deploy:
   - provider: script
     skip_cleanup: true
-    script: npm run chromatic
+    script: npx lerna run chromatic
     on:
       all_branches: true
       condition: $TRAVIS_BRANCH != "main"
   - provider: script
     skip_cleanup: true
-    script: npm run chromatic -- --auto-accept-changes
+    script: npx lerna run chromatic -- --auto-accept-changes
     on:
       branch: main
   - provider: script
     skip_cleanup: true
     script:
-      - npx semantic-release -b main
+      - yarn run semantic-release
     on:
       branch: main

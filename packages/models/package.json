@@ -1,0 +1,39 @@
+{
+  "name": "@appland/models",
+  "version": "1.0.0",
+  "description": "",
+  "module": "src/index.js",
+  "main": "dist/bundle.cjs",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint 'src/**/*.js' 'tests/**/*.js'",
+    "lint:fix": "eslint 'src/**/*.js' 'tests/**/*.js' --fix",
+    "pre-commit": "lint-staged",
+    "build": "rollup -c",
+    "test": "cross-env NODE_OPTIONS='--experimental-vm-modules' jest"
+  },
+  "lint-staged": {
+    "*.{js,md,json}": [
+      "prettier --write"
+    ]
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^18.0.0",
+    "@rollup/plugin-node-resolve": "^11.2.1",
+    "eslint": "^7.25.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^26.6.3",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "crypto-js": "^4.0.0",
+    "sqlite-parser": "^1.0.1"
+  }
+}
