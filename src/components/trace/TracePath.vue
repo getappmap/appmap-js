@@ -116,7 +116,9 @@ export default {
     },
   },
   mounted() {
-    this.renderPaths();
+    this.$nextTick(() => {
+      this.renderPaths();
+    });
   },
 };
 </script>
