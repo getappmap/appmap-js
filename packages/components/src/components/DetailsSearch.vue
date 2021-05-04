@@ -138,7 +138,11 @@ export default {
         }
       });
 
-      Object.values(items).forEach((item) => {
+      Object.entries(items).forEach(([key, item]) => {
+        if (!item.data.length) {
+          delete items[key];
+          return;
+        }
         item.data = item.data.sort((a, b) => {
           const aStr =
             a.object instanceof CodeObject
