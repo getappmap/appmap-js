@@ -132,10 +132,6 @@ export default class ClassMap {
         ancestors.forEach((obj) => validCodeObjects.add(obj));
       });
 
-    this.codeObjects = this.codeObjects.filter((obj) =>
-      validCodeObjects.has(obj)
-    );
-
     this.roots = this.roots.filter((obj) => validCodeObjects.has(obj));
 
     Object.keys(this.codeObjectsByLocation).forEach((obj) => {
