@@ -483,7 +483,7 @@ context('VS Code Extension', () => {
         .contains('Functions')
         .parent()
         .within(() => {
-          cy.get('.list-item').should('have.length', 4);
+          cy.get('.list-item').should('have.length', 5);
         });
     });
 
