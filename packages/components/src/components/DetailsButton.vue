@@ -1,5 +1,5 @@
 <template>
-  <button type="button" class="details-btn">
+  <button type="button" :class="classes">
     <i :class="iconClass" v-if="icon" />
 
     <!-- Wrap the slot in a single object for better alignment -->
@@ -17,11 +17,19 @@ export default {
       type: String,
       required: false,
     },
+    additionalClass: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
 
   computed: {
     iconClass() {
       return `icon icon--${this.icon}`;
+    },
+    classes() {
+      return `details-btn ${this.additionalClass || ''}`;
     },
   },
 };

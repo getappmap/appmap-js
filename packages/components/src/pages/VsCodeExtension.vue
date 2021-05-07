@@ -461,6 +461,7 @@ html,
 body {
   width: 100%;
   height: 100%;
+  min-width: 320px;
   margin: 0;
 }
 
@@ -696,5 +697,21 @@ code {
 }
 ::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+@media (max-width: 800px) {
+  #app {
+    grid-template-columns: 100%;
+
+    .main-column--left {
+      width: 100%;
+    }
+    .main-column--drag,
+    .main-column--right,
+    .list-item__event-quickview,
+    .details-btn--show-in-trace {
+      display: none;
+    }
+  }
 }
 </style>

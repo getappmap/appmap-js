@@ -5,6 +5,7 @@
         <v-details-button
           v-if="shouldDisplayViewEvent"
           @click.native="viewEvent"
+          additionalClass="details-btn--show-in-trace"
         >
           Show in Trace
         </v-details-button>
