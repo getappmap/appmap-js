@@ -81,6 +81,7 @@
           <ReloadIcon class="control-button__icon" />
         </button>
         <button
+          v-if="appMapUploadable"
           class="control-button appmap-upload"
           @click="uploadAppmap"
           title="Upload"
@@ -193,6 +194,13 @@ export default {
       VIEW_COMPONENT,
       VIEW_FLOW,
     };
+  },
+
+  props: {
+    appMapUploadable: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   watch: {
