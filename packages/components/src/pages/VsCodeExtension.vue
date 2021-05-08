@@ -73,12 +73,18 @@
         </template>
       </v-tabs>
       <div class="control-buttons">
-        <button class="control-button diagram-reload" @click="resetDiagram">
-          <span class="control-button__text">Clear</span>
+        <button
+          class="control-button diagram-reload"
+          @click="resetDiagram"
+          title="Clear"
+        >
           <ReloadIcon class="control-button__icon" />
         </button>
-        <button class="control-button appmap-upload" @click="uploadAppmap">
-          <span class="control-button__text">Upload</span>
+        <button
+          class="control-button appmap-upload"
+          @click="uploadAppmap"
+          title="Upload"
+        >
           <UploadIcon class="control-button__icon" />
         </button>
       </div>
@@ -217,7 +223,7 @@ export default {
           this.setView(VIEW_FLOW);
           this.$nextTick(() => {
             this.$refs.diagramFlow.focusSelector(
-              `[data-event-id="${event.id}"]`,
+              `[data-event-id="${event.id}"]`
             );
           });
         }
@@ -380,7 +386,7 @@ export default {
           selectedObject = events.find((e) => e.id === eventId);
         } else {
           selectedObject = classMap.codeObjects.find(
-            (obj) => obj.fqid === fqid,
+            (obj) => obj.fqid === fqid
           );
         }
 
@@ -544,18 +550,8 @@ code {
             transition-timing-function: ease-out;
           }
 
-          &__text {
-            margin-right: 0.5rem;
-            letter-spacing: 0.5px;
-            opacity: 0;
-            transition: opacity 0.3s ease-in;
-            text-transform: uppercase;
-          }
-
-          &:hover .control-button__text,
-          &:active .control-button__text {
-            opacity: 1;
-            transition-timing-function: ease-out;
+          &:not(:last-child) {
+            margin-right: 1rem;
           }
 
           &__icon {
