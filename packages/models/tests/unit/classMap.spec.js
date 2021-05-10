@@ -171,9 +171,8 @@ describe('ClassMap', () => {
       expect(roots[1].id).toEqual(
         'org/springframework/samples/petclinic/owner'
       );
-      expect(roots[2].id).toEqual('org/springframework/mock/web');
-      expect(roots[3].id).toEqual('HTTP server requests');
-      expect(roots).toHaveLength(4);
+      expect(roots[2].id).toEqual('HTTP server requests');
+      expect(roots).toHaveLength(3);
     });
   });
 });
