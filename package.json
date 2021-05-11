@@ -4,7 +4,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lerna run --concurrency 1 --stream pre-commit --since HEAD --exclude-dependents",
-      "pre-push": "yarn run ci:test"
+      "pre-push": "yarn run ci"
     }
   },
   "workspaces": [
