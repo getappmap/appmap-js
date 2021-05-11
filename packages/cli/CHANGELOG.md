@@ -1,3 +1,10 @@
+# [@appland/cli-v1.0.2](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.0.1...@appland/cli-v1.0.2) (2021-05-11)
+
+
+### Bug Fixes
+
+* Add publish config ([118c54f](https://github.com/applandinc/appmap-js/commit/118c54f3db08f19de39bca7d67abd36a0071a20e))
+
 # [@appland/cli-v1.0.1](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.0.0...@appland/cli-v1.0.1) (2021-05-11)
 
 
