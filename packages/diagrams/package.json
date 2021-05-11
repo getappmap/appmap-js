@@ -9,11 +9,12 @@
     "access": "public"
   },
   "scripts": {
+    "build": "rollup -c",
     "lint": "eslint 'src/**/*.js' 'tests/**/*.js'",
     "lint:fix": "eslint 'src/**/*.js' 'tests/**/*.js' --fix",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "pre-commit": "lint-staged",
-    "build": "rollup -c"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "watch": "rollup -c -w"
   },
   "lint-staged": {
     "*.{js,md,json}": [
