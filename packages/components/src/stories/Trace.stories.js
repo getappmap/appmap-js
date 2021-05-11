@@ -23,6 +23,7 @@ export default {
   },
   args: {
     events,
+    zoomControls: true,
   },
 };
 
