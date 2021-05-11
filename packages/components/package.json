@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "main": "dist/appmap.node.js",
   "module": "dist/appmap.esm.js",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "cli": "node src/cli.js",
