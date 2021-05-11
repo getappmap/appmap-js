@@ -5,7 +5,9 @@
   "main": "dist/bundle.cjs",
   "module": "src/index.js",
   "type": "module",
-  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "lint": "eslint 'src/**/*.js' 'tests/**/*.js'",
     "lint:fix": "eslint 'src/**/*.js' 'tests/**/*.js' --fix",
