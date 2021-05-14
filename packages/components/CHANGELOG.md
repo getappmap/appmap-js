@@ -1,3 +1,18 @@
+# [@appland/components-v1.1.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.0.0...@appland/components-v1.1.0) (2021-05-14)
+
+
+### Bug Fixes
+
+* Packages share the same color in the details panel and dependency map ([#192](https://github.com/applandinc/appmap-js/issues/192)) ([6564887](https://github.com/applandinc/appmap-js/commit/656488722fb854828f6a7520d749a995df78fc1e))
+* Prevent word wrapping in tab buttons ([#193](https://github.com/applandinc/appmap-js/issues/193)) ([feeb021](https://github.com/applandinc/appmap-js/commit/feeb0217ca9ea06c231857995586f30ed535e94c))
+* The details panel will no longer display empty lists ([#203](https://github.com/applandinc/appmap-js/issues/203)) ([270b5b7](https://github.com/applandinc/appmap-js/commit/270b5b797438a6fa987872db848017704ce34886))
+
+
+### Features
+
+* Add an optional upload button to the AppMap view ([#211](https://github.com/applandinc/appmap-js/issues/211)) ([12263ce](https://github.com/applandinc/appmap-js/commit/12263ce0b2d4ffd7435c7d5799be2e298dd19008))
+* Display labels as a tag cloud ([#194](https://github.com/applandinc/appmap-js/issues/194)) ([6641237](https://github.com/applandinc/appmap-js/commit/6641237a21da6e9ee1d7a45ca028931dbb9d71ec))
+
 # @appland/components-v1.0.0 (2021-05-11)
 
 
