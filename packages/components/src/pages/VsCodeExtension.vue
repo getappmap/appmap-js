@@ -72,10 +72,23 @@
           />
         </template>
       </v-tabs>
-      <button class="diagram-reload" @click="resetDiagram">
-        <span class="diagram-reload__text">Clear</span>
-        <ReloadIcon class="diagram-reload__icon" />
-      </button>
+      <div class="control-buttons">
+        <button
+          class="control-button diagram-reload"
+          @click="resetDiagram"
+          title="Clear"
+        >
+          <ReloadIcon class="control-button__icon" />
+        </button>
+        <button
+          v-if="appMapUploadable"
+          class="control-button appmap-upload"
+          @click="uploadAppmap"
+          title="Upload"
+        >
+          <UploadIcon class="control-button__icon" />
+        </button>
+      </div>
       <div class="diagram-instructions">
         <v-instructions ref="instructions" />
       </div>
@@ -128,6 +141,7 @@
 <script>
 import { Event, buildAppMap } from '@appland/models';
 import ReloadIcon from '@/assets/reload.svg';
+import UploadIcon from '@/assets/arrow-up.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
@@ -154,6 +168,7 @@ export default {
 
   components: {
     ReloadIcon,
+    UploadIcon,
     VDetailsPanel,
     VDetailsButton,
     VDiagramComponent,
@@ -179,6 +194,13 @@ export default {
       VIEW_COMPONENT,
       VIEW_FLOW,
     };
+  },
+
+  props: {
+    appMapUploadable: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   watch: {
@@ -397,6 +419,10 @@ export default {
       this.renderKey += 1;
     },
 
+    uploadAppmap() {
+      this.$root.$emit('uploadAppmap');
+    },
+
     onClickTraceEvent(e) {
       this.$store.commit(SELECT_OBJECT, e);
     },
@@ -450,6 +476,7 @@ code {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: 100%;
+  min-width: 800px;
   height: 100vh;
   color: $base11;
   background-color: $vs-code-gray1;
@@ -499,53 +526,47 @@ code {
       grid-column-start: 2;
       grid-column-end: 3;
       width: 100%;
-      min-width: 250px;
+      min-width: 400px;
       word-break: break-all;
       overflow: hidden;
 
-      .diagram-reload {
+      .control-buttons {
         position: absolute;
         top: 1.8rem;
         right: 1.3rem;
-        border: none;
-        display: inline-flex;
-        align-items: center;
-        padding: 0.2rem;
-        background: transparent;
-        color: $gray4;
-        font: inherit;
-        font-family: $appland-text-font-family;
-        font-size: 0.8rem;
-        outline: none;
-        line-height: 0;
-        appearance: none;
-        cursor: pointer;
-        transition: color 0.3s ease-in;
 
-        &:hover,
-        &:active {
-          color: $gray5;
-          transition-timing-function: ease-out;
-        }
+        .control-button {
+          position: relative;
+          border: none;
+          display: inline-flex;
+          align-items: center;
+          padding: 0.2rem;
+          background: transparent;
+          color: $gray4;
+          font: inherit;
+          font-family: $appland-text-font-family;
+          font-size: 0.8rem;
+          outline: none;
+          line-height: 0;
+          appearance: none;
+          cursor: pointer;
+          transition: color 0.3s ease-in;
 
-        &__text {
-          margin-right: 0.5rem;
-          letter-spacing: 0.5px;
-          opacity: 0;
-          transition: opacity 0.3s ease-in;
-          text-transform: uppercase;
-        }
+          &:hover,
+          &:active {
+            color: $gray5;
+            transition-timing-function: ease-out;
+          }
 
-        &:hover .diagram-reload__text,
-        &:active .diagram-reload__text {
-          opacity: 1;
-          transition-timing-function: ease-out;
-        }
+          &:not(:last-child) {
+            margin-right: 1rem;
+          }
 
-        &__icon {
-          width: 1rem;
-          height: 1rem;
-          fill: currentColor;
+          &__icon {
+            width: 1rem;
+            height: 1rem;
+            fill: currentColor;
+          }
         }
       }
 

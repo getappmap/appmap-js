@@ -267,7 +267,8 @@ export default class ComponentDiagram extends EventSource {
 
         if (
           children.length === 1 &&
-          children[0].type !== CodeObjectType.QUERY
+          children[0].type !== CodeObjectType.QUERY &&
+          children[0].type !== CodeObjectType.FUNCTION
         ) {
           // Make sure this object isn't empty
           const eventCount = obj.allEvents.length;

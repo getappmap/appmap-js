@@ -138,7 +138,11 @@ export default {
         }
       });
 
-      Object.values(items).forEach((item) => {
+      Object.entries(items).forEach(([key, item]) => {
+        if (!item.data.length) {
+          delete items[key];
+          return;
+        }
         item.data = item.data.sort((a, b) => {
           const aStr =
             a.object instanceof CodeObject
@@ -314,7 +318,12 @@ export default {
       }
 
       .details-search__block--labels & {
+        display: inline-flex;
         color: $base19;
+
+        &:not(:last-child) {
+          margin-right: 0.5rem;
+        }
 
         &::before {
           background: linear-gradient(
@@ -326,7 +335,19 @@ export default {
         }
       }
 
-      .details-search__block--package &::before,
+      .details-search__block--package & {
+        color: $base19;
+
+        &::before {
+          background: linear-gradient(
+            to right,
+            #6fddd6 0%,
+            #23a69e 50%,
+            #0e958d 100%
+          );
+        }
+      }
+
       .details-search__block--class &::before,
       .details-search__block--function &::before {
         background: linear-gradient(
