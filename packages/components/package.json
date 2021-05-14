@@ -1,8 +1,7 @@
 {
   "name": "@appland/components",
   "version": "1.1.0",
-  "main": "dist/appmap.node.js",
-  "module": "dist/appmap.esm.js",
+  "main": "dist/appmap.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "cli": "node src/cli.js",
@@ -27,7 +26,7 @@
     "appmap-js": "src/cli.js"
   },
   "files": [
-    "dist/appmap.esm.js"
+    "dist/appmap.js"
   ],
   "dependencies": {
     "@appland/diagrams": "^1.0.0",
