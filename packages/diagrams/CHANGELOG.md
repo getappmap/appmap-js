@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.0.1](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.0.0...@appland/diagrams-v1.0.1) (2021-05-14)
+
+
+### Bug Fixes
+
+* The dependency map no longer expands a class into a function if it only contains one child ([#196](https://github.com/applandinc/appmap-js/issues/196)) ([b91d29a](https://github.com/applandinc/appmap-js/commit/b91d29afa707544041d7db5dc4187055026294a3))
+
 # @appland/diagrams-v1.0.0 (2021-05-11)
 
 
