@@ -30,13 +30,6 @@ function addCodeObject(codeObjectArray, codeObject, parent = null) {
   }
 }
 
-function filterValidCodeObjects(children, validCodeObjects) {
-  return children.filter((obj) => {
-    obj.children = filterValidCodeObjects(obj.children, validCodeObjects);
-    return validCodeObjects.has(obj);
-  });
-}
-
 export default class ClassMap {
   constructor(classMap) {
     this.codeObjectsByLocation = {};
@@ -139,14 +132,20 @@ export default class ClassMap {
         ancestors.forEach((obj) => validCodeObjects.add(obj));
       });
 
+    // Remove code objects which have no events
     this.codeObjects = this.codeObjects.filter((obj) =>
       validCodeObjects.has(obj)
     );
 
-    this.roots = this.roots.filter((obj) => {
-      obj.children = filterValidCodeObjects(obj.children, validCodeObjects);
-      return validCodeObjects.has(obj);
+    // Not every child of an object is guaranteed to be valid. Prune the children.
+    this.codeObjects.forEach((obj) => {
+      obj.children = obj.children.filter((child) =>
+        validCodeObjects.has(child)
+      );
     });
+
+    // Similarly, make sure all the root nodes are valid
+    this.roots = this.roots.filter((obj) => validCodeObjects.has(obj));
 
     Object.keys(this.codeObjectsByLocation).forEach((obj) => {
       if (!validCodeObjects.has(obj)) {
