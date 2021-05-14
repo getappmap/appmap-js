@@ -1,3 +1,10 @@
+# [@appland/components-v1.1.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.0...@appland/components-v1.1.1) (2021-05-14)
+
+
+### Bug Fixes
+
+* Package and export dist/appmap.js ([c801d2d](https://github.com/applandinc/appmap-js/commit/c801d2da0d29f6cc54defb4b789bde32e08fce11))
+
 # [@appland/components-v1.1.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.0.0...@appland/components-v1.1.0) (2021-05-14)
 
 
