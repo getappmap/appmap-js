@@ -23,13 +23,13 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: npx lerna run chromatic
+    script: yarn run chromatic && yarn run test:publish
     on:
       all_branches: true
       condition: $TRAVIS_BRANCH != "main"
   - provider: script
     skip_cleanup: true
-    script: npx lerna run chromatic -- --auto-accept-changes
+    script: yarn run chromatic --auto-accept-changes
     on:
       branch: main
   - provider: script

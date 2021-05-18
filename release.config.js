@@ -5,7 +5,33 @@ module.exports = {
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
     '@semantic-release/changelog',
-    '@semantic-release/npm',
+    [
+      '@google/semantic-release-replace-plugin',
+      {
+        replacements: [
+          {
+            files: ['package.json'],
+            from: /(?<=^\s*"version":\s*").*(?=")/gm,
+            to: '${nextRelease.version}',
+            countMatches: true,
+            results: [
+              {
+                file: 'package.json',
+                hasChanged: true,
+                numMatches: 1,
+                numReplacements: 1,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    [
+      '@semantic-release/exec',
+      {
+        publishCmd: 'yarn npm publish',
+      },
+    ],
     '@semantic-release/git',
     '@semantic-release/github',
   ],

@@ -86,7 +86,7 @@ if (!argv.format || argv.format === 'es') {
       // This may go away after updating to Vue 3?
       replace({ 'var Trace': 'var Trace = { __esModule: true, //' }),
 
-      // terser(),
+      terser(),
     ],
   };
   buildFormats.push(esConfig);

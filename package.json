@@ -3,7 +3,7 @@
   "private": true,
   "husky": {
     "hooks": {
-      "pre-commit": "lerna run --concurrency 1 --stream pre-commit --since HEAD --exclude-dependents",
+      "pre-commit": "yarn workspaces foreach -v run pre-commit",
       "pre-push": "yarn run ci"
     }
   },
@@ -11,15 +11,16 @@
     "packages/*"
   ],
   "scripts": {
-    "lint": "lerna run lint",
-    "test": "lerna run test",
-    "build": "lerna run build",
+    "lint": "yarn workspaces foreach -v run lint",
+    "test": "yarn workspaces foreach -v run test",
+    "build": "yarn workspaces foreach -v run build",
     "ci": "yarn run build && yarn run lint && yarn run test",
-    "bootstrap": "lerna bootstrap",
-    "postinstall": "yarn run bootstrap",
-    "semantic-release": "lerna exec --concurrency 1 -- semantic-release -e semantic-release-monorepo --tag-format='${LERNA_PACKAGE_NAME}-v\\${version}'"
+    "chromatic": "yarn workspaces foreach -v run chromatic",
+    "test:publish": "yarn run semantic-release --no-ci -d",
+    "semantic-release": "yarn workspaces foreach -v exec semantic-release -e semantic-release-monorepo"
   },
   "devDependencies": {
+    "@google/semantic-release-replace-plugin": "^1.0.2",
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/git": "^9.0.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
@@ -29,9 +30,11 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "husky": "^4.3.8",
-    "lerna": "^4.0.0",
     "prettier": "^2.2.1",
     "semantic-release": "^17.4.2",
     "semantic-release-monorepo": "^7.0.5"
+  },
+  "dependencies": {
+    "@semantic-release/exec": "^5.0.0"
   }
 }
