@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.0.3](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.0.2...@appland/diagrams-v1.0.3) (2021-05-18)
+
+
+### Bug Fixes
+
+* Update local dependencies ([f0d3281](https://github.com/applandinc/appmap-js/commit/f0d328161499999ee98fbb3aec2d438b3095bd0f))
+
 # [@appland/diagrams-v1.0.2](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.0.1...@appland/diagrams-v1.0.2) (2021-05-18)
 
 
