@@ -26,5 +26,13 @@ module.exports = {
         ],
       },
     ],
+    [
+      '@semantic-release/exec',
+      {
+        publishCmd: 'yarn npm publish',
+      },
+    ],
+    '@semantic-release/git',
+    '@semantic-release/github',
   ],
 };
