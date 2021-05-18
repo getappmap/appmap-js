@@ -1,3 +1,11 @@
+# [@appland/cli-v1.0.3](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.0.2...@appland/cli-v1.0.3) (2021-05-18)
+
+
+### Bug Fixes
+
+* Update local dependencies ([f0d3281](https://github.com/applandinc/appmap-js/commit/f0d328161499999ee98fbb3aec2d438b3095bd0f))
+* Update yargs to v17.0 ([278f1da](https://github.com/applandinc/appmap-js/commit/278f1daab7bb6fc8371ac80bf210a1a6fce76f79))
+
 # [@appland/cli-v1.0.2](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.0.1...@appland/cli-v1.0.2) (2021-05-11)
 
 
