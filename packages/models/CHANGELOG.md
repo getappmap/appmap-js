@@ -1,3 +1,10 @@
+# [@appland/models-v1.0.3](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.0.2...@appland/models-v1.0.3) (2021-05-18)
+
+
+### Bug Fixes
+
+* Bundle ESM/CJS without external dependencies ([0a38ac0](https://github.com/applandinc/appmap-js/commit/0a38ac0a57baa30c6b0ff00bb69503e4891f8858))
+
 # [@appland/models-v1.0.2](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.0.1...@appland/models-v1.0.2) (2021-05-11)
 
 
