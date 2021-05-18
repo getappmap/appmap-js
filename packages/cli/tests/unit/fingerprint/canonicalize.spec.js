@@ -3,7 +3,7 @@ const { buildAppMap } = require('@appland/models');
 const {
   algorithms,
   canonicalize,
-} = require('../../../src/fingerprint/canonicalize.js');
+} = require('../../../src/fingerprint/canonicalize');
 const apiKeyScenario = require('../fixtures/revoke_api_key.appmap.json');
 
 const apiKeyAppMap = buildAppMap().source(apiKeyScenario).normalize().build();
