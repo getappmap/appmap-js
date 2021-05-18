@@ -7,10 +7,12 @@ import image from '@rollup/plugin-image';
 import { terser } from 'rollup-plugin-terser';
 import minimist from 'minimist';
 import svg from './build/rollup-vue-svg';
+import pkg from './package.json';
 
 const argv = minimist(process.argv.slice(2));
 const baseConfig = {
   input: 'src/index.js',
+  external: Object.keys(pkg.dependencies),
   plugins: {
     preVue: [
       alias({
@@ -53,28 +55,13 @@ const baseConfig = {
   },
 };
 
-// ESM/UMD/IIFE shared settings: externals
-// Refer to https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
-const external = [
-  // list external dependencies, exactly the way it is written in the import statement.
-  // eg. 'jquery'
-  'd3',
-  'deepmerge',
-  'sql-formatter',
-  'd3-flame-graph',
-  'dagre',
-  'vuex',
-  'vue',
-];
-
 // Customize configs for individual targets
 const buildFormats = [];
 if (!argv.format || argv.format === 'es') {
   const esConfig = {
     ...baseConfig,
-    external,
     output: {
-      file: 'dist/appmap.js',
+      file: 'dist/index.js',
       format: 'esm',
       exports: 'named',
       freeze: false,
@@ -99,7 +86,7 @@ if (!argv.format || argv.format === 'es') {
       // This may go away after updating to Vue 3?
       replace({ 'var Trace': 'var Trace = { __esModule: true, //' }),
 
-      terser(),
+      // terser(),
     ],
   };
   buildFormats.push(esConfig);
