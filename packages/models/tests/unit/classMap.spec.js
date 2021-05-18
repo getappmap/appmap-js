@@ -120,8 +120,9 @@ describe('ClassMap', () => {
           (obj) => obj.type === 'route' && obj.name === route
         );
 
-        const numEvents = events.filter((e) => e.isCall() && e.route === route)
-          .length;
+        const numEvents = events.filter(
+          (e) => e.isCall() && e.route === route
+        ).length;
 
         expect(routeObject).toBeTruthy();
         expect(routeObject.events).toHaveLength(numEvents);
@@ -134,8 +135,9 @@ describe('ClassMap', () => {
       const sql = classMap.sqlObject;
       expect(sql).toBeTruthy();
 
-      const numSqlEvents = sql.children.map((child) => child.events).flat()
-        .length;
+      const numSqlEvents = sql.children
+        .map((child) => child.events)
+        .flat().length;
 
       expect(numSqlEvents).toEqual(totalSqlEvents);
     });
