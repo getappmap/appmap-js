@@ -1,3 +1,10 @@
+# [@appland/components-v1.1.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.1...@appland/components-v1.1.2) (2021-05-18)
+
+
+### Bug Fixes
+
+* Bundle ESM/CJS without external dependencies ([0a38ac0](https://github.com/applandinc/appmap-js/commit/0a38ac0a57baa30c6b0ff00bb69503e4891f8858))
+
 # [@appland/components-v1.1.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.0...@appland/components-v1.1.1) (2021-05-14)
 
 
