@@ -147,7 +147,9 @@ export default {
         if (this.passesFilter(label)) {
           items.labels.data.push({
             object: label,
-            childrenCount: labelData.function.length + labelData.event.length,
+            childrenCount:
+              labelData.function.length +
+              (labelData.event ? labelData.event.length : 0),
           });
         }
       });

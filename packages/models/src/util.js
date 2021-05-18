@@ -762,9 +762,5 @@ export function resolveDifferences(arr1, arr2) {
 }
 
 export function getRootEvents(eventArray) {
-  let events = eventArray.filter((e) => e.isCall() && e.httpServerRequest);
-  if (events.length === 0) {
-    events = eventArray.filter((e) => e.isCall() && !e.parent);
-  }
-  return events;
+  return eventArray.filter((e) => e.isCall() && !e.parent);
 }

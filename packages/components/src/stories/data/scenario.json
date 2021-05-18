@@ -8694,6 +8694,36 @@
         "value": "_T\u0003\r(3__xr____|W",
         "object_id": 47346474429660
       }
+    },
+    {
+      "id": 497,
+      "path": "src/main/java/org/kohsuke/stapler/DiagnosticThreadNameFilter.java",
+      "event": "call",
+      "lineno": 24,
+      "static": false,
+      "method_id": "doFilter",
+      "thread_id": 92,
+      "defined_class": "org.kohsuke.stapler.DiagnosticThreadNameFilter",
+      "http_server_request": {
+        "protocol": "HTTP/1.1",
+        "path_info": "/jenkins/static/5bbfe734/css/simple-page.css",
+        "request_method": "GET",
+        "normalized_path_info": "/jenkins/static/5bbfe734/css/simple-page.css"
+      }
+    },
+    {
+      "id": 498,
+      "path": "src/main/java/org/kohsuke/stapler/DiagnosticThreadNameFilter.java",
+      "event": "return",
+      "lineno": 24,
+      "static": false,
+      "method_id": "doFilter",
+      "thread_id": 92,
+      "defined_class": "org.kohsuke.stapler.DiagnosticThreadNameFilter",
+      "http_server_response": {
+        "status": 200,
+        "mime_type": "text/css"
+      }
     }
   ],
   "version": "1.3",

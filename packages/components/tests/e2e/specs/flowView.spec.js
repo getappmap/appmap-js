@@ -6,7 +6,7 @@ context('Flow View', () => {
   });
 
   it('renders', () => {
-    cy.get('.appmap__flow-view .node').should('have.length', 249);
+    cy.get('.appmap__flow-view .node').should('have.length', 250);
   });
 
   it('displays poppers', () => {

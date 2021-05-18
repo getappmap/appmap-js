@@ -662,6 +662,46 @@ context('VS Code Extension', () => {
         });
       });
     });
+
+    it('applies filters properly', () => {
+      const listClassFor = (objType) => `.details-search__block--${objType} li`;
+
+      cy.get(listClassFor('http')).should('have.length', 3);
+      cy.get(listClassFor('labels')).should('have.length', 4);
+      cy.get(listClassFor('package')).should('have.length', 4);
+      cy.get(listClassFor('class')).should('have.length', 11);
+      cy.get(listClassFor('function')).should('have.length', 20);
+      cy.get(listClassFor('query')).should('have.length', 34);
+
+      cy.get('.popper__button').click();
+
+      cy.get('#unlabeled-events').click();
+      cy.get(listClassFor('labels')).should('have.length', 4);
+      cy.get(listClassFor('function')).should('have.length', 6);
+      cy.get('#unlabeled-events').click();
+    });
+
+    it('shows all root events with disabled filter', () => {
+      cy.get('.tabs .tab-btn').last().click();
+
+      cy.get('.trace-node').should('have.length', 4);
+
+      cy.get('.popper__button').click();
+      cy.get('#limit-root-events').click();
+
+      cy.get('.trace-node').should('have.length', 12);
+    });
+
+    it('shows media HTTP requests which hidden by default', () => {
+      cy.get('.tabs .tab-btn').last().click();
+
+      cy.get('.trace-node').should('have.length', 4);
+
+      cy.get('.popper__button').click();
+      cy.get('#hide-media-requests').click();
+
+      cy.get('.trace-node').should('have.length', 5);
+    });
   });
 
   context('Java appmap', () => {
