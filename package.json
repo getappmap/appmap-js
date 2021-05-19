@@ -16,8 +16,9 @@
     "build": "yarn workspaces foreach -v run build",
     "ci": "yarn run build && yarn run lint && yarn run test",
     "chromatic": "yarn workspaces foreach -v run chromatic",
-    "test:publish": "yarn run semantic-release --no-ci -d",
-    "semantic-release": "yarn workspaces foreach -v exec semantic-release -e semantic-release-monorepo"
+    "semantic-release:prepare": "yarn workspaces foreach -v exec semantic-release -e ./release/prepare.config.js",
+    "semantic-release:publish": "yarn workspaces foreach -v exec semantic-release -e ./release/publish.config.js",
+    "semantic-release": "yarn run semantic-release:prepare && yarn run semantic-release:publish"
   },
   "devDependencies": {
     "@google/semantic-release-replace-plugin": "^1.0.2",

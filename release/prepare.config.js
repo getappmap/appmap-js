@@ -1,9 +1,10 @@
+const baseConfig = require('./base.config');
+
 module.exports = {
-  branches: ['main'],
-  extends: 'semantic-release-monorepo',
+  branches: baseConfig.branches,
+  extends: baseConfig.extends,
   plugins: [
-    '@semantic-release/commit-analyzer',
-    '@semantic-release/release-notes-generator',
+    ...baseConfig.plugins,
     '@semantic-release/changelog',
     [
       '@google/semantic-release-replace-plugin',
@@ -26,13 +27,5 @@ module.exports = {
         ],
       },
     ],
-    [
-      '@semantic-release/exec',
-      {
-        publishCmd: 'yarn npm publish',
-      },
-    ],
-    '@semantic-release/git',
-    '@semantic-release/github',
   ],
 };
