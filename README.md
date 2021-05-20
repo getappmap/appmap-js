@@ -1,24 +1,31 @@
 # appmap-js
 
+This repository is home to a variety of AppLand JavaScript/TypeScript projects.
+Many of our projects are standalone but depend on one another, meaning code
+changes can often span multiple projects. This monorepo serves to simplify the
+code review and publishing process across all of these projects.
+
+## Packages
+
+- [@appland/cli](https://github.com/applandinc/appmap-js/tree/main/packages/cli)
+- [@appland/components](https://github.com/applandinc/appmap-js/tree/main/packages/components)
+- [@appland/diagrams](https://github.com/applandinc/appmap-js/tree/main/packages/diagrams)
+- [@appland/models](https://github.com/applandinc/appmap-js/tree/main/packages/models)
+
+Looking for the AppMap client for JavaScript? Find it here:
+https://github.com/applandinc/appmap-agent-js
+
 ## Development
 
-### Prerequisites
+This project uses `yarn` workspaces to tie internal packages together. To get
+started, make sure that `yarn` is installed, install the project dependencies
+and run an initial build.
 
-We use `yarn` to manage dependencies. As of the time this is written, yarn has
-better support for projects with many `package.json` files. Secondly, we use
-`lerna` to do some higher level management of packages within the monorepo.
-
-Install both via `npm`:
-
-```
-$ npm install -g yarn lerna
-```
-
-### Getting started
-
-Running `yarn` will install all dependencies and link projects together for
-local development.
-
-```
+```sh
+$ npm install -g yarn
 $ yarn
+$ yarn run build
 ```
+
+To continuously build changes, `yarn run watch` will run a watch server for
+every project that specifies a `watch` script.
