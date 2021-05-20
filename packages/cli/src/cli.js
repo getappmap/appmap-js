@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable prefer-arrow-callback */
@@ -19,6 +20,9 @@ const { verbose, listAppMapFiles, loadAppMap } = require('./utils');
 const appMapCatalog = require('./appMapCatalog');
 const FingerprintQueue = require('./fingerprintQueue');
 const Depends = require('./depends');
+const FindCodeObjects = require('./search/findCodeObjects');
+const FindEvents = require('./search/findEvents');
+const FunctionStats = require('./functionStats');
 
 class FingerprintDirectoryCommand {
   constructor(directory) {
@@ -413,6 +417,249 @@ yargs(process.argv.slice(2))
         appMapNames.forEach((name) => values.push(name));
       }
       console.log([...new Set(values)].sort().join('\n'));
+    }
+  )
+  .command(
+    'inspect <function>',
+    'Inspect a function and print available event metadata',
+    (args) => {
+      args.positional('function', {
+        describe: 'identifies the function to inspect',
+      });
+      args.option('appmap-dir', {
+        describe: 'directory to recursively inspect for AppMaps',
+        default: 'tmp/appmap',
+      });
+      args.option('interactive', {
+        describe: 'interact with the output via CLI',
+        alias: 'i',
+        boolean: true,
+      });
+      return args.strict();
+    },
+    async (argv) => {
+      verbose(argv.verbose);
+
+      const functionId = argv.function;
+      const finder = new FindCodeObjects(argv.appmapDir, functionId);
+      const codeObjectMatches = await finder.find();
+      if (!codeObjectMatches) {
+        return;
+      }
+
+      const filters = [];
+      let stats = null;
+
+      const buildStats = async () => {
+        const result = [];
+        await Promise.all(
+          codeObjectMatches.map(async (codeObjectMatch) => {
+            const inspector = new FindEvents(
+              codeObjectMatch.appmap,
+              codeObjectMatch.codeObject
+            );
+            filters.forEach(
+              // eslint-disable-next-line no-return-assign
+              (filter) => (inspector[filter.name] = filter.value)
+            );
+            const events = await inspector.matches();
+            result.push(...events);
+          })
+        );
+        stats = new FunctionStats(result);
+      };
+
+      await buildStats();
+
+      const interactive = () => {
+        const rl = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout,
+        });
+        rl.on('close', function () {
+          process.exit(0);
+        });
+
+        const home = () => {
+          console.log(`Function: ${functionId}`);
+          if (filters.length > 0) {
+            console.log('Filters:');
+            console.log(
+              filters
+                .map((filter) => `${filter.name} = ${filter.value}`)
+                .join('\n')
+            );
+            console.log();
+          }
+
+          console.log(`1) Matching events      : ${stats.count}`);
+          console.log(`2) Matching AppMaps     : ${stats.appMapNames.length}`);
+          console.log(
+            `3) Return values        : ${stats.returnValues.join(', ')}`
+          );
+          console.log(
+            `4) HTTP server requests : ${stats.httpServerRequests.join(', ')}`
+          );
+          console.log(`5) SQL queries          : ${stats.sqlQueries.length}`);
+          console.log(
+            `6) SQL tables           : ${stats.sqlTables.join(', ')}`
+          );
+          console.log(`7) Callers              : ${stats.callers.join(', ')}`);
+          console.log(
+            `8) Ancestors            : ${stats.ancestors.join(', ')}`
+          );
+          console.log(
+            `8) Descendants          : ${stats.descendants.join(', ')}`
+          );
+          getCommand();
+        };
+
+        const filter = () => {
+          rl.question('Data set number (3,4,5,6)? ', function (num) {
+            switch (num) {
+              // Return values
+              case '3':
+                rl.question(
+                  `Return value ${stats.returnValues
+                    .map((r, index) => `(${index}) ${r}`)
+                    .join(', ')}? `,
+                  async (index) => {
+                    const returnValue = stats.returnValues[parseInt(index, 10)];
+                    filters.push({ name: 'returnValue', value: returnValue });
+                    await buildStats();
+                    console.log();
+                    home();
+                  }
+                );
+                break;
+              // HTTP server requests
+              case '4':
+                rl.question(
+                  `HTTP server request ${stats.httpServerRequests
+                    .map((r, index) => `(${index}) ${r}`)
+                    .join(', ')}? `,
+                  async (index) => {
+                    const request =
+                      stats.httpServerRequests[parseInt(index, 10)];
+                    filters.push({ name: 'httpServerRequest', value: request });
+                    await buildStats();
+                    console.log();
+                    home();
+                  }
+                );
+                break;
+              // SQL queries
+              case '5':
+                break;
+              // SQL tables
+              case '6':
+                break;
+              default:
+            }
+          });
+        };
+
+        const undoFilter = async () => {
+          if (filters.length > 0) {
+            filters.pop();
+          }
+          await buildStats();
+          console.log();
+          home();
+        };
+
+        const reset = async () => {
+          while (filters.length > 0) {
+            filters.pop();
+          }
+          await buildStats();
+          console.log();
+          home();
+        };
+
+        const print = () => {
+          rl.question('Data set number? ', function (num) {
+            switch (num) {
+              case '1':
+                console.log('Events:');
+                [
+                  ...new Set(
+                    stats.infos.map(
+                      (r) =>
+                        `vscode://${join(process.cwd(), r.appmap)}.appmap.json`
+                    )
+                  ),
+                ]
+                  .sort()
+                  .forEach((u) => console.log(u));
+                break;
+              case '2':
+                console.log('AppMaps:');
+                stats.appMapNames
+                  .map((n) => `vscode://${join(process.cwd(), n)}.appmap.json`)
+                  .forEach((n) => console.log(n));
+                break;
+              case '3':
+                console.log('Return values:');
+                stats.returnValues.forEach((r) => console.log(r));
+                break;
+              case '4':
+                console.log('HTTP server requests:');
+                stats.httpServerRequests.forEach((r) => console.log(r));
+                break;
+              case '5':
+                console.log('SQL queries:');
+                stats.sqlQueries.forEach((q) => console.log(q));
+                break;
+              case '6':
+                console.log('SQL tables:');
+                stats.sqlTables.forEach((q) => console.log(q));
+                break;
+              default:
+            }
+            getCommand();
+          });
+        };
+
+        const getCommand = () => {
+          console.log();
+          rl.question(
+            'Command (h)ome, (p)rint, (f)ilter, (u)ndo filter, (r)eset, (q)uit: ',
+            function (command) {
+              // eslint-disable-next-line default-case
+              switch (command) {
+                case 'h':
+                  home();
+                  break;
+                case 'p':
+                  print();
+                  break;
+                case 'f':
+                  filter();
+                  break;
+                case 'u':
+                  undoFilter();
+                  break;
+                case 'r':
+                  reset();
+                  break;
+                case 'q':
+                  rl.close();
+                  break;
+                default:
+                  getCommand();
+              }
+            }
+          );
+        };
+
+        home();
+      };
+      if (argv.interactive) {
+        interactive();
+      } else {
+        console.log(JSON.stringify(stats, null, 2));
+      }
     }
   )
   .command(

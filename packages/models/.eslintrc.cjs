@@ -5,6 +5,7 @@ module.exports = {
   },
   extends: ['airbnb-base', 'prettier'],
   plugins: ['prettier'],
+  ignorePatterns: ['**/*.cjs'],
   parserOptions: {
     parser: 'babel-eslint',
     ecmaVersion: 11,
