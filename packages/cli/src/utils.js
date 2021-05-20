@@ -121,8 +121,33 @@ const buildDirectory = async (dirName, fn) => {
   }
 };
 
+function formatValue(value) {
+  if (!value) {
+    return 'Null';
+  }
+
+  const valueStr = value.value.indexOf('#<') === 0 ? null : value.value;
+
+  return [value.class, valueStr].filter((e) => e).join(' ');
+}
+
+function formatHttpServerRequest(event) {
+  const data = {
+    method: event.httpServerRequest.request_method,
+    path:
+      event.httpServerRequest.normalized_path_info ||
+      event.httpServerRequest.path_info,
+    statusCode:
+      event.linkedEvent.httpServerResponse.status_code ||
+      event.linkedEvent.httpServerResponse.status,
+  };
+  return [data.method, data.path, `(${data.statusCode})`].join(' ');
+}
+
 module.exports = {
   baseName,
+  formatValue,
+  formatHttpServerRequest,
   listAppMapFiles,
   loadAppMap,
   mtime,

@@ -8,7 +8,7 @@ const { baseName, listAppMapFiles } = require('./utils');
  * @returns {Object<String,Metadata>} Map of AppMap names to metadata objects.
  */
 async function appMapCatalog(directory) {
-  const scenariosByName = {};
+  const appMapsByName = {};
   const appMapFiles = [];
   await listAppMapFiles(directory, (file) => {
     appMapFiles.push(file);
@@ -23,17 +23,17 @@ async function appMapCatalog(directory) {
         fileName: file,
         metadata,
       };
-      if (scenariosByName[metadata.name]) {
+      if (appMapsByName[metadata.name]) {
         console.warn(
           `AppMap name ${metadata.name} is not unique in the mapset`
         );
       } else {
-        scenariosByName[metadata.name] = entry;
+        appMapsByName[metadata.name] = entry;
       }
     })
   );
 
-  return scenariosByName;
+  return appMapsByName;
 }
 
 module.exports = appMapCatalog;

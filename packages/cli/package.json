@@ -3,6 +3,7 @@
   "version": "1.0.4",
   "description": "",
   "main": "src/cli.js",
+  "bin": "src/cli.js",
   "publishConfig": {
     "access": "public"
   },

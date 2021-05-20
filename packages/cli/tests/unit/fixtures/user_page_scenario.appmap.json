@@ -26,7 +26,7 @@
       "repository": "git@github.com:applandinc/appland.git",
       "branch": "add-notifications",
       "commit": "2e7738908480aeefab818ddd17c91dff57db1ab0",
-      "status": [],
+      "status_code": [],
       "git_last_annotated_tag": null,
       "git_last_tag": "v0.13.0",
       "git_commits_since_last_annotated_tag": null,
@@ -40,21 +40,21 @@
     },
     "fingerprints": [
       {
-        "appmap_digest": "c172cbe9ad4c9f126e59bc8695f26e8230f51786e1fa44045ba54d5daae69f5c",
-        "canonicalization_algorithm": "info_v1",
-        "digest": "cec1d48810b037d61d5643a096c1c57eb6ee74f9e5d8f8905b36f87fae52068c",
+        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "canonicalization_algorithm": "trace_v1",
+        "digest": "7bbb5f3044129d4a93adc347a1ca6901edf6111e7b6cdb520cf21d890498a97e",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "c172cbe9ad4c9f126e59bc8695f26e8230f51786e1fa44045ba54d5daae69f5c",
+        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
         "canonicalization_algorithm": "update_v1",
         "digest": "997ec23276e3bfb491dcf6aefc138a7681fd9d4e6b74af6615878d238c968170",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "c172cbe9ad4c9f126e59bc8695f26e8230f51786e1fa44045ba54d5daae69f5c",
-        "canonicalization_algorithm": "trace_v1",
-        "digest": "7bbb5f3044129d4a93adc347a1ca6901edf6111e7b6cdb520cf21d890498a97e",
+        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "canonicalization_algorithm": "info_v1",
+        "digest": "cec1d48810b037d61d5643a096c1c57eb6ee74f9e5d8f8905b36f87fae52068c",
         "fingerprint_algorithm": "sha256"
       }
     ]
@@ -1385,8 +1385,8 @@
       "parent_id": 31,
       "elapsed": 0.082122,
       "http_server_response": {
-        "status": 200,
-        "mime_type": "text/html; charset=utf-8"
+        "mime_type": "text/html; charset=utf-8",
+        "status": 200
       }
     },
     {
