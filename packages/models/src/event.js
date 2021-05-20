@@ -52,6 +52,10 @@ export default class Event {
     return this.method_id;
   }
 
+  get isFunction() {
+    return this.definedClass && this.methodId;
+  }
+
   get isStatic() {
     return this.static;
   }
