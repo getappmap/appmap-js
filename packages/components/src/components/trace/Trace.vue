@@ -66,7 +66,6 @@ export default {
       format('truetype');
 }
 .trace {
-  position: relative;
   width: max-content;
   display: inline-block;
   font-family: 'IBM Plex Mono', monospace;

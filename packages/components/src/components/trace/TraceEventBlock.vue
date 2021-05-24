@@ -209,6 +209,7 @@ export default {
   }
   & > .trace {
     margin-left: 74px;
+    position: relative;
   }
 }
 
