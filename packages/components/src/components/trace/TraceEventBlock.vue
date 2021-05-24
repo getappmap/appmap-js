@@ -1,24 +1,10 @@
 <template>
-  <div class="event-block" :style="styles">
-    <template v-if="hasParent">
-      <v-trace-path
-        v-if="isFirstChild"
-        :element-from="collectInputs()"
-        shape="line-h"
-        align="center left"
-        :width="100"
-        :x="-100"
-      />
-
-      <v-trace-path
-        v-else
-        :element-from="collectInputs()"
-        align="center left"
-        :x="-2"
-        :width="48"
-      />
-    </template>
-
+  <div :class="classes" :style="styles">
+    <div
+      class="event-block__connection"
+      :style="connectionStyles"
+      v-if="isLastChild"
+    />
     <v-trace-node
       :event="event"
       :highlight="selectedEvents.includes(event)"
@@ -29,26 +15,6 @@
       @click.native.stop="$emit('clickEvent', event)"
       ref="node"
     />
-
-    <template v-if="isExpanded && event.children.length > 1">
-      <v-trace-path
-        :element-from="getOutput()"
-        :width="-50"
-        :height="-50"
-        align="center right"
-      />
-      <v-trace-path
-        :element-from="getOutput()"
-        :width="4"
-        :height="verticalHeight"
-        :v-if="verticalHeight > 0"
-        shape="line-v"
-        align="center right"
-        :x="50"
-        :y="45"
-        :key="verticalHeight"
-      />
-    </template>
 
     <v-trace
       v-if="isExpanded"
@@ -64,32 +30,20 @@
       @collapse="(e) => $emit('collapse', e)"
       @clickEvent="(e) => $emit('clickEvent', e)"
     />
-    <template v-else-if="!isExpanded && event.children.length > 0">
-      <v-trace-path
-        shape="line-h"
-        :width="16"
-        :height="4"
-        :elementFrom="getRef('summary')"
-        align="bottom left"
-        :y="-11"
-        key="summary"
-      />
-      <v-trace-summary
-        v-if="!isExpanded && event.children.length > 0"
-        :event="event"
-        @click.native.stop="toggleVisibility()"
-        ref="summary"
-      />
-    </template>
+
+    <v-trace-summary
+      v-if="!isExpanded && event.children.length > 0"
+      :event="event"
+      @click.native.stop="toggleVisibility()"
+      ref="summary"
+    />
   </div>
 </template>
 
 <script>
 import { Event } from '@appland/models';
 import { Color } from '@appland/diagrams';
-import OnResize from '@/components/mixins/onResize';
 import VTraceNode from './TraceNode.vue';
-import VTracePath from './TracePath.vue';
 import VTraceSummary from './TraceSummary.vue';
 
 export default {
@@ -97,10 +51,8 @@ export default {
   components: {
     'v-trace': () => import('./Trace.vue'),
     VTraceNode,
-    VTracePath,
     VTraceSummary,
   },
-  mixins: [OnResize],
   props: {
     event: {
       type: Event,
@@ -118,6 +70,7 @@ export default {
     highlightAll: Boolean,
     highlightStyle: String,
     isFirstChild: Boolean,
+    isLastChild: Boolean,
     hasParent: Boolean,
   },
   data() {
@@ -127,44 +80,6 @@ export default {
     };
   },
   methods: {
-    onResize() {
-      const { children } = this.$refs;
-      if (!children) {
-        return;
-      }
-
-      const nodes = children.nodes();
-      if (!nodes) {
-        return;
-      }
-
-      if (nodes.length > 1) {
-        let topHeight;
-        let bottomHeight;
-        let topNode;
-        let bottomNode;
-
-        for (let i = 0; i < nodes.length; i += 1) {
-          const currentNode = nodes[i];
-          const { offsetTop } = currentNode.$el;
-
-          if (!topNode || topHeight > offsetTop) {
-            topNode = currentNode;
-            topHeight = offsetTop;
-          }
-
-          if (!bottomNode || bottomHeight < offsetTop) {
-            bottomNode = currentNode;
-            bottomHeight = offsetTop;
-          }
-        }
-
-        const { y: yA } = topNode.$el.getBoundingClientRect();
-        const { y: yB } = bottomNode.$el.getBoundingClientRect();
-
-        this.height = yB - yA;
-      }
-    },
     toggleVisibility() {
       this.expanded = !this.expanded;
 
@@ -203,6 +118,7 @@ export default {
       if (this.hasSelectedEventInTree || this.hasFocusedEventInTree) {
         this.expanded = true;
       }
+      this.height = this.$el.offsetHeight;
     },
   },
   computed: {
@@ -216,8 +132,18 @@ export default {
     children() {
       return this.event.children;
     },
-    verticalHeight() {
-      return Math.max(this.height, 0);
+    classes() {
+      const classNames = ['event-block'];
+
+      if (this.isFirstChild && this.isLastChild) {
+        classNames.push('event-block--one-child');
+      } else if (this.isFirstChild && !this.isLastChild) {
+        classNames.push('event-block--first-child');
+      } else if (this.isLastChild && !this.isFirstChild) {
+        classNames.push('event-block--last-child');
+      }
+
+      return classNames;
     },
     styles() {
       let result = {};
@@ -233,6 +159,11 @@ export default {
         };
       }
       return result;
+    },
+    connectionStyles() {
+      return {
+        bottom: `${this.height - 36}px`,
+      };
     },
     hasSelectedEventInTree() {
       return (
@@ -268,7 +199,10 @@ export default {
   display: flex;
   flex-shrink: 0;
   align-items: flex-start;
-  margin-bottom: 1rem;
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
 
   & > * {
     flex: inherit;
@@ -276,5 +210,73 @@ export default {
   & > .trace {
     margin-left: 74px;
   }
+}
+
+.event-block .trace .event-block--one-child::before {
+  content: '';
+  position: absolute;
+  top: 36px;
+  left: -74px;
+  width: 74px;
+  height: 4px;
+  background-color: $gray4;
+  z-index: -1;
+}
+
+.event-block .trace .event-block--first-child::before {
+  content: '';
+  position: absolute;
+  top: 36px;
+  left: -74px;
+  width: 74px;
+  height: 4px;
+  background-color: $gray4;
+  z-index: -1;
+}
+
+.event-block .trace .event-block--first-child::after {
+  content: '';
+  position: absolute;
+  top: 36px;
+  left: -74px;
+  width: 37px;
+  height: 37px;
+  border-radius: 0 25px 0 0;
+  border: 4px solid $gray4;
+  border-bottom: 0;
+  border-left: 0;
+  z-index: -1;
+}
+
+.event-block
+  .trace
+  .event-block:not(.event-block--one-child):not(.event-block--first-child):not(.event-block--last-child) {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 100%;
+    width: 33px;
+    height: 37px;
+    border-radius: 0 0 0 25px;
+    border: 4px solid $gray4;
+    border-top: 0;
+    border-right: 0;
+    z-index: -1;
+  }
+}
+
+.event-block .trace .event-block--last-child .event-block__connection {
+  position: absolute;
+  top: 74px;
+  right: 100%;
+  width: 37px;
+  border-radius: 0 0 0 25px;
+  border: 4px solid $gray4;
+  border-top: 0;
+  border-right: 0;
+  z-index: -1;
 }
 </style>
