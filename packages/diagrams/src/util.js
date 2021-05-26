@@ -1,4 +1,3 @@
-import { zoomTransform } from 'd3-zoom';
 import Geometry from './helpers/geometry';
 
 export function getEventTarget(target, container = document, selector = '') {
@@ -48,6 +47,22 @@ function nodeFullyVisible(viewport, node) {
   );
 }
 
+function getParentRelativeOffset(element, parent) {
+  const offset = {
+    left: 0,
+    top: 0,
+  };
+
+  let child = element;
+  while (child !== parent) {
+    offset.left += child.offsetLeft;
+    offset.top += child.offsetTop;
+    child = child.parentNode;
+  }
+
+  return offset;
+}
+
 // Pan the scenario view to given HTMLElement node.
 export function panToNode(viewport, node) {
   // To minimize panning do not move the view if the node is already fully visible.
@@ -55,27 +70,12 @@ export function panToNode(viewport, node) {
     return;
   }
 
-  let target;
-  // If a node is already selected and visible, pan so that
-  // the new selection will be in the same place.
-  const highlightedNode = viewport.element.querySelector(
-    '.trace-node.highlight'
-  );
-  if (nodeFullyVisible(viewport, highlightedNode)) {
-    const xform = zoomTransform(highlightedNode);
-
-    // we'll have to offset for the border
-    const style = getComputedStyle(highlightedNode);
-    target = xform.apply([
-      highlightedNode.offsetLeft + Number.parseInt(style.borderLeftWidth, 10),
-      highlightedNode.offsetTop + Number.parseInt(style.borderTopWidth, 10),
-    ]);
-  }
+  const offset = getParentRelativeOffset(node, viewport.element);
+  const nodeRect = node.getBoundingClientRect();
 
   viewport.translateTo(
-    node.offsetLeft + node.clientWidth * 0.5,
-    node.offsetTop + node.clientHeight * 0.5,
-    target
+    offset.left + nodeRect.width / 2,
+    offset.top + nodeRect.height / 2
   );
 }
 
