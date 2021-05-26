@@ -54,6 +54,8 @@ __metadata:
     lint-staged: ^10.5.4
     prettier: ^2.2.1
     yargs: ^17.0.1
+  bin:
+    appmap-cli: src/cli.js
   languageName: unknown
   linkType: soft
 
