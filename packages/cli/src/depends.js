@@ -76,10 +76,11 @@ class Depends {
       }
 
       const mtimeFileName = joinPath(indexDir, 'mtime');
-      const createdAt = await mtime(mtimeFileName);
+      const recordedCreatedAtStr = await fsp.readFile(mtimeFileName);
+      const createdAt = parseInt(recordedCreatedAtStr, 10);
 
       if (verbose()) {
-        console.warn(`Checking AppMap ${indexDir}`);
+        console.warn(`Checking AppMap ${indexDir} with timestamp ${createdAt}`);
       }
 
       const classMap = JSON.parse(await fsp.readFile(fileName));
@@ -102,10 +103,12 @@ class Depends {
 
       async function checkTimestamps(filePath) {
         const dependencyFilePath = this.applyBaseDir(filePath);
-        if (verbose()) {
-          console.warn(`Checking timestamp of : ${dependencyFilePath}`);
-        }
         const dependencyModifiedAt = await mtime(dependencyFilePath);
+        if (verbose()) {
+          console.warn(
+            `Timestamp of ${dependencyFilePath} is ${dependencyModifiedAt}`
+          );
+        }
         return dependencyModifiedAt && createdAt < dependencyModifiedAt;
       }
 
