@@ -35,19 +35,24 @@ class Fingerprinter {
     const mtimeFileName = joinPath(indexDir, 'mtime');
     const appMapCreatedAt = await mtime(appMapFileName);
 
-    let recordedCreatedAt = 0;
+    let indexedAt = 0;
     try {
-      const recordedCreatedAtStr = await fsp.readFile(mtimeFileName);
-      recordedCreatedAt = parseInt(recordedCreatedAtStr, 10);
+      const indexedAtStr = await fsp.readFile(mtimeFileName);
+      indexedAt = parseInt(indexedAtStr, 10);
     } catch (err) {
       if (err.code !== 'ENOENT') {
         throw err;
       }
     }
 
-    if (recordedCreatedAt === appMapCreatedAt) {
+    if (verbose()) {
+      console.warn(
+        `${appMapFileName} created at ${appMapCreatedAt}, indexed at ${indexedAt}`
+      );
+    }
+    if (indexedAt === appMapCreatedAt) {
       if (verbose()) {
-        console.warn('Fingerprints appear up to date. Skipping...');
+        console.warn('Fingerprint is up to date. Skipping...');
       }
       return;
     }

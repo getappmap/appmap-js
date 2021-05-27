@@ -6,7 +6,6 @@
 /* eslint-disable max-classes-per-file */
 
 const yargs = require('yargs');
-const { hideBin } = require('yargs/helpers');
 const chokidar = require('chokidar');
 const { diffLines } = require('diff');
 const yaml = require('js-yaml');
@@ -240,7 +239,7 @@ class DetailedDiff {
 }
 
 // eslint-disable-next-line no-unused-expressions
-yargs(hideBin(process.argv))
+yargs(process.argv.slice(2))
   .command(
     'diff',
     'Compute the difference between two mapsets',
