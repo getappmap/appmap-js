@@ -3,7 +3,7 @@
   "private": true,
   "husky": {
     "hooks": {
-      "pre-commit": "yarn workspaces foreach -v run pre-commit",
+      "pre-commit": "yarn workspaces foreach --exclude root -v run pre-commit",
       "pre-push": "yarn run ci"
     }
   },
@@ -11,14 +11,14 @@
     "packages/*"
   ],
   "scripts": {
-    "lint": "yarn workspaces foreach -v run lint",
-    "test": "yarn workspaces foreach -v run test",
-    "build": "yarn workspaces foreach -v run build",
+    "lint": "yarn workspaces foreach --exclude root -v run lint",
+    "test": "yarn workspaces foreach --exclude root -v run test",
+    "build": "yarn workspaces foreach --exclude root -v run build",
     "ci": "yarn run build && yarn run lint && yarn run test",
-    "chromatic": "yarn workspaces foreach -v run chromatic",
-    "watch": "yarn workspaces foreach -v -p -i run watch",
-    "semantic-release:prepare": "yarn workspaces foreach -v exec semantic-release -e $(pwd)/release/prepare.config.js",
-    "semantic-release:publish": "yarn workspaces foreach -v exec semantic-release -e $(pwd)/release/publish.config.js",
+    "chromatic": "yarn workspaces foreach --exclude root -v run chromatic",
+    "watch": "yarn workspaces foreach --exclude root -v -p -i run watch",
+    "semantic-release:prepare": "yarn workspaces foreach --exclude root -v exec semantic-release -e $(pwd)/release/prepare.config.js -e semantic-release-monorepo",
+    "semantic-release:publish": "yarn workspaces foreach --exclude root -v exec semantic-release -e $(pwd)/release/publish.config.js -e semantic-release-monorepo",
     "semantic-release": "yarn run semantic-release:prepare && yarn run semantic-release:publish"
   },
   "devDependencies": {
