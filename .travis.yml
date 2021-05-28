@@ -14,6 +14,8 @@ addons:
       # Ubuntu 16+ does not install this dependency by default, so we need to install it ourselves
       - libgconf-2-4
 
+if: tag IS present OR commit_message !~ /^chore(release)/
+
 install:
   - yarn
 
