@@ -1,3 +1,10 @@
+# [@appland/models-v1.0.5](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.0.4...@appland/models-v1.0.5) (2021-05-28)
+
+
+### Bug Fixes
+
+* Resolve an incorrect import of sha256 ([#227](https://github.com/applandinc/appmap-js/issues/227)) ([fc64ff9](https://github.com/applandinc/appmap-js/commit/fc64ff981046b5e1732b088889202f32924c407d))
+
 # [@appland/models-v1.0.4](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.0.3...@appland/models-v1.0.4) (2021-05-18)
 
 
