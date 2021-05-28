@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+[[ $TRAVIS_TAG =~ @appland/(.*)-.*$ ]]
+PACKAGE="${BASH_REMATCH[1]}"
+
+if [ -z "${PACKAGE}" ]; then
+  echo "Tag is not publishable. Exiting."
+  exit 1
+fi
+
+cd "packages/${PACKAGE}"
+yarn npm publish

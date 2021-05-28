@@ -17,8 +17,8 @@
     "ci": "yarn run build && yarn run lint && yarn run test",
     "chromatic": "yarn workspaces foreach --exclude root -v run chromatic",
     "watch": "yarn workspaces foreach --exclude root -v -p -i run watch",
-    "semantic-release:prepare": "yarn workspaces foreach --exclude root -v exec semantic-release -e $(pwd)/release/prepare.config.js -e semantic-release-monorepo",
-    "semantic-release:publish": "yarn workspaces foreach --exclude root -v exec semantic-release -e $(pwd)/release/publish.config.js -e semantic-release-monorepo",
+    "semantic-release:prepare": "yarn workspaces foreach --exclude root -v exec semantic-release -e semantic-release-monorepo",
+    "semantic-release:publish": "yarn workspaces foreach --exclude root -v exec semantic-release -e semantic-release-monorepo",
     "semantic-release": "yarn run semantic-release:prepare && yarn run semantic-release:publish"
   },
   "devDependencies": {

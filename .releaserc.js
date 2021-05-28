@@ -1,10 +1,8 @@
-const baseConfig = require('./base.config');
-
 module.exports = {
-  branches: baseConfig.branches,
-  extends: baseConfig.extends,
+  branches: ['main'],
   plugins: [
-    ...baseConfig.plugins,
+    '@semantic-release/commit-analyzer',
+    '@semantic-release/release-notes-generator',
     '@semantic-release/changelog',
     [
       '@google/semantic-release-replace-plugin',
@@ -27,5 +25,7 @@ module.exports = {
         ],
       },
     ],
+    '@semantic-release/git',
+    '@semantic-release/github',
   ],
 };
