@@ -1,3 +1,12 @@
+# [@appland/cli-v1.0.4](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.0.3...@appland/cli-v1.0.4) (2021-05-28)
+
+
+### Bug Fixes
+
+* Configure src/cli.js as the bin script for packages/cli ([0de396a](https://github.com/applandinc/appmap-js/commit/0de396a030c9451ee0f930a0f4a81281305ee312))
+* In dependency analysis, read the file mtime properly as the value of the file ([3700e96](https://github.com/applandinc/appmap-js/commit/3700e96caa322969d25332a613d6a6645d7d5ca5))
+* Remove dependency on yargs/helpers ([5e603d5](https://github.com/applandinc/appmap-js/commit/5e603d5b2c9e606ec82ae23ba2171f0327a7b658))
+
 # [@appland/cli-v1.0.3](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.0.2...@appland/cli-v1.0.3) (2021-05-18)
 
 
