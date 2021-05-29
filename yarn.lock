@@ -67,6 +67,7 @@ __metadata:
     js-yaml: ^3.14.1
     lint-staged: ^10.5.4
     prettier: ^2.2.1
+    semver: ^7.3.5
     yargs: ^17.0.1
   bin:
     appmap-cli: src/cli.js
