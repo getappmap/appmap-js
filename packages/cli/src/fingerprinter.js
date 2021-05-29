@@ -1,6 +1,7 @@
 const { createHash } = require('crypto');
 const { join: joinPath } = require('path');
 const fsp = require('fs').promises;
+const semver = require('semver');
 const { buildAppMap } = require('@appland/models');
 
 const {
@@ -11,6 +12,8 @@ const {
   renameFile,
 } = require('./utils');
 const { algorithms, canonicalize } = require('./fingerprint');
+
+const VERSION = '1.0.0';
 
 class Fingerprinter {
   /**
@@ -32,25 +35,44 @@ class Fingerprinter {
     }
 
     const indexDir = baseName(appMapFileName);
-    const mtimeFileName = joinPath(indexDir, 'mtime');
     const appMapCreatedAt = await mtime(appMapFileName);
+    const mtimeFileName = joinPath(indexDir, 'mtime');
+    const versionFileName = joinPath(indexDir, 'version');
 
-    let indexedAt = 0;
-    try {
-      const indexedAtStr = await fsp.readFile(mtimeFileName);
-      indexedAt = parseInt(indexedAtStr, 10);
-    } catch (err) {
-      if (err.code !== 'ENOENT') {
-        throw err;
+    const versionUpToDate = async () => {
+      let versionStr = '0.0.0';
+      try {
+        versionStr = await fsp.readFile(versionFileName);
+      } catch (err) {
+        if (err.code !== 'ENOENT') {
+          throw err;
+        }
       }
-    }
+      if (verbose()) {
+        console.warn(`${appMapFileName} index version is ${versionStr}`);
+      }
+      return semver.satisfies(versionStr, `>= ${VERSION}`);
+    };
+    const indexUpToDate = async () => {
+      let indexedAt = 0;
+      try {
+        const indexedAtStr = await fsp.readFile(mtimeFileName);
+        indexedAt = parseInt(indexedAtStr, 10);
+      } catch (err) {
+        if (err.code !== 'ENOENT') {
+          throw err;
+        }
+      }
 
-    if (verbose()) {
-      console.warn(
-        `${appMapFileName} created at ${appMapCreatedAt}, indexed at ${indexedAt}`
-      );
-    }
-    if (indexedAt === appMapCreatedAt) {
+      if (verbose()) {
+        console.warn(
+          `${appMapFileName} created at ${appMapCreatedAt}, indexed at ${indexedAt}`
+        );
+      }
+      return indexedAt === appMapCreatedAt;
+    };
+
+    if ((await versionUpToDate()) && (await indexUpToDate())) {
       if (verbose()) {
         console.warn('Fingerprint is up to date. Skipping...');
       }
@@ -127,6 +149,8 @@ class Fingerprinter {
       await renameFile(joinPath(tempDir, 'appmap.json'), appMapFileName);
       const appMapIndexedAt = await mtime(appMapFileName);
       await fsp.writeFile(joinPath(tempDir, 'mtime'), `${appMapIndexedAt}`);
+      await fsp.writeFile(joinPath(tempDir, 'ctime'), `${appMapCreatedAt}`);
+      await fsp.writeFile(joinPath(tempDir, 'version'), VERSION);
       await fsp.writeFile(
         joinPath(tempDir, 'metadata.json'),
         JSON.stringify(appmap.metadata, null, 2)
