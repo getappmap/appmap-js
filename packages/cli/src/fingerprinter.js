@@ -40,7 +40,7 @@ class Fingerprinter {
     const versionFileName = joinPath(indexDir, 'version');
 
     const versionUpToDate = async () => {
-      let versionStr = '0.0.0';
+      let versionStr = '0.0.1';
       try {
         versionStr = await fsp.readFile(versionFileName);
       } catch (err) {
@@ -48,6 +48,7 @@ class Fingerprinter {
           throw err;
         }
       }
+      versionStr = versionStr.toString().trim();
       if (verbose()) {
         console.warn(`${appMapFileName} index version is ${versionStr}`);
       }

@@ -3,12 +3,11 @@
   "version": "1.0.4",
   "description": "",
   "main": "src/cli.js",
-  "bin": "src/cli.js",
-  "publishConfig": {
-    "access": "public"
-  },
   "bin": {
     "appmap-cli": "src/cli.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "lint": "eslint 'src/**/*.js' 'tests/**/*.js'",
@@ -37,6 +36,7 @@
     "@appland/models": "workspace:*",
     "async": "^3.2.0",
     "chokidar": "^3.5.1",
+    "console-table-printer": "^2.9.0",
     "crypto-js": "^4.0.0",
     "diff": "^5.0.0",
     "fs-extra": "^9.1.0",
