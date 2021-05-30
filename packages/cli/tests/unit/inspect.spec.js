@@ -1,7 +1,7 @@
 const { utimesSync } = require('fs');
 const { join } = require('path');
 const Fingerprinter = require('../../src/fingerprinter');
-const SearchAppMaps = require('../../src/search/findCodeObjects');
+const FindCodeObjects = require('../../src/search/findCodeObjects');
 const { listAppMapFiles, verbose } = require('../../src/utils');
 
 const appMapDir = join(__dirname, 'fixtures');
@@ -21,18 +21,27 @@ describe('Inspect', () => {
   });
 
   test('finds a named function', async () => {
-    const fn = new SearchAppMaps(appMapDir, 'app/models/ApiKey.issue');
+    const fn = new FindCodeObjects(
+      appMapDir,
+      'function:app/models/ApiKey.issue'
+    );
     const result = await fn.find();
-    expect(result).toEqual([
-      {
-        appmap: 'tests/unit/fixtures/revoke_api_key',
-        codeObject: {
-          name: 'issue',
-          type: 'function',
-          static: true,
-          location: 'app/models/api_key.rb:28',
-        },
-      },
-    ]);
+    expect(JSON.stringify(result, null, 2)).toEqual(
+      JSON.stringify(
+        [
+          {
+            appmap: 'tests/unit/fixtures/revoke_api_key',
+            codeObject: {
+              name: 'issue',
+              type: 'function',
+              static: true,
+              location: 'app/models/api_key.rb:28',
+            },
+          },
+        ],
+        null,
+        2
+      )
+    );
   });
 });

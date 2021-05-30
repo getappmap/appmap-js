@@ -40,6 +40,7 @@ __metadata:
     "@appland/models": "workspace:*"
     async: ^3.2.0
     chokidar: ^3.5.1
+    console-table-printer: ^2.9.0
     crypto-js: ^4.0.0
     diff: ^5.0.0
     eslint: ^7.25.0
@@ -8419,6 +8420,15 @@ __metadata:
   version: 1.1.0
   resolution: "console-control-strings@npm:1.1.0"
   checksum: 58a404d951bf270494fb91e136cf064652c1208ccedac23e4da24e6a3a3933998f302cadc45cbf6582a007a4aa44dab944e84056b24e3b1964e9a28aeedf76c9
+  languageName: node
+  linkType: hard
+
+"console-table-printer@npm:^2.9.0":
+  version: 2.9.0
+  resolution: "console-table-printer@npm:2.9.0"
+  dependencies:
+    simple-wcswidth: ^1.0.1
+  checksum: 89a8738599101ff74a6f590a14b8c34f61b30367ee990e973d699e256743ca903e6164eef3d860b8de10e634d29a0f59457ba2b90895133bbb2d8f3f7b2565aa
   languageName: node
   linkType: hard
 
@@ -22507,6 +22517,13 @@ resolve@1.1.7:
   dependencies:
     is-arrayish: ^0.3.1
   checksum: a5a2c1c86cea94f42ab843508e7c68b5bbfd15acb08056d600ac2e9c7f7c41bc417e71160ea3034a5411d3cce186c801f7a56badfb3a854906ce163120318875
+  languageName: node
+  linkType: hard
+
+"simple-wcswidth@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "simple-wcswidth@npm:1.0.1"
+  checksum: 050ef4ed69e5f89abf79a59dfb6e2fd642b4ec6696ff903d0ffc1195f94e9092b5ae9da2c16958faa6dc4f973fc4fe8e0ed8c743c3e653ac5fee3bb0bb900e69
   languageName: node
   linkType: hard
 

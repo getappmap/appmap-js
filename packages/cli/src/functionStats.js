@@ -1,28 +1,54 @@
-const { normalizeSQL } = require('@appland/models');
-const { obfuscate } = require('./database');
+// @ts-check
+
+const { analyzeQuery, obfuscate } = require('./database');
 const { formatValue, formatHttpServerRequest } = require('./utils');
 
+/** @typedef {import('./search/types').Trigram} Trigram */
+
+/**
+ *
+ * @param {Trigram[]} trigrams
+ * @returns {Trigram[]}
+ */
+function reduceTrigrams(trigrams) {
+  const uniqueIds = new Set(trigrams.map((t) => t.id));
+  const sortOrder = [...uniqueIds].sort().reduce((memo, id, index) => {
+    memo[id] = index;
+    return memo;
+  }, {});
+  return trigrams
+    .filter((t) => {
+      const newTrigram = uniqueIds.has(t.id);
+      if (newTrigram) {
+        uniqueIds.delete(t.id);
+        return true;
+      }
+      return false;
+    })
+    .sort((a, b) => sortOrder[a.id] - sortOrder[b.id]);
+}
+
 class FunctionStats {
-  constructor(infos) {
-    this.infos = infos;
+  /**
+   *
+   * @param {import('./search/types').EventMatch[]} eventMatches
+   */
+  constructor(eventMatches) {
+    this.eventMatches = eventMatches;
   }
 
   toJSON() {
-    return this.infos;
-  }
-
-  get count() {
-    return this.infos.length;
+    return this.eventMatches;
   }
 
   get appMapNames() {
-    return [...new Set(this.infos.map((e) => e.appmap))].sort();
+    return [...new Set(this.eventMatches.map((e) => e.appmap))].sort();
   }
 
   get returnValues() {
     return [
       ...new Set(
-        this.infos.map((e) => e.event.return.return_value).map(formatValue)
+        this.eventMatches.map((e) => e.event.returnValue).map(formatValue)
       ),
     ].sort();
   }
@@ -30,10 +56,11 @@ class FunctionStats {
   get httpServerRequests() {
     return [
       ...new Set(
-        this.infos
-          .map((e) => e.ancestors.filter((a) => a.call.httpServerRequest))
+        this.eventMatches
+          .map((e) => e.ancestors.filter((a) => a.httpServerRequest))
           .flat()
-          .map((e) => formatHttpServerRequest(e.call))
+          .filter((e) => e)
+          .map((e) => formatHttpServerRequest(e))
       ),
     ].sort();
   }
@@ -41,12 +68,10 @@ class FunctionStats {
   get sqlQueries() {
     return [
       ...new Set(
-        this.infos
-          .map((e) => e.descendants.filter((d) => d.call.sql_query))
+        this.eventMatches
+          .map((e) => e.descendants.filter((d) => d.sql))
           .flat()
-          .map((e) =>
-            obfuscate(e.call.sql_query.sql, e.call.sql_query.database_type)
-          )
+          .map((e) => obfuscate(e.sqlQuery, e.sql.database_type))
       ),
     ].sort();
   }
@@ -54,10 +79,11 @@ class FunctionStats {
   get sqlTables() {
     return [
       ...new Set(
-        this.infos
-          .map((e) => e.descendants.filter((d) => d.call.sql_query))
+        this.eventMatches
+          .map((e) => e.descendants.filter((d) => d.sql))
           .flat()
-          .map((e) => normalizeSQL(e.call.sql_query.sql))
+          .map((e) => analyzeQuery(e.sql))
+          .filter((e) => typeof e === 'object')
           .map((sql) => sql.tables)
           .flat()
       ),
@@ -67,10 +93,10 @@ class FunctionStats {
   get callers() {
     return [
       ...new Set(
-        this.infos
+        this.eventMatches
           .map((e) => e.caller)
           .filter((e) => e)
-          .map((e) => e.call.isFunction && e.call.codeObject.id)
+          .map((e) => e.callEvent.isFunction && e.codeObject.id)
           .filter((e) => e)
       ),
     ];
@@ -79,11 +105,11 @@ class FunctionStats {
   get ancestors() {
     return [
       ...new Set(
-        this.infos
+        this.eventMatches
           .map((e) => e.ancestors)
           .filter((list) => list.length > 0)
           .map((list) =>
-            list.map((e) => e.call.isFunction && e.call.codeObject.id)
+            list.map((e) => e.callEvent.isFunction && e.codeObject.id)
           )
           .flat()
           .filter((e) => e)
@@ -94,16 +120,26 @@ class FunctionStats {
   get descendants() {
     return [
       ...new Set(
-        this.infos
+        this.eventMatches
           .map((e) => e.descendants)
           .filter((list) => list.length > 0)
           .map((list) =>
-            list.map((e) => e.call.isFunction && e.call.codeObject.id)
+            list.map((e) => e.callEvent.isFunction && e.codeObject.id)
           )
           .flat()
           .filter((e) => e)
       ),
     ];
+  }
+
+  get classTrigrams() {
+    return reduceTrigrams(this.eventMatches.map((e) => e.classTrigrams).flat());
+  }
+
+  get functionTrigrams() {
+    return reduceTrigrams(
+      this.eventMatches.map((e) => e.functionTrigrams).flat()
+    );
   }
 }
 

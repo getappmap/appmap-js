@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-const { normalizeSQL } = require('@appland/models');
+const { analyzeQuery } = require('../../database');
 const Base = require('./base');
 
 /**
@@ -12,7 +12,7 @@ class Canonicalize extends Base {
       id: event.id,
       parent_id: event.parent ? event.parent.id : null,
       kind: 'sql',
-      sql: normalizeSQL(event.sqlQuery),
+      sql: analyzeQuery(event.sql),
     };
   }
 

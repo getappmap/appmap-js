@@ -2,8 +2,10 @@
 const fsp = require('fs').promises;
 
 const { buildAppMap } = require('./utils');
-const { formatValue, formatHttpServerRequest } = require('../utils');
+const matchFilter = require('./matchFilter');
+const buildTrigrams = require('./trigram');
 
+/** @typedef {import('./types').Filter} Filter */
 /** @typedef {import('./types').Event} Event */
 /** @typedef {import('./types').CodeObject} CodeObject */
 /** @typedef {import('./types').EventMatch} EventMatch */
@@ -20,26 +22,16 @@ class FindEvents {
   constructor(appMapName, codeObject) {
     this.appMapName = appMapName;
     this.codeObject = codeObject;
+    this.filters = /** @type {{string: string | string[]}} */ {};
   }
 
   /**
-   * Sets a return value filter.
+   * Sets filters which are applied to all events.
    *
-   * @param {string} val
-   * @see formatValue
+   * @param {Filter[]} filters
    */
-  set returnValue(val) {
-    this._returnValue = val;
-  }
-
-  /**
-   * Sets an HTTP server request filter.
-   *
-   * @param {string} val
-   * @see formatHttpServerRequest
-   */
-  set httpServerRequest(val) {
-    this._httpServerRequest = val;
+  filter(filters) {
+    this.filters = filters;
   }
 
   /**
@@ -63,22 +55,23 @@ class FindEvents {
     const matchesByEvent = {};
 
     const significant = (/** @type {Event} */ event) =>
-      event.labels.length > 0 || !event.isFunction;
+      event.labels.size > 0 || !event.isFunction;
 
-    const beginMatch = (/** @type {Event} */ event) => {
-      const ancestors = stack
-        .filter(significant)
-        .map((e) => ({ call: e, return: e.linkedEvent }));
+    const beginMatch = () => {
+      const event = stack[stack.length - 1];
+      const ancestors = stack.slice(0, stack.length - 1).filter(significant);
       const caller =
-        /** @type {Event} */ stack.length >= 1 ? stack[stack.length - 1] : null;
+        /** @type {Event} */ stack.length >= 2 ? stack[stack.length - 2] : null;
       const matchObj = /** @type {EventMatch} */ {
         appmap: this.appMapName,
-        event: { call: event, return: event.returnEvent },
+        event,
         ancestors,
+        classTrigrams: [],
+        functionTrigrams: [],
         descendants: [],
       };
       if (caller) {
-        matchObj.caller = { call: caller, return: caller.returnEvent };
+        matchObj.caller = caller;
       }
       matches.push(matchObj);
       matchesByEvent[event] = matchObj;
@@ -89,54 +82,65 @@ class FindEvents {
       delete matchesByEvent[event.callEvent];
     };
 
-    const functionDataEqual = (/** @type {Event} */ event) => {
-      if (!event.codeObject) {
-        return false;
+    const filterMatch = () => {
+      if (this.filters.length === 0) {
+        return true;
       }
-
+      const filters = this.filters.reduce(
+        (
+          /** @type {{string,string[]}} */ memo,
+          /** @type {Filter} */ filter
+        ) => {
+          let existing = memo[filter.name];
+          if (!existing) {
+            // eslint-disable-next-line no-multi-assign
+            existing = memo[filter.name] = [];
+          }
+          existing.push(filter.value);
+          return memo;
+        },
+        {}
+      );
       return (
-        this.codeObject.name === event.codeObject.name &&
-        event.codeObject.type === 'function' &&
-        this.codeObject.static === event.codeObject.static &&
-        this.codeObject.location === event.codeObject.location
+        Object.keys(filters).filter((filterName) => {
+          const filterValues = filters[filterName];
+          return matchFilter(filterName, filterValues, stack);
+        }).length === Object.keys(filters).length
       );
     };
 
-    const returnValueMatch = (/** @type {Event} */ event) => {
-      if (!this._returnValue) {
-        return true;
-      }
-
-      return formatValue(event.returnValue) === this._returnValue;
+    const codeObjectMatch = () => {
+      const event = stack[stack.length - 1];
+      return this.codeObject.id === event.codeObject.id && filterMatch();
     };
-
-    const httpServerRequestMatch = () => {
-      if (!this._httpServerRequest) {
-        return true;
-      }
-
-      return stack
-        .filter((e) => e.http_server_request)
-        .find((e) => formatHttpServerRequest(e) === this._httpServerRequest);
-    };
-
-    const filterMatch = (/** @type {Event} */ event) =>
-      returnValueMatch(event) && httpServerRequestMatch();
-
-    const functionMatch = (/** @type {Event} */ event) =>
-      functionDataEqual(event) && filterMatch(event);
 
     const enter = (/** @type {Event} */ event) => {
-      if (functionMatch(event)) {
-        beginMatch(event);
+      if (
+        matches[matches.length - 1] &&
+        matches[matches.length - 1].event === stack[stack.length - 1]
+      ) {
+        const match = matches[matches.length - 1];
+        const caller = stack.length >= 2 ? stack[stack.length - 2] : null;
+        const matchEvent = stack[stack.length - 1];
+        const callee = event;
+        const trigrams = buildTrigrams(caller, matchEvent, callee);
+
+        match.functionTrigrams.push(trigrams.functionTrigram);
+        match.classTrigrams.push(trigrams.classTrigram);
       }
-      stack.push(event);
+
       if (significant(event)) {
         Object.values(matchesByEvent).forEach((match) => {
-          match.descendants.push({ call: event, return: event.returnEvent });
+          match.descendants.push(event);
         });
       }
+
+      stack.push(event);
+      if (codeObjectMatch()) {
+        beginMatch();
+      }
     };
+
     const leave = (/** @type {Event} */ event) => {
       if (matchesByEvent[event.callEvent]) {
         endMatch(event);

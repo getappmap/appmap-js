@@ -45,7 +45,7 @@ async function processFiles(pattern, fn) {
     // eslint-disable-next-line consistent-return
     glob(pattern, (err, files) => {
       if (err) {
-        console.warn(err);
+        console.warn(`An error occurred with glob pattern ${pattern}: ${err}`);
         return reject(err);
       }
       files.forEach((file) => q.push(file));
@@ -138,8 +138,10 @@ function formatHttpServerRequest(event) {
       event.httpServerRequest.normalized_path_info ||
       event.httpServerRequest.path_info,
     statusCode:
-      event.linkedEvent.httpServerResponse.status_code ||
-      event.linkedEvent.httpServerResponse.status,
+      event.returnEvent && event.httpServerResponse
+        ? event.httpServerResponse.status_code ||
+          event.httpServerResponse.status
+        : '<none>',
   };
   return [data.method, data.path, `(${data.statusCode})`].join(' ');
 }

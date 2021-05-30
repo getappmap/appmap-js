@@ -6,22 +6,36 @@
 /* eslint-disable no-else-return */
 const fsp = require('fs').promises;
 const { dirname, basename } = require('path');
+// @ts-ignore
+const { CodeObject: CodeObjectModel } = require('@appland/models');
 const { verbose, processFiles } = require('../utils');
-const FunctionSpec = require('./functionSpec');
-const FunctionMatcher = require('./functionMatcher');
+const {
+  FunctionMatchSpec,
+  TableMatchSpec,
+  RouteMatchSpec,
+} = require('./matchSpec');
+const CodeObjectMatcher = require('./codeObjectMatcher');
 const { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } = require('./constants');
 
 /** @typedef {import('./types').CodeObject[]} ClassMap */
 /** @typedef {import('./types').CodeObject} CodeObject */
 /** @typedef {import('./types').CodeObjectMatch} CodeObjectMatch */
 
-// Normalize the classMap, so that when "package" code objects like 'app/models'
-// are represented as one entry in the classMap, they are expanded to one entry
-// for each token.
-function expandClassMap(/** @type ClassMap */ classMap) {
-  function expandItem(/** @type CodeObject */ item) {
+/**
+ * Normalize the classMap, so that when "package" code objects like 'app/models'
+ * are represented as one entry in the classMap, they are expanded to one entry
+ * for each token.
+ *
+ * @param {ClassMap} classMap
+ */
+function expandClassMap(classMap) {
+  /**
+   * @param {CodeObject} item
+   * @returns {CodeObject}
+   */
+  function expandItem(item) {
     let normalizedItem;
-    if (item.name.includes('/')) {
+    if (item.type === 'package' && item.name.includes('/')) {
       const names = item.name.split('/');
       let lastItem;
       {
@@ -56,33 +70,73 @@ function expandClassMap(/** @type ClassMap */ classMap) {
   return classMap.map(expandItem);
 }
 
-function parseFunctionId(/** @type {string} */ functionId) {
+/**
+ * @param {string} functionId
+ * @returns {import('./types').CodeObjectMatchSpec}
+ */
+function parseFunction(functionId) {
   const packageTokens = functionId.split('/');
   const classAndFunction = packageTokens.pop();
 
-  function parseClassAndFunction() {
-    if (classAndFunction.includes('.')) {
-      const [className, functionName] = classAndFunction.split('.');
-      return new FunctionSpec(
-        packageTokens,
-        className.split('::'),
-        true,
-        functionName
-      );
-    } else if (classAndFunction.includes('#')) {
-      const [className, functionName] = classAndFunction.split('#');
-      return new FunctionSpec(
-        packageTokens,
-        className.split('::'),
-        false,
-        functionName
-      );
-    }
+  if (classAndFunction.includes('.')) {
+    const [className, functionName] = classAndFunction.split('.');
+    return new FunctionMatchSpec(
+      packageTokens,
+      className.split('::'),
+      true,
+      functionName
+    );
+  } else if (classAndFunction.includes('#')) {
+    const [className, functionName] = classAndFunction.split('#');
+    return new FunctionMatchSpec(
+      packageTokens,
+      className.split('::'),
+      false,
+      functionName
+    );
+  }
 
+  return null;
+}
+
+/**
+ * @param {string} tableName
+ * @returns {import('./types').CodeObjectMatchSpec}
+ */
+function parseTable(tableName) {
+  return new TableMatchSpec(tableName);
+}
+
+/**
+ * @param {string} routeName
+ * @returns {import('./types').CodeObjectMatchSpec}
+ */
+function parseRoute(routeName) {
+  return new RouteMatchSpec(routeName);
+}
+
+function parseCodeObjectId(/** @type {string} */ codeObjectId) {
+  const tokens = codeObjectId.split(':');
+  const type = tokens.shift();
+  if (!type || tokens.length === 0) {
     return null;
   }
 
-  return parseClassAndFunction();
+  const id = tokens.join(':');
+  const parsers = {
+    package: parseFunction,
+    class: parseFunction,
+    function: parseFunction,
+    table: parseTable,
+    route: parseRoute,
+  };
+
+  const parser = parsers[type];
+  if (!parser) {
+    return null;
+  }
+
+  return parser(id);
 }
 
 /**
@@ -93,18 +147,16 @@ function parseFunctionId(/** @type {string} */ functionId) {
 class FindCodeObjects {
   /**
    * @param {string} appMapDir
-   * @param {string} functionId
+   * @param {string} codeObjectId
    */
-  // TODO: This 'functionId' can be genericized to any type that's found in the classMap file,
-  // which includes 'query' and 'route' as well as 'package', 'class' and 'function'.
-  constructor(appMapDir, functionId) {
+  constructor(appMapDir, codeObjectId) {
     this.appMapDir = appMapDir;
-    this.functionSpec = parseFunctionId(functionId);
-    if (!this.functionSpec) {
-      console.warn(`Unable to parse function id ${functionId}`);
+    this.matchSpec = parseCodeObjectId(codeObjectId);
+    if (!this.matchSpec) {
+      console.warn(`Unable to parse code object id ${codeObjectId}`);
     }
     if (verbose()) {
-      console.warn(this.functionSpec);
+      console.warn(this.matchSpec);
     }
   }
 
@@ -112,7 +164,7 @@ class FindCodeObjects {
    * @returns {Promise<CodeObjectMatch[]>}
    */
   async find() {
-    if (!this.functionSpec) {
+    if (!this.matchSpec) {
       return;
     }
 
@@ -150,27 +202,38 @@ class FindCodeObjects {
       let match = null;
       const findMatchingFunction = (
         /** @type {import('./types').CodeObject} */ item,
-        /** @type {import('./types').CodeObjectMatcher} */ matcher
+        /** @type {import('./types').CodeObjectMatcher} */ matcher,
+        /** @type {import('./types').CodeObject[]} */ ancestors
       ) => {
         if (match) {
           return;
         }
+
+        const buildCodeObject = () => {
+          let parent = null;
+          ancestors.forEach((ancestor) => {
+            parent = new CodeObjectModel(ancestor, parent);
+          });
+          return new CodeObjectModel(item, parent);
+        };
 
         const matchResult = matcher.match(item);
         switch (matchResult) {
           case MATCH_ABORT:
             return;
           case MATCH_COMPLETE:
-            match = { appmap: appmapName, codeObject: item };
+            match = { appmap: appmapName, codeObject: buildCodeObject() };
             matches.push(match);
             return;
           case MATCH_CONTINUE:
           default:
         }
         if (item.children) {
+          ancestors.push(item);
           item.children.forEach((child) =>
-            findMatchingFunction(child, matcher)
+            findMatchingFunction(child, matcher, ancestors)
           );
+          ancestors.pop();
         }
         matcher.pop();
       };
@@ -178,7 +241,7 @@ class FindCodeObjects {
       let classMap = JSON.parse((await fsp.readFile(fileName)).toString());
       classMap = expandClassMap(classMap);
       classMap.forEach((/** @type import('./types').CodeObject */ item) =>
-        findMatchingFunction(item, new FunctionMatcher(this.functionSpec))
+        findMatchingFunction(item, new CodeObjectMatcher(this.matchSpec), [])
       );
     }
 

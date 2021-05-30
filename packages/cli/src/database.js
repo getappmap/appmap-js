@@ -1,3 +1,8 @@
+// @ts-check
+
+// @ts-ignore
+const { normalizeSQL } = require('@appland/models');
+
 // https://github.com/newrelic/newrelic-ruby-agent/blob/dev/lib/new_relic/agent/database/obfuscation_helpers.rb
 // License: https://github.com/newrelic/newrelic-ruby-agent/blob/main/LICENSE
 // Apache License 2.0
@@ -31,7 +36,11 @@ const CLEANUP_REGEXP = {
   oracle_enhanced: /'|\/\*|\*\//,
 };
 
+/**
+ * @type {{string: string[]}}
+ */
 const DIALECT_COMPONENTS = {
+  // @ts-ignore
   fallback: Object.keys(COMPONENTS_REGEXP_MAP),
   mysql: [
     'single_quotes',
@@ -80,12 +89,16 @@ const DIALECT_COMPONENTS = {
 const PLACEHOLDER = '?';
 
 function obfuscateSingleQuoteLiterals(sql) {
-  if (!COMPONENTS_REGEXP_MAP.single_quotes.match(sql)) {
+  if (!COMPONENTS_REGEXP_MAP.single_quotes.test(sql)) {
     return sql;
   }
   return sql.gsub(COMPONENTS_REGEXP_MAP.single_quotes, PLACEHOLDER);
 }
 
+/**
+ * @param {string} dialect
+ * @returns {RegExp[]}
+ */
 function generateRegexp(dialect) {
   const components = DIALECT_COMPONENTS[dialect];
   // No Regexp.union in JS
@@ -109,10 +122,18 @@ function detectUnmatchedPairs(obfuscated, adapter) {
 const FAILED_TO_OBFUSCATE_MESSAGE =
   'Failed to obfuscate SQL query - quote characters remained after obfuscation';
 
+/**
+ * Replaces literal query parameters with parameter symbols (e.g. '?');
+ *
+ * @param {string} sql
+ * @param {string} adapter
+ * @returns {string}
+ */
 function obfuscate(sql, adapter) {
-  let regexp;
+  /** @type {RegExp[]} */ let regexp;
   switch (adapter) {
-    case ('mysql', 'mysql2'):
+    case 'mysql':
+    case 'mysql2':
       regexp = MYSQL_COMPONENTS_REGEXP;
       break;
     case 'postgres':
@@ -121,7 +142,8 @@ function obfuscate(sql, adapter) {
     case 'sqlite':
       regexp = SQLITE_COMPONENTS_REGEXP;
       break;
-    case ('oracle', 'oracle_enhanced'):
+    case 'oracle':
+    case 'oracle_enhanced':
       regexp = ORACLE_COMPONENTS_REGEXP;
       break;
     case 'cassandra':
@@ -140,4 +162,36 @@ function obfuscate(sql, adapter) {
   return obfuscated;
 }
 
-module.exports = { obfuscate, obfuscateSingleQuoteLiterals };
+const QUERY_CACHE = {};
+
+function analyzeQuery(
+  /** @type {import('./search/types').SQL | string} */ query
+) {
+  if (typeof query === 'string') {
+    // This is a problem because we don't know what SQL dialect to apply.
+    console.warn(`No database_type available for ${query}`);
+    return normalizeSQL(query);
+  }
+
+  const { sql, database_type: databaseType } = query;
+
+  if (sql && databaseType) {
+    const obfuscatedSQL = obfuscate(sql, databaseType);
+
+    const cachedResult = QUERY_CACHE[obfuscatedSQL];
+    if (cachedResult) {
+      return cachedResult;
+    }
+
+    const result = normalizeSQL(obfuscatedSQL);
+    QUERY_CACHE[obfuscatedSQL] = result;
+    return result;
+  }
+
+  console.warn(
+    `sql or database_type not available for ${JSON.stringify(query)}`
+  );
+  return normalizeSQL(sql);
+}
+
+module.exports = { analyzeQuery, obfuscate, obfuscateSingleQuoteLiterals };
