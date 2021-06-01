@@ -1,33 +1,8 @@
 import CodeObject, { CodeObjectType } from './codeObject';
 
-// Recursively add a code object to an array
-// If the code object exists in the array already, add its children to the
-// existing code object instead.
-function addCodeObject(codeObjectArray, codeObject, parent = null) {
-  if (
-    !codeObjectArray ||
-    !Array.isArray(codeObjectArray) ||
-    !codeObject ||
-    !(codeObject instanceof CodeObject)
-  ) {
-    return;
-  }
-
-  // TODO.
-  // This ignores static/non-static function collisions and function overloads, though this method
-  // is never currently called in a context where those edge cases exist.
-  const existingObject = codeObjectArray.find(
-    (obj) => obj.type === codeObject.type && obj.name === codeObject.name
-  );
-
-  if (!existingObject) {
-    codeObject.parent = parent; // eslint-disable-line no-param-reassign
-    codeObjectArray.push(codeObject);
-  } else {
-    codeObject.children.forEach((child) =>
-      addCodeObject(existingObject.children, child, existingObject)
-    );
-  }
+function indexCodeObject(co, codeObjects, codeObjectsById) {
+  codeObjects.push(co);
+  codeObjectsById[co.id] = co;
 }
 
 export default class ClassMap {
@@ -35,30 +10,30 @@ export default class ClassMap {
     this.codeObjectsByLocation = {};
     this.codeObjects = [];
     this.codeObjectsById = {};
-    this.roots = classMap.map((root) => this.buildCodeObject(root));
-  }
 
-  buildCodeObject(data, parent = null) {
-    const co = new CodeObject(data, parent);
-    this.codeObjects.push(co);
-    this.codeObjectsById[co.id] = co;
+    const buildCodeObject = (data, parent = null) => {
+      const co = new CodeObject(data, parent);
+      indexCodeObject(co, this.codeObjects, this.codeObjectsById);
 
-    (data.children || []).forEach((child) => {
-      this.buildCodeObject(child, co);
-    });
-
-    if (co.type !== 'package') {
-      co.locations.forEach((location) => {
-        let codeObjects = this.codeObjectsByLocation[location];
-        if (!codeObjects) {
-          codeObjects = [];
-          this.codeObjectsByLocation[location] = codeObjects;
-        }
-        codeObjects.push(co);
+      (data.children || []).forEach((child) => {
+        buildCodeObject(child, co);
       });
-    }
 
-    return co;
+      if (co.type !== 'package') {
+        co.locations.forEach((location) => {
+          let codeObjects = this.codeObjectsByLocation[location];
+          if (!codeObjects) {
+            codeObjects = [];
+            this.codeObjectsByLocation[location] = codeObjects;
+          }
+          codeObjects.push(co);
+        });
+      }
+
+      return co;
+    };
+
+    this.roots = classMap.map((root) => buildCodeObject(root));
   }
 
   visit(fn) {
@@ -81,9 +56,22 @@ export default class ClassMap {
   }
 
   codeObjectFromEvent(event) {
-    return this.codeObjects.find(
-      (co) => co.id.indexOf(event.toString()) !== -1
-    );
+    let codeObject;
+    // These types of events should not be reporting path and lineno, but sometimes
+    // they do.
+    if (!(event.httpServerRequest || event.httpClientRequest || event.sql)) {
+      const { path, lineno } = event;
+      const location = [path, lineno].filter((e) => e).join(':');
+      if (location !== '') {
+        const codeObjects = this.codeObjectsAtLocation(location);
+        codeObject = codeObjects.find((o) => o.name === event.methodId);
+        if (codeObject) {
+          return codeObject;
+        }
+      }
+    }
+
+    return null;
   }
 
   // Returns the first root code object of a given type or null if it doesn't exist
@@ -116,12 +104,38 @@ export default class ClassMap {
       .forEach((e) => {
         let codeObject = this.codeObjectFromEvent(e);
         if (!codeObject) {
-          const data = CodeObject.constructDataFromEvent(e);
-          const rootObject = this.buildCodeObject(data);
-          addCodeObject(this.roots, rootObject);
+          const findOrCreateCodeObject = (data, codeObjectArray, parent) => {
+            // TODO: This ignores static/non-static function collisions and function overloads, though this method
+            // is never currently called in a context where those edge cases exist.
+            let newCodeObject = codeObjectArray.find(
+              (obj) => obj.type === data.type && obj.name === data.name
+            );
 
-          // The object we created will always be a leaf
-          codeObject = [rootObject, ...rootObject.descendants()].pop();
+            if (!newCodeObject) {
+              newCodeObject = new CodeObject(data, parent);
+              if (!parent) {
+                this.roots.push(newCodeObject);
+              }
+              indexCodeObject(
+                newCodeObject,
+                this.codeObjects,
+                this.codeObjectsById
+              );
+            }
+
+            return newCodeObject;
+          };
+
+          const dataElements = CodeObject.constructDataChainFromEvent(e);
+          let parent = null;
+          dataElements.forEach((dataElement) => {
+            parent = findOrCreateCodeObject(
+              dataElement,
+              parent ? parent.children : this.roots,
+              parent
+            );
+          });
+          codeObject = parent;
         }
 
         e.codeObject = codeObject;

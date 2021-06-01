@@ -260,48 +260,47 @@ export default class CodeObject {
     return obj;
   }
 
-  static constructDataFromEvent(event) {
-    const data = {};
-
+  static constructDataChainFromEvent(event) {
+    let elements;
     if (event.httpServerRequest) {
-      Object.assign(data, {
-        type: CodeObjectType.HTTP,
-        name: 'HTTP server requests',
-        children: [
-          {
-            type: CodeObjectType.ROUTE,
-            name: event.route,
-          },
-        ],
-      });
+      elements = [
+        {
+          type: CodeObjectType.HTTP,
+          name: 'HTTP server requests',
+        },
+        {
+          type: CodeObjectType.ROUTE,
+          name: event.route,
+        },
+      ];
     } else if (event.sqlQuery) {
-      Object.assign(data, {
-        type: CodeObjectType.DATABASE,
-        name: 'Database',
-        children: [
-          {
-            type: CodeObjectType.QUERY,
-            name: event.sqlQuery,
-          },
-        ],
-      });
+      elements = [
+        {
+          type: CodeObjectType.DATABASE,
+          name: 'Database',
+        },
+        {
+          type: CodeObjectType.QUERY,
+          name: event.sqlQuery,
+        },
+      ];
     } else {
-      Object.assign(data, {
-        type: CodeObjectType.CLASS,
-        name: event.definedClass,
-        children: [
-          {
-            type: CodeObjectType.FUNCTION,
-            name: event.methodId,
-            static: event.isStatic,
-            location: '',
-          },
-        ],
-      });
+      elements = [
+        {
+          type: CodeObjectType.CLASS,
+          name: event.definedClass,
+        },
+        {
+          type: CodeObjectType.FUNCTION,
+          name: event.methodId,
+          static: event.isStatic,
+          location: '',
+        },
+      ];
     }
 
     // Flag this object as having been created dynamically
-    const queue = [data];
+    const queue = [...elements];
     while (queue.length) {
       const obj = queue.pop();
       obj.dynamic = true;
@@ -310,7 +309,7 @@ export default class CodeObject {
       }
     }
 
-    return data;
+    return elements;
   }
 
   get inboundConnections() {
