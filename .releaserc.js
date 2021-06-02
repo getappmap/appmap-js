@@ -1,3 +1,5 @@
+const { join } = require('path');
+
 module.exports = {
   branches: ['main'],
   plugins: [
@@ -25,14 +27,8 @@ module.exports = {
         ],
       },
     ],
-    [
-      '@semantic-release/git',
-      {
-        assets: ['CHANGELOG.md', 'package.json'],
-        message:
-          'chore(release): ${nextRelease.version}\n\n${nextRelease.notes}',
-      },
-    ],
+    '@semantic-release/git',
+    join(__dirname, 'ci/yarnPublish.js'),
     '@semantic-release/github',
   ],
 };

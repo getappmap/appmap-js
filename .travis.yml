@@ -17,25 +17,21 @@ addons:
 if: tag IS present OR commit_message !~ /^chore(release)/
 
 install:
-  - yarn
+  - yarn && yarn run build
+
+if: tag !~ @appland/.+-v\d\.\d\.\d
 
 jobs:
   include:
     - stage: test
-      if: tag !~ @appland/.+-v\d\.\d\.\d
       script: yarn run ci
 
     - stage: deploy
-      if: tag IS NOT present AND branch != main
-      script: yarn run build && yarn run chromatic
+      if: branch != main
+      script: yarn run chromatic
 
     - stage: deploy
-      if: tag IS NOT present AND branch = main
+      if: branch = main
       script: |
-        yarn run build \
-        && yarn run chromatic --auto-accept-changes \
-        && yarn run semantic-release
-
-    - stage: deploy
-      if: tag =~ @appland/.+-v\d\.\d\.\d
-      script: yarn run build && ./bin/publish
+        yarn run chromatic --auto-accept-changes \
+        && yarn run semantic-release -e semantic-release-monorepo
