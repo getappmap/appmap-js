@@ -473,6 +473,7 @@ code {
 }
 
 #app {
+  position: relative;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: 100%;
