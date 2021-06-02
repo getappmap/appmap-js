@@ -11,6 +11,7 @@
       :highlight-style="highlightStyle"
       :has-parent="Boolean(event.parent)"
       :is-first-child="i == 0"
+      :is-last-child="i == events.length - 1"
       @updated="$emit('updated')"
       @expand="(e) => $emit('expand', e)"
       @collapse="(e) => $emit('collapse', e)"

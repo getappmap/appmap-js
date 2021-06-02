@@ -53,6 +53,7 @@ export default {
   cursor: pointer;
 
   &__content {
+    position: relative;
     margin: 1rem 0 0 1rem;
     padding: 0.25em 0.75em;
     background: $gray2;
@@ -69,6 +70,19 @@ export default {
     &:hover {
       color: $white;
       background: lighten($gray2, 10);
+    }
+
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: -1rem;
+      width: 1.1rem;
+      height: 4px;
+      transform: translateY(-1px);
+      background-color: $gray4;
+      z-index: -1;
     }
   }
   padding-top: 0.75em;
