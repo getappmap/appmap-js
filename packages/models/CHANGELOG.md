@@ -1,3 +1,10 @@
+# [@appland/models-v1.0.6](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.0.5...@appland/models-v1.0.6) (2021-06-03)
+
+
+### Bug Fixes
+
+* Optimize performance and behavior of ClassMap.bindEvents ([5bac5bd](https://github.com/applandinc/appmap-js/commit/5bac5bd90c1cc15ca05ff2d7920e9f17483f9dd4))
+
 # [@appland/models-v1.0.5](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.0.4...@appland/models-v1.0.5) (2021-05-28)
 
 
