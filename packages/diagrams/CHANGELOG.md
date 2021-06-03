@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.0.4](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.0.3...@appland/diagrams-v1.0.4) (2021-06-03)
+
+
+### Bug Fixes
+
+* Improved cross-browser compatibility for Trace lines ([#228](https://github.com/applandinc/appmap-js/issues/228)) ([1aeea4e](https://github.com/applandinc/appmap-js/commit/1aeea4e2dc64c172f964da966d9d1976be68fac5))
+
 # [@appland/diagrams-v1.0.3](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.0.2...@appland/diagrams-v1.0.3) (2021-05-18)
 
 
