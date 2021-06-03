@@ -1,3 +1,11 @@
+# [@appland/components-v1.1.5](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.4...@appland/components-v1.1.5) (2021-06-03)
+
+
+### Bug Fixes
+
+* Improved cross-browser compatibility for Trace lines ([#228](https://github.com/applandinc/appmap-js/issues/228)) ([1aeea4e](https://github.com/applandinc/appmap-js/commit/1aeea4e2dc64c172f964da966d9d1976be68fac5))
+* Pressing enter while focused on the Details search input no longer triggers a form submission ([#237](https://github.com/applandinc/appmap-js/issues/237)) ([f33ff7e](https://github.com/applandinc/appmap-js/commit/f33ff7e3facd9d3a0afd27555ed3bee18edaf98a))
+
 # [@appland/components-v1.1.3](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.2...@appland/components-v1.1.3) (2021-05-18)
 
 
