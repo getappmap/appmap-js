@@ -1,6 +1,6 @@
 <template>
   <div class="details-search">
-    <form class="details-search__form">
+    <form class="details-search__form" @submit.prevent>
       <div class="details-search__input-wrap">
         <span class="details-search__input-prefix">
           <SearchIcon />
