@@ -27,8 +27,8 @@
     "dist/index.js"
   ],
   "dependencies": {
-    "@appland/diagrams": "workspace:*",
-    "@appland/models": "workspace:*",
+    "@appland/diagrams": "workspace:^1.0.4",
+    "@appland/models": "workspace:^1.0.6",
     "highlight.js": "^10.7.2",
     "sql-formatter": "^2.3.3",
     "vue": "^2.6.11",
