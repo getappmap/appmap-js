@@ -1,0 +1,55 @@
+.appmap__zoom {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &-button {
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    appearance: none;
+    background: $gray2;
+    color: #808b98;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &-bar {
+    margin: 3px 6px;
+    position: relative;
+    width: 20px;
+    height: 90px;
+    cursor: pointer;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: 50%;
+      bottom: -3px;
+      margin-left: -3px;
+      width: 6px;
+      background: $gray2;
+      opacity: 0.8;
+    }
+  }
+
+  &-grab {
+    position: absolute;
+    border-radius: 3px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: $gray4;
+    cursor: grab;
+  }
+}

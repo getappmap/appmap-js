@@ -1,4 +1,4 @@
-// import '../scss/style.scss';
+import './scss/style.scss';
 
 export { default as ComponentDiagram } from './componentDiagram';
 export { default as FlowView } from './flowView';
