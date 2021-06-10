@@ -342,7 +342,7 @@ export default class Event {
   }
 
   dataObjects() {
-    return [this.parameters, this.messages, this.returnValue]
+    return [this.parameters, this.message, this.returnValue]
       .flat()
       .filter(Boolean);
   }
