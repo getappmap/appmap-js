@@ -18,7 +18,7 @@ export default class Event {
         data.parameters = obj.$hidden.parameters.map((p) => ({ ...p }));
       }
 
-      if (obj.$hidden.message) {
+      if (Array.isArray(obj.$hidden.message)) {
         data.message = obj.$hidden.message.map((m) => ({ ...m }));
       }
 
