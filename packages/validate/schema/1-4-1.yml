@@ -202,6 +202,8 @@
 # Event #
 #########
 
+# Common #
+
 - $id: call
   type: object
   required:
@@ -242,8 +244,6 @@
     elapsed:
       type: number
       minimum: 0
-
-# Helper #
 
 - $id: headers
   nullable: true
@@ -338,6 +338,7 @@
         static:
           type: boolean
         sql_query: false
+        http_client_request: false
         http_server_request: false
 
 - $id: function-return
@@ -354,9 +355,15 @@
           nullable: true
           items:
             $ref: exception
+        http_client_response: false
         http_server_response: false
 
 # Http Client #
+
+# Although http_client_request is introduced 1.5.0,
+# we leave the requirement to not have http_client_request
+# in other event types because it interferes with
+# subsequent verifications in lib/main.js.
 
 
 
@@ -406,6 +413,7 @@
         defined_class: false
         method_id: false
         sql_query: false
+        http_client_request: false
 
 - $id: http-server-response
   allOf:
@@ -428,6 +436,7 @@
               nullable: true
         return_value: false
         exceptions: false
+        http_client_response: false
 
 # SQL #
 
@@ -457,6 +466,7 @@
         defined_class: false
         method_id: false
         http_server_request: false
+        http_client_request: false
 
 - $id: sql-result
   allOf:
@@ -465,4 +475,5 @@
       properties:
         return_value: false
         exceptions: false
+        http_client_response: false
         http_server_response: false

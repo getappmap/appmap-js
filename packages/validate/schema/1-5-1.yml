@@ -204,6 +204,8 @@
 # Event #
 #########
 
+# Common #
+
 - $id: call
   type: object
   required:
@@ -244,8 +246,6 @@
     elapsed:
       type: number
       minimum: 0
-
-# Helper #
 
 - $id: headers
   nullable: true
@@ -361,6 +361,11 @@
         http_server_response: false
 
 # Http Client #
+
+# Although http_client_request is introduced 1.5.0,
+# we leave the requirement to not have http_client_request
+# in other event types because it interferes with
+# subsequent verifications in lib/main.js.
 
 - $id: http-client-request
   allOf:

@@ -86,6 +86,9 @@ exports.validate = (options) => {
     );
     options.version = options.data.version;
   }
+  if (/^[0-9]+\.[0-9]+$/.test(options.version)) {
+    options.version = `${options.version}.0`;
+  }
   assert(
     versions.has(options.version),
     InputError,

@@ -4,6 +4,9 @@ const { validate } = require("../lib/main.js");
 const { getVersionMapping } = require("../lib/version.js");
 
 for (let version of getVersionMapping().keys()) {
+  if (version.endsWith(".0")) {
+    version = version.substring(0, version.length - 2);
+  }
   const data = {
     version,
     metadata: {
