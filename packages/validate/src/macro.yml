@@ -1,565 +1,567 @@
 
-- $id: appmap
-  type: object
-  properties:
-    version:
-      enum:
-        - "1.6.0" #! = 1.6.0
-        - "1.6"   #! = 1.6.0
-        - "1.5.1" #! = 1.5.1
-        - "1.5.0" #! = 1.5.0
-        - "1.5"   #! = 1.5.0
-        - "1.4.1" #! = 1.4.1
-        - "1.4.0" #! = 1.4.0
-        - "1.4"   #! = 1.4.0
-        - "1.3.0" #! = 1.3.0
-        - "1.3"   #! = 1.3.0
-        - "1.2.0" #! = 1.2.0
-        - "1.2"   #! = 1.2.0
-    metadata:
-      $ref: metadata
-    classMap:
-      type: array
-      items:
-        $ref: package
-    events:
-      type: array
-      items:
-        anyOf:
-          - $ref: function-call
-          - $ref: function-return
-          - $ref: http-client-request #! >= 1.5.0
-          - $ref: http-client-response #! >= 1.5.0
-          - $ref: http-server-request
-          - $ref: http-server-response
-          - $ref: sql-query
-          - $ref: sql-result
+type: object
+required: [version, metadata, classMap, events]
+properties:
+  version:
+    enum:
+      - "1.6.0" #! = 1.6.0
+      - "1.6"   #! = 1.6.0
+      - "1.5.1" #! = 1.5.1
+      - "1.5.0" #! = 1.5.0
+      - "1.5"   #! = 1.5.0
+      - "1.4.1" #! = 1.4.1
+      - "1.4.0" #! = 1.4.0
+      - "1.4"   #! = 1.4.0
+      - "1.3.0" #! = 1.3.0
+      - "1.3"   #! = 1.3.0
+      - "1.2.0" #! = 1.2.0
+      - "1.2"   #! = 1.2.0
+  metadata:
+    $ref: "#/definitions/metadata"
+  classMap:
+    type: array
+    items:
+      $ref: "#/definitions/package"
+  events:
+    type: array
+    items:
+      anyOf:
+        - $ref: "#/definitions/function-call"
+        - $ref: "#/definitions/function-return"
+        - $ref: "#/definitions/http-client-request" #! >= 1.5.0
+        - $ref: "#/definitions/http-client-response" #! >= 1.5.0
+        - $ref: "#/definitions/http-server-request"
+        - $ref: "#/definitions/http-server-response"
+        - $ref: "#/definitions/sql-query"
+        - $ref: "#/definitions/sql-result"
 
-#############
-# Meta Data #
-#############
+definitions:
 
-- $id: metadata
-  type: object
-  required: [client, recorder]
-  properties:
-    name:
-      type: string
-      nullable: true
-    labels:
-      type: array
-      nullable: true
-      items:
+  #############
+  # Meta Data #
+  #############
+
+  metadata:
+    type: object
+    required: [client, recorder]
+    properties:
+      name:
         type: string
-    app:
-      type: string
-      nullable: true
-    language:
-      type: object
-      nullable: true
-      required:
-        - name
-        - version
-      properties:
-        name:
+        nullable: true
+      labels:
+        type: array
+        nullable: true
+        items:
           type: string
-        engine:
-          type: string
-          nullable: true
-        version:
-          type: string
-    frameworks:
-      type: array
-      nullable: true
-      items:
+      app:
+        type: string
+        nullable: true
+      language:
         type: object
+        nullable: true
         required:
           - name
           - version
         properties:
           name:
             type: string
+          engine:
+            type: string
+            nullable: true
           version:
             type: string
-    client:
-      type: object
-      required:
-        - name
-        - url
-      properties:
-        name:
-          type: string
-        url:
-          type: string
-        version:
-          type: string
-    recorder:
-      type: object
-      required:
-        - name
-      properties:
-        name:
-          type: string
-    recording:
-      type: object
-      nullable: true
-      required:
-        - defined_class
-        - method_id
-      properties:
-        defined_class:
-          type: string
-        method_id:
-          type: string
-    git:
-      type: object
-      nullable: true
-      required:
-        - repository
-        - branch
-        - commit
-        - status
-      properties:
-        repository:
-          type: string
-        branch:
-          type: string
-        commit:
-          type: string
-        status:
-          type: array
-          items:
+      frameworks:
+        type: array
+        nullable: true
+        items:
+          type: object
+          required:
+            - name
+            - version
+          properties:
+            name:
+              type: string
+            version:
+              type: string
+      client:
+        type: object
+        required:
+          - name
+          - url
+        properties:
+          name:
             type: string
-        tag:
-          type: string
-          nullable: true
-        annotated_tag:
-          type: string
-          nullable: true
-        commits_since_tag:
-          type: integer
-          nullable: true
-          minimum: 0
-        commits_since_annotated_tag:
-          type: integer
-          nullable: true
-          minimum: 0
-        test_status:    #! >= 1.6.0
-          enum:         #! >= 1.6.0
-            - null      #! >= 1.6.0
-            - succeeded #! >= 1.6.0
-            - failed    #! >= 1.6.0
-        exception:           #! >= 1.6.0
-          type: object       #! >= 1.6.0
-          nullable: true     #! >= 1.6.0
-          required:          #! >= 1.6.0
-            - class          #! >= 1.6.0
-          properties:        #! >= 1.6.0
-            class:           #! >= 1.6.0
-              type: string   #! >= 1.6.0
-            message:         #! >= 1.6.0
-              type: string   #! >= 1.6.0
-              nullable: true #! >= 1.6.0
+          url:
+            type: string
+          version:
+            type: string
+      recorder:
+        type: object
+        required:
+          - name
+        properties:
+          name:
+            type: string
+      recording:
+        type: object
+        nullable: true
+        required:
+          - defined_class
+          - method_id
+        properties:
+          defined_class:
+            type: string
+          method_id:
+            type: string
+      git:
+        type: object
+        nullable: true
+        required:
+          - repository
+          - branch
+          - commit
+          - status
+        properties:
+          repository:
+            type: string
+          branch:
+            type: string
+          commit:
+            type: string
+          status:
+            type: array
+            items:
+              type: string
+          tag:
+            type: string
+            nullable: true
+          annotated_tag:
+            type: string
+            nullable: true
+          commits_since_tag:
+            type: integer
+            nullable: true
+            minimum: 0
+          commits_since_annotated_tag:
+            type: integer
+            nullable: true
+            minimum: 0
+          test_status:    #! >= 1.6.0
+            enum:         #! >= 1.6.0
+              - null      #! >= 1.6.0
+              - succeeded #! >= 1.6.0
+              - failed    #! >= 1.6.0
+          exception:           #! >= 1.6.0
+            type: object       #! >= 1.6.0
+            nullable: true     #! >= 1.6.0
+            required:          #! >= 1.6.0
+              - class          #! >= 1.6.0
+            properties:        #! >= 1.6.0
+              class:           #! >= 1.6.0
+                type: string   #! >= 1.6.0
+              message:         #! >= 1.6.0
+                type: string   #! >= 1.6.0
+                nullable: true #! >= 1.6.0
 
-#############
-# Class Map #
-#############
+  #############
+  # Class Map #
+  #############
 
-- $id: package
-  type: object
-  required:
-    - type
-    - name
-  properties:
-    type:
-      const: package
-    name:
-      type: string
-    children:
-      type: array
-      nullable: true
-      items:
-        anyOf:
-          - $ref: package
-          - $ref: class
-
-- $id: class
-  type: object
-  required:
-    - type
-    - name
-  properties:
-    type:
-      const: class
-    name:
-      type: string
-    children:
-      type: array
-      nullable: true
-      items:
-        anyOf:
-          - $ref: class
-          - $ref: function
-
-- $id: function
-  type: object
-  required:
-    - location
-    - static
-    - source #! < 1.4.1
-  properties:
-    type:
-      const: function
-    name:
-      type: string
-    location:
-      type: string
-    static:
-      type: boolean
-    labels:
-      type: array
-      nullable: true
-      items:
+  package:
+    type: object
+    required:
+      - type
+      - name
+    properties:
+      type:
+        const: package
+      name:
         type: string
-    comment:         #! >= 1.3.0
-      type: string   #! >= 1.3.0
-      nullable: true #! >= 1.3.0
-    source:          #! >= 1.3.0
-      type: string   #! >= 1.3.0
-      nullable: true #! >= 1.4.1
-
-#########
-# Event #
-#########
-
-# Common #
-
-- $id: call
-  type: object
-  required:
-    - id
-    - event
-    - thread_id
-  properties:
-    id:
-      type: integer
-      minimum: 0
-    event:
-      const: call
-    thread_id:
-      type: integer
-      minimum: 0
-    parent_id: false
-    elapsed: false
-
-- $id: return
-  type: object
-  required:
-    - id
-    - event
-    - thread_id
-    - parent_id
-  properties:
-    id:
-      type: integer
-      minimum: 0
-    event:
-      const: return
-    thread_id:
-      type: integer
-      minimum: 0
-    parent_id:
-      type: integer
-      minimum: 0
-    elapsed:
-      type: number
-      minimum: 0
-
-- $id: headers
-  nullable: true
-  type: object
-  additionalProperties:
-    type: string
-
-- $id: verb
-  enum:
-    - GET
-    - HEAD
-    - POST
-    - PUT
-    - DELETE
-    - CONNECT
-    - OPTIONS
-    - TRACE
-    - PATCH
-
-- $id: parameter
-  type: object
-  required:
-    - name      #! < 1.6.0
-    - object_id #! < 1.6.0
-    - class
-    - value
-  properties:
-    name:
-      type: string
-      nullable: true #! >= 1.6.0
-    object_id:
-      type: integer
-      nullable: true #! >= 1.6.0
-      minimum: 0
-    class:
-      type: string
-    value:
-      type: string
-      maxLength: 100
-
-- $id: exception
-  type: object
-  required:
-    - class
-    - value
-  properties:
-    class:
-      type: string
-    message:
-      type: string
-    object_id:
-      type: integer
-      nullable: true
-      minimum: 0
-    path:
-      type: string
-      nullable: true
-    lineno:
-      type: integer
-      nullable: true
-      minimum: 0
-
-# Function #
-
-- $id: function-call
-  allOf:
-    - $ref: call
-    - type: object
-      required:
-        - defined_class
-        - method_id
-        - path
-        - lineno
-        - receiver #! < 1.4.1
-        - parameters #! < 1.4.1
-        - static
-      properties:
-        defined_class:
-          type: string
-        method_id:
-          type: string
-        path:
-          type: string
-        lineno:
-          type: integer
-          minimum: 0
-        receiver:
+      children:
+        type: array
+        nullable: true
+        items:
           anyOf:
-            - const: null #! >= 1.4.1
-            - $ref: parameter
-        parameters:
-          type: array
-          nullable: true #! >= 1.4.1
-          items:
-            $ref: parameter
-        static:
-          type: boolean
-        sql_query: false
-        http_client_request: false
-        http_server_request: false
+            - $ref: "#/definitions/package"
+            - $ref: "#/definitions/class"
 
-- $id: function-return
-  allOf:
-    - $ref: return
-    - type: object
-      properties:
-        return_value:
+  class:
+    type: object
+    required:
+      - type
+      - name
+    properties:
+      type:
+        const: class
+      name:
+        type: string
+      children:
+        type: array
+        nullable: true
+        items:
           anyOf:
-            - const: null
-            - $ref: parameter
-        exceptions:
-          type: array
-          nullable: true
-          items:
-            $ref: exception
-        http_client_response: false
-        http_server_response: false
+            - $ref: "#/definitions/class"
+            - $ref: "#/definitions/function"
 
-# Http Client #
+  function:
+    type: object
+    required:
+      - location
+      - static
+      - source #! < 1.4.1
+    properties:
+      type:
+        const: function
+      name:
+        type: string
+      location:
+        type: string
+      static:
+        type: boolean
+      labels:
+        type: array
+        nullable: true
+        items:
+          type: string
+      comment:         #! >= 1.3.0
+        type: string   #! >= 1.3.0
+        nullable: true #! >= 1.3.0
+      source:          #! >= 1.3.0
+        type: string   #! >= 1.3.0
+        nullable: true #! >= 1.4.1
 
-# Although http_client_request is introduced 1.5.0,
-# we leave the requirement to not have http_client_request
-# in other event types because it interferes with
-# subsequent verifications in lib/main.js.
+  #########
+  # Event #
+  #########
 
-- $id: http-client-request         #! >= 1.5.0
-  allOf:                           #! >= 1.5.0
-    - $ref: call                   #! >= 1.5.0
-    - type: object                 #! >= 1.5.0
-      required:                    #! >= 1.5.0
-        - http_client_request      #! >= 1.5.0
-        - message                  #! >= 1.5.0
-      properties:                  #! >= 1.5.0
-        http_client_request:       #! >= 1.5.0
-          type: object             #! >= 1.5.0
-          required:                #! >= 1.5.0
-            - request_method       #! >= 1.5.0
-            - url                  #! >= 1.5.0
-          properties:              #! >= 1.5.0
-            request_method:        #! >= 1.5.0
-              $ref: verb           #! >= 1.5.0
-            url:                   #! >= 1.5.0
-              type: string         #! >= 1.5.0
-            headers:               #! >= 1.5.0
-              $ref: headers        #! >= 1.5.0
-        message:                   #! >= 1.5.0
-          type: array              #! >= 1.5.0
-          items:                   #! >= 1.5.0
-            $ref: parameter        #! >= 1.5.0
-        defined_class: false       #! >= 1.5.0
-        method_id: false           #! >= 1.5.0
-        sql_query: false           #! >= 1.5.0
-        http_server_request: false #! >= 1.5.0
+  # Common #
 
-- $id: http-client-response         #! >= 1.5.0
-  allOf:                            #! >= 1.5.0
-    - $ref: return                  #! >= 1.5.0
-    - type: object                  #! >= 1.5.0
-      required:                     #! >= 1.5.0
-        - http_client_response      #! >= 1.5.0
-      properties:                   #! >= 1.5.0
-        http_client_response:       #! >= 1.5.0
-          type: object              #! >= 1.5.0
-          required:                 #! >= 1.5.0
-            - status_code           #! >= 1.5.0
-          properties:               #! >= 1.5.0
-            headers:                #! >= 1.5.0
-              $ref: headers         #! >= 1.5.0
-            status_code:            #! >= 1.5.0
-              type: integer         #! >= 1.5.0
-              minimum: 100          #! >= 1.5.0
-              maximum: 599          #! >= 1.5.0
-            mime_type:              #! >= 1.5.0
-              type: string          #! >= 1.5.0
-              nullable: true        #! >= 1.5.0
-        return_value: false         #! >= 1.5.0
-        exceptions: false           #! >= 1.5.0
-        http_server_response: false #! >= 1.5.0
+  call:
+    type: object
+    required:
+      - id
+      - event
+      - thread_id
+    properties:
+      id:
+        type: integer
+        minimum: 0
+      event:
+        const: call
+      thread_id:
+        type: integer
+        minimum: 0
+      parent_id: false
+      elapsed: false
 
-# Http Server #
+  return:
+    type: object
+    required:
+      - id
+      - event
+      - thread_id
+      - parent_id
+    properties:
+      id:
+        type: integer
+        minimum: 0
+      event:
+        const: return
+      thread_id:
+        type: integer
+        minimum: 0
+      parent_id:
+        type: integer
+        minimum: 0
+      elapsed:
+        type: number
+        minimum: 0
 
-- $id: http-server-request
-  allOf:
-    - $ref: call
-    - type: object
-      required:
-        - http_server_request
-        - message
-      properties:
-        http_server_request:
-          type: object
-          required:
-            - request_method
-            - path_info
-          properties:
-            headers:
-              $ref: headers
-            authorization:
-              type: string
-              nullable: true
-            mime_type:
-              type: string
-              nullable: true
-            request_method:
-              $ref: verb
-            path_info:
-              type: string
-            normalized_path_info: #! >= 1.4.0
-              type: string        #! >= 1.4.0
-              nullable: true      #! >= 1.4.0
-            protocol:
-              enum:
-                - null
-                - HTTP/1
-                - HTTP/1.0
-                - HTTP/1.1
-                - HTTP/2
-                - HTTP/2.0
-        message:
-          type: array
-          items:
-            $ref: parameter
-        defined_class: false
-        method_id: false
-        sql_query: false
-        http_client_request: false
+  headers:
+    nullable: true
+    type: object
+    additionalProperties:
+      type: string
 
-- $id: http-server-response
-  allOf:
-    - $ref: return
-    - type: object
-      required:
-        - http_server_response
-      properties:
-        http_server_response:
-          type: object
-          required:
-            - status_code
-          properties:
-            status_code:
-              type: integer
-              minimum: 100
-              maximum: 599
-            mime_type:
-              type: string
-              nullable: true
-        return_value: false
-        exceptions: false
-        http_client_response: false
+  verb:
+    enum:
+      - GET
+      - HEAD
+      - POST
+      - PUT
+      - DELETE
+      - CONNECT
+      - OPTIONS
+      - TRACE
+      - PATCH
 
-# SQL #
+  parameter:
+    type: object
+    required:
+      - name      #! < 1.6.0
+      - object_id #! < 1.6.0
+      - class
+      - value
+    properties:
+      name:
+        type: string
+        nullable: true #! >= 1.6.0
+      object_id:
+        type: integer
+        nullable: true #! >= 1.6.0
+        minimum: 0
+      class:
+        type: string
+      value:
+        type: string
+        maxLength: 100
 
-- $id: sql-query
-  allOf:
-    - $ref: call
-    - type: object
-      required:
-        - sql_query
-      properties:
-        sql_query:
-          type: object
-          required:
-            - database_type
-            - sql
-          properties:
-            database_type:
-              type: string
-            sql:
-              type: string
-            explain_sql:
-              type: string
-              nullable: true
-            server_version:
-              type: string
-              nullable: true
-        defined_class: false
-        method_id: false
-        http_server_request: false
-        http_client_request: false
+  exception:
+    type: object
+    required:
+      - class
+      - value
+    properties:
+      class:
+        type: string
+      message:
+        type: string
+      object_id:
+        type: integer
+        nullable: true
+        minimum: 0
+      path:
+        type: string
+        nullable: true
+      lineno:
+        type: integer
+        nullable: true
+        minimum: 0
 
-- $id: sql-result
-  allOf:
-    - $ref: return
-    - type: object
-      properties:
-        return_value: false
-        exceptions: false
-        http_client_response: false
-        http_server_response: false
+  # Function #
+
+  function-call:
+    allOf:
+      - $ref: "#/definitions/call"
+      - type: object
+        required:
+          - defined_class
+          - method_id
+          - path
+          - lineno
+          - receiver #! < 1.4.1
+          - parameters #! < 1.4.1
+          - static
+        properties:
+          defined_class:
+            type: string
+          method_id:
+            type: string
+          path:
+            type: string
+          lineno:
+            type: integer
+            minimum: 0
+          receiver:
+            anyOf:
+              - const: null #! >= 1.4.1
+              - $ref: "#/definitions/parameter"
+          parameters:
+            type: array
+            nullable: true #! >= 1.4.1
+            items:
+              $ref: "#/definitions/parameter"
+          static:
+            type: boolean
+          sql_query: false
+          http_client_request: false
+          http_server_request: false
+
+  function-return:
+    allOf:
+      - $ref: "#/definitions/return"
+      - type: object
+        properties:
+          return_value:
+            anyOf:
+              - const: null
+              - $ref: "#/definitions/parameter"
+          exceptions:
+            type: array
+            nullable: true
+            items:
+              $ref: "#/definitions/exception"
+          http_client_response: false
+          http_server_response: false
+
+  # Http Client #
+
+  # Although http_client_request is introduced 1.5.0,
+  # we leave the requirement to not have http_client_request
+  # in other event types because it interferes with
+  # subsequent verifications in lib/main.js.
+
+  http-client-request:                        #! >= 1.5.0
+    allOf:                                    #! >= 1.5.0
+      - $ref: "#/definitions/call"            #! >= 1.5.0
+      - type: object                          #! >= 1.5.0
+        required:                             #! >= 1.5.0
+          - http_client_request               #! >= 1.5.0
+          - message                           #! >= 1.5.0
+        properties:                           #! >= 1.5.0
+          http_client_request:                #! >= 1.5.0
+            type: object                      #! >= 1.5.0
+            required:                         #! >= 1.5.0
+              - request_method                #! >= 1.5.0
+              - url                           #! >= 1.5.0
+            properties:                       #! >= 1.5.0
+              request_method:                 #! >= 1.5.0
+                $ref: "#/definitions/verb"    #! >= 1.5.0
+              url:                            #! >= 1.5.0
+                type: string                  #! >= 1.5.0
+              headers:                        #! >= 1.5.0
+                $ref: "#/definitions/headers" #! >= 1.5.0
+          message:                            #! >= 1.5.0
+            type: array                       #! >= 1.5.0
+            items:                            #! >= 1.5.0
+              $ref: "#/definitions/parameter" #! >= 1.5.0
+          defined_class: false                #! >= 1.5.0
+          method_id: false                    #! >= 1.5.0
+          sql_query: false                    #! >= 1.5.0
+          http_server_request: false          #! >= 1.5.0
+
+  http-client-response:                       #! >= 1.5.0
+    allOf:                                    #! >= 1.5.0
+      - $ref: "#/definitions/return"          #! >= 1.5.0
+      - type: object                          #! >= 1.5.0
+        required:                             #! >= 1.5.0
+          - http_client_response              #! >= 1.5.0
+        properties:                           #! >= 1.5.0
+          http_client_response:               #! >= 1.5.0
+            type: object                      #! >= 1.5.0
+            required:                         #! >= 1.5.0
+              - status_code                   #! >= 1.5.0
+            properties:                       #! >= 1.5.0
+              headers:                        #! >= 1.5.0
+                $ref: "#/definitions/headers" #! >= 1.5.0
+              status_code:                    #! >= 1.5.0
+                type: integer                 #! >= 1.5.0
+                minimum: 100                  #! >= 1.5.0
+                maximum: 599                  #! >= 1.5.0
+              mime_type:                      #! >= 1.5.0
+                type: string                  #! >= 1.5.0
+                nullable: true                #! >= 1.5.0
+          return_value: false                 #! >= 1.5.0
+          exceptions: false                   #! >= 1.5.0
+          http_server_response: false         #! >= 1.5.0
+
+  # Http Server #
+
+  http-server-request:
+    allOf:
+      - $ref: "#/definitions/call"
+      - type: object
+        required:
+          - http_server_request
+          - message
+        properties:
+          http_server_request:
+            type: object
+            required:
+              - request_method
+              - path_info
+            properties:
+              headers:
+                $ref: "#/definitions/headers"
+              authorization:
+                type: string
+                nullable: true
+              mime_type:
+                type: string
+                nullable: true
+              request_method:
+                $ref: "#/definitions/verb"
+              path_info:
+                type: string
+              normalized_path_info: #! >= 1.4.0
+                type: string        #! >= 1.4.0
+                nullable: true      #! >= 1.4.0
+              protocol:
+                enum:
+                  - null
+                  - HTTP/1
+                  - HTTP/1.0
+                  - HTTP/1.1
+                  - HTTP/2
+                  - HTTP/2.0
+          message:
+            type: array
+            items:
+              $ref: "#/definitions/parameter"
+          defined_class: false
+          method_id: false
+          sql_query: false
+          http_client_request: false
+
+  http-server-response:
+    allOf:
+      - $ref: "#/definitions/return"
+      - type: object
+        required:
+          - http_server_response
+        properties:
+          http_server_response:
+            type: object
+            required:
+              - status_code
+            properties:
+              status_code:
+                type: integer
+                minimum: 100
+                maximum: 599
+              mime_type:
+                type: string
+                nullable: true
+          return_value: false
+          exceptions: false
+          http_client_response: false
+
+  # SQL #
+
+  sql-query:
+    allOf:
+      - $ref: "#/definitions/call"
+      - type: object
+        required:
+          - sql_query
+        properties:
+          sql_query:
+            type: object
+            required:
+              - database_type
+              - sql
+            properties:
+              database_type:
+                type: string
+              sql:
+                type: string
+              explain_sql:
+                type: string
+                nullable: true
+              server_version:
+                type: string
+                nullable: true
+          defined_class: false
+          method_id: false
+          http_server_request: false
+          http_client_request: false
+
+  sql-result:
+    allOf:
+      - $ref: "#/definitions/return"
+      - type: object
+        properties:
+          return_value: false
+          exceptions: false
+          http_client_response: false
+          http_server_response: false

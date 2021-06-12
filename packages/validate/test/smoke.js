@@ -1,6 +1,7 @@
 const { writeFileSync } = require("fs");
+const { strict: Assert } = require("assert");
 const Semver = require("semver");
-const { validate } = require("../lib/main.js");
+const { validate, AppmapError } = require("../lib/main.js");
 const { getVersionMapping } = require("../lib/version.js");
 
 for (let version of getVersionMapping().keys()) {
@@ -142,5 +143,7 @@ for (let version of getVersionMapping().keys()) {
   };
   const path = `${__dirname}/../tmp/test@${version.replace(/\./u, "-")}.appmap.json`;
   writeFileSync(path, JSON.stringify(data, null, 2), "utf8");
-  validate({ path });
+  Assert.equal(validate({ path }), undefined);
+  delete data.metadata;
+  Assert.throws(() => validate({ data }), AppmapError);
 }

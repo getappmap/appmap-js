@@ -8995,7 +8995,8 @@
         "git": {
             "branch": "appland",
             "commit": "620695333ac6621e408f21ef86fc34ef766a674f",
-            "repository": "https://github.com/land-of-apps/solidus.git"
+            "repository": "https://github.com/land-of-apps/solidus.git",
+            "status": []
         },
         "name": "Cancel items when all items are not cancelable does not display the link to cancel items",
         "client": {

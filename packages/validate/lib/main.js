@@ -1,8 +1,11 @@
+const { readFileSync } = require("fs");
 const { parse: yaml } = require("yaml");
 const Ajv = require("ajv");
-const { readFileSync } = require("fs");
+// const betterAjvErrors = require('better-ajv-errors');
 const { getVersionMapping } = require("./version.js");
 const { AppmapError, InputError, assert, assertSuccess } = require("./assert.js");
+
+const ajv = new Ajv({ jsonPointer: true });
 
 const versions = getVersionMapping();
 
@@ -98,17 +101,23 @@ exports.validate = (options) => {
   );
   // Validate against json schema //
   if (!cache.has(options.version)) {
-    const ajv = new Ajv();
-    ajv.addSchema(yaml(readFileSync(versions.get(options.version), "utf8")));
-    cache.set(options.version, ajv.getSchema("appmap"));
+    const schema = yaml(readFileSync(versions.get(options.version), "utf8"));
+    cache.set(options.version, {
+      schema,
+      validate: ajv.compile(schema),
+    });
   }
-  const validate = cache.get(options.version);
-  assert(
-    validate(options.data),
-    AppmapError,
-    "appmap failed schema validation >> %o",
-    validate.errors
-  );
+  const { validate } = cache.get(options.version);
+  if (!validate(options.data)) {
+    throw new AppmapError(JSON.stringify(validate.errors, null, 2));
+    // throw new AppmapError(betterAjvErrors(schema, options.data, validate.errors));
+  }
+  // assert(
+  //   validate(options.data),
+  //   AppmapError,
+  //   "appmap failed schema validation >> %o",
+  //   validate.errors
+  // );
   const events = options.data.events;
   // Verify the unicity of code object //
   const designators = new Set();
