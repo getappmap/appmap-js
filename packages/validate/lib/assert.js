@@ -1,6 +1,6 @@
 const { format } = require("util");
 
-exports.InvalidAppmapError = class InvalidAppmapError extends Error {};
+exports.AppmapError = class AppmapError extends Error {};
 
 exports.InputError = class InputError extends Error {};
 

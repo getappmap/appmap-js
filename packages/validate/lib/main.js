@@ -1,16 +1,12 @@
 const { parse: yaml } = require("yaml");
 const Ajv = require("ajv");
 const { readFileSync } = require("fs");
-const { InvalidAppmapError, InputError, assert, assertSuccess } = require("./assert.js");
+const { getVersionMapping } = require("./version.js");
+const { AppmapError, InputError, assert, assertSuccess } = require("./assert.js");
 
-const versions = new Map([
-  ["1.6", "1-6-0"],
-  ["1.6.0", "1-6-0"],
-]);
+const versions = getVersionMapping();
 
 const keys = Array.from(versions.keys());
-
-const ajv = new Ajv();
 
 const cache = new Map();
 
@@ -52,22 +48,18 @@ const getReturnTag = (event) => {
   return null;
 };
 
+exports.AppmapError = AppmapError;
+
+exports.InputError = InputError;
+
 exports.validate = (options) => {
   // Normalize options //
   options = {
     path: null,
     data: null,
-    version: "1.6.0",
+    version: null,
     ...options,
   };
-  assert(
-    typeof options.version === "string" && versions.has(options.version),
-    InputError,
-    "invalid version %o, it should be one of: %o",
-    options.version,
-    keys
-  );
-  options.version = versions.get(options.version);
   assert(
     (options.path === null) !== (options.data === null),
     InputError,
@@ -79,20 +71,38 @@ exports.validate = (options) => {
     const content = assertSuccess(() => readFileSync(options.path, "utf8"), InputError, "%s");
     options.data = assertSuccess(
       () => JSON.parse(content),
-      InvalidAppmapError,
+      AppmapError,
       `could not JSON-parse file %o >> %s`,
       options.path
     );
   }
+  if (options.version === null) {
+    assert(
+      typeof options.data === "object" &&
+        options.data !== null &&
+        Reflect.getOwnPropertyDescriptor(options.data, "version") !== undefined,
+      AppmapError,
+      "could extract version from appmap"
+    );
+    options.version = options.data.version;
+  }
+  assert(
+    versions.has(options.version),
+    InputError,
+    "unsupported appmap version %o; expected one of %o",
+    options.version,
+    keys
+  );
   // Validate against json schema //
   if (!cache.has(options.version)) {
-    ajv.addSchema(yaml(readFileSync(`${__dirname}/../schema/${options.version}.yml`, "utf8")));
-    cache.set(options.version, ajv.getSchema(`appmap-${options.version}`));
+    const ajv = new Ajv();
+    ajv.addSchema(yaml(readFileSync(versions.get(options.version), "utf8")));
+    cache.set(options.version, ajv.getSchema("appmap"));
   }
   const validate = cache.get(options.version);
   assert(
     validate(options.data),
-    InvalidAppmapError,
+    AppmapError,
     "appmap failed schema validation >> %o",
     validate.errors
   );
@@ -109,7 +119,7 @@ exports.validate = (options) => {
       const [, path2, lineno] = /^([\s\S]*):([0-9]+)$/.exec(entity.location);
       assert(
         path1.startsWith(path2),
-        InvalidAppmapError,
+        AppmapError,
         "path should be a prefix of %o for function code object %o",
         path1,
         entity
@@ -123,7 +133,7 @@ exports.validate = (options) => {
       ]);
       assert(
         !designators.has(designator),
-        InvalidAppmapError,
+        AppmapError,
         "detected a function code object clash in the classMap: %o",
         entity
       );
@@ -145,7 +155,7 @@ exports.validate = (options) => {
       const event2 = events[index2];
       assert(
         event1.id !== event2.id,
-        InvalidAppmapError,
+        AppmapError,
         "duplicate event id between #%i and #%i (ie between %o and %o)",
         index1,
         index2,
@@ -155,7 +165,7 @@ exports.validate = (options) => {
       if (event1.event == "return" && event2.event === "return") {
         assert(
           event1.parent_id !== event2.parent_id,
-          InvalidAppmapError,
+          AppmapError,
           "duplicate event parent_id between #%i and #%i (ie between %o and %o)",
           index1,
           index2,
@@ -181,7 +191,7 @@ exports.validate = (options) => {
         ]);
         assert(
           designators.has(designator),
-          InvalidAppmapError,
+          AppmapError,
           "could not find a match in the classMap for the function call event #%i (%o): %o is not in %o",
           index1,
           event1,
@@ -198,7 +208,7 @@ exports.validate = (options) => {
       const tag2 = getCallTag(event2);
       assert(
         tag1 === null || tag1 === tag2,
-        InvalidAppmapError,
+        AppmapError,
         "type mismatch (%s !== %s) between call-return event pair (#%i, #%i) -- ie: (%o, %o)",
         tag2,
         tag1,

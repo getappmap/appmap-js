@@ -4,7 +4,7 @@
   properties:
     version:
       enum:
-        - "1.6.0"
+        - "1.4.1"
     metadata:
       $ref: metadata
     classMap:
@@ -17,8 +17,6 @@
         anyOf:
           - $ref: function-call
           - $ref: function-return
-          - $ref: http-client-request
-          - $ref: http-client-response
           - $ref: http-server-request
           - $ref: http-server-response
           - $ref: sql-query
@@ -133,22 +131,6 @@
           type: integer
           nullable: true
           minimum: 0
-        test_status:
-          enum:
-            - null
-            - succeeded
-            - failed
-        exception:
-          type: object
-          nullable: true
-          required:
-            - class
-          properties:
-            class:
-              type: string
-            message:
-              type: string
-              nullable: true
 
 #############
 # Class Map #
@@ -284,15 +266,15 @@
 - $id: parameter
   type: object
   required:
+    - name
+    - object_id
     - class
     - value
   properties:
     name:
       type: string
-      nullable: true
     object_id:
       type: integer
-      nullable: true
       minimum: 0
     class:
       type: string
@@ -356,7 +338,6 @@
         static:
           type: boolean
         sql_query: false
-        http_client_request: false
         http_server_request: false
 
 - $id: function-return
@@ -373,64 +354,11 @@
           nullable: true
           items:
             $ref: exception
-        http_client_response: false
         http_server_response: false
 
 # Http Client #
 
-- $id: http-client-request
-  allOf:
-    - $ref: call
-    - type: object
-      required:
-        - http_client_request
-        - message
-      properties:
-        http_client_request:
-          type: object
-          required:
-            - request_method
-            - url
-          properties:
-            request_method:
-              $ref: verb
-            url:
-              type: string
-            headers:
-              $ref: headers
-        message:
-          type: array
-          items:
-            $ref: parameter
-        defined_class: false
-        method_id: false
-        sql_query: false
-        http_server_request: false
 
-- $id: http-client-response
-  allOf:
-    - $ref: return
-    - type: object
-      required:
-        - http_client_response
-      properties:
-        http_client_response:
-          type: object
-          required:
-            - status_code
-          properties:
-            headers:
-              $ref: headers
-            status_code:
-              type: integer
-              minimum: 100
-              maximum: 599
-            mime_type:
-              type: string
-              nullable: true
-        return_value: false
-        exceptions: false
-        http_server_response: false
 
 # Http Server #
 
@@ -478,7 +406,6 @@
         defined_class: false
         method_id: false
         sql_query: false
-        http_client_request: false
 
 - $id: http-server-response
   allOf:
@@ -501,7 +428,6 @@
               nullable: true
         return_value: false
         exceptions: false
-        http_client_response: false
 
 # SQL #
 
@@ -531,7 +457,6 @@
         defined_class: false
         method_id: false
         http_server_request: false
-        http_client_request: false
 
 - $id: sql-result
   allOf:
@@ -540,5 +465,4 @@
       properties:
         return_value: false
         exceptions: false
-        http_client_response: false
         http_server_response: false

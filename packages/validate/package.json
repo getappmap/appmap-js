@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "test": "npx c8 --reporter=text-summary --check-coverage --branches=100 --functions=100 --lines=100 --statements=100 --include lib/main.js node test/main.js",
+    "build": "node src/build.js",
     "test-html": "npx c8 --reporter=html node test/main.js && open coverage/index.html",
     "prettier": "npx prettier --write 'lib/*.js' 'test/*.js'",
     "lint": "npx eslint 'lib/*.js' 'test/*.js'"

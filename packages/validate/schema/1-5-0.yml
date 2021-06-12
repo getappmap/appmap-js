@@ -4,7 +4,7 @@
   properties:
     version:
       enum:
-        - "1.6.0"
+        - "1.5.0"
     metadata:
       $ref: metadata
     classMap:
@@ -133,22 +133,6 @@
           type: integer
           nullable: true
           minimum: 0
-        test_status:
-          enum:
-            - null
-            - succeeded
-            - failed
-        exception:
-          type: object
-          nullable: true
-          required:
-            - class
-          properties:
-            class:
-              type: string
-            message:
-              type: string
-              nullable: true
 
 #############
 # Class Map #
@@ -284,15 +268,15 @@
 - $id: parameter
   type: object
   required:
+    - name
+    - object_id
     - class
     - value
   properties:
     name:
       type: string
-      nullable: true
     object_id:
       type: integer
-      nullable: true
       minimum: 0
     class:
       type: string
