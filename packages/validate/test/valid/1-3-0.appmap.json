@@ -30,7 +30,7 @@
             "event": "call",
             "lineno": 8,
             "static": false,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Spree::Admin::RootController",
                 "value": "#<Spree::Admin::RootController:0x00007f5e30e34b68>",
                 "object_id": 70021261927860
@@ -46,7 +46,7 @@
             "elapsed": 0.001858651,
             "parent_id": 2,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "<html><body>You are being <a href=\"http://www.example.com/admin/orders\">redirected</a>.</body></html",
                 "object_id": 70021262067520
@@ -59,15 +59,15 @@
             "parent_id": 1,
             "thread_id": 47346401950060,
             "http_server_response": {
-                "status": 302
+                "status_code": 302
             }
         },
         {
             "id": 5,
             "path": "OpenSSL::Cipher#encrypt",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "lineno": 123,
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e30e844d8>",
                 "object_id": 70021262090860
@@ -91,7 +91,7 @@
             "elapsed": 0.000007765,
             "parent_id": 5,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e30e844d8>",
                 "object_id": 70021262090860
@@ -100,9 +100,9 @@
         {
             "id": 7,
             "path": "OpenSSL::Cipher#final",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "lineno": 123,
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e30e844d8>",
                 "object_id": 70021262090860
@@ -118,7 +118,7 @@
             "elapsed": 0.000006279,
             "parent_id": 7,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "a_ _=_fz2__\u001e2___",
                 "object_id": 70021262098560
@@ -154,7 +154,7 @@
             "event": "call",
             "lineno": 26,
             "static": true,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Module",
                 "value": "ActiveSupport::SecurityUtils",
                 "object_id": 47346414723160
@@ -182,9 +182,9 @@
         {
             "id": 11,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "lineno": 123,
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021262214740
@@ -208,7 +208,7 @@
             "elapsed": 0.000008939,
             "parent_id": 11,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
                 "object_id": 70021262236040
@@ -217,9 +217,8 @@
         {
             "id": 13,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021262235300
@@ -243,7 +242,7 @@
             "elapsed": 0.000006674,
             "parent_id": 13,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
                 "object_id": 70021262233000
@@ -255,7 +254,7 @@
             "elapsed": 0.000180768,
             "parent_id": 10,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "TrueClass",
                 "value": "true",
                 "object_id": 20
@@ -264,9 +263,8 @@
         {
             "id": 16,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x00007f5e30ec8b38>",
                 "object_id": 70021262230940
@@ -298,7 +296,7 @@
             "event": "call",
             "lineno": 26,
             "static": true,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Module",
                 "value": "ActiveSupport::SecurityUtils",
                 "object_id": 47346414723160
@@ -326,9 +324,8 @@
         {
             "id": 19,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021262276600
@@ -352,7 +349,7 @@
             "elapsed": 0.000007715,
             "parent_id": 19,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
                 "object_id": 70021262273740
@@ -361,9 +358,8 @@
         {
             "id": 21,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021262273060
@@ -387,7 +383,7 @@
             "elapsed": 0.00000675,
             "parent_id": 21,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
                 "object_id": 70021262294800
@@ -399,7 +395,7 @@
             "elapsed": 0.000162022,
             "parent_id": 18,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "TrueClass",
                 "value": "true",
                 "object_id": 20
@@ -408,9 +404,8 @@
         {
             "id": 24,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x00007f5e30ee7308>",
                 "object_id": 70021262293380
@@ -442,7 +437,7 @@
             "event": "call",
             "lineno": 26,
             "static": true,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Module",
                 "value": "ActiveSupport::SecurityUtils",
                 "object_id": 47346414723160
@@ -470,9 +465,8 @@
         {
             "id": 27,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021262356560
@@ -496,7 +490,7 @@
             "elapsed": 0.000008221,
             "parent_id": 27,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "K_Pz\u001b\u0002__>o\u0018___[_____X__\u0004X_kb_+_*",
                 "object_id": 70021262354100
@@ -505,9 +499,8 @@
         {
             "id": 29,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021262353520
@@ -531,7 +524,7 @@
             "elapsed": 0.000006367,
             "parent_id": 29,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "K_Pz\u001b\u0002__>o\u0018___[_____X__\u0004X_kb_+_*",
                 "object_id": 70021262374920
@@ -543,7 +536,7 @@
             "elapsed": 0.000176536,
             "parent_id": 26,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "TrueClass",
                 "value": "true",
                 "object_id": 20
@@ -552,9 +545,8 @@
         {
             "id": 32,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x00007f5e30f0dff8>",
                 "object_id": 70021262372860
@@ -583,9 +575,8 @@
         {
             "id": 34,
             "path": "OpenSSL::Cipher#decrypt",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e2c027bc8>",
                 "object_id": 70021221006820
@@ -609,7 +600,7 @@
             "elapsed": 0.000005704,
             "parent_id": 34,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e2c027bc8>",
                 "object_id": 70021221006820
@@ -618,9 +609,8 @@
         {
             "id": 36,
             "path": "OpenSSL::Cipher#final",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e2c027bc8>",
                 "object_id": 70021221006820
@@ -636,7 +626,7 @@
             "elapsed": 0.000005778,
             "parent_id": 36,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": ":\u0007en",
                 "object_id": 70021220999320
@@ -645,9 +635,8 @@
         {
             "id": 38,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x00007f5e2c02fc60>",
                 "object_id": 70021221023280
@@ -679,7 +668,7 @@
             "event": "call",
             "lineno": 26,
             "static": true,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Module",
                 "value": "ActiveSupport::SecurityUtils",
                 "object_id": 47346414723160
@@ -707,9 +696,8 @@
         {
             "id": 41,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021262432800
@@ -733,7 +721,7 @@
             "elapsed": 0.000007041,
             "parent_id": 41,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "K_Pz\u001b\u0002__>o\u0018___[_____X__\u0004X_kb_+_*",
                 "object_id": 70021262428200
@@ -742,9 +730,8 @@
         {
             "id": 43,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021262450560
@@ -768,7 +755,7 @@
             "elapsed": 0.000006763,
             "parent_id": 43,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "K_Pz\u001b\u0002__>o\u0018___[_____X__\u0004X_kb_+_*",
                 "object_id": 70021262446820
@@ -780,7 +767,7 @@
             "elapsed": 0.000163125,
             "parent_id": 40,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "TrueClass",
                 "value": "true",
                 "object_id": 20
@@ -789,9 +776,8 @@
         {
             "id": 46,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x00007f5e30f304e0>",
                 "object_id": 70021262443120
@@ -820,9 +806,8 @@
         {
             "id": 48,
             "path": "OpenSSL::Cipher#decrypt",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e30f57270>",
                 "object_id": 70021262522680
@@ -846,7 +831,7 @@
             "elapsed": 0.000006243,
             "parent_id": 48,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e30f57270>",
                 "object_id": 70021262522680
@@ -855,9 +840,8 @@
         {
             "id": 50,
             "path": "OpenSSL::Cipher#final",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e30f57270>",
                 "object_id": 70021262522680
@@ -873,7 +857,7 @@
             "elapsed": 0.000005157,
             "parent_id": 50,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": ":\u0007en",
                 "object_id": 70021262517080
@@ -882,9 +866,8 @@
         {
             "id": 52,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x00007f5e30f542c8>",
                 "object_id": 70021262516580
@@ -916,7 +899,7 @@
             "event": "call",
             "lineno": 16,
             "static": false,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Spree::Admin::OrdersController",
                 "value": "#<Spree::Admin::OrdersController:0x00007f5e30eb10c8>",
                 "object_id": 70021262182500
@@ -939,8 +922,8 @@
             "event": "call",
             "lineno": 142,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -963,7 +946,7 @@
             "elapsed": 0.000015515,
             "parent_id": 56,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "full-width",
                 "object_id": 70021262836100
@@ -975,8 +958,8 @@
             "event": "call",
             "lineno": 11,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -994,7 +977,7 @@
                     "kind": "block",
                     "name": "block",
                     "class": "NilClass",
-                    "value": null,
+                    "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -1006,8 +989,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1022,7 +1005,7 @@
             "elapsed": 0.000015654,
             "parent_id": 59,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[]",
                 "object_id": 70021262857900
@@ -1136,8 +1119,8 @@
             "event": "call",
             "lineno": 100,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1167,8 +1150,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1212,7 +1195,7 @@
             "elapsed": 0.000080726,
             "parent_id": 73,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a title=\"Edit\" data-action=\"edit\" class=\"fa fa-edit icon_link with-tip no-text\" href=\"/admin/orders",
                 "object_id": 70021268901920
@@ -1224,7 +1207,7 @@
             "elapsed": 0.004669494,
             "parent_id": 72,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a title=\"Edit\" data-action=\"edit\" class=\"fa fa-edit icon_link with-tip no-text\" href=\"/admin/orders",
                 "object_id": 70021268901920
@@ -1236,8 +1219,8 @@
             "event": "call",
             "lineno": 30,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1252,8 +1235,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1268,7 +1251,7 @@
             "elapsed": 0.00001601,
             "parent_id": 77,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"Orders\"]",
                 "object_id": 70021262857900
@@ -1280,8 +1263,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1296,7 +1279,7 @@
             "elapsed": 0.000015359,
             "parent_id": 79,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"Orders\"]",
                 "object_id": 70021262857900
@@ -1308,7 +1291,7 @@
             "elapsed": 0.008361013,
             "parent_id": 76,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "Orders",
                 "object_id": 70021268941360
@@ -1317,9 +1300,8 @@
         {
             "id": 82,
             "path": "JSON::Ext::Generator::State#generate",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Generator::State",
                 "value": "#<JSON::Ext::Generator::State:0x00007f5e31bf47a8>",
                 "object_id": 70021269136340
@@ -1343,7 +1325,7 @@
             "elapsed": 0.002574983,
             "parent_id": 82,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "{\"abbreviation\":\"Abbreviation\",\"accept\":\"Accept\",\"acceptance_errors\":\"Acceptance errors\",\"acceptance",
                 "object_id": 70021269827420
@@ -1352,9 +1334,8 @@
         {
             "id": 84,
             "path": "JSON::Ext::Generator::State#generate",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Generator::State",
                 "value": "#<JSON::Ext::Generator::State:0x00007f5e31d71b58>",
                 "object_id": 70021269917100
@@ -1378,7 +1359,7 @@
             "elapsed": 0.000247322,
             "parent_id": 84,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "{\"USD\":[\"$\",2,\"%s%v\"],\"EUR\":[\"€\",2,\"%s%v\"],\"GBP\":[\"£\",2,\"%s%v\"],\"AUD\":[\"$\",2,\"%s%v\"],\"CAD\":[\"$\",2,\"%",
                 "object_id": 70021270031860
@@ -1390,7 +1371,7 @@
             "event": "call",
             "lineno": 92,
             "static": false,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Spree::BackendConfiguration",
                 "value": "#<Spree::BackendConfiguration:0x0000561f6679cc88>",
                 "object_id": 47346431616580
@@ -1406,7 +1387,7 @@
             "elapsed": 0.000009352,
             "parent_id": 86,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[#<Spree::BackendConfiguration::MenuItem:0x0000561f7177c2c0 @condition=#<Proc:0x0000561f7177c310@/ho",
                 "object_id": 47346523864000
@@ -1418,8 +1399,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1449,8 +1430,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1482,7 +1463,7 @@
                     "kind": "opt",
                     "name": "options",
                     "class": "NilClass",
-                    "value": null,
+                    "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -1494,7 +1475,7 @@
             "elapsed": 0.000080403,
             "parent_id": 89,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-shopping-cart icon_link with-tip\" href=\"/admin/orders\"><span class=\"text\">Orders</sp",
                 "object_id": 70021270143940
@@ -1506,7 +1487,7 @@
             "elapsed": 0.004365762,
             "parent_id": 88,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon selected\"><a class=\"fa fa-shopping-cart icon_link with-tip\" href=\"/admin/or",
                 "object_id": 70021270166620
@@ -1518,8 +1499,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1549,8 +1530,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1581,8 +1562,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -1594,7 +1574,7 @@
             "elapsed": 0.000064428,
             "parent_id": 93,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-th-large icon_link with-tip\" href=\"/admin/products\"><span class=\"text\">Products</spa",
                 "object_id": 70021270184140
@@ -1606,8 +1586,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1637,7 +1617,7 @@
             "elapsed": 0.000301926,
             "parent_id": 95,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/products\">Products</a></li>",
                 "object_id": 70021270223380
@@ -1649,8 +1629,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1680,7 +1660,7 @@
             "elapsed": 0.000298878,
             "parent_id": 97,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/option_types\">Option Types</a></li>",
                 "object_id": 70021270224960
@@ -1692,8 +1672,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1710,8 +1690,7 @@
                 {
                     "kind": "block",
                     "name": "_block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -1723,7 +1702,7 @@
             "elapsed": 0.000222618,
             "parent_id": 99,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/properties\">Property Types</a></li>",
                 "object_id": 70021270273040
@@ -1735,8 +1714,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1753,8 +1732,7 @@
                 {
                     "kind": "block",
                     "name": "_block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -1766,7 +1744,7 @@
             "elapsed": 0.000226762,
             "parent_id": 101,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/taxonomies\">Taxonomies</a></li>",
                 "object_id": 70021270276080
@@ -1778,8 +1756,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1809,7 +1787,7 @@
             "elapsed": 0.000311735,
             "parent_id": 103,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/taxons\">Display Order</a></li>",
                 "object_id": 70021270314300
@@ -1821,7 +1799,7 @@
             "elapsed": 0.027022467,
             "parent_id": 92,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-th-large icon_link with-tip\" href=\"/admin/products\"><span ",
                 "object_id": 70021270310540
@@ -1833,8 +1811,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1864,8 +1842,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1896,8 +1874,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -1909,7 +1886,7 @@
             "elapsed": 0.000064677,
             "parent_id": 107,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-bullhorn icon_link with-tip\" href=\"/admin/promotions\"><span class=\"text\">Promotions<",
                 "object_id": 70021270342260
@@ -1921,8 +1898,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1939,8 +1916,7 @@
                 {
                     "kind": "block",
                     "name": "_block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -1952,7 +1928,7 @@
             "elapsed": 0.000221516,
             "parent_id": 109,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/promotions\">Promotions</a></li>",
                 "object_id": 70021270379860
@@ -1964,8 +1940,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -1982,8 +1958,7 @@
                 {
                     "kind": "block",
                     "name": "_block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -1995,7 +1970,7 @@
             "elapsed": 0.000236403,
             "parent_id": 111,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/promotion_categories\">Promotion Categories</a></li>",
                 "object_id": 70021270419180
@@ -2007,7 +1982,7 @@
             "elapsed": 0.013164695,
             "parent_id": 106,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-bullhorn icon_link with-tip\" href=\"/admin/promotions\"><spa",
                 "object_id": 70021270417300
@@ -2019,8 +1994,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2050,8 +2025,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2082,8 +2057,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -2095,7 +2069,7 @@
             "elapsed": 0.000067681,
             "parent_id": 115,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-cubes icon_link with-tip\" href=\"/admin/stock_items\"><span class=\"text\">Stock</span><",
                 "object_id": 70021270458560
@@ -2107,7 +2081,7 @@
             "elapsed": 0.004343819,
             "parent_id": 114,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-cubes icon_link with-tip\" href=\"/admin/stock_items\"><span ",
                 "object_id": 70021270478160
@@ -2119,8 +2093,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2150,8 +2124,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2182,8 +2156,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -2195,7 +2168,7 @@
             "elapsed": 0.00006657,
             "parent_id": 119,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-user icon_link with-tip\" href=\"/admin/users\"><span class=\"text\">Users</span></a>",
                 "object_id": 70021270549820
@@ -2207,7 +2180,7 @@
             "elapsed": 0.004301415,
             "parent_id": 118,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-user icon_link with-tip\" href=\"/admin/users\"><span class=\"",
                 "object_id": 70021270547120
@@ -2219,8 +2192,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2250,8 +2223,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2282,8 +2255,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -2295,7 +2267,7 @@
             "elapsed": 0.000068576,
             "parent_id": 123,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-wrench icon_link with-tip\" href=\"/admin/stores\"><span class=\"text\">Settings</span></",
                 "object_id": 70021270579140
@@ -2307,8 +2279,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2338,7 +2310,7 @@
             "elapsed": 0.000124145,
             "parent_id": 125,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/stores\">Stores</a></li>",
                 "object_id": 70021270610300
@@ -2350,8 +2322,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2381,7 +2353,7 @@
             "elapsed": 0.000116475,
             "parent_id": 127,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/payment_methods\">Payments</a></li>",
                 "object_id": 70021270655160
@@ -2393,8 +2365,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2424,7 +2396,7 @@
             "elapsed": 0.000112552,
             "parent_id": 129,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/tax_categories\">Taxes</a></li>",
                 "object_id": 70021270659140
@@ -2436,8 +2408,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2467,7 +2439,7 @@
             "elapsed": 0.000113881,
             "parent_id": 131,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/refund_reasons\">Refunds and Returns</a></li>",
                 "object_id": 70021270688240
@@ -2479,8 +2451,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2510,7 +2482,7 @@
             "elapsed": 0.000112235,
             "parent_id": 133,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/shipping_methods\">Shipping</a></li>",
                 "object_id": 70021270723200
@@ -2522,8 +2494,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2553,7 +2525,7 @@
             "elapsed": 0.000111347,
             "parent_id": 135,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/zones\">Zones</a></li>",
                 "object_id": 70021270747440
@@ -2565,7 +2537,7 @@
             "elapsed": 0.031520587,
             "parent_id": 122,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-wrench icon_link with-tip\" href=\"/admin/stores\"><span clas",
                 "object_id": 70021270744300
@@ -2577,8 +2549,8 @@
             "event": "call",
             "lineno": 17,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2593,8 +2565,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2609,7 +2581,7 @@
             "elapsed": 0.000017249,
             "parent_id": 139,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"Orders\"]",
                 "object_id": 70021262857900
@@ -2621,8 +2593,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
                 "object_id": 70021262842240
             },
@@ -2637,7 +2609,7 @@
             "elapsed": 0.000015299,
             "parent_id": 141,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"Orders\"]",
                 "object_id": 70021262857900
@@ -2649,7 +2621,7 @@
             "elapsed": 0.008157619,
             "parent_id": 138,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<ol class=\"breadcrumb\"><li class=\"breadcrumb-item active\">Orders</li></ol>",
                 "object_id": 70021270821700
@@ -2662,16 +2634,15 @@
             "parent_id": 9,
             "thread_id": 47346401950060,
             "http_server_response": {
-                "status": 200,
+                "status_code": 200,
                 "mime_type": "text/html; charset=utf-8"
             }
         },
         {
             "id": 145,
             "path": "OpenSSL::Cipher#encrypt",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e31f3edf0>",
                 "object_id": 70021270861560
@@ -2695,7 +2666,7 @@
             "elapsed": 0.000008119,
             "parent_id": 145,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e31f3edf0>",
                 "object_id": 70021270861560
@@ -2704,9 +2675,8 @@
         {
             "id": 147,
             "path": "OpenSSL::Cipher#final",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e31f3edf0>",
                 "object_id": 70021270861560
@@ -2722,7 +2692,7 @@
             "elapsed": 0.000006622,
             "parent_id": 147,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "____B_\f________J",
                 "object_id": 70021270857120
@@ -2758,7 +2728,7 @@
             "event": "call",
             "lineno": 26,
             "static": true,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Module",
                 "value": "ActiveSupport::SecurityUtils",
                 "object_id": 47346414723160
@@ -2786,9 +2756,8 @@
         {
             "id": 151,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021270984740
@@ -2812,7 +2781,7 @@
             "elapsed": 0.000011774,
             "parent_id": 151,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
                 "object_id": 70021270982840
@@ -2821,9 +2790,8 @@
         {
             "id": 153,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021270982420
@@ -2847,7 +2815,7 @@
             "elapsed": 0.000007635,
             "parent_id": 153,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
                 "object_id": 70021270980820
@@ -2859,7 +2827,7 @@
             "elapsed": 0.000343837,
             "parent_id": 150,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "TrueClass",
                 "value": "true",
                 "object_id": 20
@@ -2868,9 +2836,8 @@
         {
             "id": 156,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x00007f5e31f78aa0>",
                 "object_id": 70021270979920
@@ -2902,7 +2869,7 @@
             "event": "call",
             "lineno": 26,
             "static": true,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Module",
                 "value": "ActiveSupport::SecurityUtils",
                 "object_id": 47346414723160
@@ -2930,9 +2897,8 @@
         {
             "id": 159,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021271024300
@@ -2956,7 +2922,7 @@
             "elapsed": 0.000007692,
             "parent_id": 159,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
                 "object_id": 70021271021760
@@ -2965,9 +2931,8 @@
         {
             "id": 161,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021271020780
@@ -2991,7 +2956,7 @@
             "elapsed": 0.000007408,
             "parent_id": 161,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
                 "object_id": 70021271032800
@@ -3003,7 +2968,7 @@
             "elapsed": 0.00015976,
             "parent_id": 158,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "TrueClass",
                 "value": "true",
                 "object_id": 20
@@ -3012,9 +2977,8 @@
         {
             "id": 164,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x00007f5e31f91960>",
                 "object_id": 70021271030960
@@ -3046,7 +3010,7 @@
             "event": "call",
             "lineno": 26,
             "static": true,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Module",
                 "value": "ActiveSupport::SecurityUtils",
                 "object_id": 47346414723160
@@ -3074,9 +3038,8 @@
         {
             "id": 167,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021271088520
@@ -3100,7 +3063,7 @@
             "elapsed": 0.000008324,
             "parent_id": 167,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "l_l0?_f_qXt__%\t_\u0010\f_____0}o]T_X#_",
                 "object_id": 70021271086820
@@ -3109,9 +3072,8 @@
         {
             "id": 169,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021271086280
@@ -3135,7 +3097,7 @@
             "elapsed": 0.000007943,
             "parent_id": 169,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "l_l0?_f_qXt__%\t_\u0010\f_____0}o]T_X#_",
                 "object_id": 70021271099960
@@ -3147,7 +3109,7 @@
             "elapsed": 0.000180377,
             "parent_id": 166,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "TrueClass",
                 "value": "true",
                 "object_id": 20
@@ -3156,9 +3118,8 @@
         {
             "id": 172,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x00007f5e31fb2a48>",
                 "object_id": 70021271098660
@@ -3187,9 +3148,8 @@
         {
             "id": 174,
             "path": "OpenSSL::Cipher#decrypt",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e31fbdba0>",
                 "object_id": 70021271121360
@@ -3213,7 +3173,7 @@
             "elapsed": 0.000007062,
             "parent_id": 174,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e31fbdba0>",
                 "object_id": 70021271121360
@@ -3222,9 +3182,8 @@
         {
             "id": 176,
             "path": "OpenSSL::Cipher#final",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e31fbdba0>",
                 "object_id": 70021271121360
@@ -3240,7 +3199,7 @@
             "elapsed": 0.00000632,
             "parent_id": 176,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "XLA0=\u0006;␀F",
                 "object_id": 70021271132320
@@ -3249,9 +3208,8 @@
         {
             "id": 178,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x00007f5e31fc2cb8>",
                 "object_id": 70021271131740
@@ -3283,7 +3241,7 @@
             "event": "call",
             "lineno": 26,
             "static": true,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Module",
                 "value": "ActiveSupport::SecurityUtils",
                 "object_id": 47346414723160
@@ -3311,9 +3269,8 @@
         {
             "id": 181,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021271169940
@@ -3337,7 +3294,7 @@
             "elapsed": 0.000008773,
             "parent_id": 181,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "l_l0?_f_qXt__%\t_\u0010\f_____0}o]T_X#_",
                 "object_id": 70021271167480
@@ -3346,9 +3303,8 @@
         {
             "id": 183,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 70021271183320
@@ -3372,7 +3328,7 @@
             "elapsed": 0.000007861,
             "parent_id": 183,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "l_l0?_f_qXt__%\t_\u0010\f_____0}o]T_X#_",
                 "object_id": 70021271181380
@@ -3384,7 +3340,7 @@
             "elapsed": 0.000177567,
             "parent_id": 180,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "TrueClass",
                 "value": "true",
                 "object_id": 20
@@ -3393,9 +3349,8 @@
         {
             "id": 186,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x00007f5e31fda728>",
                 "object_id": 70021271180180
@@ -3424,9 +3379,8 @@
         {
             "id": 188,
             "path": "OpenSSL::Cipher#decrypt",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e31fdccd0>",
                 "object_id": 70021271185000
@@ -3450,7 +3404,7 @@
             "elapsed": 0.000007322,
             "parent_id": 188,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e31fdccd0>",
                 "object_id": 70021271185000
@@ -3459,9 +3413,8 @@
         {
             "id": 190,
             "path": "OpenSSL::Cipher#final",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x00007f5e31fdccd0>",
                 "object_id": 70021271185000
@@ -3477,7 +3430,7 @@
             "elapsed": 0.000006515,
             "parent_id": 190,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "XLA0=\u0006;␀F",
                 "object_id": 70021271205760
@@ -3486,9 +3439,8 @@
         {
             "id": 192,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x00007f5e31fe6500>",
                 "object_id": 70021271204480
@@ -3520,7 +3472,7 @@
             "event": "call",
             "lineno": 16,
             "static": false,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Spree::Admin::OrdersController",
                 "value": "#<Spree::Admin::OrdersController:0x00007f5e31f6cf70>",
                 "object_id": 70021270955960
@@ -3543,8 +3495,8 @@
             "event": "call",
             "lineno": 142,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -3567,7 +3519,7 @@
             "elapsed": 0.000015895,
             "parent_id": 196,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "full-width",
                 "object_id": 70021271352140
@@ -3579,8 +3531,8 @@
             "event": "call",
             "lineno": 11,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -3597,8 +3549,7 @@
                 {
                     "kind": "block",
                     "name": "block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -3610,8 +3561,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -3626,7 +3577,7 @@
             "elapsed": 0.000015664,
             "parent_id": 199,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[]",
                 "object_id": 70021271357920
@@ -3740,8 +3691,8 @@
             "event": "call",
             "lineno": 100,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -3771,8 +3722,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -3816,7 +3767,7 @@
             "elapsed": 0.000073435,
             "parent_id": 213,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a title=\"Edit\" data-action=\"edit\" class=\"fa fa-edit icon_link with-tip no-text\" href=\"/admin/orders",
                 "object_id": 47346496002200
@@ -3828,7 +3779,7 @@
             "elapsed": 0.004386412,
             "parent_id": 212,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a title=\"Edit\" data-action=\"edit\" class=\"fa fa-edit icon_link with-tip no-text\" href=\"/admin/orders",
                 "object_id": 47346496002200
@@ -3840,8 +3791,8 @@
             "event": "call",
             "lineno": 30,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -3856,8 +3807,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -3872,7 +3823,7 @@
             "elapsed": 0.000016649,
             "parent_id": 217,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"Orders\"]",
                 "object_id": 70021271357920
@@ -3884,8 +3835,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -3900,7 +3851,7 @@
             "elapsed": 0.000014851,
             "parent_id": 219,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"Orders\"]",
                 "object_id": 70021271357920
@@ -3912,7 +3863,7 @@
             "elapsed": 0.008634321,
             "parent_id": 216,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "Orders",
                 "object_id": 47346496099220
@@ -3921,9 +3872,8 @@
         {
             "id": 222,
             "path": "JSON::Ext::Generator::State#generate",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Generator::State",
                 "value": "#<JSON::Ext::Generator::State:0x0000561f6ccc69d8>",
                 "object_id": 47346484655340
@@ -3947,7 +3897,7 @@
             "elapsed": 0.002593347,
             "parent_id": 222,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "{\"abbreviation\":\"Abbreviation\",\"accept\":\"Accept\",\"acceptance_errors\":\"Acceptance errors\",\"acceptance",
                 "object_id": 70021355441460
@@ -3956,9 +3906,8 @@
         {
             "id": 224,
             "path": "JSON::Ext::Generator::State#generate",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Generator::State",
                 "value": "#<JSON::Ext::Generator::State:0x00007f5e3c100080>",
                 "object_id": 70021355667520
@@ -3982,7 +3931,7 @@
             "elapsed": 0.000246938,
             "parent_id": 224,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "{\"USD\":[\"$\",2,\"%s%v\"],\"EUR\":[\"€\",2,\"%s%v\"],\"GBP\":[\"£\",2,\"%s%v\"],\"AUD\":[\"$\",2,\"%s%v\"],\"CAD\":[\"$\",2,\"%",
                 "object_id": 70021355940620
@@ -3994,7 +3943,7 @@
             "event": "call",
             "lineno": 92,
             "static": false,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Spree::BackendConfiguration",
                 "value": "#<Spree::BackendConfiguration:0x0000561f6679cc88>",
                 "object_id": 47346431616580
@@ -4010,7 +3959,7 @@
             "elapsed": 0.000008185,
             "parent_id": 226,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[#<Spree::BackendConfiguration::MenuItem:0x0000561f7177c2c0 @condition=#<Proc:0x0000561f7177c310@/ho",
                 "object_id": 47346523864000
@@ -4022,8 +3971,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4053,8 +4002,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4085,8 +4034,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -4098,7 +4046,7 @@
             "elapsed": 0.000066067,
             "parent_id": 229,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-shopping-cart icon_link with-tip\" href=\"/admin/orders\"><span class=\"text\">Orders</sp",
                 "object_id": 70021356230300
@@ -4110,7 +4058,7 @@
             "elapsed": 0.004543149,
             "parent_id": 228,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon selected\"><a class=\"fa fa-shopping-cart icon_link with-tip\" href=\"/admin/or",
                 "object_id": 70021356227980
@@ -4122,8 +4070,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4153,8 +4101,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4185,8 +4133,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -4198,7 +4145,7 @@
             "elapsed": 0.000064233,
             "parent_id": 233,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-th-large icon_link with-tip\" href=\"/admin/products\"><span class=\"text\">Products</spa",
                 "object_id": 70021356340680
@@ -4210,8 +4157,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4241,7 +4188,7 @@
             "elapsed": 0.000292246,
             "parent_id": 235,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/products\">Products</a></li>",
                 "object_id": 70021356408820
@@ -4253,8 +4200,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4284,7 +4231,7 @@
             "elapsed": 0.000296513,
             "parent_id": 237,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/option_types\">Option Types</a></li>",
                 "object_id": 70021356474960
@@ -4296,8 +4243,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4314,8 +4261,7 @@
                 {
                     "kind": "block",
                     "name": "_block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -4327,7 +4273,7 @@
             "elapsed": 0.000215495,
             "parent_id": 239,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/properties\">Property Types</a></li>",
                 "object_id": 70021356565960
@@ -4339,8 +4285,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4357,8 +4303,7 @@
                 {
                     "kind": "block",
                     "name": "_block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -4370,7 +4315,7 @@
             "elapsed": 0.000211615,
             "parent_id": 241,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/taxonomies\">Taxonomies</a></li>",
                 "object_id": 70021356634680
@@ -4382,8 +4327,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4413,7 +4358,7 @@
             "elapsed": 0.000277217,
             "parent_id": 243,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/taxons\">Display Order</a></li>",
                 "object_id": 70021356704080
@@ -4425,7 +4370,7 @@
             "elapsed": 0.027172498,
             "parent_id": 232,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-th-large icon_link with-tip\" href=\"/admin/products\"><span ",
                 "object_id": 70021356701980
@@ -4437,8 +4382,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4468,8 +4413,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4500,8 +4445,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -4513,7 +4457,7 @@
             "elapsed": 0.000064913,
             "parent_id": 247,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-bullhorn icon_link with-tip\" href=\"/admin/promotions\"><span class=\"text\">Promotions<",
                 "object_id": 47346491063180
@@ -4525,8 +4469,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4543,8 +4487,7 @@
                 {
                     "kind": "block",
                     "name": "_block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -4556,7 +4499,7 @@
             "elapsed": 0.000212728,
             "parent_id": 249,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/promotions\">Promotions</a></li>",
                 "object_id": 47346484439920
@@ -4568,8 +4511,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4586,8 +4529,7 @@
                 {
                     "kind": "block",
                     "name": "_block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -4599,7 +4541,7 @@
             "elapsed": 0.00022259,
             "parent_id": 251,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/promotion_categories\">Promotion Categories</a></li>",
                 "object_id": 47346486385620
@@ -4611,7 +4553,7 @@
             "elapsed": 0.013118631,
             "parent_id": 246,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-bullhorn icon_link with-tip\" href=\"/admin/promotions\"><spa",
                 "object_id": 47346486383100
@@ -4623,8 +4565,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4654,8 +4596,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4686,8 +4628,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -4699,7 +4640,7 @@
             "elapsed": 0.00006752,
             "parent_id": 255,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-cubes icon_link with-tip\" href=\"/admin/stock_items\"><span class=\"text\">Stock</span><",
                 "object_id": 47346496248700
@@ -4711,7 +4652,7 @@
             "elapsed": 0.00455433,
             "parent_id": 254,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-cubes icon_link with-tip\" href=\"/admin/stock_items\"><span ",
                 "object_id": 47346496243220
@@ -4723,8 +4664,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4754,8 +4695,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4786,8 +4727,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -4799,7 +4739,7 @@
             "elapsed": 0.000066058,
             "parent_id": 259,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-user icon_link with-tip\" href=\"/admin/users\"><span class=\"text\">Users</span></a>",
                 "object_id": 47346487257080
@@ -4811,7 +4751,7 @@
             "elapsed": 0.004105341,
             "parent_id": 258,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-user icon_link with-tip\" href=\"/admin/users\"><span class=\"",
                 "object_id": 47346487255940
@@ -4823,8 +4763,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4854,8 +4794,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4886,8 +4826,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -4899,7 +4838,7 @@
             "elapsed": 0.000066745,
             "parent_id": 263,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-wrench icon_link with-tip\" href=\"/admin/stores\"><span class=\"text\">Settings</span></",
                 "object_id": 47346485711960
@@ -4911,8 +4850,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4942,7 +4881,7 @@
             "elapsed": 0.000118087,
             "parent_id": 265,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/stores\">Stores</a></li>",
                 "object_id": 47346485723780
@@ -4954,8 +4893,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -4985,7 +4924,7 @@
             "elapsed": 0.000115641,
             "parent_id": 267,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/payment_methods\">Payments</a></li>",
                 "object_id": 47346488413640
@@ -4997,8 +4936,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -5028,7 +4967,7 @@
             "elapsed": 0.000112665,
             "parent_id": 269,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/tax_categories\">Taxes</a></li>",
                 "object_id": 47346488419720
@@ -5040,8 +4979,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -5071,7 +5010,7 @@
             "elapsed": 0.000117494,
             "parent_id": 271,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/refund_reasons\">Refunds and Returns</a></li>",
                 "object_id": 47346496655100
@@ -5083,8 +5022,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -5114,7 +5053,7 @@
             "elapsed": 0.000111225,
             "parent_id": 273,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/shipping_methods\">Shipping</a></li>",
                 "object_id": 47346487139920
@@ -5126,8 +5065,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -5157,7 +5096,7 @@
             "elapsed": 0.000110025,
             "parent_id": 275,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/zones\">Zones</a></li>",
                 "object_id": 47346487155260
@@ -5169,7 +5108,7 @@
             "elapsed": 0.031601994,
             "parent_id": 262,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-wrench icon_link with-tip\" href=\"/admin/stores\"><span clas",
                 "object_id": 47346487152960
@@ -5181,8 +5120,8 @@
             "event": "call",
             "lineno": 17,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -5197,8 +5136,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -5213,7 +5152,7 @@
             "elapsed": 0.000015767,
             "parent_id": 279,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"Orders\"]",
                 "object_id": 70021271357920
@@ -5225,8 +5164,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
                 "object_id": 70021271331140
             },
@@ -5241,7 +5180,7 @@
             "elapsed": 0.000015989,
             "parent_id": 281,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"Orders\"]",
                 "object_id": 70021271357920
@@ -5253,7 +5192,7 @@
             "elapsed": 0.008559907,
             "parent_id": 278,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<ol class=\"breadcrumb\"><li class=\"breadcrumb-item active\">Orders</li></ol>",
                 "object_id": 47346483128080
@@ -5266,16 +5205,15 @@
             "parent_id": 149,
             "thread_id": 47346401950060,
             "http_server_response": {
-                "status": 200,
+                "status_code": 200,
                 "mime_type": "text/html; charset=utf-8"
             }
         },
         {
             "id": 285,
             "path": "OpenSSL::Cipher#encrypt",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x0000561f6cd71338>",
                 "object_id": 47346485004700
@@ -5299,7 +5237,7 @@
             "elapsed": 0.000008024,
             "parent_id": 285,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x0000561f6cd71338>",
                 "object_id": 47346485004700
@@ -5308,9 +5246,8 @@
         {
             "id": 287,
             "path": "OpenSSL::Cipher#final",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x0000561f6cd71338>",
                 "object_id": 47346485004700
@@ -5326,7 +5263,7 @@
             "elapsed": 0.000006717,
             "parent_id": 287,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "___:\u000e_}_______f(",
                 "object_id": 47346485015320
@@ -5368,7 +5305,7 @@
             "event": "call",
             "lineno": 26,
             "static": true,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Module",
                 "value": "ActiveSupport::SecurityUtils",
                 "object_id": 47346414723160
@@ -5396,9 +5333,8 @@
         {
             "id": 291,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 47346494317540
@@ -5422,7 +5358,7 @@
             "elapsed": 0.000011544,
             "parent_id": 291,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
                 "object_id": 47346494329440
@@ -5431,9 +5367,8 @@
         {
             "id": 293,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 47346494328120
@@ -5457,7 +5392,7 @@
             "elapsed": 0.000008663,
             "parent_id": 293,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
                 "object_id": 47346495446820
@@ -5469,7 +5404,7 @@
             "elapsed": 0.000224741,
             "parent_id": 290,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "TrueClass",
                 "value": "true",
                 "object_id": 20
@@ -5478,9 +5413,8 @@
         {
             "id": 296,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x0000561f6e15ade0>",
                 "object_id": 47346495444720
@@ -5512,7 +5446,7 @@
             "event": "call",
             "lineno": 26,
             "static": true,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Module",
                 "value": "ActiveSupport::SecurityUtils",
                 "object_id": 47346414723160
@@ -5540,9 +5474,8 @@
         {
             "id": 299,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 47346493245820
@@ -5566,7 +5499,7 @@
             "elapsed": 0.000009827,
             "parent_id": 299,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
                 "object_id": 47346493275320
@@ -5575,9 +5508,8 @@
         {
             "id": 301,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 47346493273020
@@ -5601,7 +5533,7 @@
             "elapsed": 0.000009225,
             "parent_id": 301,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
                 "object_id": 47346488057540
@@ -5613,7 +5545,7 @@
             "elapsed": 0.000214255,
             "parent_id": 298,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "TrueClass",
                 "value": "true",
                 "object_id": 20
@@ -5622,9 +5554,8 @@
         {
             "id": 304,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x0000561f6d341c18>",
                 "object_id": 47346488053260
@@ -5656,7 +5587,7 @@
             "event": "call",
             "lineno": 26,
             "static": true,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Module",
                 "value": "ActiveSupport::SecurityUtils",
                 "object_id": 47346414723160
@@ -5684,9 +5615,8 @@
         {
             "id": 307,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 47346496830180
@@ -5710,7 +5640,7 @@
             "elapsed": 0.000009528,
             "parent_id": 307,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "___i\u001d_T__'\u0003\u0018P_\u0015_vA__a[Mf`_tF_\b__",
                 "object_id": 47346496826740
@@ -5719,9 +5649,8 @@
         {
             "id": 309,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 47346496825840
@@ -5745,7 +5674,7 @@
             "elapsed": 0.00000822,
             "parent_id": 309,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "___i\u001d_T__'\u0003\u0018P_\u0015_vA__a[Mf`_tF_\b__",
                 "object_id": 47346496823500
@@ -5757,7 +5686,7 @@
             "elapsed": 0.000191976,
             "parent_id": 306,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "TrueClass",
                 "value": "true",
                 "object_id": 20
@@ -5766,9 +5695,8 @@
         {
             "id": 312,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x0000561f6e403650>",
                 "object_id": 47346496838440
@@ -5797,9 +5725,8 @@
         {
             "id": 314,
             "path": "OpenSSL::Cipher#decrypt",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x0000561f6e408c40>",
                 "object_id": 47346496849440
@@ -5823,7 +5750,7 @@
             "elapsed": 0.000007253,
             "parent_id": 314,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x0000561f6e408c40>",
                 "object_id": 47346496849440
@@ -5832,9 +5759,8 @@
         {
             "id": 316,
             "path": "OpenSSL::Cipher#final",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x0000561f6e408c40>",
                 "object_id": 47346496849440
@@ -5850,7 +5776,7 @@
             "elapsed": 0.000007189,
             "parent_id": 316,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "XLA0=\u0006;␀F",
                 "object_id": 47346496860180
@@ -5859,9 +5785,8 @@
         {
             "id": 318,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x0000561f6e40dbc8>",
                 "object_id": 47346496859620
@@ -5893,7 +5818,7 @@
             "event": "call",
             "lineno": 26,
             "static": true,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Module",
                 "value": "ActiveSupport::SecurityUtils",
                 "object_id": 47346414723160
@@ -5921,9 +5846,8 @@
         {
             "id": 321,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 47346487979240
@@ -5947,7 +5871,7 @@
             "elapsed": 0.000008737,
             "parent_id": 321,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "___i\u001d_T__'\u0003\u0018P_\u0015_vA__a[Mf`_tF_\b__",
                 "object_id": 47346487977040
@@ -5956,9 +5880,8 @@
         {
             "id": 323,
             "path": "Digest::Instance#digest",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Digest::SHA256",
                 "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "object_id": 47346487976460
@@ -5982,7 +5905,7 @@
             "elapsed": 0.000008706,
             "parent_id": 323,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "___i\u001d_T__'\u0003\u0018P_\u0015_vA__a[Mf`_tF_\b__",
                 "object_id": 47346487990040
@@ -5994,7 +5917,7 @@
             "elapsed": 0.000186834,
             "parent_id": 320,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "TrueClass",
                 "value": "true",
                 "object_id": 20
@@ -6003,9 +5926,8 @@
         {
             "id": 326,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x0000561f6d3223e0>",
                 "object_id": 47346487988720
@@ -6034,9 +5956,8 @@
         {
             "id": 328,
             "path": "OpenSSL::Cipher#decrypt",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x0000561f6d32f7c0>",
                 "object_id": 47346488015840
@@ -6060,7 +5981,7 @@
             "elapsed": 0.000008009,
             "parent_id": 328,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x0000561f6d32f7c0>",
                 "object_id": 47346488015840
@@ -6069,9 +5990,8 @@
         {
             "id": 330,
             "path": "OpenSSL::Cipher#final",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x0000561f6d32f7c0>",
                 "object_id": 47346488015840
@@ -6087,7 +6007,7 @@
             "elapsed": 0.000007294,
             "parent_id": 330,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "XLA0=\u0006;␀F",
                 "object_id": 47346488253860
@@ -6096,9 +6016,8 @@
         {
             "id": 332,
             "path": "JSON::Ext::Parser#parse",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Parser",
                 "value": "#<JSON::Ext::Parser:0x0000561f6d3a3350>",
                 "object_id": 47346488252840
@@ -6168,7 +6087,7 @@
             "event": "call",
             "lineno": 72,
             "static": false,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Spree::Admin::OrdersController",
                 "value": "#<Spree::Admin::OrdersController:0x0000561f6df42ad0>",
                 "object_id": 47346494346600
@@ -6210,8 +6129,8 @@
             "event": "call",
             "lineno": 7,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -6226,7 +6145,7 @@
             "elapsed": 0.001373049,
             "parent_id": 342,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<form class=\"button_to\" method=\"post\" action=\"/admin/orders/R100/approve\"><input type=\"hidden\" name=",
                 "object_id": 47346524770160
@@ -6238,8 +6157,8 @@
             "event": "call",
             "lineno": 11,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -6256,8 +6175,7 @@
                 {
                     "kind": "block",
                     "name": "block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -6269,8 +6187,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -6285,7 +6203,7 @@
             "elapsed": 0.00001489,
             "parent_id": 345,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[]",
                 "object_id": 47346524874080
@@ -6304,8 +6222,8 @@
             "event": "call",
             "lineno": 11,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -6322,8 +6240,7 @@
                 {
                     "kind": "block",
                     "name": "block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -6335,8 +6252,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -6351,7 +6268,7 @@
             "elapsed": 0.000016225,
             "parent_id": 349,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\"]",
                 "object_id": 47346524874080
@@ -6446,8 +6363,8 @@
             "event": "call",
             "lineno": 11,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -6464,8 +6381,7 @@
                 {
                     "kind": "block",
                     "name": "block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -6477,8 +6393,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -6493,7 +6409,7 @@
             "elapsed": 0.00001717,
             "parent_id": 361,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\"]",
                 "object_id": 47346524874080
@@ -6778,8 +6694,8 @@
             "event": "call",
             "lineno": 18,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -6809,7 +6725,7 @@
             "elapsed": 0.000091446,
             "parent_id": 392,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Spree::Money",
                 "value": "$10.00",
                 "object_id": 70021259963220
@@ -6818,9 +6734,8 @@
         {
             "id": 394,
             "path": "JSON::Ext::Generator::State#generate",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Generator::State",
                 "value": "#<JSON::Ext::Generator::State:0x00007f5e30a89f90>",
                 "object_id": 70021260005320
@@ -6844,7 +6759,7 @@
             "elapsed": 0.000010955,
             "parent_id": 394,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "1",
                 "object_id": 70021260002840
@@ -6853,9 +6768,8 @@
         {
             "id": 396,
             "path": "JSON::Ext::Generator::State#generate",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Generator::State",
                 "value": "#<JSON::Ext::Generator::State:0x00007f5e30ab3598>",
                 "object_id": 70021260090060
@@ -6879,7 +6793,7 @@
             "elapsed": 0.000009802,
             "parent_id": 396,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "1",
                 "object_id": 70021260088400
@@ -7078,9 +6992,8 @@
         {
             "id": 418,
             "path": "JSON::Ext::Generator::State#generate",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Generator::State",
                 "value": "#<JSON::Ext::Generator::State:0x0000561f67090448>",
                 "object_id": 47346436309540
@@ -7104,7 +7017,7 @@
             "elapsed": 0.00017253,
             "parent_id": 418,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "{\"id\":1,\"tracking\":\"U10000\",\"number\":\"H28253457438\",\"state\":\"ready\",\"stock_location_id\":1,\"inventory",
                 "object_id": 47346436498040
@@ -7116,8 +7029,8 @@
             "event": "call",
             "lineno": 30,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7132,8 +7045,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7148,7 +7061,7 @@
             "elapsed": 0.00001757,
             "parent_id": 421,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\", \"Shipments",
                 "object_id": 47346524874080
@@ -7160,8 +7073,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7176,7 +7089,7 @@
             "elapsed": 0.000016758,
             "parent_id": 423,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\", \"Shipments",
                 "object_id": 47346524874080
@@ -7188,7 +7101,7 @@
             "elapsed": 0.0094841,
             "parent_id": 420,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "Shipments - #R100 - Orders",
                 "object_id": 47346436822620
@@ -7197,9 +7110,8 @@
         {
             "id": 426,
             "path": "JSON::Ext::Generator::State#generate",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Generator::State",
                 "value": "#<JSON::Ext::Generator::State:0x0000561f673d6378>",
                 "object_id": 47346438025660
@@ -7223,7 +7135,7 @@
             "elapsed": 0.002839058,
             "parent_id": 426,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "{\"abbreviation\":\"Abbreviation\",\"accept\":\"Accept\",\"acceptance_errors\":\"Acceptance errors\",\"acceptance",
                 "object_id": 47346469116940
@@ -7232,9 +7144,8 @@
         {
             "id": 428,
             "path": "JSON::Ext::Generator::State#generate",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "JSON::Ext::Generator::State",
                 "value": "#<JSON::Ext::Generator::State:0x0000561f6b359298>",
                 "object_id": 47346471323980
@@ -7258,7 +7169,7 @@
             "elapsed": 0.000277979,
             "parent_id": 428,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "{\"USD\":[\"$\",2,\"%s%v\"],\"EUR\":[\"€\",2,\"%s%v\"],\"GBP\":[\"£\",2,\"%s%v\"],\"AUD\":[\"$\",2,\"%s%v\"],\"CAD\":[\"$\",2,\"%",
                 "object_id": 47346471870300
@@ -7270,7 +7181,7 @@
             "event": "call",
             "lineno": 92,
             "static": false,
-            "receiver": {
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "Spree::BackendConfiguration",
                 "value": "#<Spree::BackendConfiguration:0x0000561f6679cc88>",
                 "object_id": 47346431616580
@@ -7286,7 +7197,7 @@
             "elapsed": 0.000008276,
             "parent_id": 430,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[#<Spree::BackendConfiguration::MenuItem:0x0000561f7177c2c0 @condition=#<Proc:0x0000561f7177c310@/ho",
                 "object_id": 47346523864000
@@ -7298,8 +7209,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7329,8 +7240,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7361,8 +7272,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -7374,7 +7284,7 @@
             "elapsed": 0.000072683,
             "parent_id": 433,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-shopping-cart icon_link with-tip\" href=\"/admin/orders\"><span class=\"text\">Orders</sp",
                 "object_id": 47346472253400
@@ -7386,7 +7296,7 @@
             "elapsed": 0.004586647,
             "parent_id": 432,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon selected\"><a class=\"fa fa-shopping-cart icon_link with-tip\" href=\"/admin/or",
                 "object_id": 47346472287640
@@ -7398,8 +7308,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7429,8 +7339,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7461,8 +7371,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -7474,7 +7383,7 @@
             "elapsed": 0.000072531,
             "parent_id": 437,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-th-large icon_link with-tip\" href=\"/admin/products\"><span class=\"text\">Products</spa",
                 "object_id": 47346472358860
@@ -7486,8 +7395,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7517,7 +7426,7 @@
             "elapsed": 0.000310289,
             "parent_id": 439,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/products\">Products</a></li>",
                 "object_id": 47346472430940
@@ -7529,8 +7438,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7560,7 +7469,7 @@
             "elapsed": 0.000280364,
             "parent_id": 441,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/option_types\">Option Types</a></li>",
                 "object_id": 47346472508260
@@ -7572,8 +7481,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7590,8 +7499,7 @@
                 {
                     "kind": "block",
                     "name": "_block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -7603,7 +7511,7 @@
             "elapsed": 0.000222056,
             "parent_id": 443,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/properties\">Property Types</a></li>",
                 "object_id": 47346472550860
@@ -7615,8 +7523,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7633,8 +7541,7 @@
                 {
                     "kind": "block",
                     "name": "_block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -7646,7 +7553,7 @@
             "elapsed": 0.000209285,
             "parent_id": 445,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/taxonomies\">Taxonomies</a></li>",
                 "object_id": 47346472672060
@@ -7658,8 +7565,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7689,7 +7596,7 @@
             "elapsed": 0.000281651,
             "parent_id": 447,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/taxons\">Display Order</a></li>",
                 "object_id": 47346472695400
@@ -7701,7 +7608,7 @@
             "elapsed": 0.026519744,
             "parent_id": 436,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-th-large icon_link with-tip\" href=\"/admin/products\"><span ",
                 "object_id": 47346472704440
@@ -7713,8 +7620,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7744,8 +7651,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7776,8 +7683,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -7789,7 +7695,7 @@
             "elapsed": 0.000085273,
             "parent_id": 451,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-bullhorn icon_link with-tip\" href=\"/admin/promotions\"><span class=\"text\">Promotions<",
                 "object_id": 47346473087900
@@ -7801,8 +7707,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7819,8 +7725,7 @@
                 {
                     "kind": "block",
                     "name": "_block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -7832,7 +7737,7 @@
             "elapsed": 0.000228792,
             "parent_id": 453,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/promotions\">Promotions</a></li>",
                 "object_id": 47346473164640
@@ -7844,8 +7749,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7862,8 +7767,7 @@
                 {
                     "kind": "block",
                     "name": "_block",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -7875,7 +7779,7 @@
             "elapsed": 0.000214074,
             "parent_id": 455,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/promotion_categories\">Promotion Categories</a></li>",
                 "object_id": 47346473221560
@@ -7887,7 +7791,7 @@
             "elapsed": 0.013161322,
             "parent_id": 450,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-bullhorn icon_link with-tip\" href=\"/admin/promotions\"><spa",
                 "object_id": 47346473218540
@@ -7899,8 +7803,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7930,8 +7834,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -7962,8 +7866,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -7975,7 +7878,7 @@
             "elapsed": 0.000067267,
             "parent_id": 459,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-cubes icon_link with-tip\" href=\"/admin/stock_items\"><span class=\"text\">Stock</span><",
                 "object_id": 47346473284460
@@ -7987,7 +7890,7 @@
             "elapsed": 0.004247836,
             "parent_id": 458,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-cubes icon_link with-tip\" href=\"/admin/stock_items\"><span ",
                 "object_id": 47346473291620
@@ -7999,8 +7902,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8030,8 +7933,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8062,8 +7965,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -8075,7 +7977,7 @@
             "elapsed": 0.00006535,
             "parent_id": 463,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-user icon_link with-tip\" href=\"/admin/users\"><span class=\"text\">Users</span></a>",
                 "object_id": 47346473514200
@@ -8087,7 +7989,7 @@
             "elapsed": 0.004251123,
             "parent_id": 462,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-user icon_link with-tip\" href=\"/admin/users\"><span class=\"",
                 "object_id": 47346473509620
@@ -8099,8 +8001,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8130,8 +8032,8 @@
             "event": "call",
             "lineno": 114,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8162,8 +8064,7 @@
                 {
                     "kind": "opt",
                     "name": "options",
-                    "class": "NilClass",
-                    "value": null,
+                    "class": "NilClass", "value": "APPMAP_VALIDATE",
                     "object_id": 8
                 }
             ],
@@ -8175,7 +8076,7 @@
             "elapsed": 0.000066783,
             "parent_id": 467,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<a class=\"fa fa-wrench icon_link with-tip\" href=\"/admin/stores\"><span class=\"text\">Settings</span></",
                 "object_id": 47346473614620
@@ -8187,8 +8088,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8218,7 +8119,7 @@
             "elapsed": 0.000115117,
             "parent_id": 469,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/stores\">Stores</a></li>",
                 "object_id": 47346473649320
@@ -8230,8 +8131,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8261,7 +8162,7 @@
             "elapsed": 0.000116284,
             "parent_id": 471,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/payment_methods\">Payments</a></li>",
                 "object_id": 47346473704100
@@ -8273,8 +8174,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8304,7 +8205,7 @@
             "elapsed": 0.000113105,
             "parent_id": 473,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/tax_categories\">Taxes</a></li>",
                 "object_id": 47346473752500
@@ -8316,8 +8217,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8347,7 +8248,7 @@
             "elapsed": 0.000122794,
             "parent_id": 475,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/refund_reasons\">Refunds and Returns</a></li>",
                 "object_id": 47346473798420
@@ -8359,8 +8260,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8390,7 +8291,7 @@
             "elapsed": 0.00011603,
             "parent_id": 477,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/shipping_methods\">Shipping</a></li>",
                 "object_id": 47346473876100
@@ -8402,8 +8303,8 @@
             "event": "call",
             "lineno": 47,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8433,7 +8334,7 @@
             "elapsed": 0.000110535,
             "parent_id": 479,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"\"><a href=\"/admin/zones\">Zones</a></li>",
                 "object_id": 47346473919640
@@ -8445,7 +8346,7 @@
             "elapsed": 0.031629203,
             "parent_id": 466,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<li class=\"tab-with-icon\"><a class=\"fa fa-wrench icon_link with-tip\" href=\"/admin/stores\"><span clas",
                 "object_id": 47346473939980
@@ -8457,8 +8358,8 @@
             "event": "call",
             "lineno": 17,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8473,8 +8374,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8489,7 +8390,7 @@
             "elapsed": 0.000015853,
             "parent_id": 483,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\", \"Shipments",
                 "object_id": 47346524874080
@@ -8501,8 +8402,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8517,7 +8418,7 @@
             "elapsed": 0.000015865,
             "parent_id": 485,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\", \"Shipments",
                 "object_id": 47346524874080
@@ -8529,8 +8430,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8545,7 +8446,7 @@
             "elapsed": 0.000016261,
             "parent_id": 487,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\", \"Shipments",
                 "object_id": 47346524874080
@@ -8557,8 +8458,8 @@
             "event": "call",
             "lineno": 6,
             "static": false,
-            "receiver": {
-                "class": null,
+            "receiver": { "name": "APPMAP_VALIDATE",
+                "class": "APPMAP_VALIDATE",
                 "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
                 "object_id": 47346524607880
             },
@@ -8573,7 +8474,7 @@
             "elapsed": 0.000015478,
             "parent_id": 489,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "Array",
                 "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\", \"Shipments",
                 "object_id": 47346524874080
@@ -8585,7 +8486,7 @@
             "elapsed": 0.016564955,
             "parent_id": 482,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "ActiveSupport::SafeBuffer",
                 "value": "<ol class=\"breadcrumb\"><li class=\"breadcrumb-item \"><a href=\"/admin/orders\">Orders</a></li><li class",
                 "object_id": 47346474113940
@@ -8598,16 +8499,15 @@
             "parent_id": 289,
             "thread_id": 47346401950060,
             "http_server_response": {
-                "status": 200,
+                "status_code": 200,
                 "mime_type": "text/html; charset=utf-8"
             }
         },
         {
             "id": 493,
             "path": "OpenSSL::Cipher#encrypt",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x0000561f6b748430>",
                 "object_id": 47346473386520
@@ -8631,7 +8531,7 @@
             "elapsed": 0.000010205,
             "parent_id": 493,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x0000561f6b748430>",
                 "object_id": 47346473386520
@@ -8640,9 +8540,8 @@
         {
             "id": 495,
             "path": "OpenSSL::Cipher#final",
-            "event": "call",
-            "static": false,
-            "receiver": {
+            "event": "call","lineno":123,"static": false,
+            "receiver": { "name": "APPMAP_VALIDATE",
                 "class": "OpenSSL::Cipher",
                 "value": "#<OpenSSL::Cipher:0x0000561f6b748430>",
                 "object_id": 47346473386520
@@ -8658,7 +8557,7 @@
             "elapsed": 0.000008394,
             "parent_id": 495,
             "thread_id": 47346401950060,
-            "return_value": {
+            "return_value": { "name": "APPMAP_VALIDATE",
                 "class": "String",
                 "value": "_T\u0003\r(3__xr____|W",
                 "object_id": 47346474429660
@@ -8687,6 +8586,7 @@
                                             "name": "index",
                                             "type": "function",
                                             "static": false,
+                                            
                                             "location": "app/controllers/spree/admin/root_controller.rb:8"
                                         }
                                     ]
@@ -8699,12 +8599,14 @@
                                             "name": "index",
                                             "type": "function",
                                             "static": false,
+                                            
                                             "location": "app/controllers/spree/admin/orders_controller.rb:16"
                                         },
                                         {
                                             "name": "edit",
                                             "type": "function",
                                             "static": false,
+                                            
                                             "location": "app/controllers/spree/admin/orders_controller.rb:72"
                                         }
                                     ]
@@ -8735,7 +8637,8 @@
                                         "crypto"
                                     ],
                                     "static": false,
-                                    "location": "OpenSSL::Cipher#encrypt"
+                                    
+                                    "location": "OpenSSL::Cipher#encrypt:123"
                                 },
                                 {
                                     "name": "final",
@@ -8745,7 +8648,8 @@
                                         "crypto"
                                     ],
                                     "static": false,
-                                    "location": "OpenSSL::Cipher#final"
+                                    
+                                    "location": "OpenSSL::Cipher#final:123"
                                 },
                                 {
                                     "name": "decrypt",
@@ -8755,7 +8659,8 @@
                                         "crypto"
                                     ],
                                     "static": false,
-                                    "location": "OpenSSL::Cipher#decrypt"
+                                    
+                                    "location": "OpenSSL::Cipher#decrypt:123"
                                 }
                             ]
                         }
@@ -8777,7 +8682,8 @@
                                         "crypto"
                                     ],
                                     "static": false,
-                                    "location": "Digest::Instance#digest"
+                                    
+                                    "location": "Digest::Instance#digest:123"
                                 }
                             ]
                         }
@@ -8805,6 +8711,7 @@
                                         "crypto"
                                     ],
                                     "static": true,
+                                    
                                     "location": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb:26"
                                 }
                             ]
@@ -8837,7 +8744,8 @@
                                                 "json"
                                             ],
                                             "static": false,
-                                            "location": "JSON::Ext::Parser#parse"
+                                            
+                                            "location": "JSON::Ext::Parser#parse:123"
                                         }
                                     ]
                                 },
@@ -8857,7 +8765,8 @@
                                                         "json"
                                                     ],
                                                     "static": false,
-                                                    "location": "JSON::Ext::Generator::State#generate"
+                                                    
+                                                    "location": "JSON::Ext::Generator::State#generate:123"
                                                 }
                                             ]
                                         }
@@ -8889,6 +8798,7 @@
                                             "name": "admin_layout",
                                             "type": "function",
                                             "static": false,
+                                            
                                             "location": "app/helpers/spree/admin/base_helper.rb:142"
                                         }
                                     ]
@@ -8901,42 +8811,49 @@
                                             "name": "admin_breadcrumb",
                                             "type": "function",
                                             "static": false,
+                                            
                                             "location": "app/helpers/spree/admin/navigation_helper.rb:11"
                                         },
                                         {
                                             "name": "admin_breadcrumbs",
                                             "type": "function",
                                             "static": false,
+                                            
                                             "location": "app/helpers/spree/admin/navigation_helper.rb:6"
                                         },
                                         {
                                             "name": "link_to_edit_url",
                                             "type": "function",
                                             "static": false,
+                                            
                                             "location": "app/helpers/spree/admin/navigation_helper.rb:100"
                                         },
                                         {
                                             "name": "link_to_with_icon",
                                             "type": "function",
                                             "static": false,
+                                            
                                             "location": "app/helpers/spree/admin/navigation_helper.rb:114"
                                         },
                                         {
                                             "name": "admin_page_title",
                                             "type": "function",
                                             "static": false,
+                                            
                                             "location": "app/helpers/spree/admin/navigation_helper.rb:30"
                                         },
                                         {
                                             "name": "tab",
                                             "type": "function",
                                             "static": false,
+                                            
                                             "location": "app/helpers/spree/admin/navigation_helper.rb:47"
                                         },
                                         {
                                             "name": "render_admin_breadcrumbs",
                                             "type": "function",
                                             "static": false,
+                                            
                                             "location": "app/helpers/spree/admin/navigation_helper.rb:17"
                                         }
                                     ]
@@ -8949,12 +8866,14 @@
                                             "name": "event_links",
                                             "type": "function",
                                             "static": false,
+                                            
                                             "location": "app/helpers/spree/admin/orders_helper.rb:7"
                                         },
                                         {
                                             "name": "line_item_shipment_price",
                                             "type": "function",
                                             "static": false,
+                                            
                                             "location": "app/helpers/spree/admin/orders_helper.rb:18"
                                         }
                                     ]
@@ -8981,6 +8900,7 @@
                                     "name": "menu_items",
                                     "type": "function",
                                     "static": false,
+                                    
                                     "location": "lib/spree/backend_configuration.rb:92"
                                 }
                             ]
@@ -8996,7 +8916,7 @@
             "branch": "appland",
             "commit": "620695333ac6621e408f21ef86fc34ef766a674f",
             "repository": "https://github.com/land-of-apps/solidus.git",
-            "status": []
+            "status": ["APPMAP_VALIDATE"]
         },
         "name": "Cancel items when all items are not cancelable does not display the link to cancel items",
         "client": {

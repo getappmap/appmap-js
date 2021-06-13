@@ -178,9 +178,10 @@ definitions:
   function:
     type: object
     required:
+      - type
+      - name
       - location
       - static
-      - source
     properties:
       type:
         const: function
@@ -200,6 +201,7 @@ definitions:
         nullable: true
       source:
         type: string
+        nullable: true
 
   #########
   # Event #
@@ -289,7 +291,8 @@ definitions:
     type: object
     required:
       - class
-      - value
+      - message
+      - object_id
     properties:
       class:
         type: string

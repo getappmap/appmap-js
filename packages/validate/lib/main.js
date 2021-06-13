@@ -1,12 +1,15 @@
 const { readFileSync } = require("fs");
-const { parse: yaml } = require("yaml");
+const YAML = require("yaml");
 const Ajv = require("ajv");
-// const betterAjvErrors = require('better-ajv-errors');
+const { asTree } = require("treeify");
+const { structureAJVErrorArray, summarizeAJVErrorTree } = require("ajv-error-tree");
 const { getVersionMapping } = require("./version.js");
 const { AppmapError, InputError, assert, assertSuccess } = require("./assert.js");
 
-const ajv = new Ajv({ jsonPointer: true });
-
+const ajv = new Ajv({
+  verbose: true,
+});
+// jsPropertySyntax: true
 const versions = getVersionMapping();
 
 const keys = Array.from(versions.keys());
@@ -58,6 +61,8 @@ exports.InputError = InputError;
 exports.validate = (options) => {
   // Normalize options //
   options = {
+    "schema-depth": 0,
+    "instance-depth": 0,
     path: null,
     data: null,
     version: null,
@@ -101,23 +106,21 @@ exports.validate = (options) => {
   );
   // Validate against json schema //
   if (!cache.has(options.version)) {
-    const schema = yaml(readFileSync(versions.get(options.version), "utf8"));
-    cache.set(options.version, {
-      schema,
-      validate: ajv.compile(schema),
-    });
+    const schema = YAML.parse(readFileSync(versions.get(options.version), "utf8"));
+    cache.set(options.version, ajv.compile(schema));
   }
-  const { validate } = cache.get(options.version);
+  const validate = cache.get(options.version);
   if (!validate(options.data)) {
-    throw new AppmapError(JSON.stringify(validate.errors, null, 2));
-    // throw new AppmapError(betterAjvErrors(schema, options.data, validate.errors));
+    const tree1 = structureAJVErrorArray(validate.errors);
+    const tree2 = summarizeAJVErrorTree(tree1, options);
+    let message;
+    if (options["schema-depth"] === 0 && options["instance-depth"] === 0) {
+      message = typeof tree2 === "string" ? tree2 : asTree(tree2, true);
+    } else {
+      message = YAML.stringify(tree2);
+    }
+    throw new AppmapError(message, { list: validate.errors, tree: tree1 });
   }
-  // assert(
-  //   validate(options.data),
-  //   AppmapError,
-  //   "appmap failed schema validation >> %o",
-  //   validate.errors
-  // );
   const events = options.data.events;
   // Verify the unicity of code object //
   const designators = new Set();
@@ -128,28 +131,31 @@ exports.validate = (options) => {
         Error,
         "this appmap should not have passed ajv (function code objects should not appear at the top-level)"
       );
-      const [, path2, lineno] = /^([\s\S]*):([0-9]+)$/.exec(entity.location);
-      assert(
-        path1.startsWith(path2),
-        AppmapError,
-        "path should be a prefix of %o for function code object %o",
-        path1,
-        entity
-      );
-      const designator = makeDesignator([
-        path2,
-        parseInt(lineno),
-        parent.name,
-        entity.static,
-        entity.name,
-      ]);
-      assert(
-        !designators.has(designator),
-        AppmapError,
-        "detected a function code object clash in the classMap: %o",
-        entity
-      );
-      designators.add(designator);
+      if (
+        Reflect.getOwnPropertyDescriptor(entity, "location") !== undefined &&
+        entity.location !== null
+      ) {
+        let path2 = entity.location;
+        let lineno = null;
+        if (path2 !== null && /:[0-9]+$/u.test(path2)) {
+          [, path2, lineno] = /^([\s\S]*):([0-9]+)$/.exec(entity.location);
+        }
+        // assert(
+        //   path1.toLowerCase().startsWith(path2.toLowerCase()),
+        //   AppmapError,
+        //   "path should be a prefix of %o for function code object %o",
+        //   path1,
+        //   entity
+        // );
+        const designator = makeDesignator([path2, parseInt(lineno), entity.static, entity.name]);
+        assert(
+          !designators.has(designator),
+          AppmapError,
+          "detected a function code object clash in the classMap: %o",
+          entity
+        );
+        designators.add(designator);
+      }
     } else {
       path1 = `${path1}${entity.name}/`;
       for (let child of entity.children) {
@@ -197,7 +203,6 @@ exports.validate = (options) => {
         const designator = makeDesignator([
           event1.path,
           event1.lineno,
-          event1.defined_class,
           event1.static,
           event1.method_id,
         ]);
@@ -231,4 +236,6 @@ exports.validate = (options) => {
       );
     }
   }
+  // Return //
+  return options.version;
 };

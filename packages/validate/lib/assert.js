@@ -1,6 +1,11 @@
 const { format } = require("util");
 
-exports.AppmapError = class AppmapError extends Error {};
+exports.AppmapError = class AppmapError extends Error {
+  constructor(message, data = null) {
+    super(message);
+    this.data = data;
+  }
+};
 
 exports.InputError = class InputError extends Error {};
 

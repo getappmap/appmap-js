@@ -143,7 +143,11 @@ for (let version of getVersionMapping().keys()) {
   };
   const path = `${__dirname}/../tmp/test@${version.replace(/\./u, "-")}.appmap.json`;
   writeFileSync(path, JSON.stringify(data, null, 2), "utf8");
-  Assert.equal(validate({ path }), undefined);
+  Assert.ok(validate({ path }).startsWith(version));
+  data.events.push(123);
+  Assert.throws(() => validate({ data }), AppmapError);
+  data.events.pop();
   delete data.metadata;
   Assert.throws(() => validate({ data }), AppmapError);
+  Assert.throws(() => validate({ data, "schema-depth": 2, "instanceof-depth": 2 }), AppmapError);
 }

@@ -177,7 +177,8 @@ definitions:
   function:
     type: object
     required:
-      - location
+      - type
+      - name
       - static
     properties:
       type:
@@ -186,6 +187,7 @@ definitions:
         type: string
       location:
         type: string
+        nullable: true
       static:
         type: boolean
       labels:
@@ -288,7 +290,8 @@ definitions:
     type: object
     required:
       - class
-      - value
+      - message
+      - object_id
     properties:
       class:
         type: string
@@ -315,8 +318,6 @@ definitions:
         required:
           - defined_class
           - method_id
-          - path
-          - lineno
           - static
         properties:
           defined_class:
@@ -325,9 +326,11 @@ definitions:
             type: string
           path:
             type: string
+            nullable: true
           lineno:
             type: integer
             minimum: 0
+            nullable: true
           receiver:
             anyOf:
               - const: null

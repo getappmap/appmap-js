@@ -206,9 +206,10 @@ definitions:
   function:
     type: object
     required:
-      - location
+      - type
+      - name
+      - location #! < 1.4.1
       - static
-      - source #! < 1.4.1
     properties:
       type:
         const: function
@@ -216,6 +217,7 @@ definitions:
         type: string
       location:
         type: string
+        nullable: true #! >= 1.4.1
       static:
         type: boolean
       labels:
@@ -228,7 +230,7 @@ definitions:
         nullable: true #! >= 1.3.0
       source:          #! >= 1.3.0
         type: string   #! >= 1.3.0
-        nullable: true #! >= 1.4.1
+        nullable: true #! >= 1.3.0
 
   #########
   # Event #
@@ -320,7 +322,8 @@ definitions:
     type: object
     required:
       - class
-      - value
+      - message
+      - object_id
     properties:
       class:
         type: string
@@ -347,8 +350,8 @@ definitions:
         required:
           - defined_class
           - method_id
-          - path
-          - lineno
+          - path #! < 1.4.1
+          - lineno #! < 1.4.1
           - receiver #! < 1.4.1
           - parameters #! < 1.4.1
           - static
@@ -359,9 +362,11 @@ definitions:
             type: string
           path:
             type: string
+            nullable: true #! >= 1.4.1
           lineno:
             type: integer
             minimum: 0
+            nullable: true #! >= 1.4.1
           receiver:
             anyOf:
               - const: null #! >= 1.4.1
