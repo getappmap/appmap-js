@@ -1,3 +1,10 @@
+# [@appland/components-v1.1.7](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.6...@appland/components-v1.1.7) (2021-06-14)
+
+
+### Bug Fixes
+
+* Trace node panning on focus ([105b2ae](https://github.com/applandinc/appmap-js/commit/105b2aea169deeb4ff0485e41aa6f1624740be8d))
+
 # [@appland/components-v1.1.6](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.5...@appland/components-v1.1.6) (2021-06-09)
 
 
