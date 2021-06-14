@@ -23,6 +23,7 @@
 import VTrace from '@/components/trace/Trace.vue';
 import VContainer from '@/components/Container.vue';
 import { VIEW_FLOW, SELECT_OBJECT, CLEAR_OBJECT_STACK } from '@/store/vsCode';
+import { getParentRelativeOffset } from '@appland/diagrams';
 
 export default {
   name: 'v-diagram-trace',
@@ -87,11 +88,19 @@ export default {
       }, 16);
     },
 
-    focusSelector(selector) {
-      const element = this.$el.querySelector(selector);
-      if (element) {
-        this.$refs.container.panToElement(element);
-      }
+    focusFocused() {
+      setTimeout(() => {
+        const { container } = this.$refs;
+        const element = container.$el.querySelector('.trace-node.focused');
+        if (!element) {
+          return;
+        }
+
+        const coords = getParentRelativeOffset(element, this.$refs.trace);
+
+        container.setScaleTarget(element);
+        container.translateTo(coords.left, coords.top);
+      }, 16);
     },
 
     onClickEvent(event) {

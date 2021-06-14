@@ -524,6 +524,24 @@ context('VS Code Extension', () => {
         .invoke('text')
         .should('not.match', /SELECT.*FROM/);
     });
+
+    it('pans to the correct location when previewing events in the trace view', () => {
+      cy.get(
+        '.node.class[data-id="active_support/ActiveSupport::SecurityUtils"]'
+      ).click();
+
+      cy.get('.v-details-panel-list')
+        .contains('Outbound connections')
+        .parent()
+        .within(() => {
+          cy.get('.list-item').contains('Digest::Instance#digest').click();
+        });
+
+      cy.get('.list-item__event-quickview').each((el) => {
+        cy.wrap(el).click();
+        cy.get('.trace-node.focused').should('be.visible');
+      });
+    });
   });
 
   context('Java appmap', () => {

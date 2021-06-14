@@ -230,9 +230,7 @@ export default {
         if (event) {
           this.setView(VIEW_FLOW);
           this.$nextTick(() => {
-            this.$refs.diagramFlow.focusSelector(
-              `[data-event-id="${event.id}"]`
-            );
+            this.$refs.diagramFlow.focusFocused();
           });
         }
       },

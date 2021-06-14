@@ -135,7 +135,7 @@ $bg-color: $gray2;
 
   &.focused {
     outline: 4px solid transparent;
-    animation: node-focused 1s ease-out 0.3s;
+    animation: node-focused 2s ease-out 0.3s;
   }
 
   &__header {

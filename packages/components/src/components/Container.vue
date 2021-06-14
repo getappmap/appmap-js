@@ -28,6 +28,9 @@ export default {
     };
   },
   methods: {
+    translateTo(x, y) {
+      this.container.translateTo(x, y);
+    },
     panToElement(element) {
       panToNode(this.container, element);
     },
