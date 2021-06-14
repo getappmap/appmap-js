@@ -47,14 +47,30 @@ function nodeFullyVisible(viewport, node) {
   );
 }
 
-function getParentRelativeOffset(element, parent) {
+export function getParentRelativeOffset(element, parent) {
   const offset = {
     left: 0,
     top: 0,
   };
 
   let child = element;
-  while (child !== parent) {
+  while (child && child !== parent) {
+    offset.left += child.offsetLeft;
+    offset.top += child.offsetTop;
+    child = child.offsetParent;
+  }
+
+  return offset;
+}
+
+function getParentOffset(element, parent) {
+  const offset = {
+    left: 0,
+    top: 0,
+  };
+
+  let child = element;
+  while (child && child !== parent) {
     offset.left += child.offsetLeft;
     offset.top += child.offsetTop;
     child = child.parentNode;
@@ -70,7 +86,7 @@ export function panToNode(viewport, node) {
     return;
   }
 
-  const offset = getParentRelativeOffset(node, viewport.element);
+  const offset = getParentOffset(node, viewport.element);
   const nodeRect = node.getBoundingClientRect();
 
   viewport.translateTo(
