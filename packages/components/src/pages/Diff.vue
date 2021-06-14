@@ -302,7 +302,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/scss/diagrams/style';
+@import '~@appland/diagrams/dist/style.css';
 html,
 body {
   width: 100%;
