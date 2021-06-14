@@ -1,3 +1,15 @@
+# [@appland/diagrams-v1.1.0](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.0.4...@appland/diagrams-v1.1.0) (2021-06-14)
+
+
+### Bug Fixes
+
+* Trace node panning on focus ([105b2ae](https://github.com/applandinc/appmap-js/commit/105b2aea169deeb4ff0485e41aa6f1624740be8d))
+
+
+### Features
+
+* add styles for diagrams and build CSS ([07d09d4](https://github.com/applandinc/appmap-js/commit/07d09d4288c7f426ce7454c4ee170b9cae5dd410))
+
 # [@appland/diagrams-v1.0.4](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.0.3...@appland/diagrams-v1.0.4) (2021-06-03)
 
 
