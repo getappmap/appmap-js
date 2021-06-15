@@ -9,8 +9,8 @@ const {
   buildDirectory,
   mtime,
   renameFile,
-} = require('./utils');
-const { algorithms, canonicalize } = require('./fingerprint');
+} = require('../utils');
+const { algorithms, canonicalize } = require('./canonicalize');
 
 class Fingerprinter {
   /**
