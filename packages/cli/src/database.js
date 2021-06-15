@@ -164,9 +164,14 @@ function obfuscate(sql, adapter) {
 
 const QUERY_CACHE = {};
 
-function analyzeQuery(
-  /** @type {import('./search/types').SQL | string} */ query
-) {
+/**
+ * Analyze a query into a compact form that indicates the high-level behavior of the
+ * query, including the action, tables, and columns.
+ *
+ * @param {import('./search/types').SQL | string} query
+ * @returns {import('./fingerprint/types').AnalyzedQuery | string}
+ */
+function analyzeQuery(query) {
   if (typeof query === 'string') {
     // This is a problem because we don't know what SQL dialect to apply.
     console.warn(`No database_type available for ${query}`);

@@ -43,9 +43,23 @@ export default class Event {
     addHiddenProperty(this, 'previous');
     addHiddenProperty(this, 'hash');
     addHiddenProperty(this, 'identityHash');
+    addHiddenProperty(this, 'depth');
 
     // Data must be written last, after our properties are configured.
     Object.assign(this, data);
+  }
+
+  get depth() {
+    if (!this.$hidden.depth) {
+      let depth = 0;
+      let { parent } = this;
+      while (parent) {
+        depth += 1;
+        parent = this.parent;
+      }
+      this.$hidden.depth = depth;
+    }
+    return this.$hidden.depth;
   }
 
   get methodId() {
@@ -113,6 +127,14 @@ export default class Event {
     return this.returnEvent.http_server_response;
   }
 
+  get httpClientRequest() {
+    return this.callEvent.http_client_request;
+  }
+
+  get httpClientResponse() {
+    return this.returnEvent.http_client_response;
+  }
+
   get definedClass() {
     return this.defined_class ? this.defined_class.replace(/\./g, '/') : null;
   }
@@ -128,22 +150,33 @@ export default class Event {
     );
   }
 
-  get requestMethod() {
-    const { httpServerRequest } = this;
-    if (!httpServerRequest) {
+  get requestURL() {
+    const { httpClientRequest } = this;
+    if (!httpClientRequest) {
       return null;
     }
 
-    return httpServerRequest.request_method;
+    return httpClientRequest.url;
+  }
+
+  get requestMethod() {
+    const { httpClientRequest, httpServerRequest } = this;
+    const request = httpClientRequest || httpServerRequest;
+    if (!request) {
+      return null;
+    }
+
+    return request.request_method;
   }
 
   get route() {
-    const { requestMethod, requestPath } = this;
-    if (!requestMethod || !requestPath) {
+    const { requestMethod, requestPath, requestURL } = this;
+    const path = requestPath || requestURL;
+    if (!requestMethod || !path) {
       return null;
     }
 
-    return `${requestMethod} ${requestPath}`;
+    return `${requestMethod} ${path}`;
   }
 
   get sqlQuery() {

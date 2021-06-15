@@ -10,11 +10,15 @@ const yargs = require('yargs');
 const chokidar = require('chokidar');
 const { diffLines } = require('diff');
 const yaml = require('js-yaml');
+const { request: httpRequest } = require('http');
+const { request: httpsRequest } = require('https');
 const { promises: fsp, readFileSync } = require('fs');
 const { queue } = require('async');
 const process = require('process');
 const readline = require('readline');
 const { join } = require('path');
+const { homedir } = require('os');
+const { glob } = require('glob');
 const { algorithms, canonicalize } = require('./fingerprint');
 const { verbose, listAppMapFiles, loadAppMap } = require('./utils');
 const appMapCatalog = require('./appMapCatalog');
@@ -24,6 +28,7 @@ const FindCodeObjects = require('./search/findCodeObjects');
 const FindEvents = require('./search/findEvents');
 const FunctionStats = require('./functionStats');
 const Inspect = require('./inspect');
+const { buildAppMap } = require('./search/utils');
 
 class FingerprintDirectoryCommand {
   constructor(directory) {
@@ -421,6 +426,310 @@ yargs(process.argv.slice(2))
     }
   )
   .command(
+    'diff',
+    'Compare local AppMaps with a mapset from AppMap Cloud',
+    (args) => {
+      args.option('mapset', {
+        describe: 'Mapset id to compare with',
+        required: true,
+      });
+      args.option('appmap-dir', {
+        describe: 'directory to recursively inspect for AppMaps',
+        default: 'tmp/appmap',
+      });
+      args.option('level-of-detail', {
+        alias: ['l'],
+        describe: `Comparison level of detail (${Object.keys(algorithms).join(
+          ', '
+        )})`,
+        default: Object.keys(algorithms)[1],
+      });
+      return args.strict();
+    },
+    async (argv) => {
+      verbose(argv.verbose);
+
+      const failUsage = (msg) => {
+        console.warn(msg);
+        process.exit(1);
+      };
+
+      const applandConfigFilePath = join(homedir(), '.appland');
+      const applandConfigStat = await fsp.stat(applandConfigFilePath);
+      if (!applandConfigStat.isFile()) {
+        failUsage(
+          `AppMap Cloud config file ${applandConfigFilePath} does not exist`
+        );
+      }
+      const applandConfig = yaml.load(
+        await fsp.readFile(applandConfigFilePath)
+      );
+      const currentContext = applandConfig.current_context || 'default';
+      const contextConfig = applandConfig.contexts[currentContext];
+      if (!contextConfig) {
+        failUsage(
+          `No context configuration '${currentContext}' in AppMap Cloud config file ${applandConfigFilePath}`
+        );
+      }
+      const { url, api_key: apiKey } = contextConfig;
+      if (!url) {
+        failUsage(
+          `No 'url' in context configuration '${currentContext}' in AppMap Cloud config file ${applandConfigFilePath}`
+        );
+      }
+      if (!apiKey) {
+        failUsage(
+          `No 'api_key' in context configuration '${currentContext}' in AppMap Cloud config file ${applandConfigFilePath}`
+        );
+      }
+
+      const { mapset } = argv;
+
+      const appmapData = await new Promise((resolve, reject) => {
+        const getScenariosURL = new URL([url, 'api/appmaps'].join('/'));
+        getScenariosURL.searchParams.append('mapsets[]', mapset);
+        const requestFunction =
+          getScenariosURL.protocol === 'https:' ? httpsRequest : httpRequest;
+        const req = requestFunction(
+          getScenariosURL,
+          {
+            headers: {
+              Authorization: `Bearer ${apiKey}`,
+              Accept: 'application/json',
+            },
+          },
+          // eslint-disable-next-line consistent-return
+          (res) => {
+            if (res.statusCode >= 300) {
+              return reject(res.statusCode);
+            }
+            let data = '';
+            res.setEncoding('utf8');
+            res.on('data', (chunk) => {
+              data += chunk;
+            });
+            res.on('end', () => {
+              resolve(data);
+            });
+          }
+        );
+
+        req.on('error', (e) => {
+          reject(e);
+        });
+
+        // Write data to request body
+        req.end();
+      });
+
+      const { levelOfDetail } = argv;
+      const serverSideAppMapUUIDsByName = {};
+      const serverSideAppMapMetadata = JSON.parse(appmapData).map((data) => {
+        serverSideAppMapUUIDsByName[data.metadata.name] = data.scenario_uuid;
+        return data.metadata;
+      });
+      const clientSideAppMapFiles = [];
+      const clientSideAppMapFilePathsByName = [];
+      await new Promise((resolve, reject) => {
+        // eslint-disable-next-line consistent-return
+        glob(`${argv.appmapDir}/**/metadata.json`, (err, files) => {
+          if (err) {
+            return reject(err);
+          }
+          files.forEach((file) => clientSideAppMapFiles.push(file));
+          resolve();
+        });
+      });
+      const clientSideAppMapMetadata = await Promise.all(
+        clientSideAppMapFiles.map(async (f) => {
+          const metadata = JSON.parse(await fsp.readFile(f));
+          const tokens = f.split('/');
+          tokens.pop();
+          clientSideAppMapFilePathsByName[metadata.name] = `${tokens.join(
+            '/'
+          )}.appmap.json`;
+          return metadata;
+        })
+      );
+
+      console.warn(
+        `Comparing ${clientSideAppMapMetadata.length} local AppMaps with ${serverSideAppMapMetadata.length} server-side AppMaps`
+      );
+
+      const locateFingerprint = (appmap) =>
+        appmap.fingerprints.find(
+          (fp) => fp.canonicalization_algorithm === levelOfDetail
+        ).digest;
+
+      const mapByFingerprint = (appmaps) =>
+        appmaps.reduce((memo, appmap) => {
+          const fingerprint = locateFingerprint(appmap);
+          memo[fingerprint] = appmap;
+          return memo;
+        }, {});
+
+      const mapByName = (appmaps) =>
+        appmaps.reduce((memo, appmap) => {
+          memo[appmap.name] = appmap;
+          return memo;
+        }, {});
+
+      const serverSideAppMapsByFingerprint = mapByFingerprint(
+        serverSideAppMapMetadata
+      );
+      const clientSideAppMapsByFingerprint = mapByFingerprint(
+        clientSideAppMapMetadata
+      );
+
+      const serverSideAppMapsByName = mapByName(serverSideAppMapMetadata);
+      const clientSideAppMapsByName = mapByName(clientSideAppMapMetadata);
+
+      console.warn(
+        `Comparing ${
+          Object.keys(clientSideAppMapsByFingerprint).length
+        } local AppMap fingerprints with ${
+          Object.keys(serverSideAppMapsByFingerprint).length
+        } server-side AppMap fingerprints`
+      );
+
+      function intersection(setA, setB) {
+        const _intersection = new Set();
+        // eslint-disable-next-line no-restricted-syntax
+        for (const elem of setB) {
+          if (setA.has(elem)) {
+            _intersection.add(elem);
+          }
+        }
+        return _intersection;
+      }
+
+      function difference(setA, setB) {
+        const _difference = new Set(setA);
+        // eslint-disable-next-line no-restricted-syntax
+        for (const elem of setB) {
+          _difference.delete(elem);
+        }
+        return _difference;
+      }
+
+      console.log(
+        `Number of AppMaps matching on client and server: ${
+          intersection(
+            new Set(Object.keys(clientSideAppMapsByFingerprint)),
+            new Set(Object.keys(serverSideAppMapsByFingerprint))
+          ).size
+        }`
+      );
+
+      const newOnClient = difference(
+        new Set(Object.keys(clientSideAppMapsByName)),
+        new Set(Object.keys(serverSideAppMapsByName))
+      );
+
+      console.warn();
+      console.log(`New AppMaps (${newOnClient.size}):`);
+      newOnClient.forEach((name) =>
+        console.log(clientSideAppMapsByName[name].name)
+      );
+
+      // Changed AppMaps are AppMaps whose name is on both the client and
+      // server, but the fingerprints differ. Print the diff for each one.
+      const sharedAppMapNames = intersection(
+        new Set(Object.keys(clientSideAppMapsByName)),
+        new Set(Object.keys(serverSideAppMapsByName))
+      );
+
+      const loadServerSideAppMapByUUID = async (uuid) =>
+        new Promise((resolve, reject) => {
+          const getScenarioURL = new URL([url, 'api/appmaps', uuid].join('/'));
+          const requestFunction =
+            getScenarioURL.protocol === 'https:' ? httpsRequest : httpRequest;
+          const req = requestFunction(
+            getScenarioURL,
+            {
+              headers: {
+                Authorization: `Bearer ${apiKey}`,
+                Accept: 'application/json',
+              },
+            },
+            // eslint-disable-next-line consistent-return
+            (res) => {
+              if (res.statusCode >= 300) {
+                return reject(res.statusCode);
+              }
+              let data = '';
+              res.setEncoding('utf8');
+              res.on('data', (chunk) => {
+                data += chunk;
+              });
+              res.on('end', () => {
+                resolve(JSON.parse(data));
+              });
+            }
+          );
+
+          req.on('error', (e) => {
+            reject(e);
+          });
+
+          // Write data to request body
+          req.end();
+        });
+
+      console.warn();
+      console.log(`Changed AppMaps:`);
+
+      const changedAppMapNames = [...sharedAppMapNames]
+        .sort()
+        .filter((name) => {
+          const clientSideAppMap = clientSideAppMapsByName[name];
+          const serverSideAppMap = serverSideAppMapsByName[name];
+          return (
+            locateFingerprint(clientSideAppMap) !==
+            locateFingerprint(serverSideAppMap)
+          );
+        });
+
+      await Promise.all(
+        changedAppMapNames.map(async (name) => {
+          const clientSideAppMapFileName =
+            clientSideAppMapFilePathsByName[name];
+          const serverSideAppMapUUID = serverSideAppMapUUIDsByName[name];
+          const clientSideAppMapJSON = JSON.parse(
+            await fsp.readFile(clientSideAppMapFileName)
+          );
+          const serverSideAppMapJSON = await loadServerSideAppMapByUUID(
+            serverSideAppMapUUID
+          );
+          const clientSideAppMap = buildAppMap()
+            .source(clientSideAppMapJSON)
+            .normalize()
+            .build();
+          const serverSideAppMap = buildAppMap()
+            .source(serverSideAppMapJSON)
+            .normalize()
+            .build();
+          const diff = await new DetailedDiff(
+            levelOfDetail,
+            clientSideAppMap,
+            serverSideAppMap
+          ).diff();
+          await fsp.writeFile(
+            join('tmp/diff/appmap', [name, 'client', 'appmap.json'].join('.')),
+            JSON.stringify(clientSideAppMapJSON)
+          );
+          await fsp.writeFile(
+            join('tmp/diff/appmap', [name, 'server', 'appmap.json'].join('.')),
+            JSON.stringify(serverSideAppMapJSON)
+          );
+          console.warn();
+          console.log(name);
+          console.log(yaml.dump(diff));
+        })
+      );
+    }
+  )
+  .command(
     'inspect <code-object>',
     'Search AppMaps for references to a code object (package, function, class, query, route, etc) and print available event info',
     (args) => {
@@ -535,7 +844,7 @@ yargs(process.argv.slice(2))
       if (argv.interactive) {
         interactive();
       } else {
-        console.log(JSON.stringify(stats, null, 2));
+        console.log(yaml.dump(stats.toJSON()));
       }
     }
   )

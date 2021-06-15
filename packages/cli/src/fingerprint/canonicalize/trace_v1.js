@@ -3,8 +3,9 @@ const { analyzeQuery } = require('../../database');
 const Base = require('./base');
 
 /**
- * At DEBUG level, the order of labeled function calls matters, and all function class
- * and method names are retained. SQL queries are also retained in order.
+ * At TRACE level, the order of labeled function calls matters, and all function class
+ * and method names are retained. SQL queries are also retained in order. HTTP
+ * server and client request parameters are retained.
  */
 class Canonicalize extends Base {
   sql(event) {
@@ -16,19 +17,30 @@ class Canonicalize extends Base {
     };
   }
 
+  httpClientRequest(event) {
+    return {
+      id: event.id,
+      parent_id: event.parent ? event.parent.id : null,
+      kind: 'http_client_request',
+      route: event.route,
+      parameter_names: event.message ? event.message.map((m) => m.name) : null,
+      status_code: event.httpClientResponse
+        ? event.httpClientResponse.status_code
+        : null,
+    };
+  }
+
   httpServerRequest(event) {
     return {
       id: event.id,
       parent_id: event.parent ? event.parent.id : null,
       kind: 'http_server_request',
-      mime_type: event.httpServerResponse
-        ? event.httpServerResponse.mime_type
-        : null,
-      parameters: event.httpServerRequest
-        ? event.httpServerRequest.message
-        : null,
+      parameter_names: event.message ? event.message.map((m) => m.name) : null,
       route: event.route,
-      status: event.httpServerResponse ? event.httpServerResponse.status : null,
+      status_code: event.httpServerResponse
+        ? event.httpServerResponse.status ||
+          event.httpServerResponse.status_code
+        : null,
     };
   }
 

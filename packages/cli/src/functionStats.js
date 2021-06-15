@@ -3,7 +3,10 @@
 const { analyzeQuery, obfuscate } = require('./database');
 const { formatValue, formatHttpServerRequest } = require('./utils');
 
-/** @typedef {import('./search/types').Trigram} Trigram */
+/**
+ * @typedef {import('./search/types').Trigram} Trigram
+ * @typedef {import('./fingerprint/types').AnalyzedQuery} AnalyzedQuery
+ */
 
 /**
  *
@@ -38,7 +41,19 @@ class FunctionStats {
   }
 
   toJSON() {
-    return this.eventMatches;
+    const trigram = (/** @type {Trigram} */ t) =>
+      [t.callerId, t.codeObjectId, t.calleeId].join(' ->\n');
+    return {
+      returnValues: this.returnValues,
+      httpServerRequests: this.httpServerRequests,
+      sqlQueries: this.sqlQueries,
+      sqlTables: this.sqlTables,
+      callers: this.callers,
+      ancestors: this.ancestors,
+      descendants: this.descendants,
+      classTrigrams: this.classTrigrams.map(trigram),
+      functionTrigrams: this.functionTrigrams.map(trigram),
+    };
   }
 
   get appMapNames() {
@@ -83,8 +98,8 @@ class FunctionStats {
           .map((e) => e.descendants.filter((d) => d.sql))
           .flat()
           .map((e) => analyzeQuery(e.sql))
-          .filter((e) => typeof e === 'object')
-          .map((sql) => sql.tables)
+          .filter((query) => typeof query === 'object')
+          .map((query) => /** @type {AnalyzedQuery} */ (query).tables)
           .flat()
       ),
     ].sort();

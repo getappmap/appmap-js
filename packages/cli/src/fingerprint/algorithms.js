@@ -3,27 +3,6 @@ function notNull(event) {
   return event !== null && event !== undefined;
 }
 
-function compareEvents(first, second) {
-  const diff = first.kind.localeCompare(second.kind);
-  if (diff !== 0) {
-    return diff;
-  }
-
-  return JSON.stringify(first).localeCompare(JSON.stringify(second));
-}
-
-function uniqueEvents() {
-  const set = new Set();
-  return (event) => {
-    const eventStr = JSON.stringify(event, null, 2);
-    if (!set.has(eventStr)) {
-      set.add(eventStr);
-      return event;
-    }
-    return null;
-  };
-}
-
 function buildTree(events) {
   const eventsById = events
     .filter((event) => event.id)
@@ -33,21 +12,30 @@ function buildTree(events) {
       return memo;
     }, {});
 
+  const eventWithParentId = (parentId) => eventsById[parentId];
+  const eventAtLowerDepth = (depth) => {
+    for (let i = events.length - 1; i >= 0; i -= 1) {
+      const event = events[i];
+      if (event.depth <= depth) {
+        return event;
+      }
+    }
+    return null;
+  };
+
   const rootEvents = events.reduce((roots, event) => {
     // An event with no parent is a root.
     // When an event has a parent, but the parent cannot be located in the tree,
-    // assign the event to the previous known event
-    let parentId = event.parent_id;
+    // assign the event to the most recent event at a lower depth than the event.
+
+    const parentId = event.parent_id;
     if (!parentId) {
       roots.push(event);
       return roots;
     }
 
-    let parent = eventsById[parentId];
-    while (!parent && parentId >= 0) {
-      parentId -= 1;
-      parent = eventsById[parentId];
-    }
+    const parent =
+      eventWithParentId(parentId) || eventAtLowerDepth(event.depth);
 
     if (parent) {
       if (!parent.children) {
@@ -69,12 +57,16 @@ function buildTree(events) {
     delete event.parent_id;
   });
 
+  const httpServerRequestEvents = rootEvents.filter(
+    (e) => e.kind === 'http_server_request'
+  );
+  if (httpServerRequestEvents.length > 0) {
+    return httpServerRequestEvents;
+  }
   return rootEvents;
 }
 
 module.exports = {
   notNull,
-  compareEvents,
-  uniqueEvents,
   buildTree,
 };

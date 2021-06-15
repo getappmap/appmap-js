@@ -3,6 +3,18 @@ export interface SQL {
   database_type: string;
 }
 
+export interface HTTPRoute {
+  method: string;
+  uri: string;
+}
+
+export interface HTTPRequest {
+  route: HTTPRoute;
+  authentication: string;
+  parameterNames: string[];
+  statusCode: int;
+}
+
 export interface HTTPServerRequest {
   path: string;
   normalized_path: string;

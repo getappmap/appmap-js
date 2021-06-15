@@ -1,8 +1,19 @@
 const { buildTree, notNull } = require('../algorithms');
 
+const BLACKLISTED_LABELS = new Set([
+  'format.json.generate',
+  'format.yaml.generate',
+  'http.session.read',
+]);
+
 module.exports = class {
   constructor(appmap) {
     this.appmap = appmap;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  whitelistedLabels(labels) {
+    return [...labels].filter((label) => !BLACKLISTED_LABELS.has(label));
   }
 
   execute() {
@@ -19,6 +30,9 @@ module.exports = class {
     }
     if (event.httpServerRequest) {
       return this.httpServerRequest(event);
+    }
+    if (event.httpClientRequest) {
+      return this.httpClientRequest(event);
     }
 
     return this.functionCall(event);
