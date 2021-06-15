@@ -1,7 +1,7 @@
 const { utimesSync } = require('fs');
 const { join } = require('path');
 const Depends = require('../../src/depends');
-const Fingerprinter = require('../../src/fingerprinter');
+const Fingerprinter = require('../../src/fingerprint/fingerprinter');
 const { listAppMapFiles, verbose } = require('../../src/utils');
 
 const appMapDir = join(__dirname, 'fixtures');

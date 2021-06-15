@@ -1,6 +1,6 @@
 const { utimesSync } = require('fs');
 const { join } = require('path');
-const Fingerprinter = require('../../src/fingerprinter');
+const Fingerprinter = require('../../src/fingerprint/fingerprinter');
 const FindCodeObjects = require('../../src/search/findCodeObjects');
 const { listAppMapFiles, verbose } = require('../../src/utils');
 

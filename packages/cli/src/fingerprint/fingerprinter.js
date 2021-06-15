@@ -10,8 +10,8 @@ const {
   buildDirectory,
   mtime,
   renameFile,
-} = require('./utils');
-const { algorithms, canonicalize } = require('./fingerprint');
+} = require('../utils');
+const { algorithms, canonicalize } = require('./canonicalize');
 
 const VERSION = '1.0.0';
 

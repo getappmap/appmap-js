@@ -1,7 +1,6 @@
 // @ts-check
 
 const { formatValue, formatHttpServerRequest } = require('../utils');
-const { analyzeQuery } = require('../database');
 
 /** @typedef {import('./types').Event} Event */
 /** @typedef {function(string,Event[],string):boolean} Matcher */
