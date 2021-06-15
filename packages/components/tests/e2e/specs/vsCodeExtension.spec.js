@@ -542,6 +542,22 @@ context('VS Code Extension', () => {
         cy.get('.trace-node.focused').should('be.visible');
       });
     });
+
+    it('pans to the correct location when using keyboard navigation', () => {
+      cy.get('.tabs__header').contains('Trace').click();
+      cy.get(':nth-child(2) > .trace-node > .trace-node__body')
+        .click()
+        .type('{rightarrow}');
+
+      const container = cy.get('.container[name="viewFlow"]');
+      container.type('{uparrow}');
+      cy.get('.trace-node.highlight').should('be.visible');
+
+      for (let i = 0; i < 50; ++i) {
+        container.type('{downarrow}');
+        cy.get('.trace-node.highlight').should('be.visible');
+      }
+    });
   });
 
   context('Java appmap', () => {
