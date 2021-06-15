@@ -1,3 +1,10 @@
+# [@appland/components-v1.1.8](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.7...@appland/components-v1.1.8) (2021-06-15)
+
+
+### Bug Fixes
+
+* Trace ports no longer display incorrect names when AppMap is changed ([#253](https://github.com/applandinc/appmap-js/issues/253)) ([148b72b](https://github.com/applandinc/appmap-js/commit/148b72bfd17e0ef36520e5b1b2d4da886c13c1b9))
+
 # [@appland/components-v1.1.7](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.6...@appland/components-v1.1.7) (2021-06-14)
 
 
