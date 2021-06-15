@@ -2,15 +2,15 @@
   <v-trace-node-columns>
     <template v-slot:left>
       <v-trace-node-port
-        v-for="(input, index) in inputs"
-        :key="index"
+        v-for="input in inputs"
+        :key="input.name"
         :parameterObject="input"
       />
     </template>
     <template v-slot:right>
       <v-trace-node-port
-        v-for="(output, index) in outputs"
-        :key="index"
+        v-for="output in outputs"
+        :key="output.name"
         :parameterObject="output"
         type="output"
       />
