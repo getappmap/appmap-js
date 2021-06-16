@@ -23,7 +23,6 @@
 import VTrace from '@/components/trace/Trace.vue';
 import VContainer from '@/components/Container.vue';
 import { VIEW_FLOW, SELECT_OBJECT, CLEAR_OBJECT_STACK } from '@/store/vsCode';
-import { getParentRelativeOffset } from '@appland/diagrams';
 
 export default {
   name: 'v-diagram-trace',
@@ -83,8 +82,8 @@ export default {
           return;
         }
 
-        container.panToElement(element);
         container.setScaleTarget(element);
+        container.panToElement(element, this.$refs.trace);
       }, 16);
     },
 
@@ -96,10 +95,8 @@ export default {
           return;
         }
 
-        const coords = getParentRelativeOffset(element, this.$refs.trace);
-
         container.setScaleTarget(element);
-        container.translateTo(coords.left, coords.top);
+        container.panToElement(element, this.$refs.trace);
       }, 16);
     },
 

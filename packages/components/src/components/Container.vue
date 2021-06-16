@@ -9,9 +9,9 @@
 <script>
 import {
   Container,
-  panToNode,
   lazyPanToElement,
   getElementCenter,
+  getParentRelativeOffset,
 } from '@appland/diagrams';
 
 export default {
@@ -31,8 +31,10 @@ export default {
     translateTo(x, y) {
       this.container.translateTo(x, y);
     },
-    panToElement(element) {
-      panToNode(this.container, element);
+    panToElement(element, parent = null) {
+      const parentContainer = parent ?? this.container.element;
+      const coords = getParentRelativeOffset(element, parentContainer);
+      this.container.translateTo(coords.left, coords.top);
     },
     lazyPanToElement(element) {
       lazyPanToElement(this.container, element, 10);

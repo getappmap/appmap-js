@@ -20,7 +20,7 @@ context('VS Code Extension', () => {
 
       cy.get(':nth-child(16) > .list-item').click();
       cy.get('button').contains('Show in Trace').click();
-      cy.get('.trace-node.focused').should('be.visible');
+      cy.get('.trace-node.highlight').should('be.visible');
     });
 
     it('filters out objects that do not originate from an HTTP server request', () => {
@@ -566,12 +566,11 @@ context('VS Code Extension', () => {
         .click()
         .type('{rightarrow}');
 
-      const container = cy.get('.container[name="viewFlow"]');
-      container.type('{uparrow}');
+      cy.get('body').trigger('keydown', { keycode: 38 }); // arrow up
       cy.get('.trace-node.highlight').should('be.visible');
 
       for (let i = 0; i < 50; ++i) {
-        container.type('{downarrow}');
+        cy.get('body').trigger('keydown', { keycode: 40 }); // arrow down
         cy.get('.trace-node.highlight').should('be.visible');
       }
     });
