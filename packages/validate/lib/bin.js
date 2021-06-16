@@ -18,7 +18,6 @@ if (process.argv.length !== 3) {
   try {
     success(`Valid ${validate({ path: process.argv[2] })} appmap${"\n"}`);
   } catch (error) {
-    console.log(error);
     if (error instanceof AppmapError) {
       failure(`Invalid appmap:${"\n"}${error.message}${"\n"}`);
     } else {

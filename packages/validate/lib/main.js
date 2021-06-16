@@ -51,7 +51,7 @@ const getReturnTag = (event) => {
   if (Reflect.getOwnPropertyDescriptor(event, "http_server_response") !== undefined) {
     return "http-server";
   }
-  return null;
+  return "sql|function";
 };
 
 exports.AppmapError = AppmapError;
@@ -166,74 +166,47 @@ exports.validate = (options) => {
   for (let entity of options.data.classMap) {
     collectDesignator(entity, null, "");
   }
-  // Verify the unicity of event.id and event.parent_id //
-  for (let index1 = 0; index1 < events.length; index1 += 1) {
-    const event1 = events[index1];
-    for (let index2 = index1 + 1; index2 < events.length; index2 += 1) {
-      const event2 = events[index2];
+  // Verify the per thread fifo ordering //
+  {
+    const threads = new Map();
+    const ids = new Map();
+    for (let index = 0; index < events.length; index += 1) {
+      const event = events[index];
       assert(
-        event1.id !== event2.id,
+        !ids.has(event.id),
         AppmapError,
-        "duplicate event id between #%i and #%i (ie between %o and %o)",
-        index1,
-        index2,
-        event1,
-        event2
+        "duplicate event id between #%i and #%i",
+        index,
+        ids.get(index)
       );
-      if (event1.event == "return" && event2.event === "return") {
+      ids.set(event.id, index);
+      let thread = threads.get(event.thread_id);
+      if (thread === undefined) {
+        thread = [];
+        threads.set(event.thread_id, thread);
+      }
+      if (event.event === "call") {
+        thread.push(event);
+      } else {
+        const parent = thread.pop();
         assert(
-          event1.parent_id !== event2.parent_id,
+          parent.id === event.parent_id,
           AppmapError,
-          "duplicate event parent_id between #%i and #%i (ie between %o and %o)",
-          index1,
-          index2,
-          event1,
-          event2
+          "return event #%i parent id mistmatch: expected %i but got %i",
+          index,
+          parent.id,
+          event.parent_id
+        );
+        const tag1 = getCallTag(parent);
+        const tag2 = getReturnTag(event);
+        assert(
+          tag2.includes(tag1),
+          AppmapError,
+          "incompatible event type between #%i and #%i, expected a %s but got a %s",
+          tag1,
+          tag2
         );
       }
-    }
-  }
-  // Verify that
-  //   - each return event is matched by a call event
-  //   - each function call event matches a code object
-  for (let index1 = 0; index1 < events.length; index1 += 1) {
-    const event1 = events[index1];
-    if (event1.event === "call") {
-      if (Reflect.getOwnPropertyDescriptor(event1, "method_id")) {
-        const designator = makeDesignator([
-          event1.path,
-          event1.lineno,
-          event1.static,
-          event1.method_id,
-        ]);
-        assert(
-          designators.has(designator),
-          AppmapError,
-          "could not find a match in the classMap for the function call event #%i (%o): %o is not in %o",
-          index1,
-          event1,
-          designator,
-          designators
-        );
-      }
-    } else {
-      assert(event1.event === "return", Error, "this appmap should not have passed ajv");
-      const index2 = events.findIndex((event2) => event2.id === event1.parent_id);
-      assert(index2 !== -1, "missing matching call event for #%i -- ie: %o", index1, event1);
-      const event2 = events[index2];
-      const tag1 = getReturnTag(event1);
-      const tag2 = getCallTag(event2);
-      assert(
-        tag1 === null || tag1 === tag2,
-        AppmapError,
-        "type mismatch (%s !== %s) between call-return event pair (#%i, #%i) -- ie: (%o, %o)",
-        tag2,
-        tag1,
-        index2,
-        index1,
-        event2,
-        event1
-      );
     }
   }
   // Return //
