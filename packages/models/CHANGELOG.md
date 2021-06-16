@@ -1,3 +1,11 @@
+# [@appland/models-v1.1.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.0.6...@appland/models-v1.1.0) (2021-06-16)
+
+
+### Features
+
+* Find and print info about a named function ([544db5c](https://github.com/applandinc/appmap-js/commit/544db5ca402d9e3399326f28da7d3a43a606f5c4))
+* Test if an event is a regular function ([bb162d6](https://github.com/applandinc/appmap-js/commit/bb162d6b6431a4888872335c6eec5cf975b067bb))
+
 # [@appland/models-v1.0.6](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.0.5...@appland/models-v1.0.6) (2021-06-03)
 
 
