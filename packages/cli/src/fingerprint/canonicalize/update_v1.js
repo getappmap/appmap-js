@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-const { normalizeSQL } = require('@appland/models');
+const { analyzeQuery } = require('../../database');
 const Base = require('./base');
 
 /**
@@ -12,7 +12,7 @@ class Canonicalize extends Base {
    * @param {Event} event
    */
   sql(event) {
-    const normalizedSQL = normalizeSQL(event.sqlQuery);
+    const normalizedSQL = analyzeQuery(event.sql);
     if (typeof normalizedSQL === 'string') {
       const sqlLower = event.sqlQuery.toLowerCase();
       if (
@@ -23,7 +23,7 @@ class Canonicalize extends Base {
           id: event.id,
           parent_id: event.parent ? event.parent.id : null,
           kind: 'sql',
-          sql: normalizeSQL(event.sqlQuery),
+          sql: analyzeQuery(event.sql),
         };
       }
     } else if (normalizedSQL) {

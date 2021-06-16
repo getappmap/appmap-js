@@ -26,7 +26,7 @@
       "repository": "git@github.com:applandinc/appland.git",
       "branch": "feature/show-sql-in-source-code-tab",
       "commit": "d52bd55d5a08f0e9b27760780bf2737829f5f25f",
-      "status": ["M Gemfile.lock"],
+      "status_code": ["M Gemfile.lock"],
       "git_last_annotated_tag": null,
       "git_last_tag": "v0.17.1",
       "git_commits_since_last_annotated_tag": null,
@@ -41,21 +41,21 @@
     },
     "fingerprints": [
       {
-        "appmap_digest": "064811ed8bc755eb3955875ec68b5ff80ab4d135d6a7df532d04ecc832385041",
+        "appmap_digest": "7fecdd763d47626364364da02387f1fcbfe805123e806f08bacde96636cfc91d",
         "canonicalization_algorithm": "update_v1",
         "digest": "9be5419782f4189c7fba3eb4eff7a4027bc6655b9ac43c45544ede554c7c5c82",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "064811ed8bc755eb3955875ec68b5ff80ab4d135d6a7df532d04ecc832385041",
-        "canonicalization_algorithm": "info_v1",
-        "digest": "76ef6fcddad314962606f8161f73901beb9d6fa06468aee3a96eabb2b65132cb",
+        "appmap_digest": "7fecdd763d47626364364da02387f1fcbfe805123e806f08bacde96636cfc91d",
+        "canonicalization_algorithm": "trace_v1",
+        "digest": "18301be60081a8dbf2574f4226c095b395dd4c060e69da94c5ac20d2f002b23a",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "064811ed8bc755eb3955875ec68b5ff80ab4d135d6a7df532d04ecc832385041",
-        "canonicalization_algorithm": "trace_v1",
-        "digest": "18301be60081a8dbf2574f4226c095b395dd4c060e69da94c5ac20d2f002b23a",
+        "appmap_digest": "7fecdd763d47626364364da02387f1fcbfe805123e806f08bacde96636cfc91d",
+        "canonicalization_algorithm": "info_v1",
+        "digest": "76ef6fcddad314962606f8161f73901beb9d6fa06468aee3a96eabb2b65132cb",
         "fingerprint_algorithm": "sha256"
       }
     ]
@@ -669,8 +669,8 @@
       "parent_id": 7,
       "elapsed": 0.163302,
       "http_server_response": {
-        "status": 200,
-        "mime_type": "application/json; charset=utf-8"
+        "mime_type": "application/json; charset=utf-8",
+        "status": 200
       }
     },
     {
@@ -822,8 +822,8 @@
       "parent_id": 39,
       "elapsed": 0.006339,
       "http_server_response": {
-        "status": 401,
-        "mime_type": "application/json; charset=utf-8"
+        "mime_type": "application/json; charset=utf-8",
+        "status": 401
       }
     }
   ]

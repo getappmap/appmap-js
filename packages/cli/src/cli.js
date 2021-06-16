@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable prefer-arrow-callback */
@@ -6,7 +7,6 @@
 /* eslint-disable max-classes-per-file */
 
 const yargs = require('yargs');
-const chokidar = require('chokidar');
 const { diffLines } = require('diff');
 const yaml = require('js-yaml');
 const { promises: fsp, readFileSync } = require('fs');
@@ -15,95 +15,16 @@ const process = require('process');
 const readline = require('readline');
 const { join } = require('path');
 const { algorithms, canonicalize } = require('./fingerprint');
-const { verbose, listAppMapFiles, loadAppMap } = require('./utils');
+const { verbose, loadAppMap } = require('./utils');
 const appMapCatalog = require('./appMapCatalog');
-const FingerprintQueue = require('./fingerprintQueue');
+const FingerprintDirectoryCommand = require('./fingerprint/fingerprintDirectoryCommand');
+const FingerprintWatchCommand = require('./fingerprint/fingerprintWatchCommand');
 const Depends = require('./depends');
-
-class FingerprintDirectoryCommand {
-  constructor(directory) {
-    this.directory = directory;
-    this.print = false;
-  }
-
-  setPrint(print) {
-    this.print = print;
-    return this;
-  }
-
-  async execute() {
-    if (verbose()) {
-      console.warn(`Fingerprinting appmaps in ${this.directory}`);
-    }
-
-    const fpQueue = new FingerprintQueue();
-    await this.files(fpQueue.push.bind(fpQueue));
-    await fpQueue.process();
-  }
-
-  async files(fn) {
-    return listAppMapFiles(this.directory, fn);
-  }
-}
-
-class FingerprintWatchCommand {
-  constructor(directory) {
-    this.directory = directory;
-    this.print = false;
-    this.numProcessed = 0;
-  }
-
-  setPrint(print) {
-    this.print = print;
-    return this;
-  }
-
-  execute() {
-    if (verbose()) {
-      console.warn(`Watching appmaps in ${this.directory}`);
-    }
-
-    this.fpQueue = new FingerprintQueue();
-    this.fpQueue.setCounterFn(() => {
-      this.numProcessed += 1;
-    });
-    this.fpQueue.process();
-    const watcher = chokidar.watch(`${this.directory}/**/*.appmap.json`, {
-      ignoreInitial: true,
-    });
-    watcher
-      .on('add', this.added.bind(this))
-      .on('change', this.changed.bind(this))
-      .on('unlink', this.removed.bind(this));
-  }
-
-  added(file) {
-    if (verbose()) {
-      console.warn(`AppMap added: ${file}`);
-    }
-    this.enqueue(file);
-  }
-
-  changed(file) {
-    if (verbose()) {
-      console.warn(`AppMap changed: ${file}`);
-    }
-    this.enqueue(file);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  removed(file) {
-    console.warn(`TODO: AppMap removed: ${file}`);
-  }
-
-  enqueue(file) {
-    // This shouldn't be necessary, but it's passing through the wrong file names.
-    if (!file.includes('.appmap.json')) {
-      return;
-    }
-    this.fpQueue.push(file);
-  }
-}
+const FindCodeObjects = require('./search/findCodeObjects');
+const FindEvents = require('./search/findEvents');
+const FunctionStats = require('./functionStats');
+const Inspect = require('./inspect');
+const SwaggerCommand = require('./swagger/command');
 
 class DiffCommand {
   baseDir(dir) {
@@ -416,6 +337,125 @@ yargs(process.argv.slice(2))
     }
   )
   .command(
+    'inspect <code-object>',
+    'Search AppMaps for references to a code object (package, function, class, query, route, etc) and print available event info',
+    (args) => {
+      args.positional('code-object', {
+        describe: 'identifies the code-object to inspect',
+      });
+      args.option('appmap-dir', {
+        describe: 'directory to recursively inspect for AppMaps',
+        default: 'tmp/appmap',
+      });
+      args.option('interactive', {
+        describe: 'interact with the output via CLI',
+        alias: 'i',
+        boolean: true,
+      });
+      return args.strict();
+    },
+    async (argv) => {
+      verbose(argv.verbose);
+
+      const codeObjectId = argv.codeObject;
+      const finder = new FindCodeObjects(argv.appmapDir, codeObjectId);
+      const codeObjectMatches = await finder.find();
+      if (!codeObjectMatches) {
+        return;
+      }
+
+      const filters = [];
+      let stats = null;
+
+      const buildStats = async () => {
+        const result = [];
+        await Promise.all(
+          codeObjectMatches.map(async (codeObjectMatch) => {
+            const findEvents = new FindEvents(
+              codeObjectMatch.appmap,
+              codeObjectMatch.codeObject
+            );
+            findEvents.filter(filters);
+            const events = await findEvents.matches();
+            result.push(...events);
+          })
+        );
+        stats = new FunctionStats(result);
+      };
+
+      await buildStats();
+
+      const interactive = () => {
+        const rl = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout,
+        });
+        rl.on('close', function () {
+          process.exit(0);
+        });
+
+        const home = () => {
+          Inspect.home(codeObjectId, filters, stats, getCommand);
+        };
+
+        const filter = () => {
+          Inspect.filter(rl, filters, stats, buildStats, home);
+        };
+
+        const undoFilter = async () => {
+          await Inspect.undoFilter(filters, buildStats, home);
+        };
+
+        const reset = async () => {
+          await Inspect.reset(filters, buildStats, home);
+        };
+
+        const print = () => {
+          Inspect.print(stats, rl, getCommand, home);
+        };
+
+        const getCommand = () => {
+          console.log();
+          rl.question(
+            'Command (h)ome, (p)rint, (f)ilter, (u)ndo filter, (r)eset filters, (q)uit: ',
+            function (command) {
+              // eslint-disable-next-line default-case
+              switch (command) {
+                case 'h':
+                  home();
+                  break;
+                case 'p':
+                  print();
+                  break;
+                case 'f':
+                  filter();
+                  break;
+                case 'u':
+                  undoFilter();
+                  break;
+                case 'r':
+                  reset();
+                  break;
+                case 'q':
+                  rl.close();
+                  break;
+                default:
+                  getCommand();
+              }
+            }
+          );
+        };
+
+        home();
+      };
+      if (argv.interactive) {
+        interactive();
+      } else {
+        console.log(JSON.stringify(stats, null, 2));
+      }
+    }
+  )
+  .command(
     'index',
     'Compute fingerprints and update index files for all appmaps in a directory',
     (args) => {
@@ -463,6 +503,22 @@ yargs(process.argv.slice(2))
           .setPrint(argv.print)
           .execute();
       }
+    }
+  )
+  .command(
+    'swagger',
+    'Generate Swagger from AppMaps in a directory',
+    (args) => {
+      args.option('appmap-dir', {
+        describe: 'directory to recursively inspect for AppMaps',
+        default: 'tmp/appmap',
+      });
+    },
+    async (argv) => {
+      verbose(argv.verbose);
+
+      const swagger = await new SwaggerCommand(argv.appmapDir).execute();
+      console.log(yaml.dump(swagger));
     }
   )
   .option('verbose', {

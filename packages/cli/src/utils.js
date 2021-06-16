@@ -45,7 +45,7 @@ async function processFiles(pattern, fn) {
     // eslint-disable-next-line consistent-return
     glob(pattern, (err, files) => {
       if (err) {
-        console.warn(err);
+        console.warn(`An error occurred with glob pattern ${pattern}: ${err}`);
         return reject(err);
       }
       files.forEach((file) => q.push(file));
@@ -121,8 +121,35 @@ const buildDirectory = async (dirName, fn) => {
   }
 };
 
+function formatValue(value) {
+  if (!value) {
+    return 'Null';
+  }
+
+  const valueStr = value.value.indexOf('#<') === 0 ? null : value.value;
+
+  return [value.class, valueStr].filter((e) => e).join(' ');
+}
+
+function formatHttpServerRequest(event) {
+  const data = {
+    method: event.httpServerRequest.request_method,
+    path:
+      event.httpServerRequest.normalized_path_info ||
+      event.httpServerRequest.path_info,
+    statusCode:
+      event.returnEvent && event.httpServerResponse
+        ? event.httpServerResponse.status_code ||
+          event.httpServerResponse.status
+        : '<none>',
+  };
+  return [data.method, data.path, `(${data.statusCode})`].join(' ');
+}
+
 module.exports = {
   baseName,
+  formatValue,
+  formatHttpServerRequest,
   listAppMapFiles,
   loadAppMap,
   mtime,
