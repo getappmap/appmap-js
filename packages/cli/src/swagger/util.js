@@ -24,6 +24,7 @@ function classNameToSwaggerType(className) {
 function messageToSwaggerSchema(message) {
   const type = classNameToSwaggerType(message.class);
   const result = { type };
+  /*
   if (message.value) {
     let example;
     try {
@@ -31,12 +32,11 @@ function messageToSwaggerSchema(message) {
     } catch (e) {
       example = message.value;
     }
-    /*
     if (example && example !== '') {
       result.example = example.toString();
     }
-    */
   }
+  */
   if (type === 'array') {
     // This is our best guess right now.
     result.items = { type: 'string' };
