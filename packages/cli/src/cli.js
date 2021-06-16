@@ -24,6 +24,7 @@ const FindCodeObjects = require('./search/findCodeObjects');
 const FindEvents = require('./search/findEvents');
 const FunctionStats = require('./functionStats');
 const Inspect = require('./inspect');
+const SwaggerCommand = require('./swagger/command');
 
 class DiffCommand {
   baseDir(dir) {
@@ -502,6 +503,22 @@ yargs(process.argv.slice(2))
           .setPrint(argv.print)
           .execute();
       }
+    }
+  )
+  .command(
+    'swagger',
+    'Generate Swagger from AppMaps in a directory',
+    (args) => {
+      args.option('appmap-dir', {
+        describe: 'directory to recursively inspect for AppMaps',
+        default: 'tmp/appmap',
+      });
+    },
+    async (argv) => {
+      verbose(argv.verbose);
+
+      const swagger = await new SwaggerCommand(argv.appmapDir).execute();
+      console.log(yaml.dump(swagger));
     }
   )
   .option('verbose', {
