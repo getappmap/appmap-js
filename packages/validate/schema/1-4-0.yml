@@ -4,8 +4,8 @@ required: [version, metadata, classMap, events]
 properties:
   version:
     enum:
-      - "1.6.0"
-      - "1.6"
+      - "1.4.0"
+      - "1.4"
   metadata:
     $ref: "#/definitions/metadata"
   classMap:
@@ -18,8 +18,6 @@ properties:
       anyOf:
         - $ref: "#/definitions/function-call"
         - $ref: "#/definitions/function-return"
-        - $ref: "#/definitions/http-client-request"
-        - $ref: "#/definitions/http-client-response"
         - $ref: "#/definitions/http-server-request"
         - $ref: "#/definitions/http-server-response"
         - $ref: "#/definitions/sql-query"
@@ -136,22 +134,6 @@ definitions:
             type: integer
             nullable: true
             minimum: 0
-          test_status:
-            enum:
-              - null
-              - succeeded
-              - failed
-          exception:
-            type: object
-            nullable: true
-            required:
-              - class
-            properties:
-              class:
-                type: string
-              message:
-                type: string
-                nullable: true
 
   #############
   # Class Map #
@@ -198,6 +180,7 @@ definitions:
     required:
       - type
       - name
+      - location
       - static
     properties:
       type:
@@ -206,7 +189,6 @@ definitions:
         type: string
       location:
         type: string
-        nullable: true
       static:
         type: boolean
       labels:
@@ -289,15 +271,15 @@ definitions:
   parameter:
     type: object
     required:
+      - name
+      - object_id
       - class
       - value
     properties:
       name:
         type: string
-        nullable: true
       object_id:
         type: integer
-        nullable: true
         minimum: 0
       class:
         type: string
@@ -337,6 +319,10 @@ definitions:
         required:
           - defined_class
           - method_id
+          - path
+          - lineno
+          - receiver
+          - parameters
           - static
         properties:
           defined_class:
@@ -345,18 +331,14 @@ definitions:
             type: string
           path:
             type: string
-            nullable: true
           lineno:
             type: integer
             minimum: 0
-            nullable: true
           receiver:
             anyOf:
-              - const: null
               - $ref: "#/definitions/parameter"
           parameters:
             type: array
-            nullable: true
             items:
               $ref: "#/definitions/parameter"
           static:
@@ -389,59 +371,7 @@ definitions:
   # in other event types because it interferes with
   # subsequent verifications in lib/main.js.
 
-  http-client-request:
-    allOf:
-      - $ref: "#/definitions/call"
-      - type: object
-        required:
-          - http_client_request
-          - message
-        properties:
-          http_client_request:
-            type: object
-            required:
-              - request_method
-              - url
-            properties:
-              request_method:
-                $ref: "#/definitions/verb"
-              url:
-                type: string
-              headers:
-                $ref: "#/definitions/headers"
-          message:
-            type: array
-            items:
-              $ref: "#/definitions/parameter"
-          defined_class: false
-          method_id: false
-          sql_query: false
-          http_server_request: false
 
-  http-client-response:
-    allOf:
-      - $ref: "#/definitions/return"
-      - type: object
-        required:
-          - http_client_response
-        properties:
-          http_client_response:
-            type: object
-            required:
-              - status_code
-            properties:
-              headers:
-                $ref: "#/definitions/headers"
-              status_code:
-                type: integer
-                minimum: 100
-                maximum: 599
-              mime_type:
-                type: string
-                nullable: true
-          return_value: false
-          exceptions: false
-          http_server_response: false
 
   # Http Server #
 

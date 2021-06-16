@@ -1,17 +1,17 @@
 # appmap-validate
 
-Check whether an appmap adheres to the specification.
+Check whether an appmap adheres to the [specification](https://github.com/applandinc/appmap).
 
 ## Install
 
 ```sh
-npm i @appland/appmap-validate
+npm i @appland/validate
 ```
 
 ## CLI
 
 ```sh
-npx appmap-validate [--version 1.6.0] path/to/file.appmap.json
+npx appmap-validate path/to/file.appmap.json
 ```
 
 ## API
@@ -25,6 +25,34 @@ const {validate} = require("appmap-validate");
 validate({
   path, // either provide a path to an appmap file
   data, // or directly provide the JSON-parsed data
-  version // appmap specification version (currently only 1.6.0)
+  version, // appmap specification version
+  // JSON schema Error reporting options:
+  "schema-depth": 0 // depth of the schema to display
+  "instance-depth": 0 // depth of the instance to display
 });
 ```
+
+## Design Decisions
+
+- *Every object is extensible*
+  Appmap producers are free to include additional properties.
+  This can be useful to experiment with novel extensions which are not yet part of the spec.
+  Also it can be useful to include additional data for debugging purpose.
+- *Every optional property is nullable*
+  When a property is is not required, appmap producers have two options.
+  Either they do not include the property in the object.
+  Or they set its value to `null` which is easier/faster to do when using literal object notation.
+  For instance, in js:
+  ```js
+  // Missing optional property:
+  ({
+    required: "foo",
+    ... test ? {optional: "bar"} : {}
+  })
+  // null optional property:
+  ({
+    required: "foo",
+    optional: test ? "bar" : null
+  })
+  ```
+

@@ -4,8 +4,18 @@ required: [version, metadata, classMap, events]
 properties:
   version:
     enum:
-      - "1.6.0"
-      - "1.6"
+      - "1.6.0" #! = 1.6.0
+      - "1.6"   #! = 1.6.0
+      - "1.5.1" #! = 1.5.1
+      - "1.5.0" #! = 1.5.0
+      - "1.5"   #! = 1.5.0
+      - "1.4.1" #! = 1.4.1
+      - "1.4.0" #! = 1.4.0
+      - "1.4"   #! = 1.4.0
+      - "1.3.0" #! = 1.3.0
+      - "1.3"   #! = 1.3.0
+      - "1.2.0" #! = 1.2.0
+      - "1.2"   #! = 1.2.0
   metadata:
     $ref: "#/definitions/metadata"
   classMap:
@@ -18,8 +28,8 @@ properties:
       anyOf:
         - $ref: "#/definitions/function-call"
         - $ref: "#/definitions/function-return"
-        - $ref: "#/definitions/http-client-request"
-        - $ref: "#/definitions/http-client-response"
+        - $ref: "#/definitions/http-client-request" #! >= 1.5.0
+        - $ref: "#/definitions/http-client-response" #! >= 1.5.0
         - $ref: "#/definitions/http-server-request"
         - $ref: "#/definitions/http-server-response"
         - $ref: "#/definitions/sql-query"
@@ -136,22 +146,22 @@ definitions:
             type: integer
             nullable: true
             minimum: 0
-          test_status:
-            enum:
-              - null
-              - succeeded
-              - failed
-          exception:
-            type: object
-            nullable: true
-            required:
-              - class
-            properties:
-              class:
-                type: string
-              message:
-                type: string
-                nullable: true
+          test_status:    #! >= 1.6.0
+            enum:         #! >= 1.6.0
+              - null      #! >= 1.6.0
+              - succeeded #! >= 1.6.0
+              - failed    #! >= 1.6.0
+          exception:           #! >= 1.6.0
+            type: object       #! >= 1.6.0
+            nullable: true     #! >= 1.6.0
+            required:          #! >= 1.6.0
+              - class          #! >= 1.6.0
+            properties:        #! >= 1.6.0
+              class:           #! >= 1.6.0
+                type: string   #! >= 1.6.0
+              message:         #! >= 1.6.0
+                type: string   #! >= 1.6.0
+                nullable: true #! >= 1.6.0
 
   #############
   # Class Map #
@@ -198,6 +208,7 @@ definitions:
     required:
       - type
       - name
+      - location #! < 1.4.1
       - static
     properties:
       type:
@@ -206,7 +217,7 @@ definitions:
         type: string
       location:
         type: string
-        nullable: true
+        nullable: true #! >= 1.4.1
       static:
         type: boolean
       labels:
@@ -214,12 +225,12 @@ definitions:
         nullable: true
         items:
           type: string
-      comment:
-        type: string
-        nullable: true
-      source:
-        type: string
-        nullable: true
+      comment:         #! >= 1.3.0
+        type: string   #! >= 1.3.0
+        nullable: true #! >= 1.3.0
+      source:          #! >= 1.3.0
+        type: string   #! >= 1.3.0
+        nullable: true #! >= 1.3.0
 
   #########
   # Event #
@@ -289,15 +300,17 @@ definitions:
   parameter:
     type: object
     required:
+      - name      #! < 1.6.0
+      - object_id #! < 1.6.0
       - class
       - value
     properties:
       name:
         type: string
-        nullable: true
+        nullable: true #! >= 1.6.0
       object_id:
         type: integer
-        nullable: true
+        nullable: true #! >= 1.6.0
         minimum: 0
       class:
         type: string
@@ -337,6 +350,10 @@ definitions:
         required:
           - defined_class
           - method_id
+          - path #! < 1.4.1
+          - lineno #! < 1.4.1
+          - receiver #! < 1.4.1
+          - parameters #! < 1.4.1
           - static
         properties:
           defined_class:
@@ -345,18 +362,18 @@ definitions:
             type: string
           path:
             type: string
-            nullable: true
+            nullable: true #! >= 1.4.1
           lineno:
             type: integer
             minimum: 0
-            nullable: true
+            nullable: true #! >= 1.4.1
           receiver:
             anyOf:
-              - const: null
+              - const: null #! >= 1.4.1
               - $ref: "#/definitions/parameter"
           parameters:
             type: array
-            nullable: true
+            nullable: true #! >= 1.4.1
             items:
               $ref: "#/definitions/parameter"
           static:
@@ -389,59 +406,59 @@ definitions:
   # in other event types because it interferes with
   # subsequent verifications in lib/main.js.
 
-  http-client-request:
-    allOf:
-      - $ref: "#/definitions/call"
-      - type: object
-        required:
-          - http_client_request
-          - message
-        properties:
-          http_client_request:
-            type: object
-            required:
-              - request_method
-              - url
-            properties:
-              request_method:
-                $ref: "#/definitions/verb"
-              url:
-                type: string
-              headers:
-                $ref: "#/definitions/headers"
-          message:
-            type: array
-            items:
-              $ref: "#/definitions/parameter"
-          defined_class: false
-          method_id: false
-          sql_query: false
-          http_server_request: false
+  http-client-request:                        #! >= 1.5.0
+    allOf:                                    #! >= 1.5.0
+      - $ref: "#/definitions/call"            #! >= 1.5.0
+      - type: object                          #! >= 1.5.0
+        required:                             #! >= 1.5.0
+          - http_client_request               #! >= 1.5.0
+          - message                           #! >= 1.5.0
+        properties:                           #! >= 1.5.0
+          http_client_request:                #! >= 1.5.0
+            type: object                      #! >= 1.5.0
+            required:                         #! >= 1.5.0
+              - request_method                #! >= 1.5.0
+              - url                           #! >= 1.5.0
+            properties:                       #! >= 1.5.0
+              request_method:                 #! >= 1.5.0
+                $ref: "#/definitions/verb"    #! >= 1.5.0
+              url:                            #! >= 1.5.0
+                type: string                  #! >= 1.5.0
+              headers:                        #! >= 1.5.0
+                $ref: "#/definitions/headers" #! >= 1.5.0
+          message:                            #! >= 1.5.0
+            type: array                       #! >= 1.5.0
+            items:                            #! >= 1.5.0
+              $ref: "#/definitions/parameter" #! >= 1.5.0
+          defined_class: false                #! >= 1.5.0
+          method_id: false                    #! >= 1.5.0
+          sql_query: false                    #! >= 1.5.0
+          http_server_request: false          #! >= 1.5.0
 
-  http-client-response:
-    allOf:
-      - $ref: "#/definitions/return"
-      - type: object
-        required:
-          - http_client_response
-        properties:
-          http_client_response:
-            type: object
-            required:
-              - status_code
-            properties:
-              headers:
-                $ref: "#/definitions/headers"
-              status_code:
-                type: integer
-                minimum: 100
-                maximum: 599
-              mime_type:
-                type: string
-                nullable: true
-          return_value: false
-          exceptions: false
-          http_server_response: false
+  http-client-response:                       #! >= 1.5.0
+    allOf:                                    #! >= 1.5.0
+      - $ref: "#/definitions/return"          #! >= 1.5.0
+      - type: object                          #! >= 1.5.0
+        required:                             #! >= 1.5.0
+          - http_client_response              #! >= 1.5.0
+        properties:                           #! >= 1.5.0
+          http_client_response:               #! >= 1.5.0
+            type: object                      #! >= 1.5.0
+            required:                         #! >= 1.5.0
+              - status_code                   #! >= 1.5.0
+            properties:                       #! >= 1.5.0
+              headers:                        #! >= 1.5.0
+                $ref: "#/definitions/headers" #! >= 1.5.0
+              status_code:                    #! >= 1.5.0
+                type: integer                 #! >= 1.5.0
+                minimum: 100                  #! >= 1.5.0
+                maximum: 599                  #! >= 1.5.0
+              mime_type:                      #! >= 1.5.0
+                type: string                  #! >= 1.5.0
+                nullable: true                #! >= 1.5.0
+          return_value: false                 #! >= 1.5.0
+          exceptions: false                   #! >= 1.5.0
+          http_server_response: false         #! >= 1.5.0
 
   # Http Server #
 
@@ -471,9 +488,9 @@ definitions:
                 $ref: "#/definitions/verb"
               path_info:
                 type: string
-              normalized_path_info:
-                type: string
-                nullable: true
+              normalized_path_info: #! >= 1.4.0
+                type: string        #! >= 1.4.0
+                nullable: true      #! >= 1.4.0
               protocol:
                 enum:
                   - null

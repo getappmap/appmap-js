@@ -4,8 +4,8 @@ required: [version, metadata, classMap, events]
 properties:
   version:
     enum:
-      - "1.6.0"
-      - "1.6"
+      - "1.5.0"
+      - "1.5"
   metadata:
     $ref: "#/definitions/metadata"
   classMap:
@@ -136,22 +136,6 @@ definitions:
             type: integer
             nullable: true
             minimum: 0
-          test_status:
-            enum:
-              - null
-              - succeeded
-              - failed
-          exception:
-            type: object
-            nullable: true
-            required:
-              - class
-            properties:
-              class:
-                type: string
-              message:
-                type: string
-                nullable: true
 
   #############
   # Class Map #
@@ -289,15 +273,15 @@ definitions:
   parameter:
     type: object
     required:
+      - name
+      - object_id
       - class
       - value
     properties:
       name:
         type: string
-        nullable: true
       object_id:
         type: integer
-        nullable: true
         minimum: 0
       class:
         type: string

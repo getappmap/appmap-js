@@ -1,16 +1,18 @@
-const { parse: yaml } = require("yaml");
-const Ajv = require("ajv");
 const { readFileSync } = require("fs");
-const { InvalidAppmapError, InputError, assert, assertSuccess } = require("./assert.js");
+const YAML = require("yaml");
+const Ajv = require("ajv");
+const { asTree } = require("treeify");
+const { structureAJVErrorArray, summarizeAJVErrorTree } = require("ajv-error-tree");
+const { getVersionMapping } = require("./version.js");
+const { AppmapError, InputError, assert, assertSuccess } = require("./assert.js");
 
-const versions = new Map([
-  ["1.6", "1-6-0"],
-  ["1.6.0", "1-6-0"],
-]);
+const ajv = new Ajv({
+  verbose: true,
+});
+// jsPropertySyntax: true
+const versions = getVersionMapping();
 
 const keys = Array.from(versions.keys());
-
-const ajv = new Ajv();
 
 const cache = new Map();
 
@@ -49,25 +51,23 @@ const getReturnTag = (event) => {
   if (Reflect.getOwnPropertyDescriptor(event, "http_server_response") !== undefined) {
     return "http-server";
   }
-  return null;
+  return "sql|function";
 };
+
+exports.AppmapError = AppmapError;
+
+exports.InputError = InputError;
 
 exports.validate = (options) => {
   // Normalize options //
   options = {
+    "schema-depth": 0,
+    "instance-depth": 0,
     path: null,
     data: null,
-    version: "1.6.0",
+    version: null,
     ...options,
   };
-  assert(
-    typeof options.version === "string" && versions.has(options.version),
-    InputError,
-    "invalid version %o, it should be one of: %o",
-    options.version,
-    keys
-  );
-  options.version = versions.get(options.version);
   assert(
     (options.path === null) !== (options.data === null),
     InputError,
@@ -79,23 +79,48 @@ exports.validate = (options) => {
     const content = assertSuccess(() => readFileSync(options.path, "utf8"), InputError, "%s");
     options.data = assertSuccess(
       () => JSON.parse(content),
-      InvalidAppmapError,
+      AppmapError,
       `could not JSON-parse file %o >> %s`,
       options.path
     );
   }
+  if (options.version === null) {
+    assert(
+      typeof options.data === "object" &&
+        options.data !== null &&
+        Reflect.getOwnPropertyDescriptor(options.data, "version") !== undefined,
+      AppmapError,
+      "could extract version from appmap"
+    );
+    options.version = options.data.version;
+  }
+  if (/^[0-9]+\.[0-9]+$/.test(options.version)) {
+    options.version = `${options.version}.0`;
+  }
+  assert(
+    versions.has(options.version),
+    InputError,
+    "unsupported appmap version %o; expected one of %o",
+    options.version,
+    keys
+  );
   // Validate against json schema //
   if (!cache.has(options.version)) {
-    ajv.addSchema(yaml(readFileSync(`${__dirname}/../schema/${options.version}.yml`, "utf8")));
-    cache.set(options.version, ajv.getSchema(`appmap-${options.version}`));
+    const schema = YAML.parse(readFileSync(versions.get(options.version), "utf8"));
+    cache.set(options.version, ajv.compile(schema));
   }
   const validate = cache.get(options.version);
-  assert(
-    validate(options.data),
-    InvalidAppmapError,
-    "appmap failed schema validation >> %o",
-    validate.errors
-  );
+  if (!validate(options.data)) {
+    const tree1 = structureAJVErrorArray(validate.errors);
+    const tree2 = summarizeAJVErrorTree(tree1, options);
+    let message;
+    if (options["schema-depth"] === 0 && options["instance-depth"] === 0) {
+      message = typeof tree2 === "string" ? tree2 : asTree(tree2, true);
+    } else {
+      message = YAML.stringify(tree2);
+    }
+    throw new AppmapError(message, { list: validate.errors, tree: tree1 });
+  }
   const events = options.data.events;
   // Verify the unicity of code object //
   const designators = new Set();
@@ -106,28 +131,31 @@ exports.validate = (options) => {
         Error,
         "this appmap should not have passed ajv (function code objects should not appear at the top-level)"
       );
-      const [, path2, lineno] = /^([\s\S]*):([0-9]+)$/.exec(entity.location);
-      assert(
-        path1.startsWith(path2),
-        InvalidAppmapError,
-        "path should be a prefix of %o for function code object %o",
-        path1,
-        entity
-      );
-      const designator = makeDesignator([
-        path2,
-        parseInt(lineno),
-        parent.name,
-        entity.static,
-        entity.name,
-      ]);
-      assert(
-        !designators.has(designator),
-        InvalidAppmapError,
-        "detected a function code object clash in the classMap: %o",
-        entity
-      );
-      designators.add(designator);
+      if (
+        Reflect.getOwnPropertyDescriptor(entity, "location") !== undefined &&
+        entity.location !== null
+      ) {
+        let path2 = entity.location;
+        let lineno = null;
+        if (path2 !== null && /:[0-9]+$/u.test(path2)) {
+          [, path2, lineno] = /^([\s\S]*):([0-9]+)$/.exec(entity.location);
+        }
+        // assert(
+        //   path1.toLowerCase().startsWith(path2.toLowerCase()),
+        //   AppmapError,
+        //   "path should be a prefix of %o for function code object %o",
+        //   path1,
+        //   entity
+        // );
+        const designator = makeDesignator([path2, parseInt(lineno), entity.static, entity.name]);
+        assert(
+          !designators.has(designator),
+          AppmapError,
+          "detected a function code object clash in the classMap: %o",
+          entity
+        );
+        designators.add(designator);
+      }
     } else {
       path1 = `${path1}${entity.name}/`;
       for (let child of entity.children) {
@@ -138,75 +166,49 @@ exports.validate = (options) => {
   for (let entity of options.data.classMap) {
     collectDesignator(entity, null, "");
   }
-  // Verify the unicity of event.id and event.parent_id //
-  for (let index1 = 0; index1 < events.length; index1 += 1) {
-    const event1 = events[index1];
-    for (let index2 = index1 + 1; index2 < events.length; index2 += 1) {
-      const event2 = events[index2];
+  // Verify the per thread fifo ordering //
+  {
+    const threads = new Map();
+    const ids = new Map();
+    for (let index = 0; index < events.length; index += 1) {
+      const event = events[index];
       assert(
-        event1.id !== event2.id,
-        InvalidAppmapError,
-        "duplicate event id between #%i and #%i (ie between %o and %o)",
-        index1,
-        index2,
-        event1,
-        event2
+        !ids.has(event.id),
+        AppmapError,
+        "duplicate event id between #%i and #%i",
+        index,
+        ids.get(index)
       );
-      if (event1.event == "return" && event2.event === "return") {
+      ids.set(event.id, index);
+      let thread = threads.get(event.thread_id);
+      if (thread === undefined) {
+        thread = [];
+        threads.set(event.thread_id, thread);
+      }
+      if (event.event === "call") {
+        thread.push(event);
+      } else {
+        const parent = thread.pop();
         assert(
-          event1.parent_id !== event2.parent_id,
-          InvalidAppmapError,
-          "duplicate event parent_id between #%i and #%i (ie between %o and %o)",
-          index1,
-          index2,
-          event1,
-          event2
+          parent.id === event.parent_id,
+          AppmapError,
+          "return event #%i parent id mistmatch: expected %i but got %i",
+          index,
+          parent.id,
+          event.parent_id
+        );
+        const tag1 = getCallTag(parent);
+        const tag2 = getReturnTag(event);
+        assert(
+          tag2.includes(tag1),
+          AppmapError,
+          "incompatible event type between #%i and #%i, expected a %s but got a %s",
+          tag1,
+          tag2
         );
       }
     }
   }
-  // Verify that
-  //   - each return event is matched by a call event
-  //   - each function call event matches a code object
-  for (let index1 = 0; index1 < events.length; index1 += 1) {
-    const event1 = events[index1];
-    if (event1.event === "call") {
-      if (Reflect.getOwnPropertyDescriptor(event1, "method_id")) {
-        const designator = makeDesignator([
-          event1.path,
-          event1.lineno,
-          event1.defined_class,
-          event1.static,
-          event1.method_id,
-        ]);
-        assert(
-          designators.has(designator),
-          InvalidAppmapError,
-          "could not find a match in the classMap for the function call event #%i (%o): %o is not in %o",
-          index1,
-          event1,
-          designator,
-          designators
-        );
-      }
-    } else {
-      assert(event1.event === "return", Error, "this appmap should not have passed ajv");
-      const index2 = events.findIndex((event2) => event2.id === event1.parent_id);
-      assert(index2 !== -1, "missing matching call event for #%i -- ie: %o", index1, event1);
-      const event2 = events[index2];
-      const tag1 = getReturnTag(event1);
-      const tag2 = getCallTag(event2);
-      assert(
-        tag1 === null || tag1 === tag2,
-        InvalidAppmapError,
-        "type mismatch (%s !== %s) between call-return event pair (#%i, #%i) -- ie: (%o, %o)",
-        tag2,
-        tag1,
-        index2,
-        index1,
-        event2,
-        event1
-      );
-    }
-  }
+  // Return //
+  return options.version;
 };

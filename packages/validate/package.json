@@ -2,10 +2,11 @@
   "name": "@appland/appmap-validate",
   "version": "0.0.0",
   "scripts": {
-    "test": "npx c8 --reporter=text-summary --check-coverage --branches=100 --functions=100 --lines=100 --statements=100 --include lib/main.js node test/main.js",
-    "test-html": "npx c8 --reporter=html node test/main.js && open coverage/index.html",
-    "prettier": "npx prettier --write 'lib/*.js' 'test/*.js'",
-    "lint": "npx eslint 'lib/*.js' 'test/*.js'"
+    "test": "npx c8 --reporter=text-summary --check-coverage --branches=100 --functions=100 --lines=100 --statements=100 --include lib/main.js node test/smoke.js",
+    "build": "node src/build.js",
+    "test-html": "npx c8 --reporter=html node test/smoke.js && open coverage/index.html",
+    "prettier": "npx prettier --write 'lib/*.js' 'test/*.js' 'src/*.js'",
+    "lint": "npx eslint 'lib/*.js' 'test/*.js' 'src/*.js'"
   },
   "publishConfig": {
     "access": "public"
@@ -21,7 +22,8 @@
   "main": "lib/main.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/applandinc/appmap-validate.git"
+    "url": "https://github.com/applandinc/appmap-js.git",
+    "directory": "packages/validate"
   },
   "devDependencies": {
     "c8": "^7.7.2",
@@ -30,6 +32,8 @@
   },
   "dependencies": {
     "ajv": "^8.6.0",
+    "ajv-error-tree": "0.0.2",
+    "treeify": "^1.1.0",
     "yaml": "^1.10.2"
   }
 }
