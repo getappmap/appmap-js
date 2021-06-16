@@ -1,3 +1,10 @@
+# [@appland/components-v1.1.9](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.8...@appland/components-v1.1.9) (2021-06-16)
+
+
+### Bug Fixes
+
+* Upgrade @appland/diagrams to v1.1.0 ([fa83228](https://github.com/applandinc/appmap-js/commit/fa832288b8f776256318952d1e01f53af8860822))
+
 # [@appland/components-v1.1.8](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.7...@appland/components-v1.1.8) (2021-06-15)
 
 
