@@ -1,3 +1,18 @@
+# [@appland/cli-v1.1.0](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.0.4...@appland/cli-v1.1.0) (2021-06-16)
+
+
+### Bug Fixes
+
+* Remove 'example' because it adds so much noise ([17fb066](https://github.com/applandinc/appmap-js/commit/17fb066ba0e260911d4b204f6f6b4b310a13b7e1))
+
+
+### Features
+
+* Add 'swagger' command to the CLI ([3cb4380](https://github.com/applandinc/appmap-js/commit/3cb43808918dad92766b863326f0ff500cc235b2))
+* Add version file and created time to the AppMap index ([7496e3c](https://github.com/applandinc/appmap-js/commit/7496e3ceaf1dee3f96028d64246d7ea34b314386))
+* Find and print info about a named function ([544db5c](https://github.com/applandinc/appmap-js/commit/544db5ca402d9e3399326f28da7d3a43a606f5c4))
+* Search AppMaps for tables and routes ([e78d5b9](https://github.com/applandinc/appmap-js/commit/e78d5b91686818001a28ac6aee93ff388ec754e8))
+
 # [@appland/cli-v1.0.4](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.0.3...@appland/cli-v1.0.4) (2021-05-28)
 
 
