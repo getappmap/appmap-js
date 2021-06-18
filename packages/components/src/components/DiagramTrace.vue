@@ -76,28 +76,36 @@ export default {
 
     focusHighlighted() {
       setTimeout(() => {
-        const { container } = this.$refs;
+        const { container, trace } = this.$refs;
         const element = container.$el.querySelector('.trace-node.highlight');
         if (!element) {
           return;
         }
 
         container.setScaleTarget(element);
-        container.panToElement(element, this.$refs.trace);
+        container.panToElement(element, trace.$el);
       }, 16);
     },
 
     focusFocused() {
       setTimeout(() => {
-        const { container } = this.$refs;
+        const { container, trace } = this.$refs;
         const element = container.$el.querySelector('.trace-node.focused');
         if (!element) {
           return;
         }
 
         container.setScaleTarget(element);
-        container.panToElement(element, this.$refs.trace);
+        container.panToElement(element, trace.$el);
       }, 16);
+    },
+
+    focusSelector(selector) {
+      const element = this.$el.querySelector(selector);
+      if (element) {
+        const { container, trace } = this.$refs;
+        container.panToElement(element, trace.$el);
+      }
     },
 
     onClickEvent(event) {

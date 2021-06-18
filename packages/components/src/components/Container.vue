@@ -12,6 +12,7 @@ import {
   lazyPanToElement,
   getElementCenter,
   getParentRelativeOffset,
+  nodeFullyVisible,
 } from '@appland/diagrams';
 
 export default {
@@ -33,8 +34,19 @@ export default {
     },
     panToElement(element, parent = null) {
       const parentContainer = parent ?? this.container.element;
+
+      if (nodeFullyVisible(this.container.element, element)) {
+        return;
+      }
+
       const coords = getParentRelativeOffset(element, parentContainer);
-      this.container.translateTo(coords.left, coords.top);
+      const parentRect = this.container.element.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+
+      this.container.translateTo(
+        coords.left - parentRect.x + elementRect.width,
+        coords.top - parentRect.y + elementRect.height
+      );
     },
     lazyPanToElement(element) {
       lazyPanToElement(this.container, element, 10);
