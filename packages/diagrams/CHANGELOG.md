@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.1.1](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.1.0...@appland/diagrams-v1.1.1) (2021-06-21)
+
+
+### Bug Fixes
+
+* Trace nodes are always visible after focus ([#255](https://github.com/applandinc/appmap-js/issues/255)) ([5030da6](https://github.com/applandinc/appmap-js/commit/5030da6f66e36cd9efb22e0cacc8dab0cf27ab56))
+
 # [@appland/diagrams-v1.1.0](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.0.4...@appland/diagrams-v1.1.0) (2021-06-14)
 
 
