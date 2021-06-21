@@ -1,3 +1,10 @@
+# [@appland/components-v1.1.10](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.9...@appland/components-v1.1.10) (2021-06-21)
+
+
+### Bug Fixes
+
+* Trace nodes are always visible after focus ([#255](https://github.com/applandinc/appmap-js/issues/255)) ([5030da6](https://github.com/applandinc/appmap-js/commit/5030da6f66e36cd9efb22e0cacc8dab0cf27ab56))
+
 # [@appland/components-v1.1.9](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.8...@appland/components-v1.1.9) (2021-06-16)
 
 
