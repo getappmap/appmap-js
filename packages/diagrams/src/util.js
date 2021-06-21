@@ -39,10 +39,10 @@ export function lazyPanToElement(viewport, element, padding = 0) {
   viewport.translateBy(x, y);
 }
 
-function nodeFullyVisible(viewport, node) {
+export function nodeFullyVisible(container, node) {
   if (!node) return false;
-  return Geometry.contains(
-    viewport.element.getBoundingClientRect(),
+  return Geometry.inContainer(
+    container.getBoundingClientRect(),
     node.getBoundingClientRect()
   );
 }
@@ -82,7 +82,7 @@ function getParentOffset(element, parent) {
 // Pan the scenario view to given HTMLElement node.
 export function panToNode(viewport, node) {
   // To minimize panning do not move the view if the node is already fully visible.
-  if (!node || nodeFullyVisible(viewport, node)) {
+  if (!node || nodeFullyVisible(viewport.element, node)) {
     return;
   }
 

@@ -6,6 +6,23 @@ context('VS Code Extension', () => {
       );
     });
 
+    it('pans to the correct location when selecting "View in Trace"', () => {
+      cy.get(
+        '.node.class[data-id="active_support/ActiveSupport::SecurityUtils"]'
+      ).click();
+
+      cy.get('.v-details-panel-list')
+        .contains('Outbound connections')
+        .parent()
+        .within(() => {
+          cy.get('.list-item').contains('Digest::Instance#digest').click();
+        });
+
+      cy.get(':nth-child(16) > .list-item').click();
+      cy.get('button').contains('Show in Trace').click();
+      cy.get('.trace-node.highlight').should('be.visible');
+    });
+
     it('filters out objects that do not originate from an HTTP server request', () => {
       cy.get('.details-search__block-list').contains('crypto').click();
       cy.get('.v-details-panel-list')
@@ -541,6 +558,21 @@ context('VS Code Extension', () => {
         cy.wrap(el).click();
         cy.get('.trace-node.focused').should('be.visible');
       });
+    });
+
+    it('pans to the correct location when using keyboard navigation', () => {
+      cy.get('.tabs__header').contains('Trace').click();
+      cy.get(':nth-child(2) > .trace-node > .trace-node__body')
+        .click()
+        .type('{rightarrow}');
+
+      cy.get('body').trigger('keydown', { keycode: 38 }); // arrow up
+      cy.get('.trace-node.highlight').should('be.visible');
+
+      for (let i = 0; i < 50; ++i) {
+        cy.get('body').trigger('keydown', { keycode: 40 }); // arrow down
+        cy.get('.trace-node.highlight').should('be.visible');
+      }
     });
   });
 

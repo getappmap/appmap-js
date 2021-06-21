@@ -9,9 +9,10 @@
 <script>
 import {
   Container,
-  panToNode,
   lazyPanToElement,
   getElementCenter,
+  getParentRelativeOffset,
+  nodeFullyVisible,
 } from '@appland/diagrams';
 
 export default {
@@ -31,8 +32,21 @@ export default {
     translateTo(x, y) {
       this.container.translateTo(x, y);
     },
-    panToElement(element) {
-      panToNode(this.container, element);
+    panToElement(element, parent = null) {
+      const parentContainer = parent ?? this.container.element;
+
+      if (nodeFullyVisible(this.container.element, element)) {
+        return;
+      }
+
+      const coords = getParentRelativeOffset(element, parentContainer);
+      const parentRect = this.container.element.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+
+      this.container.translateTo(
+        coords.left - parentRect.x + elementRect.width * 0.5,
+        coords.top - parentRect.y + elementRect.height * 0.5
+      );
     },
     lazyPanToElement(element) {
       lazyPanToElement(this.container, element, 10);
