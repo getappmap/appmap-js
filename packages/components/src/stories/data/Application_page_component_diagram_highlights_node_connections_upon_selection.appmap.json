@@ -1,0 +1,1572 @@
+{
+  "version": "1.5.1",
+  "metadata": {
+    "app": "appland/AppLand",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "2.6.6"
+    },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/applandinc/appmap-ruby",
+      "version": "0.47.1"
+    },
+    "frameworks": [
+      {
+        "name": "rails",
+        "version": "5.2.5"
+      },
+      {
+        "name": "rspec",
+        "version": "3.9.1"
+      }
+    ],
+    "git": {
+      "repository": "git@github.com:applandinc/appmap-server.git",
+      "branch": "feature/appmap_deletion",
+      "commit": "472cf0f6ef91b05d737dadf81712c7e2179d8a99",
+      "status": [],
+      "git_last_annotated_tag": null,
+      "git_last_tag": "v0.27.0",
+      "git_commits_since_last_annotated_tag": null,
+      "git_commits_since_last_tag": 0
+    },
+    "name": "Application page component diagram highlights node connections upon selection",
+    "source_location": "spec/system/application_spec.rb",
+    "recorder": {
+      "name": "rspec"
+    },
+    "test_status": "succeeded",
+    "fingerprints": [
+      {
+        "appmap_digest": "20fbf4eb9b9d479a1ae9adbec0da4063ba093ed02076c29ccaf6fe0f08cdb8b1",
+        "canonicalization_algorithm": "update_v1",
+        "digest": "810a9c194156d31aefe44f3c114bd49124b34e9a9b244797bf9fed118a9b41f4",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "20fbf4eb9b9d479a1ae9adbec0da4063ba093ed02076c29ccaf6fe0f08cdb8b1",
+        "canonicalization_algorithm": "trace_v1",
+        "digest": "f6e8c08738e92d5aaaa37ccbbb2255e57c4900c7fbeb70616e296ede8aaf42d9",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "20fbf4eb9b9d479a1ae9adbec0da4063ba093ed02076c29ccaf6fe0f08cdb8b1",
+        "canonicalization_algorithm": "info_v1",
+        "digest": "810a9c194156d31aefe44f3c114bd49124b34e9a9b244797bf9fed118a9b41f4",
+        "fingerprint_algorithm": "sha256"
+      }
+    ]
+  },
+  "classMap": [
+    {
+      "name": "json",
+      "type": "package",
+      "children": [
+        {
+          "name": "JSON",
+          "type": "class",
+          "children": [
+            {
+              "name": "Ext",
+              "type": "class",
+              "children": [
+                {
+                  "name": "Generator",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "State",
+                      "type": "class",
+                      "children": [
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        },
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        },
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        },
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        },
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        },
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        },
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        },
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        },
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        },
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        },
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        },
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        },
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        },
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": ["format.json"]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Parser",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    },
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    },
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    },
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    },
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    },
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    },
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    },
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    },
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    },
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    },
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    },
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "net/http",
+      "type": "package",
+      "children": [
+        {
+          "name": "Net",
+          "type": "class",
+          "children": [
+            {
+              "name": "HTTP",
+              "type": "class",
+              "children": [
+                {
+                  "name": "request",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
+                  "labels": ["protocol.http"],
+                  "comment": "# Sends an HTTPRequest object +req+ to the HTTP server.\n#\n# If +req+ is a Net::HTTP::Post or Net::HTTP::Put request containing\n# data, the data is also sent. Providing data for a Net::HTTP::Head or\n# Net::HTTP::Get request results in an ArgumentError.\n#\n# Returns an HTTPResponse object.\n#\n# When called with a block, passes an HTTPResponse object to the block.\n# The body of the response will not have been read yet;\n# the block can process it using HTTPResponse#read_body,\n# if desired.\n#\n# This method never raises Net::* exceptions.\n#\n"
+                },
+                {
+                  "name": "request",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
+                  "labels": ["protocol.http"],
+                  "comment": "# Sends an HTTPRequest object +req+ to the HTTP server.\n#\n# If +req+ is a Net::HTTP::Post or Net::HTTP::Put request containing\n# data, the data is also sent. Providing data for a Net::HTTP::Head or\n# Net::HTTP::Get request results in an ArgumentError.\n#\n# Returns an HTTPResponse object.\n#\n# When called with a block, passes an HTTPResponse object to the block.\n# The body of the response will not have been read yet;\n# the block can process it using HTTPResponse#read_body,\n# if desired.\n#\n# This method never raises Net::* exceptions.\n#\n"
+                },
+                {
+                  "name": "request",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
+                  "labels": ["protocol.http"],
+                  "comment": "# Sends an HTTPRequest object +req+ to the HTTP server.\n#\n# If +req+ is a Net::HTTP::Post or Net::HTTP::Put request containing\n# data, the data is also sent. Providing data for a Net::HTTP::Head or\n# Net::HTTP::Get request results in an ArgumentError.\n#\n# Returns an HTTPResponse object.\n#\n# When called with a block, passes an HTTPResponse object to the block.\n# The body of the response will not have been read yet;\n# the block can process it using HTTPResponse#read_body,\n# if desired.\n#\n# This method never raises Net::* exceptions.\n#\n"
+                },
+                {
+                  "name": "request",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
+                  "labels": ["protocol.http"],
+                  "comment": "# Sends an HTTPRequest object +req+ to the HTTP server.\n#\n# If +req+ is a Net::HTTP::Post or Net::HTTP::Put request containing\n# data, the data is also sent. Providing data for a Net::HTTP::Head or\n# Net::HTTP::Get request results in an ArgumentError.\n#\n# Returns an HTTPResponse object.\n#\n# When called with a block, passes an HTTPResponse object to the block.\n# The body of the response will not have been read yet;\n# the block can process it using HTTPResponse#read_body,\n# if desired.\n#\n# This method never raises Net::* exceptions.\n#\n"
+                },
+                {
+                  "name": "request",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
+                  "labels": ["protocol.http"],
+                  "comment": "# Sends an HTTPRequest object +req+ to the HTTP server.\n#\n# If +req+ is a Net::HTTP::Post or Net::HTTP::Put request containing\n# data, the data is also sent. Providing data for a Net::HTTP::Head or\n# Net::HTTP::Get request results in an ArgumentError.\n#\n# Returns an HTTPResponse object.\n#\n# When called with a block, passes an HTTPResponse object to the block.\n# The body of the response will not have been read yet;\n# the block can process it using HTTPResponse#read_body,\n# if desired.\n#\n# This method never raises Net::* exceptions.\n#\n"
+                },
+                {
+                  "name": "request",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
+                  "labels": ["protocol.http"],
+                  "comment": "# Sends an HTTPRequest object +req+ to the HTTP server.\n#\n# If +req+ is a Net::HTTP::Post or Net::HTTP::Put request containing\n# data, the data is also sent. Providing data for a Net::HTTP::Head or\n# Net::HTTP::Get request results in an ArgumentError.\n#\n# Returns an HTTPResponse object.\n#\n# When called with a block, passes an HTTPResponse object to the block.\n# The body of the response will not have been read yet;\n# the block can process it using HTTPResponse#read_body,\n# if desired.\n#\n# This method never raises Net::* exceptions.\n#\n"
+                },
+                {
+                  "name": "request",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
+                  "labels": ["protocol.http"],
+                  "comment": "# Sends an HTTPRequest object +req+ to the HTTP server.\n#\n# If +req+ is a Net::HTTP::Post or Net::HTTP::Put request containing\n# data, the data is also sent. Providing data for a Net::HTTP::Head or\n# Net::HTTP::Get request results in an ArgumentError.\n#\n# Returns an HTTPResponse object.\n#\n# When called with a block, passes an HTTPResponse object to the block.\n# The body of the response will not have been read yet;\n# the block can process it using HTTPResponse#read_body,\n# if desired.\n#\n# This method never raises Net::* exceptions.\n#\n"
+                },
+                {
+                  "name": "request",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
+                  "labels": ["protocol.http"],
+                  "comment": "# Sends an HTTPRequest object +req+ to the HTTP server.\n#\n# If +req+ is a Net::HTTP::Post or Net::HTTP::Put request containing\n# data, the data is also sent. Providing data for a Net::HTTP::Head or\n# Net::HTTP::Get request results in an ArgumentError.\n#\n# Returns an HTTPResponse object.\n#\n# When called with a block, passes an HTTPResponse object to the block.\n# The body of the response will not have been read yet;\n# the block can process it using HTTPResponse#read_body,\n# if desired.\n#\n# This method never raises Net::* exceptions.\n#\n"
+                },
+                {
+                  "name": "request",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
+                  "labels": ["protocol.http"],
+                  "comment": "# Sends an HTTPRequest object +req+ to the HTTP server.\n#\n# If +req+ is a Net::HTTP::Post or Net::HTTP::Put request containing\n# data, the data is also sent. Providing data for a Net::HTTP::Head or\n# Net::HTTP::Get request results in an ArgumentError.\n#\n# Returns an HTTPResponse object.\n#\n# When called with a block, passes an HTTPResponse object to the block.\n# The body of the response will not have been read yet;\n# the block can process it using HTTPResponse#read_body,\n# if desired.\n#\n# This method never raises Net::* exceptions.\n#\n"
+                },
+                {
+                  "name": "request",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
+                  "labels": ["protocol.http"],
+                  "comment": "# Sends an HTTPRequest object +req+ to the HTTP server.\n#\n# If +req+ is a Net::HTTP::Post or Net::HTTP::Put request containing\n# data, the data is also sent. Providing data for a Net::HTTP::Head or\n# Net::HTTP::Get request results in an ArgumentError.\n#\n# Returns an HTTPResponse object.\n#\n# When called with a block, passes an HTTPResponse object to the block.\n# The body of the response will not have been read yet;\n# the block can process it using HTTPResponse#read_body,\n# if desired.\n#\n# This method never raises Net::* exceptions.\n#\n"
+                },
+                {
+                  "name": "request",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
+                  "labels": ["protocol.http"],
+                  "comment": "# Sends an HTTPRequest object +req+ to the HTTP server.\n#\n# If +req+ is a Net::HTTP::Post or Net::HTTP::Put request containing\n# data, the data is also sent. Providing data for a Net::HTTP::Head or\n# Net::HTTP::Get request results in an ArgumentError.\n#\n# Returns an HTTPResponse object.\n#\n# When called with a block, passes an HTTPResponse object to the block.\n# The body of the response will not have been read yet;\n# the block can process it using HTTPResponse#read_body,\n# if desired.\n#\n# This method never raises Net::* exceptions.\n#\n"
+                },
+                {
+                  "name": "request",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
+                  "labels": ["protocol.http"],
+                  "comment": "# Sends an HTTPRequest object +req+ to the HTTP server.\n#\n# If +req+ is a Net::HTTP::Post or Net::HTTP::Put request containing\n# data, the data is also sent. Providing data for a Net::HTTP::Head or\n# Net::HTTP::Get request results in an ArgumentError.\n#\n# Returns an HTTPResponse object.\n#\n# When called with a block, passes an HTTPResponse object to the block.\n# The body of the response will not have been read yet;\n# the block can process it using HTTPResponse#read_body,\n# if desired.\n#\n# This method never raises Net::* exceptions.\n#\n"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": 24885,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273856532140,
+          "value": "{:using=>\"css selector\", :value=>\"#component-diagram\"}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273856630620,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3d085deb8>"
+      }
+    },
+    {
+      "id": 24886,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24885,
+      "elapsed": 0.000015,
+      "return_value": {
+        "class": "String",
+        "value": "{\"using\":\"css selector\",\"value\":\"#component-diagram\"}",
+        "object_id": 70273856790380
+      }
+    },
+    {
+      "id": 24887,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/elements",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "User-Agent": "selenium/3.142.7 (ruby macosx)",
+          "Content-Length": "53",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        }
+      }
+    },
+    {
+      "id": 24888,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24887,
+      "elapsed": 0.004557,
+      "http_client_response": {
+        "status_code": 200,
+        "headers": {
+          "Content-Length": "90",
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-cache"
+        }
+      }
+    },
+    {
+      "id": 24889,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70273857382980,
+        "value": "#<JSON::Ext::Parser:0x00007fd3d09cd488>"
+      }
+    },
+    {
+      "id": 24890,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24889,
+      "elapsed": 0.000011,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"value\"=>[{\"element-6066-11e4-a52e-4f735466cecf\"=>\"847acf4e-c8d6-4b0b-82c4-2ac930f3a018\"}]}",
+        "object_id": 70273857450880
+      }
+    },
+    {
+      "id": 24891,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273857518180,
+          "value": "{:script=>\"return ((function(){function d(t,e,n){function r(t){var e=x(t);if(0<e.height&&0<e.width)r",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273857512380,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3d0a0c778>"
+      }
+    },
+    {
+      "id": 24892,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273857581940,
+          "value": "{\"element-6066-11e4-a52e-4f735466cecf\"=>\"847acf4e-c8d6-4b0b-82c4-2ac930f3a018\"}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273857581860,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3d0a2e648>"
+      }
+    },
+    {
+      "id": 24893,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24892,
+      "elapsed": 0.000008,
+      "return_value": {
+        "class": "String",
+        "value": "{\"element-6066-11e4-a52e-4f735466cecf\":\"847acf4e-c8d6-4b0b-82c4-2ac930f3a018\"}",
+        "object_id": 70273857633820
+      }
+    },
+    {
+      "id": 24894,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24891,
+      "elapsed": 0.00026,
+      "return_value": {
+        "class": "String",
+        "value": "{\"script\":\"return ((function(){function d(t,e,n){function r(t){var e=x(t);if(0<e.height&&0<e.width)r",
+        "object_id": 70273857692580
+      }
+    },
+    {
+      "id": 24895,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/execute/sync",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "User-Agent": "selenium/3.142.7 (ruby macosx)",
+          "Content-Length": "5067",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        }
+      }
+    },
+    {
+      "id": 24896,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24895,
+      "elapsed": 0.007966,
+      "http_client_response": {
+        "status_code": 200,
+        "headers": {
+          "Content-Length": "14",
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-cache"
+        }
+      }
+    },
+    {
+      "id": 24897,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70273858295340,
+        "value": "#<JSON::Ext::Parser:0x00007fd3d0b8ac58>"
+      }
+    },
+    {
+      "id": 24898,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24897,
+      "elapsed": 0.000011,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"value\"=>true}",
+        "object_id": 70273858327300
+      }
+    },
+    {
+      "id": 24899,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273858422040,
+          "value": "{:using=>\"css selector\", :value=>\".node.highlight\"}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273858459500,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3d0bdaed8>"
+      }
+    },
+    {
+      "id": 24900,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24899,
+      "elapsed": 0.000014,
+      "return_value": {
+        "class": "String",
+        "value": "{\"using\":\"css selector\",\"value\":\".node.highlight\"}",
+        "object_id": 70273858526720
+      }
+    },
+    {
+      "id": 24901,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/847acf4e-c8d6-4b0b-82c4-2ac930f3a018/elements",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "User-Agent": "selenium/3.142.7 (ruby macosx)",
+          "Content-Length": "50",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        }
+      }
+    },
+    {
+      "id": 24902,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24901,
+      "elapsed": 0.007428,
+      "http_client_response": {
+        "status_code": 200,
+        "headers": {
+          "Content-Length": "12",
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-cache"
+        }
+      }
+    },
+    {
+      "id": 24903,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70273858891320,
+        "value": "#<JSON::Ext::Parser:0x00007fd3d0cadc70>"
+      }
+    },
+    {
+      "id": 24904,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24903,
+      "elapsed": 0.000009,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"value\"=>[]}",
+        "object_id": 70273858826160
+      }
+    },
+    {
+      "id": 24905,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273859015280,
+          "value": "{:using=>\"css selector\", :value=>\".edgePath.highlight\"}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273859051060,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3d0cfbc68>"
+      }
+    },
+    {
+      "id": 24906,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24905,
+      "elapsed": 0.000017,
+      "return_value": {
+        "class": "String",
+        "value": "{\"using\":\"css selector\",\"value\":\".edgePath.highlight\"}",
+        "object_id": 70273859043820
+      }
+    },
+    {
+      "id": 24907,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/847acf4e-c8d6-4b0b-82c4-2ac930f3a018/elements",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "User-Agent": "selenium/3.142.7 (ruby macosx)",
+          "Content-Length": "54",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        }
+      }
+    },
+    {
+      "id": 24908,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24907,
+      "elapsed": 0.007062,
+      "http_client_response": {
+        "status_code": 200,
+        "headers": {
+          "Content-Length": "12",
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-cache"
+        }
+      }
+    },
+    {
+      "id": 24909,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70273859332360,
+        "value": "#<JSON::Ext::Parser:0x00007fd3d0d85210>"
+      }
+    },
+    {
+      "id": 24910,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24909,
+      "elapsed": 0.000006,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"value\"=>[]}",
+        "object_id": 70273859366460
+      }
+    },
+    {
+      "id": 24911,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273859449300,
+          "value": "{:using=>\"css selector\", :value=>\".node[id=\\\"POST /api/scenarios\\\"]\"}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273859447220,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3d0dbd368>"
+      }
+    },
+    {
+      "id": 24912,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24911,
+      "elapsed": 0.00001,
+      "return_value": {
+        "class": "String",
+        "value": "{\"using\":\"css selector\",\"value\":\".node[id=\\\"POST /api/scenarios\\\"]\"}",
+        "object_id": 70273859481480
+      }
+    },
+    {
+      "id": 24913,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/847acf4e-c8d6-4b0b-82c4-2ac930f3a018/elements",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "User-Agent": "selenium/3.142.7 (ruby macosx)",
+          "Content-Length": "68",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        }
+      }
+    },
+    {
+      "id": 24914,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24913,
+      "elapsed": 0.007313,
+      "http_client_response": {
+        "status_code": 200,
+        "headers": {
+          "Content-Length": "90",
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-cache"
+        }
+      }
+    },
+    {
+      "id": 24915,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70273859695560,
+        "value": "#<JSON::Ext::Parser:0x00007fd3d0e36790>"
+      }
+    },
+    {
+      "id": 24916,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24915,
+      "elapsed": 0.000014,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"value\"=>[{\"element-6066-11e4-a52e-4f735466cecf\"=>\"51bf7824-28dc-48a3-927f-6aeeed37c43f\"}]}",
+        "object_id": 70273859726700
+      }
+    },
+    {
+      "id": 24917,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273859759840,
+          "value": "{:script=>\"return ((function(){function d(t,e,n){function r(t){var e=x(t);if(0<e.height&&0<e.width)r",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273859757240,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3d0e54970>"
+      }
+    },
+    {
+      "id": 24918,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273859829080,
+          "value": "{\"element-6066-11e4-a52e-4f735466cecf\"=>\"51bf7824-28dc-48a3-927f-6aeeed37c43f\"}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273859828960,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3d0e779c0>"
+      }
+    },
+    {
+      "id": 24919,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24918,
+      "elapsed": 0.000011,
+      "return_value": {
+        "class": "String",
+        "value": "{\"element-6066-11e4-a52e-4f735466cecf\":\"51bf7824-28dc-48a3-927f-6aeeed37c43f\"}",
+        "object_id": 70273859858620
+      }
+    },
+    {
+      "id": 24920,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24917,
+      "elapsed": 0.000354,
+      "return_value": {
+        "class": "String",
+        "value": "{\"script\":\"return ((function(){function d(t,e,n){function r(t){var e=x(t);if(0<e.height&&0<e.width)r",
+        "object_id": 70273859854600
+      }
+    },
+    {
+      "id": 24921,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/execute/sync",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "User-Agent": "selenium/3.142.7 (ruby macosx)",
+          "Content-Length": "5067",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        }
+      }
+    },
+    {
+      "id": 24922,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24921,
+      "elapsed": 0.004415,
+      "http_client_response": {
+        "status_code": 200,
+        "headers": {
+          "Content-Length": "14",
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-cache"
+        }
+      }
+    },
+    {
+      "id": 24923,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70273860204320,
+        "value": "#<JSON::Ext::Parser:0x00007fd3d0f2ee40>"
+      }
+    },
+    {
+      "id": 24924,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24923,
+      "elapsed": 0.000008,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"value\"=>true}",
+        "object_id": 70273860238660
+      }
+    },
+    {
+      "id": 24925,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/51bf7824-28dc-48a3-927f-6aeeed37c43f/click",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "User-Agent": "selenium/3.142.7 (ruby macosx)",
+          "Content-Length": "2",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        }
+      }
+    },
+    {
+      "id": 24926,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24925,
+      "elapsed": 0.022598,
+      "http_client_response": {
+        "status_code": 200,
+        "headers": {
+          "Content-Length": "14",
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-cache"
+        }
+      }
+    },
+    {
+      "id": 24927,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70273638386400,
+        "value": "#<JSON::Ext::Parser:0x00007fd3b68195c0>"
+      }
+    },
+    {
+      "id": 24928,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24927,
+      "elapsed": 0.000011,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"value\"=>nil}",
+        "object_id": 70273638418220
+      }
+    },
+    {
+      "id": 24929,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273638548700,
+          "value": "{:using=>\"css selector\", :value=>\".node.highlight\"}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273638584820,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3b687a3e8>"
+      }
+    },
+    {
+      "id": 24930,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24929,
+      "elapsed": 0.000016,
+      "return_value": {
+        "class": "String",
+        "value": "{\"using\":\"css selector\",\"value\":\".node.highlight\"}",
+        "object_id": 70273638616540
+      }
+    },
+    {
+      "id": 24931,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/847acf4e-c8d6-4b0b-82c4-2ac930f3a018/elements",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "User-Agent": "selenium/3.142.7 (ruby macosx)",
+          "Content-Length": "50",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        }
+      }
+    },
+    {
+      "id": 24932,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24931,
+      "elapsed": 0.009319,
+      "http_client_response": {
+        "status_code": 200,
+        "headers": {
+          "Content-Length": "90",
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-cache"
+        }
+      }
+    },
+    {
+      "id": 24933,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70273808050540,
+        "value": "#<JSON::Ext::Parser:0x00007fd3cabb52d8>"
+      }
+    },
+    {
+      "id": 24934,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24933,
+      "elapsed": 0.000011,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"value\"=>[{\"element-6066-11e4-a52e-4f735466cecf\"=>\"51bf7824-28dc-48a3-927f-6aeeed37c43f\"}]}",
+        "object_id": 70273794273900
+      }
+    },
+    {
+      "id": 24935,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273794319580,
+          "value": "{:script=>\"return ((function(){function d(t,e,n){function r(t){var e=x(t);if(0<e.height&&0<e.width)r",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273794391860,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3c91a7e68>"
+      }
+    },
+    {
+      "id": 24936,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273794420480,
+          "value": "{\"element-6066-11e4-a52e-4f735466cecf\"=>\"51bf7824-28dc-48a3-927f-6aeeed37c43f\"}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273794420380,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3c91b5d38>"
+      }
+    },
+    {
+      "id": 24937,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24936,
+      "elapsed": 0.000008,
+      "return_value": {
+        "class": "String",
+        "value": "{\"element-6066-11e4-a52e-4f735466cecf\":\"51bf7824-28dc-48a3-927f-6aeeed37c43f\"}",
+        "object_id": 70273794450360
+      }
+    },
+    {
+      "id": 24938,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24935,
+      "elapsed": 0.000278,
+      "return_value": {
+        "class": "String",
+        "value": "{\"script\":\"return ((function(){function d(t,e,n){function r(t){var e=x(t);if(0<e.height&&0<e.width)r",
+        "object_id": 70273769166440
+      }
+    },
+    {
+      "id": 24939,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/execute/sync",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "User-Agent": "selenium/3.142.7 (ruby macosx)",
+          "Content-Length": "5067",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        }
+      }
+    },
+    {
+      "id": 24940,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24939,
+      "elapsed": 0.003022,
+      "http_client_response": {
+        "status_code": 200,
+        "headers": {
+          "Content-Length": "14",
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-cache"
+        }
+      }
+    },
+    {
+      "id": 24941,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70273769259140,
+        "value": "#<JSON::Ext::Parser:0x00007fd3c61b8108>"
+      }
+    },
+    {
+      "id": 24942,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24941,
+      "elapsed": 0.000006,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"value\"=>true}",
+        "object_id": 70273769280060
+      }
+    },
+    {
+      "id": 24943,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273769292680,
+          "value": "{:using=>\"css selector\", :value=>\".edgePath.highlight\"}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273639021100,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3b694f458>"
+      }
+    },
+    {
+      "id": 24944,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24943,
+      "elapsed": 0.000011,
+      "return_value": {
+        "class": "String",
+        "value": "{\"using\":\"css selector\",\"value\":\".edgePath.highlight\"}",
+        "object_id": 70273639015020
+      }
+    },
+    {
+      "id": 24945,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/847acf4e-c8d6-4b0b-82c4-2ac930f3a018/elements",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "User-Agent": "selenium/3.142.7 (ruby macosx)",
+          "Content-Length": "54",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        }
+      }
+    },
+    {
+      "id": 24946,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24945,
+      "elapsed": 0.009277,
+      "http_client_response": {
+        "status_code": 200,
+        "headers": {
+          "Content-Length": "90",
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-cache"
+        }
+      }
+    },
+    {
+      "id": 24947,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70273808192280,
+        "value": "#<JSON::Ext::Parser:0x00007fd3cabfa630>"
+      }
+    },
+    {
+      "id": 24948,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24947,
+      "elapsed": 0.00001,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"value\"=>[{\"element-6066-11e4-a52e-4f735466cecf\"=>\"22bd7d48-4cb9-492f-ac1a-2b82bab49b01\"}]}",
+        "object_id": 70273808189020
+      }
+    },
+    {
+      "id": 24949,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273808199880,
+          "value": "{:script=>\"return ((function(){function d(t,e,n){function r(t){var e=x(t);if(0<e.height&&0<e.width)r",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273808199160,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3cabfdbf0>"
+      }
+    },
+    {
+      "id": 24950,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 70273808195600,
+          "value": "{\"element-6066-11e4-a52e-4f735466cecf\"=>\"22bd7d48-4cb9-492f-ac1a-2b82bab49b01\"}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 70273808252800,
+        "value": "#<JSON::Ext::Generator::State:0x00007fd3cac17f00>"
+      }
+    },
+    {
+      "id": 24951,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24950,
+      "elapsed": 0.000008,
+      "return_value": {
+        "class": "String",
+        "value": "{\"element-6066-11e4-a52e-4f735466cecf\":\"22bd7d48-4cb9-492f-ac1a-2b82bab49b01\"}",
+        "object_id": 70273808247920
+      }
+    },
+    {
+      "id": 24952,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24949,
+      "elapsed": 0.000324,
+      "return_value": {
+        "class": "String",
+        "value": "{\"script\":\"return ((function(){function d(t,e,n){function r(t){var e=x(t);if(0<e.height&&0<e.width)r",
+        "object_id": 70273808285580
+      }
+    },
+    {
+      "id": 24953,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/execute/sync",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "User-Agent": "selenium/3.142.7 (ruby macosx)",
+          "Content-Length": "5067",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        }
+      }
+    },
+    {
+      "id": 24954,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24953,
+      "elapsed": 0.003807,
+      "http_client_response": {
+        "status_code": 200,
+        "headers": {
+          "Content-Length": "14",
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-cache"
+        }
+      }
+    },
+    {
+      "id": 24955,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70273808434120,
+        "value": "#<JSON::Ext::Parser:0x00007fd3cac70790>"
+      }
+    },
+    {
+      "id": 24956,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24955,
+      "elapsed": 0.000006,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"value\"=>true}",
+        "object_id": 70273808487400
+      }
+    },
+    {
+      "id": 24957,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "http_client_request": {
+        "request_method": "GET",
+        "url": "http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/url",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "User-Agent": "selenium/3.142.7 (ruby macosx)",
+          "Cache-Control": "no-cache",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        }
+      }
+    },
+    {
+      "id": 24958,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24957,
+      "elapsed": 0.003533,
+      "http_client_response": {
+        "status_code": 200,
+        "headers": {
+          "Content-Length": "125",
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-cache"
+        }
+      }
+    },
+    {
+      "id": 24959,
+      "event": "call",
+      "thread_id": 70273768562780,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70273639265600,
+        "value": "#<JSON::Ext::Parser:0x00007fd3b69c6a80>"
+      }
+    },
+    {
+      "id": 24960,
+      "event": "return",
+      "thread_id": 70273768562780,
+      "parent_id": 24959,
+      "elapsed": 0.000009,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"value\"=>\"http://127.0.0.1:55047/yourcorp/your-corp-application?mapset=100004&highlight=%5B%22POST+",
+        "object_id": 70273639261260
+      }
+    }
+  ]
+}
