@@ -44,8 +44,8 @@ export default {
       const elementRect = element.getBoundingClientRect();
 
       this.container.translateTo(
-        coords.left - parentRect.x + elementRect.width,
-        coords.top - parentRect.y + elementRect.height
+        coords.left - parentRect.x + elementRect.width * 0.5,
+        coords.top - parentRect.y + elementRect.height * 0.5
       );
     },
     lazyPanToElement(element) {
