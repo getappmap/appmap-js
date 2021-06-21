@@ -29,7 +29,7 @@
     "dist/style.css"
   ],
   "dependencies": {
-    "@appland/models": "workspace:*",
+    "@appland/models": "workspace:^1.1.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-replace": "^2.4.2",
     "d3-flame-graph": "^4.0.6",
