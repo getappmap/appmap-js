@@ -70,11 +70,19 @@ export default class EventSorter {
         return chunks;
       }
 
+      if (stack[0].http_client_request) {
+        chunks.push([stack]);
+        return chunks;
+      }
+
       // Check to see if the previous chunk began with an HTTP request. If it
       // does, push a new chunk. Otherwise, append to the last chunk.
       const prevChunk = chunks[chunks.length - 1];
       const prevStack = prevChunk[prevChunk.length - 1];
-      if (prevStack[0].http_server_request) {
+      if (
+        prevStack[0].http_server_request ||
+        prevStack[0].http_client_request
+      ) {
         chunks.push([stack]);
       } else {
         prevChunk.push(stack);
