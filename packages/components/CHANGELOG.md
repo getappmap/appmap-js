@@ -1,3 +1,15 @@
+# [@appland/components-v1.2.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.11...@appland/components-v1.2.0) (2021-06-22)
+
+
+### Bug Fixes
+
+* Fix a case where an inbound trace connection may be dangling ([0cf64be](https://github.com/applandinc/appmap-js/commit/0cf64be9ad77f26eb45559da2d9c5ea6144f529c))
+
+
+### Features
+
+* HTTP client requests ([0c0e833](https://github.com/applandinc/appmap-js/commit/0c0e8338d6d25bf11f73a17d035e2b424e670add))
+
 # [@appland/components-v1.1.11](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.10...@appland/components-v1.1.11) (2021-06-21)
 
 
