@@ -113,28 +113,43 @@ export default class Event {
     return this.returnEvent.http_server_response;
   }
 
+  get httpClientRequest() {
+    return this.callEvent.http_client_request;
+  }
+
+  get httpClientResponse() {
+    return this.returnEvent.http_client_response;
+  }
+
   get definedClass() {
     return this.defined_class ? this.defined_class.replace(/\./g, '/') : null;
   }
 
   get requestPath() {
-    const { httpServerRequest } = this;
-    if (!httpServerRequest) {
-      return null;
+    if (this.httpServerRequest) {
+      return (
+        this.httpServerRequest.normalized_path_info ||
+        this.httpServerRequest.path_info
+      );
     }
 
-    return (
-      httpServerRequest.normalized_path_info || httpServerRequest.path_info
-    );
+    if (this.httpClientRequest) {
+      return this.httpClientRequest.url;
+    }
+
+    return null;
   }
 
   get requestMethod() {
-    const { httpServerRequest } = this;
-    if (!httpServerRequest) {
-      return null;
+    if (this.httpServerRequest) {
+      return this.httpServerRequest.request_method;
     }
 
-    return httpServerRequest.request_method;
+    if (this.httpClientRequest) {
+      return this.httpClientRequest.request_method;
+    }
+
+    return null;
   }
 
   get route() {

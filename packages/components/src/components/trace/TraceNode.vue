@@ -66,7 +66,7 @@ export default {
       return this.event.codeObject.prettyName;
     },
     eventType() {
-      if (this.event.httpServerRequest) {
+      if (this.event.httpServerRequest || this.event.httpClientRequest) {
         return 'http';
       }
 

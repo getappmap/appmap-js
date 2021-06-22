@@ -72,8 +72,12 @@ export default {
   computed: {
     listItems() {
       const items = {
-        route: {
-          title: 'HTTP routes',
+        http_server_requests: {
+          title: 'HTTP server requests',
+          data: [],
+        },
+        http_client_requests: {
+          title: 'HTTP client requests',
           data: [],
         },
         labels: {
@@ -120,9 +124,16 @@ export default {
             }
             break;
           case 'function':
-          case 'route':
           case 'query':
             items[codeObject.type].data.push(item);
+            break;
+          case 'route':
+            if (codeObject.events[0].httpServerRequest) {
+              items.http_server_requests.data.push(item);
+            }
+            if (codeObject.events[0].httpClientRequest) {
+              items.http_client_requests.data.push(item);
+            }
             break;
           default:
             break;
@@ -308,7 +319,8 @@ export default {
         transform: translateX(-50%);
       }
 
-      .details-search__block--route &::before {
+      .details-search__block--http_server_requests &::before,
+      .details-search__block--http_client_requests &::before {
         background: linear-gradient(
           to right,
           #c61c38 0%,

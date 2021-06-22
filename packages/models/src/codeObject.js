@@ -273,6 +273,17 @@ export default class CodeObject {
           name: event.route,
         },
       ];
+    } else if (event.httpClientRequest) {
+      elements = [
+        {
+          type: CodeObjectType.HTTP,
+          name: 'HTTP client requests',
+        },
+        {
+          type: CodeObjectType.ROUTE,
+          name: event.route,
+        },
+      ];
     } else if (event.sqlQuery) {
       elements = [
         {
