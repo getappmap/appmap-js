@@ -97,11 +97,15 @@ class AppMapBuilder extends EventSource {
       }
 
       // Normalize status/status_code properties
-      const { httpServerResponse } = event;
-      if (event.isReturn() && httpServerResponse) {
-        if (httpServerResponse.status_code) {
+      const { httpServerResponse, httpClientResponse } = event;
+      if (event.isReturn()) {
+        if (httpServerResponse && httpServerResponse.status_code) {
           httpServerResponse.status = httpServerResponse.status_code;
           delete httpServerResponse.status_code;
+        }
+        if (httpClientResponse && httpClientResponse.status_code) {
+          httpClientResponse.status = httpClientResponse.status_code;
+          delete httpClientResponse.status_code;
         }
       }
 
@@ -150,7 +154,12 @@ class AppMapBuilder extends EventSource {
 
       // Iterate each event, regardless of the stack
       stacks.flat(2).forEach((e) => {
-        if (e.event !== 'call' || e.sql_query || e.http_server_request) {
+        if (
+          e.event !== 'call' ||
+          e.sql_query ||
+          e.http_server_request ||
+          e.http_client_request
+        ) {
           return;
         }
 
@@ -200,7 +209,11 @@ class AppMapBuilder extends EventSource {
             return false;
           }
 
-          if (callEvent.http_server_request || callEvent.sql_query) {
+          if (
+            callEvent.http_server_request ||
+            callEvent.http_client_request ||
+            callEvent.sql_query
+          ) {
             return true;
           }
 
@@ -216,7 +229,9 @@ class AppMapBuilder extends EventSource {
       return this;
     }
 
-    const hasHttp = Boolean(this.data.events.find((e) => e.httpServerRequest));
+    const hasHttp = Boolean(
+      this.data.events.find((e) => e.httpServerRequest || e.httpClientRequest)
+    );
     if (!hasHttp) {
       // the entire file is noise - do nothing
       return this;
@@ -228,7 +243,10 @@ class AppMapBuilder extends EventSource {
           return false;
         }
 
-        return Boolean(stack[0].httpServerRequest);
+        return (
+          Boolean(stack[0].httpServerRequest) ||
+          Boolean(stack[0].httpClientRequest)
+        );
       })
     );
   }

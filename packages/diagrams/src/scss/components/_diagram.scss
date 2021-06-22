@@ -68,12 +68,24 @@
       $class: map-get($colors, 'color-class');
       $database: map-get($colors, 'color-database');
       $io: map-get($colors, 'color-io');
+      $externalService: map-get($colors, 'color-external-service');
       $dim-opacity: 10%;
 
       .node {
         &.dim {
           .label {
             fill: mix($labelLight, $bg, $weight: $dim-opacity);
+          }
+        }
+
+        &.external-service {
+          fill: $externalService;
+
+          .label {
+            fill: $labelDark;
+          }
+          &.dim {
+            fill: mix($externalService, $bg, $weight: $dim-opacity);
           }
         }
 

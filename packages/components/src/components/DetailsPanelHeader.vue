@@ -29,6 +29,7 @@ import VNodeTypeHttpIcon from '@/assets/node-types/http.svg';
 import VNodeTypeRouteIcon from '@/assets/node-types/route.svg';
 import VNodeTypeDatabaseIcon from '@/assets/node-types/database.svg';
 import VNodeTypeQueryIcon from '@/assets/node-types/query.svg';
+import VNodeTypeExternalServiceIcon from '@/assets/node-types/external-service.svg';
 import { SELECT_OBJECT } from '@/store/vsCode';
 import { Event, CodeObjectType } from '@appland/models';
 
@@ -43,6 +44,7 @@ export default {
     VNodeTypeRouteIcon,
     VNodeTypeDatabaseIcon,
     VNodeTypeQueryIcon,
+    VNodeTypeExternalServiceIcon,
   },
 
   props: {

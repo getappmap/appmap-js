@@ -28,6 +28,7 @@ import { CLEAR_OBJECT_STACK, SELECT_OBJECT } from '@/store/vsCode';
 import NodeConnection from '@/assets/node_connection.svg';
 import VTraceNodeBodyDefault from './TraceNodeBodyDefault.vue';
 import VTraceNodeBodyHttp from './TraceNodeBodyHttp.vue';
+import VTraceNodeBodyHttpClient from './TraceNodeBodyHttpClient.vue';
 import VTraceNodeBodySql from './TraceNodeBodySql.vue';
 import VTraceNodeLabels from './TraceNodeLabels.vue';
 
@@ -37,6 +38,7 @@ export default {
     NodeConnection,
     VTraceNodeBodyDefault,
     VTraceNodeBodyHttp,
+    VTraceNodeBodyHttpClient,
     VTraceNodeBodySql,
     VTraceNodeLabels,
   },
@@ -63,15 +65,23 @@ export default {
   },
   computed: {
     title() {
+      if (this.event.httpClientRequest) {
+        return `External service call to ${this.event.codeObject.name}`;
+      }
+
       return this.event.codeObject.prettyName;
     },
     eventType() {
-      if (this.event.httpServerRequest) {
-        return 'http';
-      }
-
       if (this.event.sql) {
         return 'sql';
+      }
+
+      if (this.event.httpClientRequest) {
+        return 'http-client';
+      }
+
+      if (this.event.httpServerRequest) {
+        return 'http';
       }
 
       return 'default';
@@ -145,6 +155,10 @@ $bg-color: $gray2;
 
     &--http {
       background-color: #471554;
+    }
+    &--http-client {
+      color: $gray1;
+      background-color: $yellow;
     }
     &--sql {
       background-color: #113d80;

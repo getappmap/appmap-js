@@ -144,10 +144,9 @@ context('VS Code Extension', () => {
     it('clicking an edge displays the correct data', () => {
       cy.get('.details-search').should('be.visible');
 
-      cy.get(
-        '.edgePath[data-from="HTTP server requests"][data-to="app/helpers"]'
-      )
-        .click()
+      cy.get('.edgePath[data-from-type="http"][data-to="app/helpers"]')
+        .should('have.css', 'opacity', '1')
+        .click({ x: 5, y: 5 })
         .should('have.class', 'highlight');
 
       cy.get('.details-panel-header')
@@ -170,7 +169,7 @@ context('VS Code Extension', () => {
       cy.get('.trace').should('be.visible');
       cy.get('.trace .trace-node').should('have.length', 4);
 
-      cy.get('.trace-node[data-event-id="9"]').click();
+      cy.get('.trace-node[data-event-id="11"]').click();
       cy.get('.details-panel-header')
         .should('contain.text', 'Event')
         .should('contain.text', 'GET /admin/orders');
@@ -330,9 +329,9 @@ context('VS Code Extension', () => {
     });
 
     it('edge can navigate to event', () => {
-      cy.get(
-        `.edgePath[data-from="HTTP server requests"][data-to="app/helpers"]`
-      ).click();
+      cy.get('.edgePath[data-from-type="http"][data-to="app/helpers"]')
+        .should('have.css', 'opacity', '1')
+        .click({ x: 5, y: 5 });
 
       cy.get('.v-details-panel-list')
         .contains('Events')
@@ -573,6 +572,95 @@ context('VS Code Extension', () => {
         cy.get('body').trigger('keydown', { keycode: 40 }); // arrow down
         cy.get('.trace-node.highlight').should('be.visible');
       }
+    });
+
+    it('renders HTTP client requests correctly', () => {
+      cy.get('.details-search__block--external-service')
+        .contains('External services')
+        .get('.details-search__block-item')
+        .contains('127.0.0.1:9515')
+        .click();
+
+      cy.get('.node.external-service.highlight').should('exist');
+      cy.get('.list-item').contains('POST http://127.0.0.1:9515');
+      cy.get('button').contains('Clear selection').click();
+
+      cy.get('.node.external-service')
+        .should('not.have.class', 'highlight')
+        .click()
+        .should('have.class', 'highlight');
+
+      cy.get('.list-item').contains('POST http://127.0.0.1:9515').click();
+
+      cy.get('.event-params')
+        .contains('Request headers')
+        .parent()
+        .within(() => {
+          cy.get('li').contains('Accept').parent().contains('application/json');
+          cy.get('li')
+            .contains('Content-Type')
+            .parent()
+            .contains('application/json; charset=UTF-8');
+          cy.get('li')
+            .contains('User-Agent')
+            .parent()
+            .contains('selenium/3.142.7 (ruby macosx)');
+          cy.get('li').contains('Content-Length').parent().contains('5067');
+          cy.get('li')
+            .contains('Accept-Encoding')
+            .parent()
+            .contains('gzip;q=1.0,deflate;q=0.6,identity;q=0.3');
+        });
+
+      cy.get('.event-params')
+        .contains('HTTP response details')
+        .parent()
+        .within(() => {
+          cy.get('li').contains('status').parent().contains('200');
+        });
+
+      cy.get('.event-params')
+        .contains('Response headers')
+        .parent()
+        .within(() => {
+          cy.get('li').contains('Content-Length').parent().contains('14');
+          cy.get('li')
+            .contains('Content-Type')
+            .parent()
+            .contains('application/json; charset=utf-8');
+          cy.get('li').contains('Cache-Control').parent().contains('no-cache');
+        });
+
+      cy.get('button').contains('Show in Trace').click();
+
+      cy.get('.trace-node.highlight').within(() => {
+        cy.get('.trace-node__header--http-client').contains(
+          'External service call to 127.0.0.1:9515'
+        );
+
+        cy.get('.columns__column--left').within(() => {
+          cy.get('.port-header').contains('HTTP');
+          cy.get('.port-header').contains('Headers');
+
+          cy.get('.label').contains('method');
+          cy.get('.label').contains('url');
+          cy.get('.label').contains('Accept');
+          cy.get('.label').contains('Content-Type');
+          cy.get('.label').contains('User-Agent');
+          cy.get('.label').contains('Content-Length');
+          cy.get('.label').contains('Accept-Encoding');
+        });
+
+        cy.get('.columns__column--right').within(() => {
+          cy.get('.port-header').contains('Response');
+          cy.get('.port-header').contains('Headers');
+
+          cy.get('.label').contains('status');
+          cy.get('.label').contains('Cache-Control');
+          cy.get('.label').contains('Content-Type');
+          cy.get('.label').contains('Content-Length');
+        });
+      });
     });
   });
 

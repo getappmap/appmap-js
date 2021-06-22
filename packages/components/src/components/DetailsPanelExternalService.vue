@@ -1,7 +1,15 @@
 <template>
   <div>
-    <v-details-panel-header :objectType="object.data.name" :object="object" />
-    <v-details-panel-list title="Routes" :items="object.children" />
+    <v-details-panel-header
+      object-type="External service"
+      :object="object"
+      :title="object.name"
+    />
+    <v-details-panel-list
+      title="Events"
+      :items="object.events"
+      :event-quickview="true"
+    />
   </div>
 </template>
 
@@ -10,7 +18,7 @@ import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
-  name: 'v-details-panel-http',
+  name: 'v-details-panel-route',
   components: {
     VDetailsPanelList,
     VDetailsPanelHeader,
@@ -21,6 +29,7 @@ export default {
       required: true,
     },
   },
+  computed: {},
 };
 </script>
 
