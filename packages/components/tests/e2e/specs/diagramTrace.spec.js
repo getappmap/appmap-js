@@ -12,10 +12,10 @@ context('Trace', () => {
   }
 
   it('expands nodes', () => {
-    expandEvent(9);
-    expandEvent(138);
+    expandEvent(11);
+    expandEvent(140);
 
-    cy.get('.trace-node[data-event-id="141"]')
+    cy.get('.trace-node[data-event-id="143"]')
       .click()
       .should('have.class', 'highlight');
   });

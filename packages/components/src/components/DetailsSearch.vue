@@ -132,8 +132,10 @@ export default {
             break;
 
           case CodeObjectType.ROUTE:
-            const { type: parentType } = codeObject.parent;
-            items[parentType].data.push(item);
+            {
+              const { type: parentType } = codeObject.parent;
+              items[parentType].data.push(item);
+            }
             break;
 
           default:

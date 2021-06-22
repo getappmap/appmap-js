@@ -171,7 +171,7 @@ function eventToBehavior(e) {
     behavior.value = sqlFormatter.format(e.input.sql_query.sql);
   }
 
-  if (behavior.type === NodeType.Nonstatic) {
+  if (behavior.type === NodeType.Nonstatic && input.defined_class) {
     // display 'self' as an input
     behavior.in.push({
       name: formatParameter(input.defined_class),
