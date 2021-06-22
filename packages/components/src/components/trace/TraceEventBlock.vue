@@ -3,7 +3,7 @@
     <div
       class="event-block__connection"
       :style="connectionStyles"
-      v-if="isLastChild"
+      v-if="isLastChild && !isFirstChild"
     />
     <v-trace-node
       :event="event"

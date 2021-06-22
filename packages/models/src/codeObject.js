@@ -4,6 +4,7 @@ export const CodeObjectType = {
   DATABASE: 'database',
   QUERY: 'query',
   HTTP: 'http',
+  EXTERNAL_SERVICE: 'external-service',
   ROUTE: 'route',
   PACKAGE: 'package',
   CLASS: 'class',
@@ -271,6 +272,22 @@ export default class CodeObject {
         {
           type: CodeObjectType.ROUTE,
           name: event.route,
+        },
+      ];
+    } else if (event.httpClientRequest) {
+      let serviceName;
+
+      try {
+        const url = new URL(event.httpClientRequest.url);
+        serviceName = url.host;
+      } catch {
+        serviceName = 'External service';
+      }
+
+      elements = [
+        {
+          type: CodeObjectType.EXTERNAL_SERVICE,
+          name: serviceName,
         },
       ];
     } else if (event.sqlQuery) {

@@ -41,12 +41,33 @@
       </ul>
     </div>
 
+    <div class="event-params" v-if="requestHeaders.length">
+      <h5>Request headers</h5>
+      <ul class="table-01">
+        <li v-for="param in requestHeaders" :key="param.name">
+          <i>{{ param.class }}</i>
+          <strong>{{ param.name }}</strong>
+          <code>{{ param.value }}</code>
+        </li>
+      </ul>
+    </div>
+
     <div class="event-params" v-if="httpServerResponse">
-      <h5>HTTP response</h5>
+      <h5>HTTP response details</h5>
       <ul class="table-01">
         <li v-for="(v, k) in httpServerResponse" :key="k">
           <strong>{{ k }}</strong>
           <code>{{ v }}</code>
+        </li>
+      </ul>
+    </div>
+
+    <div class="event-params" v-if="responseHeaders.length">
+      <h5>Response headers</h5>
+      <ul class="table-01">
+        <li v-for="param in responseHeaders" :key="param.name">
+          <strong>{{ param.name }}</strong>
+          <code>{{ param.value }}</code>
         </li>
       </ul>
     </div>
@@ -105,8 +126,46 @@ export default {
       return this.object.message && this.object.message.length;
     },
 
+    requestHeaders() {
+      const { httpClientRequest } = this.object;
+      if (!httpClientRequest) {
+        return [];
+      }
+
+      return Object.entries(httpClientRequest.headers || {}).map(
+        ([name, value]) => ({
+          name,
+          value,
+        })
+      );
+    },
+
+    responseHeaders() {
+      const { httpClientResponse } = this.object;
+      if (!httpClientResponse) {
+        return [];
+      }
+
+      return Object.entries(httpClientResponse.headers || {}).map(
+        ([name, value]) => ({
+          name,
+          value,
+        })
+      );
+    },
+
     httpServerResponse() {
-      return this.object.httpServerResponse;
+      const response = {
+        ...(this.object.httpServerResponse ||
+          this.object.httpClientResponse ||
+          {}),
+      };
+
+      if (response.headers) {
+        delete response.headers;
+      }
+
+      return response;
     },
 
     hasSource() {

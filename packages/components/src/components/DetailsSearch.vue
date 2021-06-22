@@ -72,27 +72,31 @@ export default {
   computed: {
     listItems() {
       const items = {
-        route: {
-          title: 'HTTP routes',
+        [CodeObjectType.HTTP]: {
+          title: 'HTTP server requests',
+          data: [],
+        },
+        [CodeObjectType.EXTERNAL_SERVICE]: {
+          title: 'External services',
           data: [],
         },
         labels: {
           title: 'Labels',
           data: [],
         },
-        package: {
+        [CodeObjectType.PACKAGE]: {
           title: 'Packages',
           data: [],
         },
-        class: {
+        [CodeObjectType.CLASS]: {
           title: 'Classes',
           data: [],
         },
-        function: {
+        [CodeObjectType.FUNCTION]: {
           title: 'Functions',
           data: [],
         },
-        query: {
+        [CodeObjectType.QUERY]: {
           title: 'SQL queries',
           data: [],
         },
@@ -109,21 +113,31 @@ export default {
         };
 
         switch (codeObject.type) {
-          case 'package':
+          case CodeObjectType.PACKAGE:
             if (codeObject.childLeafs().length > 1) {
               items[codeObject.type].data.push(item);
             }
             break;
-          case 'class':
+
+          case CodeObjectType.CLASS:
             if (codeObject.functions.length) {
               items[codeObject.type].data.push(item);
             }
             break;
-          case 'function':
-          case 'route':
-          case 'query':
+
+          case CodeObjectType.FUNCTION:
+          case CodeObjectType.QUERY:
+          case CodeObjectType.EXTERNAL_SERVICE:
             items[codeObject.type].data.push(item);
             break;
+
+          case CodeObjectType.ROUTE:
+            {
+              const { type: parentType } = codeObject.parent;
+              items[parentType].data.push(item);
+            }
+            break;
+
           default:
             break;
         }
@@ -308,7 +322,7 @@ export default {
         transform: translateX(-50%);
       }
 
-      .details-search__block--route &::before {
+      .details-search__block--http &::before {
         background: linear-gradient(
           to right,
           #c61c38 0%,
@@ -365,6 +379,18 @@ export default {
           #702286 50%,
           #521b61 100%
         );
+      }
+
+      .details-search__block--external-service & {
+        color: $base19;
+
+        &::before {
+          background: linear-gradient(
+            to right,
+            $yellow,
+            darken($yellow, 20) 100%
+          );
+        }
       }
 
       .details-search__block--empty & {

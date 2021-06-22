@@ -29,3 +29,8 @@ export const eventHttp = Template.bind({});
 eventHttp.args = {
   event: appMap.events.find((e) => e.httpServerRequest),
 };
+
+export const eventHttpClientRequest = Template.bind({});
+eventHttpClientRequest.args = {
+  event: appMap.events.find((e) => e.httpClientRequest),
+};

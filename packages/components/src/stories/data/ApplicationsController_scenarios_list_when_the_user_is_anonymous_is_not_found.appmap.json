@@ -1,0 +1,3375 @@
+{
+  "version": "1.5.1",
+  "metadata": {
+    "app": "appland/AppLand",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "2.6.6"
+    },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/applandinc/appmap-ruby",
+      "version": "0.48.2"
+    },
+    "frameworks": [
+      {
+        "name": "rails",
+        "version": "5.2.5"
+      },
+      {
+        "name": "rspec",
+        "version": "3.9.1"
+      }
+    ],
+    "git": {
+      "repository": "git@github.com:applandinc/appmap-server.git",
+      "branch": "master",
+      "commit": "6d3814ffeff2e5313d432a5b73b933941dc109a3",
+      "status": [],
+      "git_last_annotated_tag": null,
+      "git_last_tag": "v0.27.0",
+      "git_commits_since_last_annotated_tag": null,
+      "git_commits_since_last_tag": 0
+    },
+    "name": "ApplicationsController .scenarios_list when the user is anonymous is not found",
+    "source_location": "spec/requests/application_scenarios_list_spec.rb",
+    "recorder": {
+      "name": "rspec"
+    },
+    "test_status": "succeeded"
+  },
+  "classMap": [
+    {
+      "name": "activesupport",
+      "type": "package",
+      "children": [
+        {
+          "name": "ActiveSupport",
+          "type": "class",
+          "children": [
+            {
+              "name": "Callbacks",
+              "type": "class",
+              "children": [
+                {
+                  "name": "CallbackSequence",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "invoke_before",
+                      "type": "function",
+                      "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:512",
+                      "static": false,
+                      "labels": ["mvc.before_action"]
+                    },
+                    {
+                      "name": "invoke_after",
+                      "type": "function",
+                      "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:516",
+                      "static": false,
+                      "labels": ["mvc.after_action"]
+                    },
+                    {
+                      "name": "invoke_before",
+                      "type": "function",
+                      "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:512",
+                      "static": false,
+                      "labels": ["mvc.before_action"]
+                    },
+                    {
+                      "name": "invoke_before",
+                      "type": "function",
+                      "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:512",
+                      "static": false,
+                      "labels": ["mvc.before_action"]
+                    },
+                    {
+                      "name": "invoke_before",
+                      "type": "function",
+                      "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:512",
+                      "static": false,
+                      "labels": ["mvc.before_action"]
+                    },
+                    {
+                      "name": "invoke_before",
+                      "type": "function",
+                      "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:512",
+                      "static": false,
+                      "labels": ["mvc.before_action"]
+                    },
+                    {
+                      "name": "invoke_after",
+                      "type": "function",
+                      "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:516",
+                      "static": false,
+                      "labels": ["mvc.after_action"]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "actionpack",
+      "type": "package",
+      "children": [
+        {
+          "name": "ActionController",
+          "type": "class",
+          "children": [
+            {
+              "name": "Instrumentation",
+              "type": "class",
+              "children": [
+                {
+                  "name": "process_action",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_controller/metal/instrumentation.rb:19",
+                  "static": false,
+                  "labels": ["mvc.controller"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ActionDispatch",
+          "type": "class",
+          "children": [
+            {
+              "name": "Request",
+              "type": "class",
+              "children": [
+                {
+                  "name": "Session",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "[]",
+                      "type": "function",
+                      "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/request/session.rb:91",
+                      "static": false,
+                      "labels": ["http.session"],
+                      "comment": "# Returns value of the key stored in the session or\n# +nil+ if the given key is not found in the session.\n"
+                    },
+                    {
+                      "name": "[]",
+                      "type": "function",
+                      "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/request/session.rb:91",
+                      "static": false,
+                      "labels": ["http.session"],
+                      "comment": "# Returns value of the key stored in the session or\n# +nil+ if the given key is not found in the session.\n"
+                    },
+                    {
+                      "name": "[]",
+                      "type": "function",
+                      "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/request/session.rb:91",
+                      "static": false,
+                      "labels": ["http.session"],
+                      "comment": "# Returns value of the key stored in the session or\n# +nil+ if the given key is not found in the session.\n"
+                    },
+                    {
+                      "name": "[]",
+                      "type": "function",
+                      "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/request/session.rb:91",
+                      "static": false,
+                      "labels": ["http.session"],
+                      "comment": "# Returns value of the key stored in the session or\n# +nil+ if the given key is not found in the session.\n"
+                    },
+                    {
+                      "name": "[]",
+                      "type": "function",
+                      "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/request/session.rb:91",
+                      "static": false,
+                      "labels": ["http.session"],
+                      "comment": "# Returns value of the key stored in the session or\n# +nil+ if the given key is not found in the session.\n"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Cookies",
+              "type": "class",
+              "children": [
+                {
+                  "name": "CookieJar",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "update",
+                      "type": "function",
+                      "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/middleware/cookies.rb:344",
+                      "static": false,
+                      "labels": ["http.session"]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "app/controllers",
+      "type": "package",
+      "children": [
+        {
+          "name": "AnonymousAccess",
+          "type": "class",
+          "children": [
+            {
+              "name": "allow_anonymous_access",
+              "type": "function",
+              "location": "app/controllers/concerns/anonymous_access.rb:5",
+              "static": false,
+              "comment": "# allow_anonymous_access should be called as a before_action if anonymous access is permitted.\n"
+            },
+            {
+              "name": "anonymous_access?",
+              "type": "function",
+              "location": "app/controllers/concerns/anonymous_access.rb:9",
+              "static": false
+            }
+          ]
+        },
+        {
+          "name": "CurrentUser",
+          "type": "class",
+          "children": [
+            {
+              "name": "check_current_user",
+              "type": "function",
+              "location": "app/controllers/concerns/current_user.rb:19",
+              "static": false,
+              "comment": "# check_current_user should always be called as a before_action. It will\n# either pass through the request if anonymous access is allowed, or \n# require login and check the EULA.\n"
+            },
+            {
+              "name": "current_user",
+              "type": "function",
+              "location": "app/controllers/concerns/current_user.rb:36",
+              "static": false
+            },
+            {
+              "name": "lookup_session_user",
+              "type": "function",
+              "location": "app/controllers/concerns/current_user.rb:41",
+              "static": false,
+              "labels": ["security.authentication"],
+              "comment": "# @label security.authentication\n"
+            },
+            {
+              "name": "ensure_eula_accepted",
+              "type": "function",
+              "location": "app/controllers/concerns/current_user.rb:27",
+              "static": false
+            },
+            {
+              "name": "current_user",
+              "type": "function",
+              "location": "app/controllers/concerns/current_user.rb:36",
+              "static": false
+            },
+            {
+              "name": "lookup_session_user",
+              "type": "function",
+              "location": "app/controllers/concerns/current_user.rb:41",
+              "static": false,
+              "labels": ["security.authentication"],
+              "comment": "# @label security.authentication\n"
+            }
+          ]
+        },
+        {
+          "name": "WithAuthentication",
+          "type": "class",
+          "children": [
+            {
+              "name": "with_authentication",
+              "type": "function",
+              "location": "app/controllers/concerns/with_authentication.rb:6",
+              "static": false,
+              "comment": "# with_authentication should always be called as an around_action.\n# This method ensures that the label 'public' is applied if @current_user is falsey.\n"
+            },
+            {
+              "name": "with_anonymous_user",
+              "type": "function",
+              "location": "app/controllers/concerns/with_authentication.rb:15",
+              "static": false,
+              "labels": ["public"],
+              "comment": "# @label public\n"
+            }
+          ]
+        },
+        {
+          "name": "ApplicationController",
+          "type": "class",
+          "children": [
+            {
+              "name": "render_404",
+              "type": "function",
+              "location": "app/controllers/application_controller.rb:28",
+              "static": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "app/models",
+      "type": "package",
+      "children": [
+        {
+          "name": "Configuration",
+          "type": "class",
+          "children": [
+            {
+              "name": "find",
+              "type": "function",
+              "location": "app/models/configuration.rb:8",
+              "static": true
+            },
+            {
+              "name": "attributes=",
+              "type": "function",
+              "location": "app/models/configuration.rb:44",
+              "static": false
+            },
+            {
+              "name": "attributes",
+              "type": "function",
+              "location": "app/models/configuration.rb:30",
+              "static": false
+            },
+            {
+              "name": "attributes",
+              "type": "function",
+              "location": "app/models/configuration.rb:30",
+              "static": false
+            },
+            {
+              "name": "attributes",
+              "type": "function",
+              "location": "app/models/configuration.rb:30",
+              "static": false
+            }
+          ]
+        },
+        {
+          "name": "App",
+          "type": "class",
+          "children": [
+            {
+              "name": "Search",
+              "type": "class",
+              "children": [
+                {
+                  "name": "find!",
+                  "type": "function",
+                  "location": "app/models/app/search.rb:39",
+                  "static": false
+                },
+                {
+                  "name": "find_by_slug!",
+                  "type": "function",
+                  "location": "app/models/app/search.rb:58",
+                  "static": false
+                },
+                {
+                  "name": "find_by_org_scope!",
+                  "type": "function",
+                  "location": "app/models/app/search.rb:67",
+                  "static": false
+                },
+                {
+                  "name": "find_by_user_scope!",
+                  "type": "function",
+                  "location": "app/models/app/search.rb:75",
+                  "static": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Search",
+          "type": "class",
+          "children": [
+            {
+              "name": "filter",
+              "type": "function",
+              "location": "app/models/search.rb:34",
+              "static": false
+            },
+            {
+              "name": "filter",
+              "type": "function",
+              "location": "app/models/search.rb:34",
+              "static": false
+            }
+          ]
+        },
+        {
+          "name": "DAO",
+          "type": "class",
+          "children": [
+            {
+              "name": "PublicResource",
+              "type": "class",
+              "children": [
+                {
+                  "name": "coerce",
+                  "type": "function",
+                  "location": "app/models/dao/public_resource.rb:18",
+                  "static": true,
+                  "comment": "# Coerce a dataset to a type that is safe to invoke scope.\n"
+                },
+                {
+                  "name": "scope",
+                  "type": "function",
+                  "location": "app/models/dao/public_resource.rb:26",
+                  "static": true
+                },
+                {
+                  "name": "coerce",
+                  "type": "function",
+                  "location": "app/models/dao/public_resource.rb:18",
+                  "static": true,
+                  "comment": "# Coerce a dataset to a type that is safe to invoke scope.\n"
+                },
+                {
+                  "name": "scope",
+                  "type": "function",
+                  "location": "app/models/dao/public_resource.rb:26",
+                  "static": true
+                }
+              ]
+            },
+            {
+              "name": "SequelUtil",
+              "type": "class",
+              "children": [
+                {
+                  "name": "build_where_clause",
+                  "type": "function",
+                  "location": "app/models/dao/sequel_util.rb:6",
+                  "static": true
+                },
+                {
+                  "name": "build_where_clause",
+                  "type": "function",
+                  "location": "app/models/dao/sequel_util.rb:6",
+                  "static": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Exceptions",
+          "type": "class",
+          "children": [
+            {
+              "name": "RecordNotFound",
+              "type": "class",
+              "children": [
+                {
+                  "name": "build_message",
+                  "type": "function",
+                  "location": "app/models/exceptions/record_not_found.rb:16",
+                  "static": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "json",
+      "type": "package",
+      "children": [
+        {
+          "name": "JSON",
+          "type": "class",
+          "children": [
+            {
+              "name": "Ext",
+              "type": "class",
+              "children": [
+                {
+                  "name": "Parser",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    },
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    },
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json"]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "actionview",
+      "type": "package",
+      "children": [
+        {
+          "name": "ActionView",
+          "type": "class",
+          "children": [
+            {
+              "name": "Renderer",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/renderer/renderer.rb:21",
+                  "labels": ["mvc.view"],
+                  "comment": "# Main render entry point shared by Action View and Action Controller.\n"
+                },
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/renderer/renderer.rb:21",
+                  "labels": ["mvc.view"],
+                  "comment": "# Main render entry point shared by Action View and Action Controller.\n"
+                },
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/renderer/renderer.rb:21",
+                  "labels": ["mvc.view"],
+                  "comment": "# Main render entry point shared by Action View and Action Controller.\n"
+                },
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/renderer/renderer.rb:21",
+                  "labels": ["mvc.view"],
+                  "comment": "# Main render entry point shared by Action View and Action Controller.\n"
+                },
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/renderer/renderer.rb:21",
+                  "labels": ["mvc.view"],
+                  "comment": "# Main render entry point shared by Action View and Action Controller.\n"
+                },
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/renderer/renderer.rb:21",
+                  "labels": ["mvc.view"],
+                  "comment": "# Main render entry point shared by Action View and Action Controller.\n"
+                }
+              ]
+            },
+            {
+              "name": "TemplateRenderer",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/renderer/template_renderer.rb:7",
+                  "labels": ["mvc.view"]
+                }
+              ]
+            },
+            {
+              "name": "Resolver",
+              "type": "class",
+              "children": [
+                {
+                  "name": "find_all",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb:145",
+                  "static": false,
+                  "labels": ["mvc.template.resolver"],
+                  "comment": "# Normalizes the arguments and passes it on to find_templates.\n"
+                },
+                {
+                  "name": "find_all",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb:145",
+                  "static": false,
+                  "labels": ["mvc.template.resolver"],
+                  "comment": "# Normalizes the arguments and passes it on to find_templates.\n"
+                },
+                {
+                  "name": "find_all",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb:145",
+                  "static": false,
+                  "labels": ["mvc.template.resolver"],
+                  "comment": "# Normalizes the arguments and passes it on to find_templates.\n"
+                },
+                {
+                  "name": "find_all",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb:145",
+                  "static": false,
+                  "labels": ["mvc.template.resolver"],
+                  "comment": "# Normalizes the arguments and passes it on to find_templates.\n"
+                },
+                {
+                  "name": "find_all",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb:145",
+                  "static": false,
+                  "labels": ["mvc.template.resolver"],
+                  "comment": "# Normalizes the arguments and passes it on to find_templates.\n"
+                },
+                {
+                  "name": "find_all",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb:145",
+                  "static": false,
+                  "labels": ["mvc.template.resolver"],
+                  "comment": "# Normalizes the arguments and passes it on to find_templates.\n"
+                },
+                {
+                  "name": "find_all",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb:145",
+                  "static": false,
+                  "labels": ["mvc.template.resolver"],
+                  "comment": "# Normalizes the arguments and passes it on to find_templates.\n"
+                }
+              ]
+            },
+            {
+              "name": "PartialRenderer",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/renderer/partial_renderer.rb:297",
+                  "labels": ["mvc.view"]
+                },
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/renderer/partial_renderer.rb:297",
+                  "labels": ["mvc.view"]
+                },
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/renderer/partial_renderer.rb:297",
+                  "labels": ["mvc.view"]
+                },
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/renderer/partial_renderer.rb:297",
+                  "labels": ["mvc.view"]
+                },
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/renderer/partial_renderer.rb:297",
+                  "labels": ["mvc.view"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "app/views",
+      "type": "package",
+      "children": [
+        {
+          "name": "app_views_errors_not_found_html_haml",
+          "type": "class",
+          "children": [
+            {
+              "name": "render",
+              "type": "function",
+              "location": "app/views/errors/not_found.html.haml",
+              "static": true,
+              "labels": ["mvc.template"]
+            }
+          ]
+        },
+        {
+          "name": "app_views_layouts_errors_html_haml",
+          "type": "class",
+          "children": [
+            {
+              "name": "render",
+              "type": "function",
+              "location": "app/views/layouts/errors.html.haml",
+              "static": true,
+              "labels": ["mvc.template"]
+            }
+          ]
+        },
+        {
+          "name": "app_views_layouts__standard_head_html_haml",
+          "type": "class",
+          "children": [
+            {
+              "name": "render",
+              "type": "function",
+              "location": "app/views/layouts/_standard_head.html.haml",
+              "static": true,
+              "labels": ["mvc.template"]
+            }
+          ]
+        },
+        {
+          "name": "app_views_layouts__css_head_html_haml",
+          "type": "class",
+          "children": [
+            {
+              "name": "render",
+              "type": "function",
+              "location": "app/views/layouts/_css_head.html.haml",
+              "static": true,
+              "labels": ["mvc.template"]
+            }
+          ]
+        },
+        {
+          "name": "app_views_layouts__js_head_html_haml",
+          "type": "class",
+          "children": [
+            {
+              "name": "render",
+              "type": "function",
+              "location": "app/views/layouts/_js_head.html.haml",
+              "static": true,
+              "labels": ["mvc.template"]
+            }
+          ]
+        },
+        {
+          "name": "app_views_partials__header_html_haml",
+          "type": "class",
+          "children": [
+            {
+              "name": "render",
+              "type": "function",
+              "location": "app/views/partials/_header.html.haml",
+              "static": true,
+              "labels": ["mvc.template"]
+            }
+          ]
+        },
+        {
+          "name": "app_views_partials__flash_html_haml",
+          "type": "class",
+          "children": [
+            {
+              "name": "render",
+              "type": "function",
+              "location": "app/views/partials/_flash.html.haml",
+              "static": true,
+              "labels": ["mvc.template"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "app/helpers",
+      "type": "package",
+      "children": [
+        {
+          "name": "ConfigurationHelper",
+          "type": "class",
+          "children": [
+            {
+              "name": "content_for_feature_flag",
+              "type": "function",
+              "location": "app/helpers/configuration_helper.rb:8",
+              "static": false
+            },
+            {
+              "name": "feature_flag?",
+              "type": "function",
+              "location": "app/helpers/configuration_helper.rb:4",
+              "static": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": 3137,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 70167264676060,
+          "value": "#<struct ActiveSupport::Callbacks::Filters::Environment target=#<#<Class:0x00007fa22f9a75d0>:0x00007",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 70167271984020,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007fa22ea49728>"
+      }
+    },
+    {
+      "id": 3138,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3137,
+      "elapsed": 0.000047,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007fa22ea492c8@/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesuppor",
+        "object_id": 70167271984000
+      }
+    },
+    {
+      "id": 3139,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 70167264676060,
+          "value": "#<struct ActiveSupport::Callbacks::Filters::Environment target=#<#<Class:0x00007fa22f9a75d0>:0x00007",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 70167271984020,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007fa22ea49728>"
+      }
+    },
+    {
+      "id": 3140,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3139,
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 70167271983980
+      }
+    },
+    {
+      "id": 3141,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "http_server_request": {
+        "request_method": "GET",
+        "path_info": "/default/appland/scenarios_list",
+        "normalized_path_info": "/{organization_id}/{id}/scenarios_list",
+        "headers": {
+          "Host": "www.example.com",
+          "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
+        }
+      },
+      "message": [
+        {
+          "name": "mapset",
+          "class": "String",
+          "value": "28",
+          "object_id": 70167283030040
+        },
+        {
+          "name": "page_size",
+          "class": "String",
+          "value": "2",
+          "object_id": 70167283029660
+        },
+        {
+          "name": "controller",
+          "class": "String",
+          "value": "applications",
+          "object_id": 70167254878660
+        },
+        {
+          "name": "action",
+          "class": "String",
+          "value": "scenarios_list",
+          "object_id": 70167255552900
+        },
+        {
+          "name": "organization_id",
+          "class": "String",
+          "value": "default",
+          "object_id": 70167264712240
+        },
+        {
+          "name": "id",
+          "class": "String",
+          "value": "appland",
+          "object_id": 70167264712220
+        }
+      ]
+    },
+    {
+      "id": 3142,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionController::Instrumentation",
+      "method_id": "process_action",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_controller/metal/instrumentation.rb",
+      "lineno": 19,
+      "static": false,
+      "parameters": [
+        {
+          "name": "args",
+          "class": "Array",
+          "object_id": 70167283027120,
+          "value": "[\"scenarios_list\"]",
+          "kind": "rest"
+        }
+      ],
+      "receiver": {
+        "class": "ApplicationsController",
+        "object_id": 70167264711380,
+        "value": "#<ApplicationsController:0x00007fa22dc6a5a8>"
+      }
+    },
+    {
+      "id": 3143,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 70167283024180,
+          "value": "#<struct ActiveSupport::Callbacks::Filters::Environment target=#<ApplicationsController:0x00007fa22d",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 70167282219360,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007fa22fdcf2c0>"
+      }
+    },
+    {
+      "id": 3144,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "AnonymousAccess",
+      "method_id": "allow_anonymous_access",
+      "path": "app/controllers/concerns/anonymous_access.rb",
+      "lineno": 5,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ApplicationsController",
+        "object_id": 70167264711380,
+        "value": "#<ApplicationsController:0x00007fa22dc6a5a8>"
+      }
+    },
+    {
+      "id": 3145,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3144,
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 3146,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionDispatch::Request::Session",
+      "method_id": "[]",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/request/session.rb",
+      "lineno": 91,
+      "static": false,
+      "parameters": [
+        {
+          "name": "key",
+          "class": "Symbol",
+          "object_id": 9352668,
+          "value": "_turbolinks_location",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Request::Session",
+        "object_id": 70167264691820,
+        "value": "#<ActionDispatch::Request::Session:0x00007fa22dc60cd8>"
+      }
+    },
+    {
+      "id": 3147,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionDispatch::Cookies::CookieJar",
+      "method_id": "update",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/middleware/cookies.rb",
+      "lineno": 344,
+      "static": false,
+      "parameters": [
+        {
+          "name": "other_hash",
+          "class": "Hash",
+          "object_id": 70167264677040,
+          "value": "{}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "object_id": 70167247360540,
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007fa22bb52438>"
+      }
+    },
+    {
+      "id": 3148,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3147,
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007fa22bb52438>",
+        "object_id": 70167247360540
+      }
+    },
+    {
+      "id": 3149,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3146,
+      "elapsed": 0.000192
+    },
+    {
+      "id": 3150,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3143,
+      "elapsed": 0.000473,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007fa22fdceb40@/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesuppor",
+        "object_id": 70167282219340
+      }
+    },
+    {
+      "id": 3151,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "sql_query": {
+        "sql": "SAVEPOINT autopoint_1",
+        "database_type": "postgres",
+        "server_version": 120003
+      }
+    },
+    {
+      "id": 3152,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3151,
+      "elapsed": 0.001737
+    },
+    {
+      "id": 3153,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 70167283024180,
+          "value": "#<struct ActiveSupport::Callbacks::Filters::Environment target=#<ApplicationsController:0x00007fa22d",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 70167259570680,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007fa22d29c3f0>"
+      }
+    },
+    {
+      "id": 3154,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "CurrentUser",
+      "method_id": "check_current_user",
+      "path": "app/controllers/concerns/current_user.rb",
+      "lineno": 19,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ApplicationsController",
+        "object_id": 70167264711380,
+        "value": "#<ApplicationsController:0x00007fa22dc6a5a8>"
+      }
+    },
+    {
+      "id": 3155,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "AnonymousAccess",
+      "method_id": "anonymous_access?",
+      "path": "app/controllers/concerns/anonymous_access.rb",
+      "lineno": 9,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ApplicationsController",
+        "object_id": 70167264711380,
+        "value": "#<ApplicationsController:0x00007fa22dc6a5a8>"
+      }
+    },
+    {
+      "id": 3156,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3155,
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 3157,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "CurrentUser",
+      "method_id": "current_user",
+      "path": "app/controllers/concerns/current_user.rb",
+      "lineno": 36,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ApplicationsController",
+        "object_id": 70167264711380,
+        "value": "#<ApplicationsController:0x00007fa22dc6a5a8>"
+      }
+    },
+    {
+      "id": 3158,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "CurrentUser",
+      "method_id": "lookup_session_user",
+      "path": "app/controllers/concerns/current_user.rb",
+      "lineno": 41,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ApplicationsController",
+        "object_id": 70167264711380,
+        "value": "#<ApplicationsController:0x00007fa22dc6a5a8>"
+      }
+    },
+    {
+      "id": 3159,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionDispatch::Request::Session",
+      "method_id": "[]",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/request/session.rb",
+      "lineno": 91,
+      "static": false,
+      "parameters": [
+        {
+          "name": "key",
+          "class": "Symbol",
+          "object_id": 13587228,
+          "value": "user_id",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Request::Session",
+        "object_id": 70167264691820,
+        "value": "#<ActionDispatch::Request::Session:0x00007fa22dc60cd8>"
+      }
+    },
+    {
+      "id": 3160,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3159,
+      "elapsed": 0.000018
+    },
+    {
+      "id": 3161,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3158,
+      "elapsed": 0.000102
+    },
+    {
+      "id": 3162,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3157,
+      "elapsed": 0.000182
+    },
+    {
+      "id": 3163,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3154,
+      "elapsed": 0.000372,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 3164,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "CurrentUser",
+      "method_id": "ensure_eula_accepted",
+      "path": "app/controllers/concerns/current_user.rb",
+      "lineno": 27,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ApplicationsController",
+        "object_id": 70167264711380,
+        "value": "#<ApplicationsController:0x00007fa22dc6a5a8>"
+      }
+    },
+    {
+      "id": 3165,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3164,
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 3166,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3153,
+      "elapsed": 0.000636,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007fa22fdcf608@/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesuppor",
+        "object_id": 70167259570640
+      }
+    },
+    {
+      "id": 3167,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "WithAuthentication",
+      "method_id": "with_authentication",
+      "path": "app/controllers/concerns/with_authentication.rb",
+      "lineno": 6,
+      "static": false,
+      "parameters": [
+        {
+          "name": "block",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "block"
+        }
+      ],
+      "receiver": {
+        "class": "ApplicationsController",
+        "object_id": 70167264711380,
+        "value": "#<ApplicationsController:0x00007fa22dc6a5a8>"
+      }
+    },
+    {
+      "id": 3168,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "WithAuthentication",
+      "method_id": "with_anonymous_user",
+      "path": "app/controllers/concerns/with_authentication.rb",
+      "lineno": 15,
+      "static": false,
+      "parameters": [
+        {
+          "name": "block",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "block"
+        }
+      ],
+      "receiver": {
+        "class": "ApplicationsController",
+        "object_id": 70167264711380,
+        "value": "#<ApplicationsController:0x00007fa22dc6a5a8>"
+      }
+    },
+    {
+      "id": 3169,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 70167283024180,
+          "value": "#<struct ActiveSupport::Callbacks::Filters::Environment target=#<ApplicationsController:0x00007fa22d",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 70167259573920,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007fa22d29dd40>"
+      }
+    },
+    {
+      "id": 3170,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "Configuration",
+      "method_id": "find",
+      "path": "app/models/configuration.rb",
+      "lineno": 8,
+      "static": true,
+      "parameters": [
+        {
+          "name": "session",
+          "class": "ActionDispatch::Request::Session",
+          "object_id": 70167264691820,
+          "value": "#<ActionDispatch::Request::Session:0x00007fa22dc60cd8>",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 70167091757480,
+        "value": "Configuration"
+      }
+    },
+    {
+      "id": 3171,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionDispatch::Request::Session",
+      "method_id": "[]",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/request/session.rb",
+      "lineno": 91,
+      "static": false,
+      "parameters": [
+        {
+          "name": "key",
+          "class": "Symbol",
+          "object_id": 648028,
+          "value": "configuration",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Request::Session",
+        "object_id": 70167264691820,
+        "value": "#<ActionDispatch::Request::Session:0x00007fa22dc60cd8>"
+      }
+    },
+    {
+      "id": 3172,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3171,
+      "elapsed": 0.000017
+    },
+    {
+      "id": 3173,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70167283060720,
+        "value": "#<JSON::Ext::Parser:0x00007fa22ff69fe0>"
+      }
+    },
+    {
+      "id": 3174,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3173,
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Hash",
+        "value": "{}",
+        "object_id": 70167283059780
+      }
+    },
+    {
+      "id": 3175,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "Configuration",
+      "method_id": "attributes=",
+      "path": "app/models/configuration.rb",
+      "lineno": 44,
+      "static": false,
+      "parameters": [
+        {
+          "name": "attrs",
+          "class": "Hash",
+          "object_id": 70167283059780,
+          "value": "{}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Configuration",
+        "object_id": 70167283062060,
+        "value": "#<Configuration:0x00007fa22ff6aa58>"
+      }
+    },
+    {
+      "id": 3176,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3175,
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "Hash",
+        "value": "{}",
+        "object_id": 70167283059780
+      }
+    },
+    {
+      "id": 3177,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3170,
+      "elapsed": 0.000273,
+      "return_value": {
+        "class": "Configuration",
+        "value": "#<Configuration:0x00007fa22ff6aa58>",
+        "object_id": 70167283062060
+      }
+    },
+    {
+      "id": 3178,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "Configuration",
+      "method_id": "attributes",
+      "path": "app/models/configuration.rb",
+      "lineno": 30,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "Configuration",
+        "object_id": 70167283062060,
+        "value": "#<Configuration:0x00007fa22ff6aa58>"
+      }
+    },
+    {
+      "id": 3179,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3178,
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"show_search\"=>nil, \"show_codegen\"=>nil, \"show_mini_profiler\"=>nil, \"show_mockups\"=>nil, \"show_noti",
+        "object_id": 70167283080720
+      }
+    },
+    {
+      "id": 3180,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "Configuration",
+      "method_id": "attributes",
+      "path": "app/models/configuration.rb",
+      "lineno": 30,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "Configuration",
+        "object_id": 70167283062060,
+        "value": "#<Configuration:0x00007fa22ff6aa58>"
+      }
+    },
+    {
+      "id": 3181,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3180,
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"show_search\"=>nil, \"show_codegen\"=>nil, \"show_mini_profiler\"=>nil, \"show_mockups\"=>nil, \"show_noti",
+        "object_id": 70167283078540
+      }
+    },
+    {
+      "id": 3182,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "CurrentUser",
+      "method_id": "current_user",
+      "path": "app/controllers/concerns/current_user.rb",
+      "lineno": 36,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ApplicationsController",
+        "object_id": 70167264711380,
+        "value": "#<ApplicationsController:0x00007fa22dc6a5a8>"
+      }
+    },
+    {
+      "id": 3183,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "CurrentUser",
+      "method_id": "lookup_session_user",
+      "path": "app/controllers/concerns/current_user.rb",
+      "lineno": 41,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ApplicationsController",
+        "object_id": 70167264711380,
+        "value": "#<ApplicationsController:0x00007fa22dc6a5a8>"
+      }
+    },
+    {
+      "id": 3184,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionDispatch::Request::Session",
+      "method_id": "[]",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/request/session.rb",
+      "lineno": 91,
+      "static": false,
+      "parameters": [
+        {
+          "name": "key",
+          "class": "Symbol",
+          "object_id": 13587228,
+          "value": "user_id",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Request::Session",
+        "object_id": 70167264691820,
+        "value": "#<ActionDispatch::Request::Session:0x00007fa22dc60cd8>"
+      }
+    },
+    {
+      "id": 3185,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3184,
+      "elapsed": 0.00001
+    },
+    {
+      "id": 3186,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3183,
+      "elapsed": 0.000082
+    },
+    {
+      "id": 3187,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3182,
+      "elapsed": 0.000161
+    },
+    {
+      "id": 3188,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "App::Search",
+      "method_id": "find!",
+      "path": "app/models/app/search.rb",
+      "lineno": 39,
+      "static": false,
+      "parameters": [
+        {
+          "name": "app",
+          "class": "String",
+          "object_id": 70167264712220,
+          "value": "appland",
+          "kind": "req"
+        },
+        {
+          "name": "org_slug_or_user_login",
+          "class": "String",
+          "object_id": 70167264712240,
+          "value": "default",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "App::Search",
+        "object_id": 70167283073900,
+        "value": "#<App::Search:0x00007fa22ff706d8>"
+      }
+    },
+    {
+      "id": 3189,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "App::Search",
+      "method_id": "find_by_slug!",
+      "path": "app/models/app/search.rb",
+      "lineno": 58,
+      "static": false,
+      "parameters": [
+        {
+          "name": "org_slug_or_user_login",
+          "class": "String",
+          "object_id": 70167264712240,
+          "value": "default",
+          "kind": "req"
+        },
+        {
+          "name": "app_slug",
+          "class": "String",
+          "object_id": 70167264712220,
+          "value": "appland",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "App::Search",
+        "object_id": 70167283073900,
+        "value": "#<App::Search:0x00007fa22ff706d8>"
+      }
+    },
+    {
+      "id": 3190,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "App::Search",
+      "method_id": "find_by_org_scope!",
+      "path": "app/models/app/search.rb",
+      "lineno": 67,
+      "static": false,
+      "parameters": [
+        {
+          "name": "org_slug",
+          "class": "String",
+          "object_id": 70167264712240,
+          "value": "default",
+          "kind": "req"
+        },
+        {
+          "name": "app_slug",
+          "class": "String",
+          "object_id": 70167264712220,
+          "value": "appland",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "App::Search",
+        "object_id": 70167283073900,
+        "value": "#<App::Search:0x00007fa22ff706d8>"
+      }
+    },
+    {
+      "id": 3191,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "Search",
+      "method_id": "filter",
+      "path": "app/models/search.rb",
+      "lineno": 34,
+      "static": false,
+      "parameters": [
+        {
+          "name": "dataset",
+          "class": "Class",
+          "object_id": 70167267461620,
+          "value": "DAO::App",
+          "kind": "req"
+        },
+        {
+          "name": "table_name",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "App::Search",
+        "object_id": 70167283073900,
+        "value": "#<App::Search:0x00007fa22ff706d8>"
+      }
+    },
+    {
+      "id": 3192,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "DAO::PublicResource",
+      "method_id": "coerce",
+      "path": "app/models/dao/public_resource.rb",
+      "lineno": 18,
+      "static": true,
+      "parameters": [
+        {
+          "name": "dataset",
+          "class": "Class",
+          "object_id": 70167267461620,
+          "value": "DAO::App",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 70167341819600,
+        "value": "DAO::PublicResource"
+      }
+    },
+    {
+      "id": 3193,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3192,
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "Class",
+        "value": "DAO::App",
+        "object_id": 70167267461620
+      }
+    },
+    {
+      "id": 3194,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "DAO::PublicResource",
+      "method_id": "scope",
+      "path": "app/models/dao/public_resource.rb",
+      "lineno": 26,
+      "static": true,
+      "parameters": [
+        {
+          "name": "user",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "req"
+        },
+        {
+          "name": "scope",
+          "class": "Integer",
+          "object_id": 9,
+          "value": "4",
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 70167267461620,
+        "value": "DAO::App"
+      }
+    },
+    {
+      "id": 3195,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "DAO::SequelUtil",
+      "method_id": "build_where_clause",
+      "path": "app/models/dao/sequel_util.rb",
+      "lineno": 6,
+      "static": true,
+      "parameters": [
+        {
+          "name": "dataset",
+          "class": "Sequel::Postgres::Dataset",
+          "object_id": 70167262985200,
+          "value": "#<Sequel::Postgres::Dataset:0x00007fa22d91f7e0>",
+          "kind": "req"
+        },
+        {
+          "name": "clauses",
+          "class": "Array",
+          "object_id": 70167283112660,
+          "value": "[{:public=>true}]",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 70167092858540,
+        "value": "DAO::SequelUtil"
+      }
+    },
+    {
+      "id": 3196,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3195,
+      "elapsed": 0.000044,
+      "return_value": {
+        "class": "Sequel::Postgres::Dataset",
+        "value": "#<Sequel::Postgres::Dataset:0x00007fa22ff824f0>",
+        "object_id": 70167283110520
+      }
+    },
+    {
+      "id": 3197,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3194,
+      "elapsed": 0.000161,
+      "return_value": {
+        "class": "Sequel::Postgres::Dataset",
+        "value": "#<Sequel::Postgres::Dataset:0x00007fa22ff824f0>",
+        "object_id": 70167283110520
+      }
+    },
+    {
+      "id": 3198,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3191,
+      "elapsed": 0.000353,
+      "return_value": {
+        "class": "Sequel::Postgres::Dataset",
+        "value": "#<Sequel::Postgres::Dataset:0x00007fa22ff824f0>",
+        "object_id": 70167283110520
+      }
+    },
+    {
+      "id": 3199,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "sql_query": {
+        "sql": "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"public\" IS TRUE) AND (\"apps\".\"slug\" = 'appland') AND (\"orgs\".\"slug\" = 'default')) LIMIT 1",
+        "database_type": "postgres",
+        "server_version": 120003
+      }
+    },
+    {
+      "id": 3200,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3199,
+      "elapsed": 0.002315
+    },
+    {
+      "id": 3201,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3190,
+      "elapsed": 0.032755
+    },
+    {
+      "id": 3202,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "App::Search",
+      "method_id": "find_by_user_scope!",
+      "path": "app/models/app/search.rb",
+      "lineno": 75,
+      "static": false,
+      "parameters": [
+        {
+          "name": "user_login",
+          "class": "String",
+          "object_id": 70167264712240,
+          "value": "default",
+          "kind": "req"
+        },
+        {
+          "name": "app_slug",
+          "class": "String",
+          "object_id": 70167264712220,
+          "value": "appland",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "App::Search",
+        "object_id": 70167283073900,
+        "value": "#<App::Search:0x00007fa22ff706d8>"
+      }
+    },
+    {
+      "id": 3203,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "Search",
+      "method_id": "filter",
+      "path": "app/models/search.rb",
+      "lineno": 34,
+      "static": false,
+      "parameters": [
+        {
+          "name": "dataset",
+          "class": "Class",
+          "object_id": 70167267461620,
+          "value": "DAO::App",
+          "kind": "req"
+        },
+        {
+          "name": "table_name",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "App::Search",
+        "object_id": 70167283073900,
+        "value": "#<App::Search:0x00007fa22ff706d8>"
+      }
+    },
+    {
+      "id": 3204,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "DAO::PublicResource",
+      "method_id": "coerce",
+      "path": "app/models/dao/public_resource.rb",
+      "lineno": 18,
+      "static": true,
+      "parameters": [
+        {
+          "name": "dataset",
+          "class": "Class",
+          "object_id": 70167267461620,
+          "value": "DAO::App",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 70167341819600,
+        "value": "DAO::PublicResource"
+      }
+    },
+    {
+      "id": 3205,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3204,
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "Class",
+        "value": "DAO::App",
+        "object_id": 70167267461620
+      }
+    },
+    {
+      "id": 3206,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "DAO::PublicResource",
+      "method_id": "scope",
+      "path": "app/models/dao/public_resource.rb",
+      "lineno": 26,
+      "static": true,
+      "parameters": [
+        {
+          "name": "user",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "req"
+        },
+        {
+          "name": "scope",
+          "class": "Integer",
+          "object_id": 9,
+          "value": "4",
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 70167267461620,
+        "value": "DAO::App"
+      }
+    },
+    {
+      "id": 3207,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "DAO::SequelUtil",
+      "method_id": "build_where_clause",
+      "path": "app/models/dao/sequel_util.rb",
+      "lineno": 6,
+      "static": true,
+      "parameters": [
+        {
+          "name": "dataset",
+          "class": "Sequel::Postgres::Dataset",
+          "object_id": 70167262985200,
+          "value": "#<Sequel::Postgres::Dataset:0x00007fa22d91f7e0>",
+          "kind": "req"
+        },
+        {
+          "name": "clauses",
+          "class": "Array",
+          "object_id": 70167246251240,
+          "value": "[{:public=>true}]",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 70167092858540,
+        "value": "DAO::SequelUtil"
+      }
+    },
+    {
+      "id": 3208,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3207,
+      "elapsed": 0.000044,
+      "return_value": {
+        "class": "Sequel::Postgres::Dataset",
+        "value": "#<Sequel::Postgres::Dataset:0x00007fa22b946c20>",
+        "object_id": 70167246288400
+      }
+    },
+    {
+      "id": 3209,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3206,
+      "elapsed": 0.000173,
+      "return_value": {
+        "class": "Sequel::Postgres::Dataset",
+        "value": "#<Sequel::Postgres::Dataset:0x00007fa22b946c20>",
+        "object_id": 70167246288400
+      }
+    },
+    {
+      "id": 3210,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3203,
+      "elapsed": 0.000401,
+      "return_value": {
+        "class": "Sequel::Postgres::Dataset",
+        "value": "#<Sequel::Postgres::Dataset:0x00007fa22b946c20>",
+        "object_id": 70167246288400
+      }
+    },
+    {
+      "id": 3211,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "sql_query": {
+        "sql": "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") INNER JOIN \"users\" ON (\"users\".\"id\" = \"orgs\".\"owner_id\") WHERE ((\"public\" IS TRUE) AND (\"apps\".\"slug\" = 'appland') AND (\"users\".\"login\" = 'default')) LIMIT 1",
+        "database_type": "postgres",
+        "server_version": 120003
+      }
+    },
+    {
+      "id": 3212,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3211,
+      "elapsed": 0.002167
+    },
+    {
+      "id": 3213,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3202,
+      "elapsed": 0.008278
+    },
+    {
+      "id": 3214,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "Exceptions::RecordNotFound",
+      "method_id": "build_message",
+      "path": "app/models/exceptions/record_not_found.rb",
+      "lineno": 16,
+      "static": true,
+      "parameters": [
+        {
+          "name": "kind",
+          "class": "String",
+          "object_id": 70167092497620,
+          "value": "App",
+          "kind": "req"
+        },
+        {
+          "name": "id",
+          "class": "String",
+          "object_id": 70167264712220,
+          "value": "appland",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 70167341103220,
+        "value": "Exceptions::RecordNotFound"
+      }
+    },
+    {
+      "id": 3215,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3214,
+      "elapsed": 0.000007,
+      "return_value": {
+        "class": "String",
+        "value": "App \"appland\" not found",
+        "object_id": 70167340275600
+      }
+    },
+    {
+      "id": 3216,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3189,
+      "elapsed": 0.041684,
+      "exceptions": [
+        {
+          "class": "Exceptions::RecordNotFound",
+          "message": "App \"appland\" not found",
+          "object_id": 70167340307980,
+          "path": "/Users/dustin/dev/appland/appland/app/models/app/search.rb",
+          "lineno": 62
+        }
+      ]
+    },
+    {
+      "id": 3217,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3188,
+      "elapsed": 0.041828,
+      "exceptions": [
+        {
+          "class": "Exceptions::RecordNotFound",
+          "message": "App \"appland\" not found",
+          "object_id": 70167340307980,
+          "path": "/Users/dustin/dev/appland/appland/app/models/app/search.rb",
+          "lineno": 62
+        }
+      ]
+    },
+    {
+      "id": 3218,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3169,
+      "elapsed": 0.042893,
+      "exceptions": [
+        {
+          "class": "Exceptions::RecordNotFound",
+          "message": "App \"appland\" not found",
+          "object_id": 70167340307980,
+          "path": "/Users/dustin/dev/appland/appland/app/models/app/search.rb",
+          "lineno": 62
+        }
+      ]
+    },
+    {
+      "id": 3219,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3168,
+      "elapsed": 0.044391,
+      "exceptions": [
+        {
+          "class": "Exceptions::RecordNotFound",
+          "message": "App \"appland\" not found",
+          "object_id": 70167340307980,
+          "path": "/Users/dustin/dev/appland/appland/app/models/app/search.rb",
+          "lineno": 62
+        }
+      ]
+    },
+    {
+      "id": 3220,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3167,
+      "elapsed": 0.044484,
+      "exceptions": [
+        {
+          "class": "Exceptions::RecordNotFound",
+          "message": "App \"appland\" not found",
+          "object_id": 70167340307980,
+          "path": "/Users/dustin/dev/appland/appland/app/models/app/search.rb",
+          "lineno": 62
+        }
+      ]
+    },
+    {
+      "id": 3221,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "sql_query": {
+        "sql": "ROLLBACK TO SAVEPOINT autopoint_1",
+        "database_type": "postgres",
+        "server_version": 120003
+      }
+    },
+    {
+      "id": 3222,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3221,
+      "elapsed": 0.001475
+    },
+    {
+      "id": 3223,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ApplicationController",
+      "method_id": "render_404",
+      "path": "app/controllers/application_controller.rb",
+      "lineno": 28,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ApplicationsController",
+        "object_id": 70167264711380,
+        "value": "#<ApplicationsController:0x00007fa22dc6a5a8>"
+      }
+    },
+    {
+      "id": 3224,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "inline_template",
+      "method_id": "render",
+      "path": null,
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Renderer",
+        "object_id": 70167341399020,
+        "value": "#<ActionView::Renderer:0x00007fa236eaf7d8>"
+      }
+    },
+    {
+      "id": 3225,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "app_views_errors_not_found_html_haml",
+      "method_id": "render",
+      "path": "app/views/errors/not_found.html.haml",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::TemplateRenderer",
+        "object_id": 70167341396820,
+        "value": "#<ActionView::TemplateRenderer:0x00007fa236eae6a8>"
+      }
+    },
+    {
+      "id": 3226,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb",
+      "lineno": 145,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 70167341395540,
+          "value": "not_found",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 70167341395320,
+          "value": "errors",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": null,
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 70167264711260,
+          "value": "{:locale=>[:en], :formats=>[:html, :text, :js, :css, :ics, :csv, :vcf, :vtt, :png, :jpeg, :gif, :bmp",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Concurrent::Map",
+          "object_id": 70167246591320,
+          "value": "#<Concurrent::Map:0x00007fa22b9daab0>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 70167341395820,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 70167339854480,
+        "value": "/Users/dustin/dev/appland/appland/app/views"
+      }
+    },
+    {
+      "id": 3227,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3226,
+      "elapsed": 0.000014,
+      "return_value": {
+        "class": "Array",
+        "value": "[app/views/errors/not_found.html.haml]",
+        "object_id": 70167246662920
+      }
+    },
+    {
+      "id": 3228,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb",
+      "lineno": 145,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 70167341409900,
+          "value": "errors",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 70167341409880,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": null,
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 70167341409800,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Concurrent::Map",
+          "object_id": 70167246659800,
+          "value": "#<Concurrent::Map:0x00007fa22b9fc1b0>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 70167341409980,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 70167339854480,
+        "value": "/Users/dustin/dev/appland/appland/app/views"
+      }
+    },
+    {
+      "id": 3229,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3228,
+      "elapsed": 0.00001,
+      "return_value": {
+        "class": "Array",
+        "value": "[app/views/layouts/errors.html.haml]",
+        "object_id": 70167267598880
+      }
+    },
+    {
+      "id": 3230,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "inline_template",
+      "method_id": "render",
+      "path": null,
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Renderer",
+        "object_id": 70167341399020,
+        "value": "#<ActionView::Renderer:0x00007fa236eaf7d8>"
+      }
+    },
+    {
+      "id": 3231,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "app_views_layouts__standard_head_html_haml",
+      "method_id": "render",
+      "path": "app/views/layouts/_standard_head.html.haml",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 70167341476540,
+        "value": "#<ActionView::PartialRenderer:0x00007fa236ed5578>"
+      }
+    },
+    {
+      "id": 3232,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb",
+      "lineno": 145,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 70167341474360,
+          "value": "standard_head",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 70167341474340,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 70167264711260,
+          "value": "{:locale=>[:en], :formats=>[:html, :text, :js, :css, :ics, :csv, :vcf, :vtt, :png, :jpeg, :gif, :bmp",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Concurrent::Map",
+          "object_id": 70167246591320,
+          "value": "#<Concurrent::Map:0x00007fa22b9daab0>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 70167341474540,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 70167339854480,
+        "value": "/Users/dustin/dev/appland/appland/app/views"
+      }
+    },
+    {
+      "id": 3233,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3232,
+      "elapsed": 0.000012,
+      "return_value": {
+        "class": "Array",
+        "value": "[app/views/layouts/_standard_head.html.haml]",
+        "object_id": 70167092417260
+      }
+    },
+    {
+      "id": 3234,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "inline_template",
+      "method_id": "render",
+      "path": null,
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Renderer",
+        "object_id": 70167341399020,
+        "value": "#<ActionView::Renderer:0x00007fa236eaf7d8>"
+      }
+    },
+    {
+      "id": 3235,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "app_views_layouts__css_head_html_haml",
+      "method_id": "render",
+      "path": "app/views/layouts/_css_head.html.haml",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 70167341525520,
+        "value": "#<ActionView::PartialRenderer:0x00007fa236eed420>"
+      }
+    },
+    {
+      "id": 3236,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb",
+      "lineno": 145,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 70167341523660,
+          "value": "css_head",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 70167341523520,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 70167264711260,
+          "value": "{:locale=>[:en], :formats=>[:html, :text, :js, :css, :ics, :csv, :vcf, :vtt, :png, :jpeg, :gif, :bmp",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Concurrent::Map",
+          "object_id": 70167246591320,
+          "value": "#<Concurrent::Map:0x00007fa22b9daab0>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 70167341523900,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 70167339854480,
+        "value": "/Users/dustin/dev/appland/appland/app/views"
+      }
+    },
+    {
+      "id": 3237,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3236,
+      "elapsed": 0.00001,
+      "return_value": {
+        "class": "Array",
+        "value": "[app/views/layouts/_css_head.html.haml]",
+        "object_id": 70167092675520
+      }
+    },
+    {
+      "id": 3238,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70167341703700,
+        "value": "#<JSON::Ext::Parser:0x00007fa236f44428>"
+      }
+    },
+    {
+      "id": 3239,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3238,
+      "elapsed": 0.00012,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"appModals.js\"=>\"/packs-test/js/appModals-4326b7607e6133c5f56d.js\", \"appModals.js.map\"=>\"/packs-tes",
+        "object_id": 70167341726440
+      }
+    },
+    {
+      "id": 3240,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3235,
+      "elapsed": 0.007014
+    },
+    {
+      "id": 3241,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3234,
+      "elapsed": 0.007053
+    },
+    {
+      "id": 3242,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "inline_template",
+      "method_id": "render",
+      "path": null,
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Renderer",
+        "object_id": 70167341399020,
+        "value": "#<ActionView::Renderer:0x00007fa236eaf7d8>"
+      }
+    },
+    {
+      "id": 3243,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "app_views_layouts__js_head_html_haml",
+      "method_id": "render",
+      "path": "app/views/layouts/_js_head.html.haml",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 70167267462740,
+        "value": "#<ActionView::PartialRenderer:0x00007fa22e1a9ca8>"
+      }
+    },
+    {
+      "id": 3244,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb",
+      "lineno": 145,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 70167267460600,
+          "value": "js_head",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 70167267460580,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 70167264711260,
+          "value": "{:locale=>[:en], :formats=>[:html, :text, :js, :css, :ics, :csv, :vcf, :vtt, :png, :jpeg, :gif, :bmp",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Concurrent::Map",
+          "object_id": 70167246591320,
+          "value": "#<Concurrent::Map:0x00007fa22b9daab0>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 70167267460700,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 70167339854480,
+        "value": "/Users/dustin/dev/appland/appland/app/views"
+      }
+    },
+    {
+      "id": 3245,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3244,
+      "elapsed": 0.000013,
+      "return_value": {
+        "class": "Array",
+        "value": "[app/views/layouts/_js_head.html.haml]",
+        "object_id": 70167255921080
+      }
+    },
+    {
+      "id": 3246,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3243,
+      "elapsed": 0.000655
+    },
+    {
+      "id": 3247,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3242,
+      "elapsed": 0.00069
+    },
+    {
+      "id": 3248,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3231,
+      "elapsed": 0.008325
+    },
+    {
+      "id": 3249,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3230,
+      "elapsed": 0.008358
+    },
+    {
+      "id": 3250,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "inline_template",
+      "method_id": "render",
+      "path": null,
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Renderer",
+        "object_id": 70167341399020,
+        "value": "#<ActionView::Renderer:0x00007fa236eaf7d8>"
+      }
+    },
+    {
+      "id": 3251,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "app_views_partials__header_html_haml",
+      "method_id": "render",
+      "path": "app/views/partials/_header.html.haml",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 70167341803700,
+        "value": "#<ActionView::PartialRenderer:0x00007fa236f75168>"
+      }
+    },
+    {
+      "id": 3252,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb",
+      "lineno": 145,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 70167341802020,
+          "value": "header",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 70167341802000,
+          "value": "partials",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 70167264711260,
+          "value": "{:locale=>[:en], :formats=>[:html, :text, :js, :css, :ics, :csv, :vcf, :vtt, :png, :jpeg, :gif, :bmp",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Concurrent::Map",
+          "object_id": 70167246591320,
+          "value": "#<Concurrent::Map:0x00007fa22b9daab0>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 70167341802260,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 70167339854480,
+        "value": "/Users/dustin/dev/appland/appland/app/views"
+      }
+    },
+    {
+      "id": 3253,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3252,
+      "elapsed": 0.00001,
+      "return_value": {
+        "class": "Array",
+        "value": "[app/views/partials/_header.html.haml]",
+        "object_id": 70167228437300
+      }
+    },
+    {
+      "id": 3254,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ConfigurationHelper",
+      "method_id": "content_for_feature_flag",
+      "path": "app/helpers/configuration_helper.rb",
+      "lineno": 8,
+      "static": false,
+      "parameters": [
+        {
+          "name": "flag",
+          "class": "Symbol",
+          "object_id": 14507868,
+          "value": "show_search",
+          "kind": "req"
+        },
+        {
+          "name": "enabled",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        },
+        {
+          "name": "block",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "block"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 70167341398600,
+        "value": "#<#<Class:0x00007fa22fc70708>:0x00007fa236eaf490>"
+      }
+    },
+    {
+      "id": 3255,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ConfigurationHelper",
+      "method_id": "feature_flag?",
+      "path": "app/helpers/configuration_helper.rb",
+      "lineno": 4,
+      "static": false,
+      "parameters": [
+        {
+          "name": "flag",
+          "class": "Symbol",
+          "object_id": 14507868,
+          "value": "show_search",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 70167341398600,
+        "value": "#<#<Class:0x00007fa22fc70708>:0x00007fa236eaf490>"
+      }
+    },
+    {
+      "id": 3256,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "Configuration",
+      "method_id": "attributes",
+      "path": "app/models/configuration.rb",
+      "lineno": 30,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "Configuration",
+        "object_id": 70167283062060,
+        "value": "#<Configuration:0x00007fa22ff6aa58>"
+      }
+    },
+    {
+      "id": 3257,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3256,
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"show_search\"=>nil, \"show_codegen\"=>nil, \"show_mini_profiler\"=>nil, \"show_mockups\"=>nil, \"show_noti",
+        "object_id": 70167341887140
+      }
+    },
+    {
+      "id": 3258,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3255,
+      "elapsed": 0.000162
+    },
+    {
+      "id": 3259,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3254,
+      "elapsed": 0.002399
+    },
+    {
+      "id": 3260,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "inline_template",
+      "method_id": "render",
+      "path": null,
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Renderer",
+        "object_id": 70167341399020,
+        "value": "#<ActionView::Renderer:0x00007fa236eaf7d8>"
+      }
+    },
+    {
+      "id": 3261,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "app_views_partials__flash_html_haml",
+      "method_id": "render",
+      "path": "app/views/partials/_flash.html.haml",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 70167341923220,
+        "value": "#<ActionView::PartialRenderer:0x00007fa236faf728>"
+      }
+    },
+    {
+      "id": 3262,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb",
+      "lineno": 145,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 70167341921700,
+          "value": "flash",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 70167341921680,
+          "value": "partials",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 70167264711260,
+          "value": "{:locale=>[:en], :formats=>[:html, :text, :js, :css, :ics, :csv, :vcf, :vtt, :png, :jpeg, :gif, :bmp",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Concurrent::Map",
+          "object_id": 70167246591320,
+          "value": "#<Concurrent::Map:0x00007fa22b9daab0>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 70167341921960,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 70167339854480,
+        "value": "/Users/dustin/dev/appland/appland/app/views"
+      }
+    },
+    {
+      "id": 3263,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3262,
+      "elapsed": 0.000012,
+      "return_value": {
+        "class": "Array",
+        "value": "[app/views/partials/_flash.html.haml]",
+        "object_id": 70167256413320
+      }
+    },
+    {
+      "id": 3264,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActionDispatch::Request::Session",
+      "method_id": "[]",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/request/session.rb",
+      "lineno": 91,
+      "static": false,
+      "parameters": [
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 70167338324840,
+          "value": "flash",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Request::Session",
+        "object_id": 70167264691820,
+        "value": "#<ActionDispatch::Request::Session:0x00007fa22dc60cd8>"
+      }
+    },
+    {
+      "id": 3265,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3264,
+      "elapsed": 0.000019
+    },
+    {
+      "id": 3266,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3261,
+      "elapsed": 0.000569
+    },
+    {
+      "id": 3267,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3260,
+      "elapsed": 0.000603
+    },
+    {
+      "id": 3268,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3251,
+      "elapsed": 0.007498
+    },
+    {
+      "id": 3269,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3250,
+      "elapsed": 0.007526
+    },
+    {
+      "id": 3270,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 70167090739320,
+        "value": "#<JSON::Ext::Parser:0x00007fa2190970f0>"
+      }
+    },
+    {
+      "id": 3271,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3270,
+      "elapsed": 0.000125,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"appModals.js\"=>\"/packs-test/js/appModals-4326b7607e6133c5f56d.js\", \"appModals.js.map\"=>\"/packs-tes",
+        "object_id": 70167090735580
+      }
+    },
+    {
+      "id": 3272,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3225,
+      "elapsed": 0.024004
+    },
+    {
+      "id": 3273,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3224,
+      "elapsed": 0.024042
+    },
+    {
+      "id": 3274,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3223,
+      "elapsed": 0.024332,
+      "return_value": {
+        "class": "ActiveSupport::SafeBuffer",
+        "value": "<!DOCTYPE html>\n<html>\n<head>\n<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>\n<m",
+        "object_id": 70167090845160
+      }
+    },
+    {
+      "id": 3275,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3142,
+      "elapsed": 0.084462,
+      "return_value": {
+        "class": "Exceptions::RecordNotFound",
+        "value": "App \"appland\" not found",
+        "object_id": 70167340307980
+      }
+    },
+    {
+      "id": 3276,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3141,
+      "elapsed": 0.084586,
+      "http_server_response": {
+        "status_code": 404,
+        "mime_type": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "id": 3277,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 70167090880420,
+          "value": "#<struct ActiveSupport::Callbacks::Filters::Environment target=#<#<Class:0x00007fa22f9a75d0>:0x00007",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 70167281332080,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007fa22fc1dee0>"
+      }
+    },
+    {
+      "id": 3278,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3277,
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007fa22fc1d850@/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesuppor",
+        "object_id": 70167281332060
+      }
+    },
+    {
+      "id": 3279,
+      "event": "call",
+      "thread_id": 70167224852540,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 70167090880420,
+          "value": "#<struct ActiveSupport::Callbacks::Filters::Environment target=#<#<Class:0x00007fa22f9a75d0>:0x00007",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 70167281332080,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007fa22fc1dee0>"
+      }
+    },
+    {
+      "id": 3280,
+      "event": "return",
+      "thread_id": 70167224852540,
+      "parent_id": 3279,
+      "elapsed": 0.00003,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007fa22fc1db48@/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesuppor",
+        "object_id": 70167281332040
+      }
+    }
+  ]
+}

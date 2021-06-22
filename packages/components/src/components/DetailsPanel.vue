@@ -46,6 +46,7 @@ import VDetailsPanelHttp from '@/components/DetailsPanelHttp.vue';
 import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
 import VDetailsPanelQuery from '@/components/DetailsPanelQuery.vue';
 import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
+import VDetailsPanelExternalService from '@/components/DetailsPanelExternalService.vue';
 import VDetailsPanelLabels from '@/components/DetailsPanelLabels.vue';
 import VDetailsSearch from '@/components/DetailsSearch.vue';
 import { Event, AppMap } from '@appland/models';
@@ -64,6 +65,7 @@ export default {
     VDetailsPanelPackage,
     VDetailsPanelQuery,
     VDetailsPanelRoute,
+    VDetailsPanelExternalService,
     VDetailsPanelLabels,
     VDetailsSearch,
   },

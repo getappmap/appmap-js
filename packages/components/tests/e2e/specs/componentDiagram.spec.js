@@ -12,7 +12,7 @@ context('Component Diagram', () => {
   });
 
   it('does not expand too many nodes', () => {
-    cy.get('.nodes g.node').should('have.length', 8);
+    cy.get('.nodes g.node').should('have.length', 9);
   });
 
   it('node "Spree::BackendConfiguration" should be expanded', () => {
@@ -64,7 +64,7 @@ context('Component Diagram', () => {
       'have.class',
       'dim'
     );
-    cy.get('.edgePaths .edgePath.dim').should('have.length', 6);
+    cy.get('.edgePaths .edgePath.dim').should('have.length', 7);
   });
 
   it('nothing is highlighted by default', () => {
