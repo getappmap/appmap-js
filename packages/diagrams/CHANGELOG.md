@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.2.0](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.1.2...@appland/diagrams-v1.2.0) (2021-06-22)
+
+
+### Features
+
+* HTTP client requests ([0c0e833](https://github.com/applandinc/appmap-js/commit/0c0e8338d6d25bf11f73a17d035e2b424e670add))
+
 # [@appland/diagrams-v1.1.2](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.1.1...@appland/diagrams-v1.1.2) (2021-06-21)
 
 
