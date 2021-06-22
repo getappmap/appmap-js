@@ -1,3 +1,16 @@
+# [@appland/models-v1.2.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.1.0...@appland/models-v1.2.0) (2021-06-22)
+
+
+### Bug Fixes
+
+* Event#dataObjects was missing message objects from its return value ([ade2c31](https://github.com/applandinc/appmap-js/commit/ade2c31f316284a7232d914ba4fcec8b2c1ca4c7))
+* Prevent access of non-array event messages ([15a9cc2](https://github.com/applandinc/appmap-js/commit/15a9cc2efce41451b83e2c35285de1644016fe3d))
+
+
+### Features
+
+* HTTP client requests ([0c0e833](https://github.com/applandinc/appmap-js/commit/0c0e8338d6d25bf11f73a17d035e2b424e670add))
+
 # [@appland/models-v1.1.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.0.6...@appland/models-v1.1.0) (2021-06-16)
 
 
