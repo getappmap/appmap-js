@@ -18,7 +18,7 @@ export default class Event {
         data.parameters = obj.$hidden.parameters.map((p) => ({ ...p }));
       }
 
-      if (obj.$hidden.message) {
+      if (Array.isArray(obj.$hidden.message)) {
         data.message = obj.$hidden.message.map((m) => ({ ...m }));
       }
 
@@ -346,7 +346,7 @@ export default class Event {
   }
 
   dataObjects() {
-    return [this.parameters, this.messages, this.returnValue]
+    return [this.parameters, this.message, this.returnValue]
       .flat()
       .filter(Boolean);
   }
