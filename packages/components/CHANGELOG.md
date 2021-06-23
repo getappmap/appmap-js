@@ -1,3 +1,10 @@
+# [@appland/components-v1.2.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.2.0...@appland/components-v1.2.1) (2021-06-23)
+
+
+### Bug Fixes
+
+* Upgrade dependencies ([6250ff3](https://github.com/applandinc/appmap-js/commit/6250ff3a99c0b2532016610853d60f5dba212672))
+
 # [@appland/components-v1.2.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.1.11...@appland/components-v1.2.0) (2021-06-22)
 
 
