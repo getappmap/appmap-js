@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.2.1](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.2.0...@appland/diagrams-v1.2.1) (2021-06-23)
+
+
+### Bug Fixes
+
+* Upgrade @appland/models to v1.2.0 ([a36cff8](https://github.com/applandinc/appmap-js/commit/a36cff81efb7eb800416b1de597e202fe4136f72))
+
 # [@appland/diagrams-v1.2.0](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.1.2...@appland/diagrams-v1.2.0) (2021-06-22)
 
 
