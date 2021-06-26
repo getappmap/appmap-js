@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 // @ts-check
 
-const { analyzeQuery } = require('../database');
+const { analyzeQuery, obfuscate } = require('../database');
 
 /**
  * @typedef {import('./types').CodeObject} CodeObject
@@ -10,15 +10,35 @@ const { analyzeQuery } = require('../database');
  */
 
 /**
+ * @param {string} expectedType
+ * @returns {MatchFn}
+ */
+function matchType(expectedType) {
+  const fn = (/** @type {CodeObject} */ codeObject) =>
+    codeObject.type === expectedType;
+  fn.toJSON = () => expectedType;
+  return fn;
+}
+
+/**
+ * @param {string} expectedType
+ * @param {string} expectedName
+ * @returns {MatchFn}
+ */
+function matchTypeAndName(expectedType, expectedName) {
+  const fn = (/** @type {CodeObject} */ codeObject) =>
+    codeObject.name === expectedName && codeObject.type === expectedType;
+  fn.toJSON = () => [expectedType, expectedName].join(' ');
+  return fn;
+}
+
+/**
  *
  * @param {string} name
  * @returns {MatchFn}
  */
 function matchPackage(name) {
-  const fn = (/** @type {CodeObject} */ codeObject) =>
-    codeObject.name === name && codeObject.type === 'package';
-  fn.toJSON = () => `package ${name}`;
-  return fn;
+  return matchTypeAndName('package', name);
 }
 /**
  *
@@ -26,10 +46,7 @@ function matchPackage(name) {
  * @returns {MatchFn}
  */
 function matchClass(name) {
-  const fn = (/** @type {CodeObject} */ codeObject) =>
-    codeObject.name === name && codeObject.type === 'class';
-  fn.toJSON = () => `class ${name}`;
-  return fn;
+  return matchTypeAndName('class', name);
 }
 /**
  *
@@ -50,9 +67,27 @@ function matchFunction(name, isStatic) {
  * @returns {MatchFn}
  */
 function matchDatabase() {
-  const fn = (/** @type import('./types').CodeObject */ codeObject) =>
-    codeObject.type === 'database';
-  fn.toJSON = () => `Database`;
+  return matchType('database');
+}
+
+/**
+ * @returns {MatchFn}
+ */
+function matchQuery(expectedQuery) {
+  const fn = (/** @type import('./types').CodeObject */ codeObject) => {
+    if (codeObject.type !== 'query') {
+      return false;
+    }
+
+    // TODO: Brute force is probably not a good idea.
+    // Need to store the database type on the codeObject.
+    return (
+      obfuscate(codeObject.name, 'mysql') === expectedQuery ||
+      obfuscate(codeObject.name, 'postgres') === expectedQuery ||
+      obfuscate(codeObject.name, 'sqlite') === expectedQuery
+    );
+  };
+  fn.toJSON = () => `query ${expectedQuery}`;
   return fn;
 }
 
@@ -73,7 +108,7 @@ function matchTable(tableName) {
 
     return queryInfo.tables.includes(tableName);
   };
-  fn.toJSON = () => `Table ${tableName}`;
+  fn.toJSON = () => `table ${tableName}`;
   return fn;
 }
 
@@ -81,10 +116,7 @@ function matchTable(tableName) {
  * @returns {MatchFn}
  */
 function matchHTTP() {
-  const fn = (/** @type import('./types').CodeObject */ codeObject) =>
-    codeObject.type === 'http';
-  fn.toJSON = () => `HTTP`;
-  return fn;
+  return matchType('http');
 }
 
 /**
@@ -92,15 +124,7 @@ function matchHTTP() {
  * @returns {MatchFn}
  */
 function matchRoute(routeName) {
-  const fn = (/** @type import('./types').CodeObject */ codeObject) => {
-    if (codeObject.type !== 'route') {
-      return false;
-    }
-
-    return codeObject.name === routeName;
-  };
-  fn.toJSON = () => `Route ${routeName}`;
-  return fn;
+  return matchTypeAndName('route', routeName);
 }
 
 class FunctionMatchSpec {
@@ -122,12 +146,33 @@ class FunctionMatchSpec {
   }
 }
 
+class HTTPMatchSpec {
+  constructor() {
+    this.tokens = [matchHTTP()];
+  }
+}
+
+class DatabaseMatchSpec {
+  constructor() {
+    this.tokens = [matchDatabase()];
+  }
+}
+
 class TableMatchSpec {
   /**
    * @param {string} tableName
    */
   constructor(tableName) {
     this.tokens = [matchDatabase(), matchTable(tableName)];
+  }
+}
+
+class QueryMatchSpec {
+  /**
+   * @param {string} query
+   */
+  constructor(query) {
+    this.tokens = [matchDatabase(), matchQuery(query)];
   }
 }
 
@@ -140,4 +185,11 @@ class RouteMatchSpec {
   }
 }
 
-module.exports = { FunctionMatchSpec, TableMatchSpec, RouteMatchSpec };
+module.exports = {
+  DatabaseMatchSpec,
+  FunctionMatchSpec,
+  HTTPMatchSpec,
+  TableMatchSpec,
+  QueryMatchSpec,
+  RouteMatchSpec,
+};

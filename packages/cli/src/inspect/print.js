@@ -68,6 +68,47 @@ function printValues(field, functionStats) {
  * @param {Field} field
  * @param {FunctionStats} functionStats
  */
+function packageTrigrams(field, functionStats) {
+  const table = new Table({
+    title: field.title,
+    columns: [
+      {
+        name: 'caller',
+        alignment: 'left',
+        title: 'Caller',
+        maxLen: 30,
+      },
+      {
+        name: 'package',
+        alignment: 'left',
+        title: 'Package',
+        maxLen: 30,
+      },
+      {
+        name: 'callee',
+        alignment: 'left',
+        title: 'Callee',
+        maxLen: 30,
+      },
+    ],
+  });
+  functionStats.packageTrigrams.forEach((t, index) => {
+    table.addRow(
+      {
+        caller: t.callerId,
+        package: t.codeObjectId,
+        callee: t.calleeId,
+      },
+      { color: index % 2 === 0 ? 'white' : 'cyan' }
+    );
+  });
+  table.printTable();
+}
+
+/**
+ * @param {Field} field
+ * @param {FunctionStats} functionStats
+ */
 function classTrigrams(field, functionStats) {
   const table = new Table({
     title: field.title,
@@ -152,6 +193,7 @@ const printFieldIndexes = Fields.selectIndexes(printFields.map((f) => f.name));
 
 const commands = {
   eventMatches,
+  packageTrigrams,
   classTrigrams,
   functionTrigrams,
 };

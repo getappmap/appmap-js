@@ -35,6 +35,7 @@ const FIELDS = [
     valueTitle: 'Name',
   },
   { name: 'descendants', title: 'Descendants', valueTitle: 'Name' },
+  { name: 'packageTrigrams', title: 'Package trigrams' },
   { name: 'classTrigrams', title: 'Class trigrams' },
   { name: 'functionTrigrams', title: 'Function trigrams' },
 ];

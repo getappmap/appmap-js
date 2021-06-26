@@ -85,11 +85,7 @@ function buildTrigrams(callerEvent, event, calleeEvent) {
     }
 
     const findPackage = (/** @type {CodeObject} */ codeObject) => {
-      if (!codeObject) {
-        console.warn(`${evt} has null codeObject`);
-        return null;
-      }
-      if (codeObject.type === 'package') {
+      if (codeObject.type === 'package' || !codeObject.parent) {
         return codeObject;
       }
 

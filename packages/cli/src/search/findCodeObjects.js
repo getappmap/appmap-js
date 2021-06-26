@@ -13,6 +13,9 @@ const {
   FunctionMatchSpec,
   TableMatchSpec,
   RouteMatchSpec,
+  HTTPMatchSpec,
+  DatabaseMatchSpec,
+  QueryMatchSpec,
 } = require('./matchSpec');
 const CodeObjectMatcher = require('./codeObjectMatcher');
 const { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } = require('./constants');
@@ -20,125 +23,129 @@ const { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } = require('./constants');
 /** @typedef {import('./types').CodeObject[]} ClassMap */
 /** @typedef {import('./types').CodeObject} CodeObject */
 /** @typedef {import('./types').CodeObjectMatch} CodeObjectMatch */
-
-/**
- * Normalize the classMap, so that when "package" code objects like 'app/models'
- * are represented as one entry in the classMap, they are expanded to one entry
- * for each token.
- *
- * @param {ClassMap} classMap
- */
-function expandClassMap(classMap) {
-  /**
-   * @param {CodeObject} item
-   * @returns {CodeObject}
-   */
-  function expandItem(item) {
-    let normalizedItem;
-    if (item.type === 'package' && item.name.includes('/')) {
-      const names = item.name.split('/');
-      let lastItem;
-      {
-        const lastName = names.pop();
-        lastItem = /** @type CodeObject */ { ...item };
-        lastItem.name = lastName;
-        lastItem.children = item.children;
-      }
-      const packageItems = names.map((name) => {
-        const packageItem = /** @type CodeObject */ { ...item };
-        packageItem.children = [];
-        packageItem.name = name;
-        return packageItem;
-      });
-      packageItems.push(lastItem);
-      packageItems
-        .slice(0, packageItems.length - 1)
-        .forEach((packageItem, index) => {
-          packageItem.children = [packageItems[index + 1]];
-        });
-      // eslint-disable-next-line prefer-destructuring
-      normalizedItem = packageItems[0];
-    } else {
-      normalizedItem = item;
-    }
-
-    if (normalizedItem.children) {
-      normalizedItem.children = [...normalizedItem.children].map(expandItem);
-    }
-    return normalizedItem;
-  }
-  return classMap.map(expandItem);
-}
+/** @typedef {import('./types').CodeObjectMatchSpec} CodeObjectMatchSpec */
 
 /**
  * @param {string} functionId
- * @returns {import('./types').CodeObjectMatchSpec}
+ * @returns {CodeObjectMatchSpec[]}
  */
 function parsePackage(functionId) {
   const packageTokens = functionId.split('/');
-  return new FunctionMatchSpec(packageTokens, []);
+  return [
+    // In the classMap, packages are sometimes split by '/' and appear nested.
+    // Sometimes, the package name includes the '/' character, e.g. app/models,
+    // as a single code object in the class map. So when searching for packages,
+    // match either style. From a code standpoint, I've found this much simpler than
+    // trying to handle different cases in the match spec.
+    new FunctionMatchSpec([functionId], []),
+    new FunctionMatchSpec(packageTokens, []),
+  ];
 }
 
 /**
  * @param {string} functionId
- * @returns {import('./types').CodeObjectMatchSpec}
+ * @returns {CodeObjectMatchSpec[]}
  */
 function parseClass(functionId) {
   const packageTokens = functionId.split('/');
+  if (packageTokens.length === 1) {
+    return [];
+  }
+
   const className = packageTokens.pop();
-  return new FunctionMatchSpec(packageTokens, className.split('::'));
+  const classNames = className.split('::');
+  return [
+    new FunctionMatchSpec([packageTokens.join('/')], classNames),
+    new FunctionMatchSpec(packageTokens, classNames),
+  ];
 }
 
 /**
  * @param {string} functionId
- * @returns {import('./types').CodeObjectMatchSpec}
+ * @returns {CodeObjectMatchSpec[]}
  */
 function parseFunction(functionId) {
   const packageTokens = functionId.split('/');
+  if (packageTokens.length === 1) {
+    return [];
+  }
+
   const classAndFunction = packageTokens.length > 1 ? packageTokens.pop() : '';
 
   if (classAndFunction.includes('.')) {
     const [className, functionName] = classAndFunction.split('.');
-    return new FunctionMatchSpec(
-      packageTokens,
-      className.split('::'),
-      true,
-      functionName
-    );
+    return [
+      new FunctionMatchSpec(
+        [packageTokens.join('/')],
+        className.split('::'),
+        true,
+        functionName
+      ),
+      new FunctionMatchSpec(
+        packageTokens,
+        className.split('::'),
+        true,
+        functionName
+      ),
+    ];
   } else if (classAndFunction.includes('#')) {
     const [className, functionName] = classAndFunction.split('#');
-    return new FunctionMatchSpec(
-      packageTokens,
-      className.split('::'),
-      false,
-      functionName
-    );
+    return [
+      new FunctionMatchSpec(
+        [packageTokens.join('/')],
+        className.split('::'),
+        false,
+        functionName
+      ),
+      new FunctionMatchSpec(
+        packageTokens,
+        className.split('::'),
+        false,
+        functionName
+      ),
+    ];
   }
 
-  return null;
+  return [];
 }
 
 /**
  * @param {string} tableName
- * @returns {import('./types').CodeObjectMatchSpec}
+ * @returns {CodeObjectMatchSpec[]}
  */
 function parseTable(tableName) {
-  return new TableMatchSpec(tableName);
+  return [new TableMatchSpec(tableName)];
 }
 
 /**
  * @param {string} routeName
- * @returns {import('./types').CodeObjectMatchSpec}
+ * @returns {CodeObjectMatchSpec[]}
  */
 function parseRoute(routeName) {
-  return new RouteMatchSpec(routeName);
+  return [new RouteMatchSpec(routeName)];
 }
 
-function parseCodeObjectId(/** @type {string} */ codeObjectId) {
+function parseHTTP() {
+  return [new HTTPMatchSpec()];
+}
+
+function parseDatabase() {
+  return [new DatabaseMatchSpec()];
+}
+
+function parseQuery(query) {
+  return [new QueryMatchSpec(query)];
+}
+
+/**
+ * @param {string} codeObjectId
+ * @returns {CodeObjectMatchSpec[]}
+ */
+function parseCodeObjectId(codeObjectId) {
   const tokens = codeObjectId.split(':');
   const type = tokens.shift();
   if (!type || tokens.length === 0) {
-    return null;
+    return [];
   }
 
   const id = tokens.join(':');
@@ -146,13 +153,16 @@ function parseCodeObjectId(/** @type {string} */ codeObjectId) {
     package: parsePackage,
     class: parseClass,
     function: parseFunction,
-    table: parseTable,
+    http: parseHTTP,
     route: parseRoute,
+    database: parseDatabase,
+    query: parseQuery,
+    table: parseTable,
   };
 
   const parser = parsers[type];
   if (!parser) {
-    return null;
+    return [];
   }
 
   return parser(id);
@@ -170,12 +180,14 @@ class FindCodeObjects {
    */
   constructor(appMapDir, codeObjectId) {
     this.appMapDir = appMapDir;
-    this.matchSpec = parseCodeObjectId(codeObjectId);
-    if (!this.matchSpec) {
+    this.matchSpecs = parseCodeObjectId(codeObjectId);
+    if (this.matchSpecs.length === 0) {
       console.warn(`Unable to parse code object id ${codeObjectId}`);
     }
     if (verbose()) {
-      console.warn(`Searching for: ${JSON.stringify(this.matchSpec.tokens)}`);
+      this.matchSpecs.forEach((spec) => {
+        console.warn(`Searching for: ${JSON.stringify(spec.tokens)}`);
+      });
     }
   }
 
@@ -183,7 +195,7 @@ class FindCodeObjects {
    * @returns {Promise<CodeObjectMatch[]>}
    */
   async find() {
-    if (!this.matchSpec) {
+    if (this.matchSpecs.length === 0) {
       return;
     }
 
@@ -194,6 +206,7 @@ class FindCodeObjects {
     // * Parent calling function, class, and package
     // * Descendent SQL and HTTP client requests
 
+    /** @type {CodeObjectMatch[]} */
     const matches = [];
 
     /**
@@ -260,11 +273,12 @@ class FindCodeObjects {
         matcher.pop();
       };
 
-      let classMap = JSON.parse((await fsp.readFile(fileName)).toString());
-      classMap = expandClassMap(classMap);
-      classMap.forEach((/** @type import('./types').CodeObject */ item) =>
-        findMatchingFunction(item, new CodeObjectMatcher(this.matchSpec), [])
-      );
+      const classMap = JSON.parse((await fsp.readFile(fileName)).toString());
+      this.matchSpecs.forEach((/** @type {CodeObjectMatchSpec} */ spec) => {
+        classMap.forEach((/** @type import('./types').CodeObject */ item) =>
+          findMatchingFunction(item, new CodeObjectMatcher(spec), [])
+        );
+      });
     }
 
     await processFiles(

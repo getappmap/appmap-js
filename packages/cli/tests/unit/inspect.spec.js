@@ -44,4 +44,51 @@ describe('Inspect', () => {
       )
     );
   });
+
+  test('finds a named class', async () => {
+    const fn = new FindCodeObjects(appMapDir, 'class:app/models/ApiKey');
+    const result = await fn.find();
+    expect(JSON.stringify(result, null, 2)).toEqual(
+      JSON.stringify(
+        [
+          {
+            appmap: 'tests/unit/fixtures/revoke_api_key',
+            codeObject: {
+              name: 'ApiKey',
+              type: 'class',
+            },
+          },
+        ],
+        null,
+        2
+      )
+    );
+  });
+
+  test('finds a named package', async () => {
+    const fn = new FindCodeObjects(appMapDir, 'package:app/models');
+    const result = await fn.find();
+    expect(JSON.stringify(result, null, 2)).toEqual(
+      JSON.stringify(
+        [
+          {
+            appmap: 'tests/unit/fixtures/revoke_api_key',
+            codeObject: {
+              name: 'app/models',
+              type: 'package',
+            },
+          },
+          {
+            appmap: 'tests/unit/fixtures/user_page_scenario',
+            codeObject: {
+              name: 'app/models',
+              type: 'package',
+            },
+          },
+        ],
+        null,
+        2
+      )
+    );
+  });
 });
