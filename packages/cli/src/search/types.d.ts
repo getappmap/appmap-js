@@ -66,6 +66,7 @@ export interface EventMatch {
   ancestors: Event[];
   descendants: Event[];
   caller: Event;
+  packageTrigrams: Trigram[];
   classTrigrams: Trigram[];
   functionTrigrams: Trigram[];
 }
@@ -88,6 +89,7 @@ export interface FunctionStats {
   callers: Event[];
   ancestors: Event[];
   descendants: Event[];
+  packageTrigrams: Trigram[];
   classTrigrams: Trigram[];
   functionTrigrams: Trigram[];
 }

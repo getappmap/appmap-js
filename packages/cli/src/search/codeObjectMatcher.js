@@ -28,7 +28,7 @@ class CodeObjectMatcher {
     }
     if (this.depth >= this.matchSpec.tokens.length) {
       console.warn(
-        `Aborting match ${codeObject.id} because the search depth ${this.depth} exceeds the spec length ${this.matchSpec.tokens.length}`
+        `Aborting match ${codeObject.name} because the search depth ${this.depth} exceeds the spec length ${this.matchSpec.tokens.length}`
       );
       return MATCH_ABORT;
     }
@@ -36,9 +36,9 @@ class CodeObjectMatcher {
     if (!token(codeObject)) {
       if (verbose()) {
         console.warn(
-          `${JSON.stringify(token)} at depth ${this.depth} does not match ${
-            codeObject.id
-          }`
+          `${JSON.stringify(token)} at depth ${this.depth} does not match '${
+            codeObject.name
+          }'`
         );
       }
       return MATCH_ABORT;
@@ -46,18 +46,18 @@ class CodeObjectMatcher {
     if (this.depth === this.matchSpec.tokens.length - 1) {
       if (verbose()) {
         console.warn(
-          `${JSON.stringify(token)} at depth ${this.depth} matches ${
-            codeObject.id
-          } and completes the search`
+          `${JSON.stringify(token)} at depth ${this.depth} matches '${
+            codeObject.name
+          }' and completes the search`
         );
       }
       return MATCH_COMPLETE;
     }
     if (verbose()) {
       console.warn(
-        `${JSON.stringify(token)} at depth ${this.depth} matches ${
-          codeObject.id
-        } and the search continues`
+        `${JSON.stringify(token)} at depth ${this.depth} matches '${
+          codeObject.name
+        }' and the search continues`
       );
     }
     this.depth += 1;

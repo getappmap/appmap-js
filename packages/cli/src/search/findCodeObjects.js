@@ -74,9 +74,28 @@ function expandClassMap(classMap) {
  * @param {string} functionId
  * @returns {import('./types').CodeObjectMatchSpec}
  */
+function parsePackage(functionId) {
+  const packageTokens = functionId.split('/');
+  return new FunctionMatchSpec(packageTokens, []);
+}
+
+/**
+ * @param {string} functionId
+ * @returns {import('./types').CodeObjectMatchSpec}
+ */
+function parseClass(functionId) {
+  const packageTokens = functionId.split('/');
+  const className = packageTokens.pop();
+  return new FunctionMatchSpec(packageTokens, className.split('::'));
+}
+
+/**
+ * @param {string} functionId
+ * @returns {import('./types').CodeObjectMatchSpec}
+ */
 function parseFunction(functionId) {
   const packageTokens = functionId.split('/');
-  const classAndFunction = packageTokens.pop();
+  const classAndFunction = packageTokens.length > 1 ? packageTokens.pop() : '';
 
   if (classAndFunction.includes('.')) {
     const [className, functionName] = classAndFunction.split('.');
@@ -124,8 +143,8 @@ function parseCodeObjectId(/** @type {string} */ codeObjectId) {
 
   const id = tokens.join(':');
   const parsers = {
-    package: parseFunction,
-    class: parseFunction,
+    package: parsePackage,
+    class: parseClass,
     function: parseFunction,
     table: parseTable,
     route: parseRoute,
@@ -156,7 +175,7 @@ class FindCodeObjects {
       console.warn(`Unable to parse code object id ${codeObjectId}`);
     }
     if (verbose()) {
-      console.warn(this.matchSpec);
+      console.warn(`Searching for: ${JSON.stringify(this.matchSpec.tokens)}`);
     }
   }
 
@@ -223,6 +242,9 @@ class FindCodeObjects {
             return;
           case MATCH_COMPLETE:
             match = { appmap: appmapName, codeObject: buildCodeObject() };
+            if (verbose()) {
+              console.warn(`Completed match: ${JSON.stringify(match)}`);
+            }
             matches.push(match);
             return;
           case MATCH_CONTINUE:

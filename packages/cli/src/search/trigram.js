@@ -71,17 +71,37 @@ class Trigram {
  * @param {Event} callerEvent
  * @param {Event} event
  * @param {Event} calleeEvent
- * @returns {{functionTrigram: import('./types').Trigram, classTrigram: import('./types').Trigram}}
+ * @returns {{functionTrigram: import('./types').Trigram, classTrigram: import('./types').Trigram, packageTrigram: import('./types').Trigram}}
  */
 function buildTrigrams(callerEvent, event, calleeEvent) {
   /** @type {function(Event) : CodeObject } */
   const codeObjectFn = (evt) => (evt ? evt.codeObject : null);
   /** @type {function(Event) : CodeObject } */
   const classFn = (evt) => (evt ? evt.codeObject.parent : null);
+  /** @type {function(Event) : CodeObject } */
+  const packageFn = (evt) => {
+    if (!evt) {
+      return null;
+    }
+
+    const findPackage = (/** @type {CodeObject} */ codeObject) => {
+      if (!codeObject) {
+        console.warn(`${evt} has null codeObject`);
+        return null;
+      }
+      if (codeObject.type === 'package') {
+        return codeObject;
+      }
+
+      return findPackage(codeObject.parent);
+    };
+    return findPackage(evt.codeObject);
+  };
 
   return {
     functionTrigram: new Trigram(callerEvent, event, calleeEvent, codeObjectFn),
     classTrigram: new Trigram(callerEvent, event, calleeEvent, classFn),
+    packageTrigram: new Trigram(callerEvent, event, calleeEvent, packageFn),
   };
 }
 

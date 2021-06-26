@@ -111,11 +111,14 @@ class FunctionMatchSpec {
    * @param {boolean} isStatic
    * @param {string} functionName
    */
-  constructor(packageNames, classNames, isStatic, functionName) {
+  constructor(packageNames, classNames, isStatic = null, functionName = null) {
     const packageTokens = packageNames.map(matchPackage);
     const classTokens = classNames.map(matchClass);
-    const functionToken = matchFunction(functionName, isStatic);
-    this.tokens = packageTokens.concat(classTokens).concat([functionToken]);
+    let functionTokens = [];
+    if (functionName) {
+      functionTokens = [matchFunction(functionName, isStatic)];
+    }
+    this.tokens = packageTokens.concat(classTokens).concat(functionTokens);
   }
 }
 

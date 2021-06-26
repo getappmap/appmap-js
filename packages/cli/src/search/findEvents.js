@@ -50,7 +50,7 @@ class FindEvents {
     const appmapFile = [this.appMapName, 'appmap.json'].join('.');
     const appmapData = JSON.parse((await fsp.readFile(appmapFile)).toString());
     const appmap = buildAppMap(appmapData).build();
-    const stack = [];
+    const stack = /** @type {Event[]} */ [];
     const matches = /** @type {EventMatch[]} */ [];
     const matchesByEvent = {};
 
@@ -66,6 +66,7 @@ class FindEvents {
         appmap: this.appMapName,
         event,
         ancestors,
+        packageTrigrams: [],
         classTrigrams: [],
         functionTrigrams: [],
         descendants: [],
@@ -88,7 +89,7 @@ class FindEvents {
       }
       const filters = this.filters.reduce(
         (
-          /** @type {{string,string[]}} */ memo,
+          /** @type {{string:string[]}} */ memo,
           /** @type {Filter} */ filter
         ) => {
           let existing = memo[filter.name];
@@ -111,7 +112,17 @@ class FindEvents {
 
     const codeObjectMatch = () => {
       const event = stack[stack.length - 1];
-      return this.codeObject.id === event.codeObject.id && filterMatch();
+      const matchCodeObject = (/** @type {CodeObject} */ eventCodeObject) => {
+        if (this.codeObject.id === eventCodeObject.id) {
+          return true;
+        }
+        if (!eventCodeObject.parent) {
+          return false;
+        }
+        return matchCodeObject(eventCodeObject.parent);
+      };
+
+      return matchCodeObject(event.codeObject) && filterMatch();
     };
 
     const enter = (/** @type {Event} */ event) => {
@@ -127,6 +138,7 @@ class FindEvents {
 
         match.functionTrigrams.push(trigrams.functionTrigram);
         match.classTrigrams.push(trigrams.classTrigram);
+        match.packageTrigrams.push(trigrams.packageTrigram);
       }
 
       if (significant(event)) {

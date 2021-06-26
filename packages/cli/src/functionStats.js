@@ -132,6 +132,12 @@ class FunctionStats {
     ];
   }
 
+  get packageTrigrams() {
+    return reduceTrigrams(
+      this.eventMatches.map((e) => e.packageTrigrams).flat()
+    );
+  }
+
   get classTrigrams() {
     return reduceTrigrams(this.eventMatches.map((e) => e.classTrigrams).flat());
   }
