@@ -194,7 +194,11 @@ class FindCodeObjects {
   /**
    * @returns {Promise<CodeObjectMatch[]>}
    */
-  async find() {
+  async find(
+    // eslint-disable-next-line no-unused-vars
+    fileCountFn = (/** @type {Number} */ _count) => {},
+    progressFn = () => {}
+  ) {
     if (this.matchSpecs.length === 0) {
       return;
     }
@@ -279,11 +283,13 @@ class FindCodeObjects {
           findMatchingFunction(item, new CodeObjectMatcher(spec), [])
         );
       });
+      progressFn();
     }
 
     await processFiles(
       `${this.appMapDir}/**/classMap.json`,
-      checkClassMap.bind(this)
+      checkClassMap.bind(this),
+      fileCountFn
     );
     return matches;
   }

@@ -14,6 +14,7 @@ const { queue } = require('async');
 const process = require('process');
 const readline = require('readline');
 const { join } = require('path');
+const cliProgress = require('cli-progress');
 const { algorithms, canonicalize } = require('./fingerprint');
 const { verbose, loadAppMap } = require('./utils');
 const appMapCatalog = require('./appMapCatalog');
@@ -357,9 +358,19 @@ yargs(process.argv.slice(2))
     async (argv) => {
       verbose(argv.verbose);
 
+      const newProgress = () =>
+        new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+
+      console.warn('Finding matching AppMaps');
+      let progress = newProgress();
       const codeObjectId = argv.codeObject;
       const finder = new FindCodeObjects(argv.appmapDir, codeObjectId);
-      const codeObjectMatches = await finder.find();
+      const codeObjectMatches = await finder.find(
+        (count) => progress.start(count, 0),
+        progress.increment.bind(progress)
+      );
+      progress.stop();
+
       if (!codeObjectMatches) {
         return;
       }
@@ -369,6 +380,9 @@ yargs(process.argv.slice(2))
 
       const buildStats = async () => {
         const result = [];
+        console.warn('Finding matching Events');
+        progress = newProgress();
+        progress.start(codeObjectMatches.length, 0);
         await Promise.all(
           codeObjectMatches.map(async (codeObjectMatch) => {
             const findEvents = new FindEvents(
@@ -378,8 +392,11 @@ yargs(process.argv.slice(2))
             findEvents.filter(filters);
             const events = await findEvents.matches();
             result.push(...events);
+            progress.increment();
           })
         );
+        progress.stop();
+        console.warn('Collating results...');
         stats = new FunctionStats(result);
       };
 
