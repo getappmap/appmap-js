@@ -36,9 +36,10 @@ async function mtime(filePath) {
  * Call a function with each matching file.
  *
  * @param {string} pattern
- * @param {Function} fn
+ * @param {(filePath: string): void} fn
+ * @param {(fileCount: number): void} fileCountFn
  */
-async function processFiles(pattern, fn) {
+async function processFiles(pattern, fn, fileCountFn = () => {}) {
   const q = queue(fn, 5);
   q.pause();
   await new Promise((resolve, reject) => {
@@ -47,6 +48,9 @@ async function processFiles(pattern, fn) {
       if (err) {
         console.warn(`An error occurred with glob pattern ${pattern}: ${err}`);
         return reject(err);
+      }
+      if (fileCountFn) {
+        fileCountFn(files.length);
       }
       files.forEach((file) => q.push(file));
       resolve();

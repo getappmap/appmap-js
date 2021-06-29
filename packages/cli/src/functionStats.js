@@ -16,6 +16,7 @@ function reduceTrigrams(trigrams) {
     memo[id] = index;
     return memo;
   }, {});
+
   return trigrams
     .filter((t) => {
       const newTrigram = uniqueIds.has(t.id);
@@ -57,7 +58,9 @@ class FunctionStats {
     return [
       ...new Set(
         this.eventMatches
-          .map((e) => e.ancestors.filter((a) => a.httpServerRequest))
+          .map((e) =>
+            [e.event].concat(e.ancestors).filter((a) => a.httpServerRequest)
+          )
           .flat()
           .filter((e) => e)
           .map((e) => formatHttpServerRequest(e))
@@ -69,7 +72,7 @@ class FunctionStats {
     return [
       ...new Set(
         this.eventMatches
-          .map((e) => e.descendants.filter((d) => d.sql))
+          .map((e) => [e.event].concat(e.descendants).filter((d) => d.sql))
           .flat()
           .map((e) => obfuscate(e.sqlQuery, e.sql.database_type))
       ),
@@ -80,7 +83,7 @@ class FunctionStats {
     return [
       ...new Set(
         this.eventMatches
-          .map((e) => e.descendants.filter((d) => d.sql))
+          .map((e) => [e.event].concat(e.descendants).filter((d) => d.sql))
           .flat()
           .map((e) => analyzeQuery(e.sql))
           .filter((e) => typeof e === 'object')
@@ -130,6 +133,12 @@ class FunctionStats {
           .filter((e) => e)
       ),
     ];
+  }
+
+  get packageTrigrams() {
+    return reduceTrigrams(
+      this.eventMatches.map((e) => e.packageTrigrams).flat()
+    );
   }
 
   get classTrigrams() {

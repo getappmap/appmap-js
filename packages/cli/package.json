@@ -36,6 +36,7 @@
     "@appland/models": "workspace:*",
     "async": "^3.2.0",
     "chokidar": "^3.5.1",
+    "cli-progress": "^3.9.0",
     "console-table-printer": "^2.9.0",
     "crypto-js": "^4.0.0",
     "diff": "^5.0.0",
