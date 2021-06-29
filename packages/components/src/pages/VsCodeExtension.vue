@@ -141,7 +141,7 @@
 <script>
 import { Event, buildAppMap } from '@appland/models';
 import ReloadIcon from '@/assets/reload.svg';
-import UploadIcon from '@/assets/arrow-up.svg';
+import UploadIcon from '@/assets/upload.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
