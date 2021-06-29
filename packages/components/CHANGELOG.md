@@ -1,3 +1,10 @@
+# [@appland/components-v1.3.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.2.1...@appland/components-v1.3.0) (2021-06-29)
+
+
+### Features
+
+* updated logo ([7826f08](https://github.com/applandinc/appmap-js/commit/7826f08207aa2e6bdb83f37c2c817223c7ac499c))
+
 # [@appland/components-v1.2.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.2.0...@appland/components-v1.2.1) (2021-06-23)
 
 
