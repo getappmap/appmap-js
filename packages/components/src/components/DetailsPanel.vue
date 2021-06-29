@@ -1,7 +1,7 @@
 <template>
   <div class="details-panel">
     <h3 class="details-panel__title">
-      <ApplandLogo />
+      <AppMapLogo />
     </h3>
     <div class="details-panel__content">
       <div class="details-panel__notification">
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import ApplandLogo from '@/assets/appland-logo.svg';
+import AppMapLogo from '@/assets/appmap-logo.svg';
 import VDetailsLabel from '@/components/DetailsLabel.vue';
 import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
 import VDetailsPanelDatabase from '@/components/DetailsPanelDatabase.vue';
@@ -54,7 +54,7 @@ import { Event, AppMap } from '@appland/models';
 export default {
   name: 'v-details-panel',
   components: {
-    ApplandLogo,
+    AppMapLogo,
     VDetailsLabel,
     VDetailsPanelClass,
     VDetailsPanelDatabase,
@@ -111,6 +111,7 @@ export default {
   &__title {
     padding: 2rem;
     margin: 0;
+    font-size: 0;
 
     svg {
       max-width: 10rem;
