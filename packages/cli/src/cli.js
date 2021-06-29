@@ -361,6 +361,11 @@ yargs(process.argv.slice(2))
       const newProgress = () =>
         new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
 
+      console.warn('Indexing the AppMap database');
+      new FingerprintDirectoryCommand(argv.appmapDir)
+        .setPrint(argv.print)
+        .execute();
+
       console.warn('Finding matching AppMaps');
       let progress = newProgress();
       const codeObjectId = argv.codeObject;
