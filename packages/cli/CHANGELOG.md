@@ -1,3 +1,12 @@
+# [@appland/cli-v1.2.0](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.1.0...@appland/cli-v1.2.0) (2021-06-29)
+
+
+### Features
+
+* Search by package and class ([0b14a27](https://github.com/applandinc/appmap-js/commit/0b14a2727f9aadbb43b69ac14d53258f45b20cf5))
+* Search for database:, http:, query: ([21df198](https://github.com/applandinc/appmap-js/commit/21df1983e47f3e77c2476dcf75fa8b8ee4ca5465))
+* Show progress bar while loading 'inspect' results ([2e3c410](https://github.com/applandinc/appmap-js/commit/2e3c410ea5d60b69b6f0ea5ef035f30f289088b8))
+
 # [@appland/cli-v1.1.0](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.0.4...@appland/cli-v1.1.0) (2021-06-16)
 
 
