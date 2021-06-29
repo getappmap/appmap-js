@@ -14,6 +14,10 @@
         @click.stop="$emit('expandChildren')"
       />
       <component :is="`v-trace-node-body-${eventType}`" :event="event" />
+      <v-trace-node-elapsed
+        v-if="event.returnEvent.elapsed"
+        :time="event.returnEvent.elapsed"
+      />
       <v-trace-node-labels
         v-if="event.labels.size"
         :labels="Array.from(event.labels)"
@@ -30,6 +34,7 @@ import VTraceNodeBodyDefault from './TraceNodeBodyDefault.vue';
 import VTraceNodeBodyHttp from './TraceNodeBodyHttp.vue';
 import VTraceNodeBodyHttpClient from './TraceNodeBodyHttpClient.vue';
 import VTraceNodeBodySql from './TraceNodeBodySql.vue';
+import VTraceNodeElapsed from './TraceNodeElapsed.vue';
 import VTraceNodeLabels from './TraceNodeLabels.vue';
 
 export default {
@@ -40,6 +45,7 @@ export default {
     VTraceNodeBodyHttp,
     VTraceNodeBodyHttpClient,
     VTraceNodeBodySql,
+    VTraceNodeElapsed,
     VTraceNodeLabels,
   },
   props: {
