@@ -1,3 +1,10 @@
+# [@appland/components-v1.4.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.3.0...@appland/components-v1.4.0) (2021-06-29)
+
+
+### Features
+
+* show elapsed time in Trace nodes ([f96bece](https://github.com/applandinc/appmap-js/commit/f96bece901e581d42e2949a7356d658ef2d150e7))
+
 # [@appland/components-v1.3.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.2.1...@appland/components-v1.3.0) (2021-06-29)
 
 
