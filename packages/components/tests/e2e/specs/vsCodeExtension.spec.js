@@ -146,7 +146,7 @@ context('VS Code Extension', () => {
 
       cy.get('.edgePath[data-from-type="http"][data-to="app/helpers"]')
         .should('have.css', 'opacity', '1')
-        .click({ x: 5, y: 5 })
+        .click({ x: 3, y: 3 })
         .should('have.class', 'highlight');
 
       cy.get('.details-panel-header')
@@ -331,7 +331,7 @@ context('VS Code Extension', () => {
     it('edge can navigate to event', () => {
       cy.get('.edgePath[data-from-type="http"][data-to="app/helpers"]')
         .should('have.css', 'opacity', '1')
-        .click({ x: 5, y: 5 });
+        .click({ x: 3, y: 3 });
 
       cy.get('.v-details-panel-list')
         .contains('Events')
