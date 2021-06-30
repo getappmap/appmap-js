@@ -1,3 +1,11 @@
+# [@appland/components-v1.5.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.4.0...@appland/components-v1.5.0) (2021-06-30)
+
+
+### Features
+
+* styles for AppMap "View source" link ([a46ebeb](https://github.com/applandinc/appmap-js/commit/a46ebeb450901a92075278e898fec807443813e4))
+* update Search panel styling ([a385b77](https://github.com/applandinc/appmap-js/commit/a385b770f4b915c60aeb248d4b33ad19dbbfefe8))
+
 # [@appland/components-v1.4.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.3.0...@appland/components-v1.4.0) (2021-06-29)
 
 
