@@ -358,8 +358,20 @@ yargs(process.argv.slice(2))
     async (argv) => {
       verbose(argv.verbose);
 
-      const newProgress = () =>
-        new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+      const newProgress = () => {
+        if (argv.interactive) {
+          return new cliProgress.SingleBar(
+            {},
+            cliProgress.Presets.shades_classic
+          );
+        }
+
+        return {
+          increment: () => {},
+          start: () => {},
+          stop: () => {},
+        };
+      };
 
       console.warn('Indexing the AppMap database');
       await new FingerprintDirectoryCommand(argv.appmapDir)
