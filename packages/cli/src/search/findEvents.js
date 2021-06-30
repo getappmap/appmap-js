@@ -75,7 +75,7 @@ class FindEvents {
         matchObj.caller = caller;
       }
 
-      if (event.children.length === 0) {
+      if (event.children.length === 0 && caller) {
         const trigrams = buildTrigrams(caller, event, null);
 
         matchObj.functionTrigrams.push(trigrams.functionTrigram);
