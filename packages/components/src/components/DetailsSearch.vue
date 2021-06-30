@@ -279,130 +279,72 @@ export default {
     margin-bottom: 1rem;
 
     &-title {
-      margin: 0;
-      border-bottom: 1px solid $base15;
-      padding: 0 2rem 0.2rem;
-      color: $base12;
-      font-size: 0.8rem;
+      margin: 0 2rem 0.25rem;
+      border-radius: 4px;
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      color: $base01;
+      font-size: 0.75rem;
       font-weight: bold;
       text-transform: uppercase;
+
+      .details-search__block--http & {
+        background-color: #d22d36;
+      }
+
+      .details-search__block--external-service & {
+        background-color: $yellow;
+        color: $base19;
+      }
+
+      .details-search__block--labels & {
+        background-color: $base08;
+      }
+
+      .details-search__block--package & {
+        background-color: $teal;
+      }
+
+      .details-search__block--class &,
+      .details-search__block--function & {
+        background-color: $blue;
+      }
+
+      .details-search__block--query & {
+        background-color: $royal;
+      }
+
+      .details-search__block--empty & {
+        background-color: $gray3;
+      }
     }
 
     &-list {
       margin: 0;
-      padding: 0.5rem 2rem;
+      padding: 0 2rem;
       list-style: none;
+
+      .details-search__block--labels & {
+        margin: 0 -0.25rem -0.25rem;
+      }
     }
 
     &-item {
       position: relative;
-      border-radius: $border-radius;
+      border-bottom: 1px solid $base15;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.3rem 1rem;
+      padding: 0.25rem 0;
       min-height: 2rem;
       color: $base03;
       cursor: pointer;
       overflow: hidden;
       z-index: 0;
 
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 200%;
-        height: 100%;
-        transition: transform 0.3s ease-in-out;
-        z-index: -1;
-      }
-
-      &:hover::before {
-        transform: translateX(-50%);
-      }
-
-      .details-search__block--http &::before {
-        background: linear-gradient(
-          to right,
-          #c61c38 0%,
-          #a62036 50%,
-          #6b1a27 100%
-        );
-      }
-
-      .details-search__block--labels & {
-        display: inline-flex;
-        color: $base19;
-
-        &:not(:last-child) {
-          margin-right: 0.5rem;
-        }
-
-        &::before {
-          background: linear-gradient(
-            to right,
-            #bbbbbb 0%,
-            #999999 50%,
-            #696262 100%
-          );
-        }
-      }
-
-      .details-search__block--package & {
-        color: $base19;
-
-        &::before {
-          background: linear-gradient(
-            to right,
-            #6fddd6 0%,
-            #23a69e 50%,
-            #0e958d 100%
-          );
-        }
-      }
-
-      .details-search__block--class &::before,
-      .details-search__block--function &::before {
-        background: linear-gradient(
-          to right,
-          #4362b1 0%,
-          #2a4b9f 50%,
-          #182d63 100%
-        );
-      }
-
-      .details-search__block--query &::before {
-        background: linear-gradient(
-          to right,
-          #9c2fba 0%,
-          #702286 50%,
-          #521b61 100%
-        );
-      }
-
-      .details-search__block--external-service & {
-        color: $base19;
-
-        &::before {
-          background: linear-gradient(
-            to right,
-            $yellow,
-            darken($yellow, 20) 100%
-          );
-        }
-      }
-
-      .details-search__block--empty & {
-        pointer-events: none;
-
-        &::before {
-          background: $gray3;
-        }
-      }
-
-      &:not(:last-child) {
-        margin-bottom: 0.5rem;
+      &:hover,
+      &:active {
+        color: $base06;
       }
 
       &-count {
@@ -415,6 +357,18 @@ export default {
         color: currentColor;
         background-color: rgba(0, 0, 0, 0.2);
         white-space: nowrap;
+      }
+
+      .details-search__block--labels & {
+        margin: 0.25rem;
+        border: 1px solid $base15;
+        border-radius: 4px;
+        display: inline-flex;
+        padding: 0.25rem 0.5rem;
+
+        &-count {
+          margin-left: 0.5rem;
+        }
       }
     }
   }
