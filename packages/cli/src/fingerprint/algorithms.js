@@ -4,7 +4,8 @@ function notNull(event) {
 }
 
 function makeUnique(events) {
-  return [...new Set(events.flat())].sort();
+  const eventsJSON = events.flat().map((e) => JSON.stringify(e));
+  return [...new Set(eventsJSON)].sort().map((json) => JSON.parse(json));
 }
 
 function buildTree(events) {

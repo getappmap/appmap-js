@@ -47,6 +47,18 @@
     "fingerprints": [
       {
         "appmap_digest": "7fecdd763d47626364364da02387f1fcbfe805123e806f08bacde96636cfc91d",
+        "canonicalization_algorithm": "classDependencies",
+        "digest": "b03b42964920b123b5c5f1ae158a01b3bbbaad44c4bcb23ff12c7dc50b89f63e",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7fecdd763d47626364364da02387f1fcbfe805123e806f08bacde96636cfc91d",
+        "canonicalization_algorithm": "classes",
+        "digest": "9717f0de0c287764b0504895124418e6360e6114c62ea49cef434943127325b1",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7fecdd763d47626364364da02387f1fcbfe805123e806f08bacde96636cfc91d",
         "canonicalization_algorithm": "httpClientRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
@@ -54,7 +66,7 @@
       {
         "appmap_digest": "7fecdd763d47626364364da02387f1fcbfe805123e806f08bacde96636cfc91d",
         "canonicalization_algorithm": "httpServerRequests",
-        "digest": "90badaf8df48e656ae674affe58286b03f9cdddc632207444418d4faf06fd724",
+        "digest": "39d2d586f3afb6c6cc5da0e6c99b07c38561c76cff17badc9fa092d1f3d5e0f5",
         "fingerprint_algorithm": "sha256"
       },
       {
@@ -71,8 +83,20 @@
       },
       {
         "appmap_digest": "7fecdd763d47626364364da02387f1fcbfe805123e806f08bacde96636cfc91d",
+        "canonicalization_algorithm": "packageDependencies",
+        "digest": "3f108b0a9ca874a5bc90a30f48da9b068269e0a91d01d3eb4d2af3fe25cb09f3",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7fecdd763d47626364364da02387f1fcbfe805123e806f08bacde96636cfc91d",
+        "canonicalization_algorithm": "packages",
+        "digest": "174dff39ae750e61f0eac4933a745eb8059c7e2a98a1c94c34f722037c80a468",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7fecdd763d47626364364da02387f1fcbfe805123e806f08bacde96636cfc91d",
         "canonicalization_algorithm": "sqlNormalized",
-        "digest": "632e6679a9e338e3a32c2f84bc2a5e95d74a4eac5cd6c85edf6dbf99ab0e9f93",
+        "digest": "bcb13a826aa404fa0afbaeae8cea134cf674e599619f14e3864173dd52987ee4",
         "fingerprint_algorithm": "sha256"
       },
       {

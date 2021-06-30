@@ -1,9 +1,13 @@
 /* eslint-disable global-require */
 const algorithms = {
+  classDependencies: require('./canonicalize/classDependencies'),
+  classes: require('./canonicalize/classes'),
   httpClientRequests: require('./canonicalize/httpClientRequests'),
   httpServerRequests: require('./canonicalize/httpServerRequests'),
   info: require('./canonicalize/info'),
   labels: require('./canonicalize/labels'),
+  packages: require('./canonicalize/packages'),
+  packageDependencies: require('./canonicalize/packageDependencies'),
   sqlNormalized: require('./canonicalize/sqlNormalized'),
   sqlTables: require('./canonicalize/sqlTables'),
   trace: require('./canonicalize/trace'),
