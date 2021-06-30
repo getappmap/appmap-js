@@ -253,6 +253,9 @@ export default class CodeObject {
       obj.static = this.data.static;
       obj.location = this.data.location;
     }
+    if (this.data.type === CodeObjectType.QUERY) {
+      obj.database_type = this.data.database_type;
+    }
 
     if (this.children.length > 0) {
       obj.children = this.children;
@@ -299,6 +302,7 @@ export default class CodeObject {
         {
           type: CodeObjectType.QUERY,
           name: event.sqlQuery,
+          database_type: event.sql.database_type,
         },
       ];
     } else {
