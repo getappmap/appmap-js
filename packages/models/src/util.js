@@ -481,7 +481,14 @@ function parseNormalizeSQL(sql) {
 /* eslint-enable no-inner-declarations */
 
 function dumbNormalizeSQL(sql) {
-  const sqlLower = sql.toLowerCase();
+  const sqlLower = sql.toLowerCase().trim();
+  if (sqlLower.indexOf('pragma') === 0) {
+    return {
+      tables: [],
+      columns: [],
+    };
+  }
+
   const stopWords = ['where', 'limit', 'order by', 'group by', 'values', 'set'];
   const stopWordLocations = stopWords
     .map((word) => sqlLower.indexOf(` ${word}`))
