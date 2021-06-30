@@ -370,8 +370,15 @@ function getStaticPropValues(obj) {
 /* eslint-disable no-inner-declarations */
 function parseNormalizeSQL(sql) {
   const parseSQL = sql.replace(/\s+returning\s+\*/i, '');
+  let ast;
   try {
-    const ast = sqliteParser(parseSQL);
+    ast = sqliteParser(parseSQL);
+  } catch (e) {
+    console.warn(`Unable to parse ${parseSQL} : ${e.message}`);
+    return null;
+  }
+
+  try {
     const actions = [];
     const columns = [];
     const tables = [];
@@ -452,6 +459,7 @@ function parseNormalizeSQL(sql) {
       'statement.insert': [recordAction('insert'), parseStatement],
       'statement.update': [recordAction('update'), parseStatement],
       'statement.delete': [recordAction('delete'), parseStatement],
+      'statement.pragma': nop,
     };
 
     parse(ast);
@@ -461,20 +469,13 @@ function parseNormalizeSQL(sql) {
     }
     const uniqueActions = unique(actions).sort();
 
-    const result = {};
-    if (uniqueActions.length === 1) {
-      // eslint-disable-next-line prefer-destructuring
-      result.action = uniqueActions[0];
-    } else if (actions.length > 0) {
-      result.actions = uniqueActions;
-    }
-
-    return Object.assign(result, {
+    return {
+      actions: uniqueActions,
       tables: unique(tables).sort(),
       columns: unique(columns).sort(),
-    });
+    };
   } catch (e) {
-    // console.warn(`Unable to parse ${parseSQL} : ${e.message}`);
+    console.warn(`Unable to interpret AST tree for ${parseSQL} : ${e.message}`);
     return null;
   }
 }
