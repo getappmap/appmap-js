@@ -41,20 +41,50 @@
     "fingerprints": [
       {
         "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
-        "canonicalization_algorithm": "update_v1",
-        "digest": "997ec23276e3bfb491dcf6aefc138a7681fd9d4e6b74af6615878d238c968170",
+        "canonicalization_algorithm": "httpClientRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
         "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
-        "canonicalization_algorithm": "info_v1",
-        "digest": "cec1d48810b037d61d5643a096c1c57eb6ee74f9e5d8f8905b36f87fae52068c",
+        "canonicalization_algorithm": "httpServerRequests",
+        "digest": "68f37186bc2932f3d9f6cb2b1dd773a95384211f933bfb14fe120a471ec49c4b",
         "fingerprint_algorithm": "sha256"
       },
       {
         "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
-        "canonicalization_algorithm": "trace_v1",
-        "digest": "7bbb5f3044129d4a93adc347a1ca6901edf6111e7b6cdb520cf21d890498a97e",
+        "canonicalization_algorithm": "info",
+        "digest": "93dc3d17da0bade259a0e43b2a64e2aa531eee912af6ab49e69df90473d3fbdb",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "canonicalization_algorithm": "labels",
+        "digest": "7cacc4134df39c297b9e0bf2b39cab4ad953461415a007fd8bfc5e932e7313fa",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "canonicalization_algorithm": "sqlNormalized",
+        "digest": "f42217f94b7cbe624dea39ee0289db56da68ebf9cd0a7bb74f53243d7ecd8a63",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "canonicalization_algorithm": "sqlTables",
+        "digest": "155dfea9984015042d2dbb19f93b1e983a068c6946247866d578c2a40dd9a909",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "canonicalization_algorithm": "trace",
+        "digest": "5bccf2aaf6b511d84e297cd882d998927bfdcfb24b2baa63c897a87ab08878cd",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "canonicalization_algorithm": "update",
+        "digest": "1e872ddd5516f14ee94fca9aea143a02d877794be83e5649e9dce32551c7eef0",
         "fingerprint_algorithm": "sha256"
       }
     ]
@@ -85,7 +115,10 @@
                           "type": "function",
                           "location": "JSON::Ext::Generator::State#generate",
                           "static": false,
-                          "labels": ["serialization", "json"]
+                          "labels": [
+                            "serialization",
+                            "json"
+                          ]
                         }
                       ]
                     }
@@ -100,7 +133,10 @@
                       "type": "function",
                       "location": "JSON::Ext::Parser#parse",
                       "static": false,
-                      "labels": ["serialization", "json"]
+                      "labels": [
+                        "serialization",
+                        "json"
+                      ]
                     }
                   ]
                 }
@@ -127,14 +163,20 @@
                   "type": "function",
                   "location": "/Users/kgilpin/source/appland/appmap-ruby/lib/appmap/hook/method.rb:49",
                   "static": false,
-                  "labels": ["http", "io"]
+                  "labels": [
+                    "http",
+                    "io"
+                  ]
                 },
                 {
                   "name": "request",
                   "type": "function",
                   "location": "/Users/kgilpin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
                   "static": false,
-                  "labels": ["http", "io"]
+                  "labels": [
+                    "http",
+                    "io"
+                  ]
                 }
               ]
             }
@@ -159,21 +201,30 @@
                   "type": "function",
                   "location": "OpenSSL::Cipher#decrypt",
                   "static": false,
-                  "labels": ["security", "crypto"]
+                  "labels": [
+                    "security",
+                    "crypto"
+                  ]
                 },
                 {
                   "name": "final",
                   "type": "function",
                   "location": "OpenSSL::Cipher#final",
                   "static": false,
-                  "labels": ["security", "crypto"]
+                  "labels": [
+                    "security",
+                    "crypto"
+                  ]
                 },
                 {
                   "name": "encrypt",
                   "type": "function",
                   "location": "OpenSSL::Cipher#encrypt",
                   "static": false,
-                  "labels": ["security", "crypto"]
+                  "labels": [
+                    "security",
+                    "crypto"
+                  ]
                 }
               ]
             }
@@ -192,7 +243,10 @@
                   "type": "function",
                   "location": "Digest::Instance#digest",
                   "static": false,
-                  "labels": ["security", "crypto"]
+                  "labels": [
+                    "security",
+                    "crypto"
+                  ]
                 }
               ]
             }

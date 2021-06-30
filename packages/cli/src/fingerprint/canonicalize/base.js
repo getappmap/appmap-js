@@ -1,4 +1,4 @@
-const { buildTree, notNull } = require('../algorithms');
+const { notNull } = require('../algorithms');
 
 const BLACKLISTED_LABELS = new Set([
   'format.json.generate',
@@ -7,8 +7,9 @@ const BLACKLISTED_LABELS = new Set([
 ]);
 
 module.exports = class {
-  constructor(appmap) {
+  constructor(appmap, coalesceEvents) {
     this.appmap = appmap;
+    this.coalesceEvents = coalesceEvents;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -22,19 +23,35 @@ module.exports = class {
       .map(this.transform.bind(this))
       .filter(notNull);
 
-    return buildTree(events);
+    return this.coalesceEvents(events);
   }
 
   transform(event) {
     const buildEvent = () => {
       if (event.sql) {
+        if (!this.sql) {
+          return null;
+        }
+
         return this.sql(event);
       }
       if (event.httpServerRequest) {
+        if (!this.httpServerRequest) {
+          return null;
+        }
+
         return this.httpServerRequest(event);
       }
       if (event.httpClientRequest) {
+        if (!this.httpClientRequest) {
+          return null;
+        }
+
         return this.httpClientRequest(event);
+      }
+
+      if (!this.functionCall) {
+        return null;
       }
 
       return this.functionCall(event);
@@ -45,11 +62,13 @@ module.exports = class {
       return null;
     }
 
-    result.id = event.id;
-    if (event.parent) {
-      result.parent_id = event.parent.id;
+    if (typeof result === 'object' && !Array.isArray(result)) {
+      result.id = event.id;
+      if (event.parent) {
+        result.parent_id = event.parent.id;
+      }
+      result.depth = event.depth;
     }
-    result.depth = event.depth;
     return result;
   }
 };

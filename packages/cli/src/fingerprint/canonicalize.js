@@ -1,8 +1,13 @@
 /* eslint-disable global-require */
 const algorithms = {
-  update_v1: require('./canonicalize/update_v1'),
-  info_v1: require('./canonicalize/info_v1'),
-  trace_v1: require('./canonicalize/trace_v1'),
+  httpClientRequests: require('./canonicalize/httpClientRequests'),
+  httpServerRequests: require('./canonicalize/httpServerRequests'),
+  info: require('./canonicalize/info'),
+  labels: require('./canonicalize/labels'),
+  sqlNormalized: require('./canonicalize/sqlNormalized'),
+  sqlTables: require('./canonicalize/sqlTables'),
+  trace: require('./canonicalize/trace'),
+  update: require('./canonicalize/update'),
 };
 /* eslint-enable global-require */
 

@@ -1,25 +1,19 @@
 /* eslint-disable class-methods-use-this */
-const { obfuscate, analyzeQuery } = require('../../database');
-const Base = require('./base');
+const { analyzeQuery } = require('../../database');
+const EventTree = require('./eventTree');
 
 /**
- * At TRACE level, the order of labeled function calls matters, and all function class
- * and method names are retained. SQL queries are also retained in order. HTTP
- * server and client request parameters are retained.
+ * At INFO level, the order of labeled function calls matters. SQL query strings
+ * are collected, sorted and made unique.
  */
-class Canonicalize extends Base {
+class Canonicalize extends EventTree {
   sql(event) {
-    const analyzedQuery = analyzeQuery(event.sql);
-    const result = {
+    return {
       kind: 'sql',
       sql: {
-        normalized_query: obfuscate(event.sqlQuery, event.sql.database_type),
+        analyzed_query: analyzeQuery(event.sql),
       },
     };
-    if (typeof analyzedQuery === 'object') {
-      result.analyzed_query = analyzedQuery;
-    }
-    return result;
   }
 
   httpClientRequest(event) {
@@ -46,10 +40,14 @@ class Canonicalize extends Base {
   }
 
   functionCall(event) {
+    const labels = this.whitelistedLabels(event.codeObject.labels);
+    if (labels.length === 0) {
+      return null;
+    }
+
     return {
       kind: 'function',
-      function: event.codeObject.id,
-      labels: [...event.codeObject.labels],
+      labels,
     };
   }
 }

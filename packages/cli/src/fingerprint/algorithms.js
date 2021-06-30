@@ -3,6 +3,10 @@ function notNull(event) {
   return event !== null && event !== undefined;
 }
 
+function makeUnique(events) {
+  return [...new Set(events.flat())].sort();
+}
+
 function buildTree(events) {
   const eventsById = events.reduce((memo, evt) => {
     if (!evt.id) {
@@ -70,6 +74,7 @@ function buildTree(events) {
 }
 
 module.exports = {
+  makeUnique,
   notNull,
   buildTree,
 };
