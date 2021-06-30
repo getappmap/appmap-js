@@ -39,7 +39,20 @@ class FunctionStats {
   }
 
   toJSON() {
-    return this.eventMatches;
+    const trigram = (/** @type {Trigram} */ t) =>
+      [t.callerId, t.codeObjectId, t.calleeId].join(' ->\n');
+    return {
+      returnValues: this.returnValues,
+      httpServerRequests: this.httpServerRequests,
+      sqlQueries: this.sqlQueries,
+      sqlTables: this.sqlTables,
+      callers: this.callers,
+      ancestors: this.ancestors,
+      descendants: this.descendants,
+      packageTrigrams: this.packageTrigrams.map(trigram),
+      classTrigrams: this.classTrigrams.map(trigram),
+      functionTrigrams: this.functionTrigrams.map(trigram),
+    };
   }
 
   get appMapNames() {
