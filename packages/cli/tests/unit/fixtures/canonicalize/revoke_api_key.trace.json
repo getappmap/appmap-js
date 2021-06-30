@@ -1,0 +1,289 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "DELETE /api/api_keys",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "app/models/ApiKey.authenticate",
+        "labels": [
+          "security",
+          "provider.authenticate"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "app/models/ApiKey.decode",
+            "labels": []
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "SELECT * FROM \"api_keys\" WHERE (\"login\" = ?)"
+            },
+            "analyzed_query": {
+              "actions": [
+                "select"
+              ],
+              "tables": [
+                "api_keys"
+              ],
+              "columns": [
+                "*",
+                "login"
+              ]
+            }
+          },
+          {
+            "kind": "function",
+            "function": "app/models/ApiKey.touch",
+            "labels": [],
+            "children": [
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "UPDATE \"api_keys\" SET \"last_used\" = ? WHERE (\"id\" = ?)"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "update"
+                  ],
+                  "tables": [
+                    "api_keys"
+                  ],
+                  "columns": [
+                    "id",
+                    "last_used"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "SELECT * FROM \"users\" WHERE (\"users\".\"login\" = ?) LIMIT ?"
+            },
+            "analyzed_query": {
+              "actions": [
+                "select"
+              ],
+              "tables": [
+                "users"
+              ],
+              "columns": [
+                "*",
+                "users.login"
+              ]
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "SELECT \"pg_type\".\"oid\", \"typrelid\", \"typarray\" FROM \"pg_type\" WHERE ((\"typtype\" = ?) AND (\"typname\" = ?)) LIMIT ?"
+            },
+            "analyzed_query": {
+              "actions": [
+                "select"
+              ],
+              "tables": [
+                "pg_type"
+              ],
+              "columns": [
+                "pg_type.oid",
+                "typarray",
+                "typname",
+                "typrelid",
+                "typtype"
+              ]
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "SELECT \"attname\", (CASE \"pg_type\".\"typbasetype\" WHEN ? THEN \"atttypid\" ELSE \"pg_type\".\"typbasetype\" END) AS \"atttypid\" FROM \"pg_attribute\" INNER JOIN \"pg_type\" ON (\"pg_type\".\"oid\" = \"pg_attribute\".\"atttypid\") WHERE ((\"attrelid\" = ?) AND (\"attnum\" > ?) AND NOT \"attisdropped\") ORDER BY \"attnum\""
+            },
+            "analyzed_query": {
+              "actions": [
+                "select"
+              ],
+              "tables": [
+                "pg_attribute",
+                "pg_type"
+              ],
+              "columns": [
+                "attisdropped",
+                "attname",
+                "attnum",
+                "attrelid",
+                "atttypid",
+                "pg_attribute.atttypid",
+                "pg_type.oid",
+                "pg_type.typbasetype"
+              ]
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "SELECT \"pg_type\".\"oid\", \"typrelid\", \"typarray\" FROM \"pg_type\" WHERE ((\"typtype\" = ?) AND (\"typname\" = ?)) LIMIT ?"
+            },
+            "analyzed_query": {
+              "actions": [
+                "select"
+              ],
+              "tables": [
+                "pg_type"
+              ],
+              "columns": [
+                "pg_type.oid",
+                "typarray",
+                "typname",
+                "typrelid",
+                "typtype"
+              ]
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "SELECT \"attname\", (CASE \"pg_type\".\"typbasetype\" WHEN ? THEN \"atttypid\" ELSE \"pg_type\".\"typbasetype\" END) AS \"atttypid\" FROM \"pg_attribute\" INNER JOIN \"pg_type\" ON (\"pg_type\".\"oid\" = \"pg_attribute\".\"atttypid\") WHERE ((\"attrelid\" = ?) AND (\"attnum\" > ?) AND NOT \"attisdropped\") ORDER BY \"attnum\""
+            },
+            "analyzed_query": {
+              "actions": [
+                "select"
+              ],
+              "tables": [
+                "pg_attribute",
+                "pg_type"
+              ],
+              "columns": [
+                "attisdropped",
+                "attname",
+                "attnum",
+                "attrelid",
+                "atttypid",
+                "pg_attribute.atttypid",
+                "pg_type.oid",
+                "pg_type.typbasetype"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "app/controllers/API::APIKeysController#destroy",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "app/models/ApiKey.revoke",
+            "labels": [
+              "security"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/models/ApiKey.decode",
+                "labels": []
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT * FROM \"api_keys\" WHERE (\"login\" = ?)"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "api_keys"
+                  ],
+                  "columns": [
+                    "*",
+                    "login"
+                  ]
+                }
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "DELETE FROM \"api_keys\" WHERE \"id\" = ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "delete"
+                  ],
+                  "tables": [
+                    "api_keys"
+                  ],
+                  "columns": [
+                    "id"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "DELETE /api/api_keys",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 401,
+    "children": [
+      {
+        "kind": "function",
+        "function": "app/models/ApiKey.authenticate",
+        "labels": [
+          "security",
+          "provider.authenticate"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "app/models/ApiKey.decode",
+            "labels": []
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "SELECT * FROM \"api_keys\" WHERE (\"login\" = ?)"
+            },
+            "analyzed_query": {
+              "actions": [
+                "select"
+              ],
+              "tables": [
+                "api_keys"
+              ],
+              "columns": [
+                "*",
+                "login"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Generator::State#generate",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      }
+    ]
+  }
+]
