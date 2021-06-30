@@ -3,27 +3,6 @@ function notNull(event) {
   return event !== null && event !== undefined;
 }
 
-function compareEvents(first, second) {
-  const diff = first.kind.localeCompare(second.kind);
-  if (diff !== 0) {
-    return diff;
-  }
-
-  return JSON.stringify(first).localeCompare(JSON.stringify(second));
-}
-
-function uniqueEvents() {
-  const set = new Set();
-  return (event) => {
-    const eventStr = JSON.stringify(event, null, 2);
-    if (!set.has(eventStr)) {
-      set.add(eventStr);
-      return event;
-    }
-    return null;
-  };
-}
-
 function buildTree(events) {
   const eventsById = events
     .filter((event) => event.id)
@@ -74,7 +53,5 @@ function buildTree(events) {
 
 module.exports = {
   notNull,
-  compareEvents,
-  uniqueEvents,
   buildTree,
 };
