@@ -27,48 +27,32 @@ module.exports = class {
   }
 
   transform(event) {
-    const buildEvent = () => {
-      if (event.sql) {
-        if (!this.sql) {
-          return null;
-        }
-
-        return this.sql(event);
-      }
-      if (event.httpServerRequest) {
-        if (!this.httpServerRequest) {
-          return null;
-        }
-
-        return this.httpServerRequest(event);
-      }
-      if (event.httpClientRequest) {
-        if (!this.httpClientRequest) {
-          return null;
-        }
-
-        return this.httpClientRequest(event);
-      }
-
-      if (!this.functionCall) {
+    if (event.sql) {
+      if (!this.sql) {
         return null;
       }
 
-      return this.functionCall(event);
-    };
+      return this.sql(event);
+    }
+    if (event.httpServerRequest) {
+      if (!this.httpServerRequest) {
+        return null;
+      }
 
-    const result = buildEvent();
-    if (!result) {
+      return this.httpServerRequest(event);
+    }
+    if (event.httpClientRequest) {
+      if (!this.httpClientRequest) {
+        return null;
+      }
+
+      return this.httpClientRequest(event);
+    }
+
+    if (!this.functionCall) {
       return null;
     }
 
-    if (typeof result === 'object' && !Array.isArray(result)) {
-      result.id = event.id;
-      if (event.parent) {
-        result.parent_id = event.parent.id;
-      }
-      result.depth = event.depth;
-    }
-    return result;
+    return this.functionCall(event);
   }
 };

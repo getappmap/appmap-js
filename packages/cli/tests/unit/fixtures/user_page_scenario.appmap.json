@@ -41,6 +41,18 @@
     "fingerprints": [
       {
         "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "canonicalization_algorithm": "classDependencies",
+        "digest": "123a712126f303bbee3204112d808efb229d9a581c7c70ac1307bf8c95c80555",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "canonicalization_algorithm": "classes",
+        "digest": "db03c69ae120bfac6812c1d6b6f0037a86e3477795f3796c7d3a099716f15558",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
         "canonicalization_algorithm": "httpClientRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
@@ -48,7 +60,7 @@
       {
         "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
         "canonicalization_algorithm": "httpServerRequests",
-        "digest": "68f37186bc2932f3d9f6cb2b1dd773a95384211f933bfb14fe120a471ec49c4b",
+        "digest": "48915b366ebe761451283900edd502ed786229f6a2336ba953c8fad0dd40d070",
         "fingerprint_algorithm": "sha256"
       },
       {
@@ -61,6 +73,18 @@
         "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
         "canonicalization_algorithm": "labels",
         "digest": "7cacc4134df39c297b9e0bf2b39cab4ad953461415a007fd8bfc5e932e7313fa",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "canonicalization_algorithm": "packageDependencies",
+        "digest": "774c0bfa34cfc801226bb5b56eb149cdf1fbe57fb6a3580cb4ffeb3513448206",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "canonicalization_algorithm": "packages",
+        "digest": "3c5a78bd5145121457a6f79ac33c15ec178880dd4104da892ef942e4945905a1",
         "fingerprint_algorithm": "sha256"
       },
       {

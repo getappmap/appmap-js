@@ -11,7 +11,7 @@ class Canonicalize extends Unique {
       : [];
     const parameters = `(${parameterNames.join(',')})`;
 
-    return [event.route, parameters, status].filter((e) => e).join(' ');
+    return { route: event.route, parameters, status };
   }
 }
 
