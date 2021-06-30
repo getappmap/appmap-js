@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 const { analyzeQuery, obfuscate } = require('../../database');
-const Base = require('./base');
+const EventTree = require('./eventTree');
 
 /**
  * At UPDATE level, the order of events is not important, and the amount of data
@@ -8,7 +8,7 @@ const Base = require('./base');
  * and client request method, route, and status code are retained; but not parameter
  * names.
  */
-class Canonicalize extends Base {
+class Canonicalize extends EventTree {
   /**
    *
    * @param {Event} event

@@ -11,11 +11,11 @@ const apiKeyAppMap = buildAppMap().source(apiKeyScenario).normalize().build();
 
 describe('Canonicalize', () => {
   test('lists available algorithms', () => {
-    expect(Object.keys(algorithms)).toContain('trace_v1');
+    expect(Object.keys(algorithms)).toContain('trace');
   });
 
   test('UPDATE level', async () => {
-    const normalForm = await canonicalize('update_v1', apiKeyAppMap);
+    const normalForm = await canonicalize('update', apiKeyAppMap);
     expect(
       JSON.parse(
         readFileSync(
@@ -26,7 +26,7 @@ describe('Canonicalize', () => {
   });
 
   test('INFO level', async () => {
-    const normalForm = await canonicalize('info_v1', apiKeyAppMap);
+    const normalForm = await canonicalize('info', apiKeyAppMap);
     expect(
       JSON.parse(
         readFileSync(
@@ -37,7 +37,7 @@ describe('Canonicalize', () => {
   });
 
   test('TRACE level', async () => {
-    const normalForm = await canonicalize('trace_v1', apiKeyAppMap);
+    const normalForm = await canonicalize('trace', apiKeyAppMap);
     expect(
       JSON.parse(
         readFileSync(
