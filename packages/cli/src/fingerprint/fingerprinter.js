@@ -13,7 +13,16 @@ const {
 } = require('../utils');
 const { algorithms, canonicalize } = require('./canonicalize');
 
-const VERSION = '1.0.0';
+/**
+ * CHANGELOG
+ *
+ * = 1.1.0
+ *
+ * * Add database_type to CodeObjectType.QUERY and store in metadata.json.
+ * * Fix handling of parent assignment in normalization.
+ * * sql can contain the analysis (action, tables, columns), and/or the normalized query string.
+ */
+const VERSION = '1.1.0';
 
 class Fingerprinter {
   /**

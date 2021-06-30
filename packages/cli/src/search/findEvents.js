@@ -1,6 +1,6 @@
 // @ts-check
-const fsp = require('fs').promises;
 
+const fsp = require('fs').promises;
 const { buildAppMap } = require('./utils');
 const matchFilter = require('./matchFilter');
 const buildTrigrams = require('./trigram');
