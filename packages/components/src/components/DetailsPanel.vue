@@ -2,6 +2,15 @@
   <div class="details-panel">
     <h3 class="details-panel__title">
       <AppMapLogo />
+      <button
+        v-if="appMap.metadata.source_location"
+        class="details-panel__view-source"
+        type="button"
+        @click.prevent="viewSource"
+      >
+        <EyeIcon class="details-panel__view-source-icon" />
+        View source
+      </button>
     </h3>
     <div class="details-panel__content">
       <div class="details-panel__notification">
@@ -36,6 +45,7 @@
 
 <script>
 import AppMapLogo from '@/assets/appmap-logo.svg';
+import EyeIcon from '@/assets/eye.svg';
 import VDetailsLabel from '@/components/DetailsLabel.vue';
 import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
 import VDetailsPanelDatabase from '@/components/DetailsPanelDatabase.vue';
@@ -55,6 +65,7 @@ export default {
   name: 'v-details-panel',
   components: {
     AppMapLogo,
+    EyeIcon,
     VDetailsLabel,
     VDetailsPanelClass,
     VDetailsPanelDatabase,
@@ -92,6 +103,12 @@ export default {
       return `v-details-panel-${kind}`;
     },
   },
+
+  methods: {
+    viewSource() {
+      this.$root.$emit('viewSource', this.appMap.metadata.source_location);
+    },
+  },
 };
 </script>
 
@@ -112,9 +129,45 @@ export default {
     padding: 2rem;
     margin: 0;
     font-size: 0;
+    display: flex;
+    align-items: center;
 
     svg {
       max-width: 10rem;
+    }
+  }
+
+  &__view-source {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: flex-start;
+    border: 0;
+    border-radius: 0;
+    padding: 0.2rem 0;
+    background-color: transparent;
+    color: $gray4;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 400;
+    font-style: normal;
+    text-decoration: none;
+    user-select: none;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    transition: color 0.3s ease-in;
+
+    &:hover,
+    &:active {
+      color: $gray5;
+      transition-timing-function: ease-out;
+    }
+
+    &-icon {
+      margin-right: 0.25rem;
+      width: 1em;
+      height: 1em;
+      fill: currentColor;
     }
   }
 
