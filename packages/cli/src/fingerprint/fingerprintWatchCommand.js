@@ -5,13 +5,8 @@ const FingerprintQueue = require('./fingerprintQueue');
 class FingerprintWatchCommand {
   constructor(directory) {
     this.directory = directory;
-    this.print = false;
+    this.print = true;
     this.numProcessed = 0;
-  }
-
-  setPrint(print) {
-    this.print = print;
-    return this;
   }
 
   execute() {
