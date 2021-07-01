@@ -26,6 +26,7 @@ const FindEvents = require('./search/findEvents');
 const FunctionStats = require('./functionStats');
 const Inspect = require('./inspect');
 const SwaggerCommand = require('./swagger/command');
+const InventoryCommand = require('./inventoryCommand');
 
 class DiffCommand {
   baseDir(dir) {
@@ -493,10 +494,6 @@ yargs(process.argv.slice(2))
     'index',
     'Compute fingerprints and update index files for all appmaps in a directory',
     (args) => {
-      args.option('print', {
-        describe: 'print the canonicalized forms of the AppMap',
-        boolean: true,
-      });
       args.option('watch', {
         describe: 'watch the directory for changes to appmaps',
         boolean: true,
@@ -512,7 +509,7 @@ yargs(process.argv.slice(2))
 
       if (argv.watch) {
         const cmd = new FingerprintWatchCommand(argv.appmapDir);
-        cmd.setPrint(argv.print).execute();
+        cmd.execute();
 
         // eslint-disable-next-line no-inner-declarations
         function printStatus() {
@@ -533,10 +530,26 @@ yargs(process.argv.slice(2))
           printStatus();
         }
       } else {
-        new FingerprintDirectoryCommand(argv.appmapDir)
-          .setPrint(argv.print)
-          .execute();
+        new FingerprintDirectoryCommand(argv.appmapDir).execute();
       }
+    }
+  )
+  .command(
+    'inventory',
+    'Generate canonical lists of the application code object inventory',
+    (args) => {
+      args.option('appmap-dir', {
+        describe: 'directory to recursively inspect for AppMaps',
+        default: 'tmp/appmap',
+      });
+    },
+    async (argv) => {
+      verbose(argv.verbose);
+
+      await new FingerprintDirectoryCommand(argv.appmapDir).execute();
+
+      const inventory = await new InventoryCommand(argv.appmapDir).execute();
+      console.log(yaml.dump(inventory));
     }
   )
   .command(
