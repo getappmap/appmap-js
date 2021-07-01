@@ -2,24 +2,40 @@
   <div class="qs">
     <div class="qs-container">
       <div class="qs-head">
-        <button class="qs-head__btn" type="button">
+        <button
+          class="qs-head__btn"
+          type="button"
+          v-if="currentStep !== 1"
+          @click="prevStep"
+        >
           <StepLeftIcon class="qs-head__btn-icon" />
         </button>
-        <span class="qs-head__step">step 1/4</span>
-        <button class="qs-head__btn" type="button">
+        <span class="qs-head__step"
+          >step {{ currentStep }}/{{ stepsCount }}</span
+        >
+        <button
+          class="qs-head__btn"
+          type="button"
+          v-if="currentStep !== stepsCount"
+          @click="nextStep"
+        >
           <StepRightIcon class="qs-head__btn-icon" />
         </button>
       </div>
-      <section class="qs-step">
+      <section class="qs-step" v-if="currentStep === 1">
         <div class="qs-step__head">
           <h1 class="qs-title">Install AppMap Agent</h1>
-          <select class="qs-select">
-            <option>Ruby (detected)</option>
-            <option>Java</option>
-            <option>Python</option>
+          <select class="qs-select" v-model="language">
+            <option
+              v-for="lang in Object.keys(languages)"
+              :key="lang"
+              :value="lang"
+            >
+              {{ languages[lang] }}
+            </option>
           </select>
         </div>
-        <div class="qs-step__block">
+        <div class="qs-step__block" v-if="!step1Completed">
           <p>
             This will add the following snippet to the top of your Gemfile and
             run bundle to install the AppMap gem.
@@ -27,8 +43,111 @@
           <code class="qs-code" @click="select"
             >gem "appmap", "= 0.53.0", :groups => [:development, :test]</code
           >
-          <button class="qs-button">Install the AppMap agent</button>
+          <button class="qs-button" v-if="!isActionRunning" @click="runAction">
+            Install the AppMap agent
+          </button>
+          <div class="qs-loader" v-if="isActionRunning">
+            <div class="qs-loader__dot"></div>
+            <div class="qs-loader__dot"></div>
+            <div class="qs-loader__dot"></div>
+          </div>
         </div>
+        <div class="qs-step__success" v-if="step1Completed">
+          <span class="qs-step__success-title">
+            <SuccessIcon class="qs-step__success-icon" />
+            Agent installed
+          </span>
+          <button
+            type="button"
+            class="qs-step__success-next-step qs-button qs-button--bordered"
+            @click="nextStep"
+          >
+            Next step : Configure AppMap ->
+          </button>
+        </div>
+        <pre class="qs-step__output"></pre>
+      </section>
+      <section class="qs-step" v-if="currentStep === 2">
+        <div class="qs-step__head">
+          <h1 class="qs-title">Configure AppMap</h1>
+        </div>
+        <div class="qs-step__block" v-if="!step2Completed">
+          <p>
+            This will create an <a href="#">appmap.yml</a> config file in the
+            root directory of your project. This will tell AppMap what code to
+            record. You can run these defaults or add more packages, gems, or
+            specific functions. You can edit this file at any time.
+          </p>
+          <code class="qs-code" @click="select"
+            ># AppMap RUBY template # 'name' should generally be the same as the
+            code repo name. name: my_project packages: - path: app/controllers -
+            path: app/models # Include the gems that you want to see in the
+            dependency maps. # These are just examples. - gem: activerecord -
+            gem: devise</code
+          >
+          <button class="qs-button" v-if="!isActionRunning" @click="runAction">
+            Create appmap.yml config file
+          </button>
+          <div class="qs-loader" v-if="isActionRunning">
+            <div class="qs-loader__dot"></div>
+            <div class="qs-loader__dot"></div>
+            <div class="qs-loader__dot"></div>
+          </div>
+        </div>
+        <div class="qs-step__success" v-if="step2Completed">
+          <span class="qs-step__success-title">
+            <SuccessIcon class="qs-step__success-icon" />
+            AppMap configuration file created
+          </span>
+          <a class="qs-step__success-subtitle" href="#">appmap.yml</a>
+          <button
+            type="button"
+            class="qs-step__success-next-step qs-button qs-button--bordered"
+            @click="nextStep"
+          >
+            Next step : Record AppMaps ->
+          </button>
+        </div>
+        <pre class="qs-step__output"></pre>
+      </section>
+      <section class="qs-step" v-if="currentStep === 3">
+        <div class="qs-step__head">
+          <h1 class="qs-title">Record AppMaps</h1>
+          <select class="qs-select">
+            <option>minitest (detected)</option>
+          </select>
+        </div>
+        <div class="qs-step__block" v-if="!step3Completed">
+          <p>
+            An easy way to create AppMaps is by running your tests. This will
+            run a standard command to run your tests and generate AppMap data.
+          </p>
+          <code class="qs-code" @click="select"
+            >APPMAP=true bundle exec rake test</code
+          >
+          <button class="qs-button" v-if="!isActionRunning" @click="runAction">
+            Run tests to create AppMaps
+          </button>
+          <div class="qs-loader" v-if="isActionRunning">
+            <div class="qs-loader__dot"></div>
+            <div class="qs-loader__dot"></div>
+            <div class="qs-loader__dot"></div>
+          </div>
+        </div>
+        <div class="qs-step__success" v-if="step3Completed">
+          <span class="qs-step__success-title">
+            <SuccessIcon class="qs-step__success-icon" />
+            AppMaps recorded
+          </span>
+          <button
+            type="button"
+            class="qs-step__success-next-step qs-button qs-button--bordered"
+            @click="nextStep"
+          >
+            Next step : View AppMaps ->
+          </button>
+        </div>
+        <pre class="qs-step__output"></pre>
       </section>
     </div>
     <div class="qs-help">
@@ -45,6 +164,14 @@
 import HelpIcon from '@/assets/quickstart/help.svg';
 import StepLeftIcon from '@/assets/quickstart/arrow-left.svg';
 import StepRightIcon from '@/assets/quickstart/arrow-right.svg';
+import SuccessIcon from '@/assets/quickstart/success.svg';
+
+export const Steps = {
+  INSTALL_AGENT: 1,
+  CONFIGURE_APPMAP: 2,
+  RECORD_APPMAPS: 3,
+  VIE_APPMAP: 4,
+};
 
 export default {
   name: 'Quickstart',
@@ -53,23 +180,97 @@ export default {
     HelpIcon,
     StepLeftIcon,
     StepRightIcon,
+    SuccessIcon,
   },
 
   props: {
-    step: {
+    language: {
+      type: String,
+      default: null,
+    },
+    initialStep: {
       type: Number,
       default: 1,
+    },
+    completedSteps: {
+      type: Array,
+      default: () => [],
+    },
+    onAction: {
+      type: Function,
+    },
+  },
+
+  data() {
+    return {
+      currentStep: this.initialStep,
+      step1Completed: this.completedSteps.includes(1),
+      step2Completed: this.completedSteps.includes(2),
+      step3Completed: this.completedSteps.includes(3),
+      step4Completed: this.completedSteps.includes(4),
+      isActionRunning: false,
+    };
+  },
+
+  computed: {
+    stepsCount() {
+      return Object.keys(Steps).length;
+    },
+    languages() {
+      const languages = {
+        ruby: 'Ruby',
+        java: 'Java',
+        python: 'Python',
+      };
+
+      if (Object.keys(languages).includes(this.language)) {
+        languages[this.language] += ' (detected)';
+      }
+
+      return languages;
     },
   },
 
   methods: {
+    prevStep() {
+      if (this.currentStep > 1) {
+        this.currentStep -= 1;
+      }
+    },
+    nextStep() {
+      if (this.currentStep < this.stepsCount) {
+        this.currentStep += 1;
+      }
+    },
+    async runAction() {
+      if (typeof this.onAction !== 'function') {
+        return;
+      }
+
+      this.isActionRunning = true;
+
+      try {
+        const actionResult = await this.onAction(
+          this.language,
+          this.currentStep
+        );
+        if (actionResult) {
+          this[`step${this.currentStep}Completed`] = true;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
+      this.isActionRunning = false;
+    },
     select(event) {
+      console.log(this.language);
       if (document.selection) {
-        var range = document.body.createTextRange();
+        const range = document.body.createTextRange();
         range.moveToElementText(event.target);
         range.select();
       } else if (window.getSelection) {
-        var range = document.createRange();
+        const range = document.createRange();
         range.selectNode(event.target);
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
@@ -126,62 +327,6 @@ body {
     color: #a26eff;
     text-decoration: none;
   }
-
-  .qs-button {
-    border: none;
-    border-radius: 8px;
-    display: inline-flex;
-    align-items: center;
-    padding: 6px 16px;
-    background: #a26eff;
-    color: $gray6;
-    font: inherit;
-    line-height: 18px;
-    outline: none;
-    appearance: none;
-    cursor: pointer;
-
-    &--bordered {
-      border: 1px solid #a26eff;
-      padding: 5px 15px;
-      background: #010306;
-    }
-  }
-
-  .qs-select {
-    display: inline-block;
-    border: 1px solid #454545;
-    border-radius: 8px;
-    width: auto;
-    padding: 5px 30px 5px 10px;
-    background: transparent
-      url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAB0SURBVHgBhc27DYAgEAZguILaEVyEwgmII7gJmzCDE1xBCCWrWJFAAXIFycVo/Jt75LuciDGu4icppQV67857b79QCMHmnB2UUnYAMG+Y0Cim1npIWiDiopTC1tqptbYPtI1ccl5zPD4IjmiQ/NXE1HNEuQFeAUJ2PzwWoAAAAABJRU5ErkJggg==)
-      no-repeat top 11px right 10px;
-    color: $gray6;
-    appearance: none;
-    box-shadow: none;
-    outline: none;
-    text-align: left;
-    font: inherit;
-    font-size: 14px;
-    line-height: 18px;
-  }
-
-  .qs-select::-ms-expand {
-    display: none;
-  }
-
-  .qs-code {
-    margin-bottom: 25px;
-    display: block;
-    border: 1px solid #454545;
-    border-radius: 8px;
-    padding: 12px 20px;
-    font-family: 'IBM Plex Mono', 'Helvetica Monospaced', Helvetica, Arial,
-      sans-serif;
-    color: #8dc149;
-    white-space: pre;
-  }
 }
 
 .qs-container {
@@ -189,6 +334,99 @@ body {
   border-radius: 8px;
   max-width: 565px;
   background: #1a1a1a;
+}
+
+.qs-button {
+  border: none;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  background: #a26eff;
+  color: $gray6;
+  font: inherit;
+  line-height: 18px;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+
+  &--bordered {
+    border: 1px solid #a26eff;
+    padding: 5px 15px;
+    background: #010306;
+  }
+}
+
+.qs-select {
+  display: inline-block;
+  border: 1px solid #454545;
+  border-radius: 8px;
+  width: auto;
+  padding: 5px 30px 5px 10px;
+  background: transparent
+    url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAB0SURBVHgBhc27DYAgEAZguILaEVyEwgmII7gJmzCDE1xBCCWrWJFAAXIFycVo/Jt75LuciDGu4icppQV67857b79QCMHmnB2UUnYAMG+Y0Cim1npIWiDiopTC1tqptbYPtI1ccl5zPD4IjmiQ/NXE1HNEuQFeAUJ2PzwWoAAAAABJRU5ErkJggg==)
+    no-repeat top 11px right 10px;
+  color: $gray6;
+  appearance: none;
+  box-shadow: none;
+  outline: none;
+  text-align: left;
+  font: inherit;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.qs-select::-ms-expand {
+  display: none;
+}
+
+.qs-code {
+  margin-bottom: 25px;
+  display: block;
+  border: 1px solid #454545;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-family: 'IBM Plex Mono', 'Helvetica Monospaced', Helvetica, Arial,
+    sans-serif;
+  color: #8dc149;
+  white-space: break-spaces;
+}
+
+.qs-loader {
+  margin: 10px 0;
+  display: inline-flex;
+  align-items: center;
+
+  &__dot {
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    background-color: #a26eff;
+    animation: qs-load 1s infinite ease-in-out;
+
+    &:not(:last-child) {
+      margin-right: 2px;
+    }
+
+    &:nth-child(1) {
+      animation-delay: -0.6s;
+    }
+
+    &:nth-child(2) {
+      animation-delay: -0.2s;
+    }
+  }
+}
+
+@keyframes qs-load {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.5);
+  }
+  40% {
+    transform: scale(1);
+  }
 }
 
 .qs-head {
@@ -236,12 +474,56 @@ body {
     padding: 0 16px;
   }
 
-  .qs-title {
-    display: inline-block;
+  &__success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    & + .qs-select {
-      margin-left: 10px;
+    &-title {
+      margin-top: 45px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 20px;
+      font-weight: 500;
+      color: #8dc149;
     }
+
+    &-icon {
+      margin-right: 6px;
+      width: 1em;
+      height: 1em;
+    }
+
+    &-subtitle {
+      font-size: 14px;
+    }
+
+    &-next-step {
+      margin: 45px 0 60px;
+    }
+  }
+
+  &__output {
+    margin: 25px 0 0;
+    border-top: 2px solid #252526;
+    padding: 10px 16px;
+    height: 120px;
+    font-family: 'IBM Plex Mono', 'Helvetica Monospaced', Helvetica, Arial,
+      sans-serif;
+    overflow: auto;
+    white-space: break-spaces;
+
+    &:empty {
+      display: none;
+    }
+  }
+}
+
+.qs-title {
+  display: inline-block;
+
+  & + .qs-select {
+    margin-left: 10px;
   }
 }
 
