@@ -1,3 +1,17 @@
+# [@appland/models-v1.3.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.2.0...@appland/models-v1.3.0) (2021-07-02)
+
+
+### Bug Fixes
+
+* Properly normalize 'pragma' query ([1f3b05d](https://github.com/applandinc/appmap-js/commit/1f3b05dbfd871e4446d5d2a8bfcf40474aedbb7f))
+* Separately report query parse and analysis problems ([5121cb9](https://github.com/applandinc/appmap-js/commit/5121cb99809cf96b4f908c21419f22d60d01f841))
+
+
+### Features
+
+* Include event.depth property ([f1f8ee8](https://github.com/applandinc/appmap-js/commit/f1f8ee81ebea8b9e3b8783a22bc999219b1b2e50))
+* Store the database_type in query classMap entries ([7a44af6](https://github.com/applandinc/appmap-js/commit/7a44af6504dc78574b3ba9eb5d1edb60d3124a44))
+
 # [@appland/models-v1.2.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.1.0...@appland/models-v1.2.0) (2021-06-22)
 
 
