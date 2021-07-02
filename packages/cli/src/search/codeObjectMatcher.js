@@ -51,6 +51,7 @@ class CodeObjectMatcher {
           }' and completes the search`
         );
       }
+      this.depth += 1;
       return MATCH_COMPLETE;
     }
     if (verbose()) {
