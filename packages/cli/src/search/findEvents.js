@@ -1,6 +1,6 @@
 // @ts-check
-const fsp = require('fs').promises;
 
+const fsp = require('fs').promises;
 const { buildAppMap } = require('./utils');
 const matchFilter = require('./matchFilter');
 const buildTrigrams = require('./trigram');
@@ -75,7 +75,7 @@ class FindEvents {
         matchObj.caller = caller;
       }
 
-      if (event.children.length === 0) {
+      if (event.children.length === 0 && caller) {
         const trigrams = buildTrigrams(caller, event, null);
 
         matchObj.functionTrigrams.push(trigrams.functionTrigram);

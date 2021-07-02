@@ -5,7 +5,7 @@ describe('Normalize SQL', () => {
     const sql = 'SELECT * FROM users';
     const result = normalizeSQL(sql);
     expect(result).toEqual({
-      action: 'select',
+      actions: ['select'],
       columns: ['*'],
       tables: ['users'],
     });
@@ -14,7 +14,7 @@ describe('Normalize SQL', () => {
     const sql = `INSERT INTO users (login) VALUES ('fred')`;
     const result = normalizeSQL(sql);
     expect(result).toEqual({
-      action: 'insert',
+      actions: ['insert'],
       columns: ['login'],
       tables: ['users'],
     });
@@ -23,7 +23,7 @@ describe('Normalize SQL', () => {
     const sql = `INSERT INTO users (login) VALUES ('fred') RETURNING *`;
     const result = normalizeSQL(sql);
     expect(result).toEqual({
-      action: 'insert',
+      actions: ['insert'],
       columns: ['login'],
       tables: ['users'],
     });
@@ -32,7 +32,7 @@ describe('Normalize SQL', () => {
     const sql = `UPDATE users SET login = 'fred'`;
     const result = normalizeSQL(sql);
     expect(result).toEqual({
-      action: 'update',
+      actions: ['update'],
       columns: ['login'],
       tables: ['users'],
     });

@@ -3,6 +3,17 @@ export interface SQL {
   database_type: string;
 }
 
+export interface HTTPRoute {
+  method: string;
+  uri: string;
+}
+
+export interface HTTPRequest {
+  route: HTTPRoute;
+  parameterNames: string[];
+  statusCode: int;
+}
+ 
 export interface HTTPServerRequest {
   path: string;
   normalized_path: string;
@@ -36,6 +47,7 @@ export interface CodeObject {
   id: string;
   name: string;
   type: string;
+  database_type: string;
   children: CodeObject[];
   parent: CodeObject;
   location: string; // Functions only

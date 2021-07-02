@@ -1,0 +1,78 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "DELETE /api/api_keys",
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "provider.authenticate"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "DELETE /api/api_keys",
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "provider.authenticate"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ],
+        "children": [
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "api_keys"
+                ],
+                "columns": [
+                  "id",
+                  "last_used"
+                ]
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security"
+            ],
+            "children": [
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "delete"
+                    ],
+                    "tables": [
+                      "api_keys"
+                    ],
+                    "columns": [
+                      "id"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

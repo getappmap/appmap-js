@@ -43,9 +43,23 @@ export default class Event {
     addHiddenProperty(this, 'previous');
     addHiddenProperty(this, 'hash');
     addHiddenProperty(this, 'identityHash');
+    addHiddenProperty(this, 'depth');
 
     // Data must be written last, after our properties are configured.
     Object.assign(this, data);
+  }
+
+  get depth() {
+    if (this.$hidden.depth === undefined) {
+      let result = 0;
+      let { parent } = this;
+      while (parent) {
+        result += 1;
+        parent = parent.parent;
+      }
+      this.$hidden.depth = result;
+    }
+    return this.$hidden.depth;
   }
 
   get methodId() {

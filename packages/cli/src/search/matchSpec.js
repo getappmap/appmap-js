@@ -101,7 +101,10 @@ function matchTable(tableName) {
       return false;
     }
 
-    const queryInfo = /** @type {SQLInfo} */ analyzeQuery(codeObject.name);
+    const queryInfo = /** @type {SQLInfo} */ analyzeQuery({
+      sql: codeObject.name,
+      database_type: codeObject.database_type,
+    });
     if (typeof queryInfo !== 'object') {
       return false;
     }

@@ -3,7 +3,7 @@ const { algorithms, canonicalize } = require('./canonicalize');
 const FingerprintDirectoryCommand = require('./fingerprintDirectoryCommand');
 const FingerprintWatchCommand = require('./fingerprintWatchCommand');
 
-async function fingerprintDirectory(dir, watch = false, print = true) {
+async function fingerprintDirectory(dir, watch = false) {
   if (verbose) {
     verbose(true);
   }
@@ -13,9 +13,6 @@ async function fingerprintDirectory(dir, watch = false, print = true) {
     cmd = new FingerprintWatchCommand(dir);
   } else {
     cmd = new FingerprintDirectoryCommand(dir);
-  }
-  if (print) {
-    cmd.setPrint(true);
   }
   return cmd.execute();
 }

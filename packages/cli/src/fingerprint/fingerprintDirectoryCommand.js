@@ -4,12 +4,7 @@ const FingerprintQueue = require('./fingerprintQueue');
 class FingerprintDirectoryCommand {
   constructor(directory) {
     this.directory = directory;
-    this.print = false;
-  }
-
-  setPrint(print) {
-    this.print = print;
-    return this;
+    this.print = true;
   }
 
   async execute() {
