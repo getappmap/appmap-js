@@ -1,3 +1,24 @@
+# [@appland/cli-v1.3.0](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.2.0...@appland/cli-v1.3.0) (2021-07-02)
+
+
+### Bug Fixes
+
+* Don't emit trigrams with no caller and no callee ([65be7e5](https://github.com/applandinc/appmap-js/commit/65be7e5c03c3cd8a233c77bbb85c5ca54a563e07))
+* Only show progress bars in interactive mode ([6436a3b](https://github.com/applandinc/appmap-js/commit/6436a3b7bff79eafcfef554eb27dd581113bd9a0))
+* Refine JSON output of inspect command ([101e97e](https://github.com/applandinc/appmap-js/commit/101e97e3014ac41eda49b96b2f5a4a080bbf7f07))
+* Remove unused functions ([fe03064](https://github.com/applandinc/appmap-js/commit/fe030646ed6e85ecf3afc7a5f36948988e37e39e))
+* Update the AppMap index before the 'inspect' command runs ([1983813](https://github.com/applandinc/appmap-js/commit/19838133180ece16879af622bf3ccb576fc6de27))
+
+
+### Features
+
+* Add 'inventory' CLI command ([8175fb0](https://github.com/applandinc/appmap-js/commit/8175fb0727b40fdfc35720ead7362ae46ea2d877))
+* Add database_type to CodeObjectType.QUERY ([8787b2d](https://github.com/applandinc/appmap-js/commit/8787b2de0e05bce6753c90b3b6f08115c94e8cc7))
+* Add fingerprint strategies ([066bf9e](https://github.com/applandinc/appmap-js/commit/066bf9e1d2cf4767ca105d6f794daf8f82acaed5))
+* App.Land client ([775abb3](https://github.com/applandinc/appmap-js/commit/775abb3ad598031d9b95f20e7b12f88bd8d8da3b))
+* Fingerprint classes and packages ([7448804](https://github.com/applandinc/appmap-js/commit/74488040e804a6f57a19878980fa3ace25d6feb4))
+* Store the database_type in query classMap entries ([7a44af6](https://github.com/applandinc/appmap-js/commit/7a44af6504dc78574b3ba9eb5d1edb60d3124a44))
+
 # [@appland/cli-v1.2.0](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.1.0...@appland/cli-v1.2.0) (2021-06-29)
 
 
