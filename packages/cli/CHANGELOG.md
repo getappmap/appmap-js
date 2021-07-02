@@ -1,3 +1,10 @@
+# [@appland/cli-v1.3.1](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.3.0...@appland/cli-v1.3.1) (2021-07-02)
+
+
+### Bug Fixes
+
+* Find all matching events in each AppMap ([de578c7](https://github.com/applandinc/appmap-js/commit/de578c73864e10c6b815ac460fb94b8a0b4eab92))
+
 # [@appland/cli-v1.3.0](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.2.0...@appland/cli-v1.3.0) (2021-07-02)
 
 
