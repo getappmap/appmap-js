@@ -5,12 +5,11 @@ export default {
   component: Quickstart,
   args: {
     language: 'ruby',
-    // completedSteps: [1, 2],
     onAction: () =>
       new Promise((resolve) => {
         setTimeout(() => {
           resolve(true);
-        }, 2000);
+        }, 1000);
       }),
   },
 };
