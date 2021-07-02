@@ -51,7 +51,10 @@ class Trigram {
    */
   get codeObjectId() {
     const co = this.codeObjectFn(this.event);
-    return co ? co.id : null;
+    if (co) {
+      return normalizeId(co, this.event);
+    }
+    return null;
   }
 
   /**

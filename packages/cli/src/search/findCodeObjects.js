@@ -235,16 +235,11 @@ class FindCodeObjects {
         console.warn(`Checking AppMap ${appmapName}`);
       }
 
-      let match = null;
       const findMatchingFunction = (
         /** @type {import('./types').CodeObject} */ item,
         /** @type {import('./types').CodeObjectMatcher} */ matcher,
         /** @type {import('./types').CodeObject[]} */ ancestors
       ) => {
-        if (match) {
-          return;
-        }
-
         const buildCodeObject = () => {
           let parent = null;
           ancestors.forEach((ancestor) => {
@@ -253,6 +248,7 @@ class FindCodeObjects {
           return new CodeObjectModel(item, parent);
         };
 
+        let match;
         const matchResult = matcher.match(item);
         switch (matchResult) {
           case MATCH_ABORT:
@@ -263,7 +259,6 @@ class FindCodeObjects {
               console.warn(`Completed match: ${JSON.stringify(match)}`);
             }
             matches.push(match);
-            return;
           case MATCH_CONTINUE:
           default:
         }
