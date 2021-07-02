@@ -2,25 +2,29 @@
   <div class="qs">
     <div class="qs-container">
       <div class="qs-head">
-        <button
-          class="qs-head__btn"
-          type="button"
-          v-if="currentStep !== 1"
-          @click="prevStep"
-        >
-          <StepLeftIcon class="qs-head__btn-icon" />
-        </button>
+        <div class="qs-head__btn-wrap">
+          <button
+            class="qs-head__btn"
+            type="button"
+            v-if="currentStep !== 1"
+            @click="prevStep"
+          >
+            <StepLeftIcon class="qs-head__btn-icon" />
+          </button>
+        </div>
         <span class="qs-head__step"
           >step {{ currentStep }}/{{ stepsCount }}</span
         >
-        <button
-          class="qs-head__btn"
-          type="button"
-          v-if="currentStep !== stepsCount"
-          @click="nextStep"
-        >
-          <StepRightIcon class="qs-head__btn-icon" />
-        </button>
+        <div class="qs-head__btn-wrap">
+          <button
+            class="qs-head__btn"
+            type="button"
+            v-if="currentStep !== stepsCount"
+            @click="nextStep"
+          >
+            <StepRightIcon class="qs-head__btn-icon" />
+          </button>
+        </div>
       </div>
       <section class="qs-step" v-if="currentStep === 1">
         <div class="qs-step__head">
@@ -59,13 +63,12 @@
           </span>
           <button
             type="button"
-            class="qs-step__success-next-step qs-button qs-button--bordered"
+            class="qs-step__success-next-step qs-button"
             @click="nextStep"
           >
             Next step : Configure AppMap ->
           </button>
         </div>
-        <pre class="qs-step__output"></pre>
       </section>
       <section class="qs-step" v-if="currentStep === 2">
         <div class="qs-step__head">
@@ -78,12 +81,18 @@
             record. You can run these defaults or add more packages, gems, or
             specific functions. You can edit this file at any time.
           </p>
+          <!-- prettier-ignore -->
           <code class="qs-code" @click="select"
-            ># AppMap RUBY template # 'name' should generally be the same as the
-            code repo name. name: my_project packages: - path: app/controllers -
-            path: app/models # Include the gems that you want to see in the
-            dependency maps. # These are just examples. - gem: activerecord -
-            gem: devise</code
+            ># AppMap RUBY template
+# 'name' should generally be the same as the code repo name.
+ name: my_project
+ packages:
+ - path: app/controllers
+ - path: app/models
+ # Include the gems that you want to see in the dependency maps.
+ # These are just examples.
+ - gem: activerecord
+ - gem: devise</code
           >
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
             Create appmap.yml config file
@@ -99,16 +108,15 @@
             <SuccessIcon class="qs-step__success-icon" />
             AppMap configuration file created
           </span>
-          <a class="qs-step__success-subtitle" href="#">appmap.yml</a>
+          <span class="qs-step__success-subtitle">appmap.yml</span>
           <button
             type="button"
-            class="qs-step__success-next-step qs-button qs-button--bordered"
+            class="qs-step__success-next-step qs-button"
             @click="nextStep"
           >
             Next step : Record AppMaps ->
           </button>
         </div>
-        <pre class="qs-step__output"></pre>
       </section>
       <section class="qs-step" v-if="currentStep === 3">
         <div class="qs-step__head">
@@ -128,7 +136,11 @@
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
             Run tests to create AppMaps
           </button>
-          <div class="qs-loader" v-if="isActionRunning">
+          <div
+            class="qs-loader"
+            v-if="isActionRunning"
+            data-process="5 AppMaps created"
+          >
             <div class="qs-loader__dot"></div>
             <div class="qs-loader__dot"></div>
             <div class="qs-loader__dot"></div>
@@ -141,13 +153,12 @@
           </span>
           <button
             type="button"
-            class="qs-step__success-next-step qs-button qs-button--bordered"
+            class="qs-step__success-next-step qs-button"
             @click="nextStep"
           >
             Next step : View AppMaps ->
           </button>
         </div>
-        <pre class="qs-step__output"></pre>
       </section>
     </div>
     <div class="qs-help">
@@ -170,7 +181,6 @@ export const Steps = {
   INSTALL_AGENT: 1,
   CONFIGURE_APPMAP: 2,
   RECORD_APPMAPS: 3,
-  VIE_APPMAP: 4,
 };
 
 export default {
@@ -199,6 +209,9 @@ export default {
     onAction: {
       type: Function,
     },
+    onStep: {
+      type: Function,
+    },
   },
 
   data() {
@@ -210,6 +223,16 @@ export default {
       step4Completed: this.completedSteps.includes(4),
       isActionRunning: false,
     };
+  },
+
+  watch: {
+    currentStep: {
+      handler() {
+        if (typeof this.onStep === 'function') {
+          this.onStep(this.currentStep);
+        }
+      },
+    },
   },
 
   computed: {
@@ -332,7 +355,6 @@ body {
 .qs-container {
   margin-bottom: 12px;
   border-radius: 8px;
-  max-width: 565px;
   background: #1a1a1a;
 }
 
@@ -386,6 +408,7 @@ body {
   border: 1px solid #454545;
   border-radius: 8px;
   padding: 12px 20px;
+  font-size: 12px;
   font-family: 'IBM Plex Mono', 'Helvetica Monospaced', Helvetica, Arial,
     sans-serif;
   color: #8dc149;
@@ -396,6 +419,12 @@ body {
   margin: 10px 0;
   display: inline-flex;
   align-items: center;
+
+  &[data-process]::after {
+    content: attr(data-process);
+    margin-left: 16px;
+    color: #a26eff;
+  }
 
   &__dot {
     border-radius: 50%;
@@ -437,6 +466,11 @@ body {
   align-items: center;
   line-height: 1;
 
+  &__btn-wrap {
+    width: 16px;
+    height: 16px;
+  }
+
   &__btn {
     border: none;
     display: inline-flex;
@@ -449,6 +483,11 @@ body {
     line-height: 0;
     appearance: none;
     cursor: pointer;
+
+    &:hover,
+    &:active {
+      color: $base03;
+    }
 
     &-icon {
       width: 12px;
@@ -463,21 +502,17 @@ body {
 }
 
 .qs-step {
-  padding-bottom: 16px;
+  max-width: 520px;
+  padding: 0 16px 16px;
 
   &__head {
     margin-bottom: 6px;
   }
 
-  &__head,
-  &__block {
-    padding: 0 16px;
-  }
-
   &__success {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
 
     &-title {
       margin-top: 45px;
@@ -496,25 +531,11 @@ body {
 
     &-subtitle {
       font-size: 14px;
+      color: $gray6;
     }
 
     &-next-step {
-      margin: 45px 0 60px;
-    }
-  }
-
-  &__output {
-    margin: 25px 0 0;
-    border-top: 2px solid #252526;
-    padding: 10px 16px;
-    height: 120px;
-    font-family: 'IBM Plex Mono', 'Helvetica Monospaced', Helvetica, Arial,
-      sans-serif;
-    overflow: auto;
-    white-space: break-spaces;
-
-    &:empty {
-      display: none;
+      margin: 40px 0 55px;
     }
   }
 }
