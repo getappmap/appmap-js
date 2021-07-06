@@ -17,5 +17,14 @@ export default {
 export const quickstart = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { Quickstart },
-  template: '<quickstart v-bind="$props" />',
+  template: '<quickstart v-bind="$props" ref="quickstart" />',
+  mounted() {
+    /*
+    this.$refs.quickstart.projectSelector([
+      {name: 'Ruby', path: '/'},
+      {name: 'Java', path: '/'},
+      {name: 'Python', path: '/'},
+    ]);
+    */
+  },
 });

@@ -173,6 +173,34 @@
         >
       </div>
     </div>
+    <div class="qs-popup-bg" v-if="showProjectSelector">
+      <article class="qs-popup">
+        <h1 class="qs-popup__title">Select a project</h1>
+        <p class="qs-popup__subtitle">
+          This workspace contains multiple projects. Select the project you
+          would like to map with AppMap
+        </p>
+        <div class="qs-popup__radio-group">
+          <div
+            class="qs-popup__radio"
+            v-for="project in projects"
+            :key="project.name"
+          >
+            <label class="qs-radio">
+              <input
+                type="radio"
+                :value="project.name"
+                v-model="selectedProject"
+              />
+              <span>{{ project.name }}</span>
+            </label>
+          </div>
+        </div>
+        <button class="qs-button" @click="saveSelectedProject">
+          Confirm project selection
+        </button>
+      </article>
+    </div>
   </div>
 </template>
 
@@ -227,6 +255,9 @@ export default {
       step3Completed: this.completedSteps.includes(3),
       step4Completed: this.completedSteps.includes(4),
       isActionRunning: false,
+      showProjectSelector: false,
+      projects: [],
+      selectedProject: null,
     };
   },
 
@@ -291,8 +322,16 @@ export default {
 
       this.isActionRunning = false;
     },
+    projectSelector(projects) {
+      this.projects = projects;
+      this.selectedProject = projects[0].name;
+      this.showProjectSelector = true;
+    },
+    saveSelectedProject() {
+      this.showProjectSelector = false;
+      this.$root.$emit('selectedProject', this.selectedProject);
+    },
     select(event) {
-      console.log(this.language);
       if (document.selection) {
         const range = document.body.createTextRange();
         range.moveToElementText(event.target);
@@ -328,6 +367,7 @@ body {
 }
 
 .qs {
+  position: relative;
   width: 100%;
   height: 100vh;
   padding: 10px 22px;
@@ -566,6 +606,91 @@ body {
 
   &__text {
     line-height: 18px;
+  }
+}
+
+.qs-popup-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.qs-popup {
+  border-radius: 10px;
+  border: 1px solid #9457ff;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  display: inline-block;
+  width: 510px;
+  max-height: 95%;
+  padding: 1.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #000;
+
+  &__title,
+  p.qs-popup__subtitle {
+    margin-bottom: 10px;
+  }
+
+  &__radio-group {
+    margin-bottom: 20px;
+  }
+
+  &__radio:not(:last-child) {
+    margin-bottom: 5px;
+  }
+}
+
+.qs-radio {
+  display: inline-block;
+  padding-left: 20px;
+  cursor: pointer;
+  user-select: none;
+
+  input[type='radio'] {
+    @include visually-hidden;
+  }
+
+  span {
+    position: relative;
+    display: block;
+
+    &::before {
+      content: '';
+      position: absolute;
+      display: block;
+      top: 2px;
+      left: -20px;
+      width: 11px;
+      height: 11px;
+      border: 1px solid #a26eff;
+      border-radius: 50%;
+      background-color: transparent;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      display: block;
+      border-radius: 50%;
+      top: 5px;
+      left: -17px;
+      width: 7px;
+      height: 7px;
+      background-color: #a26eff;
+      opacity: 0;
+    }
+  }
+
+  input[type='radio']:checked + span::after {
+    opacity: 1;
   }
 }
 </style>
