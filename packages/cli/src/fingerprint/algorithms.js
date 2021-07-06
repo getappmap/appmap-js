@@ -10,46 +10,38 @@ function makeUnique(events) {
 
 function buildTree(events) {
   const eventsById = events.reduce((memo, evt) => {
-    if (!evt.id) {
-      throw new Error('event.id is null');
+    if (!evt.$event) {
+      throw new Error('event.$event is null');
     }
     // eslint-disable-next-line no-param-reassign
-    memo[evt.id] = evt;
+    memo[evt.$event.id] = evt;
     return memo;
   }, {});
 
-  const eventWithParentId = (parentId) => eventsById[parentId];
-  const eventAtLowerDepth = (depth) => {
-    for (let i = events.length - 1; i >= 0; i -= 1) {
-      const event = events[i];
-      if (event.depth <= depth) {
-        return event;
-      }
+  const findParent = (appMapEvent) => {
+    if (!appMapEvent) {
+      return null;
     }
-    return null;
+
+    const result = eventsById[appMapEvent.id];
+    if (result) {
+      return result;
+    }
+
+    return findParent(appMapEvent.parent);
   };
 
   const rootEvents = events.reduce((roots, event) => {
     // An event with no parent is a root.
-    // When an event has a parent, but the parent cannot be located in the tree,
-    // assign the event to the most recent event at a lower depth than the event.
-    const parentId = event.parent_id;
-    if (!parentId) {
+    // When an event has a parent, find the closest ancestor which is present in the tree.
+    const parent = findParent(event.$event.parent);
+
+    if (!parent) {
       roots.push(event);
-      return roots;
-    }
-
-    const parent =
-      eventWithParentId(parentId) || eventAtLowerDepth(event.depth);
-
-    if (parent) {
-      if (!parent.children) {
-        parent.children = [event];
-      } else {
-        parent.children.push(event);
-      }
+    } else if (!parent.children) {
+      parent.children = [event];
     } else {
-      roots.push(event);
+      parent.children.push(event);
     }
 
     return roots;
@@ -57,18 +49,16 @@ function buildTree(events) {
 
   events.forEach((event) => {
     // eslint-disable-next-line no-param-reassign
-    delete event.id;
-    // eslint-disable-next-line no-param-reassign
-    delete event.parent_id;
-    // eslint-disable-next-line no-param-reassign
-    delete event.depth;
+    delete event.$event;
   });
 
-  const httpServerRequestEvents = rootEvents.filter(
-    (e) => e.kind === 'http_server_request'
+  const commands = rootEvents.filter(
+    (e) =>
+      e.kind === 'http_server_request' ||
+      (e.labels && e.labels.includes('command'))
   );
-  if (httpServerRequestEvents.length > 0) {
-    return httpServerRequestEvents;
+  if (commands.length > 0) {
+    return commands;
   }
 
   return rootEvents;

@@ -16,14 +16,18 @@ const { algorithms, canonicalize } = require('./canonicalize');
 /**
  * CHANGELOG
  *
- * = 1.1.0
+ * # 1.1.1
+ *
+ * * Fix parent assignment algorithm.
+ *
+ * # 1.1.0
  *
  * * Add httpClientRequests, httpServerRequests, labels, sqlNormalized, sqlTables.
  * * Add database_type to CodeObjectType.QUERY and store in metadata.json.
  * * Fix handling of parent assignment in normalization.
  * * sql can contain the analysis (action, tables, columns), and/or the normalized query string.
  */
-const VERSION = '1.1.0';
+const VERSION = '1.1.1';
 
 class Fingerprinter {
   /**

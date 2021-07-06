@@ -27,9 +27,11 @@ class CodeObjectMatcher {
       return MATCH_ABORT;
     }
     if (this.depth >= this.matchSpec.tokens.length) {
-      console.warn(
-        `Aborting match ${codeObject.name} because the search depth ${this.depth} exceeds the spec length ${this.matchSpec.tokens.length}`
-      );
+      if (verbose()) {
+        console.warn(
+          `Aborting match ${codeObject.name} because the search depth ${this.depth} exceeds the spec length ${this.matchSpec.tokens.length}`
+        );
+      }
       return MATCH_ABORT;
     }
     const token = this.matchSpec.tokens[this.depth];
