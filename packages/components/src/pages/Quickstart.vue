@@ -165,7 +165,12 @@
       <HelpIcon class="qs-help__icon" />
       <div class="qs-help__text">
         <p>Need help or want to give feedback?</p>
-        <a href="#">Contact an AppLand developer directly.</a>
+        <a
+          href="https://appland.com/company/contact-us"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Contact an AppLand developer directly.</a
+        >
       </div>
     </div>
   </div>
