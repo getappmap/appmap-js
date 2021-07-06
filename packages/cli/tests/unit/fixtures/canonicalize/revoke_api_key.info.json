@@ -37,6 +37,23 @@
             "sql": {
               "analyzed_query": {
                 "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "api_keys"
+                ],
+                "columns": [
+                  "id",
+                  "last_used"
+                ]
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [
                   "select"
                 ],
                 "tables": [
@@ -138,6 +155,47 @@
             }
           }
         ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security"
+        ],
+        "children": [
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "api_keys"
+                ],
+                "columns": [
+                  "*",
+                  "login"
+                ]
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [
+                  "delete"
+                ],
+                "tables": [
+                  "api_keys"
+                ],
+                "columns": [
+                  "id"
+                ]
+              }
+            }
+          }
+        ]
       }
     ]
   },
@@ -181,66 +239,6 @@
         "labels": [
           "serialization",
           "json"
-        ],
-        "children": [
-          {
-            "kind": "sql",
-            "sql": {
-              "analyzed_query": {
-                "actions": [
-                  "update"
-                ],
-                "tables": [
-                  "api_keys"
-                ],
-                "columns": [
-                  "id",
-                  "last_used"
-                ]
-              }
-            }
-          },
-          {
-            "kind": "function",
-            "labels": [
-              "security"
-            ],
-            "children": [
-              {
-                "kind": "sql",
-                "sql": {
-                  "analyzed_query": {
-                    "actions": [
-                      "select"
-                    ],
-                    "tables": [
-                      "api_keys"
-                    ],
-                    "columns": [
-                      "*",
-                      "login"
-                    ]
-                  }
-                }
-              },
-              {
-                "kind": "sql",
-                "sql": {
-                  "analyzed_query": {
-                    "actions": [
-                      "delete"
-                    ],
-                    "tables": [
-                      "api_keys"
-                    ],
-                    "columns": [
-                      "id"
-                    ]
-                  }
-                }
-              }
-            ]
-          }
         ]
       }
     ]

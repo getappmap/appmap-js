@@ -8,6 +8,49 @@
         "labels": [
           "security",
           "provider.authenticate"
+        ],
+        "children": [
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "api_keys"
+                ],
+                "columns": [
+                  "id",
+                  "last_used"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security"
+        ],
+        "children": [
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [
+                  "delete"
+                ],
+                "tables": [
+                  "api_keys"
+                ],
+                "columns": [
+                  "id"
+                ]
+              }
+            }
+          }
         ]
       }
     ]
@@ -28,49 +71,6 @@
         "labels": [
           "serialization",
           "json"
-        ],
-        "children": [
-          {
-            "kind": "sql",
-            "sql": {
-              "analyzed_query": {
-                "actions": [
-                  "update"
-                ],
-                "tables": [
-                  "api_keys"
-                ],
-                "columns": [
-                  "id",
-                  "last_used"
-                ]
-              }
-            }
-          },
-          {
-            "kind": "function",
-            "labels": [
-              "security"
-            ],
-            "children": [
-              {
-                "kind": "sql",
-                "sql": {
-                  "analyzed_query": {
-                    "actions": [
-                      "delete"
-                    ],
-                    "tables": [
-                      "api_keys"
-                    ],
-                    "columns": [
-                      "id"
-                    ]
-                  }
-                }
-              }
-            ]
-          }
         ]
       }
     ]

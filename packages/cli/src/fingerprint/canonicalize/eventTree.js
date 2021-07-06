@@ -12,11 +12,7 @@ module.exports = class extends Base {
       return null;
     }
 
-    result.id = event.id;
-    if (event.parent) {
-      result.parent_id = event.parent.id;
-    }
-    result.depth = event.depth;
+    result.$event = event;
 
     return result;
   }

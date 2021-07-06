@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 const { buildAppMap } = require('@appland/models');
-const { readFileSync } = require('fs-extra');
+const { readFileSync, writeFileSync } = require('fs-extra');
 const {
   algorithms,
   canonicalize,
@@ -9,41 +9,34 @@ const apiKeyScenario = require('../fixtures/revoke_api_key.appmap.json');
 
 const apiKeyAppMap = buildAppMap().source(apiKeyScenario).normalize().build();
 
+const doUpdateFixtures = () => process.env.UPDATE_FIXTURES === 'true';
+
 describe('Canonicalize', () => {
   test('lists available algorithms', () => {
     expect(Object.keys(algorithms)).toContain('trace');
   });
 
-  test('UPDATE level', async () => {
-    const normalForm = await canonicalize('update', apiKeyAppMap);
-    expect(
-      JSON.parse(
-        readFileSync(
-          `tests/unit/fixtures/canonicalize/revoke_api_key.update.json`
-        )
-      )
-    ).toEqual(normalForm);
-  });
+  ['update', 'info', 'trace'].forEach((algorithmName) => {
+    test(`${algorithmName.toUpperCase()} level`, async () => {
+      const normalForm = await canonicalize(algorithmName, apiKeyAppMap);
 
-  test('INFO level', async () => {
-    const normalForm = await canonicalize('info', apiKeyAppMap);
-    expect(
-      JSON.parse(
-        readFileSync(
-          `tests/unit/fixtures/canonicalize/revoke_api_key.info.json`
-        )
-      )
-    ).toEqual(normalForm);
-  });
+      const updateFixtureFile = () => {
+        writeFileSync(
+          `tests/unit/fixtures/canonicalize/revoke_api_key.${algorithmName}.json`,
+          JSON.stringify(normalForm, null, 2)
+        );
+      };
 
-  test('TRACE level', async () => {
-    const normalForm = await canonicalize('trace', apiKeyAppMap);
-    expect(
-      JSON.parse(
-        readFileSync(
-          `tests/unit/fixtures/canonicalize/revoke_api_key.trace.json`
+      if (doUpdateFixtures()) {
+        updateFixtureFile();
+      }
+      expect(
+        JSON.parse(
+          readFileSync(
+            `tests/unit/fixtures/canonicalize/revoke_api_key.${algorithmName}.json`
+          )
         )
-      )
-    ).toEqual(normalForm);
+      ).toEqual(normalForm);
+    });
   });
 });
