@@ -1,3 +1,10 @@
+# [@appland/cli-v1.3.2](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.3.1...@appland/cli-v1.3.2) (2021-07-06)
+
+
+### Bug Fixes
+
+* Fix parent tree assignment in canonicalization ([fd54afa](https://github.com/applandinc/appmap-js/commit/fd54afa722166ce1ac022cbd649827ac2fa84b53))
+
 # [@appland/cli-v1.3.1](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.3.0...@appland/cli-v1.3.1) (2021-07-02)
 
 
