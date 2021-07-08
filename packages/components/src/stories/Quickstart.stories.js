@@ -1,10 +1,11 @@
-import { Steps, Quickstart } from '@/pages/Quickstart.vue';
+import Quickstart, { Steps } from '@/pages/Quickstart.vue';
 
 export default {
   title: 'Pages/VS Code',
   component: Quickstart,
   args: {
     language: 'ruby',
+    testFrameworks: ['minitest', 'jest'],
     stepsState: ['incomplete', 'incomplete', 'incomplete'],
     installSnippets: {
       ruby: 'gem "appmap", "= 0.53.0", :groups => [:development, :test]',

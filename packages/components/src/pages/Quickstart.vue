@@ -132,7 +132,9 @@
         <div class="qs-step__head">
           <h1 class="qs-title">Record AppMaps</h1>
           <select class="qs-select">
-            <option>minitest (detected)</option>
+            <option v-for="framework in testFrameworks" :key="framework">
+              {{ framework }}
+            </option>
           </select>
         </div>
         <div class="qs-step__block" v-if="!step3Completed">
@@ -241,6 +243,10 @@ export default {
       type: String,
       default: null,
     },
+    testFrameworks: {
+      type: Array,
+      default: () => [],
+    },
     installSnippets: {
       type: Object,
       default: () => {},
@@ -275,6 +281,9 @@ export default {
   data() {
     return {
       selectedLanguage: this.language,
+      selectedTestFramework: this.testFrameworks.length
+        ? this.testFrameworks[0]
+        : null,
       currentStep: this.initialStep,
       isActionRunning: false,
       showProjectSelector: false,
@@ -346,7 +355,11 @@ export default {
       this.isActionRunning = true;
 
       try {
-        await this.onAction(this.language, this.currentStep);
+        await this.onAction(
+          this.selectedLanguage,
+          this.currentStep,
+          this.selectedTestFramework
+        );
       } catch (e) {
         console.error(e);
       }
