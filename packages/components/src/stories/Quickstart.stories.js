@@ -1,16 +1,40 @@
-import Quickstart from '@/pages/Quickstart.vue';
+import { Steps, Quickstart } from '@/pages/Quickstart.vue';
 
 export default {
   title: 'Pages/VS Code',
   component: Quickstart,
   args: {
     language: 'ruby',
-    onAction: () =>
-      new Promise((resolve) => {
+    stepsState: ['incomplete', 'incomplete', 'incomplete'],
+    installSnippets: {
+      ruby: 'gem "appmap", "= 0.53.0", :groups => [:development, :test]',
+      java: 'java -jar appmap.jar',
+      python: 'pip install appmap',
+    },
+    appmapYmlSnippet: `# AppMap RUBY template
+# 'name' should generally be the same as the code repo name.
+ name: my_project
+ packages:
+ - path: app/controllers
+ - path: app/models
+ # Include the gems that you want to see in the dependency maps.
+ # These are just examples.
+ - gem: activerecord
+ - gem: devise`,
+    // appmapsProgress: 1,
+    onAction(language, step) {
+      return new Promise((resolve) => {
         setTimeout(() => {
+          this.$set(
+            this.stepsState,
+            Object.values(Steps).indexOf(step),
+            'complete'
+          );
           resolve(true);
         }, 1000);
-      }),
+      });
+    },
+    // error: 'The AppMap agent was not installed',
   },
 };
 

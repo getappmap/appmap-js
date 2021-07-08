@@ -29,7 +29,7 @@
       <section class="qs-step" v-if="currentStep === 1">
         <div class="qs-step__head">
           <h1 class="qs-title">Install AppMap Agent</h1>
-          <select class="qs-select" v-model="language">
+          <select class="qs-select" v-model="selectedLanguage">
             <option
               v-for="lang in Object.keys(languages)"
               :key="lang"
@@ -39,14 +39,14 @@
             </option>
           </select>
         </div>
-        <div class="qs-step__block" v-if="!step1Completed">
+        <div class="qs-step__block" v-if="!step1Completed && !error">
           <p>
             This will add the following snippet to the top of your Gemfile and
             run bundle to install the AppMap gem.
           </p>
-          <code class="qs-code" @click="select"
-            >gem "appmap", "= 0.53.0", :groups => [:development, :test]</code
-          >
+          <code class="qs-code" @click="select">{{
+            installSnippets[selectedLanguage]
+          }}</code>
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
             Install the AppMap agent
           </button>
@@ -56,7 +56,24 @@
             <div class="qs-loader__dot"></div>
           </div>
         </div>
-        <div class="qs-step__success" v-if="step1Completed">
+        <div class="qs-step__error" v-if="error">
+          <span class="qs-step__error-title">{{ error }}</span>
+          <ol class="qs-step__error-list">
+            <li class="qs-step__error-list-item">Review the console output</li>
+            <li class="qs-step__error-list-item">Make necessary adjustments</li>
+            <li class="qs-step__error-list-item">
+              <a href="#">Try again to install</a>
+            </li>
+          </ol>
+          <a
+            class="qs-step__error-button qs-button qs-button--bordered"
+            href="https://appland.com/company/contact-us"
+            target="_blank"
+            rel="noopener noreferrer"
+            >For further assistance please contact us</a
+          >
+        </div>
+        <div class="qs-step__success" v-if="step1Completed && !error">
           <span class="qs-step__success-title">
             <SuccessIcon class="qs-step__success-icon" />
             Agent installed
@@ -81,19 +98,7 @@
             record. You can run these defaults or add more packages, gems, or
             specific functions. You can edit this file at any time.
           </p>
-          <!-- prettier-ignore -->
-          <code class="qs-code" @click="select"
-            ># AppMap RUBY template
-# 'name' should generally be the same as the code repo name.
- name: my_project
- packages:
- - path: app/controllers
- - path: app/models
- # Include the gems that you want to see in the dependency maps.
- # These are just examples.
- - gem: activerecord
- - gem: devise</code
-          >
+          <code class="qs-code" @click="select">{{ appmapYmlSnippet }}</code>
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
             Create appmap.yml config file
           </button>
@@ -108,7 +113,12 @@
             <SuccessIcon class="qs-step__success-icon" />
             AppMap configuration file created
           </span>
-          <span class="qs-step__success-subtitle">appmap.yml</span>
+          <a
+            href="#"
+            class="qs-step__success-link"
+            @click.prevent="viewAppmapYml"
+            >appmap.yml</a
+          >
           <button
             type="button"
             class="qs-step__success-next-step qs-button"
@@ -139,7 +149,7 @@
           <div
             class="qs-loader"
             v-if="isActionRunning"
-            data-process="5 AppMaps created"
+            :data-process="appmapsProgressText"
           >
             <div class="qs-loader__dot"></div>
             <div class="qs-loader__dot"></div>
@@ -231,13 +241,25 @@ export default {
       type: String,
       default: null,
     },
+    installSnippets: {
+      type: Object,
+      default: () => {},
+    },
+    appmapYmlSnippet: {
+      type: String,
+      default: '',
+    },
     initialStep: {
       type: Number,
       default: 1,
     },
-    completedSteps: {
+    stepsState: {
       type: Array,
       default: () => [],
+    },
+    appmapsProgress: {
+      type: Number,
+      default: 0,
     },
     onAction: {
       type: Function,
@@ -245,15 +267,15 @@ export default {
     onStep: {
       type: Function,
     },
+    error: {
+      type: String,
+    },
   },
 
   data() {
     return {
+      selectedLanguage: this.language,
       currentStep: this.initialStep,
-      step1Completed: this.completedSteps.includes(1),
-      step2Completed: this.completedSteps.includes(2),
-      step3Completed: this.completedSteps.includes(3),
-      step4Completed: this.completedSteps.includes(4),
       isActionRunning: false,
       showProjectSelector: false,
       projects: [],
@@ -275,6 +297,15 @@ export default {
     stepsCount() {
       return Object.keys(Steps).length;
     },
+    step1Completed() {
+      return this.stepsState[0] === 'complete';
+    },
+    step2Completed() {
+      return this.stepsState[1] === 'complete';
+    },
+    step3Completed() {
+      return this.stepsState[2] === 'complete';
+    },
     languages() {
       const languages = {
         ruby: 'Ruby',
@@ -287,6 +318,11 @@ export default {
       }
 
       return languages;
+    },
+    appmapsProgressText() {
+      return `${this.appmapsProgress} AppMap${
+        this.appmapsProgress !== 1 ? 's' : ''
+      } created`;
     },
   },
 
@@ -302,6 +338,7 @@ export default {
       }
     },
     async runAction() {
+      console.log(this.onAction);
       if (typeof this.onAction !== 'function') {
         return;
       }
@@ -309,13 +346,7 @@ export default {
       this.isActionRunning = true;
 
       try {
-        const actionResult = await this.onAction(
-          this.language,
-          this.currentStep
-        );
-        if (actionResult) {
-          this[`step${this.currentStep}Completed`] = true;
-        }
+        await this.onAction(this.language, this.currentStep);
       } catch (e) {
         console.error(e);
       }
@@ -330,6 +361,9 @@ export default {
     saveSelectedProject() {
       this.showProjectSelector = false;
       this.$root.$emit('selectedProject', this.selectedProject);
+    },
+    viewAppmapYml() {
+      this.$root.$emit('viewAppmapYml');
     },
     select(event) {
       if (document.selection) {
@@ -420,8 +454,12 @@ body {
   &--bordered {
     border: 1px solid #a26eff;
     padding: 5px 15px;
-    background: #010306;
+    background: transparent;
   }
+}
+
+a.qs-button {
+  color: $gray6;
 }
 
 .qs-select {
@@ -579,8 +617,36 @@ body {
       color: $gray6;
     }
 
+    &-link {
+      font-size: 14px;
+    }
+
     &-next-step {
       margin: 40px 0 55px;
+    }
+  }
+
+  &__error {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    &-title {
+      margin-top: 45px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 20px;
+      font-weight: 500;
+      color: #ff0000;
+    }
+
+    &-list {
+      margin: 12px 0 0;
+      padding-left: 20px;
+    }
+
+    &-button {
+      margin: 30px 0 35px;
     }
   }
 }
