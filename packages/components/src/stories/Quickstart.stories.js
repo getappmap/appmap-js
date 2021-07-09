@@ -22,6 +22,7 @@ export default {
  # These are just examples.
  - gem: activerecord
  - gem: devise`,
+    runTestsSnippet: 'APPMAP=true bundle exec rake test',
     // appmapsProgress: 1,
     onAction(language, step) {
       return new Promise((resolve) => {
