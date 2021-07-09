@@ -190,6 +190,23 @@
           </button>
         </div>
       </section>
+      <section class="qs-step" v-if="currentStep === 4">
+        <div class="qs-step__head">
+          <h1 class="qs-title">Open AppMaps</h1>
+        </div>
+        <div class="qs-step__block">
+          <p>We’ve identified a few AppMaps you may want to check out first.</p>
+          <p v-for="appmap in appmaps" :key="appmap.path">
+            <a href="#" @click="openAppmap(appmap.path)">{{ appmap.name }}</a>
+          </p>
+          <p>
+            Browse the
+            <a href="#" @click="openLocalAppmaps">local AppMaps</a> and open any
+            from the list. For more information, go
+            <a href="https://appland.com/docs/reference/vscode">here</a>
+          </p>
+        </div>
+      </section>
     </div>
     <div class="qs-help">
       <HelpIcon class="qs-help__icon" />
@@ -244,6 +261,7 @@ export const Steps = {
   INSTALL_AGENT: 1,
   CONFIGURE_APPMAP: 2,
   RECORD_APPMAPS: 3,
+  OPEN_APPMAPS: 4,
 };
 
 export default {
@@ -288,6 +306,10 @@ export default {
     appmapsProgress: {
       type: Number,
       default: 0,
+    },
+    appmaps: {
+      type: Array,
+      default: () => [],
     },
     onAction: {
       type: Function,
@@ -403,6 +425,12 @@ export default {
     },
     viewAppmapYml() {
       this.$root.$emit('viewAppmapYml');
+    },
+    openAppmap(path) {
+      this.$root.$emit('openAppmap', path);
+    },
+    openLocalAppmaps() {
+      this.$root.$emit('openLocalAppmaps');
     },
     select(event) {
       if (document.selection) {
@@ -624,7 +652,7 @@ a.qs-button {
 }
 
 .qs-step {
-  max-width: 520px;
+  max-width: 600px;
   padding: 0 16px 16px;
 
   &__head {
