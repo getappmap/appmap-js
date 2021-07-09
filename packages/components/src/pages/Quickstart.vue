@@ -40,9 +40,17 @@
           </select>
         </div>
         <div class="qs-step__block" v-if="!step1Completed && !error">
-          <p>
+          <p v-if="selectedLanguage === 'ruby'">
             This will add the following snippet to the top of your Gemfile and
             run bundle to install the AppMap gem.
+          </p>
+          <p v-else-if="selectedLanguage === 'java'">
+            This will add the following snippet to the top of your Java package
+            and run Java to install the AppMap package.
+          </p>
+          <p v-else-if="selectedLanguage === 'python'">
+            This will add the following snippet to the top of your Python
+            imports and run pip to install the AppMap package.
           </p>
           <code class="qs-code" @click="select">{{
             installSnippets[selectedLanguage]
@@ -92,11 +100,23 @@
           <h1 class="qs-title">Configure AppMap</h1>
         </div>
         <div class="qs-step__block" v-if="!step2Completed">
-          <p>
-            This will create an <a href="#">appmap.yml</a> config file in the
-            root directory of your project. This will tell AppMap what code to
-            record. You can run these defaults or add more packages, gems, or
-            specific functions. You can edit this file at any time.
+          <p v-if="selectedLanguage === 'ruby'">
+            This will create an appmap.yml config file in the root directory of
+            your project. This will tell AppMap what code to record. You can run
+            these defaults or add more packages, gems, or specific functions.
+            You can edit this file at any time.
+          </p>
+          <p v-else-if="selectedLanguage === 'java'">
+            This will create an appmap.yml config file in the root directory of
+            your project. This will tell AppMap what code to record. You can run
+            these defaults or add more packages, gems, or specific functions.
+            You can edit this file at any time.
+          </p>
+          <p v-else-if="selectedLanguage === 'python'">
+            This will create an appmap.yml config file in the root directory of
+            your project. This will tell AppMap what code to record. You can run
+            these defaults or add more packages, gems, or specific functions.
+            You can edit this file at any time.
           </p>
           <code class="qs-code" @click="select">{{ appmapYmlSnippet }}</code>
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
@@ -142,9 +162,7 @@
             An easy way to create AppMaps is by running your tests. This will
             run a standard command to run your tests and generate AppMap data.
           </p>
-          <code class="qs-code" @click="select"
-            >APPMAP=true bundle exec rake test</code
-          >
+          <code class="qs-code" @click="select">{{ runTestsSnippet }}</code>
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
             Run tests to create AppMaps
           </button>
@@ -255,6 +273,10 @@ export default {
       type: String,
       default: '',
     },
+    runTestsSnippet: {
+      type: String,
+      default: '',
+    },
     initialStep: {
       type: Number,
       default: 1,
@@ -297,6 +319,13 @@ export default {
       handler() {
         if (typeof this.onStep === 'function') {
           this.onStep(this.currentStep);
+        }
+      },
+    },
+    stepsState: {
+      handler() {
+        if (this.isActionRunning) {
+          this.isActionRunning = false;
         }
       },
     },
@@ -347,7 +376,6 @@ export default {
       }
     },
     async runAction() {
-      console.log(this.onAction);
       if (typeof this.onAction !== 'function') {
         return;
       }
@@ -363,8 +391,6 @@ export default {
       } catch (e) {
         console.error(e);
       }
-
-      this.isActionRunning = false;
     },
     projectSelector(projects) {
       this.projects = projects;
