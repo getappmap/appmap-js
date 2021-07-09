@@ -24,6 +24,20 @@ export default {
  - gem: devise`,
     runTestsSnippet: 'APPMAP=true bundle exec rake test',
     // appmapsProgress: 1,
+    appmaps: [
+      {
+        name: 'Appmap 1',
+        path: '/path/to/appmap',
+      },
+      {
+        name: 'Appmap 2',
+        path: '/another/path/to/appmap',
+      },
+      {
+        name: 'Appmap 3',
+        path: '/one/more/path/to/appmap',
+      },
+    ],
     onAction(language, step) {
       return new Promise((resolve) => {
         setTimeout(() => {

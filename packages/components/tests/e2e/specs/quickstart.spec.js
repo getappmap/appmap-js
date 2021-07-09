@@ -5,8 +5,8 @@ context('Quickstart', () => {
     );
   });
 
-  it('contains 3 steps', () => {
-    cy.get('.qs-head__step').should('contain.text', 'step 1/3');
+  it('contains 4 steps', () => {
+    cy.get('.qs-head__step').should('contain.text', 'step 1/4');
   });
 
   it('switches between steps', () => {
@@ -18,8 +18,11 @@ context('Quickstart', () => {
     cy.get('.qs-head__btn-wrap').last().click();
     cy.get('.qs-title').should('contain.text', 'Record AppMaps');
 
+    cy.get('.qs-head__btn-wrap').last().click();
+    cy.get('.qs-title').should('contain.text', 'Open AppMaps');
+
     cy.get('.qs-head__btn-wrap').first().click();
-    cy.get('.qs-title').should('contain.text', 'Configure AppMap');
+    cy.get('.qs-title').should('contain.text', 'Record AppMaps');
   });
 
   it('completes all steps', () => {
@@ -45,5 +48,8 @@ context('Quickstart', () => {
     cy.wait(1000)
       .get('.qs-step__success-title')
       .should('contain.text', 'AppMaps recorded');
+    cy.get('.qs-step__success-next-step').click();
+
+    cy.get('.qs-title').should('contain.text', 'Open AppMaps');
   });
 });
