@@ -219,7 +219,7 @@
       <div class="qs-help__text">
         <p>Need help or want to give feedback?</p>
         <a
-          href="https://appland.com/company/contact-us"
+          href="https://appland.com/appmap/support"
           target="_blank"
           rel="noopener noreferrer"
           >Contact an AppLand developer directly.</a
