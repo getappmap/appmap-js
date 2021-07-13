@@ -5,7 +5,10 @@ export default {
   component: Quickstart,
   args: {
     language: 'ruby',
-    testFrameworks: ['minitest', 'jest'],
+    testFrameworks: {
+      minitest: 'APPMAP=true bundle exec rails test',
+      rspec: 'APPMAP=true bundle exec rake',
+    },
     stepsState: ['incomplete', 'incomplete', 'incomplete'],
     installSnippets: {
       ruby: 'gem "appmap", "= 0.53.0", :groups => [:development, :test]',
@@ -22,7 +25,6 @@ export default {
  # These are just examples.
  - gem: activerecord
  - gem: devise`,
-    runTestsSnippet: 'APPMAP=true bundle exec rake test',
     // appmapsProgress: 1,
     appmaps: [
       {
