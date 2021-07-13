@@ -151,7 +151,11 @@
       <section class="qs-step" v-if="currentStep === 3">
         <div class="qs-step__head">
           <h1 class="qs-title">Record AppMaps</h1>
-          <select class="qs-select" v-model="selectedTestFramework">
+          <select
+            class="qs-select"
+            v-model="selectedTestFramework"
+            v-if="Object.keys(testFrameworks).length"
+          >
             <option
               v-for="framework in Object.keys(testFrameworks)"
               :key="framework"
@@ -161,14 +165,28 @@
             </option>
           </select>
         </div>
-        <div class="qs-step__block" v-if="!step3Completed">
+        <div class="qs-step__block">
           <p>
             An easy way to create AppMaps is by running your tests. This will
             run a standard command to run your tests and generate AppMap data.
           </p>
-          <code class="qs-code" @click="select">{{
-            testFrameworks[selectedTestFramework]
-          }}</code>
+          <div class="qs-code-edit">
+            <input
+              class="qs-code-edit__input"
+              type="text"
+              v-model="testCommand"
+              :readonly="!testCommandEdit"
+              ref="testCommandInput"
+            />
+            <button
+              class="qs-code-edit__btn"
+              type="button"
+              v-if="!testCommandEdit"
+              @click="makeTestCommandEditable"
+            >
+              Edit
+            </button>
+          </div>
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
             Run tests to create AppMaps
           </button>
@@ -181,19 +199,22 @@
             <div class="qs-loader__dot"></div>
             <div class="qs-loader__dot"></div>
           </div>
-        </div>
-        <div class="qs-step__success" v-if="step3Completed">
-          <span class="qs-step__success-title">
-            <SuccessIcon class="qs-step__success-icon" />
-            AppMaps recorded
-          </span>
-          <button
-            type="button"
-            class="qs-step__success-next-step qs-button"
-            @click="nextStep"
+          <div
+            class="qs-step__success"
+            v-if="step3Completed && !isActionRunning"
           >
-            Next step : View AppMaps ->
-          </button>
+            <span class="qs-step__success-title">
+              <SuccessIcon class="qs-step__success-icon" />
+              AppMaps recorded
+            </span>
+            <button
+              type="button"
+              class="qs-step__success-next-step qs-button"
+              @click="nextStep"
+            >
+              Next step : View AppMaps ->
+            </button>
+          </div>
         </div>
       </section>
       <section class="qs-step" v-if="currentStep === 4">
@@ -287,11 +308,11 @@ export default {
     },
     testFrameworks: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     installSnippets: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     appmapYmlSnippet: {
       type: String,
@@ -330,6 +351,10 @@ export default {
       selectedTestFramework: Object.keys(this.testFrameworks).length
         ? Object.keys(this.testFrameworks)[0]
         : null,
+      testCommand: Object.keys(this.testFrameworks).length
+        ? this.testFrameworks[Object.keys(this.testFrameworks)[0]]
+        : 'APPMAP=true',
+      testCommandEdit: !Object.keys(this.testFrameworks).length,
       currentStep: this.initialStep,
       isActionRunning: false,
       showProjectSelector: false,
@@ -351,6 +376,11 @@ export default {
         if (this.isActionRunning) {
           this.isActionRunning = false;
         }
+      },
+    },
+    selectedTestFramework: {
+      handler() {
+        this.testCommand = this.testFrameworks[this.selectedTestFramework];
       },
     },
   },
@@ -407,11 +437,13 @@ export default {
       this.isActionRunning = true;
 
       try {
-        await this.onAction(
-          this.selectedLanguage,
-          this.currentStep,
-          this.selectedTestFramework
-        );
+        const data = {};
+
+        if (this.currentStep === Steps.RECORD_APPMAPS) {
+          data.command = this.testCommand;
+        }
+
+        await this.onAction(this.selectedLanguage, this.currentStep, data);
       } catch (e) {
         console.error(e);
       }
@@ -433,6 +465,12 @@ export default {
     },
     openLocalAppmaps() {
       this.$root.$emit('openLocalAppmaps');
+    },
+    makeTestCommandEditable() {
+      this.testCommandEdit = true;
+      this.$nextTick(() => {
+        this.$refs.testCommandInput.focus();
+      });
     },
     select(event) {
       if (document.selection) {
@@ -565,6 +603,49 @@ a.qs-button {
     sans-serif;
   color: #8dc149;
   white-space: break-spaces;
+}
+
+.qs-code-edit {
+  margin-bottom: 25px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #454545;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: #8dc149;
+  white-space: break-spaces;
+
+  &__input {
+    margin: 0;
+    flex: 1;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    font: inherit;
+    font-family: 'IBM Plex Mono', 'Helvetica Monospaced', Helvetica, Arial,
+      sans-serif;
+    color: inherit;
+    background: transparent;
+    outline: none;
+    appearance: none;
+  }
+
+  &__btn {
+    border: 1px solid #454545;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 16px;
+    background: transparent;
+    color: $gray6;
+    font: inherit;
+    line-height: 18px;
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+  }
 }
 
 .qs-loader {
