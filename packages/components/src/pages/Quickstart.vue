@@ -151,8 +151,12 @@
       <section class="qs-step" v-if="currentStep === 3">
         <div class="qs-step__head">
           <h1 class="qs-title">Record AppMaps</h1>
-          <select class="qs-select">
-            <option v-for="framework in testFrameworks" :key="framework">
+          <select class="qs-select" v-model="selectedTestFramework">
+            <option
+              v-for="framework in Object.keys(testFrameworks)"
+              :key="framework"
+              :value="framework"
+            >
               {{ framework }}
             </option>
           </select>
@@ -162,7 +166,9 @@
             An easy way to create AppMaps is by running your tests. This will
             run a standard command to run your tests and generate AppMap data.
           </p>
-          <code class="qs-code" @click="select">{{ runTestsSnippet }}</code>
+          <code class="qs-code" @click="select">{{
+            testFrameworks[selectedTestFramework]
+          }}</code>
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
             Run tests to create AppMaps
           </button>
@@ -280,18 +286,14 @@ export default {
       default: null,
     },
     testFrameworks: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     installSnippets: {
       type: Object,
       default: () => {},
     },
     appmapYmlSnippet: {
-      type: String,
-      default: '',
-    },
-    runTestsSnippet: {
       type: String,
       default: '',
     },
@@ -325,8 +327,8 @@ export default {
   data() {
     return {
       selectedLanguage: this.language,
-      selectedTestFramework: this.testFrameworks.length
-        ? this.testFrameworks[0]
+      selectedTestFramework: Object.keys(this.testFrameworks).length
+        ? Object.keys(this.testFrameworks)[0]
         : null,
       currentStep: this.initialStep,
       isActionRunning: false,
