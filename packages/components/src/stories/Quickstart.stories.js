@@ -40,7 +40,7 @@ export default {
         path: '/one/more/path/to/appmap',
       },
     ],
-    onAction(language, step) {
+    onAction(language, step, data = {}) {
       return new Promise((resolve) => {
         setTimeout(() => {
           this.$set(
