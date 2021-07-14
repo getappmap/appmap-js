@@ -6,7 +6,7 @@
           <button
             class="qs-head__btn"
             type="button"
-            v-if="currentStep !== 1"
+            v-if="canGoPrevStep"
             @click="prevStep"
           >
             <StepLeftIcon class="qs-head__btn-icon" />
@@ -19,7 +19,7 @@
           <button
             class="qs-head__btn"
             type="button"
-            v-if="currentStep !== stepsCount"
+            v-if="canGoNextStep"
             @click="nextStep"
           >
             <StepRightIcon class="qs-head__btn-icon" />
@@ -39,7 +39,7 @@
             </option>
           </select>
         </div>
-        <div class="qs-step__block" v-if="!step1Completed && !error">
+        <div class="qs-step__block" v-if="!step1Completed && !step1Failed">
           <p v-if="selectedLanguage === 'ruby'">
             This will add the following snippet to the top of your Gemfile and
             run bundle to install the AppMap gem.
@@ -60,24 +60,7 @@
           </button>
           <QuickstartLoader v-if="isActionRunning" />
         </div>
-        <div class="qs-step__error" v-if="error">
-          <span class="qs-step__error-title">{{ error }}</span>
-          <ol class="qs-step__error-list">
-            <li class="qs-step__error-list-item">Review the console output</li>
-            <li class="qs-step__error-list-item">Make necessary adjustments</li>
-            <li class="qs-step__error-list-item">
-              <a href="#">Try again to install</a>
-            </li>
-          </ol>
-          <a
-            class="qs-step__error-button qs-button qs-button--bordered"
-            href="https://appland.com/company/contact-us"
-            target="_blank"
-            rel="noopener noreferrer"
-            >For further assistance please contact us</a
-          >
-        </div>
-        <div class="qs-step__success" v-if="step1Completed && !error">
+        <div class="qs-step__success" v-if="step1Completed">
           <span class="qs-step__success-title">
             <SuccessIcon class="qs-step__success-icon" />
             Agent installed
@@ -90,12 +73,20 @@
             Next step : Configure AppMap ->
           </button>
         </div>
+        <div v-if="step1Failed">
+          <QuickstartError
+            v-for="(error, index) in steps[0]['errors']"
+            :key="index"
+            :code="error.code"
+            :message="error.message"
+          />
+        </div>
       </section>
       <section class="qs-step" v-if="currentStep === 2">
         <div class="qs-step__head">
           <h1 class="qs-title">Configure AppMap</h1>
         </div>
-        <div class="qs-step__block" v-if="!step2Completed">
+        <div class="qs-step__block" v-if="!step2Completed && !step2Failed">
           <p v-if="selectedLanguage === 'ruby'">
             This will create an appmap.yml config file in the root directory of
             your project. This will tell AppMap what code to record. You can run
@@ -138,6 +129,14 @@
           >
             Next step : Record AppMaps ->
           </button>
+        </div>
+        <div v-if="step2Failed">
+          <QuickstartError
+            v-for="(error, index) in steps[1]['errors']"
+            :key="index"
+            :code="error.code"
+            :message="error.message"
+          />
         </div>
       </section>
       <section class="qs-step" v-if="currentStep === 3">
@@ -201,6 +200,14 @@
             >
               Next step : View AppMaps ->
             </button>
+          </div>
+          <div v-if="step3Failed">
+            <QuickstartError
+              v-for="(error, index) in steps[2]['errors']"
+              :key="index"
+              :code="error.code"
+              :message="error.message"
+            />
           </div>
         </div>
       </section>
@@ -295,6 +302,7 @@ import HelpIcon from '@/assets/quickstart/help.svg';
 import StepLeftIcon from '@/assets/quickstart/arrow-left.svg';
 import StepRightIcon from '@/assets/quickstart/arrow-right.svg';
 import SuccessIcon from '@/assets/quickstart/success.svg';
+import QuickstartError from '@/components/quickstart/QuickstartError.vue';
 import QuickstartLoader from '@/components/quickstart/QuickstartLoader.vue';
 
 export const Steps = {
@@ -312,6 +320,7 @@ export default {
     StepLeftIcon,
     StepRightIcon,
     SuccessIcon,
+    QuickstartError,
     QuickstartLoader,
   },
 
@@ -336,7 +345,7 @@ export default {
       type: Number,
       default: 1,
     },
-    stepsState: {
+    steps: {
       type: Array,
       default: () => [],
     },
@@ -353,9 +362,6 @@ export default {
     },
     onStep: {
       type: Function,
-    },
-    error: {
-      type: String,
     },
   },
 
@@ -385,7 +391,7 @@ export default {
         }
       },
     },
-    stepsState: {
+    steps: {
       handler() {
         if (this.isActionRunning) {
           this.isActionRunning = false;
@@ -403,14 +409,35 @@ export default {
     stepsCount() {
       return Object.keys(Steps).length;
     },
+    canGoPrevStep() {
+      return (
+        this.currentStep !== 1 &&
+        this.steps[this.currentStep - 2].state !== 'incomplete'
+      );
+    },
+    canGoNextStep() {
+      return (
+        this.currentStep !== this.stepsCount &&
+        this.steps[this.currentStep - 1].state !== 'incomplete'
+      );
+    },
     step1Completed() {
-      return this.stepsState[0] === 'complete';
+      return this.steps[0].state === 'complete';
+    },
+    step1Failed() {
+      return this.steps[0].state === 'error';
     },
     step2Completed() {
-      return this.stepsState[1] === 'complete';
+      return this.steps[1].state === 'complete';
+    },
+    step2Failed() {
+      return this.steps[1].state === 'error';
     },
     step3Completed() {
-      return this.stepsState[2] === 'complete';
+      return this.steps[2].state === 'complete';
+    },
+    step3Failed() {
+      return this.steps[2].state === 'error';
     },
     languages() {
       const languages = {
@@ -745,30 +772,6 @@ a.qs-button {
 
     &-next-step {
       margin: 40px 0 55px;
-    }
-  }
-
-  &__error {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    &-title {
-      margin-top: 45px;
-      display: inline-flex;
-      align-items: center;
-      font-size: 20px;
-      font-weight: 500;
-      color: #ff0000;
-    }
-
-    &-list {
-      margin: 12px 0 0;
-      padding-left: 20px;
-    }
-
-    &-button {
-      margin: 30px 0 35px;
     }
   }
 }

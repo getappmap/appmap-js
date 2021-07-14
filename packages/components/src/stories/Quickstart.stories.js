@@ -9,7 +9,23 @@ export default {
       minitest: 'APPMAP=true bundle exec rails test',
       rspec: 'APPMAP=true bundle exec rake',
     },
-    stepsState: ['incomplete', 'incomplete', 'incomplete'],
+    steps: [
+      {
+        state: 'incomplete',
+        errors: [
+          {
+            code: 'ERROR',
+            message: 'The AppMap agent was not installed',
+          },
+        ],
+      },
+      {
+        state: 'incomplete',
+      },
+      {
+        state: 'incomplete',
+      },
+    ],
     installSnippets: {
       ruby: 'gem "appmap", "= 0.53.0", :groups => [:development, :test]',
       java: 'java -jar appmap.jar',
@@ -53,16 +69,16 @@ export default {
       console.log(data);
       return new Promise((resolve) => {
         setTimeout(() => {
-          this.$set(
-            this.stepsState,
-            Object.values(Steps).indexOf(step),
-            'complete'
-          );
+          const index = Object.values(Steps).indexOf(step);
+          const stepData = this.steps[index];
+
+          stepData.state = 'complete';
+
+          this.$set(this.steps, index, stepData);
           resolve(true);
         }, 1000);
       });
     },
-    // error: 'The AppMap agent was not installed',
   },
 };
 
@@ -78,8 +94,5 @@ export const quickstart = (args, { argTypes }) => ({
       {name: 'Python', path: '/'},
     ]);
     */
-    this.$refs.quickstart.$on('openAppmap', (path) => {
-      console.log(path);
-    });
   },
 });
