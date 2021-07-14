@@ -41,6 +41,7 @@ export default {
       },
     ],
     onAction(language, step, data = {}) {
+      console.log(data);
       return new Promise((resolve) => {
         setTimeout(() => {
           this.$set(
