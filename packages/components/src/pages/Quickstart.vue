@@ -58,11 +58,7 @@
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
             Install the AppMap agent
           </button>
-          <div class="qs-loader" v-if="isActionRunning">
-            <div class="qs-loader__dot"></div>
-            <div class="qs-loader__dot"></div>
-            <div class="qs-loader__dot"></div>
-          </div>
+          <QuickstartLoader v-if="isActionRunning" />
         </div>
         <div class="qs-step__error" v-if="error">
           <span class="qs-step__error-title">{{ error }}</span>
@@ -122,11 +118,7 @@
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
             Create appmap.yml config file
           </button>
-          <div class="qs-loader" v-if="isActionRunning">
-            <div class="qs-loader__dot"></div>
-            <div class="qs-loader__dot"></div>
-            <div class="qs-loader__dot"></div>
-          </div>
+          <QuickstartLoader v-if="isActionRunning" />
         </div>
         <div class="qs-step__success" v-if="step2Completed">
           <span class="qs-step__success-title">
@@ -190,15 +182,10 @@
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
             Run tests to create AppMaps
           </button>
-          <div
-            class="qs-loader"
+          <QuickstartLoader
             v-if="isActionRunning"
-            :data-process="appmapsProgressText"
-          >
-            <div class="qs-loader__dot"></div>
-            <div class="qs-loader__dot"></div>
-            <div class="qs-loader__dot"></div>
-          </div>
+            :text="appmapsProgressText"
+          />
           <div
             class="qs-step__success"
             v-if="step3Completed && !isActionRunning"
@@ -222,15 +209,40 @@
           <h1 class="qs-title">Open AppMaps</h1>
         </div>
         <div class="qs-step__block">
+          <p>You have completed the Quickstart.</p>
           <p>We’ve identified a few AppMaps you may want to check out first.</p>
-          <p v-for="appmap in appmaps" :key="appmap.path">
-            <a href="#" @click="openAppmap(appmap.path)">{{ appmap.name }}</a>
-          </p>
+          <table class="qs-appmaps-table">
+            <colgroup>
+              <col width="70%" />
+              <col width="10%" />
+              <col width="10%" />
+              <col width="10%" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>AppMap</th>
+                <th>Requests</th>
+                <th>SQL queries</th>
+                <th>Functions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="appmap in appmaps"
+                :key="appmap.path"
+                @click="openAppmap(appmap.path)"
+              >
+                <td>{{ appmap.name }}</td>
+                <td>{{ appmap.requests }}</td>
+                <td>{{ appmap.sqlQueries }}</td>
+                <td>{{ appmap.functions }}</td>
+              </tr>
+            </tbody>
+          </table>
           <p>
             Browse the
             <a href="#" @click="openLocalAppmaps">local AppMaps</a> and open any
-            from the list. For more information, go
-            <a href="https://appland.com/docs/reference/vscode">here</a>
+            from the list.
           </p>
         </div>
       </section>
@@ -283,6 +295,7 @@ import HelpIcon from '@/assets/quickstart/help.svg';
 import StepLeftIcon from '@/assets/quickstart/arrow-left.svg';
 import StepRightIcon from '@/assets/quickstart/arrow-right.svg';
 import SuccessIcon from '@/assets/quickstart/success.svg';
+import QuickstartLoader from '@/components/quickstart/QuickstartLoader.vue';
 
 export const Steps = {
   INSTALL_AGENT: 1,
@@ -299,6 +312,7 @@ export default {
     StepLeftIcon,
     StepRightIcon,
     SuccessIcon,
+    QuickstartLoader,
   },
 
   props: {
@@ -642,52 +656,10 @@ a.qs-button {
     color: $gray6;
     font: inherit;
     line-height: 18px;
+    white-space: nowrap;
     outline: none;
     appearance: none;
     cursor: pointer;
-  }
-}
-
-.qs-loader {
-  margin: 10px 0;
-  display: inline-flex;
-  align-items: center;
-
-  &[data-process]::after {
-    content: attr(data-process);
-    margin-left: 16px;
-    color: #a26eff;
-  }
-
-  &__dot {
-    border-radius: 50%;
-    width: 10px;
-    height: 10px;
-    background-color: #a26eff;
-    animation: qs-load 1s infinite ease-in-out;
-
-    &:not(:last-child) {
-      margin-right: 2px;
-    }
-
-    &:nth-child(1) {
-      animation-delay: -0.6s;
-    }
-
-    &:nth-child(2) {
-      animation-delay: -0.2s;
-    }
-  }
-}
-
-@keyframes qs-load {
-  0%,
-  80%,
-  100% {
-    transform: scale(0.5);
-  }
-  40% {
-    transform: scale(1);
   }
 }
 
@@ -822,6 +794,52 @@ a.qs-button {
 
   &__text {
     line-height: 18px;
+  }
+}
+
+.qs-appmaps-table {
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  width: 100%;
+
+  th,
+  td {
+    border: none;
+    padding: 0 1rem;
+    font-weight: normal;
+    color: $gray6;
+    text-align: left;
+    white-space: nowrap;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:not(:first-child) {
+      font-size: 12px;
+    }
+  }
+
+  th {
+    border-bottom: 0.5rem solid transparent;
+    line-height: 1;
+
+    &:nth-child(n + 3) {
+      border-left: 1px solid currentColor;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #242c41;
+      cursor: pointer;
+    }
+
+    td {
+      padding-top: 2px;
+      padding-bottom: 2px;
+      color: #a26eff;
+    }
   }
 }
 
