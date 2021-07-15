@@ -368,9 +368,6 @@ export default {
   data() {
     return {
       selectedLanguage: this.language,
-      selectedTestFramework: Object.keys(this.testFrameworks).length
-        ? Object.keys(this.testFrameworks)[0]
-        : null,
       testCommand: Object.keys(this.testFrameworks).length
         ? this.testFrameworks[Object.keys(this.testFrameworks)[0]]
         : 'APPMAP=true',
@@ -456,6 +453,11 @@ export default {
       return `${this.appmapsProgress} AppMap${
         this.appmapsProgress !== 1 ? 's' : ''
       } created`;
+    },
+    selectedTestFramework() {
+      return Object.keys(this.testFrameworks).length
+        ? Object.keys(this.testFrameworks)[0]
+        : null;
     },
   },
 
