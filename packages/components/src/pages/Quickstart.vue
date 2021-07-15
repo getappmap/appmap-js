@@ -842,6 +842,7 @@ a.qs-button {
       padding-top: 2px;
       padding-bottom: 2px;
       color: #a26eff;
+      white-space: normal;
     }
   }
 }
