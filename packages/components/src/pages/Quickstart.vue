@@ -44,14 +44,6 @@
             This will add the following snippet to the top of your Gemfile and
             run bundle to install the AppMap gem.
           </p>
-          <p v-else-if="selectedLanguage === 'java'">
-            This will add the following snippet to the top of your Java package
-            and run Java to install the AppMap package.
-          </p>
-          <p v-else-if="selectedLanguage === 'python'">
-            This will add the following snippet to the top of your Python
-            imports and run pip to install the AppMap package.
-          </p>
           <code class="qs-code" @click="select">{{
             installSnippets[selectedLanguage]
           }}</code>
@@ -88,18 +80,6 @@
         </div>
         <div class="qs-step__block" v-if="!step2Completed && !step2Failed">
           <p v-if="selectedLanguage === 'ruby'">
-            This will create an appmap.yml config file in the root directory of
-            your project. This will tell AppMap what code to record. You can run
-            these defaults or add more packages, gems, or specific functions.
-            You can edit this file at any time.
-          </p>
-          <p v-else-if="selectedLanguage === 'java'">
-            This will create an appmap.yml config file in the root directory of
-            your project. This will tell AppMap what code to record. You can run
-            these defaults or add more packages, gems, or specific functions.
-            You can edit this file at any time.
-          </p>
-          <p v-else-if="selectedLanguage === 'python'">
             This will create an appmap.yml config file in the root directory of
             your project. This will tell AppMap what code to record. You can run
             these defaults or add more packages, gems, or specific functions.
@@ -312,6 +292,10 @@ export const Steps = {
   OPEN_APPMAPS: 4,
 };
 
+const supportedLanguages = {
+  ruby: 'Ruby',
+};
+
 export default {
   name: 'Quickstart',
 
@@ -430,11 +414,7 @@ export default {
       return this.steps[2].state === 'error';
     },
     languages() {
-      const languages = {
-        ruby: 'Ruby',
-        java: 'Java',
-        python: 'Python',
-      };
+      const languages = { ...supportedLanguages };
 
       if (Object.keys(languages).includes(this.language)) {
         languages[this.language] += ' (detected)';
