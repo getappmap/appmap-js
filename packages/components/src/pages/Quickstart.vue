@@ -388,13 +388,6 @@ export default {
         }
       },
     },
-    steps: {
-      handler() {
-        if (this.isActionRunning) {
-          this.isActionRunning = false;
-        }
-      },
-    },
     selectedTestFramework: {
       handler() {
         this.testCommand = this.testFrameworks[this.selectedTestFramework];
@@ -489,6 +482,8 @@ export default {
         await this.onAction(this.selectedLanguage, this.currentStep, data);
       } catch (e) {
         console.error(e);
+      } finally {
+        this.isActionRunning = false;
       }
     },
     projectSelector(projects) {
