@@ -142,13 +142,14 @@
             run a standard command to run your tests and generate AppMap data.
           </p>
           <div class="qs-code-edit">
-            <input
-              class="qs-code-edit__input"
+            <textarea
+              class="qs-code-edit__textarea"
               type="text"
               v-model="testCommand"
               :readonly="!testCommandEdit"
               ref="testCommandInput"
-            />
+              :style="testCommandStyles"
+            ></textarea>
             <button
               class="qs-code-edit__btn"
               type="button"
@@ -359,6 +360,7 @@ export default {
         ? this.testFrameworks[Object.keys(this.testFrameworks)[0]]
         : 'APPMAP=true',
       testCommandEdit: !Object.keys(this.testFrameworks).length,
+      testCommandHeight: 22,
       currentStep: this.initialStep,
       isActionRunning: false,
       showProjectSelector: false,
@@ -385,8 +387,14 @@ export default {
       },
     },
     selectedTestFramework: {
+      immediate: true,
       handler() {
         this.testCommand = this.testFrameworks[this.selectedTestFramework];
+      },
+    },
+    testCommand: {
+      handler() {
+        this.testCommandHeight = this.testCommand.split('\n').length * 22;
       },
     },
   },
@@ -438,6 +446,9 @@ export default {
       return `${this.appmapsProgress} AppMap${
         this.appmapsProgress !== 1 ? 's' : ''
       } created`;
+    },
+    testCommandStyles() {
+      return `height:${this.testCommandHeight}px`;
     },
   },
 
@@ -631,33 +642,48 @@ a.qs-button {
 }
 
 .qs-code-edit {
-  margin-bottom: 25px;
-  height: 44px;
+  position: relative;
   display: flex;
-  align-items: center;
+  margin-bottom: 25px;
   border: 1px solid #454545;
   border-radius: 8px;
-  padding: 5px 10px;
+  padding: 15px 10px;
   font-size: 12px;
   color: #8dc149;
   white-space: break-spaces;
 
-  &__input {
+  &__textarea {
     margin: 0;
     flex: 1;
     border: 0;
     border-radius: 0;
-    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    min-height: 22px;
+    max-height: 220px;
+    padding: 0 5px;
     font: inherit;
     font-family: 'IBM Plex Mono', 'Helvetica Monospaced', Helvetica, Arial,
       sans-serif;
+    line-height: 22px;
     color: inherit;
-    background: transparent;
+    white-space: pre;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 22px,
+      $vs-code-gray1 22px,
+      $vs-code-gray1 44px
+    );
     outline: none;
     appearance: none;
+    resize: none;
   }
 
   &__btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     border: 1px solid #454545;
     border-radius: 8px;
     display: inline-flex;
