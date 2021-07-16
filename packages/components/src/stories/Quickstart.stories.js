@@ -41,7 +41,6 @@ export default {
  # These are just examples.
  - gem: activerecord
  - gem: devise`,
-    // appmapsProgress: 1,
     appmaps: [
       {
         name: 'Appmap 1',

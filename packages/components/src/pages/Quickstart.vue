@@ -137,7 +137,25 @@
           </select>
         </div>
         <div class="qs-step__block">
-          <p>
+          <div v-if="step3Failed">
+            <QuickstartError
+              v-for="(error, index) in steps[2]['errors']"
+              :key="index"
+              :code="error.code"
+              :message="error.message"
+            >
+              <ol>
+                <li>Review the console output</li>
+                <li>Make necessary adjustments</li>
+                <li>Re-run tests</li>
+              </ol>
+              <p>
+                Note: You can run your tests as normal from the console with
+                APPMAP=true
+              </p>
+            </QuickstartError>
+          </div>
+          <p v-if="!step3Completed && !step3Failed">
             An easy way to create AppMaps is by running your tests. This will
             run a standard command to run your tests and generate AppMap data.
           </p>
@@ -162,34 +180,7 @@
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
             Run tests to create AppMaps
           </button>
-          <QuickstartLoader
-            v-if="isActionRunning"
-            :text="appmapsProgressText"
-          />
-          <div
-            class="qs-step__success"
-            v-if="step3Completed && !isActionRunning"
-          >
-            <span class="qs-step__success-title">
-              <SuccessIcon class="qs-step__success-icon" />
-              AppMaps recorded
-            </span>
-            <button
-              type="button"
-              class="qs-step__success-next-step qs-button"
-              @click="nextStep"
-            >
-              Next step : View AppMaps ->
-            </button>
-          </div>
-          <div v-if="step3Failed">
-            <QuickstartError
-              v-for="(error, index) in steps[2]['errors']"
-              :key="index"
-              :code="error.code"
-              :message="error.message"
-            />
-          </div>
+          <QuickstartLoader v-if="isActionRunning" />
         </div>
       </section>
       <section class="qs-step" v-if="currentStep === 4">
@@ -334,10 +325,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    appmapsProgress: {
-      type: Number,
-      default: 0,
-    },
     appmaps: {
       type: Array,
       default: () => [],
@@ -442,11 +429,6 @@ export default {
 
       return languages;
     },
-    appmapsProgressText() {
-      return `${this.appmapsProgress} AppMap${
-        this.appmapsProgress !== 1 ? 's' : ''
-      } created`;
-    },
     testCommandStyles() {
       return `height:${this.testCommandHeight}px`;
     },
@@ -474,7 +456,7 @@ export default {
         const data = {};
 
         if (this.currentStep === Steps.RECORD_APPMAPS) {
-          data.command = this.testCommand;
+          data.command = this.testCommand.split('\n');
         }
 
         await this.onAction(this.selectedLanguage, this.currentStep, data);

@@ -22,9 +22,8 @@ context('Quickstart', () => {
     cy.get('.qs-head__btn-wrap').last().click();
     cy.get('.qs-title').should('contain.text', 'Record AppMaps');
     cy.get('.qs-button').contains('Run tests to create AppMaps').click();
-    cy.wait(1000).get('.qs-step__success-next-step').click();
 
-    cy.get('.qs-head__btn-wrap').last().click();
+    cy.wait(1000).get('.qs-head__btn-wrap').last().click();
     cy.get('.qs-title').should('contain.text', 'Open AppMaps');
 
     cy.get('.qs-head__btn-wrap').first().click();
@@ -51,10 +50,7 @@ context('Quickstart', () => {
     cy.get('.qs-title').should('contain.text', 'Record AppMaps');
     cy.get('.qs-button').contains('Run tests to create AppMaps').click();
     cy.get('.qs-loader').should('be.visible');
-    cy.wait(1000)
-      .get('.qs-step__success-title')
-      .should('contain.text', 'AppMaps recorded');
-    cy.get('.qs-step__success-next-step').click();
+    cy.wait(1000).get('.qs-head__btn-wrap').last().click();
 
     cy.get('.qs-title').should('contain.text', 'Open AppMaps');
   });
