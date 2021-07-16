@@ -1,6 +1,7 @@
 <template>
   <div class="qs-error">
     <span class="qs-error__title">{{ message }}</span>
+    <slot></slot>
   </div>
 </template>
 
@@ -28,7 +29,7 @@ export default {
   align-items: flex-start;
 
   &__title {
-    margin-top: 45px;
+    margin-top: 25px;
     display: inline-flex;
     align-items: center;
     font-size: 20px;
