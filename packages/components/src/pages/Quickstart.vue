@@ -47,10 +47,10 @@
           <code class="qs-code" @click="select">{{
             installSnippets[selectedLanguage]
           }}</code>
-          <button class="qs-button" v-if="!isActionRunning" @click="runAction">
+          <button class="qs-button" v-if="!step1Progress" @click="runAction">
             Install the AppMap agent
           </button>
-          <QuickstartLoader v-if="isActionRunning" />
+          <QuickstartLoader v-if="step1Progress" />
         </div>
         <div class="qs-step__success" v-if="step1Completed">
           <span class="qs-step__success-title">
@@ -86,10 +86,10 @@
             You can edit this file at any time.
           </p>
           <code class="qs-code" @click="select">{{ appmapYmlSnippet }}</code>
-          <button class="qs-button" v-if="!isActionRunning" @click="runAction">
+          <button class="qs-button" v-if="!step2Progress" @click="runAction">
             Create appmap.yml config file
           </button>
-          <QuickstartLoader v-if="isActionRunning" />
+          <QuickstartLoader v-if="step2Progress" />
         </div>
         <div class="qs-step__success" v-if="step2Completed">
           <span class="qs-step__success-title">
@@ -177,10 +177,10 @@
               Edit
             </button>
           </div>
-          <button class="qs-button" v-if="!isActionRunning" @click="runAction">
+          <button class="qs-button" v-if="!step3Progress" @click="runAction">
             Run tests to create AppMaps
           </button>
-          <QuickstartLoader v-if="isActionRunning" />
+          <QuickstartLoader v-if="step3Progress" />
         </div>
       </section>
       <section class="qs-step" v-if="currentStep === 4">
@@ -349,7 +349,6 @@ export default {
       testCommandEdit: !Object.keys(this.testFrameworks).length,
       testCommandHeight: 22,
       currentStep: this.initialStep,
-      isActionRunning: false,
       showProjectSelector: false,
       projects: [],
       selectedProject: null,
@@ -402,17 +401,26 @@ export default {
         this.steps[this.currentStep - 1].state !== 'incomplete'
       );
     },
+    step1Progress() {
+      return this.steps[0].state === 'progress';
+    },
     step1Completed() {
       return this.steps[0].state === 'complete';
     },
     step1Failed() {
       return this.steps[0].state === 'error';
     },
+    step2Progress() {
+      return this.steps[1].state === 'progress';
+    },
     step2Completed() {
       return this.steps[1].state === 'complete';
     },
     step2Failed() {
       return this.steps[1].state === 'error';
+    },
+    step3Progress() {
+      return this.steps[2].state === 'progress';
     },
     step3Completed() {
       return this.steps[2].state === 'complete';
@@ -450,8 +458,6 @@ export default {
         return;
       }
 
-      this.isActionRunning = true;
-
       try {
         const data = {};
 
@@ -462,8 +468,6 @@ export default {
         await this.onAction(this.selectedLanguage, this.currentStep, data);
       } catch (e) {
         console.error(e);
-      } finally {
-        this.isActionRunning = false;
       }
     },
     projectSelector(projects) {

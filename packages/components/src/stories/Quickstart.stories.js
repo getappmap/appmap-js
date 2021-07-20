@@ -67,12 +67,15 @@ export default {
     onAction(language, step, data = {}) {
       console.log(data);
       return new Promise((resolve) => {
+        const index = Object.values(Steps).indexOf(step);
+        const stepData = this.steps[index];
+
         setTimeout(() => {
-          const index = Object.values(Steps).indexOf(step);
-          const stepData = this.steps[index];
-
+          stepData.state = 'progress';
+          this.$set(this.steps, index, stepData);
+        }, 0);
+        setTimeout(() => {
           stepData.state = 'complete';
-
           this.$set(this.steps, index, stepData);
           resolve(true);
         }, 1000);
