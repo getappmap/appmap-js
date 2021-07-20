@@ -159,7 +159,7 @@
             An easy way to create AppMaps is by running your tests. This will
             run a standard command to run your tests and generate AppMap data.
           </p>
-          <div class="qs-code-edit">
+          <div class="qs-code-edit" v-if="!step3Completed && !step3Failed">
             <textarea
               class="qs-code-edit__textarea"
               type="text"
@@ -177,10 +177,27 @@
               Edit
             </button>
           </div>
-          <button class="qs-button" v-if="!step3Progress" @click="runAction">
+          <div class="qs-step__success" v-if="step3Completed">
+            <span class="qs-step__success-title">
+              <SuccessIcon class="qs-step__success-icon" />
+              {{ appmapsProgressText }}
+            </span>
+            <button
+              type="button"
+              class="qs-step__success-next-step qs-button"
+              @click="nextStep"
+            >
+              Next step : Open AppMaps ->
+            </button>
+          </div>
+          <button
+            class="qs-button"
+            v-if="!step3Completed && !step3Progress"
+            @click="runAction"
+          >
             Run tests to create AppMaps
           </button>
-          <QuickstartLoader v-if="step3Progress" />
+          <QuickstartLoader v-if="step3Progress" :text="appmapsProgressText" />
         </div>
       </section>
       <section class="qs-step" v-if="currentStep === 4">
@@ -325,6 +342,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    appmapsProgress: {
+      type: Number,
+      default: 0,
+    },
     appmaps: {
       type: Array,
       default: () => [],
@@ -436,6 +457,11 @@ export default {
       }
 
       return languages;
+    },
+    appmapsProgressText() {
+      return `${this.appmapsProgress} AppMap${
+        this.appmapsProgress !== 1 ? 's' : ''
+      } created`;
     },
     testCommandStyles() {
       return `height:${this.testCommandHeight}px`;
