@@ -954,8 +954,8 @@ a.btn--quickstart {
 }
 
 .qs {
-  h1 {
-    text-shadow: $text-shadow; //0px 0px 4px $gray2;
+  &-title {
+    text-shadow: $text-shadow;
   }
 }
 
