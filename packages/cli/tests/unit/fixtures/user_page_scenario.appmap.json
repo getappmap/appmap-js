@@ -66,7 +66,7 @@
       {
         "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
         "canonicalization_algorithm": "info",
-        "digest": "93dc3d17da0bade259a0e43b2a64e2aa531eee912af6ab49e69df90473d3fbdb",
+        "digest": "e09798c3872822cd6aee88e0de2b54d06e05bf1f4c1bb3c21ca5d422e1938980",
         "fingerprint_algorithm": "sha256"
       },
       {
@@ -108,7 +108,7 @@
       {
         "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
         "canonicalization_algorithm": "update",
-        "digest": "1e872ddd5516f14ee94fca9aea143a02d877794be83e5649e9dce32551c7eef0",
+        "digest": "2ab423434b33202dc6d67a42db9249a87ad52b4dec60489a996eb8400cd410da",
         "fingerprint_algorithm": "sha256"
       }
     ]
@@ -139,10 +139,7 @@
                           "type": "function",
                           "location": "JSON::Ext::Generator::State#generate",
                           "static": false,
-                          "labels": [
-                            "serialization",
-                            "json"
-                          ]
+                          "labels": ["serialization", "json"]
                         }
                       ]
                     }
@@ -157,10 +154,7 @@
                       "type": "function",
                       "location": "JSON::Ext::Parser#parse",
                       "static": false,
-                      "labels": [
-                        "serialization",
-                        "json"
-                      ]
+                      "labels": ["serialization", "json"]
                     }
                   ]
                 }
@@ -187,20 +181,14 @@
                   "type": "function",
                   "location": "/Users/kgilpin/source/appland/appmap-ruby/lib/appmap/hook/method.rb:49",
                   "static": false,
-                  "labels": [
-                    "http",
-                    "io"
-                  ]
+                  "labels": ["http", "io"]
                 },
                 {
                   "name": "request",
                   "type": "function",
                   "location": "/Users/kgilpin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
                   "static": false,
-                  "labels": [
-                    "http",
-                    "io"
-                  ]
+                  "labels": ["http", "io"]
                 }
               ]
             }
@@ -225,30 +213,21 @@
                   "type": "function",
                   "location": "OpenSSL::Cipher#decrypt",
                   "static": false,
-                  "labels": [
-                    "security",
-                    "crypto"
-                  ]
+                  "labels": ["security", "crypto"]
                 },
                 {
                   "name": "final",
                   "type": "function",
                   "location": "OpenSSL::Cipher#final",
                   "static": false,
-                  "labels": [
-                    "security",
-                    "crypto"
-                  ]
+                  "labels": ["security", "crypto"]
                 },
                 {
                   "name": "encrypt",
                   "type": "function",
                   "location": "OpenSSL::Cipher#encrypt",
                   "static": false,
-                  "labels": [
-                    "security",
-                    "crypto"
-                  ]
+                  "labels": ["security", "crypto"]
                 }
               ]
             }
@@ -267,10 +246,7 @@
                   "type": "function",
                   "location": "Digest::Instance#digest",
                   "static": false,
-                  "labels": [
-                    "security",
-                    "crypto"
-                  ]
+                  "labels": ["security", "crypto"]
                 }
               ]
             }

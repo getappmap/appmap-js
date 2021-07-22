@@ -26,9 +26,7 @@
       "repository": "git@github.com:applandinc/appland.git",
       "branch": "feature/show-sql-in-source-code-tab",
       "commit": "d52bd55d5a08f0e9b27760780bf2737829f5f25f",
-      "status_code": [
-        "M Gemfile.lock"
-      ],
+      "status_code": ["M Gemfile.lock"],
       "git_last_annotated_tag": null,
       "git_last_tag": "v0.17.1",
       "git_commits_since_last_annotated_tag": null,
@@ -37,10 +35,7 @@
     "name": "API::APIKeysController revoke an existing api key",
     "feature": "API::APIKeysController revoke",
     "feature_group": "API API keys",
-    "labels": [
-      "api key",
-      "api"
-    ],
+    "labels": ["api key", "api"],
     "recorder": {
       "name": "rspec"
     },
@@ -72,7 +67,7 @@
       {
         "appmap_digest": "7fecdd763d47626364364da02387f1fcbfe805123e806f08bacde96636cfc91d",
         "canonicalization_algorithm": "info",
-        "digest": "c1064e2f1302314204b19fa917a3627df98c582f4c3d8b0261a3688e06a9ff0f",
+        "digest": "bd63ed674a87494c9565d4bf7ecad797683528b8b83bbb66f27b334b6e303f67",
         "fingerprint_algorithm": "sha256"
       },
       {
@@ -114,7 +109,7 @@
       {
         "appmap_digest": "7fecdd763d47626364364da02387f1fcbfe805123e806f08bacde96636cfc91d",
         "canonicalization_algorithm": "update",
-        "digest": "00af1f41f569985c70a97d5a5d548bbb7cfce3cc7d5d19075e2e2f2b8481c1f9",
+        "digest": "a78760f0ae6eabb20403b812101d86c609294e36fff53be54dec71b1244076b0",
         "fingerprint_algorithm": "sha256"
       }
     ]
@@ -133,9 +128,7 @@
               "type": "function",
               "location": "app/models/api_key.rb:28",
               "static": true,
-              "labels": [
-                "security"
-              ]
+              "labels": ["security"]
             },
             {
               "name": "encode",
@@ -148,10 +141,7 @@
               "type": "function",
               "location": "app/models/api_key.rb:51",
               "static": true,
-              "labels": [
-                "security",
-                "provider.authenticate"
-              ]
+              "labels": ["security", "provider.authenticate"]
             },
             {
               "name": "decode",
@@ -170,9 +160,7 @@
               "type": "function",
               "location": "app/models/api_key.rb:40",
               "static": true,
-              "labels": [
-                "security"
-              ]
+              "labels": ["security"]
             }
           ]
         }
@@ -227,10 +215,7 @@
                           "type": "function",
                           "location": "JSON::Ext::Generator::State#generate",
                           "static": false,
-                          "labels": [
-                            "serialization",
-                            "json"
-                          ]
+                          "labels": ["serialization", "json"]
                         }
                       ]
                     }

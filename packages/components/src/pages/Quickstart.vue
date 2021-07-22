@@ -50,6 +50,10 @@
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
             Install the AppMap agent
           </button>
+          <!-- <p class="plop">
+            <a href="/" class="btn--quickstart">Quickstart</a>
+          </p> -->
+          
           <QuickstartLoader v-if="isActionRunning" />
         </div>
         <div class="qs-step__success" v-if="step1Completed">
@@ -711,7 +715,7 @@ a.qs-button {
     align-items: center;
     padding: 2px;
     background: transparent;
-    color: #c5c5c5;
+    color: $purps; //#c5c5c5;
     font: inherit;
     outline: none;
     line-height: 0;
@@ -720,7 +724,7 @@ a.qs-button {
 
     &:hover,
     &:active {
-      color: $base03;
+      color: lighten($purps,08); //$base03;
     }
 
     &-icon {
@@ -936,4 +940,27 @@ a.qs-button {
     opacity: 1;
   }
 }
+
+a.btn--quickstart {
+  background-color: $purps;
+  padding: .5rem 1rem;
+  border: 0;
+  transition: $transition;
+  color: $white;
+  border-radius: $border-radius;
+  &:hover {
+    background-color: darken($purps, 08);
+  }
+}
+
+.qs {
+  h1 {
+    text-shadow: $text-shadow; //0px 0px 4px $gray2;
+  }
+}
+
+.qs p.plop {
+  margin: 2rem 0;
+}
+
 </style>
