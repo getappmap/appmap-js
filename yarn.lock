@@ -38,9 +38,11 @@ __metadata:
   resolution: "@appland/appmap-validate@workspace:packages/validate"
   dependencies:
     ajv: ^8.6.0
+    ajv-error-tree: 0.0.2
     c8: ^7.7.2
     eslint: ^7.28.0
     prettier: ^2.3.1
+    treeify: ^1.1.0
     yaml: ^1.10.2
   bin:
     appmap-validate: lib/bin.js
@@ -54,6 +56,7 @@ __metadata:
     "@appland/models": "workspace:*"
     async: ^3.2.0
     chokidar: ^3.5.1
+    cli-progress: ^3.9.0
     console-table-printer: ^2.9.0
     crypto-js: ^4.0.0
     diff: ^5.0.0
@@ -79,8 +82,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/components@workspace:packages/components"
   dependencies:
-    "@appland/diagrams": "workspace:^1.1.0"
-    "@appland/models": "workspace:^1.0.6"
+    "@appland/diagrams": "workspace:^1.2.1"
+    "@appland/models": "workspace:^1.2.0"
     "@babel/core": ^7.13.1
     "@babel/node": ^7.13.0
     "@babel/preset-env": ^7.9.5
@@ -138,11 +141,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/diagrams@workspace:^1.1.0, @appland/diagrams@workspace:packages/diagrams":
+"@appland/diagrams@workspace:^1.2.1, @appland/diagrams@workspace:packages/diagrams":
   version: 0.0.0-use.local
   resolution: "@appland/diagrams@workspace:packages/diagrams"
   dependencies:
-    "@appland/models": "workspace:*"
+    "@appland/models": "workspace:^1.2.0"
     "@rollup/plugin-commonjs": ^18.1.0
     "@rollup/plugin-node-resolve": ^13.0.0
     "@rollup/plugin-replace": ^2.4.2
@@ -173,7 +176,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@workspace:*, @appland/models@workspace:^1.0.6, @appland/models@workspace:packages/models":
+"@appland/models@workspace:*, @appland/models@workspace:^1.2.0, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
@@ -5657,6 +5660,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ajv-error-tree@npm:0.0.2":
+  version: 0.0.2
+  resolution: "ajv-error-tree@npm:0.0.2"
+  checksum: ac1ffbecfa65522f217f523e552251623d6558f7a4f5cd02e436dd383a74b029fe493d7e3277fb3d714b9cd40b051fce4d24fc35b6ad6663ea9dc5eb2073f69a
+  languageName: node
+  linkType: hard
+
 "ajv-errors@npm:^1.0.0":
   version: 1.0.1
   resolution: "ajv-errors@npm:1.0.1"
@@ -7993,6 +8003,16 @@ __metadata:
   bin:
     highlight: bin/highlight
   checksum: 6d7ceeb10d4f364942b34d47fd211de00fc97149b2fdc2869c087531838a7a6a231c1f6ea573ed725f51dbb479bd9d09c9fcedd5891812d123af465111615d36
+  languageName: node
+  linkType: hard
+
+"cli-progress@npm:^3.9.0":
+  version: 3.9.0
+  resolution: "cli-progress@npm:3.9.0"
+  dependencies:
+    colors: ^1.1.2
+    string-width: ^4.2.0
+  checksum: 8c5d78a3226e9f25b447609454557c82a99c562880d4962941b0c5ec3d37c3b2679d3d592640fdbcd778168f60eeb4d08118432276b8f2306802d2951b196636
   languageName: node
   linkType: hard
 
@@ -24307,6 +24327,13 @@ resolve@1.1.7:
   bin:
     tree-kill: cli.js
   checksum: 967643efa4a231868232ea9d046c3ba7494ea6061fbb1e661c699b43ca0f0a14dad0782a631d915959d562830035166bab80ed726f9fe33b838af8a7516624ed
+  languageName: node
+  linkType: hard
+
+"treeify@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "treeify@npm:1.1.0"
+  checksum: 78db62f564d025ffd9ec0f89e9195ee343298db0eb2d54cd84bce2b7460d347a1d3ea14a75a7f04d3c45b87aa9eb4b0c8ecd7ab4fba9b456cf29c4c895f4fc1d
   languageName: node
   linkType: hard
 

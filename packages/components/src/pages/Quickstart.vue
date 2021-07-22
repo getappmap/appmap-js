@@ -270,7 +270,7 @@
 </template>
 
 <script>
-import HelpIcon from '@/assets/quickstart/help.svg';
+import HelpIcon from '@/assets/quickstart/question-circle-fill.svg';
 import StepLeftIcon from '@/assets/quickstart/arrow-left.svg';
 import StepRightIcon from '@/assets/quickstart/arrow-right.svg';
 import SuccessIcon from '@/assets/quickstart/success.svg';
@@ -551,15 +551,21 @@ body {
   }
 
   a {
-    color: #a26eff;
+    color: $purps;
     text-decoration: none;
   }
 }
 
 .qs-container {
-  margin-bottom: 12px;
-  border-radius: 8px;
+  margin: 1rem 0;
+  border-radius: .5rem;
   background: #1a1a1a;
+  display: flex;
+  flex-direction: row-reverse;
+  align-content: space-around;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.5rem;
 }
 
 .qs-button {
@@ -567,19 +573,23 @@ body {
   border-radius: 8px;
   display: inline-flex;
   align-items: center;
-  padding: 6px 16px;
-  background: #a26eff;
+  padding: .5rem 1rem;
+  background: $purps;
   color: $gray6;
   font: inherit;
-  line-height: 18px;
   outline: none;
   appearance: none;
   cursor: pointer;
+  transition: $transition;
 
   &--bordered {
-    border: 1px solid #a26eff;
+    border: 1px solid $purps;
     padding: 5px 15px;
     background: transparent;
+  }
+
+  &:hover {
+    background: darken($purps,08);
   }
 }
 
@@ -611,7 +621,7 @@ a.qs-button {
 }
 
 .qs-code {
-  margin-bottom: 25px;
+  margin: 1.5rem 0;
   display: block;
   border: 1px solid #454545;
   border-radius: 8px;
@@ -684,7 +694,7 @@ a.qs-button {
 
 .qs-head {
   margin-bottom: 6px;
-  padding: 6px 16px;
+  padding: .5rem 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -722,15 +732,17 @@ a.qs-button {
 
   &__step {
     margin: 0 5px;
+    text-align: center;
   }
 }
 
 .qs-step {
   max-width: 600px;
-  padding: 0 16px 16px;
 
   &__head {
     margin-bottom: 6px;
+    line-height: 18px
+    
   }
 
   &__success {
@@ -780,11 +792,12 @@ a.qs-button {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  margin-top: 1rem;
 
   &__icon {
-    margin: 0 15px;
-    width: 22px;
-    height: 22px;
+    margin: 0 1rem 0 0;
+    width: 24px;
+    height: 24px;
   }
 
   &__text {

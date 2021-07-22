@@ -20,7 +20,7 @@
             v-if="selectedObject || selectedLabel"
             @click.native="clearSelection"
           >
-            Clear selection
+            Clear map
           </v-details-button>
           <v-details-button icon="back" v-if="canGoBack" @click.native="goBack">
             Back to

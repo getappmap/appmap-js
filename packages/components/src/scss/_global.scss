@@ -1,0 +1,32 @@
+body {
+  font-size:16px;
+}
+
+a {
+  color: $purps;
+}
+
+.btn-qs {
+  border: none;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  padding: .5rem 1rem;
+  background: $purps;
+  color: $gray6;
+  font: inherit;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  transition: $transition;
+  
+  &--bordered {
+    border: 1px solid $purps;
+    padding: 5px 15px;
+    background: transparent;
+  }
+
+  &:hover {
+    background: darken($purps,08);
+  }
+}

@@ -48,7 +48,7 @@ export default {
 
 <style scoped lang="scss">
 .btn {
-  border-radius: 8px;
+  border-radius: .5rem;
   border-style: none;
   color: $gray6;
   padding: 0.5em 1em;
@@ -64,6 +64,9 @@ export default {
   }
   &--secondary {
     background-color: $blue;
+  }
+  &--quickstart {
+    background-color: $purps;
   }
   &--ghost {
     background-color: inherit;

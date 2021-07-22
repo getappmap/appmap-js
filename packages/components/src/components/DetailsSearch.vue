@@ -323,6 +323,7 @@ export default {
       margin: 0;
       padding: 0 2rem;
       list-style: none;
+      color: red;
 
       .details-search__block--labels & {
         margin: 0 -0.25rem -0.25rem;
@@ -337,7 +338,7 @@ export default {
       align-items: center;
       padding: 0.25rem 0;
       min-height: 2rem;
-      color: $base03;
+      color: $gray4; //$base03;
       cursor: pointer;
       overflow: hidden;
       z-index: 0;
