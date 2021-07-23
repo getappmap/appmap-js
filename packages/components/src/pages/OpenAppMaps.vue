@@ -8,7 +8,7 @@
         <div class="qs-step__block">
           <p>You have completed the Quickstart.</p>
           <p>We’ve identified a few AppMaps you may want to check out first.</p>
-          <table class="qs-appmaps-table">
+          <table class="qs-appmaps-table" v-if="appmaps.length">
             <colgroup>
               <col width="70%" />
               <col width="10%" />
@@ -36,6 +36,9 @@
               </tr>
             </tbody>
           </table>
+          <div v-else class="qs-noappmaps">
+            No AppMaps found in your project.
+          </div>
         </div>
       </section>
     </div>
@@ -101,7 +104,7 @@ body {
 .qs {
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   padding: 10px 22px;
   font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -217,6 +220,7 @@ a.qs-button {
 }
 
 .qs-help {
+  margin-bottom: 12px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -230,5 +234,58 @@ a.qs-button {
   &__text {
     line-height: 18px;
   }
+}
+
+.qs-appmaps-table {
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  width: 100%;
+
+  th,
+  td {
+    border: none;
+    padding: 0 1rem;
+    font-weight: normal;
+    color: $gray6;
+    text-align: left;
+    white-space: nowrap;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:not(:first-child) {
+      font-size: 12px;
+    }
+  }
+
+  th {
+    border-bottom: 0.5rem solid transparent;
+    line-height: 1;
+
+    &:nth-child(n + 3) {
+      border-left: 1px solid currentColor;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #242c41;
+      cursor: pointer;
+    }
+
+    td {
+      padding-top: 2px;
+      padding-bottom: 2px;
+      color: #a26eff;
+      white-space: normal;
+    }
+  }
+}
+
+.qs-noappmaps {
+  margin: 20px 0;
+  font-size: 16px;
+  color: $hotpink;
 }
 </style>

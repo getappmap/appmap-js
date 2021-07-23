@@ -6,11 +6,11 @@
           <h1 class="qs-title">Install AppMap Agent</h1>
           <select class="qs-select" v-model="selectedLanguage">
             <option
-              v-for="langId in Object.keys(languagesList)"
-              :key="langId"
-              :value="langId"
+              v-for="lang in languagesList"
+              :key="lang.id"
+              :value="lang.id"
             >
-              {{ languagesList[langId] }}
+              {{ lang.name }}
             </option>
           </select>
         </div>
@@ -20,20 +20,28 @@
             language. Visit the quickstart guide in our documentaion to continue
             installation.
           </p>
-          <div class="qs-link-wrap" v-if="selectedLanguage">
+          <div
+            class="qs-link-wrap"
+            v-if="selectedLanguage && selectedLanguageData"
+          >
             <a :href="selectedLanguageData.link" class="qs-button">
-              <img class="qs-button__icon" src="@/assets/quickstart/link.png" />
+              <img
+                class="qs-button__icon"
+                src="../assets/quickstart/link.png"
+              />
               AppMap Quickstart guide for {{ selectedLanguageData.name }}
             </a>
           </div>
-          <p>Also available:</p>
-          <ul class="qs-list">
-            <li v-for="lang in notSelectedLanguages" :key="lang">
-              <a :href="lang.link"
-                >AppMap Quickstart guide for {{ lang.name }}</a
-              >
-            </li>
-          </ul>
+          <div v-if="notSelectedLanguages.length">
+            <p>Also available:</p>
+            <ul class="qs-list">
+              <li v-for="lang in notSelectedLanguages" :key="lang.id">
+                <a :href="lang.link"
+                  >AppMap Quickstart guide for {{ lang.name }}</a
+                >
+              </li>
+            </ul>
+          </div>
         </div>
       </section>
     </div>
@@ -71,21 +79,18 @@ export default {
 
   data() {
     return {
-      selectedLanguage:
-        this.languages.filter((lang) => lang.isDetected)[0]?.id ??
-        this.languages[0]?.id,
+      selectedLanguage: null,
     };
   },
 
   computed: {
     languagesList() {
-      const list = {};
-
-      this.languages.forEach((lang) => {
-        list[lang.id] = lang.name + (lang.isDetected ? ' (detected)' : '');
+      return this.languages.map(({ ...lang }) => {
+        if (lang.isDetected) {
+          lang.name += ' (detected)';
+        }
+        return lang;
       });
-
-      return list;
     },
     selectedLanguageData() {
       if (!this.selectedLanguage) {
@@ -98,6 +103,16 @@ export default {
     notSelectedLanguages() {
       return this.languages.filter((lang) => lang.id !== this.selectedLanguage);
     },
+  },
+
+  mounted() {
+    const detectedLanguages = this.languages.filter((lang) => lang.isDetected);
+
+    if (detectedLanguages.length) {
+      this.selectedLanguage = detectedLanguages[0].id;
+    } else if (this.languages.length) {
+      this.selectedLanguage = this.languages[0].id;
+    }
   },
 };
 </script>
@@ -124,7 +139,7 @@ body {
 .qs {
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   padding: 10px 22px;
   font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -240,6 +255,7 @@ a.qs-button {
 }
 
 .qs-help {
+  margin-bottom: 12px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
