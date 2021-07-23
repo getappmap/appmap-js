@@ -15,6 +15,7 @@ const process = require('process');
 const readline = require('readline');
 const { join } = require('path');
 const cliProgress = require('cli-progress');
+const { exec } = require('child_process');
 const { algorithms, canonicalize } = require('./fingerprint');
 const { verbose, loadAppMap } = require('./utils');
 const appMapCatalog = require('./appMapCatalog');
@@ -27,6 +28,15 @@ const FunctionStats = require('./functionStats');
 const Inspect = require('./inspect');
 const SwaggerCommand = require('./swagger/command');
 const InventoryCommand = require('./inventoryCommand');
+const JavaAgentInstaller = require('./agentInstaller/javaAgentInstaller');
+const RubyAgentInstaller = require('./agentInstaller/rubyAgentInstaller');
+const ValidationError = require('./errors/validationError');
+const AbortError = require('./errors/abortError');
+
+const AGENT_INSTALLERS = {
+  java: (dir) => new JavaAgentInstaller(dir),
+  ruby: (dir) => new RubyAgentInstaller(dir),
+};
 
 class DiffCommand {
   baseDir(dir) {
@@ -540,6 +550,7 @@ yargs(process.argv.slice(2))
         describe: 'directory to recursively inspect for AppMaps',
         default: 'tmp/appmap',
       });
+      return args.strict();
     },
     async (argv) => {
       verbose(argv.verbose);
@@ -558,6 +569,7 @@ yargs(process.argv.slice(2))
         describe: 'directory to recursively inspect for AppMaps',
         default: 'tmp/appmap',
       });
+      return args.strict();
     },
     async (argv) => {
       verbose(argv.verbose);
@@ -571,6 +583,138 @@ yargs(process.argv.slice(2))
     type: 'boolean',
     description: 'Run with verbose logging',
   })
+  .command(
+    'install-agent <language>',
+    'Install and configure an AppMap language agent',
+    (args) => {
+      args.positional('language', {
+        describe: 'Which language agent to install',
+      });
+      args.option('dir', {
+        describe: 'directory in which to install',
+        default: '.',
+        alias: 'd',
+      });
+      return args.strict();
+    },
+    async (argv) => {
+      verbose(argv.verbose);
+
+      const commandFn = async () => {
+        const { language, dir } = argv;
+        const installerFn = AGENT_INSTALLERS[language];
+        if (!installerFn) {
+          throw new ValidationError(
+            `Unsupported AppMap agent language : ${argv.language}`
+          );
+        }
+        const installer = installerFn(dir);
+
+        const runCommand = async (command) => {
+          const commandString = [command.program]
+            .concat(command.args)
+            .join(' ');
+          return new Promise((resolve, reject) => {
+            const cp = exec(commandString, {
+              env: Object.assign(process.env, command.environment),
+              cwd: dir,
+            });
+            cp.stderr.on('data', (data) => {
+              process.stderr.write(data);
+            });
+            cp.stdout.on('data', (data) => {
+              process.stderr.write(data);
+            });
+
+            cp.on('exit', (code) => {
+              console.log(`'${command.program}' exited with code ${code}`);
+              if (code === 0) {
+                return resolve();
+              }
+
+              return reject(code);
+            });
+          });
+        };
+
+        function askQuestion(query) {
+          const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout,
+          });
+
+          return new Promise((resolve, reject) =>
+            rl.question(query, (answer) => {
+              rl.close();
+              if (answer === 'a') {
+                reject(new AbortError());
+              }
+              resolve(answer);
+            })
+          );
+        }
+
+        const steps = installer.installAgent('.');
+        await Promise.all(
+          steps.map(async (step) => {
+            let userAction;
+
+            console.warn(step.assumptions);
+            console.warn('');
+            userAction = await askQuestion(
+              `Press enter to continue, 'a' abort, or 'm' to run it yourself manually: `
+            );
+
+            if (userAction !== 'm') {
+              const { installCommand } = step;
+              if (typeof installCommand === 'function') {
+                const result = await installCommand();
+                console.log(result);
+              } else {
+                await runCommand(installCommand);
+              }
+            }
+
+            console.warn('');
+            console.warn(step.postInstallMessage);
+            console.warn('');
+            console.warn(
+              [
+                '  ',
+                step.verifyCommand.program,
+                step.verifyCommand.args.join(' '),
+              ].join(' ')
+            );
+
+            if (step.verifyCommand) {
+              console.warn('');
+              userAction = await askQuestion(
+                `Press enter to continue, 'a' abort, or 'm' to run it yourself manually: `
+              );
+
+              if (userAction !== 'm') {
+                await runCommand(step.verifyCommand);
+              }
+            }
+          })
+        );
+      };
+
+      try {
+        return await commandFn();
+      } catch (err) {
+        if (err instanceof ValidationError) {
+          console.warn(err.message);
+          return process.exit(1);
+        }
+        if (err instanceof AbortError) {
+          return process.exit(2);
+        }
+
+        throw err;
+      }
+    }
+  )
   .strict()
   .demandCommand()
   .help().argv;
