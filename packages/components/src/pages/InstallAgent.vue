@@ -4,15 +4,6 @@
       <section class="qs-step">
         <div class="qs-step__head">
           <h1 class="qs-title">Install AppMap Agent</h1>
-          <select class="qs-select" v-model="selectedLanguage">
-            <option
-              v-for="lang in languagesList"
-              :key="lang.id"
-              :value="lang.id"
-            >
-              {{ lang.name }}
-            </option>
-          </select>
         </div>
         <div class="qs-step__block">
           <p>
@@ -77,20 +68,19 @@ export default {
     },
   },
 
-  data() {
-    return {
-      selectedLanguage: null,
-    };
-  },
-
   computed: {
-    languagesList() {
-      return this.languages.map(({ ...lang }) => {
-        if (lang.isDetected) {
-          lang.name += ' (detected)';
-        }
-        return lang;
-      });
+    selectedLanguage() {
+      const detectedLanguages = this.languages.filter(
+        (lang) => lang.isDetected
+      );
+
+      if (detectedLanguages.length) {
+        return detectedLanguages[0].id;
+      }
+      if (this.languages.length) {
+        return this.languages[0].id;
+      }
+      return null;
     },
     selectedLanguageData() {
       if (!this.selectedLanguage) {
@@ -103,16 +93,6 @@ export default {
     notSelectedLanguages() {
       return this.languages.filter((lang) => lang.id !== this.selectedLanguage);
     },
-  },
-
-  mounted() {
-    const detectedLanguages = this.languages.filter((lang) => lang.isDetected);
-
-    if (detectedLanguages.length) {
-      this.selectedLanguage = detectedLanguages[0].id;
-    } else if (this.languages.length) {
-      this.selectedLanguage = this.languages[0].id;
-    }
   },
 };
 </script>
