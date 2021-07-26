@@ -5,7 +5,7 @@
         <div class="qs-step__head">
           <h1 class="qs-title">Install AppMap Agent</h1>
         </div>
-        <div class="qs-step__block">
+        <div class="qs-step__block" v-if="hasDetectedLanguage">
           <p>
             To create AppMaps you need to install the AppMap Agent for your
             language. Visit the quickstart guide in our documentaion to continue
@@ -33,6 +33,26 @@
               </li>
             </ul>
           </div>
+        </div>
+        <div class="qs-step__block" v-else>
+          <p>
+            AppMap currently supports Java, Python, and Ruby projects.<br />Visit
+            the Quickstart guides for more details:
+          </p>
+          <ul class="qs-list">
+            <li v-for="lang in languages" :key="lang.id">
+              <a :href="lang.link"
+                >AppMap Quickstart guide for {{ lang.name }}</a
+              >
+            </li>
+          </ul>
+          <p class="qs-step__separator">or</p>
+          <p>
+            For updates on new language support
+            <a href="https://discord.com/invite/N9VUap6"
+              >join our Discord community</a
+            >
+          </p>
         </div>
       </section>
     </div>
@@ -70,17 +90,7 @@ export default {
 
   computed: {
     selectedLanguage() {
-      const detectedLanguages = this.languages.filter(
-        (lang) => lang.isDetected
-      );
-
-      if (detectedLanguages.length) {
-        return detectedLanguages[0].id;
-      }
-      if (this.languages.length) {
-        return this.languages[0].id;
-      }
-      return null;
+      return this.languages.filter((lang) => lang.isDetected)[0].id;
     },
     selectedLanguageData() {
       if (!this.selectedLanguage) {
@@ -92,6 +102,9 @@ export default {
     },
     notSelectedLanguages() {
       return this.languages.filter((lang) => lang.id !== this.selectedLanguage);
+    },
+    hasDetectedLanguage() {
+      return this.languages.some((lang) => lang.isDetected);
     },
   },
 };
@@ -219,6 +232,11 @@ a.qs-button {
 
   &__head {
     margin-bottom: 6px;
+  }
+
+  p.qs-step__separator {
+    margin: 10px 0;
+    opacity: 0.5;
   }
 }
 
