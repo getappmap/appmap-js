@@ -5,10 +5,12 @@
         <div class="qs-step__head">
           <h1 class="qs-title">Open AppMaps</h1>
         </div>
-        <div class="qs-step__block">
-          <p>You have completed the Quickstart.</p>
-          <p>We’ve identified a few AppMaps you may want to check out first.</p>
-          <table class="qs-appmaps-table" v-if="appmaps.length">
+        <div class="qs-step__block" v-if="appmaps.length">
+          <p>Here are the AppMaps recorded from your project.</p>
+          <p>
+            You may want to check out those with Requests and SQL queries first.
+          </p>
+          <table class="qs-appmaps-table">
             <colgroup>
               <col width="70%" />
               <col width="10%" />
@@ -36,10 +38,8 @@
               </tr>
             </tbody>
           </table>
-          <div v-else class="qs-noappmaps">
-            No AppMaps found in your project.
-          </div>
         </div>
+        <div v-else class="qs-noappmaps">No AppMaps found in your project.</div>
       </section>
     </div>
     <div class="qs-help">
