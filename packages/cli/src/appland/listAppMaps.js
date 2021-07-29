@@ -4,7 +4,7 @@ const { request: httpRequest } = require('http');
 const { request: httpsRequest } = require('https');
 const { baseURL, apiKey, exists } = require('./settings');
 
-/** @typedef {import('../diff/types').AppMapListItem} AppMapListItem */
+/** @typedef {import('./types').AppMapListItem} AppMapListItem */
 
 /**
  * Lists AppMaps in a mapset.
