@@ -84,8 +84,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/components@workspace:packages/components"
   dependencies:
-    "@appland/diagrams": "workspace:^1.2.1"
-    "@appland/models": "workspace:^1.2.0"
+    "@appland/diagrams": "workspace:^1.2.3"
+    "@appland/models": "workspace:^1.3.1"
     "@babel/core": ^7.13.1
     "@babel/node": ^7.13.0
     "@babel/preset-env": ^7.9.5
@@ -143,7 +143,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/diagrams@workspace:^1.2.1, @appland/diagrams@workspace:packages/diagrams":
+"@appland/diagrams@workspace:^1.2.3, @appland/diagrams@workspace:packages/diagrams":
   version: 0.0.0-use.local
   resolution: "@appland/diagrams@workspace:packages/diagrams"
   dependencies:
@@ -178,7 +178,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@workspace:*, @appland/models@workspace:^1.2.0, @appland/models@workspace:^1.3.1, @appland/models@workspace:packages/models":
+"@appland/models@workspace:*, @appland/models@workspace:^1.3.1, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
