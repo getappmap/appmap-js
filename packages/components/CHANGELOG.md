@@ -1,3 +1,11 @@
+# [@appland/components-v1.6.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.5.0...@appland/components-v1.6.0) (2021-07-30)
+
+
+### Features
+
+* Add Quickstart docs pages 'Install AppMap Agent' and 'Open AppMaps' ([#297](https://github.com/applandinc/appmap-js/issues/297)) ([a2bbd78](https://github.com/applandinc/appmap-js/commit/a2bbd78216547724d8781a21356e7662e6e2f90f))
+* Add Quickstart pages for setup ([#267](https://github.com/applandinc/appmap-js/issues/267)) ([10ab21a](https://github.com/applandinc/appmap-js/commit/10ab21a9847d5a5b63c1d261f308235cab246fba))
+
 # [@appland/components-v1.5.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.4.0...@appland/components-v1.5.0) (2021-06-30)
 
 
