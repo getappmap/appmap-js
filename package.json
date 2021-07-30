@@ -13,12 +13,12 @@
   "scripts": {
     "lint": "yarn workspaces foreach --exclude root -v run lint",
     "test": "yarn workspaces foreach --exclude root -v run test",
-    "build": "yarn workspaces foreach --exclude root -v run build",
+    "build": "yarn workspaces foreach -t --exclude root -v run build",
     "ci": "yarn run build && yarn run lint && yarn run test",
     "chromatic": "yarn workspaces foreach --exclude root -v run chromatic",
-    "watch": "yarn workspaces foreach --exclude root -v -p -i run watch",
-    "semantic-release:prepare": "yarn workspaces foreach --exclude root -v exec semantic-release -e semantic-release-monorepo",
-    "semantic-release:publish": "yarn workspaces foreach --exclude root -v exec semantic-release -e semantic-release-monorepo",
+    "watch": "yarn workspaces foreach -t --exclude root -v -p -i run watch",
+    "semantic-release:prepare": "yarn workspaces foreach -t --exclude root -v exec semantic-release -e semantic-release-monorepo",
+    "semantic-release:publish": "yarn workspaces foreach -t --exclude root -v exec semantic-release -e semantic-release-monorepo",
     "semantic-release": "yarn run semantic-release:prepare && yarn run semantic-release:publish"
   },
   "devDependencies": {
