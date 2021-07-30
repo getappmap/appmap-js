@@ -1,3 +1,10 @@
+# [@appland/components-v1.6.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.6.0...@appland/components-v1.6.1) (2021-07-30)
+
+
+### Bug Fixes
+
+* Upgrade models, diagrams dependencies ([7aa1a21](https://github.com/applandinc/appmap-js/commit/7aa1a21696b833b8ab533ce2ab459f4bce40f0a1))
+
 # [@appland/components-v1.6.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.5.0...@appland/components-v1.6.0) (2021-07-30)
 
 
