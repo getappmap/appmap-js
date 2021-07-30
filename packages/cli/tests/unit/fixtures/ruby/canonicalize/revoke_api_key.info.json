@@ -2,33 +2,20 @@
   {
     "kind": "http_server_request",
     "route": "DELETE /api/api_keys",
-    "parameter_names": [
-      "controller",
-      "action"
-    ],
+    "parameter_names": ["controller", "action"],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
-        "labels": [
-          "security",
-          "provider.authenticate"
-        ],
+        "labels": ["security", "provider.authenticate"],
         "children": [
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": [
-                  "select"
-                ],
-                "tables": [
-                  "api_keys"
-                ],
-                "columns": [
-                  "*",
-                  "login"
-                ]
+                "actions": ["select"],
+                "tables": ["api_keys"],
+                "columns": ["*", "login"]
               }
             }
           },
@@ -36,16 +23,9 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": [
-                  "update"
-                ],
-                "tables": [
-                  "api_keys"
-                ],
-                "columns": [
-                  "id",
-                  "last_used"
-                ]
+                "actions": ["update"],
+                "tables": ["api_keys"],
+                "columns": ["id", "last_used"]
               }
             }
           },
@@ -53,16 +33,9 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": [
-                  "select"
-                ],
-                "tables": [
-                  "users"
-                ],
-                "columns": [
-                  "*",
-                  "users.login"
-                ]
+                "actions": ["select"],
+                "tables": ["users"],
+                "columns": ["*", "users.login"]
               }
             }
           },
@@ -70,12 +43,8 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": [
-                  "select"
-                ],
-                "tables": [
-                  "pg_type"
-                ],
+                "actions": ["select"],
+                "tables": ["pg_type"],
                 "columns": [
                   "pg_type.oid",
                   "typarray",
@@ -90,13 +59,8 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": [
-                  "select"
-                ],
-                "tables": [
-                  "pg_attribute",
-                  "pg_type"
-                ],
+                "actions": ["select"],
+                "tables": ["pg_attribute", "pg_type"],
                 "columns": [
                   "attisdropped",
                   "attname",
@@ -114,12 +78,8 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": [
-                  "select"
-                ],
-                "tables": [
-                  "pg_type"
-                ],
+                "actions": ["select"],
+                "tables": ["pg_type"],
                 "columns": [
                   "pg_type.oid",
                   "typarray",
@@ -134,13 +94,8 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": [
-                  "select"
-                ],
-                "tables": [
-                  "pg_attribute",
-                  "pg_type"
-                ],
+                "actions": ["select"],
+                "tables": ["pg_attribute", "pg_type"],
                 "columns": [
                   "attisdropped",
                   "attname",
@@ -158,24 +113,15 @@
       },
       {
         "kind": "function",
-        "labels": [
-          "security"
-        ],
+        "labels": ["security"],
         "children": [
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": [
-                  "select"
-                ],
-                "tables": [
-                  "api_keys"
-                ],
-                "columns": [
-                  "*",
-                  "login"
-                ]
+                "actions": ["select"],
+                "tables": ["api_keys"],
+                "columns": ["*", "login"]
               }
             }
           },
@@ -183,15 +129,9 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": [
-                  "delete"
-                ],
-                "tables": [
-                  "api_keys"
-                ],
-                "columns": [
-                  "id"
-                ]
+                "actions": ["delete"],
+                "tables": ["api_keys"],
+                "columns": ["id"]
               }
             }
           }
@@ -202,33 +142,20 @@
   {
     "kind": "http_server_request",
     "route": "DELETE /api/api_keys",
-    "parameter_names": [
-      "controller",
-      "action"
-    ],
+    "parameter_names": ["controller", "action"],
     "status_code": 401,
     "children": [
       {
         "kind": "function",
-        "labels": [
-          "security",
-          "provider.authenticate"
-        ],
+        "labels": ["security", "provider.authenticate"],
         "children": [
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": [
-                  "select"
-                ],
-                "tables": [
-                  "api_keys"
-                ],
-                "columns": [
-                  "*",
-                  "login"
-                ]
+                "actions": ["select"],
+                "tables": ["api_keys"],
+                "columns": ["*", "login"]
               }
             }
           }
@@ -236,10 +163,7 @@
       },
       {
         "kind": "function",
-        "labels": [
-          "serialization",
-          "json"
-        ]
+        "labels": ["serialization", "json"]
       }
     ]
   }

@@ -26,9 +26,7 @@
       "repository": "git@github.com:applandinc/appland.git",
       "branch": "feature/show-sql-in-source-code-tab",
       "commit": "d52bd55d5a08f0e9b27760780bf2737829f5f25f",
-      "status_code": [
-        "M Gemfile.lock"
-      ],
+      "status_code": ["M Gemfile.lock"],
       "git_last_annotated_tag": null,
       "git_last_tag": "v0.17.1",
       "git_commits_since_last_annotated_tag": null,
@@ -37,10 +35,7 @@
     "name": "API::APIKeysController revoke an existing api key",
     "feature": "API::APIKeysController revoke",
     "feature_group": "API API keys",
-    "labels": [
-      "api key",
-      "api"
-    ],
+    "labels": ["api key", "api"],
     "recorder": {
       "name": "rspec"
     },
@@ -133,9 +128,7 @@
               "type": "function",
               "location": "app/models/api_key.rb:28",
               "static": true,
-              "labels": [
-                "security"
-              ]
+              "labels": ["security"]
             },
             {
               "name": "encode",
@@ -148,10 +141,7 @@
               "type": "function",
               "location": "app/models/api_key.rb:51",
               "static": true,
-              "labels": [
-                "security",
-                "provider.authenticate"
-              ]
+              "labels": ["security", "provider.authenticate"]
             },
             {
               "name": "decode",
@@ -170,9 +160,7 @@
               "type": "function",
               "location": "app/models/api_key.rb:40",
               "static": true,
-              "labels": [
-                "security"
-              ]
+              "labels": ["security"]
             }
           ]
         }
@@ -227,10 +215,7 @@
                           "type": "function",
                           "location": "JSON::Ext::Generator::State#generate",
                           "static": false,
-                          "labels": [
-                            "serialization",
-                            "json"
-                          ]
+                          "labels": ["serialization", "json"]
                         }
                       ]
                     }

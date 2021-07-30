@@ -1,10 +1,16 @@
 const { utimesSync } = require('fs');
 const { join } = require('path');
+const tmp = require('tmp');
+const fs = require('fs-extra');
 const Depends = require('../../src/depends');
 const Fingerprinter = require('../../src/fingerprint/fingerprinter');
 const { listAppMapFiles, verbose } = require('../../src/utils');
 
-const appMapDir = join(__dirname, 'fixtures');
+tmp.setGracefulCleanup();
+
+const fixtureDir = join(__dirname, 'fixtures', 'ruby');
+const appMapDir = tmp.dirSync().name;
+
 const userModelFilePath = join(appMapDir, 'app/models/user.rb');
 const now = Date.now();
 
@@ -13,6 +19,8 @@ describe('Depends', () => {
     if (process.env.DEBUG) {
       verbose(true);
     }
+
+    fs.copySync(fixtureDir, appMapDir);
 
     const fingerprinter = new Fingerprinter(true);
     await listAppMapFiles(appMapDir, async (fileName) => {

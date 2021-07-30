@@ -1,10 +1,17 @@
 const { utimesSync } = require('fs');
 const { join } = require('path');
+const tmp = require('tmp');
+const fs = require('fs-extra');
+
 const Fingerprinter = require('../../src/fingerprint/fingerprinter');
 const FindCodeObjects = require('../../src/search/findCodeObjects');
 const { listAppMapFiles, verbose } = require('../../src/utils');
 
-const appMapDir = join(__dirname, 'fixtures');
+tmp.setGracefulCleanup();
+
+const fixtureDir = join(__dirname, 'fixtures', 'ruby');
+const appMapDir = tmp.dirSync().name;
+
 const now = Date.now();
 
 describe('Inspect', () => {
@@ -12,6 +19,8 @@ describe('Inspect', () => {
     if (process.env.DEBUG) {
       verbose(true);
     }
+
+    fs.copySync(fixtureDir, appMapDir);
 
     const fingerprinter = new Fingerprinter(true);
     await listAppMapFiles(appMapDir, async (fileName) => {
@@ -30,7 +39,7 @@ describe('Inspect', () => {
       JSON.stringify(
         [
           {
-            appmap: 'tests/unit/fixtures/revoke_api_key',
+            appmap: `${appMapDir}/revoke_api_key`,
             codeObject: {
               name: 'issue',
               type: 'function',
@@ -52,7 +61,7 @@ describe('Inspect', () => {
       JSON.stringify(
         [
           {
-            appmap: 'tests/unit/fixtures/revoke_api_key',
+            appmap: `${appMapDir}/revoke_api_key`,
             codeObject: {
               name: 'ApiKey',
               type: 'class',
@@ -72,14 +81,14 @@ describe('Inspect', () => {
       JSON.stringify(
         [
           {
-            appmap: 'tests/unit/fixtures/revoke_api_key',
+            appmap: `${appMapDir}/revoke_api_key`,
             codeObject: {
               name: 'app/models',
               type: 'package',
             },
           },
           {
-            appmap: 'tests/unit/fixtures/user_page_scenario',
+            appmap: `${appMapDir}/user_page_scenario`,
             codeObject: {
               name: 'app/models',
               type: 'package',
