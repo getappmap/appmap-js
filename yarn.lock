@@ -73,6 +73,7 @@ __metadata:
     lint-staged: ^10.5.4
     prettier: ^2.2.1
     semver: ^7.3.5
+    tmp: ^0.2.1
     w3c-xmlserializer: ^2.0.0
     yargs: ^17.0.1
   bin:
@@ -22143,6 +22144,7 @@ resolve@1.1.7:
     prettier: ^2.2.1
     semantic-release: ^17.4.2
     semantic-release-monorepo: ^7.0.5
+    yarn-changed-workspaces: ^2.0.9
   languageName: unknown
   linkType: soft
 
@@ -24200,7 +24202,7 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"tmp@npm:^0.2.0":
+"tmp@npm:^0.2.0, tmp@npm:^0.2.1":
   version: 0.2.1
   resolution: "tmp@npm:0.2.1"
   dependencies:
@@ -26347,6 +26349,21 @@ resolve@1.1.7:
     y18n: ^5.0.5
     yargs-parser: ^20.2.2
   checksum: a7969b48d2dea129a7d4fcc3f13e88d4f94bacbd24f720b2ce19946fa9facc42cfed89c059d953091241f4e9e9000ed9dbf86e4bb4b6ceb3a26af10ddebdd0b2
+  languageName: node
+  linkType: hard
+
+"yarn-changed-workspaces@npm:^2.0.9":
+  version: 2.0.9
+  resolution: "yarn-changed-workspaces@npm:2.0.9"
+  dependencies:
+    chalk: ^4.1.0
+    glob: ^7.1.6
+    lodash: ^4.17.20
+    micromatch: ^4.0.2
+    yargs: ^15.4.1
+  bin:
+    yarn-changed-workspaces: bin/cli.js
+  checksum: 481df4f2d7d892a9bd0c3a4777d7fa5c696e0cab5afeda20a4f31130389ce2201b97f5b89d2abb7b49ce857963bd664944402e35d92e0d4b428f5ab4819513cd
   languageName: node
   linkType: hard
 

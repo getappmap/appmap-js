@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+workspaces="$(yarn run yarn-changed-workspaces -b origin/main | grep '^@' | tr '\n' ',')"
+tasks="$@"
+
+for t in $tasks; do
+  yarn workspaces foreach\
+     --include "{$workspaces}"\
+     --exclude root\
+     run $t
+done
