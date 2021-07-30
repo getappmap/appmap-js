@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.2.2](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.2.1...@appland/diagrams-v1.2.2) (2021-07-30)
+
+
+### Bug Fixes
+
+* Move rollup dependencies to development ([07e639d](https://github.com/applandinc/appmap-js/commit/07e639d7a851ef0cfdb09b4011dce8fbe80f3c31))
+
 # [@appland/diagrams-v1.2.1](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.2.0...@appland/diagrams-v1.2.1) (2021-06-23)
 
 
