@@ -48,7 +48,7 @@ export default {
 
 <style scoped lang="scss">
 .btn {
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   border-style: none;
   color: $gray6;
   padding: 0.5em 1em;
@@ -59,6 +59,10 @@ export default {
     color: $gray4;
   }
 
+  &:hover {
+    color: $gray6;
+  }
+
   &--primary {
     background-color: $hotpink;
   }
@@ -67,6 +71,10 @@ export default {
   }
   &--quickstart {
     background-color: $purps;
+    &:hover {
+      background-color: darken($purps, 08);
+      color: $gray6;
+    }
   }
   &--ghost {
     background-color: inherit;

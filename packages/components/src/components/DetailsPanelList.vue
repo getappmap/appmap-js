@@ -134,13 +134,13 @@ export default {
         justify-content: space-between;
         align-items: center;
         padding: 0.5rem 2rem;
-        color: $blue;
+        color: $gray4;
         text-decoration: none;
         background: transparent;
         border: none;
         cursor: pointer;
         text-align: left;
-        font-size: 1rem;
+        font-size: 14px;
 
         &:focus {
           outline: 0;

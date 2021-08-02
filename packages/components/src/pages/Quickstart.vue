@@ -50,10 +50,7 @@
           <button class="qs-button" v-if="!isActionRunning" @click="runAction">
             Install the AppMap agent
           </button>
-          <!-- <p class="plop">
-            <a href="/" class="btn--quickstart">Quickstart</a>
-          </p> -->
-          
+
           <QuickstartLoader v-if="isActionRunning" />
         </div>
         <div class="qs-step__success" v-if="step1Completed">
@@ -562,7 +559,7 @@ body {
 
 .qs-container {
   margin: 1rem 0;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   background: #1a1a1a;
   display: flex;
   flex-direction: row-reverse;
@@ -577,9 +574,10 @@ body {
   border-radius: 8px;
   display: inline-flex;
   align-items: center;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   background: $purps;
   color: $gray6;
+  text-shadow: 0 0 0.3rem darken($purps, 08);
   font: inherit;
   outline: none;
   appearance: none;
@@ -593,7 +591,19 @@ body {
   }
 
   &:hover {
-    background: darken($purps,08);
+    background: darken($purps, 08);
+    color: $gray6;
+  }
+
+  &.ghost {
+    background: transparent;
+    border: 1px solid $purps;
+    color: $gray6;
+    text-shadow: none;
+    &:hover {
+      border-color: darken($purps, 15);
+      color: darken($gray6, 25);
+    }
   }
 }
 
@@ -698,7 +708,7 @@ a.qs-button {
 
 .qs-head {
   margin-bottom: 6px;
-  padding: .5rem 0;
+  padding: 0.5rem 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -724,7 +734,7 @@ a.qs-button {
 
     &:hover,
     &:active {
-      color: lighten($purps,08); //$base03;
+      color: lighten($purps, 08); //$base03;
     }
 
     &-icon {
@@ -745,8 +755,7 @@ a.qs-button {
 
   &__head {
     margin-bottom: 6px;
-    line-height: 18px
-    
+    line-height: 18px;
   }
 
   &__success {
@@ -943,13 +952,15 @@ a.qs-button {
 
 a.btn--quickstart {
   background-color: $purps;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   border: 0;
   transition: $transition;
-  color: $white;
+  color: $gray6;
+  text-shadow: 0 0 0.3rem darken($purps, 08);
   border-radius: $border-radius;
   &:hover {
     background-color: darken($purps, 08);
+    color: $gray6;
   }
 }
 
@@ -962,5 +973,4 @@ a.btn--quickstart {
 .qs p.plop {
   margin: 2rem 0;
 }
-
 </style>

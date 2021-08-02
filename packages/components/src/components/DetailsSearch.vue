@@ -276,7 +276,7 @@ export default {
   }
 
   &__block {
-    margin-bottom: 1rem;
+    margin-bottom: 2.5rem;
 
     &-title {
       margin: 0 2rem 0.25rem;

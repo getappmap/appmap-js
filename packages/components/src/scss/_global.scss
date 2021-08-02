@@ -1,9 +1,13 @@
 body {
-  font-size:16px;
+  font-size: 14px;
 }
 
 a {
   color: $purps;
+  transition: $transition;
+  &:hover {
+    color: darken($purps, 08);
+  }
 }
 
 .btn-qs {
@@ -11,7 +15,7 @@ a {
   border-radius: 8px;
   display: inline-flex;
   align-items: center;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   background: $purps;
   color: $gray6;
   font: inherit;
@@ -27,6 +31,6 @@ a {
   }
 
   &:hover {
-    background: darken($purps,08);
+    background: darken($purps, 08);
   }
 }
