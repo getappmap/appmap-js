@@ -1,3 +1,10 @@
+# [@appland/cli-v1.5.1](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.5.0...@appland/cli-v1.5.1) (2021-08-03)
+
+
+### Bug Fixes
+
+* Import PythonAgentInstaller properly ([f59da43](https://github.com/applandinc/appmap-js/commit/f59da43ae0b52a18a6d0a5bda5b9913747881ca8))
+
 # [@appland/cli-v1.5.0](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.4.0...@appland/cli-v1.5.0) (2021-08-03)
 
 
