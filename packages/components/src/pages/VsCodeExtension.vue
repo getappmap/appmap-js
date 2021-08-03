@@ -462,6 +462,10 @@ body {
   margin: 0;
 }
 
+body.sb-show-main.sb-main-padded {
+  padding: 0;
+}
+
 * {
   box-sizing: border-box;
 }
