@@ -100,7 +100,7 @@ so we will install the AppMap Maven plugin.`;
     return `The AppMap plugin has been added to your pom.xml. You should open this file and check that
 it looks clean and correct.
 
-Once you've done that, you'll test the proper operation of the AppMap plugin by running the following command
+Once you've done that, we'll test the proper operation of the AppMap plugin by running the following command
 in your terminal`;
   }
 
@@ -216,7 +216,7 @@ so we will install the AppMap Gradle plugin.`;
     return `The AppMap plugin has been added to your build.gradle. You should open this file and check that
 it looks clean and correct.
 
-Once you've done that, you'll test the proper operation of the AppMap plugin by running the following command
+Once you've done that, we'll test the proper operation of the AppMap plugin by running the following command
 in your terminal`;
   }
 

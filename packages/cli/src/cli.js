@@ -663,19 +663,21 @@ yargs(process.argv.slice(2))
           steps.map(async (step) => {
             let userAction;
 
-            console.warn(step.assumptions);
-            console.warn('');
-            userAction = await askQuestion(
-              `Press enter to continue, 'a' abort, or 'm' to run it yourself manually: `
-            );
+            if (step.assumptions) {
+              console.warn(step.assumptions);
+              console.warn('');
+              userAction = await askQuestion(
+                `Press enter to continue, 'a' abort, or 'm' to run it yourself manually: `
+              );
 
-            if (userAction !== 'm') {
-              const { installCommand } = step;
-              if (typeof installCommand === 'function') {
-                const result = await installCommand();
-                console.log(result);
-              } else {
-                await runCommand(installCommand);
+              if (userAction !== 'm') {
+                const { installCommand } = step;
+                if (typeof installCommand === 'function') {
+                  const result = await installCommand();
+                  console.log(result);
+                } else {
+                  await runCommand(installCommand);
+                }
               }
             }
 

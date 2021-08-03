@@ -3,7 +3,6 @@
 // @ts-check
 
 const { promises: fsp } = require('fs');
-const childProcess = require('child_process');
 const BuildToolInstaller = require('./buildToolInstallerBase');
 const CommandStruct = require('./commandStruct');
 const InstallAgentStep = require('./installAgentStep');
@@ -35,30 +34,33 @@ class PoetryInstaller extends BuildToolInstaller {
    * @returns {string}
    */
   get assumptions() {
-    return `Your project contains a ${POETRY_LOCK_FILE}. Therefore, it looks like a poetry project,
-so we will install the AppMap Python package "appmap".`;
+    return null;
   }
 
   /**
    * @returns {string}
    */
   get postInstallMessage() {
-    return `The AppMap Python package ("appmap") has been added to your pyproject.toml as a development dependency. You should open this file and check that
-it looks clean and correct.`;
+    return `Your project contains a ${POETRY_LOCK_FILE}. Therefore, it looks like a poetry project.
+
+The AppMap Python package ("appmap") will be added to your project as a development dependency.`;
   }
 
   /**
    * @returns {Command}
    */
   get verifyCommand() {
-    return null;
+    return new CommandStruct(
+      'poetry',
+      ['add', '--dev', '--allow-prereleases', 'appmap'],
+      process.env
+    );
   }
 
   /**
    * @returns {Promise<InstallResult>}
    */
-  async install(spawn = childProcess.spawn) {
-    spawn('poetry', ['add', '--dev', '--allow-prereleases', 'appmap']);
+  async install() {
     return 'installed';
   }
 }
@@ -75,8 +77,8 @@ class PipInstaller extends BuildToolInstaller {
    * @returns {string}
    */
   get assumptions() {
-    return `Your project contains a ${REQUIREMENTS_FILE}. Therefore, it looks like a pip project,
-    so we will add a dependency on the "appmap" package.`;
+    return `Your project contains a ${REQUIREMENTS_FILE}. Therefore, it looks like a pip project.
+We  will add a dependency on the "appmap" package by updating ${REQUIREMENTS_FILE}.`;
   }
 
   /**
@@ -84,7 +86,10 @@ class PipInstaller extends BuildToolInstaller {
    */
   get postInstallMessage() {
     return `The AppMap Python package ("appmap") has been added to your ${REQUIREMENTS_FILE}. You should open this file and check that
-    it looks clean and correct.`;
+it looks clean and correct.
+    
+Once you've done that, we'll complete the installation of the AppMap package by running the following command
+in your terminal:`;
   }
 
   /**
