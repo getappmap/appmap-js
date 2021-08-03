@@ -77,6 +77,8 @@ describe('Inspect', () => {
   test('finds a named package', async () => {
     const fn = new FindCodeObjects(appMapDir, 'package:app/models');
     const result = await fn.find();
+    // FindCodeObjects.find may return appmaps in any order. Sort them so they'll match.
+    result.sort((o1, o2) => o1.appmap.localeCompare(o2.appmap));
     expect(JSON.stringify(result, null, 2)).toEqual(
       JSON.stringify(
         [

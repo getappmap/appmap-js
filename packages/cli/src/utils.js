@@ -33,7 +33,8 @@ async function mtime(filePath) {
 }
 
 /**
- * Call a function with each matching file.
+ * Call a function with each matching file. No guarantee is given that
+ * files will be processed in any particular order.
  *
  * @param {string} pattern
  * @param {(filePath: string): void} fn
