@@ -30,7 +30,9 @@ const SwaggerCommand = require('./swagger/command');
 const InventoryCommand = require('./inventoryCommand');
 const JavaAgentInstaller = require('./agentInstaller/javaAgentInstaller');
 const RubyAgentInstaller = require('./agentInstaller/rubyAgentInstaller');
-const PythonAgentInstaller = require('./agentInstaller/pythonAgentInstaller');
+const {
+  PythonAgentInstaller,
+} = require('./agentInstaller/pythonAgentInstaller');
 const ValidationError = require('./errors/validationError');
 const AbortError = require('./errors/abortError');
 
