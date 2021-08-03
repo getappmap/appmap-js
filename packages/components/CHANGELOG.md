@@ -1,3 +1,10 @@
+# [@appland/components-v1.6.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.6.1...@appland/components-v1.6.2) (2021-08-03)
+
+
+### Bug Fixes
+
+* Adjust scrolling and padding of Quickstart pages ([#301](https://github.com/applandinc/appmap-js/issues/301)) ([d8f1511](https://github.com/applandinc/appmap-js/commit/d8f15113ce4cc9854a745fb068bcca81743db4c5))
+
 # [@appland/components-v1.6.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.6.0...@appland/components-v1.6.1) (2021-07-30)
 
 
