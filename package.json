@@ -3,8 +3,8 @@
   "private": true,
   "husky": {
     "hooks": {
-      "pre-commit": "yarn workspaces foreach --exclude root -v run pre-commit",
-      "pre-push": "yarn run ci"
+      "pre-commit": "ci/foreach-changed-run pre-commit",
+      "pre-push": "ci/foreach-changed-run build lint test"
     }
   },
   "workspaces": [
@@ -38,6 +38,7 @@
     "husky": "^4.3.8",
     "prettier": "^2.2.1",
     "semantic-release": "^17.4.2",
-    "semantic-release-monorepo": "^7.0.5"
+    "semantic-release-monorepo": "^7.0.5",
+    "yarn-changed-workspaces": "^2.0.9"
   }
 }

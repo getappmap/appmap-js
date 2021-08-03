@@ -30,12 +30,14 @@ const SwaggerCommand = require('./swagger/command');
 const InventoryCommand = require('./inventoryCommand');
 const JavaAgentInstaller = require('./agentInstaller/javaAgentInstaller');
 const RubyAgentInstaller = require('./agentInstaller/rubyAgentInstaller');
+const PythonAgentInstaller = require('./agentInstaller/pythonAgentInstaller');
 const ValidationError = require('./errors/validationError');
 const AbortError = require('./errors/abortError');
 
 const AGENT_INSTALLERS = {
   java: (dir) => new JavaAgentInstaller(dir),
   ruby: (dir) => new RubyAgentInstaller(dir),
+  python: (dir) => new PythonAgentInstaller(dir),
 };
 
 class DiffCommand {
@@ -678,15 +680,15 @@ yargs(process.argv.slice(2))
             console.warn('');
             console.warn(step.postInstallMessage);
             console.warn('');
-            console.warn(
-              [
-                '  ',
-                step.verifyCommand.program,
-                step.verifyCommand.args.join(' '),
-              ].join(' ')
-            );
-
             if (step.verifyCommand) {
+              console.warn(
+                [
+                  '  ',
+                  step.verifyCommand.program,
+                  step.verifyCommand.args.join(' '),
+                ].join(' ')
+              );
+
               console.warn('');
               userAction = await askQuestion(
                 `Press enter to continue, 'a' abort, or 'm' to run it yourself manually: `
@@ -695,6 +697,9 @@ yargs(process.argv.slice(2))
               if (userAction !== 'm') {
                 await runCommand(step.verifyCommand);
               }
+            } else {
+              console.warn('');
+              userAction = await askQuestion(`Press enter to continue:`);
             }
           })
         );

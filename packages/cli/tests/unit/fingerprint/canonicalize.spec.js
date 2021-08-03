@@ -5,7 +5,7 @@ const {
   algorithms,
   canonicalize,
 } = require('../../../src/fingerprint/canonicalize');
-const apiKeyScenario = require('../fixtures/revoke_api_key.appmap.json');
+const apiKeyScenario = require('../fixtures/ruby/revoke_api_key.appmap.json');
 
 const apiKeyAppMap = buildAppMap().source(apiKeyScenario).normalize().build();
 
@@ -22,7 +22,7 @@ describe('Canonicalize', () => {
 
       const updateFixtureFile = () => {
         writeFileSync(
-          `tests/unit/fixtures/canonicalize/revoke_api_key.${algorithmName}.json`,
+          `tests/unit/fixtures/ruby/canonicalize/revoke_api_key.${algorithmName}.json`,
           JSON.stringify(normalForm, null, 2)
         );
       };
@@ -33,7 +33,7 @@ describe('Canonicalize', () => {
       expect(
         JSON.parse(
           readFileSync(
-            `tests/unit/fixtures/canonicalize/revoke_api_key.${algorithmName}.json`
+            `tests/unit/fixtures/ruby/canonicalize/revoke_api_key.${algorithmName}.json`
           )
         )
       ).toEqual(normalForm);

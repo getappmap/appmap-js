@@ -139,10 +139,7 @@
                           "type": "function",
                           "location": "JSON::Ext::Generator::State#generate",
                           "static": false,
-                          "labels": [
-                            "serialization",
-                            "json"
-                          ]
+                          "labels": ["serialization", "json"]
                         }
                       ]
                     }
@@ -157,10 +154,7 @@
                       "type": "function",
                       "location": "JSON::Ext::Parser#parse",
                       "static": false,
-                      "labels": [
-                        "serialization",
-                        "json"
-                      ]
+                      "labels": ["serialization", "json"]
                     }
                   ]
                 }
@@ -187,20 +181,14 @@
                   "type": "function",
                   "location": "/Users/kgilpin/source/appland/appmap-ruby/lib/appmap/hook/method.rb:49",
                   "static": false,
-                  "labels": [
-                    "http",
-                    "io"
-                  ]
+                  "labels": ["http", "io"]
                 },
                 {
                   "name": "request",
                   "type": "function",
                   "location": "/Users/kgilpin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468",
                   "static": false,
-                  "labels": [
-                    "http",
-                    "io"
-                  ]
+                  "labels": ["http", "io"]
                 }
               ]
             }
@@ -225,30 +213,21 @@
                   "type": "function",
                   "location": "OpenSSL::Cipher#decrypt",
                   "static": false,
-                  "labels": [
-                    "security",
-                    "crypto"
-                  ]
+                  "labels": ["security", "crypto"]
                 },
                 {
                   "name": "final",
                   "type": "function",
                   "location": "OpenSSL::Cipher#final",
                   "static": false,
-                  "labels": [
-                    "security",
-                    "crypto"
-                  ]
+                  "labels": ["security", "crypto"]
                 },
                 {
                   "name": "encrypt",
                   "type": "function",
                   "location": "OpenSSL::Cipher#encrypt",
                   "static": false,
-                  "labels": [
-                    "security",
-                    "crypto"
-                  ]
+                  "labels": ["security", "crypto"]
                 }
               ]
             }
@@ -267,10 +246,7 @@
                   "type": "function",
                   "location": "Digest::Instance#digest",
                   "static": false,
-                  "labels": [
-                    "security",
-                    "crypto"
-                  ]
+                  "labels": ["security", "crypto"]
                 }
               ]
             }
