@@ -1,3 +1,10 @@
+# [@appland/cli-v1.5.0](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.4.0...@appland/cli-v1.5.0) (2021-08-03)
+
+
+### Features
+
+* Add python support to install-agent command ([9316233](https://github.com/applandinc/appmap-js/commit/9316233b3c703b43ecb277c6ec41f539a3a8a544))
+
 # [@appland/cli-v1.4.0](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.3.2...@appland/cli-v1.4.0) (2021-07-29)
 
 
