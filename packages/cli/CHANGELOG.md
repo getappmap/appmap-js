@@ -1,3 +1,10 @@
+# [@appland/cli-v1.5.2](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.5.1...@appland/cli-v1.5.2) (2021-08-04)
+
+
+### Bug Fixes
+
+* Reword instructions for agent install ([edeacf6](https://github.com/applandinc/appmap-js/commit/edeacf6e11da1d1aad39e985c2c8be8d81307fa3))
+
 # [@appland/cli-v1.5.1](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.5.0...@appland/cli-v1.5.1) (2021-08-03)
 
 
