@@ -43,7 +43,7 @@ of your Gemfile as possible, so that AppMap can observe and hook the other gems 
     return `The AppMap Ruby gem ("appmap") has been added to your Gemfile. You should open this file and check that
 it looks clean and correct.
 
-Once you've done that, you'll complete the installation of the AppMap gem by running the following command
+Once you've done that, we'll complete the installation of the AppMap gem by running the following command
 in your terminal:`;
   }
 

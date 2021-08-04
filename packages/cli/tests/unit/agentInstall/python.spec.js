@@ -34,16 +34,11 @@ describe('Agent Installation', () => {
       expect(btInstaller).toBeInstanceOf(PoetryInstaller);
     });
 
-    it("doesn't provide a verify command", async () => {
+    it('provides the correct verify command', async () => {
       const btInstaller = buildToolInstaller(installerForProject('poetry'));
-      expect(btInstaller.verifyCommand).toBeNull();
-    });
-
-    it('spawns the correct command', async () => {
-      const btInstaller = buildToolInstaller(installerForProject('poetry'));
-      const spawn = jest.fn();
-      btInstaller.install(spawn);
-      expect(spawn).toHaveBeenCalledWith('poetry', [
+      const cmdStruct = btInstaller.verifyCommand;
+      expect(cmdStruct.program).toBe('poetry');
+      expect(cmdStruct.args).toEqual([
         'add',
         '--dev',
         '--allow-prereleases',
