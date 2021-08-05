@@ -1,11 +1,9 @@
 {
-  "name": "@appland/cli",
-  "version": "1.5.2",
+  "name": "@appland/appmap",
+  "version": "2.3.4",
   "description": "",
   "main": "src/cli.js",
-  "bin": {
-    "appmap-cli": "src/cli.js"
-  },
+  "bin": "src/cli.js",
   "publishConfig": {
     "access": "public"
   },
