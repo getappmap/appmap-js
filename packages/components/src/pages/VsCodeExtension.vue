@@ -88,9 +88,10 @@
         >
           <UploadIcon class="control-button__icon" />
         </button>
-      </div>
-      <div class="diagram-instructions">
-        <v-instructions ref="instructions" />
+
+        <div class="control-button diagram-instructions">
+          <v-instructions ref="instructions" />
+        </div>
       </div>
     </div>
 
@@ -535,8 +536,10 @@ code {
 
       .control-buttons {
         position: absolute;
-        top: 1.8rem;
+        top: 1.6rem;
         right: 1.3rem;
+        display: flex;
+        flex-direction: row;
 
         .control-button {
           position: relative;
@@ -573,11 +576,11 @@ code {
         }
       }
 
-      .diagram-instructions {
-        position: absolute;
-        right: 1.3rem;
-        bottom: 1.3rem;
-      }
+      // .diagram-instructions {
+      //   position: absolute;
+      //   right: 1.3rem;
+      //   bottom: 1.3rem;
+      // }
     }
 
     .main-column--drag {

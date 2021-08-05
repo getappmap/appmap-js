@@ -5,48 +5,20 @@
     </button>
     <section class="instructions__container" v-if="isOpen">
       <div class="instructions__head">
-        <h1 class="instructions__title">Welcome to your AppMap!</h1>
-
+        <h1 class="instructions__title">AppMap instructions</h1>
         <button class="instructions__close" @click="close">
           <CloseIcon />
         </button>
-      </div>
-      <div class="instructions__content welcome">
-        <div class="intro">
-          <p>
-            These UML-inspired diagrams display your key application components,
-            and how they are inter-related during application execution.
-          </p>
-          <ul>
-            <li>
-              When you first open an AppMap, we'll show you the maps we've
-              created, as well as lists of labels and events we've identified in
-              your code.
-            </li>
-            <li>
-              When a node is selected, we'll show you its details in the
-              sidebar.
-            </li>
-            <li>
-              Use powerful filters bring focus to a narrow area of interest.
-            </li>
-          </ul>
-        </div>
       </div>
       <section class="instructions-wrap">
         <div class="dependency-map">
           <h4>Dependency map</h4>
           <ul class="feature-list">
-            <li>
-              Right-click nodes to set as root, expand, collapse and reset the
-              diagram elements
-            </li>
-            <li>
-              Clicking an edge between nodes will display associated events
-            </li>
+            <li>Right-click: set as root, expand, collapse, reset diagram</li>
+            <li>Click edge between nodes: display associated events</li>
           </ul>
           <ul class="legend">
-            <h5>Legend</h5>
+            <!-- <h5>Legend</h5> -->
             <li>
               <div class="icon class-pkg"></div>
               <p>Class packages</p>
@@ -57,7 +29,7 @@
             </li>
             <li>
               <div class="icon dynamic"></div>
-              <p>Dynamic dependencies such as method calls or SQL queries</p>
+              <p>Dynamic dependencies</p>
             </li>
             <li>
               <div class="icon web-service"></div>
@@ -76,7 +48,7 @@
             <li>&nbsp;Expand nodes to see children</li>
           </ul>
           <ul class="legend">
-            <h5>Legend</h5>
+            <!-- <h5>Legend</h5> -->
             <li class="type-int icon">Integer/Number</li>
             <li class="type-string icon">String</li>
             <li class="type-bool icon">Boolean</li>
@@ -136,7 +108,7 @@ export default {
     background: transparent;
     color: $gray4;
     font: inherit;
-    font-size: 0.8rem;
+    font-size: 1rem;
     outline: none;
     line-height: 0;
     appearance: none;
@@ -153,31 +125,37 @@ export default {
   }
 
   &__container {
-    border-radius: $border-radius $border-radius 0 $border-radius;
+    border-radius: $border-radius;
     position: absolute;
     right: 0;
-    bottom: 100%;
-    margin: 0 0.75rem 1rem 0;
+    top: 3rem;
+    //bottom: 100%;
+    margin: 0;
     width: max-content;
     height: max-content;
     max-width: 50vw;
     max-height: 80vh;
     padding: 1.5rem;
+    padding-top: 0;
     color: $gray6;
-    background: $black;
+    background: $gray1; //darken($vs-code-gray1, 10);
     overflow-y: auto;
   }
 
   &__head {
     position: relative;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    margin: 0.8rem 0;
   }
 
   &__title {
     margin: 0;
-    color: $hotpink;
-    font-size: 1.5rem;
+    color: $gray3;
+    font-size: 1rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    font-weight: 600;
   }
 
   &__content {
@@ -203,8 +181,9 @@ ul {
 ul.feature-list {
   border-bottom: 1px solid $gray2;
   padding-left: 0;
-  padding-bottom: 1rem;
+  padding-bottom: 0.5rem;
   line-height: 1.3rem;
+  margin: 0;
 }
 
 .instructions-wrap {
@@ -213,42 +192,47 @@ ul.feature-list {
   grid-template-columns: 1fr 1fr;
   column-gap: 2rem;
   overflow: auto;
+
   .legend {
-    margin: 0;
+    margin: 0.5rem 0 0 0;
     padding: 0;
     list-style-type: none;
     word-break: break-word;
     h5 {
-      margin: 0 0 0.4rem 0;
-      color: $gray2;
+      margin: 0 0 1rem 0;
+      color: $gray3;
       font-size: 1rem;
+      line-height: 1rem;
       font-weight: 400;
     }
     li {
       display: flex;
       flex-direction: row;
-      margin: 0.5rem 0;
-      line-height: 2rem;
+      margin: 0.25rem 0;
+      line-height: 1.5rem;
+      align-items: center;
       p {
         flex: 1;
         margin: 0;
         line-height: 1.5rem;
       }
-      align-items: flex-start;
     }
   }
 
   .dependency-map,
   .trace {
     padding: 1rem;
-    border-radius: $border-radius-big;
+    border-radius: $border-radius;
     border: 1px solid $gray2;
     width: 100%;
     font-size: 0.9rem;
+    line-height: 1.5rem;
     h4 {
-      margin: 0;
-      color: $hotpink;
+      margin: 0 0 0.5rem 0;
+      color: $gray4;
       font-size: 1rem;
+      line-height: 1rem;
+      font-weight: 600;
     }
     .legend {
       ul {
@@ -259,7 +243,7 @@ ul.feature-list {
           display: flex;
           flex-direction: row;
           margin: 0;
-          line-height: 2rem;
+          line-height: 1.5rem;
           p {
             flex: 1;
             margin: 0;
@@ -271,7 +255,7 @@ ul.feature-list {
   }
 
   .dependency-map {
-    padding-right: 1.5rem;
+    //padding-right: 1.5rem;
     .icon {
       display: inline-block;
       height: 1rem;
@@ -301,7 +285,7 @@ ul.feature-list {
     font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     .legend {
       li {
-        line-height: 2rem;
+        line-height: 1.5rem;
         margin: 0;
       }
     }
