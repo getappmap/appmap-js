@@ -6,7 +6,7 @@ const { promises: fsp } = require('fs');
 const BuildToolInstaller = require('./buildToolInstallerBase');
 const CommandStruct = require('./commandStruct');
 const InstallAgentStep = require('./installAgentStep');
-const ValidationError = require('../errors/validationError');
+const ValidationError = require('./validationError');
 
 /**
  * @typedef {import('./types').AgentInstaller} AgentInstaller

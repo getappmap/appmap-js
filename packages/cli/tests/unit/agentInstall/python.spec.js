@@ -7,7 +7,7 @@ const {
   PythonAgentInstaller,
   PoetryInstaller,
   PipInstaller,
-} = require('../../../src/agentInstaller/pythonAgentInstaller');
+} = require('../../../src/cmds/agentInstaller/pythonAgentInstaller');
 
 tmp.setGracefulCleanup();
 

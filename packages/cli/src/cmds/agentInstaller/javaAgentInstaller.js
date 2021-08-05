@@ -9,7 +9,7 @@ const { join } = require('path');
 const BuildToolInstaller = require('./buildToolInstallerBase');
 const InstallAgentStep = require('./installAgentStep');
 const CommandStruct = require('./commandStruct');
-const ValidationError = require('../errors/validationError');
+const ValidationError = require('./validationError');
 
 /**
  * @typedef {import('./types').AgentInstaller} AgentInstaller
