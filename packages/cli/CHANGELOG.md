@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.0.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v2.3.4...@appland/appmap-v3.0.0) (2021-08-05)
+
+
+### Continuous Integration
+
+* CLI now available as @appland/appmap ([bd99645](https://github.com/applandinc/appmap-js/commit/bd9964536056406181aab5b393800a7a8152ddbc))
+
+
+### BREAKING CHANGES
+
+* @appland/cli renamed to @appland/appmap
+
 # [@appland/cli-v1.5.2](https://github.com/applandinc/appmap-js/compare/@appland/cli-v1.5.1...@appland/cli-v1.5.2) (2021-08-04)
 
 
