@@ -1,3 +1,10 @@
+# [@appland/components-v1.6.3](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.6.2...@appland/components-v1.6.3) (2021-08-06)
+
+
+### Bug Fixes
+
+* Update upload icon ([#262](https://github.com/applandinc/appmap-js/issues/262)) ([a1f3861](https://github.com/applandinc/appmap-js/commit/a1f386195d365500609f478757a6fe8d5951e704))
+
 # [@appland/components-v1.6.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.6.1...@appland/components-v1.6.2) (2021-08-03)
 
 
