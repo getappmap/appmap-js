@@ -28,6 +28,9 @@ export default {
       defaultValue: 'default',
     },
   },
+  args: {
+    appMapUploadable: true,
+  },
 };
 
 export const extension = (args, { argTypes }) => ({
