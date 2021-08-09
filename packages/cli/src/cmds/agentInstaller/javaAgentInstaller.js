@@ -7,12 +7,11 @@ const { JSDOM } = require('jsdom');
 const xmlSerializer = require('w3c-xmlserializer');
 const { join } = require('path');
 const BuildToolInstaller = require('./buildToolInstallerBase');
-const InstallAgentStep = require('./installAgentStep');
 const CommandStruct = require('./commandStruct');
 const ValidationError = require('./validationError');
+const AgentInstaller = require('./agentInstallerBase');
 
 /**
- * @typedef {import('./types').AgentInstaller} AgentInstaller
  * @typedef {import('./types').Command} Command
  * @typedef {import('./types').InstallResult} InstallResult
  * @typedef {import('./types').InstallStep} InstallStep
@@ -277,44 +276,22 @@ ${plugins.map((plugin) => `  ${plugin}`).join('\n')}
   }
 }
 
-class JavaAgentInstaller {
+class JavaAgentInstaller extends AgentInstaller {
   /**
    * @param {string} path
    */
   constructor(path) {
-    this.path = path;
-  }
-
-  /**
-   *
-   * @returns {InstallStep[]}
-   */
-  installAgent() {
     const installers = [
-      new GradleInstaller(this.path),
-      new MavenInstaller(this.path),
+      new GradleInstaller(path),
+      new MavenInstaller(path),
     ].filter((installer) => installer.available);
-    if (installers.length > 0) {
-      return [new InstallAgentStep(installers[0])];
+    if (installers.length === 0) {
+      throw new ValidationError(
+        'No Java installer available for the current project. Supported frameworks are: Maven, Gradle.'
+      );
     }
 
-    throw new ValidationError(
-      'No Java installer available for the current project. Supported frameworks are: Maven, Gradle.'
-    );
-  }
-
-  /**
-   * @returns {InstallStep[]}
-   */
-  configureAgent() {
-    return [];
-  }
-
-  /**
-   * @returns {InstallStep[]}
-   */
-  runTests() {
-    return [];
+    super(installers[0], path);
   }
 }
 

@@ -24,7 +24,7 @@ const installerForProject = (projectType) => {
 };
 
 const buildToolInstaller = (installer) =>
-  installer.installAgent()[0].buildToolInstaller;
+  installer.installAgentFlow.buildToolInstaller;
 
 describe('Agent Installation', () => {
   describe('poetry support', () => {

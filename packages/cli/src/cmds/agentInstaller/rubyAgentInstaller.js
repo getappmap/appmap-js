@@ -3,13 +3,12 @@
 // @ts-check
 
 const { promises: fsp } = require('fs');
+const AgentInstaller = require('./agentInstallerBase');
 const BuildToolInstaller = require('./buildToolInstallerBase');
 const CommandStruct = require('./commandStruct');
-const InstallAgentStep = require('./installAgentStep');
 const ValidationError = require('./validationError');
 
 /**
- * @typedef {import('./types').AgentInstaller} AgentInstaller
  * @typedef {import('./types').Command} Command
  * @typedef {import('./types').InstallResult} InstallResult
  * @typedef {import('./types').InstallStep} InstallStep
@@ -84,45 +83,27 @@ in your terminal:`;
 
     return 'installed';
   }
+
+  get agentInitCommand() {
+    return new CommandStruct('bundle', ['exec', 'appmap-agent-init'], {});
+  }
 }
 
-class RubyAgentInstaller {
+class RubyAgentInstaller extends AgentInstaller {
   /**
    * @param {string} path
    */
   constructor(path) {
-    this.path = path;
-  }
-
-  /**
-   *
-   * @returns {InstallStep[]}
-   */
-  installAgent() {
-    const installers = [new BundleInstaller(this.path)].filter(
+    const installers = [new BundleInstaller(path)].filter(
       (installer) => installer.available
     );
-    if (installers.length > 0) {
-      return [new InstallAgentStep(installers[0])];
+    if (installers.length === 0) {
+      throw new ValidationError(
+        'No Ruby installer available for the current project. Supported frameworks are: Bundler.'
+      );
     }
 
-    throw new ValidationError(
-      'No Ruby installer available for the current project. Supported frameworks are: Bundler.'
-    );
-  }
-
-  /**
-   * @returns {InstallStep[]}
-   */
-  configureAgent() {
-    return [];
-  }
-
-  /**
-   * @returns {InstallStep[]}
-   */
-  runTests() {
-    return [];
+    super(installers[0], path);
   }
 }
 

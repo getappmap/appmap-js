@@ -12,6 +12,10 @@ class CommandStruct {
     this.args = args;
     this.environment = environment;
   }
+
+  toString() {
+    return [this.program].concat(this.args).join(' ');
+  }
 }
 
 module.exports = CommandStruct;
