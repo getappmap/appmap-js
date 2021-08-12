@@ -134,7 +134,7 @@ exports.validate = (data, options) => {
         //   path1,
         //   entity
         // );
-        const designator = makeDesignator([path2, parseInt(lineno), entity.static, entity.name]);
+        const designator = makeDesignator([parent.name, path2, parseInt(lineno), entity.static, entity.name]);
         assert(
           !designators.has(designator),
           AppmapError,
