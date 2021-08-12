@@ -3,35 +3,30 @@
     <div class="qs-container">
       <section class="qs-step">
         <div class="qs-step__head">
-          <h1 class="qs-title">Install AppMap Agent</h1>
+          <h1 class="qs-title">🥳 Congratulations! You have installed the AppMap extension.</h1>
+          <p>You can use this extension to view and navigate existing AppMaps.</p>
         </div>
         <div class="qs-step__block" v-if="hasDetectedLanguage">
-          <p>
-            To create AppMaps you need to install the AppMap Agent for your
-            language. Visit the quickstart guide in our documentaion to continue
-            installation.
-          </p>
-          <div
-            class="qs-link-wrap"
-            v-if="selectedLanguage && selectedLanguageData"
-          >
-            <a :href="selectedLanguageData.link" class="qs-button">
-              <img
-                class="qs-button__icon"
-                src="../assets/quickstart/link.png"
-              />
-              AppMap Quickstart guide for {{ selectedLanguageData.name }}
-            </a>
-          </div>
-          <div v-if="notSelectedLanguages.length">
-            <p>Also available:</p>
-            <ul class="qs-list">
-              <li v-for="lang in notSelectedLanguages" :key="lang.id">
-                <a :href="lang.link"
-                  >AppMap Quickstart guide for {{ lang.name }}</a
-                >
-              </li>
-            </ul>
+          <h3>
+            To record AppMaps of your code you must also install the AppMap agent for this project.
+          </h3>
+          <div class="qs-link-wrap" v-if="selectedLanguage && selectedLanguageData">
+            <p>
+              We have provided an installer to help you do that. All you have to is open a terminal
+              window in the root of your project and paste in this command:
+            </p>
+            <code>
+              {{ selectedLanguageData.installCommand }}
+            </code>
+            <p>OR</p>
+            <p>
+              If node-based installers are not your thing you can install the AppMap agent manually
+              by following our <a :href="selectedLanguageData.link" target="_blank">quickstart</a>
+              guide in the AppMap documentation.
+            </p>
+            <p>
+              After you have installed the agent proceed to <a href="#record-appmaps">Record AppMaps</a>
+            </p>
           </div>
         </div>
         <div class="qs-step__block" v-else>
@@ -55,17 +50,83 @@
           </p>
         </div>
       </section>
+
+      <section class="qs-step">
+        <div class="qs-step__head">
+          <h1 class="qs-title">Record AppMaps</h1>
+        </div>
+        <div class="qs-step__block">
+          <p>
+            Record AppMaps using your existing tests.
+          </p>
+          <ul>
+            <li><a href="">Record AppMaps with RSpec</a></li>
+            <li><a href="">Record AppMaps with Minitest</a></li>
+            <li><a href="">Record AppMaps with Cucumber</a></li>
+          </ul>
+          <p>
+            If you do not have tests, you can use our Remote recording capability to record your
+            application as it runs. This requires a Rails-based application.
+          </p>
+          <ul>
+            <li><a href="">Remote recording</a></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="qs-step">
+        <div class="qs-step__head">
+          <h1 class="qs-title">Open AppMaps</h1>
+        </div>
+        <div class="qs-step__block" v-if="appmaps.length">
+          <p>Here are the AppMaps recorded from your project.</p>
+          <p>
+            You may want to check out those with Requests and SQL queries first.
+          </p>
+          <table class="qs-appmaps-table">
+            <colgroup>
+              <col width="70%" />
+              <col width="10%" />
+              <col width="10%" />
+              <col width="10%" />
+            </colgroup>
+            <thead>
+            <tr>
+              <th>AppMap</th>
+              <th>Requests</th>
+              <th>SQL queries</th>
+              <th>Functions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr
+              v-for="appmap in appmaps"
+              :key="appmap.path"
+              @click="openAppmap(appmap.path)"
+            >
+              <td>{{ appmap.name }}</td>
+              <td>{{ appmap.requests }}</td>
+              <td>{{ appmap.sqlQueries }}</td>
+              <td>{{ appmap.functions }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-else class="qs-noappmaps">No AppMaps found in your project.</div>
+      </section>
     </div>
+
     <div class="qs-help">
       <HelpIcon class="qs-help__icon" />
       <div class="qs-help__text">
-        <p>Need help or want to give feedback?</p>
-        <a
-          href="https://appland.com/appmap/support"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Contact an AppLand developer directly.</a
-        >
+        <p>
+          Stuck?
+          <a
+            href="https://appland.com/appmap/support"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Contact an AppLand developer directly.</a>
+        </p>
       </div>
     </div>
   </div>
@@ -85,6 +146,16 @@ export default {
     languages: {
       type: Array,
       default: () => [],
+    },
+    appmaps: {
+      type: Array,
+      default: () => [],
+    },
+  },
+
+  methods: {
+    openAppmap(path) {
+      this.$root.$emit('openAppmap', path);
     },
   },
 
