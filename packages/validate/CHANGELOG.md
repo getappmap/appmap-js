@@ -1,3 +1,20 @@
+# [@appland/appmap-validate-v2.0.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-validate-v1.0.0...@appland/appmap-validate-v2.0.0) (2021-08-12)
+
+
+### Bug Fixes
+
+* add defined_class in the keying between function call events and the classMap ([5ba2cde](https://github.com/applandinc/appmap-js/commit/5ba2cde48c9c4de78c36706989b285dec8d8a1b7))
+
+
+### Features
+
+* remove non-crucial dependencies to make run on the browser. ([0196ad9](https://github.com/applandinc/appmap-js/commit/0196ad962fb014eca8ca88a3b502642cc5afb837))
+
+
+### BREAKING CHANGES
+
+* the main function does no longer accept a path, instead the json data must be provided as first argument.
+
 # @appland/appmap-validate-v1.0.0 (2021-06-16)
 
 

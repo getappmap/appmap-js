@@ -1,6 +1,6 @@
 {
   "name": "@appland/appmap-validate",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "scripts": {
     "test": "npx c8 --reporter=text-summary --check-coverage --branches=100 --functions=100 --lines=100 --statements=100 --include lib/index.js node test/smoke.js",
     "build": "node src/build.js",
