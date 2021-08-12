@@ -2,22 +2,22 @@
   "name": "@appland/appmap-validate",
   "version": "1.0.0",
   "scripts": {
-    "test": "npx c8 --reporter=text-summary --check-coverage --branches=100 --functions=100 --lines=100 --statements=100 --include lib/main.js node test/smoke.js",
+    "test": "npx c8 --reporter=text-summary --check-coverage --branches=100 --functions=100 --lines=100 --statements=100 --include lib/index.js node test/smoke.js",
     "build": "node src/build.js",
     "test-html": "npx c8 --reporter=html node test/smoke.js && open coverage/index.html",
-    "prettier": "npx prettier --write 'lib/*.js' 'test/*.js' 'src/*.js'",
-    "lint": "npx eslint 'lib/*.js' 'test/*.js' 'src/*.js'"
+    "format": "npx prettier --write 'lib/*.js' 'test/*.js' 'src/*.js' 'schema/*.js'",
+    "lint": "npx eslint 'lib/*.js' 'test/*.js' 'src/*.js' 'schema/*.js'"
   },
   "publishConfig": {
     "access": "public"
   },
   "files": [
     "lib/*.js",
-    "schema/*.yml"
+    "schema/*.js"
   ],
-  "bin": "lib/bin.js",
+  "bin": "bin/index.js",
   "license": "MIT",
-  "main": "lib/main.js",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/applandinc/appmap-js.git",
@@ -26,12 +26,13 @@
   "devDependencies": {
     "c8": "^7.7.2",
     "eslint": "^7.28.0",
-    "prettier": "^2.3.1"
+    "prettier": "^2.3.1",
+    "yaml": "^1.10.2"
   },
   "dependencies": {
     "ajv": "^8.6.0",
-    "ajv-error-tree": "0.0.2",
-    "treeify": "^1.1.0",
-    "yaml": "^1.10.2"
+    "ajv-error-tree": "^0.0.5",
+    "format-util": "^1.0.5",
+    "treeify": "^1.1.0"
   }
 }

@@ -1,20 +1,29 @@
-const { readFileSync } = require("fs");
-const YAML = require("yaml");
 const Ajv = require("ajv");
 const { asTree } = require("treeify");
 const { structureAJVErrorArray, summarizeAJVErrorTree } = require("ajv-error-tree");
-const { getVersionMapping } = require("./version.js");
-const { AppmapError, InputError, assert, assertSuccess } = require("./assert.js");
+const { AppmapError, InputError, assert } = require("./assert.js");
+const { schema: schema_1_2_0 } = require("../schema/1-2-0.js");
+const { schema: schema_1_3_0 } = require("../schema/1-3-0.js");
+const { schema: schema_1_4_0 } = require("../schema/1-4-0.js");
+const { schema: schema_1_5_0 } = require("../schema/1-5-0.js");
+const { schema: schema_1_5_1 } = require("../schema/1-5-1.js");
+const { schema: schema_1_6_0 } = require("../schema/1-6-0.js");
 
 const ajv = new Ajv({
+  // jsPropertySyntax: true
   verbose: true,
 });
-// jsPropertySyntax: true
-const versions = getVersionMapping();
+
+const versions = new Map([
+  ["1.2.0", ajv.compile(schema_1_2_0)],
+  ["1.3.0", ajv.compile(schema_1_3_0)],
+  ["1.4.0", ajv.compile(schema_1_4_0)],
+  ["1.5.0", ajv.compile(schema_1_5_0)],
+  ["1.5.1", ajv.compile(schema_1_5_1)],
+  ["1.6.0", ajv.compile(schema_1_6_0)],
+]);
 
 const keys = Array.from(versions.keys());
-
-const cache = new Map();
 
 const makeDesignator = JSON.stringify;
 
@@ -58,41 +67,23 @@ exports.AppmapError = AppmapError;
 
 exports.InputError = InputError;
 
-exports.validate = (options) => {
+exports.validate = (data, options) => {
   // Normalize options //
   options = {
     "schema-depth": 0,
     "instance-depth": 0,
-    path: null,
-    data: null,
     version: null,
     ...options,
   };
-  assert(
-    (options.path === null) !== (options.data === null),
-    InputError,
-    `either path or data must be provided, got: path = %o and data = %o`,
-    options.path,
-    options.data
-  );
-  if (options.path !== null) {
-    const content = assertSuccess(() => readFileSync(options.path, "utf8"), InputError, "%s");
-    options.data = assertSuccess(
-      () => JSON.parse(content),
-      AppmapError,
-      `could not JSON-parse file %o >> %s`,
-      options.path
-    );
-  }
   if (options.version === null) {
     assert(
-      typeof options.data === "object" &&
-        options.data !== null &&
-        Reflect.getOwnPropertyDescriptor(options.data, "version") !== undefined,
+      typeof data === "object" &&
+        data !== null &&
+        Reflect.getOwnPropertyDescriptor(data, "version") !== undefined,
       AppmapError,
-      "could extract version from appmap"
+      "could not extract version from appmap"
     );
-    options.version = options.data.version;
+    options.version = data.version;
   }
   if (/^[0-9]+\.[0-9]+$/.test(options.version)) {
     options.version = `${options.version}.0`;
@@ -105,23 +96,19 @@ exports.validate = (options) => {
     keys
   );
   // Validate against json schema //
-  if (!cache.has(options.version)) {
-    const schema = YAML.parse(readFileSync(versions.get(options.version), "utf8"));
-    cache.set(options.version, ajv.compile(schema));
-  }
-  const validate = cache.get(options.version);
-  if (!validate(options.data)) {
+  const validate = versions.get(options.version);
+  if (!validate(data)) {
     const tree1 = structureAJVErrorArray(validate.errors);
     const tree2 = summarizeAJVErrorTree(tree1, options);
     let message;
     if (options["schema-depth"] === 0 && options["instance-depth"] === 0) {
       message = typeof tree2 === "string" ? tree2 : asTree(tree2, true);
     } else {
-      message = YAML.stringify(tree2);
+      message = JSON.stringify(tree2, null, 2);
     }
     throw new AppmapError(message, { list: validate.errors, tree: tree1 });
   }
-  const events = options.data.events;
+  const events = data.events;
   // Verify the unicity of code object //
   const designators = new Set();
   const collectDesignator = (entity, parent, path1) => {
@@ -147,7 +134,7 @@ exports.validate = (options) => {
         //   path1,
         //   entity
         // );
-        const designator = makeDesignator([path2, parseInt(lineno), entity.static, entity.name]);
+        const designator = makeDesignator([parent.name, path2, parseInt(lineno), entity.static, entity.name]);
         assert(
           !designators.has(designator),
           AppmapError,
@@ -163,7 +150,7 @@ exports.validate = (options) => {
       }
     }
   };
-  for (let entity of options.data.classMap) {
+  for (let entity of data.classMap) {
     collectDesignator(entity, null, "");
   }
   // Verify the per thread fifo ordering //

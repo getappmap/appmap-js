@@ -1,13 +1,8 @@
-const { writeFileSync } = require("fs");
 const { strict: Assert } = require("assert");
 const Semver = require("semver");
-const { validate, AppmapError } = require("../lib/main.js");
-const { getVersionMapping } = require("../lib/version.js");
+const { validate, AppmapError } = require("../lib/index.js");
 
-for (let version of getVersionMapping().keys()) {
-  if (version.endsWith(".0")) {
-    version = version.substring(0, version.length - 2);
-  }
+for (const version of ["1.2", "1.3", "1.4", "1.5", "1.5.1", "1.6"]) {
   const data = {
     version,
     metadata: {
@@ -141,13 +136,11 @@ for (let version of getVersionMapping().keys()) {
         : []),
     ],
   };
-  const path = `${__dirname}/../tmp/test@${version.replace(/\./u, "-")}.appmap.json`;
-  writeFileSync(path, JSON.stringify(data, null, 2), "utf8");
-  Assert.ok(validate({ path }).startsWith(version));
+  Assert.ok(validate(data).startsWith(version));
   data.events.push(123);
-  Assert.throws(() => validate({ data }), AppmapError);
+  Assert.throws(() => validate(data), AppmapError);
   data.events.pop();
   delete data.metadata;
-  Assert.throws(() => validate({ data }), AppmapError);
-  Assert.throws(() => validate({ data, "schema-depth": 2, "instanceof-depth": 2 }), AppmapError);
+  Assert.throws(() => validate(data), AppmapError);
+  Assert.throws(() => validate(data, { "schema-depth": 2, "instanceof-depth": 2 }), AppmapError);
 }
