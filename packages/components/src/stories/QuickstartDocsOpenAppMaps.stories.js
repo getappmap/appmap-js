@@ -1,7 +1,7 @@
-import OpenAppMaps from '@/pages/OpenAppMaps.vue';
+import OpenAppMaps from '@/pages/quickstart-docs/OpenAppMaps.vue';
 
 export default {
-  title: 'Pages/VS Code',
+  title: 'Pages/VS Code/Quickstart Docs/Open App Maps',
   component: OpenAppMaps,
   args: {
     appmaps: [

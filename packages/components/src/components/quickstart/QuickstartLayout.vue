@@ -1,55 +1,20 @@
 <template>
   <div class="qs">
     <div class="qs-container">
-      <section class="qs-step">
-        <div class="qs-step__head">
-          <h1 class="qs-title">Open AppMaps</h1>
-        </div>
-        <div class="qs-step__block" v-if="appmaps.length">
-          <p>You have completed the Quickstart.</p>
-          <p>We've identified a few AppMaps you may want to check out first.</p>
-          <table class="qs-appmaps-table">
-            <colgroup>
-              <col width="70%" />
-              <col width="10%" />
-              <col width="10%" />
-              <col width="10%" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th>AppMap</th>
-                <th>Requests</th>
-                <th>SQL queries</th>
-                <th>Functions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="appmap in appmaps"
-                :key="appmap.path"
-                @click="openAppmap(appmap.path)"
-              >
-                <td>{{ appmap.name }}</td>
-                <td>{{ appmap.requests }}</td>
-                <td>{{ appmap.sqlQueries }}</td>
-                <td>{{ appmap.functions }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div v-else class="qs-noappmaps">No AppMaps found in your project.</div>
-      </section>
+      <slot />
     </div>
     <div class="qs-help">
       <HelpIcon class="qs-help__icon" />
       <div class="qs-help__text">
-        <p>Need help or want to give feedback?</p>
-        <a
-          href="https://appland.com/appmap/support"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Contact an AppLand developer directly.</a
-        >
+        <p>
+          Stuck?
+          <a
+            href="https://appland.com/appmap/support"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Contact an AppLand developer directly.</a
+          >
+        </p>
       </div>
     </div>
   </div>
@@ -59,28 +24,15 @@
 import HelpIcon from '@/assets/quickstart/help.svg';
 
 export default {
-  name: 'OpenAppMaps',
+  name: 'QuickstartLayout',
 
   components: {
     HelpIcon,
   },
-
-  props: {
-    appmaps: {
-      type: Array,
-      default: () => [],
-    },
-  },
-
-  methods: {
-    openAppmap(path) {
-      this.$root.$emit('openAppmap', path);
-    },
-  },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 html,
 body {
   width: 100%;
@@ -197,11 +149,16 @@ a.qs-button {
 }
 
 .qs-step {
-  max-width: 600px;
+  max-width: 800px;
   padding: 35px 16px 16px;
 
   &__head {
     margin-bottom: 6px;
+  }
+
+  p.qs-step__separator {
+    margin: 10px 0;
+    opacity: 0.5;
   }
 }
 
@@ -232,58 +189,5 @@ a.qs-button {
   &__text {
     line-height: 18px;
   }
-}
-
-.qs-appmaps-table {
-  margin: 1.5rem 0;
-  border-collapse: collapse;
-  width: 100%;
-
-  th,
-  td {
-    border: none;
-    padding: 0 1rem;
-    font-weight: normal;
-    color: $gray6;
-    text-align: left;
-    white-space: nowrap;
-
-    &:first-child {
-      padding-left: 0;
-    }
-
-    &:not(:first-child) {
-      font-size: 12px;
-    }
-  }
-
-  th {
-    border-bottom: 0.5rem solid transparent;
-    line-height: 1;
-
-    &:nth-child(n + 3) {
-      border-left: 1px solid currentColor;
-    }
-  }
-
-  tbody {
-    tr {
-      border-bottom: 1px solid #242c41;
-      cursor: pointer;
-    }
-
-    td {
-      padding-top: 2px;
-      padding-bottom: 2px;
-      color: #a26eff;
-      white-space: normal;
-    }
-  }
-}
-
-.qs-noappmaps {
-  margin: 20px 0;
-  font-size: 16px;
-  color: $hotpink;
 }
 </style>
