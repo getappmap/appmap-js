@@ -22,14 +22,14 @@ const {validate} = require("appmap-validate");
 // Throws an InputError if there was a problem with the input options
 // Throws an InvalidAppmapError if the provided appmap is invalid
 // Any other thrown error should be considered as a bug
-validate({
-  path, // either provide a path to an appmap file
-  data, // or directly provide the JSON-parsed data
-  version, // appmap specification version
-  // JSON schema Error reporting options:
-  "schema-depth": 0 // depth of the schema to display
-  "instance-depth": 0 // depth of the instance to display
-});
+validate(
+  data,
+  {
+    version, // appmap specification version
+    "schema-depth": 0 // depth of the schema to display
+    "instance-depth": 0 // depth of the instance to display
+  }
+);
 ```
 
 ## Design Decisions

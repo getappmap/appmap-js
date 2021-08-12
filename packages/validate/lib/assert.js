@@ -1,4 +1,4 @@
-const { format } = require("util");
+const format = require("format-util");
 
 exports.AppmapError = class AppmapError extends Error {
   constructor(message, data = null) {

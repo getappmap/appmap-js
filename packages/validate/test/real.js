@@ -1,6 +1,8 @@
-const { readdirSync } = require("fs");
-const { validate } = require("../lib/main.js");
+const { readdirSync, readFileSync } = require("fs");
+const { validate } = require("../lib/index.js");
 
-for (let filename of readdirSync(`${__dirname}/valid`)) {
-  validate({ path: `${__dirname}/valid/${filename}` });
+const directory = `${__dirname}/valid`;
+
+for (let filename of readdirSync(directory)) {
+  validate(JSON.parse(readFileSync(`${directory}/${filename}`, "utf8")));
 }
