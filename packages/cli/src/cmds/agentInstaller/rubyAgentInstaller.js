@@ -106,4 +106,4 @@ class RubyAgentInstaller extends AgentInstaller {
   }
 }
 
-module.exports = RubyAgentInstaller;
+module.exports = { BundleInstaller, RubyAgentInstaller };

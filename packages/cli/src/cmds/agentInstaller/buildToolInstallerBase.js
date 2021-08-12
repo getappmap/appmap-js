@@ -1,7 +1,7 @@
-const { existsSync } = require('fs');
+const { existsSync, writeFileSync } = require('fs');
 const { join } = require('path');
-const { ManualStep } = require('./workflow');
-const runCommand = require('./runCommand');
+const { ManualStep, Step } = require('./workflow');
+const cmdRunner = require('./commandRunner');
 
 /**
  * @typedef {import('./types').Command} Command
@@ -13,9 +13,10 @@ class BuildToolInstallerBase {
    * @param {string} path
    *
    */
-  constructor(buildFile, path) {
+  constructor(buildFile, path, commandRunner = null) {
     this.buildFile = buildFile;
     this.path = path;
+    this.commandRunner = commandRunner || cmdRunner;
   }
 
   get installSteps() {
@@ -44,9 +45,63 @@ ${cmd}
 `;
     return new ManualStep(prompt, async (userAction) => {
       if (userAction !== 'm') {
-        await runCommand(this.verifyCommand);
+        await this.commandRunner.run(this.verifyCommand);
       }
     });
+  }
+
+  get configureSteps() {
+    return [this.configureStep1, this.configureStep2];
+  }
+
+  get appMapYml() {
+    const out = this.commandRunner.runSync(this.agentInitCommand);
+    const json = JSON.parse(out);
+    return json.configuration.contents;
+  }
+
+  get configureStep1() {
+    const prompt = `
+This is the AppMap configuration for this project:
+${this.appMapYml}`;
+
+    return new Step(prompt, null);
+  }
+
+  get configureStep2() {
+    const configExists = existsSync(join(this.path, 'appmap.yml'));
+    let prompt;
+    let query;
+    if (configExists) {
+      prompt = `
+appmap.yml exists.
+`;
+      query =
+        "Hit enter to use the existing file, 'o' to overwrite, 'm' to update manually, 'a' to abort: ";
+    } else {
+      prompt = `
+appmap.yml not found.
+`;
+      query = "Hit enter to create, 'm' to create manually, 'a' to abort: ";
+    }
+    return new Step(
+      prompt,
+      async (userAction) => {
+        if (userAction === 'm') {
+          return;
+        }
+        // userAction === 'a' gets caught by Step
+
+        // Only remaining possibilities are the user hit enter, or the user
+        // picked 'o'. If the user hit enter, create the config file only if it
+        // doesn't already exit. If the user hit 'o', we want to overwrite the
+        // file.
+        if (!configExists || userAction === 'o') {
+          writeFileSync('appmap.yml', this.appMapYml);
+        }
+      },
+      query
+    );
   }
 
   get available() {

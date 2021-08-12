@@ -81,8 +81,8 @@ class MavenInstaller extends BuildToolInstaller {
   /**
    * @param {string} path
    */
-  constructor(path) {
-    super('pom.xml', path);
+  constructor(path, commandRunner = null) {
+    super('pom.xml', path, commandRunner);
   }
 
   /**
@@ -111,6 +111,26 @@ in your terminal`;
     return new CommandStruct(
       new Maven(this.path).runCommand(),
       ['-Dplugin=com.appland:appmap-maven-plugin', 'help:describe'],
+      {}
+    );
+  }
+
+  get agentInitCommand() {
+    const cmd = new CommandStruct(
+      new Maven(this.path).runCommand(),
+      ['appmap:print-jar-path'],
+      {}
+    );
+
+    const out = this.commandRunner.runSync(cmd);
+    const appmapPath = out
+      .split('\n')
+      .filter((l) => l.match(/^com\.appland:appmap-agent\.jar.path/))[0]
+      .split('=')[1];
+
+    return new CommandStruct(
+      'java',
+      ['-jar', appmapPath, '-d', this.path, 'init'],
       {}
     );
   }
@@ -217,8 +237,8 @@ class GradleInstaller extends BuildToolInstaller {
   /**
    * @param {string} path
    */
-  constructor(path) {
-    super('build.gradle', path);
+  constructor(path, commandRunner = null) {
+    super('build.gradle', path, commandRunner);
   }
 
   /**
@@ -253,6 +273,26 @@ in your terminal`;
         '--configuration',
         'appmapAgent',
       ],
+      {}
+    );
+  }
+
+  get agentInitCommand() {
+    const cmd = new CommandStruct(
+      new Gradle(this.path).runCommand(),
+      ['-q', 'appmap-print-jar-path'],
+      {}
+    );
+
+    const out = this.commandRunner.runSync(cmd);
+    const appmapPath = out
+      .split('\n')
+      .filter((l) => l.match(/^com\.appland:appmap-agent\.jar.path/))[0]
+      .split('=')[1];
+
+    return new CommandStruct(
+      'java',
+      ['-jar', appmapPath, '-d', this.path, 'init'],
       {}
     );
   }
@@ -411,10 +451,10 @@ class JavaAgentInstaller extends AgentInstaller {
   /**
    * @param {string} path
    */
-  constructor(path) {
+  constructor(path, commandRunner = null) {
     const installers = [
-      new GradleInstaller(path),
-      new MavenInstaller(path),
+      new GradleInstaller(path, commandRunner),
+      new MavenInstaller(path, commandRunner),
     ].filter((installer) => installer.available);
     if (installers.length === 0) {
       throw new ValidationError(

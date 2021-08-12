@@ -14,6 +14,7 @@ export interface Command {
 
 export interface BuildToolInstaller {
   installSteps: Step[];
+  configureSteps: Step[];
 
   available: boolean;
 
@@ -26,6 +27,8 @@ export interface BuildToolInstaller {
   postInstallMessage: string;
 
   verifyCommand: Command;
+
+  agentInitCommand: Command;
 }
 
 export interface Step {

@@ -42,6 +42,7 @@ exports.handler = async (argv) => {
     const installer = new InstallerClass(dir);
 
     await installer.installAgentFlow.run();
+    return installer.configureAgentFlow.run();
   };
 
   return commandFn().catch((err) => {

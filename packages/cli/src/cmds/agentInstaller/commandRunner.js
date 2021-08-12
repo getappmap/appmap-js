@@ -1,6 +1,6 @@
-const { exec } = require('child_process');
+const { exec, execSync } = require('child_process');
 
-async function runCommand(command) {
+async function run(command) {
   return new Promise((resolve, reject) => {
     const cp = exec(command.toString(), {
       env: Object.assign(process.env, command.environment),
@@ -24,4 +24,11 @@ async function runCommand(command) {
   });
 }
 
-module.exports = runCommand;
+function runSync(command) {
+  return execSync(command.toString(), {
+    env: Object.assign(process.env, command.environment),
+    cwd: this.path,
+  }).toString();
+}
+
+module.exports = { run, runSync };
