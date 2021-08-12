@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-// @ts-check
 
 const readline = require('readline');
 

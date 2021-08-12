@@ -1,5 +1,3 @@
-// @ts-check
-
 const { request: httpRequest } = require('http');
 const { request: httpsRequest } = require('https');
 const { baseURL, apiKey, exists } = require('./settings');
@@ -8,7 +6,7 @@ const { baseURL, apiKey, exists } = require('./settings');
  * Loads AppMap data from UUID.
  *
  * @param {string} uuid
- * @returns {Promise<AppMapData>}
+ * @returns {Promise<import('./types').AppMapData>}
  */
 const getAppMap = async (uuid) => {
   if (!exists) {

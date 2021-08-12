@@ -1,5 +1,3 @@
-// @ts-check
-
 const { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } = require('./constants');
 const { verbose } = require('../utils');
 

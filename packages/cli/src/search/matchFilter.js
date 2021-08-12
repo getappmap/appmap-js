@@ -1,5 +1,3 @@
-// @ts-check
-
 const { formatValue, formatHttpServerRequest } = require('../utils');
 
 /** @typedef {import('./types').Event} Event */

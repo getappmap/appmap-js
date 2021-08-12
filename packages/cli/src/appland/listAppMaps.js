@@ -1,5 +1,3 @@
-// @ts-check
-
 const { request: httpRequest } = require('http');
 const { request: httpsRequest } = require('https');
 const { baseURL, apiKey, exists } = require('./settings');

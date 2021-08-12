@@ -1,5 +1,3 @@
-// @ts-check
-
 // @ts-ignore
 const { normalizeSQL } = require('@appland/models');
 

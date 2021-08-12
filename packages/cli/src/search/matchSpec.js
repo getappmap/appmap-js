@@ -1,6 +1,4 @@
 /* eslint-disable max-classes-per-file */
-// @ts-check
-
 const { analyzeQuery, obfuscate } = require('../database');
 
 /**

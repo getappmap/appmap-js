@@ -1,5 +1,3 @@
-// @ts-check
-
 const { existsSync } = require('fs');
 const { join } = require('path');
 const { ManualStep } = require('./workflow');

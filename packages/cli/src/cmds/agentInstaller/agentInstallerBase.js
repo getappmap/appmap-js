@@ -1,4 +1,3 @@
-// @ts-check
 const { Workflow } = require('./workflow');
 
 class AgentInstallerBase {

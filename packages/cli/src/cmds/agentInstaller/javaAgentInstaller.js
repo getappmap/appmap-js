@@ -1,5 +1,3 @@
-// @ts-check
-
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
 const { existsSync, promises: fsp } = require('fs');

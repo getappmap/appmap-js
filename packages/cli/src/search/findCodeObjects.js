@@ -1,5 +1,3 @@
-// @ts-check
-
 /* eslint-disable no-fallthrough */
 /* eslint-disable consistent-return */
 /* eslint-disable max-classes-per-file */

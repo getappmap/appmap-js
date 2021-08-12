@@ -1,6 +1,5 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
-// @ts-check
 
 const { promises: fsp } = require('fs');
 const AgentInstaller = require('./agentInstallerBase');
