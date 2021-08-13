@@ -84,6 +84,7 @@
                 type="checkbox"
                 id="limit-root-events"
                 v-model="filters.limitRootEvents.on"
+                @change="setUserFiltered"
               />
               <label for="limit-root-events">Limit root events to HTTP</label>
             </div>
@@ -92,6 +93,7 @@
                 type="checkbox"
                 id="unlabeled-events"
                 v-model="filters.unlabeledEvents.on"
+                @change="setUserFiltered"
               />
               <label for="unlabeled-events">Show unlabeled events</label>
             </div>
@@ -100,6 +102,7 @@
                 type="checkbox"
                 id="hide-media-requests"
                 v-model="filters.hideMediaRequests.on"
+                @change="setUserFiltered"
               />
               <label for="hide-media-requests">Hide media HTTP requests</label>
             </div>
@@ -243,6 +246,7 @@ export default {
           default: true,
         },
       },
+      isUserFiltered: false,
     };
   },
 
@@ -388,7 +392,7 @@ export default {
         Array.isArray(appMap.classMap.codeObjects) &&
         appMap.classMap.codeObjects.length;
 
-      return !this.filtersChanged && (!hasEvents || !hasClassMap);
+      return !this.isUserFiltered && (!hasEvents || !hasClassMap);
     },
 
     filtersChanged() {
@@ -554,6 +558,10 @@ export default {
     stopResizing() {
       document.body.style.userSelect = '';
       this.isPanelResizing = false;
+    },
+
+    setUserFiltered() {
+      this.isUserFiltered = true;
     },
   },
 };
