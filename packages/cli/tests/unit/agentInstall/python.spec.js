@@ -26,7 +26,7 @@ const installerForProject = (projectType) => {
 const buildToolInstaller = (installer) =>
   installer.installAgentFlow.buildToolInstaller;
 
-describe('Agent Installation', () => {
+describe('Python Agent Installation', () => {
   describe('poetry support', () => {
     it('detects poetry project', async () => {
       const installer = installerForProject('poetry');

@@ -1,0 +1,14 @@
+// Not a real gradle file...
+buildscript {
+  repositories {
+    mavenCentral
+  }
+}
+
+plugins {
+  id 'java'
+}
+
+application {
+    mainClass = 'demo.App' 
+}

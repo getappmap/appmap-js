@@ -71,6 +71,7 @@ __metadata:
     js-yaml: ^3.14.1
     jsdom: ^16.6.0
     lint-staged: ^10.5.4
+    moo: ^0.5.1
     prettier: ^2.2.1
     semver: ^7.3.5
     tmp: ^0.2.1
@@ -17860,6 +17861,13 @@ __metadata:
   version: 2.29.1
   resolution: "moment@npm:2.29.1"
   checksum: 86729013febf7160de5b93da69273dd304d674b0224f9544b3abd09a87671ddd2cdd57598261ce57588910d63747ffd5590965e83c790d8bf327083c0e0a06e0
+  languageName: node
+  linkType: hard
+
+"moo@npm:^0.5.1":
+  version: 0.5.1
+  resolution: "moo@npm:0.5.1"
+  checksum: d637b67ae6768e3470939ee96b1916d6efdf737068b4bfce77f3f360c005a7417c0863a5aaf696c5efdb718eb09ad05239830aa6dc438b85870372c149b4fb80
   languageName: node
   linkType: hard
 

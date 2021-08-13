@@ -1,6 +1,6 @@
 const process = require('process');
 const { verbose } = require('../../utils');
-const JavaAgentInstaller = require('./javaAgentInstaller');
+const { JavaAgentInstaller } = require('./javaAgentInstaller');
 const RubyAgentInstaller = require('./rubyAgentInstaller');
 const { PythonAgentInstaller } = require('./pythonAgentInstaller');
 const ValidationError = require('./validationError');
