@@ -5,9 +5,9 @@
         <h1 class="qs-title">Open AppMaps</h1>
       </div>
       <div class="qs-step__block" v-if="appmaps.length">
-        <p>Here are the AppMaps recorded from your project.</p>
+        <p>You have AppMaps in this project!</p>
         <p>
-          You may want to check out those with Requests and SQL queries first.
+          Here are some that look interesting that you may want to check out...
         </p>
         <table class="qs-appmaps-table">
           <colgroup>
@@ -20,7 +20,7 @@
             <tr>
               <th>AppMap</th>
               <th>Requests</th>
-              <th>SQL queries</th>
+              <th>SQL</th>
               <th>Functions</th>
             </tr>
           </thead>

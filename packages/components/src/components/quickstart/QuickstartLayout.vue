@@ -6,15 +6,13 @@
     <div class="qs-help">
       <HelpIcon class="qs-help__icon" />
       <div class="qs-help__text">
-        <p>
-          Stuck?
-          <a
-            href="https://appland.com/appmap/support"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Contact an AppLand developer directly.</a
-          >
-        </p>
+        Stuck?
+        <a
+          href="https://appland.com/appmap/support"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Contact an AppLand developer directly.</a
+        >
       </div>
     </div>
   </div>
@@ -47,7 +45,7 @@ body {
 ::selection,
 ::-moz-selection,
 ::-webkit-selection {
-  background-color: #a26eff;
+  background-color: #2a84ef;
   color: white;
 }
 
@@ -74,11 +72,38 @@ body {
   p {
     margin: 0;
     line-height: 1.75;
+
+    &.mb10 {
+      margin-bottom: 10px;
+    }
+
+    &.mb20 {
+      margin-bottom: 20px;
+    }
   }
 
   a {
-    color: #a26eff;
+    color: #2a84ef;
     text-decoration: none;
+  }
+
+  code {
+    margin: 20px 0;
+    display: block;
+    border: 1px solid #454545;
+    border-radius: 8px;
+    max-width: 80%;
+    padding: 12px 20px;
+    color: #d7ba7d;
+  }
+
+  ul {
+    padding-left: 10px;
+
+    li::marker {
+      content: '> ';
+      color: #2a84ef;
+    }
   }
 }
 
@@ -149,11 +174,11 @@ a.qs-button {
 }
 
 .qs-step {
-  max-width: 800px;
-  padding: 35px 16px 16px;
+  max-width: 675px;
+  padding: 32px 37px;
 
   &__head {
-    margin-bottom: 6px;
+    margin-bottom: 30px;
   }
 
   p.qs-step__separator {
@@ -170,8 +195,52 @@ a.qs-button {
   }
 }
 
-.qs-link-wrap {
-  margin: 30px 0;
+.qs-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 17px 8px;
+
+  &__congrats {
+    border: 1px solid #a5fc18;
+    border-radius: 10px;
+    width: 100%;
+    padding: 20px;
+    background: rgba(87, 189, 51, 0.2);
+    font-weight: 500;
+  }
+
+  &__list {
+    margin: 50px 0 20px;
+    line-height: 1.5;
+  }
+
+  &__item {
+    max-width: 650px;
+
+    &:not(:last-child) {
+      margin-bottom: 40px;
+    }
+
+    h1.qs-welcome__item-title {
+      position: relative;
+      margin-bottom: 5px;
+      font-size: 18px;
+      font-weight: 400;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 6px;
+        left: -21px;
+        display: block;
+        width: 12px;
+        height: 12px;
+        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAWCAYAAADNX8xBAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAEPSURBVHgBrZLbDYJAEEVnB8O3JWgZPEKkErUDrUDoQCtQO7ADNED4tAQpwX9ezqgkPkDZ1ZNAwuxyc+/dBfgXSZIM4A9gURSnMAy9IAj68APILyHEQtf1I7kbgyIiiqLqaSBEioiuYRgpSICvg6qqBhw3juO1TH/YtkCCExI8cn/QgbdojZtucT2Ku/1J6IG9pmnTpv4Q5Bi19ScrdIX7K8syoDSzeiYb7Y26PyVHj5Azdpj2QBH6+UxOlrZt+/yt6miZ5/nQsiy/Hsg62nMfpmkeXhc6CXEH9Mwdx9m17el9Ebj2kGXZynXd86e9n4Q21INPAil0oEmotYdOQhyDLteMjnMLCuBdwOPjVBVhLnB0jXAe7EHuAAAAAElFTkSuQmCC')
+          no-repeat 0 0 / contain;
+      }
+    }
+  }
 }
 
 .qs-help {
@@ -189,5 +258,40 @@ a.qs-button {
   &__text {
     line-height: 18px;
   }
+}
+
+.qs-appmaps-table {
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  width: 100%;
+  th,
+  td {
+    border: none;
+    padding: 0 1rem;
+    font-weight: normal;
+    color: $base07;
+    text-align: left;
+    white-space: nowrap;
+    &:first-child {
+      padding-left: 0;
+    }
+  }
+  tbody {
+    tr {
+      cursor: pointer;
+    }
+    td {
+      padding-top: 2px;
+      padding-bottom: 2px;
+      color: #2a84ef;
+      white-space: normal;
+    }
+  }
+}
+
+.qs-noappmaps {
+  margin: 20px 0;
+  font-size: 16px;
+  color: $hotpink;
 }
 </style>
