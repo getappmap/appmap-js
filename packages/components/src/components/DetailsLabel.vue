@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import { AppMap } from '@appland/models';
+import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
   name: 'v-details-label',

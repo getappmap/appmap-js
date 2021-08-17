@@ -1,5 +1,5 @@
-import VTraceNode from '@/components/trace/TraceNode.vue';
 import { buildAppMap } from '@appland/models';
+import VTraceNode from '@/components/trace/TraceNode.vue';
 import scenario from './data/scenario.json';
 
 const appMap = buildAppMap(scenario).build();

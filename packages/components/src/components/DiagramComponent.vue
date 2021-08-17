@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import { CLEAR_OBJECT_STACK, SELECT_OBJECT } from '@/store/vsCode';
 import { ComponentDiagram } from '@appland/diagrams';
 import { CodeObject, Event, ClassMap, CodeObjectType } from '@appland/models';
+import { CLEAR_OBJECT_STACK, SELECT_OBJECT } from '@/store/vsCode';
 
 export default {
   name: 'v-diagram-component',

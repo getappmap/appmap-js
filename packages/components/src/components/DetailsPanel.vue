@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { Event, AppMap } from '@appland/models';
 import AppMapLogo from '@/assets/appmap-logo.svg';
 import EyeIcon from '@/assets/eye.svg';
 import VDetailsLabel from '@/components/DetailsLabel.vue';
@@ -59,7 +60,6 @@ import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
 import VDetailsPanelExternalService from '@/components/DetailsPanelExternalService.vue';
 import VDetailsPanelLabels from '@/components/DetailsPanelLabels.vue';
 import VDetailsSearch from '@/components/DetailsSearch.vue';
-import { Event, AppMap } from '@appland/models';
 
 export default {
   name: 'v-details-panel',

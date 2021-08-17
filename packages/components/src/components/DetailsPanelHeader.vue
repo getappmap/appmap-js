@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { Event, CodeObjectType } from '@appland/models';
 import VNodeTypePackageIcon from '@/assets/node-types/package.svg';
 import VNodeTypeClassIcon from '@/assets/node-types/class.svg';
 import VNodeTypeFunctionIcon from '@/assets/node-types/function.svg';
@@ -31,7 +32,6 @@ import VNodeTypeDatabaseIcon from '@/assets/node-types/database.svg';
 import VNodeTypeQueryIcon from '@/assets/node-types/query.svg';
 import VNodeTypeExternalServiceIcon from '@/assets/node-types/external-service.svg';
 import { SELECT_OBJECT } from '@/store/vsCode';
-import { Event, CodeObjectType } from '@appland/models';
 
 export default {
   name: 'v-details-panel-header',
