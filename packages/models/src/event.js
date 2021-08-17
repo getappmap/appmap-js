@@ -25,6 +25,10 @@ export default class Event {
       if (obj.$hidden.labels) {
         data.labels = [...obj.$hidden.labels];
       }
+
+      if (obj.$hidden.exceptions) {
+        data.exceptions = [...obj.$hidden.exceptions];
+      }
     }
 
     // Cyclic references shall not be enumerable
@@ -39,6 +43,7 @@ export default class Event {
 
     addHiddenProperty(this, 'linkedEvent');
     addHiddenProperty(this, 'labels');
+    addHiddenProperty(this, 'exceptions');
     addHiddenProperty(this, 'next');
     addHiddenProperty(this, 'previous');
     addHiddenProperty(this, 'hash');
@@ -113,6 +118,10 @@ export default class Event {
   get labels() {
     const eventLabels = this.callEvent.$hidden.labels || [];
     return new Set([...eventLabels, ...this.callEvent.codeObject.labels]);
+  }
+
+  get exceptions() {
+    return this.returnEvent.$hidden.exceptions || [];
   }
 
   get message() {
@@ -248,6 +257,12 @@ export default class Event {
   set labels(value) {
     if (hasProp(this.$hidden, 'labels')) {
       this.$hidden.labels = value;
+    }
+  }
+
+  set exceptions(value) {
+    if (hasProp(this.$hidden, 'exceptions')) {
+      this.$hidden.exceptions = value;
     }
   }
 
