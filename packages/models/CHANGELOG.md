@@ -1,3 +1,10 @@
+# [@appland/models-v1.4.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.3.1...@appland/models-v1.4.0) (2021-08-17)
+
+
+### Features
+
+* Add global filters ([#217](https://github.com/applandinc/appmap-js/issues/217)) ([3f16612](https://github.com/applandinc/appmap-js/commit/3f16612b7a876f94c81ca0414971c4c455b1a897))
+
 # [@appland/models-v1.3.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.3.0...@appland/models-v1.3.1) (2021-07-30)
 
 
