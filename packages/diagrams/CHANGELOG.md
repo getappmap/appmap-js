@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.3.0](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.2.3...@appland/diagrams-v1.3.0) (2021-08-17)
+
+
+### Features
+
+* Add global filters ([#217](https://github.com/applandinc/appmap-js/issues/217)) ([3f16612](https://github.com/applandinc/appmap-js/commit/3f16612b7a876f94c81ca0414971c4c455b1a897))
+
 # [@appland/diagrams-v1.2.3](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.2.2...@appland/diagrams-v1.2.3) (2021-07-30)
 
 
