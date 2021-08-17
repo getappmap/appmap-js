@@ -27,6 +27,26 @@
           <a href="#" @click="goToRecordAppmaps"><b>Record AppMaps</b></a>
         </p>
       </div>
+      <div class="qs-step__block" v-else>
+        <p>
+          AppMap currently supports Java, Python, and Ruby projects.<br />Visit
+          the Quickstart guides for more details:
+        </p>
+        <ul class="qs-list">
+          <li v-for="lang in languages" :key="lang.id">
+            <a :href="lang.link">
+              AppMap Quickstart guide for {{ lang.name }}
+            </a>
+          </li>
+        </ul>
+        <p class="qs-step__separator">or</p>
+        <p>
+          For updates on new language support
+          <a href="https://discord.com/invite/N9VUap6"
+            >join our Discord community</a
+          >
+        </p>
+      </div>
     </section>
   </QuickstartLayout>
 </template>
