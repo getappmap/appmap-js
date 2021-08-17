@@ -1,8 +1,14 @@
 import Geometry from './helpers/geometry';
 
-export function getEventTarget(target, container = document, selector = '') {
-  const selectedElements = Array.from(container.querySelectorAll(selector));
+export function getEventTarget(target, container = document, selector = false) {
   let el = target;
+  let selectedElements;
+
+  if (selector) {
+    selectedElements = Array.from(container.querySelectorAll(selector));
+  } else {
+    selectedElements = [container];
+  }
 
   while (el) {
     if (selectedElements.includes(el)) {

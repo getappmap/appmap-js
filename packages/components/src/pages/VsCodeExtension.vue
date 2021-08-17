@@ -73,6 +73,41 @@
         </template>
       </v-tabs>
       <div class="control-buttons">
+        <v-popper-menu :showDot="filtersChanged">
+          <template v-slot:icon>
+            <FilterIcon class="control-button__icon" />
+          </template>
+          <template v-slot:body>
+            <h2>Filters</h2>
+            <div>
+              <input
+                type="checkbox"
+                id="limit-root-events"
+                v-model="filters.limitRootEvents.on"
+                @change="setUserFiltered"
+              />
+              <label for="limit-root-events">Limit root events to HTTP</label>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                id="unlabeled-events"
+                v-model="filters.unlabeledEvents.on"
+                @change="setUserFiltered"
+              />
+              <label for="unlabeled-events">Show unlabeled events</label>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                id="hide-media-requests"
+                v-model="filters.hideMediaRequests.on"
+                @change="setUserFiltered"
+              />
+              <label for="hide-media-requests">Hide media HTTP requests</label>
+            </div>
+          </template>
+        </v-popper-menu>
         <button
           class="control-button diagram-reload"
           @click="resetDiagram"
@@ -139,9 +174,10 @@
 </template>
 
 <script>
-import { Event, buildAppMap } from '@appland/models';
+import { CodeObjectType, Event, buildAppMap } from '@appland/models';
 import ReloadIcon from '@/assets/reload.svg';
 import UploadIcon from '@/assets/upload.svg';
+import FilterIcon from '@/assets/filter.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
@@ -149,6 +185,7 @@ import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
 import VInstructions from '../components/Instructions.vue';
 import VNotification from '../components/Notification.vue';
+import VPopperMenu from '../components/PopperMenu.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import {
@@ -169,12 +206,14 @@ export default {
   components: {
     ReloadIcon,
     UploadIcon,
+    FilterIcon,
     VDetailsPanel,
     VDetailsButton,
     VDiagramComponent,
     VDiagramTrace,
     VInstructions,
     VNotification,
+    VPopperMenu,
     VTabs,
     VTab,
     DiagramGray,
@@ -193,6 +232,21 @@ export default {
       versionText: '',
       VIEW_COMPONENT,
       VIEW_FLOW,
+      filters: {
+        limitRootEvents: {
+          on: true,
+          default: true,
+        },
+        unlabeledEvents: {
+          on: true,
+          default: true,
+        },
+        hideMediaRequests: {
+          on: true,
+          default: true,
+        },
+      },
+      isUserFiltered: false,
     };
   },
 
@@ -243,10 +297,50 @@ export default {
     },
     filteredAppMap() {
       const { appMap } = this.$store.state;
-      const events = appMap.rootEvents().reduce((callTree, rootEvent) => {
+      let rootEvents = appMap.rootEvents();
+
+      if (this.filters.limitRootEvents.on) {
+        rootEvents = rootEvents.filter((e) => e.httpServerRequest);
+      }
+
+      let events = rootEvents.reduce((callTree, rootEvent) => {
         rootEvent.traverse((e) => callTree.push(e));
         return callTree;
       }, []);
+
+      events = events.filter(
+        (e) =>
+          this.filters.unlabeledEvents.on ||
+          e.labels.size > 0 ||
+          e.codeObject.type !== CodeObjectType.FUNCTION
+      );
+
+      if (this.filters.hideMediaRequests.on) {
+        const mediaRegex = [
+          'application/javascript',
+          'application/ecmascript',
+          'audio/.+',
+          'font/.+',
+          'image/.+',
+          'text/javascript',
+          'text/ecmascript',
+          'text/css',
+          'video/.+',
+        ].map((t) => new RegExp(t, 'i'));
+        const excludedEvents = [];
+        events.forEach((e) => {
+          if (
+            e.http_server_response &&
+            e.http_server_response.mime_type &&
+            mediaRegex.some((regex) =>
+              regex.test(e.http_server_response.mime_type)
+            )
+          ) {
+            excludedEvents.push(e.parent_id);
+          }
+        });
+        events = events.filter((e) => !excludedEvents.includes(e.id));
+      }
 
       return buildAppMap({
         events,
@@ -298,13 +392,28 @@ export default {
         Array.isArray(appMap.classMap.codeObjects) &&
         appMap.classMap.codeObjects.length;
 
-      return !hasEvents || !hasClassMap;
+      return !this.isUserFiltered && (!hasEvents || !hasClassMap);
+    },
+
+    filtersChanged() {
+      return Object.values(this.filters).some(
+        (f) =>
+          (typeof f.on === 'boolean' && f.on !== f.default) ||
+          (typeof on === 'function' && f.on() !== f.default)
+      );
     },
   },
 
   methods: {
     loadData(data) {
       this.$store.commit(SET_APPMAP_DATA, data);
+
+      const rootEvents = this.$store.state.appMap.rootEvents();
+
+      if (rootEvents.every((e) => !e.httpServerRequest)) {
+        this.filters.limitRootEvents.on = false;
+      }
+
       this.isLoading = false;
     },
 
@@ -450,6 +559,10 @@ export default {
       document.body.style.userSelect = '';
       this.isPanelResizing = false;
     },
+
+    setUserFiltered() {
+      this.isUserFiltered = true;
+    },
   },
 };
 </script>
@@ -538,6 +651,10 @@ code {
         top: 1.8rem;
         right: 1.3rem;
 
+        & > *:not(:last-child) {
+          margin-right: 1rem;
+        }
+
         .control-button {
           position: relative;
           border: none;
@@ -559,10 +676,6 @@ code {
           &:active {
             color: $gray5;
             transition-timing-function: ease-out;
-          }
-
-          &:not(:last-child) {
-            margin-right: 1rem;
           }
 
           &__icon {

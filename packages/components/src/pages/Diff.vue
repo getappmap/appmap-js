@@ -9,57 +9,53 @@
         :highlightStyle="highlightConfig.style"
         :zoomControls="false"
         :highlightAll="changeType !== 'changed'"
-        @clickEvent="(e) => log(e.hash)"
       />
 
-      <v-popper-menu>
-        <template v-slot:icon>
-          <v-cog />
-        </template>
-        <template v-slot:body>
-          <h2>Filters</h2>
-          <div>
-            <input
-              type="checkbox"
-              id="unlabeled-events"
-              v-model="filters.unlabeled.on"
-            />
-            <label for="unlabeled-events">Unlabeled events</label>
-          </div>
+      <div class="diff__filters">
+        <v-popper-menu position="bottom right" :showDot="filtersChanged">
+          <template v-slot:icon>
+            <v-cog />
+          </template>
+          <template v-slot:body>
+            <h2>Filters</h2>
+            <div>
+              <input
+                type="checkbox"
+                id="unlabeled-events"
+                v-model="filters.unlabeled.on"
+              />
+              <label for="unlabeled-events">Unlabeled events</label>
+            </div>
 
-          <div>
-            <input
-              type="checkbox"
-              id="unlabeled-events"
-              v-model="filters.labeled.on"
-            />
-            <label for="unlabeled-events">Labeled events</label>
-          </div>
+            <div>
+              <input
+                type="checkbox"
+                id="labeled-events"
+                v-model="filters.labeled.on"
+              />
+              <label for="labeled-events">Labeled events</label>
+            </div>
 
-          <div>
-            <input
-              type="checkbox"
-              id="unlabeled-events"
-              v-model="filters.http.on"
-            />
-            <label for="unlabeled-events">HTTP server requests</label>
-          </div>
+            <div>
+              <input
+                type="checkbox"
+                id="http-server-requests"
+                v-model="filters.http.on"
+              />
+              <label for="http-server-requests">HTTP server requests</label>
+            </div>
 
-          <div>
-            <input
-              type="checkbox"
-              id="unlabeled-events"
-              v-model="filters.sql.on"
-            />
-            <label for="unlabeled-events">SQL queries</label>
-          </div>
-        </template>
-      </v-popper-menu>
-      <!-- <v-overlay
-        @mousedown.native="hideOverlay = true"
-        v-if="eventsBase === null && !hideOverlay"
-        :opacity="0"
-      /> -->
+            <div>
+              <input
+                type="checkbox"
+                id="sql-queries"
+                v-model="filters.sql.on"
+              />
+              <label for="sql-queries">SQL queries</label>
+            </div>
+          </template>
+        </v-popper-menu>
+      </div>
     </div>
 
     <div class="diff__column">
@@ -71,13 +67,7 @@
         :highlightStyle="highlightConfig.style"
         :zoomControls="false"
         :highlightAll="changeType !== 'changed'"
-        @clickEvent="(e) => log(this.filterEvent(e))"
       />
-      <!-- <v-overlay
-        @mousedown.native="hideOverlay = true"
-        v-if="eventsWorking === null && !hideOverlay"
-        :opacity="0"
-      /> -->
     </div>
   </div>
 </template>
@@ -221,6 +211,14 @@ export default {
         .map((f) => f.filter);
     },
 
+    filtersChanged() {
+      return Object.values(this.filters).some(
+        (f) =>
+          (typeof f.on === 'boolean' && f.on === false) ||
+          (typeof on === 'function' && f.on() === false)
+      );
+    },
+
     allChanges() {
       const diff = AppMap.getDiff(
         this.filteredBaseAppMap,
@@ -248,10 +246,6 @@ export default {
   },
 
   methods: {
-    log(...msg) {
-      console.log(...msg);
-    },
-
     highlight(kind, data) {
       this.changeType = kind;
       this.hideOverlay = false;
@@ -276,8 +270,6 @@ export default {
 
   // #region For testing purposes only
   mounted() {
-    console.log('changes:', this.allChanges);
-
     let i = 0;
     const highlightChange = () => {
       if (!this.allChanges.length) {
@@ -334,6 +326,12 @@ code {
     border-style: solid;
     border-color: $gray1;
     border-width: 0 2px;
+  }
+
+  &__filters {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
   }
 }
 </style>

@@ -1,9 +1,9 @@
 <template>
-  <div class="popper" :style="styles">
-    <div class="popper__button" v-if="!open" @mousedown="open = true">
+  <div :class="classes">
+    <div class="popper__button" @click="open = !open">
       <slot name="icon" />
     </div>
-    <div class="popper__body" v-if="open" @mouseleave="open = false">
+    <div class="popper__body" v-if="open">
       <div class="popper__content">
         <slot name="body" />
       </div>
@@ -12,19 +12,26 @@
 </template>
 
 <script>
+import { getEventTarget } from '@appland/diagrams';
+
 export default {
   name: 'v-popper-menu',
   props: {
     position: {
       type: String,
-      default: 'top left',
+      default: 'bottom left',
       validator: (value) => {
         const [v, h] = value.split(/\s+?/);
         return (
-          ['top', 'center', 'bottom'].indexOf(v) !== -1 &&
-          ['left', 'center', 'right'].indexOf(h) !== -1
+          ['top', 'bottom'].indexOf(v) !== -1 &&
+          ['left', 'right'].indexOf(h) !== -1
         );
       },
+    },
+    showDot: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
   },
   data() {
@@ -35,55 +42,57 @@ export default {
     };
   },
   computed: {
-    styles() {
-      const result = {};
-      const transform = { x: 0, y: 0 };
+    classes() {
+      const classNames = [
+        'popper',
+        `popper--v-${this.vAlign}`,
+        `popper--h-${this.hAlign}`,
+      ];
 
-      if (this.vAlign === 'top') {
-        result.top = 0;
-      } else if (this.vAlign === 'center') {
-        result.top = '50%';
-        transform.y = '-50%';
-      } else if (this.vAlign === 'bottom') {
-        result.bottom = 0;
+      if (this.showDot) {
+        classNames.push('popper--dotted');
       }
 
-      if (this.hAlign === 'left') {
-        result.left = 0;
-      } else if (this.hAlign === 'center') {
-        result.left = '50%';
-        transform.x = '-50%';
-      } else if (this.hAlign === 'right') {
-        result.right = 0;
+      if (this.open) {
+        classNames.push('popper--opened');
       }
 
-      if (transform.x || transform.y) {
-        result.transform = `translate(${transform.x}, ${transform.y})`;
-      }
-
-      return result;
+      return classNames;
     },
+  },
+  mounted() {
+    window.addEventListener('click', (event) => {
+      if (!getEventTarget(event.target, this.$el)) {
+        this.open = false;
+      }
+    });
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .popper {
-  position: absolute;
-  padding: 0.25rem;
+  display: inline-block;
+  position: relative;
+  color: $gray4;
 
   &__button {
-    background: $general;
-    padding: 0.5rem;
-    border-radius: 1rem;
-    color: $white;
+    position: relative;
+    padding: 0.2rem;
+    color: inherit;
     cursor: pointer;
-    opacity: 0.8;
     line-height: 0;
     transition: $transition;
 
-    &:hover {
-      opacity: 1;
+    .popper--dotted &::before {
+      content: '';
+      position: absolute;
+      top: 5%;
+      right: 5%;
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background-color: $hotpink;
     }
 
     svg {
@@ -92,25 +101,96 @@ export default {
     }
   }
 
+  &.popper--opened,
+  &:hover {
+    color: $gray5;
+  }
+
   $border-radius: 1rem;
 
   &__body {
-    background: $general;
-    padding: 0.2rem;
     border-radius: $border-radius;
-  }
-
-  &__content {
-    border-radius: $border-radius;
-    background-color: $black;
-    opacity: 0.8;
-    padding: 1rem;
-    color: $white;
+    position: absolute;
+    width: max-content;
+    height: max-content;
+    max-width: 50vw;
+    max-height: 50vh;
+    padding: 0.5rem;
     font-family: $appland-text-font-family;
+    color: $gray6;
+    background: $black;
+
+    &::before {
+      content: '';
+      position: absolute;
+      border: 0.3rem solid transparent;
+    }
+
+    .popper--v-top & {
+      bottom: 100%;
+      margin-bottom: 0.8rem;
+    }
+
+    .popper--v-bottom & {
+      top: 100%;
+      margin-top: 0.8rem;
+    }
+
+    .popper--h-left & {
+      right: 50%;
+    }
+
+    .popper--h-right & {
+      left: 50%;
+    }
+
+    .popper--v-top.popper--h-left & {
+      border-bottom-right-radius: 0;
+
+      &::before {
+        top: 100%;
+        right: 0;
+        border-top-color: $black;
+        border-right-color: $black;
+      }
+    }
+
+    .popper--v-top.popper--h-right & {
+      border-bottom-left-radius: 0;
+
+      &::before {
+        top: 100%;
+        left: 0;
+        border-top-color: $black;
+        border-left-color: $black;
+      }
+    }
+
+    .popper--v-bottom.popper--h-left & {
+      border-top-right-radius: 0;
+
+      &::before {
+        bottom: 100%;
+        right: 0;
+        border-bottom-color: $black;
+        border-right-color: $black;
+      }
+    }
+
+    .popper--v-bottom.popper--h-right & {
+      border-top-left-radius: 0;
+
+      &::before {
+        bottom: 100%;
+        left: 0;
+        border-bottom-color: $black;
+        border-left-color: $black;
+      }
+    }
 
     h2 {
-      font-size: 1.2rem;
-      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+      margin: 0 0 0.25rem 0;
     }
   }
 }
