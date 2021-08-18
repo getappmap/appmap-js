@@ -363,6 +363,10 @@ yargs(process.argv.slice(2))
         describe: 'directory to recursively inspect for AppMaps',
         default: 'tmp/appmap',
       });
+      args.option('base-appmap-dir', {
+        describe:
+          'directory to recursively inspect for base version AppMaps (used for the "compare" feature)',
+      });
       args.option('interactive', {
         describe: 'interact with the output via CLI',
         alias: 'i',
@@ -390,6 +394,10 @@ yargs(process.argv.slice(2))
 
       console.warn('Indexing the AppMap database');
       await new FingerprintDirectoryCommand(argv.appmapDir).execute();
+      if (argv.baseAppmapDir) {
+        console.warn('Indexing the base AppMap database');
+        await new FingerprintDirectoryCommand(argv.baseAppmapDir).execute();
+      }
 
       let state;
 
@@ -446,63 +454,58 @@ yargs(process.argv.slice(2))
           yargs.exit(0, new Error());
         });
 
-        const home = () => {
-          Inspect.home(state, getCommand);
-        };
+        const home = () => Inspect.home(state, getCommand);
 
-        const filter = () => {
-          Inspect.filter(rl, state, buildStats, home);
-        };
+        const filter = () => Inspect.filter(rl, state, buildStats, home);
 
-        const undoFilter = async () => {
-          await Inspect.undoFilter(state, buildStats, home);
-        };
+        const undoFilter = async () =>
+          Inspect.undoFilter(state, buildStats, home);
 
-        const navigate = async () => {
-          await Inspect.navigate(rl, state, findCodeObjects, home);
-        };
+        const navigate = async () =>
+          Inspect.navigate(rl, state, findCodeObjects, home);
 
-        const reset = async () => {
-          await Inspect.reset(state, buildStats, home);
-        };
+        const compare = async () => Inspect.compare(state, home);
 
-        const print = () => {
-          Inspect.print(rl, state, getCommand, home);
-        };
+        const reset = async () => Inspect.reset(state, buildStats, home);
+
+        const print = () => Inspect.print(rl, state, getCommand, home);
+
+        const quit = () => rl.close();
 
         const getCommand = () => {
           console.log();
-          rl.question(
-            'Command (h)ome, (p)rint, (f)ilter, (u)ndo filter, (n)avigate, (r)eset filters, (q)uit: ',
-            function (command) {
-              // eslint-disable-next-line default-case
-              switch (command) {
-                case 'h':
-                  home();
-                  break;
-                case 'p':
-                  print();
-                  break;
-                case 'f':
-                  filter();
-                  break;
-                case 'u':
-                  undoFilter();
-                  break;
-                case 'n':
-                  navigate();
-                  break;
-                case 'r':
-                  reset();
-                  break;
-                case 'q':
-                  rl.close();
-                  break;
-                default:
-                  getCommand();
-              }
+
+          const options = {
+            home,
+            print,
+            filter,
+            'undo filter': undoFilter,
+            navigate,
+          };
+          if (argv.baseAppmapDir) {
+            options.compare = compare;
+          }
+          options['reset filters'] = reset;
+          options.quit = quit;
+
+          const prompt = `${Object.keys(options)
+            .map((opt) => `(${opt.charAt(0)})${opt.substring(1)}`)
+            .join(', ')}: `;
+
+          rl.question(prompt, (command) => {
+            let cmd;
+            const commandName = Object.keys(options).find(
+              (opt) => opt.charAt(0) === command
+            );
+            if (commandName) {
+              cmd = options[commandName];
             }
-          );
+            if (!cmd) {
+              return getCommand();
+            }
+
+            return cmd();
+          });
         };
 
         home();
