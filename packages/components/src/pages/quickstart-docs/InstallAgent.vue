@@ -13,9 +13,9 @@
           is open a terminal window in the root of your project and paste in
           this command:
         </p>
-        <code>
-          {{ selectedLanguageData.installCommand }}
-        </code>
+        <v-code-snippet>{{
+          selectedLanguageData.installCommand
+        }}</v-code-snippet>
         <p class="mb10">OR</p>
         <p class="mb20">
           You can install the AppMap agent manually by following our
@@ -53,12 +53,14 @@
 
 <script>
 import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
+import VCodeSnippet from '@/components/CodeSnippet.vue';
 
 export default {
   name: 'QuickstartDocsInstallAgent',
 
   components: {
     QuickstartLayout,
+    VCodeSnippet,
   },
 
   props: {
