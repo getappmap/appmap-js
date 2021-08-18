@@ -1,4 +1,4 @@
-import '../search/types';
+import { FunctionStats } from '../search/types';
 
 export interface Field {
   name: string;

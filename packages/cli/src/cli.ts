@@ -459,7 +459,7 @@ yargs(process.argv.slice(2))
         };
 
         const navigate = async () => {
-          await Inspect.navigate(state, buildStats, home);
+          await Inspect.navigate(rl, state, findCodeObjects, home);
         };
 
         const reset = async () => {

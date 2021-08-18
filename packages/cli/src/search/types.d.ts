@@ -2,22 +2,13 @@ export interface SQL {
   sql: string;
   database_type: string;
 }
-
-export interface HTTPRoute {
-  method: string;
-  uri: string;
-}
-
-export interface HTTPRequest {
-  route: HTTPRoute;
-  parameterNames: string[];
-  statusCode: number;
-}
-
+ 
 export interface HTTPServerRequest {
-  path: string;
-  normalized_path: string;
-  headers: { string: string };
+  request_method: string;
+  path_info: string;
+  normalized_path_info: string;
+  status_code: integer;
+  headers: {string:string};
 }
 
 export interface Event {
@@ -93,7 +84,13 @@ export interface Filter {
   value: string;
 }
 
+export interface Reference {
+  type: string;
+  name: string;
+}
+
 export interface FunctionStats {
+  references: Reference[];
   eventMatches: EventMatch[];
   returnValues: string[];
   httpServerRequests: string[];

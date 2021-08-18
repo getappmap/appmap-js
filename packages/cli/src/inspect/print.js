@@ -208,7 +208,7 @@ const commands = {
 function print(rl, state, getCommand, home) {
   const { stats: functionStats } = state;
   const retry = () => {
-    print(rl, functionStats, getCommand, home);
+    print(rl, state, getCommand, home);
   };
 
   rl.question(

@@ -1,18 +1,28 @@
+// @ts-check
+
 const { Table } = require('console-table-printer');
-const Fields = require('./fields');
 
-const filterFields = Fields.fields.filter((f) => f.filterName);
+/** @typedef {import('./types').Console} Console */
+/** @typedef {import('./types').State} State */
 
-const navigate = (rl, filters, stats, buildStats, home) => {
-  const filterFieldIndexes = Fields.selectIndexes(
-    filterFields.map((f) => f.name)
-  );
+/**
+ * @param {Console} rl
+ * @param {State} state
+ * @param {function} findCodeObjects
+ * @param {function} home
+ */
+const navigate = (rl, state, findCodeObjects, home) => {
+  const { stats: functionStats } = state;
   const dsTable = new Table({
-    title: 'Filter data set',
+    title: 'Navigate to object',
     columns: [
       {
         name: 'index',
         title: 'Index',
+      },
+      {
+        name: 'type',
+        title: 'Type',
       },
       {
         name: 'name',
@@ -20,11 +30,13 @@ const navigate = (rl, filters, stats, buildStats, home) => {
       },
     ],
   });
-  filterFields.forEach((field, index) => {
+  const { references } = functionStats;
+  references.forEach((reference, index) => {
     dsTable.addRow(
       {
-        index: filterFieldIndexes[index] + 1,
-        name: field.title,
+        index: index + 1,
+        type: reference.type,
+        name: reference.name,
       },
       { color: index % 2 === 0 ? 'white' : 'cyan' }
     );
@@ -32,72 +44,20 @@ const navigate = (rl, filters, stats, buildStats, home) => {
   dsTable.printTable();
 
   rl.question(
-    `Data set (${filterFieldIndexes.map((i) => i + 1).join(',')}) or (h)ome ? `,
+    `Reference (${references
+      .map((_reference, i) => i + 1)
+      .join(',')}) or (h)ome ? `,
     async (num) => {
       if (num === 'h') {
         return home();
       }
-      const filterField = Fields.fieldFromIndex(parseInt(num, 10) - 1);
-
-      function retry() {
-        navigate(rl, filters, stats, buildStats, home);
+      const reference = references[parseInt(num, 10) - 1];
+      if (!reference) {
+        return navigate(rl, state, findCodeObjects, home);
       }
-
-      if (!filterField || !filterField.filterName) {
-        return retry();
-      }
-
-      const statsValues = stats[filterField.name];
-      if (!statsValues) {
-        return retry();
-      }
-
-      const valueTable = new Table({
-        title: filterField.title,
-        columns: [
-          {
-            name: 'index',
-            title: 'Index',
-          },
-          {
-            name: 'value',
-            title: 'Value',
-          },
-        ],
-      });
-      statsValues.forEach((value, index) => {
-        valueTable.addRow(
-          {
-            index: index + 1,
-            value,
-          },
-          { color: index % 2 === 0 ? 'white' : 'cyan' }
-        );
-      });
-      valueTable.printTable();
-
-      return rl.question(
-        `Choose ${filterField.title} filter (${statsValues
-          .map((_, index) => index + 1)
-          .join(',')}), or (h)ome ? `,
-        // eslint-disable-next-line consistent-return
-        async (index) => {
-          if (index === 'h') {
-            return home();
-          }
-
-          const value = statsValues[parseInt(index, 10) - 1];
-          if (value) {
-            const newFilter = { name: filterField.filterName, value };
-            filters.push(newFilter);
-            await buildStats();
-            console.log();
-            home();
-          } else {
-            retry();
-          }
-        }
-      );
+      await findCodeObjects([reference.type, reference.name].join(':'));
+      console.log();
+      return home();
     }
   );
 };
