@@ -56,7 +56,7 @@
     "chokidar": "^3.5.1",
     "cli-progress": "^3.9.0",
     "conf": "^10.0.2",
-    "console-table-printer": "^2.9.0",
+    "console-table-printer": "^2.10.0",
     "crypto-js": "^4.0.0",
     "detect-indent": "^6.1.0",
     "diff": "^5.0.0",

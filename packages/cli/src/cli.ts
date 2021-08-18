@@ -391,35 +391,27 @@ yargs(process.argv.slice(2))
       console.warn('Indexing the AppMap database');
       await new FingerprintDirectoryCommand(argv.appmapDir).execute();
 
-      console.warn('Finding matching AppMaps');
-      let progress = newProgress();
-      const codeObjectId = argv.codeObject;
-      const finder = new FindCodeObjects(argv.appmapDir, codeObjectId);
-      const codeObjectMatches = await finder.find(
-        (count) => progress.start(count, 0),
-        progress.increment.bind(progress)
-      );
-      progress.stop();
+      let state;
 
-      if (!codeObjectMatches) {
-        return;
-      }
-
-      const filters = [];
-      let stats = null;
+      const newState = (codeObjectId) => ({
+        codeObjectId,
+        codeObjectMatches: [],
+        filters: [],
+        stats: null,
+      });
 
       const buildStats = async () => {
         const result: any[] = [];
         console.warn('Finding matching Events');
-        progress = newProgress();
-        progress.start(codeObjectMatches.length, 0);
+        const progress = newProgress();
+        progress.start(state.codeObjectMatches.length, 0);
         await Promise.all(
-          codeObjectMatches.map(async (codeObjectMatch) => {
+          state.codeObjectMatches.map(async (codeObjectMatch) => {
             const findEvents = new FindEvents(
               codeObjectMatch.appmap,
               codeObjectMatch.codeObject
             );
-            findEvents.filter(filters);
+            findEvents.filter(state.filters);
             const events = await findEvents.matches();
             result.push(...events);
             progress.increment();
@@ -427,10 +419,23 @@ yargs(process.argv.slice(2))
         );
         progress.stop();
         console.warn('Collating results...');
-        stats = new FunctionStats(result);
+        state.stats = new FunctionStats(result);
       };
 
-      await buildStats();
+      const findCodeObjects = async (codeObjectId) => {
+        console.warn('Finding matching AppMaps');
+        const progress = newProgress();
+        state = newState(codeObjectId);
+        const finder = new FindCodeObjects(argv.appmapDir, codeObjectId);
+        state.codeObjectMatches = await finder.find(
+          (count) => progress.start(count, 0),
+          progress.increment.bind(progress)
+        );
+        progress.stop();
+        await buildStats();
+      };
+
+      await findCodeObjects(argv.codeObject);
 
       const interactive = () => {
         const rl = readline.createInterface({
@@ -442,29 +447,33 @@ yargs(process.argv.slice(2))
         });
 
         const home = () => {
-          Inspect.home(codeObjectId, filters, stats, getCommand);
+          Inspect.home(state, getCommand);
         };
 
         const filter = () => {
-          Inspect.filter(rl, filters, stats, buildStats, home);
+          Inspect.filter(rl, state, buildStats, home);
         };
 
         const undoFilter = async () => {
-          await Inspect.undoFilter(filters, buildStats, home);
+          await Inspect.undoFilter(state, buildStats, home);
+        };
+
+        const navigate = async () => {
+          await Inspect.navigate(state, buildStats, home);
         };
 
         const reset = async () => {
-          await Inspect.reset(filters, buildStats, home);
+          await Inspect.reset(state, buildStats, home);
         };
 
         const print = () => {
-          Inspect.print(stats, rl, getCommand, home);
+          Inspect.print(rl, state, getCommand, home);
         };
 
         const getCommand = () => {
           console.log();
           rl.question(
-            'Command (h)ome, (p)rint, (f)ilter, (u)ndo filter, (r)eset filters, (q)uit: ',
+            'Command (h)ome, (p)rint, (f)ilter, (u)ndo filter, (n)avigate, (r)eset filters, (q)uit: ',
             function (command) {
               // eslint-disable-next-line default-case
               switch (command) {
@@ -479,6 +488,9 @@ yargs(process.argv.slice(2))
                   break;
                 case 'u':
                   undoFilter();
+                  break;
+                case 'n':
+                  navigate();
                   break;
                 case 'r':
                   reset();
@@ -498,7 +510,7 @@ yargs(process.argv.slice(2))
       if (argv.interactive) {
         interactive();
       } else {
-        console.log(JSON.stringify(stats, null, 2));
+        console.log(JSON.stringify(state.stats, null, 2));
       }
     }
   )

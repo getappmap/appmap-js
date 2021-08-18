@@ -4,17 +4,17 @@ const Fields = require('./fields');
 
 /** @typedef {import('../search/types').FunctionStats} FunctionStats */
 /** @typedef {import('./types').Filter} Filter */
+/** @typedef {import('./types').State} State */
 
 const MAX_VALUE_LENGTH = 60;
 
 /**
  *
- * @param {string} codeObjectId
- * @param {Filter[]} filters
- * @param {FunctionStats} stats
+ * @param {State} state
  * @param {function(): void} getCommand
  */
-const home = (codeObjectId, filters, stats, getCommand) => {
+const home = (state, getCommand) => {
+  const { codeObjectId, filters, stats } = state;
   if (filters.length > 0) {
     console.log('Filters:');
     console.log(

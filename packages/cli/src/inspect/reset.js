@@ -1,4 +1,14 @@
-const reset = async (filters, buildStats, home) => {
+// @ts-check
+
+/** @typedef {import('./types').State} State */
+
+/**
+ * @param {State} state
+ * @param {function} buildStats
+ * @param {function} home
+ */
+const reset = async (state, buildStats, home) => {
+  const { filters } = state;
   while (filters.length > 0) {
     filters.pop();
   }

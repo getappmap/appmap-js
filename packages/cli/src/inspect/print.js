@@ -5,6 +5,7 @@ const Fields = require('./fields');
 /** @typedef {import('../search/types').EventMatch} EventMatch */
 /** @typedef {import('../search/types').FunctionStats} FunctionStats */
 /** @typedef {import('./types').Field} Field */
+/** @typedef {import('./types').State} State */
 
 /**
  * @param {Field} field
@@ -199,14 +200,15 @@ const commands = {
 
 /**
  *
- * @param {FunctionStats} functionStats
+ * @param {State} state
  * @param {any} rl
  * @param {function(): void} getCommand
  * @param {function(): void} home
  */
-function print(functionStats, rl, getCommand, home) {
+function print(rl, state, getCommand, home) {
+  const { stats: functionStats } = state;
   const retry = () => {
-    print(functionStats, rl, getCommand, home);
+    print(rl, functionStats, getCommand, home);
   };
 
   rl.question(

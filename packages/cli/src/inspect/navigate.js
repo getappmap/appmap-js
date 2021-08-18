@@ -1,21 +1,9 @@
-// @ts-check
-
 const { Table } = require('console-table-printer');
 const Fields = require('./fields');
 
-/** @typedef {import('./types').State} State */
-/** @typedef {import('./types').Console} Console */
-
 const filterFields = Fields.fields.filter((f) => f.filterName);
 
-/**
- * @param {Console} rl
- * @param {State} state
- * @param {function} buildStats
- * @param {function} home
- */
-const filter = (rl, state, buildStats, home) => {
-  const { filters, stats } = state;
+const navigate = (rl, filters, stats, buildStats, home) => {
   const filterFieldIndexes = Fields.selectIndexes(
     filterFields.map((f) => f.name)
   );
@@ -52,7 +40,7 @@ const filter = (rl, state, buildStats, home) => {
       const filterField = Fields.fieldFromIndex(parseInt(num, 10) - 1);
 
       function retry() {
-        filter(rl, state, buildStats, home);
+        navigate(rl, filters, stats, buildStats, home);
       }
 
       if (!filterField || !filterField.filterName) {
@@ -114,4 +102,4 @@ const filter = (rl, state, buildStats, home) => {
   );
 };
 
-module.exports = filter;
+module.exports = navigate;

@@ -23,6 +23,7 @@ export interface HTTPServerRequest {
 export interface Event {
   id: number;
   type: string;
+  parent: Event;
   definedClass: string;
   methodId: string;
   labels: Set<string>;
