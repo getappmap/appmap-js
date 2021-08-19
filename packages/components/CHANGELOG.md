@@ -1,3 +1,10 @@
+# [@appland/components-v1.8.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.7.0...@appland/components-v1.8.0) (2021-08-19)
+
+
+### Features
+
+* Add exceptions to Trace nodes ([#312](https://github.com/applandinc/appmap-js/issues/312)) ([620d86d](https://github.com/applandinc/appmap-js/commit/620d86d446a9757e6d31b43b0587a5027a58528c))
+
 # [@appland/components-v1.7.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.6.3...@appland/components-v1.7.0) (2021-08-17)
 
 
