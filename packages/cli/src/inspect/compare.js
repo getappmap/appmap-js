@@ -1,5 +1,8 @@
 // @ts-check
 
+const { diffLines } = require('diff');
+const { dump: yamlDump } = require('js-yaml');
+
 /** @typedef {import('./types').Console} Console */
 /** @typedef {import('./types').State} State */
 
@@ -11,7 +14,13 @@
  */
 const compare = async (rl, state, buildBaseStats, home) => {
   const baseState = await buildBaseStats();
-  console.log(baseState);
+
+  const baseComparableState = yamlDump(baseState.stats.toComparableState());
+  const workingComparableState = yamlDump(state.stats.toComparableState());
+
+  const diff = diffLines(baseComparableState, workingComparableState);
+
+  console.log(diff);
 
   rl.question(
     `Press enter to continue: `,
