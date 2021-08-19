@@ -12,7 +12,7 @@ const reset = async (state, buildStats, home) => {
   while (filters.length > 0) {
     filters.pop();
   }
-  await buildStats();
+  await buildStats(state);
   console.log();
   home();
 };

@@ -102,7 +102,7 @@ const filter = (rl, state, buildStats, home) => {
           if (value) {
             const newFilter = { name: filterField.filterName, value };
             filters.push(newFilter);
-            await buildStats();
+            await buildStats(state);
             console.log();
             home();
           } else {

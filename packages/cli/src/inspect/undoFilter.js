@@ -13,7 +13,7 @@ const undoFilter = async (state, buildStats, home) => {
   if (filters.length > 0) {
     filters.pop();
   }
-  await buildStats();
+  await buildStats(state);
   console.log();
   home();
 };

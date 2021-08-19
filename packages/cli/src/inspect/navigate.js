@@ -55,7 +55,8 @@ const navigate = (rl, state, findCodeObjects, home) => {
       if (!reference) {
         return navigate(rl, state, findCodeObjects, home);
       }
-      await findCodeObjects([reference.type, reference.name].join(':'));
+      state.codeObjectId = [reference.type, reference.name].join(':');
+      await findCodeObjects(state);
       console.log();
       return home();
     }

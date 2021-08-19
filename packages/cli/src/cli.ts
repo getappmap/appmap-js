@@ -399,16 +399,15 @@ yargs(process.argv.slice(2))
         await new FingerprintDirectoryCommand(argv.baseAppmapDir).execute();
       }
 
-      let state;
-
-      const newState = (codeObjectId) => ({
+      const newState = (appmapDir, codeObjectId, filters) => ({
+        appmapDir,
         codeObjectId,
         codeObjectMatches: [],
-        filters: [],
+        filters: filters || [],
         stats: null,
       });
 
-      const buildStats = async () => {
+      const buildStats = async (state: any) => {
         const result: any[] = [];
         console.warn('Finding matching Events');
         const progress = newProgress();
@@ -430,20 +429,31 @@ yargs(process.argv.slice(2))
         state.stats = new FunctionStats(result);
       };
 
-      const findCodeObjects = async (codeObjectId) => {
+      const buildBaseStats = async () => {
+        const baseState = newState(
+          argv.baseAppmapDir,
+          workingState.codeObjectId,
+          [...workingState.filters]
+        );
+        await findCodeObjects(baseState);
+        return baseState;
+      };
+
+      const findCodeObjects = async (state) => {
         console.warn('Finding matching AppMaps');
+        const { appmapDir, codeObjectId } = state;
         const progress = newProgress();
-        state = newState(codeObjectId);
-        const finder = new FindCodeObjects(argv.appmapDir, codeObjectId);
+        const finder = new FindCodeObjects(appmapDir, codeObjectId);
         state.codeObjectMatches = await finder.find(
           (count) => progress.start(count, 0),
           progress.increment.bind(progress)
         );
         progress.stop();
-        await buildStats();
+        await buildStats(state);
       };
 
-      await findCodeObjects(argv.codeObject);
+      const workingState = newState(argv.appmapDir, argv.codeObject);
+      await findCodeObjects(workingState);
 
       const interactive = () => {
         const rl = readline.createInterface({
@@ -454,21 +464,22 @@ yargs(process.argv.slice(2))
           yargs.exit(0, new Error());
         });
 
-        const home = () => Inspect.home(state, getCommand);
+        const home = () => Inspect.home(workingState, getCommand);
 
-        const filter = () => Inspect.filter(rl, state, buildStats, home);
+        const filter = () => Inspect.filter(rl, workingState, buildStats, home);
 
         const undoFilter = async () =>
-          Inspect.undoFilter(state, buildStats, home);
+          Inspect.undoFilter(workingState, buildStats, home);
 
         const navigate = async () =>
-          Inspect.navigate(rl, state, findCodeObjects, home);
+          Inspect.navigate(rl, workingState, findCodeObjects, home);
 
-        const compare = async () => Inspect.compare(state, home);
+        const compare = async () =>
+          Inspect.compare(rl, workingState, buildBaseStats, home);
 
-        const reset = async () => Inspect.reset(state, buildStats, home);
+        const reset = async () => Inspect.reset(workingState, buildStats, home);
 
-        const print = () => Inspect.print(rl, state, getCommand, home);
+        const print = () => Inspect.print(rl, workingState, getCommand, home);
 
         const quit = () => rl.close();
 
@@ -513,7 +524,7 @@ yargs(process.argv.slice(2))
       if (argv.interactive) {
         interactive();
       } else {
-        console.log(JSON.stringify(state.stats, null, 2));
+        console.log(JSON.stringify(workingState.stats, null, 2));
       }
     }
   )
