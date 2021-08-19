@@ -3,6 +3,10 @@
 const { diffLines } = require('diff');
 const { dump: yamlDump } = require('js-yaml');
 
+const FgGreen = '\x1b[32m';
+const FgMagenta = '\x1b[35m';
+const FgWhite = '\x1b[37m';
+
 /** @typedef {import('./types').Console} Console */
 /** @typedef {import('./types').State} State */
 
@@ -20,7 +24,13 @@ const compare = async (rl, state, buildBaseStats, home) => {
 
   const diff = diffLines(baseComparableState, workingComparableState);
 
-  console.log(diff);
+  diff.forEach((entry) => {
+    // eslint-disable-next-line no-nested-ternary
+    const color = entry.added ? FgGreen : entry.removed ? FgMagenta : FgWhite;
+    entry.value.split('\n').forEach((line) => {
+      console.log(`%s%s\x1b[0m`, color, line);
+    });
+  });
 
   rl.question(
     `Press enter to continue: `,
