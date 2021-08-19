@@ -1,3 +1,10 @@
+# [@appland/models-v1.5.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.4.0...@appland/models-v1.5.0) (2021-08-19)
+
+
+### Features
+
+* Add exceptions to Trace nodes ([#312](https://github.com/applandinc/appmap-js/issues/312)) ([620d86d](https://github.com/applandinc/appmap-js/commit/620d86d446a9757e6d31b43b0587a5027a58528c))
+
 # [@appland/models-v1.4.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.3.1...@appland/models-v1.4.0) (2021-08-17)
 
 
