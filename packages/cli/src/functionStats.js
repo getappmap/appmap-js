@@ -1,5 +1,4 @@
-// @ts-check
-
+// @ts-nocheck
 const { analyzeQuery, obfuscate } = require('./database');
 const { formatValue, formatHttpServerRequest } = require('./utils');
 

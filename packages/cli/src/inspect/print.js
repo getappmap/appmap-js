@@ -1,5 +1,4 @@
-// @ts-check
-
+// @ts-ignore
 const { Table } = require('console-table-printer');
 const Fields = require('./fields');
 

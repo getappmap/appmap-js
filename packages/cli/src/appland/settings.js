@@ -1,5 +1,3 @@
-// @ts-check
-
 const { join } = require('path');
 const { homedir } = require('os');
 const { statSync, readFileSync } = require('fs');

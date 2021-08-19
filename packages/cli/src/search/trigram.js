@@ -1,5 +1,3 @@
-// @ts-check
-
 const { obfuscate } = require('../database');
 
 /** @typedef {import('./types').CodeObject} CodeObject */

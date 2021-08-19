@@ -1,5 +1,3 @@
-// @ts-check
-
 class CommandStruct {
   /**
    *
@@ -11,6 +9,10 @@ class CommandStruct {
     this.program = program;
     this.args = args;
     this.environment = environment;
+  }
+
+  toString() {
+    return [this.program].concat(this.args).join(' ');
   }
 }
 

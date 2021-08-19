@@ -1,15 +1,14 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
-// @ts-check
 
 const { promises: fsp } = require('fs');
+const AgentInstaller = require('./agentInstallerBase');
 const BuildToolInstaller = require('./buildToolInstallerBase');
 const CommandStruct = require('./commandStruct');
-const InstallAgentStep = require('./installAgentStep');
-const ValidationError = require('../errors/validationError');
+const ValidationError = require('./validationError');
+const { Step } = require('./workflow');
 
 /**
- * @typedef {import('./types').AgentInstaller} AgentInstaller
  * @typedef {import('./types').Command} Command
  * @typedef {import('./types').InstallResult} InstallResult
  * @typedef {import('./types').InstallStep} InstallStep
@@ -30,18 +29,23 @@ class PoetryInstaller extends BuildToolInstaller {
     super(POETRY_LOCK_FILE, path);
   }
 
+  get installStep1() {
+    const ret = new Step(this.assumptions, null);
+    return ret;
+  }
+
   /**
    * @returns {string}
    */
   get assumptions() {
-    return null;
+    return `Your project contains a ${POETRY_LOCK_FILE}. Therefore, it looks like a poetry project.`;
   }
 
   /**
    * @returns {string}
    */
   get postInstallMessage() {
-    return `Your project contains a ${POETRY_LOCK_FILE}. Therefore, it looks like a poetry project.
+    return `
 
 The AppMap Python package ("appmap") will be added to your project as a development dependency.`;
   }
@@ -55,6 +59,10 @@ The AppMap Python package ("appmap") will be added to your project as a developm
       ['add', '--dev', '--allow-prereleases', 'appmap'],
       process.env
     );
+  }
+
+  get agentInitCommand() {
+    return new CommandStruct('poetry', ['run', 'appmap-agent-init'], {});
   }
 
   /**
@@ -124,46 +132,28 @@ in your terminal:`;
 
     return 'installed';
   }
+
+  get agentInitCommand() {
+    return new CommandStruct('appmap-agent-init', [], {});
+  }
 }
 
-class PythonAgentInstaller {
+class PythonAgentInstaller extends AgentInstaller {
   /**
    * @param {string} path
    */
   constructor(path) {
-    this.path = path;
-  }
-
-  /**
-   *
-   * @returns {InstallStep[]}
-   */
-  installAgent() {
     const installers = [
-      new PoetryInstaller(this.path),
-      new PipInstaller(this.path),
+      new PoetryInstaller(path),
+      new PipInstaller(path),
     ].filter((installer) => installer.available);
-    if (installers.length > 0) {
-      return [new InstallAgentStep(installers[0])];
+    if (installers.length === 0) {
+      throw new ValidationError(
+        'No Python installer available for the current project. Supported frameworks are: poetry, pip.'
+      );
     }
 
-    throw new ValidationError(
-      'No Python installer available for the current project. Supported frameworks are: poetry, pip.'
-    );
-  }
-
-  /**
-   * @returns {InstallStep[]}
-   */
-  configureAgent() {
-    return [];
-  }
-
-  /**
-   * @returns {InstallStep[]}
-   */
-  runTests() {
-    return [];
+    super(installers[0], path);
   }
 }
 
