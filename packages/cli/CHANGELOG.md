@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.1.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.0.0...@appland/appmap-v3.1.0) (2021-08-19)
+
+
+### Bug Fixes
+
+* Always update build.gradle and pom.xml ([fd3e820](https://github.com/applandinc/appmap-js/commit/fd3e820f1cc6cf16a827fc21389b78d6cda7ac48))
+
+
+### Features
+
+* Create agent configuration ([cdbb282](https://github.com/applandinc/appmap-js/commit/cdbb28231df51c2c0874000126f8d20bf486b2c4))
+
 # [@appland/appmap-v3.0.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v2.3.4...@appland/appmap-v3.0.0) (2021-08-05)
 
 
