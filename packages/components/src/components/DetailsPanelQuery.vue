@@ -10,9 +10,9 @@
 </template>
 
 <script>
+import { getSqlLabelFromString } from '@appland/models';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
-import { getSqlLabelFromString } from '@appland/models';
 import { SELECT_OBJECT, POP_OBJECT_STACK } from '../store/vsCode';
 
 export default {

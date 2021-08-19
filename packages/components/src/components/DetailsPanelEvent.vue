@@ -88,12 +88,12 @@
 </template>
 
 <script>
+import { getSqlLabel } from '@appland/models';
 import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import VSqlCode from '@/components/SqlCode.vue';
 import { SET_VIEW, VIEW_FLOW } from '@/store/vsCode';
-import { getSqlLabel } from '@appland/models';
 
 export default {
   name: 'v-details-panel-event',

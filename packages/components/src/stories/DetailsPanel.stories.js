@@ -1,8 +1,8 @@
+import { CodeObjectType } from '@appland/models';
 import VDetailsPanel from '@/components/DetailsPanel.vue';
 import VDetailsButton from '@/components/DetailsButton.vue';
 import scenario from '@/stories/data/scenario.json';
 import { buildStore, SET_APPMAP_DATA } from '@/store/vsCode';
-import { CodeObjectType } from '@appland/models';
 
 const store = buildStore();
 store.commit(SET_APPMAP_DATA, scenario);

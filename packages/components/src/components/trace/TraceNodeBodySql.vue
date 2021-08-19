@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import VSqlCode from '@/components/SqlCode.vue';
 import { Event } from '@appland/models';
+import VSqlCode from '@/components/SqlCode.vue';
 
 export default {
   name: 'v-trace-node-body-sql',

@@ -48,8 +48,8 @@
 </template>
 
 <script>
-import SearchIcon from '@/assets/search.svg';
 import { CodeObject, AppMap, CodeObjectType } from '@appland/models';
+import SearchIcon from '@/assets/search.svg';
 import { SELECT_OBJECT, SELECT_LABEL } from '../store/vsCode';
 
 export default {

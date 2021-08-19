@@ -19,9 +19,9 @@
 </template>
 
 <script>
+import { CodeObjectType } from '@appland/models';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
-import { CodeObjectType } from '@appland/models';
 
 export default {
   name: 'v-details-panel-route',
