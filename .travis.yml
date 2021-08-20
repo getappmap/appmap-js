@@ -3,10 +3,7 @@ os: linux
 dist: xenial
 node_js: [14]
 
-cache:
-  npm: true
-  directories:
-    - $HOME/.cache
+cache: false
 
 addons:
   apt:

@@ -11,31 +11,31 @@ export interface HTTPRoute {
 export interface HTTPRequest {
   route: HTTPRoute;
   parameterNames: string[];
-  statusCode: int;
+  statusCode: number;
 }
- 
+
 export interface HTTPServerRequest {
   path: string;
   normalized_path: string;
-  headers: {string:string};
+  headers: { string: string };
 }
 
 export interface Event {
-  id: integer;
+  id: number;
   type: string;
   definedClass: string;
   methodId: string;
-  labels: Set;
+  labels: Set<string>;
   sql: SQL;
   httpServerRequest: HTTPServerRequest;
   sqlQuery: string;
-  isFunction: bool;
+  isFunction: boolean;
   returnValue: any;
   callEvent: Event;
   returnEvent: Event;
   codeObject: CodeObject;
-  isCall: function(): boolean;
-  isReturn: function(): boolean;
+  isCall: () => boolean;
+  isReturn: () => boolean;
 }
 
 export interface SQLInfo {
@@ -63,8 +63,8 @@ export interface Trigram {
 }
 
 export interface CodeObjectMatcher {
-  match: function(CodeObject) : string;
-  pop: function() : void;
+  match: (CodeObject) => string;
+  pop: () => void;
 }
 
 export interface CodeObjectMatch {
