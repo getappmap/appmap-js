@@ -28,6 +28,9 @@ const compare = async (rl, state, buildBaseStats, home) => {
     // eslint-disable-next-line no-nested-ternary
     const color = entry.added ? FgGreen : entry.removed ? FgMagenta : FgWhite;
     entry.value.split('\n').forEach((line) => {
+      if (line.trim() === '') {
+        return;
+      }
       console.log(`%s%s\x1b[0m`, color, line);
     });
   });

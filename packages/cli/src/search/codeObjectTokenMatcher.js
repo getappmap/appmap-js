@@ -1,7 +1,7 @@
 const { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } = require('./constants');
 const { verbose } = require('../utils');
 
-class CodeObjectMatcher {
+class CodeObjectTokenMatcher {
   /**
    * Search code objects in the classMap, looking for matches to a spec.
    *
@@ -70,4 +70,4 @@ class CodeObjectMatcher {
   }
 }
 
-module.exports = CodeObjectMatcher;
+module.exports = CodeObjectTokenMatcher;

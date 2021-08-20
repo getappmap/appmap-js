@@ -44,6 +44,7 @@ export interface CodeObject {
   parent: CodeObject;
   location: string; // Functions only
   static: boolean; // Functions only
+  hasLabel(string): boolean;
 }
 
 export interface Trigram {
