@@ -27,6 +27,12 @@ const Inspect = require('./inspect');
 const SwaggerCommand = require('./swagger/command');
 const InventoryCommand = require('./inventoryCommand');
 const InstallCommand = require('./cmds/agentInstaller/install-agent');
+const {
+  printDiff,
+  printObject,
+  printAddedLine,
+  printRemovedLine,
+} = require('./cli/output');
 
 class DiffCommand {
   public appMapNames: any;
@@ -187,11 +193,11 @@ yargs(process.argv.slice(2))
           'compute the diff of the canonicalized forms of each changed AppMap',
         boolean: true,
       });
+      args.option('appmap-dir', {
+        describe: 'directory containing work-in-progress AppMaps',
+      });
       args.option('base-dir', {
         describe: 'directory containing base version AppMaps',
-      });
-      args.option('working-dir', {
-        describe: 'directory containing work-in-progress AppMaps',
       });
     },
     async function (argv) {
@@ -204,7 +210,7 @@ yargs(process.argv.slice(2))
       // eslint-disable-next-line prefer-const
       baseDir = argv.baseDir;
       // eslint-disable-next-line prefer-const
-      workingDir = argv.workingDir;
+      workingDir = argv.appmapDir;
 
       if (!baseDir) {
         throw new Error('Location of base version AppMaps is required');
@@ -363,7 +369,7 @@ yargs(process.argv.slice(2))
         describe: 'directory to recursively inspect for AppMaps',
         default: 'tmp/appmap',
       });
-      args.option('base-appmap-dir', {
+      args.option('base-dir', {
         describe:
           'directory to recursively inspect for base version AppMaps (used for the "compare" feature)',
       });
@@ -394,7 +400,7 @@ yargs(process.argv.slice(2))
 
       console.warn('Indexing the AppMap database');
       await new FingerprintDirectoryCommand(argv.appmapDir).execute();
-      if (argv.baseAppmapDir) {
+      if (argv.baseDir) {
         console.warn('Indexing the base AppMap database');
         await new FingerprintDirectoryCommand(argv.baseAppmapDir).execute();
       }
@@ -576,15 +582,124 @@ yargs(process.argv.slice(2))
         describe: 'directory to recursively inspect for AppMaps',
         default: 'tmp/appmap',
       });
+      args.option('base-dir', {
+        describe:
+          'directory to recursively inspect for base version AppMaps. When this option is provided, this command computes and prints the difference between the inventories',
+      });
+      args.option('format', {
+        describe: 'output format (text, yaml, json)',
+        options: ['text', 'yaml', 'json'],
+        default: 'text',
+      });
       return args.strict();
     },
     async (argv) => {
       verbose(argv.verbose);
 
       await new FingerprintDirectoryCommand(argv.appmapDir).execute();
+      if (argv.baseDir) {
+        await new FingerprintDirectoryCommand(argv.baseDir).execute();
+      }
 
       const inventory = await new InventoryCommand(argv.appmapDir).execute();
-      console.log(yaml.dump(inventory));
+      if (argv.baseDir) {
+        // eslint-disable-next-line no-inner-declarations
+        function textIfy(entry) {
+          // console.log(JSON.stringify(entry));
+          if (typeof entry === 'string') {
+            return entry.trim();
+          }
+          if (Array.isArray(entry)) {
+            return entry.map((l) => l.trim()).join(' -> ');
+          }
+          return Object.keys(entry)
+            .reduce((memo, key) => {
+              memo.push(`${key}=${entry[key]}`);
+              return memo;
+            }, [])
+            .join(',');
+        }
+
+        const baseInventory = await new InventoryCommand(
+          argv.baseDir
+        ).execute();
+
+        const printSectionName = (sectionName) => {
+          console.log(
+            `\x1b[1m%s%s\x1b[0m`,
+            sectionName.charAt(0).toUpperCase(),
+            sectionName.slice(1)
+          );
+          console.log(
+            `\x1b[1m%s\x1b[0m`,
+            new Array(sectionName.length + 1).join('=')
+          );
+        };
+
+        const sectionKeys = Object.keys(inventory);
+        const customHandledKeys = [
+          'packages',
+          'classes',
+          'labels',
+          'sqlTables',
+          'sqlNormalized',
+        ];
+
+        ['packages', 'classes', 'labels', 'sqlTables', 'sqlNormalized'].forEach(
+          (sectionName) => {
+            delete sectionKeys[sectionName];
+
+            const workingSet = new Set(inventory[sectionName]);
+            const baseSet = new Set(baseInventory[sectionName]);
+            const union = new Set(
+              inventory[sectionName].concat(baseInventory[sectionName])
+            );
+
+            printSectionName(sectionName);
+            let changed = 0;
+            [...union].sort().forEach((obj) => {
+              if (!baseSet.has(obj)) {
+                changed += 1;
+                printAddedLine(`+ ${obj}`);
+              }
+              if (!workingSet.has(obj)) {
+                changed += 1;
+                printRemovedLine(`- ${obj}`);
+              }
+            });
+            console.log(`${union.size - changed} total`);
+            console.log();
+          }
+        );
+
+        sectionKeys
+          .filter((key) => !customHandledKeys.includes(key))
+          .forEach((sectionName) => {
+            console.log(
+              `\x1b[1m%s%s\x1b[0m`,
+              sectionName.charAt(0).toUpperCase(),
+              sectionName.slice(1)
+            );
+            console.log(
+              `\x1b[1m%s\x1b[0m`,
+              new Array(sectionName.length + 1).join('=')
+            );
+            const diff = diffLines(
+              baseInventory[sectionName]
+                .map(textIfy)
+                .map((s) => s.trim())
+                .join('\n'),
+              inventory[sectionName]
+                .map(textIfy)
+                .map((s) => s.trim())
+                .join('\n')
+            );
+            printDiff(diff, argv.format);
+            console.log();
+          });
+      } else {
+        printObject(inventory, argv.format);
+      }
     }
   )
   .command(

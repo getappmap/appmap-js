@@ -87,6 +87,7 @@ class InventoryCommand {
           if (verbose()) {
             console.log(`Collecting ${JSON.stringify(stackStr)}`);
           }
+          // Save the AppMap name/path here, as well as the event id of the leaf.
           callStacks.add(JSON.stringify(stackStr));
         }
         stack.pop();
