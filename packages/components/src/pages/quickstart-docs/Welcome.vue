@@ -8,14 +8,16 @@
       <div class="qs-welcome__list">
         <section class="qs-welcome__item">
           <h1 class="qs-welcome__item-title">
-            I received a <b>link to an AppMap</b> from a friend or colleague and
-            I want to open it
+            I would like to <b>make AppMaps of my App</b>
           </h1>
           <p>
-            If you recieved a link to an AppMap, simply click on it, log-in with
-            a new or existing account, and you will be directed to the AppMap.
-            You can read more about sharing AppMap files in our
-            <a href="https://appland.com/docs/appmap-overview.html">docs</a>.
+            To record AppMaps you will need to install the AppMap agent for this
+            project.
+          </p>
+          <p>
+            <a href="#" @click="goToInstallAgent"
+              ><b>Install AppMap Agent</b></a
+            >
           </p>
         </section>
         <section class="qs-welcome__item">
@@ -31,16 +33,13 @@
         </section>
         <section class="qs-welcome__item">
           <h1 class="qs-welcome__item-title">
-            I would like to <b>make AppMaps of my App</b>
+            I received a <b>link to an AppMap</b> and I want to open it
           </h1>
           <p>
-            To record AppMaps you will need to install the AppMap agent for this
-            project.
-          </p>
-          <p>
-            <a href="#" @click="goToInstallAgent"
-              ><b>Install the AppMap Agent</b></a
-            >
+            Simply click the link you recieved, follow the prompt to log-in with
+            a new or existing account, and you will be directed to the AppMap.
+            You can read more about sharing AppMap files in our
+            <a href="https://appland.com/docs/appmap-overview.html">docs</a>.
           </p>
         </section>
       </div>
