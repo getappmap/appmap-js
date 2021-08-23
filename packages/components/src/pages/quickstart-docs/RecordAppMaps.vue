@@ -12,7 +12,7 @@
             application server as it runs.
           </p>
           <p class="mb20">Record AppMaps for your language:</p>
-          <p class="mb20">
+          <p class="mb20" v-if="editor === 'vscode'">
             <a
               href="https://appland.com/docs/quickstart/vscode/java-step-3.html"
               >Java</a
@@ -21,6 +21,17 @@
               >Python</a
             >&nbsp;&nbsp;|&nbsp;&nbsp;<a
               href="https://appland.com/docs/quickstart/vscode/ruby-step-3.html"
+              >Ruby</a
+            >
+          </p>
+          <p class="mb20" v-if="editor === 'jetbrains'">
+            <a href="https://appland.com/docs/quickstart/intellij/step-3"
+              >Java</a
+            >&nbsp;&nbsp;|&nbsp;&nbsp;<a
+              href="https://appland.com/docs/quickstart/pycharm/step-3"
+              >Python</a
+            >&nbsp;&nbsp;|&nbsp;&nbsp;<a
+              href="https://appland.com/docs/quickstart/rubymine/step-3"
               >Ruby</a
             >
           </p>
@@ -43,6 +54,15 @@ export default {
 
   components: {
     QuickstartLayout,
+  },
+
+  props: {
+    editor: {
+      type: String,
+      required: true,
+      default: 'vscode',
+      validator: (value) => ['vscode', 'jetbrains'].indexOf(value) !== -1,
+    },
   },
 
   methods: {
