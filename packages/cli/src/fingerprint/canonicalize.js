@@ -11,6 +11,7 @@ const algorithms = {
   sqlNormalized: require('./canonicalize/sqlNormalized'),
   sqlTables: require('./canonicalize/sqlTables'),
   trace: require('./canonicalize/trace'),
+  timing: require('./canonicalize/timing'),
   update: require('./canonicalize/update'),
 };
 /* eslint-enable global-require */

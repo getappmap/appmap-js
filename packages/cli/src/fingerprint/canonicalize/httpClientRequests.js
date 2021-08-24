@@ -9,9 +9,8 @@ class Canonicalize extends Unique {
     const parameterNames = event.message
       ? event.message.map((m) => m.name)
       : [];
-    const parameters = `(${parameterNames.join(',')})`;
 
-    return { route: event.route, parameters, status };
+    return { route: event.route, parameters: parameterNames.sort(), status };
   }
 }
 

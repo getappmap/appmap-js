@@ -3,7 +3,6 @@ const { notNull } = require('../algorithms');
 const BLACKLISTED_LABELS = new Set([
   'format.json.generate',
   'format.yaml.generate',
-  'http.session.read',
 ]);
 
 module.exports = class {
