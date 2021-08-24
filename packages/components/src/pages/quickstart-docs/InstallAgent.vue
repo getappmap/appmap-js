@@ -14,9 +14,7 @@
         <p class="mb20">
           Alternatively you can follow the manual installation instructions in
           our
-          <a href="https://appland.com/docs/quickstart/vscode/step-2"
-            >documentation</a
-          >.
+          <a href="https://appland.com/docs/quickstart/">documentation</a>.
         </p>
         <p>
           After you have installed the agent proceed to
