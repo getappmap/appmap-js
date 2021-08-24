@@ -26,13 +26,13 @@ const FunctionStats = require('./functionStats');
 const Inspect = require('./inspect');
 const SwaggerCommand = require('./swagger/command');
 const InventoryCommand = require('./inventoryCommand');
-const InstallCommand = require('./cmds/agentInstaller/install-agent');
+const InventoryCollector = require('./inventory/buildInventory');
 const {
-  printDiff,
-  printObject,
   printAddedLine,
   printRemovedLine,
+  printObject,
 } = require('./cli/output');
+const { textIfy } = require('./inventory/util');
 
 class DiffCommand {
   public appMapNames: any;
@@ -601,26 +601,9 @@ yargs(process.argv.slice(2))
         await new FingerprintDirectoryCommand(argv.baseDir).execute();
       }
 
-      const inventory = await new InventoryCommand(argv.appmapDir).execute();
+      const inventory = await new InventoryCollector(argv.appmapDir).execute();
       if (argv.baseDir) {
-        // eslint-disable-next-line no-inner-declarations
-        function textIfy(entry) {
-          // console.log(JSON.stringify(entry));
-          if (typeof entry === 'string') {
-            return entry.trim();
-          }
-          if (Array.isArray(entry)) {
-            return entry.map((l) => l.trim()).join(' -> ');
-          }
-          return Object.keys(entry)
-            .reduce((memo, key) => {
-              memo.push(`${key}=${entry[key]}`);
-              return memo;
-            }, [])
-            .join(',');
-        }
-
-        const baseInventory = await new InventoryCommand(
+        const baseInventory = await new InventoryCollector(
           argv.baseDir
         ).execute();
 
@@ -637,66 +620,29 @@ yargs(process.argv.slice(2))
         };
 
         const sectionKeys = Object.keys(inventory);
-        const customHandledKeys = [
-          'packages',
-          'classes',
-          'labels',
-          'sqlTables',
-          'sqlNormalized',
-        ];
+        sectionKeys.forEach((sectionName) => {
+          const workingSet = new Set(inventory[sectionName]);
+          const baseSet = new Set(baseInventory[sectionName]);
+          const union = new Set(
+            inventory[sectionName].concat(baseInventory[sectionName])
+          );
 
-        ['packages', 'classes', 'labels', 'sqlTables', 'sqlNormalized'].forEach(
-          (sectionName) => {
-            delete sectionKeys[sectionName];
-
-            const workingSet = new Set(inventory[sectionName]);
-            const baseSet = new Set(baseInventory[sectionName]);
-            const union = new Set(
-              inventory[sectionName].concat(baseInventory[sectionName])
-            );
-
-            printSectionName(sectionName);
-            let changed = 0;
-            [...union].sort().forEach((obj) => {
-              if (!baseSet.has(obj)) {
-                changed += 1;
-                printAddedLine(`+ ${obj}`);
-              }
-              if (!workingSet.has(obj)) {
-                changed += 1;
-                printRemovedLine(`- ${obj}`);
-              }
-            });
-            console.log(`${union.size - changed} total`);
-            console.log();
-          }
-        );
-
-        sectionKeys
-          .filter((key) => !customHandledKeys.includes(key))
-          .forEach((sectionName) => {
-            console.log(
-              `\x1b[1m%s%s\x1b[0m`,
-              sectionName.charAt(0).toUpperCase(),
-              sectionName.slice(1)
-            );
-            console.log(
-              `\x1b[1m%s\x1b[0m`,
-              new Array(sectionName.length + 1).join('=')
-            );
-            const diff = diffLines(
-              baseInventory[sectionName]
-                .map(textIfy)
-                .map((s) => s.trim())
-                .join('\n'),
-              inventory[sectionName]
-                .map(textIfy)
-                .map((s) => s.trim())
-                .join('\n')
-            );
-            printDiff(diff, argv.format);
-            console.log();
+          printSectionName(sectionName);
+          let changed = 0;
+          [...union].sort().forEach((obj) => {
+            if (!baseSet.has(obj)) {
+              changed += 1;
+              printAddedLine(`+ ${textIfy(obj)}`);
+            }
+            if (!workingSet.has(obj)) {
+              changed += 1;
+              printRemovedLine(`- ${textIfy(obj)}`);
+            }
           });
+          console.log(`${changed} changes`);
+          console.log(`${union.size - changed} total`);
+          console.log();
+        });
       } else {
         printObject(inventory, argv.format);
       }
