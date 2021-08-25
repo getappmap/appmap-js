@@ -8,18 +8,19 @@ import * as console from 'console';
 import { buildAppMap } from '../../search/utils';
 import AssertionChecker from './assertionChecker';
 import Assertion from './assertion';
+import { glob } from 'glob';
 
 
-exports.command = 'assert <appMapsDir>';
+exports.command = 'assert';
 exports.describe = 'Run assertions for AppMaps in the directory';
 
 exports.builder = (args) => {
-  args.positional('appMapsDir', {
-    describe: 'Path to AppMaps directory',
-    require: true,
+  args.option('appmap-dir', {
+    describe: 'directory to recursively inspect for AppMaps',
+    default: 'tmp/appmap',
   });
   args.option('config', {
-    describe: 'Path to assertions config file',
+    describe: 'path to assertions config file',
     default: 'assertions.yml',
     alias: 'c',
   });
@@ -30,10 +31,10 @@ exports.handler = async (argv) => {
   verbose(argv.verbose);
 
   const commandFn = async () => {
-    const { appMapsDir } = argv;
+    const { appmapDir } = argv;
 
-    if (!fs.existsSync(appMapsDir)) {
-      throw new ValidationError(`AppMaps directory ${appMapsDir} does not exist.`)
+    if (!fs.existsSync(appmapDir)) {
+      throw new ValidationError(`AppMaps directory ${appmapDir} does not exist.`);
     }
 
     let summary = { passed: 0, failed: 0 }
@@ -42,10 +43,18 @@ exports.handler = async (argv) => {
       new Assertion('http_server_response', '', 'e.elapsed < 1'),
     ];
 
-    fs.readdirSync(appMapsDir).forEach((file: string) => {
-      const filePath = appMapsDir + '/' + file;
+    const files: string[] = await new Promise((resolve, reject) => {
+      glob(`${appmapDir}/**/*.appmap.json`, (err, globFiles) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(globFiles);
+      });
+    });
+
+    files.forEach((file: string) => {
       const appMap = buildAppMap()
-        .source(JSON.parse(fs.readFileSync(filePath, 'utf-8').toString()))
+        .source(JSON.parse(fs.readFileSync(file, 'utf-8').toString()))
         .normalize()
         .build();
 
@@ -56,7 +65,7 @@ exports.handler = async (argv) => {
           summary.failed++;
         }
       })
-    })
+    });
 
     console.log(summary);
 
