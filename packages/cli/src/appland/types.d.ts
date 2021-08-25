@@ -1,3 +1,6 @@
+// @ts-ignore
+import { Event } from '@appland/models';
+
 export interface Fingerprint {
   appmap_digest: string;
   canonicalization_algorithm: string;
@@ -17,7 +20,7 @@ export interface AppMapListItem {
 
 export interface AppMapData {
   version: string;
-  metadata: object;
+  metadata: AppMapMetadata;
   classMap: object[];
-  events: object[];
+  events: Event[];
 }

@@ -5,7 +5,11 @@ import Assertion from '../assertion';
 export default class HttpRequestStrategy implements Strategy {
   check(appMap: AppMapData, assertion: Assertion): Boolean {
     for (let e of appMap.events) {
-      if (e.hasOwnProperty('http_server_response') && !eval(assertion.assert)) {
+      if (!e.httpServerRequest || !e.elapsed) {
+        continue;
+      }
+
+      if (!eval(assertion.assert)) {
         return false;
       }
     }
