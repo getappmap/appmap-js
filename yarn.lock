@@ -69,7 +69,7 @@ __metadata:
     chokidar: ^3.5.1
     cli-progress: ^3.9.0
     conf: ^10.0.2
-    console-table-printer: ^2.9.0
+    console-table-printer: ^2.10.0
     crypto-js: ^4.0.0
     detect-indent: ^6.1.0
     diff: ^5.0.0
@@ -9017,12 +9017,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"console-table-printer@npm:^2.9.0":
-  version: 2.9.0
-  resolution: "console-table-printer@npm:2.9.0"
+"console-table-printer@npm:^2.10.0":
+  version: 2.10.0
+  resolution: "console-table-printer@npm:2.10.0"
   dependencies:
     simple-wcswidth: ^1.0.1
-  checksum: 654eecab5a60d2d54b83cfe93e21e8c705b47706a7d22cb091a9515706b9f11aa3551406cfc9e90e91f2975212e98f00dc6b992b5406aca5be1be62d6fbf2d36
+  checksum: 10c4f13d5868517b173f82c1ad9d7e41fb62b6d94184acc514053de8c2cc70af09aa0759ed06b219ad5a34d0e95740dfbd7816ffaad383807848c5988ed1e3a8
   languageName: node
   linkType: hard
 
