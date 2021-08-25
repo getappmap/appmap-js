@@ -44,14 +44,14 @@ export default {
     font-size: 1.1rem;
     font-weight: 500;
     line-height: 1.2;
-    padding: 0 2rem;
+    padding: 0;
     margin: 0 0 1rem 0;
   }
 
   .labels {
     list-style-type: none;
     padding: 0;
-    margin: 0 2rem 1.5rem;
+    margin: 0 0 1rem;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;

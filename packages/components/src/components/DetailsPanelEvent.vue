@@ -216,7 +216,7 @@ export default {
 <style scoped lang="scss">
 .details-panel-event {
   h3 {
-    padding: 0 2rem;
+    padding: 0;
   }
   .event-params {
     padding: 0;
@@ -227,14 +227,14 @@ export default {
       font-weight: 500;
       line-height: 1.2;
       margin: 0 0 0.25rem 0;
-      padding: 0 2rem;
+      padding: 0;
     }
     .table-01 {
       font-size: 14px;
       font-family: sans-serif;
       font-weight: 500;
       li {
-        padding: 0.5rem 2rem;
+        padding: 0.5rem 0;
       }
     }
   }
@@ -252,7 +252,7 @@ export default {
       flex-direction: column;
       justify-content: space-between;
       a {
-        margin: 0 2rem;
+        margin: 0;
         width: 100%;
       }
     }
@@ -262,6 +262,6 @@ export default {
 <style scoped>
 .details-panel-event >>> .sql-code {
   margin-bottom: 1.5rem;
-  padding: 0 2rem;
+  padding: 0;
 }
 </style>

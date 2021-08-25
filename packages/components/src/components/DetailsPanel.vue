@@ -1,7 +1,7 @@
 <template>
   <div class="details-panel">
     <h3 class="details-panel__title">
-      <AppMapLogo />
+      <img src="@/assets/appmap-logo.png" alt="" />
       <button
         v-if="appMap.metadata.source_location"
         class="details-panel__view-source"
@@ -45,7 +45,6 @@
 
 <script>
 import { Event, AppMap } from '@appland/models';
-import AppMapLogo from '@/assets/appmap-logo.svg';
 import EyeIcon from '@/assets/eye.svg';
 import VDetailsLabel from '@/components/DetailsLabel.vue';
 import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
@@ -64,7 +63,6 @@ import VDetailsSearch from '@/components/DetailsSearch.vue';
 export default {
   name: 'v-details-panel',
   components: {
-    AppMapLogo,
     EyeIcon,
     VDetailsLabel,
     VDetailsPanelClass,
@@ -119,6 +117,7 @@ export default {
   min-width: 280px;
   width: 100%;
   height: 100%;
+  padding: 1rem;
   color: $gray6;
   background-color: $vs-code-gray1;
   word-break: break-word;
@@ -126,8 +125,7 @@ export default {
   overflow: auto;
 
   &__title {
-    padding: 2rem;
-    margin: 0;
+    margin-bottom: 1rem;
     font-size: 0;
     display: flex;
     align-items: center;
@@ -187,7 +185,7 @@ export default {
     align-items: flex-start;
 
     &:not(:empty) {
-      padding: 0 2rem 1rem;
+      padding: 0 0 1rem;
     }
   }
 

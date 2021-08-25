@@ -16,7 +16,7 @@ const baseConfig = {
   plugins: {
     preVue: [
       alias({
-        resolve: ['.js', '.jsx', '.ts', '.tsx', '.vue', '.svg'],
+        resolve: ['.js', '.jsx', '.ts', '.tsx', '.vue', '.svg', '.png'],
         entries: {
           '@': path.resolve(__dirname, 'src'),
         },
