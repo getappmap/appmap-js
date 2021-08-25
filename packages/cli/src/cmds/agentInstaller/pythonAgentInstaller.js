@@ -34,6 +34,10 @@ class PoetryInstaller extends BuildToolInstaller {
     return ret;
   }
 
+  get validateSteps() {
+    return [];
+  }
+
   /**
    * @returns {string}
    */
@@ -79,6 +83,10 @@ class PipInstaller extends BuildToolInstaller {
    */
   constructor(path) {
     super(REQUIREMENTS_FILE, path);
+  }
+
+  get validateSteps() {
+    return [];
   }
 
   /**

@@ -1,7 +1,7 @@
 const process = require('process');
 const { verbose } = require('../../utils');
 const { JavaAgentInstaller } = require('./javaAgentInstaller');
-const RubyAgentInstaller = require('./rubyAgentInstaller');
+const { RubyAgentInstaller } = require('./rubyAgentInstaller');
 const { PythonAgentInstaller } = require('./pythonAgentInstaller');
 const ValidationError = require('./validationError');
 const AbortError = require('./abortError');
@@ -42,7 +42,8 @@ exports.handler = async (argv) => {
     const installer = new InstallerClass(dir);
 
     await installer.installAgentFlow.run();
-    return installer.configureAgentFlow.run();
+    await installer.configureAgentFlow.run();
+    return installer.validateAgentFlow.run();
   };
 
   return commandFn().catch((err) => {

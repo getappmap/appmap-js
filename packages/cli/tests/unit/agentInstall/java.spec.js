@@ -53,6 +53,9 @@ function testAgentInit(installerFixture) {
   it('provides the correct agent init command', () => {
     const cmdRunner = {
       runSync: () => 'com.appland:appmap-agent.jar.path=appmap.jar',
+      logger: {
+        log: () => {},
+      },
     };
 
     const btInstaller = buildToolInstaller(
@@ -60,7 +63,7 @@ function testAgentInit(installerFixture) {
     );
     const cmdStruct = btInstaller.agentInitCommand;
     expect(cmdStruct.program).toBe('java');
-    expect(cmdStruct.args).toEqual([
+    expect(cmdStruct.args).toStrictEqual([
       '-jar',
       'appmap.jar',
       '-d',
@@ -76,6 +79,15 @@ describe('Java Agent Installation', () => {
       const installer = installerForProject('gradle/no-plugins');
       const btInstaller = buildToolInstaller(installer);
       expect(btInstaller).toBeInstanceOf(GradleInstaller);
+    });
+
+    it('uses the correct command to print the jar path', async () => {
+      const btInstaller = buildToolInstaller(
+        installerForProject('gradle/no-plugins')
+      );
+      const printCmd = btInstaller.printJarPathCommand;
+      expect(printCmd.program).toBe('gradle');
+      expect(printCmd.args).toStrictEqual(['appmap-print-jar-path']);
     });
 
     describe(
@@ -97,6 +109,15 @@ describe('Java Agent Installation', () => {
       const installer = installerForProject('maven-no-project');
       const btInstaller = buildToolInstaller(installer);
       expect(btInstaller.install()).rejects.toThrow(/No project section found/);
+    });
+
+    it('uses the correct command to print the jar path', async () => {
+      const btInstaller = buildToolInstaller(
+        installerForProject('maven/no-plugins')
+      );
+      const printCmd = btInstaller.printJarPathCommand;
+      expect(printCmd.program).toBe('mvn');
+      expect(printCmd.args).toStrictEqual(['appmap:print-jar-path']);
     });
 
     describe('updates', testUpdates.bind(null, 'maven', 'expected-pom.xml'));

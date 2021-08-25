@@ -77,12 +77,32 @@ class Gradle {
   }
 }
 
-class MavenInstaller extends BuildToolInstaller {
+class JavaBuildToolInstaller extends BuildToolInstaller {
+  get agentJar() {
+    if (!this._agentJar) {
+      const cmd = this.printJarPathCommand;
+      const out = this.commandRunner.runSync(cmd);
+      // eslint-disable-next-line prefer-destructuring
+      this._agentJar = out
+        .split('\n')
+        .filter((l) => l.match(/^com\.appland:appmap-agent\.jar.path/))[0]
+        .split('=')[1];
+    }
+
+    return this._agentJar;
+  }
+}
+
+class MavenInstaller extends JavaBuildToolInstaller {
   /**
    * @param {string} path
    */
   constructor(path, commandRunner = null) {
     super('pom.xml', path, commandRunner);
+  }
+
+  get validateSteps() {
+    return [];
   }
 
   /**
@@ -116,21 +136,25 @@ in your terminal`;
   }
 
   get agentInitCommand() {
-    const cmd = new CommandStruct(
-      new Maven(this.path).runCommand(),
-      ['appmap:print-jar-path'],
-      {}
-    );
-
-    const out = this.commandRunner.runSync(cmd);
-    const appmapPath = out
-      .split('\n')
-      .filter((l) => l.match(/^com\.appland:appmap-agent\.jar.path/))[0]
-      .split('=')[1];
-
     return new CommandStruct(
       'java',
-      ['-jar', appmapPath, '-d', this.path, 'init'],
+      ['-jar', this.agentJar, '-d', this.path, 'init'],
+      {}
+    );
+  }
+
+  get agentValidateCommand() {
+    return new CommandStruct(
+      'java',
+      ['-jar', this.agentJar, '-d', this.path, 'validate'],
+      {}
+    );
+  }
+
+  get printJarPathCommand() {
+    return new CommandStruct(
+      new Maven(this.path).runCommand(),
+      ['appmap:print-jar-path'],
       {}
     );
   }
@@ -233,12 +257,16 @@ in your terminal`;
   }
 }
 
-class GradleInstaller extends BuildToolInstaller {
+class GradleInstaller extends JavaBuildToolInstaller {
   /**
    * @param {string} path
    */
   constructor(path, commandRunner = null) {
     super('build.gradle', path, commandRunner);
+  }
+
+  get validateSteps() {
+    return [];
   }
 
   /**
@@ -278,21 +306,17 @@ in your terminal`;
   }
 
   get agentInitCommand() {
-    const cmd = new CommandStruct(
-      new Gradle(this.path).runCommand(),
-      ['-q', 'appmap-print-jar-path'],
-      {}
-    );
-
-    const out = this.commandRunner.runSync(cmd);
-    const appmapPath = out
-      .split('\n')
-      .filter((l) => l.match(/^com\.appland:appmap-agent\.jar.path/))[0]
-      .split('=')[1];
-
     return new CommandStruct(
       'java',
-      ['-jar', appmapPath, '-d', this.path, 'init'],
+      ['-jar', this.agentJar, '-d', this.path, 'init'],
+      {}
+    );
+  }
+
+  get printJarPathCommand() {
+    return new CommandStruct(
+      new Gradle(this.path).runCommand(),
+      ['appmap-print-jar-path'],
       {}
     );
   }
@@ -437,7 +461,7 @@ plugins {
           braceIdx--;
         }
         if (braceIdx === 0) {
-          // We've found the right brace of the buildcript block, we're done.
+          // We've found the right brace of the buildscript block, we're done.
           return token.offset;
         }
       }
@@ -461,7 +485,6 @@ class JavaAgentInstaller extends AgentInstaller {
         'No Java installer available for the current project. Supported frameworks are: Maven, Gradle.'
       );
     }
-
     super(installers[0], path);
   }
 }

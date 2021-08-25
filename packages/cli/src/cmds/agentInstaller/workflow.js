@@ -7,29 +7,35 @@ const AbortError = require('./abortError');
 const QUERY = "Press enter to continue, 'a' abort";
 const MANUAL_QUERY =
   "Press enter to continue, 'a' abort, or 'm' to run it yourself manually: ";
+
+const defaultPrompter = (prompt, query) => {
+  console.warn(prompt);
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return new Promise((resolve, reject) =>
+    rl.question(query, (answer) => {
+      rl.close();
+      if (answer === 'a') {
+        reject(new AbortError());
+      }
+      resolve(answer);
+    })
+  );
+};
+
 class Step {
-  constructor(prompt, action, query = QUERY) {
+  constructor(prompt, action, query = QUERY, logger = console) {
     this.prompt = prompt;
     this.query = query;
     this.action = action;
+    this.logger = logger;
   }
 
-  run() {
-    console.warn(this.prompt);
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-
-    return new Promise((resolve, reject) =>
-      rl.question(this.query, (answer) => {
-        rl.close();
-        if (answer === 'a') {
-          reject(new AbortError());
-        }
-        resolve(answer);
-      })
-    ).then(this.action);
+  async run(prompter = defaultPrompter) {
+    return prompter(this.prompt, this.query).then(this.action);
   }
 }
 

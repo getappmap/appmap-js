@@ -16,6 +16,10 @@ class AgentInstallerBase {
     return new Workflow(btInstaller, btInstaller.configureSteps, this.path);
   }
 
+  get validateAgentFlow() {
+    const btInstaller = this.buildToolInstaller;
+    return new Workflow(btInstaller, btInstaller.validateSteps, this.path);
+  }
   /*
   runTests( {
     // TODO

@@ -31,4 +31,6 @@ function runSync(command) {
   }).toString();
 }
 
-module.exports = { run, runSync };
+const logger = console;
+
+module.exports = { run, runSync, logger };

@@ -1,7 +1,9 @@
 const { existsSync, writeFileSync } = require('fs');
+const os = require('os');
 const { join } = require('path');
 const { ManualStep, Step } = require('./workflow');
 const cmdRunner = require('./commandRunner');
+const ValidationError = require('./validationError');
 
 /**
  * @typedef {import('./types').Command} Command
@@ -104,6 +106,57 @@ appmap.yml not found.
     );
   }
 
+  get validateSteps() {
+    return [this.validateStep1];
+  }
+
+  get validateStep1() {
+    const now = new Date();
+    const resultsFile = join(
+      os.tmpdir(),
+      `agent-validation-${now.getFullYear()}${now.getMonth()}${now.getDay()}${now.getHours()}${now.getMinutes()}${now.getSeconds()}.log`
+    );
+    const prompt = `
+We'll now ensure that your project is ready to create AppMaps.
+Validation results will be available in
+${resultsFile}
+`;
+    return new Step(
+      prompt,
+      async () =>
+        new Promise((resolve, reject) => {
+          const results = JSON.parse(
+            this.commandRunner.runSync(this.agentValidateCommand)
+          );
+          if (results.length === 0) {
+            const msg = `
+Validation succeeded.
+
+Your project is ready to go!
+`;
+            this.commandRunner.logger.log(msg);
+            writeFileSync(resultsFile, msg);
+            resolve(0);
+            return;
+          }
+
+          results.forEach((r) => {
+            let msg = `
+Error: ${r.message}`;
+            this.commandRunner.logger.error(msg);
+            writeFileSync(resultsFile, msg);
+            if (r.detailed_message) {
+              msg = `Detail: ${r.detailed_message};
+`;
+              this.commandRunner.logger.error(msg);
+              writeFileSync(resultsFile, msg);
+            }
+          });
+          reject(new ValidationError('Validation failed'));
+        })
+    );
+  }
+
   get available() {
     return existsSync(this.buildFilePath);
   }
@@ -151,6 +204,14 @@ appmap.yml not found.
    */
   // eslint-disable-next-line class-methods-use-this
   get verifyCommand() {
+    throw new Error('not implemented');
+  }
+
+  /**
+   * @returns {Command}
+   */
+  // eslint-disable-next-line class-methods-use-this
+  get agentValidateCommand() {
     throw new Error('not implemented');
   }
 

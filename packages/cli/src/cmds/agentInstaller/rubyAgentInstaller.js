@@ -21,8 +21,8 @@ class BundleInstaller extends BuildToolInstaller {
   /**
    * @param {string} path
    */
-  constructor(path) {
-    super('Gemfile', path);
+  constructor(path, commandRunner = null) {
+    super('Gemfile', path, commandRunner);
   }
 
   /**
@@ -86,14 +86,18 @@ in your terminal:`;
   get agentInitCommand() {
     return new CommandStruct('bundle', ['exec', 'appmap-agent-init'], {});
   }
+
+  get agentValidateCommand() {
+    return new CommandStruct('bundle', ['exec', 'appmap-agent-validate'], {});
+  }
 }
 
 class RubyAgentInstaller extends AgentInstaller {
   /**
    * @param {string} path
    */
-  constructor(path) {
-    const installers = [new BundleInstaller(path)].filter(
+  constructor(path, commandRunner = null) {
+    const installers = [new BundleInstaller(path, commandRunner)].filter(
       (installer) => installer.available
     );
     if (installers.length === 0) {
