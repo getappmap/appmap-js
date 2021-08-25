@@ -12,7 +12,7 @@ export interface Filter {
 }
 
 export interface Console {
-  question: function(string, function(string));
+  question: (question: string, handler: (response: string) => void) => void;
 }
 
 export interface State {

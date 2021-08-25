@@ -6,7 +6,7 @@ export interface Dependency {
 export interface Request {
   route: string;
   parameters: string[];
-  status: integer;
+  status: number;
 }
 
 export interface Inventory {

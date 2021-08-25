@@ -402,7 +402,7 @@ yargs(process.argv.slice(2))
       await new FingerprintDirectoryCommand(argv.appmapDir).execute();
       if (argv.baseDir) {
         console.warn('Indexing the base AppMap database');
-        await new FingerprintDirectoryCommand(argv.baseAppmapDir).execute();
+        await new FingerprintDirectoryCommand(argv.baseDir).execute();
       }
 
       const newState = (appmapDir, codeObjectId, filters) => ({
@@ -437,8 +437,9 @@ yargs(process.argv.slice(2))
 
       const buildBaseStats = async () => {
         const baseState = newState(
-          argv.baseAppmapDir,
+          argv.baseDir,
           workingState.codeObjectId,
+          // eslint-disable-next-line prettier/prettier
           [...workingState.filters]
         );
         await findCodeObjects(baseState);
@@ -499,7 +500,7 @@ yargs(process.argv.slice(2))
             'undo filter': undoFilter,
             navigate,
           };
-          if (argv.baseAppmapDir) {
+          if (argv.baseDir) {
             options.compare = compare;
           }
           options['reset filters'] = reset;

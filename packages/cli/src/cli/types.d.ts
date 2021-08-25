@@ -7,6 +7,6 @@ export enum Format {
 export interface DiffEntry {
   added: boolean;
   removed: boolean;
-  count: integer;
+  count: number;
   value: string;
 }

@@ -1,14 +1,16 @@
 export interface SQL {
   sql: string;
+  // TODO: Camelize
   database_type: string;
 }
- 
+
 export interface HTTPServerRequest {
+  // TODO: Camelize
   request_method: string;
   path_info: string;
   normalized_path_info: string;
-  status_code: integer;
-  headers: {string:string};
+  status_code: number;
+  headers: { string: string };
 }
 
 export interface Event {
@@ -44,7 +46,7 @@ export interface CodeObject {
   parent: CodeObject;
   location: string; // Functions only
   static: boolean; // Functions only
-  hasLabel(string): boolean;
+  hasLabel(label: string): boolean;
 }
 
 export interface Trigram {
@@ -104,5 +106,5 @@ export interface FunctionStats {
   classTrigrams: Trigram[];
   functionTrigrams: Trigram[];
 
-  toComparableState: function(): object;
+  toComparableState: () => object;
 }

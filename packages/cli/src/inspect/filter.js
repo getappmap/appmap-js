@@ -35,6 +35,7 @@ const filter = (rl, state, buildStats, home) => {
   filterFields.forEach((field, index) => {
     dsTable.addRow(
       {
+        // @ts-ignore
         index: filterFieldIndexes[index] + 1,
         name: field.title,
       },
@@ -44,6 +45,7 @@ const filter = (rl, state, buildStats, home) => {
   dsTable.printTable();
 
   rl.question(
+    // @ts-ignore
     `Data set (${filterFieldIndexes.map((i) => i + 1).join(',')}) or (h)ome ? `,
     async (num) => {
       if (num === 'h') {
