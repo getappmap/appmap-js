@@ -10,7 +10,6 @@ import AssertionChecker from './assertionChecker';
 import Assertion from './assertion';
 import { glob } from 'glob';
 
-
 exports.command = 'assert';
 exports.describe = 'Run assertions for AppMaps in the directory';
 
@@ -37,10 +36,11 @@ exports.handler = async (argv) => {
       throw new ValidationError(`AppMaps directory ${appmapDir} does not exist.`);
     }
 
-    let summary = { passed: 0, failed: 0 }
+    let summary = { passed: 0, failed: 0, skipped: 0 };
     const checker = new AssertionChecker();
     const assertions = [
-      new Assertion('http_server_response', '', 'e.elapsed < 1'),
+      new Assertion('http_server_request','e.elapsed < 1'),
+      new Assertion('sql_query', 'e.elapsed < 0.1', 'e.sql.sql.match(/SELECT/)'),
     ];
 
     const files: string[] = await new Promise((resolve, reject) => {
@@ -59,10 +59,14 @@ exports.handler = async (argv) => {
         .build();
 
       assertions.forEach((assertion: Assertion) => {
-        if (checker.check(appMap, assertion)) {
+        const result = checker.check(appMap, assertion);
+
+        if (result === true) {
           summary.passed++;
-        } else {
+        } else if (result === false) {
           summary.failed++;
+        } else {
+          summary.skipped++;
         }
       })
     });

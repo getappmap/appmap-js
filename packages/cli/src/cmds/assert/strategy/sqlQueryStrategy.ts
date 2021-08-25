@@ -3,10 +3,10 @@ import { Event } from '@appland/models';
 import Strategy from './strategy';
 import { Scope } from '../types';
 
-export default class HttpRequestStrategy extends Strategy {
-  protected scope: Scope = 'http_server_request';
+export default class SqlQueryStrategy extends Strategy {
+  protected scope: Scope = 'sql_query';
 
   protected isEventApplicable(event: Event): Boolean {
-    return event.httpServerRequest && event.elapsed;
+    return event.sql;
   }
 }
