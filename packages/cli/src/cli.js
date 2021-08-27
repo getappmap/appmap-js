@@ -27,6 +27,7 @@ const FunctionStats = require('./functionStats');
 const Inspect = require('./inspect');
 const SwaggerCommand = require('./swagger/command');
 const InventoryCommand = require('./inventoryCommand');
+const InstallCommand = require('./cmds/agentInstaller/install-agent');
 
 class DiffCommand {
   baseDir(dir) {
@@ -573,7 +574,7 @@ yargs(process.argv.slice(2))
     type: 'boolean',
     description: 'Run with verbose logging',
   })
-  .command(require('./cmds/agentInstaller/install-agent'))
+  .command(InstallCommand)
   .strict()
   .demandCommand()
   .help().argv;
