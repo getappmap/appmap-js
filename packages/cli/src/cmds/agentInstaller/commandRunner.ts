@@ -2,6 +2,7 @@ import { exec, execSync } from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
 import CommandStruct from './commandStruct';
+import { verbose } from '../../utils';
 
 export async function run(
   command: CommandStruct
@@ -15,6 +16,21 @@ export async function run(
     let stdout = '';
     let stderr = '';
 
+    if (verbose()) {
+      console.log(
+        [
+          `Running command: \`${chalk.yellow(command.toString())}\``,
+          `cwd: ${chalk.yellow(path.resolve(command.path as string))}`,
+          `environment: ${chalk.yellow(
+            JSON.stringify(command.environment, undefined, 2)
+          )}`,
+        ].join('\n')
+      );
+
+      cp.stderr?.pipe(process.stderr);
+      cp.stdout?.pipe(process.stdout);
+    }
+
     cp.stderr?.on('data', (data) => {
       stderr += data;
     });
@@ -24,7 +40,10 @@ export async function run(
     });
 
     cp.on('exit', (code) => {
-      console.log(`'${command.program}' exited with code ${code}`);
+      if (verbose()) {
+        console.log(`'${command.program}' exited with code ${code}`);
+      }
+
       if (code === 0) {
         return resolve({ stdout, stderr });
       }
