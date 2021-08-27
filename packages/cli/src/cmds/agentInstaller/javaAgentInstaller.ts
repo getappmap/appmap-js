@@ -1,105 +1,87 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
-import { existsSync, promises as fsp } from 'fs';
+import { promises as fsp } from 'fs';
 import { JSDOM } from 'jsdom';
 import xmlSerializer from 'w3c-xmlserializer';
-import { join } from 'path';
+import { join, sep } from 'path';
 import moo from 'moo';
-import BuildToolInstaller from './buildToolInstallerBase';
+import chalk from 'chalk';
 import CommandStruct from './commandStruct';
-import ValidationError from './validationError';
-import AgentInstaller from './agentInstallerBase';
-import * as CommandRunnerImpl from './commandRunner';
+import AgentInstaller from './agentInstaller';
+import { run } from './commandRunner';
+import { exists } from '../../utils';
 
-type CommandRunner = {
-  run: (cmd: CommandStruct) => Promise<number>;
-  runSync: (cmd: CommandStruct) => string;
-};
+export class MavenInstaller implements AgentInstaller {
+  constructor(readonly path: string) {}
 
-class Maven {
-  /**
-   * @param {string} path
-   */
-  constructor(protected readonly path: string) {}
+  get name(): string {
+    return 'Maven';
+  }
 
-  runCommand(): string {
+  get buildFile(): string {
+    return 'pom.xml';
+  }
+
+  get buildFilePath(): string {
+    return join(this.path, this.buildFile);
+  }
+
+  async postInstallMessage(): Promise<string> {
+    let mvnBin = 'mvn';
+    if (await exists(join(this.path, 'mvnw'))) {
+      mvnBin = `.${sep}mvnw`;
+    }
+
+    return [
+      `The AppMap agent will automatically record your tests when you run ${chalk.blue(
+        `${mvnBin} test`
+      )}.`,
+      `By default, AppMap files will be output to ${chalk.blue(
+        'target/appmap'
+      )}.`,
+    ].join('\n');
+  }
+
+  async available(): Promise<boolean> {
+    return await exists(this.buildFilePath);
+  }
+
+  async runCommand(): Promise<string> {
     if (
       process.platform === 'win32' &&
-      existsSync(join(this.path, 'mvnw.cmd'))
+      (await exists(join(this.path, 'mvnw.cmd')))
     ) {
       return 'mvnw.cmd';
     }
 
-    if (process.platform !== 'win32' && existsSync(join(this.path, 'mvnw'))) {
+    if (
+      process.platform !== 'win32' &&
+      (await exists(join(this.path, 'mvnw')))
+    ) {
       return './mvnw';
     }
 
     // Pray
     return 'mvn';
   }
-}
 
-class Gradle {
-  constructor(protected readonly path: string) {}
-
-  runCommand(): string {
-    if (
-      process.platform === 'win32' &&
-      existsSync(join(this.path, 'gradlew.bat'))
-    ) {
-      return 'gradlew.bat';
-    }
-
-    if (
-      process.platform !== 'win32' &&
-      existsSync(join(this.path, 'gradlew'))
-    ) {
-      return './gradlew';
-    }
-
-    // Pray
-    return 'gradle';
-  }
-}
-
-export class MavenInstaller extends BuildToolInstaller {
-  constructor(
-    protected readonly path: string,
-    protected readonly commandRunner = CommandRunnerImpl as unknown as CommandRunner
-  ) {
-    super('pom.xml', path, commandRunner);
-  }
-
-  get assumptions(): string {
-    return `Your project contains a pom.xml. Therefore, it looks like a Maven project,
-so we will install the AppMap Maven plugin.`;
-  }
-
-  get postInstallMessage(): string {
-    return `The AppMap plugin has been added to your pom.xml. You should open this file and check that
-it looks clean and correct.
-
-Once you've done that, we'll test the proper operation of the AppMap plugin by running the following command
-in your terminal`;
-  }
-
-  get verifyCommand(): CommandStruct {
+  async verifyCommand(): Promise<CommandStruct> {
     return new CommandStruct(
-      new Maven(this.path).runCommand(),
+      await this.runCommand(),
       ['-Dplugin=com.appland:appmap-maven-plugin', 'help:describe'],
       this.path
     );
   }
 
-  get agentInitCommand(): CommandStruct {
+  async initCommand(): Promise<CommandStruct> {
     const cmd = new CommandStruct(
-      new Maven(this.path).runCommand(),
+      await this.runCommand(),
       ['appmap:print-jar-path'],
       this.path
     );
 
-    const out = this.commandRunner.runSync(cmd);
-    const appmapPath = out
+    const { stdout } = await run(cmd);
+    const appmapPath = stdout
       .split('\n')
       .filter((l) => l.match(/^com\.appland:appmap-agent\.jar.path/))[0]
       .split('=')[1];
@@ -111,10 +93,8 @@ in your terminal`;
     );
   }
 
-  async install(): Promise<void> {
-    const buildFileSource = (
-      await fsp.readFile(super.buildFilePath)
-    ).toString();
+  async installAgent(): Promise<void> {
+    const buildFileSource = (await fsp.readFile(this.buildFilePath)).toString();
     const jsdom = new JSDOM();
     const domParser = new jsdom.window.DOMParser();
     const doc = domParser.parseFromString(buildFileSource, 'text/xml');
@@ -139,7 +119,7 @@ in your terminal`;
     ).singleNodeValue;
     if (!projectSection) {
       // Doesn't make sense to be missing the <project> section
-      throw new Error(`No project section found in ${super.buildFilePath}`);
+      throw new Error(`No project section found in ${this.buildFilePath}`);
     }
 
     const ns = projectSection.namespaceURI || defaultns;
@@ -202,34 +182,65 @@ in your terminal`;
       pluginsSection.appendChild(doc.createTextNode('\n'));
     }
     const serialized = xmlSerializer(doc.getRootNode());
-    await fsp.writeFile(super.buildFilePath, serialized);
+    await fsp.writeFile(this.buildFilePath, serialized);
   }
 }
 
-export class GradleInstaller extends BuildToolInstaller {
-  constructor(
-    protected readonly path: string,
-    protected readonly commandRunner = CommandRunnerImpl as unknown as CommandRunner
-  ) {
-    super('build.gradle', path, commandRunner);
+export class GradleInstaller implements AgentInstaller {
+  constructor(readonly path: string) {}
+
+  get name(): string {
+    return 'Gradle';
   }
 
-  get assumptions(): string {
-    return `Your project contains a build.gradle. Therefore, it looks like a Gradle project,
-so we will install the AppMap Gradle plugin.`;
+  get buildFile(): string {
+    return 'build.gradle';
   }
 
-  get postInstallMessage(): string {
-    return `The AppMap plugin has been added to your build.gradle. You should open this file and check that
-it looks clean and correct.
-
-Once you've done that, we'll test the proper configuration of the AppMap plugin by running the following command
-in your terminal`;
+  get buildFilePath(): string {
+    return join(this.path, this.buildFile);
   }
 
-  get verifyCommand(): CommandStruct {
+  async postInstallMessage(): Promise<string> {
+    let gradleBin = 'gradle';
+    if (await exists(join(this.path, 'gradlew'))) {
+      gradleBin = `.${sep}gradlew`;
+    }
+
+    return [
+      `Record your tests by running ${chalk.blue(`${gradleBin} appmap test`)}.`,
+      `By default, AppMap files will be output to ${chalk.blue(
+        'target/appmap'
+      )}.`,
+    ].join('\n');
+  }
+
+  async available(): Promise<boolean> {
+    return await exists(this.buildFilePath);
+  }
+
+  async runCommand(): Promise<string> {
+    if (
+      process.platform === 'win32' &&
+      (await exists(join(this.path, 'gradlew.bat')))
+    ) {
+      return 'gradlew.bat';
+    }
+
+    if (
+      process.platform !== 'win32' &&
+      (await exists(join(this.path, 'gradlew')))
+    ) {
+      return './gradlew';
+    }
+
+    // Pray
+    return 'gradle';
+  }
+
+  async verifyCommand(): Promise<CommandStruct> {
     return new CommandStruct(
-      new Gradle(this.path).runCommand(),
+      await this.runCommand(),
       [
         'dependencyInsight',
         '--dependency',
@@ -241,15 +252,15 @@ in your terminal`;
     );
   }
 
-  get agentInitCommand(): CommandStruct {
+  async initCommand(): Promise<CommandStruct> {
     const cmd = new CommandStruct(
-      new Gradle(this.path).runCommand(),
+      await this.runCommand(),
       ['-q', 'appmap-print-jar-path'],
       this.path
     );
 
-    const out = this.commandRunner.runSync(cmd);
-    const appmapPath = out
+    const { stdout } = await run(cmd);
+    const appmapPath = stdout
       .split('\n')
       .filter((l) => l.match(/^com\.appland:appmap-agent\.jar.path/))[0]
       .split('=')[1];
@@ -272,7 +283,7 @@ in your terminal`;
    * If there's no plugins block, and no buildscript block, append a new plugins
    * block.
    */
-  insertPluginSpec(buildFileSource: string): string {
+  async insertPluginSpec(buildFileSource: string): Promise<string> {
     const pluginSpec = `id 'com.appland.appmap' version '1.1.0'`;
     const pluginMatch = buildFileSource.match(/plugins\s*\{\s*([^}]*)\}/);
     let updatedBuildFileSource;
@@ -328,18 +339,16 @@ plugins {
 
     // We always want to update the source, so this shouldn't ever happen.
     if (updatedBuildFileSource === undefined) {
-      throw new Error(`Failed to update ${super.buildFilePath}`);
+      throw new Error(`Failed to update ${this.buildFilePath}`);
     }
 
     return updatedBuildFileSource;
   }
 
-  async install(): Promise<void> {
-    const buildFileSource = (
-      await fsp.readFile(super.buildFilePath)
-    ).toString();
-    const updatedBuildFileSource = this.insertPluginSpec(buildFileSource);
-    await fsp.writeFile(super.buildFilePath, updatedBuildFileSource);
+  async installAgent(): Promise<void> {
+    const buildFileSource = (await fsp.readFile(this.buildFilePath)).toString();
+    let updatedBuildFileSource = await this.insertPluginSpec(buildFileSource);
+    await fsp.writeFile(this.buildFilePath, updatedBuildFileSource);
   }
 
   /**
@@ -407,21 +416,10 @@ plugins {
   }
 }
 
-export default class JavaAgentInstaller extends AgentInstaller {
-  constructor(
-    path: string,
-    commandRunner = CommandRunnerImpl as unknown as CommandRunner
-  ) {
-    const installers = [
-      new GradleInstaller(path, commandRunner),
-      new MavenInstaller(path, commandRunner),
-    ].filter((installer) => installer.available);
-    if (installers.length === 0) {
-      throw new ValidationError(
-        'No Java installer available for the current project. Supported frameworks are: Maven, Gradle.'
-      );
-    }
+const JavaAgentInstaller = {
+  name: 'Java',
+  documentation: 'https://appland.com/docs/reference/appmap-java',
+  installers: [MavenInstaller, GradleInstaller],
+};
 
-    super(installers[0], path);
-  }
-}
+export default JavaAgentInstaller;

@@ -5,6 +5,9 @@ import PythonAgentInstaller from './pythonAgentInstaller';
 import ValidationError from './validationError';
 import AbortError from './abortError';
 import { verbose } from '../../utils';
+import AgentInstallerProcedure from './agentInstallerProcedure';
+import chalk from 'chalk';
+import UI from './userInteraction';
 
 const AGENT_INSTALLERS = {
   java: JavaAgentInstaller,
@@ -15,6 +18,12 @@ const AGENT_INSTALLERS = {
 export const command = 'install-agent [project-type]';
 export const describe = 'Install and configure an AppMap language agent';
 
+function supportedTargetsMessage(): string {
+  const supportedLanguages = Object.keys(AGENT_INSTALLERS)
+    .map((name) => chalk.blue(name))
+    .join(', ');
+
+  return `Supported languages: ${supportedLanguages}`;
 export const builder = (args) => {
   });
   args.option('dir', {
@@ -30,17 +39,19 @@ export const handler = async (argv) => {
 
   const commandFn = async () => {
     const { language, dir } = argv;
-    const InstallerClass = AGENT_INSTALLERS[language];
-    if (!InstallerClass) {
-      throw new ValidationError(
-        `Unsupported AppMap agent language: ${argv.language}`
+    let installerOptions = AGENT_INSTALLERS[language];
+    if (!installerOptions) {
+        UI.error(
+        [
+          `${chalk.red(installTarget)} is not a supported installer type.`,
+          supportedTargetsMessage(),
+        ].join('\n')
       );
+      process.exit(1);
     }
 
-    const installer = new InstallerClass(dir);
-
-    await installer.installAgentFlow.run();
-    return installer.configureAgentFlow.run();
+    const installer = new AgentInstallerProcedure(installerOptions, dir);
+    await installer.run(installerFramework);
   };
 
   return commandFn().catch((err) => {

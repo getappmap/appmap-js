@@ -1,41 +1,44 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
 
+import { join } from 'path';
 import { promises as fsp } from 'fs';
-import AgentInstaller from './agentInstallerBase';
-import BuildToolInstaller from './buildToolInstallerBase';
+import AgentInstaller from './agentInstaller';
 import CommandStruct from './commandStruct';
-import ValidationError from './validationError';
-import { Step } from './workflow';
-
-const POETRY_LOCK_FILE = 'poetry.lock';
-const REQUIREMENTS_FILE = 'requirements.txt';
+import { exists } from '../../utils';
+import chalk from 'chalk';
 
 const REGEX_PKG_DEPENDENCY = /^\s*appmap\s*[=>~]+=.*$/m;
 // include .dev0 so pip will allow prereleases
 const PKG_DEPENDENCY = 'appmap>=1.1.0.dev0';
 
-export class PoetryInstaller extends BuildToolInstaller {
-  constructor(protected readonly path: string) {
-    super(POETRY_LOCK_FILE, path);
+export class PoetryInstaller implements AgentInstaller {
+  constructor(readonly path: string) {}
+
+  get name(): string {
+    return 'poetry';
   }
 
-  get installStep1(): Step {
-    const ret = new Step(this.assumptions, null);
-    return ret;
+  get buildFile(): string {
+    return 'poetry.lock';
   }
 
-  get assumptions(): string {
-    return `Your project contains a ${POETRY_LOCK_FILE}. Therefore, it looks like a poetry project.`;
+  get buildFilePath(): string {
+    return join(this.path, this.buildFile);
   }
 
-  get postInstallMessage(): string {
-    return `
-
-The AppMap Python package ("appmap") will be added to your project as a development dependency.`;
+  postInstallMessage(): string {
+    return [
+      `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
+      `By default, AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
+    ].join('\n');
   }
 
-  get verifyCommand(): CommandStruct {
+  async available(): Promise<boolean> {
+    return await exists(this.buildFilePath);
+  }
+
+  verifyCommand(): CommandStruct {
     return new CommandStruct(
       'poetry',
       ['add', '--dev', '--allow-prereleases', 'appmap'],
@@ -43,43 +46,51 @@ The AppMap Python package ("appmap") will be added to your project as a developm
     );
   }
 
-  get agentInitCommand(): CommandStruct {
+  initCommand(): CommandStruct {
     return new CommandStruct('poetry', ['run', 'appmap-agent-init'], this.path);
   }
 
-  async install(): Promise<void> {
-    return Promise.resolve();
+  installAgent(): void {
+    throw new Error('Not yet implemented');
   }
 }
 
-export class PipInstaller extends BuildToolInstaller {
-  constructor(protected readonly path: string) {
-    super(REQUIREMENTS_FILE, path);
+export class PipInstaller implements AgentInstaller {
+  constructor(readonly path: string) {}
+
+  get name(): string {
+    return 'pip';
   }
 
-  get assumptions(): string {
-    return `Your project contains a ${REQUIREMENTS_FILE}. Therefore, it looks like a pip project.
-We  will add a dependency on the "appmap" package by updating ${REQUIREMENTS_FILE}.`;
+  get buildFile(): string {
+    return 'requirements.txt';
   }
 
-  get postInstallMessage(): string {
-    return `The AppMap Python package ("appmap") has been added to your ${REQUIREMENTS_FILE}. You should open this file and check that
-it looks clean and correct.
-    
-Once you've done that, we'll complete the installation of the AppMap package by running the following command
-in your terminal:`;
+  get buildFilePath(): string {
+    return join(this.path, this.buildFile);
   }
 
-  get verifyCommand(): CommandStruct {
+  postInstallMessage(): string {
+    return [
+      `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
+      `By default, AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
+    ].join('\n');
+  }
+
+  async available(): Promise<boolean> {
+    return await exists(this.buildFilePath);
+  }
+
+  verifyCommand(): CommandStruct {
     return new CommandStruct(
       'pip',
-      ['install', '-r', REQUIREMENTS_FILE],
+      ['install', '-r', this.buildFile],
       this.path
     );
   }
 
-  async install(): Promise<void> {
-    let requirements = (await fsp.readFile(super.buildFilePath)).toString();
+  async installAgent(): Promise<void> {
+    let requirements = (await fsp.readFile(this.buildFilePath)).toString();
 
     const pkgExists = requirements.search(REGEX_PKG_DEPENDENCY) !== -1;
 
@@ -92,29 +103,18 @@ in your terminal:`;
       requirements = `${PKG_DEPENDENCY}\n` + requirements;
     }
 
-    await fsp.writeFile(super.buildFilePath, requirements);
+    await fsp.writeFile(this.buildFilePath, requirements);
   }
 
-  get agentInitCommand(): CommandStruct {
+  initCommand(): CommandStruct {
     return new CommandStruct('appmap-agent-init', [], this.path);
   }
 }
 
-export default class PythonAgentInstaller extends AgentInstaller {
-  /**
-   * @param {string} path
-   */
-  constructor(path) {
-    const installers = [
-      new PoetryInstaller(path),
-      new PipInstaller(path),
-    ].filter((installer) => installer.available);
-    if (installers.length === 0) {
-      throw new ValidationError(
-        'No Python installer available for the current project. Supported frameworks are: poetry, pip.'
-      );
-    }
+const PythonAgentInstaller = {
+  name: 'Python',
+  documentation: 'https://appland.com/docs/reference/appmap-python',
+  installers: [PipInstaller],
+};
 
-    super(installers[0], path);
-  }
-}
+export default PythonAgentInstaller;

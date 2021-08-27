@@ -43,6 +43,7 @@
   "dependencies": {
     "@appland/models": "workspace:*",
     "async": "^3.2.0",
+    "chalk": "^4.1.2",
     "chokidar": "^3.5.1",
     "cli-progress": "^3.9.0",
     "console-table-printer": "^2.9.0",
