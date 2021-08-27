@@ -1,35 +1,28 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
-const { existsSync, promises: fsp } = require('fs');
-const { JSDOM } = require('jsdom');
-const xmlSerializer = require('w3c-xmlserializer');
-const { join } = require('path');
+import { existsSync, promises as fsp } from 'fs';
+import { JSDOM } from 'jsdom';
+import xmlSerializer from 'w3c-xmlserializer';
+import { join } from 'path';
+import moo from 'moo';
+import BuildToolInstaller from './buildToolInstallerBase';
+import CommandStruct from './commandStruct';
+import ValidationError from './validationError';
+import AgentInstaller from './agentInstallerBase';
+import * as CommandRunnerImpl from './commandRunner';
 
-const moo = require('moo');
-
-const BuildToolInstaller = require('./buildToolInstallerBase');
-const CommandStruct = require('./commandStruct');
-const ValidationError = require('./validationError');
-const AgentInstaller = require('./agentInstallerBase');
-
-/**
- * @typedef {import('./types').Command} Command
- * @typedef {import('./types').InstallResult} InstallResult
- * @typedef {import('./types').InstallStep} InstallStep
- */
+type CommandRunner = {
+  run: (cmd: CommandStruct) => Promise<number>;
+  runSync: (cmd: CommandStruct) => string;
+};
 
 class Maven {
   /**
    * @param {string} path
    */
-  constructor(path) {
-    this.path = path;
-  }
+  constructor(protected readonly path: string) {}
 
-  /**
-   * @returns {string}
-   */
-  runCommand() {
+  runCommand(): string {
     if (
       process.platform === 'win32' &&
       existsSync(join(this.path, 'mvnw.cmd'))
@@ -47,17 +40,9 @@ class Maven {
 }
 
 class Gradle {
-  /**
-   * @param {string} path
-   */
-  constructor(path) {
-    this.path = path;
-  }
+  constructor(protected readonly path: string) {}
 
-  /**
-   * @returns {string}
-   */
-  runCommand() {
+  runCommand(): string {
     if (
       process.platform === 'win32' &&
       existsSync(join(this.path, 'gradlew.bat'))
@@ -77,26 +62,20 @@ class Gradle {
   }
 }
 
-class MavenInstaller extends BuildToolInstaller {
-  /**
-   * @param {string} path
-   */
-  constructor(path, commandRunner = null) {
+export class MavenInstaller extends BuildToolInstaller {
+  constructor(
+    protected readonly path: string,
+    protected readonly commandRunner = CommandRunnerImpl as unknown as CommandRunner
+  ) {
     super('pom.xml', path, commandRunner);
   }
 
-  /**
-   * @returns {string}
-   */
-  get assumptions() {
+  get assumptions(): string {
     return `Your project contains a pom.xml. Therefore, it looks like a Maven project,
 so we will install the AppMap Maven plugin.`;
   }
 
-  /**
-   * @returns {string}
-   */
-  get postInstallMessage() {
+  get postInstallMessage(): string {
     return `The AppMap plugin has been added to your pom.xml. You should open this file and check that
 it looks clean and correct.
 
@@ -104,22 +83,19 @@ Once you've done that, we'll test the proper operation of the AppMap plugin by r
 in your terminal`;
   }
 
-  /**
-   * @returns {Command}
-   */
-  get verifyCommand() {
+  get verifyCommand(): CommandStruct {
     return new CommandStruct(
       new Maven(this.path).runCommand(),
       ['-Dplugin=com.appland:appmap-maven-plugin', 'help:describe'],
-      {}
+      this.path
     );
   }
 
-  get agentInitCommand() {
+  get agentInitCommand(): CommandStruct {
     const cmd = new CommandStruct(
       new Maven(this.path).runCommand(),
       ['appmap:print-jar-path'],
-      {}
+      this.path
     );
 
     const out = this.commandRunner.runSync(cmd);
@@ -131,15 +107,14 @@ in your terminal`;
     return new CommandStruct(
       'java',
       ['-jar', appmapPath, '-d', this.path, 'init'],
-      {}
+      this.path
     );
   }
 
-  /**
-   * @returns {Promise<InstallResult>}
-   */
-  async install() {
-    const buildFileSource = (await fsp.readFile(this.buildFilePath)).toString();
+  async install(): Promise<void> {
+    const buildFileSource = (
+      await fsp.readFile(super.buildFilePath)
+    ).toString();
     const jsdom = new JSDOM();
     const domParser = new jsdom.window.DOMParser();
     const doc = domParser.parseFromString(buildFileSource, 'text/xml');
@@ -164,7 +139,7 @@ in your terminal`;
     ).singleNodeValue;
     if (!projectSection) {
       // Doesn't make sense to be missing the <project> section
-      throw new Error(`No project section found in ${this.buildFilePath}`);
+      throw new Error(`No project section found in ${super.buildFilePath}`);
     }
 
     const ns = projectSection.namespaceURI || defaultns;
@@ -227,32 +202,24 @@ in your terminal`;
       pluginsSection.appendChild(doc.createTextNode('\n'));
     }
     const serialized = xmlSerializer(doc.getRootNode());
-    await fsp.writeFile(this.buildFilePath, serialized);
-
-    return 'installed';
+    await fsp.writeFile(super.buildFilePath, serialized);
   }
 }
 
-class GradleInstaller extends BuildToolInstaller {
-  /**
-   * @param {string} path
-   */
-  constructor(path, commandRunner = null) {
+export class GradleInstaller extends BuildToolInstaller {
+  constructor(
+    protected readonly path: string,
+    protected readonly commandRunner = CommandRunnerImpl as unknown as CommandRunner
+  ) {
     super('build.gradle', path, commandRunner);
   }
 
-  /**
-   * @returns {string}
-   */
-  get assumptions() {
+  get assumptions(): string {
     return `Your project contains a build.gradle. Therefore, it looks like a Gradle project,
 so we will install the AppMap Gradle plugin.`;
   }
 
-  /**
-   * @returns {string}
-   */
-  get postInstallMessage() {
+  get postInstallMessage(): string {
     return `The AppMap plugin has been added to your build.gradle. You should open this file and check that
 it looks clean and correct.
 
@@ -260,10 +227,7 @@ Once you've done that, we'll test the proper configuration of the AppMap plugin 
 in your terminal`;
   }
 
-  /**
-   * @returns {Command}
-   */
-  get verifyCommand() {
+  get verifyCommand(): CommandStruct {
     return new CommandStruct(
       new Gradle(this.path).runCommand(),
       [
@@ -273,15 +237,15 @@ in your terminal`;
         '--configuration',
         'appmapAgent',
       ],
-      {}
+      this.path
     );
   }
 
-  get agentInitCommand() {
+  get agentInitCommand(): CommandStruct {
     const cmd = new CommandStruct(
       new Gradle(this.path).runCommand(),
       ['-q', 'appmap-print-jar-path'],
-      {}
+      this.path
     );
 
     const out = this.commandRunner.runSync(cmd);
@@ -293,7 +257,7 @@ in your terminal`;
     return new CommandStruct(
       'java',
       ['-jar', appmapPath, '-d', this.path, 'init'],
-      {}
+      this.path
     );
   }
 
@@ -307,10 +271,8 @@ in your terminal`;
    *
    * If there's no plugins block, and no buildscript block, append a new plugins
    * block.
-   *
-   * @returns {string}
    */
-  insertPluginSpec(buildFileSource) {
+  insertPluginSpec(buildFileSource: string): string {
     const pluginSpec = `id 'com.appland.appmap' version '1.1.0'`;
     const pluginMatch = buildFileSource.match(/plugins\s*\{\s*([^}]*)\}/);
     let updatedBuildFileSource;
@@ -366,20 +328,18 @@ plugins {
 
     // We always want to update the source, so this shouldn't ever happen.
     if (updatedBuildFileSource === undefined) {
-      throw new Error(`Failed to update ${this.buildFilePath}`);
+      throw new Error(`Failed to update ${super.buildFilePath}`);
     }
 
     return updatedBuildFileSource;
   }
 
-  /**
-   * @returns {Promise<InstallResult>}
-   */
-  async install() {
-    const buildFileSource = (await fsp.readFile(this.buildFilePath)).toString();
+  async install(): Promise<void> {
+    const buildFileSource = (
+      await fsp.readFile(super.buildFilePath)
+    ).toString();
     const updatedBuildFileSource = this.insertPluginSpec(buildFileSource);
-    await fsp.writeFile(this.buildFilePath, updatedBuildFileSource);
-    return 'installed';
+    await fsp.writeFile(super.buildFilePath, updatedBuildFileSource);
   }
 
   /**
@@ -387,7 +347,7 @@ plugins {
    * return the offset in the source where the block ends. It not found, return
    * undefined.
    */
-  static findBuildscriptBlock(gradleSrc) {
+  static findBuildscriptBlock(gradleSrc: string): number | undefined {
     const lexer = moo.compile({
       buildscript: 'buildscript',
       comment: /\/\/.*?$/,
@@ -447,11 +407,11 @@ plugins {
   }
 }
 
-class JavaAgentInstaller extends AgentInstaller {
-  /**
-   * @param {string} path
-   */
-  constructor(path, commandRunner = null) {
+export default class JavaAgentInstaller extends AgentInstaller {
+  constructor(
+    path: string,
+    commandRunner = CommandRunnerImpl as unknown as CommandRunner
+  ) {
     const installers = [
       new GradleInstaller(path, commandRunner),
       new MavenInstaller(path, commandRunner),
@@ -465,5 +425,3 @@ class JavaAgentInstaller extends AgentInstaller {
     super(installers[0], path);
   }
 }
-
-module.exports = { GradleInstaller, JavaAgentInstaller, MavenInstaller };

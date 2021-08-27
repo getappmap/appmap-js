@@ -1,10 +1,10 @@
-const process = require('process');
-const { verbose } = require('../../utils');
-const { JavaAgentInstaller } = require('./javaAgentInstaller');
-const RubyAgentInstaller = require('./rubyAgentInstaller');
-const { PythonAgentInstaller } = require('./pythonAgentInstaller');
-const ValidationError = require('./validationError');
-const AbortError = require('./abortError');
+import process from 'process';
+import JavaAgentInstaller from './javaAgentInstaller';
+import RubyAgentInstaller from './rubyAgentInstaller';
+import PythonAgentInstaller from './pythonAgentInstaller';
+import ValidationError from './validationError';
+import AbortError from './abortError';
+import { verbose } from '../../utils';
 
 const AGENT_INSTALLERS = {
   java: JavaAgentInstaller,
@@ -12,12 +12,10 @@ const AGENT_INSTALLERS = {
   python: PythonAgentInstaller,
 };
 
-exports.command = 'install-agent <language>';
-exports.describe = 'Install and configure an AppMap language agent';
+export const command = 'install-agent [project-type]';
+export const describe = 'Install and configure an AppMap language agent';
 
-exports.builder = (args) => {
-  args.positional('language', {
-    describe: 'Which language agent to install',
+export const builder = (args) => {
   });
   args.option('dir', {
     describe: 'directory in which to install',
@@ -27,7 +25,7 @@ exports.builder = (args) => {
   return args.strict();
 };
 
-exports.handler = async (argv) => {
+export const handler = async (argv) => {
   verbose(argv.verbose);
 
   const commandFn = async () => {

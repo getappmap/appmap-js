@@ -1,43 +1,28 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
 
-const { promises: fsp } = require('fs');
-const AgentInstaller = require('./agentInstallerBase');
-const BuildToolInstaller = require('./buildToolInstallerBase');
-const CommandStruct = require('./commandStruct');
-const ValidationError = require('./validationError');
-
-/**
- * @typedef {import('./types').Command} Command
- * @typedef {import('./types').InstallResult} InstallResult
- * @typedef {import('./types').InstallStep} InstallStep
- */
+import { promises as fsp } from 'fs';
+import AgentInstaller from './agentInstallerBase';
+import BuildToolInstaller from './buildToolInstallerBase';
+import CommandStruct from './commandStruct';
+import ValidationError from './validationError';
 
 const REGEX_GEM_DECLARATION = /(?!\s)(?:gem|group|require)\s/m;
 const REGEX_GEM_DEPENDENCY = /^\s*gem\s+['|"]appmap['|"].*$/m;
 const GEM_DEPENDENCY = "gem 'appmap', :groups => [:development, :test]";
 
-class BundleInstaller extends BuildToolInstaller {
-  /**
-   * @param {string} path
-   */
-  constructor(path) {
+export class BundleInstaller extends BuildToolInstaller {
+  constructor(protected readonly path: string) {
     super('Gemfile', path);
   }
 
-  /**
-   * @returns {string}
-   */
-  get assumptions() {
+  get assumptions(): string {
     return `Your project contains a Gemfile. Therefore, it looks like a Bundler project,
 so we will install the AppMap Ruby gem, "appmap". This gem will be installed as close to the beginning
 of your Gemfile as possible, so that AppMap can observe and hook the other gems as they load.`;
   }
 
-  /**
-   * @returns {string}
-   */
-  get postInstallMessage() {
+  get postInstallMessage(): string {
     return `The AppMap Ruby gem ("appmap") has been added to your Gemfile. You should open this file and check that
 it looks clean and correct.
 
@@ -45,18 +30,12 @@ Once you've done that, we'll complete the installation of the AppMap gem by runn
 in your terminal:`;
   }
 
-  /**
-   * @returns {Command}
-   */
-  get verifyCommand() {
-    return new CommandStruct('bundle', ['install'], {});
+  get verifyCommand(): CommandStruct {
+    return new CommandStruct('bundle', ['install'], this.path);
   }
 
-  /**
-   * @returns {Promise<InstallResult>}
-   */
-  async install() {
-    let gemfile = (await fsp.readFile(this.buildFilePath)).toString();
+  async install(): Promise<void> {
+    let gemfile = (await fsp.readFile(super.buildFilePath)).toString();
     const index = gemfile.search(REGEX_GEM_DECLARATION);
 
     if (index !== -1) {
@@ -72,27 +51,26 @@ in your terminal:`;
         gemfile = chars.join('');
       }
 
-      await fsp.writeFile(this.buildFilePath, gemfile);
+      await fsp.writeFile(super.buildFilePath, gemfile);
     } else {
       await fsp.writeFile(
-        this.buildFilePath,
+        super.buildFilePath,
         `${gemfile}\ngem "appmap", :groups => [:development, :test]\n`
       );
     }
-
-    return 'installed';
   }
 
-  get agentInitCommand() {
-    return new CommandStruct('bundle', ['exec', 'appmap-agent-init'], {});
+  get agentInitCommand(): CommandStruct {
+    return new CommandStruct(
+      'bundle',
+      ['exec', 'appmap-agent-init'],
+      this.path
+    );
   }
 }
 
-class RubyAgentInstaller extends AgentInstaller {
-  /**
-   * @param {string} path
-   */
-  constructor(path) {
+export default class RubyAgentInstaller extends AgentInstaller {
+  constructor(path: string) {
     const installers = [new BundleInstaller(path)].filter(
       (installer) => installer.available
     );
@@ -105,5 +83,3 @@ class RubyAgentInstaller extends AgentInstaller {
     super(installers[0], path);
   }
 }
-
-module.exports = { BundleInstaller, RubyAgentInstaller };

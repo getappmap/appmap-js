@@ -1,3 +1,1 @@
-class ValidationError extends Error {}
-
-module.exports = ValidationError;
+export default class ValidationError extends Error {}

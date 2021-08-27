@@ -1,14 +1,16 @@
-class CommandStruct {
-  /**
-   *
-   * @param {string} program
-   * @param {string[]} args
-   * @param {NodeJS.ProcessEnv} environment
-   */
-  constructor(program, args, environment) {
-    this.program = program;
-    this.args = args;
-    this.environment = environment;
+import { PathLike } from 'fs';
+import { env } from 'process';
+
+export default class CommandStruct {
+  readonly environment: NodeJS.ProcessEnv;
+
+  constructor(
+    readonly program: string,
+    readonly args: readonly string[],
+    readonly path: PathLike,
+    environment: NodeJS.ProcessEnv = {}
+  ) {
+    this.environment = { ...env, ...environment };
   }
 
   toString() {

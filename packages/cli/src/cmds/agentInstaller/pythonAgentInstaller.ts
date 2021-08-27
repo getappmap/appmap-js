@@ -1,18 +1,12 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
 
-const { promises: fsp } = require('fs');
-const AgentInstaller = require('./agentInstallerBase');
-const BuildToolInstaller = require('./buildToolInstallerBase');
-const CommandStruct = require('./commandStruct');
-const ValidationError = require('./validationError');
-const { Step } = require('./workflow');
-
-/**
- * @typedef {import('./types').Command} Command
- * @typedef {import('./types').InstallResult} InstallResult
- * @typedef {import('./types').InstallStep} InstallStep
- */
+import { promises as fsp } from 'fs';
+import AgentInstaller from './agentInstallerBase';
+import BuildToolInstaller from './buildToolInstallerBase';
+import CommandStruct from './commandStruct';
+import ValidationError from './validationError';
+import { Step } from './workflow';
 
 const POETRY_LOCK_FILE = 'poetry.lock';
 const REQUIREMENTS_FILE = 'requirements.txt';
@@ -21,78 +15,54 @@ const REGEX_PKG_DEPENDENCY = /^\s*appmap\s*[=>~]+=.*$/m;
 // include .dev0 so pip will allow prereleases
 const PKG_DEPENDENCY = 'appmap>=1.1.0.dev0';
 
-class PoetryInstaller extends BuildToolInstaller {
-  /**
-   * @param {string} path
-   */
-  constructor(path) {
+export class PoetryInstaller extends BuildToolInstaller {
+  constructor(protected readonly path: string) {
     super(POETRY_LOCK_FILE, path);
   }
 
-  get installStep1() {
+  get installStep1(): Step {
     const ret = new Step(this.assumptions, null);
     return ret;
   }
 
-  /**
-   * @returns {string}
-   */
-  get assumptions() {
+  get assumptions(): string {
     return `Your project contains a ${POETRY_LOCK_FILE}. Therefore, it looks like a poetry project.`;
   }
 
-  /**
-   * @returns {string}
-   */
-  get postInstallMessage() {
+  get postInstallMessage(): string {
     return `
 
 The AppMap Python package ("appmap") will be added to your project as a development dependency.`;
   }
 
-  /**
-   * @returns {Command}
-   */
-  get verifyCommand() {
+  get verifyCommand(): CommandStruct {
     return new CommandStruct(
       'poetry',
       ['add', '--dev', '--allow-prereleases', 'appmap'],
-      process.env
+      this.path
     );
   }
 
-  get agentInitCommand() {
-    return new CommandStruct('poetry', ['run', 'appmap-agent-init'], {});
+  get agentInitCommand(): CommandStruct {
+    return new CommandStruct('poetry', ['run', 'appmap-agent-init'], this.path);
   }
 
-  /**
-   * @returns {Promise<InstallResult>}
-   */
-  async install() {
-    return 'installed';
+  async install(): Promise<void> {
+    return Promise.resolve();
   }
 }
 
-class PipInstaller extends BuildToolInstaller {
-  /**
-   * @param {string} path
-   */
-  constructor(path) {
+export class PipInstaller extends BuildToolInstaller {
+  constructor(protected readonly path: string) {
     super(REQUIREMENTS_FILE, path);
   }
 
-  /**
-   * @returns {string}
-   */
-  get assumptions() {
+  get assumptions(): string {
     return `Your project contains a ${REQUIREMENTS_FILE}. Therefore, it looks like a pip project.
 We  will add a dependency on the "appmap" package by updating ${REQUIREMENTS_FILE}.`;
   }
 
-  /**
-   * @returns {string}
-   */
-  get postInstallMessage() {
+  get postInstallMessage(): string {
     return `The AppMap Python package ("appmap") has been added to your ${REQUIREMENTS_FILE}. You should open this file and check that
 it looks clean and correct.
     
@@ -100,22 +70,16 @@ Once you've done that, we'll complete the installation of the AppMap package by 
 in your terminal:`;
   }
 
-  /**
-   * @returns {Command}
-   */
-  get verifyCommand() {
+  get verifyCommand(): CommandStruct {
     return new CommandStruct(
       'pip',
       ['install', '-r', REQUIREMENTS_FILE],
-      process.env
+      this.path
     );
   }
 
-  /**
-   * @returns {Promise<InstallResult>}
-   */
-  async install() {
-    let requirements = (await fsp.readFile(this.buildFilePath)).toString();
+  async install(): Promise<void> {
+    let requirements = (await fsp.readFile(super.buildFilePath)).toString();
 
     const pkgExists = requirements.search(REGEX_PKG_DEPENDENCY) !== -1;
 
@@ -128,17 +92,15 @@ in your terminal:`;
       requirements = `${PKG_DEPENDENCY}\n` + requirements;
     }
 
-    await fsp.writeFile(this.buildFilePath, requirements);
-
-    return 'installed';
+    await fsp.writeFile(super.buildFilePath, requirements);
   }
 
-  get agentInitCommand() {
-    return new CommandStruct('appmap-agent-init', [], {});
+  get agentInitCommand(): CommandStruct {
+    return new CommandStruct('appmap-agent-init', [], this.path);
   }
 }
 
-class PythonAgentInstaller extends AgentInstaller {
+export default class PythonAgentInstaller extends AgentInstaller {
   /**
    * @param {string} path
    */
@@ -156,9 +118,3 @@ class PythonAgentInstaller extends AgentInstaller {
     super(installers[0], path);
   }
 }
-
-module.exports = {
-  PythonAgentInstaller,
-  PoetryInstaller,
-  PipInstaller,
-};
