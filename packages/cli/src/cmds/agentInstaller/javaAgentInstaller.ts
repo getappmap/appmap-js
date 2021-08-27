@@ -12,6 +12,7 @@ import { run } from './commandRunner';
 import { exists } from '../../utils';
 import UI from './userInteraction';
 import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
+import AbortError from './abortError';
 
 export class MavenInstaller implements AgentInstaller {
   constructor(readonly path: string) {}
@@ -424,6 +425,25 @@ export class GradleInstaller implements AgentInstaller {
       buildFileSource,
       whitespace,
       async (lines) => {
+        const javaPresent = lines.some((line) =>
+          line.match(/^\s*id\s+["']\s*java/)
+        );
+        if (!javaPresent) {
+          const { userWillContinue } = await UI.prompt({
+            type: 'list',
+            name: 'userWillContinue',
+            message: `The ${chalk.red(
+              "'java'"
+            )} plugin was not found. This configuration is unsupported and is likely to fail. Continue?`,
+            default: 'Abort',
+            choices: ['Abort', 'Continue'],
+          });
+
+          if (userWillContinue === 'Abort') {
+            throw new AbortError();
+          }
+        }
+
         const existingIndex = lines.findIndex((line) =>
           line.match(/com\.appland\.appmap/)
         );
