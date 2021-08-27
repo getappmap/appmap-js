@@ -168,10 +168,14 @@ export class MavenInstaller implements AgentInstaller {
       doc,
       doc.createNSResolver(doc.getRootNode()),
       9
-    ).singleNodeValue;
+    ).singleNodeValue as Element | null;
     if (appmapPlugin) {
-      // @ts-ignore
-      appmapPlugin.querySelector('version').textContent = pluginVersion;
+      let version = appmapPlugin.querySelector('version');
+      if (!version) {
+        version = doc.createElementNS(ns, 'version');
+        appmapPlugin.appendChild(version);
+      }
+      version.textContent = pluginVersion;
     } else {
       const pluginNode = domParser
         .parseFromString(pluginString, 'application/xml')
