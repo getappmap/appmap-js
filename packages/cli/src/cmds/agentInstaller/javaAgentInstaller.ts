@@ -50,21 +50,18 @@ export class MavenInstaller implements AgentInstaller {
   }
 
   async runCommand(): Promise<string> {
-    if (
-      process.platform === 'win32' &&
-      (await exists(join(this.path, 'mvnw.cmd')))
-    ) {
-      return 'mvnw.cmd';
+    const wrapperExists = await exists(join(this.path, 'mvnw'));
+
+    if (wrapperExists) {
+      return `.${sep}mvnw`;
+    } else if (verbose()) {
+      console.warn(
+        `${chalk.yellow(
+          'mvnw wrapper'
+        )} not located, falling back to ${chalk.yellow('mvn')}`
+      );
     }
 
-    if (
-      process.platform !== 'win32' &&
-      (await exists(join(this.path, 'mvnw')))
-    ) {
-      return './mvnw';
-    }
-
-    // Pray
     return 'mvn';
   }
 
@@ -227,21 +224,18 @@ export class GradleInstaller implements AgentInstaller {
   }
 
   async runCommand(): Promise<string> {
-    if (
-      process.platform === 'win32' &&
-      (await exists(join(this.path, 'gradlew.bat')))
-    ) {
-      return 'gradlew.bat';
+    const wrapperExists = await exists(join(this.path, 'gradlew'));
+
+    if (wrapperExists) {
+      return `.${sep}gradlew`;
+    } else if (verbose()) {
+      console.warn(
+        `${chalk.yellow(
+          'gradlew wrapper'
+        )} not located, falling back to ${chalk.yellow('gradle')}`
+      );
     }
 
-    if (
-      process.platform !== 'win32' &&
-      (await exists(join(this.path, 'gradlew')))
-    ) {
-      return './gradlew';
-    }
-
-    // Pray
     return 'gradle';
   }
 
