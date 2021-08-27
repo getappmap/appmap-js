@@ -38,10 +38,10 @@ export class MavenInstaller implements AgentInstaller {
     return [
       `The AppMap agent will automatically record your tests when you run ${chalk.blue(
         `${mvnBin} test`
-      )}.`,
+      )}`,
       `By default, AppMap files will be output to ${chalk.blue(
         'target/appmap'
-      )}.`,
+      )}`,
     ].join('\n');
   }
 
@@ -212,10 +212,10 @@ export class GradleInstaller implements AgentInstaller {
     }
 
     return [
-      `Record your tests by running ${chalk.blue(`${gradleBin} appmap test`)}.`,
+      `Record your tests by running ${chalk.blue(`${gradleBin} appmap test`)}`,
       `By default, AppMap files will be output to ${chalk.blue(
-        'target/appmap'
-      )}.`,
+        'build/appmap'
+      )}`,
     ].join('\n');
   }
 
