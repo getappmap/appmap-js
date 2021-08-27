@@ -10,6 +10,7 @@ import CommandStruct from './commandStruct';
 import AgentInstaller from './agentInstaller';
 import { run } from './commandRunner';
 import { exists } from '../../utils';
+import UI from './userInteraction';
 
 export class MavenInstaller implements AgentInstaller {
   constructor(readonly path: string) {}
@@ -272,68 +273,67 @@ export class GradleInstaller implements AgentInstaller {
     );
   }
 
-  /**
-   * Add the com.appland.appmap plugin to build.gradle.
-   *
-   * Start by looking for an existing plugins block. If found, add our plugin to
-   * it. If there's no plugins block, look for a buildscript block. If found,
-   * insert a new plugins block after it. (Gradle requires that the plugins
-   * block appear after the buildscript block, and before any other blocks.)
-   *
-   * If there's no plugins block, and no buildscript block, append a new plugins
-   * block.
-   */
-  async insertPluginSpec(buildFileSource: string): Promise<string> {
-    const pluginSpec = `id 'com.appland.appmap' version '1.1.0'`;
-    const pluginMatch = buildFileSource.match(/plugins\s*\{\s*([^}]*)\}/);
+  async modifyBlock(
+    blockIdentifier: string,
+    buildFileSource: string,
+    lineTransform: (lines: string[]) => string[] | Promise<string[]>,
+    placementIndex?: () => number | undefined
+  ) {
+    const match = buildFileSource.match(
+      new RegExp(`${blockIdentifier}\\s*\\{\\s*([^}]*)\\}`)
+    );
     let updatedBuildFileSource;
-    if (pluginMatch) {
-      const pluginMatchIndex = buildFileSource.indexOf(pluginMatch[0]);
-      const plugins = pluginMatch[1]
+
+    if (match) {
+      const matchIndex = buildFileSource.indexOf(match[0]);
+      let lines = match[1]
         .split('\n')
         .map((line) => line.trim())
         .filter((line) => line !== '');
-      let found = false;
-      let updatedPlugins = plugins.map((plugin) => {
-        if (plugin.indexOf('com.appland.appmap') !== -1) {
-          found = true;
-          return `  ${pluginSpec}`;
-        }
-        return `  ${plugin}`;
-      });
-      if (!found) {
-        updatedPlugins = updatedPlugins.concat([`  ${pluginSpec}`]);
-      }
-      const pluginSection = `plugins {
-${updatedPlugins.join('\n')}
-}`;
+
+      lines = await lineTransform(lines);
+      const newSection = [
+        `${blockIdentifier} {`,
+        lines.map((line) => `  ${line}`).join('\n'),
+        '}',
+      ].join('\n');
+
       updatedBuildFileSource = [
-        buildFileSource.substring(0, pluginMatchIndex),
-        pluginSection,
+        buildFileSource.substring(0, matchIndex),
+        newSection,
         buildFileSource.substring(
-          pluginMatchIndex + pluginMatch[0].length,
+          matchIndex + match[0].length,
           buildFileSource.length
         ),
       ].join('');
     } else {
-      const pluginSection = `
-plugins {
-  ${pluginSpec}
-}
-`;
-      const buildscriptOffset =
-        GradleInstaller.findBuildscriptBlock(buildFileSource);
-      if (buildscriptOffset !== undefined) {
+      const lines = await lineTransform([]);
+      const newSection = [
+        '',
+        `${blockIdentifier} {`,
+        lines.map((line) => `  ${line}`).join('\n'),
+        '}',
+      ].join('\n');
+
+      let offset: number | undefined;
+      if (placementIndex) {
+        offset = placementIndex();
+      }
+
+      if (offset !== undefined) {
         updatedBuildFileSource = [
-          buildFileSource.substring(0, buildscriptOffset + 1),
-          pluginSection,
-          buildFileSource.substring(
-            buildscriptOffset + 2,
-            buildFileSource.length
-          ),
+          buildFileSource.substring(0, offset + 1),
+          '\n' + newSection,
+          buildFileSource.substring(offset + 1, buildFileSource.length),
         ].join('');
       } else {
-        updatedBuildFileSource = [pluginSection, buildFileSource].join('\n');
+        const sourceChunks: string[] = [];
+        if (['plugins', 'buildscript'].includes(blockIdentifier)) {
+          sourceChunks.push(newSection, buildFileSource);
+        } else {
+          sourceChunks.push(buildFileSource, newSection);
+        }
+        updatedBuildFileSource = sourceChunks.join('\n');
       }
     }
 
@@ -345,20 +345,102 @@ plugins {
     return updatedBuildFileSource;
   }
 
+  /**
+   * Add Maven Central as a repository to build.gradle.
+   */
+  async insertRepository(buildFileSource: string): Promise<string> {
+    return await this.modifyBlock(
+      'repositories',
+      buildFileSource,
+      async (lines) => {
+        const exists = lines.some((line) => /mavenCentral\s*\(/.test(line));
+        if (!exists) {
+          const { addMavenCentral } = await UI.prompt({
+            type: 'list',
+            name: 'addMavenCentral',
+            message:
+              'The Maven Central repository is required by the AppMap plugin to fetch the AppMap agent JAR. Add it now?',
+            choices: ['Yes', 'No'],
+          });
+
+          if (addMavenCentral === 'Yes') {
+            lines.push('mavenCentral()');
+          }
+        }
+
+        return lines;
+      },
+      () => {
+        const offsets = [
+          GradleInstaller.findBlock(buildFileSource, 'buildscript'),
+          GradleInstaller.findBlock(buildFileSource, 'plugins'),
+        ].filter(Boolean) as number[];
+
+        if (!offsets.length) {
+          return undefined;
+        }
+
+        return Math.max(...offsets);
+      }
+    );
+  }
+
+  /**
+   * Add the com.appland.appmap plugin to build.gradle.
+   *
+   * Start by looking for an existing plugins block. If found, add our plugin to
+   * it. If there's no plugins block, look for a buildscript block. If found,
+   * insert a new plugins block after it. (Gradle requires that the plugins
+   * block appear after the buildscript block, and before any other blocks.)
+   *
+   * If there's no plugins block, and no buildscript block, append a new plugins
+   * block.
+   *
+   * @returns {string}
+   */
+  async insertPluginSpec(buildFileSource: string): Promise<string> {
+    const pluginSpec = `id 'com.appland.appmap' version '1.1.0'`;
+
+    return await this.modifyBlock(
+      'plugins',
+      buildFileSource,
+      async (lines) => {
+        const existingIndex = lines.findIndex((line) =>
+          line.match(/com\.appland\.appmap/)
+        );
+
+        if (existingIndex !== -1) {
+          lines[existingIndex] = pluginSpec;
+        } else {
+          lines.push(pluginSpec);
+        }
+
+        return lines;
+      },
+      () => GradleInstaller.findBlock(buildFileSource, 'buildscript')
+    );
+  }
+
   async installAgent(): Promise<void> {
     const buildFileSource = (await fsp.readFile(this.buildFilePath)).toString();
     let updatedBuildFileSource = await this.insertPluginSpec(buildFileSource);
+    updatedBuildFileSource = await this.insertRepository(
+      updatedBuildFileSource
+    );
     await fsp.writeFile(this.buildFilePath, updatedBuildFileSource);
   }
 
   /**
-   * Parse the given gradle source, looking for the buildscript block. If found,
-   * return the offset in the source where the block ends. It not found, return
-   * undefined.
+   * Parse the given gradle source, looking for a block identified by
+   * `blockIdentifier`. If found, return the offset in the source where
+   * the block ends. It not found, return undefined.
    */
-  static findBuildscriptBlock(gradleSrc: string): number | undefined {
+  static findBlock(
+    gradleSrc: string,
+    blockIdentifier: string
+  ): number | undefined {
     const lexer = moo.compile({
-      buildscript: 'buildscript',
+      blockIdentifier,
       comment: /\/\/.*?$/,
       ident: /[\w.]+/,
       lbrace: '{',
@@ -383,7 +465,7 @@ plugins {
       if (t === 'comment' || t === 'space') {
         continue;
       }
-      if (t === 'buildscript') {
+      if (t === 'blockIdentifier') {
         startBuildscript = true;
         continue;
       }
