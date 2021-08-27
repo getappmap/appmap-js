@@ -11,7 +11,6 @@ const { diffLines } = require('diff');
 const yaml = require('js-yaml');
 const { promises: fsp, readFileSync } = require('fs');
 const { queue } = require('async');
-const process = require('process');
 const readline = require('readline');
 const { join } = require('path');
 const cliProgress = require('cli-progress');
@@ -30,12 +29,20 @@ const InventoryCommand = require('./inventoryCommand');
 const InstallCommand = require('./cmds/agentInstaller/install-agent');
 
 class DiffCommand {
-  baseDir(dir) {
+  public appMapNames: any;
+  public baseDir?: string;
+  public baseAppMapNames: any;
+  public baseCatalog: any;
+  public workingAppMapNames: any;
+  public workingCatalog: any;
+  public workingDir?: string;
+
+  setBaseDir(dir) {
     this.baseDir = dir;
     return this;
   }
 
-  workingDir(dir) {
+  setWorkingDir(dir) {
     this.workingDir = dir;
     return this;
   }
@@ -83,7 +90,7 @@ class DiffCommand {
   async changed(algorithmName) {
     await this._loadCatalogs();
 
-    const result = [];
+    const result: string[] = [];
     Object.keys(this.workingCatalog)
       .filter((name) => this.baseCatalog[name])
       .filter(this._includesAppMap.bind(this))
@@ -145,6 +152,10 @@ class DiffCommand {
 }
 
 class DetailedDiff {
+  protected algorithm: string;
+  protected baseAppMap: any;
+  protected workingAppMap: any;
+
   constructor(algorithm, baseAppMap, workingAppMap) {
     this.algorithm = algorithm;
     this.baseAppMap = baseAppMap;
@@ -202,14 +213,18 @@ yargs(process.argv.slice(2))
         throw new Error('Location of work-in-progress AppMaps is required');
       }
 
-      const diff = new DiffCommand().baseDir(baseDir).workingDir(workingDir);
+      const diff = new DiffCommand()
+        .setBaseDir(baseDir)
+        .setWorkingDir(workingDir);
+
       if (argv.name) {
         diff.setAppMapNames([argv.name]);
       }
 
       const diffObject = {
         added: [...(await diff.added())].sort(),
-        changed: [],
+        changed: <any[]>[],
+        removed: <any>undefined,
       };
 
       const cumulativeChangedAppMaps = new Set();
@@ -226,7 +241,7 @@ yargs(process.argv.slice(2))
               );
               const changeResult = {
                 algorithm,
-                changed: [],
+                changed: <any[]>[],
               };
               if (changedAppMaps.length > 0) {
                 if (showDiff) {
@@ -313,11 +328,10 @@ yargs(process.argv.slice(2))
       }
 
       const appMapNames = await depends.depends();
-      const values = [];
+      const values: any[] = [];
       if (argv.field) {
         const { field } = argv;
-        // eslint-disable-next-line no-inner-declarations
-        async function printField(appMapBaseName) {
+        const q = queue(async (appMapBaseName: string) => {
           const data = await fsp.readFile(
             join(appMapBaseName, 'metadata.json')
           );
@@ -329,14 +343,13 @@ yargs(process.argv.slice(2))
           } else {
             console.warn(`No ${field} in ${appMapBaseName}`);
           }
-        }
-        const q = queue(printField, 5);
+        }, 5);
         appMapNames.forEach((name) => q.push(name));
         await q.drain();
       } else {
         appMapNames.forEach((name) => values.push(name));
       }
-      console.log([...new Set(values)].sort().join('\n'));
+      console.log(Array.from(new Set(values)).sort().join('\n'));
     }
   )
   .command(
@@ -396,7 +409,7 @@ yargs(process.argv.slice(2))
       let stats = null;
 
       const buildStats = async () => {
-        const result = [];
+        const result: any[] = [];
         console.warn('Finding matching Events');
         progress = newProgress();
         progress.start(codeObjectMatches.length, 0);
@@ -510,8 +523,7 @@ yargs(process.argv.slice(2))
         const cmd = new FingerprintWatchCommand(argv.appmapDir);
         cmd.execute();
 
-        // eslint-disable-next-line no-inner-declarations
-        function printStatus() {
+        if (!argv.verbose) {
           process.stdout.write('\x1B[?25l');
           const consoleLabel = 'AppMaps processed: 0';
           process.stdout.write(consoleLabel);
@@ -523,10 +535,6 @@ yargs(process.argv.slice(2))
           process.on('beforeExit', (/* _code */) => {
             process.stdout.write(`\x1B[?25h`);
           });
-        }
-
-        if (!argv.verbose) {
-          printStatus();
         }
       } else {
         new FingerprintDirectoryCommand(argv.appmapDir).execute();

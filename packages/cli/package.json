@@ -16,7 +16,7 @@
     "pre-commit": "lint-staged",
     "test": "jest",
     "build": "tsc",
-    "start": "ts-node src/cli.js"
+    "start": "ts-node src/cli.ts"
   },
   "lint-staged": {
     "*.{js,md,json}": [
