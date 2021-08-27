@@ -333,7 +333,7 @@ plugins {
           ),
         ].join('');
       } else {
-        updatedBuildFileSource = [buildFileSource, pluginSection].join('\n');
+        updatedBuildFileSource = [pluginSection, buildFileSource].join('\n');
       }
     }
 
