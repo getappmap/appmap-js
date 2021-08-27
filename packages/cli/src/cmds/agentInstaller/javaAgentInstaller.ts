@@ -11,6 +11,7 @@ import AgentInstaller from './agentInstaller';
 import { run } from './commandRunner';
 import { exists } from '../../utils';
 import UI from './userInteraction';
+import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
 
 export class MavenInstaller implements AgentInstaller {
   constructor(readonly path: string) {}
@@ -280,6 +281,7 @@ export class GradleInstaller implements AgentInstaller {
   async modifyBlock(
     blockIdentifier: string,
     buildFileSource: string,
+    whitespace: Whitespace,
     lineTransform: (lines: string[]) => string[] | Promise<string[]>,
     placementIndex?: () => number | undefined
   ) {
@@ -296,10 +298,15 @@ export class GradleInstaller implements AgentInstaller {
         .filter((line) => line !== '');
 
       lines = await lineTransform(lines);
+      const column = getColumn(buildFileSource, matchIndex);
       const newSection = [
         `${blockIdentifier} {`,
-        lines.map((line) => `  ${line}`).join('\n'),
-        '}',
+        lines
+          .map((line) =>
+            whitespace.padLine(line, column + (whitespace.width || 0))
+          )
+          .join('\n'),
+        whitespace.padLine('}', column),
       ].join('\n');
 
       updatedBuildFileSource = [
@@ -315,7 +322,7 @@ export class GradleInstaller implements AgentInstaller {
       const newSection = [
         '',
         `${blockIdentifier} {`,
-        lines.map((line) => `  ${line}`).join('\n'),
+        lines.map((line) => whitespace.padLine(line)).join('\n'),
         '}',
       ].join('\n');
 
@@ -352,10 +359,14 @@ export class GradleInstaller implements AgentInstaller {
   /**
    * Add Maven Central as a repository to build.gradle.
    */
-  async insertRepository(buildFileSource: string): Promise<string> {
+  async insertRepository(
+    buildFileSource: string,
+    whitespace: Whitespace
+  ): Promise<string> {
     return await this.modifyBlock(
       'repositories',
       buildFileSource,
+      whitespace,
       async (lines) => {
         const exists = lines.some((line) => /mavenCentral\s*\(/.test(line));
         if (!exists) {
@@ -402,12 +413,16 @@ export class GradleInstaller implements AgentInstaller {
    *
    * @returns {string}
    */
-  async insertPluginSpec(buildFileSource: string): Promise<string> {
+  async insertPluginSpec(
+    buildFileSource: string,
+    whitespace: Whitespace
+  ): Promise<string> {
     const pluginSpec = `id 'com.appland.appmap' version '1.1.0'`;
 
     return await this.modifyBlock(
       'plugins',
       buildFileSource,
+      whitespace,
       async (lines) => {
         const existingIndex = lines.findIndex((line) =>
           line.match(/com\.appland\.appmap/)
@@ -427,9 +442,14 @@ export class GradleInstaller implements AgentInstaller {
 
   async installAgent(): Promise<void> {
     const buildFileSource = (await fsp.readFile(this.buildFilePath)).toString();
-    let updatedBuildFileSource = await this.insertPluginSpec(buildFileSource);
+    const whitespace = getWhitespace(buildFileSource);
+    let updatedBuildFileSource = await this.insertPluginSpec(
+      buildFileSource,
+      whitespace
+    );
     updatedBuildFileSource = await this.insertRepository(
-      updatedBuildFileSource
+      updatedBuildFileSource,
+      whitespace
     );
     await fsp.writeFile(this.buildFilePath, updatedBuildFileSource);
   }
