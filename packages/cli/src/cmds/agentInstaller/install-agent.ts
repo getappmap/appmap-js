@@ -63,6 +63,14 @@ export const handler = async (argv) => {
       return process.exit(2);
     }
 
-    throw err;
+    if (verbose()) {
+      UI.error(err);
+    } else {
+      UI.error(
+        `An error occurred. Try re-running the command with the ${chalk.red(
+          'verbose'
+        )} flag (${chalk.red('-v')}).`
+      );
+    }
   });
 };
