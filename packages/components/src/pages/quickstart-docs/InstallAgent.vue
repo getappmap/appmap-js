@@ -11,11 +11,6 @@
           this command:
         </p>
         <v-code-snippet>npx @appland/appmap install-agent</v-code-snippet>
-        <p class="mb20">
-          Alternatively you can follow the manual installation instructions in
-          our
-          <a href="https://appland.com/docs/quickstart/">documentation</a>.
-        </p>
         <p>
           After you have installed the agent proceed to
           <a href="#" @click="goToRecordAppmaps"><b>Record AppMaps</b></a>
