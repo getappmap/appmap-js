@@ -20,15 +20,13 @@ export default abstract class Strategy {
         continue;
       }
 
-      if (assertion.where && !eval(assertion.where)) {
+      if (assertion.where && !assertion.where(e, appMap)) {
         continue;
       }
 
       skipped = false;
 
-      if (!eval(assertion.assert)) {
-        return false;
-      }
+      return assertion.assert(e, appMap);
     }
 
     return skipped ? null : true;

@@ -1,1 +1,1 @@
-export type Scope = 'appmap' | 'http_server_request' | 'sql_query';
+export type Scope = 'appmap' | 'http_server_request' | 'sql_query' | 'method';

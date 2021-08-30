@@ -9,6 +9,9 @@ import { buildAppMap } from '../../search/utils';
 import AssertionChecker from './assertionChecker';
 import Assertion from './assertion';
 import { glob } from 'glob';
+import AssertionsConfig from './assertionsConfig';
+import ProgressFormatter from './formatter/progressFormatter';
+import PrettyFormatter from './formatter/prettyFormatter';
 
 exports.command = 'assert';
 exports.describe = 'Run assertions for AppMaps in the directory';
@@ -20,8 +23,13 @@ exports.builder = (args) => {
   });
   args.option('config', {
     describe: 'path to assertions config file',
-    default: 'assertions.yml',
+    default: './assertionsConfig',
     alias: 'c',
+  });
+  args.option('format', {
+    describe: 'output format (progress, pretty)',
+    default: 'progress',
+    alias: 'f',
   });
   return args.strict();
 };
@@ -30,7 +38,7 @@ exports.handler = async (argv) => {
   verbose(argv.verbose);
 
   const commandFn = async () => {
-    const { appmapDir } = argv;
+    const { appmapDir, config, format } = argv;
 
     if (!fs.existsSync(appmapDir)) {
       throw new ValidationError(`AppMaps directory ${appmapDir} does not exist.`);
@@ -38,10 +46,9 @@ exports.handler = async (argv) => {
 
     let summary = { passed: 0, failed: 0, skipped: 0 };
     const checker = new AssertionChecker();
-    const assertions = [
-      new Assertion('http_server_request','e.elapsed < 1'),
-      new Assertion('sql_query', 'e.elapsed < 0.1', 'e.sql.sql.match(/SELECT/)'),
-    ];
+    const formatter = format === 'progress' ? new ProgressFormatter() : new PrettyFormatter();
+    await import(config);
+    const assertions = (new AssertionsConfig()).assertions;
 
     const files: string[] = await new Promise((resolve, reject) => {
       glob(`${appmapDir}/**/*.appmap.json`, (err, globFiles) => {
@@ -52,13 +59,18 @@ exports.handler = async (argv) => {
       });
     });
 
+    let index = 0;
+
     files.forEach((file: string) => {
       const appMap = buildAppMap()
         .source(JSON.parse(fs.readFileSync(file, 'utf-8').toString()))
         .normalize()
         .build();
 
+      process.stdout.write(formatter.appMap(appMap));
+
       assertions.forEach((assertion: Assertion) => {
+        index++;
         const result = checker.check(appMap, assertion);
 
         if (result === true) {
@@ -68,10 +80,13 @@ exports.handler = async (argv) => {
         } else {
           summary.skipped++;
         }
+
+        process.stdout.write(formatter.result(assertion, result, index));
       })
     });
 
-    console.log(summary);
+    process.stdout.write("\n\n");
+    process.stdout.write(formatter.summary(summary.passed, summary.skipped, summary.failed));
 
     return process.exit(summary.failed === 0 ? 0 : 1);
   };
