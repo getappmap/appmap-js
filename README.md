@@ -7,7 +7,7 @@ code review and publishing process across all of these projects.
 
 ## Packages
 
-- [@appland/cli](https://github.com/applandinc/appmap-js/tree/main/packages/cli)
+- [@appland/appmap](https://github.com/applandinc/appmap-js/tree/main/packages/cli)
 - [@appland/components](https://github.com/applandinc/appmap-js/tree/main/packages/components)
 - [@appland/diagrams](https://github.com/applandinc/appmap-js/tree/main/packages/diagrams)
 - [@appland/models](https://github.com/applandinc/appmap-js/tree/main/packages/models)
