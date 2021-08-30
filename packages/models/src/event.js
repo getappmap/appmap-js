@@ -144,6 +144,10 @@ export default class Event {
     return this.returnEvent.http_client_response;
   }
 
+  get elapsedTime() {
+    return this.returnEvent.elapsed;
+  }
+
   get definedClass() {
     return this.defined_class ? this.defined_class.replace(/\./g, '/') : null;
   }
