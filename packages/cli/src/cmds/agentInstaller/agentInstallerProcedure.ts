@@ -141,10 +141,12 @@ export default class AgentInstallerProcedure {
       successMessage.push('', await installer.postInstallMessage(), '');
     }
 
-    successMessage.push(
-      'For more information, visit',
-      chalk.blue('https://appland.com/docs/reference/appmap-java')
-    );
+    if (this.documentation) {
+      successMessage.push(
+        'For more information, visit',
+        chalk.blue(this.documentation)
+      );
+    }
 
     UI.success(successMessage.join('\n'));
   }
