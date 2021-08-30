@@ -42,6 +42,8 @@
   },
   "dependencies": {
     "@appland/models": "workspace:*",
+    "@sidvind/better-ajv-errors": "^0.9.1",
+    "ajv": "^8.6.2",
     "async": "^3.2.0",
     "chokidar": "^3.5.1",
     "cli-progress": "^3.9.0",
@@ -52,6 +54,7 @@
     "glob": "^7.1.6",
     "js-yaml": "^3.14.1",
     "jsdom": "^16.6.0",
+    "jsonschema": "^1.4.0",
     "moo": "^0.5.1",
     "semver": "^7.3.5",
     "w3c-xmlserializer": "^2.0.0",

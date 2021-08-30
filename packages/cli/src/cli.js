@@ -574,6 +574,7 @@ yargs(process.argv.slice(2))
     description: 'Run with verbose logging',
   })
   .command(require('./cmds/agentInstaller/install-agent'))
+  .command(require('./cmds/configValidator/validate-config'))
   .strict()
   .demandCommand()
   .help().argv;
