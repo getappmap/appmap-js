@@ -9,7 +9,6 @@ import { buildAppMap } from '../../search/utils';
 import AssertionChecker from './assertionChecker';
 import Assertion from './assertion';
 import { glob } from 'glob';
-import AssertionsConfig from './assertionsConfig';
 import ProgressFormatter from './formatter/progressFormatter';
 import PrettyFormatter from './formatter/prettyFormatter';
 
@@ -22,7 +21,8 @@ exports.builder = (args) => {
     default: 'tmp/appmap',
   });
   args.option('config', {
-    describe: 'path to assertions config file',
+    describe:
+      'path to assertions config file. The path indicated should default-export a function which returns an Assertion[].',
     default: './assertionsConfig',
     alias: 'c',
   });
@@ -50,8 +50,8 @@ exports.handler = async (argv) => {
     const checker = new AssertionChecker();
     const formatter =
       format === 'progress' ? new ProgressFormatter() : new PrettyFormatter();
-    await import(config);
-    const assertions = new AssertionsConfig().assertions;
+    const assertionsFn = (await import(config)).default;
+    const assertions: Assertion[] = assertionsFn();
 
     const files: string[] = await new Promise((resolve, reject) => {
       glob(`${appmapDir}/**/*.appmap.json`, (err, globFiles) => {
