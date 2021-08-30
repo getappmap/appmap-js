@@ -27,9 +27,9 @@ exports.builder = (args) => {
     alias: 'c',
   });
   args.option('format', {
-    describe: 'output format (progress, pretty)',
+    describe: 'output format',
     default: 'progress',
-    alias: 'f',
+    options: ['progress', 'pretty'],
   });
   return args.strict();
 };
@@ -41,14 +41,17 @@ exports.handler = async (argv) => {
     const { appmapDir, config, format } = argv;
 
     if (!fs.existsSync(appmapDir)) {
-      throw new ValidationError(`AppMaps directory ${appmapDir} does not exist.`);
+      throw new ValidationError(
+        `AppMaps directory ${appmapDir} does not exist.`
+      );
     }
 
     let summary = { passed: 0, failed: 0, skipped: 0 };
     const checker = new AssertionChecker();
-    const formatter = format === 'progress' ? new ProgressFormatter() : new PrettyFormatter();
+    const formatter =
+      format === 'progress' ? new ProgressFormatter() : new PrettyFormatter();
     await import(config);
-    const assertions = (new AssertionsConfig()).assertions;
+    const assertions = new AssertionsConfig().assertions;
 
     const files: string[] = await new Promise((resolve, reject) => {
       glob(`${appmapDir}/**/*.appmap.json`, (err, globFiles) => {
@@ -82,11 +85,13 @@ exports.handler = async (argv) => {
         }
 
         process.stdout.write(formatter.result(assertion, result, index));
-      })
+      });
     });
 
-    process.stdout.write("\n\n");
-    process.stdout.write(formatter.summary(summary.passed, summary.skipped, summary.failed));
+    process.stdout.write('\n\n');
+    process.stdout.write(
+      formatter.summary(summary.passed, summary.skipped, summary.failed)
+    );
 
     return process.exit(summary.failed === 0 ? 0 : 1);
   };
