@@ -1,18 +1,36 @@
 // eslint-disable-next-line no-inner-declarations
-function textIfy(entry) {
+function textIfy(entry, parse = true) {
   // eslint-disable-next-line no-param-reassign
-  entry = JSON.parse(entry);
+  if (parse) {
+    // eslint-disable-next-line no-param-reassign
+    entry = JSON.parse(entry);
+  }
   if (typeof entry === 'string') {
     return entry.trim();
   }
   if (Array.isArray(entry)) {
-    return entry.map((l) => l.trim()).join(' -> ');
+    return entry.map((e) => textIfy(e, false)).join(' -> ');
   }
   if (entry.route) {
-    return `${entry.route} ${entry.status} (${entry.parameters.join(',')})`;
+    const hasRailsParams =
+      entry.parameters.includes('action') &&
+      entry.parameters.includes('controller');
+    const parameters = entry.parameters.filter(
+      (p) => !hasRailsParams || (p !== 'action' && p !== 'controller')
+    );
+    return [entry.route, entry.status, `(${parameters.join(',')})`].join(' ');
+  }
+  if (entry.query) {
+    return entry.query;
+  }
+  if (entry.function) {
+    return entry.function;
   }
   if (entry.caller) {
     return [entry.caller, entry.callee].join(' -> ');
+  }
+  if (entry.labels) {
+    return entry.labels.map((label) => ['@', label].join('')).join(',');
   }
   return Object.keys(entry)
     .reduce((memo, key) => {

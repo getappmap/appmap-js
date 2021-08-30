@@ -2,16 +2,21 @@
 const yaml = require('js-yaml');
 
 const FgGreen = '\x1b[32m';
+const FgBlue = '\x1b[34m';
 const FgMagenta = '\x1b[35m';
 
 const Buffer = 5;
 
 function printAddedLine(line) {
-  console.log(`%s%s\x1b[0m`, FgGreen, line);
+  console.log(`%s+ %s\x1b[0m`, FgGreen, line);
+}
+
+function printChangedLine(line) {
+  console.log(`%sm %s\x1b[0m`, FgBlue, line);
 }
 
 function printRemovedLine(line) {
-  console.log(`%s%s\x1b[0m`, FgMagenta, line);
+  console.log(`%s- %s\x1b[0m`, FgMagenta, line);
 }
 
 /**
@@ -115,4 +120,10 @@ function printObject(object, format) {
   }
 }
 
-module.exports = { printAddedLine, printRemovedLine, printDiff, printObject };
+module.exports = {
+  printAddedLine,
+  printChangedLine,
+  printRemovedLine,
+  printDiff,
+  printObject,
+};

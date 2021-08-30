@@ -33,6 +33,7 @@ class BuildInventory {
       httpClientRequests: new Set(),
     };
     const callStacks = new Set();
+    const functionTrigrams = new Set();
     // const timingMeasurements = {};
 
     await this.files(async (appMapFileName) => {
@@ -63,39 +64,70 @@ class BuildInventory {
       const trace = JSON.parse(traceData.toString());
       const stack = [];
 
-      const stringifyFunction = (call) =>
-        call.labels.length > 0 ? call.labels.sort().join(',') : null;
-      const stringifyHttpServerRequest = (call) =>
-        `${call.route} ${call.status_code}`;
-      const stringifyHttpClientRequest = (call) => {
+      const objectifyLabels = (call) =>
+        call.labels.length > 0 ? { labels: call.labels.sort() } : null;
+      const objectifyHttpServerRequest = (call) => ({
+        route: call.route,
+        parameters: call.parameter_names,
+        status: call.status_code,
+      });
+      const objectifyHttpClientRequest = (call) => {
         if (SeleniumClientRegexp.test(call.route)) {
           return null;
         }
-        return `${call.route} ${call.status_code}`;
+        return {
+          route: call.route,
+          parameters: call.parameter_names,
+          status: call.status_code,
+        };
       };
-      const stringifySql = (call) => call.sql.normalized_query;
-      const stringifyDefault = (call) => JSON.stringify(call);
+      const objectifyQuery = (call) => ({
+        query: call.sql.normalized_query,
+      });
+      const objectifyFunction = (call) => ({ function: call.function });
+      const objectifyDefault = (call) => call;
 
-      const stringifiers = {
-        function: stringifyFunction,
-        http_server_request: stringifyHttpServerRequest,
-        http_client_request: stringifyHttpClientRequest,
-        sql: stringifySql,
+      const functionTrigramObjectifiers = {
+        function: objectifyFunction,
+        http_server_request: objectifyHttpServerRequest,
+        http_client_request: objectifyHttpClientRequest,
+        sql: objectifyQuery,
       };
+      const stackObjectifiers = {
+        function: objectifyLabels,
+        http_server_request: objectifyHttpServerRequest,
+        http_client_request: objectifyHttpClientRequest,
+        sql: objectifyQuery,
+      };
+
+      function functionTrigramObjectify(call) {
+        return (functionTrigramObjectifiers[call.kind] || objectifyDefault)(
+          call
+        );
+      }
+      function stackObjectify(call) {
+        return (stackObjectifiers[call.kind] || objectifyDefault)(call);
+      }
 
       const buildStack = (call) => {
-        const stringifier = stringifiers[call.kind] || stringifyDefault;
-        const callStr = stringifier(call);
-        stack.push(callStr);
+        stack.push(call);
         if (call.children && call.children.length > 0) {
           call.children.forEach(buildStack);
         } else {
-          const stackStr = stack.filter((e) => e);
+          const stackStr = stack.map(stackObjectify).filter((e) => e);
           if (verbose()) {
             console.log(`Collecting ${JSON.stringify(stackStr)}`);
           }
           // Save the AppMap name/path here, as well as the event id of the leaf.
           callStacks.add(JSON.stringify(stackStr));
+
+          // eslint-disable-next-line no-lonely-if
+          if (stack.length > 2) {
+            const trigram = stack.slice(stack.length - 3, stack.length);
+            functionTrigrams.add(
+              JSON.stringify(trigram.map(functionTrigramObjectify))
+            );
+          }
         }
         stack.pop();
       };
@@ -103,6 +135,8 @@ class BuildInventory {
       trace
         .filter((call) => call.route || (call.labels && call.labels.length > 0))
         .forEach(buildStack);
+
+      result.functionTrigrams = functionTrigrams;
       result.stacks = callStacks;
 
       /*

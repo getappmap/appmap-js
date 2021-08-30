@@ -31,8 +31,10 @@ const {
   printAddedLine,
   printRemovedLine,
   printObject,
+  printChangedLine,
 } = require('./cli/output');
 const { textIfy } = require('./inventory/util');
+const { QueryMatchSpec } = require('./search/matchSpec');
 
 class DiffCommand {
   public appMapNames: any;
@@ -620,7 +622,60 @@ yargs(process.argv.slice(2))
           );
         };
 
+        const packageName = (id) => {
+          const tokens = id.split('/');
+          return tokens.slice(0, tokens.length - 1).join('/');
+        };
+        const className = (id) => id.split(/[#.]/)[0];
+
+        const changed = new Set();
+        const addedCodeObjects = new Set();
+        const removedCodeObjects = new Set();
+        {
+          const workingSet = new Set(inventory.functionTrigrams);
+          const baseSet = new Set(baseInventory.functionTrigrams);
+          const union = new Set(
+            inventory.functionTrigrams.concat(baseInventory.functionTrigrams)
+          );
+          const all = new Set();
+          [...union].sort().forEach((trigramStr) => {
+            const trigram = JSON.parse(trigramStr);
+            trigram.forEach((entry) => all.add(JSON.stringify(entry)));
+            if (!baseSet.has(trigramStr) || !workingSet.has(trigramStr)) {
+              const entry = trigram[1];
+              changed.add(JSON.stringify(entry));
+              if (entry.function) {
+                changed.add(
+                  JSON.stringify({ package: packageName(entry.function) })
+                );
+                changed.add(
+                  JSON.stringify({ class: className(entry.function) })
+                );
+                changed.add(JSON.stringify({ function: entry.function }));
+              }
+            }
+          });
+        }
+
+        const objectifyClass = (name) => ({
+          class: name,
+        });
+        const objectifyQuery = (name) => ({
+          query: name,
+        });
+        const objectifyRequest = (request) => ({
+          route: request.route,
+          parameters: request.parameters,
+          status: request.status,
+        });
+
         const sectionKeys = Object.keys(inventory);
+        const sectionObjectifier = {
+          classes: objectifyClass,
+          sqlNormalized: objectifyQuery,
+          httpServerRequests: objectifyRequest,
+          httpClientRequests: objectifyRequest,
+        };
         sectionKeys.forEach((sectionName) => {
           const workingSet = new Set(inventory[sectionName]);
           const baseSet = new Set(baseInventory[sectionName]);
@@ -628,20 +683,97 @@ yargs(process.argv.slice(2))
             inventory[sectionName].concat(baseInventory[sectionName])
           );
 
+          const objectifier = sectionObjectifier[sectionName];
+
           printSectionName(sectionName);
-          let changed = 0;
-          [...union].sort().forEach((obj) => {
-            if (!baseSet.has(obj)) {
-              changed += 1;
-              printAddedLine(`+ ${textIfy(obj)}`);
-            }
-            if (!workingSet.has(obj)) {
-              changed += 1;
-              printRemovedLine(`- ${textIfy(obj)}`);
-            }
-          });
-          console.log(`${changed} changes`);
-          console.log(`${union.size - changed} total`);
+
+          /*
+          console.log(addedCodeObjects);
+          console.log(removedCodeObjects);
+          */
+
+          function diffPrinter() {
+            let changedCount = 0;
+            [...union].sort().forEach((obj) => {
+              const rootAddedOrRemoved = (stack) => {
+                if (
+                  sectionName !== 'functionTrigrams' &&
+                  sectionName !== 'stacks'
+                ) {
+                  return false;
+                }
+                return JSON.parse(stack).some((entry) => {
+                  let key;
+                  if (entry.route) {
+                    key = JSON.stringify(objectifyRequest(entry));
+                  } else if (entry.query) {
+                    key = JSON.stringify(objectifyQuery(entry.query));
+                  } else if (entry.function) {
+                    key = JSON.stringify(
+                      objectifyClass(className(entry.function))
+                    );
+                  }
+                  if (!key) {
+                    return false;
+                  }
+                  return (
+                    addedCodeObjects.has(key) || removedCodeObjects.has(key)
+                  );
+                });
+              };
+
+              if (!baseSet.has(obj) && !rootAddedOrRemoved(obj)) {
+                changedCount += 1;
+                printAddedLine(textIfy(obj));
+                if (sectionName === 'httpServerRequests') {
+                  addedCodeObjects.add(
+                    JSON.stringify(objectifyRequest(JSON.parse(obj)))
+                  );
+                }
+                if (sectionName === 'classes') {
+                  addedCodeObjects.add(
+                    JSON.stringify(objectifyClass(JSON.parse(obj)))
+                  );
+                }
+                if (sectionName === 'sqlNormalized') {
+                  addedCodeObjects.add(
+                    JSON.stringify(objectifyQuery(JSON.parse(obj)))
+                  );
+                }
+              } else if (!workingSet.has(obj) && !rootAddedOrRemoved(obj)) {
+                changedCount += 1;
+                printRemovedLine(textIfy(obj));
+                if (sectionName === 'httpServerRequests') {
+                  removedCodeObjects.add(
+                    JSON.stringify(objectifyRequest(JSON.parse(obj)))
+                  );
+                }
+                if (sectionName === 'classes') {
+                  removedCodeObjects.add(
+                    JSON.stringify(objectifyClass(JSON.parse(obj)))
+                  );
+                }
+                if (sectionName === 'sqlNormalized') {
+                  removedCodeObjects.add(
+                    JSON.stringify(objectifyQuery(JSON.parse(obj)))
+                  );
+                }
+              } else if (
+                objectifier &&
+                changed.has(JSON.stringify(objectifier(JSON.parse(obj))))
+              ) {
+                changedCount += 1;
+                printChangedLine(textIfy(obj));
+              }
+            });
+
+            return { changed: changedCount, total: union.size };
+          }
+
+          const { changed: changedCount, total } = diffPrinter();
+
+          console.log(`${changedCount} changes`);
+          console.log(`${total} total`);
           console.log();
         });
       } else {
