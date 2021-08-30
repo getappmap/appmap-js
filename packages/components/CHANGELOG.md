@@ -1,3 +1,10 @@
+# [@appland/components-v1.10.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.9.1...@appland/components-v1.10.0) (2021-08-30)
+
+
+### Features
+
+* Updated design for quickstart docs pages ([#322](https://github.com/applandinc/appmap-js/issues/322)) ([29cddc7](https://github.com/applandinc/appmap-js/commit/29cddc7f07f6f0b7120f608888b188e87b848ab0))
+
 # [@appland/components-v1.9.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.9.0...@appland/components-v1.9.1) (2021-08-27)
 
 
