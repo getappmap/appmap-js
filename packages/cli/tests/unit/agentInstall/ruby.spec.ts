@@ -34,5 +34,11 @@ describe('Ruby Agent Installation', () => {
       expect(cmdStruct.program).toBe('bundle');
       expect(cmdStruct.args).toEqual(['exec', 'appmap-agent-init']);
     });
+
+    it('provides the correct validate command', async () => {
+      const cmdStruct = await btInstaller.initCommand();
+      expect(cmdStruct.program).toBe('bundle');
+      expect(cmdStruct.args).toEqual(['exec', 'appmap-agent-validate']);
+    });
   });
 });

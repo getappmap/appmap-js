@@ -74,6 +74,14 @@ export class BundleInstaller implements AgentInstaller {
       this.path
     );
   }
+
+  async validateAgentCommand(): Promise<CommandStruct> {
+    return new CommandStruct(
+      'bundle',
+      ['exec', 'appmap-agent-validater'],
+      this.path
+    );
+  }
 }
 
 const RubyAgentInstaller = {

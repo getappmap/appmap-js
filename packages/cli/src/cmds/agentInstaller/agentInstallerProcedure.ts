@@ -138,6 +138,18 @@ export default class AgentInstallerProcedure {
       );
     }
 
+    if (installer.validateAgentCommand) {
+      UI.status = 'Validating the AppMap agent...';
+
+      const cmd = await installer.validateAgentCommand();
+      try {
+        await run(cmd);
+      } catch (e) {
+        UI.error('Failed to validate the installation.');
+        throw e;
+      }
+    }
+
     const successMessage = [
       chalk.green('Success! The AppMap agent has been installed.'),
     ];
