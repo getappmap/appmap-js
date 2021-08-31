@@ -1,0 +1,13 @@
+buildscript { }
+
+plugins {
+  id 'java'
+  id 'com.appland.appmap' version '1.1.0'
+}
+
+repositories {
+  mavenCentral()
+}
+
+group = 'com.example'
+version = '0.0.0-test'

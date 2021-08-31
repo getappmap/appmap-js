@@ -1,5 +1,5 @@
 /* eslint-disable func-names */
-const fsp = require('fs').promises;
+const { constants: fsConstants, promises: fsp } = require('fs');
 const fsExtra = require('fs-extra');
 const { queue } = require('async');
 const glob = require('glob');
@@ -151,6 +151,23 @@ function formatHttpServerRequest(event) {
   return [data.method, data.path, `(${data.statusCode})`].join(' ');
 }
 
+/**
+ * @param {PathLike} path
+ * @returns {Promise<boolean>}
+ */
+function exists(path) {
+  return new Promise((resolve) => {
+    fsp
+      .access(path, fsConstants.R_OK)
+      .then(() => {
+        resolve(true);
+      })
+      .catch(() => {
+        resolve(false);
+      });
+  });
+}
+
 module.exports = {
   baseName,
   formatValue,
@@ -162,4 +179,5 @@ module.exports = {
   processFiles,
   buildDirectory,
   renameFile,
+  exists,
 };
