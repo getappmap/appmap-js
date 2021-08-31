@@ -27,6 +27,7 @@ const Inspect = require('./inspect');
 const SwaggerCommand = require('./swagger/command');
 const InventoryCommand = require('./inventoryCommand');
 const InstallCommand = require('./cmds/agentInstaller/install-agent');
+const AssertCommand = require('./cmds/assert/command');
 
 class DiffCommand {
   public appMapNames: any;
@@ -583,6 +584,7 @@ yargs(process.argv.slice(2))
     description: 'Run with verbose logging',
   })
   .command(InstallCommand)
+  .command(AssertCommand.default)
   .strict()
   .demandCommand()
   .help().argv;
