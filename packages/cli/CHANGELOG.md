@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.2.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.1.0...@appland/appmap-v3.2.0) (2021-08-31)
+
+
+### Features
+
+* Rework the `agent-install` user experience ([#316](https://github.com/applandinc/appmap-js/issues/316)) ([6e34f23](https://github.com/applandinc/appmap-js/commit/6e34f236f44ab2f0a5393ecf0ef59a0fd2af2d2d))
+
 # [@appland/appmap-v3.1.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.0.0...@appland/appmap-v3.1.0) (2021-08-19)
 
 
