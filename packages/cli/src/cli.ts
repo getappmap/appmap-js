@@ -14,6 +14,7 @@ const { queue } = require('async');
 const readline = require('readline');
 const { join } = require('path');
 const cliProgress = require('cli-progress');
+const { tmpdir } = require('os');
 const { algorithms, canonicalize } = require('./fingerprint');
 const { verbose, loadAppMap } = require('./utils');
 const appMapCatalog = require('./appMapCatalog');
@@ -588,6 +589,10 @@ yargs(process.argv.slice(2))
         describe:
           'directory to recursively inspect for base version AppMaps. When this option is provided, this command computes and prints the difference between the inventories',
       });
+      args.option('base-mapset', {
+        describe:
+          'mapset id for base version AppMaps. When this option is provided, this command computes and prints the difference between the inventories. AppMap Cloud (server) credentials must be available for this to work.',
+      });
       args.option('format', {
         describe: 'output format (text, yaml, json)',
         options: ['text', 'yaml', 'json'],
@@ -599,15 +604,62 @@ yargs(process.argv.slice(2))
       verbose(argv.verbose);
 
       await new FingerprintDirectoryCommand(argv.appmapDir).execute();
-      if (argv.baseDir) {
-        await new FingerprintDirectoryCommand(argv.baseDir).execute();
+      const inventory = await new InventoryCollector(argv.appmapDir).execute();
+      const workingAppMaps = inventory.appMaps
+        .map(JSON.parse)
+        .reduce((memo, appMap) => {
+          memo[appMap.name] = appMap;
+          return memo;
+        }, {});
+
+      let baseDir;
+      if (argv.baseMapset) {
+        // eslint-disable-next-line global-require
+        const listAppMaps = require('./appland/listAppMaps');
+        // eslint-disable-next-line global-require
+        const getAppMap = require('./appland/getAppMap');
+
+        const baseAppMaps = await listAppMaps(argv.baseMapset);
+        baseDir = await fsp.mkdtemp(join(tmpdir(), 'appmap_'));
+        console.log(`Saving remote AppMaps to ${baseDir}`);
+
+        const workingInfoFingerprints = Object.values(workingAppMaps).reduce(
+          (memo, appMap) => {
+            memo.add(appMap.infoFingerprint);
+            return memo;
+          },
+          new Set()
+        );
+
+        await Promise.all(
+          baseAppMaps.map(async (appMap) => {
+            if (appMap.metadata.fingerprints) {
+              const baseInfoFingerprint = appMap.metadata.fingerprints.find(
+                (fp) => fp.canonicalization_algorithm === 'info'
+              ).digest;
+              if (workingInfoFingerprints.has(baseInfoFingerprint)) {
+                return;
+              }
+            }
+            const uuid = appMap.scenario_uuid;
+            const baseAppMap = await getAppMap(uuid);
+            if (verbose()) {
+              console.log(`${baseAppMap.metadata.name} (${uuid})`);
+            }
+            fsp.writeFile(
+              join(baseDir, [uuid, 'appmap.json'].join('.')),
+              JSON.stringify(baseAppMap)
+            );
+          })
+        );
       }
 
-      const inventory = await new InventoryCollector(argv.appmapDir).execute();
-      if (argv.baseDir) {
-        const baseInventory = await new InventoryCollector(
-          argv.baseDir
-        ).execute();
+      if (baseDir) {
+        await new FingerprintDirectoryCommand(baseDir).execute();
+      }
+
+      if (baseDir) {
+        const baseInventory = await new InventoryCollector(baseDir).execute();
 
         const printSectionName = (sectionName) => {
           console.log(
@@ -624,12 +676,6 @@ yargs(process.argv.slice(2))
         {
           printSectionName('AppMaps');
 
-          const workingAppMaps = inventory.appMaps
-            .map(JSON.parse)
-            .reduce((memo, appMap) => {
-              memo[appMap.name] = appMap;
-              return memo;
-            }, {});
           const baseAppMaps = baseInventory.appMaps
             .map(JSON.parse)
             .reduce((memo, appMap) => {
@@ -640,21 +686,23 @@ yargs(process.argv.slice(2))
           const allNames = new Set(
             Object.keys(workingAppMaps).concat(Object.keys(baseAppMaps))
           );
-          allNames.forEach((appMapName) => {
-            if (!baseAppMaps[appMapName]) {
-              changedCount += 1;
-              printAddedLine(textIfy(workingAppMaps[appMapName], false));
-            } else if (!workingAppMaps[appMapName]) {
-              changedCount += 1;
-              printRemovedLine(textIfy(baseAppMaps[appMapName], false));
-            } else if (
-              baseAppMaps[appMapName].infoFingerprint !==
-              workingAppMaps[appMapName].infoFingerprint
-            ) {
-              changedCount += 1;
-              printChangedLine(textIfy(workingAppMaps[appMapName], false));
-            }
-          });
+          await Promise.all(
+            [...allNames].map(async (appMapName) => {
+              if (!baseAppMaps[appMapName]) {
+                changedCount += 1;
+                printAddedLine(textIfy(workingAppMaps[appMapName], false));
+              } else if (!workingAppMaps[appMapName]) {
+                changedCount += 1;
+                printRemovedLine(textIfy(baseAppMaps[appMapName], false));
+              } else if (
+                baseAppMaps[appMapName].infoFingerprint !==
+                workingAppMaps[appMapName].infoFingerprint
+              ) {
+                changedCount += 1;
+                printChangedLine(textIfy(workingAppMaps[appMapName], false));
+              }
+            })
+          );
           console.log(`${changedCount} changes`);
           console.log(`${allNames.size} total`);
           console.log();
