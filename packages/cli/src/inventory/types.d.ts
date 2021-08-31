@@ -27,7 +27,14 @@ export interface Stack {
   functions: Call[];
 }
 
+export interface AppMapMetadata {
+  fileName: string;
+  name: string;
+  infoFingerprint: string;
+}
+
 export interface Inventory {
+  appMaps: AppMapMetadata[];
   packages: Set<string>;
   classes: Set<string>;
   labels: Set<string>;

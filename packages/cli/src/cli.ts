@@ -622,6 +622,45 @@ yargs(process.argv.slice(2))
           );
         };
 
+        {
+          printSectionName('AppMaps');
+
+          const workingAppMaps = inventory.appMaps
+            .map(JSON.parse)
+            .reduce((memo, appMap) => {
+              memo[appMap.name] = appMap;
+              return memo;
+            }, {});
+          const baseAppMaps = baseInventory.appMaps
+            .map(JSON.parse)
+            .reduce((memo, appMap) => {
+              memo[appMap.name] = appMap;
+              return memo;
+            }, {});
+          let changedCount = 0;
+          const allNames = new Set(
+            Object.keys(workingAppMaps).concat(Object.keys(baseAppMaps))
+          );
+          allNames.forEach((appMapName) => {
+            if (!baseAppMaps[appMapName]) {
+              changedCount += 1;
+              printAddedLine(textIfy(workingAppMaps[appMapName], false));
+            } else if (!workingAppMaps[appMapName]) {
+              changedCount += 1;
+              printRemovedLine(textIfy(baseAppMaps[appMapName], false));
+            } else if (
+              baseAppMaps[appMapName].infoFingerprint !==
+              workingAppMaps[appMapName].infoFingerprint
+            ) {
+              changedCount += 1;
+              printChangedLine(textIfy(workingAppMaps[appMapName], false));
+            }
+          });
+          console.log(`${changedCount} changes`);
+          console.log(`${allNames.size} total`);
+          console.log();
+        }
+
         const packageName = (id) => {
           const tokens = id.split('/');
           return tokens.slice(0, tokens.length - 1).join('/');
@@ -669,7 +708,9 @@ yargs(process.argv.slice(2))
           status: request.status,
         });
 
-        const sectionKeys = Object.keys(inventory);
+        const sectionKeys = Object.keys(inventory).filter(
+          (key) => key !== 'appMaps'
+        );
         const sectionObjectifier = {
           classes: objectifyClass,
           sqlNormalized: objectifyQuery,

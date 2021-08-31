@@ -3,9 +3,7 @@
 const { join: joinPath } = require('path');
 const { promises: fsp } = require('fs');
 const { verbose, listAppMapFiles, baseName } = require('../utils');
-
-// http://127.0.0.1:9516/session/69857e75c343c04e3dd841fb656156c9/element/87f74064-ff83-44b0-ac20-05cce2951c71
-const SeleniumClientRegexp = /http:\/\/127.0.0.1:\d+\/session\/[a-f0-9]+\//;
+const { SeleniumClientRegexp } = require('./util');
 
 class BuildInventory {
   constructor(directory) {
@@ -22,7 +20,7 @@ class BuildInventory {
       console.warn(`Collecting inventory info from ${this.directory}`);
     }
 
-    const result = /** import('./types').Inventory */ {
+    const result = /** {import('./types').Inventory} */ {
       packages: new Set(),
       classes: new Set(),
       labels: new Set(),
@@ -32,6 +30,7 @@ class BuildInventory {
       httpServerRequests: new Set(),
       httpClientRequests: new Set(),
     };
+    const appMaps = [];
     const callStacks = new Set();
     const functionTrigrams = new Set();
     // const timingMeasurements = {};
@@ -41,6 +40,20 @@ class BuildInventory {
         console.warn(`Collecting inventory info from ${appMapFileName}`);
       }
       const indexDir = baseName(appMapFileName);
+
+      const metadataStr = await fsp.readFile(
+        joinPath(indexDir, `metadata.json`)
+      );
+      const metadata = JSON.parse(metadataStr.toString());
+      appMaps.push(
+        JSON.stringify({
+          fileName: appMapFileName,
+          name: metadata.name,
+          infoFingerprint: metadata.fingerprints.find(
+            (fp) => fp.canonicalization_algorithm === 'info'
+          ).digest,
+        })
+      );
 
       await Promise.all(
         Object.keys(result).map(async (algorithmName) => {
@@ -136,6 +149,7 @@ class BuildInventory {
         .filter((call) => call.route || (call.labels && call.labels.length > 0))
         .forEach(buildStack);
 
+      result.appMaps = appMaps;
       result.functionTrigrams = functionTrigrams;
       result.stacks = callStacks;
 

@@ -11,6 +11,9 @@ function textIfy(entry, parse = true) {
   if (Array.isArray(entry)) {
     return entry.map((e) => textIfy(e, false)).join(' -> ');
   }
+  if (entry.infoFingerprint) {
+    return [entry.name, `(${entry.fileName})`].join(' ');
+  }
   if (entry.route) {
     const hasRailsParams =
       entry.parameters.includes('action') &&
@@ -40,4 +43,7 @@ function textIfy(entry, parse = true) {
     .join(',');
 }
 
-module.exports = { textIfy };
+// http://127.0.0.1:9516/session/69857e75c343c04e3dd841fb656156c9/element/87f74064-ff83-44b0-ac20-05cce2951c71
+const SeleniumClientRegexp = /http:\/\/127.0.0.1:\d+\/session\/[a-f0-9]+\//;
+
+module.exports = { textIfy, SeleniumClientRegexp };
