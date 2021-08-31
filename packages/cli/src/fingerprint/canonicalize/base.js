@@ -1,8 +1,11 @@
+const { SeleniumClientRegexp } = require('../../inventory/util');
 const { notNull } = require('../algorithms');
 
 const BLACKLISTED_LABELS = new Set([
   'format.json.generate',
+  'format.json.parse',
   'format.yaml.generate',
+  'format.yaml.parse',
 ]);
 
 module.exports = class {
@@ -42,6 +45,9 @@ module.exports = class {
     }
     if (event.httpClientRequest) {
       if (!this.httpClientRequest) {
+        return null;
+      }
+      if (SeleniumClientRegexp.test(event.route)) {
         return null;
       }
 
