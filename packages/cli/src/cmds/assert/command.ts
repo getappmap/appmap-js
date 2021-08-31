@@ -73,18 +73,22 @@ exports.handler = async (argv) => {
       process.stdout.write(formatter.appMap(appMap));
 
       assertions.forEach((assertion: Assertion) => {
-        index++;
         const result = checker.check(appMap, assertion);
 
         if (result === true) {
           summary.passed++;
+          index++;
         } else if (result === false) {
+          index++;
           summary.failed++;
         } else {
           summary.skipped++;
         }
 
-        process.stdout.write(formatter.result(assertion, result, index));
+        const message = formatter.result(assertion, result, index);
+        if (message) {
+          process.stdout.write(message);
+        }
       });
     });
 

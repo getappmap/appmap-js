@@ -1,5 +1,5 @@
-import Formatter from "./formatter";
-import Assertion from "../assertion";
+import Formatter from './formatter';
+import Assertion from '../assertion';
 import chalk from 'chalk';
 import { AppMapData } from '../../../appland/types';
 
@@ -8,8 +8,12 @@ export default class ProgressFormatter extends Formatter {
     return '';
   }
 
-  result(assertion: Assertion, result: Boolean | null, index: number): string {
-    const ending = index % 80 === 0 ? "\n" : '';
+  result(
+    assertion: Assertion,
+    result: Boolean | null,
+    index: number
+  ): string | undefined {
+    const ending = index % 80 === 0 ? '\n' : '';
 
     if (result === true) {
       return chalk.green('.') + ending;
@@ -18,7 +22,5 @@ export default class ProgressFormatter extends Formatter {
     if (result === false) {
       return chalk.red('F') + ending;
     }
-
-    return chalk.blue('S') + ending;
   }
 }
