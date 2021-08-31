@@ -34,7 +34,6 @@ const {
   printChangedLine,
 } = require('./cli/output');
 const { textIfy } = require('./inventory/util');
-const { QueryMatchSpec } = require('./search/matchSpec');
 
 class DiffCommand {
   public appMapNames: any;
