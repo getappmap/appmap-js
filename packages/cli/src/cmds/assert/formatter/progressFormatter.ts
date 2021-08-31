@@ -10,7 +10,7 @@ export default class ProgressFormatter extends Formatter {
 
   result(
     assertion: Assertion,
-    result: Boolean | null,
+    result: boolean | null,
     index: number
   ): string | undefined {
     const ending = index % 80 === 0 ? '\n' : '';

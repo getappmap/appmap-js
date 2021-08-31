@@ -6,13 +6,13 @@ import { Scope } from '../types';
 
 export default abstract class Strategy {
   protected abstract scope: Scope;
-  protected abstract isEventApplicable(event: Event): Boolean;
+  protected abstract isEventApplicable(event: Event): boolean;
 
-  supports(assertion: Assertion): Boolean {
+  supports(assertion: Assertion): boolean {
     return assertion.scope === this.scope;
   }
 
-  check(appMap: AppMapData, assertion: Assertion): Boolean | null {
+  check(appMap: AppMapData, assertion: Assertion): boolean | null {
     let skipped = true;
 
     for (let e of appMap.events) {

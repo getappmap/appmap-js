@@ -6,7 +6,7 @@ import { Scope } from '../types';
 export default class AppMapStrategy extends Strategy {
   protected scope: Scope = 'appmap';
 
-  protected isEventApplicable(event: Event): Boolean {
+  protected isEventApplicable(event: Event): boolean {
     return true;
   }
 }

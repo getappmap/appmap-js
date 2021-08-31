@@ -6,7 +6,7 @@ export default abstract class Formatter {
   abstract appMap(appMap: AppMapData): string;
   abstract result(
     assertion: Assertion,
-    result: Boolean | null,
+    result: boolean | null,
     index: number
   ): string | undefined;
 

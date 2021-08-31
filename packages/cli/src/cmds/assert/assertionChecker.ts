@@ -11,7 +11,7 @@ export default class AssertionChecker {
     new SqlQueryStrategy(),
   ];
 
-  check(appMapData: AppMapData, assertion: Assertion): Boolean | null {
+  check(appMapData: AppMapData, assertion: Assertion): boolean | null {
     for (let strategy of this.strategies) {
       if (strategy.supports(assertion)) {
         return strategy.check(appMapData, assertion);

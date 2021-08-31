@@ -10,7 +10,7 @@ export default class PrettyFormatter extends Formatter {
 
   result(
     assertion: Assertion,
-    result: Boolean | null,
+    result: boolean | null,
     index: number
   ): string | undefined {
     const readableAssertion = assertion.toString();

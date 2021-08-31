@@ -9,7 +9,7 @@ export default class Assertion {
 
   static assert(
     scope: Scope,
-    assert: (e: Event, appMap: AppMapData) => Boolean,
+    assert: (e: Event, appMap: AppMapData) => boolean,
     cb?: (assertion: Assertion) => void
   ) {
     const assertion = new Assertion(scope, assert);
@@ -21,7 +21,7 @@ export default class Assertion {
 
   constructor(
     public scope: Scope,
-    public assert: (e: Event, appMap: AppMapData) => Boolean
+    public assert: (e: Event, appMap: AppMapData) => boolean
   ) {}
 
   toString(): string {
