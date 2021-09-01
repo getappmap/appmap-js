@@ -123,6 +123,7 @@ export default {
       align-items: center;
       padding: 0.25rem 0;
       min-height: 2rem;
+      font-size: 0.9em;
       color: $base03;
       cursor: pointer;
       overflow: hidden;

@@ -48,10 +48,6 @@ export default {
     background-color: darken($vs-code-gray1, 03);
     border-color: darken($vs-code-gray1, 03);
   }
-
-  & + & {
-    margin-top: 1rem;
-  }
 }
 
 .icon {

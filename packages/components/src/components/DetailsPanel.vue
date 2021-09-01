@@ -186,13 +186,13 @@ export default {
     justify-content: flex-start;
     align-items: flex-start;
 
-    &:not(:empty) {
-      padding: 0 0 1rem;
+    button {
+      margin-bottom: 1rem;
     }
   }
 
   &__notification:not(:empty) {
-    padding: 0 2rem 2rem;
+    padding: 0 0 1rem;
   }
 }
 </style>

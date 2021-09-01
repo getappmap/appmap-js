@@ -231,7 +231,7 @@ export default {
   }
 
   &__input {
-    border: 1px solid $base06;
+    border: 1px solid $base15;
     width: 100%;
     padding: 0.5rem;
     font: inherit;
@@ -270,7 +270,7 @@ export default {
       }
 
       .details-search__block--labels & {
-        background-color: $base09;
+        background-color: $base11;
       }
 
       .details-search__block--package & {
@@ -309,6 +309,7 @@ export default {
       align-items: center;
       padding: 0.25rem 0;
       min-height: 2rem;
+      font-size: 0.9em;
       color: $base03;
       cursor: pointer;
       overflow: hidden;

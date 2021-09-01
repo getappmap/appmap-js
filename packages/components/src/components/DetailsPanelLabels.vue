@@ -60,8 +60,8 @@ export default {
       margin: 0 0.25rem 0.25rem 0;
       border-radius: 0.25rem;
       padding: 0.1rem 0.3rem;
-      background: $base09;
-      color: $base19;
+      background: $base11;
+      color: $base01;
       cursor: pointer;
 
       &:hover,
