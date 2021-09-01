@@ -51,7 +51,7 @@
           />
         </v-tab>
 
-        <v-tab name="Trace" :is-active="isViewingFlow" :ref="VIEW_FLOW">
+        <v-tab name="Trace View" :is-active="isViewingFlow" :ref="VIEW_FLOW">
           <v-diagram-trace
             ref="diagramFlow"
             :events="filteredAppMap.rootEvents()"

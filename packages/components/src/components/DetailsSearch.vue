@@ -1,19 +1,14 @@
 <template>
   <div class="details-search">
     <form class="details-search__form" @submit.prevent>
-      <div class="details-search__input-wrap">
-        <span class="details-search__input-prefix">
-          <SearchIcon />
-        </span>
-        <input
-          class="details-search__input-element"
-          type="text"
-          autocomplete="off"
-          placeholder="Search..."
-          ref="searchInput"
-          v-model="filter"
-        />
-      </div>
+      <input
+        class="details-search__input"
+        type="text"
+        autocomplete="off"
+        placeholder="Search AppMap"
+        ref="searchInput"
+        v-model="filter"
+      />
     </form>
     <section
       :class="`details-search__block details-search__block--${type}`"
@@ -49,15 +44,10 @@
 
 <script>
 import { CodeObject, AppMap, CodeObjectType } from '@appland/models';
-import SearchIcon from '@/assets/search.svg';
 import { SELECT_OBJECT, SELECT_LABEL } from '../store/vsCode';
 
 export default {
   name: 'v-details-search',
-
-  components: {
-    SearchIcon,
-  },
 
   props: {
     appMap: AppMap,
@@ -225,7 +215,7 @@ export default {
 
   &__form {
     margin-bottom: 1.5rem;
-    padding: 0 2rem;
+    padding: 0;
   }
 
   &__input-wrap {
@@ -240,30 +230,10 @@ export default {
     }
   }
 
-  &__input-prefix {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform: translateY(-50%);
-    text-align: center;
-    color: $base06;
-
-    svg {
-      position: relative;
-      left: 3px;
-      fill: currentColor;
-    }
-  }
-
-  &__input-element {
-    border: none;
-    border-radius: $border-radius;
+  &__input {
+    border: 1px solid $base15;
     width: 100%;
-    padding: 0.5rem 2rem;
+    padding: 0.5rem;
     font: inherit;
     font-size: 0.9rem;
     color: $base06;
@@ -281,7 +251,7 @@ export default {
     margin-bottom: 1rem;
 
     &-title {
-      margin: 0 2rem 0.25rem;
+      margin: 0 0 0.25rem;
       border-radius: 4px;
       display: inline-block;
       padding: 0.25rem 0.5rem;
@@ -291,7 +261,7 @@ export default {
       text-transform: uppercase;
 
       .details-search__block--http & {
-        background-color: #d22d36;
+        background-color: #542168;
       }
 
       .details-search__block--external-service & {
@@ -300,7 +270,7 @@ export default {
       }
 
       .details-search__block--labels & {
-        background-color: $base08;
+        background-color: $base11;
       }
 
       .details-search__block--package & {
@@ -323,7 +293,7 @@ export default {
 
     &-list {
       margin: 0;
-      padding: 0 2rem;
+      padding: 0;
       list-style: none;
 
       .details-search__block--labels & {
@@ -339,6 +309,7 @@ export default {
       align-items: center;
       padding: 0.25rem 0;
       min-height: 2rem;
+      font-size: 0.9em;
       color: $base03;
       cursor: pointer;
       overflow: hidden;

@@ -18,7 +18,7 @@ context('VS Code Extension', () => {
           cy.get('.list-item').contains('Digest::Instance#digest').click();
         });
 
-      cy.get(':nth-child(16) > .list-item').click();
+      cy.get('.list-item:nth-child(16)').click();
       cy.get('button').contains('Show in Trace').click();
       cy.get('.trace-node.highlight').should('be.visible');
     });
@@ -534,7 +534,7 @@ context('VS Code Extension', () => {
         '.details-search__block--query > .details-search__block-list > :nth-child(1)'
       ).click();
 
-      cy.get(':nth-child(1) > .list-item').click();
+      cy.get('.list-item:nth-child(1)').click();
 
       cy.get('.details-panel__buttons')
         .invoke('text')

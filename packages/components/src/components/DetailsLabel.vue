@@ -46,7 +46,7 @@ export default {
   margin-bottom: 1rem;
 
   &__header {
-    margin: 0 2rem 1rem;
+    margin: 0 0 1rem;
     display: flex;
     flex-direction: column;
 
