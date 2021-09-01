@@ -3,7 +3,6 @@ import { verbose } from '../../utils';
 import ValidationError from '../error/validationError';
 import AbortError from '../error/abortError';
 import * as fs from 'fs';
-import 'fs/promises';
 import * as console from 'console';
 import { buildAppMap } from '../../search/utils';
 import AssertionChecker from './assertionChecker';
