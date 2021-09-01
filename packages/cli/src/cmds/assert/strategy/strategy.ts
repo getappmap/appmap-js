@@ -20,6 +20,9 @@ export default abstract class Strategy {
     let skipped = true;
 
     for (let e of appMap.events) {
+      if (!e.isCall() || !e.returnEvent) {
+        continue;
+      }
       if (!this.isEventApplicable(e)) {
         continue;
       }
