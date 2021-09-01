@@ -13,7 +13,7 @@ const assertions: Assertion[] = [
   ),
   Assertion.assert(
     'sql_query',
-    (e: Event) => e.elapsedTime < 0.25,
+    (e: Event) => e.elapsedTime < 1,
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
         e.elapsedTime &&
