@@ -18,15 +18,30 @@ const { baseURL, apiKey, exists } =
    */
   (() => {
     const applandConfigFilePath = join(homedir(), '.appland');
-    const applandConfigStat = statSync(applandConfigFilePath);
+    let applandConfigStat;
+    try {
+      applandConfigStat = statSync(applandConfigFilePath);
+    } catch (e) {
+      if (e.toString().includes('ENOENT')) {
+        return failUsage(
+          `AppMap Cloud config file ${applandConfigFilePath} does not exist`
+        );
+      }
+    }
     if (!applandConfigStat.isFile()) {
       return failUsage(
-        `AppMap Cloud config file ${applandConfigFilePath} does not exist`
+        `AppMap Cloud config file ${applandConfigFilePath} is not a file`
       );
     }
     const applandConfig = /** @type {object} */ (
       yaml.load(readFileSync(applandConfigFilePath).toString())
     );
+    if (!applandConfig) {
+      return failUsage(
+        `AppMap Cloud config file ${applandConfigFilePath} is empty`
+      );
+    }
+
     const currentContext =
       /** @type {string} */ applandConfig.current_context || 'default';
     const contextConfig =
