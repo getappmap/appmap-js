@@ -12,6 +12,7 @@ import ProgressFormatter from './formatter/progressFormatter';
 import PrettyFormatter from './formatter/prettyFormatter';
 import { glob as globCallback } from 'glob';
 import { promisify } from 'util';
+import { AssertionFailure } from './types';
 
 export default {
   command: 'assert',
@@ -60,6 +61,7 @@ export default {
       const files: string[] = await glob(`${appmapDir}/**/*.appmap.json`);
 
       let index = 0;
+      const failures: AssertionFailure[] = [];
 
       files.forEach((file: string) => {
         const appMap = buildAppMap()
@@ -70,29 +72,47 @@ export default {
         process.stdout.write(formatter.appMap(appMap));
 
         assertions.forEach((assertion: Assertion) => {
-          const result = checker.check(appMap, assertion);
+          index++;
+          const failureCount = failures.length;
+          checker.check(appMap, assertion, failures);
+          const newFailures = failures.slice(failureCount, failures.length);
 
-          if (result === true) {
+          if (newFailures.length === 0) {
             summary.passed++;
-            index++;
-          } else if (result === false) {
-            index++;
-            summary.failed++;
           } else {
-            summary.skipped++;
+            summary.failed++;
           }
 
-          const message = formatter.result(assertion, result, index);
+          const message = formatter.result(assertion, newFailures, index);
           if (message) {
             process.stdout.write(message);
           }
         });
       });
 
-      process.stdout.write('\n\n');
+      console.log('\n');
+      if (failures.length > 0) {
+        console.log(`${failures.length} failures:`);
+        console.log();
+
+        let failureCount = 0;
+        failures.forEach((failure) => {
+          failureCount += 1;
+          console.log(`Failure ${failureCount}:`);
+          console.log(`\tAppMap:\t${failure.appMapName}`);
+          console.log(
+            `\tEvent:\t${failure.event.id} - ${failure.event.toString()} (${
+              failure.event.elapsedTime * 1000
+            }ms)`
+          );
+          console.log(`\tCondition:\t${failure.condition}`);
+          console.log('\n');
+        });
+      }
       process.stdout.write(
         formatter.summary(summary.passed, summary.skipped, summary.failed)
       );
+      console.log();
 
       return process.exit(summary.failed === 0 ? 0 : 1);
     };
@@ -108,5 +128,5 @@ export default {
 
       throw err;
     });
-  }
-}
+  },
+};

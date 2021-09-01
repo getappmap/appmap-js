@@ -2,6 +2,7 @@ import Formatter from './formatter';
 import Assertion from '../assertion';
 import chalk from 'chalk';
 import { AppMapData } from '../../../appland/types';
+import { AssertionFailure } from '../types';
 
 export default class ProgressFormatter extends Formatter {
   appMap(appMap: AppMapData): string {
@@ -10,16 +11,14 @@ export default class ProgressFormatter extends Formatter {
 
   result(
     assertion: Assertion,
-    result: boolean | null,
+    failures: AssertionFailure[],
     index: number
   ): string | undefined {
     const ending = index % 80 === 0 ? '\n' : '';
 
-    if (result === true) {
+    if (failures.length === 0) {
       return chalk.green('.') + ending;
-    }
-
-    if (result === false) {
+    } else {
       return chalk.red('F') + ending;
     }
   }

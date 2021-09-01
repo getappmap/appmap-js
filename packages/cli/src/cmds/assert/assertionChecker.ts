@@ -4,6 +4,7 @@ import HttpRequestStrategy from './strategy/httpRequestStrategy';
 import AbortError from '../error/abortError';
 import { AppMapData } from '../../appland/types';
 import SqlQueryStrategy from './strategy/sqlQueryStrategy';
+import { AssertionFailure } from './types';
 
 export default class AssertionChecker {
   private strategies: Strategy[] = [
@@ -11,10 +12,14 @@ export default class AssertionChecker {
     new SqlQueryStrategy(),
   ];
 
-  check(appMapData: AppMapData, assertion: Assertion): boolean | null {
+  check(
+    appMapData: AppMapData,
+    assertion: Assertion,
+    failures: AssertionFailure[]
+  ): void {
     for (let strategy of this.strategies) {
       if (strategy.supports(assertion)) {
-        return strategy.check(appMapData, assertion);
+        return strategy.check(appMapData, assertion, failures);
       }
     }
 

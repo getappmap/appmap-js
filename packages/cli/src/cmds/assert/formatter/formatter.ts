@@ -1,12 +1,13 @@
 import Assertion from '../assertion';
 import { AppMapData } from '../../../appland/types';
 import chalk from 'chalk';
+import { AssertionFailure } from '../types';
 
 export default abstract class Formatter {
   abstract appMap(appMap: AppMapData): string;
   abstract result(
     assertion: Assertion,
-    result: boolean | null,
+    failures: AssertionFailure[],
     index: number
   ): string | undefined;
 

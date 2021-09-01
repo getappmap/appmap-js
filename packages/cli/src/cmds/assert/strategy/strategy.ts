@@ -2,7 +2,7 @@
 import { Event } from '@appland/models';
 import Assertion from '../assertion';
 import { AppMapData } from '../../../appland/types';
-import { Scope } from '../types';
+import { AssertionFailure, Scope } from '../types';
 
 export default abstract class Strategy {
   protected abstract scope: Scope;
@@ -12,7 +12,11 @@ export default abstract class Strategy {
     return assertion.scope === this.scope;
   }
 
-  check(appMap: AppMapData, assertion: Assertion): boolean | null {
+  check(
+    appMap: AppMapData,
+    assertion: Assertion,
+    failures: AssertionFailure[]
+  ): void {
     let skipped = true;
 
     for (let e of appMap.events) {
@@ -26,9 +30,16 @@ export default abstract class Strategy {
 
       skipped = false;
 
-      return assertion.assert(e, appMap);
+      const succeeded = assertion.assert(e, appMap);
+      if (!succeeded) {
+        failures.push({
+          appMapName: appMap.metadata.name,
+          event: e,
+          condition: [assertion.description, assertion.assert.toString()]
+            .map((e) => e)
+            .join(' '),
+        });
+      }
     }
-
-    return skipped ? null : true;
   }
 }
