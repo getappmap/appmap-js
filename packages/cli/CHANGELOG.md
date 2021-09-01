@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.2.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.2.0...@appland/appmap-v3.2.1) (2021-09-01)
+
+
+### Bug Fixes
+
+* The CLI can no longer be imported as a third party library ([bf20ac2](https://github.com/applandinc/appmap-js/commit/bf20ac2757e101ccc2d4158fc42761d5be6e0a4b))
+
 # [@appland/appmap-v3.2.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.1.0...@appland/appmap-v3.2.0) (2021-08-31)
 
 
