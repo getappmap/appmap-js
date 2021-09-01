@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.4.0](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.3.1...@appland/diagrams-v1.4.0) (2021-09-01)
+
+
+### Features
+
+* Adjust color and style of the AppMap view ([#319](https://github.com/applandinc/appmap-js/issues/319)) ([7e2df06](https://github.com/applandinc/appmap-js/commit/7e2df06ee2a137e7e378fa78a085b86bd7befd2a))
+
 # [@appland/diagrams-v1.3.1](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.3.0...@appland/diagrams-v1.3.1) (2021-08-26)
 
 
