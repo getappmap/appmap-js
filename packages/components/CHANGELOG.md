@@ -1,3 +1,10 @@
+# [@appland/components-v1.11.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.10.0...@appland/components-v1.11.0) (2021-09-01)
+
+
+### Features
+
+* Adjust color and style of the AppMap view ([#319](https://github.com/applandinc/appmap-js/issues/319)) ([7e2df06](https://github.com/applandinc/appmap-js/commit/7e2df06ee2a137e7e378fa78a085b86bd7befd2a))
+
 # [@appland/components-v1.10.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.9.1...@appland/components-v1.10.0) (2021-08-30)
 
 
