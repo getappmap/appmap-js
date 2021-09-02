@@ -3,6 +3,9 @@ import InstallAgent from '@/pages/quickstart-docs/InstallAgent.vue';
 export default {
   title: 'Pages/VS Code/Quickstart Docs/Install Agent',
   component: InstallAgent,
+  args: {
+    clipboardText: 'npx @appland/appmap install-agent',
+  },
 };
 
 export const installAgent = (args, { argTypes }) => ({

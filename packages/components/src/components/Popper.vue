@@ -1,9 +1,11 @@
 <template>
-  <div class="popper" @mouseover="hover = true" @mouseleave="hover = false">
+  <div class="popper">
     <transition name="fade">
-      <span :class="`popper__text popper__text--${placement}`" v-if="isVisible">
-        {{ textValue }}
-      </span>
+      <span
+        :class="`popper__text popper__text--${placement} popper__text--${flashStyle}`"
+        v-if="isVisible"
+        v-html="flashText"
+      ></span>
     </transition>
 
     <slot />
@@ -21,10 +23,6 @@ export default {
       validator: (value) =>
         ['left', 'right', 'top', 'bottom'].indexOf(value) !== -1,
     },
-    text: {
-      type: String,
-      required: true,
-    },
     flashTime: {
       type: Number,
       default: 1500,
@@ -33,10 +31,10 @@ export default {
 
   data() {
     return {
-      hover: false,
       displayFlash: false,
       flashText: '',
       flashTimer: null,
+      flashStyle: 'default',
     };
   },
 
@@ -50,18 +48,15 @@ export default {
 
   computed: {
     isVisible() {
-      return this.displayFlash || this.hover;
-    },
-
-    textValue() {
-      return this.flashText || this.text;
+      return this.displayFlash && this.flashText;
     },
   },
 
   methods: {
-    flash(text) {
-      this.flashText = text;
+    flash(text, style = 'default') {
       this.displayFlash = true;
+      this.flashText = text;
+      this.flashStyle = style;
 
       if (this.flashTimer) {
         clearTimeout(this.flashTimer);
@@ -98,9 +93,10 @@ $border-color: $gray4;
     top: 0;
     z-index: 2147483647;
     transform: translateY(-20%);
+    font-size: 0.75rem;
     word-wrap: break-word;
     word-break: normal;
-    text-align: initial;
+    text-align: center;
     width: max-content;
 
     &--left {
@@ -137,6 +133,11 @@ $border-color: $gray4;
     &--bottom {
       top: 100%;
       transform: translateY(0);
+    }
+
+    &--success {
+      border-color: #88b811;
+      color: #88b811;
     }
   }
 }

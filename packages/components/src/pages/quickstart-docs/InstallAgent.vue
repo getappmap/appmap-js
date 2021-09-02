@@ -10,7 +10,10 @@
           is open a terminal window in the root of your project and paste in
           this command:
         </p>
-        <v-code-snippet>npx @appland/appmap install-agent</v-code-snippet>
+        <v-code-snippet
+          :clipboardText="codeSnippet"
+          :messageSuccess="messageSuccess"
+        ></v-code-snippet>
         <p>
           After you have installed the agent proceed to
           <a href="#" @click="goToRecordAppmaps"><b>Record AppMaps</b></a>
@@ -30,6 +33,14 @@ export default {
   components: {
     QuickstartLayout,
     VCodeSnippet,
+  },
+
+  data() {
+    return {
+      codeSnippet: 'npx @appland/appmap install-agent',
+      messageSuccess:
+        '<b>Copied!</b><br>Paste into your terminal<br>to run the installer',
+    };
   },
 
   methods: {

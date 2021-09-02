@@ -2,14 +2,15 @@ import { mount } from '@vue/test-utils';
 import CodeSnippet from '@/components/CodeSnippet.vue';
 
 describe('CodeSnippet.vue', () => {
+  let clipboardText;
   Object.assign(navigator, {
     clipboard: {
       async writeText(val) {
-        this.clipboardText = val;
+        clipboardText = val;
         return Promise.resolve();
       },
       async readText() {
-        return Promise.resolve(this.clipboardText);
+        return Promise.resolve(clipboardText);
       },
     },
   });
@@ -21,7 +22,9 @@ describe('CodeSnippet.vue', () => {
       mocks: { navigator },
     });
 
-    wrapper.get('pre').trigger('click');
+    const btn = wrapper.get('button');
+    btn.element.disabled = false;
+    btn.trigger('click');
 
     const actualClipboardText = await navigator.clipboard.readText();
     expect(actualClipboardText).toBe(clipboardText);
