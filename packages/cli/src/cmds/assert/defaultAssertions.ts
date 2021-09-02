@@ -5,16 +5,20 @@ import Assertion from './assertion';
 const assertions: Assertion[] = [
   Assertion.assert(
     'http_server_request',
-    (e: Event) => e.elapsed < 0.25,
+    (e: Event) => e.elapsedTime < 1,
     (assertion: Assertion): void => {
+      assertion.where = (e: Event) => e.elapsedTime;
       assertion.description = 'Slow HTTP server request';
     }
   ),
   Assertion.assert(
     'sql_query',
-    (e: Event) => e.elapsedTime < 0.1,
+    (e: Event) => e.elapsedTime < 1,
     (assertion: Assertion): void => {
-      assertion.where = (e: Event) => e.sqlQuery.match(/SELECT/);
+      assertion.where = (e: Event) =>
+        e.elapsedTime &&
+        e.sqlQuery.match(/SELECT/) &&
+        !e.sqlQuery.match(/pg_advisory_xact_lock/);
       assertion.description = 'Slow SQL query';
     }
   ),
