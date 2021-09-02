@@ -38,9 +38,7 @@ export default abstract class Strategy {
         failures.push({
           appMapName: appMap.metadata.name,
           event: e,
-          condition: [assertion.description, assertion.assert.toString()]
-            .map((e) => e)
-            .join(' '),
+          condition: assertion.description || assertion.assert.toString(),
         });
       }
     }
