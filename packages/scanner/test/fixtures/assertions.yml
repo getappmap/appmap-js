@@ -1,0 +1,7 @@
+scope: http_server_request
+where: event.httpServerRequest
+assert: event.httpServerResponse.status === 200
+---
+scope: http_server_request
+where: event.httpServerRequest
+assert: event.httpServerResponse
