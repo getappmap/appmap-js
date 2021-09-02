@@ -1,0 +1,13 @@
+language: node_js
+os: linux
+dist: xenial
+node_js: [14]
+
+cache:
+  yarn: true
+
+install:
+  - yarn
+
+script:
+  - yarn build && yarn test
