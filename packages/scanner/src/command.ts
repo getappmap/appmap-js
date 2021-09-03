@@ -117,9 +117,7 @@ export default {
           console.log(eventMsg);
           if (failure.event.parent) {
             console.log(
-              `\tParent:\t${
-                failure.event.parent.id
-              } - ${failure.event.parent.toString()}`
+              `\tParent:\t${failure.event.parent.id} - ${failure.event.parent.toString()}`
             );
           }
           console.log(`\tCondition:\t${failure.condition}`);

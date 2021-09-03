@@ -1,4 +1,3 @@
-// @ts-ignore
 import { Event } from '@appland/models';
 
 /*
@@ -8,9 +7,12 @@ const responseHeaders = (event: Event): any => {
 */
 
 // TODO: Why is mime_type still defined on httpServerResponse? It should be "headers".
-const contentType = (event: Event): string | undefined => event.httpServerResponse?.mime_type;
-// responseHeaders(event)['Content-Type'] || 
+function contentType(event: Event): string | undefined {
+  return event.httpServerResponse?.mime_type;
+  // responseHeaders(event)['Content-Type'] ||
+}
 
+// eslint-disable-next-line
 function isFalsey(valueObj: any): boolean {
   if (!valueObj) {
     return true;

@@ -1,4 +1,3 @@
-// @ts-ignore
 import { Event, EventNavigator } from '@appland/models';
 import Assertion from '../assertion';
 import { contentType, isFalsey } from './util';
@@ -8,28 +7,22 @@ function isPublic(event: Event): boolean {
 }
 
 function providesAuthentication(event: Event) {
-  return (
-    event.labels.has('security.authentication') && !isFalsey(event.returnValue)
-  );
+  return event.labels.has('security.authentication') && !isFalsey(event.returnValue);
 }
 
 const authenticatedBy = (iterator: Iterator<EventNavigator>): boolean => {
-  let i : IteratorResult<EventNavigator> = iterator.next();
-  while ( !i.done ) {
-    if ( isPublic(i.value.event) || providesAuthentication(i.value.event) ) {
+  let i: IteratorResult<EventNavigator> = iterator.next();
+  while (!i.done) {
+    if (isPublic(i.value.event) || providesAuthentication(i.value.event)) {
       return true;
     }
     i = iterator.next();
   }
 
   return false;
-}
+};
 
-
-export default function (
-  routes: RegExp[] = [/.*/],
-  contentTypes: RegExp[] = [/.*/]
-) {
+export default function (routes: RegExp[] = [/.*/], contentTypes: RegExp[] = [/.*/]): Assertion {
   return Assertion.assert(
     'http_server_request',
     (event: Event) => authenticatedBy(new EventNavigator(event).descendants()),
