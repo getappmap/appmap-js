@@ -1,10 +1,10 @@
 <template>
-  <div class="popper">
+  <div class="popper" @mouseover="hover = true" @mouseleave="hover = false">
     <transition name="fade">
       <span
         :class="`popper__text popper__text--${placement} popper__text--${flashStyle}`"
         v-if="isVisible"
-        v-html="flashText"
+        v-html="textValue"
       ></span>
     </transition>
 
@@ -23,6 +23,9 @@ export default {
       validator: (value) =>
         ['left', 'right', 'top', 'bottom'].indexOf(value) !== -1,
     },
+    text: {
+      type: String,
+    },
     flashTime: {
       type: Number,
       default: 1500,
@@ -32,6 +35,7 @@ export default {
   data() {
     return {
       displayFlash: false,
+      hover: false,
       flashText: '',
       flashTimer: null,
       flashStyle: 'default',
@@ -48,7 +52,12 @@ export default {
 
   computed: {
     isVisible() {
-      return this.displayFlash && this.flashText;
+      return (
+        (this.displayFlash && this.flashText) || (this.hover && this.textValue)
+      );
+    },
+    textValue() {
+      return this.flashText || this.text;
     },
   },
 
