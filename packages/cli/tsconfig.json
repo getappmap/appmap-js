@@ -10,7 +10,7 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es5",
+    "target": "es2017",
     "types": ["node", "jest"]
   },
   "include": ["src/**/*"],
