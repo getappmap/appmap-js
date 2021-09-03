@@ -2,7 +2,6 @@
 import { join } from 'path';
 import tmp from 'tmp';
 import fs from 'fs-extra';
-
 import {
   PoetryInstaller,
   PipInstaller,
@@ -38,59 +37,59 @@ describe('Python Agent Installation', () => {
       expect(cmdStruct.program).toBe('poetry');
       expect(cmdStruct.args).toEqual(['run', 'appmap-agent-init']);
     });
+  });
 
-    describe('pip support', () => {
-      let btInstaller: PipInstaller;
-      let projectDirectory: string;
+  describe('pip support', () => {
+    let btInstaller: PipInstaller;
+    let projectDirectory: string;
 
-      beforeAll(() => {
-        projectDirectory = getProjectDirectory('pip');
-        btInstaller = new PipInstaller(projectDirectory);
-      });
+    beforeAll(() => {
+      projectDirectory = getProjectDirectory('pip');
+      btInstaller = new PipInstaller(projectDirectory);
+    });
 
-      it('detects pip project', async () => {
-        expect(btInstaller.available()).resolves.toBe(true);
-      });
+    it('detects pip project', async () => {
+      expect(btInstaller.available()).resolves.toBe(true);
+    });
 
-      it('adds appmap to requirements.txt when missing', async () => {
-        await btInstaller.installAgent();
-        const requirementsTxt = fs.readFileSync(
-          join(projectDirectory, 'requirements.txt'),
-          'utf8'
-        );
-        expect(requirementsTxt).toMatch(/^appmap>=/);
-      });
+    it('adds appmap to requirements.txt when missing', async () => {
+      await btInstaller.installAgent();
+      const requirementsTxt = fs.readFileSync(
+        join(projectDirectory, 'requirements.txt'),
+        'utf8'
+      );
+      expect(requirementsTxt).toMatch(/^appmap>=/);
+    });
 
-      it('replaces existing appmap in requirements.txt', async () => {
-        const requirementsPath = join(projectDirectory, 'requirements.txt');
-        fs.writeFileSync(requirementsPath, ' appmap == 1.0.0');
+    it('replaces existing appmap in requirements.txt', async () => {
+      const requirementsPath = join(projectDirectory, 'requirements.txt');
+      fs.writeFileSync(requirementsPath, ' appmap == 1.0.0');
 
-        await btInstaller.installAgent();
-        const requirementsTxt = fs.readFileSync(
-          join(projectDirectory, 'requirements.txt'),
-          'utf8'
-        );
-        expect(requirementsTxt).toMatch(/^appmap>=/);
-      });
+      await btInstaller.installAgent();
+      const requirementsTxt = fs.readFileSync(
+        join(projectDirectory, 'requirements.txt'),
+        'utf8'
+      );
+      expect(requirementsTxt).toMatch(/^appmap>=/);
+    });
 
-      it("doesn't munge a non-matching requirement", async () => {
-        const requirementsPath = join(projectDirectory, 'requirements.txt');
-        fs.writeFileSync(requirementsPath, ' not-appmap == 1.0.0');
+    it("doesn't munge a non-matching requirement", async () => {
+      const requirementsPath = join(projectDirectory, 'requirements.txt');
+      fs.writeFileSync(requirementsPath, ' not-appmap == 1.0.0');
 
-        await btInstaller.installAgent();
-        const requirementsTxt = fs.readFileSync(
-          join(projectDirectory, 'requirements.txt'),
-          'utf8'
-        );
-        expect(requirementsTxt).toMatch(/^appmap>=/m);
-        expect(requirementsTxt).toMatch(/^ not-appmap == 1.0.0/m);
-      });
+      await btInstaller.installAgent();
+      const requirementsTxt = fs.readFileSync(
+        join(projectDirectory, 'requirements.txt'),
+        'utf8'
+      );
+      expect(requirementsTxt).toMatch(/^appmap>=/m);
+      expect(requirementsTxt).toMatch(/^ not-appmap == 1.0.0/m);
+    });
 
-      it('provides the correct init command', async () => {
-        const cmdStruct = btInstaller.initCommand();
-        expect(cmdStruct.program).toBe('appmap-agent-init');
-        expect(cmdStruct.args).toEqual([]);
-      });
+    it('provides the correct init command', async () => {
+      const cmdStruct = btInstaller.initCommand();
+      expect(cmdStruct.program).toBe('appmap-agent-init');
+      expect(cmdStruct.args).toEqual([]);
     });
   });
 });
