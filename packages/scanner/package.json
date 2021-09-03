@@ -9,6 +9,8 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node src/cli.ts",
+    "lint": "eslint src --ext .ts",
+    "ci": "yarn lint && yarn build && yarn test",
     "test": "jest"
   },
   "author": "AppLand, Inc.",
@@ -21,6 +23,9 @@
     "@typescript-eslint/eslint-plugin": "^4.30.0",
     "@typescript-eslint/parser": "^4.30.0",
     "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.1",
     "jest": "^27.1.0",
     "prettier": "^2.3.2",
     "sinon": "^11.1.2",

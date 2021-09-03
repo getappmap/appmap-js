@@ -11,7 +11,7 @@ export default abstract class Formatter {
     index: number
   ): string | undefined;
 
-  summary(passed: number, skipped: number, failed: number): string {
+  summary(passed: number, _skipped: number, failed: number): string {
     const total = passed + failed;
     const passedStr = chalk.green(`${passed} passed`);
     const failedStr = chalk.red(`${failed} failed`);

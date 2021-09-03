@@ -12,9 +12,7 @@ export default abstract class Strategy {
   }
 
   check(appMap: AppMap, assertion: Assertion, failures: AssertionFailure[]): void {
-    let skipped = true;
-
-    for (let e of appMap.events) {
+    for (const e of appMap.events) {
       if (!e.isCall() || !e.returnEvent) {
         continue;
       }
@@ -25,8 +23,6 @@ export default abstract class Strategy {
       if (assertion.where && !assertion.where(e, appMap)) {
         continue;
       }
-
-      skipped = false;
 
       const succeeded = assertion.assert(e, appMap);
       if (!succeeded) {
