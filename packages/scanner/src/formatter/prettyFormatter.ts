@@ -9,7 +9,7 @@ export default class PrettyFormatter extends Formatter {
     return '\n' + appMap.metadata.name + '\n';
   }
 
-  result(assertion: Assertion, failures: AssertionFailure[], index: number): string | undefined {
+  result(assertion: Assertion, failures: AssertionFailure[]): string | undefined {
     const readableAssertion = assertion.toString();
 
     if (failures.length === 0) {

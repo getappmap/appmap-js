@@ -1,4 +1,3 @@
-// @ts-ignore
 import { Event } from '@appland/models';
 import { Scope } from './types';
 import { AppMap } from '@appland/models';
@@ -11,7 +10,7 @@ export default class Assertion {
     scope: Scope,
     assert: (e: Event, appMap: AppMap) => boolean,
     cb?: (assertion: Assertion) => void
-  ) {
+  ): Assertion {
     const assertion = new Assertion(scope, assert);
     if (cb) {
       cb(assertion);

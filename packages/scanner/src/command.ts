@@ -56,7 +56,7 @@ export default {
         throw new ValidationError(`AppMaps directory ${chalk.red(appmapDir)} does not exist.`);
       }
 
-      let summary = { passed: 0, failed: 0, skipped: 0 };
+      const summary = { passed: 0, failed: 0, skipped: 0 };
       const checker = new AssertionChecker();
       const formatter = format === 'progress' ? new ProgressFormatter() : new PrettyFormatter();
       const assertionsFn = (await import(config)).default;
