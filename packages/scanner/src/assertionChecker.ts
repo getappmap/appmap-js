@@ -5,9 +5,16 @@ import { AbortError } from './errors';
 import { AppMap } from '@appland/models';
 import SqlQueryStrategy from './strategy/sqlQueryStrategy';
 import { AssertionFailure } from './types';
+import EventStrategy from './strategy/eventStrategy';
+import FunctionStrategy from './strategy/functionStrategy';
 
 export default class AssertionChecker {
-  private strategies: Strategy[] = [new HttpRequestStrategy(), new SqlQueryStrategy()];
+  private strategies: Strategy[] = [
+    new EventStrategy(),
+    new FunctionStrategy(),
+    new HttpRequestStrategy(),
+    new SqlQueryStrategy(),
+  ];
 
   check(appMapData: AppMap, assertion: Assertion, failures: AssertionFailure[]): void {
     for (const strategy of this.strategies) {
