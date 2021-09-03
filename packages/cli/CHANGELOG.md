@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.2.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.2.1...@appland/appmap-v3.2.2) (2021-09-03)
+
+
+### Bug Fixes
+
+* Index is now asynchronous ([6389d47](https://github.com/applandinc/appmap-js/commit/6389d475c975aa9e2aeb9c493917e2b14584af04))
+* Target ES2017 ([23ad225](https://github.com/applandinc/appmap-js/commit/23ad225ab775f2983a4ee49c2e965e7259297ce7))
+
 # [@appland/appmap-v3.2.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.2.0...@appland/appmap-v3.2.1) (2021-09-01)
 
 
