@@ -6,6 +6,7 @@ import { promises as fsp } from 'fs';
 import { join } from 'path';
 import { exists } from '../../utils';
 import AgentInstaller from './agentInstaller';
+import { run } from './commandRunner';
 import CommandStruct from './commandStruct';
 
 const REGEX_GEM_DECLARATION = /(?!\s)(?:gem|group|require)\s/m;
@@ -38,10 +39,6 @@ export class BundleInstaller implements AgentInstaller {
     return await exists(this.buildFilePath);
   }
 
-  verifyCommand(): CommandStruct {
-    return new CommandStruct('bundle', ['install'], this.path);
-  }
-
   async installAgent(): Promise<void> {
     let gemfile = (await fsp.readFile(this.buildFilePath)).toString();
     const index = gemfile.search(REGEX_GEM_DECLARATION);
@@ -66,6 +63,8 @@ export class BundleInstaller implements AgentInstaller {
         `${gemfile}\ngem "appmap", :groups => [:development, :test]\n`
       );
     }
+
+    await run(new CommandStruct('bundle', ['install'], this.path));
   }
 
   initCommand(): CommandStruct {

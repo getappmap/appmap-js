@@ -33,17 +33,6 @@ describe('Python Agent Installation', () => {
       expect(btInstaller.available()).resolves.toBe(true);
     });
 
-    it('provides the correct verify command', async () => {
-      const cmdStruct = btInstaller.verifyCommand();
-      expect(cmdStruct.program).toBe('poetry');
-      expect(cmdStruct.args).toEqual([
-        'add',
-        '--dev',
-        '--allow-prereleases',
-        'appmap',
-      ]);
-    });
-
     it('provides the correct init command', async () => {
       const cmdStruct = btInstaller.initCommand();
       expect(cmdStruct.program).toBe('poetry');
@@ -63,14 +52,8 @@ describe('Python Agent Installation', () => {
         expect(btInstaller.available()).resolves.toBe(true);
       });
 
-      it('provides the correct verify command', async () => {
-        const cmdStruct = btInstaller.verifyCommand();
-        expect(cmdStruct.program).toBe('pip');
-        expect(cmdStruct.args).toEqual(['install', '-r', 'requirements.txt']);
-      });
-
       it('adds appmap to requirements.txt when missing', async () => {
-        const status = await btInstaller.installAgent();
+        await btInstaller.installAgent();
         const requirementsTxt = fs.readFileSync(
           join(projectDirectory, 'requirements.txt'),
           'utf8'
@@ -82,7 +65,7 @@ describe('Python Agent Installation', () => {
         const requirementsPath = join(projectDirectory, 'requirements.txt');
         fs.writeFileSync(requirementsPath, ' appmap == 1.0.0');
 
-        const status = await btInstaller.installAgent();
+        await btInstaller.installAgent();
         const requirementsTxt = fs.readFileSync(
           join(projectDirectory, 'requirements.txt'),
           'utf8'
@@ -94,7 +77,7 @@ describe('Python Agent Installation', () => {
         const requirementsPath = join(projectDirectory, 'requirements.txt');
         fs.writeFileSync(requirementsPath, ' not-appmap == 1.0.0');
 
-        const status = await btInstaller.installAgent();
+        await btInstaller.installAgent();
         const requirementsTxt = fs.readFileSync(
           join(projectDirectory, 'requirements.txt'),
           'utf8'
