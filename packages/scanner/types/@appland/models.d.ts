@@ -1,5 +1,3 @@
-import { string } from 'yargs';
-
 declare module '@appland/models' {
   export type CodeObjectType =
     | 'package'
