@@ -13,16 +13,26 @@ function providesAuthentication(event: Event) {
   );
 }
 
+const authenticatedBy = (iterator: Iterator<EventNavigator>): boolean => {
+  let i : IteratorResult<EventNavigator> = iterator.next();
+  while ( !i.done ) {
+    if ( isPublic(i.value.event) || providesAuthentication(i.value.event) ) {
+      return true;
+    }
+    i = iterator.next();
+  }
+
+  return false;
+}
+
+
 export default function (
   routes: RegExp[] = [/.*/],
   contentTypes: RegExp[] = [/.*/]
 ) {
   return Assertion.assert(
     'http_server_request',
-    (event: Event) =>
-      new EventNavigator(event)
-        .descendants((e: Event) => isPublic(e) || providesAuthentication(e))
-        .next()?.value,
+    (event: Event) => authenticatedBy(new EventNavigator(event).descendants()),
     (assertion: Assertion): void => {
       assertion.where = (e: Event) => {
         return (
