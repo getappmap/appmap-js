@@ -516,12 +516,12 @@ yargs(process.argv.slice(2))
       });
       return args.strict();
     },
-    (argv) => {
+    async (argv) => {
       verbose(argv.verbose);
 
       if (argv.watch) {
         const cmd = new FingerprintWatchCommand(argv.appmapDir);
-        cmd.execute();
+        await cmd.execute();
 
         if (!argv.verbose) {
           process.stdout.write('\x1B[?25l');
@@ -537,7 +537,8 @@ yargs(process.argv.slice(2))
           });
         }
       } else {
-        new FingerprintDirectoryCommand(argv.appmapDir).execute();
+        const cmd = new FingerprintDirectoryCommand(argv.appmapDir);
+        await cmd.execute();
       }
     }
   )
