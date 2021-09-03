@@ -2,6 +2,8 @@
 import { join } from 'path';
 import tmp from 'tmp';
 import fs from 'fs-extra';
+import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
+import sinon from 'sinon';
 import {
   PoetryInstaller,
   PipInstaller,
@@ -48,11 +50,17 @@ describe('Python Agent Installation', () => {
       btInstaller = new PipInstaller(projectDirectory);
     });
 
+    afterEach(() => {
+      sinon.restore();
+    });
+
     it('detects pip project', async () => {
       expect(btInstaller.available()).resolves.toBe(true);
     });
 
     it('adds appmap to requirements.txt when missing', async () => {
+      sinon.stub(commandRunner, 'run').resolves({ stderr: '', stdout: '' });
+
       await btInstaller.installAgent();
       const requirementsTxt = fs.readFileSync(
         join(projectDirectory, 'requirements.txt'),
@@ -62,6 +70,8 @@ describe('Python Agent Installation', () => {
     });
 
     it('replaces existing appmap in requirements.txt', async () => {
+      sinon.stub(commandRunner, 'run').resolves({ stderr: '', stdout: '' });
+
       const requirementsPath = join(projectDirectory, 'requirements.txt');
       fs.writeFileSync(requirementsPath, ' appmap == 1.0.0');
 
@@ -74,6 +84,8 @@ describe('Python Agent Installation', () => {
     });
 
     it("doesn't munge a non-matching requirement", async () => {
+      sinon.stub(commandRunner, 'run').resolves({ stderr: '', stdout: '' });
+
       const requirementsPath = join(projectDirectory, 'requirements.txt');
       fs.writeFileSync(requirementsPath, ' not-appmap == 1.0.0');
 
