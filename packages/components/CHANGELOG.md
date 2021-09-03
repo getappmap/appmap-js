@@ -1,3 +1,10 @@
+# [@appland/components-v1.12.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.11.0...@appland/components-v1.12.0) (2021-09-03)
+
+
+### Features
+
+* Add copy button to `CodeSnippet` component ([#328](https://github.com/applandinc/appmap-js/issues/328)) ([89389db](https://github.com/applandinc/appmap-js/commit/89389dbcc561e5a798fba0cd4e23ade2d27bfde5))
+
 # [@appland/components-v1.11.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.10.0...@appland/components-v1.11.0) (2021-09-01)
 
 
