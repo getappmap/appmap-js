@@ -6,6 +6,7 @@
       ref="input"
       v-model="clipboardText"
       @focus="onInputFocus"
+      @copy="onCopy"
     />
     <v-popper placement="top" ref="popper">
       <button
@@ -57,7 +58,12 @@ export default {
       if (text && this.hasClipboardAPI) {
         navigator.clipboard.writeText(text);
         this.$refs.popper.flash(this.messageSuccess, 'success');
+        this.onCopy();
       }
+    },
+    onCopy() {
+      const text = this.clipboardText.trim();
+      this.$root.$emit('clipboard', text);
     },
   },
 
