@@ -36,7 +36,7 @@ export default {
     args.option('config', {
       describe:
         'path to assertions config file. The path indicated should default-export a function which returns an Assertion[].',
-      default: './defaultAssertions',
+      default: '../defaultAssertions.ts',
       alias: 'c',
     });
     args.option('format', {

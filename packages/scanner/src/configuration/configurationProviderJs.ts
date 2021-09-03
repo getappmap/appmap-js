@@ -6,6 +6,6 @@ export default class ConfigurationProviderJs implements ConfigurationProvider {
 
   async getConfig(): Promise<readonly Assertion[]> {
     const { path } = this;
-    return (await import(path)).default;
+    return (await import(path)).default();
   }
 }

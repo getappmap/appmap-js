@@ -11,7 +11,7 @@ describe('smoke test', () => {
     const processExit = sinon.stub(process, 'exit');
     await AssertCommand.handler({
       appmapDir: join(__dirname, 'fixtures', 'appmaps'),
-      config: join(__dirname, '..', 'src', 'defaultAssertions'),
+      config: join(__dirname, '..', 'src', 'defaultAssertions.ts'),
       format: 'progress',
     } as any);
 
