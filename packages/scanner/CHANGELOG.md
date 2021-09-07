@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/applandinc/scanner/compare/v1.0.1...v1.1.0) (2021-09-07)
+
+
+### Features
+
+* Read configuration from yaml ([bc166f4](https://github.com/applandinc/scanner/commit/bc166f4dbed7dc4a7cbf7fd58c7d172c6bcac53f))
+
 ## [1.0.1](https://github.com/applandinc/scanner/compare/v1.0.0...v1.0.1) (2021-09-07)
 
 
