@@ -1,5 +1,5 @@
 {
-  "name": "@applandinc/scanners",
+  "name": "@applandinc/scanner",
   "version": "1.0.0",
   "description": "",
   "bin": "built/index.js",
