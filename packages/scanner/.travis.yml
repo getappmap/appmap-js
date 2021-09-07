@@ -15,8 +15,6 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    script:
-      - npm config set registry https://npm.pkg.github.com
-      - yarn run semantic-release
+    script: npm config set registry https://npm.pkg.github.com && yarn run semantic-release
     on:
       branch: main
