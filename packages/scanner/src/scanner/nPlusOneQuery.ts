@@ -4,10 +4,8 @@ import { obfuscate } from '../database';
 
 function findRootEvent(event: Event): Event {
   let evt = event;
-  let parent = event.parent;
-  while (parent) {
-    evt = parent;
-    parent = evt.parent;
+  while (evt.parent) {
+    evt = evt.parent;
   }
   return evt;
 }
@@ -27,13 +25,22 @@ class Options {
 
 export default function (options: Options = new Options()): Assertion {
   const uniqueSQL = new Set<string>();
-  const eventIdForRoot: Record<number, number> = {};
+  const matchedSQL = new Set<string>();
 
-  const findDuplicates = (event: Event): number => {
+  const findDuplicates = (event: Event, appMap: AppMap): number => {
     const sql = sqlNormalized(event.sql!);
-    const eventRoot = findRootEvent(event);
+    const rootEvent = findRootEvent(event);
+
+    const sqlKey = [appMap.name, rootEvent.id, sql].join('\n');
+
+    // Short circuit if we've already flagged this SQL.
+    if (matchedSQL.has(sqlKey)) {
+      return 0;
+    }
+    matchedSQL.add(sqlKey);
+
     let matches = 0;
-    const iter = new EventNavigator(eventRoot).descendants();
+    const iter = new EventNavigator(rootEvent).descendants();
     let curr = iter.next();
 
     function isMatch(descendant: Event): boolean {
@@ -57,7 +64,7 @@ export default function (options: Options = new Options()): Assertion {
 
   return Assertion.assert(
     'sql_query',
-    (event: Event) => findDuplicates(event) < options.limit.warning,
+    (event: Event, appMap: AppMap) => findDuplicates(event, appMap) < options.limit.warning,
     (assertion: Assertion): void => {
       assertion.where = (e: Event, appMap: AppMap) => {
         if (getSqlLabelFromString(e.sqlQuery!) !== 'SQL Select') {
@@ -76,7 +83,6 @@ export default function (options: Options = new Options()): Assertion {
         }
 
         uniqueSQL.add(sqlKey);
-        eventIdForRoot[rootEvent.id] = e.id;
         return true;
       };
       assertion.description = `SQL query should not be repeated within the same command`;
