@@ -19,5 +19,5 @@ export GITHUB_TOKEN=yourtokenhere
 ```
 Add the package with `yarn`:
 ```bash
-yarn add @applandinc/scanners@1.0.0
+yarn add @applandinc/scanner
 ```
