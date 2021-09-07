@@ -10,6 +10,7 @@ import { ValidationError, AbortError } from './errors';
 import { AssertionFailure } from './types';
 import { Argv, Arguments } from 'yargs';
 import chalk from 'chalk';
+import loadConfiguration from './configuration';
 
 interface CommandOptions {
   verbose?: boolean;
@@ -30,11 +31,12 @@ export default {
     args.option('appmap-dir', {
       describe: 'directory to recursively inspect for AppMaps',
       default: 'tmp/appmap',
+      alias: 'd',
     });
     args.option('config', {
       describe:
         'path to assertions config file. The path indicated should default-export a function which returns an Assertion[].',
-      default: './defaultAssertions',
+      default: '../defaultAssertions.ts',
       alias: 'c',
     });
     args.option('format', {
@@ -59,8 +61,10 @@ export default {
       const summary = { passed: 0, failed: 0, skipped: 0 };
       const checker = new AssertionChecker();
       const formatter = format === 'progress' ? new ProgressFormatter() : new PrettyFormatter();
-      const assertionsFn = (await import(config)).default;
-      const assertions: Assertion[] = assertionsFn();
+      const assertions = await loadConfiguration(config);
+      if (!assertions) {
+        throw new Error(`Failed to load assertions from ${chalk.red(config)}`);
+      }
 
       const glob = promisify(globCallback);
       const files: string[] = await glob(`${appmapDir}/**/*.appmap.json`);
