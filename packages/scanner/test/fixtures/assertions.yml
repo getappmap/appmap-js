@@ -1,6 +1,7 @@
 scope: http_server_request
 where: event.httpServerRequest
 assert: event.httpServerResponse.status === 200
+description: All requests should have status code 200
 ---
 scope: http_server_request
 where: event.httpServerRequest

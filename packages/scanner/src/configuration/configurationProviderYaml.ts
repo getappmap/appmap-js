@@ -9,6 +9,7 @@ interface YamlConfiguration {
   readonly scope: Scope;
   readonly where: string;
   readonly assert: string;
+  readonly description?: string;
 }
 
 export default class ConfigurationProviderYaml implements ConfigurationProvider {
@@ -31,6 +32,10 @@ export default class ConfigurationProviderYaml implements ConfigurationProvider 
         assert.runInNewContext({ event, appMap })
       );
       assertion.where = (event, appMap) => where.runInNewContext({ event, appMap });
+      if (c.description) {
+        assertion.description = c.description;
+      }
+
       return assertion;
     });
   }
