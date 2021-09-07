@@ -236,4 +236,5 @@ declare module '@appland/models' {
   }
 
   export function buildAppMap(data?: string | Record<string, unknown>): AppMapBuilder;
+  export function getSqlLabelFromString(sqlString: string): string;
 }
