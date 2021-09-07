@@ -1,6 +1,5 @@
-import { Event } from '@appland/models';
+import { AppMap, Event } from '@appland/models';
 import Assertion from '../assertion';
-import { AppMap } from '@appland/models';
 import { AssertionFailure, Scope } from '../types';
 
 export default abstract class Strategy {

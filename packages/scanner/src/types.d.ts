@@ -1,6 +1,11 @@
 import { Event } from '@appland/models';
 
-export type Scope = 'event' | 'http_server_request' | 'sql_query' | 'function';
+export type Scope =
+  | 'event'
+  | 'http_client_request'
+  | 'http_server_request'
+  | 'sql_query'
+  | 'function';
 
 export interface AssertionFailure {
   appMapName: string;
