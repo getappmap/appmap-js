@@ -1,6 +1,6 @@
 {
   "name": "scanners",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "",
   "bin": "built/index.js",
   "files": [
@@ -11,11 +11,14 @@
     "start": "ts-node src/cli.ts",
     "lint": "eslint src --ext .ts",
     "ci": "yarn lint && yarn build && yarn test",
-    "test": "jest"
+    "test": "jest",
+    "semantic-release": "semantic-release"
   },
   "author": "AppLand, Inc.",
   "license": "MIT",
   "devDependencies": {
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.1",
     "@types/glob": "^7.1.4",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.10",
@@ -28,6 +31,7 @@
     "eslint-plugin-prettier": "^3.4.1",
     "jest": "^27.1.0",
     "prettier": "^2.3.2",
+    "semantic-release": "^17.4.7",
     "sinon": "^11.1.2",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
@@ -37,6 +41,14 @@
     "@appland/models": "^1.5.0",
     "@types/sinon": "^10.0.2",
     "chalk": "^4.1.2",
+    "semantic-release": "^17.4.7",
     "yargs": "^17.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/applandinc/scanner.git"
+  },
+  "publishConfig": {
+    "access": "restricted"
   }
 }
