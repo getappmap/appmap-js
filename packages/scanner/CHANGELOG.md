@@ -1,3 +1,17 @@
+# [1.3.0](https://github.com/applandinc/scanner/compare/v1.2.0...v1.3.0) (2021-09-08)
+
+
+### Bug Fixes
+
+* Clarify the role of assertion config id ([d72493a](https://github.com/applandinc/scanner/commit/d72493accc711be1edf48a245df8ed71db3b25fb))
+
+
+### Features
+
+* Enable configuration of builtin scanners via YAML ([3f3cd16](https://github.com/applandinc/scanner/commit/3f3cd16d25d6dd4b2849eb4f26ab83ba6a00d2cd))
+* Rename some scanners to better indicate the problem ([6338ab2](https://github.com/applandinc/scanner/commit/6338ab2ada1ae767b97dac4a031fa18b2c5fdb2d))
+* typedef EventFilter ([3876792](https://github.com/applandinc/scanner/commit/3876792d09ea683c01efafcec34a367f74912fd9))
+
 # [1.2.0](https://github.com/applandinc/scanner/compare/v1.1.0...v1.2.0) (2021-09-08)
 
 
