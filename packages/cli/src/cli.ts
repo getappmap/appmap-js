@@ -26,7 +26,7 @@ const FindEvents = require('./search/findEvents');
 const FunctionStats = require('./functionStats');
 const Inspect = require('./inspect');
 const SwaggerCommand = require('./swagger/command');
-const InventoryCommand = require('./inventoryCommand');
+const InstallCommand = require('./cmds/agentInstaller/install-agent');
 const InventoryCollector = require('./inventory/buildInventory');
 const {
   printAddedLine,
@@ -461,7 +461,7 @@ yargs(process.argv.slice(2))
         await buildStats(state);
       };
 
-      const workingState = newState(argv.appmapDir, argv.codeObject);
+      const workingState = newState(argv.appmapDir, argv.codeObject, []);
       await findCodeObjects(workingState);
 
       const interactive = () => {
@@ -503,10 +503,10 @@ yargs(process.argv.slice(2))
             navigate,
           };
           if (argv.baseDir) {
-            options.compare = compare;
+            options['compare'] = compare;
           }
           options['reset filters'] = reset;
-          options.quit = quit;
+          options['quit'] = quit;
 
           const prompt = `${Object.keys(options)
             .map((opt) => `(${opt.charAt(0)})${opt.substring(1)}`)
@@ -623,13 +623,12 @@ yargs(process.argv.slice(2))
         baseDir = await fsp.mkdtemp(join(tmpdir(), 'appmap_'));
         console.log(`Saving remote AppMaps to ${baseDir}`);
 
-        const workingInfoFingerprints = Object.values(workingAppMaps).reduce(
-          (memo, appMap) => {
-            memo.add(appMap.infoFingerprint);
-            return memo;
-          },
-          new Set()
-        );
+        const workingInfoFingerprints: any = Object.values(
+          workingAppMaps
+        ).reduce((memo: any, appMap: any) => {
+          memo.add(appMap.infoFingerprint);
+          return memo;
+        }, new Set());
 
         await Promise.all(
           baseAppMaps.map(async (appMap) => {
@@ -724,7 +723,7 @@ yargs(process.argv.slice(2))
             inventory.functionTrigrams.concat(baseInventory.functionTrigrams)
           );
           const all = new Set();
-          [...union].sort().forEach((trigramStr) => {
+          [...union].sort().forEach((trigramStr: any) => {
             const trigram = JSON.parse(trigramStr);
             trigram.forEach((entry) => all.add(JSON.stringify(entry)));
             if (!baseSet.has(trigramStr) || !workingSet.has(trigramStr)) {
@@ -815,17 +814,17 @@ yargs(process.argv.slice(2))
                 printAddedLine(textIfy(obj));
                 if (sectionName === 'httpServerRequests') {
                   addedCodeObjects.add(
-                    JSON.stringify(objectifyRequest(JSON.parse(obj)))
+                    JSON.stringify(objectifyRequest(JSON.parse(obj as any)))
                   );
                 }
                 if (sectionName === 'classes') {
                   addedCodeObjects.add(
-                    JSON.stringify(objectifyClass(JSON.parse(obj)))
+                    JSON.stringify(objectifyClass(JSON.parse(obj as any)))
                   );
                 }
                 if (sectionName === 'sqlNormalized') {
                   addedCodeObjects.add(
-                    JSON.stringify(objectifyQuery(JSON.parse(obj)))
+                    JSON.stringify(objectifyQuery(JSON.parse(obj as any)))
                   );
                 }
               } else if (!workingSet.has(obj) && !rootAddedOrRemoved(obj)) {
@@ -833,22 +832,22 @@ yargs(process.argv.slice(2))
                 printRemovedLine(textIfy(obj));
                 if (sectionName === 'httpServerRequests') {
                   removedCodeObjects.add(
-                    JSON.stringify(objectifyRequest(JSON.parse(obj)))
+                    JSON.stringify(objectifyRequest(JSON.parse(obj as any)))
                   );
                 }
                 if (sectionName === 'classes') {
                   removedCodeObjects.add(
-                    JSON.stringify(objectifyClass(JSON.parse(obj)))
+                    JSON.stringify(objectifyClass(JSON.parse(obj as any)))
                   );
                 }
                 if (sectionName === 'sqlNormalized') {
                   removedCodeObjects.add(
-                    JSON.stringify(objectifyQuery(JSON.parse(obj)))
+                    JSON.stringify(objectifyQuery(JSON.parse(obj as any)))
                   );
                 }
               } else if (
                 objectifier &&
-                changed.has(JSON.stringify(objectifier(JSON.parse(obj))))
+                changed.has(JSON.stringify(objectifier(JSON.parse(obj as any))))
               ) {
                 changedCount += 1;
                 printChangedLine(textIfy(obj));
