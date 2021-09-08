@@ -18,6 +18,7 @@ const validatedBy = (iterator: Iterator<EventNavigator>): boolean => {
 
 export default function (): Assertion {
   return Assertion.assert(
+    'validate-before-save',
     'function',
     // TODO: ensure that the object id on the 'validate' is the same as the object id on the 'save'
     // TODO: if validate happens in a preceding event, this is also OK

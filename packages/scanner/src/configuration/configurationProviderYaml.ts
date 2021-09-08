@@ -14,6 +14,7 @@ interface BaseConfig {
 
 interface CustomAssertionConfig extends BaseConfig {
   readonly id: undefined;
+  readonly name: string;
   readonly scope: Scope;
   readonly where?: string;
   readonly assert: string;
@@ -44,7 +45,7 @@ function populateAssertion(assertion: Assertion, config: BaseConfig): void {
 
 async function buildCustomAssertion(config: CustomAssertionConfig): Promise<Assertion> {
   const assert = new Script(config.assert);
-  const assertion = new Assertion(config.scope, (event, appMap) =>
+  const assertion = new Assertion(config.name, config.scope, (event, appMap) =>
     assert.runInNewContext({ event, appMap })
   );
   if (config.where) {

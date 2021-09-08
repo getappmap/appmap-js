@@ -11,6 +11,9 @@ import { AssertionMatch } from './types';
 import { Argv, Arguments } from 'yargs';
 import chalk from 'chalk';
 import loadConfiguration from './configuration';
+import { exec } from 'child_process';
+import { appMapDir } from './scanner/util';
+import { join } from 'path';
 
 interface CommandOptions {
   verbose?: boolean;
@@ -51,6 +54,20 @@ export default {
   async handler(options: Arguments): Promise<void> {
     const { appmapDir, config, progressFormat, verbose } = options as unknown as CommandOptions;
 
+    process.stdout.write(`Indexing ${appmapDir}...`);
+    await new Promise((resolve, reject) => {
+      exec(
+        `node ./node_modules/@appland/appmap/built/cli.js index --appmap-dir ${appmapDir}`,
+        (error, stdout /* , stderr */) => {
+          if (error) {
+            return reject(error);
+          }
+          resolve(stdout);
+        }
+      );
+    });
+    console.log('done');
+
     try {
       try {
         await fs.access(appmapDir as PathLike, fsConstants.R_OK);
@@ -85,6 +102,7 @@ export default {
             const matchCount = matches.length;
             checker.check(appMap, assertion, matches);
             const newMatches = matches.slice(matchCount, matches.length);
+            newMatches.forEach((match) => (match.appMapFile = file));
 
             if (newMatches.length === 0) {
               summary.matched++;
@@ -109,7 +127,9 @@ export default {
         matches.forEach((match) => {
           matchCount += 1;
           console.log(`Match ${matchCount}:`);
+          console.log(`\tScanner:\t${match.scannerId}`);
           console.log(`\tAppMap:\t${match.appMapName}`);
+          console.log(`\tFile:\t${match.appMapFile}`);
 
           let eventMsg = `\tEvent:\t${match.event.id} - ${match.event.toString()}`;
           if (match.event.elapsedTime !== undefined) {
@@ -125,6 +145,26 @@ export default {
       }
       process.stdout.write(formatter.summary(summary.matched, summary.skipped, summary.unmatched));
       console.log();
+
+      const appMapDirMatches: Record<string, AssertionMatch[]> = {};
+      matches.forEach((m) => {
+        const dirName = appMapDir(m.appMapFile!);
+        if (!appMapDirMatches[dirName]) {
+          appMapDirMatches[dirName] = [];
+        }
+        appMapDirMatches[dirName].push(m);
+      });
+
+      await Promise.all(
+        Object.keys(appMapDirMatches).map(async (appMapDir) => {
+          const matches = appMapDirMatches[appMapDir];
+          const matchList = matches.map((match) => ({
+            eventId: match.event.id,
+            scannerId: match.scannerId,
+          }));
+          return fs.writeFile(join(appMapDir, 'scan.json'), JSON.stringify(matchList, null, 2));
+        })
+      );
 
       return process.exit(summary.unmatched === 0 ? 0 : 1);
     } catch (err) {

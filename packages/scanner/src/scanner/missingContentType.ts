@@ -7,6 +7,7 @@ const isNoContent = (status: number) => status != 204;
 
 export default function (): Assertion {
   return Assertion.assert(
+    'missing-content-type',
     'http_server_request',
     (e: Event) => contentType(e) !== undefined,
     (assertion: Assertion): void => {

@@ -1,4 +1,3 @@
-import { Event, AppMap } from '@appland/models';
 import { EventFilter, Scope } from './types';
 
 export default class Assertion {
@@ -7,15 +6,20 @@ export default class Assertion {
   public exclude: EventFilter[];
   public description?: string;
 
-  static assert(scope: Scope, assert: EventFilter, cb?: (assertion: Assertion) => void): Assertion {
-    const assertion = new Assertion(scope, assert);
+  static assert(
+    id: string,
+    scope: Scope,
+    assert: EventFilter,
+    cb?: (assertion: Assertion) => void
+  ): Assertion {
+    const assertion = new Assertion(id, scope, assert);
     if (cb) {
       cb(assertion);
     }
     return assertion;
   }
 
-  constructor(public scope: Scope, public assert: EventFilter) {
+  constructor(public id: string, public scope: Scope, public assert: EventFilter) {
     this.include = [];
     this.exclude = [];
   }

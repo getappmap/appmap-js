@@ -24,6 +24,7 @@ const authenticatedBy = (iterator: Iterator<EventNavigator>): boolean => {
 
 export default function (routes: RegExp[] = [/.*/], contentTypes: RegExp[] = [/.*/]): Assertion {
   return Assertion.assert(
+    'missing-authentication',
     'http_server_request',
     (event: Event) => authenticatedBy(new EventNavigator(event).descendants()),
     (assertion: Assertion): void => {
