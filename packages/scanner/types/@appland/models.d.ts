@@ -1,5 +1,3 @@
-import { string } from 'yargs';
-
 declare module '@appland/models' {
   export type CodeObjectType =
     | 'package'
@@ -173,6 +171,18 @@ declare module '@appland/models' {
     toJSON(): any;
   }
 
+  export class EventNavigator {
+    constructor(event: Event);
+
+    event: Event;
+    self(): Generator<EventNavigator>;
+    ancestors(): Generator<EventNavigator>;
+    preceding(): Generator<EventNavigator>;
+    precedingSiblings(): Generator<EventNavigator>;
+    followingSiblings(): Generator<EventNavigator>;
+    descendants(): Generator<EventNavigator>;
+  }
+
   export type LabelMap = Record<string, Record<CodeObjectType | 'event', Event | CodeObject>>;
 
   export class EventChangeSummary {
@@ -226,4 +236,5 @@ declare module '@appland/models' {
   }
 
   export function buildAppMap(data?: string | Record<string, unknown>): AppMapBuilder;
+  export function getSqlLabelFromString(sqlString: string): string;
 }

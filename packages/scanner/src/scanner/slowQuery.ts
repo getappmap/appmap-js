@@ -8,7 +8,7 @@ export default function (
 ): Assertion {
   return Assertion.assert(
     'sql_query',
-    (e: Event) => e.elapsedTime !== undefined && e.elapsedTime < timeAllowed,
+    (e: Event) => e.elapsedTime! < timeAllowed,
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
         e.elapsedTime !== undefined &&

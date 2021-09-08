@@ -1,9 +1,8 @@
-import { Event } from '@appland/models';
+import { Event, AppMap } from '@appland/models';
 import { Scope } from './types';
-import { AppMap } from '@appland/models';
 
 export default class Assertion {
-  public where?: (e: Event, appMap?: AppMap) => boolean;
+  public where?: (e: Event, appMap: AppMap) => boolean;
   public description?: string;
 
   static assert(

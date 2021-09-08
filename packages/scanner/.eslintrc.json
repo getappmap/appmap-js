@@ -23,6 +23,7 @@
         "modifiers": ["exported"],
         "format": ["PascalCase", "UPPER_CASE"]
       }
-    ]
+    ],
+    "@typescript-eslint/no-non-null-assertion": "off"
   }
 }
