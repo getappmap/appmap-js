@@ -13,13 +13,16 @@ interface BaseConfig {
 }
 
 interface CustomAssertionConfig extends BaseConfig {
+  readonly id: undefined;
   readonly scope: Scope;
   readonly where?: string;
   readonly assert: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface BuiltinAssertionConfig extends BaseConfig {}
+interface BuiltinAssertionConfig extends BaseConfig {
+  readonly id: string;
+}
 
 function populateAssertion(assertion: Assertion, config: BaseConfig): void {
   if (config.include && config.include.length > 0) {
