@@ -7,6 +7,7 @@ import AgentInstaller from './agentInstaller';
 import CommandStruct from './commandStruct';
 import { exists } from '../../utils';
 import chalk from 'chalk';
+import { run } from './commandRunner';
 
 const REGEX_PKG_DEPENDENCY = /^\s*appmap\s*[=>~]+=.*$/m;
 // include .dev0 so pip will allow prereleases
@@ -38,20 +39,18 @@ export class PoetryInstaller implements AgentInstaller {
     return await exists(this.buildFilePath);
   }
 
-  verifyCommand(): CommandStruct {
-    return new CommandStruct(
-      'poetry',
-      ['add', '--dev', '--allow-prereleases', 'appmap'],
-      this.path
-    );
-  }
-
   initCommand(): CommandStruct {
     return new CommandStruct('poetry', ['run', 'appmap-agent-init'], this.path);
   }
 
-  installAgent(): void {
-    throw new Error('Not yet implemented');
+  async installAgent(): Promise<void> {
+    const cmd = new CommandStruct(
+      'poetry',
+      ['add', '--dev', '--allow-prereleases', 'appmap'],
+      this.path
+    );
+
+    await run(cmd);
   }
 }
 
@@ -81,14 +80,6 @@ export class PipInstaller implements AgentInstaller {
     return await exists(this.buildFilePath);
   }
 
-  verifyCommand(): CommandStruct {
-    return new CommandStruct(
-      'pip',
-      ['install', '-r', this.buildFile],
-      this.path
-    );
-  }
-
   async installAgent(): Promise<void> {
     let requirements = (await fsp.readFile(this.buildFilePath)).toString();
 
@@ -104,6 +95,13 @@ export class PipInstaller implements AgentInstaller {
     }
 
     await fsp.writeFile(this.buildFilePath, requirements);
+
+    const cmd = new CommandStruct(
+      'pip',
+      ['install', '-r', this.buildFile],
+      this.path
+    );
+    await run(cmd);
   }
 
   initCommand(): CommandStruct {
@@ -114,7 +112,7 @@ export class PipInstaller implements AgentInstaller {
 const PythonAgentInstaller = {
   name: 'Python',
   documentation: 'https://appland.com/docs/reference/appmap-python',
-  installers: [PipInstaller],
+  installers: [PipInstaller, PoetryInstaller],
 };
 
 export default PythonAgentInstaller;

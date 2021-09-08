@@ -29,12 +29,6 @@ describe('Ruby Agent Installation', () => {
       expect(btInstaller.available()).resolves.toBe(true);
     });
 
-    it('provides the correct verify command', async () => {
-      const cmdStruct = btInstaller.verifyCommand();
-      expect(cmdStruct.program).toBe('bundle');
-      expect(cmdStruct.args).toEqual(['install']);
-    });
-
     it('provides the correct init command', async () => {
       const cmdStruct = btInstaller.initCommand();
       expect(cmdStruct.program).toBe('bundle');

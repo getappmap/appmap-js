@@ -122,6 +122,11 @@ export default class AgentInstallerProcedure {
 
     await installer.installAgent();
 
+    if (installer.verifyCommand) {
+      const cmd = await installer.verifyCommand();
+      await run(cmd);
+    }
+
     if (writeAppMapYml) {
       const initCommand = await installer.initCommand();
       const { stdout } = await run(initCommand);
