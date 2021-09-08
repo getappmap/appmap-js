@@ -1,21 +1,21 @@
 import Assertion from '../assertion';
 import { AppMap } from '@appland/models';
 import chalk from 'chalk';
-import { AssertionFailure } from '../types';
+import { AssertionMatch } from '../types';
 
 export default abstract class Formatter {
   abstract appMap(appMap: AppMap): string;
   abstract result(
     assertion: Assertion,
-    failures: AssertionFailure[],
+    matches: AssertionMatch[],
     index: number
   ): string | undefined;
 
-  summary(passed: number, _skipped: number, failed: number): string {
-    const total = passed + failed;
-    const passedStr = chalk.green(`${passed} passed`);
-    const failedStr = chalk.red(`${failed} failed`);
+  summary(unmatched: number, _skipped: number, matched: number): string {
+    const total = unmatched + matched;
+    const passedStr = chalk.green(`${unmatched} unmatched`);
+    const matchedStr = chalk.magenta(`${matched} matched`);
 
-    return `${total} assertions (${[passedStr, failedStr].join(', ')})`;
+    return `${total} assertions (${[passedStr, matchedStr].join(', ')})`;
   }
 }

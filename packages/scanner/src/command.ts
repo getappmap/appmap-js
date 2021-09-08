@@ -7,7 +7,7 @@ import Assertion from './assertion';
 import ProgressFormatter from './formatter/progressFormatter';
 import PrettyFormatter from './formatter/prettyFormatter';
 import { ValidationError, AbortError } from './errors';
-import { AssertionFailure } from './types';
+import { AssertionMatch } from './types';
 import { Argv, Arguments } from 'yargs';
 import chalk from 'chalk';
 import loadConfiguration from './configuration';
@@ -16,7 +16,7 @@ interface CommandOptions {
   verbose?: boolean;
   appmapDir: string;
   config: string;
-  format: string;
+  progressFormat: string;
 }
 
 export default {
@@ -39,8 +39,8 @@ export default {
       default: '../sampleAssertions.yml',
       alias: 'c',
     });
-    args.option('format', {
-      describe: 'output format',
+    args.option('progress-format', {
+      describe: 'progress output format',
       default: 'progress',
       options: ['progress', 'pretty'],
     });
@@ -49,7 +49,7 @@ export default {
   },
 
   async handler(options: Arguments): Promise<void> {
-    const { appmapDir, config, format, verbose } = options as unknown as CommandOptions;
+    const { appmapDir, config, progressFormat, verbose } = options as unknown as CommandOptions;
 
     try {
       try {
@@ -58,9 +58,10 @@ export default {
         throw new ValidationError(`AppMaps directory ${chalk.red(appmapDir)} does not exist.`);
       }
 
-      const summary = { passed: 0, failed: 0, skipped: 0 };
+      const summary = { matched: 0, unmatched: 0, skipped: 0 };
       const checker = new AssertionChecker();
-      const formatter = format === 'progress' ? new ProgressFormatter() : new PrettyFormatter();
+      const formatter =
+        progressFormat === 'progress' ? new ProgressFormatter() : new PrettyFormatter();
       const assertions = await loadConfiguration(config);
       if (!assertions) {
         throw new Error(`Failed to load assertions from ${chalk.red(config)}`);
@@ -70,7 +71,7 @@ export default {
       const files: string[] = await glob(`${appmapDir}/**/*.appmap.json`);
 
       let index = 0;
-      const failures: AssertionFailure[] = [];
+      const matches: AssertionMatch[] = [];
 
       await Promise.all(
         files.map(async (file: string) => {
@@ -81,17 +82,17 @@ export default {
 
           assertions.forEach((assertion: Assertion) => {
             index++;
-            const failureCount = failures.length;
-            checker.check(appMap, assertion, failures);
-            const newFailures = failures.slice(failureCount, failures.length);
+            const matchCount = matches.length;
+            checker.check(appMap, assertion, matches);
+            const newMatches = matches.slice(matchCount, matches.length);
 
-            if (newFailures.length === 0) {
-              summary.passed++;
+            if (newMatches.length === 0) {
+              summary.matched++;
             } else {
-              summary.failed++;
+              summary.unmatched++;
             }
 
-            const message = formatter.result(assertion, newFailures, index);
+            const message = formatter.result(assertion, newMatches, index);
             if (message) {
               process.stdout.write(message);
             }
@@ -100,34 +101,32 @@ export default {
       );
 
       console.log('\n');
-      if (failures.length > 0) {
-        console.log(`${failures.length} failures:`);
+      if (matches.length > 0) {
+        console.log(`${matches.length} matches:`);
         console.log();
 
-        let failureCount = 0;
-        failures.forEach((failure) => {
-          failureCount += 1;
-          console.log(`Failure ${failureCount}:`);
-          console.log(`\tAppMap:\t${failure.appMapName}`);
+        let matchCount = 0;
+        matches.forEach((match) => {
+          matchCount += 1;
+          console.log(`Match ${matchCount}:`);
+          console.log(`\tAppMap:\t${match.appMapName}`);
 
-          let eventMsg = `\tEvent:\t${failure.event.id} - ${failure.event.toString()}`;
-          if (failure.event.elapsedTime !== undefined) {
-            eventMsg += ` (${failure.event.elapsedTime}ms)`;
+          let eventMsg = `\tEvent:\t${match.event.id} - ${match.event.toString()}`;
+          if (match.event.elapsedTime !== undefined) {
+            eventMsg += ` (${match.event.elapsedTime}ms)`;
           }
           console.log(eventMsg);
-          if (failure.event.parent) {
-            console.log(
-              `\tParent:\t${failure.event.parent.id} - ${failure.event.parent.toString()}`
-            );
+          if (match.event.parent) {
+            console.log(`\tParent:\t${match.event.parent.id} - ${match.event.parent.toString()}`);
           }
-          console.log(`\tCondition:\t${failure.condition}`);
+          console.log(`\tCondition:\t${match.condition}`);
           console.log('\n');
         });
       }
-      process.stdout.write(formatter.summary(summary.passed, summary.skipped, summary.failed));
+      process.stdout.write(formatter.summary(summary.matched, summary.skipped, summary.unmatched));
       console.log();
 
-      return process.exit(summary.failed === 0 ? 0 : 1);
+      return process.exit(summary.unmatched === 0 ? 0 : 1);
     } catch (err) {
       if (err instanceof ValidationError) {
         console.warn(err.message);

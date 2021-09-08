@@ -1,6 +1,6 @@
 import { AppMap, Event } from '@appland/models';
 import Assertion from '../assertion';
-import { AssertionFailure, Scope } from '../types';
+import { AssertionMatch, Scope } from '../types';
 
 export default abstract class Strategy {
   protected abstract scope: Scope;
@@ -10,7 +10,7 @@ export default abstract class Strategy {
     return assertion.scope === this.scope;
   }
 
-  check(appMap: AppMap, assertion: Assertion, failures: AssertionFailure[]): void {
+  check(appMap: AppMap, assertion: Assertion, matches: AssertionMatch[]): void {
     for (const e of appMap.events) {
       if (!e.isCall() || !e.returnEvent) {
         continue;
@@ -31,7 +31,7 @@ export default abstract class Strategy {
 
       const succeeded = assertion.assert(e, appMap);
       if (!succeeded) {
-        failures.push({
+        matches.push({
           appMapName: appMap.metadata.name,
           event: e,
           condition: assertion.description || assertion.assert.toString(),
