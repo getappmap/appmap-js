@@ -157,7 +157,7 @@ declare module '@appland/models' {
     exceptions: readonly ExceptionObject[];
     message?: readonly ParameterObject[];
 
-    link(Event: Event): void;
+    link(event: Event): void;
     isCall(): boolean;
     isReturn(): boolean;
     callStack(): Event[];

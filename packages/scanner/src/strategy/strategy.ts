@@ -22,6 +22,12 @@ export default abstract class Strategy {
       if (assertion.where && !assertion.where(e, appMap)) {
         continue;
       }
+      if (assertion.include.length > 0 && !assertion.include.every((fn) => fn(e, appMap))) {
+        continue;
+      }
+      if (assertion.exclude.length > 0 && assertion.exclude.some((fn) => fn(e, appMap))) {
+        continue;
+      }
 
       const succeeded = assertion.assert(e, appMap);
       if (!succeeded) {

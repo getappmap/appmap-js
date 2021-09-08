@@ -1,15 +1,13 @@
 import { Event, AppMap } from '@appland/models';
-import { Scope } from './types';
+import { EventFilter, Scope } from './types';
 
 export default class Assertion {
-  public where?: (e: Event, appMap: AppMap) => boolean;
+  public where?: EventFilter;
+  public include: EventFilter[];
+  public exclude: EventFilter[];
   public description?: string;
 
-  static assert(
-    scope: Scope,
-    assert: (e: Event, appMap: AppMap) => boolean,
-    cb?: (assertion: Assertion) => void
-  ): Assertion {
+  static assert(scope: Scope, assert: EventFilter, cb?: (assertion: Assertion) => void): Assertion {
     const assertion = new Assertion(scope, assert);
     if (cb) {
       cb(assertion);
@@ -17,7 +15,10 @@ export default class Assertion {
     return assertion;
   }
 
-  constructor(public scope: Scope, public assert: (e: Event, appMap: AppMap) => boolean) {}
+  constructor(public scope: Scope, public assert: EventFilter) {
+    this.include = [];
+    this.exclude = [];
+  }
 
   toString(): string {
     const tokens = [`[${this.scope}]`];
@@ -28,6 +29,12 @@ export default class Assertion {
     }
     if (this.where) {
       tokens.push(`(where ${this.where})`);
+    }
+    if (this.include.length > 0) {
+      tokens.push(`(include ${this.include.join(' && ')})`);
+    }
+    if (this.exclude.length > 0) {
+      tokens.push(`(exclude ${this.exclude.join(' || ')})`);
     }
     return tokens.join(' ');
   }
