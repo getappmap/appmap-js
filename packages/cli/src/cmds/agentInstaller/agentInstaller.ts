@@ -5,10 +5,10 @@ export default interface AgentInstaller {
   readonly name: string;
   readonly buildFile?: string;
 
-  installAgent(): void | Promise<void>;
-  validateAgent?(): void | Promise<void>;
-  initCommand(): CommandStruct | Promise<CommandStruct>;
-  verifyCommand?(): CommandStruct | Promise<CommandStruct>;
-  postInstallMessage?(): string | Promise<string>;
-  available(): boolean | Promise<boolean>;
+  installAgent(): Promise<void>;
+  validateAgentCommand?(): Promise<CommandStruct>;
+  initCommand(): Promise<CommandStruct>;
+  verifyCommand?(): Promise<CommandStruct>;
+  postInstallMessage?(): Promise<string>;
+  available(): Promise<boolean>;
 }

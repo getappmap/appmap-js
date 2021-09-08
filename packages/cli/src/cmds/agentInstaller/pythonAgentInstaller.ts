@@ -28,7 +28,7 @@ export class PoetryInstaller implements AgentInstaller {
     return join(this.path, this.buildFile);
   }
 
-  postInstallMessage(): string {
+  async postInstallMessage(): Promise<string> {
     return [
       `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
       `By default, AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
@@ -39,7 +39,7 @@ export class PoetryInstaller implements AgentInstaller {
     return await exists(this.buildFilePath);
   }
 
-  initCommand(): CommandStruct {
+  async initCommand(): Promise<CommandStruct> {
     return new CommandStruct('poetry', ['run', 'appmap-agent-init'], this.path);
   }
 
@@ -69,7 +69,7 @@ export class PipInstaller implements AgentInstaller {
     return join(this.path, this.buildFile);
   }
 
-  postInstallMessage(): string {
+  async postInstallMessage(): Promise<string> {
     return [
       `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
       `By default, AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
@@ -104,7 +104,7 @@ export class PipInstaller implements AgentInstaller {
     await run(cmd);
   }
 
-  initCommand(): CommandStruct {
+  async initCommand(): Promise<CommandStruct> {
     return new CommandStruct('appmap-agent-init', [], this.path);
   }
 }

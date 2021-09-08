@@ -14,12 +14,31 @@ import UI from './userInteraction';
 import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
 import AbortError from './abortError';
 
-abstract class AgentJarPathProvider {
-  protected _agentJar?: string;
+abstract class JavaBuildToollInstaller {
+  private _agentJar?: string;
 
-  abstract printJarPathCommand(): Promise<CommandStruct>;
+  protected abstract printJarPathCommand(): Promise<CommandStruct>;
+  protected constructor(readonly path: string) {
+    this.path = path;
+  }
 
-  async agentJar(): Promise<string> {
+  async initCommand(): Promise<CommandStruct> {
+    return new CommandStruct(
+      'java',
+      ['-jar', await this.agentJar(), '-d', this.path, 'init'],
+      this.path
+    );
+  }
+
+  async validateAgentCommand(): Promise<CommandStruct> {
+    return new CommandStruct(
+      'java',
+      ['-jar', await this.agentJar(), '-d', this.path, 'validate'],
+      this.path
+    );
+  }
+
+  private async agentJar(): Promise<string> {
     if (!this._agentJar) {
       const cmd = await this.printJarPathCommand();
       const { stdout } = await run(cmd);
@@ -32,14 +51,15 @@ abstract class AgentJarPathProvider {
 
     return this._agentJar!;
   }
+
 }
 
 export class MavenInstaller
-  extends AgentJarPathProvider
+  extends JavaBuildToollInstaller
   implements AgentInstaller
 {
   constructor(readonly path: string) {
-    super();
+    super(path);
   }
 
   get name(): string {
@@ -98,26 +118,10 @@ export class MavenInstaller
     );
   }
 
-  async validateAgentCommand(): Promise<CommandStruct> {
-    return new CommandStruct(
-      'java',
-      ['-jar', await this.agentJar(), '-d', this.path, 'validate'],
-      this.path
-    );
-  }
-
   async printJarPathCommand(): Promise<CommandStruct> {
     return new CommandStruct(
       await this.runCommand(),
       ['appmap:print-jar-path'],
-      this.path
-    );
-  }
-
-  async initCommand(): Promise<CommandStruct> {
-    return new CommandStruct(
-      'java',
-      ['-jar', await this.agentJar(), '-d', this.path, 'init'],
       this.path
     );
   }
@@ -220,11 +224,11 @@ export class MavenInstaller
 }
 
 export class GradleInstaller
-  extends AgentJarPathProvider
+  extends JavaBuildToollInstaller
   implements AgentInstaller
 {
   constructor(readonly path: string) {
-    super();
+    super(path);
   }
 
   get name(): string {
@@ -291,14 +295,6 @@ export class GradleInstaller
         '--configuration',
         'appmapAgent',
       ],
-      this.path
-    );
-  }
-
-  async initCommand(): Promise<CommandStruct> {
-    return new CommandStruct(
-      'java',
-      ['-jar', await this.agentJar(), '-d', this.path, 'init'],
       this.path
     );
   }

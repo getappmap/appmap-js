@@ -35,7 +35,7 @@ describe('Python Agent Installation', () => {
     });
 
     it('provides the correct init command', async () => {
-      const cmdStruct = btInstaller.initCommand();
+      const cmdStruct = await btInstaller.initCommand();
       expect(cmdStruct.program).toBe('poetry');
       expect(cmdStruct.args).toEqual(['run', 'appmap-agent-init']);
     });
@@ -99,7 +99,7 @@ describe('Python Agent Installation', () => {
     });
 
     it('provides the correct init command', async () => {
-      const cmdStruct = btInstaller.initCommand();
+      const cmdStruct = await btInstaller.initCommand();
       expect(cmdStruct.program).toBe('appmap-agent-init');
       expect(cmdStruct.args).toEqual([]);
     });
