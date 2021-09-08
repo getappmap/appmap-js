@@ -1,7 +1,7 @@
 import { AppMap } from '@appland/models';
 import Assertion from './assertion';
 import { AbortError } from './errors';
-import { AssertionFailure } from './types';
+import { AssertionMatch } from './types';
 import Strategy from './strategy/strategy';
 import HttpServerRequestStrategy from './strategy/httpServerRequestStrategy';
 import SqlQueryStrategy from './strategy/sqlQueryStrategy';
@@ -18,10 +18,10 @@ export default class AssertionChecker {
     new SqlQueryStrategy(),
   ];
 
-  check(appMapData: AppMap, assertion: Assertion, failures: AssertionFailure[]): void {
+  check(appMapData: AppMap, assertion: Assertion, matches: AssertionMatch[]): void {
     for (const strategy of this.strategies) {
       if (strategy.supports(assertion)) {
-        return strategy.check(appMapData, assertion, failures);
+        return strategy.check(appMapData, assertion, matches);
       }
     }
 

@@ -9,8 +9,10 @@ export type Scope =
 
 type EventFilter = (e: Event, appMap: AppMap) => boolean;
 
-export interface AssertionFailure {
+export interface AssertionMatch {
   appMapName: string;
+  appMapFile?: string;
+  scannerId: string;
   event: Event;
   condition: string;
 }

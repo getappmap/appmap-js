@@ -39,6 +39,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
+    "@appland/appmap": "^3.2.3",
     "@appland/models": "^1.5.0",
     "@types/sinon": "^10.0.2",
     "chalk": "^4.1.2",

@@ -7,6 +7,7 @@ export default function (
   queryExclude = [/pg_advisory_xact_lock/]
 ): Assertion {
   return Assertion.assert(
+    'slow-query',
     'sql_query',
     (e: Event) => e.elapsedTime! < timeAllowed,
     (assertion: Assertion): void => {

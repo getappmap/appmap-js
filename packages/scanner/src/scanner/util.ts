@@ -12,6 +12,10 @@ function contentType(event: Event): string | undefined {
   // responseHeaders(event)['Content-Type'] ||
 }
 
+function appMapDir(appMapFileName: string): string {
+  return appMapFileName.substring(0, appMapFileName.length - '.appmap.json'.length);
+}
+
 // eslint-disable-next-line
 function isFalsey(valueObj: any): boolean {
   if (!valueObj) {
@@ -30,4 +34,4 @@ function isFalsey(valueObj: any): boolean {
   return false;
 }
 
-export { contentType, isFalsey };
+export { appMapDir, contentType, isFalsey };
