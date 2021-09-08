@@ -1,3 +1,11 @@
+# [1.4.0](https://github.com/applandinc/scanner/compare/v1.3.0...v1.4.0) (2021-09-08)
+
+
+### Features
+
+* Rename 'failures' to 'matches' ([a1675a6](https://github.com/applandinc/scanner/commit/a1675a65ebf9b6a198113255624247a707aa3d7b))
+* Write scanner results into AppMap index ([ed029bf](https://github.com/applandinc/scanner/commit/ed029bfb40826e4542f55c8a42daa1dbf2b11f56))
+
 # [1.3.0](https://github.com/applandinc/scanner/compare/v1.2.0...v1.3.0) (2021-09-08)
 
 
