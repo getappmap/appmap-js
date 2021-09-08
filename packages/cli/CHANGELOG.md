@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.2.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.2.2...@appland/appmap-v3.2.3) (2021-09-08)
+
+
+### Bug Fixes
+
+* Add Poetry installer ([21b0296](https://github.com/applandinc/appmap-js/commit/21b02960f79da8884806c1ce7701c52b7c0002fa))
+
 # [@appland/appmap-v3.2.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.2.1...@appland/appmap-v3.2.2) (2021-09-03)
 
 
