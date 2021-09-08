@@ -1,0 +1,17 @@
+---
+id: slowHttpServerRequest
+---
+id: slowQuery
+---
+id: queryFromView
+include:
+  - /microposts/.test(event.sqlQuery)
+  - >
+    const root = event.ancestors().pop();
+    root && root.route && root.requestMethod === 'POST';
+---
+id: hasContentType
+---
+id: missingAuthentication
+---
+id: validateBeforeSave

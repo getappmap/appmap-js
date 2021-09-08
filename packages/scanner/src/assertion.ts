@@ -3,6 +3,8 @@ import { Scope } from './types';
 
 export default class Assertion {
   public where?: (e: Event, appMap: AppMap) => boolean;
+  public include: ((e: Event, appMap: AppMap) => boolean)[];
+  public exclude: ((e: Event, appMap: AppMap) => boolean)[];
   public description?: string;
 
   static assert(
@@ -17,7 +19,10 @@ export default class Assertion {
     return assertion;
   }
 
-  constructor(public scope: Scope, public assert: (e: Event, appMap: AppMap) => boolean) {}
+  constructor(public scope: Scope, public assert: (e: Event, appMap: AppMap) => boolean) {
+    this.include = [];
+    this.exclude = [];
+  }
 
   toString(): string {
     const tokens = [`[${this.scope}]`];
@@ -28,6 +33,12 @@ export default class Assertion {
     }
     if (this.where) {
       tokens.push(`(where ${this.where})`);
+    }
+    if (this.include.length > 0) {
+      tokens.push(`(include ${this.include.join(' && ')})`);
+    }
+    if (this.exclude.length > 0) {
+      tokens.push(`(exclude ${this.exclude.join(' || ')})`);
     }
     return tokens.join(' ');
   }
