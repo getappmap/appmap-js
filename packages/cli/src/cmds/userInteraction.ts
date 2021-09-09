@@ -49,6 +49,10 @@ export class UserInteraction {
     console.error('\n' + msg);
   }
 
+  warn(msg?: string) {
+    console.error(msg);
+  }
+
   get status(): string {
     return this.spinner.text;
   }

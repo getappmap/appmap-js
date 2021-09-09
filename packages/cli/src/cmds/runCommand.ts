@@ -4,8 +4,8 @@ import { verbose } from '../utils';
 import UI from './userInteraction';
 import chalk from 'chalk';
 
-export default function runCommand(fn: () => Promise<any>) {
-  fn().catch((err) => {
+export default async function runCommand(fn: () => Promise<any>) {
+  return fn().catch((err) => {
     if (err instanceof ValidationError) {
       console.warn(err.message);
       return process.exit(1);
