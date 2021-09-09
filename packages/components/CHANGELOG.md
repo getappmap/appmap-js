@@ -1,3 +1,10 @@
+# [@appland/components-v1.12.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.12.0...@appland/components-v1.12.1) (2021-09-09)
+
+
+### Bug Fixes
+
+* Search will always return expected results ([#336](https://github.com/applandinc/appmap-js/issues/336)) ([95b42bc](https://github.com/applandinc/appmap-js/commit/95b42bc32fb8c2c66345ebfc2ebc540a118a1074))
+
 # [@appland/components-v1.12.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.11.0...@appland/components-v1.12.0) (2021-09-03)
 
 
