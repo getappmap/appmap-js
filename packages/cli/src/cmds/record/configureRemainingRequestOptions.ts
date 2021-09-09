@@ -25,7 +25,7 @@ export default async function configureRemainingRequestOptions(
   UI.progress(`OK. Now I will try and connect to the AppMap recording agent.`);
   UI.progress(`Here's the URL I will use:\n`);
   UI.progress(
-    `${requestOptions.protocol}//${requestOptions.hostname}:${requestOptions.port}/${requestOptions.path}_appmap/record`
+    `${requestOptions.protocol}//${requestOptions.hostname}:${requestOptions.port}${requestOptions.path}_appmap/record`
   );
   UI.progress('');
 
