@@ -5,10 +5,9 @@ import Yargs from 'yargs';
 
 import { exists } from '../../utils';
 import AgentInstaller from './agentInstaller';
-import { AbortError, ValidationError } from './errors';
+import { AbortError, ValidationError } from '../errors';
 import { run } from './commandRunner';
-import UI from './userInteraction';
-import { InstallError } from './errors';
+import UI from '../userInteraction';
 
 type AgentInstallerConstructor = new (path: string) => AgentInstaller;
 

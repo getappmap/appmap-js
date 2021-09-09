@@ -11,9 +11,9 @@ import AgentInstaller from './agentInstaller';
 import { run } from './commandRunner';
 import { getOutput } from './commandUtil';
 import { verbose, exists } from '../../utils';
-import UI from './userInteraction';
+import UI from '../userInteraction';
 import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
-import { AbortError } from './errors';
+import { AbortError } from '../errors';
 
 abstract class JavaBuildToollInstaller {
   private _agentJar?: string;

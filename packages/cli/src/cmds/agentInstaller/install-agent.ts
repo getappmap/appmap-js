@@ -2,11 +2,11 @@ import { promises as fs } from 'fs';
 import JavaAgentInstaller from './javaAgentInstaller';
 import RubyAgentInstaller from './rubyAgentInstaller';
 import PythonAgentInstaller from './pythonAgentInstaller';
-import { ValidationError, AbortError, InstallError } from './errors';
+import { ValidationError, AbortError, InstallError } from '../errors';
 import { verbose } from '../../utils';
 import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
-import UI from './userInteraction';
+import UI from '../userInteraction';
 import Telemetry from '../../telemetry';
 import AgentInstaller from './agentInstaller';
 import { ProcessLog } from './commandRunner';
@@ -76,6 +76,7 @@ export const handler = async (argv) => {
   const { projectType, dir } = argv;
   let installer: AgentInstaller | undefined;
 
+  let err: any;
   try {
     let installTarget = projectType;
     if (!installTarget) {
@@ -125,7 +126,7 @@ export const handler = async (argv) => {
     });
   } catch (e) {
     let installersAvailable: string | undefined;
-    let err = e;
+    err = e;
 
     if (e instanceof InstallError) {
       err = e.error;
