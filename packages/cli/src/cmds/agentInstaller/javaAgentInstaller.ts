@@ -13,6 +13,7 @@ import { exists } from '../../utils';
 import UI from './userInteraction';
 import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
 import AbortError from './abortError';
+import { verbose } from '../../utils';
 
 export class MavenInstaller implements AgentInstaller {
   constructor(readonly path: string) {}
