@@ -78,7 +78,7 @@ export class BundleInstaller implements AgentInstaller {
   async validateAgentCommand(): Promise<CommandStruct> {
     return new CommandStruct(
       'bundle',
-      ['exec', 'appmap-agent-validater'],
+      ['exec', 'appmap-agent-validate'],
       this.path
     );
   }

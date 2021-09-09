@@ -1,6 +1,8 @@
 import chalk from 'chalk';
 import { promises as fs } from 'fs';
 import { join, resolve } from 'path';
+import Yargs from 'yargs';
+
 import { exists } from '../../utils';
 import AgentInstaller from './agentInstaller';
 import ValidationError from './validationError';
@@ -110,7 +112,7 @@ export default class AgentInstallerProcedure {
       });
 
       if (overwriteAppMapYml === ABORT) {
-        process.exit(0);
+        Yargs.exit(0, new Error());
       }
 
       if (overwriteAppMapYml === USE_EXISTING) {
