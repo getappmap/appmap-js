@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.2.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.2.3...@appland/appmap-v3.2.4) (2021-09-09)
+
+
+### Bug Fixes
+
+* Fix missing import for `verbose` when running a Java installer ([4a6bba0](https://github.com/applandinc/appmap-js/commit/4a6bba0d4e8a7650e6af1e50b7783f5fc5ac00cf))
+
 # [@appland/appmap-v3.2.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.2.2...@appland/appmap-v3.2.3) (2021-09-08)
 
 
