@@ -36,7 +36,7 @@ export default class AgentInstallerProcedure {
     return this.installers.filter((_, i) => results[i]);
   }
 
-  async run(userSpecifiedInstaller?: string): Promise<void> {
+  async run(userSpecifiedInstaller?: string): Promise<AgentInstaller> {
     const availableInstallers = await this.availableInstallers();
 
     let installer: AgentInstaller | undefined;
@@ -154,5 +154,7 @@ export default class AgentInstallerProcedure {
     }
 
     UI.success(successMessage.join('\n'));
+
+    return installer;
   }
 }

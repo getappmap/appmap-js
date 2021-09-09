@@ -435,7 +435,7 @@ export class GradleInstaller implements AgentInstaller {
           });
 
           if (userWillContinue === 'Abort') {
-            throw new AbortError();
+            throw new AbortError('no java plugin found');
           }
         }
 
