@@ -171,7 +171,7 @@ export default {
         return null;
       }
 
-      return new RegExp(filterString, 'ig');
+      return new RegExp(filterString, 'i');
     },
   },
 
@@ -185,24 +185,18 @@ export default {
     },
 
     passesFilter(obj) {
-      const { filterRegex } = this;
-      if (!filterRegex) {
-        // If it's null, we don't need to apply any filtering. Always return true.
+      // If it's null, we don't need to apply any filtering. Always return true.
+      if (!this.filterRegex) {
         return true;
       }
 
-      let filterString = obj;
-
       if (obj instanceof CodeObject) {
-        filterString =
+        const filterString =
           obj.type === CodeObjectType.QUERY ? obj.name : obj.prettyName;
+        return this.filterRegex.test(filterString);
       }
 
-      if (typeof filterString !== 'string') {
-        return false;
-      }
-
-      return !this.filterRegex || this.filterRegex.test(filterString);
+      return false;
     },
   },
 };
