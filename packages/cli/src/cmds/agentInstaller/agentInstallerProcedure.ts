@@ -3,9 +3,9 @@ import { promises as fs } from 'fs';
 import { join, resolve } from 'path';
 import { exists } from '../../utils';
 import AgentInstaller from './agentInstaller';
-import ValidationError from './validationError';
+import ValidationError from '../validationError';
 import { run } from './commandRunner';
-import UI from './userInteraction';
+import UI from '../userInteraction';
 
 type AgentInstallerConstructor = new (path: string) => AgentInstaller;
 

@@ -2,12 +2,11 @@ import process from 'process';
 import JavaAgentInstaller from './javaAgentInstaller';
 import RubyAgentInstaller from './rubyAgentInstaller';
 import PythonAgentInstaller from './pythonAgentInstaller';
-import ValidationError from './validationError';
-import AbortError from './abortError';
 import { verbose } from '../../utils';
 import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
-import UI from './userInteraction';
+import UI from '../userInteraction';
+import runCommand from '../runCommand';
 
 const AGENT_INSTALLERS = {
   java: JavaAgentInstaller,
@@ -108,23 +107,5 @@ export const handler = async (argv) => {
     await installer.run(installerFramework);
   };
 
-  return commandFn().catch((err) => {
-    if (err instanceof ValidationError) {
-      console.warn(err.message);
-      return process.exit(1);
-    }
-    if (err instanceof AbortError) {
-      return process.exit(2);
-    }
-
-    if (verbose()) {
-      UI.error(err);
-    } else {
-      UI.error(
-        `An error occurred. Try re-running the command with the ${chalk.red(
-          'verbose'
-        )} flag (${chalk.red('-v')}).`
-      );
-    }
-  });
+  return runCommand(commandFn);
 };
