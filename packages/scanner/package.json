@@ -42,9 +42,11 @@
     "@appland/appmap": "^3.2.3",
     "@appland/models": "^1.5.0",
     "@types/sinon": "^10.0.2",
+    "ansi-escapes": "^5.0.0",
     "chalk": "^4.1.2",
     "js-yaml": "^4.1.0",
     "semantic-release": "^17.4.7",
+    "supports-hyperlinks": "^2.2.0",
     "yargs": "^17.1.1"
   },
   "repository": {

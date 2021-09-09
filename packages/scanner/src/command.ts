@@ -14,12 +14,14 @@ import loadConfiguration from './configuration';
 import { exec } from 'child_process';
 import { appMapDir } from './scanner/util';
 import { join } from 'path';
+import { ideLink } from './util';
 
 interface CommandOptions {
   verbose?: boolean;
   appmapDir: string;
   config: string;
   progressFormat: string;
+  ide?: string;
 }
 
 export default {
@@ -47,12 +49,17 @@ export default {
       default: 'progress',
       options: ['progress', 'pretty'],
     });
+    args.option('ide', {
+      describe:
+        'IDE code for console links (IDE_CODE://open?file=$file&line=$line). For example: vscode, x-mine, phpstorm.',
+    });
 
     return args.strict();
   },
 
   async handler(options: Arguments): Promise<void> {
-    const { appmapDir, config, progressFormat, verbose } = options as unknown as CommandOptions;
+    const { appmapDir, config, progressFormat, verbose, ide } =
+      options as unknown as CommandOptions;
 
     process.stdout.write(`Indexing ${appmapDir}...`);
     await new Promise((resolve, reject) => {
@@ -129,7 +136,10 @@ export default {
           console.log(`Match ${matchCount}:`);
           console.log(`\tScanner:\t${match.scannerId}`);
           console.log(`\tAppMap:\t${match.appMapName}`);
-          console.log(`\tFile:\t${match.appMapFile}`);
+
+          const filePath =
+            ide && match.appMapFile ? ideLink(match.appMapFile, ide) : match.appMapFile;
+          console.log(`\tFile:\t${filePath}`);
 
           let eventMsg = `\tEvent:\t${match.event.id} - ${match.event.toString()}`;
           if (match.event.elapsedTime !== undefined) {
