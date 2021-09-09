@@ -50,8 +50,8 @@ export default {
       options: ['progress', 'pretty'],
     });
     args.option('ide', {
-      describe:
-        'IDE code for console links (IDE_CODE://open?file=$file&line=$line). For example: vscode, x-mine, phpstorm.',
+      describe: 'choose your IDE protocol to open AppMaps directly in your IDE.',
+      options: ['vscode', 'x-mine', 'idea', 'pycharm'],
     });
 
     return args.strict();

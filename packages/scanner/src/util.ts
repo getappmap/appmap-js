@@ -10,18 +10,8 @@ export function ideLink(filePath: string, ide: string): string {
     return filePath;
   }
 
-  return [
-    OSC,
-    '8',
-    SEP,
-    SEP,
-    `${ide}://open?url=file://${filePath}`,
-    BEL,
-    filePath,
-    OSC,
-    '8',
-    SEP,
-    SEP,
-    BEL,
-  ].join('');
+  const path = `${__dirname}/../${filePath}`;
+  const link = ide == 'vscode' ? 'vscode://file/' + path : `${ide}://open?file=${path}`;
+
+  return [OSC, '8', SEP, SEP, link, BEL, filePath, OSC, '8', SEP, SEP, BEL].join('');
 }
