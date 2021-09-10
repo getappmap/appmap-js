@@ -98,7 +98,7 @@ __metadata:
     w3c-xmlserializer: ^2.0.0
     yargs: ^17.0.1
   bin:
-    appmap: built/cli.js
+    appmap: built/src/cli.js
   languageName: unknown
   linkType: soft
 
