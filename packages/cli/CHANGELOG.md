@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.3.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.3.1...@appland/appmap-v3.3.2) (2021-09-10)
+
+
+### Bug Fixes
+
+* Fixed an issue where install-agent quit before rresolving all promises ([8c42539](https://github.com/applandinc/appmap-js/commit/8c42539926e05f1498676b9d844e0a4b6b92d75a))
+
 # [@appland/appmap-v3.3.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.3.0...@appland/appmap-v3.3.1) (2021-09-10)
 
 
