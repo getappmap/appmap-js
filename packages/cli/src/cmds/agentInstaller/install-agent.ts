@@ -153,7 +153,7 @@ export const handler = async (argv) => {
     }
 
     if (err instanceof AbortError) {
-      Telemetry.sendEvent({
+      await Telemetry.sendEvent({
         name: 'install-agent:abort',
         properties: {
           installer: installer?.name,
@@ -175,7 +175,7 @@ export const handler = async (argv) => {
       exception = String(err);
     }
 
-    Telemetry.sendEvent({
+    await Telemetry.sendEvent({
       name: 'install-agent:failure',
       properties: {
         installer: installer?.name,

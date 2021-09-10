@@ -130,6 +130,7 @@ export default class Telemetry {
   private static _session?: Session;
   private static _client?: TelemetryClient;
   private static debug = process.env.APPMAP_TELEMETRY_DEBUG !== undefined;
+  private static enabled = process.env.APPMAP_TELEMETRY_DISABLED === undefined;
   public static readonly machineId = getMachineId();
 
   static get session(): Session {
@@ -170,46 +171,54 @@ export default class Telemetry {
     return this._client;
   }
 
-  static sendEvent(data: TelemetryData): void {
-    try {
-      const transformedProperties = transformProps(data.properties || {});
-      const transformedMetrics = transformProps(data.metrics || {});
-      const properties = {
-        'common.source': name,
-        'common.os': os.platform(),
-        'common.platformversion': os.release(),
-        'common.arch': os.arch(),
-        'appmap.cli.version': version,
-        'appmap.cli.machineId': Telemetry.machineId,
-        'appmap.cli.sessionId': Telemetry.session.id,
-        'appmap.cli.args': process.argv.slice(1).join(' '),
-        ...transformedProperties,
-      };
-
-      const event = {
-        name: `${name}/${data.name}`,
-        measurements: transformedMetrics,
-        properties,
-      };
-
-      Telemetry.client.trackEvent(event);
-      Telemetry.client.flush();
-
-      if (this.debug) {
-        console.log(JSON.stringify(event, null, 2));
-      }
-
-      Telemetry.session.touch();
-    } catch (e) {
-      // Don't let telemetry fail the entire command
-      // Do nothing other than log for now, we can't do anything about it
-      if (this.debug) {
-        if (e instanceof Error) {
-          console.error(e.stack);
-        } else {
-          console.error(e);
-        }
-      }
+  static async sendEvent(data: TelemetryData): Promise<void> {
+    if (!this.enabled) {
+      return Promise.resolve();
     }
+
+    return new Promise((resolve) => {
+      try {
+        const transformedProperties = transformProps(data.properties || {});
+        const transformedMetrics = transformProps(data.metrics || {});
+        const properties = {
+          'common.source': name,
+          'common.os': os.platform(),
+          'common.platformversion': os.release(),
+          'common.arch': os.arch(),
+          'appmap.cli.version': version,
+          'appmap.cli.machineId': Telemetry.machineId,
+          'appmap.cli.sessionId': Telemetry.session.id,
+          'appmap.cli.args': process.argv.slice(1).join(' '),
+          ...transformedProperties,
+        };
+
+        const event = {
+          name: `${name}/${data.name}`,
+          measurements: transformedMetrics,
+          properties,
+        };
+
+        Telemetry.client.trackEvent(event);
+        Telemetry.client.flush({ callback: () => resolve() });
+
+        if (this.debug) {
+          console.log(JSON.stringify(event, null, 2));
+        }
+
+        Telemetry.session.touch();
+      } catch (e) {
+        // Don't let telemetry fail the entire command
+        // Do nothing other than log for now, we can't do anything about it
+        if (this.debug) {
+          if (e instanceof Error) {
+            console.error(e.stack);
+          } else {
+            console.error(e);
+          }
+        }
+
+        resolve();
+      }
+    });
   }
 }
