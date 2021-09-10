@@ -8,6 +8,9 @@ import { verbose } from '../../utils';
 import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
 import UI from './userInteraction';
+import Telemetry from '../../telemetry';
+import AgentInstaller from './agentInstaller';
+import { ProcessLog } from './commandRunner';
 
 const AGENT_INSTALLERS = {
   java: JavaAgentInstaller,
@@ -67,9 +70,12 @@ export const builder = (args) => {
 
 export const handler = async (argv) => {
   verbose(argv.verbose);
+  const startTime = Date.now();
+  const endTime = () => (Date.now() - startTime) / 1000;
+  const { projectType, dir } = argv;
+  let installer: AgentInstaller | undefined;
 
-  const commandFn = async () => {
-    const { projectType, dir } = argv;
+  try {
     let installTarget = projectType;
     if (!installTarget) {
       const { result } = await UI.prompt({
@@ -96,7 +102,7 @@ export const handler = async (argv) => {
             supportedTargetsMessage(),
           ].join('\n')
         );
-        process.exit(1);
+        throw new AbortError(`unsupported installer type \'${installTarget}\'`);
       }
 
       // The user has specified a framework
@@ -104,17 +110,88 @@ export const handler = async (argv) => {
       installerFramework = installTarget;
     }
 
-    const installer = new AgentInstallerProcedure(installerOptions, dir);
-    await installer.run(installerFramework);
-  };
+    const installProcedure = new AgentInstallerProcedure(installerOptions, dir);
+    installer = await installProcedure.run(installerFramework);
 
-  return commandFn().catch((err) => {
+    Telemetry.sendEvent({
+      name: 'install-agent:success',
+      properties: {
+        installer: installer.name,
+      },
+      metrics: {
+        duration: endTime(),
+      },
+    });
+  } catch (err) {
+    let installersAvailable: string | undefined;
+    try {
+      // Map installers to their available status, e.g.,
+      // { maven: true, gradle: false, pip: false }
+      const installerStatuses = await Promise.all(
+        Object.entries(AGENT_FRAMEWORK_INSTALLERS).map(
+          async ([name, info]: [
+            string,
+            { installerFramework: new (...args: any[]) => AgentInstaller }
+          ]) => {
+            const framework = new info.installerFramework(dir);
+            return [name, await framework.available()];
+          }
+        )
+      );
+
+      // Join the available installers into a string
+      installersAvailable = installerStatuses
+        .filter(([_, available]) => available)
+        .map(([name]) => name)
+        .join(', ');
+    } catch (e) {
+      if (e instanceof Error) {
+        installersAvailable = e.stack;
+      } else {
+        installersAvailable = String(e);
+      }
+    }
+
+    if (err instanceof AbortError) {
+      Telemetry.sendEvent({
+        name: 'install-agent:abort',
+        properties: {
+          installer: installer?.name,
+          installers_available: installersAvailable,
+          reason: err.message,
+        },
+        metrics: {
+          duration: endTime(),
+        },
+      });
+
+      process.exit(2);
+    }
+
+    let exception: string | undefined;
+    if (err instanceof Error) {
+      exception = err.stack;
+    } else {
+      exception = String(err);
+    }
+
+    Telemetry.sendEvent({
+      name: 'install-agent:failure',
+      properties: {
+        installer: installer?.name,
+        installers_available: installersAvailable,
+        exception_type: (err as any)?.constructor?.name,
+        log: ProcessLog.buffer,
+        exception,
+      },
+      metrics: {
+        duration: endTime(),
+      },
+    });
+
     if (err instanceof ValidationError) {
       console.warn(err.message);
       return process.exit(1);
-    }
-    if (err instanceof AbortError) {
-      return process.exit(2);
     }
 
     if (verbose()) {
@@ -126,5 +203,5 @@ export const handler = async (argv) => {
         )} flag (${chalk.red('-v')}).`
       );
     }
-  });
+  }
 };

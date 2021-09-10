@@ -4,11 +4,16 @@ import tmp from 'tmp';
 import sinon from 'sinon';
 import inquirer from 'inquirer';
 import { handler as invokeCli } from '../../../src/cmds/agentInstaller/install-agent';
+import Telemetry from '../../../src/telemetry';
 
 const fixtureDir = path.join(__dirname, '..', 'fixtures', 'java');
 tmp.setGracefulCleanup();
 
 describe('install-agent sub-command', () => {
+  beforeEach(() => {
+    sinon.stub(Telemetry);
+  });
+
   afterEach(() => {
     sinon.restore();
   });
