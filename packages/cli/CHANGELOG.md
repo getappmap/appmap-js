@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.3.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.3.0...@appland/appmap-v3.3.1) (2021-09-10)
+
+
+### Bug Fixes
+
+* Update path of bin script ([da8e666](https://github.com/applandinc/appmap-js/commit/da8e666512d4ff2774fcc65c797686616ba7059e))
+
 # [@appland/appmap-v3.3.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.2.4...@appland/appmap-v3.3.0) (2021-09-10)
 
 
