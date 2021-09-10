@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.3.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.2.4...@appland/appmap-v3.3.0) (2021-09-10)
+
+
+### Features
+
+* Add telemetry reporting to install-agent results ([d555249](https://github.com/applandinc/appmap-js/commit/d5552493ce2685befaa76df6f36b4075aa50ad8b))
+
 # [@appland/appmap-v3.2.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.2.3...@appland/appmap-v3.2.4) (2021-09-09)
 
 
