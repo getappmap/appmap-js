@@ -14,8 +14,53 @@ import UI from './userInteraction';
 import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
 import AbortError from './abortError';
 
-export class MavenInstaller implements AgentInstaller {
-  constructor(readonly path: string) {}
+abstract class JavaBuildToollInstaller {
+  private _agentJar?: string;
+
+  protected abstract printJarPathCommand(): Promise<CommandStruct>;
+  protected constructor(readonly path: string) {
+    this.path = path;
+  }
+
+  async initCommand(): Promise<CommandStruct> {
+    return new CommandStruct(
+      'java',
+      ['-jar', await this.agentJar(), '-d', this.path, 'init'],
+      this.path
+    );
+  }
+
+  async validateAgentCommand(): Promise<CommandStruct> {
+    return new CommandStruct(
+      'java',
+      ['-jar', await this.agentJar(), '-d', this.path, 'validate'],
+      this.path
+    );
+  }
+
+  private async agentJar(): Promise<string> {
+    if (!this._agentJar) {
+      const cmd = await this.printJarPathCommand();
+      const { stdout } = await run(cmd);
+
+      this._agentJar = stdout
+        .split('\n')
+        .filter((l) => l.match(/^com\.appland:appmap-agent\.jar.path/))[0]
+        .split('=')[1];
+    }
+
+    return this._agentJar!;
+  }
+
+}
+
+export class MavenInstaller
+  extends JavaBuildToollInstaller
+  implements AgentInstaller
+{
+  constructor(readonly path: string) {
+    super(path);
+  }
 
   get name(): string {
     return 'Maven';
@@ -73,22 +118,10 @@ export class MavenInstaller implements AgentInstaller {
     );
   }
 
-  async initCommand(): Promise<CommandStruct> {
-    const cmd = new CommandStruct(
+  async printJarPathCommand(): Promise<CommandStruct> {
+    return new CommandStruct(
       await this.runCommand(),
       ['appmap:print-jar-path'],
-      this.path
-    );
-
-    const { stdout } = await run(cmd);
-    const appmapPath = stdout
-      .split('\n')
-      .filter((l) => l.match(/^com\.appland:appmap-agent\.jar.path/))[0]
-      .split('=')[1];
-
-    return new CommandStruct(
-      'java',
-      ['-jar', appmapPath, '-d', this.path, 'init'],
       this.path
     );
   }
@@ -190,8 +223,13 @@ export class MavenInstaller implements AgentInstaller {
   }
 }
 
-export class GradleInstaller implements AgentInstaller {
-  constructor(readonly path: string) {}
+export class GradleInstaller
+  extends JavaBuildToollInstaller
+  implements AgentInstaller
+{
+  constructor(readonly path: string) {
+    super(path);
+  }
 
   get name(): string {
     return 'Gradle';
@@ -203,6 +241,14 @@ export class GradleInstaller implements AgentInstaller {
 
   get buildFilePath(): string {
     return join(this.path, this.buildFile);
+  }
+
+  async printJarPathCommand(): Promise<CommandStruct> {
+    return new CommandStruct(
+      await this.runCommand(),
+      ['appmap-print-jar-path'],
+      this.path
+    );
   }
 
   async postInstallMessage(): Promise<string> {
@@ -249,26 +295,6 @@ export class GradleInstaller implements AgentInstaller {
         '--configuration',
         'appmapAgent',
       ],
-      this.path
-    );
-  }
-
-  async initCommand(): Promise<CommandStruct> {
-    const cmd = new CommandStruct(
-      await this.runCommand(),
-      ['-q', 'appmap-print-jar-path'],
-      this.path
-    );
-
-    const { stdout } = await run(cmd);
-    const appmapPath = stdout
-      .split('\n')
-      .filter((l) => l.match(/^com\.appland:appmap-agent\.jar.path/))[0]
-      .split('=')[1];
-
-    return new CommandStruct(
-      'java',
-      ['-jar', appmapPath, '-d', this.path, 'init'],
       this.path
     );
   }

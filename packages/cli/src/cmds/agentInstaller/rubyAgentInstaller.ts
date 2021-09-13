@@ -28,7 +28,7 @@ export class BundleInstaller implements AgentInstaller {
     return join(this.path, this.buildFile);
   }
 
-  postInstallMessage(): string {
+  async postInstallMessage(): Promise<string> {
     return [
       `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
       `AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
@@ -67,10 +67,18 @@ export class BundleInstaller implements AgentInstaller {
     await run(new CommandStruct('bundle', ['install'], this.path));
   }
 
-  initCommand(): CommandStruct {
+  async initCommand(): Promise<CommandStruct> {
     return new CommandStruct(
       'bundle',
       ['exec', 'appmap-agent-init'],
+      this.path
+    );
+  }
+
+  async validateAgentCommand(): Promise<CommandStruct> {
+    return new CommandStruct(
+      'bundle',
+      ['exec', 'appmap-agent-validate'],
       this.path
     );
   }

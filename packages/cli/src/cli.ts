@@ -438,7 +438,7 @@ yargs(process.argv.slice(2))
           output: process.stdout,
         });
         rl.on('close', function () {
-          process.exit(0);
+          yargs.exit(0, new Error());
         });
 
         const home = () => {

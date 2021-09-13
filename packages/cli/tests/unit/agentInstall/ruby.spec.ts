@@ -30,7 +30,7 @@ describe('Ruby Agent Installation', () => {
     });
 
     it('provides the correct init command', async () => {
-      const cmdStruct = btInstaller.initCommand();
+      const cmdStruct = await btInstaller.initCommand();
       expect(cmdStruct.program).toBe('bundle');
       expect(cmdStruct.args).toEqual(['exec', 'appmap-agent-init']);
     });

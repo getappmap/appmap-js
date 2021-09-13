@@ -18,4 +18,9 @@ export default class CommandStruct {
   }
 }
 
+export type CommandReturn = {
+  stdout: string;
+  stderr: string;
+};
+
 module.exports = CommandStruct;

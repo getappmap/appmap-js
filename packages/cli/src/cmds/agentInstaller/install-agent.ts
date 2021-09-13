@@ -12,6 +12,8 @@ import Telemetry from '../../telemetry';
 import AgentInstaller from './agentInstaller';
 import { ProcessLog } from './commandRunner';
 
+import Yargs from 'yargs';
+
 const AGENT_INSTALLERS = {
   java: JavaAgentInstaller,
   ruby: RubyAgentInstaller,
@@ -165,7 +167,7 @@ export const handler = async (argv) => {
         },
       });
 
-      process.exit(2);
+      Yargs.exit(2, err);
     }
 
     let exception: string | undefined;
@@ -191,7 +193,7 @@ export const handler = async (argv) => {
 
     if (err instanceof ValidationError) {
       console.warn(err.message);
-      return process.exit(1);
+      return Yargs.exit(1, err);
     }
 
     if (verbose()) {
@@ -203,5 +205,6 @@ export const handler = async (argv) => {
         )} flag (${chalk.red('-v')}).`
       );
     }
-  }
+    Yargs.exit(3, err);
+  };
 };

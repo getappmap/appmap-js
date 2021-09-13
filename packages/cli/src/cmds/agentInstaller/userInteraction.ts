@@ -50,6 +50,10 @@ export class UserInteraction {
   }
 
   set status(value: string) {
+    if (this.spinner.isSpinning) {
+      this.spinner.succeed();
+    }
+    
     this.spinner.text = value;
     if (!this.spinner.isSpinning && !verbose()) {
       this.spinner.start();
