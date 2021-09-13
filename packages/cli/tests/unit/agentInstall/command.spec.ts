@@ -11,7 +11,7 @@ import CommandStruct, {
   CommandReturn,
 } from '../../../src/cmds/agentInstaller/commandStruct';
 
-import UI from '../../../src/cmds/agentInstaller/userInteraction';
+import UI from '../../../src/cmds/userInteraction';
 
 const fixtureDir = path.join(__dirname, '..', 'fixtures');
 tmp.setGracefulCleanup();
