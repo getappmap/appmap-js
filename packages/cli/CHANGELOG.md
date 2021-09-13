@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.4.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.3.2...@appland/appmap-v3.4.0) (2021-09-13)
+
+
+### Features
+
+* Add validation step after install ([18effec](https://github.com/applandinc/appmap-js/commit/18effec0a4e121d24bfbfc38c6cdc1f9fcbd7b84))
+
 # [@appland/appmap-v3.3.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.3.1...@appland/appmap-v3.3.2) (2021-09-10)
 
 
