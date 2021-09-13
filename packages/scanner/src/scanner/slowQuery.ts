@@ -8,6 +8,7 @@ export default function (
 ): Assertion {
   return Assertion.assert(
     'slow-query',
+    'Slow SQL queries',
     'sql_query',
     (e: Event) => e.elapsedTime! < timeAllowed,
     (assertion: Assertion): void => {

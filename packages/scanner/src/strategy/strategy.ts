@@ -34,6 +34,7 @@ export default abstract class Strategy {
         matches.push({
           appMapName: appMap.metadata.name,
           scannerId: assertion.id,
+          scannerTitle: assertion.summaryTitle,
           event: e,
           condition: assertion.description || assertion.assert.toString(),
         });

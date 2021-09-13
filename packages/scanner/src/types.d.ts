@@ -13,6 +13,7 @@ export interface AssertionMatch {
   appMapName: string;
   appMapFile?: string;
   scannerId: string;
+  scannerTitle: string;
   event: Event;
   condition: string;
 }

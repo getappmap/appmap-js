@@ -7,6 +7,7 @@ import { Scope } from 'src/types';
 
 interface BaseConfig {
   readonly id?: string;
+  readonly summaryTitle: string;
   readonly include?: string[];
   readonly exclude?: string[];
   readonly description?: string;
@@ -45,7 +46,7 @@ function populateAssertion(assertion: Assertion, config: BaseConfig): void {
 
 async function buildCustomAssertion(config: CustomAssertionConfig): Promise<Assertion> {
   const assert = new Script(config.assert);
-  const assertion = new Assertion(config.name, config.scope, (event, appMap) =>
+  const assertion = new Assertion(config.name, config.summaryTitle, config.scope, (event, appMap) =>
     assert.runInNewContext({ event, appMap })
   );
   if (config.where) {

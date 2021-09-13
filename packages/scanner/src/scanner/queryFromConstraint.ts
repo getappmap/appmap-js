@@ -6,6 +6,7 @@ const WHITELIST = [/BEGIN/, /COMMIT/, /ROLLBACK/, /RELEASE/, /SAVEPOINT/];
 export default function (parentPackages: string[], whitelist: RegExp[] = []): Assertion {
   return Assertion.assert(
     'query-from-invalid-package',
+    'Queries from invalid packages',
     'event',
     (e: Event) => parentPackages.includes(e.parent!.codeObject.packageOf),
     (assertion: Assertion): void => {

@@ -64,6 +64,7 @@ export default function (options: Options = new Options()): Assertion {
 
   return Assertion.assert(
     'n-plus-one-query',
+    'Duplicate SQL queries',
     'sql_query',
     (event: Event, appMap: AppMap) => findDuplicates(event, appMap) < options.limit.warning,
     (assertion: Assertion): void => {

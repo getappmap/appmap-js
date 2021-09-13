@@ -8,18 +8,24 @@ export default class Assertion {
 
   static assert(
     id: string,
+    summaryTitle: string,
     scope: Scope,
     assert: EventFilter,
     cb?: (assertion: Assertion) => void
   ): Assertion {
-    const assertion = new Assertion(id, scope, assert);
+    const assertion = new Assertion(id, summaryTitle, scope, assert);
     if (cb) {
       cb(assertion);
     }
     return assertion;
   }
 
-  constructor(public id: string, public scope: Scope, public assert: EventFilter) {
+  constructor(
+    public id: string,
+    public summaryTitle: string,
+    public scope: Scope,
+    public assert: EventFilter
+  ) {
     this.include = [];
     this.exclude = [];
   }

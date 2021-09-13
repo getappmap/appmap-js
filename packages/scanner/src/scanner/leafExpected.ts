@@ -5,6 +5,7 @@ import Assertion from '../assertion';
 export default function (scope: Scope, where: ((e: Event) => boolean) | null = null): Assertion {
   return Assertion.assert(
     'leaf-expected',
+    'Unexpected child events',
     scope,
     (e: Event) => e.children.length === 0,
     (assertion: Assertion): void => {
