@@ -1,9 +1,8 @@
 import { ChildProcess, exec, execSync } from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
-import CommandStruct, {CommandReturn} from './commandStruct';
+import CommandStruct, { CommandReturn } from './commandStruct';
 import { verbose } from '../../utils';
-import { Duplex } from 'stream';
 
 export class ProcessLog {
   public static buffer: string = '';
@@ -11,10 +10,10 @@ export class ProcessLog {
   public static log(command: string, childProcess: ChildProcess) {
     this.buffer.concat(`\n\nRunning command: \`${command}\`\n\n`);
     childProcess.stdout?.on('data', (data: string) => {
-      this.buffer.concat(data);
+      this.buffer = this.buffer.concat(data);
     });
     childProcess.stderr?.on('data', (data: string) => {
-      this.buffer.concat(data);
+      this.buffer = this.buffer.concat(data);
     });
   }
 
@@ -29,9 +28,7 @@ export class ProcessLog {
   }
 }
 
-export async function run(
-  command: CommandStruct
-): Promise<CommandReturn> {
+export async function run(command: CommandStruct): Promise<CommandReturn> {
   return new Promise((resolve, reject) => {
     const cp = exec(command.toString(), {
       env: command.environment,
