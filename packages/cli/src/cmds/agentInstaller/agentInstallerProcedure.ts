@@ -90,7 +90,12 @@ export default class AgentInstallerProcedure {
         message.push(
           `${chalk.red(
             buildFile
-          )} was expected to be found at this path, but none could be located.`
+          )} was expected to be found at this path, but none could be located.`,
+          '',
+          `Switch the current directory or specify a directory using the ${chalk.blue(
+            '-d'
+          )} or ${chalk.blue('--dir')} command line argument.`,
+          `Use ${chalk.blue('--help')} for more information.`
         );
       }
 
