@@ -163,41 +163,34 @@ exports.validate = (data, options) => {
   {
     const threads = new Map();
     const ids = new Map();
+    let max = 0;
     for (let index = 0; index < events.length; index += 1) {
       const event = events[index];
       assert(
-        !ids.has(event.id),
+        event.id > max,
         AppmapError,
-        "duplicate event id between #%i and #%i",
-        index,
-        ids.get(index)
+        "non-monotonous event id between #%i and #%i",
+        event.id,
+        max
       );
+      max = event.id;
       ids.set(event.id, index);
       let thread = threads.get(event.thread_id);
       if (thread === undefined) {
-        thread = { stack: [], counter: 0 };
+        thread = [];
         threads.set(event.thread_id, thread);
       }
-      thread.counter += 1;
-      assert(
-        event.id === thread.counter,
-        AppmapError,
-        "expected id of event #%i to be %i but got %i",
-        index,
-        thread.counter,
-        event.id
-      );
       if (event.event === "call") {
         // console.log(new Array(thread.length).join("."), event.id);
-        thread.stack.push(event);
+        thread.push(event);
       } else {
-        const parent = thread.stack.pop();
+        const parent = thread.pop();
         // console.log(new Array(thread.length).join("."), event.id, event.parent_id);
         assert(
           parent.id === event.parent_id,
           AppmapError,
           "expected parent id of return event #%i to be %i but got %i",
-          index,
+          event.id,
           parent.id,
           event.parent_id
         );
@@ -207,6 +200,8 @@ exports.validate = (data, options) => {
           tag2.includes(tag1),
           AppmapError,
           "incompatible event type between #%i and #%i, expected a %s but got a %s",
+          event.id,
+          event.parent_id,
           tag1,
           tag2
         );
