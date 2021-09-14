@@ -134,7 +134,13 @@ exports.validate = (data, options) => {
         //   path1,
         //   entity
         // );
-        const designator = makeDesignator([parent.name, path2, parseInt(lineno), entity.static, entity.name]);
+        const designator = makeDesignator([
+          parent.name,
+          path2,
+          parseInt(lineno),
+          entity.static,
+          entity.name,
+        ]);
         assert(
           !designators.has(designator),
           AppmapError,
@@ -173,13 +179,15 @@ exports.validate = (data, options) => {
         threads.set(event.thread_id, thread);
       }
       if (event.event === "call") {
+        console.log(new Array(thread.length).join("."), event.id);
         thread.push(event);
       } else {
         const parent = thread.pop();
+        console.log(new Array(thread.length).join("."), event.id, event.parent_id);
         assert(
           parent.id === event.parent_id,
           AppmapError,
-          "return event #%i parent id mistmatch: expected %i but got %i",
+          "return event #%i parent id mismatch: expected %i but got %i",
           index,
           parent.id,
           event.parent_id
