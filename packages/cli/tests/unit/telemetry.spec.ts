@@ -9,7 +9,7 @@ const invalidExpiration = () => Date.now() - 1000 * 60 * 60;
 
 describe('telemetry', () => {
   beforeAll(() => {
-    // Don't acidentally send data
+    // Don't accidentally send data
     sinon.stub(Telemetry, 'client').value({
       trackEvent: sinon.stub(),
     });
@@ -66,6 +66,10 @@ describe('telemetry', () => {
   });
 
   describe('Telemetry', () => {
+    beforeEach(() => {
+      sandbox.stub(Telemetry, 'enabled').get(() => true);
+    });
+
     it('sends the expected telemetry data', () => {
       const trackEvent = Telemetry.client.trackEvent as sinon.SinonStub;
       Telemetry.sendEvent({

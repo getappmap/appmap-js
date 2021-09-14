@@ -130,9 +130,13 @@ export default class Telemetry {
   private static _session?: Session;
   private static _client?: TelemetryClient;
   private static debug = process.env.APPMAP_TELEMETRY_DEBUG !== undefined;
-  private static enabled = process.env.APPMAP_TELEMETRY_DISABLED === undefined;
+  private static _enabled = process.env.APPMAP_TELEMETRY_DISABLED === undefined;
   public static readonly machineId = getMachineId();
 
+  static get enabled(): boolean {
+    return this._enabled
+  }
+  
   static get session(): Session {
     if (!this._session?.valid) {
       this._session = Session.issue();
