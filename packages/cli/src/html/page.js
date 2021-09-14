@@ -7,6 +7,7 @@ require('@appland/diagrams/dist/style.css');
 Vue.use(Vuex);
 Vue.use(plugin);
 
+// eslint-disable-next-line no-unused-vars
 const app = new Vue({
   el: '#app',
   render: (h) =>
@@ -19,11 +20,13 @@ const app = new Vue({
   mounted() {
     const { ui } = this.$refs;
 
-    // Load your appmap.json here
-    ui.loadData({});
-  },
-});
+    const params = new URL(document.location).searchParams;
+    const appmap = params.get('appmap');
 
-app.$on('viewSource', () => {
-  // do something
+    if (appmap) {
+      ui.loadData(appmap);
+    } else {
+      ui.loadData({});
+    }
+  },
 });

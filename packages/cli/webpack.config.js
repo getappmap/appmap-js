@@ -5,7 +5,7 @@ const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 
 module.exports = {
   target: 'web',
-  entry: './src/html.js',
+  entry: './src/html/page.js',
   output: {
     path: path.join(__dirname, '/built'),
   },
@@ -21,6 +21,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'appmap.html',
+      template: './src/html/template.html',
       title: 'Appmap Viewer',
       inject: 'body',
     }),
