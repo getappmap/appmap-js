@@ -4,7 +4,7 @@ import { glob as globCallback } from 'glob';
 import { promisify } from 'util';
 import sinon from 'sinon';
 import inquirer from 'inquirer';
-import { GradleInstaller } from '../../../src/cmds/agentInstaller/javaAgentInstaller';
+import { GradleInstaller } from '../../../src/cmds/agentInstaller/gradleInstaller';
 
 const glob = promisify(globCallback);
 const fixtureDir = path.join(__dirname, '..', 'fixtures', 'java', 'gradle');
