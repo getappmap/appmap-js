@@ -12,7 +12,7 @@ import { run } from './commandRunner';
 import { verbose, exists } from '../../utils';
 import UI from './userInteraction';
 import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
-import AbortError from './abortError';
+import { AbortError } from './errors';
 
 abstract class JavaBuildToollInstaller {
   private _agentJar?: string;
@@ -51,7 +51,6 @@ abstract class JavaBuildToollInstaller {
 
     return this._agentJar!;
   }
-
 }
 
 export class MavenInstaller
