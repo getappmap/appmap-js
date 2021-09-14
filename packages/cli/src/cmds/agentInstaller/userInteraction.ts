@@ -42,7 +42,9 @@ export class UserInteraction {
       this.spinner.fail();
     }
 
-    console.error('\n' + msg);
+    if (msg) {
+      console.error('\n', msg);
+    }
   }
 
   get status(): string {
@@ -53,7 +55,7 @@ export class UserInteraction {
     if (this.spinner.isSpinning) {
       this.spinner.succeed();
     }
-    
+
     this.spinner.text = value;
     if (!this.spinner.isSpinning && !verbose()) {
       this.spinner.start();

@@ -1,7 +1,7 @@
 import { ChildProcess, exec, execSync } from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
-import CommandStruct, { CommandReturn } from './commandStruct';
+import CommandStruct, { CommandOutput, CommandReturn } from './commandStruct';
 import { verbose } from '../../utils';
 
 export class ProcessLog {

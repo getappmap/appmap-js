@@ -9,6 +9,7 @@ import chalk from 'chalk';
 import CommandStruct from './commandStruct';
 import AgentInstaller from './agentInstaller';
 import { run } from './commandRunner';
+import { getOutput } from './commandUtil';
 import { verbose, exists } from '../../utils';
 import UI from './userInteraction';
 import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
@@ -50,6 +51,18 @@ abstract class JavaBuildToollInstaller {
     }
 
     return this._agentJar!;
+  }
+
+  async environment(): Promise<Record<string, string>> {
+    // JDK version is returned as a string similar to:
+    // javac 1.8.0_212-internal (build 1.8.0_212-internal+11)
+    const version = await getOutput('javac', ['-version'], this.path);
+    return {
+      JAVA_HOME: process.env.JAVA_HOME || chalk.yellow('Unspecified'),
+      'JDK Version': version.ok
+        ? version.output.split(/\s/)[1]
+        : chalk.red(version.output),
+    };
   }
 }
 

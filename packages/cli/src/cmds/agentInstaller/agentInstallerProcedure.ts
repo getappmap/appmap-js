@@ -5,7 +5,7 @@ import Yargs from 'yargs';
 
 import { exists } from '../../utils';
 import AgentInstaller from './agentInstaller';
-import { ValidationError } from './errors';
+import { AbortError, ValidationError } from './errors';
 import { run } from './commandRunner';
 import UI from './userInteraction';
 import { InstallError } from './errors';
@@ -79,6 +79,66 @@ export default class AgentInstallerProcedure {
     }
 
     try {
+      let writeAppMapYml = true;
+      if (await exists(join(this.path, 'appmap.yml'))) {
+        const USE_EXISTING = 'Use existing';
+        const OVERWRITE = 'Overwrite';
+        const ABORT = 'Abort';
+
+        const { overwriteAppMapYml } = await UI.prompt({
+          type: 'list',
+          name: 'overwriteAppMapYml',
+          message:
+            'An appmap.yml configuration file already exists. How should the conflict be resolved?',
+          choices: [USE_EXISTING, OVERWRITE, ABORT],
+        });
+
+        if (overwriteAppMapYml === ABORT) {
+          Yargs.exit(0, new Error());
+        }
+
+        if (overwriteAppMapYml === USE_EXISTING) {
+          writeAppMapYml = false;
+        }
+      }
+
+      let env = {
+        'Project type': installer.name,
+        'Project directory': resolve(this.path),
+      };
+
+      if (installer.environment) {
+        env = { ...env, ...(await installer.environment()) };
+      }
+
+      const { confirm } = await UI.prompt({
+        type: 'confirm',
+        name: 'confirm',
+        message: [
+          `AppMap is about to be installed. Confirm the details below.`,
+          Object.entries(env).map(
+            ([key, value]) => `  ${chalk.blue(key)}: ${value.trim()}`
+          ),
+          '',
+          '  Is this correct?',
+        ]
+          .flat()
+          .join('\n'),
+      });
+
+      if (!confirm) {
+        UI.status = 'Aborting installation.';
+        UI.error(
+          [
+            'Modify the installation environment as needed, and re-run the command.',
+            `Use ${chalk.blue('--help')} for more information.`,
+          ].join('\n')
+        );
+        throw new AbortError(
+          'aborted while confirming installation environment'
+        );
+      }
+
       if (!availableInstallers.includes(installer)) {
         const projectPath = chalk.red(resolve(this.path));
         const { name, buildFile } = installer;
@@ -102,29 +162,6 @@ export default class AgentInstallerProcedure {
         }
 
         throw new ValidationError(message.join('\n'));
-      }
-
-      let writeAppMapYml = true;
-      if (await exists(join(this.path, 'appmap.yml'))) {
-        const USE_EXISTING = 'Use existing';
-        const OVERWRITE = 'Overwrite';
-        const ABORT = 'Abort';
-
-        const { overwriteAppMapYml } = await UI.prompt({
-          type: 'list',
-          name: 'overwriteAppMapYml',
-          message:
-            'An appmap.yml configuration file already exists. How should the conflict be resolved?',
-          choices: [USE_EXISTING, OVERWRITE, ABORT],
-        });
-
-        if (overwriteAppMapYml === ABORT) {
-          Yargs.exit(0, new Error());
-        }
-
-        if (overwriteAppMapYml === USE_EXISTING) {
-          writeAppMapYml = false;
-        }
       }
 
       UI.status = 'Installing the AppMap agent...';

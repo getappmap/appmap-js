@@ -18,9 +18,16 @@ export default class CommandStruct {
   }
 }
 
-export type CommandReturn = {
+export interface CommandReturn {
   stdout: string;
   stderr: string;
-};
+}
 
-module.exports = CommandStruct;
+/**
+ * A simplified interface where stdout/stderr are handled as a single string, with a flag indicating
+ * if the command succeeded or not.
+ */
+export interface CommandOutput {
+  output: string;
+  ok?: boolean;
+}
