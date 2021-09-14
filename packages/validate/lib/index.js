@@ -175,19 +175,28 @@ exports.validate = (data, options) => {
       ids.set(event.id, index);
       let thread = threads.get(event.thread_id);
       if (thread === undefined) {
-        thread = [];
+        thread = { stack: [], counter: 0 };
         threads.set(event.thread_id, thread);
       }
+      thread.counter += 1;
+      assert(
+        event.id === thread.counter,
+        AppmapError,
+        "expected id of event #%i to be %i but got %i",
+        index,
+        thread.counter,
+        event.id
+      );
       if (event.event === "call") {
-        console.log(new Array(thread.length).join("."), event.id);
-        thread.push(event);
+        // console.log(new Array(thread.length).join("."), event.id);
+        thread.stack.push(event);
       } else {
-        const parent = thread.pop();
-        console.log(new Array(thread.length).join("."), event.id, event.parent_id);
+        const parent = thread.stack.pop();
+        // console.log(new Array(thread.length).join("."), event.id, event.parent_id);
         assert(
           parent.id === event.parent_id,
           AppmapError,
-          "return event #%i parent id mismatch: expected %i but got %i",
+          "expected parent id of return event #%i to be %i but got %i",
           index,
           parent.id,
           event.parent_id
