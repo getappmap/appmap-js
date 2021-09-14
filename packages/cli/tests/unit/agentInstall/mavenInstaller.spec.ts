@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import { glob as globCallback } from 'glob';
 import { promisify } from 'util';
 import sinon from 'sinon';
-import { MavenInstaller } from '../../../src/cmds/agentInstaller/javaAgentInstaller';
+import { MavenInstaller } from '../../../src/cmds/agentInstaller/mavenInstaller';
 
 const glob = promisify(globCallback);
 const fixtureDir = path.join(__dirname, '..', 'fixtures', 'java', 'maven');
