@@ -43,9 +43,9 @@ function getMachineId(): string {
     .flat()
     .map((iface) => iface?.mac)
     .filter((mac) => mac && !invalidMacAddresses.has(mac))
-    .pop();
+    .shift();
 
-  if (!machineId) {
+  if (!machineIdSource) {
     // Fallback to a random string
     machineIdSource = randomBytes(32);
   }
@@ -136,7 +136,7 @@ export default class Telemetry {
   static get enabled(): boolean {
     return this._enabled
   }
-  
+
   static get session(): Session {
     if (!this._session?.valid) {
       this._session = Session.issue();
