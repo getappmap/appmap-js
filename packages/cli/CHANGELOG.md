@@ -1,3 +1,17 @@
+# [@appland/appmap-v3.5.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.4.1...@appland/appmap-v3.5.0) (2021-09-15)
+
+
+### Bug Fixes
+
+* `appland.cli.log` is now populated on failure ([916f84c](https://github.com/applandinc/appmap-js/commit/916f84ce2a6eb08ac463d8f37fbbc32bad2486fb))
+* Capture installer information upon failure ([6b01a9b](https://github.com/applandinc/appmap-js/commit/6b01a9b4b8f3e6cad8d6728682b767ccad3f2fa3))
+* Clarify steps to fix missing requirements ([e743176](https://github.com/applandinc/appmap-js/commit/e743176318369f4d887480bcce26869e95feea4b))
+
+
+### Features
+
+* Ask user to confirm installation environment ([17a802b](https://github.com/applandinc/appmap-js/commit/17a802b776b63b8eab5039b8d7905e430e9a8eaa))
+
 # [@appland/appmap-v3.4.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.4.0...@appland/appmap-v3.4.1) (2021-09-15)
 
 
