@@ -12,6 +12,7 @@ describe('telemetry', () => {
     // Don't accidentally send data
     sinon.stub(Telemetry, 'client').value({
       trackEvent: sinon.stub(),
+      flush: sinon.stub(),
     });
 
     // Don't persist data locally

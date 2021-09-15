@@ -7,6 +7,7 @@ import { join } from 'path';
 import { exists } from '../../utils';
 import AgentInstaller from './agentInstaller';
 import { run } from './commandRunner';
+import { getOutput } from './commandUtil';
 import CommandStruct from './commandStruct';
 
 const REGEX_GEM_DECLARATION = /(?!\s)(?:gem|group|require)\s/m;
@@ -81,6 +82,20 @@ export class BundleInstaller implements AgentInstaller {
       ['exec', 'appmap-agent-validate'],
       this.path
     );
+  }
+
+  async environment(): Promise<Record<string, string>> {
+    // Ruby version is returned as a string similar to:
+    // ruby 3.0.0p0 (2020-12-25 revision 95aff21468) [x86_64-linux]
+    const version = await getOutput('ruby', ['--version'], this.path);
+    const gemHome = await getOutput('gem', ['env', 'home'], this.path);
+
+    return {
+      'Ruby version': version.ok
+        ? version.output.split(/\s/)[1]
+        : chalk.red(version.output),
+      'Gem home': gemHome.ok ? gemHome.output : chalk.red(gemHome.output),
+    };
   }
 }
 

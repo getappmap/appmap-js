@@ -57,7 +57,7 @@ describe('install-agent sub-command', () => {
     // This bug https://github.com/sinonjs/sinon/issues/2384 acknowledges that
     // sinon.restore doesn't restore static methods. It suggests
     // sinon.restoreObject as a workaround, but restoreObject is currently
-    // missing from @types/sinon. 
+    // missing from @types/sinon.
     //
     // This hacks around both problems:
     sinon['restoreObject'](Telemetry);
@@ -66,6 +66,7 @@ describe('install-agent sub-command', () => {
 
   describe('A Java project', () => {
     const testE2E = async (
+      verifyJavaVersion: (command: CommandStruct) => Promise<CommandReturn>,
       verifyAgent: (command: CommandStruct) => Promise<CommandReturn>,
       printPath: (command: CommandStruct) => Promise<CommandReturn>,
       initAgent: (command: CommandStruct) => Promise<CommandReturn>,
@@ -75,6 +76,8 @@ describe('install-agent sub-command', () => {
       let callIdx = 0;
       sinon
         .stub(commandRunner, 'run')
+        .onCall(callIdx++)
+        .callsFake(verifyJavaVersion)
         .onCall(callIdx++)
         .callsFake(verifyAgent)
         .onCall(callIdx++)
@@ -122,6 +125,12 @@ describe('install-agent sub-command', () => {
       return Promise.resolve(ret);
     };
 
+    const verifyJavaVersion = (cmdStruct: CommandStruct) => {
+      expect(cmdStruct.program).toEqual('javac');
+      expect(cmdStruct.args).toEqual(['--version']);
+      return Promise.resolve({ stdout: '11.0.11', stderr: '' });
+    };
+
     describe('managed with gradle', () => {
       const projectFixture = path.join(
         fixtureDir,
@@ -158,9 +167,11 @@ describe('install-agent sub-command', () => {
 
       beforeEach(() => {
         fs.copySync(projectFixture, projectDir);
-        sinon
-          .stub(inquirer, 'prompt')
-          .resolves({ addMavenCentral: 'Yes', result: 'Gradle' });
+        sinon.stub(inquirer, 'prompt').resolves({
+          addMavenCentral: 'Yes',
+          result: 'Gradle',
+          confirm: true,
+        });
       });
 
       it('installs as expected', async () => {
@@ -174,6 +185,7 @@ describe('install-agent sub-command', () => {
           expect(actualConfig).toEqual(expectedConfig);
         };
         await testE2E(
+          verifyJavaVersion,
           verifyAgent,
           printPath,
           initAgent,
@@ -190,6 +202,7 @@ describe('install-agent sub-command', () => {
         };
 
         await testE2E(
+          verifyJavaVersion,
           verifyAgent,
           printPath,
           initAgent,
@@ -232,7 +245,9 @@ describe('install-agent sub-command', () => {
 
       beforeEach(() => {
         fs.copySync(projectFixture, projectDir);
-        sinon.stub(inquirer, 'prompt').resolves({ result: 'Maven' });
+        sinon
+          .stub(inquirer, 'prompt')
+          .resolves({ result: 'Maven', confirm: true });
       });
 
       it('installs as expected', async () => {
@@ -246,6 +261,7 @@ describe('install-agent sub-command', () => {
           expect(actualConfig).toEqual(expectedConfig);
         };
         await testE2E(
+          verifyJavaVersion,
           verifyAgent,
           printPath,
           initAgent,
@@ -262,6 +278,7 @@ describe('install-agent sub-command', () => {
         };
 
         await testE2E(
+          verifyJavaVersion,
           verifyAgent,
           printPath,
           initAgent,
@@ -277,6 +294,7 @@ describe('install-agent sub-command', () => {
 
     beforeEach(() => {
       fs.copySync(projectFixture, projectDir);
+      sinon.stub(inquirer, 'prompt').resolves({ confirm: true });
     });
 
     const installAgent = (cmdStruct: CommandStruct) => {
@@ -285,7 +303,7 @@ describe('install-agent sub-command', () => {
       expect(args).toEqual(['install']);
       const ret = { stdout: '', stderr: '' };
       return Promise.resolve(ret);
-    };    
+    };
 
     const expectedConfig = `
 # Fake appmap.yml
@@ -316,7 +334,21 @@ packages:
       return Promise.resolve(ret);
     };
 
+    const rubyVersion = (cmdStruct: CommandStruct) => {
+      expect(cmdStruct.program).toEqual('ruby');
+      expect(cmdStruct.args).toEqual(['-v']);
+      return Promise.resolve({ stdout: 'ruby 2.5.1p57', stderr: '' });
+    };
+
+    const gemHome = (cmdStruct: CommandStruct) => {
+      expect(cmdStruct.program).toEqual('ruby');
+      expect(cmdStruct.args).toEqual(['-v']);
+      return Promise.resolve({ stdout: '/usr/local/gems', stderr: '' });
+    };
+
     const testE2E = async (
+      rubyVersion: (command: CommandStruct) => Promise<CommandReturn>,
+      gemHome: (command: CommandStruct) => Promise<CommandReturn>,
       installAgent: (command: CommandStruct) => Promise<CommandReturn>,
       initAgent: (command: CommandStruct) => Promise<CommandReturn>,
       validateAgent: (command: CommandStruct) => Promise<CommandReturn>,
@@ -325,6 +357,10 @@ packages:
       let callIdx = 0;
       sinon
         .stub(commandRunner, 'run')
+        .onCall(callIdx++)
+        .callsFake(rubyVersion)
+        .onCall(callIdx++)
+        .callsFake(gemHome)
         .onCall(callIdx++)
         .callsFake(installAgent)
         .onCall(callIdx++)
@@ -345,7 +381,14 @@ packages:
         );
         expect(actualConfig).toEqual(expectedConfig);
       };
-      await testE2E(installAgent, initAgent, validateAgent, evalResults);
+      await testE2E(
+        rubyVersion,
+        gemHome,
+        installAgent,
+        initAgent,
+        validateAgent,
+        evalResults
+      );
     });
 
     it('fails when validation fails', async () => {
@@ -355,21 +398,36 @@ packages:
         expect(err.message).toEqual(msg);
       };
 
-      await testE2E(installAgent, initAgent, failValidate, evalResults);
+      await testE2E(
+        rubyVersion,
+        gemHome,
+        installAgent,
+        initAgent,
+        failValidate,
+        evalResults
+      );
     });
   });
 
   describe('A Python project', () => {
     const testE2E = async (
+      pythonVersion: (command: CommandStruct) => Promise<CommandReturn>,
+      pythonPath: (command: CommandStruct) => Promise<CommandReturn>,
       installAgent: (command: CommandStruct) => Promise<CommandReturn>,
       initAgent: (command: CommandStruct) => Promise<CommandReturn>,
       evalResults: (err: Error | undefined, argv: any, output: string) => void
     ) => {
-
       let callIdx = 0;
-      sinon.stub(commandRunner, 'run')
-      .onCall(callIdx++).callsFake(installAgent)
-      .onCall(callIdx++).callsFake(initAgent);
+      sinon
+        .stub(commandRunner, 'run')
+        .onCall(callIdx++)
+        .callsFake(pythonVersion)
+        .onCall(callIdx++)
+        .callsFake(pythonPath)
+        .onCall(callIdx++)
+        .callsFake(installAgent)
+        .onCall(callIdx++)
+        .callsFake(initAgent);
 
       return invokeCommand(projectDir, 'Python', evalResults);
     };
@@ -381,12 +439,26 @@ packages:
 - fake_app
     `;
 
+    const pythonVersion = (cmdStruct: CommandStruct) => {
+      expect(cmdStruct.program).toEqual('python');
+      expect(cmdStruct.args).toEqual(['--version']);
+      return Promise.resolve({ stdout: 'Python 3.7.0', stderr: '' });
+    };
+
+    const pythonPath = (cmdStruct: CommandStruct) => {
+      expect(cmdStruct.program).toEqual('python');
+      expect(cmdStruct.args).toEqual(['-c', "'import sys; print(sys.prefix)'"]);
+      return Promise.resolve({ stdout: '/usr/local', stderr: '' });
+    };
+
     describe('managed with pip', () => {
       const projectFixture = path.join(fixtureDir, 'python', 'pip');
 
       beforeEach(() => {
         fs.copySync(projectFixture, projectDir);
-        sinon.stub(inquirer, 'prompt').resolves({ result: 'pip' });
+        sinon
+          .stub(inquirer, 'prompt')
+          .resolves({ result: 'pip', confirm: true });
       });
 
       const installAgent = (cmdStruct: CommandStruct) => {
@@ -419,7 +491,13 @@ packages:
           );
           expect(actualConfig).toEqual(expectedConfig);
         };
-        await testE2E(installAgent, initAgent, evalResults);
+        await testE2E(
+          pythonVersion,
+          pythonPath,
+          installAgent,
+          initAgent,
+          evalResults
+        );
       });
     });
 
@@ -428,16 +506,22 @@ packages:
 
       beforeEach(() => {
         fs.copySync(projectFixture, projectDir);
-        sinon.stub(inquirer, 'prompt').resolves({ result: 'poetry' });
+        sinon
+          .stub(inquirer, 'prompt')
+          .resolves({ result: 'poetry', confirm: true });
       });
 
       const installAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('poetry');
-        expect(cmdStruct.args).toEqual([ 'add', '--dev', '--allow-prereleases', 'appmap' ]);
+        expect(cmdStruct.args).toEqual([
+          'add',
+          '--dev',
+          '--allow-prereleases',
+          'appmap',
+        ]);
         const ret = { stdout: '', stderr: '' };
         return Promise.resolve(ret);
       };
-
 
       const initAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('poetry');
@@ -462,7 +546,13 @@ packages:
           );
           expect(actualConfig).toEqual(expectedConfig);
         };
-        await testE2E(installAgent, initAgent, evalResults);
+        await testE2E(
+          pythonVersion,
+          pythonPath,
+          installAgent,
+          initAgent,
+          evalResults
+        );
       });
     });
   });

@@ -5,9 +5,10 @@ import Yargs from 'yargs';
 
 import { exists } from '../../utils';
 import AgentInstaller from './agentInstaller';
-import ValidationError from './validationError';
+import { AbortError, ValidationError } from './errors';
 import { run } from './commandRunner';
 import UI from './userInteraction';
+import { InstallError } from './errors';
 
 type AgentInstallerConstructor = new (path: string) => AgentInstaller;
 
@@ -77,98 +78,144 @@ export default class AgentInstallerProcedure {
       throw new ValidationError(`Invalid selection`);
     }
 
-    if (!availableInstallers.includes(installer)) {
-      const projectPath = chalk.red(resolve(this.path));
-      const { name, buildFile } = installer;
-      const message = [
-        `No ${chalk.red(
-          name
-        )} project was able to be located at ${projectPath}.`,
-      ];
+    try {
+      let writeAppMapYml = true;
+      if (await exists(join(this.path, 'appmap.yml'))) {
+        const USE_EXISTING = 'Use existing';
+        const OVERWRITE = 'Overwrite';
+        const ABORT = 'Abort';
 
-      if (installer.buildFile) {
-        message.push(
-          `${chalk.red(
-            buildFile
-          )} was expected to be found at this path, but none could be located.`
+        const { overwriteAppMapYml } = await UI.prompt({
+          type: 'list',
+          name: 'overwriteAppMapYml',
+          message:
+            'An appmap.yml configuration file already exists. How should the conflict be resolved?',
+          choices: [USE_EXISTING, OVERWRITE, ABORT],
+        });
+
+        if (overwriteAppMapYml === ABORT) {
+          Yargs.exit(0, new Error());
+        }
+
+        if (overwriteAppMapYml === USE_EXISTING) {
+          writeAppMapYml = false;
+        }
+      }
+
+      let env = {
+        'Project type': installer.name,
+        'Project directory': resolve(this.path),
+      };
+
+      if (installer.environment) {
+        env = { ...env, ...(await installer.environment()) };
+      }
+
+      const { confirm } = await UI.prompt({
+        type: 'confirm',
+        name: 'confirm',
+        message: [
+          `AppMap is about to be installed. Confirm the details below.`,
+          Object.entries(env).map(
+            ([key, value]) => `  ${chalk.blue(key)}: ${value.trim()}`
+          ),
+          '',
+          '  Is this correct?',
+        ]
+          .flat()
+          .join('\n'),
+      });
+
+      if (!confirm) {
+        UI.status = 'Aborting installation.';
+        UI.error(
+          [
+            'Modify the installation environment as needed, and re-run the command.',
+            `Use ${chalk.blue('--help')} for more information.`,
+          ].join('\n')
+        );
+        throw new AbortError(
+          'aborted while confirming installation environment'
         );
       }
 
-      throw new ValidationError(message.join('\n'));
-    }
+      if (!availableInstallers.includes(installer)) {
+        const projectPath = chalk.red(resolve(this.path));
+        const { name, buildFile } = installer;
+        const message = [
+          `No ${chalk.red(
+            name
+          )} project was able to be located at ${projectPath}.`,
+        ];
 
-    let writeAppMapYml = true;
-    if (await exists(join(this.path, 'appmap.yml'))) {
-      const USE_EXISTING = 'Use existing';
-      const OVERWRITE = 'Overwrite';
-      const ABORT = 'Abort';
+        if (installer.buildFile) {
+          message.push(
+            `${chalk.red(
+              buildFile
+            )} was expected to be found at this path, but none could be located.`,
+            '',
+            `Switch the current directory or specify a directory using the ${chalk.blue(
+              '-d'
+            )} or ${chalk.blue('--dir')} command line argument.`,
+            `Use ${chalk.blue('--help')} for more information.`
+          );
+        }
 
-      const { overwriteAppMapYml } = await UI.prompt({
-        type: 'list',
-        name: 'overwriteAppMapYml',
-        message:
-          'An appmap.yml configuration file already exists. How should the conflict be resolved?',
-        choices: [USE_EXISTING, OVERWRITE, ABORT],
-      });
-
-      if (overwriteAppMapYml === ABORT) {
-        Yargs.exit(0, new Error());
+        throw new ValidationError(message.join('\n'));
       }
 
-      if (overwriteAppMapYml === USE_EXISTING) {
-        writeAppMapYml = false;
-      }
-    }
+      UI.status = 'Installing the AppMap agent...';
 
-    UI.status = 'Installing the AppMap agent...';
+      await installer.installAgent();
 
-    await installer.installAgent();
-
-    if (installer.verifyCommand) {
-      const cmd = await installer.verifyCommand();
-      await run(cmd);
-    }
-
-    if (writeAppMapYml) {
-      const initCommand = await installer.initCommand();
-      const { stdout } = await run(initCommand);
-      const json = JSON.parse(stdout);
-
-      await fs.writeFile(
-        join(this.path, 'appmap.yml'),
-        json.configuration.contents
-      );
-    }
-
-    if (installer.validateAgentCommand) {
-      UI.status = 'Validating the AppMap agent...';
-
-      const cmd = await installer.validateAgentCommand();
-      try {
+      if (installer.verifyCommand) {
+        const cmd = await installer.verifyCommand();
         await run(cmd);
-      } catch (e) {
-        UI.error('Failed to validate the installation.');
-        throw e;
       }
+
+      if (writeAppMapYml) {
+        const initCommand = await installer.initCommand();
+        const { stdout } = await run(initCommand);
+        const json = JSON.parse(stdout);
+
+        await fs.writeFile(
+          join(this.path, 'appmap.yml'),
+          json.configuration.contents
+        );
+      }
+
+      if (installer.validateAgentCommand) {
+        UI.status = 'Validating the AppMap agent...';
+
+        const cmd = await installer.validateAgentCommand();
+        try {
+          await run(cmd);
+        } catch (e) {
+          UI.error('Failed to validate the installation.');
+          throw e;
+        }
+      }
+
+      const successMessage = [
+        chalk.green('Success! The AppMap agent has been installed.'),
+      ];
+
+      if (installer.postInstallMessage) {
+        successMessage.push('', await installer.postInstallMessage(), '');
+      }
+
+      if (this.documentation) {
+        successMessage.push(
+          'For more information, visit',
+          chalk.blue(this.documentation)
+        );
+      }
+
+      UI.success(successMessage.join('\n'));
+
+      return installer;
+    } catch (e) {
+      throw new InstallError(e, installer);
     }
-
-    const successMessage = [
-      chalk.green('Success! The AppMap agent has been installed.'),
-    ];
-
-    if (installer.postInstallMessage) {
-      successMessage.push('', await installer.postInstallMessage(), '');
-    }
-
-    if (this.documentation) {
-      successMessage.push(
-        'For more information, visit',
-        chalk.blue(this.documentation)
-      );
-    }
-
-    UI.success(successMessage.join('\n'));
-
-    return installer;
   }
 }

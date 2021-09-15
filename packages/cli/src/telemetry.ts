@@ -134,7 +134,7 @@ export default class Telemetry {
   public static readonly machineId = getMachineId();
 
   static get enabled(): boolean {
-    return this._enabled
+    return this._enabled;
   }
 
   static get session(): Session {
@@ -176,10 +176,6 @@ export default class Telemetry {
   }
 
   static async sendEvent(data: TelemetryData): Promise<void> {
-    if (!this.enabled) {
-      return Promise.resolve();
-    }
-
     return new Promise((resolve) => {
       try {
         const transformedProperties = transformProps(data.properties || {});
@@ -202,14 +198,17 @@ export default class Telemetry {
           properties,
         };
 
-        Telemetry.client.trackEvent(event);
-        Telemetry.client.flush({ callback: () => resolve() });
-
         if (this.debug) {
           console.log(JSON.stringify(event, null, 2));
         }
 
-        Telemetry.session.touch();
+        if (this.enabled) {
+          Telemetry.client.trackEvent(event);
+          Telemetry.session.touch();
+          Telemetry.client.flush({ callback: () => resolve() });
+        } else {
+          resolve();
+        }
       } catch (e) {
         // Don't let telemetry fail the entire command
         // Do nothing other than log for now, we can't do anything about it

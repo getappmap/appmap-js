@@ -10,5 +10,6 @@ export default interface AgentInstaller {
   initCommand(): Promise<CommandStruct>;
   verifyCommand?(): Promise<CommandStruct>;
   postInstallMessage?(): Promise<string>;
+  environment?(): Promise<Record<string, string>>;
   available(): Promise<boolean>;
 }

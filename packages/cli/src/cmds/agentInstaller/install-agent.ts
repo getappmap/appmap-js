@@ -2,8 +2,7 @@ import process from 'process';
 import JavaAgentInstaller from './javaAgentInstaller';
 import RubyAgentInstaller from './rubyAgentInstaller';
 import PythonAgentInstaller from './pythonAgentInstaller';
-import ValidationError from './validationError';
-import AbortError from './abortError';
+import { ValidationError, AbortError, InstallError } from './errors';
 import { verbose } from '../../utils';
 import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
@@ -124,8 +123,15 @@ export const handler = async (argv) => {
         duration: endTime(),
       },
     });
-  } catch (err) {
+  } catch (e) {
     let installersAvailable: string | undefined;
+    let err = e;
+
+    if (e instanceof InstallError) {
+      err = e.error;
+      installer = e.installer;
+    }
+
     try {
       // Map installers to their available status, e.g.,
       // { maven: true, gradle: false, pip: false }
@@ -206,5 +212,5 @@ export const handler = async (argv) => {
       );
     }
     Yargs.exit(3, err);
-  };
+  }
 };

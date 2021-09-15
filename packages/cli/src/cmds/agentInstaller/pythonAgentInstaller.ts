@@ -8,13 +8,43 @@ import CommandStruct from './commandStruct';
 import { exists } from '../../utils';
 import chalk from 'chalk';
 import { run } from './commandRunner';
+import { getOutput } from './commandUtil';
 
 const REGEX_PKG_DEPENDENCY = /^\s*appmap\s*[=>~]+=.*$/m;
 // include .dev0 so pip will allow prereleases
 const PKG_DEPENDENCY = 'appmap>=1.1.0.dev0';
 
-export class PoetryInstaller implements AgentInstaller {
+abstract class PythonEnvironment {
   constructor(readonly path: string) {}
+
+  async environment(): Promise<Record<string, string>> {
+    // Python version is returned as a string similar to:
+    // Python 3.7.0
+    const version = await getOutput('python', ['--version'], this.path);
+    const pythonPath = await getOutput(
+      'python',
+      ['-c', "'import sys; print(sys.prefix)'"],
+      this.path
+    );
+
+    return {
+      'Python version': version.ok
+        ? version.output.split(/\s/)[1]
+        : chalk.red(version.output),
+      'Python package directory': pythonPath.ok
+        ? pythonPath.output
+        : chalk.red(pythonPath.output),
+    };
+  }
+}
+
+export class PoetryInstaller
+  extends PythonEnvironment
+  implements AgentInstaller
+{
+  constructor(readonly path: string) {
+    super(path);
+  }
 
   get name(): string {
     return 'poetry';
@@ -54,8 +84,10 @@ export class PoetryInstaller implements AgentInstaller {
   }
 }
 
-export class PipInstaller implements AgentInstaller {
-  constructor(readonly path: string) {}
+export class PipInstaller extends PythonEnvironment implements AgentInstaller {
+  constructor(readonly path: string) {
+    super(path);
+  }
 
   get name(): string {
     return 'pip';
