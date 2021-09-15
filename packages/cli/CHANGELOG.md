@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.4.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.4.0...@appland/appmap-v3.4.1) (2021-09-15)
+
+
+### Bug Fixes
+
+* Users are now identified in the same manner as VSCode ([#355](https://github.com/applandinc/appmap-js/issues/355)) ([8d9cd50](https://github.com/applandinc/appmap-js/commit/8d9cd507bcbcbecb0a0fa742206b8534ad797620))
+
 # [@appland/appmap-v3.4.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.3.2...@appland/appmap-v3.4.0) (2021-09-13)
 
 
