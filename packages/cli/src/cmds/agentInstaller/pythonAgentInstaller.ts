@@ -141,10 +141,55 @@ export class PipInstaller extends PythonEnvironment implements AgentInstaller {
   }
 }
 
+export class PipenvInstaller
+  extends PythonEnvironment
+  implements AgentInstaller
+{
+  constructor(readonly path: string) {
+    super(path);
+  }
+
+  get name(): string {
+    return 'pipenv';
+  }
+
+  get buildFile(): string {
+    return 'Pipfile';
+  }
+
+  get buildFilePath(): string {
+    return join(this.path, this.buildFile);
+  }
+
+  async postInstallMessage(): Promise<string> {
+    return [
+      `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
+      `By default, AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
+    ].join('\n');
+  }
+
+  async available(): Promise<boolean> {
+    return await exists(this.buildFilePath);
+  }
+
+  async installAgent(): Promise<void> {
+    const cmd = new CommandStruct(
+      'pipenv',
+      ['install', '-d', 'appmap'],
+      this.path
+    );
+    await run(cmd);
+  }
+
+  async initCommand(): Promise<CommandStruct> {
+    return new CommandStruct('appmap-agent-init', [], this.path);
+  }
+}
+
 const PythonAgentInstaller = {
   name: 'Python',
   documentation: 'https://appland.com/docs/reference/appmap-python',
-  installers: [PipInstaller, PoetryInstaller],
+  installers: [PipInstaller, PipenvInstaller, PoetryInstaller],
 };
 
 export default PythonAgentInstaller;
