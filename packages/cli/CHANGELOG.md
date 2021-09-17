@@ -1,3 +1,18 @@
+# [@appland/appmap-v3.6.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.5.1...@appland/appmap-v3.6.0) (2021-09-17)
+
+
+### Bug Fixes
+
+* Correct import of Error classes ([badd988](https://github.com/applandinc/appmap-js/commit/badd988c00abcc4720f6e346a86ef15e4beeda6b))
+* Fix agent install module imports ([a7caa17](https://github.com/applandinc/appmap-js/commit/a7caa1719bc3e20ff6fc08ed0412bb1d224afbb1))
+
+
+### Features
+
+* appmap.html standalone page ([97fa02e](https://github.com/applandinc/appmap-js/commit/97fa02ec809553d185a9acadcf895562ee5b80e6))
+* open an AppMap in the default browser ([15fb41d](https://github.com/applandinc/appmap-js/commit/15fb41d2f2adc180588f5e00ea584dd274ffb080))
+* Serve the appmap file and JS map file ([250c26d](https://github.com/applandinc/appmap-js/commit/250c26d92665c81264a29576c2155409b144ab5c))
+
 # [@appland/appmap-v3.5.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.5.0...@appland/appmap-v3.5.1) (2021-09-17)
 
 
