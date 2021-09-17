@@ -1,7 +1,7 @@
 import inquirer, { QuestionCollection } from 'inquirer';
 import ora, { Ora } from 'ora';
 import boxen from 'boxen';
-import { verbose } from '../../utils';
+import { verbose } from '../utils';
 
 export class UserInteraction {
   private spinner: Ora = ora();
@@ -20,6 +20,10 @@ export class UserInteraction {
     }
 
     return result;
+  }
+
+  progress(msg: string) {
+    console.log(msg);
   }
 
   success(msg: string) {
@@ -45,6 +49,10 @@ export class UserInteraction {
     if (msg) {
       console.error('\n', msg);
     }
+  }
+
+  warn(msg?: string) {
+    console.error(msg);
   }
 
   get status(): string {

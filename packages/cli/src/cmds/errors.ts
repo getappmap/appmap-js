@@ -1,4 +1,4 @@
-import AgentInstaller from './agentInstaller';
+import AgentInstaller from './agentInstaller/agentInstaller';
 
 export class InstallError {
   constructor(readonly error: unknown, readonly installer?: AgentInstaller) {}
