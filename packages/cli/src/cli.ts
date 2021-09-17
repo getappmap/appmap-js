@@ -26,7 +26,7 @@ const FunctionStats = require('./functionStats');
 const Inspect = require('./inspect');
 const SwaggerCommand = require('./swagger/command');
 const InventoryCommand = require('./inventoryCommand');
-const InstallCommand = require('./cmds/agentInstaller/install-agent');
+import InstallCommand from './cmds/agentInstaller/install-agent';
 
 class DiffCommand {
   public appMapNames: any;

@@ -10,26 +10,11 @@ import { run } from './commandRunner';
 import UI from './userInteraction';
 import { InstallError } from './errors';
 
-type AgentInstallerConstructor = new (path: string) => AgentInstaller;
-
-export interface AgentInstallerOptions {
-  readonly name: string;
-  readonly documentation?: string;
-  readonly installers?: readonly AgentInstallerConstructor[];
-}
-
 export default class AgentInstallerProcedure {
-  readonly name: string;
-  readonly documentation?: string;
-  readonly installers: readonly AgentInstaller[];
-
-  constructor(readonly options: AgentInstallerOptions, readonly path: string) {
-    this.name = options.name;
-    this.documentation = options.documentation;
-    this.installers = (options?.installers || []).map(
-      (constructor) => new constructor(path)
-    );
-  }
+  constructor(
+    readonly installers: readonly AgentInstaller[],
+    readonly path: string
+  ) {}
 
   async availableInstallers(): Promise<AgentInstaller[]> {
     const results = await Promise.all(
@@ -41,35 +26,52 @@ export default class AgentInstallerProcedure {
 
   async run(userSpecifiedInstaller?: string): Promise<AgentInstaller> {
     const availableInstallers = await this.availableInstallers();
+    if (availableInstallers.length === 0) {
+      throw new ValidationError(
+        [
+          `No project was found in ${chalk.red(resolve(this.path))}`,
+          `Supported project types are: ${this.installers
+            .map((i) => chalk.blue(i.name))
+            .sort()
+            .join(', ')}`,
+          '',
+          `Switch the current directory or specify another directory by using the ${chalk.blue(
+            '-d'
+          )} or ${chalk.blue('--dir')} command line argument.`,
+          `Use ${chalk.blue('--help')} for more information.`,
+        ].join('\n')
+      );
+    }
 
     let installer: AgentInstaller | undefined;
     if (userSpecifiedInstaller) {
       installer = this.installers.find(
         (i) => i.name.toLowerCase() === userSpecifiedInstaller.toLowerCase()
       );
+
+      /*
+      if (!installer) {
+        Allow this case to fall through. This means that the user specified an installer which is
+        either not supported or not available in the current directory. However, another installer
+        is available, so we'll ignore this error and continue.
+      }
+      */
     }
 
     if (!installer) {
-      let projectType = this.installers[0].name;
-      if (this.installers.length > 1) {
-        const { result } = await UI.prompt({
+      if (availableInstallers.length === 1) {
+        installer = availableInstallers[0];
+      } else {
+        const { installerName } = await UI.prompt({
           type: 'list',
-          name: 'result',
-          message: `Select the type of ${this.name} project to install the AppMap agent to.`,
-          default:
-            availableInstallers.length > 0
-              ? availableInstallers[0].name
-              : undefined,
-          choices: this.installers.map((i) => i.name),
+          name: 'installerName',
+          message: `Multiple project types were found in ${chalk.blue(
+            resolve(this.path)
+          )}. Select one to continue.`,
+          choices: availableInstallers.map((i) => i.name),
         });
 
-        projectType = result;
-      }
-
-      if (projectType) {
-        installer = this.installers.find((i) => i.name === projectType);
-      } else {
-        installer = this.installers[0];
+        installer = availableInstallers.find((i) => i.name === installerName);
       }
     }
 
@@ -79,29 +81,6 @@ export default class AgentInstallerProcedure {
     }
 
     try {
-      let writeAppMapYml = true;
-      if (await exists(join(this.path, 'appmap.yml'))) {
-        const USE_EXISTING = 'Use existing';
-        const OVERWRITE = 'Overwrite';
-        const ABORT = 'Abort';
-
-        const { overwriteAppMapYml } = await UI.prompt({
-          type: 'list',
-          name: 'overwriteAppMapYml',
-          message:
-            'An appmap.yml configuration file already exists. How should the conflict be resolved?',
-          choices: [USE_EXISTING, OVERWRITE, ABORT],
-        });
-
-        if (overwriteAppMapYml === ABORT) {
-          Yargs.exit(0, new Error());
-        }
-
-        if (overwriteAppMapYml === USE_EXISTING) {
-          writeAppMapYml = false;
-        }
-      }
-
       let env = {
         'Project type': installer.name,
         'Project directory': resolve(this.path),
@@ -139,29 +118,27 @@ export default class AgentInstallerProcedure {
         );
       }
 
-      if (!availableInstallers.includes(installer)) {
-        const projectPath = chalk.red(resolve(this.path));
-        const { name, buildFile } = installer;
-        const message = [
-          `No ${chalk.red(
-            name
-          )} project was able to be located at ${projectPath}.`,
-        ];
+      let writeAppMapYml = true;
+      if (await exists(join(this.path, 'appmap.yml'))) {
+        const USE_EXISTING = 'Use existing';
+        const OVERWRITE = 'Overwrite';
+        const ABORT = 'Abort';
 
-        if (installer.buildFile) {
-          message.push(
-            `${chalk.red(
-              buildFile
-            )} was expected to be found at this path, but none could be located.`,
-            '',
-            `Switch the current directory or specify a directory using the ${chalk.blue(
-              '-d'
-            )} or ${chalk.blue('--dir')} command line argument.`,
-            `Use ${chalk.blue('--help')} for more information.`
-          );
+        const { overwriteAppMapYml } = await UI.prompt({
+          type: 'list',
+          name: 'overwriteAppMapYml',
+          message:
+            'An appmap.yml configuration file already exists. How should the conflict be resolved?',
+          choices: [USE_EXISTING, OVERWRITE, ABORT],
+        });
+
+        if (overwriteAppMapYml === ABORT) {
+          Yargs.exit(0, new Error());
         }
 
-        throw new ValidationError(message.join('\n'));
+        if (overwriteAppMapYml === USE_EXISTING) {
+          writeAppMapYml = false;
+        }
       }
 
       UI.status = 'Installing the AppMap agent...';
@@ -204,10 +181,10 @@ export default class AgentInstallerProcedure {
         successMessage.push('', await installer.postInstallMessage(), '');
       }
 
-      if (this.documentation) {
+      if (installer.documentation) {
         successMessage.push(
           'For more information, visit',
-          chalk.blue(this.documentation)
+          chalk.blue(installer.documentation)
         );
       }
 

@@ -23,6 +23,10 @@ abstract class JavaBuildToollInstaller {
     this.path = path;
   }
 
+  get documentation(): string {
+    return 'https://appland.com/docs/reference/appmap-java';
+  }
+
   async initCommand(): Promise<CommandStruct> {
     return new CommandStruct(
       'java',
@@ -573,11 +577,3 @@ export class GradleInstaller
     return undefined; // no buildscript block
   }
 }
-
-const JavaAgentInstaller = {
-  name: 'Java',
-  documentation: 'https://appland.com/docs/reference/appmap-java',
-  installers: [MavenInstaller, GradleInstaller],
-};
-
-export default JavaAgentInstaller;

@@ -14,8 +14,12 @@ const REGEX_PKG_DEPENDENCY = /^\s*appmap\s*[=>~]+=.*$/m;
 // include .dev0 so pip will allow prereleases
 const PKG_DEPENDENCY = 'appmap>=1.1.0.dev0';
 
-abstract class PythonEnvironment {
+abstract class PythonInstaller {
   constructor(readonly path: string) {}
+
+  get documentation() {
+    return 'https://appland.com/docs/reference/appmap-python';
+  }
 
   async environment(): Promise<Record<string, string>> {
     // Python version is returned as a string similar to:
@@ -38,10 +42,7 @@ abstract class PythonEnvironment {
   }
 }
 
-export class PoetryInstaller
-  extends PythonEnvironment
-  implements AgentInstaller
-{
+export class PoetryInstaller extends PythonInstaller implements AgentInstaller {
   constructor(readonly path: string) {
     super(path);
   }
@@ -84,7 +85,7 @@ export class PoetryInstaller
   }
 }
 
-export class PipInstaller extends PythonEnvironment implements AgentInstaller {
+export class PipInstaller extends PythonInstaller implements AgentInstaller {
   constructor(readonly path: string) {
     super(path);
   }
@@ -140,11 +141,3 @@ export class PipInstaller extends PythonEnvironment implements AgentInstaller {
     return new CommandStruct('appmap-agent-init', [], this.path);
   }
 }
-
-const PythonAgentInstaller = {
-  name: 'Python',
-  documentation: 'https://appland.com/docs/reference/appmap-python',
-  installers: [PipInstaller, PoetryInstaller],
-};
-
-export default PythonAgentInstaller;

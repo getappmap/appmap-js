@@ -4,6 +4,7 @@ export default interface AgentInstaller {
   readonly path: string;
   readonly name: string;
   readonly buildFile?: string;
+  readonly documentation?: string;
 
   installAgent(): Promise<void>;
   validateAgentCommand?(): Promise<CommandStruct>;
