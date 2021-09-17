@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.5.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.5.0...@appland/appmap-v3.5.1) (2021-09-17)
+
+
+### Bug Fixes
+
+* Add debugging information for directory listing when install fails ([fb315c6](https://github.com/applandinc/appmap-js/commit/fb315c6b49925ad6a3d4a3f5eef265448602293a))
+
 # [@appland/appmap-v3.5.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.4.1...@appland/appmap-v3.5.0) (2021-09-15)
 
 
