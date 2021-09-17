@@ -1,4 +1,4 @@
-import process from 'process';
+import { promises as fs } from 'fs';
 import JavaAgentInstaller from './javaAgentInstaller';
 import RubyAgentInstaller from './rubyAgentInstaller';
 import PythonAgentInstaller from './pythonAgentInstaller';
@@ -183,6 +183,17 @@ export const handler = async (argv) => {
       exception = String(err);
     }
 
+    let directory: string | undefined;
+    try {
+      directory = (await fs.readdir(dir)).join('\n');
+    } catch (e) {
+      if (e instanceof Error) {
+        directory = e.stack;
+      } else {
+        directory = String(e);
+      }
+    }
+
     await Telemetry.sendEvent({
       name: 'install-agent:failure',
       properties: {
@@ -191,6 +202,7 @@ export const handler = async (argv) => {
         exception_type: (err as any)?.constructor?.name,
         log: ProcessLog.buffer,
         exception,
+        directory,
       },
       metrics: {
         duration: endTime(),
