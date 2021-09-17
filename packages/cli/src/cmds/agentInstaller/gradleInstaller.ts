@@ -8,11 +8,10 @@ import { verbose, exists } from '../../utils';
 import UI from '../userInteraction';
 import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
 import { AbortError } from '../errors';
-import { JavaBuildToolInstaller } from './javaBuildToolInstaller';
+import JavaBuildToolInstaller from './javaBuildToolInstaller';
 import { GradleParser, GradleParseResult } from './gradleParser';
 
-
-export class GradleInstaller
+export default class GradleInstaller
   extends JavaBuildToolInstaller
   implements AgentInstaller
 {

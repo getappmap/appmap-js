@@ -18,7 +18,6 @@ tmp.setGracefulCleanup();
 
 const invokeCommand = (
   projectDir: string,
-  projectType: string,
   evalResults: (err: Error | undefined, argv: any, output: string) => void
 ) => {
   const debugSwitch: string = ''; // to debug, set debugSwitch to -v
@@ -31,14 +30,14 @@ const invokeCommand = (
   }
 
   return yargs
-    .command(require('../../../src/cmds/agentInstaller/install-agent'))
+    .command(require('../../../src/cmds/agentInstaller/install-agent').default)
     .option('verbose', {
       alias: 'v',
       type: 'boolean',
       description: 'Run with verbose logging',
     })
     .parse(
-      `install-agent ${debugSwitch} --dir ${projectDir} ${projectType}`,
+      `install-agent ${debugSwitch} --dir ${projectDir}`,
       {},
       (err, argv, output) => {
         evalResults(err, argv, output);
@@ -87,7 +86,7 @@ describe('install-agent sub-command', () => {
         .onCall(callIdx++)
         .callsFake(validateAgent);
 
-      return invokeCommand(projectDir, 'Java', evalResults);
+      return invokeCommand(projectDir, evalResults);
     };
 
     const expectedConfig = `
@@ -369,7 +368,7 @@ packages:
         .onCall(callIdx++)
         .callsFake(validateAgent);
 
-      return invokeCommand(projectDir, 'Ruby', evalResults);
+      return invokeCommand(projectDir, evalResults);
     };
 
     it('installs as expected', async () => {
@@ -430,7 +429,7 @@ packages:
         .onCall(callIdx++)
         .callsFake(initAgent);
 
-      return invokeCommand(projectDir, 'Python', evalResults);
+      return invokeCommand(projectDir, evalResults);
     };
 
     const expectedConfig = `
