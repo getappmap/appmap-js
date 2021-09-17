@@ -1,5 +1,4 @@
-import ValidationError from './validationError';
-import AbortError from './abortError';
+import { AbortError, ValidationError } from './errors';
 import { verbose } from '../utils';
 import UI from './userInteraction';
 import chalk from 'chalk';

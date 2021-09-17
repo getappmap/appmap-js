@@ -5,7 +5,7 @@ import Yargs from 'yargs';
 
 import { exists } from '../../utils';
 import AgentInstaller from './agentInstaller';
-import { AbortError, ValidationError } from '../errors';
+import { AbortError, InstallError, ValidationError } from '../errors';
 import { run } from './commandRunner';
 import UI from '../userInteraction';
 
