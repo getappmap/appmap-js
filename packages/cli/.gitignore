@@ -1,1 +1,7 @@
 built
+tests/unit/fixtures/**/canonical.*
+tests/unit/fixtures/**/mtime
+tests/unit/fixtures/**/ctime
+tests/unit/fixtures/**/version
+tests/unit/fixtures/**/metadata.json
+tests/unit/fixtures/**/classMap.json

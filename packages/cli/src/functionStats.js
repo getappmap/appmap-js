@@ -54,6 +54,127 @@ class FunctionStats {
     };
   }
 
+  toComparableState() {
+    const statusCodes = (eventMatches) =>
+      eventMatches
+        .filter((e) => e.event.returnEvent)
+        .map((e) => e.event.httpServerResponse)
+        .filter((res) => res)
+        .map((res) => res.status || res.status_code);
+
+    const exceptions = (eventMatches) =>
+      eventMatches
+        .map((e) => e.event)
+        .filter((e) => e.isFunction)
+        .filter((e) => e.exceptions)
+        .map((e) => e.exceptions.map((exception) => exception.class))
+        .flat();
+
+    const callers = (eventMatches) =>
+      eventMatches
+        .map((e) => e.event)
+        .map((e) => e.parent)
+        .filter((e) => e)
+        .map((e) => e.codeObject.id);
+
+    const callees = (eventMatches) =>
+      eventMatches
+        .map((e) => e.event)
+        .map((e) => e.children)
+        .flat()
+        .map((e) => e.codeObject.id);
+
+    const functionParams = (eventMatches) =>
+      eventMatches
+        .map((e) => e.event)
+        .filter((e) => e.isFunction)
+        .map((e) => e.parameters.map((param) => param.name))
+        .flat();
+
+    const messageParams = (eventMatches) =>
+      eventMatches
+        .map((e) => e.event)
+        .filter((e) => e.message)
+        .map((e) => e.message.map((param) => param.name))
+        .flat();
+
+    const refs = (fn) => [...new Set(fn(this.eventMatches))].sort();
+
+    const parameters = [functionParams, messageParams].map(refs).flat();
+
+    return {
+      returnValues: this.returnValues,
+      parameters,
+      exceptions: refs(exceptions),
+      statusCodes: refs(statusCodes),
+      callers: refs(callers),
+      callees: refs(callees),
+    };
+  }
+
+  get references() {
+    const routes = (eventMatches) =>
+      eventMatches
+        .map((e) =>
+          [e.event].concat(e.ancestors).filter((a) => a.httpServerRequest)
+        )
+        .flat()
+        .map((e) =>
+          JSON.stringify({
+            type: 'route',
+            name: [
+              e.httpServerRequest.request_method,
+              e.httpServerRequest.normalized_path_info,
+            ].join(' '),
+          })
+        );
+
+    const queries = (eventMatches) =>
+      eventMatches
+        .map((e) => [e.event].concat(e.descendants).filter((d) => d.sql))
+        .flat()
+        .map((e) =>
+          JSON.stringify({
+            type: 'query',
+            name: obfuscate(e.sqlQuery, e.sql.database_type),
+          })
+        );
+
+    const codeObjects = (eventMatches, type, property) =>
+      eventMatches
+        .map((e) => [e.event, e.event.parent].concat(e.event.children))
+        .flat()
+        .filter((e) => e && e.callEvent.isFunction && e.codeObject.id)
+        .map((e) => e.codeObject)
+        .map((co) =>
+          JSON.stringify({
+            type,
+            name: property(co),
+          })
+        );
+
+    const packages = (eventMatches) =>
+      codeObjects(eventMatches, 'package', (co) => co.packageOf);
+
+    const classes = (eventMatches) =>
+      codeObjects(eventMatches, 'class', (co) =>
+        [co.packageOf, co.classOf].join('/')
+      );
+
+    const functions = (eventMatches) =>
+      codeObjects(eventMatches, 'function', (co) => co.id);
+
+    const refs = (fn) => [...new Set(fn(this.eventMatches))].sort();
+
+    return (
+      [routes, queries, packages, classes, functions]
+        .map(refs)
+        .flat()
+        // @ts-ignore
+        .map(JSON.parse)
+    );
+  }
+
   get appMapNames() {
     return [...new Set(this.eventMatches.map((e) => e.appmap))].sort();
   }
@@ -61,7 +182,10 @@ class FunctionStats {
   get returnValues() {
     return [
       ...new Set(
-        this.eventMatches.map((e) => e.event.returnValue).map(formatValue)
+        this.eventMatches
+          .filter((e) => e.event && e.event.returnEvent)
+          .map((e) => e.event.returnValue)
+          .map(formatValue)
       ),
     ].sort();
   }

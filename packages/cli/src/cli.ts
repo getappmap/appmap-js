@@ -14,6 +14,7 @@ const { queue } = require('async');
 const readline = require('readline');
 const { join } = require('path');
 const cliProgress = require('cli-progress');
+const { tmpdir } = require('os');
 const { algorithms, canonicalize } = require('./fingerprint');
 const { verbose, loadAppMap } = require('./utils');
 const appMapCatalog = require('./appMapCatalog');
@@ -25,8 +26,15 @@ const FindEvents = require('./search/findEvents');
 const FunctionStats = require('./functionStats');
 const Inspect = require('./inspect');
 const SwaggerCommand = require('./swagger/command');
-const InventoryCommand = require('./inventoryCommand');
 const InstallCommand = require('./cmds/agentInstaller/install-agent');
+const InventoryCollector = require('./inventory/buildInventory');
+const {
+  printAddedLine,
+  printRemovedLine,
+  printObject,
+  printChangedLine,
+} = require('./cli/output');
+const { textIfy } = require('./inventory/util');
 
 class DiffCommand {
   public appMapNames: any;
@@ -187,11 +195,11 @@ yargs(process.argv.slice(2))
           'compute the diff of the canonicalized forms of each changed AppMap',
         boolean: true,
       });
+      args.option('appmap-dir', {
+        describe: 'directory containing work-in-progress AppMaps',
+      });
       args.option('base-dir', {
         describe: 'directory containing base version AppMaps',
-      });
-      args.option('working-dir', {
-        describe: 'directory containing work-in-progress AppMaps',
       });
     },
     async function (argv) {
@@ -204,7 +212,7 @@ yargs(process.argv.slice(2))
       // eslint-disable-next-line prefer-const
       baseDir = argv.baseDir;
       // eslint-disable-next-line prefer-const
-      workingDir = argv.workingDir;
+      workingDir = argv.appmapDir;
 
       if (!baseDir) {
         throw new Error('Location of base version AppMaps is required');
@@ -363,6 +371,10 @@ yargs(process.argv.slice(2))
         describe: 'directory to recursively inspect for AppMaps',
         default: 'tmp/appmap',
       });
+      args.option('base-dir', {
+        describe:
+          'directory to recursively inspect for base version AppMaps (used for the "compare" feature)',
+      });
       args.option('interactive', {
         describe: 'interact with the output via CLI',
         alias: 'i',
@@ -390,36 +402,31 @@ yargs(process.argv.slice(2))
 
       console.warn('Indexing the AppMap database');
       await new FingerprintDirectoryCommand(argv.appmapDir).execute();
-
-      console.warn('Finding matching AppMaps');
-      let progress = newProgress();
-      const codeObjectId = argv.codeObject;
-      const finder = new FindCodeObjects(argv.appmapDir, codeObjectId);
-      const codeObjectMatches = await finder.find(
-        (count) => progress.start(count, 0),
-        progress.increment.bind(progress)
-      );
-      progress.stop();
-
-      if (!codeObjectMatches) {
-        return;
+      if (argv.baseDir) {
+        console.warn('Indexing the base AppMap database');
+        await new FingerprintDirectoryCommand(argv.baseDir).execute();
       }
 
-      const filters = [];
-      let stats = null;
+      const newState = (appmapDir, codeObjectId, filters) => ({
+        appmapDir,
+        codeObjectId,
+        codeObjectMatches: [],
+        filters: filters || [],
+        stats: null,
+      });
 
-      const buildStats = async () => {
+      const buildStats = async (state: any) => {
         const result: any[] = [];
         console.warn('Finding matching Events');
-        progress = newProgress();
-        progress.start(codeObjectMatches.length, 0);
+        const progress = newProgress();
+        progress.start(state.codeObjectMatches.length, 0);
         await Promise.all(
-          codeObjectMatches.map(async (codeObjectMatch) => {
+          state.codeObjectMatches.map(async (codeObjectMatch) => {
             const findEvents = new FindEvents(
               codeObjectMatch.appmap,
               codeObjectMatch.codeObject
             );
-            findEvents.filter(filters);
+            findEvents.filter(state.filters);
             const events = await findEvents.matches();
             result.push(...events);
             progress.increment();
@@ -427,10 +434,35 @@ yargs(process.argv.slice(2))
         );
         progress.stop();
         console.warn('Collating results...');
-        stats = new FunctionStats(result);
+        state.stats = new FunctionStats(result);
       };
 
-      await buildStats();
+      const buildBaseStats = async () => {
+        const baseState = newState(
+          argv.baseDir,
+          workingState.codeObjectId,
+          // eslint-disable-next-line prettier/prettier
+          [...workingState.filters]
+        );
+        await findCodeObjects(baseState);
+        return baseState;
+      };
+
+      const findCodeObjects = async (state) => {
+        console.warn('Finding matching AppMaps');
+        const { appmapDir, codeObjectId } = state;
+        const progress = newProgress();
+        const finder = new FindCodeObjects(appmapDir, codeObjectId);
+        state.codeObjectMatches = await finder.find(
+          (count) => progress.start(count, 0),
+          progress.increment.bind(progress)
+        );
+        progress.stop();
+        await buildStats(state);
+      };
+
+      const workingState = newState(argv.appmapDir, argv.codeObject, []);
+      await findCodeObjects(workingState);
 
       const interactive = () => {
         const rl = readline.createInterface({
@@ -441,56 +473,59 @@ yargs(process.argv.slice(2))
           yargs.exit(0, new Error());
         });
 
-        const home = () => {
-          Inspect.home(codeObjectId, filters, stats, getCommand);
-        };
+        const home = () => Inspect.home(workingState, getCommand);
 
-        const filter = () => {
-          Inspect.filter(rl, filters, stats, buildStats, home);
-        };
+        const filter = () => Inspect.filter(rl, workingState, buildStats, home);
 
-        const undoFilter = async () => {
-          await Inspect.undoFilter(filters, buildStats, home);
-        };
+        const undoFilter = async () =>
+          Inspect.undoFilter(workingState, buildStats, home);
 
-        const reset = async () => {
-          await Inspect.reset(filters, buildStats, home);
-        };
+        const navigate = async () =>
+          Inspect.navigate(rl, workingState, findCodeObjects, home);
 
-        const print = () => {
-          Inspect.print(stats, rl, getCommand, home);
-        };
+        const compare = async () =>
+          Inspect.compare(rl, workingState, buildBaseStats, home);
+
+        const reset = async () => Inspect.reset(workingState, buildStats, home);
+
+        const print = () => Inspect.print(rl, workingState, getCommand, home);
+
+        const quit = () => rl.close();
 
         const getCommand = () => {
           console.log();
-          rl.question(
-            'Command (h)ome, (p)rint, (f)ilter, (u)ndo filter, (r)eset filters, (q)uit: ',
-            function (command) {
-              // eslint-disable-next-line default-case
-              switch (command) {
-                case 'h':
-                  home();
-                  break;
-                case 'p':
-                  print();
-                  break;
-                case 'f':
-                  filter();
-                  break;
-                case 'u':
-                  undoFilter();
-                  break;
-                case 'r':
-                  reset();
-                  break;
-                case 'q':
-                  rl.close();
-                  break;
-                default:
-                  getCommand();
-              }
+
+          const options = {
+            home,
+            print,
+            filter,
+            'undo filter': undoFilter,
+            navigate,
+          };
+          if (argv.baseDir) {
+            options['compare'] = compare;
+          }
+          options['reset filters'] = reset;
+          options['quit'] = quit;
+
+          const prompt = `${Object.keys(options)
+            .map((opt) => `(${opt.charAt(0)})${opt.substring(1)}`)
+            .join(', ')}: `;
+
+          rl.question(prompt, (command) => {
+            let cmd;
+            const commandName = Object.keys(options).find(
+              (opt) => opt.charAt(0) === command
+            );
+            if (commandName) {
+              cmd = options[commandName];
             }
-          );
+            if (!cmd) {
+              return getCommand();
+            }
+
+            return cmd();
+          });
         };
 
         home();
@@ -498,7 +533,7 @@ yargs(process.argv.slice(2))
       if (argv.interactive) {
         interactive();
       } else {
-        console.log(JSON.stringify(stats, null, 2));
+        console.log(JSON.stringify(workingState.stats, null, 2));
       }
     }
   )
@@ -546,19 +581,316 @@ yargs(process.argv.slice(2))
     'inventory',
     'Generate canonical lists of the application code object inventory',
     (args) => {
+      args.option('inventory', {
+        describe: 'pre-existing inventory file',
+      });
       args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
-        default: 'tmp/appmap',
+      });
+      args.option('base-dir', {
+        describe:
+          'directory to recursively inspect for base version AppMaps. When this option is provided, this command computes and prints the difference between the inventories',
+      });
+      args.option('base-mapset', {
+        describe:
+          'mapset id for base version AppMaps. When this option is provided, this command computes and prints the difference between the inventories. AppMap Cloud (server) credentials must be available for this to work.',
+      });
+      args.option('base-inventory', {
+        describe:
+          'base inventory file. . When this option is provided, this command computes and prints the difference between the inventories.',
+      });
+      args.option('format', {
+        describe: 'output format (text, yaml)',
+        options: ['text', 'yaml'],
+        default: 'text',
       });
       return args.strict();
     },
     async (argv) => {
       verbose(argv.verbose);
 
-      await new FingerprintDirectoryCommand(argv.appmapDir).execute();
+      let inventory;
 
-      const inventory = await new InventoryCommand(argv.appmapDir).execute();
-      console.log(yaml.dump(inventory));
+      if (argv.inventory) {
+        inventory = yaml.load(await fsp.readFile(argv.inventory));
+      } else if (argv.appmapDir) {
+        await new FingerprintDirectoryCommand(argv.appmapDir).execute();
+        inventory = await new InventoryCollector(argv.appmapDir).execute();
+      }
+
+      if (!inventory) {
+        console.warn(`Either 'inventory' or 'appmap-dir' is required`);
+        yargs.exit(1);
+      }
+
+      const workingAppMaps = inventory.appMaps
+        .map(JSON.parse)
+        .reduce((memo, appMap) => {
+          memo[appMap.name] = appMap;
+          return memo;
+        }, {});
+
+      let baseDir;
+      if (argv.baseDir) {
+        baseDir = argv.baseDir;
+      } else if (argv.baseMapset) {
+        // eslint-disable-next-line global-require
+        const listAppMaps = require('./appland/listAppMaps');
+        // eslint-disable-next-line global-require
+        const getAppMap = require('./appland/getAppMap');
+
+        const baseAppMaps = await listAppMaps(argv.baseMapset);
+        baseDir = await fsp.mkdtemp(join(tmpdir(), 'appmap_'));
+        console.log(`Saving remote AppMaps to ${baseDir}`);
+
+        const workingInfoFingerprints: any = Object.values(
+          workingAppMaps
+        ).reduce((memo: any, appMap: any) => {
+          memo.add(appMap.infoFingerprint);
+          return memo;
+        }, new Set());
+
+        await Promise.all(
+          baseAppMaps.map(async (appMap) => {
+            if (appMap.metadata.fingerprints) {
+              const baseInfoFingerprint = appMap.metadata.fingerprints.find(
+                (fp) => fp.canonicalization_algorithm === 'info'
+              ).digest;
+              if (workingInfoFingerprints.has(baseInfoFingerprint)) {
+                return;
+              }
+            }
+            const uuid = appMap.scenario_uuid;
+            const baseAppMap = await getAppMap(uuid);
+            if (verbose()) {
+              console.log(`${baseAppMap.metadata.name} (${uuid})`);
+            }
+            fsp.writeFile(
+              join(baseDir, [uuid, 'appmap.json'].join('.')),
+              JSON.stringify(baseAppMap)
+            );
+          })
+        );
+      }
+
+      let baseInventory;
+      if (argv.baseInventory) {
+        baseInventory = yaml.load(await fsp.readFile(argv.baseInventory));
+      } else if (baseDir) {
+        await new FingerprintDirectoryCommand(baseDir).execute();
+        baseInventory = await new InventoryCollector(baseDir).execute();
+      }
+
+      if (baseInventory) {
+        const printSectionName = (sectionName) => {
+          console.log(
+            `\x1b[1m%s%s\x1b[0m`,
+            sectionName.charAt(0).toUpperCase(),
+            sectionName.slice(1)
+          );
+          console.log(
+            `\x1b[1m%s\x1b[0m`,
+            new Array(sectionName.length + 1).join('=')
+          );
+        };
+
+        {
+          printSectionName('AppMaps');
+
+          const baseAppMaps = baseInventory.appMaps
+            .map(JSON.parse)
+            .reduce((memo, appMap) => {
+              memo[appMap.name] = appMap;
+              return memo;
+            }, {});
+          let changedCount = 0;
+          const allNames = new Set(
+            Object.keys(workingAppMaps).concat(Object.keys(baseAppMaps))
+          );
+          await Promise.all(
+            [...allNames].map(async (appMapName) => {
+              if (!baseAppMaps[appMapName]) {
+                changedCount += 1;
+                printAddedLine(textIfy(workingAppMaps[appMapName], false));
+              } else if (!workingAppMaps[appMapName]) {
+                changedCount += 1;
+                printRemovedLine(textIfy(baseAppMaps[appMapName], false));
+              } else if (
+                baseAppMaps[appMapName].infoFingerprint !==
+                workingAppMaps[appMapName].infoFingerprint
+              ) {
+                changedCount += 1;
+                printChangedLine(textIfy(workingAppMaps[appMapName], false));
+              }
+            })
+          );
+          console.log(`${changedCount} changes`);
+          console.log(`${allNames.size} total`);
+          console.log();
+        }
+
+        const packageName = (id) => {
+          const tokens = id.split('/');
+          return tokens.slice(0, tokens.length - 1).join('/');
+        };
+        const className = (id) => id.split(/[#.]/)[0];
+
+        const changed = new Set();
+        const addedCodeObjects = new Set();
+        const removedCodeObjects = new Set();
+        {
+          const workingSet = new Set(inventory.functionTrigrams);
+          const baseSet = new Set(baseInventory.functionTrigrams);
+          const union = new Set(
+            inventory.functionTrigrams.concat(baseInventory.functionTrigrams)
+          );
+          const all = new Set();
+          [...union].sort().forEach((trigramStr: any) => {
+            const trigram = JSON.parse(trigramStr);
+            trigram.forEach((entry) => all.add(JSON.stringify(entry)));
+            if (!baseSet.has(trigramStr) || !workingSet.has(trigramStr)) {
+              const entry = trigram[1];
+              changed.add(JSON.stringify(entry));
+              if (entry.function) {
+                changed.add(
+                  JSON.stringify({ package: packageName(entry.function) })
+                );
+                changed.add(
+                  JSON.stringify({ class: className(entry.function) })
+                );
+                changed.add(JSON.stringify({ function: entry.function }));
+              }
+            }
+          });
+        }
+
+        const objectifyClass = (name) => ({
+          class: name,
+        });
+        const objectifyQuery = (name) => ({
+          query: name,
+        });
+        const objectifyRequest = (request) => ({
+          route: request.route,
+          parameters: request.parameters,
+          status: request.status,
+        });
+
+        const sectionKeys = Object.keys(inventory).filter(
+          (key) => key !== 'appMaps'
+        );
+        const sectionObjectifier = {
+          classes: objectifyClass,
+          sqlNormalized: objectifyQuery,
+          httpServerRequests: objectifyRequest,
+          httpClientRequests: objectifyRequest,
+        };
+        sectionKeys.forEach((sectionName) => {
+          const workingSet = new Set(inventory[sectionName]);
+          const baseSet = new Set(baseInventory[sectionName]);
+          const union = new Set(
+            inventory[sectionName].concat(baseInventory[sectionName])
+          );
+
+          const objectifier = sectionObjectifier[sectionName];
+
+          printSectionName(sectionName);
+
+          /*
+          console.log(addedCodeObjects);
+          console.log(removedCodeObjects);
+          */
+
+          function diffPrinter() {
+            let changedCount = 0;
+            [...union].sort().forEach((obj) => {
+              const rootAddedOrRemoved = (stack) => {
+                if (
+                  sectionName !== 'functionTrigrams' &&
+                  sectionName !== 'stacks'
+                ) {
+                  return false;
+                }
+                return JSON.parse(stack).some((entry) => {
+                  let key;
+                  if (entry.route) {
+                    key = JSON.stringify(objectifyRequest(entry));
+                  } else if (entry.query) {
+                    key = JSON.stringify(objectifyQuery(entry.query));
+                  } else if (entry.function) {
+                    key = JSON.stringify(
+                      objectifyClass(className(entry.function))
+                    );
+                  }
+                  if (!key) {
+                    return false;
+                  }
+                  return (
+                    addedCodeObjects.has(key) || removedCodeObjects.has(key)
+                  );
+                });
+              };
+
+              if (!baseSet.has(obj) && !rootAddedOrRemoved(obj)) {
+                changedCount += 1;
+                printAddedLine(textIfy(obj));
+                if (sectionName === 'httpServerRequests') {
+                  addedCodeObjects.add(
+                    JSON.stringify(objectifyRequest(JSON.parse(obj as any)))
+                  );
+                }
+                if (sectionName === 'classes') {
+                  addedCodeObjects.add(
+                    JSON.stringify(objectifyClass(JSON.parse(obj as any)))
+                  );
+                }
+                if (sectionName === 'sqlNormalized') {
+                  addedCodeObjects.add(
+                    JSON.stringify(objectifyQuery(JSON.parse(obj as any)))
+                  );
+                }
+              } else if (!workingSet.has(obj) && !rootAddedOrRemoved(obj)) {
+                changedCount += 1;
+                printRemovedLine(textIfy(obj));
+                if (sectionName === 'httpServerRequests') {
+                  removedCodeObjects.add(
+                    JSON.stringify(objectifyRequest(JSON.parse(obj as any)))
+                  );
+                }
+                if (sectionName === 'classes') {
+                  removedCodeObjects.add(
+                    JSON.stringify(objectifyClass(JSON.parse(obj as any)))
+                  );
+                }
+                if (sectionName === 'sqlNormalized') {
+                  removedCodeObjects.add(
+                    JSON.stringify(objectifyQuery(JSON.parse(obj as any)))
+                  );
+                }
+              } else if (
+                objectifier &&
+                changed.has(JSON.stringify(objectifier(JSON.parse(obj as any))))
+              ) {
+                changedCount += 1;
+                printChangedLine(textIfy(obj));
+              }
+            });
+
+            return { changed: changedCount, total: union.size };
+          }
+
+          const { changed: changedCount, total } = diffPrinter();
+
+          console.log(`${changedCount} changes`);
+          console.log(`${total} total`);
+          console.log();
+        });
+      } else {
+        printObject(
+          inventory,
+          argv.format
+        );
+      }
     }
   )
   .command(

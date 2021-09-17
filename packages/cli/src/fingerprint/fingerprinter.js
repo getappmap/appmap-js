@@ -16,6 +16,16 @@ const { algorithms, canonicalize } = require('./canonicalize');
 /**
  * CHANGELOG
  *
+ * # 1.2.1
+ *
+ * * Sort parameter names embedded in client and server requests.
+ *
+ * # 1.2.0
+ *
+ * * Sort parameter names.
+ * * Convert routes and dependencies from objects to strings.
+ * * Index timing data for all code objects and labels.
+ *
  * # 1.1.1
  *
  * * Fix parent assignment algorithm.
@@ -27,7 +37,7 @@ const { algorithms, canonicalize } = require('./canonicalize');
  * * Fix handling of parent assignment in normalization.
  * * sql can contain the analysis (action, tables, columns), and/or the normalized query string.
  */
-const VERSION = '1.1.1';
+const VERSION = '1.2.1';
 
 class Fingerprinter {
   /**

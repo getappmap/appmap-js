@@ -46,6 +46,7 @@ function matchPackage(name) {
 function matchClass(name) {
   return matchTypeAndName('class', name);
 }
+
 /**
  *
  * @param {string} name

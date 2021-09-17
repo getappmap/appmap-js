@@ -1,28 +1,22 @@
 export interface SQL {
   sql: string;
+  // TODO: Camelize
   database_type: string;
 }
 
-export interface HTTPRoute {
-  method: string;
-  uri: string;
-}
-
-export interface HTTPRequest {
-  route: HTTPRoute;
-  parameterNames: string[];
-  statusCode: number;
-}
-
 export interface HTTPServerRequest {
-  path: string;
-  normalized_path: string;
+  // TODO: Camelize
+  request_method: string;
+  path_info: string;
+  normalized_path_info: string;
+  status_code: number;
   headers: { string: string };
 }
 
 export interface Event {
   id: number;
   type: string;
+  parent: Event;
   definedClass: string;
   methodId: string;
   labels: Set<string>;
@@ -52,6 +46,7 @@ export interface CodeObject {
   parent: CodeObject;
   location: string; // Functions only
   static: boolean; // Functions only
+  hasLabel(label: string): boolean;
 }
 
 export interface Trigram {
@@ -92,7 +87,13 @@ export interface Filter {
   value: string;
 }
 
+export interface Reference {
+  type: string;
+  name: string;
+}
+
 export interface FunctionStats {
+  references: Reference[];
   eventMatches: EventMatch[];
   returnValues: string[];
   httpServerRequests: string[];
@@ -104,4 +105,6 @@ export interface FunctionStats {
   packageTrigrams: Trigram[];
   classTrigrams: Trigram[];
   functionTrigrams: Trigram[];
+
+  toComparableState: () => object;
 }

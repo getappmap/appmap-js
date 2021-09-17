@@ -15,17 +15,17 @@ const {
   DatabaseMatchSpec,
   QueryMatchSpec,
 } = require('./matchSpec');
-const CodeObjectMatcher = require('./codeObjectMatcher');
+const CodeObjectTokenMatcher = require('./codeObjectTokenMatcher');
 const { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } = require('./constants');
 
 /** @typedef {import('./types').CodeObject[]} ClassMap */
 /** @typedef {import('./types').CodeObject} CodeObject */
+/** @typedef {import('./types').CodeObjectMatcher} CodeObjectMatcher */
 /** @typedef {import('./types').CodeObjectMatch} CodeObjectMatch */
-/** @typedef {import('./types').CodeObjectMatchSpec} CodeObjectMatchSpec */
 
 /**
  * @param {string} functionId
- * @returns {CodeObjectMatchSpec[]}
+ * @returns {CodeObjectMatcher[]}
  */
 function parsePackage(functionId) {
   const packageTokens = functionId.split('/');
@@ -35,14 +35,14 @@ function parsePackage(functionId) {
     // as a single code object in the class map. So when searching for packages,
     // match either style. From a code standpoint, I've found this much simpler than
     // trying to handle different cases in the match spec.
-    new FunctionMatchSpec([functionId], []),
-    new FunctionMatchSpec(packageTokens, []),
+    new CodeObjectTokenMatcher(new FunctionMatchSpec([functionId], [])),
+    new CodeObjectTokenMatcher(new FunctionMatchSpec(packageTokens, [])),
   ];
 }
 
 /**
  * @param {string} functionId
- * @returns {CodeObjectMatchSpec[]}
+ * @returns {CodeObjectMatcher[]}
  */
 function parseClass(functionId) {
   const packageTokens = functionId.split('/');
@@ -53,14 +53,18 @@ function parseClass(functionId) {
   const className = packageTokens.pop();
   const classNames = className.split('::');
   return [
-    new FunctionMatchSpec([packageTokens.join('/')], classNames),
-    new FunctionMatchSpec(packageTokens, classNames),
+    new CodeObjectTokenMatcher(
+      new FunctionMatchSpec([packageTokens.join('/')], classNames)
+    ),
+    new CodeObjectTokenMatcher(
+      new FunctionMatchSpec(packageTokens, classNames)
+    ),
   ];
 }
 
 /**
  * @param {string} functionId
- * @returns {CodeObjectMatchSpec[]}
+ * @returns {CodeObjectMatcher[]}
  */
 function parseFunction(functionId) {
   const packageTokens = functionId.split('/');
@@ -73,33 +77,41 @@ function parseFunction(functionId) {
   if (classAndFunction.includes('.')) {
     const [className, functionName] = classAndFunction.split('.');
     return [
-      new FunctionMatchSpec(
-        [packageTokens.join('/')],
-        className.split('::'),
-        true,
-        functionName
+      new CodeObjectTokenMatcher(
+        new FunctionMatchSpec(
+          [packageTokens.join('/')],
+          className.split('::'),
+          true,
+          functionName
+        )
       ),
-      new FunctionMatchSpec(
-        packageTokens,
-        className.split('::'),
-        true,
-        functionName
+      new CodeObjectTokenMatcher(
+        new FunctionMatchSpec(
+          packageTokens,
+          className.split('::'),
+          true,
+          functionName
+        )
       ),
     ];
   } else if (classAndFunction.includes('#')) {
     const [className, functionName] = classAndFunction.split('#');
     return [
-      new FunctionMatchSpec(
-        [packageTokens.join('/')],
-        className.split('::'),
-        false,
-        functionName
+      new CodeObjectTokenMatcher(
+        new FunctionMatchSpec(
+          [packageTokens.join('/')],
+          className.split('::'),
+          false,
+          functionName
+        )
       ),
-      new FunctionMatchSpec(
-        packageTokens,
-        className.split('::'),
-        false,
-        functionName
+      new CodeObjectTokenMatcher(
+        new FunctionMatchSpec(
+          packageTokens,
+          className.split('::'),
+          false,
+          functionName
+        )
       ),
     ];
   }
@@ -109,35 +121,44 @@ function parseFunction(functionId) {
 
 /**
  * @param {string} tableName
- * @returns {CodeObjectMatchSpec[]}
+ * @returns {CodeObjectMatcher[]}
  */
 function parseTable(tableName) {
-  return [new TableMatchSpec(tableName)];
+  return [new CodeObjectTokenMatcher(new TableMatchSpec(tableName))];
 }
 
 /**
  * @param {string} routeName
- * @returns {CodeObjectMatchSpec[]}
+ * @returns {CodeObjectMatcher[]}
  */
 function parseRoute(routeName) {
-  return [new RouteMatchSpec(routeName)];
+  return [new CodeObjectTokenMatcher(new RouteMatchSpec(routeName))];
 }
 
+/**
+ * @returns {CodeObjectMatcher[]}
+ */
 function parseHTTP() {
-  return [new HTTPMatchSpec()];
+  return [new CodeObjectTokenMatcher(new HTTPMatchSpec())];
 }
 
+/**
+ * @returns {CodeObjectMatcher[]}
+ */
 function parseDatabase() {
-  return [new DatabaseMatchSpec()];
+  return [new CodeObjectTokenMatcher(new DatabaseMatchSpec())];
 }
 
+/**
+ * @returns {CodeObjectMatcher[]}
+ */
 function parseQuery(query) {
-  return [new QueryMatchSpec(query)];
+  return [new CodeObjectTokenMatcher(new QueryMatchSpec(query))];
 }
 
 /**
  * @param {string} codeObjectId
- * @returns {CodeObjectMatchSpec[]}
+ * @returns {CodeObjectMatcher[]}
  */
 function parseCodeObjectId(codeObjectId) {
   const tokens = codeObjectId.split(':');
@@ -182,11 +203,13 @@ class FindCodeObjects {
     if (this.matchSpecs.length === 0) {
       console.warn(`Unable to parse code object id ${codeObjectId}`);
     }
+    /*
     if (verbose()) {
       this.matchSpecs.forEach((spec) => {
         console.warn(`Searching for: ${JSON.stringify(spec.tokens)}`);
       });
     }
+    */
   }
 
   /**
@@ -271,9 +294,9 @@ class FindCodeObjects {
       };
 
       const classMap = JSON.parse((await fsp.readFile(fileName)).toString());
-      this.matchSpecs.forEach((/** @type {CodeObjectMatchSpec} */ spec) => {
+      this.matchSpecs.forEach((matcher) => {
         classMap.forEach((/** @type import('./types').CodeObject */ item) =>
-          findMatchingFunction(item, new CodeObjectMatcher(spec), [])
+          findMatchingFunction(item, matcher, [])
         );
       });
       progressFn();

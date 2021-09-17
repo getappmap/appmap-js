@@ -643,7 +643,9 @@ export function hashHttp(e) {
   message.forEach((m) =>
     getStaticPropValues(m).forEach((v) => content.push(v))
   );
-  getStaticPropValues(httpServerResponse).forEach((v) => content.push(v));
+  if (httpServerResponse) {
+    getStaticPropValues(httpServerResponse).forEach((v) => content.push(v));
+  }
   getStaticPropValues(httpServerRequest).forEach((v) => content.push(v));
 
   return sha256(content.join('')).toString();
@@ -681,10 +683,13 @@ export function identityHashEvent(e) {
   const { sqlQuery } = e;
   if (sqlQuery) {
     const queryOps = normalizeSQL(sqlQuery);
-    const content = ['sql', queryOps.action, ...queryOps.tables]
-      .filter(Boolean)
-      .join('');
-    return sha256(content).toString();
+    if (queryOps.action && queryOps.table) {
+      const content = ['sql', queryOps.action, ...queryOps.tables]
+        .filter(Boolean)
+        .join('');
+      return sha256(content).toString();
+    }
+    return sqlQuery.toString();
   }
 
   return e.toString();

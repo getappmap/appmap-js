@@ -2,7 +2,7 @@
   {
     "kind": "http_server_request",
     "route": "DELETE /api/api_keys",
-    "parameter_names": ["controller", "action"],
+    "parameter_names": ["action", "controller"],
     "status_code": 200,
     "children": [
       {
@@ -142,7 +142,7 @@
   {
     "kind": "http_server_request",
     "route": "DELETE /api/api_keys",
-    "parameter_names": ["controller", "action"],
+    "parameter_names": ["action", "controller"],
     "status_code": 401,
     "children": [
       {

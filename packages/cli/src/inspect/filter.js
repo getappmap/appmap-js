@@ -1,9 +1,21 @@
+// @ts-check
+
 const { Table } = require('console-table-printer');
 const Fields = require('./fields');
 
+/** @typedef {import('./types').State} State */
+/** @typedef {import('./types').Console} Console */
+
 const filterFields = Fields.fields.filter((f) => f.filterName);
 
-const filter = (rl, filters, stats, buildStats, home) => {
+/**
+ * @param {Console} rl
+ * @param {State} state
+ * @param {function} buildStats
+ * @param {function} home
+ */
+const filter = (rl, state, buildStats, home) => {
+  const { filters, stats } = state;
   const filterFieldIndexes = Fields.selectIndexes(
     filterFields.map((f) => f.name)
   );
@@ -23,6 +35,7 @@ const filter = (rl, filters, stats, buildStats, home) => {
   filterFields.forEach((field, index) => {
     dsTable.addRow(
       {
+        // @ts-ignore
         index: filterFieldIndexes[index] + 1,
         name: field.title,
       },
@@ -32,6 +45,7 @@ const filter = (rl, filters, stats, buildStats, home) => {
   dsTable.printTable();
 
   rl.question(
+    // @ts-ignore
     `Data set (${filterFieldIndexes.map((i) => i + 1).join(',')}) or (h)ome ? `,
     async (num) => {
       if (num === 'h') {
@@ -40,7 +54,7 @@ const filter = (rl, filters, stats, buildStats, home) => {
       const filterField = Fields.fieldFromIndex(parseInt(num, 10) - 1);
 
       function retry() {
-        filter(rl, filters, stats, buildStats, home);
+        filter(rl, state, buildStats, home);
       }
 
       if (!filterField || !filterField.filterName) {
@@ -90,7 +104,7 @@ const filter = (rl, filters, stats, buildStats, home) => {
           if (value) {
             const newFilter = { name: filterField.filterName, value };
             filters.push(newFilter);
-            await buildStats();
+            await buildStats(state);
             console.log();
             home();
           } else {
