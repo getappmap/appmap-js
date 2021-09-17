@@ -581,9 +581,11 @@ yargs(process.argv.slice(2))
     'inventory',
     'Generate canonical lists of the application code object inventory',
     (args) => {
+      args.option('inventory', {
+        describe: 'pre-existing inventory file',
+      });
       args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
-        default: 'tmp/appmap',
       });
       args.option('base-dir', {
         describe:
@@ -593,9 +595,13 @@ yargs(process.argv.slice(2))
         describe:
           'mapset id for base version AppMaps. When this option is provided, this command computes and prints the difference between the inventories. AppMap Cloud (server) credentials must be available for this to work.',
       });
+      args.option('base-inventory', {
+        describe:
+          'base inventory file. . When this option is provided, this command computes and prints the difference between the inventories.',
+      });
       args.option('format', {
-        describe: 'output format (text, yaml, json)',
-        options: ['text', 'yaml', 'json'],
+        describe: 'output format (text, yaml)',
+        options: ['text', 'yaml'],
         default: 'text',
       });
       return args.strict();
@@ -603,8 +609,20 @@ yargs(process.argv.slice(2))
     async (argv) => {
       verbose(argv.verbose);
 
-      await new FingerprintDirectoryCommand(argv.appmapDir).execute();
-      const inventory = await new InventoryCollector(argv.appmapDir).execute();
+      let inventory;
+
+      if (argv.inventory) {
+        inventory = yaml.load(await fsp.readFile(argv.inventory));
+      } else if (argv.appmapDir) {
+        await new FingerprintDirectoryCommand(argv.appmapDir).execute();
+        inventory = await new InventoryCollector(argv.appmapDir).execute();
+      }
+
+      if (!inventory) {
+        console.warn(`Either 'inventory' or 'appmap-dir' is required`);
+        yargs.exit(1);
+      }
+
       const workingAppMaps = inventory.appMaps
         .map(JSON.parse)
         .reduce((memo, appMap) => {
@@ -613,7 +631,9 @@ yargs(process.argv.slice(2))
         }, {});
 
       let baseDir;
-      if (argv.baseMapset) {
+      if (argv.baseDir) {
+        baseDir = argv.baseDir;
+      } else if (argv.baseMapset) {
         // eslint-disable-next-line global-require
         const listAppMaps = require('./appland/listAppMaps');
         // eslint-disable-next-line global-require
@@ -653,13 +673,15 @@ yargs(process.argv.slice(2))
         );
       }
 
-      if (baseDir) {
+      let baseInventory;
+      if (argv.baseInventory) {
+        baseInventory = yaml.load(await fsp.readFile(argv.baseInventory));
+      } else if (baseDir) {
         await new FingerprintDirectoryCommand(baseDir).execute();
+        baseInventory = await new InventoryCollector(baseDir).execute();
       }
 
-      if (baseDir) {
-        const baseInventory = await new InventoryCollector(baseDir).execute();
-
+      if (baseInventory) {
         const printSectionName = (sectionName) => {
           console.log(
             `\x1b[1m%s%s\x1b[0m`,
@@ -864,7 +886,10 @@ yargs(process.argv.slice(2))
           console.log();
         });
       } else {
-        printObject(inventory, argv.format);
+        printObject(
+          inventory,
+          argv.format
+        );
       }
     }
   )
