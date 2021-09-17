@@ -29,6 +29,10 @@ export class BundleInstaller implements AgentInstaller {
     return join(this.path, this.buildFile);
   }
 
+  get documentation() {
+    return 'https://appland.com/docs/reference/appmap-ruby';
+  }
+
   async postInstallMessage(): Promise<string> {
     return [
       `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
@@ -98,11 +102,3 @@ export class BundleInstaller implements AgentInstaller {
     };
   }
 }
-
-const RubyAgentInstaller = {
-  name: 'Ruby',
-  documentation: 'https://appland.com/docs/reference/appmap-ruby',
-  installers: [BundleInstaller],
-};
-
-export default RubyAgentInstaller;
