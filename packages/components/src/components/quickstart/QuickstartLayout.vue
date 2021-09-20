@@ -181,6 +181,10 @@ a.qs-button {
     margin-bottom: 30px;
   }
 
+  p.qs-step__margin {
+    margin: 10px 0;
+  }
+
   p.qs-step__separator {
     margin: 10px 0;
     opacity: 0.5;
@@ -199,9 +203,8 @@ a.qs-button {
   padding: 17px 8px;
 
   &__congrats {
-    border: 1px solid #2d8dff;
+    border: 1px solid #707070;
     border-radius: 10px;
-    width: 100%;
     padding: 20px;
     font-weight: 500;
   }

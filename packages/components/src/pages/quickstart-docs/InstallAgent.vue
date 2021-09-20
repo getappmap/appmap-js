@@ -1,14 +1,20 @@
 <template>
   <QuickstartLayout>
-    <section class="qs-step">
-      <div class="qs-step__head">
-        <h1 class="qs-title">Install the AppMap agent for this project</h1>
+    <div class="qs-welcome">
+      <div class="qs-welcome__congrats">
+        🥳 Congrats! You’ve installed the AppMap extension.
+        <b>Now, let’s get you some AppMaps.</b>
       </div>
+    </div>
+    <section class="qs-step" style="padding-top: 0">
+      <h1>Make AppMaps</h1>
       <div class="qs-step__block">
-        <p>
-          We have provided an installer to help you do that. All you have to do
-          is open a terminal window in the root of your project and paste in
-          this command:
+        <p class="qs-step__margin">
+          To record AppMaps you will need to install the AppMap agent for this
+          project. We have provided an installer to help you do that.
+        </p>
+        <p class="qs-step__margin">
+          Run this command in the <b>root directory</b> of your project.
         </p>
         <v-code-snippet
           :clipboardText="codeSnippet"
