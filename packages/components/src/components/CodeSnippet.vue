@@ -83,7 +83,7 @@ export default {
 .code-snippet {
   margin: 1rem 0;
   border-radius: $border-radius;
-  border: 1px solid #3794ff;
+  border: 2px solid #3794ff;
   display: flex;
   align-items: stretch;
   color: white;
@@ -100,6 +100,7 @@ export default {
     background: transparent;
     outline: none;
     appearance: none;
+    font-size: 1rem;
   }
 
   &__btn {
