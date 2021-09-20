@@ -11,11 +11,23 @@ export default abstract class Formatter {
     index: number
   ): string | undefined;
 
-  summary(unmatched: number, _skipped: number, matched: number): string {
+  summary(
+    unmatched: number,
+    _skipped: number,
+    matched: number,
+    titledSummary: Map<string, number>
+  ): string {
     const total = unmatched + matched;
     const passedStr = chalk.green(`${unmatched} unmatched`);
     const matchedStr = chalk.magenta(`${matched} matched`);
 
-    return `${total} assertions (${[passedStr, matchedStr].join(', ')})`;
+    const result: Array<string> = [];
+    result.push(`${total} assertions (${[passedStr, matchedStr].join(', ')})`);
+
+    titledSummary.forEach((value: number, key: string) => {
+      result.push(chalk.magenta(`\t- ${key}: ${value} case(s)`));
+    });
+
+    return result.join('\n');
   }
 }

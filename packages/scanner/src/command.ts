@@ -14,7 +14,7 @@ import loadConfiguration from './configuration';
 import { exec } from 'child_process';
 import { appMapDir } from './scanner/util';
 import { join } from 'path';
-import { ideLink } from './util';
+import { ideLink } from './scanner/util';
 
 interface CommandOptions {
   verbose?: boolean;
@@ -40,8 +40,8 @@ export default {
     });
     args.option('config', {
       describe:
-        'path to assertions config file. The path indicated should default-export a function which returns an Assertion[].',
-      default: '../sampleAssertions.yml',
+        'path to assertions config file (TypeScript or YAML, check docs for configuration format)',
+      default: '../sampleAssertions.ts',
       alias: 'c',
     });
     args.option('progress-format', {
@@ -112,9 +112,9 @@ export default {
             newMatches.forEach((match) => (match.appMapFile = file));
 
             if (newMatches.length === 0) {
-              summary.matched++;
-            } else {
               summary.unmatched++;
+            } else {
+              summary.matched++;
             }
 
             const message = formatter.result(assertion, newMatches, index);
@@ -126,6 +126,8 @@ export default {
       );
 
       console.log('\n');
+      const titledSummary = new Map<string, number>();
+
       if (matches.length > 0) {
         console.log(`${matches.length} matches:`);
         console.log();
@@ -133,7 +135,9 @@ export default {
         let matchCount = 0;
         matches.forEach((match) => {
           matchCount += 1;
-          console.log(`Match ${matchCount}:`);
+          titledSummary.set(match.scannerTitle, (titledSummary.get(match.scannerTitle) ?? 0) + 1);
+
+          console.log(`Case ${matchCount}:`);
           console.log(`\tScanner:\t${match.scannerId}`);
           console.log(`\tAppMap:\t${match.appMapName}`);
 
@@ -153,7 +157,9 @@ export default {
           console.log('\n');
         });
       }
-      process.stdout.write(formatter.summary(summary.matched, summary.skipped, summary.unmatched));
+      process.stdout.write(
+        formatter.summary(summary.unmatched, summary.skipped, summary.matched, titledSummary)
+      );
       console.log();
 
       const appMapDirMatches: Record<string, AssertionMatch[]> = {};
@@ -176,7 +182,7 @@ export default {
         })
       );
 
-      return process.exit(summary.unmatched === 0 ? 0 : 1);
+      return process.exit(summary.matched === 0 ? 0 : 1);
     } catch (err) {
       if (err instanceof ValidationError) {
         console.warn(err.message);
