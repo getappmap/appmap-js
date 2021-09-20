@@ -1,3 +1,11 @@
+# [@appland/components-v1.12.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.12.1...@appland/components-v1.12.2) (2021-09-20)
+
+
+### Bug Fixes
+
+* Increase the visibility of the code snippet ([b932cdd](https://github.com/applandinc/appmap-js/commit/b932cddc44ad39ede7a1db629b761411376e4328))
+* Merge the welcome page with the install page ([b478c8f](https://github.com/applandinc/appmap-js/commit/b478c8fc560b4ab5dc3e9941a5de2189322e5258))
+
 # [@appland/components-v1.12.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.12.0...@appland/components-v1.12.1) (2021-09-09)
 
 
