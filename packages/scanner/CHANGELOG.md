@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/applandinc/scanner/compare/v1.4.0...v1.5.0) (2021-09-20)
+
+
+### Features
+
+* Add summary by scanners ([a3e9465](https://github.com/applandinc/scanner/commit/a3e9465d095e41d82da855d1df35389beb4cea5e))
+
 # [1.4.0](https://github.com/applandinc/scanner/compare/v1.3.0...v1.4.0) (2021-09-08)
 
 
