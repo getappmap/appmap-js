@@ -1,3 +1,10 @@
+## [1.5.4](https://github.com/applandinc/scanner/compare/v1.5.3...v1.5.4) (2021-09-21)
+
+
+### Bug Fixes
+
+* Revert bin path ([4d72f53](https://github.com/applandinc/scanner/commit/4d72f53d325896332a30f56ad2d324e6298b28ec))
+
 ## [1.5.3](https://github.com/applandinc/scanner/compare/v1.5.2...v1.5.3) (2021-09-21)
 
 
