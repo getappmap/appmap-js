@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.6.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.6.1...@appland/appmap-v3.6.2) (2021-09-21)
+
+
+### Bug Fixes
+
+* Use child_process.spawn instead of exec ([d0d85f3](https://github.com/applandinc/appmap-js/commit/d0d85f3bf153c1d986331302d6fe865ad06547dd))
+
 # [@appland/appmap-v3.6.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.6.0...@appland/appmap-v3.6.1) (2021-09-21)
 
 
