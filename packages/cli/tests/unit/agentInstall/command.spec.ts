@@ -147,6 +147,7 @@ describe('install-agent sub-command', () => {
           'com.appland:appmap-agent',
           '--configuration',
           'appmapAgent',
+          '--stacktrace',
         ]);
         const ret = {
           stdout: '',
