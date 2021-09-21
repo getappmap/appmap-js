@@ -306,6 +306,7 @@ export class GradleInstaller
         'com.appland:appmap-agent',
         '--configuration',
         'appmapAgent',
+        '--stacktrace',
       ],
       this.path
     );
