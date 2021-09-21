@@ -64,7 +64,7 @@ export default {
     process.stdout.write(`Indexing ${appmapDir}...`);
     await new Promise((resolve, reject) => {
       exec(
-        `node ./node_modules/@appland/appmap/built/cli.js index --appmap-dir ${appmapDir}`,
+        `node ./node_modules/@appland/appmap/built/src/cli.js index --appmap-dir ${appmapDir}`,
         (error, stdout /* , stderr */) => {
           if (error) {
             return reject(error);
