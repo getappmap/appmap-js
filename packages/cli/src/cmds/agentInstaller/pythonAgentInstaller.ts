@@ -23,7 +23,7 @@ abstract class PythonEnvironment {
     const version = await getOutput('python', ['--version'], this.path);
     const pythonPath = await getOutput(
       'python',
-      ['-c', "'import sys; print(sys.prefix)'"],
+      ['-c', 'import sys; print(sys.prefix)'],
       this.path
     );
 
