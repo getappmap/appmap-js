@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.6.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.6.0...@appland/appmap-v3.6.1) (2021-09-21)
+
+
+### Bug Fixes
+
+* Now logging commands run ([9a20f46](https://github.com/applandinc/appmap-js/commit/9a20f465ae47ea14c1204e49eacb97fe17a9ee32))
+
 # [@appland/appmap-v3.6.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.5.1...@appland/appmap-v3.6.0) (2021-09-17)
 
 
