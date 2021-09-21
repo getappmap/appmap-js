@@ -2,7 +2,7 @@
   "name": "@applandinc/scanner",
   "version": "1.5.1",
   "description": "",
-  "bin": "built/cli.js",
+  "bin": "built/cli",
   "files": [
     "built"
   ],
