@@ -1,7 +1,7 @@
-import { ChildProcess, exec, execSync } from 'child_process';
+import { ChildProcess, execSync, spawn } from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
-import CommandStruct, { CommandOutput, CommandReturn } from './commandStruct';
+import CommandStruct, { CommandReturn } from './commandStruct';
 import { verbose } from '../../utils';
 
 export class ProcessLog {
@@ -30,8 +30,8 @@ export class ProcessLog {
 
 export async function run(command: CommandStruct): Promise<CommandReturn> {
   return new Promise((resolve, reject) => {
-    const cp = exec(command.toString(), {
-      env: command.environment,
+    const cp = spawn(command.program, command.args, {
+        env: command.environment,
       cwd: command.path as string,
     });
 
