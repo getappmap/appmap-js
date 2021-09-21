@@ -46,7 +46,7 @@ function ideLink(filePath: string, ide: string): string {
     return filePath;
   }
 
-  const path = `${__dirname}/../${filePath}`;
+  const path = `${__dirname}/../../../../../${filePath}`;
   const link = ide == 'vscode' ? 'vscode://file/' + path : `${ide}://open?file=${path}`;
 
   return [OSC, '8', SEP, SEP, link, BEL, filePath, OSC, '8', SEP, SEP, BEL].join('');
