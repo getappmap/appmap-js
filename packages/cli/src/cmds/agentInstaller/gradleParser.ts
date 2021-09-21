@@ -1,70 +1,162 @@
 import moo from 'moo';
 
-export default class GradleParser {
+class SourceOffsets {
+  braceIdx: number = 1;
+  // A syntactically correct build file will always have an rbrace to match the
+  // lbrace.
+  rbrace: number = -1;
+  constructor(readonly blockName: string, readonly lbrace: number) {}
+}
+
 /**
-   * Parse the given gradle source, looking for a block identified by
-   * `blockIdentifier`. If found, return the offset in the source where
-   * the block ends. It not found, return undefined.
+ * The results of parsing a build.gradle file. Each member contains the offsets
+ * into the source for the block's left brace and right brace, or is null if the
+ * block is not present.
+ *
+ * startOffset is the first non-comment, non-whitespace character. mavenPresent
+ * will be true if `mavenCentral()` is included in the repositories.
+ **/
+export class GradleParseResult {
+  startOffset: number = -1;
+  buildscript: SourceOffsets | null = null;
+  repositories: SourceOffsets | null = null;
+  plugins: SourceOffsets | null = null;
+  mavenPresent: boolean = false;
+}
+
+export class GradleParser {
+  public debug: number = 0;
+  public static keywords: string[] = ['buildscript', 'repositories', 'plugins'];
+
+  /**
+   * Parse the given gradle source, returning a GradleParseResult describing what we found.
+   *
+   * Owes a debt to https://github.com/no-context/moo/pull/93 .
    */
-   static findBlock(
-    gradleSrc: string,
-    blockIdentifier: string
-  ): number | undefined {
-    const lexer = moo.compile({
-      blockIdentifier,
-      comment: /\/\/.*?$/,
-      ident: /[\w.]+/,
-      lbrace: '{',
-      rbrace: '}',
-      punct: /[()":'/.,$*+=<>[\]~?\\&!|-]/,
-      space: { match: /\s+/, lineBreaks: true },
-      NL: { match: /\n/, lineBreaks: true },
+  parse(src: string): GradleParseResult {
+    const lexer = moo.states({
+      gradle: {
+        keyword: GradleParser.keywords,
+        mavenCentral: 'mavenCentral',
+        comment: { match: /\/\/.*?\n/, lineBreaks: true },
+        multicomment: /\/\*[^]*?\*\//,
+        // idents aren't interpreted, but they make debugging easier
+        ident: /[\w.]+/,
+        multistring: { match: /"""/, push: 'mstringbeg' },
+        string: /'(?:\\[^]|[^\\'])*?'|"(?:\\[^]|[^\\"])*?"/,
+        lbrace: { match: '{', push: 'brace' },
+        space: { match: /\s+/, lineBreaks: true },
+        other: { match: /[^]/, lineBreaks: true },
+      },
+      mstringbeg: {
+        mstringend: { match: /"""/, pop: 1 },
+        other: { match: /[^]/, lineBreaks: true },
+      },
+      brace: {
+        rbrace: { match: '}', pop: 1 },
+        // gradle state is a catch-all, so it needs to be included after rbrace
+        include: 'gradle',
+      },
     });
 
-    lexer.reset(gradleSrc);
-
-    let token;
-    let startBuildscript = false;
-    let inBuildscript = false;
-    let braceIdx = 0;
+    let t;
+    let startBlock: string | null = null;
+    const blockStack: SourceOffsets[] = [];
+    lexer.reset(src);
+    let result = new GradleParseResult();
 
     // eslint-disable-next-line no-cond-assign
-    while ((token = lexer.next())) {
-      /* eslint-disable no-continue */
-      /* eslint-disable no-plusplus */
-      const t = token.type;
-      if (t === 'comment' || t === 'space') {
+    /* eslint-disable no-continue */
+    /* eslint-disable no-plusplus */
+    while ((t = lexer.next())) {
+      const writeDebug = () => {
+        console.log(`${t.type} ${t.value} ${JSON.stringify(blockStack)}`);
+      };
+
+      if (this.debug > 1) {
+        writeDebug();
+      }
+
+      const ignored = ['comment', 'multicomment', 'other', 'space'];
+      if (ignored.includes(t.type!)) {
         continue;
       }
-      if (t === 'blockIdentifier') {
-        startBuildscript = true;
-        continue;
+      if (this.debug == 1) {
+        writeDebug();
       }
-      if (startBuildscript) {
-        // The buildscript token can appear in multiple places in a gradle file.
-        // We'll only be starting the buildscript block if it's immediately
-        // followed by a left brace.
-        if (t === 'lbrace') {
-          braceIdx = 1;
-          inBuildscript = true;
+      
+      if (t.type == 'keyword') {
+        if (result.startOffset < 0) {
+          result.startOffset = t.offset;
         }
-        startBuildscript = false;
+
+        // We're only interested in the repositories block if it's not within
+        // the buildscript block.
+        const inBuildscript =
+          blockStack.length === 1 && blockStack[0].blockName === 'buildscript';
+        if (t.value !== 'repositories' || !inBuildscript) {
+          startBlock = t.value;
+          continue;
+        }
+      }
+
+      if (startBlock) {
+        // The keyword tokens can appear in multiple places in a gradle file.
+        // We'll only be starting a block if the keyword is immediately followed
+        // by a left brace.
+        if (t.type === 'lbrace') {
+          const newOffsets = new SourceOffsets(startBlock, t.offset);
+          result[startBlock] = newOffsets;
+          if (this.debug > 0) {
+            console.log(`result is now ${JSON.stringify(result, null, 2)}`);
+          }
+          blockStack.unshift(newOffsets);
+        }
+        startBlock = null;
         continue;
       }
 
-      if (inBuildscript) {
-        if (t === 'lbrace') {
-          braceIdx++;
-        } else if (t === 'rbrace') {
-          braceIdx--;
-        }
-        if (braceIdx === 0) {
-          // We've found the right brace of the buildcript block, we're done.
-          return token.offset;
-        }
+      // We're not in a block, nothing else to do
+      if (blockStack.length === 0) {
+        continue;
+      }
+
+      if (t.type === 'lbrace') {
+        blockStack[0].braceIdx++;
+      } else if (t.type === 'rbrace') {
+        blockStack[0].braceIdx--;
+      } else if (
+        t.type === 'mavenCentral' &&
+        blockStack[0].blockName === 'repositories'
+      ) {
+        // The current token is mavenCentral, and we're in the repositories
+        // block. This is the one we care about.
+        result.mavenPresent = true;
+      }
+
+      if (blockStack[0].braceIdx === 0) {
+        blockStack[0].rbrace = t.offset;
+        const offsets = blockStack.shift();
+        result[offsets!.blockName] = offsets;
       }
     }
 
-    return undefined; // no buildscript block
+    if (result.startOffset < 0) {
+      // No interesting tokens, we need to copy the whole file.
+      result.startOffset = src.length;
+    }
+    return result;
   }
+  
+  checkSyntax(parseResult: GradleParseResult) {
+    GradleParser.keywords.forEach((k) => {
+      if (parseResult[k] !== null && parseResult[k].rbrace === -1) {
+        throw new Error(
+          `parse failed, ${JSON.stringify(parseResult, null, 2)}`
+        );
+      }
+    });
+  }  
 }
+
+

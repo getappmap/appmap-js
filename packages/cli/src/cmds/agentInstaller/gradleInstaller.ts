@@ -9,10 +9,13 @@ import UI from '../userInteraction';
 import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
 import { AbortError } from '../errors';
 import { JavaBuildToolInstaller } from './javaBuildToolInstaller';
+import { GradleParser, GradleParseResult } from './gradleParser';
+
 
 export class GradleInstaller
   extends JavaBuildToolInstaller
-  implements AgentInstaller {
+  implements AgentInstaller
+{
   constructor(readonly path: string) {
     super(path);
   }
@@ -86,126 +89,6 @@ export class GradleInstaller
     );
   }
 
-  async modifyBlock(
-    blockIdentifier: string,
-    buildFileSource: string,
-    whitespace: Whitespace,
-    lineTransform: (lines: string[]) => string[] | Promise<string[]>,
-    placementIndex?: () => number | undefined
-  ) {
-    const match = buildFileSource.match(
-      new RegExp(`${blockIdentifier}\\s*\\{\\s*([^}]*)\\}`)
-    );
-    let updatedBuildFileSource;
-
-    if (match) {
-      const matchIndex = buildFileSource.indexOf(match[0]);
-      let lines = match[1]
-        .split('\n')
-        .map((line) => line.trim())
-        .filter((line) => line !== '');
-
-      lines = await lineTransform(lines);
-      const column = getColumn(buildFileSource, matchIndex);
-      const newSection = [
-        `${blockIdentifier} {`,
-        lines
-          .map((line) => whitespace.padLine(line, column + (whitespace.width || 0))
-          )
-          .join('\n'),
-        whitespace.padLine('}', column),
-      ].join('\n');
-
-      updatedBuildFileSource = [
-        buildFileSource.substring(0, matchIndex),
-        newSection,
-        buildFileSource.substring(
-          matchIndex + match[0].length,
-          buildFileSource.length
-        ),
-      ].join('');
-    } else {
-      const lines = await lineTransform([]);
-      const newSection = [
-        '',
-        `${blockIdentifier} {`,
-        lines.map((line) => whitespace.padLine(line)).join('\n'),
-        '}',
-      ].join('\n');
-
-      let offset: number | undefined;
-      if (placementIndex) {
-        offset = placementIndex();
-      }
-
-      if (offset !== undefined) {
-        updatedBuildFileSource = [
-          buildFileSource.substring(0, offset + 1),
-          '\n' + newSection,
-          buildFileSource.substring(offset + 1, buildFileSource.length),
-        ].join('');
-      } else {
-        const sourceChunks: string[] = [];
-        if (['plugins', 'buildscript'].includes(blockIdentifier)) {
-          sourceChunks.push(newSection, buildFileSource);
-        } else {
-          sourceChunks.push(buildFileSource, newSection);
-        }
-        updatedBuildFileSource = sourceChunks.join('\n');
-      }
-    }
-
-    // We always want to update the source, so this shouldn't ever happen.
-    if (updatedBuildFileSource === undefined) {
-      throw new Error(`Failed to update ${this.buildFilePath}`);
-    }
-
-    return updatedBuildFileSource;
-  }
-
-  /**
-   * Add Maven Central as a repository to build.gradle.
-   */
-  async insertRepository(
-    buildFileSource: string,
-    whitespace: Whitespace
-  ): Promise<string> {
-    return await this.modifyBlock(
-      'repositories',
-      buildFileSource,
-      whitespace,
-      async (lines) => {
-        const exists = lines.some((line) => /mavenCentral\s*\(/.test(line));
-        if (!exists) {
-          const { addMavenCentral } = await UI.prompt({
-            type: 'list',
-            name: 'addMavenCentral',
-            message: 'The Maven Central repository is required by the AppMap plugin to fetch the AppMap agent JAR. Add it now?',
-            choices: ['Yes', 'No'],
-          });
-
-          if (addMavenCentral === 'Yes') {
-            lines.push('mavenCentral()');
-          }
-        }
-
-        return lines;
-      },
-      () => {
-        const offsets = [
-          GradleParser.findBlock(buildFileSource, 'buildscript'),
-          GradleParser.findBlock(buildFileSource, 'plugins'),
-        ].filter(Boolean) as number[];
-
-        if (!offsets.length) {
-          return undefined;
-        }
-
-        return Math.max(...offsets);
-      }
-    );
-  }
-
   /**
    * Add the com.appland.appmap plugin to build.gradle.
    *
@@ -221,61 +104,153 @@ export class GradleInstaller
    */
   async insertPluginSpec(
     buildFileSource: string,
+    parseResult: GradleParseResult,
     whitespace: Whitespace
-  ): Promise<string> {
+  ): Promise<{ updatedSrc: string; offset: number }> {
     const pluginSpec = `id 'com.appland.appmap' version '1.1.0'`;
 
-    return await this.modifyBlock(
-      'plugins',
-      buildFileSource,
-      whitespace,
-      async (lines) => {
-        const javaPresent = lines.some((line) => line.match(/^\s*id\s+["']\s*java/)
-        );
-        if (!javaPresent) {
-          const { userWillContinue } = await UI.prompt({
-            type: 'list',
-            name: 'userWillContinue',
-            message: `The ${chalk.red(
-              "'java'"
-            )} plugin was not found. This configuration is unsupported and is likely to fail. Continue?`,
-            default: 'Abort',
-            choices: ['Abort', 'Continue'],
-          });
+    const lines = parseResult.plugins
+      ? buildFileSource
+          .substring(parseResult.plugins.lbrace + 1, parseResult.plugins.rbrace)
+          .split('\n')
+          .map((line) => line.trim())
+          .filter((line) => line !== '')
+      : [];
 
-          if (userWillContinue === 'Abort') {
-            throw new AbortError('no java plugin found');
-          }
-        }
-
-        const existingIndex = lines.findIndex((line) => line.match(/com\.appland\.appmap/)
-        );
-
-        if (existingIndex !== -1) {
-          lines[existingIndex] = pluginSpec;
-        } else {
-          lines.push(pluginSpec);
-        }
-
-        return lines;
-      },
-      () => GradleParser.findBlock(buildFileSource, 'buildscript')
+    const javaPresent = lines.some((line) =>
+      line.match(/^\s*id\s+["']\s*java/)
     );
+    if (!javaPresent) {
+      const { userWillContinue } = await UI.prompt({
+        type: 'list',
+        name: 'userWillContinue',
+        message: `The ${chalk.red(
+          "'java'"
+        )} plugin was not found. This configuration is unsupported and is likely to fail. Continue?`,
+        default: 'Abort',
+        choices: ['Abort', 'Continue'],
+      });
+
+      if (userWillContinue === 'Abort') {
+        throw new AbortError('no java plugin found');
+      }
+    }
+
+    // Missing plugin block, so no java plugin, but the user opted to continue.
+    if (!parseResult.plugins) {
+      const pluginsBlock = `
+plugins {
+${whitespace.padLine(pluginSpec)}
+}
+`;
+      const buildscriptEnd = parseResult.buildscript
+        ? parseResult.buildscript.rbrace + 1
+        : parseResult.startOffset;
+      const updatedSrc = [
+        buildFileSource.substring(0, buildscriptEnd),
+        pluginsBlock,
+      ].join('\n');
+      const offset = buildscriptEnd;
+      return { updatedSrc, offset };
+    }
+
+    // Found plugin block, update it with plugin spec
+    const existingIndex = lines.findIndex((line) =>
+      line.match(/com\.appland\.appmap/)
+    );
+
+    if (existingIndex !== -1) {
+      lines[existingIndex] = pluginSpec;
+    } else {
+      lines.push(pluginSpec);
+    }
+
+    const column = getColumn(buildFileSource, parseResult.plugins.lbrace);
+
+    const updatedSrc = [
+      buildFileSource.substring(0, parseResult.plugins.lbrace + 1),
+      lines.map((l) => whitespace.padLine(l)).join('\n'),
+    ].join('\n');
+    const offset = parseResult.plugins.rbrace - 1;
+
+    return { updatedSrc, offset };
+  }
+
+  /**
+   * Ensure the build file contains a buildscript block with mavenCentral in its
+   * repositories.
+   *
+   * Returns a portion of the updated source, including everything through the
+   * rbrace of the buildscript block. Also returns the offset into the original
+   * source from which copying should continue.
+   */
+  async insertRepository(
+    buildFileSource: string,
+    updatedSrc: string,
+    offset: number,
+    parseResult: GradleParseResult,
+    whitespace: Whitespace
+  ): Promise<{ updatedSrc: string; offset: number }> {
+    if (parseResult.mavenPresent) {
+      // mavenPresent means there's already a repositories block with
+      // mavenCentral in it, so just copy the rest of the original.
+      return { updatedSrc, offset };
+    }
+
+    const { addMavenCentral } = await UI.prompt({
+      type: 'list',
+      name: 'addMavenCentral',
+      message:
+        'The Maven Central repository is required by the AppMap plugin to fetch the AppMap agent JAR. Add it now?',
+      choices: ['Yes', 'No'],
+    });
+    if (addMavenCentral !== 'Yes') {
+      return { updatedSrc, offset };
+    }
+
+    const mavenCentral = `mavenCentral()`;
+    if (!parseResult.repositories) {
+      const repositoriesBlock = `
+repositories {
+${whitespace.padLine(mavenCentral)}
+}
+`;
+      updatedSrc += repositoriesBlock;
+      return { updatedSrc, offset };
+    }
+
+    updatedSrc = [
+      updatedSrc,
+      buildFileSource.substring(offset, parseResult.repositories.lbrace),
+      whitespace.padLine(mavenCentral),
+    ].join[''];
+    offset = parseResult.repositories.rbrace;
+    return { updatedSrc, offset };
   }
 
   async installAgent(): Promise<void> {
     const buildFileSource = (await fsp.readFile(this.buildFilePath)).toString();
+    const parser = new GradleParser();
+    const parseResult: GradleParseResult = parser.parse(buildFileSource);
+    parser.checkSyntax(parseResult);
     const whitespace = getWhitespace(buildFileSource);
-    let updatedBuildFileSource = await this.insertPluginSpec(
+
+    let { updatedSrc, offset } = await this.insertPluginSpec(
       buildFileSource,
+      parseResult,
       whitespace
     );
-    updatedBuildFileSource = await this.insertRepository(
-      updatedBuildFileSource,
+
+    ({ updatedSrc, offset } = await this.insertRepository(
+      buildFileSource,
+      updatedSrc,
+      offset,
+      parseResult,
       whitespace
-    );
-    await fsp.writeFile(this.buildFilePath, updatedBuildFileSource);
+    ));
+
+    updatedSrc += buildFileSource.substring(offset);
+
+    await fsp.writeFile(this.buildFilePath, updatedSrc);
   }
-
-
 }
