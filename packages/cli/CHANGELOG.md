@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.6.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.6.2...@appland/appmap-v3.6.3) (2021-09-21)
+
+
+### Bug Fixes
+
+* Run Gradle dependencyInsight task with stacktrace option in case of error ([91a5979](https://github.com/applandinc/appmap-js/commit/91a59796dc5b73e6208f3b452bf4b63f812583fd))
+
 # [@appland/appmap-v3.6.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.6.1...@appland/appmap-v3.6.2) (2021-09-21)
 
 
