@@ -24,14 +24,16 @@ describe('GradleInstaller', () => {
   describe('installAgent', () => {
     const expectedExt = '.expected.gradle';
     const files = glob.sync(path.join(dataDir, `*${expectedExt}`));
-    const tests = files.map((file) => path.basename(file, expectedExt));
 
-    tests.forEach((test) => {
-      if (test !== 'buildscript-plugins') {
+    files.forEach((file) => {
+      const test = path.basename(file, expectedExt);
+      if (false && test !== 'empty') {
         return;
       }
+      
+      const actualFile = `${test}.gradle`;
 
-      it('transforms build.gradle as expected', async () => {
+      it(`transforms ${actualFile} as expected`, async () => {
         const gradle = new GradleInstaller('.');
 
         sinon
@@ -40,17 +42,26 @@ describe('GradleInstaller', () => {
 
         sinon
           .stub(gradle, 'buildFilePath')
-          .value(path.join(dataDir, `${test}.actual.gradle`));
+          .value(path.join(dataDir, actualFile));
 
         const writeFile = sinon.stub(fs, 'writeFile');
 
-        const expected = (
-          await fs.readFile(path.join(dataDir, `${test}${expectedExt}`))
-        ).toString();
+        const ignoreWhitespaceDiff = false;
 
+        let expected = await fs.readFile(path.join(dataDir, `${test}${expectedExt}`), 'utf-8');
+        if (ignoreWhitespaceDiff) {
+          expected = expected.replace(/[^\S\r\n]+/g, '');
+        }
         await gradle.installAgent();
 
-        const actual = writeFile.getCall(-1).args[1];
+        let actual = writeFile.getCall(-1).args[1].toString();
+        if (ignoreWhitespaceDiff) {
+          actual = actual.replace(/[^\S\r\n]+/g, '');
+        }
+        if (actual !== expected) {
+          console.log(actual);
+        }
+
         expect(actual).toBe(expected);
       });
     });

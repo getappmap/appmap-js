@@ -59,6 +59,7 @@ __metadata:
     "@types/inquirer": ^7.3.3
     "@types/jest": ^27.0.1
     "@types/jsdom": ^16.2.13
+    "@types/moo": ^0.5.5
     "@types/node": ^16.6.2
     "@types/sinon": ^10.0.2
     "@types/w3c-xmlserializer": ^2.0.2
@@ -4707,6 +4708,13 @@ __metadata:
   version: 1.2.1
   resolution: "@types/minimist@npm:1.2.1"
   checksum: 02631cdd79d346ed6838f5443767b5218a0d915fd0529d4a8840c4eba942d7f6906f0056686dd5a119d42528bed0bee5767ebef7667fdca6fcb95411bb56084e
+  languageName: node
+  linkType: hard
+
+"@types/moo@npm:^0.5.5":
+  version: 0.5.5
+  resolution: "@types/moo@npm:0.5.5"
+  checksum: 3ade4daad004d2876b88b5d780390b8c08c0bfb57e84ddc3a25ace8147d44a4c9ea173e4abcdfec4f7b9204b408091287d3fabf0336de1cfbb6a07e3beedf372
   languageName: node
   linkType: hard
 
