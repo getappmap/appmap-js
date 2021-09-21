@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/applandinc/scanner/compare/v1.5.1...v1.5.2) (2021-09-21)
+
+
+### Bug Fixes
+
+* Add executable with hashbang ([ab42f06](https://github.com/applandinc/scanner/commit/ab42f06605b2b0c740abbbf75cff714a4785eaa4))
+
 ## [1.5.1](https://github.com/applandinc/scanner/compare/v1.5.0...v1.5.1) (2021-09-21)
 
 
