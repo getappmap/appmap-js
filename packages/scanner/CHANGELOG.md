@@ -1,3 +1,10 @@
+## [1.5.5](https://github.com/applandinc/scanner/compare/v1.5.4...v1.5.5) (2021-09-21)
+
+
+### Bug Fixes
+
+* Fix path to appmap's cli ([1f38306](https://github.com/applandinc/scanner/commit/1f383064541684f858d32d80557222a0c7a92c59))
+
 ## [1.5.4](https://github.com/applandinc/scanner/compare/v1.5.3...v1.5.4) (2021-09-21)
 
 
