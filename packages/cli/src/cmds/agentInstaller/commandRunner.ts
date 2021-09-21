@@ -8,7 +8,7 @@ export class ProcessLog {
   public static buffer: string = '';
 
   public static log(command: string, childProcess: ChildProcess) {
-    this.buffer.concat(`\n\nRunning command: \`${command}\`\n\n`);
+    this.buffer = this.buffer.concat(`\n\nRunning command: \`${command}\`\n\n`);
     childProcess.stdout?.on('data', (data: string) => {
       this.buffer = this.buffer.concat(data);
     });
