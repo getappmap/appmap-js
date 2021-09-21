@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/applandinc/scanner/compare/v1.5.0...v1.5.1) (2021-09-21)
+
+
+### Bug Fixes
+
+* Fix bin path ([13bdc01](https://github.com/applandinc/scanner/commit/13bdc017e187a78e215da79f69e406972d78e44e))
+
 # [1.5.0](https://github.com/applandinc/scanner/compare/v1.4.0...v1.5.0) (2021-09-20)
 
 
