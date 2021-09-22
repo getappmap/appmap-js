@@ -2,11 +2,13 @@
 import { join } from 'path';
 import tmp from 'tmp';
 import fs from 'fs-extra';
+import sinon, { SinonStub } from 'sinon';
+import UI from '../../../src/cmds/agentInstaller/userInteraction';
 import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
-import sinon from 'sinon';
 import {
   PoetryInstaller,
   PipInstaller,
+  PipFallbackInstaller,
 } from '../../../src/cmds/agentInstaller/pythonAgentInstaller';
 
 tmp.setGracefulCleanup();
@@ -102,6 +104,49 @@ describe('Python Agent Installation', () => {
       const cmdStruct = await btInstaller.initCommand();
       expect(cmdStruct.program).toBe('appmap-agent-init');
       expect(cmdStruct.args).toEqual([]);
+    });
+  });
+
+  describe('pip global install (fallback)', () => {
+    let btInstaller: PipFallbackInstaller;
+    let projectDirectory: string;
+    const { VIRTUAL_ENV } = process.env;
+    let runStub: SinonStub;
+
+    beforeAll(() => {
+      // Let it run in an empty directory
+      projectDirectory = tmp.dirSync({} as any).name;
+      btInstaller = new PipFallbackInstaller(projectDirectory);
+
+      runStub = sinon
+        .stub(commandRunner, 'run')
+        .resolves({ stderr: '', stdout: '' });
+    });
+
+    afterEach(() => {
+      process.env.VIRTUAL_ENV = VIRTUAL_ENV;
+      sinon.restore();
+    });
+
+    it('detects pip global installer as available when VIRTUAL_ENV is set', async () => {
+      process.env.VIRTUAL_ENV = '.venv';
+      expect(btInstaller.available()).resolves.toBe(true);
+    });
+
+    it('does not detect pip global installer as available when VIRTUAL_ENV is not set', async () => {
+      process.env.VIRTUAL_ENV = undefined;
+      expect(btInstaller.available()).resolves.toBe(true);
+    });
+
+    it('runs the correct install command', async () => {
+      sinon.stub(UI, 'prompt').resolves({ globalInstall: true });
+
+      await btInstaller.installAgent();
+
+      const [command, args, path] = runStub.getCall(-1).args;
+      expect(command).toBe('appmap-agent-init');
+      expect(args).toEqual(['install', 'appmap']);
+      expect(path).toEqual(projectDirectory);
     });
   });
 });

@@ -9,6 +9,8 @@ import { exists } from '../../utils';
 import chalk from 'chalk';
 import { run } from './commandRunner';
 import { getOutput } from './commandUtil';
+import UI from './userInteraction';
+import { AbortError } from './errors';
 
 const REGEX_PKG_DEPENDENCY = /^\s*appmap\s*[=>~]+=.*$/m;
 // include .dev0 so pip will allow prereleases
@@ -19,6 +21,13 @@ abstract class PythonInstaller {
 
   get documentation() {
     return 'https://appland.com/docs/reference/appmap-python';
+  }
+
+  async postInstallMessage(): Promise<string> {
+    return [
+      `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
+      `By default, AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
+    ].join('\n');
   }
 
   async environment(): Promise<Record<string, string>> {
@@ -59,13 +68,6 @@ export class PoetryInstaller extends PythonInstaller implements AgentInstaller {
     return join(this.path, this.buildFile);
   }
 
-  async postInstallMessage(): Promise<string> {
-    return [
-      `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
-      `By default, AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
-    ].join('\n');
-  }
-
   async available(): Promise<boolean> {
     return await exists(this.buildFilePath);
   }
@@ -102,13 +104,6 @@ export class PipInstaller extends PythonInstaller implements AgentInstaller {
     return join(this.path, this.buildFile);
   }
 
-  async postInstallMessage(): Promise<string> {
-    return [
-      `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
-      `By default, AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
-    ].join('\n');
-  }
-
   async available(): Promise<boolean> {
     return await exists(this.buildFilePath);
   }
@@ -134,6 +129,52 @@ export class PipInstaller extends PythonInstaller implements AgentInstaller {
       ['install', '-r', this.buildFile],
       this.path
     );
+    await run(cmd);
+  }
+
+  async initCommand(): Promise<CommandStruct> {
+    return new CommandStruct('appmap-agent-init', [], this.path);
+  }
+}
+
+export class PipFallbackInstaller
+  extends PythonInstaller
+  implements AgentInstaller
+{
+  constructor(readonly path: string) {
+    super(path);
+  }
+
+  get name(): string {
+    return 'pip';
+  }
+
+  get fallback(): boolean {
+    return true;
+  }
+
+  async available(): Promise<boolean> {
+    return process.env.VIRTUAL_ENV !== undefined;
+  }
+
+  async installAgent(): Promise<void> {
+    const { globalInstall } = await UI.prompt([
+      {
+        type: 'confirm',
+        name: 'globalInstall',
+        message: `No package dependency declarations were found, however a virtual environment has been detected. Continue installation via ${chalk.blue(
+          'pip install appmap'
+        )}?`,
+      },
+    ]);
+
+    if (!globalInstall) {
+      throw new AbortError(
+        'user opted not to `pip install appmap` in the absence of requirements.txt'
+      );
+    }
+
+    const cmd = new CommandStruct('pip', ['install', 'appmap'], this.path);
     await run(cmd);
   }
 
