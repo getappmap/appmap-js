@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/applandinc/scanner/compare/v1.5.6...v1.6.0) (2021-09-22)
+
+
+### Bug Fixes
+
+* Change default assertions config to be .js ([58a9c4d](https://github.com/applandinc/scanner/commit/58a9c4d6421582a3119b1c36b9a61f5ab3978642))
+
+
+### Features
+
+* Pass state to VS Code links ([94efff9](https://github.com/applandinc/scanner/commit/94efff906a5e97aaeda896641381fec46c930d55))
+
 ## [1.5.6](https://github.com/applandinc/scanner/compare/v1.5.5...v1.5.6) (2021-09-21)
 
 
