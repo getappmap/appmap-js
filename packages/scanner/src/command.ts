@@ -41,7 +41,7 @@ export default {
     args.option('config', {
       describe:
         'path to assertions config file (TypeScript or YAML, check docs for configuration format)',
-      default: '../sampleAssertions.ts',
+      default: '../sampleAssertions.js',
       alias: 'c',
     });
     args.option('progress-format', {
