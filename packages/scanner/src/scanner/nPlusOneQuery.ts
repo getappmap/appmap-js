@@ -62,6 +62,7 @@ export default function (options: Options = new Options()): Assertion {
     return matches;
   };
 
+  // TODO: Ensure that the duplicate queries happen within a single command context.
   return Assertion.assert(
     'n-plus-one-query',
     'Duplicate SQL queries',
