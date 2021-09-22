@@ -6,7 +6,7 @@ export class Whitespace {
 
   constructor(type?: 'tab' | 'space', width?: number) {
     this.type = type || 'space';
-    this.width = width || 2;
+    this.width = Math.max(width || 2, 2);
   }
 
   get char(): string {

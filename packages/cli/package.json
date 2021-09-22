@@ -65,6 +65,7 @@
     "@appland/components": "workspace:*",
     "@appland/diagrams": "workspace:*",
     "@appland/models": "workspace:*",
+    "@types/moo": "^0.5.5",
     "applicationinsights": "^2.1.4",
     "async": "^3.2.0",
     "boxen": "^5.0.1",
