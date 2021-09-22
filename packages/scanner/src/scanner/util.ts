@@ -34,7 +34,7 @@ function isFalsey(valueObj: any): boolean {
   return false;
 }
 
-function ideLink(filePath: string, ide: string): string {
+function ideLink(filePath: string, ide: string, eventId: number): string {
   const OSC = '\u001B]';
   const BEL = '\u0007';
   const SEP = ';';
@@ -47,7 +47,12 @@ function ideLink(filePath: string, ide: string): string {
   }
 
   const path = `${__dirname}/../../../../../${filePath}`;
-  const link = ide == 'vscode' ? 'vscode://file/' + path : `${ide}://open?file=${path}`;
+  const state = { currentView: 'viewFlow', selectedObject: `event:${eventId}` };
+  const encodedState = encodeURIComponent(JSON.stringify(state));
+  const link =
+    ide == 'vscode'
+      ? `vscode://appland.appmap/open?uri=${path}&state=${encodedState}`
+      : `${ide}://open?file=${path}`;
 
   return [OSC, '8', SEP, SEP, link, BEL, filePath, OSC, '8', SEP, SEP, BEL].join('');
 }

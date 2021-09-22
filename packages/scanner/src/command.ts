@@ -142,7 +142,9 @@ export default {
           console.log(`\tAppMap:\t${match.appMapName}`);
 
           const filePath =
-            ide && match.appMapFile ? ideLink(match.appMapFile, ide) : match.appMapFile;
+            ide && match.appMapFile
+              ? ideLink(match.appMapFile, ide, match.event.id)
+              : match.appMapFile;
           console.log(`\tFile:\t${filePath}`);
 
           let eventMsg = `\tEvent:\t${match.event.id} - ${match.event.toString()}`;
