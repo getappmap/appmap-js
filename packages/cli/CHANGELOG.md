@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.6.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.6.3...@appland/appmap-v3.6.4) (2021-09-22)
+
+
+### Bug Fixes
+
+* Correct build.gradle updates ([afc490c](https://github.com/applandinc/appmap-js/commit/afc490c25e55566a7a11628955fb24d22fedeb42))
+
 # [@appland/appmap-v3.6.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.6.2...@appland/appmap-v3.6.3) (2021-09-21)
 
 
