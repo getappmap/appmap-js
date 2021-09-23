@@ -149,7 +149,7 @@ export default {
 
           let eventMsg = `\tEvent:\t${match.event.id} - ${match.event.toString()}`;
           if (match.event.elapsedTime !== undefined) {
-            eventMsg += ` (${match.event.elapsedTime}ms)`;
+            eventMsg += ` (${match.event.elapsedTime}s)`;
           }
           console.log(eventMsg);
           if (match.event.parent) {
