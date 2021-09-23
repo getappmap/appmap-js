@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/applandinc/scanner/compare/v1.6.0...v1.6.1) (2021-09-23)
+
+
+### Bug Fixes
+
+* Update [@appmap](https://github.com/appmap) deps ([f2b1cda](https://github.com/applandinc/scanner/commit/f2b1cdac1b7c1a7bc40f6ad0a3752e7227d5225e))
+
 # [1.6.0](https://github.com/applandinc/scanner/compare/v1.5.6...v1.6.0) (2021-09-22)
 
 
