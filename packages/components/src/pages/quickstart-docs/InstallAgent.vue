@@ -7,7 +7,7 @@
       </div>
     </div>
     <section class="qs-step" style="padding-top: 0">
-      <h1>Make AppMaps</h1>
+      <h1>Install AppMap Agent</h1>
       <div class="qs-step__block">
         <p class="qs-step__margin">
           To record AppMaps you will need to install the AppMap agent for this
