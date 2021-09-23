@@ -87,6 +87,10 @@ export default class Event {
     return this.returnEvent.return_value;
   }
 
+  get elapsedTime() {
+    return this.returnEvent.elapsed;
+  }
+
   get linkedEvent() {
     return this.$hidden.linkedEvent;
   }
