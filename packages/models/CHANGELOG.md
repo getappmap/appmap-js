@@ -1,3 +1,10 @@
+# [@appland/models-v1.5.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.5.0...@appland/models-v1.5.1) (2021-09-23)
+
+
+### Bug Fixes
+
+* add missing `elapsedTime` method to `Event` ([3f5b122](https://github.com/applandinc/appmap-js/commit/3f5b12274683a3f028151ef94f41f0f60827963c))
+
 # [@appland/models-v1.5.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.4.0...@appland/models-v1.5.0) (2021-08-19)
 
 
