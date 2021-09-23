@@ -3,13 +3,14 @@
 
 
 "@appland/appmap@^3.2.3":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@appland/appmap/-/appmap-3.6.1.tgz#49c341a9cc39623189792077979afc029ad964a2"
-  integrity sha512-uih+zUnnoyr3usV11o9mQyxnlleKp640qpD2xpZyR/vZgeeaRIpKN6OPv4nEkAo6qXR8Qzc52Vo5GWRtvRl4mg==
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/@appland/appmap/-/appmap-3.6.4.tgz#7f2eda9a794425fd24c1abb2d35ee5aeb11c7741"
+  integrity sha512-HpyfUjKlAx3gKEVF6NTHcFFtyGnHLyI5lVIqr0hUL80J5MUGh47xZWf9xJdZwpBgavX5vede7nLTqvHKX84Zdw==
   dependencies:
     "@appland/components" "1.12.2"
     "@appland/diagrams" "1.4.0"
     "@appland/models" "1.5.0"
+    "@types/moo" "^0.5.5"
     applicationinsights "^2.1.4"
     async "^3.2.0"
     boxen "^5.0.1"
@@ -63,10 +64,19 @@
     deepmerge "^4.2.2"
     sql-formatter "^4.0.2"
 
-"@appland/models@1.5.0", "@appland/models@^1.5.0":
+"@appland/models@1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@appland/models/-/models-1.5.0.tgz#4417473be867c09a69c216e77e5cbc55c7912d3a"
   integrity sha512-e/bWFfmNUkh5nuZoIbVRmRk06bFtj6SrdiKPpZ0VoTEhgTdeO/31/ryFPVpu693zMBKVcNdRILa8WF4kNJtKbg==
+  dependencies:
+    cross-env "^7.0.3"
+    crypto-js "^4.0.0"
+    sqlite-parser "^1.0.1"
+
+"@appland/models@^1.5.0":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@appland/models/-/models-1.5.1.tgz#96f269d8327281c9be7694c34c35b61d3645fd39"
+  integrity sha512-juY47UB98GNycxK6Q05tyBBvBGEVE93xwvTfpdNIQDYB8YwJEQ4u7XjOWm54fZwX8hcGO3IAjCYrkeU5k+BY1Q==
   dependencies:
     cross-env "^7.0.3"
     crypto-js "^4.0.0"
@@ -1222,6 +1232,11 @@
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
+"@types/moo@^0.5.5":
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/@types/moo/-/moo-0.5.5.tgz#83220b7349c59fd4bb1bc14b1d4ea0041899dc15"
+  integrity sha512-eXQpwnkI4Ntw5uJg6i2PINdRFWLr55dqjuYQaLHNjvqTzF14QdNWbCbml9sza0byyXNA0hZlHtcdN+VNDcgVHA==
+
 "@types/node-fetch@^2.5.0":
   version "2.5.12"
   resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.5.12.tgz#8a6f779b1d4e60b7a57fb6fd48d84fb545b9cc66"
@@ -1230,7 +1245,12 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*", "@types/node@^16.7.10":
+"@types/node@*":
+  version "16.9.6"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.9.6.tgz#040a64d7faf9e5d9e940357125f0963012e66f04"
+  integrity sha512-YHUZhBOMTM3mjFkXVcK+WwAcYmyhe1wL4lfqNtzI0b3qAy7yuSetnM7QJazgE5PFmgVTNGiLOgRFfJMqW7XpSQ==
+
+"@types/node@^16.7.10":
   version "16.7.10"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.7.10.tgz#7aa732cc47341c12a16b7d562f519c2383b6d4fc"
   integrity sha512-S63Dlv4zIPb8x6MMTgDq5WWRJQe56iBEY0O3SOFA9JrRienkOVDXSXBjjJw6HTNQYSE2JI6GMCR6LVbIMHJVvA==
@@ -3372,10 +3392,22 @@ glob-parent@^5.1.2, glob-parent@~5.1.2:
   dependencies:
     is-glob "^4.0.1"
 
-glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6, glob@^7.1.7:
+glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.7:
   version "7.1.7"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.7.tgz#3b193e9233f01d42d0b3f78294bbeeb418f94a90"
   integrity sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==
+  dependencies:
+    fs.realpath "^1.0.0"
+    inflight "^1.0.4"
+    inherits "2"
+    minimatch "^3.0.4"
+    once "^1.3.0"
+    path-is-absolute "^1.0.0"
+
+glob@^7.1.6:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-7.2.0.tgz#d15535af7732e02e948f4c41628bd910293f6023"
+  integrity sha512-lmLf6gtyrPq8tTjSmrO94wBeQbFR3HbLHbuyD69wuyQkImp2hWqMGB47OX65FBkPffO641IP9jWa1z4ivqG26Q==
   dependencies:
     fs.realpath "^1.0.0"
     inflight "^1.0.4"
@@ -5046,9 +5078,9 @@ node-emoji@^1.10.0:
     lodash "^4.17.21"
 
 node-fetch@^2.6.0:
-  version "2.6.4"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.4.tgz#7f1d13b8f9ff0c1a994dc6f73c69f7d652c7ace2"
-  integrity sha512-aD1fO+xtLiSCc9vuD+sYMxpIuQyhHscGSkBEo2o5LTV/3bTEAYvdUii29n8LlO5uLCmWdGP7uVUVXFo5SRdkLA==
+  version "2.6.5"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.5.tgz#42735537d7f080a7e5f78b6c549b7146be1742fd"
+  integrity sha512-mmlIVHJEu5rnIxgEgez6b9GgWXbkZj5YZ7fx+2r94a2E+Uirsp6HsPTPlomfdHtpt/B0cdKviwkoaM6pyvUOpQ==
   dependencies:
     whatwg-url "^5.0.0"
 
@@ -7143,7 +7175,20 @@ yargs@^16.0.3, yargs@^16.2.0:
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
 
-yargs@^17.0.1, yargs@^17.1.1:
+yargs@^17.0.1:
+  version "17.2.0"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.2.0.tgz#ec529632b2cb9044f3927f4b45f9cc4ae2535653"
+  integrity sha512-UPeZv4h9Xv510ibpt5rdsUNzgD78nMa1rhxxCgvkKiq06hlKCEHJLiJ6Ub8zDg/wR6hedEI6ovnd2vCvJ4nusA==
+  dependencies:
+    cliui "^7.0.2"
+    escalade "^3.1.1"
+    get-caller-file "^2.0.5"
+    require-directory "^2.1.1"
+    string-width "^4.2.0"
+    y18n "^5.0.5"
+    yargs-parser "^20.2.2"
+
+yargs@^17.1.1:
   version "17.1.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.1.1.tgz#c2a8091564bdb196f7c0a67c1d12e5b85b8067ba"
   integrity sha512-c2k48R0PwKIqKhPMWjeiF6y2xY/gPMUlro0sgxqXpbOIohWiLNXWslsootttv7E1e73QPAMQSg5FeySbVcpsPQ==
