@@ -95,7 +95,7 @@ export default {
     padding: 0.75rem 1.25rem;
     margin: 0;
     border: none;
-    border-right: 1px solid #3794ff;
+    border-right: 2px solid #3794ff;
     border-radius: 0;
     background: transparent;
     outline: none;

@@ -7,21 +7,37 @@
       </div>
     </div>
     <section class="qs-step" style="padding-top: 0">
-      <h1>Install AppMap Agent</h1>
+      <h1 class="qs-headline__1">Quickstart</h1>
+      <h6 class="qs-headline__subhead">INSTALL APPMAP AGENT</h6>
       <div class="qs-step__block">
         <p class="qs-step__margin">
-          To record AppMaps you will need to install the AppMap agent for this
-          project. We have provided an installer to help you do that.
+          AppMap watches your code as it executes and generates traces you can
+          examine visually to understand exactly how it works.
         </p>
         <p class="qs-step__margin">
-          Run this command in the <b>root directory</b> of your project.
+          To do that you first need to hook a special AppMap agent in your code
+          and then run it normally, executing test cases or recording a live
+          interactive session of a web service.
         </p>
-        <v-code-snippet
-          :clipboardText="codeSnippet"
-          :messageSuccess="messageSuccess"
-        ></v-code-snippet>
-        <p>
-          After you have installed the agent proceed to
+        <p class="qs-step__margin qs-step__callout__primary">
+          <span class="callout-text">
+            Run this command in the <b>root directory</b> of your project:
+          </span>
+          <v-code-snippet
+            :clipboardText="codeSnippet"
+            :messageSuccess="messageSuccess"
+          ></v-code-snippet>
+          <span class="callout-text__right">
+            If you can’t run a Node.js based installer
+            <a href="https://appland.com/docs/quickstart/vscode/manual-step-2"
+              >visit our docs</a
+            >
+            for options.
+          </span>
+        </p>
+
+        <p class="qs-step__next-step">
+          Next up:
           <a href="#" @click="goToRecordAppmaps"><b>Record AppMaps</b></a>
         </p>
       </div>
