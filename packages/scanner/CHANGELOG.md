@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/applandinc/scanner/compare/v1.6.1...v1.6.2) (2021-09-23)
+
+
+### Bug Fixes
+
+* replace ms with s ([83f0cf2](https://github.com/applandinc/scanner/commit/83f0cf20f615110c5c5ad6c265df98db0e250364))
+
 ## [1.6.1](https://github.com/applandinc/scanner/compare/v1.6.0...v1.6.1) (2021-09-23)
 
 
