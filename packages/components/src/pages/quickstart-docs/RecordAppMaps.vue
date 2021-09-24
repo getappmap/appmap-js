@@ -46,7 +46,16 @@
         </div>
         <p class="qs-step__next-step">
           Next up:
-          <a href="#" @click="goToOpenAppmaps"><b>Open AppMaps</b></a>
+          <a href="#" @click="goToOpenAppmaps"><b>Open AppMaps</b></a><br/>
+          <a href="#" @click="goToInstallAgent"
+            ><div class="qs-next-progress-circle"></div
+          ></a>
+          <a href="#" @click="goToRecordAppmaps"
+            ><div class="qs-next-progress-circle"></div
+          ></a>
+          <a href="#" @click="goToOpenAppmaps"
+            ><div class="qs-next-progress-circle todo"></div
+          ></a>
         </p>
       </div>
     </section>
@@ -73,6 +82,16 @@ export default {
   },
 
   methods: {
+      goToInstallAgent(event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.$root.$emit('transition', 'INSTALL_AGENT');
+    },
+    goToRecordAppmaps(event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.$root.$emit('transition', 'RECORD_APPMAPS');
+    },
     goToOpenAppmaps(event) {
       event.preventDefault();
       event.stopImmediatePropagation();

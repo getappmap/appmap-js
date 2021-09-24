@@ -6,12 +6,12 @@
     <div class="qs-help">
       <HelpIcon class="qs-help__icon" />
       <div class="qs-help__text">
-        Stuck?
+        Stuck? For live support, contact an AppLand dieveloper directly
         <a
           href="https://appland.com/appmap/support"
           target="_blank"
           rel="noopener noreferrer"
-          >Contact an AppLand developer directly.</a
+          >here.</a
         >
       </div>
     </div>

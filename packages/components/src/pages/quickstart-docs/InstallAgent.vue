@@ -37,14 +37,19 @@
             for options.
           </span>
         </p>
-
         <span class="qs-step__next-step">
           Next up:
           <a href="#" @click="goToRecordAppmaps"><b>Record AppMaps</b></a
           ><br />
-          <div class="qs-next-progress-circle"></div>
-          <div class="qs-next-progress-circle todo"></div>
-          <div class="qs-next-progress-circle todo"></div>
+          <a href="#" @click="goToInstallAgent"
+            ><div class="qs-next-progress-circle"></div
+          ></a>
+          <a href="#" @click="goToRecordAppmaps"
+            ><div class="qs-next-progress-circle todo"></div
+          ></a>
+          <a href="#" @click="goToOpenAppmaps"
+            ><div class="qs-next-progress-circle todo"></div
+          ></a>
         </span>
       </div>
     </section>
@@ -72,10 +77,20 @@ export default {
   },
 
   methods: {
+    goToInstallAgent(event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.$root.$emit('transition', 'INSTALL_AGENT');
+    },
     goToRecordAppmaps(event) {
       event.preventDefault();
       event.stopImmediatePropagation();
       this.$root.$emit('transition', 'RECORD_APPMAPS');
+    },
+    goToOpenAppmaps(event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.$root.$emit('transition', 'OPEN_APPMAPS');
     },
   },
 };

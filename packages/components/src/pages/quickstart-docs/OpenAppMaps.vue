@@ -46,7 +46,16 @@
           You can return here by clicking on the AppMap logo in the left column
           <br />
           when you want to install AppMap for another project.</span
-        >
+        ><br />
+        <a href="#" @click="goToInstallAgent"
+          ><div class="qs-next-progress-circle"></div
+        ></a>
+        <a href="#" @click="goToRecordAppmaps"
+          ><div class="qs-next-progress-circle"></div
+        ></a>
+        <a href="#" @click="goToOpenAppmaps"
+          ><div class="qs-next-progress-circle"></div
+        ></a>
       </p>
     </section>
   </QuickstartLayout>
@@ -70,6 +79,21 @@ export default {
   },
 
   methods: {
+    goToInstallAgent(event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.$root.$emit('transition', 'INSTALL_AGENT');
+    },
+    goToRecordAppmaps(event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.$root.$emit('transition', 'RECORD_APPMAPS');
+    },
+    goToOpenAppmaps(event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.$root.$emit('transition', 'OPEN_APPMAPS');
+    },
     openAppmap(path) {
       this.$root.$emit('openAppmap', path);
     },
