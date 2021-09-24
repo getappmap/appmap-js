@@ -37,7 +37,7 @@ const invokeCommand = (
       description: 'Run with verbose logging',
     })
     .parse(
-      `install-agent ${debugSwitch} --dir ${projectDir}`,
+      `install-agent ${debugSwitch} ${projectDir}`,
       {},
       (err, argv, output) => {
         evalResults(err, argv, output);

@@ -16,7 +16,7 @@ import { BundleInstaller } from './rubyAgentInstaller';
 interface InstallCommandOptions {
   verbose?: any;
   projectType?: string;
-  dir: string;
+  directory: string;
 }
 
 type AgentInstallerConstructor = new (...args: any[]) => AgentInstaller;
@@ -29,7 +29,7 @@ const INSTALLERS: readonly AgentInstallerConstructor[] = [
 ];
 
 export default {
-  command: 'install [project-type]',
+  command: 'install [directory]',
   aliases: ['i', 'install-agent'],
   describe: 'Install and configure an AppMap language agent',
   builder(args: Yargs.Argv) {
@@ -40,32 +40,39 @@ export default {
       chalk.blue(installer.prototype.name)
     ).join(', ');
 
-    args.positional('project-type', {
+    args.option('project-type', {
       describe: [
         'Specifies the installation target. This may be a language or project framework. Case-insensitive.',
         `Supported project types: ${installerNames}`,
       ].join('\n'),
       type: 'string',
       default: undefined,
+      alias: 'p',
     });
-    args.option('dir', {
+    args.positional('directory', {
       describe: 'directory in which to install',
       default: '.',
-      alias: 'd',
     });
     return args.strict();
   },
 
   async handler(args: InstallCommandOptions) {
-    const { projectType, dir, verbose: isVerbose } = args;
+    const { projectType, directory, verbose: isVerbose } = args;
     const startTime = Date.now();
     const endTime = () => (Date.now() - startTime) / 1000;
     let installer: AgentInstaller | undefined;
+    const installers = INSTALLERS.map(
+      (constructor) => new constructor(directory)
+    );
+
 
     verbose(isVerbose);
 
     try {
-      const installProcedure = new AgentInstallerProcedure(installers, dir);
+      const installProcedure = new AgentInstallerProcedure(
+        installers,
+        directory
+      );
       installer = await installProcedure.run(projectType);
 
       Telemetry.sendEvent({
@@ -132,14 +139,14 @@ export default {
         exception = String(err);
       }
 
-      let directory: string | undefined;
+      let directoryContents: string | undefined;
       try {
-        directory = (await fs.readdir(dir)).join('\n');
+        directoryContents = (await fs.readdir(directory)).join('\n');
       } catch (e) {
         if (e instanceof Error) {
-          directory = e.stack;
+          directoryContents = e.stack;
         } else {
-          directory = String(e);
+          directoryContents = String(e);
         }
       }
 
@@ -151,7 +158,7 @@ export default {
           exception_type: (err as any)?.constructor?.name,
           log: ProcessLog.buffer,
           exception,
-          directory,
+          directory: directoryContents,
         },
         metrics: {
           duration: endTime(),
