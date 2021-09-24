@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import Yargs from 'yargs';
+import { resolve } from 'path';
 import { ValidationError, AbortError, InstallError } from '../errors';
 import { verbose } from '../../utils';
 import AgentInstallerProcedure from './agentInstallerProcedure';
@@ -65,7 +66,6 @@ export default {
       (constructor) => new constructor(directory)
     );
 
-
     verbose(isVerbose);
 
     try {
@@ -79,6 +79,7 @@ export default {
         name: 'install-agent:success',
         properties: {
           installer: installer.name,
+          path: resolve(directory),
         },
         metrics: {
           duration: endTime(),
@@ -123,6 +124,7 @@ export default {
             installer: installer?.name,
             installers_available: installersAvailable,
             reason: err.message,
+            path: resolve(directory),
           },
           metrics: {
             duration: endTime(),
@@ -159,6 +161,7 @@ export default {
           log: ProcessLog.buffer,
           exception,
           directory: directoryContents,
+          path: resolve(directory),
         },
         metrics: {
           duration: endTime(),
