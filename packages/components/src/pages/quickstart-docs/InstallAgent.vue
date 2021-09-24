@@ -16,8 +16,8 @@
         </p>
         <p class="qs-step__margin">
           To do that you first need to hook a special AppMap agent in your code
-          and then run it normally, executing test cases or recording a live
-          interactive session of a web service.
+          and then run your app normally. You will then be able to interact with
+          your app and make recordings of what is happening in the code.
         </p>
         <p class="qs-step__margin qs-step__callout__primary">
           <span class="callout-text">
@@ -29,7 +29,9 @@
           ></v-code-snippet>
           <span class="callout-text__right">
             If you can’t run a Node.js based installer
-            <a href="https://appland.com/docs/quickstart/vscode/manual-step-2"
+            <a
+              class="blue-on-blue-link"
+              href="https://appland.com/docs/quickstart/vscode/manual-step-2"
               >visit our docs</a
             >
             for options.

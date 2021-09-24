@@ -85,6 +85,9 @@ body {
   a {
     color: #2a84ef;
     text-decoration: none;
+    &.blue-on-blue-link {
+      color: $brightblue;
+    }
   }
 
   code {
@@ -110,7 +113,11 @@ body {
 .qs-container {
   margin-bottom: 12px;
   border-radius: 8px;
-  background: #1a1a1a;
+  background: linear-gradient(
+    0deg,
+    rgba(26, 26, 26, 0) 0%,
+    rgba(26, 26, 26, 1) 100%
+  );
 }
 
 .qs-button {
@@ -173,6 +180,12 @@ a.qs-button {
   list-style: none;
 }
 
+.qs-next-icon {
+  width: fit-content;
+  margin: auto 0.5rem;
+  color: $gray4;
+}
+
 h1.qs-headline__1 {
   font-size: 2rem;
   margin-left: -3px;
@@ -215,6 +228,11 @@ h6.qs-headline__subhead {
       background-color: black;
     }
   }
+}
+
+.primary-links {
+  display: block;
+  margin-top: 1rem;
 }
 
 .qs-title {

@@ -2,43 +2,50 @@
   <QuickstartLayout>
     <section class="qs-step">
       <div class="qs-step__head">
-        <h1 class="qs-title">Record AppMaps</h1>
+        <h1 class="qs-headline__1">Quickstart</h1>
+        <h6 class="qs-headline__subhead">RECORD APPMAPS</h6>
       </div>
       <div class="qs-step__block">
         <div>
-          <p class="mb20">
-            The two primary methods for creating AppMaps are recording test
-            cases or remote recording -- recording what is happening on your
-            application server as it runs.
+          <p class="qs-step__margin">
+            With the agent installed and your application server running you will be able to:</p>
+            <p class="qs-inline-steps"><b> Start a recording <span class="qs-next-icon"> >> </span> Interact with your
+            application <span class="qs-next-icon"> >> </span> Stop the recording and view an AppMap of how the code behaved </b></p>
           </p>
-          <p class="mb20">Record AppMaps for your language:</p>
-          <p class="mb20" v-if="editor === 'vscode'">
-            <a
+          <p class="qs-step__margin qs-step__callout__primary">Follow the simple instructions for doing this with your framework:
+          <span class="qs-step__margin primary-links" v-if="editor === 'vscode'">
+            <a class="blue-on-blue-link"
               href="https://appland.com/docs/quickstart/vscode/java-step-3.html"
-              >Java</a
-            >&nbsp;&nbsp;|&nbsp;&nbsp;<a
+              >Spring</a
+            >&nbsp;&nbsp;|&nbsp;&nbsp;<a class="blue-on-blue-link"
               href="https://appland.com/docs/quickstart/vscode/python-step-3.html"
-              >Python</a
-            >&nbsp;&nbsp;|&nbsp;&nbsp;<a
+              >Flask</a
+            >&nbsp;&nbsp;|&nbsp;&nbsp;<a class="blue-on-blue-link"
+              href="https://appland.com/docs/quickstart/vscode/python-step-3.html"
+              >Django</a
+            >&nbsp;&nbsp;|&nbsp;&nbsp;<a class="blue-on-blue-link"
               href="https://appland.com/docs/quickstart/vscode/ruby-step-3.html"
-              >Ruby</a
+              >Rails</a
             >
+          </span>
           </p>
           <p class="mb20" v-if="editor === 'jetbrains'">
             <a href="https://appland.com/docs/quickstart/intellij/step-3"
-              >Java</a
+              >Spring</a
             >&nbsp;&nbsp;|&nbsp;&nbsp;<a
               href="https://appland.com/docs/quickstart/pycharm/step-3"
-              >Python</a
+              >Flask</a
+            >&nbsp;&nbsp;|&nbsp;&nbsp;<a
+              href="https://appland.com/docs/quickstart/pycharm/step-3"
+              >Django</a
             >&nbsp;&nbsp;|&nbsp;&nbsp;<a
               href="https://appland.com/docs/quickstart/rubymine/step-3"
-              >Ruby</a
+              >Rails</a
             >
           </p>
         </div>
-
-        <p>
-          After you have recorded AppMaps proceed to
+        <p class="qs-step__next-step">
+          Next up:
           <a href="#" @click="goToOpenAppmaps"><b>Open AppMaps</b></a>
         </p>
       </div>
