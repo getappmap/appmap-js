@@ -2,7 +2,8 @@
   <QuickstartLayout>
     <section class="qs-step">
       <div class="qs-step__head">
-        <h1 class="qs-title">Open AppMaps</h1>
+        <h1 class="qs-headline__1">Quickstart</h1>
+        <h6 class="qs-headline__subhead">OPEN APPMAPS</h6>
       </div>
       <div class="qs-step__block" v-if="appmaps.length">
         <p>You have AppMaps in this project!</p>
@@ -39,6 +40,11 @@
         </table>
       </div>
       <div v-else class="qs-noappmaps">No AppMaps found in your project.</div>
+      <p class="qs-step__next-step">
+        This is the last step of the Quickstart. You can return here by clicking
+        on the AppMap logo in the left column when want to install AppMap for
+        another project.
+      </p>
     </section>
   </QuickstartLayout>
 </template>
