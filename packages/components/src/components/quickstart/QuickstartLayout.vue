@@ -191,10 +191,15 @@ h1.qs-headline__1 {
   margin-left: -3px;
 }
 
-h6.qs-headline__subhead {
+.qs-headline__subhead {
   font-size: 0.75rem;
   font-weight: normal;
   margin-bottom: 1.5rem;
+}
+
+.step-number {
+  color: $gray4;
+  font-style: italic;
 }
 
 .qs-step {

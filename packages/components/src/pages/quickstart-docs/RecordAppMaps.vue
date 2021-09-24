@@ -3,7 +3,9 @@
     <section class="qs-step">
       <div class="qs-step__head">
         <h1 class="qs-headline__1">Quickstart</h1>
-        <h6 class="qs-headline__subhead">RECORD APPMAPS</h6>
+         <div class="qs-headline__subhead">
+            RECORD APPMAPS<span class="step-number"> (step 2 of 3)</span>
+      </div>
       </div>
       <div class="qs-step__block">
         <div>

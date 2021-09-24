@@ -3,7 +3,9 @@
     <section class="qs-step">
       <div class="qs-step__head">
         <h1 class="qs-headline__1">Quickstart</h1>
-        <h6 class="qs-headline__subhead">OPEN APPMAPS</h6>
+        <div class="qs-headline__subhead">
+          OPEN APPMAPS <span class="step-number">(step 3 of 3)</span>
+        </div>
       </div>
       <div class="qs-step__block" v-if="appmaps.length">
         <p>You have AppMaps in this project!</p>

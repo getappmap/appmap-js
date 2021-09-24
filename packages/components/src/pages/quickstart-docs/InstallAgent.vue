@@ -8,7 +8,10 @@
     </div>
     <section class="qs-step" style="padding-top: 0">
       <h1 class="qs-headline__1">Quickstart</h1>
-      <h6 class="qs-headline__subhead">INSTALL APPMAP AGENT</h6>
+      <div class="qs-headline__subhead">
+        INSTALL APPMAP AGENT <span class="step-number">(step 1 of 3)</span>
+      </div>
+
       <div class="qs-step__block">
         <p class="qs-step__margin">
           AppMap watches your code as it executes and generates traces you can
