@@ -47,9 +47,7 @@ export default class AgentInstallerProcedure {
           '',
           `At least one of the requirements above must be satisfied to continue.`,
           '',
-          `Change the current directory or specify another directory by using the ${chalk.blue(
-            '-d'
-          )} or ${chalk.blue('--dir')} command line argument.`,
+          `Change the current directory or specify a different directory as the last argument to this command.`,
           `Use ${chalk.blue('--help')} for more information.`,
         ].join('\n')
       );
