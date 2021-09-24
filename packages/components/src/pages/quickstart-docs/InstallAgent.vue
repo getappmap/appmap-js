@@ -38,10 +38,14 @@
           </span>
         </p>
 
-        <p class="qs-step__next-step">
+        <span class="qs-step__next-step">
           Next up:
-          <a href="#" @click="goToRecordAppmaps"><b>Record AppMaps</b></a>
-        </p>
+          <a href="#" @click="goToRecordAppmaps"><b>Record AppMaps</b></a
+          ><br />
+          <div class="qs-next-progress-circle"></div>
+          <div class="qs-next-progress-circle todo"></div>
+          <div class="qs-next-progress-circle todo"></div>
+        </span>
       </div>
     </section>
   </QuickstartLayout>

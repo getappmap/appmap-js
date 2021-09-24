@@ -41,9 +41,12 @@
       </div>
       <div v-else class="qs-noappmaps">No AppMaps found in your project.</div>
       <p class="qs-step__next-step">
-        This is the last step of the Quickstart. You can return here by clicking
-        on the AppMap logo in the left column when want to install AppMap for
-        another project.
+        <b>This is the last step of the Quickstart!</b>
+        <br /><span class="minor-instructions">
+          You can return here by clicking on the AppMap logo in the left column
+          <br />
+          when you want to install AppMap for another project.</span
+        >
       </p>
     </section>
   </QuickstartLayout>

@@ -214,9 +214,30 @@ h6.qs-headline__subhead {
     opacity: 0.5;
   }
 
-  p.qs-step__next-step {
+  .qs-step__next-step {
     width: fit-content;
     margin: auto;
+    text-align: center;
+    width: fit-content;
+    margin: auto;
+    display: block;
+    text-align: center;
+    .minor-instructions {
+      color: $gray4;
+      font-size: 0.75rem;
+    }
+  }
+
+  .qs-next-progress-circle {
+    background: #2a84ef;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 1rem 0.25rem;
+    &.todo {
+      background-color: $gray3;
+    }
   }
 
   p.qs-step__callout__primary {
