@@ -13,6 +13,7 @@ import MavenInstaller from './mavenInstaller';
 import GradleInstaller from './gradleInstaller';
 import { PipInstaller, PoetryInstaller } from './pythonAgentInstaller';
 import { BundleInstaller } from './rubyAgentInstaller';
+import SignalConstants from 'constants';
 
 interface InstallCommandOptions {
   verbose?: any;
@@ -67,6 +68,27 @@ export default {
     );
 
     verbose(isVerbose);
+
+    ['SIGINT', 'SIGTERM', 'SIGBREAK'].forEach((signal) => {
+      process.on(signal, () => {
+        Telemetry.sendEvent({
+          name: 'install-agent:abort',
+          properties: {
+            installer: installer?.name,
+            reason: `process was closed via ${signal} signal`,
+            path: resolve(directory),
+            log: ProcessLog.buffer,
+          },
+          metrics: {
+            duration: endTime(),
+          },
+        });
+
+        // Exit immediately here. Otherwise, if the user hit `Ctrl + C` during a process exec, an
+        // exception may propagate as a failure due to the non-zero exit code of the child process.
+        process.exit(128 + SignalConstants[signal]);
+      });
+    });
 
     try {
       const installProcedure = new AgentInstallerProcedure(

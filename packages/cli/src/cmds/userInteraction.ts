@@ -2,24 +2,34 @@ import inquirer, { QuestionCollection } from 'inquirer';
 import ora, { Ora } from 'ora';
 import boxen from 'boxen';
 import { verbose } from '../utils';
+import { AbortError } from './errors';
 
 export class UserInteraction {
   private spinner: Ora = ora();
 
-  async prompt(questions: QuestionCollection) {
-    const wasSpinning = this.spinner.isSpinning;
-    if (wasSpinning) {
-      this.spinner.stop();
-      this.spinner.clear();
-    }
+  async prompt(questions: QuestionCollection): Promise<inquirer.Answers> {
+    return new Promise(async (resolve, reject) => {
+      const wasSpinning = this.spinner.isSpinning;
+      if (wasSpinning) {
+        this.spinner.stop();
+        this.spinner.clear();
+      }
 
-    const result = await inquirer.prompt(questions);
+      // Inquirer overrides process.on('SIGINT'), so this is a workaround
+      process.stdin.on('data', (buf) => {
+        if (buf.toString().endsWith('\u0003')) {
+          reject(new AbortError('user exited via Ctrl+C'));
+        }
+      });
 
-    if (wasSpinning) {
-      this.spinner.start();
-    }
+      const result = await inquirer.prompt(questions, { input: process.stdin });
 
-    return result;
+      if (wasSpinning) {
+        this.spinner.start();
+      }
+
+      resolve(result);
+    });
   }
 
   progress(msg: string) {
