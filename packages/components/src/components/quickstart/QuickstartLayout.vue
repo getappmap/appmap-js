@@ -88,6 +88,10 @@ body {
     &.blue-on-blue-link {
       color: $brightblue;
     }
+    &:focus {
+      outline: none;
+      outline-offset: 0;
+    }
   }
 
   code {
