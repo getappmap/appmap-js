@@ -1,10 +1,10 @@
 import { Event } from '@appland/models';
-import Assertion from './assertion';
-import missingContentType from './scanner/missingContentType';
-import leafExpected from './scanner/leafExpected';
-import missingAuthentication from './scanner/missingAuthentication';
-import slowHttpServerRequest from './scanner/slowHttpServerRequest';
-import slowQuery from './scanner/slowQuery';
+import Assertion from '../assertion';
+import missingContentType from '../scanner/missingContentType';
+import leafExpected from '../scanner/leafExpected';
+import missingAuthentication from '../scanner/missingAuthentication';
+import slowHttpServerRequest from '../scanner/slowHttpServerRequest';
+import slowQuery from '../scanner/slowQuery';
 
 class SlowFunctionOptions {
   constructor(public timeAllowed: number = 1, public fn: string) {}
