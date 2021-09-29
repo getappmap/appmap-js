@@ -42,17 +42,19 @@
         </p>
         <span class="qs-step__next-step">
           Next up:
-          <a href="#" @click="goToRecordAppmaps"><b>Record AppMaps</b></a
-          ><br />
-          <a href="#" @click="goToInstallAgent"
-            ><div class="qs-next-progress-circle"></div
-          ></a>
-          <a href="#" @click="goToRecordAppmaps"
-            ><div class="qs-next-progress-circle todo"></div
-          ></a>
-          <a href="#" @click="goToOpenAppmaps"
-            ><div class="qs-next-progress-circle todo"></div
-          ></a>
+          <a href="#" @click="goToRecordAppmaps">
+            <b>Record AppMaps</b>
+          </a>
+          <br />
+          <a href="#" @click="goToInstallAgent">
+            <div class="qs-next-progress-circle"></div>
+          </a>
+          <a href="#" @click="goToRecordAppmaps">
+            <div class="qs-next-progress-circle todo"></div>
+          </a>
+          <a href="#" @click="goToOpenAppmaps">
+            <div class="qs-next-progress-circle todo"></div>
+          </a>
         </span>
       </div>
     </section>

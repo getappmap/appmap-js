@@ -44,20 +44,22 @@
       <div v-else class="qs-noappmaps">No AppMaps found in your project.</div>
       <p class="qs-step__next-step">
         <b>This is the last step of the Quickstart!</b>
-        <br /><span class="minor-instructions">
+        <br />
+        <span class="minor-instructions">
           You can return here by clicking on the AppMap logo in the left column
           <br />
-          when you want to install AppMap for another project.</span
-        ><br />
-        <a href="#" @click="goToInstallAgent"
-          ><div class="qs-next-progress-circle"></div
-        ></a>
-        <a href="#" @click="goToRecordAppmaps"
-          ><div class="qs-next-progress-circle"></div
-        ></a>
-        <a href="#" @click="goToOpenAppmaps"
-          ><div class="qs-next-progress-circle"></div
-        ></a>
+          when you want to install AppMap for another project.
+        </span>
+        <br />
+        <a href="#" @click="goToInstallAgent">
+          <div class="qs-next-progress-circle"></div>
+        </a>
+        <a href="#" @click="goToRecordAppmaps">
+          <div class="qs-next-progress-circle"></div>
+        </a>
+        <a href="#" @click="goToOpenAppmaps">
+          <div class="qs-next-progress-circle"></div>
+        </a>
       </p>
     </section>
   </QuickstartLayout>
