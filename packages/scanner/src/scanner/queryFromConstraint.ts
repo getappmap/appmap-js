@@ -12,7 +12,13 @@ function scanner(options: Options): Assertion {
     'query-from-invalid-package',
     'Queries from invalid packages',
     'event',
-    (e: Event) => options.parentPackages.includes(e.parent!.codeObject.packageOf),
+    (e: Event) => {
+      if (!options.parentPackages.includes(e.parent!.codeObject.packageOf)) {
+        return `${e.codeObject.id} is invoked from illegal package ${
+          e.parent!.codeObject.packageOf
+        }`;
+      }
+    },
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
         e.sqlQuery !== undefined &&

@@ -31,7 +31,7 @@ function scanner(options: Options = new Options()): Assertion {
     'missing-authentication',
     'Unauthenticated HTTP server requests',
     'http_server_request',
-    (event: Event) => authenticatedBy(new EventNavigator(event).descendants()),
+    (event: Event) => !authenticatedBy(new EventNavigator(event).descendants()),
     (assertion: Assertion): void => {
       assertion.where = (e: Event) => {
         return (

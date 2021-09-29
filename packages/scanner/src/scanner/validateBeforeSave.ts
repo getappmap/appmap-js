@@ -23,7 +23,7 @@ export default function (): Assertion {
     'function',
     // TODO: ensure that the object id on the 'validate' is the same as the object id on the 'save'
     // TODO: if validate happens in a preceding event, this is also OK
-    (event: Event) => validatedBy(new EventNavigator(event).descendants()), // || validatedBy(new EventNavigator(event).preceding()),
+    (event: Event) => !validatedBy(new EventNavigator(event).descendants()),
     (assertion: Assertion): void => {
       assertion.where = (e: Event) => ['save', 'save!'].includes(e.methodId!);
       assertion.description = `'save' must be preceded by 'valid?' or 'validate'`;

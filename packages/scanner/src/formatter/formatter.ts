@@ -1,15 +1,11 @@
 import Assertion from '../assertion';
 import { AppMap } from '@appland/models';
 import chalk from 'chalk';
-import { AssertionMatch } from '../types';
+import { Finding } from '../types';
 
 export default abstract class Formatter {
   abstract appMap(appMap: AppMap): string;
-  abstract result(
-    assertion: Assertion,
-    matches: AssertionMatch[],
-    index: number
-  ): string | undefined;
+  abstract result(assertion: Assertion, findings: Finding[], index: number): string | undefined;
 
   summary(
     unmatched: number,

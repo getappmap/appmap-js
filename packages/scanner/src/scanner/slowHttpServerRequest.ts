@@ -10,7 +10,7 @@ function scanner(options: Options = new Options()): Assertion {
     'slow-http-server-request',
     'Slow HTTP server requests',
     'http_server_request',
-    (e: Event) => e.elapsedTime! < options.timeAllowed,
+    (e: Event) => e.elapsedTime! > options.timeAllowed,
     (assertion: Assertion): void => {
       assertion.where = (e: Event) => e.elapsedTime !== undefined;
       assertion.description = `Slow HTTP server request (> ${options.timeAllowed * 1000}ms)`;

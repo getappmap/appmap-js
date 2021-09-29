@@ -7,7 +7,7 @@ export default function (scope: Scope, where: ((e: Event) => boolean) | null = n
     'leaf-expected',
     'Unexpected child events',
     scope,
-    (e: Event) => e.children.length === 0,
+    (e: Event) => e.children.length > 0,
     (assertion: Assertion): void => {
       if (where) {
         assertion.where = where;

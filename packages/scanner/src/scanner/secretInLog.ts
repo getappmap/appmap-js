@@ -42,9 +42,21 @@ export default function (): Assertion {
     'secret-in-log',
     'Secret in log',
     'event',
-    (e: Event) =>
-      Object.keys(REGEXES).find((key) => findMatchingValue(REGEXES[key], e.parameters!)) ===
-      undefined,
+    (e: Event) => {
+      const matches: Match[] = Object.keys(REGEXES).reduce((memo, key) => {
+        const match = findMatchingValue(REGEXES[key], e.parameters!);
+        if (match) {
+          memo.push(match);
+        }
+        return memo;
+      }, [] as Match[]);
+      if (matches.length > 0) {
+        return matches.map((match) => ({
+          level: 'error',
+          message: `${match.value} contains secret ${match.regexp}`,
+        }));
+      }
+    },
     (assertion: Assertion): void => {
       assertion.where = (e: Event) => e.parameters !== null && e.codeObject.labels.has('log');
       assertion.description = `Log contains secret-like text`;

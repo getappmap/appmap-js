@@ -7,7 +7,7 @@ import Assertion from './assertion';
 import ProgressFormatter from './formatter/progressFormatter';
 import PrettyFormatter from './formatter/prettyFormatter';
 import { ValidationError, AbortError } from './errors';
-import { AssertionMatch } from './types';
+import { Finding } from './types';
 import { Argv, Arguments } from 'yargs';
 import chalk from 'chalk';
 import loadConfiguration from './configuration';
@@ -105,7 +105,7 @@ export default {
       const files: string[] = await glob(`${appmapDir}/**/*.appmap.json`);
 
       let index = 0;
-      const matches: AssertionMatch[] = [];
+      const matches: Finding[] = [];
 
       await Promise.all(
         files.map(async (file: string) => {
@@ -168,8 +168,8 @@ export default {
             eventMsg += ` (${match.event.elapsedTime}s)`;
           }
           console.log(eventMsg);
-          if (match.event.parent) {
-            console.log(`\tParent:\t${match.event.parent.id} - ${match.event.parent.toString()}`);
+          if (match.message) {
+            console.log(`\tMessage:\t${match.message}`);
           }
           console.log(`\tCondition:\t${match.condition}`);
           console.log('\n');
@@ -180,7 +180,7 @@ export default {
       );
       console.log();
 
-      const appMapDirMatches: Record<string, AssertionMatch[]> = {};
+      const appMapDirMatches: Record<string, Finding[]> = {};
       matches.forEach((m) => {
         const dirName = appMapDir(m.appMapFile!);
         if (!appMapDirMatches[dirName]) {

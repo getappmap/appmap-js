@@ -10,7 +10,7 @@ export default function (): Assertion {
     'missing-content-type',
     'HTTP server requests without a Content-Type header',
     'http_server_request',
-    (e: Event) => contentType(e) !== undefined,
+    (e: Event) => contentType(e) === undefined,
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
         e.httpServerResponse !== undefined &&
