@@ -35,6 +35,7 @@
             <a
               class="blue-on-blue-link"
               href="https://appland.com/docs/quickstart/vscode/manual-step-2"
+              @click="onOpenDocumentation"
               >visit our docs</a
             >
             for options.
@@ -96,6 +97,9 @@ export default {
       event.preventDefault();
       event.stopImmediatePropagation();
       this.$root.$emit('transition', 'OPEN_APPMAPS');
+    },
+    onOpenDocumentation() {
+      this.$root.$emit('openDocumentation');
     },
   },
 };
