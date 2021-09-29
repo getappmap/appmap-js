@@ -73,7 +73,7 @@
     crypto-js "^4.0.0"
     sqlite-parser "^1.0.1"
 
-"@appland/models@^1.5.0":
+"@appland/models@^1.5.0", "@appland/models@^1.5.1":
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/@appland/models/-/models-1.5.1.tgz#96f269d8327281c9be7694c34c35b61d3645fd39"
   integrity sha512-juY47UB98GNycxK6Q05tyBBvBGEVE93xwvTfpdNIQDYB8YwJEQ4u7XjOWm54fZwX8hcGO3IAjCYrkeU5k+BY1Q==

@@ -6,7 +6,7 @@ export default function (timeAllowed = 1): Assertion {
     'slow-http-server-request',
     'Slow HTTP server requests',
     'http_server_request',
-    (e: Event) => e.elapsedTime !== undefined && e.elapsedTime < timeAllowed,
+    (e: Event) => e.elapsedTime! < timeAllowed,
     (assertion: Assertion): void => {
       assertion.where = (e: Event) => e.elapsedTime !== undefined;
       assertion.description = `Slow HTTP server request (> ${timeAllowed * 1000}ms)`;

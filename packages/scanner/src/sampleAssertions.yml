@@ -15,3 +15,5 @@ id: missingContentType
 id: missingAuthentication
 ---
 id: validateBeforeSave
+---
+id: secretInLog

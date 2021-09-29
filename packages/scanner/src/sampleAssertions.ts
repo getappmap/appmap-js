@@ -11,7 +11,7 @@ import validateBeforeSave from './scanner/validateBeforeSave';
 
 const assertions: Assertion[] = [
   slowHttpServerRequest(),
-  slowQuery(),
+  slowQuery(0.05),
   queryFromView(),
   missingContentType(),
   missingAuthentication(),

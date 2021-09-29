@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@appland/appmap": "^3.2.3",
-    "@appland/models": "^1.5.0",
+    "@appland/models": "^1.5.1",
     "@types/sinon": "^10.0.2",
     "ansi-escapes": "^5.0.0",
     "chalk": "^4.1.2",
