@@ -42,7 +42,7 @@ context('VS Code Extension', () => {
       cy.get('.instructions__container').should('be.visible');
 
       cy.get('.instructions__close').click();
-      cy.get('.instructions__container').should('not.be.visible');
+      cy.get('.instructions__container').should('not.exist');
     });
 
     it('clicking HTTP server requests displays the correct data', () => {
