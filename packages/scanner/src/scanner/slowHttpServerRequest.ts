@@ -1,15 +1,21 @@
 import { Event } from '@appland/models';
 import Assertion from '../assertion';
 
-export default function (timeAllowed = 1): Assertion {
+class Options {
+  constructor(public timeAllowed = 1) {}
+}
+
+function scanner(options: Options = new Options()): Assertion {
   return Assertion.assert(
     'slow-http-server-request',
     'Slow HTTP server requests',
     'http_server_request',
-    (e: Event) => e.elapsedTime! < timeAllowed,
+    (e: Event) => e.elapsedTime! < options.timeAllowed,
     (assertion: Assertion): void => {
       assertion.where = (e: Event) => e.elapsedTime !== undefined;
-      assertion.description = `Slow HTTP server request (> ${timeAllowed * 1000}ms)`;
+      assertion.description = `Slow HTTP server request (> ${options.timeAllowed * 1000}ms)`;
     }
   );
 }
+
+export default { Options, scanner };

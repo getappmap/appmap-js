@@ -1,16 +1,14 @@
 import { Event } from '@appland/models';
 import Assertion from '../assertion';
 
-class UpdateInGetRequestOptions {
+class Options {
   constructor(
     public queryInclude: RegExp[] = [/INSERT/i, /UPDATE/i],
     public queryExclude: RegExp[] = []
   ) {}
 }
 
-function updateInGetRequest(
-  options: UpdateInGetRequestOptions = new UpdateInGetRequestOptions()
-): Assertion {
+function scanner(options: Options = new Options()): Assertion {
   return Assertion.assert(
     'update-in-get-request',
     'Data update performed in GET or HEAD request',
@@ -34,4 +32,4 @@ function updateInGetRequest(
   );
 }
 
-export default { options: UpdateInGetRequestOptions, scanner: updateInGetRequest };
+export default { Options, scanner };

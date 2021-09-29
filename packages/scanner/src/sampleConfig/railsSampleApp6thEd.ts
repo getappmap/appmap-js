@@ -7,10 +7,10 @@ import slowQuery from '../scanner/slowQuery';
 import updateInGetRequest from '../scanner/updateInGetRequest';
 
 const assertions: Assertion[] = [
-  slowHttpServerRequest(),
-  slowQuery(0.05),
+  slowHttpServerRequest.scanner(),
+  slowQuery.scanner(new slowQuery.Options(0.05)),
   missingContentType(),
-  missingAuthentication(),
+  missingAuthentication.scanner(),
   leafExpected('http_client_request'),
   leafExpected('sql_query'),
   updateInGetRequest.scanner(),

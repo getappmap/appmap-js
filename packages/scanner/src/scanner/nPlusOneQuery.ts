@@ -14,16 +14,15 @@ function sqlNormalized(query: SqlQuery): string {
   return obfuscate(query.sql, query.database_type);
 }
 
-class Limits {
-  constructor(public warning: number = 3, public error: number = 10) {}
-}
-
 class Options {
-  limit: Limits = new Limits();
-  whitelist: string[] = [];
+  /**
+  TODO: Warn on warningLimit, error on errorLimit.
+  errorLimit = 10;
+   */
+  constructor(public warningLimit = 3, public whitelist: string[] = []) {}
 }
 
-export default function (options: Options = new Options()): Assertion {
+function scanner(options: Options = new Options()): Assertion {
   const uniqueSQL = new Set<string>();
   const matchedSQL = new Set<string>();
 
@@ -67,7 +66,7 @@ export default function (options: Options = new Options()): Assertion {
     'n-plus-one-query',
     'Duplicate SQL queries',
     'sql_query',
-    (event: Event, appMap: AppMap) => findDuplicates(event, appMap) < options.limit.warning,
+    (event: Event, appMap: AppMap) => findDuplicates(event, appMap) < options.warningLimit,
     (assertion: Assertion): void => {
       assertion.where = (e: Event, appMap: AppMap) => {
         if (getSqlLabelFromString(e.sqlQuery!) !== 'SQL Select') {
@@ -92,3 +91,5 @@ export default function (options: Options = new Options()): Assertion {
     }
   );
 }
+
+export default { Options, scanner };
