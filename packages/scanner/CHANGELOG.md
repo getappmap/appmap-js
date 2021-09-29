@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/applandinc/scanner/compare/v1.6.2...v1.7.0) (2021-09-29)
+
+
+### Features
+
+* Update GitHub token format ([e765624](https://github.com/applandinc/scanner/commit/e76562405c8a28c050297f3bb6c5b16f69704f84))
+
 ## [1.6.2](https://github.com/applandinc/scanner/compare/v1.6.1...v1.6.2) (2021-09-23)
 
 
