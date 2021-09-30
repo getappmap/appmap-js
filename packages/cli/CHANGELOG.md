@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.7.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.6.4...@appland/appmap-v3.7.0) (2021-09-30)
+
+
+### Bug Fixes
+
+* Add project directory debug data ([78c9ce7](https://github.com/applandinc/appmap-js/commit/78c9ce7292d3d0d6882fc41588fd65d4670c3809))
+* Move directory argument to an optional positional argument ([a593924](https://github.com/applandinc/appmap-js/commit/a593924faf5beef9c0875308207e222a2eb8cd9a))
+
+
+### Features
+
+* Auto-select installer if only one is available ([db8ac09](https://github.com/applandinc/appmap-js/commit/db8ac0944b462f32b0909d3818b33b09f8e2342b))
+
 # [@appland/appmap-v3.6.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.6.3...@appland/appmap-v3.6.4) (2021-09-22)
 
 
