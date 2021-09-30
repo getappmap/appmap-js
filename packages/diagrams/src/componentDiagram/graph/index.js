@@ -370,34 +370,6 @@ export default class Graph {
     };
   }
 
-  makeRoot(codeObject) {
-    const visitedNodes = new Set();
-    const visitedEdges = new Set();
-    const queue = [codeObject.id];
-
-    while (queue.length > 0) {
-      const currentId = queue.pop();
-      if (!visitedNodes.has(currentId)) {
-        this.graph.outEdges(currentId).forEach((e) => {
-          visitedEdges.add(e);
-          queue.push(e.w);
-        });
-
-        visitedNodes.add(currentId);
-      }
-    }
-
-    // cleanup non traversable nodes
-    this.graph.nodes().forEach((node) => {
-      if (visitedNodes.has(node)) {
-        return;
-      }
-      this.removeNode(node);
-    });
-
-    this.render();
-  }
-
   edge(to, from) {
     return this.graph.edge(to, from);
   }

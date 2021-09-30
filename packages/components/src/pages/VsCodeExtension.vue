@@ -232,6 +232,7 @@ export default {
       versionText: '',
       VIEW_COMPONENT,
       VIEW_FLOW,
+      rootCodeObject: null,
       filters: {
         limitRootEvents: {
           on: true,
@@ -307,6 +308,17 @@ export default {
         rootEvent.traverse((e) => callTree.push(e));
         return callTree;
       }, []);
+
+      if (this.rootCodeObject) {
+        const eventBranches = this.rootCodeObject.allEvents.map((e) => [
+          e.id,
+          e.linkedEvent.id,
+        ]);
+
+        events = events.filter((e) =>
+          eventBranches.some((branch) => e.id >= branch[0] && e.id <= branch[1])
+        );
+      }
 
       events = events.filter(
         (e) =>
@@ -521,6 +533,7 @@ export default {
     },
 
     resetDiagram() {
+      this.rootCodeObject = null;
       this.clearSelection();
 
       this.renderKey += 1;
@@ -563,6 +576,12 @@ export default {
     setUserFiltered() {
       this.isUserFiltered = true;
     },
+  },
+
+  mounted() {
+    this.$root.$on('makeRoot', (codeObject) => {
+      this.rootCodeObject = codeObject;
+    });
   },
 };
 </script>
