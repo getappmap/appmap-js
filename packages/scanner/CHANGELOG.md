@@ -1,3 +1,15 @@
+# [1.8.0](https://github.com/applandinc/scanner/compare/v1.7.0...v1.8.0) (2021-09-30)
+
+
+### Bug Fixes
+
+* Match slow query if any include pattern matches ([1478b9a](https://github.com/applandinc/scanner/commit/1478b9a2d47867ef32621025cc492f0c5420e432))
+
+
+### Features
+
+* Scan for SQL update in GET/HEAD request ([e00a85e](https://github.com/applandinc/scanner/commit/e00a85e664f21ddfb6f1409633c556f324f4ee86))
+
 # [1.7.0](https://github.com/applandinc/scanner/compare/v1.6.2...v1.7.0) (2021-09-29)
 
 
