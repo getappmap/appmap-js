@@ -26,8 +26,7 @@ declare module '@appland/models' {
   }
 
   export class ReturnValueObject extends ObjectBase {
-    readonly return_value?: string;
-    readonly exceptions?: readonly ExceptionObject[];
+    readonly value: string;
   }
 
   export class HttpServerRequest {
