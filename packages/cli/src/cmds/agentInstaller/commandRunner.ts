@@ -1,8 +1,9 @@
-import { ChildProcess, execSync, spawn } from 'child_process';
+import { ChildProcess, execSync, spawn, ExecException } from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
 import CommandStruct, { CommandReturn } from './commandStruct';
 import { verbose } from '../../utils';
+import { ChildProcessError } from '../errors';
 
 export class ProcessLog {
   public static buffer: string = '';
@@ -28,15 +29,45 @@ export class ProcessLog {
   }
 }
 
+interface CommandOutputChunk {
+  stream: 'stdout' | 'stderr';
+  data: string;
+}
+
+class CommandOutput {
+  private chunks: CommandOutputChunk[] = [];
+
+  append(stream: 'stdout' | 'stderr', data: string) {
+    this.chunks.push({ stream, data });
+  }
+
+  get stdout() {
+    return this.chunks
+      .filter((chunk) => chunk.stream === 'stdout')
+      .map((chunk) => chunk.data)
+      .join('');
+  }
+
+  get stderr() {
+    return this.chunks
+      .filter((chunk) => chunk.stream === 'stderr')
+      .map((chunk) => chunk.data)
+      .join('');
+  }
+
+  get all() {
+    return this.chunks.map((chunk) => chunk.data).join('');
+  }
+}
+
 export async function run(command: CommandStruct): Promise<CommandReturn> {
   return new Promise((resolve, reject) => {
     const cp = spawn(command.program, command.args, {
-        env: command.environment,
+      env: command.environment,
       cwd: command.path as string,
     });
 
-    let stdout = '';
-    let stderr = '';
+    let output = new CommandOutput();
 
     if (verbose()) {
       console.log(
@@ -54,14 +85,27 @@ export async function run(command: CommandStruct): Promise<CommandReturn> {
     }
 
     cp.stderr?.on('data', (data) => {
-      stderr += data;
+      output.append('stderr', data.toString());
     });
 
     cp.stdout?.on('data', (data) => {
-      stdout += data;
+      output.append('stdout', data.toString());
     });
 
     ProcessLog.log(command.toString(), cp);
+
+    cp.on('error', (err: Error) => {
+      if (err['code'] === 'ENOENT') {
+        reject(
+          new ChildProcessError(
+            command.toString(),
+            `${command.toString()} was not found. Verify the command can be found in your PATH and try again.`
+          )
+        );
+      }
+
+      reject(err);
+    });
 
     cp.on('exit', (code, signal) => {
       if (verbose()) {
@@ -71,10 +115,15 @@ export async function run(command: CommandStruct): Promise<CommandReturn> {
       ProcessLog.recordExit(command.program, code, signal);
 
       if (code === 0) {
-        return resolve({ stdout, stderr });
+        return resolve({
+          stdout: output.stdout,
+          stderr: output.stderr,
+        });
       }
 
-      return reject(code);
+      return reject(
+        new ChildProcessError(command.toString(), output.all, code)
+      );
     });
   });
 }

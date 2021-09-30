@@ -168,6 +168,16 @@ function exists(path) {
   });
 }
 
+/**
+ * Append a prefix to each line in a string
+ * @param {string} str the string to be prefixed
+ * @param {string} prefix a string to prefix each line with
+ * @returns {string} the resulting string which starts each line with a prefix
+ */
+function prefixLines(str, prefix) {
+  return str.replace(/^/gm, prefix);
+}
+
 module.exports = {
   baseName,
   formatValue,
@@ -180,4 +190,5 @@ module.exports = {
   buildDirectory,
   renameFile,
   exists,
+  prefixLines,
 };

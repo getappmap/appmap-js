@@ -3,10 +3,14 @@ import ora, { Ora } from 'ora';
 import boxen from 'boxen';
 import { verbose } from '../utils';
 
+interface SpinnerOptions {
+  supressSpinner?: boolean;
+}
+
 export class UserInteraction {
   private spinner: Ora = ora();
 
-  async prompt(questions: QuestionCollection) {
+  async prompt(questions: QuestionCollection, opts?: SpinnerOptions) {
     const wasSpinning = this.spinner.isSpinning;
     if (wasSpinning) {
       this.spinner.stop();
@@ -15,7 +19,7 @@ export class UserInteraction {
 
     const result = await inquirer.prompt(questions);
 
-    if (wasSpinning) {
+    if (wasSpinning && !opts?.supressSpinner) {
       this.spinner.start();
     }
 
@@ -47,7 +51,8 @@ export class UserInteraction {
     }
 
     if (msg) {
-      console.error('\n', msg);
+      console.error('');
+      console.error(msg);
     }
   }
 
