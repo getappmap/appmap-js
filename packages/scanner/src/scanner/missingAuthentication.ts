@@ -37,7 +37,7 @@ function scanner(options: Options = new Options()): Assertion {
         return (
           e.route !== undefined &&
           e.httpServerResponse !== undefined &&
-          e.httpServerResponse!.status_code < 300 &&
+          e.httpServerResponse.status < 300 &&
           contentType(e) !== undefined &&
           options.routes.some((pattern) => pattern.test(e.route!)) &&
           options.contentTypes.some((pattern) => pattern.test(contentType(e)!))

@@ -32,8 +32,6 @@ declare module '@appland/models' {
 
   export class HttpServerRequest {
     readonly headers?: Record<string, string>;
-    readonly authorization?: string;
-    readonly mime_type?: string;
     readonly request_method: string;
     readonly path_info: string;
     readonly normalized_path_info?: string;
@@ -41,8 +39,8 @@ declare module '@appland/models' {
   }
 
   export class HttpServerResponse {
-    readonly status_code: number;
-    readonly mime_type?: string;
+    readonly status: number;
+    readonly headers?: Record<string, string>;
   }
 
   export class HttpClientRequest {
@@ -52,8 +50,7 @@ declare module '@appland/models' {
   }
 
   export class HttpClientResponse {
-    readonly status_code: number;
-    readonly mime_type?: string;
+    readonly status: number;
     readonly headers?: Record<string, string>;
   }
 

@@ -14,8 +14,8 @@ export default function (): Assertion {
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
         e.httpServerResponse !== undefined &&
-        !isRedirect(e.httpServerResponse!.status_code) &&
-        !isNoContent(e.httpServerResponse!.status_code);
+        !isRedirect(e.httpServerResponse!.status) &&
+        !isNoContent(e.httpServerResponse!.status);
       assertion.description = `HTTP server request must have a Content-Type header`;
     }
   );

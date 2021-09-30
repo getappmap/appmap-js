@@ -9,8 +9,9 @@ function verbose(v: boolean | null = null): boolean {
 }
 
 function contentType(event: Event): string | undefined {
-  return event.httpServerResponse?.mime_type;
-  // responseHeaders(event)['Content-Type'] ||
+  if (event.httpServerResponse && event.httpServerResponse!.headers) {
+    return event.httpServerResponse!.headers!['Content-Type'];
+  }
 }
 
 function appMapDir(appMapFileName: string): string {
