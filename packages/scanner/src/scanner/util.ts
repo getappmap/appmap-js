@@ -8,6 +8,10 @@ function verbose(v: boolean | null = null): boolean {
   return isVerbose;
 }
 
+function emptyValue(value: string): boolean {
+  return [null, undefined, ''].includes(value);
+}
+
 function contentType(event: Event): string | undefined {
   if (event.httpServerResponse && event.httpServerResponse!.headers) {
     return event.httpServerResponse!.headers!['Content-Type'];
@@ -59,4 +63,4 @@ function ideLink(filePath: string, ide: string, eventId: number): string {
   return [OSC, '8', SEP, SEP, link, BEL, filePath, OSC, '8', SEP, SEP, BEL].join('');
 }
 
-export { appMapDir, contentType, isFalsey, ideLink, verbose };
+export { appMapDir, contentType, emptyValue, isFalsey, ideLink, verbose };
