@@ -5,6 +5,7 @@ export default {
   component: RecordAppMaps,
   args: {
     editor: 'vscode',
+    projectName: 'my_web_app',
   },
 };
 

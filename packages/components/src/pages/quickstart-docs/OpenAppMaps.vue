@@ -2,7 +2,7 @@
   <QuickstartLayout>
     <section class="qs-step">
       <div class="qs-step__head">
-        <h1 class="qs-headline__1">Quickstart</h1>
+        <h1 class="qs-headline__1">{{ headerText }}</h1>
         <div class="qs-headline__subhead">
           OPEN APPMAPS <span class="step-number">(step 3 of 3)</span>
         </div>
@@ -79,6 +79,13 @@ export default {
     appmaps: {
       type: Array,
       default: () => [],
+    },
+    projectName: String,
+  },
+
+  computed: {
+    headerText() {
+      return ['Quickstart', this.projectName].filter((x) => x).join(': ');
     },
   },
 

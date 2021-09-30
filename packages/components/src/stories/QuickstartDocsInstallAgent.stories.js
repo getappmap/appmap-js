@@ -4,6 +4,7 @@ export default {
   title: 'Pages/VS Code/Quickstart Docs/Install Agent',
   component: InstallAgent,
   args: {
+    projectName: 'my_web_app',
     clipboardText: 'npx @appland/appmap install-agent',
   },
 };

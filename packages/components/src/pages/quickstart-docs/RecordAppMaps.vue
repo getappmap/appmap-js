@@ -2,7 +2,7 @@
   <QuickstartLayout>
     <section class="qs-step">
       <div class="qs-step__head">
-        <h1 class="qs-headline__1">Quickstart</h1>
+        <h1 class="qs-headline__1">{{ headerText }}</h1>
         <div class="qs-headline__subhead">
           RECORD APPMAPS<span class="step-number"> (step 2 of 3)</span>
         </div>
@@ -112,6 +112,13 @@ export default {
       required: true,
       default: 'vscode',
       validator: (value) => ['vscode', 'jetbrains'].indexOf(value) !== -1,
+    },
+    projectName: String,
+  },
+
+  computed: {
+    headerText() {
+      return ['Quickstart', this.projectName].filter((x) => x).join(': ');
     },
   },
 

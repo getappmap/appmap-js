@@ -7,7 +7,7 @@
       </div>
     </div>
     <section class="qs-step" style="padding-top: 0">
-      <h1 class="qs-headline__1">Quickstart</h1>
+      <h1 class="qs-headline__1">{{ headerText }}</h1>
       <div class="qs-headline__subhead">
         INSTALL APPMAP AGENT <span class="step-number">(step 1 of 3)</span>
       </div>
@@ -74,12 +74,22 @@ export default {
     VCodeSnippet,
   },
 
+  props: {
+    projectName: String,
+  },
+
   data() {
     return {
       codeSnippet: 'npx @appland/appmap install-agent',
       messageSuccess:
         '<b>Copied!</b><br>Paste into your terminal<br>to run the installer',
     };
+  },
+
+  computed: {
+    headerText() {
+      return ['Quickstart', this.projectName].filter((x) => x).join(': ');
+    },
   },
 
   methods: {

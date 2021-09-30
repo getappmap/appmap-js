@@ -27,6 +27,7 @@ export default {
         functions: 279,
       },
     ],
+    projectName: 'my_web_app',
   },
 };
 
