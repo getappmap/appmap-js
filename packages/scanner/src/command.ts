@@ -26,6 +26,7 @@ enum ExitCode {
 interface CommandOptions {
   verbose?: boolean;
   appmapDir?: string;
+  appmapFile?: string;
   config: string;
   progressFormat: string;
   ide?: string;
@@ -44,6 +45,10 @@ export default {
     args.option('appmap-dir', {
       describe: 'directory to recursively inspect for AppMaps',
       alias: 'd',
+    });
+    args.option('appmap-file', {
+      describe: 'single file to scan',
+      alias: 'f',
     });
     args.option('config', {
       describe:
@@ -87,11 +92,19 @@ export default {
         postCommitStatus('pending', 'Validation is in progress...');
       }
 
+      if (appmapFile && appmapDir) {
+        throw new ValidationError('Use --appmap-dir or --appmap-file, but not both');
+      }
+
       let files: string[] = [];
       if (appmapDir) {
         await validateFile('directory', appmapDir!);
         const glob = promisify(globCallback);
         files = await glob(`${appmapDir}/**/*.appmap.json`);
+      }
+      if (appmapFile) {
+        await validateFile('file', appmapFile);
+        files = [appmapFile];
       }
 
       const checker = new AssertionChecker();
