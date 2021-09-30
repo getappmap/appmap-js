@@ -1,13 +1,13 @@
 import { Event } from '@appland/models';
-import Assertion from './assertion';
-import missingContentType from './scanner/missingContentType';
-import leafExpected from './scanner/leafExpected';
-import missingAuthentication from './scanner/missingAuthentication';
-import nPlusOneQuery from './scanner/nPlusOneQuery';
-import queryFromView from './scanner/queryFromView';
-import slowHttpServerRequest from './scanner/slowHttpServerRequest';
-import slowQuery from './scanner/slowQuery';
-import validateBeforeSave from './scanner/validateBeforeSave';
+import Assertion from '../assertion';
+import missingContentType from '../scanner/missingContentType';
+import leafExpected from '../scanner/leafExpected';
+import missingAuthentication from '../scanner/missingAuthentication';
+import nPlusOneQuery from '../scanner/nPlusOneQuery';
+import queryFromView from '../scanner/queryFromView';
+import slowHttpServerRequest from '../scanner/slowHttpServerRequest';
+import slowQuery from '../scanner/slowQuery';
+import validateBeforeSave from '../scanner/validateBeforeSave';
 
 const assertions: Assertion[] = [
   slowHttpServerRequest(),

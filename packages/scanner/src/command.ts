@@ -41,7 +41,7 @@ export default {
     args.option('config', {
       describe:
         'path to assertions config file (TypeScript or YAML, check docs for configuration format)',
-      default: '../sampleAssertions.js',
+      default: join(__dirname, './sampleConfig/default.ts'),
       alias: 'c',
     });
     args.option('progress-format', {
@@ -99,6 +99,12 @@ export default {
 
       await Promise.all(
         files.map(async (file: string) => {
+          // TODO: Improve this by respecting .gitignore, or similar.
+          // For now, this addresses the main problem of encountering appmap-js and its appmap.json files
+          // in a bundled node_modules.
+          if (file.split('/').includes('node_modules')) {
+            return null;
+          }
           const appMapData = await fs.readFile(file, 'utf8');
           const appMap = buildAppMap(appMapData).normalize().build();
 
