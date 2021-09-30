@@ -3,12 +3,16 @@ import CommandStruct from './commandStruct';
 import { run } from './commandRunner';
 import { getOutput } from './commandUtil';
 
-export abstract class JavaBuildToolInstaller {
+export default abstract class JavaBuildToolInstaller {
   private _agentJar?: string;
 
   protected abstract printJarPathCommand(): Promise<CommandStruct>;
   protected constructor(readonly path: string) {
     this.path = path;
+  }
+
+  get documentation(): string {
+    return 'https://appland.com/docs/reference/appmap-java';
   }
 
   async initCommand(): Promise<CommandStruct> {

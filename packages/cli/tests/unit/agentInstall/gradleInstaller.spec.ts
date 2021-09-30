@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import glob from 'glob';
 import sinon from 'sinon';
 import inquirer from 'inquirer';
-import { GradleInstaller } from '../../../src/cmds/agentInstaller/gradleInstaller';
+import GradleInstaller from '../../../src/cmds/agentInstaller/gradleInstaller';
 
 const fixtureDir = path.join(__dirname, '..', 'fixtures', 'java', 'gradle');
 const dataDir = path.join(fixtureDir, 'data');
@@ -30,7 +30,7 @@ describe('GradleInstaller', () => {
       if (false && test !== 'empty') {
         return;
       }
-      
+
       const actualFile = `${test}.gradle`;
 
       it(`transforms ${actualFile} as expected`, async () => {
@@ -48,7 +48,10 @@ describe('GradleInstaller', () => {
 
         const ignoreWhitespaceDiff = false;
 
-        let expected = await fs.readFile(path.join(dataDir, `${test}${expectedExt}`), 'utf-8');
+        let expected = await fs.readFile(
+          path.join(dataDir, `${test}${expectedExt}`),
+          'utf-8'
+        );
         if (ignoreWhitespaceDiff) {
           expected = expected.replace(/[^\S\r\n]+/g, '');
         }

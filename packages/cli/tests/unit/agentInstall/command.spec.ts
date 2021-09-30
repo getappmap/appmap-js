@@ -5,20 +5,21 @@ import sinon from 'sinon';
 import inquirer from 'inquirer';
 import Telemetry from '../../../src/telemetry';
 import yargs from 'yargs';
-
+import { PoetryInstaller } from '../../../src/cmds/agentInstaller/pythonAgentInstaller';
+import AgentInstallerProcedure from '../../../src/cmds/agentInstaller/agentInstallerProcedure';
 import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
 import CommandStruct, {
   CommandReturn,
 } from '../../../src/cmds/agentInstaller/commandStruct';
 
 import UI from '../../../src/cmds/userInteraction';
+import { ValidationError } from '../../../src/cmds/errors';
 
 const fixtureDir = path.join(__dirname, '..', 'fixtures');
 tmp.setGracefulCleanup();
 
 const invokeCommand = (
   projectDir: string,
-  projectType: string,
   evalResults: (err: Error | undefined, argv: any, output: string) => void
 ) => {
   const debugSwitch: string = ''; // to debug, set debugSwitch to -v
@@ -31,14 +32,14 @@ const invokeCommand = (
   }
 
   return yargs
-    .command(require('../../../src/cmds/agentInstaller/install-agent'))
+    .command(require('../../../src/cmds/agentInstaller/install-agent').default)
     .option('verbose', {
       alias: 'v',
       type: 'boolean',
       description: 'Run with verbose logging',
     })
     .parse(
-      `install-agent ${debugSwitch} --dir ${projectDir} ${projectType}`,
+      `install-agent ${debugSwitch} ${projectDir}`,
       {},
       (err, argv, output) => {
         evalResults(err, argv, output);
@@ -87,7 +88,7 @@ describe('install-agent sub-command', () => {
         .onCall(callIdx++)
         .callsFake(validateAgent);
 
-      return invokeCommand(projectDir, 'Java', evalResults);
+      return invokeCommand(projectDir, evalResults);
     };
 
     const expectedConfig = `
@@ -369,7 +370,7 @@ packages:
         .onCall(callIdx++)
         .callsFake(validateAgent);
 
-      return invokeCommand(projectDir, 'Ruby', evalResults);
+      return invokeCommand(projectDir, evalResults);
     };
 
     it('installs as expected', async () => {
@@ -430,7 +431,7 @@ packages:
         .onCall(callIdx++)
         .callsFake(initAgent);
 
-      return invokeCommand(projectDir, 'Python', evalResults);
+      return invokeCommand(projectDir, evalResults);
     };
 
     const expectedConfig = `
@@ -555,6 +556,48 @@ packages:
           evalResults
         );
       });
+    });
+  });
+
+  describe('Varied project configurations', () => {
+    beforeEach(() => {
+      sinon.stub(commandRunner, 'run').resolves({ stdout: '', stderr: '' });
+      sinon.stub(console, 'warn');
+    });
+
+    it('requests the user to select a project type if more than one exist', async () => {
+      const projectFixture = path.join(fixtureDir, 'python', 'mixed');
+      const { name: projectDir } = tmp.dirSync({} as any);
+      await fs.copy(projectFixture, projectDir);
+
+      const promptStub = sinon
+        .stub(inquirer, 'prompt')
+        .resolves({ installerName: 'poetry', confirm: true });
+
+      const installAgentStub = sinon
+        .stub(PoetryInstaller.prototype, 'installAgent')
+        .resolves();
+
+      await invokeCommand(projectDir, () => {});
+
+      const firstPrompt = promptStub.getCall(0).args[0] as inquirer.Question;
+      expect(firstPrompt.name).toEqual('installerName');
+      expect(installAgentStub.called).toBe(true);
+    });
+
+    it('fails if no supported project is found', async () => {
+      const { name: projectDir } = tmp.dirSync({} as any);
+      const installProcedureStub = sinon
+        .stub(AgentInstallerProcedure.prototype, 'run')
+        .callThrough();
+
+      await invokeCommand(projectDir, () => {});
+
+      const { returnValue } = installProcedureStub.getCall(0);
+      expect(returnValue).rejects.toBeInstanceOf(ValidationError);
+      returnValue.catch((err) =>
+        expect(err.message).toMatch('No supported project was found')
+      );
     });
   });
 });

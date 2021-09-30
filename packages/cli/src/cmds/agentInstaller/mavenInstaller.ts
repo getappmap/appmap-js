@@ -6,12 +6,12 @@ import chalk from 'chalk';
 import CommandStruct from './commandStruct';
 import AgentInstaller from './agentInstaller';
 import { verbose, exists } from '../../utils';
-import { JavaBuildToolInstaller } from './javaBuildToolInstaller';
+import JavaBuildToolInstaller from './javaBuildToolInstaller';
 
-
-export class MavenInstaller
+export default class MavenInstaller
   extends JavaBuildToolInstaller
-  implements AgentInstaller {
+  implements AgentInstaller
+{
   constructor(readonly path: string) {
     super(path);
   }
