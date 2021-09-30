@@ -1,4 +1,5 @@
 import { AppMap, Event } from '@appland/models';
+import { verbose } from '../scanner/util';
 import Assertion from '../assertion';
 import { Finding, Scope } from '../types';
 
@@ -12,20 +13,42 @@ export default abstract class Strategy {
 
   check(appMap: AppMap, assertion: Assertion, findings: Finding[]): void {
     for (const e of appMap.events) {
-      if (!e.isCall() || !e.returnEvent) {
+      if (!e.isCall()) {
+        continue;
+      }
+      if (verbose()) {
+        console.warn(`Asserting ${assertion.id} on event ${e.toString()}`);
+      }
+
+      if (!e.returnEvent) {
+        if (verbose()) {
+          console.warn(`\tEvent has no returnEvent. Skipping.`);
+        }
         continue;
       }
       if (!this.isEventApplicable(e)) {
+        if (verbose()) {
+          console.warn(`\tEvent is not applicable. Skipping.`);
+        }
         continue;
       }
 
       if (assertion.where && !assertion.where(e, appMap)) {
+        if (verbose()) {
+          console.warn(`\t'where' clause is not satisifed. Skipping.`);
+        }
         continue;
       }
       if (assertion.include.length > 0 && !assertion.include.every((fn) => fn(e, appMap))) {
+        if (verbose()) {
+          console.warn(`\t'include' clause is not satisifed. Skipping.`);
+        }
         continue;
       }
       if (assertion.exclude.length > 0 && assertion.exclude.some((fn) => fn(e, appMap))) {
+        if (verbose()) {
+          console.warn(`\t'exclude' clause is not satisifed. Skipping.`);
+        }
         continue;
       }
 
@@ -41,6 +64,7 @@ export default abstract class Strategy {
       };
 
       const matchResult = assertion.matcher(e, appMap);
+      const numFindings = findings.length;
       if (matchResult === true) {
         findings.push(buildFinding());
       } else if (typeof matchResult === 'string') {
@@ -55,6 +79,13 @@ export default abstract class Strategy {
           }
           findings.push(finding);
         });
+      }
+      if (verbose()) {
+        if (findings.length > numFindings) {
+          findings.forEach((finding) =>
+            console.log(`\tFinding: ${finding.scannerId} : ${finding.message || finding.condition}`)
+          );
+        }
       }
     }
   }

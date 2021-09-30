@@ -8,6 +8,7 @@ import SqlQueryStrategy from './strategy/sqlQueryStrategy';
 import EventStrategy from './strategy/eventStrategy';
 import FunctionStrategy from './strategy/functionStrategy';
 import HttpClientRequestStrategy from './strategy/httpClientRequestStrategy';
+import { verbose } from './scanner/util';
 
 export default class AssertionChecker {
   private strategies: Strategy[] = [
@@ -19,6 +20,9 @@ export default class AssertionChecker {
   ];
 
   check(appMapData: AppMap, assertion: Assertion, matches: Finding[]): void {
+    if (verbose()) {
+      console.warn(`Checking AppMap ${appMapData.name}`);
+    }
     for (const strategy of this.strategies) {
       if (strategy.supports(assertion)) {
         return strategy.check(appMapData, assertion, matches);

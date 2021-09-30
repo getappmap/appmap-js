@@ -11,7 +11,7 @@ import { Finding } from './types';
 import { Argv, Arguments } from 'yargs';
 import chalk from 'chalk';
 import loadConfiguration from './configuration';
-import { appMapDir } from './scanner/util';
+import { appMapDir, verbose } from './scanner/util';
 import { join } from 'path';
 import { ideLink } from './scanner/util';
 import postCommitStatus from './commitStatus/github/commitStatus';
@@ -74,8 +74,19 @@ export default {
   },
 
   async handler(options: Arguments): Promise<void> {
-    const { appmapDir, appmapFile, config, progressFormat, verbose, ide, commitStatus } =
-      options as unknown as CommandOptions;
+    const {
+      appmapDir,
+      appmapFile,
+      config,
+      progressFormat,
+      verbose: isVerbose,
+      ide,
+      commitStatus,
+    } = options as unknown as CommandOptions;
+
+    if (isVerbose) {
+      verbose(true);
+    }
 
     const validateFile = async (kind: string, path: string) => {
       try {
