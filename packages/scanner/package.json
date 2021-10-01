@@ -45,6 +45,7 @@
     "ansi-escapes": "^5.0.0",
     "chalk": "^4.1.2",
     "js-yaml": "^4.1.0",
+    "octokat": "^0.10.0",
     "semantic-release": "^17.4.7",
     "supports-hyperlinks": "^2.2.0",
     "yargs": "^17.1.1"

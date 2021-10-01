@@ -15,6 +15,7 @@ import { exec } from 'child_process';
 import { appMapDir } from './scanner/util';
 import { join } from 'path';
 import { ideLink } from './scanner/util';
+import postCommitStatus from './commitStatus/github/commitStatus';
 
 interface CommandOptions {
   verbose?: boolean;
@@ -22,6 +23,7 @@ interface CommandOptions {
   config: string;
   progressFormat: string;
   ide?: string;
+  commitStatus?: string;
 }
 
 export default {
@@ -53,12 +55,16 @@ export default {
       describe: 'choose your IDE protocol to open AppMaps directly in your IDE.',
       options: ['vscode', 'x-mine', 'idea', 'pycharm'],
     });
+    args.option('commit-status', {
+      describe: 'set your repository hosting system to post commit status',
+      options: ['github'],
+    });
 
     return args.strict();
   },
 
   async handler(options: Arguments): Promise<void> {
-    const { appmapDir, config, progressFormat, verbose, ide } =
+    const { appmapDir, config, progressFormat, verbose, ide, commitStatus } =
       options as unknown as CommandOptions;
 
     process.stdout.write(`Indexing ${appmapDir}...`);
@@ -76,6 +82,10 @@ export default {
     console.log('done');
 
     try {
+      if (commitStatus) {
+        postCommitStatus('pending', 'Validation is in progress...');
+      }
+
       try {
         await fs.access(appmapDir as PathLike, fsConstants.R_OK);
       } catch {
@@ -190,8 +200,22 @@ export default {
         })
       );
 
+      if (commitStatus) {
+        summary.matched === 0
+          ? postCommitStatus('success', `${summary.unmatched} checks passed`)
+          : postCommitStatus('failure', `${summary.matched} checks failed`);
+      }
+
       return process.exit(summary.matched === 0 ? 0 : 1);
     } catch (err) {
+      if (commitStatus) {
+        try {
+          postCommitStatus('error', 'There was an error while running AppMap scanner');
+        } catch (err) {
+          console.warn('Unable to post commit status');
+        }
+      }
+
       if (err instanceof ValidationError) {
         console.warn(err.message);
         return process.exit(1);
