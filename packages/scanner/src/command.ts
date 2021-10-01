@@ -11,7 +11,7 @@ import { Finding } from './types';
 import { Argv, Arguments } from 'yargs';
 import chalk from 'chalk';
 import loadConfiguration from './configuration';
-import { appMapDir, verbose } from './scanner/util';
+import { verbose } from './scanner/util';
 import { join } from 'path';
 import { ideLink } from './scanner/util';
 import postCommitStatus from './commitStatus/github/commitStatus';
@@ -188,30 +188,10 @@ export default {
       );
       console.log();
 
-      const appMapDirMatches: Record<string, Finding[]> = {};
-      findings.forEach((m) => {
-        const dirName = appMapDir(m.appMapFile!);
-        if (!appMapDirMatches[dirName]) {
-          appMapDirMatches[dirName] = [];
-        }
-        appMapDirMatches[dirName].push(m);
-      });
-
-      await Promise.all(
-        Object.keys(appMapDirMatches).map(async (appMapDir) => {
-          const matches = appMapDirMatches[appMapDir];
-          const matchList = matches.map((match) => ({
-            eventId: match.event.id,
-            scannerId: match.scannerId,
-          }));
-          return fs.writeFile(join(appMapDir, 'scan.json'), JSON.stringify(matchList, null, 2));
-        })
-      );
-
       if (commitStatus) {
-        summary.matched === 0
-          ? postCommitStatus('success', `${summary.unmatched} checks passed`)
-          : postCommitStatus('failure', `${summary.matched} checks failed`);
+        findings.length === 0
+          ? postCommitStatus('success', `${files.length * assertions.length} checks passed`)
+          : postCommitStatus('failure', `${findings.length} findings`);
       }
 
       return process.exit(findings.length === 0 ? 0 : ExitCode.Finding);
