@@ -1,3 +1,23 @@
+# [1.11.0](https://github.com/applandinc/scanner/compare/v1.10.0...v1.11.0) (2021-10-01)
+
+
+### Bug Fixes
+
+* Don't write results into appmap index dir (which may not exist) ([ff402cb](https://github.com/applandinc/scanner/commit/ff402cbbe31636bad48247b1d18549998288075e))
+* Fix declaration of Event#returnValue ([97b4b36](https://github.com/applandinc/scanner/commit/97b4b364587f7f0685719ae1171af0c30ffe265a))
+* Implement proper usage of HTTP status and mime_type ([bb56aef](https://github.com/applandinc/scanner/commit/bb56aef2c7b62520779b40e3dc0fd213ae731c74))
+* Leave absolute paths alone when generating links ([ab9f358](https://github.com/applandinc/scanner/commit/ab9f358151af69529406cee070501d812446b27b))
+
+
+### Features
+
+* Add a generic secret regexp ([7fa5e22](https://github.com/applandinc/scanner/commit/7fa5e229f145eda8e14f291ad95442216ba8f726))
+* Deeper verbose logging ([970171c](https://github.com/applandinc/scanner/commit/970171c6903e3b6d0fb14324a98135aa7d4717ec))
+* Enable multiple matches, custom messages, and problem level ([206c9b5](https://github.com/applandinc/scanner/commit/206c9b58e457673cb2403666d9c41c834c40c2fe))
+* Enable validation of a single AppMap file ([a75e336](https://github.com/applandinc/scanner/commit/a75e3367c28c8c01bc518b745b9984666e54acea))
+* Find actual allocated secrets in logs ([29471a5](https://github.com/applandinc/scanner/commit/29471a5585f4114744381ec73e91320fe01d79b4))
+* Refactor command printed output and exit status codes ([c6a134a](https://github.com/applandinc/scanner/commit/c6a134ac33cf95c00a80994421f26ecef6806755))
+
 # [1.10.0](https://github.com/applandinc/scanner/compare/v1.9.0...v1.10.0) (2021-10-01)
 
 
