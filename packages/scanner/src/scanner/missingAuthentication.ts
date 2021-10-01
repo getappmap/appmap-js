@@ -22,7 +22,11 @@ const authenticatedBy = (iterator: Iterator<EventNavigator>): boolean => {
   return false;
 };
 
-export default function (routes: RegExp[] = [/.*/], contentTypes: RegExp[] = [/.*/]): Assertion {
+class Options {
+  constructor(public routes: RegExp[] = [/.*/], public contentTypes: RegExp[] = [/.*/]) {}
+}
+
+function scanner(options: Options = new Options()): Assertion {
   return Assertion.assert(
     'missing-authentication',
     'Unauthenticated HTTP server requests',
@@ -35,11 +39,13 @@ export default function (routes: RegExp[] = [/.*/], contentTypes: RegExp[] = [/.
           e.httpServerResponse !== undefined &&
           e.httpServerResponse!.status_code < 300 &&
           contentType(e) !== undefined &&
-          routes.some((pattern) => pattern.test(e.route!)) &&
-          contentTypes.some((pattern) => pattern.test(contentType(e)!))
+          options.routes.some((pattern) => pattern.test(e.route!)) &&
+          options.contentTypes.some((pattern) => pattern.test(contentType(e)!))
         );
       };
       assertion.description = `HTTP server request must be authenticated`;
     }
   );
 }
+
+export default { Options, scanner };

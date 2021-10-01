@@ -10,19 +10,16 @@ import slowQuery from '../scanner/slowQuery';
 import validateBeforeSave from '../scanner/validateBeforeSave';
 
 const assertions: Assertion[] = [
-  slowHttpServerRequest(),
-  slowQuery(0.05),
-  queryFromView(),
+  slowHttpServerRequest.scanner(),
+  slowQuery.scanner(new slowQuery.Options(0.05)),
+  queryFromView.scanner(),
   missingContentType(),
-  missingAuthentication(),
+  missingAuthentication.scanner(),
   validateBeforeSave(),
   leafExpected('http_client_request'),
   leafExpected('sql_query'),
   leafExpected('function', (e: Event) => e.codeObject.labels.has('logging')),
-  nPlusOneQuery({
-    limit: { warning: 3, error: 10 },
-    whitelist: [`SELECT * FROM "users" WHERE "id" = ?`],
-  }),
+  nPlusOneQuery.scanner(new nPlusOneQuery.Options(3, [`SELECT * FROM "users" WHERE "id" = ?`])),
 ];
 
 export default function (): Assertion[] {

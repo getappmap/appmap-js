@@ -3,18 +3,26 @@ import Assertion from '../assertion';
 
 const WHITELIST = [/BEGIN/, /COMMIT/, /ROLLBACK/, /RELEASE/, /SAVEPOINT/];
 
-export default function (parentPackages: string[], whitelist: RegExp[] = []): Assertion {
+class Options {
+  constructor(public parentPackages: string[] = [], public whitelist: RegExp[] = []) {}
+}
+
+function scanner(options: Options): Assertion {
   return Assertion.assert(
     'query-from-invalid-package',
     'Queries from invalid packages',
     'event',
-    (e: Event) => parentPackages.includes(e.parent!.codeObject.packageOf),
+    (e: Event) => options.parentPackages.includes(e.parent!.codeObject.packageOf),
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
         e.sqlQuery !== undefined &&
         e.parent !== undefined &&
-        !whitelist.concat(WHITELIST).some((pattern) => pattern.test(e.sqlQuery!));
-      assertion.description = `Query must be invoked from one of (${parentPackages.join(',')})`;
+        !options.whitelist.concat(WHITELIST).some((pattern) => pattern.test(e.sqlQuery!));
+      assertion.description = `Query must be invoked from one of (${options.parentPackages.join(
+        ','
+      )})`;
     }
   );
 }
+
+export default { Options, scanner };

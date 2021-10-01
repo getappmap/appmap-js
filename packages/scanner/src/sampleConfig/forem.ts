@@ -24,11 +24,11 @@ const slowFunction = function (options: SlowFunctionOptions): Assertion {
 };
 
 const assertions: Assertion[] = [
-  slowHttpServerRequest(),
-  slowQuery(0.05),
+  slowHttpServerRequest.scanner(),
+  slowQuery.scanner(new slowQuery.Options(0.05)),
   slowFunction({ timeAllowed: 0.05, fn: 'app/models/Article#comments_blob' }),
   missingContentType(),
-  missingAuthentication(),
+  missingAuthentication.scanner(),
   leafExpected('http_client_request'),
   leafExpected('sql_query'),
 ];
