@@ -318,6 +318,8 @@ export default {
         events = events.filter((e) =>
           eventBranches.some((branch) => e.id >= branch[0] && e.id <= branch[1])
         );
+
+        appMap.classMap.setTemporaryRoot(this.rootCodeObject.id);
       }
 
       events = events.filter(
@@ -535,6 +537,7 @@ export default {
     resetDiagram() {
       this.rootCodeObject = null;
       this.clearSelection();
+      this.$store.state.appMap.classMap.clearTemporaryRoot();
 
       this.renderKey += 1;
     },
@@ -580,7 +583,9 @@ export default {
 
   mounted() {
     this.$root.$on('makeRoot', (codeObject) => {
+      this.clearSelection();
       this.rootCodeObject = codeObject;
+      console.log(codeObject);
     });
   },
 };

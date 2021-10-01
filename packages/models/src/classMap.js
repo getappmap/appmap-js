@@ -34,6 +34,7 @@ export default class ClassMap {
     };
 
     this.roots = classMap.map((root) => buildCodeObject(root));
+    this.originalRoots = this.roots;
   }
 
   visit(fn) {
@@ -87,6 +88,14 @@ export default class ClassMap {
   // Returns the root SQL code object if it exists
   get sqlObject() {
     return this.root(CodeObjectType.DATABASE);
+  }
+
+  setTemporaryRoot(id) {
+    this.roots = [this.codeObjectsById[id]];
+  }
+
+  clearTemporaryRoot() {
+    this.roots = [...this.originalRoots];
   }
 
   // Binds an event array to code objects and vice versa. This allows use of
