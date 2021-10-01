@@ -14,7 +14,7 @@ export default class ProgressFormatter extends Formatter {
     if (matches.length === 0) {
       return chalk.green('—') + ending;
     } else {
-      return chalk.magenta('⚠️') + ending;
+      return chalk.magenta('!') + ending;
     }
   }
 }
