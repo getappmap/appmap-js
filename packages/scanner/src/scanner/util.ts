@@ -1,4 +1,5 @@
 import { Event } from '@appland/models';
+import { isAbsolute } from 'path';
 
 let isVerbose = false;
 function verbose(v: boolean | null = null): boolean {
@@ -52,7 +53,12 @@ function ideLink(filePath: string, ide: string, eventId: number): string {
     return filePath;
   }
 
-  const path = `${__dirname}/../../../../../${filePath}`;
+  let path: string;
+  if (!isAbsolute(filePath)) {
+    path = `${__dirname}/../../../../../${filePath}`;
+  } else {
+    path = filePath;
+  }
   const state = { currentView: 'viewFlow', selectedObject: `event:${eventId}` };
   const encodedState = encodeURIComponent(JSON.stringify(state));
   const link =
