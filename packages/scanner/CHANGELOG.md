@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/applandinc/scanner/compare/v1.9.0...v1.10.0) (2021-10-01)
+
+
+### Features
+
+* Scanner are classes with named fields ([2bce496](https://github.com/applandinc/scanner/commit/2bce4969c715e913430023e182e0369544bc85ca))
+
 # [1.9.0](https://github.com/applandinc/scanner/compare/v1.8.0...v1.9.0) (2021-10-01)
 
 
