@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/applandinc/scanner/compare/v1.8.0...v1.9.0) (2021-10-01)
+
+
+### Features
+
+* post commit status to GitHub ([5298ff2](https://github.com/applandinc/scanner/commit/5298ff24e7c1e5feec13a39365584ef181fa64e2))
+
 # [1.8.0](https://github.com/applandinc/scanner/compare/v1.7.0...v1.8.0) (2021-09-30)
 
 
