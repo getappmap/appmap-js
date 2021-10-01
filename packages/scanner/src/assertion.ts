@@ -1,4 +1,4 @@
-import { EventFilter, Scope } from './types';
+import { EventFilter, Scope, Matcher } from './types';
 
 export default class Assertion {
   public where?: EventFilter;
@@ -10,10 +10,10 @@ export default class Assertion {
     id: string,
     summaryTitle: string,
     scope: Scope,
-    assert: EventFilter,
+    matcher: Matcher,
     cb?: (assertion: Assertion) => void
   ): Assertion {
-    const assertion = new Assertion(id, summaryTitle, scope, assert);
+    const assertion = new Assertion(id, summaryTitle, scope, matcher);
     if (cb) {
       cb(assertion);
     }
@@ -24,7 +24,7 @@ export default class Assertion {
     public id: string,
     public summaryTitle: string,
     public scope: Scope,
-    public assert: EventFilter
+    public matcher: Matcher
   ) {
     this.include = [];
     this.exclude = [];
@@ -35,7 +35,7 @@ export default class Assertion {
     if (this.description) {
       tokens.push(this.description);
     } else {
-      tokens.push(this.assert.toString());
+      tokens.push(this.matcher.toString());
     }
     if (this.where) {
       tokens.push(`(where ${this.where})`);

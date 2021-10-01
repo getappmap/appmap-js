@@ -1,4 +1,5 @@
 import { AppMap, Event, EventNavigator, getSqlLabelFromString, SqlQuery } from '@appland/models';
+import { Level } from 'src/types';
 import Assertion from '../assertion';
 import { obfuscate } from '../database';
 
@@ -15,11 +16,7 @@ function sqlNormalized(query: SqlQuery): string {
 }
 
 class Options {
-  /**
-  TODO: Warn on warningLimit, error on errorLimit.
-  errorLimit = 10;
-   */
-  constructor(public warningLimit = 3, public whitelist: string[] = []) {}
+  constructor(public warningLimit = 2, public errorLimit = 10, public whitelist: string[] = []) {}
 }
 
 function scanner(options: Options = new Options()): Assertion {
@@ -66,7 +63,23 @@ function scanner(options: Options = new Options()): Assertion {
     'n-plus-one-query',
     'Duplicate SQL queries',
     'sql_query',
-    (event: Event, appMap: AppMap) => findDuplicates(event, appMap) < options.warningLimit,
+    (event: Event, appMap: AppMap) => {
+      const duplicateCount = findDuplicates(event, appMap);
+      let level: Level | undefined;
+      if (duplicateCount >= options.errorLimit) {
+        level = 'warning';
+      } else if (duplicateCount >= options.warningLimit) {
+        level = 'error';
+      }
+      if (level) {
+        return [
+          {
+            level: level,
+            message: `${duplicateCount} occurrances of SQL "${event.sqlQuery}"`,
+          },
+        ];
+      }
+    },
     (assertion: Assertion): void => {
       assertion.where = (e: Event, appMap: AppMap) => {
         if (getSqlLabelFromString(e.sqlQuery!) !== 'SQL Select') {

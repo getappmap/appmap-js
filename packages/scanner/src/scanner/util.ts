@@ -1,15 +1,22 @@
 import { Event } from '@appland/models';
+import { isAbsolute } from 'path';
 
-/*
-const responseHeaders = (event: Event): any => {
-  return event.httpServerResponse?.headers || event.httpClientResponse?.headers || {};
-};
-*/
+let isVerbose = false;
+function verbose(v: boolean | null = null): boolean {
+  if (v === true || v === false) {
+    isVerbose = v;
+  }
+  return isVerbose;
+}
 
-// TODO: Why is mime_type still defined on httpServerResponse? It should be "headers".
+function emptyValue(value: string): boolean {
+  return [null, undefined, ''].includes(value);
+}
+
 function contentType(event: Event): string | undefined {
-  return event.httpServerResponse?.mime_type;
-  // responseHeaders(event)['Content-Type'] ||
+  if (event.httpServerResponse && event.httpServerResponse!.headers) {
+    return event.httpServerResponse!.headers!['Content-Type'];
+  }
 }
 
 function appMapDir(appMapFileName: string): string {
@@ -46,7 +53,12 @@ function ideLink(filePath: string, ide: string, eventId: number): string {
     return filePath;
   }
 
-  const path = `${__dirname}/../../../../../${filePath}`;
+  let path: string;
+  if (!isAbsolute(filePath)) {
+    path = `${__dirname}/../../../../../${filePath}`;
+  } else {
+    path = filePath;
+  }
   const state = { currentView: 'viewFlow', selectedObject: `event:${eventId}` };
   const encodedState = encodeURIComponent(JSON.stringify(state));
   const link =
@@ -57,4 +69,4 @@ function ideLink(filePath: string, ide: string, eventId: number): string {
   return [OSC, '8', SEP, SEP, link, BEL, filePath, OSC, '8', SEP, SEP, BEL].join('');
 }
 
-export { appMapDir, contentType, isFalsey, ideLink };
+export { appMapDir, contentType, emptyValue, isFalsey, ideLink, verbose };

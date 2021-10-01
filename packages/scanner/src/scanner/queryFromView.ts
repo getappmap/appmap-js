@@ -10,8 +10,7 @@ function scanner(options: Options = new Options()): Assertion {
     'query-from-view',
     'Queries from view',
     'sql_query',
-    (e: Event) =>
-      e.ancestors().every((e: Event) => !e.codeObject.labels.has(options.forbiddenLabel)),
+    (e: Event) => e.ancestors().some((e: Event) => e.codeObject.labels.has(options.forbiddenLabel)),
     (assertion: Assertion): void => {
       assertion.description = `SQL query from ${options.forbiddenLabel}`;
     }

@@ -7,19 +7,26 @@ import Assertion from './assertion';
 import ProgressFormatter from './formatter/progressFormatter';
 import PrettyFormatter from './formatter/prettyFormatter';
 import { ValidationError, AbortError } from './errors';
-import { AssertionMatch } from './types';
+import { Finding } from './types';
 import { Argv, Arguments } from 'yargs';
 import chalk from 'chalk';
 import loadConfiguration from './configuration';
-import { exec } from 'child_process';
-import { appMapDir } from './scanner/util';
+import { verbose } from './scanner/util';
 import { join } from 'path';
 import { ideLink } from './scanner/util';
 import postCommitStatus from './commitStatus/github/commitStatus';
 
+enum ExitCode {
+  ValidationError = 1,
+  AbortError = 2,
+  RuntimeError = 3,
+  Finding = 10,
+}
+
 interface CommandOptions {
   verbose?: boolean;
-  appmapDir: string;
+  appmapDir?: string;
+  appmapFile?: string;
   config: string;
   progressFormat: string;
   ide?: string;
@@ -37,8 +44,11 @@ export default {
     });
     args.option('appmap-dir', {
       describe: 'directory to recursively inspect for AppMaps',
-      default: 'tmp/appmap',
       alias: 'd',
+    });
+    args.option('appmap-file', {
+      describe: 'single file to scan',
+      alias: 'f',
     });
     args.option('config', {
       describe:
@@ -64,35 +74,50 @@ export default {
   },
 
   async handler(options: Arguments): Promise<void> {
-    const { appmapDir, config, progressFormat, verbose, ide, commitStatus } =
-      options as unknown as CommandOptions;
+    const {
+      appmapDir,
+      appmapFile,
+      config,
+      progressFormat,
+      verbose: isVerbose,
+      ide,
+      commitStatus,
+    } = options as unknown as CommandOptions;
 
-    process.stdout.write(`Indexing ${appmapDir}...`);
-    await new Promise((resolve, reject) => {
-      exec(
-        `node ./node_modules/@appland/appmap/built/src/cli.js index --appmap-dir ${appmapDir}`,
-        (error, stdout /* , stderr */) => {
-          if (error) {
-            return reject(error);
-          }
-          resolve(stdout);
-        }
-      );
-    });
-    console.log('done');
+    if (isVerbose) {
+      verbose(true);
+    }
+
+    const validateFile = async (kind: string, path: string) => {
+      try {
+        return fs.access(path as PathLike, fsConstants.R_OK);
+      } catch {
+        throw new ValidationError(
+          `AppMap ${kind} ${chalk.red(path)} does not exist, or is not readable.`
+        );
+      }
+    };
 
     try {
       if (commitStatus) {
         postCommitStatus('pending', 'Validation is in progress...');
       }
 
-      try {
-        await fs.access(appmapDir as PathLike, fsConstants.R_OK);
-      } catch {
-        throw new ValidationError(`AppMaps directory ${chalk.red(appmapDir)} does not exist.`);
+      if (appmapFile && appmapDir) {
+        throw new ValidationError('Use --appmap-dir or --appmap-file, but not both');
       }
 
-      const summary = { matched: 0, unmatched: 0, skipped: 0 };
+      let files: string[] = [];
+      if (appmapDir) {
+        await validateFile('directory', appmapDir!);
+        const glob = promisify(globCallback);
+        files = await glob(`${appmapDir}/**/*.appmap.json`);
+      }
+      if (appmapFile) {
+        await validateFile('file', appmapFile);
+        files = [appmapFile];
+      }
+
       const checker = new AssertionChecker();
       const formatter =
         progressFormat === 'progress' ? new ProgressFormatter() : new PrettyFormatter();
@@ -101,11 +126,8 @@ export default {
         throw new Error(`Failed to load assertions from ${chalk.red(config)}`);
       }
 
-      const glob = promisify(globCallback);
-      const files: string[] = await glob(`${appmapDir}/**/*.appmap.json`);
-
       let index = 0;
-      const matches: AssertionMatch[] = [];
+      const findings: Finding[] = [];
 
       await Promise.all(
         files.map(async (file: string) => {
@@ -122,16 +144,10 @@ export default {
 
           assertions.forEach((assertion: Assertion) => {
             index++;
-            const matchCount = matches.length;
-            checker.check(appMap, assertion, matches);
-            const newMatches = matches.slice(matchCount, matches.length);
+            const matchCount = findings.length;
+            checker.check(appMap, assertion, findings);
+            const newMatches = findings.slice(matchCount, findings.length);
             newMatches.forEach((match) => (match.appMapFile = file));
-
-            if (newMatches.length === 0) {
-              summary.unmatched++;
-            } else {
-              summary.matched++;
-            }
 
             const message = formatter.result(assertion, newMatches, index);
             if (message) {
@@ -144,69 +160,41 @@ export default {
       console.log('\n');
       const titledSummary = new Map<string, number>();
 
-      if (matches.length > 0) {
-        console.log(`${matches.length} matches:`);
+      if (findings.length > 0) {
+        console.log(`${findings.length} findings:`);
         console.log();
 
-        let matchCount = 0;
-        matches.forEach((match) => {
-          matchCount += 1;
+        findings.forEach((match) => {
           titledSummary.set(match.scannerTitle, (titledSummary.get(match.scannerTitle) ?? 0) + 1);
 
-          console.log(`Case ${matchCount}:`);
-          console.log(`\tScanner:\t${match.scannerId}`);
-          console.log(`\tAppMap:\t${match.appMapName}`);
-
+          console.log(`${chalk.magenta(match.message || match.condition)}`);
           const filePath =
             ide && match.appMapFile
               ? ideLink(match.appMapFile, ide, match.event.id)
               : match.appMapFile;
-          console.log(`\tFile:\t${filePath}`);
-
+          console.log(`\tLink:\t${chalk.blue(filePath)}`);
+          console.log(`\tRule:\t${match.scannerId}`);
+          console.log(`\tAppMap name:\t${match.appMapName}`);
           let eventMsg = `\tEvent:\t${match.event.id} - ${match.event.toString()}`;
           if (match.event.elapsedTime !== undefined) {
             eventMsg += ` (${match.event.elapsedTime}s)`;
           }
           console.log(eventMsg);
-          if (match.event.parent) {
-            console.log(`\tParent:\t${match.event.parent.id} - ${match.event.parent.toString()}`);
-          }
-          console.log(`\tCondition:\t${match.condition}`);
           console.log('\n');
         });
       }
       process.stdout.write(
-        formatter.summary(summary.unmatched, summary.skipped, summary.matched, titledSummary)
+        formatter.summary(files.length * assertions.length, findings.length, titledSummary)
       );
       console.log();
 
-      const appMapDirMatches: Record<string, AssertionMatch[]> = {};
-      matches.forEach((m) => {
-        const dirName = appMapDir(m.appMapFile!);
-        if (!appMapDirMatches[dirName]) {
-          appMapDirMatches[dirName] = [];
-        }
-        appMapDirMatches[dirName].push(m);
-      });
-
-      await Promise.all(
-        Object.keys(appMapDirMatches).map(async (appMapDir) => {
-          const matches = appMapDirMatches[appMapDir];
-          const matchList = matches.map((match) => ({
-            eventId: match.event.id,
-            scannerId: match.scannerId,
-          }));
-          return fs.writeFile(join(appMapDir, 'scan.json'), JSON.stringify(matchList, null, 2));
-        })
-      );
-
       if (commitStatus) {
-        summary.matched === 0
-          ? postCommitStatus('success', `${summary.unmatched} checks passed`)
-          : postCommitStatus('failure', `${summary.matched} checks failed`);
+        findings.length === 0
+          ? postCommitStatus('success', `${files.length * assertions.length} checks passed`)
+          : postCommitStatus('failure', `${findings.length} findings`);
       }
 
-      return process.exit(summary.matched === 0 ? 0 : 1);
+      return process.exit(findings.length === 0 ? 0 : ExitCode.Finding);
     } catch (err) {
       if (commitStatus) {
         try {
@@ -218,14 +206,14 @@ export default {
 
       if (err instanceof ValidationError) {
         console.warn(err.message);
-        return process.exit(1);
+        return process.exit(ExitCode.ValidationError);
       }
       if (err instanceof AbortError) {
-        return process.exit(2);
+        return process.exit(ExitCode.AbortError);
       }
       if (!verbose && err instanceof Error) {
         console.error(err.message);
-        return process.exit(3);
+        return process.exit(ExitCode.RuntimeError);
       }
 
       throw err;

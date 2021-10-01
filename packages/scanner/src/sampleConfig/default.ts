@@ -19,7 +19,7 @@ const assertions: Assertion[] = [
   leafExpected('http_client_request'),
   leafExpected('sql_query'),
   leafExpected('function', (e: Event) => e.codeObject.labels.has('logging')),
-  nPlusOneQuery.scanner(new nPlusOneQuery.Options(3, [`SELECT * FROM "users" WHERE "id" = ?`])),
+  nPlusOneQuery.scanner(new nPlusOneQuery.Options(3, 10, [`SELECT * FROM "users" WHERE "id" = ?`])),
 ];
 
 export default function (): Assertion[] {

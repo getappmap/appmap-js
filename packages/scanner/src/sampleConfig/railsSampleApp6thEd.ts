@@ -5,14 +5,16 @@ import missingAuthentication from '../scanner/missingAuthentication';
 import slowHttpServerRequest from '../scanner/slowHttpServerRequest';
 import slowQuery from '../scanner/slowQuery';
 import updateInGetRequest from '../scanner/updateInGetRequest';
+import secretInLog from '../scanner/secretInLog';
 
 const assertions: Assertion[] = [
-  slowHttpServerRequest.scanner(),
+  slowHttpServerRequest.scanner(new slowHttpServerRequest.Options(0.5)),
   slowQuery.scanner(new slowQuery.Options(0.05)),
   missingContentType(),
   missingAuthentication.scanner(),
   leafExpected('http_client_request'),
   leafExpected('sql_query'),
+  secretInLog.scanner(),
   updateInGetRequest.scanner(),
 ];
 
