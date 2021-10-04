@@ -1,7 +1,12 @@
 import { promises as fs } from 'fs';
 import Yargs from 'yargs';
 import { resolve } from 'path';
-import { ValidationError, AbortError, InstallError } from '../errors';
+import {
+  ValidationError,
+  AbortError,
+  InstallError,
+  ChildProcessError,
+} from '../errors';
 import { verbose } from '../../utils';
 import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
@@ -173,14 +178,26 @@ export default {
         return Yargs.exit(1, err);
       }
 
-      if (verbose()) {
-        UI.error(err);
-      } else {
-        UI.error(
-          `An error occurred. Try re-running the command with the ${chalk.red(
-            'verbose'
-          )} flag (${chalk.red('-v')}).`
+      if (err instanceof ChildProcessError) {
+        const { showError } = await UI.prompt(
+          {
+            name: 'showError',
+            type: 'confirm',
+            message: `An error has occurred while running:\n  ${chalk.red(
+              err.command
+            )}\n${chalk.green('?')} View error details?`,
+            prefix: chalk.red('!'),
+          },
+          { supressSpinner: true }
         );
+
+        if (showError) {
+          UI.error(err.message);
+        }
+      } else if (err instanceof Error) {
+        UI.error(err.stack);
+      } else {
+        UI.error(err);
       }
 
       Yargs.exit(3, err as Error);
