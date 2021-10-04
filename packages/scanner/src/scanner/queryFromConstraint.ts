@@ -1,10 +1,23 @@
 import { Event } from '@appland/models';
 import Assertion from '../assertion';
+import { toRegExpArray } from './util';
 
 const WHITELIST = [/BEGIN/, /COMMIT/, /ROLLBACK/, /RELEASE/, /SAVEPOINT/];
 
 class Options {
-  constructor(public parentPackages: string[] = [], public whitelist: RegExp[] = []) {}
+  private _whitelist: RegExp[];
+
+  constructor(public parentPackages: string[] = [], whitelist: RegExp[] = []) {
+    this._whitelist = whitelist;
+  }
+
+  get whitelist(): RegExp[] {
+    return this._whitelist;
+  }
+
+  set whitelist(value: string[] | RegExp[]) {
+    this._whitelist = toRegExpArray(value);
+  }
 }
 
 function scanner(options: Options): Assertion {

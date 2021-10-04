@@ -10,10 +10,10 @@ import secretInLog from '../scanner/secretInLog';
 const assertions: Assertion[] = [
   slowHttpServerRequest.scanner(new slowHttpServerRequest.Options(0.5)),
   slowQuery.scanner(new slowQuery.Options(0.05)),
-  missingContentType(),
+  missingContentType.scanner(),
   missingAuthentication.scanner(),
-  leafExpected('http_client_request'),
-  leafExpected('sql_query'),
+  leafExpected.scanner('http_client_request'),
+  leafExpected.scanner('sql_query'),
   secretInLog.scanner(),
   updateInGetRequest.scanner(),
 ];

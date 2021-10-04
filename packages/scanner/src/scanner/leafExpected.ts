@@ -2,7 +2,7 @@ import { Event } from '@appland/models';
 import { Scope } from 'src/types';
 import Assertion from '../assertion';
 
-export default function (scope: Scope, where: ((e: Event) => boolean) | null = null): Assertion {
+const scanner = (scope: Scope, where: ((e: Event) => boolean) | null = null): Assertion => {
   return Assertion.assert(
     'leaf-expected',
     'Unexpected child events',
@@ -15,4 +15,6 @@ export default function (scope: Scope, where: ((e: Event) => boolean) | null = n
       assertion.description = `${scope} event should not have any child events`;
     }
   );
-}
+};
+
+export default { scanner };

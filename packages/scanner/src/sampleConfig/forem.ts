@@ -27,10 +27,10 @@ const assertions: Assertion[] = [
   slowHttpServerRequest.scanner(),
   slowQuery.scanner(new slowQuery.Options(0.05)),
   slowFunction({ timeAllowed: 0.05, fn: 'app/models/Article#comments_blob' }),
-  missingContentType(),
+  missingContentType.scanner(),
   missingAuthentication.scanner(),
-  leafExpected('http_client_request'),
-  leafExpected('sql_query'),
+  leafExpected.scanner('http_client_request'),
+  leafExpected.scanner('sql_query'),
 ];
 
 export default function (): Assertion[] {

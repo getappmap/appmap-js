@@ -69,4 +69,12 @@ function ideLink(filePath: string, ide: string, eventId: number): string {
   return [OSC, '8', SEP, SEP, link, BEL, filePath, OSC, '8', SEP, SEP, BEL].join('');
 }
 
-export { appMapDir, contentType, emptyValue, isFalsey, ideLink, verbose };
+const toRegExp = (value: string | RegExp): RegExp => {
+  return typeof value === 'string' ? new RegExp(value as string) : (value as RegExp);
+};
+
+const toRegExpArray = (value: string[] | RegExp[]): RegExp[] => {
+  return value.map(toRegExp);
+};
+
+export { appMapDir, contentType, emptyValue, isFalsey, ideLink, toRegExpArray, verbose };

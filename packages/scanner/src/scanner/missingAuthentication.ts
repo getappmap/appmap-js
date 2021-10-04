@@ -1,6 +1,6 @@
 import { Event, EventNavigator } from '@appland/models';
 import Assertion from '../assertion';
-import { contentType, isFalsey } from './util';
+import { contentType, isFalsey, toRegExpArray } from './util';
 
 function isPublic(event: Event): boolean {
   return event.labels.has('public');
@@ -23,7 +23,29 @@ const authenticatedBy = (iterator: Iterator<EventNavigator>): boolean => {
 };
 
 class Options {
-  constructor(public routes: RegExp[] = [/.*/], public contentTypes: RegExp[] = [/.*/]) {}
+  private _routes: RegExp[];
+  private _contentTypes: RegExp[];
+
+  constructor(routes: RegExp[] = [/.*/], contentTypes: RegExp[] = [/.*/]) {
+    this._routes = routes;
+    this._contentTypes = contentTypes;
+  }
+
+  get routes(): RegExp[] {
+    return this._routes;
+  }
+
+  set routes(value: RegExp[] | string[]) {
+    this._routes = toRegExpArray(value);
+  }
+
+  get contentTypes(): RegExp[] {
+    return this._contentTypes;
+  }
+
+  set contentTypes(value: RegExp[] | string[]) {
+    this._contentTypes = toRegExpArray(value);
+  }
 }
 
 function scanner(options: Options = new Options()): Assertion {
@@ -33,6 +55,7 @@ function scanner(options: Options = new Options()): Assertion {
     'http_server_request',
     (event: Event) => !authenticatedBy(new EventNavigator(event).descendants()),
     (assertion: Assertion): void => {
+      assertion.options = options;
       assertion.where = (e: Event) => {
         return (
           e.route !== undefined &&

@@ -5,6 +5,7 @@ export default class Assertion {
   public include: EventFilter[];
   public exclude: EventFilter[];
   public description?: string;
+  public options?: any;
 
   static assert(
     id: string,
