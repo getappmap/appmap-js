@@ -174,7 +174,7 @@
 </template>
 
 <script>
-import { CodeObjectType, Event, buildAppMap } from '@appland/models';
+import { CodeObjectType, ClassMap, Event, buildAppMap } from '@appland/models';
 import ReloadIcon from '@/assets/reload.svg';
 import UploadIcon from '@/assets/upload.svg';
 import FilterIcon from '@/assets/filter.svg';
@@ -298,6 +298,7 @@ export default {
     },
     filteredAppMap() {
       const { appMap } = this.$store.state;
+      let classMap = appMap.classMap;
       let rootEvents = appMap.rootEvents();
 
       if (this.filters.limitRootEvents.on) {
@@ -319,7 +320,16 @@ export default {
           eventBranches.some((branch) => e.id >= branch[0] && e.id <= branch[1])
         );
 
-        appMap.classMap.setTemporaryRoot(this.rootCodeObject.id);
+        if (
+          this.rootCodeObject.type === 'class' &&
+          this.rootCodeObject.packageObject
+        ) {
+          classMap = new ClassMap([
+            classMap.codeObjects.filter(
+              (co) => co.id !== this.rootCodeObject.packageObject.id
+            ),
+          ]);
+        }
       }
 
       events = events.filter(
@@ -358,7 +368,7 @@ export default {
 
       return buildAppMap({
         events,
-        classMap: appMap.classMap.roots.map((c) => ({ ...c.data })),
+        classMap: classMap.roots.map((c) => ({ ...c.data })),
         metadata: appMap.metadata,
       }).build();
     },
@@ -537,7 +547,6 @@ export default {
     resetDiagram() {
       this.rootCodeObject = null;
       this.clearSelection();
-      this.$store.state.appMap.classMap.clearTemporaryRoot();
 
       this.renderKey += 1;
     },
@@ -583,9 +592,7 @@ export default {
 
   mounted() {
     this.$root.$on('makeRoot', (codeObject) => {
-      this.clearSelection();
       this.rootCodeObject = codeObject;
-      console.log(codeObject);
     });
   },
 };
