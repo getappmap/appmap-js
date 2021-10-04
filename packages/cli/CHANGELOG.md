@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.7.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.7.0...@appland/appmap-v3.7.1) (2021-10-04)
+
+
+### Bug Fixes
+
+* Present user with errors generated from child process ([71e11e1](https://github.com/applandinc/appmap-js/commit/71e11e1e38221660f3910bf4227b9e6546c5e519))
+* Sessions are now properly persisted on disk ([e4960cd](https://github.com/applandinc/appmap-js/commit/e4960cd31f958fd2bf895e2838cf6d8a9b2cc5a8))
+
 # [@appland/appmap-v3.7.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.6.4...@appland/appmap-v3.7.0) (2021-09-30)
 
 
