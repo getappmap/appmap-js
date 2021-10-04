@@ -298,7 +298,7 @@ export default {
     },
     filteredAppMap() {
       const { appMap } = this.$store.state;
-      let classMap = appMap.classMap;
+      let { classMap } = appMap;
       let rootEvents = appMap.rootEvents();
 
       if (this.filters.limitRootEvents.on) {
