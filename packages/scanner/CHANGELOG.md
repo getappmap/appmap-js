@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/applandinc/scanner/compare/v1.11.0...v1.11.1) (2021-10-05)
+
+
+### Bug Fixes
+
+* properly read owner/repo/sha ([ca02937](https://github.com/applandinc/scanner/commit/ca0293774a552ede96a4804faba2782e815299e7))
+
 # [1.11.0](https://github.com/applandinc/scanner/compare/v1.10.0...v1.11.0) (2021-10-01)
 
 
