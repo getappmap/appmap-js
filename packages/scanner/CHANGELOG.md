@@ -1,3 +1,11 @@
+# [1.12.0](https://github.com/applandinc/scanner/compare/v1.11.2...v1.12.0) (2021-10-05)
+
+
+### Features
+
+* Configure scanner properties from YAML ([690ed5f](https://github.com/applandinc/scanner/commit/690ed5f4b6dfadde23de11446c1e93abe95ff89e))
+* Enumerate labels which are used in the scanner ([827d56f](https://github.com/applandinc/scanner/commit/827d56fa80ac9c21ac5ce2e09d0552df5b64045d))
+
 ## [1.11.2](https://github.com/applandinc/scanner/compare/v1.11.1...v1.11.2) (2021-10-05)
 
 
