@@ -9,7 +9,7 @@ export default function postCommitStatus(state: CommitStatusState, description: 
   const octokat = require('octokat');
   const octo = new octokat({ token: token() });
 
-  octo.repos(owner, repo).statuses(sha).create({
+  octo.repos(owner(), repo()).statuses(sha()).create({
     state: state,
     context: 'appland/scanner',
     description: description,
@@ -50,7 +50,7 @@ function extractSlug(path: string | undefined, index: number): string | undefine
     return undefined;
   }
 
-  return path && path.split('/')[index];
+  return path.split('/')[index];
 }
 
 function validate() {
