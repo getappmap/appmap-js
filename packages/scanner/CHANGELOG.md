@@ -1,3 +1,10 @@
+## [1.11.2](https://github.com/applandinc/scanner/compare/v1.11.1...v1.11.2) (2021-10-05)
+
+
+### Bug Fixes
+
+* include secretsRegexes.json into built directory ([b733283](https://github.com/applandinc/scanner/commit/b7332835566f2b7bf03f3b14601cb14b641105dc))
+
 ## [1.11.1](https://github.com/applandinc/scanner/compare/v1.11.0...v1.11.1) (2021-10-05)
 
 
