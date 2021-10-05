@@ -320,6 +320,8 @@ export default {
           eventBranches.some((branch) => e.id >= branch[0] && e.id <= branch[1])
         );
 
+        // it's necessary to remove package wrap in Component Diagram,
+        // without this code package will be rendered in collapsed state
         if (
           this.rootCodeObject.type === 'class' &&
           this.rootCodeObject.packageObject
