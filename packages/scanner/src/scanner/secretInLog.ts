@@ -4,6 +4,8 @@ import { join } from 'path';
 import { MatchResult } from 'src/types';
 import Assertion from '../assertion';
 import { verbose, emptyValue } from './util';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import * as secretsRegexes from './secretsRegexes.json'; // import directly to include json file into the build
 
 const regexData: { [key: string]: string | string[] } = JSON.parse(
   readFileSync(join(__dirname, 'secretsRegexes.json')).toString()
