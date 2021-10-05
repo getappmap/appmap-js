@@ -1,6 +1,5 @@
-import { promises as fsp } from 'fs';
+import os from 'os';
 import { join, sep } from 'path';
-import moo from 'moo';
 import chalk from 'chalk';
 import CommandStruct from './commandStruct';
 import AgentInstaller from './agentInstaller';
@@ -10,6 +9,7 @@ import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
 import { AbortError } from '../errors';
 import JavaBuildToolInstaller from './javaBuildToolInstaller';
 import { GradleParser, GradleParseResult } from './gradleParser';
+import EncodedFile from '../../encodedFile';
 
 export default class GradleInstaller
   extends JavaBuildToolInstaller
@@ -148,7 +148,7 @@ ${whitespace.padLine(pluginSpec)}
       const updatedSrc = [
         buildFileSource.substring(0, buildscriptEnd),
         pluginsBlock,
-      ].join('\n');
+      ].join(os.EOL);
       const offset = buildscriptEnd;
       return { updatedSrc, offset };
     }
@@ -168,8 +168,8 @@ ${whitespace.padLine(pluginSpec)}
 
     const updatedSrc = [
       buildFileSource.substring(0, parseResult.plugins.lbrace + 1),
-      lines.map((l) => whitespace.padLine(l)).join('\n'),
-    ].join('\n');
+      lines.map((l) => whitespace.padLine(l)).join(os.EOL),
+    ].join(os.EOL);
     const offset = parseResult.plugins.rbrace - 1;
 
     return { updatedSrc, offset };
@@ -228,7 +228,8 @@ ${whitespace.padLine(mavenCentral)}
   }
 
   async installAgent(): Promise<void> {
-    const buildFileSource = (await fsp.readFile(this.buildFilePath)).toString();
+    const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);
+    const buildFileSource = encodedFile.toString();
     const parser = new GradleParser();
     const parseResult: GradleParseResult = parser.parse(buildFileSource);
     parser.checkSyntax(parseResult);
@@ -250,6 +251,6 @@ ${whitespace.padLine(mavenCentral)}
 
     updatedSrc += buildFileSource.substring(offset);
 
-    await fsp.writeFile(this.buildFilePath, updatedSrc);
+    encodedFile.write(updatedSrc);
   }
 }

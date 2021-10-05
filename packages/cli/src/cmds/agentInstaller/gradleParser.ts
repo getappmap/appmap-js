@@ -81,11 +81,11 @@ export class GradleParser {
       if (ignored.includes(t.type!)) {
         continue;
       }
-      if (this.debug == 1) {
+      if (this.debug === 1) {
         writeDebug();
       }
       
-      if (t.type == 'keyword') {
+      if (t.type === 'keyword') {
         if (result.startOffset < 0) {
           result.startOffset = t.offset;
         }
