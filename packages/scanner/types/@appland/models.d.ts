@@ -60,8 +60,24 @@ declare module '@appland/models' {
     readonly server_version?: string;
   }
 
+  export type Label =
+    | 'command'
+    | 'security.authentication'
+    | 'security.authorization'
+    | 'security.require_login'
+    | 'mvc.model'
+    | 'mvc.controller'
+    | 'mvc.view'
+    | 'mvc.template'
+    | 'public'
+    | 'secret'
+    | 'log';
+
+  export interface CustomLabel {
+    value: string;
+  }
   export class CodeObject {
-    readonly labels: Set<string>;
+    readonly labels: Set<Label | CustomLabel>;
     readonly children: CodeObject[];
     readonly parent?: CodeObject;
     readonly events: Event[];

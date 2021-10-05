@@ -18,7 +18,7 @@ const assertions: Assertion[] = [
   validateBeforeSave.scanner(),
   leafExpected.scanner('http_client_request'),
   leafExpected.scanner('sql_query'),
-  leafExpected.scanner('function', (e: Event) => e.codeObject.labels.has('logging')),
+  leafExpected.scanner('function', (e: Event) => e.codeObject.labels.has('log')),
   nPlusOneQuery.scanner(new nPlusOneQuery.Options(3, 10, [`SELECT * FROM "users" WHERE "id" = ?`])),
 ];
 

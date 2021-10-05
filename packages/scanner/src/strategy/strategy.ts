@@ -12,6 +12,7 @@ export default abstract class Strategy {
   }
 
   check(appMap: AppMap, assertion: Assertion, findings: Finding[]): void {
+    // TODO: strategy should be applied per request/command
     for (const e of appMap.events) {
       if (!e.isCall()) {
         continue;
