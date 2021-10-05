@@ -17,7 +17,7 @@
         "selector": "variableLike",
         "modifiers": ["unused"]
       },
-      { "selector": "variableLike", "format": ["camelCase", "UPPER_CASE"] },
+      { "selector": "variableLike", "format": ["camelCase", "PascalCase", "UPPER_CASE"] },
       {
         "selector": "variable",
         "modifiers": ["exported"],

@@ -16,7 +16,7 @@ const validatedBy = (iterator: Iterator<EventNavigator>): boolean => {
   return false;
 };
 
-export default function (): Assertion {
+const scanner = (): Assertion => {
   return Assertion.assert(
     'validate-before-save',
     '`save` calls without validation',
@@ -29,4 +29,6 @@ export default function (): Assertion {
       assertion.description = `'save' must be preceded by 'valid?' or 'validate'`;
     }
   );
-}
+};
+
+export default { scanner };

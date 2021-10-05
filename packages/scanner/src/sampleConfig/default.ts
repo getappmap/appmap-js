@@ -13,12 +13,12 @@ const assertions: Assertion[] = [
   slowHttpServerRequest.scanner(),
   slowQuery.scanner(new slowQuery.Options(0.05)),
   queryFromView.scanner(),
-  missingContentType(),
+  missingContentType.scanner(),
   missingAuthentication.scanner(),
-  validateBeforeSave(),
-  leafExpected('http_client_request'),
-  leafExpected('sql_query'),
-  leafExpected('function', (e: Event) => e.codeObject.labels.has('logging')),
+  validateBeforeSave.scanner(),
+  leafExpected.scanner('http_client_request'),
+  leafExpected.scanner('sql_query'),
+  leafExpected.scanner('function', (e: Event) => e.codeObject.labels.has('log')),
   nPlusOneQuery.scanner(new nPlusOneQuery.Options(3, 10, [`SELECT * FROM "users" WHERE "id" = ?`])),
 ];
 

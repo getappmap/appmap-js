@@ -78,7 +78,7 @@ const scanner = function (): Assertion {
     'Secret in log',
     'event',
     (e: Event) => {
-      if (e.codeObject.labels.has('secret.generator')) {
+      if (e.codeObject.labels.has('secret')) {
         recordSecrets(e);
       }
       if (e.parameters && e.codeObject.labels.has('log')) {
@@ -87,7 +87,7 @@ const scanner = function (): Assertion {
     },
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
-        e.codeObject.labels.has('log') || e.codeObject.labels.has('secret.generator');
+        e.codeObject.labels.has('log') || e.codeObject.labels.has('secret');
       assertion.description = `Log contains secret-like text`;
     }
   );

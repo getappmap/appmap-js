@@ -1,8 +1,8 @@
-import { Event } from '@appland/models';
+import { Event, Label } from '@appland/models';
 import Assertion from '../assertion';
 
 class Options {
-  constructor(public forbiddenLabel = 'mvc.template') {}
+  constructor(public forbiddenLabel: Label = 'mvc.template') {}
 }
 
 function scanner(options: Options = new Options()): Assertion {

@@ -27,3 +27,16 @@ export interface Finding {
   message: string | null;
   condition: string;
 }
+
+interface Configuration {
+  scanners: AssertionConfig[];
+}
+
+interface AssertionConfig {
+  readonly id: string;
+  readonly summaryTitle: string;
+  readonly include?: string[];
+  readonly exclude?: string[];
+  readonly description?: string;
+  readonly properties?: Record<string, string | string[] | number>;
+}

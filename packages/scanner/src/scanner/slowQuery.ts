@@ -1,12 +1,35 @@
 import { Event } from '@appland/models';
 import Assertion from '../assertion';
+import { toRegExpArray } from './util';
 
 class Options {
+  private _queryInclude: RegExp[];
+  private _queryExclude: RegExp[];
+
   constructor(
     public timeAllowed = 1,
-    public queryInclude = [/SELECT/i],
-    public queryExclude = [/pg_advisory_xact_lock/]
-  ) {}
+    queryInclude = [/SELECT/i],
+    queryExclude = [/pg_advisory_xact_lock/]
+  ) {
+    this._queryInclude = queryInclude;
+    this._queryExclude = queryExclude;
+  }
+
+  get queryInclude(): RegExp[] {
+    return this._queryInclude;
+  }
+
+  set queryInclude(value: string[] | RegExp[]) {
+    this._queryInclude = toRegExpArray(value);
+  }
+
+  get queryExclude(): RegExp[] {
+    return this._queryExclude;
+  }
+
+  set queryExclude(value: string[] | RegExp[]) {
+    this._queryExclude = toRegExpArray(value);
+  }
 }
 
 function scanner(options: Options = new Options()): Assertion {

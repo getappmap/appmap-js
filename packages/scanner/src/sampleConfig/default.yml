@@ -1,19 +1,15 @@
----
-id: slowHttpServerRequest
----
-id: slowQuery
----
-id: queryFromView
-include:
-  - /microposts/.test(event.sqlQuery)
-  - >
-    const root = event.ancestors().pop();
-    root && root.route && root.requestMethod === 'POST';
----
-id: missingContentType
----
-id: missingAuthentication
----
-id: validateBeforeSave
----
-id: secretInLog
+scanners:
+  - id: slowHttpServerRequest
+  - id: slowQuery
+  - id: queryFromView
+    include:
+      - /microposts/.test(event.sqlQuery)
+      - >
+        const root = event.ancestors().pop();
+        root && root.route && root.requestMethod === 'POST';
+  - id: missingContentType
+  - id: missingAuthentication
+    properties:
+      routes: [ /.*/ ]
+  - id: validateBeforeSave
+  - id: secretInLog

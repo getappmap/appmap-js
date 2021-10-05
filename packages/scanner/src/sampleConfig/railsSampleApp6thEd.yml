@@ -1,0 +1,11 @@
+scanners:
+  - id: slowHttpServerRequest
+    properties:
+      timeAllowed: 0.5
+  - id: slowQuery
+    properties:
+      timeAllowed: 0.05
+  - id: missingContentType
+  - id: missingAuthentication
+  - id: secretInLog
+  - id: updateInGetRequest
