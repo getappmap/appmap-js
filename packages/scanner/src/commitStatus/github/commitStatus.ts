@@ -18,7 +18,7 @@ export default function postCommitStatus(state: CommitStatusState, description: 
       description: description,
     })
     .then((status: any) => {
-      return process.stdout.write(status);
+      return process.stdout.write(JSON.stringify(status));
     });
 }
 
