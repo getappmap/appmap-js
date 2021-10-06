@@ -1,3 +1,10 @@
+## [1.12.4](https://github.com/applandinc/scanner/compare/v1.12.3...v1.12.4) (2021-10-06)
+
+
+### Bug Fixes
+
+* await github responses ([ee4fd29](https://github.com/applandinc/scanner/commit/ee4fd29dc3786b1447de5c732d45a8723ebf2081))
+
 ## [1.12.3](https://github.com/applandinc/scanner/compare/v1.12.2...v1.12.3) (2021-10-06)
 
 
