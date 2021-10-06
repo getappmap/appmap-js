@@ -2,24 +2,21 @@ import { ValidationError } from '../../errors';
 
 type CommitStatusState = 'pending' | 'success' | 'error' | 'failure';
 
-export default function postCommitStatus(state: CommitStatusState, description: string): void {
+export default function postCommitStatus(
+  state: CommitStatusState,
+  description: string
+): Promise<any> {
   validate();
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const octokat = require('octokat');
   const octo = new octokat({ token: token() });
 
-  octo
-    .repos(owner(), repo())
-    .statuses(sha())
-    .create({
-      state: state,
-      context: 'appland/scanner',
-      description: description,
-    })
-    .then((status: any) => {
-      return process.stdout.write(JSON.stringify(status));
-    });
+  return octo.repos(owner(), repo()).statuses(sha()).create({
+    state: state,
+    context: 'appland/scanner',
+    description: description,
+  });
 }
 
 function token(): string | undefined {

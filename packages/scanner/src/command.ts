@@ -189,16 +189,16 @@ export default {
       console.log();
 
       if (commitStatus) {
-        findings.length === 0
-          ? postCommitStatus('success', `${files.length * assertions.length} checks passed`)
-          : postCommitStatus('failure', `${findings.length} findings`);
+        return findings.length === 0
+          ? await postCommitStatus('success', `${files.length * assertions.length} checks passed`)
+          : await postCommitStatus('failure', `${findings.length} findings`);
       }
 
       return process.exit(findings.length === 0 ? 0 : ExitCode.Finding);
     } catch (err) {
       if (commitStatus) {
         try {
-          postCommitStatus('error', 'There was an error while running AppMap scanner');
+          await postCommitStatus('error', 'There was an error while running AppMap scanner');
         } catch (err) {
           console.warn('Unable to post commit status');
         }
