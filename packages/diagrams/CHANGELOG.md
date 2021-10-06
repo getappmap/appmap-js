@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.5.0](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.4.0...@appland/diagrams-v1.5.0) (2021-10-06)
+
+
+### Features
+
+* 'Set as root' context menu action is now applied globally ([#390](https://github.com/applandinc/appmap-js/issues/390)) ([e952026](https://github.com/applandinc/appmap-js/commit/e952026ff53f99b0f4fb3dff9e401efdf248c351))
+
 # [@appland/diagrams-v1.4.0](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.3.1...@appland/diagrams-v1.4.0) (2021-09-01)
 
 
