@@ -1,3 +1,10 @@
+## [1.12.2](https://github.com/applandinc/scanner/compare/v1.12.1...v1.12.2) (2021-10-06)
+
+
+### Bug Fixes
+
+* use callback to print github responses ([7645931](https://github.com/applandinc/scanner/commit/76459314940310c1bc5a79449abbe215d8739bff))
+
 ## [1.12.1](https://github.com/applandinc/scanner/compare/v1.12.0...v1.12.1) (2021-10-06)
 
 
