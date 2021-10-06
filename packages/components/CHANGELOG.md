@@ -1,3 +1,10 @@
+# [@appland/components-v1.13.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.12.2...@appland/components-v1.13.0) (2021-10-06)
+
+
+### Features
+
+* 'Set as root' context menu action is now applied globally ([#390](https://github.com/applandinc/appmap-js/issues/390)) ([e952026](https://github.com/applandinc/appmap-js/commit/e952026ff53f99b0f4fb3dff9e401efdf248c351))
+
 # [@appland/components-v1.12.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.12.1...@appland/components-v1.12.2) (2021-09-20)
 
 
