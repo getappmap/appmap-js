@@ -1,3 +1,10 @@
+## [1.12.1](https://github.com/applandinc/scanner/compare/v1.12.0...v1.12.1) (2021-10-06)
+
+
+### Bug Fixes
+
+* print github commit status responses ([c798deb](https://github.com/applandinc/scanner/commit/c798deb3706ada35e7306a482d56e1dbd77e83a9))
+
 # [1.12.0](https://github.com/applandinc/scanner/compare/v1.11.2...v1.12.0) (2021-10-05)
 
 
