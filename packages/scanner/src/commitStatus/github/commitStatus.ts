@@ -9,12 +9,17 @@ export default function postCommitStatus(state: CommitStatusState, description: 
   const octokat = require('octokat');
   const octo = new octokat({ token: token() });
 
-  const result = octo.repos(owner(), repo()).statuses(sha()).create({
-    state: state,
-    context: 'appland/scanner',
-    description: description,
-  });
-  process.stdout.write(result);
+  octo
+    .repos(owner(), repo())
+    .statuses(sha())
+    .create({
+      state: state,
+      context: 'appland/scanner',
+      description: description,
+    })
+    .then((status: any) => {
+      return process.stdout.write(status);
+    });
 }
 
 function token(): string | undefined {
