@@ -1,3 +1,10 @@
+## [1.12.3](https://github.com/applandinc/scanner/compare/v1.12.2...v1.12.3) (2021-10-06)
+
+
+### Bug Fixes
+
+* stringify response object ([69225a9](https://github.com/applandinc/scanner/commit/69225a9dfa1791becfde17a1d882b04f0fd5232f))
+
 ## [1.12.2](https://github.com/applandinc/scanner/compare/v1.12.1...v1.12.2) (2021-10-06)
 
 
