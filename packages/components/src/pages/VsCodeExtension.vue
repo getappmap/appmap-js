@@ -174,7 +174,7 @@
 </template>
 
 <script>
-import { CodeObjectType, Event, buildAppMap } from '@appland/models';
+import { CodeObjectType, ClassMap, Event, buildAppMap } from '@appland/models';
 import ReloadIcon from '@/assets/reload.svg';
 import UploadIcon from '@/assets/upload.svg';
 import FilterIcon from '@/assets/filter.svg';
@@ -232,6 +232,7 @@ export default {
       versionText: '',
       VIEW_COMPONENT,
       VIEW_FLOW,
+      rootCodeObject: null,
       filters: {
         limitRootEvents: {
           on: true,
@@ -297,6 +298,7 @@ export default {
     },
     filteredAppMap() {
       const { appMap } = this.$store.state;
+      let { classMap } = appMap;
       let rootEvents = appMap.rootEvents();
 
       if (this.filters.limitRootEvents.on) {
@@ -307,6 +309,30 @@ export default {
         rootEvent.traverse((e) => callTree.push(e));
         return callTree;
       }, []);
+
+      if (this.rootCodeObject) {
+        const eventBranches = this.rootCodeObject.allEvents.map((e) => [
+          e.id,
+          e.linkedEvent.id,
+        ]);
+
+        events = events.filter((e) =>
+          eventBranches.some((branch) => e.id >= branch[0] && e.id <= branch[1])
+        );
+
+        // it's necessary to remove package wrap in Component Diagram,
+        // without this code package will be rendered in collapsed state
+        if (
+          this.rootCodeObject.type === 'class' &&
+          this.rootCodeObject.packageObject
+        ) {
+          classMap = new ClassMap([
+            classMap.codeObjects.filter(
+              (co) => co.id !== this.rootCodeObject.packageObject.id
+            ),
+          ]);
+        }
+      }
 
       events = events.filter(
         (e) =>
@@ -344,7 +370,7 @@ export default {
 
       return buildAppMap({
         events,
-        classMap: appMap.classMap.roots.map((c) => ({ ...c.data })),
+        classMap: classMap.roots.map((c) => ({ ...c.data })),
         metadata: appMap.metadata,
       }).build();
     },
@@ -521,6 +547,7 @@ export default {
     },
 
     resetDiagram() {
+      this.rootCodeObject = null;
       this.clearSelection();
 
       this.renderKey += 1;
@@ -563,6 +590,12 @@ export default {
     setUserFiltered() {
       this.isUserFiltered = true;
     },
+  },
+
+  mounted() {
+    this.$root.$on('makeRoot', (codeObject) => {
+      this.rootCodeObject = codeObject;
+    });
   },
 };
 </script>

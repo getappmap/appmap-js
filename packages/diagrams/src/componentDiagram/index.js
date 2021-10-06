@@ -121,7 +121,7 @@ const COMPONENT_OPTIONS = {
           .transform(
             (e) => componentDiagram.graph.node(e.dataset.id).codeObject
           )
-          .on('execute', (id) => componentDiagram.makeRoot(id)),
+          .on('execute', (id) => componentDiagram.emit('makeRoot', id)),
       (item) =>
         item
           .text('Expand')
@@ -414,11 +414,6 @@ export default class ComponentDiagram extends EventSource {
     }
 
     this.emit('collapse', codeObjectPackage);
-  }
-
-  makeRoot(codeObject) {
-    this.graph.makeRoot(codeObject);
-    this.scrollTo(codeObject);
   }
 
   hasPackage(packageId) {

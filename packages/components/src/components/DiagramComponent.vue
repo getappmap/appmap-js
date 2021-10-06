@@ -113,7 +113,10 @@ export default {
           .on('expand', () => this.highlightSelectedComponent(false))
           .on('viewSource', (location) =>
             this.$root.$emit('viewSource', location)
-          );
+          )
+          .on('makeRoot', (codeObject) => {
+            this.$root.$emit('makeRoot', codeObject);
+          });
         this.highlightSelectedComponent();
       });
     },
