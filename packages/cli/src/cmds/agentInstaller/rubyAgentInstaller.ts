@@ -1,14 +1,15 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
 
-import chalk from 'chalk';
-import { promises as fsp } from 'fs';
+import os from 'os';
 import { join } from 'path';
+import chalk from 'chalk';
 import { exists } from '../../utils';
 import AgentInstaller from './agentInstaller';
 import { run } from './commandRunner';
 import { getOutput } from './commandUtil';
 import CommandStruct from './commandStruct';
+import EncodedFile from '../../encodedFile';
 
 const REGEX_GEM_DECLARATION = /(?!\s)(?:gem|group|require)\s/m;
 const REGEX_GEM_DEPENDENCY = /^\s*gem\s+['|"]appmap['|"].*$/m;
@@ -45,7 +46,8 @@ export class BundleInstaller implements AgentInstaller {
   }
 
   async installAgent(): Promise<void> {
-    let gemfile = (await fsp.readFile(this.buildFilePath)).toString();
+    const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);
+    let gemfile = encodedFile.toString();
     const index = gemfile.search(REGEX_GEM_DECLARATION);
 
     if (index !== -1) {
@@ -53,19 +55,18 @@ export class BundleInstaller implements AgentInstaller {
 
       if (gemExists) {
         // Replace the existing gem declaration entirely
-        gemfile = gemfile.replace(REGEX_GEM_DEPENDENCY, `\n${GEM_DEPENDENCY}`);
+        gemfile = gemfile.replace(REGEX_GEM_DEPENDENCY, `${os.EOL}${GEM_DEPENDENCY}`);
       } else {
         // Insert a new gem declaration
         const chars = gemfile.split('');
-        chars.splice(index, 0, `${GEM_DEPENDENCY}\n\n`);
+        chars.splice(index, 0, `${GEM_DEPENDENCY}${os.EOL + os.EOL}`);
         gemfile = chars.join('');
       }
 
-      await fsp.writeFile(this.buildFilePath, gemfile);
+      encodedFile.write(gemfile);
     } else {
-      await fsp.writeFile(
-        this.buildFilePath,
-        `${gemfile}\ngem "appmap", :groups => [:development, :test]\n`
+      encodedFile.write(
+        `${gemfile}${os.EOL}gem "appmap", :groups => [:development, :test]${os.EOL}`
       );
     }
 

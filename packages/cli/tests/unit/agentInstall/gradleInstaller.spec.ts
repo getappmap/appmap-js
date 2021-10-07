@@ -4,6 +4,7 @@ import glob from 'glob';
 import sinon from 'sinon';
 import inquirer from 'inquirer';
 import GradleInstaller from '../../../src/cmds/agentInstaller/gradleInstaller';
+import EncodedFile from '../../../src/encodedFile';
 
 const fixtureDir = path.join(__dirname, '..', 'fixtures', 'java', 'gradle');
 const dataDir = path.join(fixtureDir, 'data');
@@ -44,7 +45,7 @@ describe('GradleInstaller', () => {
           .stub(gradle, 'buildFilePath')
           .value(path.join(dataDir, actualFile));
 
-        const writeFile = sinon.stub(fs, 'writeFile');
+        const efWrite = sinon.stub(EncodedFile.prototype, 'write');
 
         const ignoreWhitespaceDiff = false;
 
@@ -57,7 +58,7 @@ describe('GradleInstaller', () => {
         }
         await gradle.installAgent();
 
-        let actual = writeFile.getCall(-1).args[1].toString();
+        let actual = efWrite.getCall(-1).args[0].toString();
         if (ignoreWhitespaceDiff) {
           actual = actual.replace(/[^\S\r\n]+/g, '');
         }

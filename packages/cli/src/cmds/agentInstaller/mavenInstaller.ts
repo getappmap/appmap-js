@@ -1,12 +1,13 @@
-import { promises as fsp } from 'fs';
+import os from 'os';
+import { join, sep } from 'path';
 import { JSDOM } from 'jsdom';
 import xmlSerializer from 'w3c-xmlserializer';
-import { join, sep } from 'path';
 import chalk from 'chalk';
 import CommandStruct from './commandStruct';
 import AgentInstaller from './agentInstaller';
 import { verbose, exists } from '../../utils';
 import JavaBuildToolInstaller from './javaBuildToolInstaller';
+import EncodedFile from '../../encodedFile';
 
 export default class MavenInstaller
   extends JavaBuildToolInstaller
@@ -81,7 +82,8 @@ export default class MavenInstaller
   }
 
   async installAgent(): Promise<void> {
-    const buildFileSource = (await fsp.readFile(this.buildFilePath)).toString();
+    const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);
+    const buildFileSource = encodedFile.toString();
     const jsdom = new JSDOM();
     const domParser = new jsdom.window.DOMParser();
     const doc = domParser.parseFromString(buildFileSource, 'text/xml');
@@ -136,7 +138,7 @@ export default class MavenInstaller
     if (!buildSection) {
       buildSection = createEmptySection('build', ns);
       projectSection.appendChild(buildSection);
-      projectSection.appendChild(doc.createTextNode('\n'));
+      projectSection.appendChild(doc.createTextNode(os.EOL));
     }
     let pluginsSection = doc.evaluate(
       '/project/build/plugins',
@@ -147,7 +149,7 @@ export default class MavenInstaller
     if (!pluginsSection) {
       pluginsSection = createEmptySection('plugins', ns);
       buildSection.appendChild(pluginsSection);
-      buildSection.appendChild(doc.createTextNode('\n'));
+      buildSection.appendChild(doc.createTextNode(os.EOL));
     }
     const appmapPlugin = doc.evaluate(
       `/project/build/plugins/plugin[groupId/text() = 'com.appland' and artifactId/text() = 'appmap-maven-plugin']`,
@@ -170,9 +172,9 @@ export default class MavenInstaller
         const node = pluginNode.childNodes[0];
         pluginsSection.appendChild(node);
       }
-      pluginsSection.appendChild(doc.createTextNode('\n'));
+      pluginsSection.appendChild(doc.createTextNode(os.EOL));
     }
     const serialized = xmlSerializer(doc.getRootNode());
-    await fsp.writeFile(this.buildFilePath, serialized);
+    encodedFile.write(serialized);
   }
 }

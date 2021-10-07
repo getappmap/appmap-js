@@ -1,14 +1,14 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
-
+import os from 'os';
 import { join } from 'path';
-import { promises as fsp } from 'fs';
 import AgentInstaller from './agentInstaller';
 import CommandStruct from './commandStruct';
 import { exists } from '../../utils';
 import chalk from 'chalk';
 import { run } from './commandRunner';
 import { getOutput } from './commandUtil';
+import EncodedFile from '../../encodedFile';
 
 const REGEX_PKG_DEPENDENCY = /^\s*appmap\s*[=>~]+=.*$/m;
 // include .dev0 so pip will allow prereleases
@@ -114,7 +114,8 @@ export class PipInstaller extends PythonInstaller implements AgentInstaller {
   }
 
   async installAgent(): Promise<void> {
-    let requirements = (await fsp.readFile(this.buildFilePath)).toString();
+    const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);
+    let requirements = encodedFile.toString();
 
     const pkgExists = requirements.search(REGEX_PKG_DEPENDENCY) !== -1;
 
@@ -124,10 +125,10 @@ export class PipInstaller extends PythonInstaller implements AgentInstaller {
     } else {
       // Insert a new package declaration.
       // eslint-disable-next-line prefer-template
-      requirements = `${PKG_DEPENDENCY}\n` + requirements;
+      requirements = PKG_DEPENDENCY + os.EOL + requirements;
     }
 
-    await fsp.writeFile(this.buildFilePath, requirements);
+    encodedFile.write(requirements);
 
     const cmd = new CommandStruct(
       'pip',
