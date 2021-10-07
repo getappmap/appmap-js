@@ -25,6 +25,10 @@ describe('telemetry', () => {
 
   describe('Session', () => {
     it('writes persistent session data', () => {
+      // Ignore any existing sessions.
+      const conf = sandbox.stub(Conf.prototype, 'get');
+      conf.withArgs(sinon.match('sessionId')).returns(undefined);
+
       const setStub = Conf.prototype.set as SinonSpy;
       const { session } = Telemetry;
 
