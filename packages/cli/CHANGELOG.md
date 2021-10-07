@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.7.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.7.1...@appland/appmap-v3.7.2) (2021-10-07)
+
+
+### Bug Fixes
+
+* Support UTF-16LE encoded build files ([a520438](https://github.com/applandinc/appmap-js/commit/a52043870cfcf66e5e26efb30f490df6a0e1c51e))
+
 # [@appland/appmap-v3.7.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.7.0...@appland/appmap-v3.7.1) (2021-10-04)
 
 
