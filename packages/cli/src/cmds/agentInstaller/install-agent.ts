@@ -1,23 +1,21 @@
-import { promises as fs } from 'fs';
 import Yargs from 'yargs';
-import { resolve } from 'path';
+import { promises as fs } from 'fs';
 import {
-  ValidationError,
   AbortError,
-  InstallError,
   ChildProcessError,
+  InvalidPathError,
+  ValidationError,
 } from '../errors';
-import { verbose } from '../../utils';
+import { prefixLines, verbose } from '../../utils';
 import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
 import UI from '../userInteraction';
 import Telemetry from '../../telemetry';
+import { INSTALLERS } from './installers';
+import { getDirectoryProperty } from './telemetryUtil';
+import { getProjects, ProjectConfiguration } from './projectConfiguration';
 import AgentInstaller from './agentInstaller';
 import { ProcessLog } from './commandRunner';
-import MavenInstaller from './mavenInstaller';
-import GradleInstaller from './gradleInstaller';
-import { PipInstaller, PoetryInstaller } from './pythonAgentInstaller';
-import { BundleInstaller } from './rubyAgentInstaller';
 
 interface InstallCommandOptions {
   verbose?: any;
@@ -25,14 +23,105 @@ interface InstallCommandOptions {
   directory: string;
 }
 
-type AgentInstallerConstructor = new (...args: any[]) => AgentInstaller;
-export const INSTALLERS: readonly AgentInstallerConstructor[] = [
-  BundleInstaller,
-  MavenInstaller,
-  GradleInstaller,
-  PipInstaller,
-  PoetryInstaller,
-];
+class InstallerError {
+  readonly error: Error;
+  readonly log: string;
+
+  constructor(
+    error: unknown,
+    readonly duration: number,
+    readonly project?: ProjectConfiguration
+  ) {
+    this.error = error instanceof Error ? error : new Error(String(error));
+    this.log = ProcessLog.consumeBuffer();
+  }
+
+  get message(): string {
+    if (
+      this.error instanceof ValidationError ||
+      this.error instanceof ChildProcessError
+    ) {
+      return this.error.message;
+    } else if (this.error instanceof Error) {
+      return this.error.stack || String(this.error);
+    }
+
+    return String(this.error);
+  }
+
+  async handle(): Promise<void> {
+    UI.error();
+
+    const installersAvailable = this.project?.availableInstallers
+      .map((i) => i.name)
+      .join(', ');
+
+    if (this.error instanceof AbortError) {
+      await Telemetry.sendEvent({
+        name: 'install-agent:abort',
+        properties: {
+          installer: this.project?.selectedInstaller?.name,
+          installers_available: installersAvailable,
+          reason: this.error.message,
+          path: this.project?.path,
+        },
+        metrics: {
+          duration: this.duration,
+        },
+      });
+
+      UI.error(`${chalk.yellow('!')} Installation has been aborted.`);
+    } else if (this.error instanceof InvalidPathError) {
+      Telemetry.sendEvent({
+        name: 'install-agent:soft_failure',
+        properties: {
+          error: this.error.message,
+          directory: this.project?.path
+            ? await getDirectoryProperty(this.project.path)
+            : undefined,
+        },
+      });
+
+      UI.error(`${chalk.red('!')} ${this.error.message}`);
+    } else {
+      let exception: string | undefined;
+      if (this.error instanceof Error) {
+        exception = this.error.stack;
+      } else {
+        exception = String(this.error);
+      }
+
+      let directoryContents: string | undefined;
+      if (this.project?.path) {
+        try {
+          directoryContents = (await fs.readdir(this.project.path)).join('\n');
+        } catch (e) {
+          if (e instanceof Error) {
+            directoryContents = e.stack;
+          } else {
+            directoryContents = String(e);
+          }
+        }
+      }
+
+      await Telemetry.sendEvent({
+        name: 'install-agent:failure',
+        properties: {
+          installer: this.project?.selectedInstaller?.name,
+          installers_available: installersAvailable,
+          exception_type: (this.error as any)?.constructor?.name,
+          log: this.log,
+          exception,
+          directory: directoryContents,
+          path: this.project?.path,
+        },
+        metrics: {
+          duration: this.duration,
+        },
+      });
+    }
+  }
+}
 
 export default {
   command: 'install [directory]',
@@ -62,15 +151,13 @@ export default {
     return args.strict();
   },
 
-  async handler(args: InstallCommandOptions) {
+  async handler(args: InstallCommandOptions): Promise<void> {
     Telemetry.sendEvent({
       name: 'install-agent:start',
     });
 
     const { projectType, directory, verbose: isVerbose } = args;
-    const startTime = Date.now();
-    const endTime = () => (Date.now() - startTime) / 1000;
-    let installer: AgentInstaller | undefined;
+    const errors: InstallerError[] = [];
     const installers = INSTALLERS.map(
       (constructor) => new constructor(directory)
     );
@@ -78,133 +165,73 @@ export default {
     verbose(isVerbose);
 
     try {
-      const installProcedure = new AgentInstallerProcedure(
+      const projects = await getProjects(
         installers,
-        directory
+        directory,
+        true,
+        projectType
       );
-      installer = await installProcedure.run(projectType);
 
-      Telemetry.sendEvent({
-        name: 'install-agent:success',
-        properties: {
-          installer: installer.name,
-          path: resolve(directory),
-        },
-        metrics: {
-          duration: endTime(),
-        },
-      });
-    } catch (e) {
-      let installersAvailable: string | undefined;
-      let err = e;
-
-      if (e instanceof InstallError) {
-        err = e.error;
-        installer = e.installer;
-      }
-
-      try {
-        // Map installers to their available status, e.g.,
-        // { maven: true, gradle: false, pip: false }
-        const installerStatuses = await Promise.all(
-          installers.map(async (installer) => [
-            installer.name,
-            await installer.available(),
-          ])
+      for (let i = 0; i < projects.length; i++) {
+        const startTime = Date.now();
+        const endTime = () => (Date.now() - startTime) / 1000;
+        const project = projects[i];
+        const installProcedure = new AgentInstallerProcedure(
+          project.selectedInstaller as AgentInstaller,
+          project.path
         );
 
-        // Join the available installers into a string
-        installersAvailable = installerStatuses
-          .filter(([_, available]) => available)
-          .map(([name]) => name)
-          .join(', ');
-      } catch (e) {
-        if (e instanceof Error) {
-          installersAvailable = e.stack;
-        } else {
-          installersAvailable = String(e);
+        console.log(
+          `Installing AppMap agent for ${chalk.blue(project.name)}...`
+        );
+
+        try {
+          await installProcedure.run();
+        } catch (e) {
+          let installerError = new InstallerError(e, endTime(), project);
+          await installerError.handle();
+          errors.push(installerError);
         }
       }
 
-      if (err instanceof AbortError) {
-        await Telemetry.sendEvent({
-          name: 'install-agent:abort',
-          properties: {
-            installer: installer?.name,
-            installers_available: installersAvailable,
-            reason: err.message,
-            path: resolve(directory),
-          },
-          metrics: {
-            duration: endTime(),
-          },
-        });
+      if (errors.length) {
+        const message =
+          projects.length === 1
+            ? 'Installation failed. View error details?'
+            : `${errors.length} out of ${projects.length} installations failed. View error details?`;
 
-        Yargs.exit(2, err);
-      }
-
-      let exception: string | undefined;
-      if (err instanceof Error) {
-        exception = err.stack;
-      } else {
-        exception = String(err);
-      }
-
-      let directoryContents: string | undefined;
-      try {
-        directoryContents = (await fs.readdir(directory)).join('\n');
-      } catch (e) {
-        if (e instanceof Error) {
-          directoryContents = e.stack;
-        } else {
-          directoryContents = String(e);
-        }
-      }
-
-      await Telemetry.sendEvent({
-        name: 'install-agent:failure',
-        properties: {
-          installer: installer?.name,
-          installers_available: installersAvailable,
-          exception_type: (err as any)?.constructor?.name,
-          log: ProcessLog.buffer,
-          exception,
-          directory: directoryContents,
-          path: resolve(directory),
-        },
-        metrics: {
-          duration: endTime(),
-        },
-      });
-
-      if (err instanceof ValidationError) {
-        console.warn(err.message);
-        return Yargs.exit(1, err);
-      }
-
-      if (err instanceof ChildProcessError) {
         const { showError } = await UI.prompt(
           {
             name: 'showError',
             type: 'confirm',
-            message: `An error has occurred while running:\n  ${chalk.red(
-              err.command
-            )}\n${chalk.green('?')} View error details?`,
+            message,
             prefix: chalk.red('!'),
           },
           { supressSpinner: true }
         );
 
         if (showError) {
-          UI.error(err.message);
+          errors.forEach((error) => {
+            UI.error(
+              projects.length > 1
+                ? prefixLines(
+                    error.message,
+                    `[${chalk.red(error.project?.name)}] `
+                  )
+                : error.message
+            );
+          });
         }
-      } else if (err instanceof Error) {
-        UI.error(err.stack);
-      } else {
-        UI.error(err);
       }
+    } catch (err) {
+      const installerError = new InstallerError(err, 0, undefined);
+      await installerError.handle();
 
-      Yargs.exit(3, err as Error);
+      errors.push(installerError);
+    }
+
+    if (errors.length) {
+      Yargs.exit(1, new Error(errors.map((e) => e.message).join('\n')));
     }
   },
 };

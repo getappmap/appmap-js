@@ -27,6 +27,13 @@ export class ProcessLog {
       `\n\n'${program}' exited with code ${code}, signal ${signal}\n\n`
     );
   }
+
+  // Return the current buffer and clear it for future use
+  public static consumeBuffer() {
+    const buffer = this.buffer;
+    this.buffer = '';
+    return buffer;
+  }
 }
 
 interface CommandOutputChunk {
