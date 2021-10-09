@@ -30,10 +30,7 @@ export default class MavenInstaller
   }
 
   async postInstallMessage(): Promise<string> {
-    let mvnBin = 'mvn';
-    if (await exists(join(this.path, 'mvnw'))) {
-      mvnBin = `.${sep}mvnw`;
-    }
+    let mvnBin = await this.runCommand();
 
     return [
       `The AppMap agent will automatically record your tests when you run ${chalk.blue(
@@ -50,15 +47,16 @@ export default class MavenInstaller
   }
 
   async runCommand(): Promise<string> {
-    const wrapperExists = await exists(join(this.path, 'mvnw'));
+    const ext = os.platform() === 'win32' ? '.cmd' : '';
+    const wrapperExists = await exists(join(this.path, `mvnw${ext}`));
 
     if (wrapperExists) {
-      return `.${sep}mvnw`;
+      return `.${sep}mvnw${ext}`;
     } else if (verbose()) {
       console.warn(
         `${chalk.yellow(
-          'mvnw wrapper'
-        )} not located, falling back to ${chalk.yellow('mvn')}`
+          `mvnw${ext} wrapper`
+        )} not found, falling back to ${chalk.yellow(`mvn${ext}`)}`
       );
     }
 

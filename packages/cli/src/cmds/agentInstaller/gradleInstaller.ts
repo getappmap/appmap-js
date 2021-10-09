@@ -40,10 +40,7 @@ export default class GradleInstaller
   }
 
   async postInstallMessage(): Promise<string> {
-    let gradleBin = 'gradle';
-    if (await exists(join(this.path, 'gradlew'))) {
-      gradleBin = `.${sep}gradlew`;
-    }
+    let gradleBin = await this.runCommand();
 
     return [
       `Record your tests by running ${chalk.blue(`${gradleBin} appmap test`)}`,
@@ -58,15 +55,16 @@ export default class GradleInstaller
   }
 
   async runCommand(): Promise<string> {
-    const wrapperExists = await exists(join(this.path, 'gradlew'));
+    const ext = os.platform() === 'win32' ? '.bat' : '';
+    const wrapperExists = await exists(join(this.path, `gradlew${ext}`));
 
     if (wrapperExists) {
-      return `.${sep}gradlew`;
+      return `.${sep}gradlew${ext}`;
     } else if (verbose()) {
       console.warn(
         `${chalk.yellow(
-          'gradlew wrapper'
-        )} not located, falling back to ${chalk.yellow('gradle')}`
+          `gradlew${ext} wrapper`
+        )} not located, falling back to ${chalk.yellow(`gradle${ext}`)}`
       );
     }
 
