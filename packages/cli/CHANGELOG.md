@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.7.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.7.2...@appland/appmap-v3.7.3) (2021-10-11)
+
+
+### Bug Fixes
+
+* Use correct wrapper name on Windows ([485dbb9](https://github.com/applandinc/appmap-js/commit/485dbb9969506b06317becf2f5cb8072cb4957f2))
+
 # [@appland/appmap-v3.7.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.7.1...@appland/appmap-v3.7.2) (2021-10-07)
 
 
