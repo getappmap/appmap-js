@@ -3,7 +3,7 @@ import Assertion from '../assertion';
 import { contentType } from './util';
 
 const isRedirect = (status: number) => [301, 302, 303, 307, 308].includes(status);
-const isNoContent = (status: number) => status != 204;
+const hasContent = (status: number) => status !== 204;
 
 const scanner = (): Assertion => {
   return Assertion.assert(
@@ -15,7 +15,7 @@ const scanner = (): Assertion => {
       assertion.where = (e: Event) =>
         e.httpServerResponse !== undefined &&
         !isRedirect(e.httpServerResponse!.status) &&
-        !isNoContent(e.httpServerResponse!.status);
+        hasContent(e.httpServerResponse!.status);
       assertion.description = `HTTP server request must have a Content-Type header`;
     }
   );
