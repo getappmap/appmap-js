@@ -169,5 +169,11 @@ export default {
     margin-top: 0;
     margin-bottom: 0.8rem;
   }
+
+  &__ghost-link {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 }
 </style>

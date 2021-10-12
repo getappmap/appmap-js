@@ -9,6 +9,9 @@
         <v-details-button @click.native="viewSource">
           View source
         </v-details-button>
+        <v-details-button @click.native="setAsRoot">
+          Set as Root
+        </v-details-button>
       </template>
     </v-details-panel-header>
 
@@ -69,6 +72,9 @@ export default {
   methods: {
     viewSource() {
       this.$root.$emit('viewSource', this.object.locations[0]);
+    },
+    setAsRoot() {
+      this.$root.$emit('makeRoot', this.object);
     },
   },
 };
