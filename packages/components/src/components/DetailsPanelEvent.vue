@@ -52,7 +52,7 @@
       </ul>
     </div>
 
-    <div class="event-params" v-if="httpServerResponse">
+    <div class="event-params" v-if="Object.keys(httpServerResponse).length">
       <h5>HTTP response details</h5>
       <ul class="table-01">
         <li v-for="(v, k) in httpServerResponse" :key="k">
