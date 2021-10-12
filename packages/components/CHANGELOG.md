@@ -1,3 +1,10 @@
+# [@appland/components-v1.13.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.13.0...@appland/components-v1.13.1) (2021-10-12)
+
+
+### Bug Fixes
+
+* "HTTP response details" section was already visible in event details ([#408](https://github.com/applandinc/appmap-js/issues/408)) ([559404d](https://github.com/applandinc/appmap-js/commit/559404d40a3ca051c3e248177fbea395745bfd5a))
+
 # [@appland/components-v1.13.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.12.2...@appland/components-v1.13.0) (2021-10-06)
 
 
