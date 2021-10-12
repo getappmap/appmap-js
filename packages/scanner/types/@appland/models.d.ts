@@ -1,3 +1,6 @@
+import { type } from 'os';
+import { string } from 'yargs';
+
 declare module '@appland/models' {
   export type CodeObjectType =
     | 'package'
@@ -61,23 +64,23 @@ declare module '@appland/models' {
   }
 
   export type Label =
-    | 'command'
     | 'security.authentication'
     | 'security.authorization'
     | 'security.require_login'
-    | 'mvc.model'
     | 'mvc.controller'
-    | 'mvc.view'
+    | 'mvc.dao'
+    | 'mvc.model'
     | 'mvc.template'
+    | 'mvc.template.resolver'
+    | 'mvc.view'
+    | 'command'
+    | 'log'
     | 'public'
     | 'secret'
-    | 'log';
+    | string;
 
-  export interface CustomLabel {
-    value: string;
-  }
   export class CodeObject {
-    readonly labels: Set<Label | CustomLabel>;
+    readonly labels: Set<Label>;
     readonly children: CodeObject[];
     readonly parent?: CodeObject;
     readonly events: Event[];
