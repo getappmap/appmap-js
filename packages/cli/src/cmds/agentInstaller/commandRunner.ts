@@ -106,7 +106,7 @@ export async function run(command: CommandStruct): Promise<CommandReturn> {
         reject(
           new ChildProcessError(
             command.toString(),
-            `${command.toString()} was not found. Verify the command can be found in your PATH and try again.`
+            `${command.program} was not found. Verify the command can be found in your PATH and try again.`
           )
         );
       }
