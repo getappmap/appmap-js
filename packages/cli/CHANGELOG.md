@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.7.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.7.3...@appland/appmap-v3.7.4) (2021-10-14)
+
+
+### Bug Fixes
+
+* Correct search for first gem in a Gemfile ([caed268](https://github.com/applandinc/appmap-js/commit/caed2683104af7870956bc76a63772aeaafb9d63))
+
 # [@appland/appmap-v3.7.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.7.2...@appland/appmap-v3.7.3) (2021-10-11)
 
 
