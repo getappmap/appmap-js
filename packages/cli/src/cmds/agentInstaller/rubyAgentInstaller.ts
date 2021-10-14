@@ -11,7 +11,8 @@ import { getOutput } from './commandUtil';
 import CommandStruct from './commandStruct';
 import EncodedFile from '../../encodedFile';
 
-const REGEX_GEM_DECLARATION = /(?!\s)(?:gem|group|require)\s/m;
+const REGEX_GEM_DECLARATION = /^(?:gem|group|require)\s/m;
+
 const REGEX_GEM_DEPENDENCY = /^\s*gem\s+['|"]appmap['|"].*$/m;
 const GEM_DEPENDENCY = "gem 'appmap', :groups => [:development, :test]";
 
@@ -66,7 +67,7 @@ export class BundleInstaller implements AgentInstaller {
       encodedFile.write(gemfile);
     } else {
       encodedFile.write(
-        `${gemfile}${os.EOL}gem "appmap", :groups => [:development, :test]${os.EOL}`
+        `${gemfile}${os.EOL}${GEM_DEPENDENCY}${os.EOL}`
       );
     }
 
