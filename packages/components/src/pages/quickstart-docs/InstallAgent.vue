@@ -41,12 +41,13 @@ export default {
     VCodeSnippet,
   },
 
-  data() {
-    return {
-      codeSnippet: 'npx @appland/appmap install-agent',
-      messageSuccess:
+  props: {
+    codeSnippet: String,
+    messageSuccess: {
+      type: String,
+      default:
         '<b>Copied!</b><br>Paste into your terminal<br>to run the installer',
-    };
+    },
   },
 
   methods: {
