@@ -1,16 +1,21 @@
 scanners:
-  - id: slowHttpServerRequest
+  - id: http500
+  - id: illegalPackageDependency
     properties:
-      timeAllowed: 1.0
-  - id: slowQuery
-    properties:
-      timeAllowed: 0.25
+      selector: function:app/controllers/*
+      packageNames: [ 'actionpack', 'activesupport', 'solidus_core' ]
   - id: missingContentType
   - id: missingAuthentication
     properties:
       routes:
         - /\/api/\/
   - id: secretInLog
+  - id: slowHttpServerRequest
+    properties:
+      timeAllowed: 1.0
+  - id: slowQuery
+    properties:
+      timeAllowed: 0.25
   - id: updateInGetRequest
     properties:
       query_exclude:
