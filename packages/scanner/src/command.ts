@@ -13,8 +13,8 @@ import chalk from 'chalk';
 import loadConfiguration from './configuration';
 import { verbose } from './scanner/util';
 import { join } from 'path';
-import { ideLink } from './scanner/util';
 import postCommitStatus from './commitStatus/github/commitStatus';
+import Generator, { ReportType } from './report/generator';
 
 enum ExitCode {
   ValidationError = 1,
@@ -31,6 +31,8 @@ interface CommandOptions {
   progressFormat: string;
   ide?: string;
   commitStatus?: string;
+  report: ReportType;
+  reportFile?: string;
 }
 
 export default {
@@ -69,6 +71,14 @@ export default {
       describe: 'set your repository hosting system to post commit status',
       options: ['github'],
     });
+    args.option('report', {
+      describe: 'reporting format',
+      default: 'text',
+      options: ['text', 'json'],
+    });
+    args.option('report-file', {
+      describe: 'set JSON report file name to save output to a file',
+    });
 
     return args.strict();
   },
@@ -82,6 +92,8 @@ export default {
       verbose: isVerbose,
       ide,
       commitStatus,
+      report,
+      reportFile,
     } = options as unknown as CommandOptions;
 
     if (isVerbose) {
@@ -157,36 +169,8 @@ export default {
         })
       );
 
-      console.log('\n');
-      const titledSummary = new Map<string, number>();
-
-      if (findings.length > 0) {
-        console.log(`${findings.length} findings:`);
-        console.log();
-
-        findings.forEach((match) => {
-          titledSummary.set(match.scannerTitle, (titledSummary.get(match.scannerTitle) ?? 0) + 1);
-
-          console.log(`${chalk.magenta(match.message || match.condition)}`);
-          const filePath =
-            ide && match.appMapFile
-              ? ideLink(match.appMapFile, ide, match.event.id)
-              : match.appMapFile;
-          console.log(`\tLink:\t${chalk.blue(filePath)}`);
-          console.log(`\tRule:\t${match.scannerId}`);
-          console.log(`\tAppMap name:\t${match.appMapName}`);
-          let eventMsg = `\tEvent:\t${match.event.id} - ${match.event.toString()}`;
-          if (match.event.elapsedTime !== undefined) {
-            eventMsg += ` (${match.event.elapsedTime}s)`;
-          }
-          console.log(eventMsg);
-          console.log('\n');
-        });
-      }
-      process.stdout.write(
-        formatter.summary(files.length * assertions.length, findings.length, titledSummary)
-      );
-      console.log();
+      const reportGenerator = new Generator(formatter, report, reportFile, ide);
+      reportGenerator.generate(findings, files.length * assertions.length);
 
       if (commitStatus) {
         return findings.length === 0
