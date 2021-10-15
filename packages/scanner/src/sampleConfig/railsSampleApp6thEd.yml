@@ -1,6 +1,10 @@
 scanners:
   - id: http500
   - id: insecureCompare
+  - id: illegalPackageDependency
+    properties:
+      selector: function:app/controllers/*
+      packageNames: [ 'actionpack' ]
   - id: missingAuthentication
   - id: missingContentType
   - id: nPlusOneQuery

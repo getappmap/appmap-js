@@ -4,6 +4,7 @@ import secretInLog from '../src/scanner/secretInLog';
 import nPlusOneQuery from '../src/scanner/nPlusOneQuery';
 import insecureCompare from '../src/scanner/insecureCompare';
 import http500 from '../src/scanner/http500';
+import illegalPackageAccess from '../src/scanner/illegalPackageDependency';
 import { scan } from './util';
 
 describe('assert', () => {
@@ -99,5 +100,23 @@ describe('assert', () => {
     const finding = findings[0];
     expect(finding.scannerId).toEqual('http-5xx');
     expect(finding.event.id).toEqual(1789);
+  });
+
+  it('illegal package dependency', async () => {
+    const scanner = illegalPackageAccess.scanner(
+      new illegalPackageAccess.Options('query:*', ['app/views'])
+    );
+    const findings = await scan(
+      scanner,
+      'Users_profile_profile_display_while_anonyomus.appmap.json'
+    );
+
+    expect(findings).toHaveLength(1);
+    const finding = findings[0];
+    expect(finding.scannerId).toEqual('illegal-package-dependency');
+    expect(finding.event.id).toEqual(40);
+    expect(finding.message).toEqual(
+      `Code object Database->SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ? was invoked from app/controllers, not from app/views`
+    );
   });
 });
