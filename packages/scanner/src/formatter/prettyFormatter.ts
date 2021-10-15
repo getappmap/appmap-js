@@ -13,9 +13,9 @@ export default class PrettyFormatter extends Formatter {
     const readableAssertion = assertion.toString();
 
     if (matches.length === 0) {
-      return '\t' + chalk.green(readableAssertion) + '\n';
+      return '\t' + chalk.stderr.green(readableAssertion) + '\n';
     } else {
-      return '\t' + chalk.magenta(readableAssertion) + '\n';
+      return '\t' + chalk.stderr.magenta(readableAssertion) + '\n';
     }
   }
 }

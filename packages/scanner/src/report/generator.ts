@@ -1,23 +1,27 @@
 import * as fs from 'fs';
-import ErrnoException = NodeJS.ErrnoException;
 import chalk from 'chalk';
 import { ideLink } from '../scanner/util';
 import { Finding } from '../types';
 import Formatter from '../formatter/formatter';
 
 export type ReportType = 'text' | 'json';
-type ReportingLevel = 'error' | 'warning' | 'log';
 
 export default class Generator {
+  private fileCreated = false;
+
   constructor(
     private formatter: Formatter,
     private reportType: ReportType,
     private reportFile: string | undefined,
     private ide: string | undefined
-  ) {}
+  ) {
+    if (this.reportFile) {
+      this.formatter.disableColors();
+    }
+  }
 
   generate(findings: Finding[], totalAssertions: number): void {
-    if (this.reportType === 'text') {
+    if (this.reportType === 'text' && !this.reportFile) {
       this.writeln();
     }
 
@@ -41,11 +45,13 @@ export default class Generator {
         }
 
         if (this.reportType === 'text') {
-          this.write(`${chalk.magenta(match.message || match.condition)}`);
-          this.write(`\tLink:\t${chalk.blue(filePath)}`);
-          this.write(`\tRule:\t${match.scannerId}`);
-          this.write(`\tAppMap name:\t${match.appMapName}`);
+          const message = match.message || match.condition;
+          this.writeln(this.reportFile ? message : chalk.magenta(message));
+          this.writeln(`\tLink:\t${this.reportFile ? filePath : chalk.blue(filePath)}`);
+          this.writeln(`\tRule:\t${match.scannerId}`);
+          this.writeln(`\tAppMap name:\t${match.appMapName}`);
           this.writeln(eventMsg);
+          this.writeln();
         }
       });
     }
@@ -59,29 +65,26 @@ export default class Generator {
     }
   }
 
-  private write(text: string, level: ReportingLevel = 'log'): void {
-    this.writeText(text, level);
+  private write(text: string): void {
+    this.writeText(text);
   }
 
-  private writeln(text = '', level: ReportingLevel = 'log'): void {
-    this.writeText(text + '\n', level);
+  private writeln(text = ''): void {
+    this.writeText(text + '\n');
   }
 
-  private writeText(text: string, level: ReportingLevel): void {
-    if (this.reportType === 'json' && this.reportFile) {
-      fs.writeFileSync(this.reportFile, text);
+  private writeText(text: string): void {
+    if (this.reportFile) {
+      const options = this.fileCreated ? { flag: 'a+' } : {};
+      fs.writeFileSync(this.reportFile, text, options);
+
+      if (!this.fileCreated) {
+        this.fileCreated = true;
+      }
+
       return;
     }
 
-    switch (level) {
-      case 'error':
-        console.error(text);
-        break;
-      case 'warning':
-        console.warn(text);
-        break;
-      default:
-        console.log(text);
-    }
+    process.stdout.write(text);
   }
 }
