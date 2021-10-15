@@ -2,10 +2,16 @@ import { AppMap, Event } from '@appland/models';
 
 export type Scope =
   | 'event'
+  | 'function'
   | 'http_client_request'
   | 'http_server_request'
   | 'sql_query'
-  | 'function';
+  | 'transaction';
+
+interface ScopedEvent {
+  event: Event;
+  scopeId: string;
+}
 
 export type Level = 'warning' | 'error';
 
@@ -16,7 +22,7 @@ export interface MatchResult {
   message?: string;
 }
 
-type Matcher = (e: Event, appMap: AppMap) => boolean | string | MatchResult[] | undefined;
+type Matcher = (e: Event, scopeId: string) => boolean | string | MatchResult[] | undefined;
 
 export interface Finding {
   appMapName: string;

@@ -1,8 +1,8 @@
 import { Event } from '@appland/models';
-import Strategy from './strategy';
 import { Scope } from '../types';
+import SingleContextStrategy from './singleContextStrategy';
 
-export default class FunctionStrategy extends Strategy {
+export default class FunctionStrategy extends SingleContextStrategy {
   protected scope: Scope = 'function';
 
   protected isEventApplicable(event: Event): boolean {

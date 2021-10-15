@@ -25,11 +25,11 @@ function scanner(options: Options = new Options()): Assertion {
   const uniqueSQL = new Set<string>();
   const matchedSQL = new Set<string>();
 
-  const findDuplicates = (event: Event, appMap: AppMap): number => {
+  const findDuplicates = (event: Event, scopeId: string): number => {
     const sql = sqlNormalized(event.sql!);
     const rootEvent = findRootEvent(event);
 
-    const sqlKey = [appMap.name, rootEvent.id, sql].join('\n');
+    const sqlKey = [scopeId, rootEvent.id, sql].join('\n');
 
     // Short circuit if we've already flagged this SQL.
     if (matchedSQL.has(sqlKey)) {
@@ -65,8 +65,8 @@ function scanner(options: Options = new Options()): Assertion {
     'n-plus-one-query',
     'N+1 SQL queries',
     'sql_query',
-    (event: Event, appMap: AppMap) => {
-      const duplicateCount = findDuplicates(event, appMap);
+    (event: Event, scopeId: string) => {
+      const duplicateCount = findDuplicates(event, scopeId);
       let level: Level | undefined;
       if (duplicateCount >= options.errorLimit) {
         level = 'error';

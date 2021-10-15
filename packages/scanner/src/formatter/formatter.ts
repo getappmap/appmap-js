@@ -24,7 +24,7 @@ export default abstract class Formatter {
     return result.join('\n');
   }
 
-  disableColors() {
+  disableColors(): void {
     this.noColors = true;
   }
 }
