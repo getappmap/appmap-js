@@ -1,12 +1,14 @@
 scanners:
+  - id: http500
+  - id: insecureCompare
+  - id: missingAuthentication
+  - id: missingContentType
+  - id: nPlusOneQuery
+  - id: secretInLog
   - id: slowHttpServerRequest
     properties:
       timeAllowed: 0.5
   - id: slowQuery
     properties:
       timeAllowed: 0.05
-  - id: missingContentType
-  - id: missingAuthentication
-  - id: insecureCompare
-  - id: secretInLog
   - id: updateInGetRequest

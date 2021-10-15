@@ -77,4 +77,15 @@ const toRegExpArray = (value: string[] | RegExp[]): RegExp[] => {
   return value.map(toRegExp);
 };
 
-export { appMapDir, contentType, emptyValue, isFalsey, ideLink, toRegExpArray, verbose };
+const RootLabels = ['command', 'job'];
+
+const isRoot = (event: Event | undefined): boolean => {
+  if (!event) {
+    return true;
+  }
+  return (
+    !!event.httpServerRequest || RootLabels.some((label) => event.codeObject.labels.has(label))
+  );
+};
+
+export { appMapDir, contentType, emptyValue, isFalsey, ideLink, isRoot, toRegExpArray, verbose };

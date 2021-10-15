@@ -1,15 +1,17 @@
 scanners:
-  - id: slowHttpServerRequest
-  - id: slowQuery
+  - id: http500
+  - id: missingContentType
+  - id: missingAuthentication
+    properties:
+      routes: [ /\/api\// ]
+  - id: nPlusOneQuery
   - id: queryFromView
     include:
       - /microposts/.test(event.sqlQuery)
       - >
         const root = event.ancestors().pop();
         root && root.route && root.requestMethod === 'POST';
-  - id: missingContentType
-  - id: missingAuthentication
-    properties:
-      routes: [ /\/api\// ]
-  - id: validateBeforeSave
   - id: secretInLog
+  - id: slowHttpServerRequest
+  - id: slowQuery
+  - id: validateBeforeSave
