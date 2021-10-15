@@ -1,3 +1,16 @@
+# [1.14.0](https://github.com/applandinc/scanner/compare/v1.13.0...v1.14.0) (2021-10-15)
+
+
+### Bug Fixes
+
+* Fix error/warning of n+1 query check ([6065085](https://github.com/applandinc/scanner/commit/606508585c32b1b5705cd62bbf90239295e006a4))
+
+
+### Features
+
+* Better findings report generation ([0065442](https://github.com/applandinc/scanner/commit/00654427f6850317e948d01d5cde6ae6a2b20c3b))
+* Scan for http 500 error ([dd2dfb6](https://github.com/applandinc/scanner/commit/dd2dfb66983935e4649adfa9c009cf3b5dffe2bf))
+
 # [1.13.0](https://github.com/applandinc/scanner/compare/v1.12.4...v1.13.0) (2021-10-15)
 
 
