@@ -51,19 +51,20 @@ export default {
     flex-direction: column;
 
     &-type {
+      margin: 0 0 0.2rem;
       text-transform: uppercase;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: $gray4;
-      letter-spacing: 0.5px;
+      font-size: 0.75rem;
+      line-height: 1;
+      font-weight: 700;
+      color: $base11;
     }
 
     &-title {
-      margin: 0.5rem 0 0.8rem;
-      font-size: 1.5rem;
-      font-weight: 500;
-      color: $base03;
-      letter-spacing: 0.5px;
+      color: $gray6;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 0.8rem;
     }
   }
 }

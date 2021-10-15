@@ -13,7 +13,12 @@
         {{ item.name }}
       </div>
     </div>
-    <h4 class="details-panel-header__details-type">{{ objectType }}</h4>
+    <h4
+      class="details-panel-header__details-type"
+      :data-type="objectType.toLowerCase()"
+    >
+      {{ objectType }}
+    </h4>
     <h4 class="details-panel-header__details-name" :if="title">{{ title }}</h4>
     <div class="details-panel-header__ghost-link">
       <slot name="links" />
@@ -153,21 +158,49 @@ export default {
   &__details-type {
     color: $gray4;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 0;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 0.75rem;
+    line-height: 1;
+    font-weight: 700;
     margin: 0 0 0.2rem;
+
+    &[data-type='http'],
+    &[data-type='route'] {
+      color: #542168;
+    }
+
+    &[data-type='external service'] {
+      color: $yellow;
+    }
+
+    &[data-type='package'] {
+      color: $teal;
+    }
+
+    &[data-type='class'],
+    &[data-type='function'] {
+      color: $blue;
+    }
+
+    &[data-type='sql query'] {
+      color: $royal;
+    }
   }
 
   &__details-name {
-    color: $base03;
-    letter-spacing: 0.5px;
-    border-bottom: 0;
-    font-size: 1.5rem;
-    font-weight: 500;
+    color: $gray6;
+    font-size: 1.25rem;
+    font-weight: 600;
     margin-top: 0;
     margin-bottom: 0.8rem;
+  }
+
+  &__ghost-link {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 }
 </style>

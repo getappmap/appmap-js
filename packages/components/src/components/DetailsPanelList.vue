@@ -98,15 +98,17 @@ export default {
 .v-details-panel-list {
   list-style-type: none;
   padding: 0;
-  margin-bottom: 1.5rem;
+  margin: 0 -1rem 1.5rem;
 
   h5 {
+    border-bottom: 1px solid #333a4d;
     color: $base03;
-    font-size: 1.1rem;
-    font-weight: 500;
-    line-height: 1.2;
-    padding: 0;
-    margin: 0 0 1rem 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 0;
+    padding: 0.25rem 1rem;
+    text-transform: uppercase;
   }
 
   ul {
@@ -117,21 +119,21 @@ export default {
 
     .list-item {
       position: relative;
-      border-bottom: 1px solid $base15;
+      border-bottom: 1px solid #333a4d;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.25rem 0;
+      padding: 0.25rem 1rem;
       min-height: 2rem;
       font-size: 0.9em;
-      color: $base03;
+      color: $light-purple;
       cursor: pointer;
       overflow: hidden;
       z-index: 0;
 
       &:hover,
       &:active {
-        color: $base06;
+        color: $light-purple2;
       }
 
       &__count {
