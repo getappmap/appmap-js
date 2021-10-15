@@ -1,3 +1,17 @@
+# [1.13.0](https://github.com/applandinc/scanner/compare/v1.12.4...v1.13.0) (2021-10-15)
+
+
+### Bug Fixes
+
+* Fix short name for validateBeforeSave ([0cc4bcc](https://github.com/applandinc/scanner/commit/0cc4bccb2fa0fd1ff46fbbc036ebb1c3a934282b))
+* Fixes to scanners ([b1a264a](https://github.com/applandinc/scanner/commit/b1a264a5c9dede1fc38ddfc12281365a09bfe75f))
+
+
+### Features
+
+* Add JSON reporting ([fe70006](https://github.com/applandinc/scanner/commit/fe700063d9b9f3c4c493178edc9a404e4dd81234))
+* Find insecure comparison of secrets ([fd3f80e](https://github.com/applandinc/scanner/commit/fd3f80ebd520c8cc257dd321e84d23fbd74f7385))
+
 ## [1.12.4](https://github.com/applandinc/scanner/compare/v1.12.3...v1.12.4) (2021-10-06)
 
 
