@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/applandinc/scanner/compare/v1.14.0...v1.15.0) (2021-10-15)
+
+
+### Features
+
+* Illegal package dependency ([1b31cea](https://github.com/applandinc/scanner/commit/1b31cea8ccad8f52470eb880fcfd0d245578ba2f))
+
 # [1.14.0](https://github.com/applandinc/scanner/compare/v1.13.0...v1.14.0) (2021-10-15)
 
 
