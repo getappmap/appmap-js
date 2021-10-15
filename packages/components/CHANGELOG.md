@@ -1,3 +1,10 @@
+# [@appland/components-v1.13.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.13.1...@appland/components-v1.13.2) (2021-10-15)
+
+
+### Bug Fixes
+
+* Move install docs command and copied text to props ([98abb85](https://github.com/applandinc/appmap-js/commit/98abb853e8fd74380c71e24894e46d0afa9002d0))
+
 # [@appland/components-v1.13.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.13.0...@appland/components-v1.13.1) (2021-10-12)
 
 
