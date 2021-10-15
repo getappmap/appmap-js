@@ -9,6 +9,7 @@ import EventStrategy from './strategy/eventStrategy';
 import FunctionStrategy from './strategy/functionStrategy';
 import HttpClientRequestStrategy from './strategy/httpClientRequestStrategy';
 import { verbose } from './scanner/util';
+import TransactionStrategy from './strategy/transactionStrategy';
 
 export default class AssertionChecker {
   private strategies: Strategy[] = [
@@ -17,6 +18,7 @@ export default class AssertionChecker {
     new HttpClientRequestStrategy(),
     new HttpServerRequestStrategy(),
     new SqlQueryStrategy(),
+    new TransactionStrategy(),
   ];
 
   check(appMapData: AppMap, assertion: Assertion, matches: Finding[]): void {

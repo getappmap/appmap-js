@@ -16,6 +16,7 @@ scanners:
   - id: slowQuery
     properties:
       timeAllowed: 0.25
+  - id: tooManyUpdates
   - id: updateInGetRequest
     properties:
       query_exclude:

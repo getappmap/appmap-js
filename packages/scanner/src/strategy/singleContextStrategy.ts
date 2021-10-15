@@ -12,11 +12,13 @@ export default abstract class SingleContextStrategy extends Strategy {
     while (!eventResult.done) {
       const event = eventResult.value;
 
-      if (this.isEventApplicable(event)) {
-        yield { event, scopeId };
-      } else {
-        if (verbose()) {
-          console.warn(`${event.toString()} is not applicable. Skipping.`);
+      if (event.isCall()) {
+        if (this.isEventApplicable(event)) {
+          yield { event, scopeId };
+        } else {
+          if (verbose()) {
+            console.warn(`${event.toString()} is not applicable. Skipping.`);
+          }
         }
       }
 

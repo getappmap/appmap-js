@@ -14,4 +14,5 @@ scanners:
   - id: secretInLog
   - id: slowHttpServerRequest
   - id: slowQuery
+  - id: tooManyUpdates
   - id: validateBeforeSave

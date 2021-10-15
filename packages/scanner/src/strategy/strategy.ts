@@ -16,9 +16,6 @@ export default abstract class Strategy {
       const { events } = appMap;
       for (let i = 0; i < events.length; i++) {
         const event = events[i];
-        if (event.isCall()) {
-          yield event;
-        }
         yield event;
       }
     };
