@@ -30,6 +30,19 @@ Add the package with `yarn`:
 yarn add @applandinc/scanner
 ```
 
+## Writing findings to a report
+It is possible to export scanner findings to a file in human or machine readable formats.
+
+Text format (default):
+```bash
+yarn scanner -d tmp/appmap --report-file=report.txt
+```
+
+JSON format:
+```bash
+yarn scanner -d tmp/appmap --report=json --report-file=report.json
+```
+
 ## New scanner ideas
 
 * Ensure that a "circuit breaker" library is used each time an RPC is made. Learn more at https://netflixtechblog.com/making-the-netflix-api-more-resilient-a8ec62159c2d

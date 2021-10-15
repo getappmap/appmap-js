@@ -12,9 +12,9 @@ export default class ProgressFormatter extends Formatter {
     const ending = index % 80 === 0 ? '\n' : '';
 
     if (matches.length === 0) {
-      return chalk.green('—') + ending;
+      return chalk.stderr.green('.') + ending;
     } else {
-      return chalk.magenta('!') + ending;
+      return chalk.stderr.magenta('!') + ending;
     }
   }
 }

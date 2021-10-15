@@ -77,7 +77,7 @@ export default {
       options: ['text', 'json'],
     });
     args.option('report-file', {
-      describe: 'set JSON report file name to save output to a file',
+      describe: 'file name for findings report',
     });
 
     return args.strict();
@@ -152,7 +152,7 @@ export default {
           const appMapData = await fs.readFile(file, 'utf8');
           const appMap = buildAppMap(appMapData).normalize().build();
 
-          process.stdout.write(formatter.appMap(appMap));
+          process.stderr.write(formatter.appMap(appMap));
 
           assertions.forEach((assertion: Assertion) => {
             index++;
@@ -163,7 +163,7 @@ export default {
 
             const message = formatter.result(assertion, newMatches, index);
             if (message) {
-              process.stdout.write(message);
+              process.stderr.write(message);
             }
           });
         })
