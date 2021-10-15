@@ -3,6 +3,7 @@ import missingAuthentication from '../src/scanner/missingAuthentication';
 import secretInLog from '../src/scanner/secretInLog';
 import nPlusOneQuery from '../src/scanner/nPlusOneQuery';
 import insecureCompare from '../src/scanner/insecureCompare';
+import http500 from '../src/scanner/http500';
 import { scan } from './util';
 
 describe('assert', () => {
@@ -86,5 +87,17 @@ describe('assert', () => {
     const finding = findings[0];
     expect(finding.scannerId).toEqual('insecure-compare');
     expect(finding.event.id).toEqual(1094);
+  });
+
+  it('http 500', async () => {
+    const scanner = http500.scanner();
+    const findings = await scan(
+      scanner,
+      'Password_resets_password_resets_with_http500.appmap.json'
+    );
+    expect(findings).toHaveLength(1);
+    const finding = findings[0];
+    expect(finding.scannerId).toEqual('http-5xx');
+    expect(finding.event.id).toEqual(1789);
   });
 });
