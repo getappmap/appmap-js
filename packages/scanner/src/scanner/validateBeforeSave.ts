@@ -18,7 +18,7 @@ const validatedBy = (iterator: Iterator<EventNavigator>): boolean => {
 
 const scanner = (): Assertion => {
   return Assertion.assert(
-    'validate-before-save',
+    'save-without-validation',
     '`save` calls without validation',
     'function',
     // TODO: ensure that the object id on the 'validate' is the same as the object id on the 'save'

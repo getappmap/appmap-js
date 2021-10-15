@@ -6,7 +6,10 @@ class Options {
   private _queryInclude: RegExp[];
   private _queryExclude: RegExp[];
 
-  constructor(queryInclude: RegExp[] = [/INSERT/i, /UPDATE/i], queryExclude: RegExp[] = []) {
+  constructor(
+    queryInclude: RegExp[] = [/\binsert\b/i, /\bupdate\b/i],
+    queryExclude: RegExp[] = []
+  ) {
     this._queryInclude = queryInclude;
     this._queryExclude = queryExclude;
   }

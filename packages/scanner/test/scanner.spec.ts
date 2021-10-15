@@ -2,6 +2,7 @@ import slowHttpServerRequest from '../src/scanner/slowHttpServerRequest';
 import missingAuthentication from '../src/scanner/missingAuthentication';
 import secretInLog from '../src/scanner/secretInLog';
 import nPlusOneQuery from '../src/scanner/nPlusOneQuery';
+import insecureCompare from '../src/scanner/insecureCompare';
 import { scan } from './util';
 
 describe('assert', () => {
@@ -64,6 +65,8 @@ describe('assert', () => {
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
     expect(findings).toHaveLength(1);
+    // It's important that there is only one finding, since the query repeats 29 times.
+    // That's one finding; not 29 findings.
     const finding = findings[0];
     expect(finding.appMapName).toEqual('Users_profile profile display while anonyomus');
     expect(finding.scannerId).toEqual('n-plus-one-query');
@@ -71,5 +74,17 @@ describe('assert', () => {
     expect(finding.message).toEqual(
       `29 occurrances of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
     );
+  });
+
+  it('insecure comparison', async () => {
+    const scanner = insecureCompare.scanner();
+    const findings = await scan(
+      scanner,
+      'Password_resets_password_resets_with_insecure_compare.appmap.json'
+    );
+    expect(findings).toHaveLength(1);
+    const finding = findings[0];
+    expect(finding.scannerId).toEqual('insecure-compare');
+    expect(finding.event.id).toEqual(1094);
   });
 });

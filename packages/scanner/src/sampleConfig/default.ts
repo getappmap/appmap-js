@@ -14,7 +14,7 @@ const assertions: Assertion[] = [
   slowQuery.scanner(new slowQuery.Options(0.05)),
   queryFromView.scanner(),
   missingContentType.scanner(),
-  missingAuthentication.scanner(),
+  missingAuthentication.scanner(new missingAuthentication.Options([/\/api\//])),
   validateBeforeSave.scanner(),
   leafExpected.scanner('http_client_request'),
   leafExpected.scanner('sql_query'),

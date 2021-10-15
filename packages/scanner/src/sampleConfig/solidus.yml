@@ -1,12 +1,17 @@
 scanners:
   - id: slowHttpServerRequest
     properties:
-      timeAllowed: 0.5
+      timeAllowed: 1.0
   - id: slowQuery
     properties:
-      timeAllowed: 0.05
+      timeAllowed: 0.25
   - id: missingContentType
   - id: missingAuthentication
-  - id: insecureCompare
+    properties:
+      routes:
+        - /\/api/\/
   - id: secretInLog
   - id: updateInGetRequest
+    properties:
+      query_exclude:
+        - /^INSERT INTO "spree_order_mutexes"/

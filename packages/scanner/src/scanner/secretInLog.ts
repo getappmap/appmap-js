@@ -1,21 +1,9 @@
 import { Event, ParameterObject } from '@appland/models';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { MatchResult } from 'src/types';
 import Assertion from '../assertion';
-import { verbose, emptyValue } from './util';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import * as secretsRegexes from './secretsRegexes.json'; // import directly to include json file into the build
-
-const regexData: { [key: string]: string | string[] } = JSON.parse(
-  readFileSync(join(__dirname, 'secretsRegexes.json')).toString()
-);
-const REGEXES: { [key: string]: RegExp[] } = Object.keys(regexData).reduce((memo, key) => {
-  const value = regexData[key];
-  const regexes = Array.isArray(value) ? value : [value];
-  memo[key] = regexes.map((regex) => new RegExp(regex));
-  return memo;
-}, {} as { [key: string]: RegExp[] });
+import SecretsRegexes from '../analyzer/secretsRegexes';
+import { emptyValue } from './util';
+import recordSecrets from '../analyzer/recordSecrets';
 
 class Match {
   constructor(public regexp: RegExp | string, public value: string) {}
@@ -39,8 +27,8 @@ const findMatchingValue = (regexps: RegExp[], parameters: readonly ParameterObje
 };
 
 const findInLog = (e: Event): MatchResult[] | undefined => {
-  const matches: Match[] = Object.keys(REGEXES).reduce((memo, key) => {
-    const matches = findMatchingValue(REGEXES[key], e.parameters!);
+  const matches: Match[] = Object.keys(SecretsRegexes).reduce((memo, key) => {
+    const matches = findMatchingValue(SecretsRegexes[key], e.parameters!);
     matches.forEach((match) => memo.push(match));
     return memo;
   }, [] as Match[]);
@@ -62,16 +50,6 @@ const findInLog = (e: Event): MatchResult[] | undefined => {
   }
 };
 
-const recordSecrets = (e: Event) => {
-  if (emptyValue(e.returnValue.value)) {
-    return;
-  }
-  if (verbose()) {
-    console.warn(`Secret generated: ${e.returnValue.value}`);
-  }
-  secrets.add(e.returnValue.value);
-};
-
 const scanner = function (): Assertion {
   return Assertion.assert(
     'secret-in-log',
@@ -79,7 +57,7 @@ const scanner = function (): Assertion {
     'event',
     (e: Event) => {
       if (e.codeObject.labels.has('secret')) {
-        recordSecrets(e);
+        recordSecrets(secrets, e);
       }
       if (e.parameters && e.codeObject.labels.has('log')) {
         return findInLog(e);

@@ -95,7 +95,12 @@
     },
     {
       "event": "return",
-      "http_server_response": { "mime_type": "text/html;charset=UTF-8", "status": 200 },
+      "http_server_response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/html;charset=UTF-8"
+        }
+      },
       "id": 1049,
       "parent_id": 1037,
       "thread_id": 1

@@ -6,6 +6,7 @@ import slowHttpServerRequest from '../scanner/slowHttpServerRequest';
 import slowQuery from '../scanner/slowQuery';
 import updateInGetRequest from '../scanner/updateInGetRequest';
 import secretInLog from '../scanner/secretInLog';
+import insecureCompare from '../scanner/insecureCompare';
 
 const assertions: Assertion[] = [
   slowHttpServerRequest.scanner(new slowHttpServerRequest.Options(0.5)),
@@ -15,6 +16,7 @@ const assertions: Assertion[] = [
   leafExpected.scanner('http_client_request'),
   leafExpected.scanner('sql_query'),
   secretInLog.scanner(),
+  insecureCompare.scanner(),
   updateInGetRequest.scanner(),
 ];
 
