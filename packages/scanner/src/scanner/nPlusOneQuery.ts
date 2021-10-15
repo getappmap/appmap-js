@@ -1,12 +1,14 @@
 import { AppMap, Event, EventNavigator, getSqlLabelFromString, SqlQuery } from '@appland/models';
-import { Level } from 'src/types';
+import { Level } from '../types';
 import Assertion from '../assertion';
 import { obfuscate } from '../database';
+import { isRoot } from './util';
 
 function findRootEvent(event: Event): Event {
   let evt = event;
-  while (evt.parent) {
-    evt = evt.parent;
+
+  while (!isRoot(evt.parent)) {
+    evt = evt.parent!;
   }
   return evt;
 }
@@ -16,7 +18,7 @@ function sqlNormalized(query: SqlQuery): string {
 }
 
 class Options {
-  constructor(public warningLimit = 2, public errorLimit = 10, public whitelist: string[] = []) {}
+  constructor(public warningLimit = 5, public errorLimit = 10, public whitelist: string[] = []) {}
 }
 
 function scanner(options: Options = new Options()): Assertion {
@@ -61,15 +63,15 @@ function scanner(options: Options = new Options()): Assertion {
   // TODO: Ensure that the duplicate queries happen within a single command context.
   return Assertion.assert(
     'n-plus-one-query',
-    'Duplicate SQL queries',
+    'N+1 SQL queries',
     'sql_query',
     (event: Event, appMap: AppMap) => {
       const duplicateCount = findDuplicates(event, appMap);
       let level: Level | undefined;
       if (duplicateCount >= options.errorLimit) {
-        level = 'warning';
-      } else if (duplicateCount >= options.warningLimit) {
         level = 'error';
+      } else if (duplicateCount >= options.warningLimit) {
+        level = 'warning';
       }
       if (level) {
         return [
@@ -82,6 +84,10 @@ function scanner(options: Options = new Options()): Assertion {
     },
     (assertion: Assertion): void => {
       assertion.where = (e: Event, appMap: AppMap) => {
+        if (!e.parent) {
+          return false;
+        }
+
         if (getSqlLabelFromString(e.sqlQuery!) !== 'SQL Select') {
           return false;
         }
