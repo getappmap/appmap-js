@@ -1,11 +1,13 @@
 import path from 'path';
-import fs from 'fs-extra';
+import fse from 'fs-extra';
 import tmp from 'tmp';
 import sinon from 'sinon';
 import inquirer from 'inquirer';
 import Telemetry from '../../../src/telemetry';
 import yargs from 'yargs';
+
 import { PoetryInstaller } from '../../../src/cmds/agentInstaller/pythonAgentInstaller';
+import { BundleInstaller } from '../../../src/cmds/agentInstaller/rubyAgentInstaller';
 import AgentInstallerProcedure from '../../../src/cmds/agentInstaller/agentInstallerProcedure';
 import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
 import CommandStruct, {
@@ -13,7 +15,11 @@ import CommandStruct, {
 } from '../../../src/cmds/agentInstaller/commandStruct';
 
 import UI from '../../../src/cmds/userInteraction';
-import { ValidationError } from '../../../src/cmds/errors';
+import { InstallError, ValidationError } from '../../../src/cmds/errors';
+
+import * as validator from '../../../src/service/config/validator';
+
+import 'jest-sinon';
 
 const fixtureDir = path.join(__dirname, '..', 'fixtures');
 tmp.setGracefulCleanup();
@@ -122,13 +128,13 @@ describe('install-agent sub-command', () => {
         projectDir,
         'validate',
       ]);
-      const ret = { stdout: '', stderr: '' };
+      const ret = { stdout: '[]', stderr: '' };
       return Promise.resolve(ret);
     };
 
     const verifyJavaVersion = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('javac');
-      expect(cmdStruct.args).toEqual(['--version']);
+      expect(cmdStruct.args).toEqual(['-version']);
       return Promise.resolve({ stdout: '11.0.11', stderr: '' });
     };
 
@@ -168,7 +174,7 @@ describe('install-agent sub-command', () => {
       };
 
       beforeEach(() => {
-        fs.copySync(projectFixture, projectDir);
+        fse.copySync(projectFixture, projectDir);
         sinon.stub(inquirer, 'prompt').resolves({
           addMavenCentral: 'Yes',
           result: 'Gradle',
@@ -180,7 +186,7 @@ describe('install-agent sub-command', () => {
         const evalResults = async (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = await fs.readFile(
+          const actualConfig = await fse.readFile(
             path.join(projectDir, 'appmap.yml'),
             { encoding: 'utf-8' }
           );
@@ -246,7 +252,7 @@ describe('install-agent sub-command', () => {
       };
 
       beforeEach(() => {
-        fs.copySync(projectFixture, projectDir);
+        fse.copySync(projectFixture, projectDir);
         sinon
           .stub(inquirer, 'prompt')
           .resolves({ result: 'Maven', confirm: true });
@@ -256,7 +262,7 @@ describe('install-agent sub-command', () => {
         const evalResults = async (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = await fs.readFile(
+          const actualConfig = await fse.readFile(
             path.join(projectDir, 'appmap.yml'),
             { encoding: 'utf-8' }
           );
@@ -295,7 +301,7 @@ describe('install-agent sub-command', () => {
     const projectFixture = path.join(fixtureDir, 'ruby', 'app');
 
     beforeEach(() => {
-      fs.copySync(projectFixture, projectDir);
+      fse.copySync(projectFixture, projectDir);
       sinon.stub(inquirer, 'prompt').resolves({ confirm: true });
     });
 
@@ -332,7 +338,7 @@ packages:
       expect(cmdStruct.program).toEqual('bundle');
       const args = cmdStruct.args;
       expect(args).toEqual(['exec', 'appmap-agent-validate']);
-      const ret = { stdout: '', stderr: '' };
+      const ret = { stdout: '[]', stderr: '' };
       return Promise.resolve(ret);
     };
 
@@ -377,7 +383,7 @@ packages:
       const evalResults = async (err, argv, output) => {
         expect(err).toBeNull();
 
-        const actualConfig = await fs.readFile(
+        const actualConfig = await fse.readFile(
           path.join(projectDir, 'appmap.yml'),
           { encoding: 'utf-8' }
         );
@@ -457,7 +463,7 @@ packages:
       const projectFixture = path.join(fixtureDir, 'python', 'pip');
 
       beforeEach(() => {
-        fs.copySync(projectFixture, projectDir);
+        fse.copySync(projectFixture, projectDir);
         sinon
           .stub(inquirer, 'prompt')
           .resolves({ result: 'pip', confirm: true });
@@ -487,7 +493,7 @@ packages:
         const evalResults = async (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = await fs.readFile(
+          const actualConfig = await fse.readFile(
             path.join(projectDir, 'appmap.yml'),
             { encoding: 'utf-8' }
           );
@@ -507,7 +513,7 @@ packages:
       const projectFixture = path.join(fixtureDir, 'python', 'poetry');
 
       beforeEach(() => {
-        fs.copySync(projectFixture, projectDir);
+        fse.copySync(projectFixture, projectDir);
         sinon
           .stub(inquirer, 'prompt')
           .resolves({ result: 'poetry', confirm: true });
@@ -542,7 +548,7 @@ packages:
         const evalResults = async (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = await fs.readFile(
+          const actualConfig = await fse.readFile(
             path.join(projectDir, 'appmap.yml'),
             { encoding: 'utf-8' }
           );
@@ -568,7 +574,7 @@ packages:
     it('requests the user to select a project type if more than one exist', async () => {
       const projectFixture = path.join(fixtureDir, 'python', 'mixed');
       const { name: projectDir } = tmp.dirSync({} as any);
-      await fs.copy(projectFixture, projectDir);
+      await fse.copy(projectFixture, projectDir);
 
       const promptStub = sinon
         .stub(inquirer, 'prompt')
@@ -582,7 +588,7 @@ packages:
 
       const firstPrompt = promptStub.getCall(0).args[0] as inquirer.Question;
       expect(firstPrompt.name).toEqual('installerName');
-      expect(installAgentStub.called).toBe(true);
+      expect(installAgentStub).toBeCalled();
     });
 
     it('fails if no supported project is found', async () => {
@@ -594,10 +600,87 @@ packages:
       await invokeCommand(projectDir, () => {});
 
       const { returnValue } = installProcedureStub.getCall(0);
-      expect(returnValue).rejects.toBeInstanceOf(ValidationError);
-      returnValue.catch((err) =>
-        expect(err.message).toMatch('No supported project was found')
-      );
+      await expect(returnValue).rejects.toBeInstanceOf(ValidationError);
+      await returnValue.catch((err) => {
+        expect(err.message).toMatch('No supported project was found');
+      });
+    });
+  });
+
+  describe('when appmap-agent-validate returns a schema', () => {
+    beforeEach(() => {
+      const installer = new BundleInstaller('.');
+
+      sinon.stub(console, 'warn');
+
+      sinon
+        .stub(AgentInstallerProcedure.prototype, 'availableInstallers')
+        .resolves([installer]);
+      sinon.stub(installer, 'environment').resolves({});
+
+      sinon
+        .stub(inquirer, 'prompt')
+        .resolves({
+          installerName: 'ruby',
+          confirm: true,
+          overwriteAppMapYml: 'Use existing',
+        });
+
+      sinon.stub(BundleInstaller.prototype, 'installAgent').resolves();
+
+      sinon.stub(AgentInstallerProcedure.prototype, 'configExists').value(true);
+      sinon.stub(AgentInstallerProcedure.prototype, 'loadConfig').returns({});
+
+      sinon
+        .stub(AgentInstallerProcedure.prototype, 'validateAgent')
+        .resolves({ stdout: '{"errors": [], "schema": "{}"}', stderr: '' });
+    });
+
+    it('succeeds when the config syntax is valid', async () => {
+      const validateConfig = sinon
+        .stub(validator, 'validateConfig')
+        .returns({ valid: true });
+      await invokeCommand(projectDir, () => {});
+
+      expect(validateConfig).toBeCalled();
+    });
+
+    it('fails when the config syntax is invalid', async () => {
+      const jsError = [
+        {
+          start: { line: 0, column: 0, offset: 0 },
+          end: { line: 0, column: 1, offset: 0 },
+          error: 'syntax error',
+          dataPath: '/path/1',
+          path: '/path/1',
+        },
+      ];
+
+      const validationResult = {
+        valid: false,
+        errors: {
+          cli: `line1
+          line2
+          syntax error
+          line4`,
+          js: jsError,
+        },
+      };
+      const validateConfig = sinon
+        .stub(validator, 'validateConfig')
+        .returns(validationResult);
+
+      const installProcedureStub = sinon
+        .stub(AgentInstallerProcedure.prototype, 'run')
+        .callThrough();
+
+      await invokeCommand(projectDir, () => {});
+
+      const { returnValue } = installProcedureStub.getCall(0);
+      await expect(returnValue).rejects.toBeInstanceOf(InstallError);
+      await returnValue.catch((err) => {
+        expect(err.error.message).toMatch('syntax error');
+      });
     });
   });
 });

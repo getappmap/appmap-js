@@ -1,13 +1,14 @@
 import chalk from 'chalk';
-import { promises as fs } from 'fs';
+import fs from 'fs';
 import { join, resolve } from 'path';
+import yaml from 'js-yaml';
 import Yargs from 'yargs';
 
-import { exists } from '../../utils';
 import AgentInstaller from './agentInstaller';
 import { AbortError, InstallError, ValidationError } from '../errors';
 import { run } from './commandRunner';
 import UI from '../userInteraction';
+import {validateConfig} from '../../service/config/validator';
 
 export default class AgentInstallerProcedure {
   constructor(
@@ -147,7 +148,7 @@ export default class AgentInstallerProcedure {
       }
 
       let writeAppMapYml = true;
-      if (await exists(join(this.path, 'appmap.yml'))) {
+      if (this.configExists) {
         const USE_EXISTING = 'Use existing';
         const OVERWRITE = 'Overwrite';
         const ABORT = 'Abort';
@@ -178,13 +179,14 @@ export default class AgentInstallerProcedure {
         await run(cmd);
       }
 
+      const appMapYml = this.configPath;
       if (writeAppMapYml) {
         const initCommand = await installer.initCommand();
         const { stdout } = await run(initCommand);
         const json = JSON.parse(stdout);
 
-        await fs.writeFile(
-          join(this.path, 'appmap.yml'),
+        fs.writeFileSync(
+          appMapYml,
           json.configuration.contents
         );
       }
@@ -192,12 +194,23 @@ export default class AgentInstallerProcedure {
       if (installer.validateAgentCommand) {
         UI.status = 'Validating the AppMap agent...';
 
-        const cmd = await installer.validateAgentCommand();
-        try {
-          await run(cmd);
-        } catch (e) {
-          UI.error('Failed to validate the installation.');
-          throw e;
+        let {stdout} = await this.validateAgent(await installer.validateAgentCommand());
+        const schema = JSON.parse(stdout)['schema'];
+        // If appmap-agent-validate returned a schema, and we're using an
+        // existing appmap.yml, verify that the config matches the schema.
+        if (schema && !writeAppMapYml) {
+          UI.status = `Checking the syntax of AppMap agent configuration...`;
+          const config = this.loadConfig();
+          const result = validateConfig(schema, config);
+          if (!result.valid) {
+            const errors = result.errors!
+            const lines = errors.cli.split('\n').slice(2,4);
+
+            // type in IOutputError is wrong, says the member is called dataPath?
+            lines[1] += ` (${errors.js[0]['path']})`;
+
+            throw new ValidationError(`\n${appMapYml}:\n${lines.join('\n')}`);
+          }
         }
       }
 
@@ -222,5 +235,28 @@ export default class AgentInstallerProcedure {
     } catch (e) {
       throw new InstallError(e, installer);
     }
+  }
+
+  loadConfig() {
+    return yaml.load(fs.readFileSync(this.configPath));
+  }
+
+  async validateAgent(cmd) {
+    let stdout, stderr;
+    try {
+      return run(cmd);
+    } catch (e) {
+      UI.error('Failed to validate the installation.');
+      throw e;
+    }
+  }
+
+   
+  get configExists(): boolean {
+    return fs.existsSync(this.configPath);
+  }
+
+  get configPath(): fs.PathLike {
+    return resolve(join(this.path, 'appmap.yml'));
   }
 }
