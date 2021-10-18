@@ -47,7 +47,7 @@ describe('smoke test', () => {
       ),
       format: 'progress',
       config: join(__dirname, '..', 'src', 'sampleConfig', 'default.yml'), // need to pass it explicitly
-      report: 'json',
+      reportFormat: 'json',
       reportFile: reportFile,
     } as any);
 
