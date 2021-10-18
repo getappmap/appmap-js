@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.8.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.7.4...@appland/appmap-v3.8.0) (2021-10-18)
+
+
+### Features
+
+* Notify on install startup ([578c4f3](https://github.com/applandinc/appmap-js/commit/578c4f348cc9852ea5be54925d4aaf9f58866aa3))
+
 # [@appland/appmap-v3.7.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.7.3...@appland/appmap-v3.7.4) (2021-10-14)
 
 
