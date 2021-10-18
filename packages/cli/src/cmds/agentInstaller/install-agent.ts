@@ -63,6 +63,10 @@ export default {
   },
 
   async handler(args: InstallCommandOptions) {
+    Telemetry.sendEvent({
+      name: 'install-agent:start',
+    });
+
     const { projectType, directory, verbose: isVerbose } = args;
     const startTime = Date.now();
     const endTime = () => (Date.now() - startTime) / 1000;
