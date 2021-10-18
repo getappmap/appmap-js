@@ -9,7 +9,6 @@ const scanner = (): Assertion => {
   return Assertion.assert(
     'missing-content-type',
     'HTTP server requests without a Content-Type header',
-    'http_server_request',
     (e: Event) => contentType(e) === undefined,
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
@@ -21,4 +20,4 @@ const scanner = (): Assertion => {
   );
 };
 
-export default { scanner };
+export default { scope: 'http_server_request', scanner };

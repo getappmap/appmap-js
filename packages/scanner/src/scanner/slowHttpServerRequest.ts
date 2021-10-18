@@ -9,7 +9,6 @@ function scanner(options: Options = new Options()): Assertion {
   return Assertion.assert(
     'slow-http-server-request',
     'Slow HTTP server requests',
-    'http_server_request',
     (e: Event) => e.elapsedTime! > options.timeAllowed,
     (assertion: Assertion): void => {
       assertion.where = (e: Event) => !!e.httpServerRequest && e.elapsedTime !== undefined;
@@ -18,4 +17,4 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { Options, scanner };
+export default { scope: 'http_server_request', Options, scanner };

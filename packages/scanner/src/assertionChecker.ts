@@ -1,7 +1,7 @@
 import { AppMap, Event } from '@appland/models';
 import Assertion from './assertion';
 import { AbortError } from './errors';
-import { Finding, Scope } from './types';
+import { AssertionPrototype, Finding, Scope } from './types';
 import { verbose } from './scanner/util';
 import ScopeIterator from './scope/scopeIterator';
 import RootScope from './scope/rootScope';
@@ -17,13 +17,13 @@ export default class AssertionChecker {
     http_server_request: new HTTPServerRequestScope(),
   };
 
-  check(appMap: AppMap, assertion: Assertion, matches: Finding[]): void {
+  check(appMap: AppMap, assertionPrototype: AssertionPrototype, matches: Finding[]): void {
     if (verbose()) {
       console.warn(`Checking AppMap ${appMap.name}`);
     }
-    const scopeIterator = this.scopes[assertion.scope];
+    const scopeIterator = this.scopes[assertionPrototype.scope];
     if (!scopeIterator) {
-      throw new AbortError(`Invalid scope name "${assertion.scope}"`);
+      throw new AbortError(`Invalid scope name "${assertionPrototype.scope}"`);
     }
 
     const callEvents = function* (): Generator<Event> {
@@ -36,6 +36,7 @@ export default class AssertionChecker {
     };
 
     for (const scope of scopeIterator.scopes(callEvents())) {
+      const assertion = assertionPrototype.build();
       this.checkScope(scope, appMap, assertion, matches);
     }
   }
@@ -91,14 +92,14 @@ export default class AssertionChecker {
         appMapName: appMap.metadata.name,
         scannerId: assertion.id,
         scannerTitle: assertion.summaryTitle,
-        event: event,
+        event,
+        scope,
         message: null,
         condition: assertion.description || assertion.matcher.toString(),
       };
     };
 
-    const scopeId = [appMap.metadata.name, scope.id].join(':');
-    const matchResult = assertion.matcher(event, scopeId);
+    const matchResult = assertion.matcher(event);
     const numFindings = findings.length;
     if (matchResult === true) {
       findings.push(buildFinding());

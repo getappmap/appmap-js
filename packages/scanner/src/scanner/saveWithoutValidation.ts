@@ -20,7 +20,6 @@ const scanner = (): Assertion => {
   return Assertion.assert(
     'save-without-validation',
     '`save` calls without validation',
-    'all',
     // TODO: ensure that the object id on the 'validate' is the same as the object id on the 'save'
     // TODO: if validate happens in a preceding event, this is also OK
     (event: Event) => !validatedBy(new EventNavigator(event).descendants()),

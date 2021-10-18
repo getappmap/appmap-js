@@ -9,6 +9,8 @@ export default class RootScope extends ScopeIterator {
       if (event.isCall()) {
         if (!event.parent) {
           yield new ScopeImpl(event);
+
+          this.advanceToReturnEvent(event, events);
         }
       }
     }

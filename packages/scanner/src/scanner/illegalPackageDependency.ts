@@ -13,7 +13,6 @@ function scanner(options: Options): Assertion {
   return Assertion.assert(
     'illegal-package-dependency',
     'Illegal use of code by a non-whitelisted package',
-    'all',
     (e: Event) => {
       const parentPackage = e.parent!.codeObject.packageOf;
       if (
@@ -36,4 +35,4 @@ function scanner(options: Options): Assertion {
   );
 }
 
-export default { Options, scanner };
+export default { scanner, Options };

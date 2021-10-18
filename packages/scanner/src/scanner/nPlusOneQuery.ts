@@ -1,17 +1,7 @@
-import { AppMap, Event, EventNavigator, getSqlLabelFromString, SqlQuery } from '@appland/models';
-import { Level } from '../types';
+import { Event, getSqlLabelFromString, SqlQuery } from '@appland/models';
+import { Level, MatchResult } from '../types';
 import Assertion from '../assertion';
 import { obfuscate } from '../database';
-import { isRoot } from './util';
-
-function findRootEvent(event: Event): Event {
-  let evt = event;
-
-  while (!isRoot(evt.parent)) {
-    evt = evt.parent!;
-  }
-  return evt;
-}
 
 function sqlNormalized(query: SqlQuery): string {
   return obfuscate(query.sql, query.database_type);
@@ -22,69 +12,52 @@ class Options {
 }
 
 function scanner(options: Options = new Options()): Assertion {
-  const uniqueSQL = new Set<string>();
-  const matchedSQL = new Set<string>();
+  const sqlCount: Record<string, number> = {};
+  const warnings = new Set<string>();
+  const errors = new Set<string>();
 
-  const findDuplicates = (event: Event, scopeId: string): number => {
+  const matcher = (event: Event): MatchResult[] | undefined => {
     const sql = sqlNormalized(event.sql!);
-    const rootEvent = findRootEvent(event);
 
-    const sqlKey = [scopeId, rootEvent.id, sql].join('\n');
-
-    // Short circuit if we've already flagged this SQL.
-    if (matchedSQL.has(sqlKey)) {
-      return 0;
+    let count = sqlCount[sql];
+    if (!count) {
+      count = 1;
+    } else {
+      count = count + 1;
     }
-    matchedSQL.add(sqlKey);
+    sqlCount[sql] = count;
 
-    let matches = 0;
-    const iter = new EventNavigator(rootEvent).descendants();
-    let curr = iter.next();
-
-    function isMatch(descendant: Event): boolean {
-      if (descendant.id <= event.id) {
-        return false;
+    let level: Level | undefined;
+    // TODO: Keep counting and report the max. This can't be done efficiently with the current Assertion interface.
+    if (count === options.errorLimit) {
+      if (!errors.has(sql)) {
+        level = 'error';
+        errors.add(sql);
       }
-      if (!descendant.sql) {
-        return false;
+    } else if (count === options.warningLimit) {
+      if (!warnings.has(sql)) {
+        level = 'warning';
+        warnings.add(sql);
       }
-      return sqlNormalized(descendant.sql!) === sql;
     }
-
-    while (!curr.done) {
-      if (isMatch(curr.value.event)) {
-        matches += 1;
-      }
-      curr = iter.next();
+    if (level) {
+      return [
+        {
+          level: level,
+          message: `${count} occurrances of SQL "${event.sqlQuery}"`,
+        },
+      ];
     }
-    return matches;
   };
 
   // TODO: Ensure that the duplicate queries happen within a single command context.
   return Assertion.assert(
     'n-plus-one-query',
     'N+1 SQL queries',
-    'command',
-    (event: Event, scopeId: string) => {
-      const duplicateCount = findDuplicates(event, scopeId);
-      let level: Level | undefined;
-      if (duplicateCount >= options.errorLimit) {
-        level = 'error';
-      } else if (duplicateCount >= options.warningLimit) {
-        level = 'warning';
-      }
-      if (level) {
-        return [
-          {
-            level: level,
-            message: `${duplicateCount} occurrances of SQL "${event.sqlQuery}"`,
-          },
-        ];
-      }
-    },
+    matcher,
     (assertion: Assertion): void => {
-      assertion.where = (e: Event, appMap: AppMap) => {
-        if (!e.sqlQuery || !e.parent) {
+      assertion.where = (e: Event) => {
+        if (!e.sqlQuery) {
           return false;
         }
 
@@ -92,18 +65,11 @@ function scanner(options: Options = new Options()): Assertion {
           return false;
         }
 
-        const rootEvent: Event = findRootEvent(e);
         const sql = sqlNormalized(e.sql!);
         if (options.whitelist.includes(sql)) {
           return false;
         }
 
-        const sqlKey = [appMap.name, rootEvent.id, sql].join('\n');
-        if (uniqueSQL.has(sqlKey)) {
-          return false;
-        }
-
-        uniqueSQL.add(sqlKey);
         return true;
       };
       assertion.description = `SQL query should not be repeated within the same command`;
@@ -111,4 +77,4 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { Options, scanner };
+export default { scope: 'command', Options, scanner };

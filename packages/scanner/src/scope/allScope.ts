@@ -12,7 +12,9 @@ class ScopeImpl implements Scope {
   }
 
   *events(): Generator<Event> {
-    yield this.scope;
+    if (this.scope) {
+      yield this.scope;
+    }
 
     for (const event of this.eventsIter) {
       yield event;

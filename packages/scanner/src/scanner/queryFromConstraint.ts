@@ -24,7 +24,6 @@ function scanner(options: Options): Assertion {
   return Assertion.assert(
     'query-from-invalid-package',
     'Queries from invalid packages',
-    'all',
     (e: Event) => {
       if (!options.parentPackages.includes(e.parent!.codeObject.packageOf)) {
         return `${e.codeObject.id} is invoked from illegal package ${

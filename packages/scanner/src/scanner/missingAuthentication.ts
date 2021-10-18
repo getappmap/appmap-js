@@ -52,7 +52,6 @@ function scanner(options: Options = new Options()): Assertion {
   return Assertion.assert(
     'missing-authentication',
     'Unauthenticated HTTP server requests',
-    'http_server_request',
     (event: Event) => !authenticatedBy(new EventNavigator(event).descendants()),
     (assertion: Assertion): void => {
       assertion.options = options;
@@ -71,4 +70,4 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { Options, scanner };
+export default { scope: 'http_server_request', Options, scanner };

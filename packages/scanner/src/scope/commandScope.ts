@@ -22,19 +22,18 @@ class ScopeImpl implements Scope {
 
 export default class CommandScope extends ScopeIterator {
   *scopes(events: Generator<Event>): Generator<Scope> {
-    let eventResult = events.next();
-    while (!eventResult.done) {
-      const event = eventResult.value;
+    for (const event of events) {
       if (event.isCall()) {
         if (
-          !event.codeObject.labels.has('command') ||
+          event.codeObject.labels.has('command') ||
           event.codeObject.labels.has('job') ||
           event.httpServerRequest
         ) {
           yield new ScopeImpl(event);
+
+          this.advanceToReturnEvent(event, events);
         }
       }
-      eventResult = events.next();
     }
   }
 }

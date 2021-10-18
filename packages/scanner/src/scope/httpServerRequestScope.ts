@@ -9,6 +9,8 @@ export default class HTTPServerRequestScope extends ScopeIterator {
       if (event.isCall()) {
         if (event.httpServerRequest) {
           yield new ScopeImpl(event);
+
+          this.advanceToReturnEvent(event, events);
         }
       }
     }

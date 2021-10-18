@@ -6,15 +6,28 @@ import insecureCompare from '../src/scanner/insecureCompare';
 import http500 from '../src/scanner/http500';
 import illegalPackageAccess from '../src/scanner/illegalPackageDependency';
 import { scan } from './util';
+import { ScopeName } from '../src/types';
+import Assertion from '../src/assertion';
+
+const makePrototype = (id: string, buildFn: () => Assertion, scope: ScopeName = 'all') => {
+  return {
+    config: { id },
+    scope: scope || 'all',
+    build: buildFn,
+  };
+};
 
 describe('assert', () => {
   it('slow HTTP server request', async () => {
-    const scanner = slowHttpServerRequest.scanner(new slowHttpServerRequest.Options(0.5));
+    const { scope, scanner, Options } = slowHttpServerRequest;
     const findings = await scan(
-      scanner,
+      makePrototype(
+        'slow-http-server-request',
+        () => scanner(new Options(0.5)),
+        scope as ScopeName
+      ),
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
-
     expect(findings).toHaveLength(1);
     const finding = findings[0];
     expect(finding.appMapName).toEqual('Users_profile profile display while anonyomus');
@@ -25,9 +38,9 @@ describe('assert', () => {
   });
 
   it('missing authentication', async () => {
-    const scanner = missingAuthentication.scanner();
+    const { scope, scanner } = missingAuthentication;
     const findings = await scan(
-      scanner,
+      makePrototype('secret-in-log', () => scanner(), scope as ScopeName),
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
 
@@ -39,9 +52,9 @@ describe('assert', () => {
   });
 
   it('secret in log file', async () => {
-    const scanner = secretInLog.scanner();
+    const { scanner } = secretInLog;
     const findings = await scan(
-      scanner,
+      makePrototype('secret-in-log', () => scanner()),
       'Users_signup_valid_signup_information_with_account_activation.appmap.json'
     );
     expect(findings).toHaveLength(2);
@@ -61,27 +74,34 @@ describe('assert', () => {
   });
 
   it('n+1 query', async () => {
-    const scanner = nPlusOneQuery.scanner();
+    const { scanner } = nPlusOneQuery;
     const findings = await scan(
-      scanner,
+      makePrototype('n-plus-one-query', () => scanner()),
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
-    expect(findings).toHaveLength(1);
+
+    expect(findings).toHaveLength(2);
     // It's important that there is only one finding, since the query repeats 29 times.
     // That's one finding; not 29 findings.
-    const finding = findings[0];
-    expect(finding.appMapName).toEqual('Users_profile profile display while anonyomus');
-    expect(finding.scannerId).toEqual('n-plus-one-query');
-    expect(finding.event.id).toEqual(91);
-    expect(finding.message).toEqual(
-      `29 occurrances of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
+    const finding1 = findings[0];
+    expect(finding1.appMapName).toEqual('Users_profile profile display while anonyomus');
+    expect(finding1.scannerId).toEqual('n-plus-one-query');
+    expect(finding1.event.id).toEqual(131);
+    expect(finding1.message).toEqual(
+      `5 occurrances of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
+    );
+
+    const finding2 = findings[1];
+    expect(finding2.event.id).toEqual(181);
+    expect(finding2.message).toEqual(
+      `10 occurrances of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
     );
   });
 
   it('insecure comparison', async () => {
-    const scanner = insecureCompare.scanner();
+    const { scanner } = insecureCompare;
     const findings = await scan(
-      scanner,
+      makePrototype('insecure-compare', () => scanner()),
       'Password_resets_password_resets_with_insecure_compare.appmap.json'
     );
     expect(findings).toHaveLength(1);
@@ -91,9 +111,9 @@ describe('assert', () => {
   });
 
   it('http 500', async () => {
-    const scanner = http500.scanner();
+    const { scanner, scope } = http500;
     const findings = await scan(
-      scanner,
+      makePrototype('http-500', () => scanner()),
       'Password_resets_password_resets_with_http500.appmap.json'
     );
     expect(findings).toHaveLength(1);
@@ -103,14 +123,13 @@ describe('assert', () => {
   });
 
   it('illegal package dependency', async () => {
-    const scanner = illegalPackageAccess.scanner(
-      new illegalPackageAccess.Options('query:*', ['app/views'])
-    );
+    const { scanner, Options } = illegalPackageAccess;
     const findings = await scan(
-      scanner,
+      makePrototype('illegal-package-dependency', () =>
+        scanner(new Options('query:*', ['app/views']))
+      ),
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
-
     expect(findings).toHaveLength(1);
     const finding = findings[0];
     expect(finding.scannerId).toEqual('illegal-package-dependency');

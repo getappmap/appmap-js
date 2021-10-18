@@ -36,7 +36,6 @@ function scanner(options: Options = new Options()): Assertion {
   return Assertion.assert(
     'slow-query',
     'Slow SQL queries',
-    'all',
     (e: Event) => e.elapsedTime! > options.timeAllowed,
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>

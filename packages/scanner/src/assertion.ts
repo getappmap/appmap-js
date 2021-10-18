@@ -10,29 +10,23 @@ export default class Assertion {
   static assert(
     id: string,
     summaryTitle: string,
-    scope: ScopeName,
     matcher: Matcher,
     cb?: (assertion: Assertion) => void
   ): Assertion {
-    const assertion = new Assertion(id, summaryTitle, scope, matcher);
+    const assertion = new Assertion(id, summaryTitle, matcher);
     if (cb) {
       cb(assertion);
     }
     return assertion;
   }
 
-  constructor(
-    public id: string,
-    public summaryTitle: string,
-    public scope: ScopeName,
-    public matcher: Matcher
-  ) {
+  constructor(public id: string, public summaryTitle: string, public matcher: Matcher) {
     this.include = [];
     this.exclude = [];
   }
 
   toString(): string {
-    const tokens = [`[${this.scope}]`];
+    const tokens = [`[${this.id}]`];
     if (this.description) {
       tokens.push(this.description);
     } else {

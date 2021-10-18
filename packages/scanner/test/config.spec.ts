@@ -1,7 +1,7 @@
 import { load } from 'js-yaml';
 import Assertion from '../src/assertion';
-import ConfigurationProviderYaml from '../src/configuration/configurationProviderYaml';
-import { Configuration } from '../src/types';
+import ConfigurationProvider from '../src/configuration/configurationProvider';
+import { AssertionPrototype, Configuration } from '../src/types';
 
 describe('YAML config test', () => {
   it('propagates property settings', async () => {
@@ -12,10 +12,10 @@ describe('YAML config test', () => {
         timeAllowed: 0.251
     `;
     const configObj = load(yamlConfig) as Configuration;
-    const provider = new ConfigurationProviderYaml(configObj);
-    const assertions: readonly Assertion[] = await provider.getConfig();
-    expect(assertions).toHaveLength(1);
-    const assertion = assertions[0];
+    const provider = new ConfigurationProvider(configObj);
+    const assertionPrototypes: readonly AssertionPrototype[] = await provider.getConfig();
+    expect(assertionPrototypes).toHaveLength(1);
+    const assertion = assertionPrototypes[0].build();
     expect(assertion.description).toEqual(`Slow HTTP server request (> 251ms)`);
   });
 
@@ -27,10 +27,10 @@ describe('YAML config test', () => {
         - routes: /GET/
     `;
     const configObj = load(yamlConfig) as Configuration;
-    const provider = new ConfigurationProviderYaml(configObj);
-    const assertions: readonly Assertion[] = await provider.getConfig();
-    expect(assertions).toHaveLength(1);
-    const assertion = assertions[0];
+    const provider = new ConfigurationProvider(configObj);
+    const assertionPrototypes: readonly AssertionPrototype[] = await provider.getConfig();
+    expect(assertionPrototypes).toHaveLength(1);
+    const assertion = assertionPrototypes[0].build();
     expect(assertion.options.routes).toEqual([/.*/]);
   });
 });

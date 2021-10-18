@@ -9,8 +9,6 @@ class Options {
   ) {}
 }
 
-const ScopeData: Record<string, number> = {};
-
 function scanner(options: Options = new Options()): Assertion {
   const sqlPatterns = options.queryIncludes.map((pattern) => new RegExp(pattern, 'i'));
 
@@ -32,25 +30,16 @@ function scanner(options: Options = new Options()): Assertion {
     return isSQLUpdate() || isRPCUpdate();
   };
 
+  let updateCount = 0;
+
   return Assertion.assert(
     'too-many-updates',
     'Too many SQL and RPC updates performed in one command',
-    'command',
-    (event: Event, scopeId: string) => {
-      const incrementUpdateCount = () => {
-        let count = ScopeData[scopeId];
-        if (count) {
-          count += 1;
-        } else {
-          count = 1;
-        }
-        ScopeData[scopeId] = count;
-        return count;
-      };
-
+    (event: Event) => {
       if (isUpdate(event)) {
-        const updateCount = incrementUpdateCount();
-        if (updateCount > options.maxUpdates) {
+        updateCount += 1;
+        // TODO: Keep counting and report the max. This can't be done efficiently with the current Assertion interface.
+        if (updateCount === options.maxUpdates) {
           return true;
         }
       }
@@ -62,4 +51,4 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { Options, scanner };
+export default { scope: 'command', Options, scanner };

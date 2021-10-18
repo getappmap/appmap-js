@@ -1,4 +1,5 @@
 import { AppMap, Event } from '@appland/models';
+import Assertion from './assertion';
 
 export type ScopeName = 'all' | 'root' | 'command' | 'http_server_request';
 
@@ -16,7 +17,7 @@ export interface MatchResult {
   message?: string;
 }
 
-type Matcher = (e: Event, scopeId: string) => boolean | string | MatchResult[] | undefined;
+type Matcher = (e: Event) => boolean | string | MatchResult[] | undefined;
 
 export interface Finding {
   appMapName: string;
@@ -24,6 +25,7 @@ export interface Finding {
   scannerId: string;
   scannerTitle: string;
   event: Event;
+  scope: Event;
   message: string | null;
   condition: string;
 }
@@ -34,9 +36,14 @@ interface Configuration {
 
 interface AssertionConfig {
   readonly id: string;
-  readonly summaryTitle: string;
   readonly include?: string[];
   readonly exclude?: string[];
   readonly description?: string;
   readonly properties?: Record<string, string | string[] | number>;
+}
+
+interface AssertionPrototype {
+  config: AssertionConfig;
+  scope: ScopeName;
+  build(): Assertion;
 }
