@@ -7,7 +7,7 @@ import nPlusOneQuery from '../scanner/nPlusOneQuery';
 import queryFromView from '../scanner/queryFromView';
 import slowHttpServerRequest from '../scanner/slowHttpServerRequest';
 import slowQuery from '../scanner/slowQuery';
-import validateBeforeSave from '../scanner/validateBeforeSave';
+import saveWithoutValidation from '../scanner/saveWithoutValidation';
 
 const assertions: Assertion[] = [
   slowHttpServerRequest.scanner(),
@@ -15,7 +15,7 @@ const assertions: Assertion[] = [
   queryFromView.scanner(),
   missingContentType.scanner(),
   missingAuthentication.scanner(new missingAuthentication.Options([/\/api\//])),
-  validateBeforeSave.scanner(),
+  saveWithoutValidation.scanner(),
   leafExpected.scanner('http_client_request'),
   leafExpected.scanner('sql_query'),
   leafExpected.scanner('function', (e: Event) => e.codeObject.labels.has('log')),

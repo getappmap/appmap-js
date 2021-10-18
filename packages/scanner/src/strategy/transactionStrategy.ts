@@ -1,7 +1,7 @@
 import { Event } from '@appland/models';
 import Strategy from './strategy';
 import { Scope, ScopedEvent } from '../types';
-import { verbose } from 'src/scanner/util';
+import { verbose } from '../scanner/util';
 
 const sqlNormalized = (event: Event) => event.sqlQuery!.split(/\s/).join(' ').toLowerCase();
 
