@@ -36,13 +36,14 @@ function scanner(options: Options = new Options()): Assertion {
   return Assertion.assert(
     'slow-query',
     'Slow SQL queries',
-    'sql_query',
+    'all',
     (e: Event) => e.elapsedTime! > options.timeAllowed,
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
-        e.elapsedTime !== undefined &&
-        options.queryInclude.some((pattern) => e.sqlQuery && e.sqlQuery.match(pattern)) &&
-        !options.queryExclude.some((pattern) => e.sqlQuery && e.sqlQuery.match(pattern));
+        !!e.sqlQuery &&
+        !!e.elapsedTime &&
+        options.queryInclude.some((pattern) => e.sqlQuery!.match(pattern)) &&
+        !options.queryExclude.some((pattern) => e.sqlQuery!.match(pattern));
       assertion.description = `Slow SQL query (> ${options.timeAllowed * 1000}ms)`;
     }
   );

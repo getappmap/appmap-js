@@ -24,7 +24,7 @@ function scanner(options: Options): Assertion {
   return Assertion.assert(
     'query-from-invalid-package',
     'Queries from invalid packages',
-    'event',
+    'all',
     (e: Event) => {
       if (!options.parentPackages.includes(e.parent!.codeObject.packageOf)) {
         return `${e.codeObject.id} is invoked from illegal package ${
@@ -34,8 +34,8 @@ function scanner(options: Options): Assertion {
     },
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
-        e.sqlQuery !== undefined &&
-        e.parent !== undefined &&
+        !!e.sqlQuery &&
+        !!e.parent &&
         !options.whitelist.concat(WHITELIST).some((pattern) => pattern.test(e.sqlQuery!));
       assertion.description = `Query must be invoked from one of (${options.parentPackages.join(
         ','

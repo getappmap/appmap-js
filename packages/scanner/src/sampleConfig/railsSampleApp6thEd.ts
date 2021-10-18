@@ -1,6 +1,5 @@
 import Assertion from '../assertion';
 import missingContentType from '../scanner/missingContentType';
-import leafExpected from '../scanner/leafExpected';
 import missingAuthentication from '../scanner/missingAuthentication';
 import slowHttpServerRequest from '../scanner/slowHttpServerRequest';
 import slowQuery from '../scanner/slowQuery';
@@ -13,8 +12,6 @@ const assertions: Assertion[] = [
   slowQuery.scanner(new slowQuery.Options(0.05)),
   missingContentType.scanner(),
   missingAuthentication.scanner(),
-  leafExpected.scanner('http_client_request'),
-  leafExpected.scanner('sql_query'),
   secretInLog.scanner(),
   insecureCompare.scanner(),
   updateInGetRequest.scanner(),

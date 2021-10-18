@@ -42,7 +42,7 @@ const scanner = function (): Assertion {
   return Assertion.assert(
     'insecure-compare',
     'Insecure comparison of secrets',
-    'function',
+    'all',
     (e: Event) => {
       if (e.codeObject.labels.has('secret')) {
         recordSecrets(secrets, e);
@@ -53,7 +53,8 @@ const scanner = function (): Assertion {
     },
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
-        e.codeObject.labels.has('string.equals') || e.codeObject.labels.has('secret');
+        e.isFunction &&
+        (e.codeObject.labels.has('string.equals') || e.codeObject.labels.has('secret'));
       assertion.description = `Insecure comparison of secrets`;
     }
   );

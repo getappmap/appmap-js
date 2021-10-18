@@ -1,7 +1,6 @@
 import { Event } from '@appland/models';
 import Assertion from '../assertion';
 import missingContentType from '../scanner/missingContentType';
-import leafExpected from '../scanner/leafExpected';
 import missingAuthentication from '../scanner/missingAuthentication';
 import slowHttpServerRequest from '../scanner/slowHttpServerRequest';
 import slowQuery from '../scanner/slowQuery';
@@ -14,7 +13,7 @@ const slowFunction = function (options: SlowFunctionOptions): Assertion {
   return Assertion.assert(
     'slow-function',
     `Slow Function : ${options.fn}`,
-    'function',
+    'all',
     (e: Event) => e.elapsedTime! < options.timeAllowed,
     (assertion: Assertion): void => {
       assertion.where = (e: Event) => e.elapsedTime !== undefined && e.codeObject.id === options.fn;
@@ -29,8 +28,6 @@ const assertions: Assertion[] = [
   slowFunction({ timeAllowed: 0.05, fn: 'app/models/Article#comments_blob' }),
   missingContentType.scanner(),
   missingAuthentication.scanner(),
-  leafExpected.scanner('http_client_request'),
-  leafExpected.scanner('sql_query'),
 ];
 
 export default function (): Assertion[] {

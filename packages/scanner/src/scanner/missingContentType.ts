@@ -13,7 +13,7 @@ const scanner = (): Assertion => {
     (e: Event) => contentType(e) === undefined,
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
-        e.httpServerResponse !== undefined &&
+        !!e.httpServerResponse &&
         !isRedirect(e.httpServerResponse!.status) &&
         hasContent(e.httpServerResponse!.status);
       assertion.description = `HTTP server request must have a Content-Type header`;

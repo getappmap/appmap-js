@@ -64,7 +64,7 @@ function scanner(options: Options = new Options()): Assertion {
   return Assertion.assert(
     'n-plus-one-query',
     'N+1 SQL queries',
-    'sql_query',
+    'command',
     (event: Event, scopeId: string) => {
       const duplicateCount = findDuplicates(event, scopeId);
       let level: Level | undefined;
@@ -84,7 +84,7 @@ function scanner(options: Options = new Options()): Assertion {
     },
     (assertion: Assertion): void => {
       assertion.where = (e: Event, appMap: AppMap) => {
-        if (!e.parent) {
+        if (!e.sqlQuery || !e.parent) {
           return false;
         }
 

@@ -1,4 +1,4 @@
-import { EventFilter, Scope, Matcher } from './types';
+import { EventFilter, ScopeName, Matcher } from './types';
 
 export default class Assertion {
   public where?: EventFilter;
@@ -10,7 +10,7 @@ export default class Assertion {
   static assert(
     id: string,
     summaryTitle: string,
-    scope: Scope,
+    scope: ScopeName,
     matcher: Matcher,
     cb?: (assertion: Assertion) => void
   ): Assertion {
@@ -24,7 +24,7 @@ export default class Assertion {
   constructor(
     public id: string,
     public summaryTitle: string,
-    public scope: Scope,
+    public scope: ScopeName,
     public matcher: Matcher
   ) {
     this.include = [];

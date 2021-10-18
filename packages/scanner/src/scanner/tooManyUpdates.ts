@@ -34,8 +34,8 @@ function scanner(options: Options = new Options()): Assertion {
 
   return Assertion.assert(
     'too-many-updates',
-    'Too many SQL and RPC updates performed in one transaction',
-    'transaction',
+    'Too many SQL and RPC updates performed in one command',
+    'command',
     (event: Event, scopeId: string) => {
       const incrementUpdateCount = () => {
         let count = ScopeData[scopeId];
@@ -56,6 +56,7 @@ function scanner(options: Options = new Options()): Assertion {
       }
     },
     (assertion: Assertion): void => {
+      assertion.where = (e: Event) => !!e.sqlQuery || !!e.httpServerRequest;
       assertion.description = `Too many SQL and RPC updates performed in one transaction`;
     }
   );

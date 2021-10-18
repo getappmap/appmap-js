@@ -9,9 +9,10 @@ function scanner(options: Options = new Options()): Assertion {
   return Assertion.assert(
     'query-from-view',
     'Queries from view',
-    'sql_query',
+    'all',
     (e: Event) => e.ancestors().some((e: Event) => e.codeObject.labels.has(options.forbiddenLabel)),
     (assertion: Assertion): void => {
+      assertion.where = (e: Event) => !!e.sqlQuery;
       assertion.description = `SQL query from ${options.forbiddenLabel}`;
     }
   );

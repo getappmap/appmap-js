@@ -1,16 +1,10 @@
 import { AppMap, Event } from '@appland/models';
 
-export type Scope =
-  | 'event'
-  | 'function'
-  | 'http_client_request'
-  | 'http_server_request'
-  | 'sql_query'
-  | 'transaction';
+export type ScopeName = 'all' | 'root' | 'command' | 'http_server_request';
 
-interface ScopedEvent {
-  event: Event;
-  scopeId: string;
+interface Scope {
+  scope: Event;
+  events: () => Generator<Event>;
 }
 
 export type Level = 'warning' | 'error';

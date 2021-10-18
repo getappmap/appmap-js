@@ -1,36 +1,126 @@
-import { AppMap } from '@appland/models';
+import { AppMap, Event } from '@appland/models';
 import Assertion from './assertion';
 import { AbortError } from './errors';
-import { Finding } from './types';
-import Strategy from './strategy/strategy';
-import HttpServerRequestStrategy from './strategy/httpServerRequestStrategy';
-import SqlQueryStrategy from './strategy/sqlQueryStrategy';
-import EventStrategy from './strategy/eventStrategy';
-import FunctionStrategy from './strategy/functionStrategy';
-import HttpClientRequestStrategy from './strategy/httpClientRequestStrategy';
+import { Finding, Scope } from './types';
 import { verbose } from './scanner/util';
-import TransactionStrategy from './strategy/transactionStrategy';
+import ScopeIterator from './scope/scopeIterator';
+import RootScope from './scope/rootScope';
+import HTTPServerRequestScope from './scope/httpServerRequestScope';
+import CommandScope from './scope/commandScope';
+import AllScope from './scope/allScope';
 
 export default class AssertionChecker {
-  private strategies: Strategy[] = [
-    new EventStrategy(),
-    new FunctionStrategy(),
-    new HttpClientRequestStrategy(),
-    new HttpServerRequestStrategy(),
-    new SqlQueryStrategy(),
-    new TransactionStrategy(),
-  ];
+  private scopes: Record<string, ScopeIterator> = {
+    all: new AllScope(),
+    root: new RootScope(),
+    command: new CommandScope(),
+    http_server_request: new HTTPServerRequestScope(),
+  };
 
-  check(appMapData: AppMap, assertion: Assertion, matches: Finding[]): void {
+  check(appMap: AppMap, assertion: Assertion, matches: Finding[]): void {
     if (verbose()) {
-      console.warn(`Checking AppMap ${appMapData.name}`);
+      console.warn(`Checking AppMap ${appMap.name}`);
     }
-    for (const strategy of this.strategies) {
-      if (strategy.supports(assertion)) {
-        return strategy.check(appMapData, assertion, matches);
+    const scopeIterator = this.scopes[assertion.scope];
+    if (!scopeIterator) {
+      throw new AbortError(`Invalid scope name "${assertion.scope}"`);
+    }
+
+    const callEvents = function* (): Generator<Event> {
+      for (let i = 0; i < appMap.events.length; i++) {
+        const event = appMap.events[i];
+        if (event.isCall()) {
+          yield event;
+        }
+      }
+    };
+
+    for (const scope of scopeIterator.scopes(callEvents())) {
+      this.checkScope(scope, appMap, assertion, matches);
+    }
+  }
+
+  checkScope(scope: Scope, appMap: AppMap, assertion: Assertion, matches: Finding[]): void {
+    for (const event of scope.events()) {
+      this.checkEvent(event, scope.scope, appMap, assertion, matches);
+    }
+  }
+
+  checkEvent(
+    event: Event,
+    scope: Event,
+    appMap: AppMap,
+    assertion: Assertion,
+    findings: Finding[]
+  ): void {
+    if (!event.isCall()) {
+      return;
+    }
+    if (verbose()) {
+      console.warn(`Asserting ${assertion.id} on event ${event.toString()}`);
+    }
+
+    if (!event.returnEvent) {
+      if (verbose()) {
+        console.warn(`\tEvent has no returnEvent. Skipping.`);
+      }
+      return;
+    }
+
+    if (assertion.where && !assertion.where(event, appMap)) {
+      if (verbose()) {
+        console.warn(`\t'where' clause is not satisifed. Skipping.`);
+      }
+      return;
+    }
+    if (assertion.include.length > 0 && !assertion.include.every((fn) => fn(event, appMap))) {
+      if (verbose()) {
+        console.warn(`\t'include' clause is not satisifed. Skipping.`);
+      }
+      return;
+    }
+    if (assertion.exclude.length > 0 && assertion.exclude.some((fn) => fn(event, appMap))) {
+      if (verbose()) {
+        console.warn(`\t'exclude' clause is not satisifed. Skipping.`);
+      }
+      return;
+    }
+
+    const buildFinding = (): Finding => {
+      return {
+        appMapName: appMap.metadata.name,
+        scannerId: assertion.id,
+        scannerTitle: assertion.summaryTitle,
+        event: event,
+        message: null,
+        condition: assertion.description || assertion.matcher.toString(),
+      };
+    };
+
+    const scopeId = [appMap.metadata.name, scope.id].join(':');
+    const matchResult = assertion.matcher(event, scopeId);
+    const numFindings = findings.length;
+    if (matchResult === true) {
+      findings.push(buildFinding());
+    } else if (typeof matchResult === 'string') {
+      const finding = buildFinding();
+      finding.message = matchResult as string;
+      findings.push(finding);
+    } else if (matchResult) {
+      matchResult.forEach((mr) => {
+        const finding = buildFinding();
+        if (mr.message) {
+          finding.message = mr.message;
+        }
+        findings.push(finding);
+      });
+    }
+    if (verbose()) {
+      if (findings.length > numFindings) {
+        findings.forEach((finding) =>
+          console.log(`\tFinding: ${finding.scannerId} : ${finding.message || finding.condition}`)
+        );
       }
     }
-
-    throw new AbortError(`Strategy not found for scope "${assertion.scope}".`);
   }
 }

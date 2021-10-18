@@ -20,12 +20,12 @@ const scanner = (): Assertion => {
   return Assertion.assert(
     'save-without-validation',
     '`save` calls without validation',
-    'function',
+    'all',
     // TODO: ensure that the object id on the 'validate' is the same as the object id on the 'save'
     // TODO: if validate happens in a preceding event, this is also OK
     (event: Event) => !validatedBy(new EventNavigator(event).descendants()),
     (assertion: Assertion): void => {
-      assertion.where = (e: Event) => ['save', 'save!'].includes(e.methodId!);
+      assertion.where = (e: Event) => e.isFunction && ['save', 'save!'].includes(e.methodId!);
       assertion.description = `'save' must be preceded by 'valid?' or 'validate'`;
     }
   );

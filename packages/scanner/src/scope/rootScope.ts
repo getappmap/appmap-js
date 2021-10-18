@@ -1,15 +1,16 @@
 import { Event } from '@appland/models';
-import Scope from './scope';
+import { Scope } from 'src/types';
+import ScopeImpl from './scopeImpl';
+import ScopeIterator from './scopeIterator';
 
-export default class RootScope extends Scope {
-  *scopes(events: Generator<Event>): Generator<Event> {
-    let eventResult = events.next();
-    while (!eventResult.done) {
-      const event = eventResult.value;
-      if (!event.parent) {
-        yield event;
+export default class RootScope extends ScopeIterator {
+  *scopes(events: Generator<Event>): Generator<Scope> {
+    for (const event of events) {
+      if (event.isCall()) {
+        if (!event.parent) {
+          yield new ScopeImpl(event);
+        }
       }
-      eventResult = events.next();
     }
   }
 }

@@ -54,7 +54,7 @@ const scanner = function (): Assertion {
   return Assertion.assert(
     'secret-in-log',
     'Secret in log',
-    'event',
+    'all',
     (e: Event) => {
       if (e.codeObject.labels.has('secret')) {
         recordSecrets(secrets, e);

@@ -13,7 +13,7 @@ function scanner(options: Options): Assertion {
   return Assertion.assert(
     'illegal-package-dependency',
     'Illegal use of code by a non-whitelisted package',
-    'event',
+    'all',
     (e: Event) => {
       const parentPackage = e.parent!.codeObject.packageOf;
       if (
