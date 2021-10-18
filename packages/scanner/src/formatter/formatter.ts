@@ -24,6 +24,8 @@ export default abstract class Formatter {
       result.push(this.noColors ? casesStr : chalk.stderr.magenta(casesStr));
     });
 
+    result.push('');
+
     return result.join('\n');
   }
 
