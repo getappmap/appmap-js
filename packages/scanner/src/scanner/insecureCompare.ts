@@ -19,6 +19,9 @@ function stringEquals(e: Event): string | boolean | import('../types').MatchResu
   }
 
   function isSecret(str: string): boolean {
+    if (secrets.has(str)) {
+      return true;
+    }
     return !!Object.keys(SecretsRegexes).find(
       (key): boolean => !!SecretsRegexes[key].find((re: RegExp): boolean => re.test(str))
     );
@@ -39,7 +42,7 @@ const scanner = function (): Assertion {
   return Assertion.assert(
     'insecure-compare',
     'Insecure comparison of secrets',
-    'event',
+    'function',
     (e: Event) => {
       if (e.codeObject.labels.has('secret')) {
         recordSecrets(secrets, e);
