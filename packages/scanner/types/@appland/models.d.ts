@@ -1,6 +1,3 @@
-import { type } from 'os';
-import { string } from 'yargs';
-
 declare module '@appland/models' {
   export type CodeObjectType =
     | 'package'
@@ -64,19 +61,21 @@ declare module '@appland/models' {
   }
 
   export type Label =
-    | 'security.authentication'
-    | 'security.authorization'
-    | 'security.require_login'
+    | 'command'
+    | 'log'
     | 'mvc.controller'
     | 'mvc.dao'
     | 'mvc.model'
     | 'mvc.template'
     | 'mvc.template.resolver'
     | 'mvc.view'
-    | 'command'
-    | 'log'
     | 'public'
+    | 'rpc.circuit_breaker'
+    | 'rpc.retry'
     | 'secret'
+    | 'security.authentication'
+    | 'security.authorization'
+    | 'security.require_login'
     | string;
 
   export class CodeObject {
