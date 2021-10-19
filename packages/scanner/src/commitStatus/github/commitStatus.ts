@@ -36,7 +36,7 @@ function owner(): string | undefined {
   return (
     process.env.CIRCLE_PROJECT_USERNAME ||
     extractSlug(process.env.TRAVIS_REPO_SLUG, 0) ||
-    extractSlug(process.env.CI_REPO_NAME, 0)
+    extractSlug(process.env.CI_REPO_OWNER, 0)
   );
 }
 
