@@ -29,26 +29,25 @@ export default {
 
 <style scoped lang="scss">
 .tab-btn {
+  align-self: flex-end;
+  position: relative;
+  bottom: -1px;
   appearance: none;
-  border: 1px solid $base13;
-  border-radius: $border-radius;
+  border: 1px solid $lightgray2;
+  border-radius: 0.25rem 0.25rem 0 0;
   background-color: transparent;
-  background-origin: border-box;
-  background-clip: border-box;
-  background-position: -1px 0;
-  background-size: calc(100% + 2px);
   cursor: pointer;
-  color: $base11;
+  color: $lightgray2;
   font-size: 0.75rem;
-  padding: 0.5rem 1.5rem;
+  font-family: $appland-text-font-family;
+  padding: 0.5rem 0.5rem;
   margin: 0;
   transition: $transition;
-  letter-spacing: 0.5px;
   white-space: nowrap;
 
   &:hover,
   &:active {
-    color: $white;
+    color: $base03;
   }
 
   &:focus {
@@ -56,17 +55,17 @@ export default {
   }
 
   & + & {
-    margin-left: 0.75rem;
+    margin-left: 1rem;
   }
 
   &--active {
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-color: transparent;
-    background-image: $general;
+    border-bottom-color: $vs-code-gray1;
     cursor: default;
-    color: $white;
-    &:hover {
-      color: $white;
+    color: $base03;
+
+    &:hover,
+    &:active {
+      color: $base03;
     }
   }
 }

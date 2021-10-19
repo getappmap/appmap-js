@@ -12,6 +12,9 @@
       <div class="tabs__notification">
         <slot name="notification" />
       </div>
+      <div class="tabs__controls">
+        <slot name="controls" />
+      </div>
     </div>
     <div class="tabs__content">
       <slot />
@@ -68,13 +71,28 @@ export default {
   height: 100%;
 
   &__header {
+    border-bottom: 1px solid $lightgray2;
+    height: 44px;
     display: flex;
-    padding: 1.5rem;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
 
   &__notification {
+    align-self: flex-end;
+    margin: 0 1rem 0.25rem 1rem;
     flex: 1;
-    margin: 0 8rem 0 1.5rem;
+  }
+
+  &__controls {
+    position: relative;
+    z-index: 1;
+
+    & > *:not(:last-child) {
+      margin-right: 0.5rem;
+    }
   }
 
   &__content {

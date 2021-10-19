@@ -30,15 +30,14 @@ export default {
 <style scoped lang="scss">
 .details-btn {
   display: flex;
-  border: 1px solid lighten($gray3, 05);
+  border: 1px solid $base15;
   border-radius: $border-radius;
   padding: 0.25rem 0.6rem 0.25rem 0.5rem;
   letter-spacing: 0.5px;
-  color: $gray4;
+  color: $base10;
   background-color: transparent;
-  text-transform: uppercase;
   font: inherit;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   cursor: pointer;
   outline: none;
   text-align: left;

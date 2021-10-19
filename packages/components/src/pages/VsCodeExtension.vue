@@ -71,59 +71,61 @@
             @closeEvent="onNotificationClose"
           />
         </template>
+        <template v-slot:controls>
+          <v-popper-menu :showDot="filtersChanged">
+            <template v-slot:icon>
+              <FilterIcon class="control-button__icon" />
+            </template>
+            <template v-slot:body>
+              <h2>Filters</h2>
+              <div>
+                <input
+                  type="checkbox"
+                  id="limit-root-events"
+                  v-model="filters.limitRootEvents.on"
+                  @change="setUserFiltered"
+                />
+                <label for="limit-root-events">Limit root events to HTTP</label>
+              </div>
+              <div>
+                <input
+                  type="checkbox"
+                  id="unlabeled-events"
+                  v-model="filters.unlabeledEvents.on"
+                  @change="setUserFiltered"
+                />
+                <label for="unlabeled-events">Show unlabeled events</label>
+              </div>
+              <div>
+                <input
+                  type="checkbox"
+                  id="hide-media-requests"
+                  v-model="filters.hideMediaRequests.on"
+                  @change="setUserFiltered"
+                />
+                <label for="hide-media-requests"
+                  >Hide media HTTP requests</label
+                >
+              </div>
+            </template>
+          </v-popper-menu>
+          <button
+            class="control-button diagram-reload"
+            @click="resetDiagram"
+            title="Clear"
+          >
+            <ReloadIcon class="control-button__icon" />
+          </button>
+          <button
+            v-if="appMapUploadable"
+            class="control-button appmap-upload"
+            @click="uploadAppmap"
+            title="Upload"
+          >
+            <UploadIcon class="control-button__icon" />
+          </button>
+        </template>
       </v-tabs>
-      <div class="control-buttons">
-        <v-popper-menu :showDot="filtersChanged">
-          <template v-slot:icon>
-            <FilterIcon class="control-button__icon" />
-          </template>
-          <template v-slot:body>
-            <h2>Filters</h2>
-            <div>
-              <input
-                type="checkbox"
-                id="limit-root-events"
-                v-model="filters.limitRootEvents.on"
-                @change="setUserFiltered"
-              />
-              <label for="limit-root-events">Limit root events to HTTP</label>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                id="unlabeled-events"
-                v-model="filters.unlabeledEvents.on"
-                @change="setUserFiltered"
-              />
-              <label for="unlabeled-events">Show unlabeled events</label>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                id="hide-media-requests"
-                v-model="filters.hideMediaRequests.on"
-                @change="setUserFiltered"
-              />
-              <label for="hide-media-requests">Hide media HTTP requests</label>
-            </div>
-          </template>
-        </v-popper-menu>
-        <button
-          class="control-button diagram-reload"
-          @click="resetDiagram"
-          title="Clear"
-        >
-          <ReloadIcon class="control-button__icon" />
-        </button>
-        <button
-          v-if="appMapUploadable"
-          class="control-button appmap-upload"
-          @click="uploadAppmap"
-          title="Upload"
-        >
-          <UploadIcon class="control-button__icon" />
-        </button>
-      </div>
       <div class="diagram-instructions">
         <v-instructions ref="instructions" />
       </div>
@@ -679,43 +681,32 @@ code {
       word-break: break-all;
       overflow: hidden;
 
-      .control-buttons {
-        position: absolute;
-        top: 1.8rem;
-        right: 1.3rem;
+      .control-button {
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem;
+        background: transparent;
+        color: $lightgray2;
+        font: inherit;
+        font-family: $appland-text-font-family;
+        font-size: 0.75rem;
+        outline: none;
+        line-height: 0;
+        appearance: none;
+        cursor: pointer;
+        transition: color 0.3s ease-in;
 
-        & > *:not(:last-child) {
-          margin-right: 1rem;
+        &:hover,
+        &:active {
+          color: $gray5;
+          transition-timing-function: ease-out;
         }
 
-        .control-button {
-          position: relative;
-          border: none;
-          display: inline-flex;
-          align-items: center;
-          padding: 0.2rem;
-          background: transparent;
-          color: $gray4;
-          font: inherit;
-          font-family: $appland-text-font-family;
-          font-size: 0.8rem;
-          outline: none;
-          line-height: 0;
-          appearance: none;
-          cursor: pointer;
-          transition: color 0.3s ease-in;
-
-          &:hover,
-          &:active {
-            color: $gray5;
-            transition-timing-function: ease-out;
-          }
-
-          &__icon {
-            width: 1rem;
-            height: 1rem;
-            fill: currentColor;
-          }
+        &__icon {
+          width: 0.75rem;
+          height: 0.75rem;
+          fill: currentColor;
         }
       }
 

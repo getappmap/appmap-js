@@ -94,7 +94,7 @@ export default {
   &__head {
     display: flex;
     align-items: center;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 1rem;
     cursor: pointer;
     user-select: none;
   }
