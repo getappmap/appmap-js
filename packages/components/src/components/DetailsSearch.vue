@@ -1,14 +1,19 @@
 <template>
   <div class="details-search">
     <form class="details-search__form" @submit.prevent>
-      <input
-        class="details-search__input"
-        type="text"
-        autocomplete="off"
-        placeholder="Search AppMap"
-        ref="searchInput"
-        v-model="filter"
-      />
+      <div class="details-search__input-wrap">
+        <span class="details-search__input-prefix">
+          <SearchIcon />
+        </span>
+        <input
+          class="details-search__input-element"
+          type="text"
+          autocomplete="off"
+          placeholder="search code objects..."
+          ref="searchInput"
+          v-model="filter"
+        />
+      </div>
     </form>
     <section
       :class="`details-search__block details-search__block--${type}`"
@@ -44,10 +49,15 @@
 
 <script>
 import { CodeObject, AppMap, CodeObjectType } from '@appland/models';
+import SearchIcon from '@/assets/search.svg';
 import { SELECT_OBJECT, SELECT_LABEL } from '../store/vsCode';
 
 export default {
   name: 'v-details-search',
+
+  components: {
+    SearchIcon,
+  },
 
   props: {
     appMap: AppMap,
@@ -215,29 +225,49 @@ export default {
   &__input-wrap {
     position: relative;
     border-radius: $border-radius;
-    padding: 2px;
-    background: linear-gradient(to right, #4562b1 0%, #540a9f 100%);
+    border: 2px solid $light-purple;
 
     .details-search--empty & {
-      background: $gray3;
+      border-radius: $gray3;
       pointer-events: none;
     }
   }
 
-  &__input {
-    border: 1px solid $base15;
-    width: 100%;
-    padding: 0.5rem;
-    font: inherit;
-    font-size: 0.9rem;
+  &__input-prefix {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-50%);
+    text-align: center;
     color: $base06;
-    background: $vs-code-gray1;
+
+    svg {
+      position: relative;
+      left: 3px;
+      width: 14px;
+      height: 14px;
+      fill: $lightgray2;
+    }
+  }
+
+  &__input-element {
+    border: none;
+    width: 100%;
+    padding: 0.5rem 2rem;
+    font: inherit;
+    font-size: 0.75rem;
+    color: $base03;
+    background: transparent;
     outline: none;
 
     &::-webkit-placeholder,
     &::-moz-placeholder,
     &::placeholder {
-      color: $base06;
+      color: $gray4;
     }
   }
 
