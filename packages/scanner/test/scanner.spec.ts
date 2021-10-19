@@ -7,13 +7,19 @@ import http500 from '../src/scanner/http500';
 import illegalPackageAccess from '../src/scanner/illegalPackageDependency';
 import rpcWithoutCircuitBreaker from '../src/scanner/rpcWithoutCircuitBreaker';
 import { scan } from './util';
-import { ScopeName } from '../src/types';
+import { AssertionPrototype, ScopeName } from '../src/types';
 import Assertion from '../src/assertion';
 
-const makePrototype = (id: string, buildFn: () => Assertion, scope: ScopeName = 'all') => {
+const makePrototype = (
+  id: string,
+  buildFn: () => Assertion,
+  scope: ScopeName = 'appmap',
+  enumerateScope = true
+): AssertionPrototype => {
   return {
     config: { id },
-    scope: scope || 'all',
+    scope: scope,
+    enumerateScope,
     build: buildFn,
   };
 };
@@ -75,9 +81,9 @@ describe('assert', () => {
   });
 
   it('n+1 query', async () => {
-    const { scanner } = nPlusOneQuery;
+    const { scope, enumerateScope, scanner } = nPlusOneQuery;
     const findings = await scan(
-      makePrototype('n-plus-one-query', () => scanner()),
+      makePrototype('n-plus-one-query', () => scanner(), scope as ScopeName, enumerateScope),
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
 
@@ -112,9 +118,9 @@ describe('assert', () => {
   });
 
   it('http 500', async () => {
-    const { scanner, scope } = http500;
+    const { scope, scanner } = http500;
     const findings = await scan(
-      makePrototype('http-500', () => scanner()),
+      makePrototype('http-500', () => scanner(), scope as ScopeName),
       'Password_resets_password_resets_with_http500.appmap.json'
     );
     expect(findings).toHaveLength(1);

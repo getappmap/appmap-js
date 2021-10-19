@@ -17,4 +17,4 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { scope: 'http_server_request', Options, scanner };
+export default { scope: 'http_server_request', enumerateScope: false, Options, scanner };

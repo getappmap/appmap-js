@@ -2,15 +2,25 @@
   "version": "1.5.1",
   "metadata": {
     "app": "sample_app_6th_ed",
-    "language": { "name": "ruby", "engine": "ruby", "version": "3.0.1" },
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "3.0.1"
+    },
     "client": {
       "name": "appmap",
       "url": "https://github.com/applandinc/appmap-ruby",
       "version": "0.66.1"
     },
     "frameworks": [
-      { "name": "rails", "version": "6.0.3.7" },
-      { "name": "minitest", "version": "5.11.3" }
+      {
+        "name": "rails",
+        "version": "6.0.3.7"
+      },
+      {
+        "name": "minitest",
+        "version": "5.11.3"
+      }
     ],
     "git": {
       "repository": "git@github.com:land-of-apps/sample_app_6th_ed.git",
@@ -48,8 +58,84 @@
     },
     "name": "Users_signup valid signup information with account activation",
     "source_location": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/test/integration/users_signup_test.rb:22",
-    "recorder": { "name": "minitest" },
-    "test_status": "succeeded"
+    "recorder": {
+      "name": "minitest"
+    },
+    "test_status": "succeeded",
+    "fingerprints": [
+      {
+        "appmap_digest": "7d780c3f9f81d24ad82afb3830f8b31ca8ad8f9cbb883c6b517a6696b996b68c",
+        "canonicalization_algorithm": "classDependencies",
+        "digest": "73a9e80f2c61511fa539256287b7682438488fa60e024023b0b7d6f505e2dcc9",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7d780c3f9f81d24ad82afb3830f8b31ca8ad8f9cbb883c6b517a6696b996b68c",
+        "canonicalization_algorithm": "classes",
+        "digest": "c01e27c1d2fc05147a7d8c396dcf5110d6bfd27484471f873e567f51c1b3f9ce",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7d780c3f9f81d24ad82afb3830f8b31ca8ad8f9cbb883c6b517a6696b996b68c",
+        "canonicalization_algorithm": "httpClientRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7d780c3f9f81d24ad82afb3830f8b31ca8ad8f9cbb883c6b517a6696b996b68c",
+        "canonicalization_algorithm": "httpServerRequests",
+        "digest": "14a59c0f3ade009b03fe744b4ca33ec304dc6d2e32f0fcdbc5a4fee2b4099747",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7d780c3f9f81d24ad82afb3830f8b31ca8ad8f9cbb883c6b517a6696b996b68c",
+        "canonicalization_algorithm": "info",
+        "digest": "1951603e69bd9930b254e049a8aef259d8dc46ba551caaf6d5a4545b372852a6",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7d780c3f9f81d24ad82afb3830f8b31ca8ad8f9cbb883c6b517a6696b996b68c",
+        "canonicalization_algorithm": "labels",
+        "digest": "5b05cc50dcf06c0675a81113356d98eb945f363dc7d5310efe155fce239c80c8",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7d780c3f9f81d24ad82afb3830f8b31ca8ad8f9cbb883c6b517a6696b996b68c",
+        "canonicalization_algorithm": "packageDependencies",
+        "digest": "235fc1d503e4a33c144486b8f1a38df5f073989081fcf2db31ac3ca2856162d2",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7d780c3f9f81d24ad82afb3830f8b31ca8ad8f9cbb883c6b517a6696b996b68c",
+        "canonicalization_algorithm": "packages",
+        "digest": "f1e7160b1e4db3935a66ca454d5952bed27d814bb360efbba7d202a17c729d5b",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7d780c3f9f81d24ad82afb3830f8b31ca8ad8f9cbb883c6b517a6696b996b68c",
+        "canonicalization_algorithm": "sqlNormalized",
+        "digest": "45ae9108c35bd5458f0b54a358ab4737ecb4b8327c7523f380e0c9d4b5ee1747",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7d780c3f9f81d24ad82afb3830f8b31ca8ad8f9cbb883c6b517a6696b996b68c",
+        "canonicalization_algorithm": "sqlTables",
+        "digest": "8bb43aeefc5b65ede30ced12f8f60333c7879c749ed0828b4c0680b1e22d1d65",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7d780c3f9f81d24ad82afb3830f8b31ca8ad8f9cbb883c6b517a6696b996b68c",
+        "canonicalization_algorithm": "trace",
+        "digest": "ab8b1553b127fcf6b2501f64fd2ebca0957bf7f45d9bd566261f4f7e56828169",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7d780c3f9f81d24ad82afb3830f8b31ca8ad8f9cbb883c6b517a6696b996b68c",
+        "canonicalization_algorithm": "update",
+        "digest": "6f6c934f25f6a19f86b9868b5d04c807809a52cff2c48279b69be430fc789322",
+        "fingerprint_algorithm": "sha256"
+      }
+    ]
   },
   "classMap": [
     {
@@ -73,14 +159,18 @@
                       "type": "function",
                       "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesupport-6.0.3.7/lib/active_support/callbacks.rb:512",
                       "static": false,
-                      "labels": ["mvc.before_action"]
+                      "labels": [
+                        "mvc.before_action"
+                      ]
                     },
                     {
                       "name": "invoke_after",
                       "type": "function",
                       "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesupport-6.0.3.7/lib/active_support/callbacks.rb:516",
                       "static": false,
-                      "labels": ["mvc.after_action"]
+                      "labels": [
+                        "mvc.after_action"
+                      ]
                     }
                   ]
                 }
@@ -107,7 +197,9 @@
                   "type": "function",
                   "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/3.0.0/logger/log_device.rb:31",
                   "static": false,
-                  "labels": ["log"]
+                  "labels": [
+                    "log"
+                  ]
                 }
               ]
             }
@@ -132,14 +224,18 @@
                   "type": "function",
                   "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_controller/metal/instrumentation.rb:19",
                   "static": false,
-                  "labels": ["mvc.controller"]
+                  "labels": [
+                    "mvc.controller"
+                  ]
                 },
                 {
                   "name": "redirect_to",
                   "type": "function",
                   "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_controller/metal/instrumentation.rb:62",
                   "static": false,
-                  "labels": ["mvc.controller"]
+                  "labels": [
+                    "mvc.controller"
+                  ]
                 }
               ]
             }
@@ -162,7 +258,9 @@
                       "type": "function",
                       "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_dispatch/request/session.rb:91",
                       "static": false,
-                      "labels": ["http.session.read"],
+                      "labels": [
+                        "http.session.read"
+                      ],
                       "comment": "# Returns value of the key stored in the session or\n# +nil+ if the given key is not found in the session.\n"
                     },
                     {
@@ -170,7 +268,9 @@
                       "type": "function",
                       "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_dispatch/request/session.rb:165",
                       "static": false,
-                      "labels": ["http.session.write"],
+                      "labels": [
+                        "http.session.write"
+                      ],
                       "comment": "# Deletes given key from the session.\n"
                     }
                   ]
@@ -190,14 +290,18 @@
                       "type": "function",
                       "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_dispatch/middleware/cookies.rb:333",
                       "static": false,
-                      "labels": ["http.session.read"]
+                      "labels": [
+                        "http.session.read"
+                      ]
                     },
                     {
                       "name": "[]=",
                       "type": "function",
                       "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_dispatch/middleware/cookies.rb:373",
                       "static": false,
-                      "labels": ["http.session.read"],
+                      "labels": [
+                        "http.session.read"
+                      ],
                       "comment": "# Sets the cookie named +name+. The second argument may be the cookie's\n# value or a hash of options as documented above.\n"
                     }
                   ]
@@ -221,7 +325,9 @@
               "type": "function",
               "location": "app/controllers/users_controller.rb:19",
               "static": false,
-              "labels": ["public"],
+              "labels": [
+                "public"
+              ],
               "comment": "# @label public\n"
             },
             {
@@ -229,7 +335,9 @@
               "type": "function",
               "location": "app/controllers/users_controller.rb:24",
               "static": false,
-              "labels": ["public"],
+              "labels": [
+                "public"
+              ],
               "comment": "# @label public\n"
             },
             {
@@ -250,7 +358,9 @@
               "type": "function",
               "location": "app/controllers/sessions_controller.rb:9",
               "static": false,
-              "labels": ["public"],
+              "labels": [
+                "public"
+              ],
               "comment": "# Login a new user.\n# @label public\n"
             }
           ]
@@ -264,7 +374,9 @@
               "type": "function",
               "location": "app/controllers/account_activations_controller.rb:5",
               "static": false,
-              "labels": ["public"],
+              "labels": [
+                "public"
+              ],
               "comment": "# Activate the account of an existing user.\n# @label public\n"
             }
           ]
@@ -288,7 +400,9 @@
                   "type": "function",
                   "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionview-6.0.3.7/lib/action_view/template/resolver.rb:116",
                   "static": false,
-                  "labels": ["mvc.template.resolver"],
+                  "labels": [
+                    "mvc.template.resolver"
+                  ],
                   "comment": "# Normalizes the arguments and passes it on to find_templates.\n"
                 }
               ]
@@ -301,7 +415,9 @@
                   "name": "render",
                   "type": "function",
                   "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionview-6.0.3.7/lib/action_view/renderer/template_renderer.rb:7",
-                  "labels": ["mvc.view"]
+                  "labels": [
+                    "mvc.view"
+                  ]
                 }
               ]
             },
@@ -313,7 +429,9 @@
                   "name": "render",
                   "type": "function",
                   "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionview-6.0.3.7/lib/action_view/renderer/partial_renderer.rb:294",
-                  "labels": ["mvc.view"]
+                  "labels": [
+                    "mvc.view"
+                  ]
                 }
               ]
             }
@@ -334,7 +452,9 @@
               "type": "function",
               "location": "app/views/users/new.html.erb",
               "static": true,
-              "labels": ["mvc.template"]
+              "labels": [
+                "mvc.template"
+              ]
             }
           ]
         },
@@ -347,7 +467,9 @@
               "type": "function",
               "location": "app/views/layouts/application.html.erb",
               "static": true,
-              "labels": ["mvc.template"]
+              "labels": [
+                "mvc.template"
+              ]
             }
           ]
         },
@@ -360,7 +482,9 @@
               "type": "function",
               "location": "app/views/shared/_error_messages.html.erb",
               "static": true,
-              "labels": ["mvc.template"]
+              "labels": [
+                "mvc.template"
+              ]
             }
           ]
         },
@@ -373,7 +497,9 @@
               "type": "function",
               "location": "app/views/layouts/_shim.html.erb",
               "static": true,
-              "labels": ["mvc.template"]
+              "labels": [
+                "mvc.template"
+              ]
             }
           ]
         },
@@ -386,7 +512,9 @@
               "type": "function",
               "location": "app/views/layouts/_header.html.erb",
               "static": true,
-              "labels": ["mvc.template"]
+              "labels": [
+                "mvc.template"
+              ]
             }
           ]
         },
@@ -399,7 +527,9 @@
               "type": "function",
               "location": "app/views/layouts/_footer.html.erb",
               "static": true,
-              "labels": ["mvc.template"]
+              "labels": [
+                "mvc.template"
+              ]
             }
           ]
         },
@@ -412,7 +542,9 @@
               "type": "function",
               "location": "app/views/user_mailer/account_activation.html.erb",
               "static": true,
-              "labels": ["mvc.template"]
+              "labels": [
+                "mvc.template"
+              ]
             }
           ]
         },
@@ -425,7 +557,9 @@
               "type": "function",
               "location": "app/views/layouts/mailer.html.erb",
               "static": true,
-              "labels": ["mvc.template"]
+              "labels": [
+                "mvc.template"
+              ]
             }
           ]
         },
@@ -438,7 +572,9 @@
               "type": "function",
               "location": "app/views/layouts/mailer.text.erb",
               "static": true,
-              "labels": ["mvc.template"]
+              "labels": [
+                "mvc.template"
+              ]
             }
           ]
         },
@@ -451,7 +587,9 @@
               "type": "function",
               "location": "app/views/users/show.html.erb",
               "static": true,
-              "labels": ["mvc.template"]
+              "labels": [
+                "mvc.template"
+              ]
             }
           ]
         },
@@ -464,7 +602,9 @@
               "type": "function",
               "location": "app/views/shared/_stats.html.erb",
               "static": true,
-              "labels": ["mvc.template"]
+              "labels": [
+                "mvc.template"
+              ]
             }
           ]
         },
@@ -477,7 +617,9 @@
               "type": "function",
               "location": "app/views/users/_follow_form.html.erb",
               "static": true,
-              "labels": ["mvc.template"]
+              "labels": [
+                "mvc.template"
+              ]
             }
           ]
         }
@@ -509,7 +651,9 @@
               "type": "function",
               "location": "app/helpers/sessions_helper.rb:35",
               "static": false,
-              "labels": ["security.authentication"],
+              "labels": [
+                "security.authentication"
+              ],
               "comment": "# Returns true if the user is logged in, false otherwise.\n# @label security.authentication\n"
             },
             {
@@ -571,7 +715,9 @@
                       "type": "function",
                       "location": "JSON::Ext::Parser#parse",
                       "static": false,
-                      "labels": ["format.json.parse"]
+                      "labels": [
+                        "format.json.parse"
+                      ]
                     }
                   ]
                 },
@@ -588,7 +734,9 @@
                           "type": "function",
                           "location": "JSON::Ext::Generator::State#generate",
                           "static": false,
-                          "labels": ["format.json.generate"]
+                          "labels": [
+                            "format.json.generate"
+                          ]
                         }
                       ]
                     }
@@ -613,7 +761,9 @@
               "type": "function",
               "location": "app/models/user.rb:31",
               "static": true,
-              "labels": ["secret"],
+              "labels": [
+                "secret"
+              ],
               "comment": "# Returns a random token.\n# @label secret generator\n"
             },
             {
@@ -683,14 +833,18 @@
                   "type": "function",
                   "location": "OpenSSL::Cipher#encrypt",
                   "static": false,
-                  "labels": ["crypto.encrypt"]
+                  "labels": [
+                    "crypto.encrypt"
+                  ]
                 },
                 {
                   "name": "decrypt",
                   "type": "function",
                   "location": "OpenSSL::Cipher#decrypt",
                   "static": false,
-                  "labels": ["crypto.decrypt"]
+                  "labels": [
+                    "crypto.decrypt"
+                  ]
                 }
               ]
             }
@@ -729,8 +883,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4839,
-      "elapsed": 5.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 32100 }
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 32100
+      }
     },
     {
       "id": 4841,
@@ -761,7 +919,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4841,
-      "elapsed": 1.0e-5,
+      "elapsed": 0.00001,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc70206ad58 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -778,7 +936,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 4844, "event": "return", "thread_id": 4900, "parent_id": 4843, "elapsed": 5.4e-5 },
+    {
+      "id": 4844,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4843,
+      "elapsed": 0.000054
+    },
     {
       "id": 4845,
       "event": "call",
@@ -808,8 +972,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4845,
-      "elapsed": 3.1e-5,
-      "return_value": { "class": "Integer", "value": "71", "object_id": 143 }
+      "elapsed": 0.000031,
+      "return_value": {
+        "class": "Integer",
+        "value": "71",
+        "object_id": 143
+      }
     },
     {
       "id": 4847,
@@ -840,8 +1008,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4847,
-      "elapsed": 1.8e-5,
-      "return_value": { "class": "Integer", "value": "71", "object_id": 143 }
+      "elapsed": 0.000018,
+      "return_value": {
+        "class": "Integer",
+        "value": "71",
+        "object_id": 143
+      }
     },
     {
       "id": 4849,
@@ -872,8 +1044,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4849,
-      "elapsed": 1.6e-5,
-      "return_value": { "class": "Integer", "value": "71", "object_id": 143 }
+      "elapsed": 0.000016,
+      "return_value": {
+        "class": "Integer",
+        "value": "71",
+        "object_id": 143
+      }
     },
     {
       "id": 4851,
@@ -904,7 +1080,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4851,
-      "elapsed": 3.3e-5,
+      "elapsed": 0.000033,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc704bccb68 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -940,8 +1116,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4853,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 29500 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 29500
+      }
     },
     {
       "id": 4855,
@@ -972,7 +1152,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4855,
-      "elapsed": 5.4e-5,
+      "elapsed": 0.000054,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc71125e448 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -1008,8 +1188,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4857,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 29620 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 29620
+      }
     },
     {
       "id": 4859,
@@ -1040,8 +1224,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4859,
-      "elapsed": 2.1e-5,
-      "return_value": { "class": "Integer", "value": "104", "object_id": 209 }
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Integer",
+        "value": "104",
+        "object_id": 209
+      }
     },
     {
       "id": 4861,
@@ -1052,7 +1240,10 @@
         "path_info": "/signup",
         "normalized_path_info": "/signup",
         "headers": {
-          "rack.version": [1, 3],
+          "rack.version": [
+            1,
+            3
+          ],
           "rack.multithread": true,
           "rack.multiprocess": true,
           "rack.run_once": false,
@@ -1068,7 +1259,9 @@
           "REQUEST_URI": "/signup",
           "Host": "www.example.com",
           "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
-          "action_dispatch.parameter_filter": ["password"],
+          "action_dispatch.parameter_filter": [
+            "password"
+          ],
           "action_dispatch.secret_key_base": "795d64e49aae60c6abfefa522f01c7fa1f1b6f945ab3bc6edb87fde5156dd662478da295cfa77d5d5ced5ba340ac7bcfdd96361530395150122dd9113192c974",
           "action_dispatch.show_exceptions": false,
           "action_dispatch.show_detailed_exceptions": true,
@@ -1091,13 +1284,26 @@
           "action_dispatch.remote_ip": "127.0.0.1",
           "rack.session": "#<ActionDispatch::Request::Session:0x00007fc7111ce578>",
           "rack.session.options": "#<ActionDispatch::Request::Session::Options:0x00007fc7111ce528>",
-          "action_dispatch.request.path_parameters": { "controller": "users", "action": "new" },
+          "action_dispatch.request.path_parameters": {
+            "controller": "users",
+            "action": "new"
+          },
           "action_controller.instance": "#<UsersController:0x00007fc7111cd268>"
         }
       },
       "message": [
-        { "name": "controller", "class": "String", "value": "users", "object_id": 76380 },
-        { "name": "action", "class": "String", "value": "new", "object_id": 76400 }
+        {
+          "name": "controller",
+          "class": "String",
+          "value": "users",
+          "object_id": 76380
+        },
+        {
+          "name": "action",
+          "class": "String",
+          "value": "new",
+          "object_id": 76400
+        }
       ]
     },
     {
@@ -1153,8 +1359,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4863,
-      "elapsed": 2.1e-5,
-      "return_value": { "class": "Integer", "value": "81", "object_id": 163 }
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Integer",
+        "value": "81",
+        "object_id": 163
+      }
     },
     {
       "id": 4865,
@@ -1214,7 +1424,13 @@
       "lineno": 333,
       "static": false,
       "parameters": [
-        { "name": "other_hash", "class": "Hash", "object_id": 76920, "value": "{}", "kind": "req" }
+        {
+          "name": "other_hash",
+          "class": "Hash",
+          "object_id": 76920,
+          "value": "{}",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Cookies::CookieJar",
@@ -1227,14 +1443,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4867,
-      "elapsed": 7.0e-6,
+      "elapsed": 0.000007,
       "return_value": {
         "class": "ActionDispatch::Cookies::CookieJar",
         "value": "#<ActionDispatch::Cookies::CookieJar:0x00007fc7111c6af8>",
         "object_id": 76940
       }
     },
-    { "id": 4869, "event": "return", "thread_id": 4900, "parent_id": 4866, "elapsed": 0.000152 },
+    {
+      "id": 4869,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4866,
+      "elapsed": 0.000152
+    },
     {
       "id": 4870,
       "event": "return",
@@ -1268,8 +1490,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4871,
-      "elapsed": 6.4e-5,
-      "return_value": { "class": "User", "value": "#<User:0x00007fc7111c4780>", "object_id": 76960 }
+      "elapsed": 0.000064,
+      "return_value": {
+        "class": "User",
+        "value": "#<User:0x00007fc7111c4780>",
+        "object_id": 76960
+      }
     },
     {
       "id": 4873,
@@ -1281,7 +1507,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 76980, "value": "new", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 76980,
+          "value": "new",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -1310,7 +1542,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 77020, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77020,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -1323,7 +1561,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4873,
-      "elapsed": 1.0e-5,
+      "elapsed": 0.00001,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/users/new.html.erb locals=[]>]",
@@ -1355,7 +1593,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 77040, "value": "new", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77040,
+          "value": "new",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -1384,7 +1628,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 77080, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77080,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -1397,7 +1647,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4876,
-      "elapsed": 8.0e-6,
+      "elapsed": 0.000008,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/users/new.html.erb locals=[]>]",
@@ -1414,7 +1664,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 77100, "value": "users", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77100,
+          "value": "users",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -1443,7 +1699,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 77160, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77160,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -1456,8 +1718,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4878,
-      "elapsed": 8.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 36180 }
+      "elapsed": 0.000008,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 36180
+      }
     },
     {
       "id": 4880,
@@ -1469,7 +1735,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 77100, "value": "users", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77100,
+          "value": "users",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -1498,7 +1770,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 77160, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77160,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -1511,8 +1789,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4880,
-      "elapsed": 7.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 36180 }
+      "elapsed": 0.000007,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 36180
+      }
     },
     {
       "id": 4882,
@@ -1524,7 +1806,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 77100, "value": "users", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77100,
+          "value": "users",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -1553,7 +1841,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 77160, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77160,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -1566,8 +1860,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4882,
-      "elapsed": 7.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 36180 }
+      "elapsed": 0.000007,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 36180
+      }
     },
     {
       "id": 4884,
@@ -1614,7 +1912,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 77240, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77240,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -1627,7 +1931,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4884,
-      "elapsed": 7.0e-6,
+      "elapsed": 0.000007,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/layouts/application.html.erb locals=[]>]",
@@ -1663,8 +1967,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4886,
-      "elapsed": 2.2e-5,
-      "return_value": { "class": "Integer", "value": "97", "object_id": 195 }
+      "elapsed": 0.000022,
+      "return_value": {
+        "class": "Integer",
+        "value": "97",
+        "object_id": 195
+      }
     },
     {
       "id": 4888,
@@ -1745,7 +2053,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4889,
-      "elapsed": 1.0e-5,
+      "elapsed": 0.00001,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/shared/_error_messages.html.erb locals=[\"object\"]>]",
@@ -1781,10 +2089,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4891,
-      "elapsed": 2.1e-5,
-      "return_value": { "class": "Integer", "value": "118", "object_id": 237 }
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Integer",
+        "value": "118",
+        "object_id": 237
+      }
     },
-    { "id": 4893, "event": "return", "thread_id": 4900, "parent_id": 4888, "elapsed": 0.000407 },
+    {
+      "id": 4893,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4888,
+      "elapsed": 0.000407
+    },
     {
       "id": 4894,
       "event": "call",
@@ -1814,8 +2132,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4894,
-      "elapsed": 2.3e-5,
-      "return_value": { "class": "Integer", "value": "134", "object_id": 269 }
+      "elapsed": 0.000023,
+      "return_value": {
+        "class": "Integer",
+        "value": "134",
+        "object_id": 269
+      }
     },
     {
       "id": 4896,
@@ -1846,7 +2168,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4896,
-      "elapsed": 1.0e-5,
+      "elapsed": 0.00001,
       "return_value": {
         "class": "ActiveSupport::SafeBuffer",
         "value": "Sign up | Ruby on Rails Tutorial Sample App",
@@ -1882,8 +2204,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4898,
-      "elapsed": 2.0e-5,
-      "return_value": { "class": "Integer", "value": "90", "object_id": 181 }
+      "elapsed": 0.00002,
+      "return_value": {
+        "class": "Integer",
+        "value": "90",
+        "object_id": 181
+      }
     },
     {
       "id": 4900,
@@ -1905,7 +2231,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4900,
-      "elapsed": 8.0e-6,
+      "elapsed": 0.000008,
       "return_value": {
         "class": "Hash",
         "value": "{\"application.js\"=>\"/packs-test/js/application-1891d2b124e05b81079a.js\", \"application.js.map\"=>\"/pac",
@@ -1937,7 +2263,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 77500, "value": "shim", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77500,
+          "value": "shim",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -1966,7 +2298,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 77540, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77540,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -1979,7 +2317,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4903,
-      "elapsed": 9.0e-6,
+      "elapsed": 0.000009,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/layouts/_shim.html.erb locals=[]>]",
@@ -2015,10 +2353,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4905,
-      "elapsed": 2.0e-5,
-      "return_value": { "class": "Integer", "value": "109", "object_id": 219 }
+      "elapsed": 0.00002,
+      "return_value": {
+        "class": "Integer",
+        "value": "109",
+        "object_id": 219
+      }
     },
-    { "id": 4907, "event": "return", "thread_id": 4900, "parent_id": 4902, "elapsed": 0.000393 },
+    {
+      "id": 4907,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4902,
+      "elapsed": 0.000393
+    },
     {
       "id": 4908,
       "event": "call",
@@ -2044,7 +2392,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 77580, "value": "header", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77580,
+          "value": "header",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -2073,7 +2427,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 77620, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77620,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -2086,7 +2446,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4909,
-      "elapsed": 9.0e-6,
+      "elapsed": 0.000009,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/layouts/_header.html.erb locals=[]>]",
@@ -2149,9 +2509,27 @@
         "value": "#<ActionDispatch::Request::Session:0x00007fc7111ce578>"
       }
     },
-    { "id": 4914, "event": "return", "thread_id": 4900, "parent_id": 4913, "elapsed": 1.3e-5 },
-    { "id": 4915, "event": "return", "thread_id": 4900, "parent_id": 4912, "elapsed": 7.5e-5 },
-    { "id": 4916, "event": "return", "thread_id": 4900, "parent_id": 4911, "elapsed": 0.000113 },
+    {
+      "id": 4914,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4913,
+      "elapsed": 0.000013
+    },
+    {
+      "id": 4915,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4912,
+      "elapsed": 0.000075
+    },
+    {
+      "id": 4916,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4911,
+      "elapsed": 0.000113
+    },
     {
       "id": 4917,
       "event": "call",
@@ -2181,10 +2559,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4917,
-      "elapsed": 2.2e-5,
-      "return_value": { "class": "Integer", "value": "112", "object_id": 225 }
+      "elapsed": 0.000022,
+      "return_value": {
+        "class": "Integer",
+        "value": "112",
+        "object_id": 225
+      }
     },
-    { "id": 4919, "event": "return", "thread_id": 4900, "parent_id": 4908, "elapsed": 0.001051 },
+    {
+      "id": 4919,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4908,
+      "elapsed": 0.001051
+    },
     {
       "id": 4920,
       "event": "call",
@@ -2195,7 +2583,13 @@
       "lineno": 91,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -2203,7 +2597,13 @@
         "value": "#<ActionDispatch::Request::Session:0x00007fc7111ce578>"
       }
     },
-    { "id": 4921, "event": "return", "thread_id": 4900, "parent_id": 4920, "elapsed": 9.0e-6 },
+    {
+      "id": 4921,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4920,
+      "elapsed": 0.000009
+    },
     {
       "id": 4922,
       "event": "call",
@@ -2229,7 +2629,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 77660, "value": "footer", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77660,
+          "value": "footer",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -2258,7 +2664,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 77700, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77700,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -2271,7 +2683,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4923,
-      "elapsed": 9.0e-6,
+      "elapsed": 0.000009,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/layouts/_footer.html.erb locals=[]>]",
@@ -2307,11 +2719,27 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4925,
-      "elapsed": 2.1e-5,
-      "return_value": { "class": "Integer", "value": "111", "object_id": 223 }
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Integer",
+        "value": "111",
+        "object_id": 223
+      }
     },
-    { "id": 4927, "event": "return", "thread_id": 4900, "parent_id": 4922, "elapsed": 0.000475 },
-    { "id": 4928, "event": "return", "thread_id": 4900, "parent_id": 4875, "elapsed": 0.006377 },
+    {
+      "id": 4927,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4922,
+      "elapsed": 0.000475
+    },
+    {
+      "id": 4928,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4875,
+      "elapsed": 0.006377
+    },
     {
       "id": 4929,
       "event": "call",
@@ -2341,7 +2769,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4929,
-      "elapsed": 2.1e-5,
+      "elapsed": 0.000021,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7004b2a20 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -2377,8 +2805,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4931,
-      "elapsed": 2.0e-5,
-      "return_value": { "class": "Integer", "value": "120", "object_id": 241 }
+      "elapsed": 0.00002,
+      "return_value": {
+        "class": "Integer",
+        "value": "120",
+        "object_id": 241
+      }
     },
     {
       "id": 4933,
@@ -2386,7 +2818,11 @@
       "thread_id": 4900,
       "parent_id": 4862,
       "elapsed": 0.007886,
-      "return_value": { "class": "User", "value": "#<User:0x00007fc7111c4780>", "object_id": 76960 }
+      "return_value": {
+        "class": "User",
+        "value": "#<User:0x00007fc7111c4780>",
+        "object_id": 76960
+      }
     },
     {
       "id": 4934,
@@ -2395,7 +2831,6 @@
       "parent_id": 4861,
       "elapsed": 0.007966,
       "http_server_response": {
-        "status_code": 200,
         "mime_type": "text/html; charset=utf-8",
         "headers": {
           "X-Frame-Options": "SAMEORIGIN",
@@ -2405,7 +2840,8 @@
           "X-Permitted-Cross-Domain-Policies": "none",
           "Referrer-Policy": "strict-origin-when-cross-origin",
           "Content-Type": "text/html; charset=utf-8"
-        }
+        },
+        "status": 200
       }
     },
     {
@@ -2437,7 +2873,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4935,
-      "elapsed": 5.7e-5,
+      "elapsed": 0.000057,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7112d8e78 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -2473,8 +2909,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4937,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 30980 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 30980
+      }
     },
     {
       "id": 4939,
@@ -2486,7 +2926,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 4940, "event": "return", "thread_id": 4900, "parent_id": 4939, "elapsed": 0.000111 },
+    {
+      "id": 4940,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4939,
+      "elapsed": 0.000111
+    },
     {
       "id": 4941,
       "event": "call",
@@ -2516,7 +2962,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4941,
-      "elapsed": 4.3e-5,
+      "elapsed": 0.000043,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc71125e448 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -2552,8 +2998,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4943,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 29620 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 29620
+      }
     },
     {
       "id": 4945,
@@ -2584,8 +3034,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4945,
-      "elapsed": 2.1e-5,
-      "return_value": { "class": "Integer", "value": "104", "object_id": 209 }
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Integer",
+        "value": "104",
+        "object_id": 209
+      }
     },
     {
       "id": 4947,
@@ -2597,7 +3051,10 @@
         "mime_type": "application/x-www-form-urlencoded",
         "normalized_path_info": "/users",
         "headers": {
-          "rack.version": [1, 3],
+          "rack.version": [
+            1,
+            3
+          ],
           "rack.input": "#<StringIO:0x00007fc7030eca50>",
           "rack.multithread": true,
           "rack.multiprocess": true,
@@ -2615,7 +3072,9 @@
           "Host": "www.example.com",
           "CONTENT_TYPE": "application/x-www-form-urlencoded",
           "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
-          "action_dispatch.parameter_filter": ["password"],
+          "action_dispatch.parameter_filter": [
+            "password"
+          ],
           "action_dispatch.secret_key_base": "795d64e49aae60c6abfefa522f01c7fa1f1b6f945ab3bc6edb87fde5156dd662478da295cfa77d5d5ced5ba340ac7bcfdd96361530395150122dd9113192c974",
           "action_dispatch.show_exceptions": false,
           "action_dispatch.show_detailed_exceptions": true,
@@ -2648,7 +3107,10 @@
           "action_dispatch.remote_ip": "127.0.0.1",
           "rack.session": "#<ActionDispatch::Request::Session:0x00007fc7030e43c8>",
           "rack.session.options": "#<ActionDispatch::Request::Session::Options:0x00007fc7030e4378>",
-          "action_dispatch.request.path_parameters": { "controller": "users", "action": "create" },
+          "action_dispatch.request.path_parameters": {
+            "controller": "users",
+            "action": "create"
+          },
           "action_controller.instance": "#<UsersController:0x00007fc704b7f138>",
           "action_dispatch.request.content_type": "application/x-www-form-urlencoded"
         }
@@ -2660,14 +3122,36 @@
           "value": "{\"name\"=>\"Example User\", \"email\"=>\"user@example.com\", \"password\"=>\"[FILTERED]\", \"password_confirmati",
           "object_id": 83780,
           "properties": [
-            { "name": "name", "class": "String" },
-            { "name": "email", "class": "String" },
-            { "name": "password", "class": "String" },
-            { "name": "password_confirmation", "class": "String" }
+            {
+              "name": "name",
+              "class": "String"
+            },
+            {
+              "name": "email",
+              "class": "String"
+            },
+            {
+              "name": "password",
+              "class": "String"
+            },
+            {
+              "name": "password_confirmation",
+              "class": "String"
+            }
           ]
         },
-        { "name": "controller", "class": "String", "value": "users", "object_id": 38760 },
-        { "name": "action", "class": "String", "value": "create", "object_id": 35460 }
+        {
+          "name": "controller",
+          "class": "String",
+          "value": "users",
+          "object_id": 38760
+        },
+        {
+          "name": "action",
+          "class": "String",
+          "value": "create",
+          "object_id": 35460
+        }
       ]
     },
     {
@@ -2723,8 +3207,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4949,
-      "elapsed": 2.1e-5,
-      "return_value": { "class": "Integer", "value": "84", "object_id": 169 }
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Integer",
+        "value": "84",
+        "object_id": 169
+      }
     },
     {
       "id": 4951,
@@ -2755,8 +3243,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4951,
-      "elapsed": 1.5e-5,
-      "return_value": { "class": "Integer", "value": "182", "object_id": 365 }
+      "elapsed": 0.000015,
+      "return_value": {
+        "class": "Integer",
+        "value": "182",
+        "object_id": 365
+      }
     },
     {
       "id": 4953,
@@ -2816,7 +3308,13 @@
       "lineno": 333,
       "static": false,
       "parameters": [
-        { "name": "other_hash", "class": "Hash", "object_id": 77980, "value": "{}", "kind": "req" }
+        {
+          "name": "other_hash",
+          "class": "Hash",
+          "object_id": 77980,
+          "value": "{}",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Cookies::CookieJar",
@@ -2829,14 +3327,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4955,
-      "elapsed": 7.0e-6,
+      "elapsed": 0.000007,
       "return_value": {
         "class": "ActionDispatch::Cookies::CookieJar",
         "value": "#<ActionDispatch::Cookies::CookieJar:0x00007fc704b78018>",
         "object_id": 78000
       }
     },
-    { "id": 4957, "event": "return", "thread_id": 4900, "parent_id": 4954, "elapsed": 0.000148 },
+    {
+      "id": 4957,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4954,
+      "elapsed": 0.000148
+    },
     {
       "id": 4958,
       "event": "return",
@@ -2894,8 +3398,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4960,
-      "elapsed": 4.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 75480 }
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 75480
+      }
     },
     {
       "id": 4962,
@@ -2907,7 +3415,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 4963, "event": "return", "thread_id": 4900, "parent_id": 4962, "elapsed": 6.5e-5 },
+    {
+      "id": 4963,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4962,
+      "elapsed": 0.000065
+    },
     {
       "id": 4964,
       "event": "call",
@@ -2918,7 +3432,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 4965, "event": "return", "thread_id": 4900, "parent_id": 4964, "elapsed": 7.7e-5 },
+    {
+      "id": 4965,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4964,
+      "elapsed": 0.000077
+    },
     {
       "id": 4966,
       "event": "call",
@@ -2948,8 +3468,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4966,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 75540 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 75540
+      }
     },
     {
       "id": 4968,
@@ -2980,7 +3504,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4968,
-      "elapsed": 2.2e-5,
+      "elapsed": 0.000022,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7112ad610 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -2997,15 +3521,23 @@
       "lineno": 31,
       "static": true,
       "parameters": [],
-      "receiver": { "class": "Class", "object_id": 17700, "value": "User" }
+      "receiver": {
+        "class": "Class",
+        "object_id": 17700,
+        "value": "User"
+      }
     },
     {
       "id": 4971,
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4970,
-      "elapsed": 1.2e-5,
-      "return_value": { "class": "String", "value": "rGirqVd8HfLFZZGvxLbCzA", "object_id": 78080 }
+      "elapsed": 0.000012,
+      "return_value": {
+        "class": "String",
+        "value": "rGirqVd8HfLFZZGvxLbCzA",
+        "object_id": 78080
+      }
     },
     {
       "id": 4972,
@@ -3025,7 +3557,11 @@
           "kind": "req"
         }
       ],
-      "receiver": { "class": "Class", "object_id": 17700, "value": "User" }
+      "receiver": {
+        "class": "Class",
+        "object_id": 17700,
+        "value": "User"
+      }
     },
     {
       "id": 4973,
@@ -3049,7 +3585,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 4975, "event": "return", "thread_id": 4900, "parent_id": 4974, "elapsed": 0.000411 },
+    {
+      "id": 4975,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4974,
+      "elapsed": 0.000411
+    },
     {
       "id": 4976,
       "event": "call",
@@ -3079,7 +3621,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4976,
-      "elapsed": 4.5e-5,
+      "elapsed": 0.000045,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc70310afa0 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -3096,7 +3638,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 4979, "event": "return", "thread_id": 4900, "parent_id": 4978, "elapsed": 5.5e-5 },
+    {
+      "id": 4979,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4978,
+      "elapsed": 0.000055
+    },
     {
       "id": 4980,
       "event": "call",
@@ -3107,7 +3655,11 @@
       "lineno": 61,
       "static": false,
       "parameters": [],
-      "receiver": { "class": "User", "object_id": 78180, "value": "#<User:0x00007fc704b73ce8>" }
+      "receiver": {
+        "class": "User",
+        "object_id": 78180,
+        "value": "#<User:0x00007fc704b73ce8>"
+      }
     },
     {
       "id": 4981,
@@ -3178,7 +3730,13 @@
           "value": "#<Object:0x00007fc70311f1a8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 78300, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 78300,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -3223,7 +3781,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 78360, "value": "mailer", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 78360,
+          "value": "mailer",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -3252,7 +3816,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 78420, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 78420,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -3301,8 +3871,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4987,
-      "elapsed": 3.5e-5,
-      "return_value": { "class": "Integer", "value": "113", "object_id": 227 }
+      "elapsed": 0.000035,
+      "return_value": {
+        "class": "Integer",
+        "value": "113",
+        "object_id": 227
+      }
     },
     {
       "id": 4989,
@@ -3333,10 +3907,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4989,
-      "elapsed": 2.2e-5,
-      "return_value": { "class": "Integer", "value": "149", "object_id": 299 }
+      "elapsed": 0.000022,
+      "return_value": {
+        "class": "Integer",
+        "value": "149",
+        "object_id": 299
+      }
     },
-    { "id": 4991, "event": "return", "thread_id": 4900, "parent_id": 4984, "elapsed": 0.002279 },
+    {
+      "id": 4991,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4984,
+      "elapsed": 0.002279
+    },
     {
       "id": 4992,
       "event": "call",
@@ -3362,7 +3946,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 78540, "value": "mailer", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 78540,
+          "value": "mailer",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -3391,7 +3981,13 @@
           "value": "#<Object:0x00007fc704b9a4b0>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 78620, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 78620,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -3440,8 +4036,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4995,
-      "elapsed": 2.1e-5,
-      "return_value": { "class": "Integer", "value": "113", "object_id": 227 }
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Integer",
+        "value": "113",
+        "object_id": 227
+      }
     },
     {
       "id": 4997,
@@ -3472,10 +4072,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 4997,
-      "elapsed": 2.1e-5,
-      "return_value": { "class": "Integer", "value": "149", "object_id": 299 }
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Integer",
+        "value": "149",
+        "object_id": 299
+      }
     },
-    { "id": 4999, "event": "return", "thread_id": 4900, "parent_id": 4992, "elapsed": 0.001268 },
+    {
+      "id": 4999,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 4992,
+      "elapsed": 0.001268
+    },
     {
       "id": 5000,
       "event": "return",
@@ -3517,8 +4127,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5001,
-      "elapsed": 3.3e-5,
-      "return_value": { "class": "Integer", "value": "107", "object_id": 215 }
+      "elapsed": 0.000033,
+      "return_value": {
+        "class": "Integer",
+        "value": "107",
+        "object_id": 215
+      }
     },
     {
       "id": 5003,
@@ -3542,7 +4156,13 @@
       "lineno": 91,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -3550,7 +4170,13 @@
         "value": "#<ActionDispatch::Request::Session:0x00007fc7030e43c8>"
       }
     },
-    { "id": 5005, "event": "return", "thread_id": 4900, "parent_id": 5004, "elapsed": 1.6e-5 },
+    {
+      "id": 5005,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5004,
+      "elapsed": 0.000016
+    },
     {
       "id": 5006,
       "event": "call",
@@ -3605,7 +4231,11 @@
       "thread_id": 4900,
       "parent_id": 5007,
       "elapsed": 0.000173,
-      "return_value": { "class": "Integer", "value": "77", "object_id": 155 }
+      "return_value": {
+        "class": "Integer",
+        "value": "77",
+        "object_id": 155
+      }
     },
     {
       "id": 5009,
@@ -3660,7 +4290,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5011,
-      "elapsed": 1.1e-5,
+      "elapsed": 0.000011,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7004b2a20 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -3696,8 +4326,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5013,
-      "elapsed": 1.7e-5,
-      "return_value": { "class": "Integer", "value": "110", "object_id": 221 }
+      "elapsed": 0.000017,
+      "return_value": {
+        "class": "Integer",
+        "value": "110",
+        "object_id": 221
+      }
     },
     {
       "id": 5015,
@@ -3718,7 +4352,6 @@
       "parent_id": 4947,
       "elapsed": 0.017943,
       "http_server_response": {
-        "status_code": 302,
         "headers": {
           "X-Frame-Options": "SAMEORIGIN",
           "X-XSS-Protection": "1; mode=block",
@@ -3727,7 +4360,8 @@
           "X-Permitted-Cross-Domain-Policies": "none",
           "Referrer-Policy": "strict-origin-when-cross-origin",
           "Location": "http://www.example.com/"
-        }
+        },
+        "status": 302
       }
     },
     {
@@ -3740,7 +4374,13 @@
       "lineno": 91,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -3753,7 +4393,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5017,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "Hash",
         "value": "{\"discard\"=>[], \"flashes\"=>{\"info\"=>\"Please check your email to activate your account.\"}}",
@@ -3788,7 +4428,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5019,
-      "elapsed": 2.2e-5,
+      "elapsed": 0.000022,
       "return_value": {
         "class": "String",
         "value": "{\"session_id\":\"0f2278dcce9cf9f6c9b7bc5e50334cae\",\"flash\":{\"discard\":[],\"flashes\":{\"info\":\"Please che",
@@ -3804,7 +4444,13 @@
       "path": "OpenSSL::Cipher#encrypt",
       "static": false,
       "parameters": [
-        { "name": "arg", "class": "Array", "object_id": 78940, "value": "[]", "kind": "rest" }
+        {
+          "name": "arg",
+          "class": "Array",
+          "object_id": 78940,
+          "value": "[]",
+          "kind": "rest"
+        }
       ],
       "receiver": {
         "class": "OpenSSL::Cipher",
@@ -3817,7 +4463,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5021,
-      "elapsed": 3.0e-6,
+      "elapsed": 0.000003,
       "return_value": {
         "class": "OpenSSL::Cipher",
         "value": "#<OpenSSL::Cipher:0x00007fc710874e00>",
@@ -3852,7 +4498,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5023,
-      "elapsed": 2.0e-5,
+      "elapsed": 0.00002,
       "return_value": {
         "class": "String",
         "value": "{\"_rails\":{\"message\":\"eyJzZXNzaW9uX2lkIjoiMGYyMjc4ZGNjZTljZjlmNmM5YjdiYzVlNTAzMzRjYWUiLCJmbGFzaCI6ey",
@@ -3895,7 +4541,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5025,
-      "elapsed": 1.2e-5,
+      "elapsed": 0.000012,
       "return_value": {
         "class": "String",
         "value": "VCIDLbL2SLU/k7J5VbpNwsIyLEos1Krdxe4s0PhLiLdXhqkFaPevYsit3CCgBm8qtlKmhVUlc8vDUgZCKw8TBz0eIKlJxeUmb3e6",
@@ -3931,7 +4577,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5027,
-      "elapsed": 6.3e-5,
+      "elapsed": 0.000063,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7112d8e78 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -3967,8 +4613,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5029,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 30980 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 30980
+      }
     },
     {
       "id": 5031,
@@ -3980,7 +4630,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5032, "event": "return", "thread_id": 4900, "parent_id": 5031, "elapsed": 8.7e-5 },
+    {
+      "id": 5032,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5031,
+      "elapsed": 0.000087
+    },
     {
       "id": 5033,
       "event": "call",
@@ -4010,7 +4666,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5033,
-      "elapsed": 4.3e-5,
+      "elapsed": 0.000043,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc71125e448 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -4046,8 +4702,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5035,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 29620 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 29620
+      }
     },
     {
       "id": 5037,
@@ -4078,8 +4738,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5037,
-      "elapsed": 2.8e-5,
-      "return_value": { "class": "Integer", "value": "104", "object_id": 209 }
+      "elapsed": 0.000028,
+      "return_value": {
+        "class": "Integer",
+        "value": "104",
+        "object_id": 209
+      }
     },
     {
       "id": 5039,
@@ -4091,7 +4755,10 @@
         "mime_type": "application/x-www-form-urlencoded",
         "normalized_path_info": "/login",
         "headers": {
-          "rack.version": [1, 3],
+          "rack.version": [
+            1,
+            3
+          ],
           "rack.input": "#<StringIO:0x00007fc710846aa0>",
           "rack.multithread": true,
           "rack.multiprocess": true,
@@ -4110,7 +4777,9 @@
           "CONTENT_TYPE": "application/x-www-form-urlencoded",
           "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
           "Cookie": "_sample_app_session=VCIDLbL2SLU%2Fk7J5VbpNwsIyLEos1Krdxe4s0PhLiLdXhqkFaPevYsit3CCgBm8qtlKmhVUlc8vDUgZCKw8TBz0eIKlJxeUmb3e62%2BfpGu5kKS9yVcXCJE59%2Bq%2FEQ%2FzE7SW3Umg%2BrMw%2FepW6gH%2Bf7QOZGOrsYUjO4Ra8PDFpsXB6Blyu%2BXRk0ifvvyLleYHzYAy1xaeYjYNwmJsoEXOH8ZgP3GzH%2FpLGtMvYU0BiT64JPASoSvfa%2FrYCYawjDvGCUlJtrB0Z4ngMWTvcNu4K0bze7KmCklSTIUvWtMAahdbVf4yZV90fSsL%2BWR6izUZZ5gWOoaNBVbDgPvJiGSnVOYD%2B51%2FcCvA%3D--1ESuc2uRO%2FiRwP4W--ViZcTcLJK%2BjtTJkD9dzevw%3D%3D",
-          "action_dispatch.parameter_filter": ["password"],
+          "action_dispatch.parameter_filter": [
+            "password"
+          ],
           "action_dispatch.secret_key_base": "795d64e49aae60c6abfefa522f01c7fa1f1b6f945ab3bc6edb87fde5156dd662478da295cfa77d5d5ced5ba340ac7bcfdd96361530395150122dd9113192c974",
           "action_dispatch.show_exceptions": false,
           "action_dispatch.show_detailed_exceptions": true,
@@ -4130,7 +4799,11 @@
           "action_dispatch.routes": "#<ActionDispatch::Routing::RouteSet:0x00007fc703f143a8>",
           "ORIGINAL_FULLPATH": "/login",
           "rack.request.form_hash": {
-            "session": { "email": "user@example.com", "password": "password", "remember_me": "1" }
+            "session": {
+              "email": "user@example.com",
+              "password": "password",
+              "remember_me": "1"
+            }
           },
           "rack.request.form_vars": "session[email]=user%40example.com&session[password]=password&session[remember_me]=1",
           "rack.request.form_input": "#<StringIO:0x00007fc710846aa0>",
@@ -4153,13 +4826,32 @@
           "value": "{\"email\"=>\"user@example.com\", \"password\"=>\"[FILTERED]\", \"remember_me\"=>\"1\"}",
           "object_id": 83840,
           "properties": [
-            { "name": "email", "class": "String" },
-            { "name": "password", "class": "String" },
-            { "name": "remember_me", "class": "String" }
+            {
+              "name": "email",
+              "class": "String"
+            },
+            {
+              "name": "password",
+              "class": "String"
+            },
+            {
+              "name": "remember_me",
+              "class": "String"
+            }
           ]
         },
-        { "name": "controller", "class": "String", "value": "sessions", "object_id": 31960 },
-        { "name": "action", "class": "String", "value": "create", "object_id": 31980 }
+        {
+          "name": "controller",
+          "class": "String",
+          "value": "sessions",
+          "object_id": 31960
+        },
+        {
+          "name": "action",
+          "class": "String",
+          "value": "create",
+          "object_id": 31980
+        }
       ]
     },
     {
@@ -4215,8 +4907,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5041,
-      "elapsed": 2.7e-5,
-      "return_value": { "class": "Integer", "value": "87", "object_id": 175 }
+      "elapsed": 0.000027,
+      "return_value": {
+        "class": "Integer",
+        "value": "87",
+        "object_id": 175
+      }
     },
     {
       "id": 5043,
@@ -4247,8 +4943,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5043,
-      "elapsed": 1.5e-5,
-      "return_value": { "class": "Integer", "value": "142", "object_id": 285 }
+      "elapsed": 0.000015,
+      "return_value": {
+        "class": "Integer",
+        "value": "142",
+        "object_id": 285
+      }
     },
     {
       "id": 5045,
@@ -4327,7 +5027,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5047,
-      "elapsed": 6.0e-6,
+      "elapsed": 0.000006,
       "return_value": {
         "class": "ActionDispatch::Cookies::CookieJar",
         "value": "#<ActionDispatch::Cookies::CookieJar:0x00007fc71089cb30>",
@@ -4343,7 +5043,13 @@
       "path": "OpenSSL::Cipher#decrypt",
       "static": false,
       "parameters": [
-        { "name": "arg", "class": "Array", "object_id": 79340, "value": "[]", "kind": "rest" }
+        {
+          "name": "arg",
+          "class": "Array",
+          "object_id": 79340,
+          "value": "[]",
+          "kind": "rest"
+        }
       ],
       "receiver": {
         "class": "OpenSSL::Cipher",
@@ -4356,7 +5062,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5049,
-      "elapsed": 6.0e-6,
+      "elapsed": 0.000006,
       "return_value": {
         "class": "OpenSSL::Cipher",
         "value": "#<OpenSSL::Cipher:0x00007fc710896fa0>",
@@ -4383,7 +5089,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5051,
-      "elapsed": 7.0e-6,
+      "elapsed": 0.000007,
       "return_value": {
         "class": "Hash",
         "value": "{\"_rails\"=>{\"message\"=>\"eyJzZXNzaW9uX2lkIjoiMGYyMjc4ZGNjZTljZjlmNmM5YjdiYzVlNTAzMzRjYWUiLCJmbGFzaCI6",
@@ -4410,14 +5116,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5053,
-      "elapsed": 5.0e-6,
+      "elapsed": 0.000005,
       "return_value": {
         "class": "Hash",
         "value": "{\"session_id\"=>\"0f2278dcce9cf9f6c9b7bc5e50334cae\", \"flash\"=>{\"discard\"=>[], \"flashes\"=>{\"info\"=>\"Ple",
         "object_id": 79440
       }
     },
-    { "id": 5055, "event": "return", "thread_id": 4900, "parent_id": 5046, "elapsed": 0.000642 },
+    {
+      "id": 5055,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5046,
+      "elapsed": 0.000642
+    },
     {
       "id": 5056,
       "event": "return",
@@ -4456,7 +5168,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5059, "event": "return", "thread_id": 4900, "parent_id": 5058, "elapsed": 7.6e-5 },
+    {
+      "id": 5059,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5058,
+      "elapsed": 0.000076
+    },
     {
       "id": 5060,
       "event": "call",
@@ -4467,7 +5185,13 @@
       "lineno": 91,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -4480,7 +5204,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5060,
-      "elapsed": 6.0e-6,
+      "elapsed": 0.000006,
       "return_value": {
         "class": "Hash",
         "value": "{\"discard\"=>[], \"flashes\"=>{\"info\"=>\"Please check your email to activate your account.\"}}",
@@ -4540,8 +5264,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5063,
-      "elapsed": 2.7e-5,
-      "return_value": { "class": "Integer", "value": "77", "object_id": 155 }
+      "elapsed": 0.000027,
+      "return_value": {
+        "class": "Integer",
+        "value": "77",
+        "object_id": 155
+      }
     },
     {
       "id": 5065,
@@ -4596,7 +5324,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5067,
-      "elapsed": 1.0e-5,
+      "elapsed": 0.00001,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc71128cde8 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -4632,8 +5360,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5069,
-      "elapsed": 1.9e-5,
-      "return_value": { "class": "Integer", "value": "108", "object_id": 217 }
+      "elapsed": 0.000019,
+      "return_value": {
+        "class": "Integer",
+        "value": "108",
+        "object_id": 217
+      }
     },
     {
       "id": 5071,
@@ -4654,7 +5386,6 @@
       "parent_id": 5039,
       "elapsed": 0.003499,
       "http_server_response": {
-        "status_code": 302,
         "headers": {
           "X-Frame-Options": "SAMEORIGIN",
           "X-XSS-Protection": "1; mode=block",
@@ -4663,7 +5394,8 @@
           "X-Permitted-Cross-Domain-Policies": "none",
           "Referrer-Policy": "strict-origin-when-cross-origin",
           "Location": "http://www.example.com/"
-        }
+        },
+        "status": 302
       }
     },
     {
@@ -4676,7 +5408,13 @@
       "lineno": 91,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -4689,7 +5427,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5073,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "Hash",
         "value": "{\"discard\"=>[], \"flashes\"=>{\"warning\"=>\"Account not activated. Check your email for the activation l",
@@ -4724,7 +5462,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5075,
-      "elapsed": 2.4e-5,
+      "elapsed": 0.000024,
       "return_value": {
         "class": "String",
         "value": "{\"session_id\":\"0f2278dcce9cf9f6c9b7bc5e50334cae\",\"flash\":{\"discard\":[],\"flashes\":{\"warning\":\"Account",
@@ -4740,7 +5478,13 @@
       "path": "OpenSSL::Cipher#encrypt",
       "static": false,
       "parameters": [
-        { "name": "arg", "class": "Array", "object_id": 79640, "value": "[]", "kind": "rest" }
+        {
+          "name": "arg",
+          "class": "Array",
+          "object_id": 79640,
+          "value": "[]",
+          "kind": "rest"
+        }
       ],
       "receiver": {
         "class": "OpenSSL::Cipher",
@@ -4753,7 +5497,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5077,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "OpenSSL::Cipher",
         "value": "#<OpenSSL::Cipher:0x00007fc704be9498>",
@@ -4788,7 +5532,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5079,
-      "elapsed": 2.0e-5,
+      "elapsed": 0.00002,
       "return_value": {
         "class": "String",
         "value": "{\"_rails\":{\"message\":\"eyJzZXNzaW9uX2lkIjoiMGYyMjc4ZGNjZTljZjlmNmM5YjdiYzVlNTAzMzRjYWUiLCJmbGFzaCI6ey",
@@ -4831,7 +5575,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5081,
-      "elapsed": 1.2e-5,
+      "elapsed": 0.000012,
       "return_value": {
         "class": "String",
         "value": "lSM3XgnJUo4g27hIvaRg6KVz96+s33X4xu/gvJWYwWdWOY+AMyT5R+p2NxHl15k9eMo3E0ZO+euaBYkerlmKDGdrdf8QRVCA8wKr",
@@ -4867,7 +5611,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5083,
-      "elapsed": 5.4e-5,
+      "elapsed": 0.000054,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7112d8e78 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -4903,8 +5647,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5085,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 30980 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 30980
+      }
     },
     {
       "id": 5087,
@@ -4930,7 +5678,13 @@
         "value": "#<ActionDispatch::Request::Session:0x00007fc7108b4028>"
       }
     },
-    { "id": 5088, "event": "return", "thread_id": 4900, "parent_id": 5087, "elapsed": 4.0e-6 },
+    {
+      "id": 5088,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5087,
+      "elapsed": 0.000004
+    },
     {
       "id": 5089,
       "event": "call",
@@ -4960,7 +5714,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5089,
-      "elapsed": 4.3e-5,
+      "elapsed": 0.000043,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc71125e448 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -4996,8 +5750,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5091,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 29620 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 29620
+      }
     },
     {
       "id": 5093,
@@ -5028,8 +5786,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5093,
-      "elapsed": 2.2e-5,
-      "return_value": { "class": "Integer", "value": "163", "object_id": 327 }
+      "elapsed": 0.000022,
+      "return_value": {
+        "class": "Integer",
+        "value": "163",
+        "object_id": 327
+      }
     },
     {
       "id": 5095,
@@ -5040,7 +5802,10 @@
         "path_info": "/account_activations/invalid%20token/edit",
         "normalized_path_info": "/account_activations/{id}/edit",
         "headers": {
-          "rack.version": [1, 3],
+          "rack.version": [
+            1,
+            3
+          ],
           "rack.multithread": true,
           "rack.multiprocess": true,
           "rack.run_once": false,
@@ -5058,7 +5823,9 @@
           "Host": "www.example.com",
           "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
           "Cookie": "_sample_app_session=lSM3XgnJUo4g27hIvaRg6KVz96%2Bs33X4xu%2FgvJWYwWdWOY%2BAMyT5R%2Bp2NxHl15k9eMo3E0ZO%2BeuaBYkerlmKDGdrdf8QRVCA8wKrSbtNyhwFJ8vdSpjrcuK5J1Yrf2c0LlA6TkxC6ctRicRbji7NR5VqaMtid4BXmcDYn7OqnGMEn81cGFp5rG0uJGQQLfZz1JLbMhamMdMW%2FnLW5r78m6NKH2mHJFbgIns91AV%2FCTBvLBjyrxkHlxvK6uXI5HHA5hKBFfiwLKAKyyQXcctpKoWsrz508zl8QT%2BKzWkRZRvWXGP%2Bt7UKpNRknKRMLn41XDjG6LBQOGT2KZ6JzjfqTGYTPPcIZfZl7KMdSmkQZlPZSKAaO4VSEKtOZviOXCk%3D--gfdcZI%2B%2FbXTbnjHT--VVZeSsLIVS%2F8w5AmKob12w%3D%3D",
-          "action_dispatch.parameter_filter": ["password"],
+          "action_dispatch.parameter_filter": [
+            "password"
+          ],
           "action_dispatch.secret_key_base": "795d64e49aae60c6abfefa522f01c7fa1f1b6f945ab3bc6edb87fde5156dd662478da295cfa77d5d5ced5ba340ac7bcfdd96361530395150122dd9113192c974",
           "action_dispatch.show_exceptions": false,
           "action_dispatch.show_detailed_exceptions": true,
@@ -5090,15 +5857,30 @@
         }
       },
       "message": [
-        { "name": "email", "class": "String", "value": "user@example.com", "object_id": 83860 },
+        {
+          "name": "email",
+          "class": "String",
+          "value": "user@example.com",
+          "object_id": 83860
+        },
         {
           "name": "controller",
           "class": "String",
           "value": "account_activations",
           "object_id": 83880
         },
-        { "name": "action", "class": "String", "value": "edit", "object_id": 83900 },
-        { "name": "id", "class": "String", "value": "invalid token", "object_id": 80160 }
+        {
+          "name": "action",
+          "class": "String",
+          "value": "edit",
+          "object_id": 83900
+        },
+        {
+          "name": "id",
+          "class": "String",
+          "value": "invalid token",
+          "object_id": 80160
+        }
       ]
     },
     {
@@ -5154,8 +5936,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5097,
-      "elapsed": 2.2e-5,
-      "return_value": { "class": "Integer", "value": "95", "object_id": 191 }
+      "elapsed": 0.000022,
+      "return_value": {
+        "class": "Integer",
+        "value": "95",
+        "object_id": 191
+      }
     },
     {
       "id": 5099,
@@ -5186,8 +5972,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5099,
-      "elapsed": 1.6e-5,
-      "return_value": { "class": "Integer", "value": "106", "object_id": 213 }
+      "elapsed": 0.000016,
+      "return_value": {
+        "class": "Integer",
+        "value": "106",
+        "object_id": 213
+      }
     },
     {
       "id": 5101,
@@ -5266,7 +6056,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5103,
-      "elapsed": 6.0e-6,
+      "elapsed": 0.000006,
       "return_value": {
         "class": "ActionDispatch::Cookies::CookieJar",
         "value": "#<ActionDispatch::Cookies::CookieJar:0x00007fc711226778>",
@@ -5282,7 +6072,13 @@
       "path": "OpenSSL::Cipher#decrypt",
       "static": false,
       "parameters": [
-        { "name": "arg", "class": "Array", "object_id": 80040, "value": "[]", "kind": "rest" }
+        {
+          "name": "arg",
+          "class": "Array",
+          "object_id": 80040,
+          "value": "[]",
+          "kind": "rest"
+        }
       ],
       "receiver": {
         "class": "OpenSSL::Cipher",
@@ -5295,7 +6091,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5105,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "OpenSSL::Cipher",
         "value": "#<OpenSSL::Cipher:0x00007fc711224c98>",
@@ -5322,7 +6118,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5107,
-      "elapsed": 5.0e-6,
+      "elapsed": 0.000005,
       "return_value": {
         "class": "Hash",
         "value": "{\"_rails\"=>{\"message\"=>\"eyJzZXNzaW9uX2lkIjoiMGYyMjc4ZGNjZTljZjlmNmM5YjdiYzVlNTAzMzRjYWUiLCJmbGFzaCI6",
@@ -5349,14 +6145,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5109,
-      "elapsed": 6.0e-6,
+      "elapsed": 0.000006,
       "return_value": {
         "class": "Hash",
         "value": "{\"session_id\"=>\"0f2278dcce9cf9f6c9b7bc5e50334cae\", \"flash\"=>{\"discard\"=>[], \"flashes\"=>{\"warning\"=>\"",
         "object_id": 80140
       }
     },
-    { "id": 5111, "event": "return", "thread_id": 4900, "parent_id": 5102, "elapsed": 0.000387 },
+    {
+      "id": 5111,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5102,
+      "elapsed": 0.000387
+    },
     {
       "id": 5112,
       "event": "return",
@@ -5395,7 +6197,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5115, "event": "return", "thread_id": 4900, "parent_id": 5114, "elapsed": 6.5e-5 },
+    {
+      "id": 5115,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5114,
+      "elapsed": 0.000065
+    },
     {
       "id": 5116,
       "event": "call",
@@ -5421,9 +6229,19 @@
           "kind": "req"
         }
       ],
-      "receiver": { "class": "User", "object_id": 80180, "value": "#<User:0x00007fc71121f158>" }
+      "receiver": {
+        "class": "User",
+        "object_id": 80180,
+        "value": "#<User:0x00007fc71121f158>"
+      }
     },
-    { "id": 5117, "event": "return", "thread_id": 4900, "parent_id": 5116, "elapsed": 0.000948 },
+    {
+      "id": 5117,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5116,
+      "elapsed": 0.000948
+    },
     {
       "id": 5118,
       "event": "call",
@@ -5434,7 +6252,13 @@
       "lineno": 91,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -5447,7 +6271,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5118,
-      "elapsed": 5.0e-6,
+      "elapsed": 0.000005,
       "return_value": {
         "class": "Hash",
         "value": "{\"discard\"=>[], \"flashes\"=>{\"warning\"=>\"Account not activated. Check your email for the activation l",
@@ -5507,8 +6331,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5121,
-      "elapsed": 2.1e-5,
-      "return_value": { "class": "Integer", "value": "77", "object_id": 155 }
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Integer",
+        "value": "77",
+        "object_id": 155
+      }
     },
     {
       "id": 5123,
@@ -5563,7 +6391,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5125,
-      "elapsed": 1.5e-5,
+      "elapsed": 0.000015,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc71128cde8 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -5599,8 +6427,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5127,
-      "elapsed": 1.8e-5,
-      "return_value": { "class": "Integer", "value": "108", "object_id": 217 }
+      "elapsed": 0.000018,
+      "return_value": {
+        "class": "Integer",
+        "value": "108",
+        "object_id": 217
+      }
     },
     {
       "id": 5129,
@@ -5621,7 +6453,6 @@
       "parent_id": 5095,
       "elapsed": 0.003036,
       "http_server_response": {
-        "status_code": 302,
         "headers": {
           "X-Frame-Options": "SAMEORIGIN",
           "X-XSS-Protection": "1; mode=block",
@@ -5630,7 +6461,8 @@
           "X-Permitted-Cross-Domain-Policies": "none",
           "Referrer-Policy": "strict-origin-when-cross-origin",
           "Location": "http://www.example.com/"
-        }
+        },
+        "status": 302
       }
     },
     {
@@ -5643,7 +6475,13 @@
       "lineno": 91,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -5656,7 +6494,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5131,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "Hash",
         "value": "{\"discard\"=>[], \"flashes\"=>{\"danger\"=>\"Invalid activation link\"}}",
@@ -5691,7 +6529,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5133,
-      "elapsed": 2.0e-5,
+      "elapsed": 0.00002,
       "return_value": {
         "class": "String",
         "value": "{\"session_id\":\"0f2278dcce9cf9f6c9b7bc5e50334cae\",\"flash\":{\"discard\":[],\"flashes\":{\"danger\":\"Invalid ",
@@ -5707,7 +6545,13 @@
       "path": "OpenSSL::Cipher#encrypt",
       "static": false,
       "parameters": [
-        { "name": "arg", "class": "Array", "object_id": 80380, "value": "[]", "kind": "rest" }
+        {
+          "name": "arg",
+          "class": "Array",
+          "object_id": 80380,
+          "value": "[]",
+          "kind": "rest"
+        }
       ],
       "receiver": {
         "class": "OpenSSL::Cipher",
@@ -5720,7 +6564,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5135,
-      "elapsed": 3.0e-6,
+      "elapsed": 0.000003,
       "return_value": {
         "class": "OpenSSL::Cipher",
         "value": "#<OpenSSL::Cipher:0x00007fc711249318>",
@@ -5755,7 +6599,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5137,
-      "elapsed": 1.9e-5,
+      "elapsed": 0.000019,
       "return_value": {
         "class": "String",
         "value": "{\"_rails\":{\"message\":\"eyJzZXNzaW9uX2lkIjoiMGYyMjc4ZGNjZTljZjlmNmM5YjdiYzVlNTAzMzRjYWUiLCJmbGFzaCI6ey",
@@ -5798,7 +6642,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5139,
-      "elapsed": 1.0e-5,
+      "elapsed": 0.00001,
       "return_value": {
         "class": "String",
         "value": "m5vT83sNV9Jsfodj8YbdUpjjoaRr8W2bFEhxZYS4XL+qEumQlCZolfUAGGvIIYQo9ONtnGUdp5Za5Y0f3kz/haLekqMEmcJRl5LZ",
@@ -5834,7 +6678,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5141,
-      "elapsed": 4.2e-5,
+      "elapsed": 0.000042,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7112d8e78 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -5870,8 +6714,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5143,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 30980 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 30980
+      }
     },
     {
       "id": 5145,
@@ -5897,7 +6745,13 @@
         "value": "#<ActionDispatch::Request::Session:0x00007fc704bcf188>"
       }
     },
-    { "id": 5146, "event": "return", "thread_id": 4900, "parent_id": 5145, "elapsed": 5.0e-6 },
+    {
+      "id": 5146,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5145,
+      "elapsed": 0.000005
+    },
     {
       "id": 5147,
       "event": "call",
@@ -5927,7 +6781,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5147,
-      "elapsed": 3.9e-5,
+      "elapsed": 0.000039,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc71125e448 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -5963,8 +6817,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5149,
-      "elapsed": 4.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 29620 }
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 29620
+      }
     },
     {
       "id": 5151,
@@ -5995,8 +6853,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5151,
-      "elapsed": 2.0e-5,
-      "return_value": { "class": "Integer", "value": "157", "object_id": 315 }
+      "elapsed": 0.00002,
+      "return_value": {
+        "class": "Integer",
+        "value": "157",
+        "object_id": 315
+      }
     },
     {
       "id": 5153,
@@ -6007,7 +6869,10 @@
         "path_info": "/account_activations/rGirqVd8HfLFZZGvxLbCzA/edit",
         "normalized_path_info": "/account_activations/{id}/edit",
         "headers": {
-          "rack.version": [1, 3],
+          "rack.version": [
+            1,
+            3
+          ],
           "rack.multithread": true,
           "rack.multiprocess": true,
           "rack.run_once": false,
@@ -6025,7 +6890,9 @@
           "Host": "www.example.com",
           "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
           "Cookie": "_sample_app_session=m5vT83sNV9Jsfodj8YbdUpjjoaRr8W2bFEhxZYS4XL%2BqEumQlCZolfUAGGvIIYQo9ONtnGUdp5Za5Y0f3kz%2FhaLekqMEmcJRl5LZgKLNea7ZZ2EQtJQIL2yDRn2lFaGc%2BeX2mzZOi7MV7T%2BrTk7CNiFQnmnddNtgfEMDhA8CpxcqQ9IZi7n1T%2FR8YP40lRdGtu0iFE4mlB8zNemMoX%2F8mqYt%2Fq9Z6IluVgi2tNhgQPkam8%2Fj3mErOy5P0Fdf%2Fcnpuu%2BZHiaB9ebitJXDsdbAWpdDw9UIqG2EJHrXiUFgeSI2aFKLXbux--2W3D0ai2Ai8ANz14--28%2BPfb%2FP%2FPRptYKpvNt0bg%3D%3D",
-          "action_dispatch.parameter_filter": ["password"],
+          "action_dispatch.parameter_filter": [
+            "password"
+          ],
           "action_dispatch.secret_key_base": "795d64e49aae60c6abfefa522f01c7fa1f1b6f945ab3bc6edb87fde5156dd662478da295cfa77d5d5ced5ba340ac7bcfdd96361530395150122dd9113192c974",
           "action_dispatch.show_exceptions": false,
           "action_dispatch.show_detailed_exceptions": true,
@@ -6057,15 +6924,30 @@
         }
       },
       "message": [
-        { "name": "email", "class": "String", "value": "wrong", "object_id": 83920 },
+        {
+          "name": "email",
+          "class": "String",
+          "value": "wrong",
+          "object_id": 83920
+        },
         {
           "name": "controller",
           "class": "String",
           "value": "account_activations",
           "object_id": 83880
         },
-        { "name": "action", "class": "String", "value": "edit", "object_id": 83900 },
-        { "name": "id", "class": "String", "value": "rGirqVd8HfLFZZGvxLbCzA", "object_id": 83940 }
+        {
+          "name": "action",
+          "class": "String",
+          "value": "edit",
+          "object_id": 83900
+        },
+        {
+          "name": "id",
+          "class": "String",
+          "value": "rGirqVd8HfLFZZGvxLbCzA",
+          "object_id": 83940
+        }
       ]
     },
     {
@@ -6121,8 +7003,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5155,
-      "elapsed": 2.1e-5,
-      "return_value": { "class": "Integer", "value": "95", "object_id": 191 }
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Integer",
+        "value": "95",
+        "object_id": 191
+      }
     },
     {
       "id": 5157,
@@ -6153,8 +7039,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5157,
-      "elapsed": 1.6e-5,
-      "return_value": { "class": "Integer", "value": "104", "object_id": 209 }
+      "elapsed": 0.000016,
+      "return_value": {
+        "class": "Integer",
+        "value": "104",
+        "object_id": 209
+      }
     },
     {
       "id": 5159,
@@ -6233,7 +7123,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5161,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "ActionDispatch::Cookies::CookieJar",
         "value": "#<ActionDispatch::Cookies::CookieJar:0x00007fc71126b210>",
@@ -6249,7 +7139,13 @@
       "path": "OpenSSL::Cipher#decrypt",
       "static": false,
       "parameters": [
-        { "name": "arg", "class": "Array", "object_id": 80780, "value": "[]", "kind": "rest" }
+        {
+          "name": "arg",
+          "class": "Array",
+          "object_id": 80780,
+          "value": "[]",
+          "kind": "rest"
+        }
       ],
       "receiver": {
         "class": "OpenSSL::Cipher",
@@ -6262,7 +7158,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5163,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "OpenSSL::Cipher",
         "value": "#<OpenSSL::Cipher:0x00007fc7112696b8>",
@@ -6289,7 +7185,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5165,
-      "elapsed": 5.0e-6,
+      "elapsed": 0.000005,
       "return_value": {
         "class": "Hash",
         "value": "{\"_rails\"=>{\"message\"=>\"eyJzZXNzaW9uX2lkIjoiMGYyMjc4ZGNjZTljZjlmNmM5YjdiYzVlNTAzMzRjYWUiLCJmbGFzaCI6",
@@ -6316,14 +7212,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5167,
-      "elapsed": 5.0e-6,
+      "elapsed": 0.000005,
       "return_value": {
         "class": "Hash",
         "value": "{\"session_id\"=>\"0f2278dcce9cf9f6c9b7bc5e50334cae\", \"flash\"=>{\"discard\"=>[], \"flashes\"=>{\"danger\"=>\"I",
         "object_id": 80880
       }
     },
-    { "id": 5169, "event": "return", "thread_id": 4900, "parent_id": 5160, "elapsed": 0.000348 },
+    {
+      "id": 5169,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5160,
+      "elapsed": 0.000348
+    },
     {
       "id": 5170,
       "event": "return",
@@ -6362,7 +7264,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5173, "event": "return", "thread_id": 4900, "parent_id": 5172, "elapsed": 4.9e-5 },
+    {
+      "id": 5173,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5172,
+      "elapsed": 0.000049
+    },
     {
       "id": 5174,
       "event": "call",
@@ -6373,7 +7281,13 @@
       "lineno": 91,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -6386,7 +7300,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5174,
-      "elapsed": 5.0e-6,
+      "elapsed": 0.000005,
       "return_value": {
         "class": "Hash",
         "value": "{\"discard\"=>[], \"flashes\"=>{\"danger\"=>\"Invalid activation link\"}}",
@@ -6446,8 +7360,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5177,
-      "elapsed": 1.9e-5,
-      "return_value": { "class": "Integer", "value": "77", "object_id": 155 }
+      "elapsed": 0.000019,
+      "return_value": {
+        "class": "Integer",
+        "value": "77",
+        "object_id": 155
+      }
     },
     {
       "id": 5179,
@@ -6502,7 +7420,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5181,
-      "elapsed": 1.4e-5,
+      "elapsed": 0.000014,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc71128cde8 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -6538,8 +7456,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5183,
-      "elapsed": 1.7e-5,
-      "return_value": { "class": "Integer", "value": "108", "object_id": 217 }
+      "elapsed": 0.000017,
+      "return_value": {
+        "class": "Integer",
+        "value": "108",
+        "object_id": 217
+      }
     },
     {
       "id": 5185,
@@ -6560,7 +7482,6 @@
       "parent_id": 5153,
       "elapsed": 0.001821,
       "http_server_response": {
-        "status_code": 302,
         "headers": {
           "X-Frame-Options": "SAMEORIGIN",
           "X-XSS-Protection": "1; mode=block",
@@ -6569,7 +7490,8 @@
           "X-Permitted-Cross-Domain-Policies": "none",
           "Referrer-Policy": "strict-origin-when-cross-origin",
           "Location": "http://www.example.com/"
-        }
+        },
+        "status": 302
       }
     },
     {
@@ -6582,7 +7504,13 @@
       "lineno": 91,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -6595,7 +7523,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5187,
-      "elapsed": 3.0e-6,
+      "elapsed": 0.000003,
       "return_value": {
         "class": "Hash",
         "value": "{\"discard\"=>[], \"flashes\"=>{\"danger\"=>\"Invalid activation link\"}}",
@@ -6630,7 +7558,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5189,
-      "elapsed": 2.0e-5,
+      "elapsed": 0.00002,
       "return_value": {
         "class": "String",
         "value": "{\"session_id\":\"0f2278dcce9cf9f6c9b7bc5e50334cae\",\"flash\":{\"discard\":[],\"flashes\":{\"danger\":\"Invalid ",
@@ -6646,7 +7574,13 @@
       "path": "OpenSSL::Cipher#encrypt",
       "static": false,
       "parameters": [
-        { "name": "arg", "class": "Array", "object_id": 81080, "value": "[]", "kind": "rest" }
+        {
+          "name": "arg",
+          "class": "Array",
+          "object_id": 81080,
+          "value": "[]",
+          "kind": "rest"
+        }
       ],
       "receiver": {
         "class": "OpenSSL::Cipher",
@@ -6659,7 +7593,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5191,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "OpenSSL::Cipher",
         "value": "#<OpenSSL::Cipher:0x00007fc7112520a8>",
@@ -6694,7 +7628,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5193,
-      "elapsed": 2.0e-5,
+      "elapsed": 0.00002,
       "return_value": {
         "class": "String",
         "value": "{\"_rails\":{\"message\":\"eyJzZXNzaW9uX2lkIjoiMGYyMjc4ZGNjZTljZjlmNmM5YjdiYzVlNTAzMzRjYWUiLCJmbGFzaCI6ey",
@@ -6737,7 +7671,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5195,
-      "elapsed": 1.0e-5,
+      "elapsed": 0.00001,
       "return_value": {
         "class": "String",
         "value": "LUEQywxh5mdTAyCxphd1daztrrTnnUxxJcsr6g2A4Yfap4shbZzaurV/QLh+ItcMP0iwkzOAW+wlP4nDkDLN6Xh0uZWSrN+SXuQa",
@@ -6773,7 +7707,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5197,
-      "elapsed": 4.1e-5,
+      "elapsed": 0.000041,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7112d8e78 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -6809,8 +7743,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5199,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 30980 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 30980
+      }
     },
     {
       "id": 5201,
@@ -6836,7 +7774,13 @@
         "value": "#<ActionDispatch::Request::Session:0x00007fc711237848>"
       }
     },
-    { "id": 5202, "event": "return", "thread_id": 4900, "parent_id": 5201, "elapsed": 4.0e-6 },
+    {
+      "id": 5202,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5201,
+      "elapsed": 0.000004
+    },
     {
       "id": 5203,
       "event": "call",
@@ -6866,7 +7810,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5203,
-      "elapsed": 3.9e-5,
+      "elapsed": 0.000039,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc71125e448 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -6902,8 +7846,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5205,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 29620 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 29620
+      }
     },
     {
       "id": 5207,
@@ -6934,8 +7882,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5207,
-      "elapsed": 2.1e-5,
-      "return_value": { "class": "Integer", "value": "170", "object_id": 341 }
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Integer",
+        "value": "170",
+        "object_id": 341
+      }
     },
     {
       "id": 5209,
@@ -6946,7 +7898,10 @@
         "path_info": "/account_activations/rGirqVd8HfLFZZGvxLbCzA/edit",
         "normalized_path_info": "/account_activations/{id}/edit",
         "headers": {
-          "rack.version": [1, 3],
+          "rack.version": [
+            1,
+            3
+          ],
           "rack.multithread": true,
           "rack.multiprocess": true,
           "rack.run_once": false,
@@ -6964,7 +7919,9 @@
           "Host": "www.example.com",
           "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
           "Cookie": "_sample_app_session=LUEQywxh5mdTAyCxphd1daztrrTnnUxxJcsr6g2A4Yfap4shbZzaurV%2FQLh%2BItcMP0iwkzOAW%2BwlP4nDkDLN6Xh0uZWSrN%2BSXuQah3oGsFJd%2BarcTJmyyiQxaGZ3q6GMMJOZQWLJitcQ26CUH7SITScj6uOrpxLLSnxg8QCN0yu5ECU33qPR9qHb6IH32GQPc1uBRPMoptRXvi1C9O2z1TG6s7M87wBs%2FYyhbKp5l9MGtFgfNrYOVxO8NcjA0UKNON9TxlYXKtUbGAhw1wR%2FDRDXIY%2FEcsgTUvvFveC%2FusA%2FgZ657hj7--CZI3TV75XAtfT%2FcS--I3PmnZowrWlHCLF9xGYepw%3D%3D",
-          "action_dispatch.parameter_filter": ["password"],
+          "action_dispatch.parameter_filter": [
+            "password"
+          ],
           "action_dispatch.secret_key_base": "795d64e49aae60c6abfefa522f01c7fa1f1b6f945ab3bc6edb87fde5156dd662478da295cfa77d5d5ced5ba340ac7bcfdd96361530395150122dd9113192c974",
           "action_dispatch.show_exceptions": false,
           "action_dispatch.show_detailed_exceptions": true,
@@ -6996,15 +7953,30 @@
         }
       },
       "message": [
-        { "name": "email", "class": "String", "value": "user@example.com", "object_id": 83960 },
+        {
+          "name": "email",
+          "class": "String",
+          "value": "user@example.com",
+          "object_id": 83960
+        },
         {
           "name": "controller",
           "class": "String",
           "value": "account_activations",
           "object_id": 83880
         },
-        { "name": "action", "class": "String", "value": "edit", "object_id": 83900 },
-        { "name": "id", "class": "String", "value": "rGirqVd8HfLFZZGvxLbCzA", "object_id": 81600 }
+        {
+          "name": "action",
+          "class": "String",
+          "value": "edit",
+          "object_id": 83900
+        },
+        {
+          "name": "id",
+          "class": "String",
+          "value": "rGirqVd8HfLFZZGvxLbCzA",
+          "object_id": 81600
+        }
       ]
     },
     {
@@ -7060,8 +8032,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5211,
-      "elapsed": 2.0e-5,
-      "return_value": { "class": "Integer", "value": "95", "object_id": 191 }
+      "elapsed": 0.00002,
+      "return_value": {
+        "class": "Integer",
+        "value": "95",
+        "object_id": 191
+      }
     },
     {
       "id": 5213,
@@ -7092,8 +8068,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5213,
-      "elapsed": 1.5e-5,
-      "return_value": { "class": "Integer", "value": "115", "object_id": 231 }
+      "elapsed": 0.000015,
+      "return_value": {
+        "class": "Integer",
+        "value": "115",
+        "object_id": 231
+      }
     },
     {
       "id": 5215,
@@ -7172,7 +8152,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5217,
-      "elapsed": 5.0e-6,
+      "elapsed": 0.000005,
       "return_value": {
         "class": "ActionDispatch::Cookies::CookieJar",
         "value": "#<ActionDispatch::Cookies::CookieJar:0x00007fc711274400>",
@@ -7188,7 +8168,13 @@
       "path": "OpenSSL::Cipher#decrypt",
       "static": false,
       "parameters": [
-        { "name": "arg", "class": "Array", "object_id": 81480, "value": "[]", "kind": "rest" }
+        {
+          "name": "arg",
+          "class": "Array",
+          "object_id": 81480,
+          "value": "[]",
+          "kind": "rest"
+        }
       ],
       "receiver": {
         "class": "OpenSSL::Cipher",
@@ -7201,7 +8187,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5219,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "OpenSSL::Cipher",
         "value": "#<OpenSSL::Cipher:0x00007fc711270c38>",
@@ -7228,7 +8214,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5221,
-      "elapsed": 5.0e-6,
+      "elapsed": 0.000005,
       "return_value": {
         "class": "Hash",
         "value": "{\"_rails\"=>{\"message\"=>\"eyJzZXNzaW9uX2lkIjoiMGYyMjc4ZGNjZTljZjlmNmM5YjdiYzVlNTAzMzRjYWUiLCJmbGFzaCI6",
@@ -7255,14 +8241,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5223,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "Hash",
         "value": "{\"session_id\"=>\"0f2278dcce9cf9f6c9b7bc5e50334cae\", \"flash\"=>{\"discard\"=>[], \"flashes\"=>{\"danger\"=>\"I",
         "object_id": 81580
       }
     },
-    { "id": 5225, "event": "return", "thread_id": 4900, "parent_id": 5216, "elapsed": 0.000504 },
+    {
+      "id": 5225,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5216,
+      "elapsed": 0.000504
+    },
     {
       "id": 5226,
       "event": "return",
@@ -7301,7 +8293,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5229, "event": "return", "thread_id": 4900, "parent_id": 5228, "elapsed": 6.2e-5 },
+    {
+      "id": 5229,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5228,
+      "elapsed": 0.000062
+    },
     {
       "id": 5230,
       "event": "call",
@@ -7327,7 +8325,11 @@
           "kind": "req"
         }
       ],
-      "receiver": { "class": "User", "object_id": 81620, "value": "#<User:0x00007fc7112ba680>" }
+      "receiver": {
+        "class": "User",
+        "object_id": 81620,
+        "value": "#<User:0x00007fc7112ba680>"
+      }
     },
     {
       "id": 5231,
@@ -7335,7 +8337,11 @@
       "thread_id": 4900,
       "parent_id": 5230,
       "elapsed": 0.000893,
-      "return_value": { "class": "TrueClass", "value": "true", "object_id": 20 }
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
     },
     {
       "id": 5232,
@@ -7347,7 +8353,11 @@
       "lineno": 54,
       "static": false,
       "parameters": [],
-      "receiver": { "class": "User", "object_id": 81620, "value": "#<User:0x00007fc7112ba680>" }
+      "receiver": {
+        "class": "User",
+        "object_id": 81620,
+        "value": "#<User:0x00007fc7112ba680>"
+      }
     },
     {
       "id": 5233,
@@ -7378,7 +8388,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5233,
-      "elapsed": 2.3e-5,
+      "elapsed": 0.000023,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7112ad610 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -7395,7 +8405,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5236, "event": "return", "thread_id": 4900, "parent_id": 5235, "elapsed": 4.8e-5 },
+    {
+      "id": 5236,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5235,
+      "elapsed": 0.000048
+    },
     {
       "id": 5237,
       "event": "call",
@@ -7406,7 +8422,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5238, "event": "return", "thread_id": 4900, "parent_id": 5237, "elapsed": 7.4e-5 },
+    {
+      "id": 5238,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5237,
+      "elapsed": 0.000074
+    },
     {
       "id": 5239,
       "event": "call",
@@ -7436,7 +8458,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5239,
-      "elapsed": 4.8e-5,
+      "elapsed": 0.000048,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7112b2fe8 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -7453,7 +8475,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5242, "event": "return", "thread_id": 4900, "parent_id": 5241, "elapsed": 3.7e-5 },
+    {
+      "id": 5242,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5241,
+      "elapsed": 0.000037
+    },
     {
       "id": 5243,
       "event": "call",
@@ -7483,7 +8511,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5243,
-      "elapsed": 2.2e-5,
+      "elapsed": 0.000022,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7112ad610 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -7500,7 +8528,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5246, "event": "return", "thread_id": 4900, "parent_id": 5245, "elapsed": 3.5e-5 },
+    {
+      "id": 5246,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5245,
+      "elapsed": 0.000035
+    },
     {
       "id": 5247,
       "event": "call",
@@ -7511,7 +8545,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5248, "event": "return", "thread_id": 4900, "parent_id": 5247, "elapsed": 6.2e-5 },
+    {
+      "id": 5248,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5247,
+      "elapsed": 0.000062
+    },
     {
       "id": 5249,
       "event": "call",
@@ -7541,7 +8581,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5249,
-      "elapsed": 2.8e-5,
+      "elapsed": 0.000028,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7112b2fe8 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -7558,14 +8598,24 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5252, "event": "return", "thread_id": 4900, "parent_id": 5251, "elapsed": 3.6e-5 },
+    {
+      "id": 5252,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5251,
+      "elapsed": 0.000036
+    },
     {
       "id": 5253,
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5232,
       "elapsed": 0.001951,
-      "return_value": { "class": "TrueClass", "value": "true", "object_id": 20 }
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
     },
     {
       "id": 5254,
@@ -7596,8 +8646,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5254,
-      "elapsed": 1.5e-5,
-      "return_value": { "class": "Integer", "value": "1046959424", "object_id": 2093918849 }
+      "elapsed": 0.000015,
+      "return_value": {
+        "class": "Integer",
+        "value": "1046959424",
+        "object_id": 2093918849
+      }
     },
     {
       "id": 5256,
@@ -7609,7 +8663,13 @@
       "lineno": 91,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -7622,7 +8682,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5256,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "Hash",
         "value": "{\"discard\"=>[], \"flashes\"=>{\"danger\"=>\"Invalid activation link\"}}",
@@ -7682,8 +8742,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5259,
-      "elapsed": 2.8e-5,
-      "return_value": { "class": "Integer", "value": "93", "object_id": 187 }
+      "elapsed": 0.000028,
+      "return_value": {
+        "class": "Integer",
+        "value": "93",
+        "object_id": 187
+      }
     },
     {
       "id": 5261,
@@ -7738,7 +8802,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5263,
-      "elapsed": 1.6e-5,
+      "elapsed": 0.000016,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc71128cde8 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -7774,8 +8838,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5265,
-      "elapsed": 1.8e-5,
-      "return_value": { "class": "Integer", "value": "108", "object_id": 217 }
+      "elapsed": 0.000018,
+      "return_value": {
+        "class": "Integer",
+        "value": "108",
+        "object_id": 217
+      }
     },
     {
       "id": 5267,
@@ -7796,7 +8864,6 @@
       "parent_id": 5209,
       "elapsed": 0.005414,
       "http_server_response": {
-        "status_code": 302,
         "headers": {
           "X-Frame-Options": "SAMEORIGIN",
           "X-XSS-Protection": "1; mode=block",
@@ -7805,7 +8872,8 @@
           "X-Permitted-Cross-Domain-Policies": "none",
           "Referrer-Policy": "strict-origin-when-cross-origin",
           "Location": "http://www.example.com/users/1046959424"
-        }
+        },
+        "status": 302
       }
     },
     {
@@ -7818,7 +8886,13 @@
       "lineno": 91,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -7831,7 +8905,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5269,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "Hash",
         "value": "{\"discard\"=>[], \"flashes\"=>{\"success\"=>\"Account activated!\"}}",
@@ -7866,7 +8940,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5271,
-      "elapsed": 2.2e-5,
+      "elapsed": 0.000022,
       "return_value": {
         "class": "String",
         "value": "{\"session_id\":\"0f2278dcce9cf9f6c9b7bc5e50334cae\",\"flash\":{\"discard\":[],\"flashes\":{\"success\":\"Account",
@@ -7882,7 +8956,13 @@
       "path": "OpenSSL::Cipher#encrypt",
       "static": false,
       "parameters": [
-        { "name": "arg", "class": "Array", "object_id": 81900, "value": "[]", "kind": "rest" }
+        {
+          "name": "arg",
+          "class": "Array",
+          "object_id": 81900,
+          "value": "[]",
+          "kind": "rest"
+        }
       ],
       "receiver": {
         "class": "OpenSSL::Cipher",
@@ -7895,7 +8975,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5273,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "OpenSSL::Cipher",
         "value": "#<OpenSSL::Cipher:0x00007fc7112d8e28>",
@@ -7930,7 +9010,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5275,
-      "elapsed": 1.9e-5,
+      "elapsed": 0.000019,
       "return_value": {
         "class": "String",
         "value": "{\"_rails\":{\"message\":\"eyJzZXNzaW9uX2lkIjoiMGYyMjc4ZGNjZTljZjlmNmM5YjdiYzVlNTAzMzRjYWUiLCJmbGFzaCI6ey",
@@ -7973,7 +9053,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5277,
-      "elapsed": 1.1e-5,
+      "elapsed": 0.000011,
       "return_value": {
         "class": "String",
         "value": "wWLzzzHv2RnWvFkqcLVqeJPsqi2rOSkiN3LkKNuvRpg6Sbvt4OF/m8JyL8xMyRLlpQ3Eqxr6gqWidbmgtNlM7p0UnIcNAJT4A1cd",
@@ -8009,7 +9089,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5279,
-      "elapsed": 4.2e-5,
+      "elapsed": 0.000042,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7112d8e78 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -8045,8 +9125,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5281,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 30980 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 30980
+      }
     },
     {
       "id": 5283,
@@ -8058,7 +9142,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5284, "event": "return", "thread_id": 4900, "parent_id": 5283, "elapsed": 4.7e-5 },
+    {
+      "id": 5284,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5283,
+      "elapsed": 0.000047
+    },
     {
       "id": 5285,
       "event": "call",
@@ -8088,7 +9178,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5285,
-      "elapsed": 4.1e-5,
+      "elapsed": 0.000041,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc71125e448 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -8124,8 +9214,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5287,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 29620 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 29620
+      }
     },
     {
       "id": 5289,
@@ -8156,8 +9250,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5289,
-      "elapsed": 2.6e-5,
-      "return_value": { "class": "Integer", "value": "114", "object_id": 229 }
+      "elapsed": 0.000026,
+      "return_value": {
+        "class": "Integer",
+        "value": "114",
+        "object_id": 229
+      }
     },
     {
       "id": 5291,
@@ -8168,7 +9266,10 @@
         "path_info": "/users/1046959424",
         "normalized_path_info": "/users/{id}",
         "headers": {
-          "rack.version": [1, 3],
+          "rack.version": [
+            1,
+            3
+          ],
           "rack.multithread": true,
           "rack.multiprocess": true,
           "rack.run_once": false,
@@ -8185,7 +9286,9 @@
           "Host": "www.example.com",
           "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
           "Cookie": "_sample_app_session=wWLzzzHv2RnWvFkqcLVqeJPsqi2rOSkiN3LkKNuvRpg6Sbvt4OF%2Fm8JyL8xMyRLlpQ3Eqxr6gqWidbmgtNlM7p0UnIcNAJT4A1cdv37Tr1MWxnwPIIOWfafv9Vy5BCBzWGL5iOLnngdB2iqLPSQUCgLIZrhv0JRVNOie418iEO4eD2awMC5kKdQmoPUfwvY0SvD6rM5c%2F7Z3VkeiNfTrE72%2FIRrdOLUI3NrENev%2FnttgCngnXHboGovtpvfi8dJ8v1zzjEbsYi2XnQupN3vUHHnLyscXgt4noSWyGsPhsWcpNgxnTHDb6nKBZWBaaCp97vDWIDgrCYWzZhVLo9zJ--XccnWhIc%2BkX3KqiZ--b1zqDy3v9pvZOH%2B41XvHeg%3D%3D",
-          "action_dispatch.parameter_filter": ["password"],
+          "action_dispatch.parameter_filter": [
+            "password"
+          ],
           "action_dispatch.secret_key_base": "795d64e49aae60c6abfefa522f01c7fa1f1b6f945ab3bc6edb87fde5156dd662478da295cfa77d5d5ced5ba340ac7bcfdd96361530395150122dd9113192c974",
           "action_dispatch.show_exceptions": false,
           "action_dispatch.show_detailed_exceptions": true,
@@ -8217,9 +9320,24 @@
         }
       },
       "message": [
-        { "name": "controller", "class": "String", "value": "users", "object_id": 38760 },
-        { "name": "action", "class": "String", "value": "show", "object_id": 38780 },
-        { "name": "id", "class": "String", "value": "1046959424", "object_id": 83980 }
+        {
+          "name": "controller",
+          "class": "String",
+          "value": "users",
+          "object_id": 38760
+        },
+        {
+          "name": "action",
+          "class": "String",
+          "value": "show",
+          "object_id": 38780
+        },
+        {
+          "name": "id",
+          "class": "String",
+          "value": "1046959424",
+          "object_id": 83980
+        }
       ]
     },
     {
@@ -8275,8 +9393,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5293,
-      "elapsed": 2.0e-5,
-      "return_value": { "class": "Integer", "value": "82", "object_id": 165 }
+      "elapsed": 0.00002,
+      "return_value": {
+        "class": "Integer",
+        "value": "82",
+        "object_id": 165
+      }
     },
     {
       "id": 5295,
@@ -8307,8 +9429,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5295,
-      "elapsed": 1.4e-5,
-      "return_value": { "class": "Integer", "value": "74", "object_id": 149 }
+      "elapsed": 0.000014,
+      "return_value": {
+        "class": "Integer",
+        "value": "74",
+        "object_id": 149
+      }
     },
     {
       "id": 5297,
@@ -8387,7 +9513,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5299,
-      "elapsed": 5.0e-6,
+      "elapsed": 0.000005,
       "return_value": {
         "class": "ActionDispatch::Cookies::CookieJar",
         "value": "#<ActionDispatch::Cookies::CookieJar:0x00007fc711308b50>",
@@ -8403,7 +9529,13 @@
       "path": "OpenSSL::Cipher#decrypt",
       "static": false,
       "parameters": [
-        { "name": "arg", "class": "Array", "object_id": 82300, "value": "[]", "kind": "rest" }
+        {
+          "name": "arg",
+          "class": "Array",
+          "object_id": 82300,
+          "value": "[]",
+          "kind": "rest"
+        }
       ],
       "receiver": {
         "class": "OpenSSL::Cipher",
@@ -8416,7 +9548,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5301,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "OpenSSL::Cipher",
         "value": "#<OpenSSL::Cipher:0x00007fc711302a48>",
@@ -8443,7 +9575,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5303,
-      "elapsed": 6.0e-6,
+      "elapsed": 0.000006,
       "return_value": {
         "class": "Hash",
         "value": "{\"_rails\"=>{\"message\"=>\"eyJzZXNzaW9uX2lkIjoiMGYyMjc4ZGNjZTljZjlmNmM5YjdiYzVlNTAzMzRjYWUiLCJmbGFzaCI6",
@@ -8470,14 +9602,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5305,
-      "elapsed": 6.0e-6,
+      "elapsed": 0.000006,
       "return_value": {
         "class": "Hash",
         "value": "{\"session_id\"=>\"0f2278dcce9cf9f6c9b7bc5e50334cae\", \"flash\"=>{\"discard\"=>[], \"flashes\"=>{\"success\"=>\"",
         "object_id": 82400
       }
     },
-    { "id": 5307, "event": "return", "thread_id": 4900, "parent_id": 5298, "elapsed": 0.000368 },
+    {
+      "id": 5307,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5298,
+      "elapsed": 0.000368
+    },
     {
       "id": 5308,
       "event": "return",
@@ -8516,7 +9654,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5311, "event": "return", "thread_id": 4900, "parent_id": 5310, "elapsed": 4.7e-5 },
+    {
+      "id": 5311,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5310,
+      "elapsed": 0.000047
+    },
     {
       "id": 5312,
       "event": "return",
@@ -8539,7 +9683,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 82440, "value": "show", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 82440,
+          "value": "show",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -8568,7 +9718,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 82480, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 82480,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -8581,7 +9737,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5313,
-      "elapsed": 9.0e-6,
+      "elapsed": 0.000009,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/users/show.html.erb locals=[]>]",
@@ -8613,7 +9769,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 82500, "value": "show", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 82500,
+          "value": "show",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -8642,7 +9804,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 82540, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 82540,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -8655,7 +9823,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5316,
-      "elapsed": 8.0e-6,
+      "elapsed": 0.000008,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/users/show.html.erb locals=[]>]",
@@ -8672,7 +9840,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 82560, "value": "users", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 82560,
+          "value": "users",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -8701,7 +9875,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 82620, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 82620,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -8714,8 +9894,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5318,
-      "elapsed": 8.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 36180 }
+      "elapsed": 0.000008,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 36180
+      }
     },
     {
       "id": 5320,
@@ -8727,7 +9911,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 82560, "value": "users", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 82560,
+          "value": "users",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -8756,7 +9946,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 82620, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 82620,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -8769,8 +9965,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5320,
-      "elapsed": 7.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 36180 }
+      "elapsed": 0.000007,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 36180
+      }
     },
     {
       "id": 5322,
@@ -8782,7 +9982,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 82560, "value": "users", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 82560,
+          "value": "users",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -8811,7 +10017,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 82620, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 82620,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -8824,8 +10036,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5322,
-      "elapsed": 6.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 36180 }
+      "elapsed": 0.000006,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 36180
+      }
     },
     {
       "id": 5324,
@@ -8872,7 +10088,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 82700, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 82700,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -8885,7 +10107,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5324,
-      "elapsed": 7.0e-6,
+      "elapsed": 0.000007,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/layouts/application.html.erb locals=[]>]",
@@ -8921,8 +10143,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5326,
-      "elapsed": 2.2e-5,
-      "return_value": { "class": "Integer", "value": "98", "object_id": 197 }
+      "elapsed": 0.000022,
+      "return_value": {
+        "class": "Integer",
+        "value": "98",
+        "object_id": 197
+      }
     },
     {
       "id": 5328,
@@ -8941,7 +10167,13 @@
           "value": "#<User:0x00007fc7112f8660>",
           "kind": "req"
         },
-        { "name": "options", "class": "NilClass", "object_id": 8, "value": null, "kind": "opt" }
+        {
+          "name": "options",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::Base",
@@ -8954,7 +10186,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5328,
-      "elapsed": 5.1e-5,
+      "elapsed": 0.000051,
       "return_value": {
         "class": "ActiveSupport::SafeBuffer",
         "value": "<img alt=\"Example User\" class=\"gravatar\" src=\"https://secure.gravatar.com/avatar/b58996c504c5638798e",
@@ -8986,7 +10218,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 82800, "value": "stats", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 82800,
+          "value": "stats",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -9015,7 +10253,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 82840, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 82840,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -9028,7 +10272,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5331,
-      "elapsed": 8.0e-6,
+      "elapsed": 0.000008,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/shared/_stats.html.erb locals=[]>]",
@@ -9045,7 +10289,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5334, "event": "return", "thread_id": 4900, "parent_id": 5333, "elapsed": 9.6e-5 },
+    {
+      "id": 5334,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5333,
+      "elapsed": 0.000096
+    },
     {
       "id": 5335,
       "event": "call",
@@ -9056,7 +10306,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5336, "event": "return", "thread_id": 4900, "parent_id": 5335, "elapsed": 8.0e-5 },
+    {
+      "id": 5336,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5335,
+      "elapsed": 0.00008
+    },
     {
       "id": 5337,
       "event": "call",
@@ -9086,10 +10342,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5337,
-      "elapsed": 2.3e-5,
-      "return_value": { "class": "Integer", "value": "111", "object_id": 223 }
+      "elapsed": 0.000023,
+      "return_value": {
+        "class": "Integer",
+        "value": "111",
+        "object_id": 223
+      }
     },
-    { "id": 5339, "event": "return", "thread_id": 4900, "parent_id": 5330, "elapsed": 0.002216 },
+    {
+      "id": 5339,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5330,
+      "elapsed": 0.002216
+    },
     {
       "id": 5340,
       "event": "call",
@@ -9151,8 +10417,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5342,
-      "elapsed": 4.0e-6,
-      "return_value": { "class": "Integer", "value": "1046959424", "object_id": 2093918849 }
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "Integer",
+        "value": "1046959424",
+        "object_id": 2093918849
+      }
     },
     {
       "id": 5344,
@@ -9164,14 +10434,24 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5345, "event": "return", "thread_id": 4900, "parent_id": 5344, "elapsed": 4.4e-5 },
+    {
+      "id": 5345,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5344,
+      "elapsed": 0.000044
+    },
     {
       "id": 5346,
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5341,
       "elapsed": 0.000258,
-      "return_value": { "class": "User", "value": "#<User:0x00007fc711364220>", "object_id": 82880 }
+      "return_value": {
+        "class": "User",
+        "value": "#<User:0x00007fc711364220>",
+        "object_id": 82880
+      }
     },
     {
       "id": 5347,
@@ -9179,7 +10459,11 @@
       "thread_id": 4900,
       "parent_id": 5340,
       "elapsed": 0.000315,
-      "return_value": { "class": "TrueClass", "value": "true", "object_id": 20 }
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
     },
     {
       "id": 5348,
@@ -9241,7 +10525,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 82920, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 82920,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -9330,16 +10620,24 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5353,
-      "elapsed": 4.0e-6,
-      "return_value": { "class": "Integer", "value": "1046959424", "object_id": 2093918849 }
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "Integer",
+        "value": "1046959424",
+        "object_id": 2093918849
+      }
     },
     {
       "id": 5355,
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5352,
-      "elapsed": 5.8e-5,
-      "return_value": { "class": "User", "value": "#<User:0x00007fc711364220>", "object_id": 82880 }
+      "elapsed": 0.000058,
+      "return_value": {
+        "class": "User",
+        "value": "#<User:0x00007fc711364220>",
+        "object_id": 82880
+      }
     },
     {
       "id": 5356,
@@ -9347,7 +10645,11 @@
       "thread_id": 4900,
       "parent_id": 5351,
       "elapsed": 0.00012,
-      "return_value": { "class": "TrueClass", "value": "true", "object_id": 20 }
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
     },
     {
       "id": 5357,
@@ -9378,10 +10680,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5357,
-      "elapsed": 2.1e-5,
-      "return_value": { "class": "Integer", "value": "115", "object_id": 231 }
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Integer",
+        "value": "115",
+        "object_id": 231
+      }
     },
-    { "id": 5359, "event": "return", "thread_id": 4900, "parent_id": 5348, "elapsed": 0.001129 },
+    {
+      "id": 5359,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5348,
+      "elapsed": 0.001129
+    },
     {
       "id": 5360,
       "event": "call",
@@ -9392,7 +10704,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5361, "event": "return", "thread_id": 4900, "parent_id": 5360, "elapsed": 6.7e-5 },
+    {
+      "id": 5361,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5360,
+      "elapsed": 0.000067
+    },
     {
       "id": 5362,
       "event": "call",
@@ -9422,8 +10740,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5362,
-      "elapsed": 2.0e-5,
-      "return_value": { "class": "Integer", "value": "135", "object_id": 271 }
+      "elapsed": 0.00002,
+      "return_value": {
+        "class": "Integer",
+        "value": "135",
+        "object_id": 271
+      }
     },
     {
       "id": 5364,
@@ -9454,7 +10776,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5364,
-      "elapsed": 1.1e-5,
+      "elapsed": 0.000011,
       "return_value": {
         "class": "ActiveSupport::SafeBuffer",
         "value": "Example User | Ruby on Rails Tutorial Sample App",
@@ -9490,8 +10812,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5366,
-      "elapsed": 1.9e-5,
-      "return_value": { "class": "Integer", "value": "90", "object_id": 181 }
+      "elapsed": 0.000019,
+      "return_value": {
+        "class": "Integer",
+        "value": "90",
+        "object_id": 181
+      }
     },
     {
       "id": 5368,
@@ -9513,7 +10839,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5368,
-      "elapsed": 8.0e-6,
+      "elapsed": 0.000008,
       "return_value": {
         "class": "Hash",
         "value": "{\"application.js\"=>\"/packs-test/js/application-1891d2b124e05b81079a.js\", \"application.js.map\"=>\"/pac",
@@ -9545,7 +10871,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 83120, "value": "shim", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 83120,
+          "value": "shim",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -9574,7 +10906,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 83160, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 83160,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -9587,7 +10925,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5371,
-      "elapsed": 9.0e-6,
+      "elapsed": 0.000009,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/layouts/_shim.html.erb locals=[]>]",
@@ -9623,10 +10961,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5373,
-      "elapsed": 1.9e-5,
-      "return_value": { "class": "Integer", "value": "109", "object_id": 219 }
+      "elapsed": 0.000019,
+      "return_value": {
+        "class": "Integer",
+        "value": "109",
+        "object_id": 219
+      }
     },
-    { "id": 5375, "event": "return", "thread_id": 4900, "parent_id": 5370, "elapsed": 0.000366 },
+    {
+      "id": 5375,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5370,
+      "elapsed": 0.000366
+    },
     {
       "id": 5376,
       "event": "call",
@@ -9652,7 +11000,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 83200, "value": "header", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 83200,
+          "value": "header",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -9681,7 +11035,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 83240, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 83240,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -9694,7 +11054,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5377,
-      "elapsed": 8.0e-6,
+      "elapsed": 0.000008,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/layouts/_header.html.erb locals=[]>]",
@@ -9762,16 +11122,24 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5381,
-      "elapsed": 5.0e-6,
-      "return_value": { "class": "Integer", "value": "1046959424", "object_id": 2093918849 }
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "Integer",
+        "value": "1046959424",
+        "object_id": 2093918849
+      }
     },
     {
       "id": 5383,
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5380,
-      "elapsed": 6.0e-5,
-      "return_value": { "class": "User", "value": "#<User:0x00007fc711364220>", "object_id": 82880 }
+      "elapsed": 0.00006,
+      "return_value": {
+        "class": "User",
+        "value": "#<User:0x00007fc711364220>",
+        "object_id": 82880
+      }
     },
     {
       "id": 5384,
@@ -9779,7 +11147,11 @@
       "thread_id": 4900,
       "parent_id": 5379,
       "elapsed": 0.000111,
-      "return_value": { "class": "TrueClass", "value": "true", "object_id": 20 }
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
     },
     {
       "id": 5385,
@@ -9826,16 +11198,24 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5386,
-      "elapsed": 4.0e-6,
-      "return_value": { "class": "Integer", "value": "1046959424", "object_id": 2093918849 }
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "Integer",
+        "value": "1046959424",
+        "object_id": 2093918849
+      }
     },
     {
       "id": 5388,
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5385,
-      "elapsed": 5.3e-5,
-      "return_value": { "class": "User", "value": "#<User:0x00007fc711364220>", "object_id": 82880 }
+      "elapsed": 0.000053,
+      "return_value": {
+        "class": "User",
+        "value": "#<User:0x00007fc711364220>",
+        "object_id": 82880
+      }
     },
     {
       "id": 5389,
@@ -9882,16 +11262,24 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5390,
-      "elapsed": 4.0e-6,
-      "return_value": { "class": "Integer", "value": "1046959424", "object_id": 2093918849 }
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "Integer",
+        "value": "1046959424",
+        "object_id": 2093918849
+      }
     },
     {
       "id": 5392,
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5389,
-      "elapsed": 5.8e-5,
-      "return_value": { "class": "User", "value": "#<User:0x00007fc711364220>", "object_id": 82880 }
+      "elapsed": 0.000058,
+      "return_value": {
+        "class": "User",
+        "value": "#<User:0x00007fc711364220>",
+        "object_id": 82880
+      }
     },
     {
       "id": 5393,
@@ -9922,10 +11310,20 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5393,
-      "elapsed": 2.0e-5,
-      "return_value": { "class": "Integer", "value": "112", "object_id": 225 }
+      "elapsed": 0.00002,
+      "return_value": {
+        "class": "Integer",
+        "value": "112",
+        "object_id": 225
+      }
     },
-    { "id": 5395, "event": "return", "thread_id": 4900, "parent_id": 5376, "elapsed": 0.001151 },
+    {
+      "id": 5395,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5376,
+      "elapsed": 0.001151
+    },
     {
       "id": 5396,
       "event": "call",
@@ -9936,7 +11334,13 @@
       "lineno": 91,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -9949,7 +11353,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5396,
-      "elapsed": 4.0e-6,
+      "elapsed": 0.000004,
       "return_value": {
         "class": "Hash",
         "value": "{\"discard\"=>[], \"flashes\"=>{\"success\"=>\"Account activated!\"}}",
@@ -9981,7 +11385,13 @@
       "lineno": 116,
       "static": false,
       "parameters": [
-        { "name": "name", "class": "String", "object_id": 83300, "value": "footer", "kind": "req" },
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 83300,
+          "value": "footer",
+          "kind": "req"
+        },
         {
           "name": "prefix",
           "class": "String",
@@ -10010,7 +11420,13 @@
           "value": "#<Object:0x00007fc7004faed8>",
           "kind": "opt"
         },
-        { "name": "locals", "class": "Array", "object_id": 83340, "value": "[]", "kind": "opt" }
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 83340,
+          "value": "[]",
+          "kind": "opt"
+        }
       ],
       "receiver": {
         "class": "ActionView::OptimizedFileSystemResolver",
@@ -10023,7 +11439,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5399,
-      "elapsed": 8.0e-6,
+      "elapsed": 0.000008,
       "return_value": {
         "class": "Array",
         "value": "[#<ActionView::Template app/views/layouts/_footer.html.erb locals=[]>]",
@@ -10059,11 +11475,27 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5401,
-      "elapsed": 1.9e-5,
-      "return_value": { "class": "Integer", "value": "111", "object_id": 223 }
+      "elapsed": 0.000019,
+      "return_value": {
+        "class": "Integer",
+        "value": "111",
+        "object_id": 223
+      }
     },
-    { "id": 5403, "event": "return", "thread_id": 4900, "parent_id": 5398, "elapsed": 0.0004 },
-    { "id": 5404, "event": "return", "thread_id": 4900, "parent_id": 5315, "elapsed": 0.009099 },
+    {
+      "id": 5403,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5398,
+      "elapsed": 0.0004
+    },
+    {
+      "id": 5404,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5315,
+      "elapsed": 0.009099
+    },
     {
       "id": 5405,
       "event": "call",
@@ -10093,7 +11525,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5405,
-      "elapsed": 2.1e-5,
+      "elapsed": 0.000021,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7004b2a20 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -10129,8 +11561,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5407,
-      "elapsed": 1.8e-5,
-      "return_value": { "class": "Integer", "value": "121", "object_id": 243 }
+      "elapsed": 0.000018,
+      "return_value": {
+        "class": "Integer",
+        "value": "121",
+        "object_id": 243
+      }
     },
     {
       "id": 5409,
@@ -10151,7 +11587,6 @@
       "parent_id": 5291,
       "elapsed": 0.011646,
       "http_server_response": {
-        "status_code": 200,
         "mime_type": "text/html; charset=utf-8",
         "headers": {
           "X-Frame-Options": "SAMEORIGIN",
@@ -10161,7 +11596,8 @@
           "X-Permitted-Cross-Domain-Policies": "none",
           "Referrer-Policy": "strict-origin-when-cross-origin",
           "Content-Type": "text/html; charset=utf-8"
-        }
+        },
+        "status": 200
       }
     },
     {
@@ -10174,7 +11610,13 @@
       "lineno": 91,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -10182,7 +11624,13 @@
         "value": "#<ActionDispatch::Request::Session:0x00007fc7113179c0>"
       }
     },
-    { "id": 5412, "event": "return", "thread_id": 4900, "parent_id": 5411, "elapsed": 3.0e-6 },
+    {
+      "id": 5412,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5411,
+      "elapsed": 0.000003
+    },
     {
       "id": 5413,
       "event": "call",
@@ -10193,7 +11641,13 @@
       "lineno": 165,
       "static": false,
       "parameters": [
-        { "name": "key", "class": "String", "object_id": 34260, "value": "flash", "kind": "req" }
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 34260,
+          "value": "flash",
+          "kind": "req"
+        }
       ],
       "receiver": {
         "class": "ActionDispatch::Request::Session",
@@ -10201,7 +11655,13 @@
         "value": "#<ActionDispatch::Request::Session:0x00007fc7113179c0>"
       }
     },
-    { "id": 5414, "event": "return", "thread_id": 4900, "parent_id": 5413, "elapsed": 5.0e-6 },
+    {
+      "id": 5414,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5413,
+      "elapsed": 0.000005
+    },
     {
       "id": 5415,
       "event": "call",
@@ -10230,7 +11690,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5415,
-      "elapsed": 1.5e-5,
+      "elapsed": 0.000015,
       "return_value": {
         "class": "String",
         "value": "{\"session_id\":\"0f2278dcce9cf9f6c9b7bc5e50334cae\",\"user_id\":1046959424}",
@@ -10246,7 +11706,13 @@
       "path": "OpenSSL::Cipher#encrypt",
       "static": false,
       "parameters": [
-        { "name": "arg", "class": "Array", "object_id": 83460, "value": "[]", "kind": "rest" }
+        {
+          "name": "arg",
+          "class": "Array",
+          "object_id": 83460,
+          "value": "[]",
+          "kind": "rest"
+        }
       ],
       "receiver": {
         "class": "OpenSSL::Cipher",
@@ -10259,7 +11725,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5417,
-      "elapsed": 3.0e-6,
+      "elapsed": 0.000003,
       "return_value": {
         "class": "OpenSSL::Cipher",
         "value": "#<OpenSSL::Cipher:0x00007fc7113b4658>",
@@ -10294,7 +11760,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5419,
-      "elapsed": 1.8e-5,
+      "elapsed": 0.000018,
       "return_value": {
         "class": "String",
         "value": "{\"_rails\":{\"message\":\"eyJzZXNzaW9uX2lkIjoiMGYyMjc4ZGNjZTljZjlmNmM5YjdiYzVlNTAzMzRjYWUiLCJ1c2VyX2lkIj",
@@ -10337,7 +11803,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5421,
-      "elapsed": 1.2e-5,
+      "elapsed": 0.000012,
       "return_value": {
         "class": "String",
         "value": "ZlZ4gM4vo0mmMVP45wHPtCQbYJoQQgnVIlf9OpS8CkeYpusW6hyOnCzq5hqxYi/emBZBMCHh2pqRQRMPVdSrASSXtedS2t8v5mus",
@@ -10373,7 +11839,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5423,
-      "elapsed": 5.3e-5,
+      "elapsed": 0.000053,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc7112d8e78 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -10409,8 +11875,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5425,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 30980 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 30980
+      }
     },
     {
       "id": 5427,
@@ -10441,8 +11911,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5427,
-      "elapsed": 5.0e-6,
-      "return_value": { "class": "Integer", "value": "1046959424", "object_id": 2093918849 }
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "Integer",
+        "value": "1046959424",
+        "object_id": 2093918849
+      }
     },
     {
       "id": 5429,
@@ -10473,8 +11947,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5429,
-      "elapsed": 3.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 31820 }
+      "elapsed": 0.000003,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 31820
+      }
     },
     {
       "id": 5431,
@@ -10505,7 +11983,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5431,
-      "elapsed": 2.4e-5,
+      "elapsed": 0.000024,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc71138fb50 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",
@@ -10522,7 +12000,13 @@
         "server_version": "3.36.0"
       }
     },
-    { "id": 5434, "event": "return", "thread_id": 4900, "parent_id": 5433, "elapsed": 0.000537 },
+    {
+      "id": 5434,
+      "event": "return",
+      "thread_id": 4900,
+      "parent_id": 5433,
+      "elapsed": 0.000537
+    },
     {
       "id": 5435,
       "event": "call",
@@ -10552,8 +12036,12 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5435,
-      "elapsed": 4.0e-6,
-      "return_value": { "class": "Array", "value": "[]", "object_id": 31900 }
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 31900
+      }
     },
     {
       "id": 5437,
@@ -10584,7 +12072,7 @@
       "event": "return",
       "thread_id": 4900,
       "parent_id": 5437,
-      "elapsed": 1.2e-5,
+      "elapsed": 0.000012,
       "return_value": {
         "class": "Array",
         "value": "[#<Proc:0x00007fc702082ca0 /Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesuppo",

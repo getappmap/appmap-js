@@ -51,4 +51,4 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { scope: 'command', Options, scanner };
+export default { scope: 'command', enumerateScope: false, Options, scanner };

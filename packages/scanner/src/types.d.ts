@@ -1,7 +1,7 @@
 import { AppMap, Event } from '@appland/models';
 import Assertion from './assertion';
 
-export type ScopeName = 'all' | 'root' | 'command' | 'http_server_request';
+export type ScopeName = 'appmap' | 'root' | 'command' | 'http_server_request';
 
 interface Scope {
   scope: Event;
@@ -45,5 +45,6 @@ interface AssertionConfig {
 interface AssertionPrototype {
   config: AssertionConfig;
   scope: ScopeName;
+  enumerateScope: boolean;
   build(): Assertion;
 }
