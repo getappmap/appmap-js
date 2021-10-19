@@ -23,6 +23,23 @@ context('VS Code Extension', () => {
       cy.get('.trace-node.highlight').should('be.visible');
     });
 
+    it('applies filter from search input', () => {
+      cy.get('.details-search__input').type('json');
+
+      cy.get(
+        '.details-search__block--labels .details-search__block-item'
+      ).should('have.length', 1);
+      cy.get(
+        '.details-search__block--package .details-search__block-item'
+      ).should('have.length', 1);
+      cy.get(
+        '.details-search__block--class .details-search__block-item'
+      ).should('have.length', 2);
+      cy.get(
+        '.details-search__block--function .details-search__block-item'
+      ).should('have.length', 2);
+    });
+
     it('filters out objects that do not originate from an HTTP server request', () => {
       cy.get('.details-search__block-list').contains('crypto').click();
       cy.get('.v-details-panel-list')
