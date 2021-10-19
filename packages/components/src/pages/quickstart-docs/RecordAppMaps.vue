@@ -6,7 +6,7 @@
       </div>
       <div class="qs-step__block">
         <div>
-          <p class="mb20">
+          <p class="mb20 qs-step__margin">
             The two primary methods for creating AppMaps are recording test
             cases or remote recording -- recording what is happening on your
             application server as it runs.
