@@ -1,3 +1,12 @@
+# [@appland/components-v1.14.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.13.2...@appland/components-v1.14.0) (2021-10-19)
+
+
+### Features
+
+* update styling for details panel ([1af8fef](https://github.com/applandinc/appmap-js/commit/1af8fef5f10cead78cf8b80e211fa072eb85e139))
+* update styling for search input ([a1ce4a9](https://github.com/applandinc/appmap-js/commit/a1ce4a995f8a4b916727dcfb7c441a49ec4f6565))
+* update styling for tab menu ([b37831c](https://github.com/applandinc/appmap-js/commit/b37831c14e5747880e50c73abe3422a3ecdeea97))
+
 # [@appland/components-v1.13.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.13.1...@appland/components-v1.13.2) (2021-10-15)
 
 
