@@ -14,13 +14,9 @@ export default class Generator {
     private reportType: ReportType,
     private reportFile: string | undefined,
     private ide: string | undefined
-  ) {
-    if (this.reportFile) {
-      this.formatter.disableColors();
-    }
-  }
+  ) {}
 
-  generate(findings: Finding[], totalAssertions: number): void {
+  generate(findings: Finding[], totalAssertions: number): string {
     if (this.reportType === 'text' && !this.reportFile) {
       this.writeln();
     }
@@ -56,13 +52,19 @@ export default class Generator {
       });
     }
 
+    const colouredSummary = this.formatter.summary(totalAssertions, findings.length, titledSummary);
+    this.formatter.disableColors();
+    const summary = this.formatter.summary(totalAssertions, findings.length, titledSummary);
+
     if (this.reportType === 'text') {
-      this.write(this.formatter.summary(totalAssertions, findings.length, titledSummary));
+      this.write(this.reportFile ? summary : colouredSummary);
     }
 
     if (this.reportType === 'json') {
       this.write(JSON.stringify(findings, null, 2));
     }
+
+    return summary;
   }
 
   private write(text: string): void {
