@@ -1,3 +1,19 @@
+# [1.16.0](https://github.com/applandinc/scanner/compare/v1.15.0...v1.16.0) (2021-10-19)
+
+
+### Bug Fixes
+
+* Fix titled summary ([29dfe5e](https://github.com/applandinc/scanner/commit/29dfe5e9350f9c4108135d4e9aad92f3be376ee3))
+
+
+### Features
+
+* Add doc/architecture.md ([06ca4c5](https://github.com/applandinc/scanner/commit/06ca4c5bad5380d477cf862ac007d6e3cb88b4eb))
+* Assertion is instantiated once for each scope occurrance, simplifying bookkeeping ([b007bc9](https://github.com/applandinc/scanner/commit/b007bc9094c63296dcf295dcee51eca39a64f475))
+* Describe scopes in architecture doc ([27b1ebb](https://github.com/applandinc/scanner/commit/27b1ebb7244f64dbd062029683621b25adba4f4e))
+* Implement scopes ([07cc23e](https://github.com/applandinc/scanner/commit/07cc23ed871a2ffce6e2dee477a4b259d650cc79))
+* Update architecture doc with Scope concept ([043e4d9](https://github.com/applandinc/scanner/commit/043e4d9babb5f6cc290bfba95336d68fcad1d0de))
+
 # [1.15.0](https://github.com/applandinc/scanner/compare/v1.14.0...v1.15.0) (2021-10-15)
 
 
