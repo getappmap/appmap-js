@@ -11,6 +11,7 @@
         </v-details-button>
       </template>
     </v-details-panel-header>
+    <v-details-panel-filters />
     <v-details-panel-list
       title="Events"
       :items="object.events"
@@ -29,6 +30,7 @@
 import { CodeObjectType } from '@appland/models';
 import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
+import VDetailsPanelFilters from '@/components/DetailsPanelFilters.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
@@ -36,6 +38,7 @@ export default {
   components: {
     VDetailsButton,
     VDetailsPanelList,
+    VDetailsPanelFilters,
     VDetailsPanelHeader,
   },
   props: {
