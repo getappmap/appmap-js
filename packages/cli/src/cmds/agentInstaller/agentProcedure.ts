@@ -128,6 +128,19 @@ export default abstract class AgentProcedure {
     const validateCmd = await installer.validateAgentCommand();
     let { stdout } = await this.validateAgent(validateCmd);
     
+    const validationResult = JSON.parse(stdout);
+
+    const errors = Array.isArray(validationResult) ? validationResult : validationResult.errors;
+    if (errors.length > 0) {
+      throw new ValidationError(errors.map((e) => {
+        let msg = e.message;
+        if (e.detailed_message) {
+          msg += `, ${e.detailed_message}`;
+        }
+        return msg;
+      }).join('\n'));
+    }
+
     const schema = JSON.parse(stdout)['schema'];
     // If appmap-agent-validate returned a schema, and we're using an
     // existing appmap.yml, verify that the config matches the schema.

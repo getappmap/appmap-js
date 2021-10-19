@@ -26,13 +26,14 @@ tmp.setGracefulCleanup();
 
 const invokeCommand = (
   projectDir: string,
-  evalResults: (err: Error | undefined, argv: any, output: string) => void
-) => {
-  const debugSwitch: string = ''; // to debug, set debugSwitch to -v
+  evalResults: (err: Error | undefined, argv: any, output: string) => void,
+  ) => {
+    const debugSwitch: string = ''; // to debug, set debugSwitch to -v
 
   if (debugSwitch !== '-v') {
     // Don't scribble on the console unless we're debugging.
     sinon.stub(console, 'log');
+    sinon.stub(console, 'warn');
     sinon.stub(console, 'error');
     sinon.stub(UI, 'status').set(() => {});
   }
@@ -53,7 +54,7 @@ const invokeCommand = (
     );
 };
 
-describe('install-agent sub-command', () => {
+describe('install sub-command', () => {
   let projectDir: string;
   beforeEach(() => {
     sinon.stub(Telemetry);
@@ -354,7 +355,7 @@ packages:
       return Promise.resolve({ stdout: '/usr/local/gems', stderr: '' });
     };
 
-    const testE2E = async (
+    const rubyTestE2E = async (
       rubyVersion: (command: CommandStruct) => Promise<CommandReturn>,
       gemHome: (command: CommandStruct) => Promise<CommandReturn>,
       installAgent: (command: CommandStruct) => Promise<CommandReturn>,
@@ -389,7 +390,7 @@ packages:
         );
         expect(actualConfig).toEqual(expectedConfig);
       };
-      await testE2E(
+      await rubyTestE2E(
         rubyVersion,
         gemHome,
         installAgent,
@@ -401,12 +402,14 @@ packages:
 
     it('fails when validation fails', async () => {
       const msg = 'failValidate, validation failed';
-      const failValidate = () => Promise.reject(new Error(msg));
+      const failValidate = () => {
+        return Promise.reject(new Error(msg));
+      };
       const evalResults = (err, argv, output) => {
         expect(err.message).toEqual(msg);
       };
 
-      await testE2E(
+      await rubyTestE2E(
         rubyVersion,
         gemHome,
         installAgent,
@@ -415,6 +418,39 @@ packages:
         evalResults
       );
     });
+
+    describe('when validation returns errors', () => {
+      const msg = 'failValidate, validation failed';
+      const testValidation = async (errorObj) => {
+      const failValidate = () => {
+        return Promise.resolve({stdout: errorObj , stderr: ''});
+      };
+      const evalResults = (err, argv, output) => {
+        expect(err.message).toEqual(msg);
+      };
+
+      await rubyTestE2E(
+        rubyVersion,
+        gemHome,
+        installAgent,
+        initAgent,
+        failValidate,
+        evalResults
+      );
+      }
+
+      const errorArray = `[{"message": "${msg}"}]`;
+      it('fails for old output format', async () => {
+        await testValidation(errorArray);
+      });
+
+      it('fails for new output format', async () => {
+        const errorObj = `{"errors": ${errorArray}}`;
+        await testValidation(errorObj);
+      });
+    });
+
+
   });
 
   describe('A Python project', () => {
@@ -568,7 +604,6 @@ packages:
   describe('Varied project configurations', () => {
     beforeEach(() => {
       sinon.stub(commandRunner, 'run').resolves({ stdout: '', stderr: '' });
-      sinon.stub(console, 'warn');
     });
 
     it('requests the user to select a project type if more than one exist', async () => {
@@ -610,8 +645,6 @@ packages:
   describe('when appmap-agent-validate returns a schema', () => {
     beforeEach(() => {
       const installer = new BundleInstaller('.');
-
-      sinon.stub(console, 'warn');
 
       sinon
         .stub(AgentInstallerProcedure.prototype, 'availableInstallers')

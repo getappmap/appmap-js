@@ -129,8 +129,11 @@ export async function run(command: CommandStruct): Promise<CommandReturn> {
 }
 
 export function runSync(command: CommandStruct) {
-  return execSync(command.toString(), {
+  const ret = execSync(command.toString(), {
     env: command.environment,
     cwd: command.path as string,
-  }).toString();
+    stdio: 'pipe'
+  })
+  
+  return ret.toString();
 }
