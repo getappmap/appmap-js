@@ -35,7 +35,6 @@ function scanner(options: Options = new Options()): Assertion {
   return Assertion.assert(
     'update-in-get-request',
     'Data update performed in GET or HEAD request',
-    'sql_query',
     (e: Event) => {
       let httpServerRequest: Event | undefined;
       function hasHttpServerRequest() {
@@ -59,9 +58,10 @@ function scanner(options: Options = new Options()): Assertion {
       }
     },
     (assertion: Assertion): void => {
+      assertion.where = (e: Event) => !!e.sqlQuery;
       assertion.description = `Data update performed in GET or HEAD request`;
     }
   );
 }
 
-export default { Options, scanner };
+export default { scope: 'http_server_request', Options, scanner };

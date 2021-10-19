@@ -3,18 +3,17 @@ import { glob as globCallback } from 'glob';
 import { promisify } from 'util';
 import { promises as fs, constants as fsConstants, PathLike } from 'fs';
 import AssertionChecker from './assertionChecker';
-import Assertion from './assertion';
 import ProgressFormatter from './formatter/progressFormatter';
 import PrettyFormatter from './formatter/prettyFormatter';
 import { ValidationError, AbortError } from './errors';
-import { Finding } from './types';
+import { AssertionPrototype, Finding } from './types';
 import { Argv, Arguments } from 'yargs';
 import chalk from 'chalk';
 import loadConfiguration from './configuration';
 import { verbose } from './scanner/util';
 import { join } from 'path';
 import postCommitStatus from './commitStatus/github/commitStatus';
-import Generator, { ReportType } from './report/generator';
+import Generator, { ReportFormat } from './report/generator';
 
 enum ExitCode {
   ValidationError = 1,
@@ -31,7 +30,7 @@ interface CommandOptions {
   progressFormat: string;
   ide?: string;
   commitStatus?: string;
-  report: ReportType;
+  reportFormat: ReportFormat;
   reportFile?: string;
 }
 
@@ -55,7 +54,7 @@ export default {
     args.option('config', {
       describe:
         'path to assertions config file (TypeScript or YAML, check docs for configuration format)',
-      default: join(__dirname, './sampleConfig/default.ts'),
+      default: join(__dirname, './sampleConfig/default.yml'),
       alias: 'c',
     });
     args.option('progress-format', {
@@ -71,7 +70,7 @@ export default {
       describe: 'set your repository hosting system to post commit status',
       options: ['github'],
     });
-    args.option('report', {
+    args.option('report-format', {
       describe: 'reporting format',
       default: 'text',
       options: ['text', 'json'],
@@ -92,7 +91,7 @@ export default {
       verbose: isVerbose,
       ide,
       commitStatus,
-      report,
+      reportFormat,
       reportFile,
     } = options as unknown as CommandOptions;
 
@@ -133,10 +132,7 @@ export default {
       const checker = new AssertionChecker();
       const formatter =
         progressFormat === 'progress' ? new ProgressFormatter() : new PrettyFormatter();
-      const assertions = await loadConfiguration(config);
-      if (!assertions) {
-        throw new Error(`Failed to load assertions from ${chalk.red(config)}`);
-      }
+      const assertionPrototypes = await loadConfiguration(config);
 
       let index = 0;
       const findings: Finding[] = [];
@@ -154,14 +150,14 @@ export default {
 
           process.stderr.write(formatter.appMap(appMap));
 
-          assertions.forEach((assertion: Assertion) => {
+          assertionPrototypes.forEach((assertionPrototype: AssertionPrototype) => {
             index++;
             const matchCount = findings.length;
-            checker.check(appMap, assertion, findings);
+            checker.check(appMap, assertionPrototype, findings);
             const newMatches = findings.slice(matchCount, findings.length);
             newMatches.forEach((match) => (match.appMapFile = file));
 
-            const message = formatter.result(assertion, newMatches, index);
+            const message = formatter.result(assertionPrototype, newMatches, index);
             if (message) {
               process.stderr.write(message);
             }
@@ -169,12 +165,15 @@ export default {
         })
       );
 
-      const reportGenerator = new Generator(formatter, report, reportFile, ide);
-      reportGenerator.generate(findings, files.length * assertions.length);
+      const reportGenerator = new Generator(formatter, reportFormat, reportFile, ide);
+      reportGenerator.generate(findings, files.length * assertionPrototypes.length);
 
       if (commitStatus) {
         return findings.length === 0
-          ? await postCommitStatus('success', `${files.length * assertions.length} checks passed`)
+          ? await postCommitStatus(
+              'success',
+              `${files.length * assertionPrototypes.length} checks passed`
+            )
           : await postCommitStatus('failure', `${findings.length} findings`);
       }
 

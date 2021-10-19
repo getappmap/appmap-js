@@ -4,14 +4,14 @@ import { ideLink } from '../scanner/util';
 import { Finding } from '../types';
 import Formatter from '../formatter/formatter';
 
-export type ReportType = 'text' | 'json';
+export type ReportFormat = 'text' | 'json';
 
 export default class Generator {
   private fileCreated = false;
 
   constructor(
     private formatter: Formatter,
-    private reportType: ReportType,
+    private reportFormat: ReportFormat,
     private reportFile: string | undefined,
     private ide: string | undefined
   ) {
@@ -21,14 +21,14 @@ export default class Generator {
   }
 
   generate(findings: Finding[], totalAssertions: number): void {
-    if (this.reportType === 'text' && !this.reportFile) {
+    if (this.reportFormat === 'text' && !this.reportFile) {
       this.writeln();
     }
 
     const titledSummary = new Map<string, number>();
 
     if (findings.length > 0) {
-      if (this.reportType === 'text') {
+      if (this.reportFormat === 'text') {
         this.writeln(`${findings.length} findings:`);
       }
 
@@ -44,23 +44,24 @@ export default class Generator {
           eventMsg += ` (${match.event.elapsedTime}s)`;
         }
 
-        if (this.reportType === 'text') {
+        if (this.reportFormat === 'text') {
           const message = match.message || match.condition;
           this.writeln(this.reportFile ? message : chalk.magenta(message));
           this.writeln(`\tLink:\t${this.reportFile ? filePath : chalk.blue(filePath)}`);
           this.writeln(`\tRule:\t${match.scannerId}`);
           this.writeln(`\tAppMap name:\t${match.appMapName}`);
           this.writeln(eventMsg);
+          this.writeln(`\tScope:\t${match.scope.id} - ${match.scope.toString()}`);
           this.writeln();
         }
       });
     }
 
-    if (this.reportType === 'text') {
+    if (this.reportFormat === 'text') {
       this.write(this.formatter.summary(totalAssertions, findings.length, titledSummary));
     }
 
-    if (this.reportType === 'json') {
+    if (this.reportFormat === 'json') {
       this.write(JSON.stringify(findings, null, 2));
     }
   }
