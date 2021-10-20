@@ -26,7 +26,7 @@ interface InstallCommandOptions {
 }
 
 type AgentInstallerConstructor = new (...args: any[]) => AgentInstaller;
-const INSTALLERS: readonly AgentInstallerConstructor[] = [
+export const INSTALLERS: readonly AgentInstallerConstructor[] = [
   BundleInstaller,
   MavenInstaller,
   GradleInstaller,

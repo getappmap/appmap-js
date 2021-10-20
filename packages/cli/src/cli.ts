@@ -29,6 +29,7 @@ const InventoryCommand = require('./inventoryCommand');
 const OpenCommand = require('./cmds/open/open');
 const RecordCommand = require('./cmds/record/record');
 import InstallCommand from './cmds/agentInstaller/install-agent';
+import StatusCommand from './cmds/agentInstaller/status';
 
 class DiffCommand {
   public appMapNames: any;
@@ -588,6 +589,7 @@ yargs(process.argv.slice(2))
   .command(InstallCommand)
   .command(OpenCommand)
   .command(RecordCommand)
+  .command(StatusCommand)
   .strict()
   .demandCommand()
   .help().argv;

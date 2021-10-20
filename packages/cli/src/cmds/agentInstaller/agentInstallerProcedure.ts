@@ -1,57 +1,17 @@
 import chalk from 'chalk';
-import { promises as fs } from 'fs';
-import { join, resolve } from 'path';
+import fs from 'fs';
+import { resolve } from 'path';
 import Yargs from 'yargs';
 
-import { exists } from '../../utils';
 import AgentInstaller from './agentInstaller';
 import { AbortError, InstallError, ValidationError } from '../errors';
 import { run } from './commandRunner';
 import UI from '../userInteraction';
+import AgentProcedure from './agentProcedure';
 
-export default class AgentInstallerProcedure {
-  constructor(
-    readonly installers: readonly AgentInstaller[],
-    readonly path: string
-  ) {}
-
-  async availableInstallers(): Promise<AgentInstaller[]> {
-    const results = await Promise.all(
-      this.installers.map(async (installer) => await installer.available())
-    );
-
-    return this.installers.filter((_, i) => results[i]);
-  }
-
+export default class AgentInstallerProcedure extends AgentProcedure {
   async run(userSpecifiedInstaller?: string): Promise<AgentInstaller> {
-    const availableInstallers = await this.availableInstallers();
-    if (availableInstallers.length === 0) {
-      const longestInstallerName = Math.max(
-        ...this.installers.map((i) => i.name.length)
-      );
-
-      throw new ValidationError(
-        [
-          `No supported project was found in ${chalk.red(resolve(this.path))}.`,
-          '',
-          'The installation requirements for each project type are listed below:',
-          this.installers
-            .map(
-              (i) =>
-                `${chalk.blue(
-                  i.name.padEnd(longestInstallerName + 2, ' ')
-                )} ${chalk.yellow(`${i.buildFile} not found`)}`
-            )
-            .filter(Boolean)
-            .join('\n'),
-          '',
-          `At least one of the requirements above must be satisfied to continue.`,
-          '',
-          `Change the current directory or specify a different directory as the last argument to this command.`,
-          `Use ${chalk.blue('--help')} for more information.`,
-        ].join('\n')
-      );
-    }
+    const availableInstallers = await this.getInstallersForProject();
 
     let installer: AgentInstaller | undefined;
     if (userSpecifiedInstaller) {
@@ -90,42 +50,22 @@ export default class AgentInstallerProcedure {
       if (availableInstallers.length === 1) {
         installer = availableInstallers[0];
       } else {
-        const { installerName } = await UI.prompt({
-          type: 'list',
-          name: 'installerName',
-          message: `Multiple project types were found in ${chalk.blue(
-            resolve(this.path)
-          )}. Select one to continue.`,
-          choices: availableInstallers.map((i) => i.name),
-        });
-
-        installer = availableInstallers.find((i) => i.name === installerName);
+        installer = await this.chooseInstaller(availableInstallers);
       }
     }
-
     if (!installer) {
       // This should branch should never occur
       throw new ValidationError(`Invalid selection`);
     }
 
     try {
-      let env = {
-        'Project type': installer.name,
-        'Project directory': resolve(this.path),
-      };
-
-      if (installer.environment) {
-        env = { ...env, ...(await installer.environment()) };
-      }
 
       const { confirm } = await UI.prompt({
         type: 'confirm',
         name: 'confirm',
         message: [
           `AppMap is about to be installed. Confirm the details below.`,
-          Object.entries(env)
-            .filter(([_, value]) => Boolean(value))
-            .map(([key, value]) => `  ${chalk.blue(key)}: ${value.trim()}`),
+          await this.getEnvironmentForDisplay(installer),
           '',
           '  Is this correct?',
         ]
@@ -146,8 +86,8 @@ export default class AgentInstallerProcedure {
         );
       }
 
-      let writeAppMapYml = true;
-      if (await exists(join(this.path, 'appmap.yml'))) {
+      let useExistingAppMapYml = false;
+      if (this.configExists) {
         const USE_EXISTING = 'Use existing';
         const OVERWRITE = 'Overwrite';
         const ABORT = 'Abort';
@@ -165,7 +105,7 @@ export default class AgentInstallerProcedure {
         }
 
         if (overwriteAppMapYml === USE_EXISTING) {
-          writeAppMapYml = false;
+          useExistingAppMapYml = true;
         }
       }
 
@@ -173,33 +113,18 @@ export default class AgentInstallerProcedure {
 
       await installer.installAgent();
 
-      if (installer.verifyCommand) {
-        const cmd = await installer.verifyCommand();
-        await run(cmd);
-      }
+      this.verifyProject(installer);
 
-      if (writeAppMapYml) {
+      const appMapYml = this.configPath;
+      if (!useExistingAppMapYml) {
         const initCommand = await installer.initCommand();
         const { stdout } = await run(initCommand);
         const json = JSON.parse(stdout);
 
-        await fs.writeFile(
-          join(this.path, 'appmap.yml'),
-          json.configuration.contents
-        );
+        fs.writeFileSync(appMapYml, json.configuration.contents);
       }
 
-      if (installer.validateAgentCommand) {
-        UI.status = 'Validating the AppMap agent...';
-
-        const cmd = await installer.validateAgentCommand();
-        try {
-          await run(cmd);
-        } catch (e) {
-          UI.error('Failed to validate the installation.');
-          throw e;
-        }
-      }
+      await this.validateProject(installer, useExistingAppMapYml);
 
       const successMessage = [
         chalk.green('Success! The AppMap agent has been installed.'),
