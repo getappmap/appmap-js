@@ -1,0 +1,11 @@
+openapi: 3.0.1
+info:
+  title:
+  version:
+paths:
+components:
+servers:
+  - url: http://{defaultHost}
+    variables:
+      defaultHost:
+        default: localhost:3000

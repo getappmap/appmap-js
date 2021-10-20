@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { verbose } from '../utils';
 
 const { promises: fsp } = require('fs');
@@ -42,6 +43,14 @@ class OpenAPICommand {
   }
 }
 
+async function loadTemplate(fileName) {
+  if (!fileName) {
+    // eslint-disable-next-line no-param-reassign
+    fileName = join(__dirname, '../../resources/openapi-template.yaml');
+  }
+  return yaml.load((await fsp.readFile(fileName)).toString());
+}
+
 module.exports = {
   command: 'openapi',
   aliases: ['swagger'],
@@ -55,13 +64,56 @@ module.exports = {
       alias: ['o'],
       describe: 'output file name',
     });
+    args.option('openapi-template', {
+      describe:
+        'template YAML; generated content will be placed in the paths and components sections',
+    });
+    args.option('openapi-title', {
+      describe: 'info/title field of the OpenAPI document',
+    });
+    args.option('openapi-version', {
+      describe: 'info/version field of the OpenAPI document',
+    });
+    args.option('openapi-default-host', {
+      describe:
+        'servers[0]/variables/defaultHost/default field of the OpenAPI document',
+    });
     return args.strict();
   },
   async handler(argv) {
     verbose(argv.verbose);
+    const { openapiTitle, openapiVersion, openapiDefaultHost } = argv;
+
+    function tryConfigure(path, fn) {
+      try {
+        fn();
+      } catch {
+        console.warn(`Warning: unable to configure OpenAPI field ${path}`);
+      }
+    }
 
     const openapi = await new OpenAPICommand(argv.appmapDir).execute();
-    const yamlRepr = yaml.dump(openapi);
+
+    const template = await loadTemplate(argv.openapiTemplate);
+    template.paths = openapi.paths;
+    template.components = openapi.components;
+    if (openapiTitle) {
+      tryConfigure('info.title', () => {
+        template.info.title = openapiTitle;
+      });
+    }
+    if (openapiVersion) {
+      tryConfigure('info.version', () => {
+        template.info.version = openapiVersion;
+      });
+    }
+    if (openapiDefaultHost) {
+      tryConfigure('servers[0].variables.defaultHost.default', () => {
+        template.servers[0].variables.defaultHost.default = openapiDefaultHost;
+      });
+    }
+
+    const yamlRepr = yaml.dump(template);
     if (argv.outputFile) {
       await fsp.writeFile(argv.outputFile, yamlRepr);
     } else {
