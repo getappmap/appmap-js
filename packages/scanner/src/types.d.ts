@@ -14,7 +14,9 @@ type EventFilter = (e: Event, appMap: AppMap) => boolean;
 
 export interface MatchResult {
   level: Level;
+  event?: Event;
   message?: string;
+  relatedEvents?: Event[];
 }
 
 type Matcher = (e: Event) => boolean | string | MatchResult[] | undefined;
@@ -26,8 +28,9 @@ export interface Finding {
   scannerTitle: string;
   event: Event;
   scope: Event;
-  message: string | null;
   condition: string;
+  message?: string;
+  relatedEvents?: Event[];
 }
 
 interface Configuration {

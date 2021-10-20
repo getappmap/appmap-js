@@ -84,14 +84,19 @@ export default class AssertionChecker {
       return;
     }
 
-    const buildFinding = (): Finding => {
+    const buildFinding = (
+      matchEvent: Event | undefined = undefined,
+      message: string | undefined = undefined,
+      relatedEvents: Event[] | undefined = undefined
+    ): Finding => {
       return {
         appMapName: appMap.metadata.name,
         scannerId: assertion.id,
         scannerTitle: assertion.summaryTitle,
-        event,
+        event: matchEvent || event,
         scope,
-        message: null,
+        message,
+        relatedEvents,
         condition: assertion.description || assertion.matcher.toString(),
       };
     };
@@ -99,17 +104,14 @@ export default class AssertionChecker {
     const matchResult = assertion.matcher(event);
     const numFindings = findings.length;
     if (matchResult === true) {
-      findings.push(buildFinding());
+      findings.push(buildFinding(event));
     } else if (typeof matchResult === 'string') {
-      const finding = buildFinding();
+      const finding = buildFinding(event, matchResult as string);
       finding.message = matchResult as string;
       findings.push(finding);
     } else if (matchResult) {
       matchResult.forEach((mr) => {
-        const finding = buildFinding();
-        if (mr.message) {
-          finding.message = mr.message;
-        }
+        const finding = buildFinding(mr.event, mr.message, mr.relatedEvents);
         findings.push(finding);
       });
     }
