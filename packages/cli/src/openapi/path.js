@@ -6,12 +6,12 @@ class Path {
     this.methods = {};
   }
 
-  swagger() {
+  openapi() {
     return Object.keys(this.methods)
       .sort()
       .reduce((memo, method) => {
         // eslint-disable-next-line no-param-reassign
-        memo[method] = this.methods[method].swagger();
+        memo[method] = this.methods[method].openapi();
         return memo;
       }, {});
   }

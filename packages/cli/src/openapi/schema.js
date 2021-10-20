@@ -1,4 +1,4 @@
-const { messageToSwaggerSchema } = require('./util');
+const { messageToOpenAPISchema } = require('./util');
 
 class Schema {
   constructor() {
@@ -22,7 +22,7 @@ class Schema {
           return;
         }
         // eslint-disable-next-line no-multi-assign
-        properties[message.name] = messageToSwaggerSchema(message);
+        properties[message.name] = messageToOpenAPISchema(message);
       });
     if (Object.keys(properties).length === 0) {
       return null;

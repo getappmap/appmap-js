@@ -1,6 +1,6 @@
 const { buildAppMap } = require('@appland/models');
 
-function classNameToSwaggerType(className) {
+function classNameToOpenAPIType(className) {
   let typeName = className;
   if (!typeName || typeName === '') {
     return 'unknown';
@@ -21,8 +21,8 @@ function classNameToSwaggerType(className) {
   }
 }
 
-function messageToSwaggerSchema(message) {
-  const type = classNameToSwaggerType(message.class);
+function messageToOpenAPISchema(message) {
+  const type = classNameToOpenAPIType(message.class);
   const result = { type };
   /*
   if (message.value) {
@@ -44,7 +44,7 @@ function messageToSwaggerSchema(message) {
     result.properties = message.properties.reduce((memo, msgProperty) => {
       // eslint-disable-next-line no-param-reassign
       memo[msgProperty.name] = {
-        type: classNameToSwaggerType(msgProperty.class),
+        type: classNameToOpenAPIType(msgProperty.class),
       };
       return memo;
     }, {});
@@ -74,6 +74,6 @@ function bestPathInfo(httpServerRequest) {
 
 module.exports = {
   bestPathInfo,
-  messageToSwaggerSchema,
+  messageToOpenAPISchema,
   parseHTTPServerRequests,
 };
