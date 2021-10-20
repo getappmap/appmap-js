@@ -2,6 +2,7 @@ import slowHttpServerRequest from '../src/scanner/slowHttpServerRequest';
 import missingAuthentication from '../src/scanner/missingAuthentication';
 import secretInLog from '../src/scanner/secretInLog';
 import nPlusOneQuery from '../src/scanner/nPlusOneQuery';
+import tooManyUpdates from '../src/scanner/tooManyUpdates';
 import insecureCompare from '../src/scanner/insecureCompare';
 import http500 from '../src/scanner/http500';
 import illegalPackageAccess from '../src/scanner/illegalPackageDependency';
@@ -40,7 +41,7 @@ describe('assert', () => {
     expect(finding.appMapName).toEqual('Users_profile profile display while anonyomus');
     expect(finding.scannerId).toEqual('slow-http-server-request');
     expect(finding.event.id).toEqual(27);
-    expect(finding.message).toBeNull();
+    expect(finding.message).toBeUndefined();
     expect(finding.condition).toEqual('Slow HTTP server request (> 500ms)');
   });
 
@@ -55,7 +56,7 @@ describe('assert', () => {
     const finding = findings[0];
     expect(finding.scannerId).toEqual('missing-authentication');
     expect(finding.event.id).toEqual(27);
-    expect(finding.message).toBeNull();
+    expect(finding.message).toBeUndefined();
   });
 
   it('secret in log file', async () => {
@@ -87,22 +88,41 @@ describe('assert', () => {
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
 
-    expect(findings).toHaveLength(2);
-    // It's important that there is only one finding, since the query repeats 29 times.
-    // That's one finding; not 29 findings.
+    expect(findings).toHaveLength(1);
+    // It's important that there is only one finding, since the query repeats 30 times.
+    // That's one finding; not 30 findings.
     const finding1 = findings[0];
     expect(finding1.appMapName).toEqual('Users_profile profile display while anonyomus');
     expect(finding1.scannerId).toEqual('n-plus-one-query');
-    expect(finding1.event.id).toEqual(131);
+    expect(finding1.event.id).toEqual(91);
+    expect(finding1.relatedEvents!).toHaveLength(30);
     expect(finding1.message).toEqual(
-      `5 occurrances of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
+      `30 occurrances of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
     );
+  });
 
-    const finding2 = findings[1];
-    expect(finding2.event.id).toEqual(181);
-    expect(finding2.message).toEqual(
-      `10 occurrances of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
+  it('too many updates', async () => {
+    const { scope, enumerateScope, Options, scanner } = tooManyUpdates;
+    const findings = await scan(
+      makePrototype(
+        'too-many-updates',
+        () => scanner(new Options(2)),
+        scope as ScopeName,
+        enumerateScope
+      ),
+      'PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
     );
+    expect(findings).toHaveLength(1);
+    // It's important that there is only one finding, since the query repeats 30 times.
+    // That's one finding; not 30 findings.
+    const finding1 = findings[0];
+    expect(finding1.appMapName).toEqual(
+      'PaymentsController create no user email on file makes a onetime payment with no user, but associate with stripe'
+    );
+    expect(finding1.scannerId).toEqual('too-many-updates');
+    expect(finding1.event.id).toEqual(89);
+    expect(finding1.message).toEqual(`Command performs 3 SQL and RPC updates`);
+    expect(finding1.relatedEvents!).toHaveLength(3);
   });
 
   it('insecure comparison', async () => {
