@@ -174,7 +174,7 @@ export default {
       );
 
       const reportGenerator = new Generator(formatter, reportFormat, reportFile, ide);
-      const summary = reportGenerator.generate(findings, files.length * assertions.length);
+      const summary = reportGenerator.generate(findings, files.length * assertionPrototypes.length);
 
       if (pullRequestComment && findings.length > 0) {
         try {

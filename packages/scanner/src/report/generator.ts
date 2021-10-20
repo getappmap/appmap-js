@@ -58,7 +58,7 @@ export default class Generator {
     const summary = this.formatter.summary(totalAssertions, findings.length, titledSummary);
 
     if (this.reportFormat === 'text') {
-      this.write(this.formatter.summary(totalAssertions, findings.length, titledSummary));
+      this.write(this.reportFile ? summary : colouredSummary);
     }
 
     if (this.reportFormat === 'json') {
