@@ -1,4 +1,4 @@
-import { EventFilter, ScopeName, Matcher } from './types';
+import { EventFilter, Matcher } from './types';
 
 export default class Assertion {
   public where?: EventFilter;

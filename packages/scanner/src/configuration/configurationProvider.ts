@@ -23,7 +23,8 @@ function populateAssertion(assertion: Assertion, config: AssertionConfig): void 
 }
 
 async function buildBuiltinAssertion(config: AssertionConfig): Promise<AssertionPrototype> {
-  const { scanner, scope, Options } = (await import(`../scanner/${config.id}`)).default;
+  const { scanner, enumerateScope, scope, Options } = (await import(`../scanner/${config.id}`))
+    .default;
 
   let options: any;
   if (Options) {
@@ -40,7 +41,8 @@ async function buildBuiltinAssertion(config: AssertionConfig): Promise<Assertion
 
   return {
     config: config,
-    scope: scope || 'all',
+    scope: scope || 'appmap',
+    enumerateScope: enumerateScope === true ? true : false,
     build: () => {
       const result = scanner(options);
       populateAssertion(result, config);

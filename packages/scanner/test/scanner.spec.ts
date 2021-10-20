@@ -2,17 +2,25 @@ import slowHttpServerRequest from '../src/scanner/slowHttpServerRequest';
 import missingAuthentication from '../src/scanner/missingAuthentication';
 import secretInLog from '../src/scanner/secretInLog';
 import nPlusOneQuery from '../src/scanner/nPlusOneQuery';
+import tooManyUpdates from '../src/scanner/tooManyUpdates';
 import insecureCompare from '../src/scanner/insecureCompare';
 import http500 from '../src/scanner/http500';
 import illegalPackageAccess from '../src/scanner/illegalPackageDependency';
+import rpcWithoutCircuitBreaker from '../src/scanner/rpcWithoutCircuitBreaker';
 import { scan } from './util';
-import { ScopeName } from '../src/types';
+import { AssertionPrototype, ScopeName } from '../src/types';
 import Assertion from '../src/assertion';
 
-const makePrototype = (id: string, buildFn: () => Assertion, scope: ScopeName = 'all') => {
+const makePrototype = (
+  id: string,
+  buildFn: () => Assertion,
+  scope: ScopeName = 'appmap',
+  enumerateScope = true
+): AssertionPrototype => {
   return {
     config: { id },
-    scope: scope || 'all',
+    scope: scope,
+    enumerateScope,
     build: buildFn,
   };
 };
@@ -33,7 +41,7 @@ describe('assert', () => {
     expect(finding.appMapName).toEqual('Users_profile profile display while anonyomus');
     expect(finding.scannerId).toEqual('slow-http-server-request');
     expect(finding.event.id).toEqual(27);
-    expect(finding.message).toBeNull();
+    expect(finding.message).toBeUndefined();
     expect(finding.condition).toEqual('Slow HTTP server request (> 500ms)');
   });
 
@@ -48,7 +56,7 @@ describe('assert', () => {
     const finding = findings[0];
     expect(finding.scannerId).toEqual('missing-authentication');
     expect(finding.event.id).toEqual(27);
-    expect(finding.message).toBeNull();
+    expect(finding.message).toBeUndefined();
   });
 
   it('secret in log file', async () => {
@@ -74,28 +82,47 @@ describe('assert', () => {
   });
 
   it('n+1 query', async () => {
-    const { scanner } = nPlusOneQuery;
+    const { scope, enumerateScope, scanner } = nPlusOneQuery;
     const findings = await scan(
-      makePrototype('n-plus-one-query', () => scanner()),
+      makePrototype('n-plus-one-query', () => scanner(), scope as ScopeName, enumerateScope),
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
 
-    expect(findings).toHaveLength(2);
-    // It's important that there is only one finding, since the query repeats 29 times.
-    // That's one finding; not 29 findings.
+    expect(findings).toHaveLength(1);
+    // It's important that there is only one finding, since the query repeats 30 times.
+    // That's one finding; not 30 findings.
     const finding1 = findings[0];
     expect(finding1.appMapName).toEqual('Users_profile profile display while anonyomus');
     expect(finding1.scannerId).toEqual('n-plus-one-query');
-    expect(finding1.event.id).toEqual(131);
+    expect(finding1.event.id).toEqual(91);
+    expect(finding1.relatedEvents!).toHaveLength(30);
     expect(finding1.message).toEqual(
-      `5 occurrances of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
+      `30 occurrances of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
     );
+  });
 
-    const finding2 = findings[1];
-    expect(finding2.event.id).toEqual(181);
-    expect(finding2.message).toEqual(
-      `10 occurrances of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
+  it('too many updates', async () => {
+    const { scope, enumerateScope, Options, scanner } = tooManyUpdates;
+    const findings = await scan(
+      makePrototype(
+        'too-many-updates',
+        () => scanner(new Options(2)),
+        scope as ScopeName,
+        enumerateScope
+      ),
+      'PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
     );
+    expect(findings).toHaveLength(1);
+    // It's important that there is only one finding, since the query repeats 30 times.
+    // That's one finding; not 30 findings.
+    const finding1 = findings[0];
+    expect(finding1.appMapName).toEqual(
+      'PaymentsController create no user email on file makes a onetime payment with no user, but associate with stripe'
+    );
+    expect(finding1.scannerId).toEqual('too-many-updates');
+    expect(finding1.event.id).toEqual(89);
+    expect(finding1.message).toEqual(`Command performs 3 SQL and RPC updates`);
+    expect(finding1.relatedEvents!).toHaveLength(3);
   });
 
   it('insecure comparison', async () => {
@@ -111,9 +138,9 @@ describe('assert', () => {
   });
 
   it('http 500', async () => {
-    const { scanner, scope } = http500;
+    const { scope, scanner } = http500;
     const findings = await scan(
-      makePrototype('http-500', () => scanner()),
+      makePrototype('http-500', () => scanner(), scope as ScopeName),
       'Password_resets_password_resets_with_http500.appmap.json'
     );
     expect(findings).toHaveLength(1);
@@ -137,5 +164,26 @@ describe('assert', () => {
     expect(finding.message).toEqual(
       `Code object Database->SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ? was invoked from app/controllers, not from app/views`
     );
+  });
+
+  it('rpc without circuit breaker creates a finding', async () => {
+    const { scanner } = rpcWithoutCircuitBreaker;
+    const findings = await scan(
+      makePrototype('rpc-without-circuit-breaker', () => scanner()),
+      'PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
+    );
+    expect(findings).toHaveLength(4);
+    const finding = findings[0];
+    expect(finding.scannerId).toEqual('rpc-without-circuit-breaker');
+    expect(finding.event.id).toEqual(19);
+  });
+
+  it('all rpc have a circuit breaker ', async () => {
+    const { scanner } = rpcWithoutCircuitBreaker;
+    const findings = await scan(
+      makePrototype('rpc-without-circuit-breaker', () => scanner()),
+      'Test_net_5xxs_trip_circuit_when_fatal_server_flag_enabled.appmap.json'
+    );
+    expect(findings).toHaveLength(0);
   });
 });

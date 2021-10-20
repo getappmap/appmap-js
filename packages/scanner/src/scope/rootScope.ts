@@ -6,12 +6,10 @@ import ScopeIterator from './scopeIterator';
 export default class RootScope extends ScopeIterator {
   *scopes(events: Generator<Event>): Generator<Scope> {
     for (const event of events) {
-      if (event.isCall()) {
-        if (!event.parent) {
-          yield new ScopeImpl(event);
+      if (event.isCall() && !event.parent) {
+        yield new ScopeImpl(event);
 
-          this.advanceToReturnEvent(event, events);
-        }
+        this.advanceToReturnEvent(event, events);
       }
     }
   }
