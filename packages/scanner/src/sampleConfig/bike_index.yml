@@ -1,0 +1,10 @@
+scanners:
+  - id: http500
+  - id: missingContentType
+  - id: missingAuthentication
+  - id: nPlusOneQuery
+  - id: saveWithoutValidation
+  - id: secretInLog
+  - id: slowHttpServerRequest
+  - id: slowQuery
+  - id: tooManyUpdates

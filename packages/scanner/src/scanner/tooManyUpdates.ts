@@ -3,7 +3,7 @@ import Assertion from '../assertion';
 
 class Options {
   constructor(
-    public maxUpdates: number = 5,
+    public maxUpdates: number = 20,
     public queryIncludes: string[] = ['\\binsert\\b', '\\bupdate\\b'],
     public updateMethods: string[] = ['put', 'post', 'patch']
   ) {}

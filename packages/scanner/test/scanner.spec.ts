@@ -5,6 +5,7 @@ import nPlusOneQuery from '../src/scanner/nPlusOneQuery';
 import insecureCompare from '../src/scanner/insecureCompare';
 import http500 from '../src/scanner/http500';
 import illegalPackageAccess from '../src/scanner/illegalPackageDependency';
+import rpcWithoutCircuitBreaker from '../src/scanner/rpcWithoutCircuitBreaker';
 import { scan } from './util';
 import { ScopeName } from '../src/types';
 import Assertion from '../src/assertion';
@@ -137,5 +138,26 @@ describe('assert', () => {
     expect(finding.message).toEqual(
       `Code object Database->SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ? was invoked from app/controllers, not from app/views`
     );
+  });
+
+  it('rpc without circuit breaker creates a finding', async () => {
+    const { scanner } = rpcWithoutCircuitBreaker;
+    const findings = await scan(
+      makePrototype('rpc-without-circuit-breaker', () => scanner()),
+      'PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
+    );
+    expect(findings).toHaveLength(4);
+    const finding = findings[0];
+    expect(finding.scannerId).toEqual('rpc-without-circuit-breaker');
+    expect(finding.event.id).toEqual(19);
+  });
+
+  it('all rpc have a circuit breaker ', async () => {
+    const { scanner } = rpcWithoutCircuitBreaker;
+    const findings = await scan(
+      makePrototype('rpc-without-circuit-breaker', () => scanner()),
+      'Test_net_5xxs_trip_circuit_when_fatal_server_flag_enabled.appmap.json'
+    );
+    expect(findings).toHaveLength(0);
   });
 });
