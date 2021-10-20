@@ -20,4 +20,4 @@ const scanner = (): Assertion => {
   );
 };
 
-export default { scope: 'http_server_request', scanner };
+export default { scope: 'http_server_request', enumerateScope: false, scanner };

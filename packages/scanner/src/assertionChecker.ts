@@ -1,17 +1,17 @@
 import { AppMap, Event } from '@appland/models';
 import Assertion from './assertion';
 import { AbortError } from './errors';
-import { AssertionPrototype, Finding, Scope } from './types';
+import { AssertionPrototype, Finding } from './types';
 import { verbose } from './scanner/util';
 import ScopeIterator from './scope/scopeIterator';
 import RootScope from './scope/rootScope';
 import HTTPServerRequestScope from './scope/httpServerRequestScope';
 import CommandScope from './scope/commandScope';
-import AllScope from './scope/allScope';
+import AppMapScope from './scope/appMapScope';
 
 export default class AssertionChecker {
   private scopes: Record<string, ScopeIterator> = {
-    all: new AllScope(),
+    appmap: new AppMapScope(),
     root: new RootScope(),
     command: new CommandScope(),
     http_server_request: new HTTPServerRequestScope(),
@@ -28,22 +28,19 @@ export default class AssertionChecker {
 
     const callEvents = function* (): Generator<Event> {
       for (let i = 0; i < appMap.events.length; i++) {
-        const event = appMap.events[i];
-        if (event.isCall()) {
-          yield event;
-        }
+        yield appMap.events[i];
       }
     };
 
     for (const scope of scopeIterator.scopes(callEvents())) {
       const assertion = assertionPrototype.build();
-      this.checkScope(scope, appMap, assertion, matches);
-    }
-  }
-
-  checkScope(scope: Scope, appMap: AppMap, assertion: Assertion, matches: Finding[]): void {
-    for (const event of scope.events()) {
-      this.checkEvent(event, scope.scope, appMap, assertion, matches);
+      if (assertionPrototype.enumerateScope) {
+        for (const event of scope.events()) {
+          this.checkEvent(event, scope.scope, appMap, assertion, matches);
+        }
+      } else {
+        this.checkEvent(scope.scope, scope.scope, appMap, assertion, matches);
+      }
     }
   }
 
@@ -87,14 +84,19 @@ export default class AssertionChecker {
       return;
     }
 
-    const buildFinding = (): Finding => {
+    const buildFinding = (
+      matchEvent: Event | undefined = undefined,
+      message: string | undefined = undefined,
+      relatedEvents: Event[] | undefined = undefined
+    ): Finding => {
       return {
         appMapName: appMap.metadata.name,
         scannerId: assertion.id,
         scannerTitle: assertion.summaryTitle,
-        event,
+        event: matchEvent || event,
         scope,
-        message: null,
+        message,
+        relatedEvents,
         condition: assertion.description || assertion.matcher.toString(),
       };
     };
@@ -102,17 +104,14 @@ export default class AssertionChecker {
     const matchResult = assertion.matcher(event);
     const numFindings = findings.length;
     if (matchResult === true) {
-      findings.push(buildFinding());
+      findings.push(buildFinding(event));
     } else if (typeof matchResult === 'string') {
-      const finding = buildFinding();
+      const finding = buildFinding(event, matchResult as string);
       finding.message = matchResult as string;
       findings.push(finding);
     } else if (matchResult) {
       matchResult.forEach((mr) => {
-        const finding = buildFinding();
-        if (mr.message) {
-          finding.message = mr.message;
-        }
+        const finding = buildFinding(mr.event, mr.message, mr.relatedEvents);
         findings.push(finding);
       });
     }

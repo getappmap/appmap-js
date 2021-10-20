@@ -17,12 +17,14 @@ class ScopeImpl implements Scope {
     }
 
     for (const event of this.eventsIter) {
-      yield event;
+      if (event.isCall()) {
+        yield event;
+      }
     }
   }
 }
 
-export default class AllScope extends ScopeIterator {
+export default class AppMapScope extends ScopeIterator {
   *scopes(events: Generator<Event>): Generator<Scope> {
     yield new ScopeImpl(events);
   }

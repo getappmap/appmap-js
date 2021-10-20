@@ -1,4 +1,5 @@
-import { Event } from '@appland/models';
+import { Event, EventNavigator } from '@appland/models';
+import { MatchResult } from 'src/types';
 import Assertion from '../assertion';
 
 class Options {
@@ -30,25 +31,41 @@ function scanner(options: Options = new Options()): Assertion {
     return isSQLUpdate() || isRPCUpdate();
   };
 
-  let updateCount = 0;
+  const updateEvents = function* (event: Event): Generator<Event> {
+    for (const e of new EventNavigator(event).descendants()) {
+      if (!isUpdate(e.event)) {
+        continue;
+      }
+      yield e.event;
+    }
+  };
+
+  const matcher = (command: Event): MatchResult[] | undefined => {
+    const events: Event[] = [];
+    for (const updateEvent of updateEvents(command)) {
+      events.push(updateEvent);
+    }
+
+    if (events.length > options.maxUpdates) {
+      return [
+        {
+          level: 'error',
+          message: `Command performs ${events.length} SQL and RPC updates`,
+          event: events[0],
+          relatedEvents: events,
+        },
+      ];
+    }
+  };
 
   return Assertion.assert(
     'too-many-updates',
     'Too many SQL and RPC updates performed in one command',
-    (event: Event) => {
-      if (isUpdate(event)) {
-        updateCount += 1;
-        // TODO: Keep counting and report the max. This can't be done efficiently with the current Assertion interface.
-        if (updateCount === options.maxUpdates) {
-          return true;
-        }
-      }
-    },
+    matcher,
     (assertion: Assertion): void => {
-      assertion.where = (e: Event) => !!e.sqlQuery || !!e.httpServerRequest;
       assertion.description = `Too many SQL and RPC updates performed in one transaction`;
     }
   );
 }
 
-export default { scope: 'command', Options, scanner };
+export default { scope: 'command', enumerateScope: false, Options, scanner };

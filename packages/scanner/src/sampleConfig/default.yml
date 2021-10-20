@@ -16,4 +16,5 @@ scanners:
   - id: slowHttpServerRequest
   - id: slowQuery
   - id: tooManyUpdates
-  
+    properties:
+      maxUpdates: 2

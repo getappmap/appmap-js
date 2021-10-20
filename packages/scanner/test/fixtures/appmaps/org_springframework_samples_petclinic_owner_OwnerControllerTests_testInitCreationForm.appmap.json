@@ -70,7 +70,12 @@
       "static": false,
       "thread_id": 1
     },
-    { "event": "return", "id": 1046, "parent_id": 1045, "thread_id": 1 },
+    {
+      "event": "return",
+      "id": 1046,
+      "parent_id": 1045,
+      "thread_id": 1
+    },
     {
       "defined_class": "org.springframework.samples.petclinic.model.BaseEntity",
       "event": "call",
@@ -90,7 +95,11 @@
       "event": "return",
       "id": 1048,
       "parent_id": 1047,
-      "return_value": { "class": "java.lang.Boolean", "object_id": 1096995325, "value": "true" },
+      "return_value": {
+        "class": "java.lang.Boolean",
+        "object_id": 1096995325,
+        "value": "true"
+      },
       "thread_id": 1
     },
     {
@@ -124,7 +133,11 @@
       "event": "return",
       "id": 1051,
       "parent_id": 1050,
-      "return_value": { "class": "java.lang.Boolean", "object_id": 1332876062, "value": "true" },
+      "return_value": {
+        "class": "java.lang.Boolean",
+        "object_id": 1332876062,
+        "value": "true"
+      },
       "thread_id": 1
     }
   ],
@@ -209,14 +222,95 @@
       "version": "11.0.11+9-post-Debian-1deb10u1",
       "engine": "OpenJDK 64-Bit Server VM"
     },
-    "client": { "name": "appmap-java", "url": "https://github.com/appland/appmap-java" },
-    "recorder": { "name": "toggle_record_receiver" },
+    "client": {
+      "name": "appmap-java",
+      "url": "https://github.com/appland/appmap-java"
+    },
+    "recorder": {
+      "name": "toggle_record_receiver"
+    },
     "recording": {
       "defined_class": "org.springframework.samples.petclinic.owner.OwnerControllerTests",
       "method_id": "testInitCreationForm"
     },
     "source_location": "org/springframework/samples/petclinic/owner/OwnerControllerTests.java:92",
-    "framework": { "name": "junit" },
-    "test_status": "succeeded"
+    "framework": {
+      "name": "junit"
+    },
+    "test_status": "succeeded",
+    "fingerprints": [
+      {
+        "appmap_digest": "5428a81b9f6a8835b48836633524a8fc63310d133eac843c0324a928b653ffe5",
+        "canonicalization_algorithm": "classDependencies",
+        "digest": "cc20a6dc8d25753a10759002753f8b829c3a416fc6b43ac34288a6d58b598b41",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "5428a81b9f6a8835b48836633524a8fc63310d133eac843c0324a928b653ffe5",
+        "canonicalization_algorithm": "classes",
+        "digest": "f8e4ae2865300e9672dcb79589933d47676fea8fe1dd4f2fda0716b9b68d193f",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "5428a81b9f6a8835b48836633524a8fc63310d133eac843c0324a928b653ffe5",
+        "canonicalization_algorithm": "httpClientRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "5428a81b9f6a8835b48836633524a8fc63310d133eac843c0324a928b653ffe5",
+        "canonicalization_algorithm": "httpServerRequests",
+        "digest": "b9be80a6c73c9dbc416942f36e5378c4fe9da60b0e0c1f1c81b6b9f01378d2fc",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "5428a81b9f6a8835b48836633524a8fc63310d133eac843c0324a928b653ffe5",
+        "canonicalization_algorithm": "info",
+        "digest": "91980c2424912dfb42bc1c39342014fa1aca092ab408785801914fb8413390fc",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "5428a81b9f6a8835b48836633524a8fc63310d133eac843c0324a928b653ffe5",
+        "canonicalization_algorithm": "labels",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "5428a81b9f6a8835b48836633524a8fc63310d133eac843c0324a928b653ffe5",
+        "canonicalization_algorithm": "packageDependencies",
+        "digest": "6129f50dd5ed08875528e40c22db7ab9605ba0f1475ee9c11804a698d034d1b9",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "5428a81b9f6a8835b48836633524a8fc63310d133eac843c0324a928b653ffe5",
+        "canonicalization_algorithm": "packages",
+        "digest": "3868fd85eaa3ee03fd5ef26291a6fb1c89212e5c744d208b92b87250fb72f176",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "5428a81b9f6a8835b48836633524a8fc63310d133eac843c0324a928b653ffe5",
+        "canonicalization_algorithm": "sqlNormalized",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "5428a81b9f6a8835b48836633524a8fc63310d133eac843c0324a928b653ffe5",
+        "canonicalization_algorithm": "sqlTables",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "5428a81b9f6a8835b48836633524a8fc63310d133eac843c0324a928b653ffe5",
+        "canonicalization_algorithm": "trace",
+        "digest": "c9cbdb347f4750b8e2c2a25bb7fae46c5b2aa00f4ee460cf4924f84fe2202552",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "5428a81b9f6a8835b48836633524a8fc63310d133eac843c0324a928b653ffe5",
+        "canonicalization_algorithm": "update",
+        "digest": "bdaf8f883efc947b9fcafd223dd7c377f0fbd51042de503759cf33b93c503b72",
+        "fingerprint_algorithm": "sha256"
+      }
+    ]
   }
 }
