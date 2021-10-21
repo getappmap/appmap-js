@@ -3,7 +3,18 @@ const { join } = require('path');
 module.exports = {
   branches: ['main'],
   plugins: [
-    '@semantic-release/commit-analyzer',
+    [
+      '@semantic-release/commit-analyzer',
+      {
+        preset: 'angular',
+        releaseRules: [
+          {
+            type: 'feature',
+            release: 'minor'
+          }
+        ]
+      }
+    ],
     '@semantic-release/release-notes-generator',
     '@semantic-release/changelog',
     [
