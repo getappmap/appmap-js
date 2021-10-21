@@ -24,7 +24,7 @@ const FindCodeObjects = require('./search/findCodeObjects');
 const FindEvents = require('./search/findEvents');
 const FunctionStats = require('./functionStats');
 const Inspect = require('./inspect');
-const SwaggerCommand = require('./swagger/command');
+const OpenAPICommand = require('./openapi/command');
 const InventoryCommand = require('./inventoryCommand');
 const OpenCommand = require('./cmds/open/open');
 const RecordCommand = require('./cmds/record/record');
@@ -564,28 +564,12 @@ yargs(process.argv.slice(2))
       console.log(yaml.dump(inventory));
     }
   )
-  .command(
-    'swagger',
-    'Generate Swagger from AppMaps in a directory',
-    (args) => {
-      args.option('appmap-dir', {
-        describe: 'directory to recursively inspect for AppMaps',
-        default: 'tmp/appmap',
-      });
-      return args.strict();
-    },
-    async (argv) => {
-      verbose(argv.verbose);
-
-      const swagger = await new SwaggerCommand(argv.appmapDir).execute();
-      console.log(yaml.dump(swagger));
-    }
-  )
   .option('verbose', {
     alias: 'v',
     type: 'boolean',
     description: 'Run with verbose logging',
   })
+  .command(OpenAPICommand)
   .command(InstallCommand)
   .command(OpenCommand)
   .command(RecordCommand)

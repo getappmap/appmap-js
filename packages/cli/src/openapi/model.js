@@ -8,15 +8,15 @@ class Model {
     this.securitySchemes = new SecuritySchemes();
   }
 
-  swagger() {
+  openapi() {
     const paths = Object.keys(this.paths)
       .sort()
       .reduce((memo, path) => {
         // eslint-disable-next-line no-param-reassign
-        memo[path] = this.paths[path].swagger();
+        memo[path] = this.paths[path].openapi();
         return memo;
       }, {});
-    const securitySchemes = this.securitySchemes.swagger();
+    const securitySchemes = this.securitySchemes.openapi();
     return { paths, components: { securitySchemes } };
   }
 

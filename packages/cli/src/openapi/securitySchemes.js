@@ -46,7 +46,7 @@ class SecuritySchemes {
     return schemeId;
   }
 
-  swagger() {
+  openapi() {
     return Object.keys(this.schemes)
       .sort()
       .reduce((memo, schemeId) => {

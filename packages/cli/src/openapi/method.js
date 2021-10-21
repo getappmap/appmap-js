@@ -1,15 +1,15 @@
 const { EventNavigator } = require('@appland/models');
 const Response = require('./response');
 const Schema = require('./schema');
-const { messageToSwaggerSchema, bestPathInfo } = require('./util');
+const { messageToOpenAPISchema, bestPathInfo } = require('./util');
 
 const bodyParamMethods = new Set(['delete', 'put', 'post', 'patch']);
 
-function swaggerIn(event, name) {
+function openapiIn(event, name) {
   const pathInfo = bestPathInfo(event.httpServerRequest);
   // Trim format info from Rails paths, e.g. /foo/bar(.:format)
   const tokens = pathInfo.split('/').map((token) => token.split('(')[0]);
-  // Recognize Rails-style normalized paths /org/:org_id and Swagger-style paths /org/{org_id}
+  // Recognize Rails-style normalized paths /org/:org_id and OpenAPI-style paths /org/{org_id}
   if (tokens.includes(`:${name}`) || tokens.includes(`{${name}}`)) {
     return 'path';
   }
@@ -23,12 +23,12 @@ class Method {
     this.events = [];
   }
 
-  swagger() {
+  openapi() {
     const responses = Object.keys(this.responses)
       .sort()
       .reduce((memo, response) => {
         // eslint-disable-next-line no-param-reassign
-        memo[response] = this.responses[response].swagger();
+        memo[response] = this.responses[response].openapi();
         return memo;
       }, {});
 
@@ -95,7 +95,7 @@ class Method {
           return;
         }
         uniqueNames.add(message.name);
-        const inLocation = swaggerIn(event, message.name);
+        const inLocation = openapiIn(event, message.name);
         if (
           inLocation !== 'path' &&
           event.httpServerRequest.request_method &&
@@ -110,7 +110,7 @@ class Method {
           const parameter = {
             name: message.name,
             in: inLocation,
-            schema: messageToSwaggerSchema(message),
+            schema: messageToOpenAPISchema(message),
           };
           if (parameter.in === 'path') {
             parameter.required = true;

@@ -6,7 +6,7 @@ class Response {
     this.events = [];
   }
 
-  swagger() {
+  openapi() {
     // eslint-disable-next-line arrow-body-style
     const mimeTypes = () => {
       return this.events
