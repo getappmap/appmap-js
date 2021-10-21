@@ -16,9 +16,7 @@ deploy:
   - provider: script
     skip_cleanup: true
     script: >-
-      echo "https://${GH_TOKEN}:@github.com" > .git/credentials \
-      && git config credential.helper "store --file=.git/credentials" \
-      && npm config set registry https://npm.pkg.github.com \
-      && GIT_TRACE=1 GIT_CURL_VERBOSE=1 yarn run semantic-release
+      npm config set registry https://npm.pkg.github.com \
+      && GIT_TRACE=1 GIT_CURL_VERBOSE=1 GIT_LFS_SKIP_PUSH=1 yarn run semantic-release
     on:
       branch: main
