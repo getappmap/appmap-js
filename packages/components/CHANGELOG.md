@@ -1,3 +1,10 @@
+# [@appland/components-v1.14.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.14.0...@appland/components-v1.14.1) (2021-10-21)
+
+
+### Bug Fixes
+
+* Remove width restriction on qs step ([#428](https://github.com/applandinc/appmap-js/issues/428)) ([b5d0a3f](https://github.com/applandinc/appmap-js/commit/b5d0a3f3fa6aa86fd08c198196a524c1d7f64a55))
+
 # [@appland/components-v1.14.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.13.2...@appland/components-v1.14.0) (2021-10-19)
 
 
