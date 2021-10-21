@@ -19,6 +19,6 @@ deploy:
       echo "https://${GH_TOKEN}:@github.com" > .git/credentials \
       && git config credential.helper "store --file=.git/credentials" \
       && npm config set registry https://npm.pkg.github.com \
-      && yarn run semantic-release
+      && GIT_TRACE=1 GIT_CURL_VERBOSE=1 yarn run semantic-release
     on:
       branch: main
