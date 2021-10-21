@@ -16,6 +16,24 @@
 * Optional pull request comments ([dd953d2](https://github.com/applandinc/scanner/commit/dd953d2c0636a66e550fdbd67ad7dbf5d4e6e83c))
 * Report related events in a Finding ([9c75bdd](https://github.com/applandinc/scanner/commit/9c75bdd7d2a98db246d914f7d8320a55483d1766))
 
+# [1.17.0](https://github.com/applandinc/scanner/compare/v1.16.0...v1.17.0) (2021-10-21)
+
+
+### Bug Fixes
+
+* Fix env var name for commit status ([444491c](https://github.com/applandinc/scanner/commit/444491c453113c1eb5b80f4a168e236d86c63f54))
+* Increase the threshold for "too-many-updates" ([0b69a6e](https://github.com/applandinc/scanner/commit/0b69a6eef97d49e036f6d484a2b7ecc9fe1a4314))
+* Remove unused import ([44bb518](https://github.com/applandinc/scanner/commit/44bb5181e023e033c22b41e35c365a9e25680d07))
+* Report the total match number for n+1 and too-many-updates ([ae4c015](https://github.com/applandinc/scanner/commit/ae4c01539ff174401643ca8145df15be348576eb))
+
+
+### Features
+
+* Assertion can choose whether to check all events in the scope, or just the root ([5993f2c](https://github.com/applandinc/scanner/commit/5993f2c388f155194faa5573c90d2c2ad58d3419))
+* Check rpc-without-circuit-breaker ([8eed0b0](https://github.com/applandinc/scanner/commit/8eed0b0b9f01336f6c52ce9e4f3bc196ddaf0de1))
+* Optional pull request comments ([dd953d2](https://github.com/applandinc/scanner/commit/dd953d2c0636a66e550fdbd67ad7dbf5d4e6e83c))
+* Report related events in a Finding ([9c75bdd](https://github.com/applandinc/scanner/commit/9c75bdd7d2a98db246d914f7d8320a55483d1766))
+
 # [1.16.0](https://github.com/applandinc/scanner/compare/v1.15.0...v1.16.0) (2021-10-19)
 
 
