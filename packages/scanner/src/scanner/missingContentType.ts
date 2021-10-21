@@ -1,7 +1,7 @@
 import { Event } from '@appland/models';
-import { AssertionSpec } from 'src/types';
+import { rpcRequestForEvent } from '../openapi/rpcRequest';
+import { AssertionSpec } from '../types';
 import Assertion from '../assertion';
-import { contentType } from './util';
 
 const isRedirect = (status: number) => [301, 302, 303, 307, 308].includes(status);
 const hasContent = (status: number) => status !== 204;
@@ -10,7 +10,7 @@ const scanner = (): Assertion => {
   return Assertion.assert(
     'missing-content-type',
     'HTTP server requests without a Content-Type header',
-    (e: Event) => contentType(e) === undefined,
+    (e: Event) => rpcRequestForEvent(e)!.contentType === undefined,
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
         !!e.httpServerResponse &&

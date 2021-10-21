@@ -1,7 +1,12 @@
 import { AppMap, Event } from '@appland/models';
 import Assertion from './assertion';
 
-export type ScopeName = 'appmap' | 'root' | 'command' | 'http_server_request';
+export type ScopeName =
+  | 'appmap'
+  | 'root'
+  | 'command'
+  | 'http_client_request'
+  | 'http_server_request';
 
 interface Scope {
   scope: Event;
@@ -11,6 +16,10 @@ interface Scope {
 export type Level = 'warning' | 'error';
 
 type EventFilter = (e: Event, appMap: AppMap) => boolean;
+
+export interface GlobalOptions {
+  appmapDir: string;
+}
 
 export interface FindingSummary {
   scannerTitle: string;
@@ -32,7 +41,7 @@ export interface MatchResult {
   relatedEvents?: Event[];
 }
 
-type Matcher = (e: Event) => boolean | string | MatchResult[] | undefined;
+type Matcher = (e: Event, appMap: AppMap) => boolean | string | MatchResult[] | undefined;
 
 export interface Finding {
   appMapName: string;
@@ -62,11 +71,11 @@ interface AssertionPrototype {
   config: AssertionConfig;
   scope: ScopeName;
   enumerateScope: boolean;
-  build(): Assertion;
+  build(globalOptions: GlobalOptions): Assertion;
 }
 
 interface AssertionSpec {
-  scanner: (options: any) => Assertion;
+  scanner: (options?: any) => Assertion;
   scope?: ScopeName;
   enumerateScope?: boolean;
   Options?: any;

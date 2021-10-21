@@ -35,13 +35,13 @@ describe('assert', () => {
         () => scanner(new Options(0.5)),
         scope as ScopeName
       ),
-      'Users_profile_profile_display_while_anonyomus.appmap.json'
+      'Password_resets_password_resets.appmap.json'
     );
     expect(findings).toHaveLength(1);
     const finding = findings[0];
-    expect(finding.appMapName).toEqual('Users_profile profile display while anonyomus');
+    expect(finding.appMapName).toEqual('Password_resets password resets');
     expect(finding.scannerId).toEqual('slow-http-server-request');
-    expect(finding.event.id).toEqual(27);
+    expect(finding.event.id).toEqual(411);
     expect(finding.message).toBeUndefined();
     expect(finding.condition).toEqual('Slow HTTP server request (> 500ms)');
   });
@@ -56,7 +56,7 @@ describe('assert', () => {
     expect(findings).toHaveLength(1);
     const finding = findings[0];
     expect(finding.scannerId).toEqual('missing-authentication');
-    expect(finding.event.id).toEqual(27);
+    expect(finding.event.id).toEqual(31);
     expect(finding.message).toBeUndefined();
   });
 
@@ -70,15 +70,15 @@ describe('assert', () => {
     {
       const finding = findings[0];
       expect(finding.scannerId).toEqual('secret-in-log');
-      expect(finding.event.id).toEqual(313);
+      expect(finding.event.id).toEqual(695);
       expect(finding.message).toEqual(
-        '[c7c8411d-c02c-4568-807e-b761348ada27] Started GET "/account_activations/rGirqVd8HfLFZZGvxLbCzA/edit contains secret rGirqVd8HfLFZZGvxLbCzA'
+        `[2f025606-b6f0-4b64-8595-006f32f4d5d0] Started GET "/account_activations/-6SputWUtvALn3TLCfoYvA/edit contains secret -6SputWUtvALn3TLCfoYvA`
       );
     }
     {
       const finding = findings[1];
       expect(finding.scannerId).toEqual('secret-in-log');
-      expect(finding.event.id).toEqual(369);
+      expect(finding.event.id).toEqual(817);
     }
   });
 
@@ -95,7 +95,7 @@ describe('assert', () => {
     const finding1 = findings[0];
     expect(finding1.appMapName).toEqual('Users_profile profile display while anonyomus');
     expect(finding1.scannerId).toEqual('n-plus-one-query');
-    expect(finding1.event.id).toEqual(91);
+    expect(finding1.event.id).toEqual(133);
     expect(finding1.relatedEvents!).toHaveLength(30);
     expect(finding1.message).toEqual(
       `30 occurrances of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
@@ -161,7 +161,7 @@ describe('assert', () => {
     expect(findings).toHaveLength(1);
     const finding = findings[0];
     expect(finding.scannerId).toEqual('illegal-package-dependency');
-    expect(finding.event.id).toEqual(40);
+    expect(finding.event.id).toEqual(48);
     expect(finding.message).toEqual(
       `Code object Database->SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ? was invoked from app/controllers, not from app/views`
     );

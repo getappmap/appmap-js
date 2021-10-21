@@ -6,12 +6,12 @@ import AssertionChecker from './assertionChecker';
 import ProgressFormatter from './formatter/progressFormatter';
 import PrettyFormatter from './formatter/prettyFormatter';
 import { ValidationError, AbortError } from './errors';
-import { AssertionPrototype, Finding } from './types';
+import { AssertionPrototype, Finding, GlobalOptions } from './types';
 import { Argv, Arguments } from 'yargs';
 import chalk from 'chalk';
 import loadConfiguration from './configuration';
 import { verbose } from './scanner/util';
-import { join } from 'path';
+import { dirname, join } from 'path';
 import postCommitStatus from './integration/github/commitStatus';
 import postPullRequestComment from './integration/github/postPullRequestComment';
 import Generator, { ReportFormat } from './report/generator';
@@ -125,6 +125,15 @@ export default {
       if (appmapFile && appmapDir) {
         throw new ValidationError('Use --appmap-dir or --appmap-file, but not both');
       }
+      const workingDir = (() => {
+        if (appmapDir) {
+          return appmapDir;
+        }
+        return dirname(appmapFile!);
+      })();
+      const commandOptions: GlobalOptions = {
+        appmapDir: workingDir,
+      };
 
       let files: string[] = [];
       if (appmapDir) {
@@ -158,18 +167,20 @@ export default {
 
           process.stderr.write(formatter.appMap(appMap));
 
-          assertionPrototypes.forEach((assertionPrototype: AssertionPrototype) => {
-            index++;
-            const matchCount = findings.length;
-            checker.check(appMap, assertionPrototype, findings);
-            const newMatches = findings.slice(matchCount, findings.length);
-            newMatches.forEach((match) => (match.appMapFile = file));
+          await Promise.all(
+            assertionPrototypes.map(async (assertionPrototype: AssertionPrototype) => {
+              index++;
+              const matchCount = findings.length;
+              await checker.check(appMap, assertionPrototype, commandOptions, findings);
+              const newMatches = findings.slice(matchCount, findings.length);
+              newMatches.forEach((match) => (match.appMapFile = file));
 
-            const message = formatter.result(assertionPrototype, newMatches, index);
-            if (message) {
-              process.stderr.write(message);
-            }
-          });
+              const message = formatter.result(assertionPrototype, newMatches, index);
+              if (message) {
+                process.stderr.write(message);
+              }
+            })
+          );
         })
       );
 
