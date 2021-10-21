@@ -1,4 +1,5 @@
 import { Event } from '@appland/models';
+import { AssertionSpec } from 'src/types';
 import Assertion from '../assertion';
 import { toRegExpArray } from './util';
 
@@ -48,4 +49,4 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { Options, scanner };
+export default { Options, scanner } as AssertionSpec;

@@ -1,5 +1,5 @@
 import { Event, EventNavigator } from '@appland/models';
-import { MatchResult } from 'src/types';
+import { AssertionSpec, MatchResult } from 'src/types';
 import Assertion from '../assertion';
 
 class Options {
@@ -68,4 +68,4 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { scope: 'command', enumerateScope: false, Options, scanner };
+export default { scope: 'command', enumerateScope: false, Options, scanner } as AssertionSpec;

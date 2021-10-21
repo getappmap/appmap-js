@@ -1,4 +1,5 @@
 import { Event } from '@appland/models';
+import { AssertionSpec } from 'src/types';
 import Assertion from '../assertion';
 import { toRegExpArray } from './util';
 
@@ -64,4 +65,4 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { scope: 'http_server_request', Options, scanner };
+export default { scope: 'http_server_request', Options, scanner } as AssertionSpec;

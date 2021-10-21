@@ -1,6 +1,7 @@
 import { Event } from '@appland/models';
 import Assertion from '../assertion';
 import minimatch from 'minimatch';
+import { AssertionSpec } from 'src/types';
 
 class Options {
   constructor(public selector: string = '*', public packageNames: string[] = []) {}
@@ -35,4 +36,4 @@ function scanner(options: Options): Assertion {
   );
 }
 
-export default { scanner, Options };
+export default { scanner, Options } as AssertionSpec;

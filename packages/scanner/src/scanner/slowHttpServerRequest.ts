@@ -1,4 +1,5 @@
 import { Event } from '@appland/models';
+import { AssertionSpec } from 'src/types';
 import Assertion from '../assertion';
 
 class Options {
@@ -17,4 +18,9 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { scope: 'http_server_request', enumerateScope: false, Options, scanner };
+export default {
+  scope: 'http_server_request',
+  enumerateScope: false,
+  Options,
+  scanner,
+} as AssertionSpec;

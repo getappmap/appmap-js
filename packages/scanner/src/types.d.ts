@@ -64,3 +64,10 @@ interface AssertionPrototype {
   enumerateScope: boolean;
   build(): Assertion;
 }
+
+interface AssertionSpec {
+  scanner: (options: any) => Assertion;
+  scope?: ScopeName;
+  enumerateScope?: boolean;
+  Options?: any;
+}
