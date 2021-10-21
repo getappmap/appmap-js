@@ -174,7 +174,6 @@ a.qs-button {
 }
 
 .qs-step {
-  max-width: 675px;
   padding: 32px 37px;
 
   &__head {
@@ -182,6 +181,7 @@ a.qs-button {
   }
 
   p.qs-step__margin {
+    max-width: 675px;
     margin: 10px 0;
   }
 
