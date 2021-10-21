@@ -16,8 +16,9 @@ deploy:
   - provider: script
     skip_cleanup: true
     script: >-
-      npm config set registry https://npm.pkg.github.com \ && git remote set-url origin
-      https://${GH_TOKEN}@github.com/applandinc/scanner.git \ && GIT_TRACE=1 GIT_CURL_VERBOSE=1 yarn
-      run semantic-release
+      npm config set registry https://npm.pkg.github.com \
+      && git config --unset lfs.https://github.com/applandinc/scanner.git/info/lfs.access \
+      && git remote set-url origin https://${GH_TOKEN}@github.com/applandinc/scanner.git \
+      && GIT_TRACE=1 GIT_CURL_VERBOSE=1 yarn run semantic-release
     on:
       branch: main
