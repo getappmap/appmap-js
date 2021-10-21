@@ -32,7 +32,7 @@ export default class Generator {
         titledSummary.set(match.scannerTitle, (titledSummary.get(match.scannerTitle) ?? 0) + 1);
 
         const filePath =
-          this.ide && match.appMapFile
+          this.ide && match.appMapFile && !this.reportFile
             ? ideLink(match.appMapFile, this.ide, match.event.id)
             : match.appMapFile;
         let eventMsg = `\tEvent:\t${match.event.id} - ${match.event.toString()}`;
