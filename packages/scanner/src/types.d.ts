@@ -12,6 +12,19 @@ export type Level = 'warning' | 'error';
 
 type EventFilter = (e: Event, appMap: AppMap) => boolean;
 
+export interface FindingSummary {
+  scannerTitle: string;
+  findingTotal: number;
+  messages: Set<string>;
+}
+
+export interface ScannerSummary {
+  checkTotal: number;
+  findingTotal: number;
+  // Record key is the finding id.
+  findingSummary: Record<string, FindingSummary>;
+}
+
 export interface MatchResult {
   level: Level;
   event?: Event;
