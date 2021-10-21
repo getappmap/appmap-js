@@ -17,6 +17,7 @@ deploy:
     skip_cleanup: true
     script: >-
       npm config set registry https://npm.pkg.github.com \
-      && GIT_TRACE=1 GIT_CURL_VERBOSE=1 GIT_LFS_SKIP_PUSH=1 yarn run semantic-release
+      && git config lfs.url http://${GH_TOKEN}@github.com/applandinc/scanner.git \
+      && GIT_TRACE=1 GIT_CURL_VERBOSE=1 yarn run semantic-release
     on:
       branch: main
