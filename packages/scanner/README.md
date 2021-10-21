@@ -1,4 +1,4 @@
-# Appmap Scanner
+# AppMap Scanner
 
 Code scanning, linting, assertions and alerts.
 

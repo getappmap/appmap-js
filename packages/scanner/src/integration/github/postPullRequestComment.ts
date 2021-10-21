@@ -22,5 +22,5 @@ export default function postPullRequestComment(comment: string): Promise<any> {
   return octo
     .repos(owner(), repo())
     .issues(pullRequestNumber())
-    .comments.create({ body: `### Appmap Scanner\n${comment}` });
+    .comments.create({ body: `### AppMap Scanner\n${comment}` });
 }
