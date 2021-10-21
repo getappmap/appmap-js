@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.10.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.9.0...@appland/appmap-v3.10.0) (2021-10-21)
+
+
+### Features
+
+* OpenAPI template is configurable ([e8b64d3](https://github.com/applandinc/appmap-js/commit/e8b64d3c33dd2267ce9c0aeb5cdfa7626a62aa9d))
+* Rename swagger command to openapi ([681b608](https://github.com/applandinc/appmap-js/commit/681b6083ff47760123cf4feed9abae8aab977eb1))
+
 # [@appland/appmap-v3.9.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.8.0...@appland/appmap-v3.9.0) (2021-10-21)
 
 # [@appland/appmap-v3.8.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.7.4...@appland/appmap-v3.8.0) (2021-10-18)
