@@ -1,11 +1,6 @@
-openapi: 3.0.1
+openapi: 3.1.0
 info:
-  title:
-  version:
+  title: My project
+  version: v1
 paths:
 components:
-servers:
-  - url: http://{defaultHost}
-    variables:
-      defaultHost:
-        default:

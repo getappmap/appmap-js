@@ -1,10 +1,12 @@
 # appmap-openapi
 
-`appmap-js openapi` generates [OpenAPI 3](https://openapi.io/specification/)
-(aka OpenAPI) YAML from [AppMap](https://appland.org/) data.
+`@appland/appmap openapi` generates
+[OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md)
+YAML from [AppMap](https://github.com/applandinc/appmap) data.
 
-AppMaps contain rich information about HTTP server requests. `appmap-js openapi`
-collects and organizes this information into the OpenAPI format.
+AppMaps contain rich information about HTTP server requests.
+`@appland/appmap openapi` collects and organizes this information into the
+OpenAPI format.
 
 The more (and better) functional and integration tests you write, the more
 OpenAPI you get. And better yet, it's always accurate because it reflects the
@@ -17,42 +19,46 @@ and debug your API.
 
 ## Supported languages
 
-`appmap-js openapi` works with any language that has an AppMap client. Consult
-[appland.org](https://appland.org/) for a current list of clients, plus usage
-instructions and examples.
+`@appland/appmap` works with any language that has an AppMap client agent.
+Consult [appland.org](https://appland.org/) for a current list of client agents,
+plus usage instructions and examples.
 
 ## How it works
 
-1. Install the AppMap client for your programming language.
+1. Install the AppMap client agent for your programming language.
 2. Record AppMaps by running test cases.
-3. Run `appmap-js openapi` to generate OpenAPI `paths` and `components`. OpenAPI
-   YAML is printed to stdout.
-4. Merge the paths and components into a wrapper template using some custom code
-   in your project, or a standardized wrapper such as the `appmap:openapi` Rake
-   task.
-5. Open your OpenAPI docs using the OpenAPI API or OpenAPI UI.
+3. Run `@appland/appmap openapi` to generate OpenAPI. You can customize the
+   OpenAPI document using command-line options.
+4. Review your OpenAPI docs using your code editor or the Swagger UI.
 
 ## Example
 
-To try out `appmap-js openapi`:
+To try out `@appland/appmap openapi`:
 
 1. Clone this repo
 2. `yarn install` to get dependencies.
 3. `cd packages/cli`
-4. `npx @appland/appmap openapi --directory test/fixtures/appland`
+4. `yarn start openapi --appmap-dir tests/unit/fixtures`
 
 ## Usage
 
 ```sh-session
-$ npx @appland/appmap openapi -h
+$ npx @appland/appmap openapi --help
 @appland/appmap generate
 
 Generate OpenAPI from AppMaps in a directory
 
 Options:
-      --version    Show version number                       [boolean]
-  -v, --verbose    Run with verbose logging                  [boolean]
-      --help       Show help                                 [boolean]
-      --appmap-dir directory to recursively inspect for AppMaps
-                                               [default: "tmp/appmap"]
+  --version               Show version number                          [boolean]
+  --verbose, -v           Run with verbose logging                     [boolean]
+  --help                  Show help                                    [boolean]
+  --appmap-dir            directory to recursively inspect for AppMaps
+                                                         [default: "tmp/appmap"]
+  --output-file, -o       output file name
+  --openapi-template      template YAML; generated content will be placed in the
+                          paths and components sections
+  --openapi-title         info/title field of the OpenAPI document
+  --openapi-version       info/version field of the OpenAPI document
+  --openapi-default-host  servers[0]/variables/defaultHost/default field of the
+                          OpenAPI document
 ```
