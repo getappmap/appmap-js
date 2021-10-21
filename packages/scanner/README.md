@@ -1,4 +1,4 @@
-# scanner
+# Appmap Scanner
 
 Code scanning, linting, assertions and alerts.
 
@@ -31,7 +31,7 @@ yarn add @applandinc/scanner
 ```
 
 ## Writing findings to a report
-It is possible to export scanner findings to a file in human or machine readable formats.
+It is possible to export scanner findings to a file in human or machine  readable formats.
 
 Text format (default):
 ```bash
@@ -41,6 +41,24 @@ yarn scanner -d tmp/appmap --report-file=report.txt
 JSON format:
 ```bash
 yarn scanner -d tmp/appmap --report=json --report-file=report.json
+```
+
+## CI integration
+When using Appmap Scanner in CI you can post findings summary as a commit status and/or a PR comment 
+(currently only GitHub is supported). In order to allow access to your repo you need to create a 
+[personal token](https://github.com/settings/tokens/new) with following privileges and add it as a `GH_TOKEN` env variable
+to your CI:
+* `repo` for posting PR comments
+* `repo:status` for posting commit statuses
+
+### Commit status
+```bash
+yarn scanner -d tmp/appmap --commit-status=github
+```
+
+### PR comment
+```bash
+yarn scanner -d tmp/appmap --pull-request-comment=github
 ```
 
 ## New scanner ideas
