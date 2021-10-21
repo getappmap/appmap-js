@@ -1,3 +1,5 @@
+# [@appland/appmap-v3.9.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.8.0...@appland/appmap-v3.9.0) (2021-10-21)
+
 # [@appland/appmap-v3.8.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.7.4...@appland/appmap-v3.8.0) (2021-10-18)
 
 
