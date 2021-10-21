@@ -1,23 +1,4 @@
-import { ValidationError } from '../../errors';
-
-type CommitStatusState = 'pending' | 'success' | 'error' | 'failure';
-
-export default function postCommitStatus(
-  state: CommitStatusState,
-  description: string
-): Promise<any> {
-  validate();
-
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const octokat = require('octokat');
-  const octo = new octokat({ token: token() });
-
-  return octo.repos(owner(), repo()).statuses(sha()).create({
-    state: state,
-    context: 'appland/scanner',
-    description: description,
-  });
-}
+import { ValidationError } from '../errors';
 
 function token(): string | undefined {
   return process.env.GH_STATUS_TOKEN || process.env.GH_TOKEN;
@@ -29,6 +10,12 @@ function sha(): string | undefined {
     process.env.TRAVIS_PULL_REQUEST_SHA ||
     process.env.TRAVIS_COMMIT ||
     process.env.CI_COMMIT_ID
+  );
+}
+
+function pullRequestNumber(): string | undefined {
+  return (
+    process.env.CIRCLE_PR_NUMBER || process.env.TRAVIS_PULL_REQUEST || process.env.CI_PR_NUMBER
   );
 }
 
@@ -56,19 +43,47 @@ function extractSlug(path: string | undefined, index: number): string | undefine
   return path.split('/')[index];
 }
 
-function validate() {
+function validateToken(): void {
   if (!token()) {
     throw new ValidationError(
       'GitHub token not configured (use GH_STATUS_TOKEN or GH_TOKEN env var)'
     );
   }
+}
+
+function validateSha(): void {
   if (!sha()) {
     throw new ValidationError('Unable to detect current build’s SHA');
   }
+}
+
+function validatePullRequestNumber(): void {
+  if (!pullRequestNumber()) {
+    throw new ValidationError('Unable to detect current pull request number');
+  }
+}
+
+function validateOwner(): void {
   if (!owner()) {
     throw new ValidationError('Unable to detect repository owner');
   }
+}
+
+function validateRepo(): void {
   if (!repo()) {
     throw new ValidationError('Unable to detect repository name');
   }
 }
+
+export {
+  token,
+  owner,
+  sha,
+  repo,
+  pullRequestNumber,
+  validateToken,
+  validateOwner,
+  validateRepo,
+  validateSha,
+  validatePullRequestNumber,
+};

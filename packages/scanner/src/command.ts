@@ -12,7 +12,8 @@ import chalk from 'chalk';
 import loadConfiguration from './configuration';
 import { verbose } from './scanner/util';
 import { join } from 'path';
-import postCommitStatus from './commitStatus/github/commitStatus';
+import postCommitStatus from './integration/github/commitStatus';
+import postPullRequestComment from './integration/github/postPullRequestComment';
 import Generator, { ReportFormat } from './report/generator';
 
 enum ExitCode {
@@ -30,6 +31,7 @@ interface CommandOptions {
   progressFormat: string;
   ide?: string;
   commitStatus?: string;
+  pullRequestComment?: string;
   reportFormat: ReportFormat;
   reportFile?: string;
 }
@@ -70,6 +72,11 @@ export default {
       describe: 'set your repository hosting system to post commit status',
       options: ['github'],
     });
+    args.option('pull-request-comment', {
+      describe:
+        'set your repository hosting system to post pull request comment with findings summary',
+      options: ['github'],
+    });
     args.option('report-format', {
       describe: 'reporting format',
       default: 'text',
@@ -91,6 +98,7 @@ export default {
       verbose: isVerbose,
       ide,
       commitStatus,
+      pullRequestComment,
       reportFormat,
       reportFile,
     } = options as unknown as CommandOptions;
@@ -166,7 +174,15 @@ export default {
       );
 
       const reportGenerator = new Generator(formatter, reportFormat, reportFile, ide);
-      reportGenerator.generate(findings, files.length * assertionPrototypes.length);
+      const summary = reportGenerator.generate(findings, files.length * assertionPrototypes.length);
+
+      if (pullRequestComment && findings.length > 0) {
+        try {
+          await postPullRequestComment(summary);
+        } catch (err) {
+          console.warn('Unable to post pull request comment');
+        }
+      }
 
       if (commitStatus) {
         return findings.length === 0
