@@ -7,6 +7,7 @@ import insecureCompare from '../src/scanner/insecureCompare';
 import http500 from '../src/scanner/http500';
 import illegalPackageAccess from '../src/scanner/illegalPackageDependency';
 import rpcWithoutCircuitBreaker from '../src/scanner/rpcWithoutCircuitBreaker';
+import slowMethodCall from '../src/scanner/slowMethodCall';
 import { scan } from './util';
 import { AssertionPrototype, ScopeName } from '../src/types';
 import Assertion from '../src/assertion';
@@ -185,5 +186,17 @@ describe('assert', () => {
       'Test_net_5xxs_trip_circuit_when_fatal_server_flag_enabled.appmap.json'
     );
     expect(findings).toHaveLength(0);
+  });
+
+  it('slow method call', async () => {
+    const { scanner, Options } = slowMethodCall;
+    const findings = await scan(
+      makePrototype('slow-method-call', () => scanner(new Options(0.2, '.*Controller', 'create'))),
+      'Microposts_interface_micropost_interface.appmap.json'
+    );
+    expect(findings).toHaveLength(1);
+    const finding = findings[0];
+    expect(finding.scannerId).toEqual('slow-method-call');
+    expect(finding.event.id).toEqual(897);
   });
 });

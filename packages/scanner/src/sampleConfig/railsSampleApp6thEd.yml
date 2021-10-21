@@ -12,6 +12,11 @@ scanners:
   - id: slowHttpServerRequest
     properties:
       timeAllowed: 0.5
+  - id: slowMethodCall
+    properties:
+      timeAllowed: 0.2
+      className: .*Controller
+      methodName: create
   - id: slowQuery
     properties:
       timeAllowed: 0.05
