@@ -1,6 +1,6 @@
-const Method = require('./method');
+import Method from './method';
 
-class Path {
+export default class Path {
   constructor(securitySchemes) {
     this.securitySchemes = securitySchemes;
     this.methods = {};
@@ -34,5 +34,3 @@ class Path {
     methodObj.addRequest(event);
   }
 }
-
-module.exports = Path;

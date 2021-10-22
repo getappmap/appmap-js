@@ -1,6 +1,7 @@
-const { STATUS_CODES } = require('http');
+import { STATUS_CODES } from 'http';
+import { contentType } from '../util';
 
-class Response {
+export default class Response {
   constructor(statusCode) {
     this.statusCode = parseInt(`${statusCode}`, 10);
     this.events = [];
@@ -8,15 +9,13 @@ class Response {
 
   openapi() {
     // eslint-disable-next-line arrow-body-style
-    const mimeTypes = () => {
+    const contentTypes = () => {
       return this.events
-        .filter(
-          (event) =>
-            event.httpServerResponse && event.httpServerResponse.mime_type
-        )
-        .map((event) => event.httpServerResponse.mime_type.split(';')[0]);
+        .map((event) => contentType(event))
+        .filter((ct) => ct)
+        .map((ct) => ct.split(';')[0]);
     };
-    const content = [...new Set(mimeTypes())]
+    const content = [...new Set(contentTypes())]
       .sort()
       .reduce((memo, mimeType) => {
         // eslint-disable-next-line no-param-reassign
@@ -30,5 +29,3 @@ class Response {
     this.events.push(event);
   }
 }
-
-module.exports = Response;

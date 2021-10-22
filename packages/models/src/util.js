@@ -1,6 +1,25 @@
 import sha256 from 'crypto-js/sha256';
 import sqliteParser from 'sqlite-parser';
 
+/**
+ * HTTP client or server response content type
+ *
+ * @param {Event} event
+ * @returns {string | undefined}
+ */
+export function contentType(/** @type {Event} */ event) {
+  if (event.httpClientRequest) {
+    return (event.httpClientRequest.headers || {})['Content-Type'];
+  }
+  if (event.httpServerResponse) {
+    return (
+      (event.httpServerResponse.headers || {})['Content-Type'] ||
+      event.httpServerResponse.mime_type // Older style, now deprecated
+    );
+  }
+  return null;
+}
+
 export const hasProp = (obj, prop) =>
   Object.prototype.hasOwnProperty.call(obj, prop);
 

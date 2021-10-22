@@ -1,7 +1,7 @@
-const { EventNavigator } = require('@appland/models');
-const Response = require('./response');
-const Schema = require('./schema');
-const { messageToOpenAPISchema, bestPathInfo } = require('./util');
+import EventNavigator from '../eventNavigator';
+import Response from './response';
+import Schema from './schema';
+import { messageToOpenAPISchema, bestPathInfo } from './util';
 
 const bodyParamMethods = new Set(['delete', 'put', 'post', 'patch']);
 
@@ -16,7 +16,7 @@ function openapiIn(event, name) {
   return 'query';
 }
 
-class Method {
+export default class Method {
   constructor(securitySchemes) {
     this.securitySchemes = securitySchemes;
     this.responses = {};
@@ -169,5 +169,3 @@ class Method {
     responseObj.addRequest(event);
   }
 }
-
-module.exports = Method;

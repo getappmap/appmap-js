@@ -1,5 +1,3 @@
-const { buildAppMap } = require('@appland/models');
-
 function classNameToOpenAPIType(className) {
   let typeName = className;
   if (!typeName || typeName === '') {
@@ -53,12 +51,6 @@ function messageToOpenAPISchema(message) {
   return result;
 }
 
-function parseHTTPServerRequests(source, collector) {
-  const appmap = buildAppMap().source(source).normalize().build();
-
-  appmap.events.filter((e) => e.httpServerRequest).forEach(collector);
-}
-
 function ensureString(value) {
   if (Array.isArray(value)) {
     return value.join('');
@@ -72,8 +64,4 @@ function bestPathInfo(httpServerRequest) {
   );
 }
 
-module.exports = {
-  bestPathInfo,
-  messageToOpenAPISchema,
-  parseHTTPServerRequests,
-};
+export { bestPathInfo, messageToOpenAPISchema };

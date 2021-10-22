@@ -21,7 +21,7 @@ function parseScheme(authorization) {
   };
 }
 
-class SecuritySchemes {
+export default class SecuritySchemes {
   constructor() {
     this.schemes = {};
   }
@@ -56,5 +56,3 @@ class SecuritySchemes {
       }, {});
   }
 }
-
-module.exports = SecuritySchemes;

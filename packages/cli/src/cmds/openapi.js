@@ -1,12 +1,10 @@
 import { join } from 'path';
+import { promises as fsp } from 'fs';
+import { queue } from 'async';
+import { glob } from 'glob';
+import yaml from 'js-yaml';
+import * as appmapModel from '@appland/models';
 import { verbose } from '../utils';
-
-const { promises: fsp } = require('fs');
-const { queue } = require('async');
-const { glob } = require('glob');
-const yaml = require('js-yaml');
-const { parseHTTPServerRequests } = require('./util');
-const Model = require('./model');
 
 class OpenAPICommand {
   constructor(directory) {
@@ -15,7 +13,7 @@ class OpenAPICommand {
 
   async execute() {
     this.count = 0;
-    this.model = new Model();
+    this.model = new appmapModel.OpenAPIModel();
     const q = queue(this.collectAppMap.bind(this), 5);
     q.pause();
     const files = await new Promise((resolve, reject) => {
@@ -37,9 +35,17 @@ class OpenAPICommand {
 
   async collectAppMap(file) {
     this.count += 1;
-    parseHTTPServerRequests(JSON.parse(await fsp.readFile(file)), (e) =>
-      this.model.addRequest(e)
-    );
+
+    const source = await fsp.readFile(file);
+    const appmap = appmapModel
+      .buildAppMap()
+      .source(JSON.parse(source))
+      .normalize()
+      .build();
+
+    appmap.events
+      .filter((e) => e.httpServerRequest)
+      .forEach((e) => this.model.addRequest(e));
   }
 }
 

@@ -1,6 +1,6 @@
-const { messageToOpenAPISchema } = require('./util');
+import { messageToOpenAPISchema } from './util';
 
-class Schema {
+export default class Schema {
   constructor() {
     this.examples = [];
   }
@@ -34,5 +34,3 @@ class Schema {
     };
   }
 }
-
-module.exports = Schema;

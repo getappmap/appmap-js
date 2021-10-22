@@ -1,8 +1,8 @@
-const Path = require('./path');
-const SecuritySchemes = require('./securitySchemes');
-const { bestPathInfo } = require('./util');
+import Path from './path';
+import SecuritySchemes from './securitySchemes';
+import { bestPathInfo } from './util';
 
-class Model {
+export default class Model {
   constructor() {
     this.paths = {};
     this.securitySchemes = new SecuritySchemes();
@@ -50,5 +50,3 @@ class Model {
     return path.join('/');
   }
 }
-
-module.exports = Model;
