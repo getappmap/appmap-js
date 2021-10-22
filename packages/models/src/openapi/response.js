@@ -1,4 +1,4 @@
-import { STATUS_CODES } from 'http';
+import StatusCodes from './statusCodes';
 import { contentType } from '../util';
 
 export default class Response {
@@ -22,7 +22,7 @@ export default class Response {
         memo[mimeType] = {};
         return memo;
       }, {});
-    return { content, description: STATUS_CODES[this.statusCode] };
+    return { content, description: StatusCodes[this.statusCode] };
   }
 
   addRequest(event) {
