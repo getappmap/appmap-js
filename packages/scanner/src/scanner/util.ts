@@ -88,4 +88,14 @@ const isRoot = (event: Event | undefined): boolean => {
   );
 };
 
-export { appMapDir, contentType, emptyValue, isFalsey, ideLink, isRoot, toRegExpArray, verbose };
+export {
+  appMapDir,
+  contentType,
+  emptyValue,
+  isFalsey,
+  ideLink,
+  isRoot,
+  toRegExp,
+  toRegExpArray,
+  verbose,
+};
