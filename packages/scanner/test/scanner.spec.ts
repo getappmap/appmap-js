@@ -7,7 +7,7 @@ import insecureCompare from '../src/scanner/insecureCompare';
 import http500 from '../src/scanner/http500';
 import illegalPackageAccess from '../src/scanner/illegalPackageDependency';
 import rpcWithoutCircuitBreaker from '../src/scanner/rpcWithoutCircuitBreaker';
-import slowMethodCall from '../src/scanner/slowMethodCall';
+import slowFunctionCall from '../src/scanner/slowFunctionCall';
 import { scan } from './util';
 import { AssertionPrototype, ScopeName } from '../src/types';
 import Assertion from '../src/assertion';
@@ -188,15 +188,18 @@ describe('assert', () => {
     expect(findings).toHaveLength(0);
   });
 
-  it('slow method call', async () => {
-    const { scanner, Options } = slowMethodCall;
+  it('slow function call', async () => {
+    const { scanner, Options } = slowFunctionCall;
     const findings = await scan(
-      makePrototype('slow-method-call', () => scanner(new Options(0.2, '.*Controller', 'create'))),
+      makePrototype('slow-function-call', () => scanner(new Options(0.2, '.*Controller#create'))),
       'Microposts_interface_micropost_interface.appmap.json'
     );
     expect(findings).toHaveLength(1);
     const finding = findings[0];
-    expect(finding.scannerId).toEqual('slow-method-call');
+    expect(finding.scannerId).toEqual('slow-function-call');
     expect(finding.event.id).toEqual(897);
+    expect(finding.message).toEqual(
+      'Slow app/controllers/MicropostsController#create call (0.228481ms)'
+    );
   });
 });
