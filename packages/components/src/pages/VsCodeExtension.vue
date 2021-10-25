@@ -52,15 +52,41 @@
         </v-tab>
 
         <v-tab name="Trace View" :is-active="isViewingFlow" :ref="VIEW_FLOW">
-          <v-diagram-trace
-            ref="diagramFlow"
-            :events="filteredAppMap.rootEvents()"
-            :selected-events="selectedEvent"
-            :focused-event="focusedEvent"
-            :name="VIEW_FLOW"
-            :zoom-controls="true"
-            @clickEvent="onClickTraceEvent"
-          />
+          <div class="trace-view">
+            <div class="trace-view__search">
+              <div class="trace-view__search-input-wrap">
+                <span class="trace-view__search-input-prefix">
+                  <SearchIcon />
+                </span>
+                <input
+                  class="trace-view__search-input-element"
+                  type="text"
+                  autocomplete="off"
+                  placeholder="search events..."
+                />
+              </div>
+              <div class="trace-view__search-arrows">
+                <div class="trace-view__search-arrow">
+                  <ArrowSearchLeftIcon />
+                </div>
+                <div class="trace-view__search-arrows-text">
+                  <b>1</b>/3 results
+                </div>
+                <div class="trace-view__search-arrow">
+                  <ArrowSearchRightIcon />
+                </div>
+              </div>
+            </div>
+            <v-diagram-trace
+              ref="diagramFlow"
+              :events="filteredAppMap.rootEvents()"
+              :selected-events="selectedEvent"
+              :focused-event="focusedEvent"
+              :name="VIEW_FLOW"
+              :zoom-controls="true"
+              @clickEvent="onClickTraceEvent"
+            />
+          </div>
         </v-tab>
         <template v-slot:notification>
           <v-notification
@@ -72,40 +98,75 @@
           />
         </template>
         <template v-slot:controls>
-          <v-popper-menu :showDot="filtersChanged">
+          <v-popper-menu :isHighlight="filtersChanged">
             <template v-slot:icon>
               <FilterIcon class="control-button__icon" />
             </template>
             <template v-slot:body>
-              <h2>Filters</h2>
-              <div>
-                <input
-                  type="checkbox"
-                  id="limit-root-events"
-                  v-model="filters.limitRootEvents.on"
-                  @change="setUserFiltered"
-                />
-                <label for="limit-root-events">Limit root events to HTTP</label>
-              </div>
-              <div>
-                <input
-                  type="checkbox"
-                  id="unlabeled-events"
-                  v-model="filters.unlabeledEvents.on"
-                  @change="setUserFiltered"
-                />
-                <label for="unlabeled-events">Show unlabeled events</label>
-              </div>
-              <div>
-                <input
-                  type="checkbox"
-                  id="hide-media-requests"
-                  v-model="filters.hideMediaRequests.on"
-                  @change="setUserFiltered"
-                />
-                <label for="hide-media-requests"
-                  >Hide media HTTP requests</label
-                >
+              <div class="filters">
+                <div class="filters__head">
+                  <FilterIcon class="filters__head-icon" />
+                  <h2 class="filters__head-text">Filters</h2>
+                  <button class="filters__head-reset" @click="resetFilters()">
+                    Reset all
+                    <ResetIcon />
+                  </button>
+                </div>
+                <div class="filters__block">
+                  <div class="filters__block-head">
+                    <h3 class="filters__block-title">Root</h3>
+                    <input type="text" />
+                  </div>
+                  <div class="filters__block-body">
+                    <div class="filters__root">
+                      route:GET /applications/1/event-10346
+                      <CloseThinIcon class="filters__root-icon" />
+                    </div>
+                  </div>
+                </div>
+                <div class="filters__block">
+                  <div class="filters__block-head">
+                    <h3 class="filters__block-title">Declutter</h3>
+                  </div>
+                  <div class="filters__block-body">
+                    <div class="filters__block-row">
+                      <label class="filters__checkbox">
+                        <input
+                          type="checkbox"
+                          @change="setUserFiltered"
+                          v-model="filters.declutter.hideUnlabeled.on"
+                        />
+                        <CheckIcon class="filters__checkbox-icon" />
+                      </label>
+                      <div class="filters__block-row-content">
+                        Hide unlabeled
+                      </div>
+                    </div>
+                    <div class="filters__block-row">
+                      <label class="filters__checkbox">
+                        <input
+                          type="checkbox"
+                          @change="setUserFiltered"
+                          v-model="filters.declutter.hideElapsedTimeUnder.on"
+                        />
+                        <CheckIcon class="filters__checkbox-icon" />
+                      </label>
+                      <div class="filters__block-row-content">
+                        Hide elapsed time under:
+                        <div class="filters__elapsed">
+                          <input
+                            type="text"
+                            class="filters__elapsed-input"
+                            v-model="
+                              filters.declutter.hideElapsedTimeUnder.time
+                            "
+                          />
+                          <span class="filters__elapsed-ms">ms</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </template>
           </v-popper-menu>
@@ -177,7 +238,13 @@
 
 <script>
 import { CodeObjectType, ClassMap, Event, buildAppMap } from '@appland/models';
+import ArrowSearchLeftIcon from '@/assets/arrow-search-left.svg';
+import ArrowSearchRightIcon from '@/assets/arrow-search-right.svg';
+import CheckIcon from '@/assets/check.svg';
+import CloseThinIcon from '@/assets/close-thin.svg';
 import ReloadIcon from '@/assets/reload.svg';
+import ResetIcon from '@/assets/reset.svg';
+import SearchIcon from '@/assets/search.svg';
 import UploadIcon from '@/assets/upload.svg';
 import FilterIcon from '@/assets/filter.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
@@ -206,7 +273,13 @@ export default {
   name: 'VSCodeExtension',
 
   components: {
+    ArrowSearchLeftIcon,
+    ArrowSearchRightIcon,
+    CheckIcon,
+    CloseThinIcon,
+    SearchIcon,
     ReloadIcon,
+    ResetIcon,
     UploadIcon,
     FilterIcon,
     VDetailsPanel,
@@ -236,17 +309,18 @@ export default {
       VIEW_FLOW,
       rootCodeObject: null,
       filters: {
-        limitRootEvents: {
-          on: true,
-          default: true,
-        },
-        unlabeledEvents: {
-          on: true,
-          default: true,
-        },
-        hideMediaRequests: {
-          on: true,
-          default: true,
+        rootObjects: [],
+        hideObjects: [],
+        declutter: {
+          hideUnlabeled: {
+            on: false,
+            default: false,
+          },
+          hideElapsedTimeUnder: {
+            on: false,
+            default: false,
+            time: 100,
+          },
         },
       },
       isUserFiltered: false,
@@ -303,10 +377,6 @@ export default {
       let { classMap } = appMap;
       let rootEvents = appMap.rootEvents();
 
-      if (this.filters.limitRootEvents.on) {
-        rootEvents = rootEvents.filter((e) => e.httpServerRequest);
-      }
-
       let events = rootEvents.reduce((callTree, rootEvent) => {
         rootEvent.traverse((e) => callTree.push(e));
         return callTree;
@@ -336,38 +406,24 @@ export default {
         }
       }
 
-      events = events.filter(
-        (e) =>
-          this.filters.unlabeledEvents.on ||
-          e.labels.size > 0 ||
-          e.codeObject.type !== CodeObjectType.FUNCTION
-      );
-
-      if (this.filters.hideMediaRequests.on) {
-        const mediaRegex = [
-          'application/javascript',
-          'application/ecmascript',
-          'audio/.+',
-          'font/.+',
-          'image/.+',
-          'text/javascript',
-          'text/ecmascript',
-          'text/css',
-          'video/.+',
-        ].map((t) => new RegExp(t, 'i'));
-        const excludedEvents = [];
-        events.forEach((e) => {
-          if (
-            e.http_server_response &&
-            e.http_server_response.mime_type &&
-            mediaRegex.some((regex) =>
-              regex.test(e.http_server_response.mime_type)
-            )
-          ) {
-            excludedEvents.push(e.parent_id);
-          }
+      if (this.filters.declutter.hideUnlabeled.on) {
+        events = events.filter((e) => {
+          return (
+            e.labels.size > 0 || e.codeObject.type !== CodeObjectType.FUNCTION
+          );
         });
-        events = events.filter((e) => !excludedEvents.includes(e.id));
+      }
+
+      if (
+        this.filters.declutter.hideElapsedTimeUnder.on &&
+        this.filters.declutter.hideElapsedTimeUnder.time > 0
+      ) {
+        events = events.filter((e) => {
+          return (
+            e?.returnEvent?.elapsedTime >=
+            this.filters.declutter.hideElapsedTimeUnder.time / 1000
+          );
+        });
       }
 
       return buildAppMap({
@@ -592,6 +648,14 @@ export default {
     setUserFiltered() {
       this.isUserFiltered = true;
     },
+
+    resetFilters() {
+      this.filters.rootObjects = [];
+      this.filters.hideObjects = [];
+      Object.keys(this.filters.declutter).forEach((k) => {
+        this.filters.declutter[k].on = this.filters.declutter[k].default;
+      });
+    },
   },
 
   mounted() {
@@ -746,6 +810,88 @@ code {
     }
   }
 
+  .trace-view {
+    display: flex;
+    flex-direction: column;
+
+    &__search {
+      margin-bottom: 1.5rem;
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      font-family: $appland-text-font-family;
+
+      &-input-wrap {
+        flex: 1;
+        position: relative;
+        border-radius: $border-radius;
+        border: 2px solid $light-purple;
+
+        .details-search--empty & {
+          border-radius: $gray3;
+          pointer-events: none;
+        }
+      }
+
+      &-input-prefix {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateY(-50%);
+        text-align: center;
+        color: $base06;
+
+        svg {
+          position: relative;
+          left: 3px;
+          width: 14px;
+          height: 14px;
+          fill: $lightgray2;
+        }
+      }
+
+      &-input-element {
+        border: none;
+        width: 100%;
+        padding: 0.5rem 2rem;
+        font: inherit;
+        font-size: 0.75rem;
+        color: $base03;
+        background: transparent;
+        outline: none;
+
+        &::-webkit-placeholder,
+        &::-moz-placeholder,
+        &::placeholder {
+          color: $gray4;
+        }
+      }
+
+      &-arrows {
+        display: flex;
+        align-items: center;
+        padding: 0 1.25rem;
+
+        &-text {
+          margin: 0 0.5rem;
+          font-size: 0.75rem;
+          color: $base06;
+        }
+      }
+
+      &-arrow {
+        padding: 0.25rem;
+        font-size: 0;
+        cursor: pointer;
+      }
+    }
+  }
+
   .no-data-notice {
     display: flex;
     position: absolute;
@@ -798,6 +944,187 @@ code {
         margin-left: -1rem;
         color: $royal;
         margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .filters {
+    width: 390px;
+    font-size: 0.75rem;
+
+    &__head {
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+
+      svg {
+        width: 1em;
+        height: 1em;
+        fill: currentColor;
+      }
+
+      &-icon {
+        margin-right: 0.75rem;
+        color: $light-purple;
+      }
+
+      &-text {
+        margin-bottom: 0;
+        color: $base01;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+
+      &-reset {
+        margin-left: auto;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem;
+        background: transparent;
+        color: $lightgray2;
+        font: inherit;
+        outline: none;
+        line-height: 1;
+        appearance: none;
+        cursor: pointer;
+        transition: color 0.3s ease-in;
+
+        &:hover,
+        &:active {
+          color: $gray5;
+          transition-timing-function: ease-out;
+        }
+
+        svg {
+          margin-left: 0.5rem;
+        }
+      }
+    }
+
+    &__block {
+      &:not(:last-child) {
+        margin-bottom: 1rem;
+      }
+
+      &-head {
+        border-radius: 0.25rem 0.25rem 0 0;
+        margin-bottom: 1px;
+        padding: 0.5rem 0.75rem;
+        line-height: 1.25rem;
+        background: #2c2b32;
+      }
+
+      &-title {
+        margin: 0;
+        display: inline-block;
+        font-size: 0.875rem;
+        font-weight: bold;
+        color: $base06;
+      }
+
+      &-body {
+        border-radius: 0 0 0.25rem 0.25rem;
+        padding: 1rem 0.75rem;
+        background: #2c2b32;
+      }
+
+      &-row {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        &:not(:last-child) {
+          margin-bottom: 1.25rem;
+        }
+
+        &-content {
+          margin-left: 1rem;
+          line-height: 1rem;
+        }
+      }
+    }
+
+    &__root {
+      border-radius: $border-radius;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      background: $light-purple;
+      color: $gray6;
+      line-height: 1;
+
+      &-icon {
+        flex-shrink: 0;
+        margin-left: 1rem;
+        width: 1em;
+        height: 1em;
+        fill: currentColor;
+        cursor: pointer;
+      }
+    }
+
+    &__checkbox {
+      border-radius: 2px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 1rem;
+      height: 1rem;
+      background: $light-purple;
+      cursor: pointer;
+
+      input {
+        position: absolute;
+        overflow: hidden;
+        clip: rect(1px, 1px, 1px, 1px);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+
+        &:checked + .filters__checkbox-icon {
+          display: block;
+        }
+      }
+
+      &-icon {
+        display: none;
+        width: 0.5rem;
+        height: 0.5rem;
+        fill: $base03;
+      }
+    }
+
+    &__elapsed {
+      margin-left: 0.5rem;
+      border-radius: 0.25rem;
+      display: inline-block;
+      vertical-align: middle;
+      height: 1rem;
+      padding: 0 0.25rem;
+      background: #191919;
+
+      &-input {
+        display: inline-block;
+        vertical-align: middle;
+        width: 2rem;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+        font: inherit;
+        text-align: right;
+        color: inherit;
+        outline: none;
+      }
+
+      &-ms {
+        color: $lightgray2;
       }
     }
   }
