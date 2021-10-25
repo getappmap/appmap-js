@@ -205,6 +205,9 @@ export default {
           obj.type === CodeObjectType.QUERY ? obj.name : obj.prettyName;
         return this.filterRegex.test(filterString);
       }
+      if (typeof obj === 'string') {
+        return this.filterRegex.test(obj);
+      }
 
       return false;
     },
