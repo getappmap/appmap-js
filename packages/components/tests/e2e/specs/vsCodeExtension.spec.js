@@ -24,7 +24,7 @@ context('VS Code Extension', () => {
     });
 
     it('applies filter from search input', () => {
-      cy.get('.details-search__input').type('json');
+      cy.get('.details-search__input-element').type('json');
 
       cy.get(
         '.details-search__block--labels .details-search__block-item'
