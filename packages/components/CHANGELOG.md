@@ -1,3 +1,10 @@
+# [@appland/components-v1.14.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.14.1...@appland/components-v1.14.2) (2021-10-26)
+
+
+### Bug Fixes
+
+* Include labels in search query ([#412](https://github.com/applandinc/appmap-js/issues/412)) ([1e392fa](https://github.com/applandinc/appmap-js/commit/1e392fabd4ab6157f1833209a0477d91176d53f1))
+
 # [@appland/components-v1.14.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.14.0...@appland/components-v1.14.1) (2021-10-21)
 
 
