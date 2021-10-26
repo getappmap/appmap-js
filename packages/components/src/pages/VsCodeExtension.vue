@@ -472,23 +472,23 @@ export default {
       }
 
       if (this.filters.declutter.hideUnlabeled.on) {
-        events = events.filter((e) => {
-          return (
+        events = events.filter(
+          (e) =>
             e.labels.size > 0 || e.codeObject.type !== CodeObjectType.FUNCTION
-          );
-        });
+        );
       }
 
       if (
         this.filters.declutter.hideElapsedTimeUnder.on &&
         this.filters.declutter.hideElapsedTimeUnder.time > 0
       ) {
-        events = events.filter((e) => {
-          return (
-            e?.returnEvent?.elapsedTime >=
-            this.filters.declutter.hideElapsedTimeUnder.time / 1000
-          );
-        });
+        events = events.filter(
+          (e) =>
+            e.returnEvent &&
+            e.returnEvent.elapsedTime &&
+            e.returnEvent.elapsedTime >=
+              this.filters.declutter.hideElapsedTimeUnder.time / 1000
+        );
       }
 
       return buildAppMap({
