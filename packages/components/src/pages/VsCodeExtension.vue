@@ -134,6 +134,32 @@
                         <input
                           type="checkbox"
                           @change="setUserFiltered"
+                          v-model="filters.declutter.limitRootEvents.on"
+                        />
+                        <CheckIcon class="filters__checkbox-icon" />
+                      </label>
+                      <div class="filters__block-row-content">
+                        Limit root events to HTTP
+                      </div>
+                    </div>
+                    <div class="filters__block-row">
+                      <label class="filters__checkbox">
+                        <input
+                          type="checkbox"
+                          @change="setUserFiltered"
+                          v-model="filters.declutter.hideMediaRequests.on"
+                        />
+                        <CheckIcon class="filters__checkbox-icon" />
+                      </label>
+                      <div class="filters__block-row-content">
+                        Hide media HTTP requests
+                      </div>
+                    </div>
+                    <div class="filters__block-row">
+                      <label class="filters__checkbox">
+                        <input
+                          type="checkbox"
+                          @change="setUserFiltered"
                           v-model="filters.declutter.hideUnlabeled.on"
                         />
                         <CheckIcon class="filters__checkbox-icon" />
@@ -312,6 +338,14 @@ export default {
         rootObjects: [],
         hideObjects: [],
         declutter: {
+          limitRootEvents: {
+            on: true,
+            default: true,
+          },
+          hideMediaRequests: {
+            on: true,
+            default: true,
+          },
           hideUnlabeled: {
             on: false,
             default: false,
@@ -377,6 +411,10 @@ export default {
       let { classMap } = appMap;
       let rootEvents = appMap.rootEvents();
 
+      if (this.filters.declutter.limitRootEvents.on) {
+        rootEvents = rootEvents.filter((e) => e.httpServerRequest);
+      }
+
       let events = rootEvents.reduce((callTree, rootEvent) => {
         rootEvent.traverse((e) => callTree.push(e));
         return callTree;
@@ -404,6 +442,33 @@ export default {
             ),
           ]);
         }
+      }
+
+      if (this.filters.declutter.hideMediaRequests.on) {
+        const mediaRegex = [
+          'application/javascript',
+          'application/ecmascript',
+          'audio/.+',
+          'font/.+',
+          'image/.+',
+          'text/javascript',
+          'text/ecmascript',
+          'text/css',
+          'video/.+',
+        ].map((t) => new RegExp(t, 'i'));
+        const excludedEvents = [];
+        events.forEach((e) => {
+          if (
+            e.http_server_response &&
+            e.http_server_response.mime_type &&
+            mediaRegex.some((regex) =>
+              regex.test(e.http_server_response.mime_type)
+            )
+          ) {
+            excludedEvents.push(e.parent_id);
+          }
+        });
+        events = events.filter((e) => !excludedEvents.includes(e.id));
       }
 
       if (this.filters.declutter.hideUnlabeled.on) {
@@ -495,7 +560,7 @@ export default {
       const rootEvents = this.$store.state.appMap.rootEvents();
 
       if (rootEvents.every((e) => !e.httpServerRequest)) {
-        this.filters.limitRootEvents.on = false;
+        this.filters.declutter.limitRootEvents.on = false;
       }
 
       this.isLoading = false;
