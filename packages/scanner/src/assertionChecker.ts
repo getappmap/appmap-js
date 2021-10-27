@@ -1,7 +1,7 @@
 import { AppMap, Event } from '@appland/models';
 import Assertion from './assertion';
 import { AbortError } from './errors';
-import { AssertionPrototype, GlobalOptions, Finding } from './types';
+import { AssertionPrototype, Finding } from './types';
 import { verbose } from './scanner/util';
 import ScopeIterator from './scope/scopeIterator';
 import RootScope from './scope/rootScope';
@@ -22,7 +22,6 @@ export default class AssertionChecker {
   async check(
     appMap: AppMap,
     assertionPrototype: AssertionPrototype,
-    globalOptions: GlobalOptions,
     matches: Finding[]
   ): Promise<void> {
     if (verbose()) {
@@ -43,7 +42,7 @@ export default class AssertionChecker {
       if (verbose()) {
         console.warn(`Scope ${scope.scope}`);
       }
-      const assertion = assertionPrototype.build(globalOptions);
+      const assertion = assertionPrototype.build();
       if (assertionPrototype.enumerateScope) {
         for (const event of scope.events()) {
           await this.checkEvent(event, scope.scope, appMap, assertion, matches);

@@ -11,7 +11,7 @@ describe('openapi.securitySchemes', () => {
 
     const schemes = new SecuritySchemes();
     schemes.addRpcRequest(postTokenRequest);
-    expect(schemes.openapi()).toEqual({ bearer: { scheme: 'bearer' } });
+    expect(schemes.openapi()).toEqual({ bearer: { scheme: 'bearer', type: 'http' } });
   });
   // TODO: http_server_request
 });

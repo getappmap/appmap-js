@@ -17,10 +17,6 @@ export type Level = 'warning' | 'error';
 
 type EventFilter = (e: Event, appMap: AppMap) => boolean;
 
-export interface GlobalOptions {
-  appmapDir: string;
-}
-
 export interface FindingSummary {
   scannerTitle: string;
   findingTotal: number;
@@ -74,7 +70,7 @@ interface AssertionPrototype {
   config: AssertionConfig;
   scope: ScopeName;
   enumerateScope: boolean;
-  build(globalOptions: GlobalOptions): Assertion;
+  build(): Assertion;
 }
 
 interface AssertionSpec {

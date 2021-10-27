@@ -21,12 +21,7 @@ const scan = async (
   const appMapData = buildAppMap(appMapBytes).normalize().build();
 
   const findings: Finding[] = [];
-  await new AssertionChecker().check(
-    appMapData,
-    assertionPrototype,
-    { appmapDir: 'test/fixtures/appmaps' },
-    findings
-  );
+  await new AssertionChecker().check(appMapData, assertionPrototype, findings);
 
   if (process.env.VERBOSE_TEST === 'true') {
     console.log(JSON.stringify(findings, null, 2));

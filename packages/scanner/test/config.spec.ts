@@ -14,7 +14,7 @@ describe('YAML config test', () => {
     const provider = new ConfigurationProvider(configObj);
     const assertionPrototypes: readonly AssertionPrototype[] = await provider.getConfig();
     expect(assertionPrototypes).toHaveLength(1);
-    const assertion = assertionPrototypes[0].build({ appmapDir: 'test/fixtures/appmaps' });
+    const assertion = assertionPrototypes[0].build();
     expect(assertion.description).toEqual(`Slow HTTP server request (> 251ms)`);
   });
 
@@ -29,7 +29,7 @@ describe('YAML config test', () => {
     const provider = new ConfigurationProvider(configObj);
     const assertionPrototypes: readonly AssertionPrototype[] = await provider.getConfig();
     expect(assertionPrototypes).toHaveLength(1);
-    const assertion = assertionPrototypes[0].build({ appmapDir: 'test/fixtures/appmaps' });
+    const assertion = assertionPrototypes[0].build();
     expect(assertion.options.routes).toEqual([/.*/]);
   });
 });
