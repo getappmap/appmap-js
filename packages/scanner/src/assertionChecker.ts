@@ -19,7 +19,7 @@ export default class AssertionChecker {
 
   check(appMap: AppMap, assertionPrototype: AssertionPrototype, matches: Finding[]): void {
     if (verbose()) {
-      console.warn(`Checking AppMap ${appMap.name}`);
+      console.warn(`Checking AppMap ${appMap.name} with scope ${assertionPrototype.scope}`);
     }
     const scopeIterator = this.scopes[assertionPrototype.scope];
     if (!scopeIterator) {
@@ -33,6 +33,9 @@ export default class AssertionChecker {
     };
 
     for (const scope of scopeIterator.scopes(callEvents())) {
+      if (verbose()) {
+        console.warn(`Scope ${scope.scope}`);
+      }
       const assertion = assertionPrototype.build();
       if (assertionPrototype.enumerateScope) {
         for (const event of scope.events()) {

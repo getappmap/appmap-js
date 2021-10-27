@@ -1,6 +1,6 @@
 import { AppMap } from '@appland/models';
 import chalk from 'chalk';
-import { AssertionPrototype, Finding } from '../types';
+import { AssertionPrototype, Finding, ScannerSummary } from '../types';
 
 export default abstract class Formatter {
   private noColors = false;
@@ -12,17 +12,24 @@ export default abstract class Formatter {
     index: number
   ): string | undefined;
 
-  summary(total: number, findings: number, titledSummary: Map<string, number>): string {
-    const matchedStr = `${findings} finding${findings === 1 ? '' : 's'}`;
+  summary(summary: ScannerSummary): string {
+    const matchedStr = `${summary.findingTotal} finding${summary.findingTotal === 1 ? '' : 's'}`;
     const colouredMatchedStr = this.noColors ? matchedStr : chalk.stderr.magenta(matchedStr);
 
     const result: Array<string> = [];
-    result.push(`${total} checks (${[colouredMatchedStr].join(', ')})`);
+    result.push(`${summary.checkTotal} checks (${[colouredMatchedStr].join(', ')})`);
 
-    titledSummary.forEach((value: number, key: string) => {
-      const casesStr = `\t- ${key}: ${value} case(s)`;
-      result.push(this.noColors ? casesStr : chalk.stderr.magenta(casesStr));
-    });
+    Object.values(summary.findingSummary)
+      .sort((a, b) => a.scannerTitle.localeCompare(b.scannerTitle))
+      .forEach((findingSummary) => {
+        const casesStr = `\t- ${findingSummary.scannerTitle}: ${findingSummary.findingTotal} case(s)`;
+        result.push(this.noColors ? casesStr : chalk.stderr.magenta(casesStr));
+        const uniqueMessages = [...new Set(findingSummary.messages)].sort();
+        uniqueMessages.forEach((message) => {
+          const messageStr = `\t\t${message}`;
+          result.push(this.noColors ? messageStr : chalk.stderr.magenta(messageStr));
+        });
+      });
 
     result.push('');
 

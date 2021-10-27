@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import chalk from 'chalk';
 import { ideLink } from '../scanner/util';
-import { Finding } from '../types';
+import { Finding, ScannerSummary } from '../types';
 import Formatter from '../formatter/formatter';
 
 export type ReportFormat = 'text' | 'json';
@@ -21,7 +21,11 @@ export default class Generator {
       this.writeln();
     }
 
-    const titledSummary = new Map<string, number>();
+    const scannerSummary: ScannerSummary = {
+      checkTotal: totalAssertions,
+      findingTotal: findings.length,
+      findingSummary: {},
+    };
 
     if (findings.length > 0) {
       if (this.reportFormat === 'text') {
@@ -29,7 +33,19 @@ export default class Generator {
       }
 
       findings.forEach((match) => {
-        titledSummary.set(match.scannerTitle, (titledSummary.get(match.scannerTitle) ?? 0) + 1);
+        let findingSummary = scannerSummary.findingSummary[match.scannerId];
+        if (!findingSummary) {
+          findingSummary = {
+            scannerTitle: match.scannerTitle,
+            findingTotal: 0,
+            messages: new Set(),
+          };
+          scannerSummary.findingSummary[match.scannerId] = findingSummary;
+        }
+        findingSummary.findingTotal += 1;
+        if (match.message) {
+          findingSummary.messages.add(match.message);
+        }
 
         const filePath =
           this.ide && match.appMapFile && !this.reportFile
@@ -53,9 +69,9 @@ export default class Generator {
       });
     }
 
-    const colouredSummary = this.formatter.summary(totalAssertions, findings.length, titledSummary);
+    const colouredSummary = this.formatter.summary(scannerSummary);
     this.formatter.disableColors();
-    const summary = this.formatter.summary(totalAssertions, findings.length, titledSummary);
+    const summary = this.formatter.summary(scannerSummary);
 
     if (this.reportFormat === 'text') {
       this.write(this.reportFile ? summary : colouredSummary);
