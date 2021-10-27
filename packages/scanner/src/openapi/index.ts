@@ -1,14 +1,16 @@
 import provider from './provider';
-import openapiDiff from 'openapi-diff';
+import OpenApiDiff from 'openapi-diff';
 import Model from './model';
 import SecuritySchemes from './securitySchemes';
 import { rpcRequestForEvent } from './rpcRequest';
 import { Event } from '@appland/models';
 import { OpenAPIV3 } from 'openapi-types';
+import { writeFileSync } from 'fs';
+import { verbose } from '../scanner/util';
 
 interface OpenAPIV3Fragment {
   paths: OpenAPIV3.PathItemObject;
-  components: Record<string, OpenAPIV3.SecuritySchemeObject>;
+  securitySchemes: Record<string, OpenAPIV3.SecuritySchemeObject>;
 }
 
 const forClientRequest = (event: Event): OpenAPIV3Fragment | undefined => {
@@ -22,38 +24,43 @@ const forClientRequest = (event: Event): OpenAPIV3Fragment | undefined => {
   securitySchemes.addRpcRequest(rpcRequest);
   model.addRpcRequest(rpcRequest);
 
-  return { paths: model.openapi(), components: securitySchemes.openapi() };
+  return { paths: model.openapi(), securitySchemes: securitySchemes.openapi() };
 };
 
-const forURL = async (url: string, workingDir: string): Promise<any> => {
-  return provider(url, workingDir);
+const forURL = async (
+  url: string,
+  openapiSchemata: Record<string, string>
+): Promise<OpenAPIV3.Document> => {
+  return provider(url, openapiSchemata);
 };
 
-const isCompatible = async (clientSchema: any, serverSchema: any): Promise<boolean> => {
-  const result = await openapiDiff.diffSpecs({
+const breakingChanges = async (
+  schemaHead: OpenAPIV3.Document,
+  schemaBase: OpenAPIV3.Document
+): Promise<Array<OpenApiDiff.DiffResult<'breaking'>>> => {
+  if (verbose()) {
+    writeFileSync('openapi_head.json', JSON.stringify(schemaHead, null, 2));
+    writeFileSync('openapi_base.json', JSON.stringify(schemaBase, null, 2));
+  }
+
+  const result = await OpenApiDiff.diffSpecs({
     sourceSpec: {
-      content: JSON.stringify(clientSchema),
-      location: 'local',
+      content: JSON.stringify(schemaHead),
+      location: 'openapi_head.json',
       format: 'openapi3',
     },
     destinationSpec: {
-      content: JSON.stringify(serverSchema),
-      location: 'local',
+      content: JSON.stringify(schemaBase),
+      location: 'openapi_base.json',
       format: 'openapi3',
     },
   });
 
   if (result.breakingDifferencesFound) {
-    console.warn('Breaking change found!');
-    console.warn(result);
-    return false;
+    return result.breakingDifferences;
   }
 
-  return true;
+  return [];
 };
 
-export default {
-  forClientRequest,
-  forURL,
-  isCompatible,
-};
+export { forClientRequest, forURL, breakingChanges };

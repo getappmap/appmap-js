@@ -7,10 +7,13 @@ import insecureCompare from '../src/scanner/insecureCompare';
 import http500 from '../src/scanner/http500';
 import illegalPackageAccess from '../src/scanner/illegalPackageDependency';
 import rpcWithoutCircuitBreaker from '../src/scanner/rpcWithoutCircuitBreaker';
+import incompatibleHTTPClientRequest from '../src/scanner/incompatibleHttpClientRequest';
 import slowFunctionCall from '../src/scanner/slowFunctionCall';
 import { scan } from './util';
 import { AssertionPrototype, ScopeName } from '../src/types';
 import Assertion from '../src/assertion';
+import { cwd } from 'process';
+import { join, normalize } from 'path';
 
 const makePrototype = (
   id: string,
@@ -200,6 +203,25 @@ describe('assert', () => {
     expect(finding.event.id).toEqual(897);
     expect(finding.message).toEqual(
       'Slow app/controllers/MicropostsController#create call (0.228481ms)'
+    );
+  });
+
+  it('incompatible http client requests', async () => {
+    const railsSampleAppSchemaURL = `file://${normalize(
+      join(cwd(), 'test', 'fixtures', 'schemata', 'railsSampleApp6thEd.openapiv3.yaml')
+    )}`;
+    const { scanner, Options } = incompatibleHTTPClientRequest;
+    const findings = await scan(
+      makePrototype('incompatible-http-client-request', () =>
+        scanner(new Options({ 'api.stripe.com': railsSampleAppSchemaURL }))
+      ),
+      'PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
+    );
+    expect(findings).toHaveLength(4);
+    const finding = findings[0];
+    expect(finding.event.id).toEqual(19);
+    expect(finding.message).toEqual(
+      `HTTP client request is incompatible with OpenAPI schema. Change details: remove paths./v1/tokens`
     );
   });
 });

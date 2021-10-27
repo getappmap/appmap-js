@@ -1,58 +1,74 @@
-import { readFile } from 'fs/promises';
 import { load } from 'js-yaml';
-import { join, sep } from 'path';
-import { verbose } from 'src/scanner/util';
 import { URL } from 'url';
+import { OpenAPIV3 } from 'openapi-types';
+import http, { IncomingMessage } from 'http';
+import https from 'https';
+import { readFile } from 'fs/promises';
 
-interface AppMapConfig {
-  openapiSchema: Record<string, string>;
-}
+type Loader = (url: URL) => Promise<Buffer>;
 
-const appmapConfig = async (workingDir: string): Promise<AppMapConfig> => {
-  const homeDir = process.env.HOME;
-  let dir = workingDir;
-  let appmapData: Buffer | undefined;
+const URLLoader = (protocol: any) => {
+  return (url: URL): Promise<Buffer> => {
+    return new Promise((resolve, reject) => {
+      protocol
+        .get(url)
+        .on('response', (response: IncomingMessage) => {
+          if (response.statusCode !== 200) {
+            return reject(`${response.statusCode} ${response.statusMessage}`);
+          }
 
-  const upDir = () => {
-    const dirTokens = dir.split(sep);
-    dirTokens.pop();
-    return dirTokens.join(sep);
+          const data: Buffer[] = [];
+          response
+            .on('data', (chunk: Buffer) => {
+              data.push(Buffer.from(chunk));
+            })
+            .on('end', () => {
+              resolve(Buffer.concat(data));
+            });
+        })
+        .on('error', reject);
+    });
   };
-
-  while (!appmapData && dir !== homeDir && dir.split(sep).length > 1) {
-    try {
-      appmapData = await readFile(join(dir, 'appmap.yml'));
-    } catch {
-      dir = upDir();
-    }
-  }
-  if (!appmapData) {
-    throw new Error(`No appmap.yml found in ${workingDir}`);
-  }
-
-  return load(appmapData!.toString()) as AppMapConfig;
 };
 
-const fetchSchema = async (_sourceURL: string): Promise<any> => {
-  return load(
-    (
-      await readFile(
-        `/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/swagger/openapi_stable.yaml`
-      )
-    ).toString()
-  );
+const FileLoader = (url: URL): Promise<Buffer> => {
+  return readFile(url.pathname);
 };
 
-const lookup = async (urlStr: string, workingDir: string): Promise<any> => {
+const ProtocolLoader: Record<string, Loader> = {
+  'http:': URLLoader(http),
+  'https:': URLLoader(https),
+  'file:': FileLoader,
+};
+
+const fetch = (urlStr: string): Promise<Buffer> => {
+  const url = new URL(urlStr);
+  const loader = ProtocolLoader[url.protocol];
+  if (!loader) {
+    throw new Error(`No schema loader for protocol ${url.protocol}`);
+  }
+  return loader(url);
+};
+
+const fetchSchema = async (sourceURL: string): Promise<OpenAPIV3.Document> => {
+  const data = await fetch(sourceURL);
+  return load(data.toString()) as OpenAPIV3.Document;
+};
+
+const lookup = async (
+  urlStr: string,
+  openapiSchemata: Record<string, string>
+): Promise<OpenAPIV3.Document> => {
   const { host } = new URL(urlStr);
-  const config = await appmapConfig(workingDir);
-  const sourceURL = config.openapiSchema[host];
-  const schemaData = await fetchSchema(sourceURL);
-  const version = schemaData.openapi;
-  if (verbose()) {
-    console.warn(`Loading schema for version ${version}`);
+  const sourceURL = openapiSchemata[host];
+  if (!sourceURL) {
+    throw new Error(
+      `No OpenAPI schema URL configured for host ${host}. Available hosts are: ${Object.keys(
+        openapiSchemata
+      ).join(', ')}`
+    );
   }
-  return schemaData;
+  return await fetchSchema(sourceURL);
 };
 
 export default lookup;

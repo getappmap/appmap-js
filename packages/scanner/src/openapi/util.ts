@@ -12,6 +12,7 @@ function parseScheme(authorization: string): Scheme {
     return {
       schemeId: 'api_key',
       scheme: {
+        type: 'apiKey',
         name: 'authorization',
         in: 'header',
       } as OpenAPIV3.ApiKeySecurityScheme,
@@ -22,6 +23,7 @@ function parseScheme(authorization: string): Scheme {
   return {
     schemeId,
     scheme: {
+      type: 'http',
       scheme: schemeId,
     } as OpenAPIV3.HttpSecurityScheme,
   };

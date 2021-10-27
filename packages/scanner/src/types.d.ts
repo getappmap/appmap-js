@@ -41,7 +41,10 @@ export interface MatchResult {
   relatedEvents?: Event[];
 }
 
-type Matcher = (e: Event, appMap: AppMap) => boolean | string | MatchResult[] | undefined;
+type Matcher = (
+  e: Event,
+  appMap: AppMap
+) => Promise<boolean | string | MatchResult[]> | boolean | string | MatchResult[] | undefined;
 
 export interface Finding {
   appMapName: string;
