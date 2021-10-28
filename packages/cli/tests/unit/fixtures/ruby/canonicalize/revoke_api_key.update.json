@@ -13,7 +13,8 @@
               "analyzed_query": {
                 "actions": ["update"],
                 "tables": ["api_keys"],
-                "columns": ["id", "last_used"]
+                "columns": ["id", "last_used"],
+                "joinsCount": 0
               }
             }
           }
@@ -29,7 +30,8 @@
               "analyzed_query": {
                 "actions": ["delete"],
                 "tables": ["api_keys"],
-                "columns": ["id"]
+                "columns": ["id"],
+                "joinsCount": 0
               }
             }
           }

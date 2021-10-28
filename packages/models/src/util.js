@@ -368,7 +368,7 @@ function getStaticPropValues(obj) {
 }
 
 /* eslint-disable no-inner-declarations */
-function parseNormalizeSQL(sql) {
+export function parseNormalizeSQL(sql) {
   const parseSQL = sql.replace(/\s+returning\s+\*/i, '');
   let ast;
   try {
@@ -473,6 +473,7 @@ function parseNormalizeSQL(sql) {
       actions: uniqueActions,
       tables: unique(tables).sort(),
       columns: unique(columns).sort(),
+      joinsCount: tables.length - 1,
     };
   } catch (e) {
     console.warn(`Unable to interpret AST tree for ${parseSQL} : ${e.message}`);
