@@ -97,7 +97,9 @@ export default class GradleInstaller
    * If there's no plugins block, and no buildscript block, append a new plugins
    * block.
    *
-   * @returns {string}
+   * @returns {updatedSrc: string, offset: number} updatedSrc is the source
+   * updated to reference the plugin, offset is the index in the original source
+   * from which copying should continue
    */
   async insertPluginSpec(
     buildFileSource: string,
@@ -167,8 +169,9 @@ ${whitespace.padLine(pluginSpec)}
     const updatedSrc = [
       buildFileSource.substring(0, parseResult.plugins.lbrace + 1),
       lines.map((l) => whitespace.padLine(l)).join(os.EOL),
+      '}'
     ].join(os.EOL);
-    const offset = parseResult.plugins.rbrace - 1;
+    const offset = parseResult.plugins.rbrace + 1;
 
     return { updatedSrc, offset };
   }
@@ -218,10 +221,10 @@ ${whitespace.padLine(mavenCentral)}
 
     updatedSrc = [
       updatedSrc,
-      buildFileSource.substring(offset, parseResult.repositories.lbrace),
+      buildFileSource.substring(offset, parseResult.repositories.rbrace),
       whitespace.padLine(mavenCentral),
-    ].join[''];
-    offset = parseResult.repositories.rbrace;
+    ].join('');
+    offset = parseResult.repositories.rbrace - 1;
     return { updatedSrc, offset };
   }
 

@@ -41,7 +41,7 @@ describe('GradleParser', () => {
       it('is ignored in a comment', () => {
         const commentSrc = '/*' + sources[kw] + '*/';
         const result = new GradleParser().parse(commentSrc);
-        expect(result.buildscript).toBeNull();
+        expect(result.buildscript).toBeUndefined();
       });
     });
   });

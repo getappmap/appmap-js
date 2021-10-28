@@ -8,25 +8,44 @@ class SourceOffsets {
   constructor(readonly blockName: string, readonly lbrace: number) {}
 }
 
+// These are the names blocks that can contain "repositories" blocks:
+enum RepositoriesContainers {
+  buildscript = "buildscript", 
+  allprojects = "allprojects", 
+  subprojects = "subprojects"
+};
+const REPOSITORIES_CONTAINERS = Object.values(RepositoriesContainers);
+
+// These are the names of the other blocks we care about:
+enum OtherContainers {
+  repositories = 'repositories', 
+  plugins = 'plugins'
+};
+
+const keywords = {
+  ...RepositoriesContainers,
+  ...OtherContainers
+};
+type Keywords = typeof keywords;
+const KEYWORDS = Object.values(keywords);
+
 /**
- * The results of parsing a build.gradle file. Each member contains the offsets
- * into the source for the block's left brace and right brace, or is null if the
- * block is not present.
+ * The results of parsing a build.gradle file. 
  *
  * startOffset is the first non-comment, non-whitespace character. mavenPresent
  * will be true if `mavenCentral()` is included in the repositories.
+ * 
+ * The rest of the properties take their names from the keywords above. Each is
+ * a SourceOffsets corresponding to block, or undefined if the block is not
+ * present.
  **/
-export class GradleParseResult {
-  startOffset: number = -1;
-  buildscript: SourceOffsets | null = null;
-  repositories: SourceOffsets | null = null;
-  plugins: SourceOffsets | null = null;
-  mavenPresent: boolean = false;
-}
+export type GradleParseResult = {
+  startOffset: number,
+  mavenPresent: boolean,
+} & {[k in keyof Keywords]?: SourceOffsets};;
 
 export class GradleParser {
   public debug: number = 0;
-  public static keywords: string[] = ['buildscript', 'repositories', 'plugins'];
 
   /**
    * Parse the given gradle source, returning a GradleParseResult describing what we found.
@@ -36,7 +55,7 @@ export class GradleParser {
   parse(src: string): GradleParseResult {
     const lexer = moo.states({
       gradle: {
-        keyword: GradleParser.keywords,
+        keyword: KEYWORDS,
         mavenCentral: 'mavenCentral',
         comment: { match: /\/\/.*?\n/, lineBreaks: true },
         multicomment: /\/\*[^]*?\*\//,
@@ -63,7 +82,10 @@ export class GradleParser {
     let startBlock: string | null = null;
     const blockStack: SourceOffsets[] = [];
     lexer.reset(src);
-    let result = new GradleParseResult();
+    let result:GradleParseResult = {
+      startOffset: -1, 
+      mavenPresent: false
+    };
 
     // eslint-disable-next-line no-cond-assign
     /* eslint-disable no-continue */
@@ -93,7 +115,7 @@ export class GradleParser {
         // We're only interested in the repositories block if it's not within
         // the buildscript block.
         const inBuildscript =
-          blockStack.length === 1 && blockStack[0].blockName === 'buildscript';
+          blockStack.length === 1 && REPOSITORIES_CONTAINERS.includes(blockStack[0].blockName as RepositoriesContainers);
         if (t.value !== 'repositories' || !inBuildscript) {
           startBlock = t.value;
           continue;
@@ -149,8 +171,8 @@ export class GradleParser {
   }
   
   checkSyntax(parseResult: GradleParseResult) {
-    GradleParser.keywords.forEach((k) => {
-      if (parseResult[k] !== null && parseResult[k].rbrace === -1) {
+    KEYWORDS.forEach((k) => {
+      if (parseResult[k]?.rbrace === -1) {
         throw new Error(
           `parse failed, ${JSON.stringify(parseResult, null, 2)}`
         );
