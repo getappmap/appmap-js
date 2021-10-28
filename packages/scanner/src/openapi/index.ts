@@ -7,6 +7,7 @@ import { Event } from '@appland/models';
 import { OpenAPIV3 } from 'openapi-types';
 import { writeFileSync } from 'fs';
 import { verbose } from '../scanner/util';
+import { URL } from 'url';
 
 interface OpenAPIV3Fragment {
   paths: OpenAPIV3.PathItemObject;
@@ -31,7 +32,7 @@ const forURL = async (
   url: string,
   openapiSchemata: Record<string, string>
 ): Promise<OpenAPIV3.Document> => {
-  return provider(url, openapiSchemata);
+  return provider(new URL(url).host, openapiSchemata);
 };
 
 const breakingChanges = async (

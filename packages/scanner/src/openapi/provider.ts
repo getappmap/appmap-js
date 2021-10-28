@@ -50,16 +50,29 @@ const fetch = (urlStr: string): Promise<Buffer> => {
   return loader(url);
 };
 
+const SchemaCache: Record<string, OpenAPIV3.Document> = {};
+const schemaCache = async (key: string, fn: (key: string) => Promise<OpenAPIV3.Document>) => {
+  const cachedResult = SchemaCache[key];
+  if (cachedResult) {
+    return cachedResult;
+  }
+
+  const result = await fn(key);
+  SchemaCache[key] = result;
+  return result;
+};
+
 const fetchSchema = async (sourceURL: string): Promise<OpenAPIV3.Document> => {
-  const data = await fetch(sourceURL);
-  return load(data.toString()) as OpenAPIV3.Document;
+  return schemaCache(sourceURL, async (sourceURL: string) => {
+    const data = await fetch(sourceURL);
+    return load(data.toString()) as OpenAPIV3.Document;
+  });
 };
 
 const lookup = async (
-  urlStr: string,
+  host: string,
   openapiSchemata: Record<string, string>
 ): Promise<OpenAPIV3.Document> => {
-  const { host } = new URL(urlStr);
   const sourceURL = openapiSchemata[host];
   if (!sourceURL) {
     throw new Error(
