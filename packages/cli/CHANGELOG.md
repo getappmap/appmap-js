@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.10.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.10.0...@appland/appmap-v3.10.1) (2021-10-28)
+
+
+### Bug Fixes
+
+* Add missing mavenCentral repo correctly ([bf33ce4](https://github.com/applandinc/appmap-js/commit/bf33ce41214d3fb839b46ca85fc76a0cf2612cb6))
+
 # [@appland/appmap-v3.10.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.9.0...@appland/appmap-v3.10.0) (2021-10-21)
 
 
