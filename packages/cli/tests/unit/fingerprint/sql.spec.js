@@ -8,7 +8,7 @@ describe('Normalize SQL', () => {
       actions: ['select'],
       columns: ['*'],
       tables: ['users'],
-      joinsCount: 0,
+      nonUniqueTablesCount: 1,
     });
   });
   test('Simple INSERT', () => {
@@ -18,7 +18,7 @@ describe('Normalize SQL', () => {
       actions: ['insert'],
       columns: ['login'],
       tables: ['users'],
-      joinsCount: 0,
+      nonUniqueTablesCount: 1,
     });
   });
   test('INSERT RETURNING', () => {
@@ -27,7 +27,7 @@ describe('Normalize SQL', () => {
     expect(result).toEqual({
       actions: ['insert'],
       columns: ['login'],
-      joinsCount: 0,
+      nonUniqueTablesCount: 1,
       tables: ['users'],
     });
   });
@@ -37,7 +37,7 @@ describe('Normalize SQL', () => {
     expect(result).toEqual({
       actions: ['update'],
       columns: ['login'],
-      joinsCount: 0,
+      nonUniqueTablesCount: 1,
       tables: ['users'],
     });
   });
@@ -47,7 +47,7 @@ describe('Normalize SQL', () => {
     expect(result).toEqual({
       actions: ['select'],
       columns: ['a.*', 'a.user_id', 'users.*', 'users.id'],
-      joinsCount: 1,
+      nonUniqueTablesCount: 2,
       tables: ['addresses', 'users'],
     });
   });
@@ -58,8 +58,19 @@ describe('Normalize SQL', () => {
     expect(result).toEqual({
       actions: ['select'],
       columns: ['a.*', 'a.user_id', 'users.*', 'users.id'],
-      joinsCount: 2,
+      nonUniqueTablesCount: 3,
       tables: ['addresses', 'payments', 'users'],
+    });
+  });
+
+  test('SELECT with self join', () => {
+    const sql = `SELECT u1.* FROM users u1 JOIN users u1 ON u1.admin_id = u2.id`;
+    const result = normalizeSQL(sql);
+    expect(result).toEqual({
+      actions: ['select'],
+      columns: ['u1.*', 'u1.admin_id', 'u2.id'],
+      nonUniqueTablesCount: 2,
+      tables: ['users'],
     });
   });
 });

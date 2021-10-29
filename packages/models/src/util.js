@@ -473,7 +473,7 @@ export function parseNormalizeSQL(sql) {
       actions: uniqueActions,
       tables: unique(tables).sort(),
       columns: unique(columns).sort(),
-      joinsCount: tables.length - 1,
+      nonUniqueTablesCount: tables.length,
     };
   } catch (e) {
     console.warn(`Unable to interpret AST tree for ${parseSQL} : ${e.message}`);
