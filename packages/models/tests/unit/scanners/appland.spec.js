@@ -4,7 +4,7 @@ import fs from 'fs';
 import buildAppMap from '../../../src/appMapBuilder';
 import applandScans from '../../../src/scanners/appland';
 
-const appmapDir = new URL('../fixtures/appland', import.meta.url).pathname;
+const appmapDir = join(__dirname, '..', 'fixtures');
 
 describe('AppLand scanner', () => {
   test('all appmaps are valid', async () => {
