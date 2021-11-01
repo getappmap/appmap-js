@@ -1,5 +1,6 @@
+import {existsSync} from 'fs';
 import os from 'os';
-import { join, sep } from 'path';
+import { join, sep, delimiter as pathDelimiter } from 'path';
 import { JSDOM } from 'jsdom';
 import xmlSerializer from 'w3c-xmlserializer';
 import chalk from 'chalk';
@@ -30,11 +31,11 @@ export default class MavenInstaller
   }
 
   async postInstallMessage(): Promise<string> {
-    let mvnBin = await this.runCommand();
+    const mvn = this.runCommand();
 
     return [
       `The AppMap agent will automatically record your tests when you run ${chalk.blue(
-        `${mvnBin} test`
+        `${mvn} test`
       )}`,
       `By default, AppMap files will be output to ${chalk.blue(
         'target/appmap'
@@ -46,9 +47,9 @@ export default class MavenInstaller
     return await exists(this.buildFilePath);
   }
 
-  async runCommand(): Promise<string> {
+  runCommand(): string {
     const ext = os.platform() === 'win32' ? '.cmd' : '';
-    const wrapperExists = await exists(join(this.path, `mvnw${ext}`));
+    const wrapperExists = existsSync(join(this.path, `mvnw${ext}`));
 
     if (wrapperExists) {
       return `.${sep}mvnw${ext}`;
@@ -65,7 +66,7 @@ export default class MavenInstaller
 
   async verifyCommand(): Promise<CommandStruct> {
     return new CommandStruct(
-      await this.runCommand(),
+      this.runCommand(),
       ['-Dplugin=com.appland:appmap-maven-plugin', 'help:describe'],
       this.path
     );
@@ -73,7 +74,7 @@ export default class MavenInstaller
 
   async printJarPathCommand(): Promise<CommandStruct> {
     return new CommandStruct(
-      await this.runCommand(),
+      this.runCommand(),
       ['appmap:print-jar-path'],
       this.path
     );
