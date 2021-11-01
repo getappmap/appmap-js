@@ -368,7 +368,7 @@ function getStaticPropValues(obj) {
 }
 
 /* eslint-disable no-inner-declarations */
-export function parseNormalizeSQL(sql) {
+function parseNormalizeSQL(sql) {
   const parseSQL = sql.replace(/\s+returning\s+\*/i, '');
   let ast;
   try {
