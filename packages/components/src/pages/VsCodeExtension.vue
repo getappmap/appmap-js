@@ -562,13 +562,13 @@ export default {
       ) {
         this.filters.declutter.hideName.names.forEach((fqid) => {
           const codeObject = classMap.codeObjects.filter(
-            (co) => co.fqid == fqid
+            (co) => co.fqid === fqid
           )[0];
           if (codeObject) {
             events = events.filter((e) => !codeObject.allEvents.includes(e));
           }
           classMap.codeObjects = classMap.codeObjects.filter(
-            (co) => co != codeObject
+            (co) => co !== codeObject
           );
         });
       }
@@ -825,7 +825,7 @@ export default {
 
     removeRootObject(codeObject) {
       this.filters.rootObjects = this.filters.rootObjects.filter(
-        (co) => co != codeObject
+        (co) => co !== codeObject
       );
     },
   },

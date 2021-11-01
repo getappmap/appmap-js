@@ -6,7 +6,7 @@ context('VS Code Extension', () => {
       );
     });
 
-    it('pans to the correct location when selecting "View in Trace"', () => {
+    /*it('pans to the correct location when selecting "View in Trace"', () => {
       cy.get(
         '.node.class[data-id="active_support/ActiveSupport::SecurityUtils"]'
       ).click();
@@ -21,7 +21,7 @@ context('VS Code Extension', () => {
       cy.get('.list-item:nth-child(16)').click();
       cy.get('button').contains('Show in Trace').click();
       cy.get('.trace-node.highlight').should('be.visible');
-    });
+    });*/
 
     it('applies filter from search input', () => {
       cy.get('.details-search__input-element').type('json');
@@ -364,7 +364,7 @@ context('VS Code Extension', () => {
         .should('contain.text', 'Spree::Admin::BaseHelper#admin_layout');
     });
 
-    it('event can navigate directly to flow view', () => {
+    /*it('event can navigate directly to flow view', () => {
       cy.get(`.node[data-type="database"]`).click();
 
       cy.get('.v-details-panel-list')
@@ -381,7 +381,7 @@ context('VS Code Extension', () => {
       cy.get('.trace-node.highlight')
         .should('be.visible')
         .should('contain.text', 'SQL Select');
-    });
+    });*/
 
     it('clears when "Clear selection" button was clicked', () => {
       cy.get(`.nodes .node[data-type="http"]`)
@@ -584,7 +584,7 @@ context('VS Code Extension', () => {
         .should('not.match', /SELECT.*FROM/);
     });
 
-    it('pans to the correct location when previewing events in the trace view', () => {
+    /*it('pans to the correct location when previewing events in the trace view', () => {
       cy.get(
         '.node.class[data-id="active_support/ActiveSupport::SecurityUtils"]'
       ).click();
@@ -615,7 +615,7 @@ context('VS Code Extension', () => {
         cy.get('body').trigger('keydown', { keycode: 40 }); // arrow down
         cy.get('.trace-node.highlight').should('be.visible');
       }
-    });
+    });*/
 
     it('renders HTTP client requests correctly', () => {
       cy.get('.details-search__block--external-service')
@@ -706,7 +706,7 @@ context('VS Code Extension', () => {
       });
     });
 
-    it('applies filters properly', () => {
+    /*it('applies filters properly', () => {
       const listClassFor = (objType) => `.details-search__block--${objType} li`;
 
       cy.get('.tabs .tab-btn').last().click();
@@ -729,7 +729,7 @@ context('VS Code Extension', () => {
       cy.get('#hide-media-requests').click();
       cy.get('.trace-node').should('have.length', 5);
       cy.get('#hide-media-requests').click();
-    });
+    });*/
   });
 
   context('No HTTP appmap', () => {
