@@ -11,7 +11,7 @@
         </v-details-button>
       </template>
     </v-details-panel-header>
-    <v-details-panel-filters />
+    <v-details-panel-filters :object="object" />
     <v-details-panel-list
       title="Functions"
       :items="object.functions"

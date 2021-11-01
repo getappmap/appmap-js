@@ -115,12 +115,26 @@
                 <div class="filters__block">
                   <div class="filters__block-head">
                     <h3 class="filters__block-title">Root</h3>
-                    <input type="text" />
+                    <form class="filters__form">
+                      <input
+                        class="filters__form-input"
+                        type="text"
+                        placeholder="add new root..."
+                      />
+                      <PlusIcon class="filters__form-plus" />
+                    </form>
                   </div>
-                  <div class="filters__block-body">
-                    <div class="filters__root">
-                      route:GET /applications/1/event-10346
-                      <CloseThinIcon class="filters__root-icon" />
+                  <div class="filters__block-body filters__block-body--flex">
+                    <div
+                      class="filters__root"
+                      v-for="co in filters.rootObjects"
+                      :key="co.id"
+                    >
+                      {{ co.id }}
+                      <CloseThinIcon
+                        class="filters__root-icon"
+                        @click="removeRootObject(co)"
+                      />
                     </div>
                   </div>
                 </div>
@@ -188,6 +202,51 @@
                             "
                           />
                           <span class="filters__elapsed-ms">ms</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="filters__block-row">
+                      <label class="filters__checkbox">
+                        <input
+                          type="checkbox"
+                          @change="setUserFiltered"
+                          v-model="filters.declutter.hideName.on"
+                        />
+                        <CheckIcon class="filters__checkbox-icon" />
+                      </label>
+                      <div class="filters__block-row-content">
+                        Hide name:
+                        <form
+                          class="filters__form"
+                          @submit.prevent="addHiddenNameInput"
+                        >
+                          <input
+                            class="filters__form-input"
+                            type="text"
+                            placeholder="find names..."
+                            ref="filterHideFormInput"
+                          />
+                          <PlusIcon
+                            class="filters__form-plus"
+                            @click="addHiddenNameInput"
+                          />
+                        </form>
+                        <div
+                          class="filters__hide"
+                          v-if="filters.declutter.hideName.names.length"
+                        >
+                          <div
+                            class="filters__hide-item"
+                            v-for="(name, index) in filters.declutter.hideName
+                              .names"
+                            :key="name"
+                          >
+                            {{ name }}
+                            <CloseThinIcon
+                              class="filters__hide-item-icon"
+                              @click.stop="removeHiddenName(index)"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -268,6 +327,7 @@ import ArrowSearchLeftIcon from '@/assets/arrow-search-left.svg';
 import ArrowSearchRightIcon from '@/assets/arrow-search-right.svg';
 import CheckIcon from '@/assets/check.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
+import PlusIcon from '@/assets/plus.svg';
 import ReloadIcon from '@/assets/reload.svg';
 import ResetIcon from '@/assets/reset.svg';
 import SearchIcon from '@/assets/search.svg';
@@ -304,6 +364,7 @@ export default {
     CheckIcon,
     CloseThinIcon,
     SearchIcon,
+    PlusIcon,
     ReloadIcon,
     ResetIcon,
     UploadIcon,
@@ -333,10 +394,8 @@ export default {
       versionText: '',
       VIEW_COMPONENT,
       VIEW_FLOW,
-      rootCodeObject: null,
       filters: {
         rootObjects: [],
-        hideObjects: [],
         declutter: {
           limitRootEvents: {
             on: true,
@@ -354,6 +413,11 @@ export default {
             on: false,
             default: false,
             time: 100,
+          },
+          hideName: {
+            on: false,
+            default: false,
+            names: [],
           },
         },
       },
@@ -420,28 +484,29 @@ export default {
         return callTree;
       }, []);
 
-      if (this.rootCodeObject) {
-        const eventBranches = this.rootCodeObject.allEvents.map((e) => [
-          e.id,
-          e.linkedEvent.id,
-        ]);
-
-        events = events.filter((e) =>
-          eventBranches.some((branch) => e.id >= branch[0] && e.id <= branch[1])
-        );
-
-        // it's necessary to remove package wrap in Component Diagram,
-        // without this code package will be rendered in collapsed state
-        if (
-          this.rootCodeObject.type === 'class' &&
-          this.rootCodeObject.packageObject
-        ) {
-          classMap = new ClassMap([
-            classMap.codeObjects.filter(
-              (co) => co.id !== this.rootCodeObject.packageObject.id
-            ),
+      if (this.filters.rootObjects.length) {
+        this.filters.rootObjects.forEach((codeObject) => {
+          const eventBranches = codeObject.allEvents.map((e) => [
+            e.id,
+            e.linkedEvent.id,
           ]);
-        }
+
+          events = events.filter((e) =>
+            eventBranches.some(
+              (branch) => e.id >= branch[0] && e.id <= branch[1]
+            )
+          );
+
+          // it's necessary to remove package wrap in Component Diagram,
+          // without this code package will be rendered in collapsed state
+          if (codeObject.type === 'class' && codeObject.packageObject) {
+            classMap = new ClassMap([
+              classMap.codeObjects.filter(
+                (co) => co.id !== codeObject.packageObject.id
+              ),
+            ]);
+          }
+        });
       }
 
       if (this.filters.declutter.hideMediaRequests.on) {
@@ -489,6 +554,23 @@ export default {
             e.returnEvent.elapsedTime >=
               this.filters.declutter.hideElapsedTimeUnder.time / 1000
         );
+      }
+
+      if (
+        this.filters.declutter.hideName.on &&
+        this.filters.declutter.hideName.names.length
+      ) {
+        this.filters.declutter.hideName.names.forEach((fqid) => {
+          const codeObject = classMap.codeObjects.filter(
+            (co) => co.fqid == fqid
+          )[0];
+          if (codeObject) {
+            events = events.filter((e) => !codeObject.allEvents.includes(e));
+          }
+          classMap.codeObjects = classMap.codeObjects.filter(
+            (co) => co != codeObject
+          );
+        });
       }
 
       return buildAppMap({
@@ -670,8 +752,8 @@ export default {
     },
 
     resetDiagram() {
-      this.rootCodeObject = null;
       this.clearSelection();
+      this.resetFilters();
 
       this.renderKey += 1;
     },
@@ -716,16 +798,44 @@ export default {
 
     resetFilters() {
       this.filters.rootObjects = [];
-      this.filters.hideObjects = [];
       Object.keys(this.filters.declutter).forEach((k) => {
         this.filters.declutter[k].on = this.filters.declutter[k].default;
       });
+      this.filters.declutter.hideName.names = [];
+    },
+
+    addHiddenNameInput() {
+      this.addHiddenName(this.$refs.filterHideFormInput.value.trim());
+      this.$refs.filterHideFormInput.value = '';
+    },
+
+    addHiddenName(name) {
+      this.filters.declutter.hideName.names.push(name);
+      this.filters.declutter.hideName.on = true;
+      this.clearSelection();
+    },
+
+    removeHiddenName(index) {
+      this.filters.declutter.hideName.names.splice(index, 1);
+      if (this.filters.declutter.hideName.names.length === 0) {
+        this.filters.declutter.hideName.on = false;
+      }
+      this.clearSelection();
+    },
+
+    removeRootObject(codeObject) {
+      this.filters.rootObjects = this.filters.rootObjects.filter(
+        (co) => co != codeObject
+      );
     },
   },
 
   mounted() {
     this.$root.$on('makeRoot', (codeObject) => {
-      this.rootCodeObject = codeObject;
+      this.filters.rootObjects.push(codeObject);
+    });
+    this.$root.$on('addHiddenName', (objectId) => {
+      this.addHiddenName(objectId);
     });
   },
 };
@@ -1077,13 +1187,14 @@ code {
       &-head {
         border-radius: 0.25rem 0.25rem 0 0;
         margin-bottom: 1px;
+        display: flex;
         padding: 0.5rem 0.75rem;
         line-height: 1.25rem;
         background: #2c2b32;
       }
 
       &-title {
-        margin: 0;
+        margin: 0 0.5rem 0 0;
         display: inline-block;
         font-size: 0.875rem;
         font-weight: bold;
@@ -1094,6 +1205,12 @@ code {
         border-radius: 0 0 0.25rem 0.25rem;
         padding: 1rem 0.75rem;
         background: #2c2b32;
+
+        &--flex {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+        }
       }
 
       &-row {
@@ -1102,12 +1219,15 @@ code {
         align-items: flex-start;
 
         &:not(:last-child) {
-          margin-bottom: 1.25rem;
+          margin-bottom: 1rem;
         }
 
         &-content {
           margin-left: 1rem;
-          line-height: 1rem;
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          line-height: 22px;
         }
       }
     }
@@ -1133,6 +1253,8 @@ code {
     }
 
     &__checkbox {
+      flex-shrink: 0;
+      margin: 3px 0;
       border-radius: 2px;
       display: inline-flex;
       justify-content: center;
@@ -1170,7 +1292,7 @@ code {
       border-radius: 0.25rem;
       display: inline-block;
       vertical-align: middle;
-      height: 1rem;
+      height: 22px;
       padding: 0 0.25rem;
       background: #191919;
 
@@ -1190,6 +1312,70 @@ code {
 
       &-ms {
         color: $lightgray2;
+      }
+    }
+
+    &__form {
+      flex: 1;
+      margin-left: 0.5rem;
+      border-radius: 0.25rem;
+      display: flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 0.5rem;
+      background: #191919;
+
+      &-input {
+        flex: 1;
+        display: inline-block;
+        vertical-align: middle;
+        width: 100%;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+        font: inherit;
+        color: inherit;
+        outline: none;
+      }
+
+      &-plus {
+        flex-shrink: 0;
+        margin-left: 1rem;
+        width: 1em;
+        height: 1em;
+        fill: $base12;
+        cursor: pointer;
+      }
+    }
+
+    &__hide {
+      margin-top: 0.75rem;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 0.5rem;
+
+      &-item {
+        border-radius: 0.25rem;
+        display: inline-flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 5px 10px;
+        background: $light-purple;
+        color: $gray6;
+        line-height: 1;
+
+        &-icon {
+          flex-shrink: 0;
+          margin-left: 1rem;
+          width: 1em;
+          height: 1em;
+          fill: currentColor;
+          cursor: pointer;
+        }
       }
     }
   }

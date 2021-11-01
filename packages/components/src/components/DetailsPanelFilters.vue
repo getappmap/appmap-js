@@ -32,7 +32,12 @@ export default {
     ResetIcon,
   },
 
-  props: {},
+  props: {
+    object: {
+      type: Object,
+      required: true,
+    },
+  },
 
   data() {
     return {
@@ -57,8 +62,12 @@ export default {
 
   methods: {
     toggleFilter(key) {
-      this.filterItems[key].isActive = !this.filterItems[key].isActive;
-      this.$forceUpdate(); // temporary hack to re-render the component
+      if (key === 'setAsRoot') {
+        this.$root.$emit('makeRoot', this.object);
+      }
+      if (key === 'hide') {
+        this.$root.$emit('addHiddenName', this.object.fqid);
+      }
     },
     resetFilters() {
       Object.keys(this.filterItems).forEach((key) => {

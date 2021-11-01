@@ -5,7 +5,7 @@
       :object="object"
       :title="object.name"
     />
-    <v-details-panel-filters />
+    <v-details-panel-filters :object="object" />
     <v-details-panel-list
       title="Events"
       :items="object.events"

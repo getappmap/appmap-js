@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-details-panel-header object-type="Database" />
-    <v-details-panel-filters />
+    <v-details-panel-filters :object="object" />
     <v-details-panel-list
       title="Inbound connections"
       :items="object.inboundConnections"

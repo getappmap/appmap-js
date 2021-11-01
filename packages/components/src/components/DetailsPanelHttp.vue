@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-details-panel-header :objectType="object.data.name" :object="object" />
-    <v-details-panel-filters />
+    <v-details-panel-filters :object="object" />
     <v-details-panel-list title="Routes" :items="object.children" />
   </div>
 </template>
