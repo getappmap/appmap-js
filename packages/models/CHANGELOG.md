@@ -1,3 +1,10 @@
+# [@appland/models-v1.6.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.5.1...@appland/models-v1.6.0) (2021-11-01)
+
+
+### Features
+
+* Export parseNormalizeSQL and add joinsCount ([1f37628](https://github.com/applandinc/appmap-js/commit/1f37628e9c448176a0d068bd312ba4672e2f4925))
+
 # [@appland/models-v1.5.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.5.0...@appland/models-v1.5.1) (2021-09-23)
 
 
