@@ -84,4 +84,48 @@ describe('Normalize SQL', () => {
       tables: ['ids', 'users'],
     });
   });
+
+  test('SELECT with LEFT JOIN', () => {
+    const sql = `SELECT u1.* FROM users u1 LEFT JOIN users u2 ON u1.admin_id = u2.id`;
+    const result = normalizeSQL(sql);
+    expect(result).toEqual({
+      actions: ['select'],
+      columns: ['u1.*', 'u1.admin_id', 'u2.id'],
+      joinsCount: 1,
+      tables: ['users'],
+    });
+  });
+
+  test('SELECT with RIGHT JOIN', () => {
+    const sql = `SELECT u1.* FROM users u1 RIGHT JOIN users u2 ON u1.admin_id = u2.id`;
+    const result = normalizeSQL(sql);
+    expect(result).toEqual({
+      actions: ['select'],
+      columns: ['u1.*', 'u1.admin_id', 'u2.id'],
+      joinsCount: 1,
+      tables: ['users'],
+    });
+  });
+
+  test('SELECT with INNER JOIN', () => {
+    const sql = `SELECT u1.* FROM users u1 INNER JOIN users u2 ON u1.admin_id = u2.id`;
+    const result = normalizeSQL(sql);
+    expect(result).toEqual({
+      actions: ['select'],
+      columns: ['u1.*', 'u1.admin_id', 'u2.id'],
+      joinsCount: 1,
+      tables: ['users'],
+    });
+  });
+
+  test('SELECT with FULL OUTER JOIN', () => {
+    const sql = `SELECT u1.* FROM users u1 FULL OUTER JOIN users u2 ON u1.admin_id = u2.id`;
+    const result = normalizeSQL(sql);
+    expect(result).toEqual({
+      actions: ['select'],
+      columns: ['u1.*', 'u1.admin_id', 'u2.id'],
+      joinsCount: 1,
+      tables: ['users'],
+    });
+  });
 });
