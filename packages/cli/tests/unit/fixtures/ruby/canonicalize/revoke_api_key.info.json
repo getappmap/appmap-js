@@ -15,7 +15,8 @@
               "analyzed_query": {
                 "actions": ["select"],
                 "tables": ["api_keys"],
-                "columns": ["*", "login"]
+                "columns": ["*", "login"],
+                "joinCount": 0
               }
             }
           },
@@ -25,7 +26,8 @@
               "analyzed_query": {
                 "actions": ["update"],
                 "tables": ["api_keys"],
-                "columns": ["id", "last_used"]
+                "columns": ["id", "last_used"],
+                "joinCount": 0
               }
             }
           },
@@ -35,7 +37,8 @@
               "analyzed_query": {
                 "actions": ["select"],
                 "tables": ["users"],
-                "columns": ["*", "users.login"]
+                "columns": ["*", "users.login"],
+                "joinCount": 0
               }
             }
           },
@@ -51,7 +54,8 @@
                   "typname",
                   "typrelid",
                   "typtype"
-                ]
+                ],
+                "joinCount": 0
               }
             }
           },
@@ -70,7 +74,8 @@
                   "pg_attribute.atttypid",
                   "pg_type.oid",
                   "pg_type.typbasetype"
-                ]
+                ],
+                "joinCount": 1
               }
             }
           },
@@ -86,7 +91,8 @@
                   "typname",
                   "typrelid",
                   "typtype"
-                ]
+                ],
+                "joinCount": 0
               }
             }
           },
@@ -105,7 +111,8 @@
                   "pg_attribute.atttypid",
                   "pg_type.oid",
                   "pg_type.typbasetype"
-                ]
+                ],
+                "joinCount": 1
               }
             }
           }
@@ -121,7 +128,8 @@
               "analyzed_query": {
                 "actions": ["select"],
                 "tables": ["api_keys"],
-                "columns": ["*", "login"]
+                "columns": ["*", "login"],
+                "joinCount": 0
               }
             }
           },
@@ -131,7 +139,8 @@
               "analyzed_query": {
                 "actions": ["delete"],
                 "tables": ["api_keys"],
-                "columns": ["id"]
+                "columns": ["id"],
+                "joinCount": 0
               }
             }
           }
@@ -155,7 +164,8 @@
               "analyzed_query": {
                 "actions": ["select"],
                 "tables": ["api_keys"],
-                "columns": ["*", "login"]
+                "columns": ["*", "login"],
+                "joinCount": 0
               }
             }
           }

@@ -382,6 +382,7 @@ function parseNormalizeSQL(sql) {
     const actions = [];
     const columns = [];
     const tables = [];
+    let joins = 0;
 
     function parse(statement) {
       const tokens = ['type', 'variant']
@@ -460,6 +461,12 @@ function parseNormalizeSQL(sql) {
       'statement.update': [recordAction('update'), parseStatement],
       'statement.delete': [recordAction('delete'), parseStatement],
       'statement.pragma': nop,
+      'map.join': [
+        (statement) => {
+          joins += statement.map.length;
+        },
+        parseStatement,
+      ],
     };
 
     parse(ast);
@@ -473,6 +480,7 @@ function parseNormalizeSQL(sql) {
       actions: uniqueActions,
       tables: unique(tables).sort(),
       columns: unique(columns).sort(),
+      joinCount: joins,
     };
   } catch (e) {
     console.warn(`Unable to interpret AST tree for ${parseSQL} : ${e.message}`);
