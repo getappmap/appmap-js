@@ -480,7 +480,7 @@ export function parseNormalizeSQL(sql) {
       actions: uniqueActions,
       tables: unique(tables).sort(),
       columns: unique(columns).sort(),
-      joinsCount: joins,
+      joinCount: joins,
     };
   } catch (e) {
     console.warn(`Unable to interpret AST tree for ${parseSQL} : ${e.message}`);

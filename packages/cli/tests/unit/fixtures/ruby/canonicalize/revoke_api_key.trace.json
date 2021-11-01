@@ -24,7 +24,7 @@
               "actions": ["select"],
               "tables": ["api_keys"],
               "columns": ["*", "login"],
-              "joinsCount": 0
+              "joinCount": 0
             }
           },
           {
@@ -41,7 +41,7 @@
                   "actions": ["update"],
                   "tables": ["api_keys"],
                   "columns": ["id", "last_used"],
-                  "joinsCount": 0
+                  "joinCount": 0
                 }
               }
             ]
@@ -55,7 +55,7 @@
               "actions": ["select"],
               "tables": ["users"],
               "columns": ["*", "users.login"],
-              "joinsCount": 0
+              "joinCount": 0
             }
           },
           {
@@ -73,7 +73,7 @@
                 "typrelid",
                 "typtype"
               ],
-              "joinsCount": 0
+              "joinCount": 0
             }
           },
           {
@@ -94,7 +94,7 @@
                 "pg_type.oid",
                 "pg_type.typbasetype"
               ],
-              "joinsCount": 1
+              "joinCount": 1
             }
           },
           {
@@ -112,7 +112,7 @@
                 "typrelid",
                 "typtype"
               ],
-              "joinsCount": 0
+              "joinCount": 0
             }
           },
           {
@@ -133,7 +133,7 @@
                 "pg_type.oid",
                 "pg_type.typbasetype"
               ],
-              "joinsCount": 1
+              "joinCount": 1
             }
           }
         ]
@@ -162,7 +162,7 @@
                   "actions": ["select"],
                   "tables": ["api_keys"],
                   "columns": ["*", "login"],
-                  "joinsCount": 0
+                  "joinCount": 0
                 }
               },
               {
@@ -174,7 +174,7 @@
                   "actions": ["delete"],
                   "tables": ["api_keys"],
                   "columns": ["id"],
-                  "joinsCount": 0
+                  "joinCount": 0
                 }
               }
             ]
@@ -208,7 +208,7 @@
               "actions": ["select"],
               "tables": ["api_keys"],
               "columns": ["*", "login"],
-              "joinsCount": 0
+              "joinCount": 0
             }
           }
         ]
