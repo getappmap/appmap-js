@@ -128,4 +128,17 @@ describe('Normalize SQL', () => {
       tables: ['users'],
     });
   });
+
+  test('Query with backticks', () => {
+    const sql = `SELECT \`Album\`.\`Title\`
+                 FROM \`Album\` AS \`Album\`
+                 GROUP BY \`Album\`.\`Title\``;
+    const result = normalizeSQL(sql);
+    expect(result).toEqual({
+      actions: ['select'],
+      columns: ['Album.Title'],
+      joinCount: 0,
+      tables: ['Album'],
+    });
+  });
 });
