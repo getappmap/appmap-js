@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.11.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.10.1...@appland/appmap-v3.11.0) (2021-11-01)
+
+
+### Features
+
+* Export parseNormalizeSQL and add joinsCount ([1f37628](https://github.com/applandinc/appmap-js/commit/1f37628e9c448176a0d068bd312ba4672e2f4925))
+
 # [@appland/appmap-v3.10.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.10.0...@appland/appmap-v3.10.1) (2021-10-28)
 
 
