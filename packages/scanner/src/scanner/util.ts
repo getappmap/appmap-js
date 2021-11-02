@@ -43,6 +43,8 @@ function isFalsey(valueObj: any): boolean {
   return false;
 }
 
+const isTruthy = (valueObj: any): boolean => !isFalsey(valueObj);
+
 function ideLink(filePath: string, ide: string, eventId: number): string {
   const OSC = '\u001B]';
   const BEL = '\u0007';
@@ -94,6 +96,7 @@ export {
   appMapDir,
   emptyValue,
   isFalsey,
+  isTruthy,
   ideLink,
   isRoot,
   toRegExp,

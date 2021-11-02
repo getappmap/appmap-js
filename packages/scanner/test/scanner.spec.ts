@@ -10,6 +10,7 @@ import rpcWithoutCircuitBreaker from '../src/scanner/rpcWithoutCircuitBreaker';
 import incompatibleHTTPClientRequest from '../src/scanner/incompatibleHttpClientRequest';
 import slowFunctionCall from '../src/scanner/slowFunctionCall';
 import tooManyJoins from '../src/scanner/tooManyJoins';
+import authzBeforeAuthn from '../src/scanner/authzBeforeAuthn';
 import { scan } from './util';
 import { AssertionPrototype, ScopeName } from '../src/types';
 import Assertion from '../src/assertion';
@@ -244,5 +245,17 @@ describe('assert', () => {
     expect(finding.message).toEqual(
       '1 join in SQL "SELECT COUNT(*) FROM "users" INNER JOIN "relationships" ON "users"."id" = "relationships"."followed_id" WHERE "relationships"."follower_id" = ?"'
     );
+  });
+
+  it('detects authorization before authentication', async () => {
+    const scanner = authzBeforeAuthn.scanner as () => Assertion;
+    const findings = await scan(
+      makePrototype('authz-before-authn', () => scanner()),
+      'Test_authz_before_authn.appmap.json'
+    );
+    expect(findings).toHaveLength(1);
+    const finding = findings[0];
+    expect(finding.scannerId).toEqual('authz-before-authn');
+    expect(finding.event.id).toEqual(16);
   });
 });
