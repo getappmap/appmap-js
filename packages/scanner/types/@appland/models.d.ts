@@ -249,6 +249,14 @@ declare module '@appland/models' {
     build(): AppMap;
   }
 
+  export interface SQLNormalizationResult {
+    tables: string[];
+    columns: string[];
+    actions?: string[];
+    joinCount?: number;
+  }
+
   export function buildAppMap(data?: string | Record<string, unknown>): AppMapBuilder;
   export function getSqlLabelFromString(sqlString: string): string;
+  export function normalizeSQL(sqlString: string): SQLNormalizationResult;
 }

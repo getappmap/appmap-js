@@ -1,21 +1,7 @@
-import { Event, EventNavigator, getSqlLabelFromString, SqlQuery } from '@appland/models';
+import { Event } from '@appland/models';
 import { Level, MatchResult } from '../types';
 import Assertion from '../assertion';
-import { obfuscate } from '../database';
-
-function sqlNormalized(query: SqlQuery): string {
-  return obfuscate(query.sql, query.database_type);
-}
-
-interface SQLEvent {
-  sql: string;
-  event: Event;
-}
-
-interface SQLCount {
-  count: number;
-  events: Event[];
-}
+import { SQLCount, sqlStrings } from '../database';
 
 class Options {
   constructor(public warningLimit = 5, public errorLimit = 10, public whitelist: string[] = []) {}
@@ -23,24 +9,6 @@ class Options {
 
 function scanner(options: Options = new Options()): Assertion {
   const sqlCount: Record<string, SQLCount> = {};
-
-  const sqlStrings = function* (event: Event): Generator<SQLEvent> {
-    for (const e of new EventNavigator(event).descendants()) {
-      if (!e.event.sqlQuery) {
-        continue;
-      }
-      if (getSqlLabelFromString(e.event.sqlQuery!) !== 'SQL Select') {
-        continue;
-      }
-
-      const sql = sqlNormalized(e.event.sql!);
-      if (options.whitelist.includes(sql)) {
-        continue;
-      }
-
-      yield { event: e.event, sql };
-    }
-  };
 
   const matcher = (command: Event): MatchResult[] | undefined => {
     for (const sqlEvent of sqlStrings(command)) {

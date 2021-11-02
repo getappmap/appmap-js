@@ -8,6 +8,7 @@ import http500 from '../src/scanner/http500';
 import illegalPackageAccess from '../src/scanner/illegalPackageDependency';
 import rpcWithoutCircuitBreaker from '../src/scanner/rpcWithoutCircuitBreaker';
 import slowFunctionCall from '../src/scanner/slowFunctionCall';
+import tooManyJoins from '../src/scanner/tooManyJoins';
 import { scan } from './util';
 import { AssertionPrototype, ScopeName } from '../src/types';
 import Assertion from '../src/assertion';
@@ -200,6 +201,26 @@ describe('assert', () => {
     expect(finding.event.id).toEqual(897);
     expect(finding.message).toEqual(
       'Slow app/controllers/MicropostsController#create call (0.228481ms)'
+    );
+  });
+
+  it('too many joins', async () => {
+    const { scope, enumerateScope, scanner, Options } = tooManyJoins;
+    const findings = await scan(
+      makePrototype(
+        'too-many-joins',
+        () => scanner(new Options(1)),
+        scope as ScopeName,
+        enumerateScope
+      ),
+      'Users_profile_profile_display_while_anonyomus.appmap.json'
+    );
+    expect(findings).toHaveLength(2);
+    const finding = findings[0];
+    expect(finding.scannerId).toEqual('too-many-joins');
+    expect(finding.event.id).toEqual(63);
+    expect(finding.message).toEqual(
+      '1 join in SQL "SELECT COUNT(*) FROM "users" INNER JOIN "relationships" ON "users"."id" = "relationships"."followed_id" WHERE "relationships"."follower_id" = ?"'
     );
   });
 });

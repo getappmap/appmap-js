@@ -3,6 +3,14 @@
 
 // TODO: Copied and TypeScript-ified from @appland/models
 
+import {
+  Event,
+  EventNavigator,
+  getSqlLabelFromString,
+  normalizeSQL,
+  SqlQuery,
+} from '@appland/models';
+
 const COMPONENTS_REGEXP_MAP: Record<string, RegExp> = {
   single_quotes: /'(?:[^']|'')*?(?:\\'.*|'(?!'))/g,
   double_quotes: /"(?:[^"]|"")*?(?:\\".*|"(?!"))/g,
@@ -109,6 +117,20 @@ function detectUnmatchedPairs(obfuscated: string, adapter: string): boolean {
 const FAILED_TO_OBFUSCATE_MESSAGE =
   'Failed to obfuscate SQL query - quote characters remained after obfuscation';
 
+export interface SQLEvent {
+  sql: string;
+  event: Event;
+}
+
+export interface SQLCount {
+  count: number;
+  events: Event[];
+}
+
+export interface JoinCount extends SQLCount {
+  joins: number;
+}
+
 /**
  * Replaces literal query parameters with parameter symbols (e.g. '?');
  *
@@ -147,4 +169,36 @@ export function obfuscate(sql: string, adapter: string): string {
     obfuscated = FAILED_TO_OBFUSCATE_MESSAGE;
   }
   return obfuscated;
+}
+
+export function sqlNormalized(query: SqlQuery): string {
+  return obfuscate(query.sql, query.database_type);
+}
+
+export function* sqlStrings(event: Event, whitelist: string[] = []): Generator<SQLEvent> {
+  for (const e of new EventNavigator(event).descendants()) {
+    if (!e.event.sqlQuery) {
+      continue;
+    }
+    if (getSqlLabelFromString(e.event.sqlQuery!) !== 'SQL Select') {
+      continue;
+    }
+
+    const sql = sqlNormalized(e.event.sql!);
+    if (whitelist.includes(sql)) {
+      continue;
+    }
+
+    yield { event: e.event, sql };
+  }
+}
+
+export function countJoins(normalizedSql: string): number {
+  try {
+    const result = normalizeSQL(normalizedSql);
+    return result.joinCount || 0;
+  } catch (e: any) {
+    console.warn(`Unable to analyze query "${normalizedSql}"`);
+    return 0;
+  }
 }
