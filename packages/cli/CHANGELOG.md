@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.12.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.11.0...@appland/appmap-v3.12.0) (2021-11-03)
+
+
+### Bug Fixes
+
+* Only display the command name if it's not found ([136ff50](https://github.com/applandinc/appmap-js/commit/136ff50bbbf3e069da79a7b8e490be24cbd6ffd4))
+
+
+### Features
+
+* Add support for sub-project installation ([7696ace](https://github.com/applandinc/appmap-js/commit/7696aceb813c9905580f53588327387dd06142a8))
+
 # [@appland/appmap-v3.11.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.10.1...@appland/appmap-v3.11.0) (2021-11-01)
 
 
