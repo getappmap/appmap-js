@@ -99,7 +99,7 @@ describe('assert', () => {
     expect(finding1.event.id).toEqual(91);
     expect(finding1.relatedEvents!).toHaveLength(30);
     expect(finding1.message).toEqual(
-      `30 occurrances of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
+      `30 occurrences of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
     );
   });
 

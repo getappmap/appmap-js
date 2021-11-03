@@ -12,30 +12,30 @@ function scanner(options: Options = new Options()): Assertion {
 
   const matcher = (command: Event): MatchResult[] | undefined => {
     for (const sqlEvent of sqlStrings(command)) {
-      let occurrance = joinCount[sqlEvent.sql];
+      let occurrence = joinCount[sqlEvent.sql];
 
-      if (!occurrance) {
-        occurrance = {
+      if (!occurrence) {
+        occurrence = {
           count: 1,
           joins: countJoins(sqlEvent.sql),
           events: [sqlEvent.event],
         };
-        joinCount[sqlEvent.sql] = occurrance;
+        joinCount[sqlEvent.sql] = occurrence;
       } else {
-        occurrance.count += 1;
-        occurrance.events.push(sqlEvent.event);
+        occurrence.count += 1;
+        occurrence.events.push(sqlEvent.event);
       }
     }
 
     return Object.keys(joinCount).reduce((matchResults, sql) => {
-      const occurrance = joinCount[sql];
+      const occurrence = joinCount[sql];
 
-      if (occurrance.joins >= options.warningLimit) {
+      if (occurrence.joins >= options.warningLimit) {
         matchResults.push({
           level: 'warning',
-          event: occurrance.events[0],
-          message: `${occurrance.joins} join${occurrance.joins > 1 ? 's' : ''} in SQL "${sql}"`,
-          relatedEvents: occurrance.events,
+          event: occurrence.events[0],
+          message: `${occurrence.joins} join${occurrence.joins > 1 ? 's' : ''} in SQL "${sql}"`,
+          relatedEvents: occurrence.events,
         });
       }
       return matchResults;

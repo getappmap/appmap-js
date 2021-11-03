@@ -12,34 +12,34 @@ function scanner(options: Options = new Options()): Assertion {
 
   const matcher = (command: Event): MatchResult[] | undefined => {
     for (const sqlEvent of sqlStrings(command)) {
-      let occurrance = sqlCount[sqlEvent.sql];
-      if (!occurrance) {
-        occurrance = {
+      let occurrence = sqlCount[sqlEvent.sql];
+      if (!occurrence) {
+        occurrence = {
           count: 1,
           events: [sqlEvent.event],
         };
-        sqlCount[sqlEvent.sql] = occurrance;
+        sqlCount[sqlEvent.sql] = occurrence;
       } else {
-        occurrance.count += 1;
-        occurrance.events.push(sqlEvent.event);
+        occurrence.count += 1;
+        occurrence.events.push(sqlEvent.event);
       }
     }
 
     return Object.keys(sqlCount).reduce((matchResults, sql) => {
-      const occurrance = sqlCount[sql];
+      const occurrence = sqlCount[sql];
 
       const buildMatchResult = (level: Level): MatchResult => {
         return {
           level: level,
-          event: occurrance.events[0],
-          message: `${occurrance.count} occurrances of SQL "${sql}"`,
-          relatedEvents: occurrance.events,
+          event: occurrence.events[0],
+          message: `${occurrence.count} occurrences of SQL "${sql}"`,
+          relatedEvents: occurrence.events,
         };
       };
 
-      if (occurrance.count >= options.errorLimit) {
+      if (occurrence.count >= options.errorLimit) {
         matchResults.push(buildMatchResult('error'));
-      } else if (occurrance.count >= options.warningLimit) {
+      } else if (occurrence.count >= options.warningLimit) {
         matchResults.push(buildMatchResult('warning'));
       }
       return matchResults;
