@@ -13,22 +13,25 @@ import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
 import CommandStruct, {
   CommandReturn,
 } from '../../../src/cmds/agentInstaller/commandStruct';
+import * as ProjectConfiguration from '../../../src/cmds/agentInstaller/projectConfiguration';
 
 import UI from '../../../src/cmds/userInteraction';
-import { InstallError, ValidationError } from '../../../src/cmds/errors';
+import { ValidationError } from '../../../src/cmds/errors';
 
 import * as validator from '../../../src/service/config/validator';
 
 import 'jest-sinon';
+import GradleInstaller from '../../../src/cmds/agentInstaller/gradleInstaller';
+import MavenInstaller from '../../../src/cmds/agentInstaller/mavenInstaller';
 
 const fixtureDir = path.join(__dirname, '..', 'fixtures');
 tmp.setGracefulCleanup();
 
 const invokeCommand = (
   projectDir: string,
-  evalResults: (err: Error | undefined, argv: any, output: string) => void,
-  ) => {
-    const debugSwitch: string = ''; // to debug, set debugSwitch to -v
+  evalResults: (err: Error | undefined, argv: any, output: string) => void
+) => {
+  const debugSwitch: string = ''; // to debug, set debugSwitch to -v
 
   if (debugSwitch !== '-v') {
     // Don't scribble on the console unless we're debugging.
@@ -207,7 +210,7 @@ describe('install sub-command', () => {
         const msg = 'failValidate, validation failed';
         const failValidate = () => Promise.reject(new Error(msg));
         const evalResults = (err, argv, output) => {
-          expect(err.message).toEqual(msg);
+          expect(err.message).toMatch(msg);
         };
 
         await testE2E(
@@ -283,7 +286,7 @@ describe('install sub-command', () => {
         const msg = 'failValidate, validation failed';
         const failValidate = () => Promise.reject(new Error(msg));
         const evalResults = (err, argv, output) => {
-          expect(err.message).toEqual(msg);
+          expect(err.message).toMatch(msg);
         };
 
         await testE2E(
@@ -406,7 +409,7 @@ packages:
         return Promise.reject(new Error(msg));
       };
       const evalResults = (err, argv, output) => {
-        expect(err.message).toEqual(msg);
+        expect(err.message).toMatch(msg);
       };
 
       await rubyTestE2E(
@@ -422,22 +425,22 @@ packages:
     describe('when validation returns errors', () => {
       const msg = 'failValidate, validation failed';
       const testValidation = async (errorObj) => {
-      const failValidate = () => {
-        return Promise.resolve({stdout: errorObj , stderr: ''});
-      };
-      const evalResults = (err, argv, output) => {
-        expect(err.message).toEqual(msg);
-      };
+        const failValidate = () => {
+          return Promise.resolve({ stdout: errorObj, stderr: '' });
+        };
+        const evalResults = (err, argv, output) => {
+          expect(err.message).toMatch(msg);
+        };
 
-      await rubyTestE2E(
-        rubyVersion,
-        gemHome,
-        installAgent,
-        initAgent,
-        failValidate,
-        evalResults
-      );
-      }
+        await rubyTestE2E(
+          rubyVersion,
+          gemHome,
+          installAgent,
+          initAgent,
+          failValidate,
+          evalResults
+        );
+      };
 
       const errorArray = `[{"message": "${msg}"}]`;
       it('fails for old output format', async () => {
@@ -449,8 +452,6 @@ packages:
         await testValidation(errorObj);
       });
     });
-
-
   });
 
   describe('A Python project', () => {
@@ -612,8 +613,8 @@ packages:
       await fse.copy(projectFixture, projectDir);
 
       const promptStub = sinon
-        .stub(inquirer, 'prompt')
-        .resolves({ installerName: 'poetry', confirm: true });
+        .stub(UI, 'prompt')
+        .resolves({ installer0: 'poetry', confirm: true });
 
       const installAgentStub = sinon
         .stub(PoetryInstaller.prototype, 'installAgent')
@@ -622,7 +623,7 @@ packages:
       await invokeCommand(projectDir, () => {});
 
       const firstPrompt = promptStub.getCall(0).args[0] as inquirer.Question;
-      expect(firstPrompt.name).toEqual('installerName');
+      expect(firstPrompt.name).toEqual('installer0');
       expect(installAgentStub).toBeCalled();
     });
 
@@ -632,13 +633,11 @@ packages:
         .stub(AgentInstallerProcedure.prototype, 'run')
         .callThrough();
 
-      await invokeCommand(projectDir, () => {});
-
-      const { returnValue } = installProcedureStub.getCall(0);
-      await expect(returnValue).rejects.toBeInstanceOf(ValidationError);
-      await returnValue.catch((err) => {
-        expect(err.message).toMatch('No supported project was found');
+      await invokeCommand(projectDir, (err) => {
+        expect(err?.message).toMatch('No supported project was found');
       });
+
+      expect(installProcedureStub).not.toBeCalled();
     });
   });
 
@@ -646,18 +645,22 @@ packages:
     beforeEach(() => {
       const installer = new BundleInstaller('.');
 
-      sinon
-        .stub(AgentInstallerProcedure.prototype, 'availableInstallers')
-        .resolves([installer]);
+      sinon.stub(ProjectConfiguration, 'getProjects').resolves([
+        {
+          path: projectDir,
+          name: 'test',
+          availableInstallers: [installer],
+          selectedInstaller: installer,
+        },
+      ]);
+
       sinon.stub(installer, 'environment').resolves({});
 
-      sinon
-        .stub(inquirer, 'prompt')
-        .resolves({
-          installerName: 'ruby',
-          confirm: true,
-          overwriteAppMapYml: 'Use existing',
-        });
+      sinon.stub(inquirer, 'prompt').resolves({
+        installerName: 'ruby',
+        confirm: true,
+        overwriteAppMapYml: 'Use existing',
+      });
 
       sinon.stub(BundleInstaller.prototype, 'installAgent').resolves();
 
@@ -710,10 +713,48 @@ packages:
       await invokeCommand(projectDir, () => {});
 
       const { returnValue } = installProcedureStub.getCall(0);
-      await expect(returnValue).rejects.toBeInstanceOf(InstallError);
+      await expect(returnValue).rejects.toBeInstanceOf(ValidationError);
       await returnValue.catch((err) => {
-        expect(err.error.message).toMatch('syntax error');
+        expect(err.message).toMatch('syntax error');
       });
+    });
+  });
+
+  describe('Multi-project install flow', () => {
+    beforeEach(() => {
+      sinon.stub(commandRunner, 'run').resolves({
+        stdout: '{"configuration": { "contents": "" }, "errors": []}',
+        stderr: '',
+      });
+      projectDir = tmp.dirSync({} as any).name;
+    });
+
+    it('installs as expected', async () => {
+      const projectFixture = path.join(fixtureDir, 'java', 'multi-project');
+      fse.copySync(projectFixture, projectDir);
+
+      sinon.stub(UI, 'prompt').resolves({
+        addSubprojects: true,
+        confirm: true,
+        selectedSubprojects: ['project-a', 'project-b'],
+      });
+
+      const expectedStubs = [
+        GradleInstaller.prototype,
+        MavenInstaller.prototype,
+      ].flatMap((prototype) => [
+        sinon.stub(prototype, 'environment').resolves(),
+        sinon.stub(prototype, 'installAgent').resolves(),
+        sinon.stub(prototype, 'initCommand').resolves(),
+        sinon.stub(prototype, 'verifyCommand').resolves(),
+        sinon.stub(prototype, 'validateAgentCommand').resolves(),
+      ]);
+
+      await invokeCommand(projectDir, (err) => {
+        expect(err).toBeNull();
+      });
+
+      expectedStubs.forEach((stub) => expect(stub.called).toBe(true));
     });
   });
 });

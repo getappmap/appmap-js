@@ -27,6 +27,13 @@ export class ProcessLog {
       `\n\n'${program}' exited with code ${code}, signal ${signal}\n\n`
     );
   }
+
+  // Return the current buffer and clear it for future use
+  public static consumeBuffer() {
+    const buffer = this.buffer;
+    this.buffer = '';
+    return buffer;
+  }
 }
 
 interface CommandOutputChunk {
@@ -99,7 +106,7 @@ export async function run(command: CommandStruct): Promise<CommandReturn> {
         reject(
           new ChildProcessError(
             command.toString(),
-            `${command.toString()} was not found. Verify the command can be found in your PATH and try again.`
+            `${command.program} was not found. Verify the command can be found in your PATH and try again.`
           )
         );
       }

@@ -1,9 +1,10 @@
 import chalk from 'chalk';
 import { prefixLines } from '../utils';
-import AgentInstaller from './agentInstaller/agentInstaller';
 
-export class InstallError {
-  constructor(readonly error: unknown, readonly installer?: AgentInstaller) {}
+export class InvalidPathError extends Error {
+  constructor(readonly message: string, readonly path?: string) {
+    super(message);
+  }
 }
 
 export class AbortError extends Error {}

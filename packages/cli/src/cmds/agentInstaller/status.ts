@@ -1,25 +1,11 @@
-import { promises as fs } from 'fs';
 import Yargs from 'yargs';
-import { resolve } from 'path';
-import {
-  ValidationError,
-  AbortError,
-  InstallError,
-  ChildProcessError,
-} from '../errors';
 import { verbose } from '../../utils';
-import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
 import UI from '../userInteraction';
-import Telemetry from '../../telemetry';
 import AgentInstaller from './agentInstaller';
-import { ProcessLog } from './commandRunner';
-import MavenInstaller from './mavenInstaller';
-import GradleInstaller from './gradleInstaller';
-import { PipInstaller, PoetryInstaller } from './pythonAgentInstaller';
-import { BundleInstaller } from './rubyAgentInstaller';
-import { INSTALLERS } from './install-agent';
+import { INSTALLERS } from './installers';
 import AgentStatusProcedure from './agentStatusProcedure';
+import { getProjects } from './projectConfiguration';
 
 interface InstallCommandOptions {
   verbose?: any;
@@ -30,7 +16,8 @@ interface InstallCommandOptions {
 export default {
   command: 'status [directory]',
   aliases: ['s'],
-  describe: 'Check the status of the current project for the AppMap language agent',
+  describe:
+    'Check the status of the current project for the AppMap language agent',
   builder(args: Yargs.Argv) {
     // FIXME: This method takes advantage of the fact that each implementation returns a static string
     // as the installer name. In the future, this may not be the case. After all, `name` is a non-static
@@ -57,7 +44,6 @@ export default {
 
   async handler(args: InstallCommandOptions) {
     const { projectType, directory, verbose: isVerbose } = args;
-    let installer: AgentInstaller | undefined;
     const installers = INSTALLERS.map(
       (constructor) => new constructor(directory)
     );
@@ -65,16 +51,23 @@ export default {
     verbose(isVerbose);
 
     try {
-      const statusProcedure = new AgentStatusProcedure(
+      const [project] = await getProjects(
         installers,
+        directory,
+        false,
+        projectType
+      );
+
+      const statusProcedure = new AgentStatusProcedure(
+        project.selectedInstaller as AgentInstaller,
         directory
       );
+
       await statusProcedure.run();
-    }
-    catch (e) {
+    } catch (e) {
       const err = e as Error;
-      UI.error(err.message)
+      UI.error(err.message);
       Yargs.exit(1, err);
     }
-  }
-}
+  },
+};
