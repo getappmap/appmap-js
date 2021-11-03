@@ -1,4 +1,5 @@
 import { Event, EventNavigator } from '@appland/models';
+import { AssertionSpec } from 'src/types';
 import Assertion from '../assertion';
 
 const validatedBy = (iterator: Iterator<EventNavigator>): boolean => {
@@ -30,4 +31,4 @@ const scanner = (): Assertion => {
   );
 };
 
-export default { scanner };
+export default { scanner } as AssertionSpec;

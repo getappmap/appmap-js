@@ -1,5 +1,4 @@
 import { load } from 'js-yaml';
-import Assertion from '../src/assertion';
 import ConfigurationProvider from '../src/configuration/configurationProvider';
 import { AssertionPrototype, Configuration } from '../src/types';
 
@@ -24,13 +23,32 @@ describe('YAML config test', () => {
     scanners:
     - id: missingAuthentication
       properties:
-        - routes: /GET/
+        routes:
+          - GET
     `;
     const configObj = load(yamlConfig) as Configuration;
     const provider = new ConfigurationProvider(configObj);
     const assertionPrototypes: readonly AssertionPrototype[] = await provider.getConfig();
     expect(assertionPrototypes).toHaveLength(1);
     const assertion = assertionPrototypes[0].build();
-    expect(assertion.options.routes).toEqual([/.*/]);
+    expect(assertion.options.routes).toEqual([/GET/]);
+  });
+
+  it('propagates Record properties', async () => {
+    const yamlConfig = `
+    scanners:
+    - id: incompatibleHttpClientRequest
+      properties:
+        schemata:
+          api.railsSampleApp.com: file:///railsSampleApp.openapiv3.yaml
+    `;
+    const configObj = load(yamlConfig) as Configuration;
+    const provider = new ConfigurationProvider(configObj);
+    const assertionPrototypes: readonly AssertionPrototype[] = await provider.getConfig();
+    expect(assertionPrototypes).toHaveLength(1);
+    const assertion = assertionPrototypes[0].build();
+    expect(assertion.options.schemata).toEqual({
+      'api.railsSampleApp.com': 'file:///railsSampleApp.openapiv3.yaml',
+    });
   });
 });

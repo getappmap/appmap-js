@@ -1,6 +1,8 @@
 import { Event, EventNavigator } from '@appland/models';
+import { rpcRequestForEvent } from '../openapi/rpcRequest';
+import { AssertionSpec } from '../types';
 import Assertion from '../assertion';
-import { contentType, isFalsey, toRegExpArray } from './util';
+import { isFalsey, toRegExpArray } from './util';
 
 function isPublic(event: Event): boolean {
   return event.labels.has('public');
@@ -60,9 +62,10 @@ function scanner(options: Options = new Options()): Assertion {
           e.route !== undefined &&
           e.httpServerResponse !== undefined &&
           e.httpServerResponse.status < 300 &&
-          contentType(e) !== undefined &&
+          !!rpcRequestForEvent(e) &&
+          !!rpcRequestForEvent(e)!.contentType &&
           options.routes.some((pattern) => pattern.test(e.route!)) &&
-          options.contentTypes.some((pattern) => pattern.test(contentType(e)!))
+          options.contentTypes.some((pattern) => pattern.test(rpcRequestForEvent(e)!.contentType))
         );
       };
       assertion.description = `HTTP server request must be authenticated`;
@@ -70,4 +73,9 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { scope: 'http_server_request', enumerateScope: false, Options, scanner };
+export default {
+  scope: 'http_server_request',
+  enumerateScope: false,
+  Options,
+  scanner,
+} as AssertionSpec;

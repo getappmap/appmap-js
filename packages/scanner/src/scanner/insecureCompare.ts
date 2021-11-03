@@ -2,6 +2,7 @@ import { Event } from '@appland/models';
 import recordSecrets from '../analyzer/recordSecrets';
 import SecretsRegexes from '../analyzer/secretsRegexes';
 import Assertion from '../assertion';
+import { AssertionSpec } from '../types';
 
 const BCRYPT_REGEXP = /^[$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][./0-9a-zA-Z]{53}$/;
 
@@ -59,4 +60,4 @@ const scanner = function (): Assertion {
   );
 };
 
-export default { scanner };
+export default { scanner } as AssertionSpec;

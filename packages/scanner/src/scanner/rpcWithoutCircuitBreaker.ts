@@ -1,4 +1,5 @@
 import { Event, EventNavigator, Label } from '@appland/models';
+import { AssertionSpec } from 'src/types';
 import Assertion from '../assertion';
 import { RPCWithoutProtectionOptions, rpcWithoutProtection } from './lib/rpcWithoutProtection';
 
@@ -26,4 +27,4 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { Options, scanner };
+export default { Options, scanner } as AssertionSpec;

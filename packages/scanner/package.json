@@ -47,6 +47,8 @@
     "js-yaml": "^4.1.0",
     "minimatch": "^3.0.4",
     "octokat": "^0.10.0",
+    "openapi-diff": "^0.23.5",
+    "openapi-types": "^9.3.0",
     "semantic-release": "^17.4.7",
     "supports-hyperlinks": "^2.2.0",
     "yargs": "^17.1.1"
