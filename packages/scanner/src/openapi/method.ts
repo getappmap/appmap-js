@@ -31,7 +31,6 @@ export default class Method {
         return memo;
       }, {} as Record<string, OpenAPIV3.ResponseObject>);
 
-    let description: string | undefined;
     const schemata: Record<string, Schema> = {};
     const parameters: OpenAPIV3_1.ParameterObject[] = [];
     let securitySchemeId: string | undefined;
@@ -91,9 +90,6 @@ export default class Method {
     const response = {
       responses: responseByStatus,
     } as OpenAPIV3.OperationObject;
-    if (description) {
-      response.description = description;
-    }
     if (securitySchemeId) {
       const securityObj: OpenAPIV3.SecurityRequirementObject = {};
       securityObj[securitySchemeId] = [];

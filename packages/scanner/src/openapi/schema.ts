@@ -27,7 +27,6 @@ export default class Schema {
         if (properties[message.name!]) {
           return;
         }
-        // eslint-disable-next-line no-multi-assign
         properties[message.name!] = messageToOpenAPISchema(message);
       });
     if (Object.keys(properties).length === 0) {

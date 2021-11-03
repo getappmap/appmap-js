@@ -14,9 +14,9 @@ function emptyValue(value: string): boolean {
 }
 
 function responseContentType(event: Event): string | undefined {
-  if (event.httpServerResponse && event.httpServerResponse!.headers) {
+  if (event.httpServerResponse?.headers) {
     return event.httpServerResponse!.headers!['Content-Type'];
-  } else if (event.httpClientResponse && event.httpClientResponse!.headers) {
+  } else if (event.httpClientResponse?.headers) {
     return event.httpClientResponse!.headers!['Content-Type'];
   }
 }
