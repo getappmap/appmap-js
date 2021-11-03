@@ -1,7 +1,11 @@
 import { Event } from '@appland/models';
 import { MatchResult } from '../types';
 import Assertion from '../assertion';
-import { JoinCount, countJoins, sqlStrings } from '../database';
+import { countJoins, SQLCount, sqlStrings } from '../database';
+
+export interface JoinCount extends SQLCount {
+  joins: number;
+}
 
 class Options {
   constructor(public warningLimit = 5, public whitelist: string[] = []) {}

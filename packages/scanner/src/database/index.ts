@@ -127,10 +127,6 @@ export interface SQLCount {
   events: Event[];
 }
 
-export interface JoinCount extends SQLCount {
-  joins: number;
-}
-
 /**
  * Replaces literal query parameters with parameter symbols (e.g. '?');
  *
