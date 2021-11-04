@@ -1,5 +1,5 @@
 import { Event } from '@appland/models';
-import { MatchResult } from '../types';
+import { AssertionSpec, MatchResult } from '../types';
 import Assertion from '../assertion';
 import { countJoins, SQLCount, sqlStrings } from '../database';
 
@@ -11,6 +11,7 @@ class Options {
   constructor(public warningLimit = 5, public whitelist: string[] = []) {}
 }
 
+// TODO: clean up according to https://github.com/applandinc/scanner/issues/43
 function scanner(options: Options = new Options()): Assertion {
   const joinCount: Record<string, JoinCount> = {};
 
@@ -56,4 +57,4 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { scope: 'command', enumerateScope: false, Options, scanner };
+export default { scope: 'command', enumerateScope: false, Options, scanner } as AssertionSpec;

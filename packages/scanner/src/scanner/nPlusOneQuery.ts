@@ -7,6 +7,7 @@ class Options {
   constructor(public warningLimit = 5, public errorLimit = 10, public whitelist: string[] = []) {}
 }
 
+// TODO: clean up according to https://github.com/applandinc/scanner/issues/43
 function scanner(options: Options = new Options()): Assertion {
   const sqlCount: Record<string, SQLCount> = {};
 

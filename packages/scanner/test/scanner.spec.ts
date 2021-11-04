@@ -240,7 +240,7 @@ describe('assert', () => {
     expect(findings).toHaveLength(2);
     const finding = findings[0];
     expect(finding.scannerId).toEqual('too-many-joins');
-    expect(finding.event.id).toEqual(63);
+    expect(finding.event.id).toEqual(97);
     expect(finding.message).toEqual(
       '1 join in SQL "SELECT COUNT(*) FROM "users" INNER JOIN "relationships" ON "users"."id" = "relationships"."followed_id" WHERE "relationships"."follower_id" = ?"'
     );
