@@ -1,5 +1,5 @@
 import { Event } from '@appland/models';
-import { Level, MatchResult } from '../types';
+import { AssertionSpec, Level, MatchResult } from '../types';
 import Assertion from '../assertion';
 import { SQLCount, sqlStrings } from '../database';
 
@@ -56,4 +56,4 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { scope: 'command', enumerateScope: false, Options, scanner };
+export default { scope: 'command', enumerateScope: false, Options, scanner } as AssertionSpec;

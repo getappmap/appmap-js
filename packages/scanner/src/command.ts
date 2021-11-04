@@ -158,18 +158,20 @@ export default {
 
           process.stderr.write(formatter.appMap(appMap));
 
-          assertionPrototypes.forEach((assertionPrototype: AssertionPrototype) => {
-            index++;
-            const matchCount = findings.length;
-            checker.check(appMap, assertionPrototype, findings);
-            const newMatches = findings.slice(matchCount, findings.length);
-            newMatches.forEach((match) => (match.appMapFile = file));
+          await Promise.all(
+            assertionPrototypes.map(async (assertionPrototype: AssertionPrototype) => {
+              index++;
+              const matchCount = findings.length;
+              await checker.check(appMap, assertionPrototype, findings);
+              const newMatches = findings.slice(matchCount, findings.length);
+              newMatches.forEach((match) => (match.appMapFile = file));
 
-            const message = formatter.result(assertionPrototype, newMatches, index);
-            if (message) {
-              process.stderr.write(message);
-            }
-          });
+              const message = formatter.result(assertionPrototype, newMatches, index);
+              if (message) {
+                process.stderr.write(message);
+              }
+            })
+          );
         })
       );
 

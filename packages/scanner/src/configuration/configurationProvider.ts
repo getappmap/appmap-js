@@ -2,7 +2,7 @@ import yaml from 'js-yaml';
 import { promises as fs } from 'fs';
 import { Script } from 'vm';
 import Assertion from '../assertion';
-import { AssertionConfig, AssertionPrototype, Configuration } from 'src/types';
+import { AssertionConfig, AssertionPrototype, AssertionSpec, Configuration } from 'src/types';
 
 function populateAssertion(assertion: Assertion, config: AssertionConfig): void {
   if (config.include && config.include.length > 0) {
@@ -23,12 +23,11 @@ function populateAssertion(assertion: Assertion, config: AssertionConfig): void 
 }
 
 async function buildBuiltinAssertion(config: AssertionConfig): Promise<AssertionPrototype> {
-  const { scanner, enumerateScope, scope, Options } = (await import(`../scanner/${config.id}`))
-    .default;
+  const assertionSpec: AssertionSpec = (await import(`../scanner/${config.id}`)).default;
 
   let options: any;
-  if (Options) {
-    options = new Options();
+  if (assertionSpec.Options) {
+    options = new assertionSpec.Options();
   } else {
     options = {};
   }
@@ -41,10 +40,10 @@ async function buildBuiltinAssertion(config: AssertionConfig): Promise<Assertion
 
   return {
     config: config,
-    scope: scope || 'appmap',
-    enumerateScope: enumerateScope === true ? true : false,
+    scope: assertionSpec.scope || 'appmap',
+    enumerateScope: assertionSpec.enumerateScope === true ? true : false,
     build: () => {
-      const result = scanner(options);
+      const result = assertionSpec.scanner(options);
       populateAssertion(result, config);
       return result;
     },

@@ -1,0 +1,407 @@
+---
+openapi: 3.0.1
+info:
+  title: Rails Sample App
+  version: v6
+paths:
+  "/":
+    get:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+  "/about":
+    get:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+  "/account_activations/{id}/edit":
+    get:
+      responses:
+        '302':
+          content: {}
+          description: Redirected
+      parameters:
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+  "/contact":
+    get:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+  "/help":
+    get:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+  "/login":
+    get:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+    post:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+        '302':
+          content: {}
+          description: Redirected
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                session:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+                    remember_me:
+                      type: string
+  "/logout":
+    delete:
+      responses:
+        '302':
+          content: {}
+          description: Redirected
+      requestBody:
+        content: {}
+  "/microposts":
+    get:
+      responses:
+        '200':
+          content:
+            application/json: {}
+          description: OK
+    post:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+        '302':
+          content: {}
+          description: Redirected
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                micropost:
+                  type: object
+                  properties:
+                    content:
+                      type: string
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                authenticity_token:
+                  type: string
+                commit:
+                  type: string
+  "/microposts/{id}":
+    delete:
+      responses:
+        '302':
+          content: {}
+          description: Redirected
+        '303':
+          content: {}
+          description: Redirected
+      requestBody:
+        content: {}
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+  "/password_resets":
+    post:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+        '302':
+          content: {}
+          description: Redirected
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                password_reset:
+                  type: string
+  "/password_resets/new":
+    get:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+  "/password_resets/{id}":
+    patch:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+        '302':
+          content: {}
+          description: Redirected
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                user:
+                  type: object
+                  properties:
+                    password:
+                      type: string
+                    password_confirmation:
+                      type: string
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+  "/password_resets/{id}/edit":
+    get:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+        '302':
+          content: {}
+          description: Redirected
+      parameters:
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+  "/relationships":
+    post:
+      responses:
+        '200':
+          content:
+            text/javascript: {}
+          description: OK
+        '302':
+          content:
+            text/html: {}
+          description: Redirected             
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                followed_id:
+                  type: string
+  "/relationships/{id}":
+    delete:
+      responses:
+        '200':
+          content:
+            text/javascript: {}
+          description: OK
+        '302':
+          content:
+            text/html: {}
+          description: Redirected             
+      requestBody:
+        content: {}
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+  "/signup":
+    get:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+  "/users":
+    get:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+        '302':
+          content: {}
+          description: Redirected
+    post:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+        '302':
+          content: {}
+          description: Redirected
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    email:
+                      type: string
+                    password:
+                      type: string
+                    password_confirmation:
+                      type: string
+  "/users/{id}":
+    delete:
+      responses:
+        '302':
+          content: {}
+          description: Redirected
+      requestBody:
+        content: {}
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+    get:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+    patch:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+        '302':
+          content: {}
+          description: Redirected
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    email:
+                      type: string
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+  "/users/{id}/edit":
+    get:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+        '302':
+          content: {}
+          description: Redirected
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+  "/users/{id}/followers":
+    get:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+        '302':
+          content: {}
+          description: Redirected
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+  "/users/{id}/following":
+    get:
+      responses:
+        '200':
+          content:
+            text/html: {}
+          description: OK
+        '302':
+          content: {}
+          description: Redirected
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+components:
+  securitySchemes: {}
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000

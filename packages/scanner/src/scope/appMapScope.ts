@@ -4,19 +4,17 @@ import ScopeIterator from './scopeIterator';
 
 class ScopeImpl implements Scope {
   scope: Event;
-  private eventsIter: Generator<Event>;
+  private eventsGen: Generator<Event>;
 
-  constructor(events: Generator<Event>) {
-    this.eventsIter = events;
-    this.scope = events.next().value;
+  constructor(scope: Event, events: Generator<Event>) {
+    this.scope = scope;
+    this.eventsGen = events;
   }
 
   *events(): Generator<Event> {
-    if (this.scope) {
-      yield this.scope;
-    }
+    yield this.scope;
 
-    for (const event of this.eventsIter) {
+    for (const event of this.eventsGen) {
       if (event.isCall()) {
         yield event;
       }
@@ -26,6 +24,10 @@ class ScopeImpl implements Scope {
 
 export default class AppMapScope extends ScopeIterator {
   *scopes(events: Generator<Event>): Generator<Scope> {
-    yield new ScopeImpl(events);
+    const eventsIter = events.next();
+    if (eventsIter.done) {
+      return;
+    }
+    yield new ScopeImpl(eventsIter.value, events);
   }
 }

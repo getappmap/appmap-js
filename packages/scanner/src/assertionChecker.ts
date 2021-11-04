@@ -6,6 +6,7 @@ import { verbose } from './scanner/util';
 import ScopeIterator from './scope/scopeIterator';
 import RootScope from './scope/rootScope';
 import HTTPServerRequestScope from './scope/httpServerRequestScope';
+import HTTPClientRequestScope from './scope/httpClientRequestScope';
 import CommandScope from './scope/commandScope';
 import AppMapScope from './scope/appMapScope';
 
@@ -15,11 +16,16 @@ export default class AssertionChecker {
     root: new RootScope(),
     command: new CommandScope(),
     http_server_request: new HTTPServerRequestScope(),
+    http_client_request: new HTTPClientRequestScope(),
   };
 
-  check(appMap: AppMap, assertionPrototype: AssertionPrototype, matches: Finding[]): void {
+  async check(
+    appMap: AppMap,
+    assertionPrototype: AssertionPrototype,
+    matches: Finding[]
+  ): Promise<void> {
     if (verbose()) {
-      console.warn(`Checking AppMap ${appMap.name}`);
+      console.warn(`Checking AppMap ${appMap.name} with scope ${assertionPrototype.scope}`);
     }
     const scopeIterator = this.scopes[assertionPrototype.scope];
     if (!scopeIterator) {
@@ -33,24 +39,27 @@ export default class AssertionChecker {
     };
 
     for (const scope of scopeIterator.scopes(callEvents())) {
+      if (verbose()) {
+        console.warn(`Scope ${scope.scope}`);
+      }
       const assertion = assertionPrototype.build();
       if (assertionPrototype.enumerateScope) {
         for (const event of scope.events()) {
-          this.checkEvent(event, scope.scope, appMap, assertion, matches);
+          await this.checkEvent(event, scope.scope, appMap, assertion, matches);
         }
       } else {
-        this.checkEvent(scope.scope, scope.scope, appMap, assertion, matches);
+        await this.checkEvent(scope.scope, scope.scope, appMap, assertion, matches);
       }
     }
   }
 
-  checkEvent(
+  async checkEvent(
     event: Event,
     scope: Event,
     appMap: AppMap,
     assertion: Assertion,
     findings: Finding[]
-  ): void {
+  ): Promise<void> {
     if (!event.isCall()) {
       return;
     }
@@ -101,7 +110,7 @@ export default class AssertionChecker {
       };
     };
 
-    const matchResult = assertion.matcher(event);
+    const matchResult = await assertion.matcher(event, appMap);
     const numFindings = findings.length;
     if (matchResult === true) {
       findings.push(buildFinding(event));

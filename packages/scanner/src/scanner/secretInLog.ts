@@ -1,5 +1,5 @@
 import { Event, ParameterObject } from '@appland/models';
-import { MatchResult } from 'src/types';
+import { AssertionSpec, MatchResult } from 'src/types';
 import Assertion from '../assertion';
 import SecretsRegexes from '../analyzer/secretsRegexes';
 import { emptyValue } from './util';
@@ -70,4 +70,4 @@ const scanner = function (): Assertion {
   );
 };
 
-export default { scanner };
+export default { scanner } as AssertionSpec;

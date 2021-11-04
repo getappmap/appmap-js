@@ -13,9 +13,11 @@ function emptyValue(value: string): boolean {
   return [null, undefined, ''].includes(value);
 }
 
-function contentType(event: Event): string | undefined {
-  if (event.httpServerResponse && event.httpServerResponse!.headers) {
+function responseContentType(event: Event): string | undefined {
+  if (event.httpServerResponse?.headers) {
     return event.httpServerResponse!.headers!['Content-Type'];
+  } else if (event.httpClientResponse?.headers) {
+    return event.httpClientResponse!.headers!['Content-Type'];
   }
 }
 
@@ -90,12 +92,12 @@ const isRoot = (event: Event | undefined): boolean => {
 
 export {
   appMapDir,
-  contentType,
   emptyValue,
   isFalsey,
   ideLink,
   isRoot,
   toRegExp,
+  responseContentType,
   toRegExpArray,
   verbose,
 };

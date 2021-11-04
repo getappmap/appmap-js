@@ -14,9 +14,15 @@ declare module '@appland/models' {
     readonly object_id?: number;
   }
 
+  export class ParameterProperty {
+    readonly name: string;
+    readonly class: string;
+  }
+
   export class ParameterObject extends ObjectBase {
     readonly name?: string;
     readonly value: string;
+    readonly properties: ParameterProperty[];
   }
 
   export class ExceptionObject extends ObjectBase {
