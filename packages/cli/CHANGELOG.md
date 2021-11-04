@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.12.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.12.0...@appland/appmap-v3.12.1) (2021-11-04)
+
+
+### Bug Fixes
+
+* reverting openapi version to 3.0.1 ([90ef5ee](https://github.com/applandinc/appmap-js/commit/90ef5ee8e1e0381ce82eda734931e7a136287ad4))
+
 # [@appland/appmap-v3.12.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.11.0...@appland/appmap-v3.12.0) (2021-11-03)
 
 
