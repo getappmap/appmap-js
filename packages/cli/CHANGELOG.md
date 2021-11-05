@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.12.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.12.1...@appland/appmap-v3.12.2) (2021-11-05)
+
+
+### Bug Fixes
+
+* include resources directory in package ([66e98fb](https://github.com/applandinc/appmap-js/commit/66e98fbb205452b33d064a3ee3435933db7e6e81))
+
 # [@appland/appmap-v3.12.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.12.0...@appland/appmap-v3.12.1) (2021-11-04)
 
 
