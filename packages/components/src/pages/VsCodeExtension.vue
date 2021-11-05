@@ -115,25 +115,32 @@
                 <div class="filters__block">
                   <div class="filters__block-head">
                     <h3 class="filters__block-title">Root</h3>
-                    <form class="filters__form">
+                    <form
+                      class="filters__form"
+                      @submit.prevent="addRootObjectInput"
+                    >
                       <input
                         class="filters__form-input"
                         type="text"
                         placeholder="add new root..."
+                        ref="filterRootObjectsInput"
                       />
                       <PlusIcon class="filters__form-plus" />
                     </form>
                   </div>
-                  <div class="filters__block-body filters__block-body--flex">
+                  <div
+                    class="filters__block-body filters__block-body--flex"
+                    v-if="filters.rootObjects.length"
+                  >
                     <div
                       class="filters__root"
-                      v-for="co in filters.rootObjects"
-                      :key="co.id"
+                      v-for="(id, index) in filters.rootObjects"
+                      :key="id"
                     >
-                      {{ co.id }}
+                      {{ id }}
                       <CloseThinIcon
                         class="filters__root-icon"
-                        @click="removeRootObject(co)"
+                        @click="removeRootObject(index)"
                       />
                     </div>
                   </div>
@@ -485,27 +492,34 @@ export default {
       }, []);
 
       if (this.filters.rootObjects.length) {
-        this.filters.rootObjects.forEach((codeObject) => {
-          const eventBranches = codeObject.allEvents.map((e) => [
-            e.id,
-            e.linkedEvent.id,
-          ]);
+        this.filters.rootObjects.forEach((id) => {
+          const filterRegExp = new RegExp(id, 'ig');
+          classMap.codeObjects.forEach((codeObject) => {
+            if (!filterRegExp.test(codeObject.fqid)) {
+              return;
+            }
 
-          events = events.filter((e) =>
-            eventBranches.some(
-              (branch) => e.id >= branch[0] && e.id <= branch[1]
-            )
-          );
-
-          // it's necessary to remove package wrap in Component Diagram,
-          // without this code package will be rendered in collapsed state
-          if (codeObject.type === 'class' && codeObject.packageObject) {
-            classMap = new ClassMap([
-              classMap.codeObjects.filter(
-                (co) => co.id !== codeObject.packageObject.id
-              ),
+            const eventBranches = codeObject.allEvents.map((e) => [
+              e.id,
+              e.linkedEvent.id,
             ]);
-          }
+
+            events = events.filter((e) =>
+              eventBranches.some(
+                (branch) => e.id >= branch[0] && e.id <= branch[1]
+              )
+            );
+
+            // it's necessary to remove package wrap in Component Diagram,
+            // without this code package will be rendered in collapsed state
+            if (codeObject.type === 'class' && codeObject.packageObject) {
+              classMap = new ClassMap([
+                classMap.codeObjects.filter(
+                  (co) => co.id !== codeObject.packageObject.id
+                ),
+              ]);
+            }
+          });
         });
       }
 
@@ -567,9 +581,9 @@ export default {
           if (codeObject) {
             events = events.filter((e) => !codeObject.allEvents.includes(e));
           }
-          classMap.codeObjects = classMap.codeObjects.filter(
+          /*classMap.codeObjects = classMap.codeObjects.filter(
             (co) => co !== codeObject
-          );
+          );*/
         });
       }
 
@@ -627,10 +641,13 @@ export default {
     },
 
     filtersChanged() {
-      return Object.values(this.filters).some(
-        (f) =>
-          (typeof f.on === 'boolean' && f.on !== f.default) ||
-          (typeof on === 'function' && f.on() !== f.default)
+      return (
+        this.filters.rootObjects.length > 0 ||
+        Object.values(this.filters.declutter).some(
+          (f) =>
+            (typeof f.on === 'boolean' && f.on !== f.default) ||
+            (typeof on === 'function' && f.on() !== f.default)
+        )
       );
     },
   },
@@ -823,16 +840,21 @@ export default {
       this.clearSelection();
     },
 
-    removeRootObject(codeObject) {
-      this.filters.rootObjects = this.filters.rootObjects.filter(
-        (co) => co !== codeObject
+    addRootObjectInput() {
+      this.filters.rootObjects.push(
+        this.$refs.filterRootObjectsInput.value.trim()
       );
+      this.$refs.filterRootObjectsInput.value = '';
+    },
+
+    removeRootObject(index) {
+      this.filters.rootObjects.splice(index);
     },
   },
 
   mounted() {
     this.$root.$on('makeRoot', (codeObject) => {
-      this.filters.rootObjects.push(codeObject);
+      this.filters.rootObjects.push(codeObject.fqid);
     });
     this.$root.$on('addHiddenName', (objectId) => {
       this.addHiddenName(objectId);
