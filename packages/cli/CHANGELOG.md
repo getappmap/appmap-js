@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.13.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.12.2...@appland/appmap-v3.13.0) (2021-11-08)
+
+
+### Bug Fixes
+
+* Wait for verification before proceeding ([3e945fb](https://github.com/applandinc/appmap-js/commit/3e945fb5c2749a1b77a7b76ed8692f97034fa0f7))
+
+
+### Features
+
+* Use IntelliJ JDK, build tools, if available ([c4d8101](https://github.com/applandinc/appmap-js/commit/c4d81013040c613277fb3c21ded2474df2f317ae))
+
 # [@appland/appmap-v3.12.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.12.1...@appland/appmap-v3.12.2) (2021-11-05)
 
 
