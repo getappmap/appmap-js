@@ -19,5 +19,8 @@ scanners:
   - id: slowQuery
     properties:
       timeAllowed: 0.05
+  - id: tooManyJoins
+    properties:
+      warningLimit: 1
   - id: tooManyUpdates
   - id: updateInGetRequest
