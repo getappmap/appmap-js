@@ -509,16 +509,6 @@ export default {
                 (branch) => e.id >= branch[0] && e.id <= branch[1]
               )
             );
-
-            // it's necessary to remove package wrap in Component Diagram,
-            // without this code package will be rendered in collapsed state
-            if (codeObject.type === 'class' && codeObject.packageObject) {
-              classMap = new ClassMap([
-                classMap.codeObjects.filter(
-                  (co) => co.id !== codeObject.packageObject.id
-                ),
-              ]);
-            }
           });
         });
       }
@@ -581,9 +571,6 @@ export default {
           if (codeObject) {
             events = events.filter((e) => !codeObject.allEvents.includes(e));
           }
-          /*classMap.codeObjects = classMap.codeObjects.filter(
-            (co) => co !== codeObject
-          );*/
         });
       }
 
