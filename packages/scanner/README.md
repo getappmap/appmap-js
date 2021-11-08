@@ -67,3 +67,13 @@ yarn scanner -d tmp/appmap --pull-request-comment=github
 * Devise `Recoverable` tokens can be [leaked into the logs](https://github.com/heartcombo/devise#password-reset-tokens-and-rails-logs).
 
 
+## Development
+
+### Using a local branch of `@appland/models`
+
+Use `yarn link` to create a symlink to a local version of `@appland/models`. Make sure the models
+package is built according to the instructions in its own README.
+
+```sh
+$ yarn link ../appmap-js/packages/models
+```

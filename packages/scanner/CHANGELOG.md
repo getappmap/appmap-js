@@ -1,3 +1,21 @@
+# [1.18.0](https://github.com/applandinc/scanner/compare/v1.17.0...v1.18.0) (2021-11-04)
+
+
+### Bug Fixes
+
+* Disable IDE links when exporting findings to a file ([9bbea63](https://github.com/applandinc/scanner/commit/9bbea638402fc9ed7bce7dd3ef9ebe4ef7a8fea0))
+
+
+### Features
+
+* Add AssertionSpec type for scanner definitions ([74de27a](https://github.com/applandinc/scanner/commit/74de27a071eeb689950e5e5d1da8c19804d3d537))
+* Add CI integration docs ([1dc0ad4](https://github.com/applandinc/scanner/commit/1dc0ad462f6602f704e737fb737960cff8f65081))
+* Add OpenAPI generation for http_client_request ([1fc93e1](https://github.com/applandinc/scanner/commit/1fc93e181ac6ac1d335a49fda72582f81f13802e))
+* Add scanner for slow method calls ([e5366fa](https://github.com/applandinc/scanner/commit/e5366fa31a4fe506e1ad27c9b0a16f7310f8610b))
+* Analyze and print OpenAPI breaking changes ([858f833](https://github.com/applandinc/scanner/commit/858f83383f136bd329e7e83dd2f488f1c6f2d33e))
+* OpenAPI schema are cached by host ([4b2ac60](https://github.com/applandinc/scanner/commit/4b2ac60d74e326325759ddf0f83b8ab9d3d91ecb))
+* Report distinct finding messages in the final summary ([3f946ba](https://github.com/applandinc/scanner/commit/3f946bab9cc2bf7e8ba83e219687002a6241822f))
+
 # [1.17.0](https://github.com/applandinc/scanner/compare/v1.16.0...v1.17.0) (2021-10-21)
 
 

@@ -17,8 +17,7 @@ deploy:
     skip_cleanup: true
     script: >-
       npm config set registry https://npm.pkg.github.com \
-      && git config --unset lfs.https://github.com/applandinc/scanner.git/info/lfs.access \
-      && git remote set-url origin https://${GH_TOKEN}@github.com/applandinc/scanner.git \
+      && echo -e "machine github.com\n  login ${GH_TOKEN}" > ~/.netrc \
       && yarn run semantic-release
     on:
       branch: main
