@@ -329,7 +329,7 @@
 </template>
 
 <script>
-import { CodeObjectType, ClassMap, Event, buildAppMap } from '@appland/models';
+import { CodeObjectType, Event, buildAppMap } from '@appland/models';
 import ArrowSearchLeftIcon from '@/assets/arrow-search-left.svg';
 import ArrowSearchRightIcon from '@/assets/arrow-search-right.svg';
 import CheckIcon from '@/assets/check.svg';
@@ -479,7 +479,7 @@ export default {
     },
     filteredAppMap() {
       const { appMap } = this.$store.state;
-      let { classMap } = appMap;
+      const { classMap } = appMap;
       let rootEvents = appMap.rootEvents();
 
       if (this.filters.declutter.limitRootEvents.on) {
