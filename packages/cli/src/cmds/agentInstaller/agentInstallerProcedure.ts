@@ -62,7 +62,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
 
     await this.installer.installAgent();
 
-    this.verifyProject();
+    await this.verifyProject();
 
     const appMapYml = this.configPath;
     if (!useExistingAppMapYml) {
