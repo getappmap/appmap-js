@@ -418,20 +418,6 @@ context('VS Code Extension', () => {
       ).should('have.length', 2);
     });
 
-    it('set new root class object removes parent package', () => {
-      cy.get('.node[data-id="json"] .label__icon--expand').click();
-
-      cy.get('.node[data-id="json/JSON::Ext::Generator::State"]').rightclick();
-
-      cy.get('.dropdown-menu').contains('Set as root').click();
-
-      cy.get('.node[data-id="json"]').should('not.be.visible');
-
-      cy.get('.node[data-id="JSON::Ext::Generator::State"]').should(
-        'be.visible'
-      );
-    });
-
     it('highlights only the first ancestor available if the selected object is not visible', () => {
       cy.get('.node[data-id="app/helpers"]').rightclick();
 
