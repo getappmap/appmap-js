@@ -1,3 +1,15 @@
+# [1.19.0](https://github.com/applandinc/scanner/compare/v1.18.0...v1.19.0) (2021-11-09)
+
+
+### Bug Fixes
+
+* Upgrade semantic-release ([45dad94](https://github.com/applandinc/scanner/commit/45dad947ba13be458cda12ea920dc22ff9d02d94))
+
+
+### Features
+
+* Scan for too many joins ([1de7bfc](https://github.com/applandinc/scanner/commit/1de7bfcf40b39dd521bc7676ed0842a50a0ef742))
+
 # [1.18.0](https://github.com/applandinc/scanner/compare/v1.17.0...v1.18.0) (2021-11-04)
 
 
