@@ -45,6 +45,10 @@ function isFalsey(valueObj: any): boolean {
 
 const isTruthy = (valueObj: any): boolean => !isFalsey(valueObj);
 
+function providesAuthentication(event: Event, label: string): boolean {
+  return event.returnValue && event.labels.has(label) && isTruthy(event.returnValue.value);
+}
+
 function ideLink(filePath: string, ide: string, eventId: number): string {
   const OSC = '\u001B]';
   const BEL = '\u0007';
@@ -99,6 +103,7 @@ export {
   isTruthy,
   ideLink,
   isRoot,
+  providesAuthentication,
   toRegExp,
   responseContentType,
   toRegExpArray,

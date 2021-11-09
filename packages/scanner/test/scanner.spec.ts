@@ -1,3 +1,4 @@
+import { buildAppMap } from '@appland/models';
 import slowHttpServerRequest from '../src/scanner/slowHttpServerRequest';
 import missingAuthentication from '../src/scanner/missingAuthentication';
 import secretInLog from '../src/scanner/secretInLog';
@@ -11,11 +12,12 @@ import incompatibleHTTPClientRequest from '../src/scanner/incompatibleHttpClient
 import slowFunctionCall from '../src/scanner/slowFunctionCall';
 import tooManyJoins from '../src/scanner/tooManyJoins';
 import authzBeforeAuthn from '../src/scanner/authzBeforeAuthn';
-import { scan } from './util';
+import { fixtureAppMap, scan } from './util';
 import { AssertionPrototype, ScopeName } from '../src/types';
 import Assertion from '../src/assertion';
 import { cwd } from 'process';
 import { join, normalize } from 'path';
+import { readFile } from 'fs/promises';
 
 const makePrototype = (
   id: string,
@@ -253,9 +255,42 @@ describe('assert', () => {
       makePrototype('authz-before-authn', () => scanner()),
       'Test_authz_before_authn.appmap.json'
     );
+    expect(findings).toHaveLength(0);
+  });
+
+  it('detects authorization before authentication', async () => {
+    const scanner = authzBeforeAuthn.scanner as () => Assertion;
+
+    // Remove security.authentication labels from the AppMap in order to
+    // trigger the finding.
+    const appMapBytes = await readFile(
+      fixtureAppMap('Test_authz_before_authn.appmap.json'),
+      'utf8'
+    );
+    const baseAppMap = JSON.parse(appMapBytes);
+    const removeAuthenticationLabel = (codeObject: any) => {
+      if (codeObject.labels) {
+        codeObject.labels = codeObject.labels.filter(
+          (label: string) => label !== 'security.authentication'
+        );
+      }
+      (codeObject.children || []).forEach(removeAuthenticationLabel);
+    };
+    baseAppMap.classMap.forEach(removeAuthenticationLabel);
+    const appMapData = buildAppMap(JSON.stringify(baseAppMap)).normalize().build();
+
+    const findings = await scan(
+      makePrototype('authz-before-authn', () => scanner()),
+      undefined,
+      appMapData
+    );
     expect(findings).toHaveLength(1);
     const finding = findings[0];
     expect(finding.scannerId).toEqual('authz-before-authn');
-    expect(finding.event.id).toEqual(16);
+    expect(finding.event.id).toEqual(1);
+    expect(finding.message).toEqual(
+      `MicropostsController#correct_user provides authorization, but the request is not authenticated`
+    );
+    expect(finding.relatedEvents!.map((e) => e.id)).toEqual([16]);
   });
 });

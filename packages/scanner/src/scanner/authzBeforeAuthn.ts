@@ -1,35 +1,42 @@
-import { Event } from '@appland/models';
+import { Event, EventNavigator } from '@appland/models';
+import { MatchResult } from '../types.d';
 import Assertion from '../assertion';
-import { isTruthy } from './util';
+import { providesAuthentication } from './util';
+
+function containsAuthentication(events: Generator<EventNavigator>) {
+  for (const iter of events) {
+    if (providesAuthentication(iter.event, SecurityAuthentication)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 function scanner(): Assertion {
   return Assertion.assert(
     'authz-before-authn',
     'Authorization before authentication',
-    (rootEvent: Event) => {
-      const events: Event[] = [...rootEvent.children];
-
-      while (events.length > 0) {
-        const event = events.shift()!;
-
-        // If the first event is a successful authentication call (i.e. has a truthy return value)
-        // then we can stop here. We already know that authentication came first.
-        if (event.labels.has('security.authentication') && isTruthy(event.returnValue?.value)) {
-          return false;
+    (rootEvent: Event): MatchResult[] | undefined => {
+      for (const event of new EventNavigator(rootEvent).descendants()) {
+        if (providesAuthentication(event.event, SecurityAuthentication)) {
+          return;
         }
-
-        if (event.labels.has('security.authorization')) {
-          // Consider cases where an authorization call leads to an authentication call as valid.
-          const childDoesAuthn = event
-            .ancestors()
-            .some((a) => a.labels.has('security.authentication'));
-
-          return childDoesAuthn ? false : [{ level: 'error', event }];
+        if (event.event.labels.has(SecurityAuthorization)) {
+          // If the authorization event has a successful authentication descendant, allow this as well.
+          if (containsAuthentication(event.descendants())) {
+            return;
+          } else {
+            return [
+              {
+                level: 'error',
+                event: rootEvent,
+                message: `${event.event} provides authorization, but the request is not authenticated`,
+                relatedEvents: [event.event],
+              },
+            ];
+          }
         }
-        events.push(...event.children);
       }
-
-      return false;
     },
     (assertion: Assertion): void => {
       assertion.where = (e) => Boolean(e.httpServerRequest);
@@ -38,4 +45,12 @@ function scanner(): Assertion {
   );
 }
 
-export default { scope: 'http_server_request', enumerateScope: false, scanner };
+const SecurityAuthentication = 'security.authentication';
+const SecurityAuthorization = 'security.authorization';
+
+export default {
+  Labels: [SecurityAuthorization, SecurityAuthentication],
+  scope: 'http_server_request',
+  enumerateScope: false,
+  scanner,
+};
