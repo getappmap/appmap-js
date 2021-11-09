@@ -1,3 +1,10 @@
+# [1.20.0](https://github.com/applandinc/scanner/compare/v1.19.0...v1.20.0) (2021-11-09)
+
+
+### Features
+
+* Scan for authorization before authentication ([3d3b1eb](https://github.com/applandinc/scanner/commit/3d3b1eb21870728e02cd4fb064325f7d2e274f89))
+
 # [1.19.0](https://github.com/applandinc/scanner/compare/v1.18.0...v1.19.0) (2021-11-09)
 
 
