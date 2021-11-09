@@ -17,8 +17,8 @@
   "author": "AppLand, Inc.",
   "license": "MIT",
   "devDependencies": {
-    "@semantic-release/changelog": "^5.0.1",
-    "@semantic-release/git": "^9.0.1",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
     "@types/glob": "^7.1.4",
     "@types/jest": "^27.0.1",
     "@types/js-yaml": "^4.0.3",
@@ -33,7 +33,7 @@
     "jest": "^27.1.0",
     "openapi-types": "^9.3.0",
     "prettier": "^2.3.2",
-    "semantic-release": "^17.4.7",
+    "semantic-release": "^18.0.0",
     "sinon": "^11.1.2",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
@@ -49,7 +49,7 @@
     "minimatch": "^3.0.4",
     "octokat": "^0.10.0",
     "openapi-diff": "^0.23.5",
-    "semantic-release": "^17.4.7",
+    "semantic-release": "^18.0.0",
     "supports-hyperlinks": "^2.2.0",
     "yargs": "^17.1.1"
   },
