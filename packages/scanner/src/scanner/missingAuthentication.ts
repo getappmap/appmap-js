@@ -2,20 +2,16 @@ import { Event, EventNavigator } from '@appland/models';
 import { rpcRequestForEvent } from '../openapi/rpcRequest';
 import { AssertionSpec } from '../types';
 import Assertion from '../assertion';
-import { isFalsey, toRegExpArray } from './util';
+import { providesAuthentication, toRegExpArray } from './util';
 
 function isPublic(event: Event): boolean {
   return event.labels.has('public');
 }
 
-function providesAuthentication(event: Event) {
-  return event.labels.has('security.authentication') && !isFalsey(event.returnValue);
-}
-
 const authenticatedBy = (iterator: Iterator<EventNavigator>): boolean => {
   let i: IteratorResult<EventNavigator> = iterator.next();
   while (!i.done) {
-    if (isPublic(i.value.event) || providesAuthentication(i.value.event)) {
+    if (isPublic(i.value.event) || providesAuthentication(i.value.event, SecurityAuthentication)) {
       return true;
     }
     i = iterator.next();
@@ -73,8 +69,11 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
+const SecurityAuthentication = 'security.authentication';
+
 export default {
   scope: 'http_server_request',
+  Labels: [SecurityAuthentication],
   enumerateScope: false,
   Options,
   scanner,

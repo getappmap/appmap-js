@@ -2,7 +2,7 @@ import { Event } from '@appland/models';
 import recordSecrets from '../analyzer/recordSecrets';
 import SecretsRegexes from '../analyzer/secretsRegexes';
 import Assertion from '../assertion';
-import { AssertionSpec } from '../types';
+import { AssertionSpec } from '../types.d';
 
 const BCRYPT_REGEXP = /^[$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][./0-9a-zA-Z]{53}$/;
 
@@ -44,20 +44,22 @@ const scanner = function (): Assertion {
     'insecure-compare',
     'Insecure comparison of secrets',
     (e: Event) => {
-      if (e.codeObject.labels.has('secret')) {
+      if (e.codeObject.labels.has(Secret)) {
         recordSecrets(secrets, e);
       }
-      if (e.parameters && e.codeObject.labels.has('string.equals')) {
+      if (e.parameters && e.codeObject.labels.has(StringEquals)) {
         return stringEquals(e);
       }
     },
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
-        e.isFunction &&
-        (e.codeObject.labels.has('string.equals') || e.codeObject.labels.has('secret'));
+        e.isFunction && (e.codeObject.labels.has(StringEquals) || e.codeObject.labels.has(Secret));
       assertion.description = `Insecure comparison of secrets`;
     }
   );
 };
 
-export default { scanner } as AssertionSpec;
+const Secret = 'secret';
+const StringEquals = 'string.equals';
+
+export default { Labels: [Secret, StringEquals], scanner } as AssertionSpec;

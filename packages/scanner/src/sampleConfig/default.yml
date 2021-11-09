@@ -18,3 +18,4 @@ scanners:
   - id: tooManyUpdates
     properties:
       maxUpdates: 2
+  - id: authzBeforeAuthn

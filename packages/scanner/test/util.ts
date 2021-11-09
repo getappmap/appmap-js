@@ -15,10 +15,16 @@ const fixtureAppMap = (file: string): string => {
 
 const scan = async (
   assertionPrototype: AssertionPrototype,
-  appmapFile: string
+  appmapFile?: string,
+  appmap?: any
 ): Promise<Finding[]> => {
-  const appMapBytes = await readFile(fixtureAppMap(appmapFile), 'utf8');
-  const appMapData = buildAppMap(appMapBytes).normalize().build();
+  let appMapData: any;
+  if (appmapFile) {
+    const appMapBytes = await readFile(fixtureAppMap(appmapFile), 'utf8');
+    appMapData = buildAppMap(appMapBytes).normalize().build();
+  } else {
+    appMapData = appmap;
+  }
 
   const findings: Finding[] = [];
   await new AssertionChecker().check(appMapData, assertionPrototype, findings);

@@ -43,6 +43,12 @@ function isFalsey(valueObj: any): boolean {
   return false;
 }
 
+const isTruthy = (valueObj: any): boolean => !isFalsey(valueObj);
+
+function providesAuthentication(event: Event, label: string): boolean {
+  return event.returnValue && event.labels.has(label) && isTruthy(event.returnValue.value);
+}
+
 function ideLink(filePath: string, ide: string, eventId: number): string {
   const OSC = '\u001B]';
   const BEL = '\u0007';
@@ -94,8 +100,10 @@ export {
   appMapDir,
   emptyValue,
   isFalsey,
+  isTruthy,
   ideLink,
   isRoot,
+  providesAuthentication,
   toRegExp,
   responseContentType,
   toRegExpArray,
