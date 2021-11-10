@@ -1,24 +1,69 @@
 const { buildAppMap } = require('@appland/models');
 
+const unrecognizedTypes = new Set();
+
 function classNameToOpenAPIType(className) {
-  let typeName = className;
-  if (!typeName || typeName === '') {
+  if (!className || className === '') {
     return 'unknown';
   }
-  typeName = typeName.toLowerCase();
 
-  switch (typeName) {
-    case 'hash':
-    case 'activesupport::hashwithindifferentaccess':
-      return 'object';
-    case 'nilclass':
-      return 'string';
-    case 'trueclass':
-    case 'falseclass':
-      return 'boolean';
-    default:
-      return typeName;
+  const mapRubyType = (t) => {
+    switch (t) {
+      case 'array':
+        return 'array';
+      case 'hash':
+      case 'activesupport::hashwithindifferentaccess':
+        return 'object';
+      case 'nilclass':
+        return 'string';
+      case 'trueclass':
+      case 'falseclass':
+        return 'boolean';
+      default:
+        return undefined;
+    }
+  };
+
+  const mapPythonType = (t) => {
+    if (!t.startsWith('builtins.')) {
+      return undefined;
+    }
+
+    switch (t.substr(9)) {
+      case 'bool':
+        return 'boolean';
+      case 'dict':
+        return 'object';
+      case 'int':
+        return 'integer';
+      case 'list':
+        return 'array';
+      case 'str':
+        return 'string';
+      default:
+        return undefined;
+    }
+  };
+
+  const mapJavaType = (t) => {
+    switch (t) {
+      case 'java.lang.string':
+        return 'string';
+      default:
+        return undefined;
+    }
+  };
+
+  const mapper = (t) => mapRubyType(t) || mapPythonType(t) || mapJavaType(t);
+  const mapped = mapper(className.toLowerCase());
+  if (!mapped && !unrecognizedTypes.has(className)) {
+    console.warn(
+      `Warning: don't know how to map "${className}" to an OpenAPI type. You'll need to update the generated file.`
+    );
+    unrecognizedTypes.add(className);
+    return className;
   }
+  return mapped;
 }
 
 function messageToOpenAPISchema(message) {
