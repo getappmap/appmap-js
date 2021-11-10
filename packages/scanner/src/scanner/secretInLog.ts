@@ -70,4 +70,4 @@ const scanner = function (): Assertion {
   );
 };
 
-export default { scanner } as AssertionSpec;
+export default { scanner, enumerateScope: true } as AssertionSpec;

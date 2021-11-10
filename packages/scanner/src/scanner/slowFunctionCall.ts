@@ -47,4 +47,4 @@ function scanner(options: Options): Assertion {
   );
 }
 
-export default { scope: `command`, enumerateScope: true, Options, scanner };
+export default { enumerateScope: true, Options, scanner };
