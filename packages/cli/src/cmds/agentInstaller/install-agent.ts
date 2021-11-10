@@ -234,7 +234,9 @@ export default {
     await Telemetry.flush();
 
     if (errors.length) {
-      Yargs.exit(1, new Error(errors.map((e) => e.message).join('\n')));
+      const reason = new Error(errors.map((e) => e.message).join('\n'));
+      console.log(reason.message);
+      Yargs.exit(1, reason);
     }
   },
 };

@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { verbose } from '../utils';
 
-const { promises: fsp } = require('fs');
+const { promises: fsp, statSync } = require('fs');
 const { queue } = require('async');
 const { glob } = require('glob');
 const yaml = require('js-yaml');
@@ -18,14 +18,9 @@ class OpenAPICommand {
     this.model = new Model();
     const q = queue(this.collectAppMap.bind(this), 5);
     q.pause();
-    const files = await new Promise((resolve, reject) => {
-      glob(`${this.directory}/**/*.appmap.json`, (err, globFiles) => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve(globFiles);
-      });
-    });
+    // Make sure the directory exists -- if it doesn't, the glob below just returns nothing.
+    statSync(this.directory);
+    const files = glob.sync(`${this.directory}/**/*.appmap.json`);
     files.forEach((f) => q.push(f));
     await new Promise((resolve, reject) => {
       q.drain(resolve);
@@ -37,9 +32,13 @@ class OpenAPICommand {
 
   async collectAppMap(file) {
     this.count += 1;
-    parseHTTPServerRequests(JSON.parse(await fsp.readFile(file)), (e) =>
-      this.model.addRequest(e)
-    );
+    try {
+      parseHTTPServerRequests(JSON.parse(await fsp.readFile(file)), (e) =>
+        this.model.addRequest(e)
+      );
+    } catch (e) {
+      throw new Error(`Error parsing ${file}`, { cause: e });
+    }
   }
 }
 
@@ -59,10 +58,12 @@ module.exports = {
     args.option('appmap-dir', {
       describe: 'directory to recursively inspect for AppMaps',
       default: 'tmp/appmap',
+      requiresArg: true,
     });
     args.option('output-file', {
       alias: ['o'],
       describe: 'output file name',
+      requiresArg: true,
     });
     args.option('openapi-template', {
       describe:
