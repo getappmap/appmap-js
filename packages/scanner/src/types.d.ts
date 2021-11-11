@@ -1,12 +1,7 @@
 import { AppMap, Event } from '@appland/models';
 import Assertion from './assertion';
 
-export type ScopeName =
-  | 'appmap'
-  | 'root'
-  | 'command'
-  | 'http_client_request'
-  | 'http_server_request';
+export type ScopeName = 'root' | 'command' | 'http_client_request' | 'http_server_request';
 
 interface Scope {
   scope: Event;

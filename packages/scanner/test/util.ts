@@ -1,4 +1,4 @@
-import { buildAppMap } from '@appland/models';
+import { AppMap, buildAppMap } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import AssertionChecker from '../src/assertionChecker';
@@ -9,21 +9,25 @@ if (process.env.VERBOSE_SCAN === 'true') {
   verbose(true);
 }
 
-const fixtureAppMap = (file: string): string => {
+const fixtureAppMapFileName = (file: string): string => {
   return join(__dirname, 'fixtures', 'appmaps', file);
+};
+
+const fixtureAppMap = async (file: string): Promise<AppMap> => {
+  const appMapBytes = await readFile(fixtureAppMapFileName(file), 'utf8');
+  return buildAppMap(appMapBytes).normalize().build();
 };
 
 const scan = async (
   assertionPrototype: AssertionPrototype,
   appmapFile?: string,
-  appmap?: any
+  appmap?: AppMap
 ): Promise<Finding[]> => {
-  let appMapData: any;
+  let appMapData: AppMap;
   if (appmapFile) {
-    const appMapBytes = await readFile(fixtureAppMap(appmapFile), 'utf8');
-    appMapData = buildAppMap(appMapBytes).normalize().build();
+    appMapData = await fixtureAppMap(appmapFile);
   } else {
-    appMapData = appmap;
+    appMapData = appmap!;
   }
 
   const findings: Finding[] = [];
@@ -36,4 +40,4 @@ const scan = async (
   return findings;
 };
 
-export { fixtureAppMap, scan };
+export { fixtureAppMap, fixtureAppMapFileName, scan };

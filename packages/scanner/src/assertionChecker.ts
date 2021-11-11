@@ -8,11 +8,9 @@ import RootScope from './scope/rootScope';
 import HTTPServerRequestScope from './scope/httpServerRequestScope';
 import HTTPClientRequestScope from './scope/httpClientRequestScope';
 import CommandScope from './scope/commandScope';
-import AppMapScope from './scope/appMapScope';
 
 export default class AssertionChecker {
   private scopes: Record<string, ScopeIterator> = {
-    appmap: new AppMapScope(),
     root: new RootScope(),
     command: new CommandScope(),
     http_server_request: new HTTPServerRequestScope(),

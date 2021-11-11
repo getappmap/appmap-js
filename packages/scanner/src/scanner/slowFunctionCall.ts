@@ -1,4 +1,5 @@
 import { Event } from '@appland/models';
+import { ScopeName } from 'src/types';
 import Assertion from '../assertion';
 import { toRegExp } from './util';
 
@@ -47,4 +48,4 @@ function scanner(options: Options): Assertion {
   );
 }
 
-export default { enumerateScope: true, Options, scanner };
+export default { scope: 'root' as ScopeName, enumerateScope: true, Options, scanner };

@@ -12,7 +12,7 @@ import incompatibleHTTPClientRequest from '../src/scanner/incompatibleHttpClient
 import slowFunctionCall from '../src/scanner/slowFunctionCall';
 import tooManyJoins from '../src/scanner/tooManyJoins';
 import authzBeforeAuthn from '../src/scanner/authzBeforeAuthn';
-import { fixtureAppMap, scan } from './util';
+import { fixtureAppMapFileName, scan } from './util';
 import { AssertionPrototype, ScopeName } from '../src/types';
 import Assertion from '../src/assertion';
 import { cwd } from 'process';
@@ -22,24 +22,25 @@ import { readFile } from 'fs/promises';
 const makePrototype = (
   id: string,
   buildFn: () => Assertion,
-  scope: ScopeName = 'appmap',
-  enumerateScope = true
+  enumerateScope: boolean | undefined,
+  scope: ScopeName | undefined
 ): AssertionPrototype => {
   return {
     config: { id },
-    scope: scope,
-    enumerateScope,
+    enumerateScope: enumerateScope === true ? true : false,
+    scope: scope || 'root',
     build: buildFn,
   };
 };
 
 describe('assert', () => {
   it('slow HTTP server request', async () => {
-    const { scope, scanner, Options } = slowHttpServerRequest;
+    const { scope, enumerateScope, scanner, Options } = slowHttpServerRequest;
     const findings = await scan(
       makePrototype(
         'slow-http-server-request',
         () => scanner(new Options(0.5)),
+        enumerateScope,
         scope as ScopeName
       ),
       'Password_resets_password_resets.appmap.json'
@@ -54,9 +55,9 @@ describe('assert', () => {
   });
 
   it('missing authentication', async () => {
-    const { scope, scanner } = missingAuthentication;
+    const { scope, enumerateScope, scanner } = missingAuthentication;
     const findings = await scan(
-      makePrototype('secret-in-log', () => scanner(), scope as ScopeName),
+      makePrototype('secret-in-log', () => scanner(), enumerateScope, scope as ScopeName),
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
 
@@ -68,9 +69,9 @@ describe('assert', () => {
   });
 
   it('secret in log file', async () => {
-    const { scanner } = secretInLog;
+    const { enumerateScope, scanner, scope } = secretInLog;
     const findings = await scan(
-      makePrototype('secret-in-log', () => scanner()),
+      makePrototype('secret-in-log', () => scanner(), enumerateScope, scope as ScopeName),
       'Users_signup_valid_signup_information_with_account_activation.appmap.json'
     );
     expect(findings).toHaveLength(2);
@@ -92,7 +93,7 @@ describe('assert', () => {
   it('n+1 query', async () => {
     const { scope, enumerateScope, scanner } = nPlusOneQuery;
     const findings = await scan(
-      makePrototype('n-plus-one-query', () => scanner(), scope as ScopeName, enumerateScope),
+      makePrototype('n-plus-one-query', () => scanner(), enumerateScope, scope as ScopeName),
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
 
@@ -115,8 +116,8 @@ describe('assert', () => {
       makePrototype(
         'too-many-updates',
         () => scanner(new Options(2)),
-        scope as ScopeName,
-        enumerateScope
+        enumerateScope,
+        scope as ScopeName
       ),
       'PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
     );
@@ -128,15 +129,15 @@ describe('assert', () => {
       'PaymentsController create no user email on file makes a onetime payment with no user, but associate with stripe'
     );
     expect(finding1.scannerId).toEqual('too-many-updates');
-    expect(finding1.event.id).toEqual(89);
-    expect(finding1.message).toEqual(`Command performs 3 SQL and RPC updates`);
-    expect(finding1.relatedEvents!).toHaveLength(3);
+    expect(finding1.event.id).toEqual(19);
+    expect(finding1.message).toEqual(`Command performs 4 SQL and RPC updates`);
+    expect(finding1.relatedEvents!).toHaveLength(4);
   });
 
   it('insecure comparison', async () => {
-    const { scanner } = insecureCompare;
+    const { scanner, scope, enumerateScope } = insecureCompare;
     const findings = await scan(
-      makePrototype('insecure-compare', () => scanner()),
+      makePrototype('insecure-compare', () => scanner(), enumerateScope, scope as ScopeName),
       'Password_resets_password_resets_with_insecure_compare.appmap.json'
     );
     expect(findings).toHaveLength(1);
@@ -146,9 +147,9 @@ describe('assert', () => {
   });
 
   it('http 500', async () => {
-    const { scope, scanner } = http500;
+    const { scope, enumerateScope, scanner } = http500;
     const findings = await scan(
-      makePrototype('http-500', () => scanner(), scope as ScopeName),
+      makePrototype('http-500', () => scanner(), enumerateScope, scope as ScopeName),
       'Password_resets_password_resets_with_http500.appmap.json'
     );
     expect(findings).toHaveLength(1);
@@ -158,10 +159,13 @@ describe('assert', () => {
   });
 
   it('illegal package dependency', async () => {
-    const { scanner, Options } = illegalPackageAccess;
+    const { scanner, scope, enumerateScope, Options } = illegalPackageAccess;
     const findings = await scan(
-      makePrototype('illegal-package-dependency', () =>
-        scanner(new Options('query:*', ['app/views']))
+      makePrototype(
+        'illegal-package-dependency',
+        () => scanner(new Options('query:*', ['app/views'])),
+        enumerateScope,
+        scope as ScopeName
       ),
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
@@ -175,9 +179,14 @@ describe('assert', () => {
   });
 
   it('rpc without circuit breaker creates a finding', async () => {
-    const { scanner } = rpcWithoutCircuitBreaker;
+    const { scanner, enumerateScope, scope } = rpcWithoutCircuitBreaker;
     const findings = await scan(
-      makePrototype('rpc-without-circuit-breaker', () => scanner()),
+      makePrototype(
+        'rpc-without-circuit-breaker',
+        () => scanner(),
+        enumerateScope,
+        scope as ScopeName
+      ),
       'PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
     );
     expect(findings).toHaveLength(4);
@@ -187,18 +196,28 @@ describe('assert', () => {
   });
 
   it('all rpc have a circuit breaker ', async () => {
-    const { scanner } = rpcWithoutCircuitBreaker;
+    const { scanner, scope, enumerateScope } = rpcWithoutCircuitBreaker;
     const findings = await scan(
-      makePrototype('rpc-without-circuit-breaker', () => scanner()),
+      makePrototype(
+        'rpc-without-circuit-breaker',
+        () => scanner(),
+        enumerateScope,
+        scope as ScopeName
+      ),
       'Test_net_5xxs_trip_circuit_when_fatal_server_flag_enabled.appmap.json'
     );
     expect(findings).toHaveLength(0);
   });
 
   it('slow function call', async () => {
-    const { scanner, Options } = slowFunctionCall;
+    const { scanner, scope, enumerateScope, Options } = slowFunctionCall;
     const findings = await scan(
-      makePrototype('slow-function-call', () => scanner(new Options(0.2, '.*Controller#create'))),
+      makePrototype(
+        'slow-function-call',
+        () => scanner(new Options(0.2, '.*Controller#create')),
+        enumerateScope,
+        scope
+      ),
       'Microposts_interface_micropost_interface.appmap.json'
     );
     expect(findings).toHaveLength(1);
@@ -214,10 +233,13 @@ describe('assert', () => {
     const railsSampleAppSchemaURL = `file://${normalize(
       join(cwd(), 'test', 'fixtures', 'schemata', 'railsSampleApp6thEd.openapiv3.yaml')
     )}`;
-    const { scanner, Options } = incompatibleHTTPClientRequest;
+    const { scanner, scope, enumerateScope, Options } = incompatibleHTTPClientRequest;
     const findings = await scan(
-      makePrototype('incompatible-http-client-request', () =>
-        scanner(new Options({ 'api.stripe.com': railsSampleAppSchemaURL }))
+      makePrototype(
+        'incompatible-http-client-request',
+        () => scanner(new Options({ 'api.stripe.com': railsSampleAppSchemaURL })),
+        enumerateScope,
+        scope as ScopeName
       ),
       'PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
     );
@@ -235,8 +257,8 @@ describe('assert', () => {
       makePrototype(
         'too-many-joins',
         () => scanner(new Options(1)),
-        scope as ScopeName,
-        enumerateScope
+        enumerateScope,
+        scope as ScopeName
       ),
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
@@ -250,21 +272,21 @@ describe('assert', () => {
   });
 
   it('detects authorization before authentication', async () => {
-    const scanner = authzBeforeAuthn.scanner as () => Assertion;
+    const { scope, enumerateScope, scanner } = authzBeforeAuthn;
     const findings = await scan(
-      makePrototype('authz-before-authn', () => scanner()),
+      makePrototype('authz-before-authn', () => scanner(), enumerateScope, scope as ScopeName),
       'Test_authz_before_authn.appmap.json'
     );
     expect(findings).toHaveLength(0);
   });
 
   it('detects authorization before authentication', async () => {
-    const scanner = authzBeforeAuthn.scanner as () => Assertion;
+    const { scope, enumerateScope, scanner } = authzBeforeAuthn;
 
     // Remove security.authentication labels from the AppMap in order to
     // trigger the finding.
     const appMapBytes = await readFile(
-      fixtureAppMap('Test_authz_before_authn.appmap.json'),
+      fixtureAppMapFileName('Test_authz_before_authn.appmap.json'),
       'utf8'
     );
     const baseAppMap = JSON.parse(appMapBytes);
@@ -280,7 +302,7 @@ describe('assert', () => {
     const appMapData = buildAppMap(JSON.stringify(baseAppMap)).normalize().build();
 
     const findings = await scan(
-      makePrototype('authz-before-authn', () => scanner()),
+      makePrototype('authz-before-authn', () => scanner(), enumerateScope, scope as ScopeName),
       undefined,
       appMapData
     );
