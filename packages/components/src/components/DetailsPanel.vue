@@ -29,6 +29,8 @@
         v-if="selectedObject"
         :is="detailsType"
         :object="selectedObject"
+        :is-root-object="isRootObject"
+        :filters-root-objects="filtersRootObjects"
       />
       <v-details-panel-labels
         v-if="selectedObject && selectedObject.labels"
@@ -89,6 +91,9 @@ export default {
     selectedLabel: {
       type: String,
     },
+    filtersRootObjects: {
+      type: Array,
+    },
   },
 
   computed: {
@@ -101,6 +106,9 @@ export default {
         kind = 'event';
       }
       return `v-details-panel-${kind}`;
+    },
+    isRootObject() {
+      return this.filtersRootObjects.includes(this.selectedObject.fqid);
     },
   },
 

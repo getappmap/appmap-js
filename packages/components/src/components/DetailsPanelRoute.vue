@@ -5,7 +5,7 @@
       :object="object"
       :title="object.name"
     />
-    <v-details-panel-filters :object="object" />
+    <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
     <v-details-panel-list
       title="Events"
       :items="object.events"
@@ -36,6 +36,11 @@ export default {
     object: {
       type: Object,
       required: true,
+    },
+    isRootObject: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   computed: {

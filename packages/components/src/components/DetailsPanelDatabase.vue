@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-details-panel-header object-type="Database" />
-    <v-details-panel-filters :object="object" />
+    <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
     <v-details-panel-list
       title="Inbound connections"
       :items="object.inboundConnections"
@@ -26,6 +26,11 @@ export default {
     object: {
       type: Object,
       required: true,
+    },
+    isRootObject: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   computed: {

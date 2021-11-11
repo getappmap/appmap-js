@@ -13,6 +13,7 @@
         :appMap="filteredAppMap"
         :selected-object="selectedObject"
         :selected-label="selectedLabel"
+        :filters-root-objects="filters.rootObjects"
       >
         <template v-slot:buttons>
           <v-details-button
@@ -53,7 +54,7 @@
 
         <v-tab name="Trace View" :is-active="isViewingFlow" :ref="VIEW_FLOW">
           <div class="trace-view">
-            <div class="trace-view__search">
+            <!--div class="trace-view__search">
               <div class="trace-view__search-input-wrap">
                 <span class="trace-view__search-input-prefix">
                   <SearchIcon />
@@ -76,7 +77,7 @@
                   <ArrowSearchRightIcon />
                 </div>
               </div>
-            </div>
+            </div-->
             <v-diagram-trace
               ref="diagramFlow"
               :events="filteredAppMap.rootEvents()"
@@ -125,7 +126,10 @@
                         placeholder="add new root..."
                         ref="filterRootObjectsInput"
                       />
-                      <PlusIcon class="filters__form-plus" />
+                      <PlusIcon
+                        class="filters__form-plus"
+                        @click="addRootObjectInput"
+                      />
                     </form>
                   </div>
                   <div
@@ -330,14 +334,11 @@
 
 <script>
 import { CodeObjectType, Event, buildAppMap } from '@appland/models';
-import ArrowSearchLeftIcon from '@/assets/arrow-search-left.svg';
-import ArrowSearchRightIcon from '@/assets/arrow-search-right.svg';
 import CheckIcon from '@/assets/check.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
 import PlusIcon from '@/assets/plus.svg';
 import ReloadIcon from '@/assets/reload.svg';
 import ResetIcon from '@/assets/reset.svg';
-import SearchIcon from '@/assets/search.svg';
 import UploadIcon from '@/assets/upload.svg';
 import FilterIcon from '@/assets/filter.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
@@ -366,11 +367,8 @@ export default {
   name: 'VSCodeExtension',
 
   components: {
-    ArrowSearchLeftIcon,
-    ArrowSearchRightIcon,
     CheckIcon,
     CloseThinIcon,
-    SearchIcon,
     PlusIcon,
     ReloadIcon,
     ResetIcon,
@@ -814,6 +812,10 @@ export default {
     },
 
     addHiddenName(name) {
+      if (this.filters.declutter.hideName.names.includes(name)) {
+        return;
+      }
+
       this.filters.declutter.hideName.names.push(name);
       this.filters.declutter.hideName.on = true;
       this.clearSelection();
@@ -828,20 +830,31 @@ export default {
     },
 
     addRootObjectInput() {
-      this.filters.rootObjects.push(
-        this.$refs.filterRootObjectsInput.value.trim()
-      );
+      this.addRootObject(this.$refs.filterRootObjectsInput.value.trim());
       this.$refs.filterRootObjectsInput.value = '';
     },
 
+    addRootObject(fqid) {
+      if (this.filters.rootObjects.includes(fqid)) {
+        return;
+      }
+
+      this.filters.rootObjects.push(fqid);
+      this.clearSelection();
+    },
+
     removeRootObject(index) {
-      this.filters.rootObjects.splice(index);
+      this.filters.rootObjects.splice(index, 1);
+      this.clearSelection();
     },
   },
 
   mounted() {
     this.$root.$on('makeRoot', (codeObject) => {
-      this.filters.rootObjects.push(codeObject.fqid);
+      this.addRootObject(codeObject.fqid);
+    });
+    this.$root.$on('removeRoot', (fqid) => {
+      this.removeRootObject(this.filters.rootObjects.indexOf(fqid));
     });
     this.$root.$on('addHiddenName', (objectId) => {
       this.addHiddenName(objectId);
@@ -997,6 +1010,8 @@ code {
   .trace-view {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    height: 100%;
 
     &__search {
       margin-bottom: 1.5rem;

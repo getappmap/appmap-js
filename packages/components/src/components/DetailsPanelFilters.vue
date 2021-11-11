@@ -37,6 +37,11 @@ export default {
       type: Object,
       required: true,
     },
+    isRootObject: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
 
   data() {
@@ -56,7 +61,13 @@ export default {
 
   computed: {
     filters() {
-      return this.filterItems;
+      const { filterItems } = this;
+
+      if (this.isRootObject) {
+        filterItems.setAsRoot.isActive = true;
+      }
+
+      return filterItems;
     },
   },
 
@@ -70,9 +81,7 @@ export default {
       }
     },
     resetFilters() {
-      Object.keys(this.filterItems).forEach((key) => {
-        this.filterItems[key].isActive = false;
-      });
+      this.$root.$emit('removeRoot', this.object.fqid);
     },
   },
 };

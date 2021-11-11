@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-details-panel-header :objectType="object.data.name" :object="object" />
-    <v-details-panel-filters :object="object" />
+    <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
     <v-details-panel-list title="Routes" :items="object.children" />
   </div>
 </template>
@@ -22,6 +22,11 @@ export default {
     object: {
       type: Object,
       required: true,
+    },
+    isRootObject: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
 };
