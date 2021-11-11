@@ -57,7 +57,7 @@ class InstallerError {
       .join(', ');
 
     if (this.error instanceof AbortError) {
-      await Telemetry.sendEvent({
+      Telemetry.sendEvent({
         name: 'install-agent:abort',
         properties: {
           installer: this.project?.selectedInstaller?.name,
@@ -104,7 +104,7 @@ class InstallerError {
         }
       }
 
-      await Telemetry.sendEvent({
+      Telemetry.sendEvent({
         name: 'install-agent:failure',
         properties: {
           installer: this.project?.selectedInstaller?.name,
@@ -229,6 +229,9 @@ export default {
 
       errors.push(installerError);
     }
+
+    // Make sure there's nothing left in the queue before we exit.
+    await Telemetry.flush();
 
     if (errors.length) {
       Yargs.exit(1, new Error(errors.map((e) => e.message).join('\n')));
