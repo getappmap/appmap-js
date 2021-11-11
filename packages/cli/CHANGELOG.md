@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.13.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.13.1...@appland/appmap-v3.13.2) (2021-11-11)
+
+
+### Bug Fixes
+
+* Improve error reporting ([ac18468](https://github.com/applandinc/appmap-js/commit/ac184684d3e16a96ac98c8129d59fe5a147786bd))
+* Map language types to OpenAPI types ([e44f906](https://github.com/applandinc/appmap-js/commit/e44f906304ac7fe568e574c9a768943ea931ec8e))
+
 # [@appland/appmap-v3.13.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.13.0...@appland/appmap-v3.13.1) (2021-11-11)
 
 
