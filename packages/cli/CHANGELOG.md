@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.13.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.13.0...@appland/appmap-v3.13.1) (2021-11-11)
+
+
+### Bug Fixes
+
+* Wait for debugging information on exit ([fe71319](https://github.com/applandinc/appmap-js/commit/fe71319feb97dafffa1065e0747abe1f05e65cee))
+
 # [@appland/appmap-v3.13.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.12.2...@appland/appmap-v3.13.0) (2021-11-08)
 
 
