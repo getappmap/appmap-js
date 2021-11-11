@@ -6,7 +6,7 @@ context('VS Code Extension', () => {
       );
     });
 
-    /*it('pans to the correct location when selecting "View in Trace"', () => {
+    it('pans to the correct location when selecting "View in Trace"', () => {
       cy.get(
         '.node.class[data-id="active_support/ActiveSupport::SecurityUtils"]'
       ).click();
@@ -21,7 +21,7 @@ context('VS Code Extension', () => {
       cy.get('.list-item:nth-child(16)').click();
       cy.get('button').contains('Show in Trace').click();
       cy.get('.trace-node.highlight').should('be.visible');
-    });*/
+    });
 
     it('applies filter from search input', () => {
       cy.get('.details-search__input-element').type('json');
@@ -364,7 +364,7 @@ context('VS Code Extension', () => {
         .should('contain.text', 'Spree::Admin::BaseHelper#admin_layout');
     });
 
-    /*it('event can navigate directly to flow view', () => {
+    it('event can navigate directly to flow view', () => {
       cy.get(`.node[data-type="database"]`).click();
 
       cy.get('.v-details-panel-list')
@@ -381,7 +381,7 @@ context('VS Code Extension', () => {
       cy.get('.trace-node.highlight')
         .should('be.visible')
         .should('contain.text', 'SQL Select');
-    });*/
+    });
 
     it('clears when "Clear selection" button was clicked', () => {
       cy.get(`.nodes .node[data-type="http"]`)
@@ -570,7 +570,7 @@ context('VS Code Extension', () => {
         .should('not.match', /SELECT.*FROM/);
     });
 
-    /*it('pans to the correct location when previewing events in the trace view', () => {
+    it('pans to the correct location when previewing events in the trace view', () => {
       cy.get(
         '.node.class[data-id="active_support/ActiveSupport::SecurityUtils"]'
       ).click();
@@ -601,7 +601,7 @@ context('VS Code Extension', () => {
         cy.get('body').trigger('keydown', { keycode: 40 }); // arrow down
         cy.get('.trace-node.highlight').should('be.visible');
       }
-    });*/
+    });
 
     it('renders HTTP client requests correctly', () => {
       cy.get('.details-search__block--external-service')
@@ -692,30 +692,90 @@ context('VS Code Extension', () => {
       });
     });
 
-    /*it('applies filters properly', () => {
-      const listClassFor = (objType) => `.details-search__block--${objType} li`;
+    it('filters: root objects', () => {
+      cy.get(
+        '.node[data-id="active_support/ActiveSupport::SecurityUtils"]'
+      ).click();
+      cy.get('.details-panel-filters .details-panel-filters__item')
+        .first()
+        .click();
+      cy.get('.nodes .node').should('have.length', 2);
 
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters .filters__root').should('have.length', 1);
+
+      cy.get('.filters .filters__root .filters__root-icon').click();
+      cy.get('.nodes .node').should('have.length', 9);
+    });
+
+    it('filters: limit root events', () => {
       cy.get('.tabs .tab-btn').last().click();
-      cy.get('.popper__button').click();
 
-      cy.get(listClassFor('http')).should('have.length', 3);
-      cy.get(listClassFor('labels')).should('have.length', 4);
-      cy.get(listClassFor('package')).should('have.length', 4);
-      cy.get(listClassFor('class')).should('have.length', 11);
-      cy.get(listClassFor('function')).should('have.length', 20);
-      cy.get(listClassFor('query')).should('have.length', 34);
-      cy.get('#unlabeled-events').click();
-      cy.get(listClassFor('labels')).should('have.length', 4);
-      cy.get(listClassFor('package')).should('have.length', 2);
-      cy.get(listClassFor('class')).should('have.length', 5);
-      cy.get(listClassFor('function')).should('have.length', 6);
-      cy.get('#unlabeled-events').click();
+      cy.get('.trace .trace-node').should('have.length', 4);
 
-      cy.get('.trace-node').should('have.length', 4);
-      cy.get('#hide-media-requests').click();
-      cy.get('.trace-node').should('have.length', 5);
-      cy.get('#hide-media-requests').click();
-    });*/
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox').eq(0).click();
+
+      cy.get('.trace .trace-node').should('have.length', 12);
+    });
+
+    it('filters: hide media HTTP requests', () => {
+      cy.get('.tabs .tab-btn').last().click();
+
+      cy.get('.trace .trace-node').should('have.length', 4);
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox').eq(1).click();
+
+      cy.get('.trace .trace-node').should('have.length', 5);
+    });
+
+    it('filters: hide unlabeled', () => {
+      cy.get(
+        '.details-search__block--package .details-search__block-item'
+      ).should('have.length', 4);
+      cy.get(
+        '.details-search__block--class .details-search__block-item'
+      ).should('have.length', 11);
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox').eq(2).click();
+
+      cy.get(
+        '.details-search__block--package .details-search__block-item'
+      ).should('have.length', 2);
+      cy.get(
+        '.details-search__block--class .details-search__block-item'
+      ).should('have.length', 5);
+    });
+
+    it('filters: hide elapsed time under 100ms', () => {
+      cy.get('.tabs .tab-btn').last().click();
+
+      cy.get('.trace .trace-node').should('have.length', 4);
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox').eq(3).click();
+
+      cy.get('.trace .trace-node').should('have.length', 3);
+    });
+
+    it('filters: hide object', () => {
+      cy.get('.nodes .node').should('have.length', 9);
+
+      cy.get('.node[data-id="HTTP server requests"]').click();
+      cy.get('.details-panel-filters .details-panel-filters__item')
+        .eq(1)
+        .click();
+
+      cy.get('.nodes .node').should('have.length', 8);
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters .filters__hide-item').should('have.length', 1);
+
+      cy.get('.filters .filters__hide-item .filters__hide-item-icon').click();
+      cy.get('.nodes .node').should('have.length', 9);
+    });
   });
 
   context('No HTTP appmap', () => {
