@@ -367,14 +367,20 @@ function getStaticPropValues(obj) {
     .map((k) => obj[k]);
 }
 
-/* eslint-disable no-inner-declarations */
-function parseNormalizeSQL(sql) {
+export function buildQueryAST(sql) {
   const parseSQL = sql.replace(/\s+returning\s+\*/i, '');
-  let ast;
   try {
-    ast = sqliteParser(parseSQL);
+    return sqliteParser(parseSQL);
   } catch (e) {
     console.warn(`Unable to parse ${parseSQL} : ${e.message}`);
+    return null;
+  }
+}
+
+/* eslint-disable no-inner-declarations */
+function parseNormalizeSQL(sql) {
+  const ast = buildQueryAST(sql);
+  if (!ast) {
     return null;
   }
 
@@ -483,7 +489,7 @@ function parseNormalizeSQL(sql) {
       joinCount: joins,
     };
   } catch (e) {
-    console.warn(`Unable to interpret AST tree for ${parseSQL} : ${e.message}`);
+    console.warn(`Unable to interpret AST tree for ${sql} : ${e.message}`);
     return null;
   }
 }
