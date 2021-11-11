@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.13.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.13.2...@appland/appmap-v3.13.3) (2021-11-11)
+
+
+### Bug Fixes
+
+* Show the correct version with --version ([e695e2c](https://github.com/applandinc/appmap-js/commit/e695e2c69e1936a35c94a6c37129e06bce7b8287))
+
 # [@appland/appmap-v3.13.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.13.1...@appland/appmap-v3.13.2) (2021-11-11)
 
 
