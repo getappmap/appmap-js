@@ -12,6 +12,7 @@ import incompatibleHTTPClientRequest from '../src/scanner/incompatibleHttpClient
 import slowFunctionCall from '../src/scanner/slowFunctionCall';
 import tooManyJoins from '../src/scanner/tooManyJoins';
 import authzBeforeAuthn from '../src/scanner/authzBeforeAuthn';
+import unbatchedMaterializedQuery from '../src/scanner/unbatchedMaterializedQuery';
 import { fixtureAppMapFileName, scan } from './util';
 import { AssertionPrototype, ScopeName } from '../src/types';
 import Assertion from '../src/assertion';
@@ -314,5 +315,23 @@ describe('assert', () => {
       `MicropostsController#correct_user provides authorization, but the request is not authenticated`
     );
     expect(finding.relatedEvents!.map((e) => e.id)).toEqual([16]);
+  });
+
+  it('unbatched materialized query', async () => {
+    const { scope, enumerateScope, scanner } = unbatchedMaterializedQuery;
+    const findings = await scan(
+      makePrototype(
+        'unbatched-materialized-query',
+        () => scanner(),
+        enumerateScope,
+        scope as ScopeName
+      ),
+      'Users_index_index_as_admin_including_pagination_and_delete_links.appmap.json'
+    );
+    expect(findings.map((finding) => finding.scope.id)).toEqual([1589]);
+    expect(findings.map((finding) => finding.event.id).sort()).toEqual([1689]);
+    expect(findings.map((finding) => finding.event.sqlQuery!)).toEqual([
+      'SELECT "microposts".* FROM "microposts" WHERE "microposts"."user_id" = ? ORDER BY "microposts"."created_at" DESC',
+    ]);
   });
 });
