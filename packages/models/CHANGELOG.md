@@ -1,3 +1,10 @@
+# [@appland/models-v1.7.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.6.0...@appland/models-v1.7.0) (2021-11-11)
+
+
+### Features
+
+* expose function to build query AST ([29785e9](https://github.com/applandinc/appmap-js/commit/29785e91138182f9f927178b625be40da541d778))
+
 # [@appland/models-v1.6.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.5.1...@appland/models-v1.6.0) (2021-11-01)
 
 
