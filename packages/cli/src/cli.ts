@@ -569,6 +569,22 @@ yargs(process.argv.slice(2))
     type: 'boolean',
     description: 'Run with verbose logging',
   })
+  .fail((msg, err, yargs) => {
+    if (msg) {
+      console.log(yargs.help());
+      console.log(msg);
+    }
+    else if (err) {
+      if (err.cause) {
+        console.error(err.message);
+        console.error(err.cause);
+      }
+      else {
+        console.error(err);
+      }
+    }
+    process.exit(1);
+  })
   .command(OpenAPICommand)
   .command(InstallCommand)
   .command(OpenCommand)
