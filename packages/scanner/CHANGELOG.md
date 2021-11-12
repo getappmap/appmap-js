@@ -1,3 +1,12 @@
+## [1.20.1](https://github.com/applandinc/scanner/compare/v1.20.0...v1.20.1) (2021-11-12)
+
+
+### Bug Fixes
+
+* Remove broken scope 'appmap' ([fad8ffa](https://github.com/applandinc/scanner/commit/fad8ffaa4959db973bacdf7589a208a78c479c40))
+* Update and correct use of scopes and enumerateScope by scanners ([9395113](https://github.com/applandinc/scanner/commit/939511379654f59b89d2976970e3da457062baa9))
+* Update Rails Sample App use of scanners ([1e64211](https://github.com/applandinc/scanner/commit/1e64211854a8b93e4a56272801d4b913b6905c0a))
+
 # [1.20.0](https://github.com/applandinc/scanner/compare/v1.19.0...v1.20.0) (2021-11-09)
 
 
