@@ -11,6 +11,7 @@
     "packages/*"
   ],
   "scripts": {
+    "prepack": "$npm_execpath run build",
     "lint": "yarn workspaces foreach --exclude root -v run lint",
     "test": "yarn workspaces foreach --exclude root -v run test",
     "build": "yarn workspaces foreach -t --exclude root -v run build",
