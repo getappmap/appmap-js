@@ -171,12 +171,17 @@ export function sqlNormalized(query: SqlQuery): string {
   return obfuscate(query.sql, query.database_type);
 }
 
+export function isSelect(sql: string): boolean {
+  return getSqlLabelFromString(sql) === 'SQL Select';
+}
+
 export function* sqlStrings(event: Event, whitelist: string[] = []): Generator<SQLEvent> {
   for (const e of new EventNavigator(event).descendants()) {
     if (!e.event.sqlQuery) {
       continue;
     }
-    if (getSqlLabelFromString(e.event.sqlQuery!) !== 'SQL Select') {
+
+    if (!isSelect(e.event.sqlQuery!)) {
       continue;
     }
 

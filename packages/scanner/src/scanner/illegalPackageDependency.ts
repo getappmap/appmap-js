@@ -36,4 +36,4 @@ function scanner(options: Options): Assertion {
   );
 }
 
-export default { scanner, Options } as AssertionSpec;
+export default { scanner, enumerateScope: true, Options } as AssertionSpec;

@@ -1,7 +1,7 @@
 import { join } from 'path';
 import sinon from 'sinon';
 import Scanner from '../src/command';
-import { fixtureAppMap } from './util';
+import { fixtureAppMapFileName } from './util';
 import { readFileSync, unlinkSync } from 'fs';
 
 describe('smoke test', () => {
@@ -13,7 +13,7 @@ describe('smoke test', () => {
     sinon.stub(process.stdout, 'write');
     const processExit = sinon.stub(process, 'exit');
     await Scanner.handler({
-      appmapFile: fixtureAppMap(
+      appmapFile: fixtureAppMapFileName(
         'org_springframework_samples_petclinic_owner_OwnerControllerTests_testInitCreationForm.appmap.json'
       ),
       format: 'progress',
@@ -28,7 +28,7 @@ describe('smoke test', () => {
     const processExit = sinon.stub(process, 'exit');
     const reportFile = 'report.json';
     await Scanner.handler({
-      appmapFile: fixtureAppMap(
+      appmapFile: fixtureAppMapFileName(
         'org_springframework_samples_petclinic_owner_OwnerControllerTests_testInitCreationForm.appmap.json'
       ),
       format: 'progress',

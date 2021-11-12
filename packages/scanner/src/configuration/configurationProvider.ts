@@ -40,7 +40,7 @@ async function buildBuiltinAssertion(config: AssertionConfig): Promise<Assertion
 
   return {
     config: config,
-    scope: assertionSpec.scope || 'appmap',
+    scope: assertionSpec.scope || 'root',
     enumerateScope: assertionSpec.enumerateScope === true ? true : false,
     build: () => {
       const result = assertionSpec.scanner(options);

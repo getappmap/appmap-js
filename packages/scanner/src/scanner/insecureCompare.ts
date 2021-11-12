@@ -62,4 +62,4 @@ const scanner = function (): Assertion {
 const Secret = 'secret';
 const StringEquals = 'string.equals';
 
-export default { Labels: [Secret, StringEquals], scanner } as AssertionSpec;
+export default { Labels: [Secret, StringEquals], enumerateScope: true, scanner } as AssertionSpec;

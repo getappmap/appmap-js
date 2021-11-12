@@ -18,4 +18,4 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { Options, scanner } as AssertionSpec;
+export default { Options, enumerateScope: true, scanner } as AssertionSpec;

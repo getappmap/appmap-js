@@ -1,5 +1,5 @@
 import { Event, EventNavigator } from '@appland/models';
-import { MatchResult } from '../types.d';
+import { AssertionSpec, MatchResult } from '../types.d';
 import Assertion from '../assertion';
 import { providesAuthentication } from './util';
 
@@ -53,4 +53,4 @@ export default {
   scope: 'http_server_request',
   enumerateScope: false,
   scanner,
-};
+} as AssertionSpec;
