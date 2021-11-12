@@ -10,10 +10,10 @@ module.exports = {
         releaseRules: [
           {
             type: 'feature',
-            release: 'minor'
-          }
-        ]
-      }
+            release: 'minor',
+          },
+        ],
+      },
     ],
     '@semantic-release/release-notes-generator',
     '@semantic-release/changelog',
@@ -36,6 +36,12 @@ module.exports = {
             ],
           },
         ],
+      },
+    ],
+    [
+      '@semantic-release/exec',
+      {
+        publishCmd: 'yarn build',
       },
     ],
     '@semantic-release/git',

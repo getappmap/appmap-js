@@ -15,8 +15,7 @@
     "pre-commit": "lint-staged",
     "test": "jest",
     "build": "tsc && webpack --mode=production",
-    "start": "ts-node src/cli.ts",
-    "prepack": "$npm_execpath run build"
+    "start": "ts-node src/cli.ts"
   },
   "lint-staged": {
     "*.{js,md,json}": [
