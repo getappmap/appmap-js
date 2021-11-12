@@ -807,16 +807,21 @@ export default {
     },
 
     addHiddenNameInput() {
-      this.addHiddenName(this.$refs.filterHideFormInput.value.trim());
+      this.addHiddenName(this.$refs.filterHideFormInput.value);
       this.$refs.filterHideFormInput.value = '';
     },
 
     addHiddenName(name) {
-      if (this.filters.declutter.hideName.names.includes(name)) {
+      const objectName = name.replaceAll(/\s/g, '');
+
+      if (
+        !objectName ||
+        this.filters.declutter.hideName.names.includes(objectName)
+      ) {
         return;
       }
 
-      this.filters.declutter.hideName.names.push(name);
+      this.filters.declutter.hideName.names.push(objectName);
       this.filters.declutter.hideName.on = true;
       this.clearSelection();
     },
@@ -830,16 +835,18 @@ export default {
     },
 
     addRootObjectInput() {
-      this.addRootObject(this.$refs.filterRootObjectsInput.value.trim());
+      this.addRootObject(this.$refs.filterRootObjectsInput.value);
       this.$refs.filterRootObjectsInput.value = '';
     },
 
     addRootObject(fqid) {
-      if (this.filters.rootObjects.includes(fqid)) {
+      const objectFqid = fqid.replaceAll(/\s/g, '');
+
+      if (!objectFqid || this.filters.rootObjects.includes(objectFqid)) {
         return;
       }
 
-      this.filters.rootObjects.push(fqid);
+      this.filters.rootObjects.push(objectFqid);
       this.clearSelection();
     },
 
