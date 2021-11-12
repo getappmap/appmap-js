@@ -1,21 +1,14 @@
 import { Event } from '@appland/models';
 import { AssertionSpec, ScopeName } from 'src/types';
+import * as types from './types';
 import Assertion from '../assertion';
 import { toRegExp } from './util';
 
-class Options {
+class Options implements types.SlowFunctionCall.Options {
   private _codeObjectRegExp: RegExp;
 
   constructor(public timeAllowed = 0.1, codeObjectName: string | RegExp) {
     this._codeObjectRegExp = toRegExp(codeObjectName);
-  }
-
-  get className(): RegExp {
-    return this._codeObjectRegExp;
-  }
-
-  set className(pattern: string | RegExp) {
-    this._codeObjectRegExp = toRegExp(pattern);
   }
 
   get codeObjectName(): RegExp {

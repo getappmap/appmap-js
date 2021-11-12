@@ -1,23 +1,24 @@
 import { Event } from '@appland/models';
 import { AssertionSpec } from 'src/types';
+import * as types from './types';
 import Assertion from '../assertion';
 import { toRegExpArray } from './util';
 
 const WHITELIST = [/BEGIN/, /COMMIT/, /ROLLBACK/, /RELEASE/, /SAVEPOINT/];
 
-class Options {
-  private _whitelist: RegExp[];
+class Options implements types.QueryFromInvalidPackage.Options {
+  private _allowList: RegExp[];
 
-  constructor(public parentPackages: string[] = [], whitelist: RegExp[] = []) {
-    this._whitelist = whitelist;
+  constructor(public parentPackages: string[] = [], allowList: RegExp[] = []) {
+    this._allowList = allowList;
   }
 
-  get whitelist(): RegExp[] {
-    return this._whitelist;
+  get allowList(): RegExp[] {
+    return this._allowList;
   }
 
-  set whitelist(value: string[] | RegExp[]) {
-    this._whitelist = toRegExpArray(value);
+  set allowList(value: string[] | RegExp[]) {
+    this._allowList = toRegExpArray(value);
   }
 }
 
@@ -36,7 +37,7 @@ function scanner(options: Options): Assertion {
       assertion.where = (e: Event) =>
         !!e.sqlQuery &&
         !!e.parent &&
-        !options.whitelist.concat(WHITELIST).some((pattern) => pattern.test(e.sqlQuery!));
+        !options.allowList.concat(WHITELIST).some((pattern) => pattern.test(e.sqlQuery!));
       assertion.description = `Query must be invoked from one of (${options.parentPackages.join(
         ','
       )})`;

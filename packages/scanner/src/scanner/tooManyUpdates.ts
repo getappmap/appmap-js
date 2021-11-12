@@ -1,10 +1,11 @@
 import { Event, EventNavigator } from '@appland/models';
 import { AssertionSpec, MatchResult } from 'src/types';
+import * as types from './types';
 import Assertion from '../assertion';
 
-class Options {
+class Options implements types.TooManyUpdates.Options {
   constructor(
-    public maxUpdates: number = 20,
+    public warningLimit: number = 20,
     public queryIncludes: string[] = ['\\binsert\\b', '\\bupdate\\b'],
     public updateMethods: string[] = ['put', 'post', 'patch']
   ) {}
@@ -46,7 +47,7 @@ function scanner(options: Options = new Options()): Assertion {
       events.push(updateEvent);
     }
 
-    if (events.length > options.maxUpdates) {
+    if (events.length > options.warningLimit) {
       return [
         {
           level: 'error',

@@ -1,9 +1,10 @@
 import { Event } from '@appland/models';
 import Assertion from '../assertion';
+import * as types from './types';
 import minimatch from 'minimatch';
 import { AssertionSpec } from 'src/types';
 
-class Options {
+class Options implements types.IllegalPackageDependency.Options {
   constructor(public selector: string = '*', public packageNames: string[] = []) {}
 }
 

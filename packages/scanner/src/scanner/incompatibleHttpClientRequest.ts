@@ -1,11 +1,12 @@
 import { Event } from '@appland/models';
 import { forClientRequest, forURL, breakingChanges } from '../openapi';
 import { AssertionSpec, MatchResult } from 'src/types';
+import * as types from './types';
 import Assertion from '../assertion';
 import OpenApiDiff from 'openapi-diff';
 import { OpenAPIV3 } from 'openapi-types';
 
-class Options {
+class Options implements types.IncompatibleHttpClientRequest.Options {
   constructor(public schemata: Record<string, string>) {}
 }
 

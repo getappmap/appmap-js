@@ -1,0 +1,208 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "IllegalPackageDependency.Options": {
+      "additionalProperties": false,
+      "properties": {
+        "packageNames": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "selector": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "IncompatibleHttpClientRequest.Options": {
+      "additionalProperties": false,
+      "properties": {
+        "schemata": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "schemata"
+      ],
+      "type": "object"
+    },
+    "MissingAuthentication.Options": {
+      "additionalProperties": false,
+      "properties": {
+        "contentTypes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "format": "regex",
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "routes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "format": "regex",
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "NPlusOneQuery.Options": {
+      "additionalProperties": false,
+      "properties": {
+        "errorLimit": {
+          "type": "number"
+        },
+        "warningLimit": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "QueryFromInvalidPackage.Options": {
+      "additionalProperties": false,
+      "properties": {
+        "allowList": {
+          "items": {
+            "format": "regex",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "parentPackages": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "parentPackages"
+      ],
+      "type": "object"
+    },
+    "QueryFromView.Options": {
+      "additionalProperties": false,
+      "properties": {
+        "forbiddenLabel": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "RPCWithoutCircuitBreaker.Options": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SlowFunctionCall.Options": {
+      "additionalProperties": false,
+      "properties": {
+        "codeObjectName": {
+          "type": "string"
+        },
+        "timeAllowed": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "codeObjectName"
+      ],
+      "type": "object"
+    },
+    "SlowHTTPServerRequest.Options": {
+      "additionalProperties": false,
+      "properties": {
+        "timeAllowed": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "SlowQuery.Options": {
+      "additionalProperties": false,
+      "properties": {
+        "excludeList": {
+          "items": {
+            "format": "regex",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "includeList": {
+          "items": {
+            "format": "regex",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "timeAllowed": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "includeList",
+        "excludeList"
+      ],
+      "type": "object"
+    },
+    "TimeAllowed": {
+      "additionalProperties": false,
+      "properties": {
+        "timeAllowed": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "TooManyJoins.Options": {
+      "additionalProperties": false,
+      "properties": {
+        "warningLimit": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "TooManyUpdates.Options": {
+      "additionalProperties": false,
+      "properties": {
+        "warningLimit": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "WarningLimit": {
+      "additionalProperties": false,
+      "properties": {
+        "warningLimit": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    }
+  }
+}
