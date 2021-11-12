@@ -1,22 +1,59 @@
-import { Event, EventNavigator } from '@appland/models';
+import { buildQueryAST, Event, EventNavigator } from '@appland/models';
 import { isSelect } from '../database';
 import { AssertionSpec } from '../types';
 import Assertion from '../assertion';
 
-function hasLimitClause(sql: string): boolean {
-  return /\blimit\b/i.test(sql);
+const astHasKey = (ast: any, key: string): boolean => {
+  return !!astFindNode(ast, (node: any) => Object.keys(node).includes(key));
+};
+
+const astFindNode = (ast: any, test: (node: any) => boolean): any => {
+  if (Array.isArray(ast)) {
+    return ast.find((node) => astFindNode(node, test));
+  }
+  if (typeof ast !== 'object') {
+    return false;
+  }
+  if (test(ast)) {
+    return ast;
+  }
+
+  return Object.values(ast).some((node) => astFindNode(node, test));
+};
+
+function hasLimitClause(ast: any): boolean {
+  return astHasKey(ast, 'limit');
 }
 
-function isCount(sql: string): boolean {
-  return /\bcount\b/i.test(sql);
+function isCount(ast: any): boolean {
+  const selectStatement = astFindNode(
+    ast,
+    (node: any) => node.type === 'statement' && node.variant === 'select'
+  );
+  if (!selectStatement) {
+    return false;
+  }
+  if (!selectStatement.result || Array.isArray(selectStatement.result)) {
+    return false;
+  }
+  const result: Array<any> = selectStatement.result;
+
+  return result.length === 1 && result[0].type === 'function' && result[0].name.name === 'count';
 }
 
-function isMetadataQuery(sql: string): boolean {
-  return /\bsqlite_master\b/.test(sql);
+function isMetadataQuery(ast: any): boolean {
+  const metadataTableNames = ['sqlite_master'];
+  return astFindNode(
+    ast,
+    (node: any) => node.variant === 'table' && metadataTableNames.includes(node.name)
+  );
 }
 
 function isBatched(e: Event): boolean {
-  return hasLimitClause(e.sqlQuery!) || isCount(e.sqlQuery!) || isMetadataQuery(e.sqlQuery!);
+  const ast = buildQueryAST(e.sqlQuery!);
+  //console.warn(JSON.stringify(ast, null, 2));
+  return hasLimitClause(ast) || isCount(ast) || isMetadataQuery(ast);
+  // return true;
 }
 
 function isMaterialized(e: Event): boolean | undefined {

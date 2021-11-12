@@ -47,13 +47,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appland/appmap@npm:^3.2.3":
-  version: 3.12.0
-  resolution: "@appland/appmap@npm:3.12.0"
+"@appland/appmap@npm:^3.13.3":
+  version: 3.13.3
+  resolution: "@appland/appmap@npm:3.13.3"
   dependencies:
     "@appland/components": 1.14.2
     "@appland/diagrams": 1.5.0
-    "@appland/models": 1.6.0
+    "@appland/models": 1.7.0
     "@sidvind/better-ajv-errors": ^0.9.1
     "@types/moo": ^0.5.5
     ajv: ^8.6.3
@@ -83,7 +83,7 @@ __metadata:
     yargs: ^17.0.1
   bin:
     appmap: built/src/cli.js
-  checksum: 3752a03b8c16413476b13c070a679bfc63a7122b4d86f701dd4b18c3fd3f77a20a44a4cca60fd50fc0caa023a95fdbfb11d7d74f11858597b618362b3a70c8e8
+  checksum: 8bc2e4c98943b20fe935ce7e7a1b23b03a73373e29e20745a0494137b0cfff35e24718d5ad974859521f01bf10e5ebba904c3fe07f82219c57d0734036c3cfac
   languageName: node
   linkType: hard
 
@@ -119,7 +119,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appland/models@npm:1.6.0, @appland/models@npm:^1.5.0, @appland/models@npm:^1.5.1":
+"@appland/models@npm:1.7.0, @appland/models@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "@appland/models@npm:1.7.0"
+  dependencies:
+    cross-env: ^7.0.3
+    crypto-js: ^4.0.0
+    sqlite-parser: ^1.0.1
+  checksum: e790eb0d27739210d5327377e6cfc9d330c6b2583d04d7fe57c8eecf799e48736942b43aeb836b3b6229cd0e1bc2548726513efd51cebe3d342fcbd0a6e731f8
+  languageName: node
+  linkType: hard
+
+"@appland/models@npm:^1.5.0":
   version: 1.6.0
   resolution: "@appland/models@npm:1.6.0"
   dependencies:
@@ -134,8 +145,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@applandinc/scanner@workspace:."
   dependencies:
-    "@appland/appmap": ^3.2.3
-    "@appland/models": ^1.5.1
+    "@appland/appmap": ^3.13.3
+    "@appland/models": ^1.7.0
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
     "@types/glob": ^7.1.4
