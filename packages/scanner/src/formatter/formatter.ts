@@ -1,6 +1,7 @@
 import { AppMap } from '@appland/models';
 import chalk from 'chalk';
-import { AssertionPrototype, Finding, ScannerSummary } from '../types';
+import { ScannerSummary } from 'src/report/scannerSummary';
+import { AssertionPrototype, Finding } from '../types';
 
 export default abstract class Formatter {
   private noColors = false;

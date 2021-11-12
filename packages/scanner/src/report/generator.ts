@@ -1,8 +1,10 @@
 import * as fs from 'fs';
 import chalk from 'chalk';
 import { ideLink } from '../scanner/util';
-import { Finding, ScannerSummary } from '../types';
+import { Finding } from '../types';
 import Formatter from '../formatter/formatter';
+import { ScannerSummary } from './scannerSummary';
+import { FindingSummary } from './findingSummary';
 
 export type ReportFormat = 'text' | 'json';
 
@@ -39,7 +41,7 @@ export default class Generator {
             scannerTitle: match.scannerTitle,
             findingTotal: 0,
             messages: new Set(),
-          };
+          } as FindingSummary;
           scannerSummary.findingSummary[match.scannerId] = findingSummary;
         }
         findingSummary.findingTotal += 1;
