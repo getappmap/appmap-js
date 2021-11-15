@@ -3,11 +3,12 @@
 
 // TODO: Copied and TypeScript-ified from @appland/models
 
+import { parse } from './parse';
 import {
+  buildQueryAST,
   Event,
   EventNavigator,
   getSqlLabelFromString,
-  normalizeSQL,
   SqlQuery,
 } from '@appland/models';
 import { EventFilter } from 'src/types';
@@ -197,8 +198,18 @@ export function* sqlStrings(event: Event, filter: EventFilter = () => true): Gen
 
 export function countJoins(normalizedSql: string): number {
   try {
-    const result = normalizeSQL(normalizedSql);
-    return result.joinCount || 0;
+    const ast = buildQueryAST(normalizedSql);
+    let joins = 0;
+
+    if (ast) {
+      parse(ast, {
+        'map.join': (statement: any) => {
+          joins += statement.map.length;
+        },
+      });
+    }
+
+    return joins;
   } catch (e: any) {
     console.warn(`Unable to analyze query "${normalizedSql}"`);
     return 0;
