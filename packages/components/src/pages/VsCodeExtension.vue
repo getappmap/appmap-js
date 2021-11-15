@@ -520,30 +520,7 @@ export default {
       }
 
       if (this.filters.declutter.hideMediaRequests.on) {
-        const mediaRegex = [
-          'application/javascript',
-          'application/ecmascript',
-          'audio/.+',
-          'font/.+',
-          'image/.+',
-          'text/javascript',
-          'text/ecmascript',
-          'text/css',
-          'video/.+',
-        ].map((t) => new RegExp(t, 'i'));
-        const excludedEvents = [];
-        events.forEach((e) => {
-          if (
-            e.http_server_response &&
-            e.http_server_response.mime_type &&
-            mediaRegex.some((regex) =>
-              regex.test(e.http_server_response.mime_type)
-            )
-          ) {
-            excludedEvents.push(e.parent_id);
-          }
-        });
-        events = events.filter((e) => !excludedEvents.includes(e.id));
+        events = this.filterMediaRequests(events);
       }
 
       if (this.filters.declutter.hideUnlabeled.on) {
@@ -582,12 +559,12 @@ export default {
 
       let eventIds = [];
       if (this.traceFilterValue) {
-        const filterValue = this.traceFilterValue
-          .replaceAll(/\s/g, '')
-          .split(',');
+        const filterValue = this.traceFilterValue.trim().split(' ');
         if (filterValue.length) {
           filterValue.forEach((item) => {
-            eventIds.push(parseInt(item.replace('event:', ''), 10));
+            if (item.startsWith('event:')) {
+              eventIds.push(parseInt(item.replace('event:', ''), 10));
+            }
           });
         }
       } else {
@@ -844,7 +821,7 @@ export default {
     },
 
     addHiddenName(name) {
-      const objectName = name.replaceAll(/\s/g, '');
+      const objectName = name.trim();
 
       if (
         !objectName ||
@@ -872,7 +849,7 @@ export default {
     },
 
     addRootObject(fqid) {
-      const objectFqid = fqid.replaceAll(/\s/g, '');
+      const objectFqid = fqid.trim();
 
       if (!objectFqid || this.filters.rootObjects.includes(objectFqid)) {
         return;
@@ -885,6 +862,86 @@ export default {
     removeRootObject(index) {
       this.filters.rootObjects.splice(index, 1);
       this.clearSelection();
+    },
+
+    filterMediaRequests(events) {
+      const excludedEvents = [];
+      const mediaRegex = [
+        'application/javascript',
+        'application/ecmascript',
+        'audio/.+',
+        'font/.+',
+        'image/.+',
+        'text/javascript',
+        'text/ecmascript',
+        'text/css',
+        'video/.+',
+      ].map((t) => new RegExp(t, 'i'));
+      const mediaFileExtensions = [
+        'aac',
+        'avi',
+        'bmp',
+        'css',
+        'flv',
+        'gif',
+        'htm',
+        'html',
+        'ico',
+        'jpeg',
+        'jpg',
+        'js',
+        'json',
+        'jsonld',
+        'mid',
+        'midi',
+        'mjs',
+        'mov',
+        'mp3',
+        'mp4',
+        'mpeg',
+        'oga',
+        'ogg',
+        'ogv',
+        'ogx',
+        'opus',
+        'otf',
+        'png',
+        'svg',
+        'tif',
+        'tiff',
+        'ts',
+        'ttf',
+        'wav',
+        'weba',
+        'webm',
+        'webp',
+        'woff',
+        'woff2',
+        'xhtml',
+        '3gp',
+        '3g2',
+      ];
+
+      events.forEach((e) => {
+        const eventName = e.codeObject.prettyName;
+
+        if (
+          eventName.startsWith('GET') &&
+          mediaFileExtensions.some((ext) => eventName.endsWith(ext))
+        ) {
+          excludedEvents.push(e.id);
+        } else if (
+          e.http_server_response &&
+          e.http_server_response.mime_type &&
+          mediaRegex.some(
+            (regex) => regex.test(e.http_server_response.mime_type) // 'mime_type' is no longer supported in the AppMap data standard, but we should keep this code for backward compatibility
+          )
+        ) {
+          excludedEvents.push(e.parent_id);
+        }
+      });
+
+      return events.filter((e) => !excludedEvents.includes(e.id));
     },
   },
 
