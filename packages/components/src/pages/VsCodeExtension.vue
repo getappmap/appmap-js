@@ -54,12 +54,13 @@
 
         <v-tab name="Trace View" :is-active="isViewingFlow" :ref="VIEW_FLOW">
           <div class="trace-view">
-            <!--div class="trace-view__search">
+            <div class="trace-view__search">
               <div class="trace-view__search-input-wrap">
                 <span class="trace-view__search-input-prefix">
                   <SearchIcon />
                 </span>
                 <input
+                  v-model="traceFilterValue"
                   class="trace-view__search-input-element"
                   type="text"
                   autocomplete="off"
@@ -77,7 +78,7 @@
                   <ArrowSearchRightIcon />
                 </div>
               </div>
-            </div-->
+            </div>
             <v-diagram-trace
               ref="diagramFlow"
               :events="filteredAppMap.rootEvents()"
@@ -334,11 +335,14 @@
 
 <script>
 import { CodeObjectType, Event, buildAppMap } from '@appland/models';
+import ArrowSearchLeftIcon from '@/assets/arrow-search-left.svg';
+import ArrowSearchRightIcon from '@/assets/arrow-search-right.svg';
 import CheckIcon from '@/assets/check.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
 import PlusIcon from '@/assets/plus.svg';
 import ReloadIcon from '@/assets/reload.svg';
 import ResetIcon from '@/assets/reset.svg';
+import SearchIcon from '@/assets/search.svg';
 import UploadIcon from '@/assets/upload.svg';
 import FilterIcon from '@/assets/filter.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
@@ -367,11 +371,14 @@ export default {
   name: 'VSCodeExtension',
 
   components: {
+    ArrowSearchLeftIcon,
+    ArrowSearchRightIcon,
     CheckIcon,
     CloseThinIcon,
     PlusIcon,
     ReloadIcon,
     ResetIcon,
+    SearchIcon,
     UploadIcon,
     FilterIcon,
     VDetailsPanel,
@@ -427,6 +434,7 @@ export default {
         },
       },
       isUserFiltered: false,
+      traceFilterValue: '',
     };
   },
 
@@ -572,8 +580,28 @@ export default {
         });
       }
 
+      let eventIds = [];
+      if (this.traceFilterValue) {
+        const filterValue = this.traceFilterValue
+          .replaceAll(/\s/g, '')
+          .split(',');
+        if (filterValue.length) {
+          filterValue.forEach((item) => {
+            eventIds.push(parseInt(item.replace('event:', ''), 10));
+          });
+        }
+      } else {
+        eventIds = events.filter((e) => e.isCall()).map((e) => e.id);
+      }
+
       return buildAppMap({
-        events,
+        events: eventIds.length
+          ? events.filter(
+              (e) =>
+                (e.isCall() && eventIds.includes(e.id)) ||
+                eventIds.includes(e.parent_id)
+            )
+          : events,
         classMap: classMap.roots.map((c) => ({ ...c.data })),
         metadata: appMap.metadata,
       }).build();
@@ -622,7 +650,11 @@ export default {
         Array.isArray(appMap.classMap.codeObjects) &&
         appMap.classMap.codeObjects.length;
 
-      return !this.isUserFiltered && (!hasEvents || !hasClassMap);
+      return (
+        !this.isUserFiltered &&
+        !this.traceFilterValue &&
+        (!hasEvents || !hasClassMap)
+      );
     },
 
     filtersChanged() {
