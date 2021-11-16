@@ -9,7 +9,6 @@ scanners:
   - id: missingAuthentication
   - id: missingContentType
   - id: nPlusOneQuery
-  - id: saveWithoutValidation
   - id: secretInLog
   - id: slowFunctionCall
     properties:
@@ -23,4 +22,5 @@ scanners:
       timeAllowed: 0.05
   - id: tooManyJoins
   - id: tooManyUpdates
+  - id: unbatchedMaterializedQuery
   - id: updateInGetRequest

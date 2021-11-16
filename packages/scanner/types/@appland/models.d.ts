@@ -262,6 +262,7 @@ declare module '@appland/models' {
     joinCount?: number;
   }
 
+  export function buildQueryAST(sql: string): any;
   export function buildAppMap(data?: string | Record<string, unknown>): AppMapBuilder;
   export function getSqlLabelFromString(sqlString: string): string;
   export function normalizeSQL(sqlString: string): SQLNormalizationResult;
