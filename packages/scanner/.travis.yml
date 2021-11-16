@@ -3,9 +3,6 @@ os: linux
 dist: xenial
 node_js: ['14.18.1']
 
-cache:
-  yarn: true
-
 script:
   - yarn ci
 
