@@ -10,8 +10,9 @@
     "build": "tsc",
     "start": "ts-node src/cli.ts",
     "schema": "./node_modules/.bin/ts-json-schema-generator --path src/scanner/types.d.ts > options-schema.json",
+    "schema-up-to-date": "git diff --exit-code options-schema.json",
     "lint": "eslint src --ext .ts",
-    "ci": "yarn lint && yarn build && yarn schema && yarn test",
+    "ci": "yarn lint && yarn build && yarn schema && yarn schema-up-to-date && yarn test",
     "test": "jest",
     "semantic-release": "semantic-release"
   },
