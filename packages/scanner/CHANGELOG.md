@@ -1,3 +1,17 @@
+# [1.22.0](https://github.com/applandinc/scanner/compare/v1.21.0...v1.22.0) (2021-11-16)
+
+
+### Bug Fixes
+
+* Copy sampleConfig files to built directory ([f89d7aa](https://github.com/applandinc/scanner/commit/f89d7aac435407b81c07b6cc4c6f107a9950c3d4))
+* Ensure existance of built directory when copying sample config ([0e047ed](https://github.com/applandinc/scanner/commit/0e047edaa3564d771d417ab69e3483d99eafa85c))
+* Fail the scan when no appmap dir or file is specified ([501deae](https://github.com/applandinc/scanner/commit/501deae182fb4aa51d07480ec0de230f78cbf994))
+
+
+### Features
+
+* Update default config with no-label scanners ([c1c7a6f](https://github.com/applandinc/scanner/commit/c1c7a6fd98b4ce48aebcf144dbb18a963fab18df))
+
 # [1.21.0](https://github.com/applandinc/scanner/compare/v1.20.1...v1.21.0) (2021-11-16)
 
 
