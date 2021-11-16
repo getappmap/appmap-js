@@ -1,68 +1,60 @@
 import { buildQueryAST, Event, EventNavigator } from '@appland/models';
-import { isSelect } from '../database';
 import { AssertionSpec } from '../types';
 import Assertion from '../assertion';
+import { parse } from '../database/parse';
 
-const astHasKey = (ast: any, key: string): boolean => {
-  return !!astFindNode(ast, (node: any) => Object.keys(node).includes(key));
-};
-
-const astFindNode = (ast: any, test: (node: any) => boolean): any => {
-  if (Array.isArray(ast)) {
-    return ast.find((node) => astFindNode(node, test));
-  }
-  if (typeof ast !== 'object') {
-    return false;
-  }
-  if (test(ast)) {
-    return ast;
-  }
-
-  return Object.values(ast).some((node) => astFindNode(node, test));
-};
-
-function hasLimitClause(ast: any): boolean {
-  return astHasKey(ast, 'limit');
-}
-
-function isCount(ast: any): boolean {
-  const selectStatement = astFindNode(
-    ast,
-    (node: any) => node.type === 'statement' && node.variant === 'select'
-  );
-  if (!selectStatement) {
-    return false;
-  }
-  if (!selectStatement.result || Array.isArray(selectStatement.result)) {
-    return false;
-  }
-  const result: Array<any> = selectStatement.result;
-
-  return result.length === 1 && result[0].type === 'function' && result[0].name.name === 'count';
-}
-
-function isMetadataQuery(ast: any): boolean {
-  const metadataTableNames = ['sqlite_master'];
-  return astFindNode(
-    ast,
-    (node: any) => node.variant === 'table' && metadataTableNames.includes(node.name)
-  );
-}
-
-function isBatched(e: Event): boolean {
-  const ast = buildQueryAST(e.sqlQuery!);
-  if (!ast) {
-    return true;
-  }
-
-  return hasLimitClause(ast) || isCount(ast) || isMetadataQuery(ast);
-}
-
-function isMaterialized(e: Event): boolean | undefined {
+function isMaterialized(e: Event): boolean {
   for (const ancestor of new EventNavigator(e).ancestors()) {
     if (ancestor.event.codeObject.labels.has(DAOMaterialize)) {
       return true;
     }
+  }
+
+  return false;
+}
+
+function isApplicable(e: Event): boolean {
+  try {
+    const ast = buildQueryAST(e.sqlQuery!);
+    let isSelect = false;
+    let isCount = false;
+    let hasLimitClause = false;
+    let isMetadataQuery = false;
+
+    if (ast) {
+      const metadataTableNames = ['sqlite_master'];
+
+      parse(ast, {
+        'statement.select': (statement: any) => {
+          isSelect = true;
+
+          if (
+            statement.result &&
+            Array.isArray(statement.result) &&
+            statement.result.length === 1 &&
+            statement.result[0].type === 'function' &&
+            statement.result[0].name.name === 'count'
+          ) {
+            isCount = true;
+          }
+        },
+        'expression.limit': () => {
+          hasLimitClause = true;
+        },
+        'identifier.table': (statement: any) => {
+          if (metadataTableNames.includes(statement.name)) {
+            isMetadataQuery = true;
+          }
+        },
+      });
+    }
+
+    const isBatched = hasLimitClause || isCount || isMetadataQuery;
+
+    return isSelect && !isBatched && isMaterialized(e);
+  } catch (e: any) {
+    console.warn(`Unable to analyze query "${e.sqlQuery!}"`);
+    return false;
   }
 }
 
@@ -70,7 +62,7 @@ function scanner(): Assertion {
   return Assertion.assert(
     'unbatched-materialized-query',
     'Unbatched materialized SQL query',
-    (e: Event) => isSelect(e.sqlQuery!) && !isBatched(e) && isMaterialized(e),
+    (e: Event) => isApplicable(e),
     (assertion: Assertion): void => {
       assertion.where = (e: Event) => !!e.sqlQuery;
       assertion.description = `Unbatched materialized SQL query`;
