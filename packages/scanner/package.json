@@ -7,7 +7,7 @@
     "built"
   ],
   "scripts": {
-    "build": "cp -r src/sampleConfig built && tsc",
+    "build": "mkdir -p built && cp -r src/sampleConfig built && tsc",
     "start": "ts-node src/cli.ts",
     "schema": "./node_modules/.bin/ts-json-schema-generator --path src/scanner/types.d.ts > options-schema.json",
     "schema-up-to-date": "git diff --exit-code options-schema.json",
