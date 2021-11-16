@@ -1,5 +1,6 @@
 import { Event } from '@appland/models';
 import { AssertionSpec, MatchResult } from '../types';
+import * as types from './types';
 import Assertion from '../assertion';
 import { countJoins, SQLCount, sqlStrings } from '../database';
 
@@ -7,8 +8,8 @@ export interface JoinCount extends SQLCount {
   joins: number;
 }
 
-class Options {
-  constructor(public warningLimit = 5, public whitelist: string[] = []) {}
+class Options implements types.TooManyJoins.Options {
+  constructor(public warningLimit = 5) {}
 }
 
 // TODO: clean up (https://github.com/applandinc/scanner/issues/43)

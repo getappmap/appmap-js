@@ -1,10 +1,11 @@
 import { Event } from '@appland/models';
 import { AssertionSpec, Level, MatchResult } from '../types';
+import * as types from './types';
 import Assertion from '../assertion';
 import { SQLCount, sqlStrings } from '../database';
 
-class Options {
-  constructor(public warningLimit = 5, public errorLimit = 10, public whitelist: string[] = []) {}
+class Options implements types.NPlusOneQuery.Options {
+  constructor(public warningLimit = 5, public errorLimit = 10) {}
 }
 
 // TODO: clean up according to https://github.com/applandinc/scanner/issues/43

@@ -1,13 +1,14 @@
 import { Event, EventNavigator, Label } from '@appland/models';
 import { AssertionSpec } from 'src/types';
+import * as types from './types';
 import Assertion from '../assertion';
 import { RPCWithoutProtectionOptions, rpcWithoutProtection } from './lib/rpcWithoutProtection';
 
-class Options implements RPCWithoutProtectionOptions {
-  constructor(public circuitBreakerLabel: Label = 'rpc.circuit_breaker') {}
+class Options implements RPCWithoutProtectionOptions, types.RPCWithoutCircuitBreaker.Options {
+  constructor(public label: string = RPCCircuitBreaker) {}
 
-  get whitelistLabel(): Label {
-    return this.circuitBreakerLabel;
+  get expectedLabel(): Label {
+    return this.label;
   }
 }
 
@@ -27,4 +28,11 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
-export default { Options, enumerateScope: true, scanner } as AssertionSpec;
+const RPCCircuitBreaker = 'rpc.circuit_breaker';
+
+export default {
+  Options,
+  Labels: [RPCCircuitBreaker],
+  enumerateScope: true,
+  scanner,
+} as AssertionSpec;

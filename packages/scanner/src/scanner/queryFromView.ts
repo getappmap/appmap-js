@@ -1,8 +1,9 @@
 import { Event, Label } from '@appland/models';
+import * as types from './types';
 import { AssertionSpec } from 'src/types';
 import Assertion from '../assertion';
 
-class Options {
+class Options implements types.QueryFromView.Options {
   constructor(public forbiddenLabel: Label = 'mvc.template') {}
 }
 

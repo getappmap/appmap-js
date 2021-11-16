@@ -1,8 +1,9 @@
 import { Event } from '@appland/models';
 import { AssertionSpec } from 'src/types';
+import * as types from './types';
 import Assertion from '../assertion';
 
-class Options {
+class Options implements types.SlowHTTPServerRequest.Options {
   constructor(public timeAllowed = 1) {}
 }
 

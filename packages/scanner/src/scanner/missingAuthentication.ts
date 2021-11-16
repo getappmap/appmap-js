@@ -1,5 +1,6 @@
 import { Event, EventNavigator } from '@appland/models';
 import { rpcRequestForEvent } from '../openapi/rpcRequest';
+import * as types from './types';
 import { AssertionSpec } from '../types';
 import Assertion from '../assertion';
 import { providesAuthentication, toRegExpArray } from './util';
@@ -20,7 +21,7 @@ const authenticatedBy = (iterator: Iterator<EventNavigator>): boolean => {
   return false;
 };
 
-class Options {
+class Options implements types.MissingAuthentication.Options {
   private _routes: RegExp[];
   private _contentTypes: RegExp[];
 

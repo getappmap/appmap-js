@@ -2,7 +2,7 @@ import { Event, Label } from '@appland/models';
 import Assertion from '../../assertion';
 
 export interface RPCWithoutProtectionOptions {
-  get whitelistLabel(): Label;
+  get expectedLabel(): Label;
 }
 
 export function rpcWithoutProtection(
@@ -16,7 +16,7 @@ export function rpcWithoutProtection(
     summaryTitle,
     (httpClientRequest: Event) => {
       for (const candidate of candidateGenerator(httpClientRequest)) {
-        if (candidate.codeObject.labels.has(options.whitelistLabel)) {
+        if (candidate.codeObject.labels.has(options.expectedLabel)) {
           return false;
         }
       }
