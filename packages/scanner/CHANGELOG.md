@@ -1,3 +1,11 @@
+# [1.21.0](https://github.com/applandinc/scanner/compare/v1.20.1...v1.21.0) (2021-11-16)
+
+
+### Features
+
+* Find unbatched materialized query ([2e3535b](https://github.com/applandinc/scanner/commit/2e3535b7443c18b279ef6f5e5901926f064cefff))
+* Specify types for scanner options and export as JSON schema ([ed197ca](https://github.com/applandinc/scanner/commit/ed197cab2db49d7c7adbe8caea537984f9a98676))
+
 ## [1.20.1](https://github.com/applandinc/scanner/compare/v1.20.0...v1.20.1) (2021-11-12)
 
 
