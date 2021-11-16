@@ -67,12 +67,15 @@
                   placeholder="search events..."
                 />
               </div>
-              <div class="trace-view__search-arrows">
+              <div
+                class="trace-view__search-arrows"
+                v-if="highlightedNodes.length"
+              >
                 <div class="trace-view__search-arrow">
                   <ArrowSearchLeftIcon />
                 </div>
                 <div class="trace-view__search-arrows-text">
-                  <b>1</b>/3 results
+                  <b>1</b>/{{ highlightedNodes.length }} results
                 </div>
                 <div class="trace-view__search-arrow">
                   <ArrowSearchRightIcon />
@@ -117,21 +120,11 @@
                 <div class="filters__block">
                   <div class="filters__block-head">
                     <h3 class="filters__block-title">Root</h3>
-                    <form
-                      class="filters__form"
-                      @submit.prevent="addRootObjectInput"
-                    >
-                      <input
-                        class="filters__form-input"
-                        type="text"
-                        placeholder="add new root..."
-                        ref="filterRootObjectsInput"
-                      />
-                      <PlusIcon
-                        class="filters__form-plus"
-                        @click="addRootObjectInput"
-                      />
-                    </form>
+                    <v-filters-form
+                      :onSubmit="addRootObject"
+                      placeholder="add new root..."
+                      :suggestions="rootObjectsSuggestions"
+                    />
                   </div>
                   <div
                     class="filters__block-body filters__block-body--flex"
@@ -228,21 +221,11 @@
                       </label>
                       <div class="filters__block-row-content">
                         Hide name:
-                        <form
-                          class="filters__form"
-                          @submit.prevent="addHiddenNameInput"
-                        >
-                          <input
-                            class="filters__form-input"
-                            type="text"
-                            placeholder="find names..."
-                            ref="filterHideFormInput"
-                          />
-                          <PlusIcon
-                            class="filters__form-plus"
-                            @click="addHiddenNameInput"
-                          />
-                        </form>
+                        <v-filters-form
+                          :onSubmit="addHiddenName"
+                          placeholder="find names..."
+                          :suggestions="hideNamesSuggestions"
+                        />
                         <div
                           class="filters__hide"
                           v-if="filters.declutter.hideName.names.length"
@@ -339,7 +322,6 @@ import ArrowSearchLeftIcon from '@/assets/arrow-search-left.svg';
 import ArrowSearchRightIcon from '@/assets/arrow-search-right.svg';
 import CheckIcon from '@/assets/check.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
-import PlusIcon from '@/assets/plus.svg';
 import ReloadIcon from '@/assets/reload.svg';
 import ResetIcon from '@/assets/reset.svg';
 import SearchIcon from '@/assets/search.svg';
@@ -350,6 +332,7 @@ import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
+import VFiltersForm from '../components/FiltersForm.vue';
 import VInstructions from '../components/Instructions.vue';
 import VNotification from '../components/Notification.vue';
 import VPopperMenu from '../components/PopperMenu.vue';
@@ -375,7 +358,6 @@ export default {
     ArrowSearchRightIcon,
     CheckIcon,
     CloseThinIcon,
-    PlusIcon,
     ReloadIcon,
     ResetIcon,
     SearchIcon,
@@ -385,6 +367,7 @@ export default {
     VDetailsButton,
     VDiagramComponent,
     VDiagramTrace,
+    VFiltersForm,
     VInstructions,
     VNotification,
     VPopperMenu,
@@ -557,31 +540,52 @@ export default {
         });
       }
 
-      let eventIds = [];
+      const eventIds = events.filter((e) => e.isCall()).map((e) => e.id);
+
+      return buildAppMap({
+        events: events.filter(
+          (e) =>
+            (e.isCall() && eventIds.includes(e.id)) ||
+            eventIds.includes(e.parent_id)
+        ),
+        classMap: classMap.roots.map((c) => ({ ...c.data })),
+        metadata: appMap.metadata,
+      }).build();
+    },
+
+    rootObjectsSuggestions() {
+      return this.filteredAppMap.classMap.codeObjects
+        .map((co) => co.fqid)
+        .filter((fqid) => !this.filters.rootObjects.includes(fqid));
+    },
+
+    hideNamesSuggestions() {
+      return this.filteredAppMap.classMap.codeObjects
+        .map((co) => co.fqid)
+        .filter(
+          (fqid) => !this.filters.declutter.hideName.names.includes(fqid)
+        );
+    },
+
+    highlightedNodes() {
+      const nodes = [];
+
       if (this.traceFilterValue) {
+        const knownEventIds = this.filteredAppMap.events.map((e) => e.id);
         const filterValue = this.traceFilterValue.trim().split(' ');
         if (filterValue.length) {
           filterValue.forEach((item) => {
             if (item.startsWith('event:')) {
-              eventIds.push(parseInt(item.replace('event:', ''), 10));
+              const eventId = parseInt(item.replace('event:', ''), 10);
+              if (!Number.isNaN(eventId) && knownEventIds.includes(eventId)) {
+                nodes.push(eventId);
+              }
             }
           });
         }
-      } else {
-        eventIds = events.filter((e) => e.isCall()).map((e) => e.id);
       }
 
-      return buildAppMap({
-        events: eventIds.length
-          ? events.filter(
-              (e) =>
-                (e.isCall() && eventIds.includes(e.id)) ||
-                eventIds.includes(e.parent_id)
-            )
-          : events,
-        classMap: classMap.roots.map((c) => ({ ...c.data })),
-        metadata: appMap.metadata,
-      }).build();
+      return nodes;
     },
 
     selectedObject() {
@@ -815,11 +819,6 @@ export default {
       this.filters.declutter.hideName.names = [];
     },
 
-    addHiddenNameInput() {
-      this.addHiddenName(this.$refs.filterHideFormInput.value);
-      this.$refs.filterHideFormInput.value = '';
-    },
-
     addHiddenName(name) {
       const objectName = name.trim();
 
@@ -841,11 +840,6 @@ export default {
         this.filters.declutter.hideName.on = false;
       }
       this.clearSelection();
-    },
-
-    addRootObjectInput() {
-      this.addRootObject(this.$refs.filterRootObjectsInput.value);
-      this.$refs.filterRootObjectsInput.value = '';
     },
 
     addRootObject(fqid) {
@@ -1432,40 +1426,6 @@ code {
 
       &-ms {
         color: $lightgray2;
-      }
-    }
-
-    &__form {
-      flex: 1;
-      margin-left: 0.5rem;
-      border-radius: 0.25rem;
-      display: flex;
-      align-items: center;
-      height: 22px;
-      padding: 0 0.5rem;
-      background: #191919;
-
-      &-input {
-        flex: 1;
-        display: inline-block;
-        vertical-align: middle;
-        width: 100%;
-        border: 0;
-        border-radius: 0;
-        box-shadow: none;
-        background: transparent;
-        font: inherit;
-        color: inherit;
-        outline: none;
-      }
-
-      &-plus {
-        flex-shrink: 0;
-        margin-left: 1rem;
-        width: 1em;
-        height: 1em;
-        fill: $base12;
-        cursor: pointer;
       }
     }
 

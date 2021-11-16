@@ -4,7 +4,7 @@
       object-type="Event"
       :object="object"
       :title="title"
-      :object-id="object.id"
+      :object-id="object.id.toString()"
     >
       <template v-slot:links>
         <v-details-button
