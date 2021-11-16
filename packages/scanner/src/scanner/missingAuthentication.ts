@@ -6,7 +6,7 @@ import Assertion from '../assertion';
 import { providesAuthentication, toRegExpArray } from './util';
 
 function isPublic(event: Event): boolean {
-  return event.labels.has('public');
+  return event.labels.has(Public);
 }
 
 const authenticatedBy = (iterator: Iterator<EventNavigator>): boolean => {
@@ -70,11 +70,12 @@ function scanner(options: Options = new Options()): Assertion {
   );
 }
 
+const Public = 'public';
 const SecurityAuthentication = 'security.authentication';
 
 export default {
   scope: 'http_server_request',
-  Labels: [SecurityAuthentication],
+  Labels: [Public, SecurityAuthentication],
   enumerateScope: false,
   Options,
   scanner,

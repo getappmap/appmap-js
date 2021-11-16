@@ -20,13 +20,17 @@ class ScopeImpl implements Scope {
   }
 }
 
+// TODO: Document the usage of these labels.
+const Command = 'command';
+const Job = 'job';
+
 export default class CommandScope extends ScopeIterator {
   *scopes(events: Generator<Event>): Generator<Scope> {
     for (const event of events) {
       if (
         event.isCall() &&
-        (event.codeObject.labels.has('command') ||
-          event.codeObject.labels.has('job') ||
+        (event.codeObject.labels.has(Command) ||
+          event.codeObject.labels.has(Job) ||
           event.httpServerRequest)
       ) {
         yield new ScopeImpl(event);
