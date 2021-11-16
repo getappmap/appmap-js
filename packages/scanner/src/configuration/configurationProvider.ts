@@ -1,8 +1,13 @@
+import Ajv from 'ajv';
 import yaml from 'js-yaml';
 import { promises as fs } from 'fs';
 import { Script } from 'vm';
 import Assertion from '../assertion';
 import { AssertionConfig, AssertionPrototype, AssertionSpec, Configuration } from 'src/types';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import options_schema from './options-schema.json';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import schema from './schema.json';
 
 function populateAssertion(assertion: Assertion, config: AssertionConfig): void {
   if (config.include && config.include.length > 0) {
@@ -63,6 +68,19 @@ export default class ConfigurationProvider {
     } else {
       rawConfig = this.config;
     }
+
+    const ajv = new Ajv();
+    const validate = ajv.compile(schema);
+    const valid = validate(rawConfig);
+    if (!valid) {
+      console.warn(validate.errors);
+      throw new Error(
+        validate
+          .errors!.map((err) => `${err.instancePath} ${err.message} (${err.schemaPath})`)
+          .join(', ')
+      );
+    }
+
     return Promise.all(
       rawConfig.scanners.map(async (c: AssertionConfig) => buildBuiltinAssertion(c))
     );

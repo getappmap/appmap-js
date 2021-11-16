@@ -9,8 +9,8 @@
   "scripts": {
     "build": "mkdir -p built && cp -r src/sampleConfig built && tsc",
     "start": "ts-node src/cli.ts",
-    "schema": "./node_modules/.bin/ts-json-schema-generator --path src/scanner/types.d.ts > options-schema.json",
-    "schema-up-to-date": "git diff --exit-code options-schema.json",
+    "schema": "./node_modules/.bin/ts-json-schema-generator --path src/scanner/types.d.ts > src/configuration/options-schema.json",
+    "schema-up-to-date": "git diff --exit-code src/configuration/options-schema.json",
     "lint": "eslint src --ext .ts",
     "ci": "yarn lint && yarn build && yarn schema && yarn schema-up-to-date && yarn test",
     "test": "jest",
@@ -46,6 +46,7 @@
     "@appland/appmap": "^3.13.3",
     "@appland/models": "^1.7.1",
     "@types/sinon": "^10.0.2",
+    "ajv": "^8.8.0",
     "ansi-escapes": "^5.0.0",
     "chalk": "^4.1.2",
     "js-yaml": "^4.1.0",
