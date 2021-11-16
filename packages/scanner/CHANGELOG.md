@@ -1,3 +1,10 @@
+## [1.22.1](https://github.com/applandinc/scanner/compare/v1.22.0...v1.22.1) (2021-11-16)
+
+
+### Bug Fixes
+
+* disable yarn cache ([baae1a3](https://github.com/applandinc/scanner/commit/baae1a37064df1a276941715816940aedc49ad74))
+
 # [1.22.0](https://github.com/applandinc/scanner/compare/v1.21.0...v1.22.0) (2021-11-16)
 
 
