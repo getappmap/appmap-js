@@ -1,21 +1,18 @@
 scanners:
   - id: http500
   - id: missingContentType
-  - id: missingAuthentication
-    properties:
-      routes: [ /\/api\// ]
   - id: nPlusOneQuery
-  - id: queryFromView
-    include:
-      - /microposts/.test(event.sqlQuery)
-      - >
-        const root = event.ancestors().pop();
-        root && root.route && root.requestMethod === 'POST';
-  - id: saveWithoutValidation
-  - id: secretInLog
   - id: slowHttpServerRequest
   - id: slowQuery
+  - id: tooManyJoins
   - id: tooManyUpdates
-    properties:
-      maxUpdates: 2
-  - id: authzBeforeAuthn
+  - id: updateInGetRequest
+  # Required labels: secret, log
+  # - id: secretInLog
+  # Required labels: security.authentication, security.authorization
+  # - id: authzBeforeAuthn
+  # Required labels: security.authentication
+  # Optional labels: public
+  # - id: missingAuthentication
+  # Required labels: dao.materialize
+  # - id: unbatchedMaterializedQuery
