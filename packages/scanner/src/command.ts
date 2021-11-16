@@ -125,6 +125,9 @@ export default {
       if (appmapFile && appmapDir) {
         throw new ValidationError('Use --appmap-dir or --appmap-file, but not both');
       }
+      if (!appmapFile && !appmapDir) {
+        throw new ValidationError('Either --appmap-dir or --appmap-file is required');
+      }
 
       let files: string[] = [];
       if (appmapDir) {
