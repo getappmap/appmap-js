@@ -96,11 +96,13 @@ export default class AssertionChecker {
       message: string | undefined = undefined,
       relatedEvents: Event[] | undefined = undefined
     ): Finding => {
+      const findingEvent = matchEvent || event;
       return {
         appMapName: appMap.metadata.name,
         scannerId: assertion.id,
         scannerTitle: assertion.summaryTitle,
-        event: matchEvent || event,
+        event: findingEvent,
+        hash: findingEvent.hash,
         scope,
         message,
         relatedEvents,

@@ -53,6 +53,9 @@ describe('assert', () => {
     expect(finding.event.id).toEqual(411);
     expect(finding.message).toBeUndefined();
     expect(finding.condition).toEqual('Slow HTTP server request (> 500ms)');
+    expect(finding.hash).toEqual(
+      'a96c5258fc9f590493abcc9342c368e5b2262e95b7d38deded1dcbf97a2126d0'
+    );
   });
 
   it('missing authentication', async () => {
