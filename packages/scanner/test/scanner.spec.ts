@@ -1,4 +1,4 @@
-import { buildAppMap } from '@appland/models';
+import { buildAppMap, Event } from '@appland/models';
 import slowHttpServerRequest from '../src/scanner/slowHttpServerRequest';
 import missingAuthentication from '../src/scanner/missingAuthentication';
 import secretInLog from '../src/scanner/secretInLog';
@@ -14,33 +14,51 @@ import tooManyJoins from '../src/scanner/tooManyJoins';
 import authzBeforeAuthn from '../src/scanner/authzBeforeAuthn';
 import unbatchedMaterializedQuery from '../src/scanner/unbatchedMaterializedQuery';
 import { fixtureAppMapFileName, scan } from './util';
-import { AssertionPrototype, ScopeName } from '../src/types';
+import { AssertionConfig, AssertionPrototype, MatchPatternConfig, ScopeName } from '../src/types';
 import Assertion from '../src/assertion';
 import { cwd } from 'process';
 import { join, normalize } from 'path';
 import { readFile } from 'fs/promises';
+import MatchPattern from '../src/scanner/lib/matchPattern';
+import { verbose } from '../src/scanner/util';
+import { options } from 'yargs';
+
+if (process.env.VERBOSE === 'true') {
+  verbose(true);
+}
 
 const makePrototype = (
   id: string,
   buildFn: () => Assertion,
   enumerateScope: boolean | undefined,
-  scope: ScopeName | undefined
+  scope: ScopeName | undefined,
+  include: MatchPatternConfig[] | undefined = undefined,
+  exclude: MatchPatternConfig[] | undefined = undefined
 ): AssertionPrototype => {
+  const config = { id } as AssertionConfig;
+  if (include) {
+    config.include = include;
+  }
+  if (exclude) {
+    config.exclude = exclude;
+  }
   return {
-    config: { id },
+    config: config,
     enumerateScope: enumerateScope === true ? true : false,
     scope: scope || 'root',
     build: buildFn,
-  };
+  } as AssertionPrototype;
 };
 
 describe('assert', () => {
   it('slow HTTP server request', async () => {
     const { scope, enumerateScope, scanner, Options } = slowHttpServerRequest;
+    const options = new Options();
+    options.timeAllowed = 0.5;
     const findings = await scan(
       makePrototype(
         'slow-http-server-request',
-        () => scanner(new Options(0.5)),
+        () => scanner(options),
         enumerateScope,
         scope as ScopeName
       ),
@@ -95,9 +113,14 @@ describe('assert', () => {
   });
 
   it('n+1 query', async () => {
-    const { scope, enumerateScope, scanner } = nPlusOneQuery;
+    const { scope, enumerateScope, scanner, Options } = nPlusOneQuery;
     const findings = await scan(
-      makePrototype('n-plus-one-query', () => scanner(), enumerateScope, scope as ScopeName),
+      makePrototype(
+        'n-plus-one-query',
+        () => scanner(new Options()),
+        enumerateScope,
+        scope as ScopeName
+      ),
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
 
@@ -116,13 +139,10 @@ describe('assert', () => {
 
   it('too many updates', async () => {
     const { scope, enumerateScope, Options, scanner } = tooManyUpdates;
+    const options = new Options();
+    options.warningLimit = 2;
     const findings = await scan(
-      makePrototype(
-        'too-many-updates',
-        () => scanner(new Options(2)),
-        enumerateScope,
-        scope as ScopeName
-      ),
+      makePrototype('too-many-updates', () => scanner(options), enumerateScope, scope as ScopeName),
       'PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
     );
     expect(findings).toHaveLength(1);
@@ -164,10 +184,17 @@ describe('assert', () => {
 
   it('illegal package dependency', async () => {
     const { scanner, scope, enumerateScope, Options } = illegalPackageAccess;
+    const options = new Options();
+    options.allowedPackages = ['app/views'];
     const findings = await scan(
       makePrototype(
         'illegal-package-dependency',
-        () => scanner(new Options('query:*', ['app/views'])),
+        () => {
+          const result = scanner(options);
+          const pattern = MatchPattern.build('query:*');
+          result.include = [(event: Event) => pattern.test(event.codeObject.fqid)];
+          return result;
+        },
         enumerateScope,
         scope as ScopeName
       ),
@@ -215,10 +242,17 @@ describe('assert', () => {
 
   it('slow function call', async () => {
     const { scanner, scope, enumerateScope, Options } = slowFunctionCall;
+    const options = new Options();
+    options.timeAllowed = 0.2;
     const findings = await scan(
       makePrototype(
         'slow-function-call',
-        () => scanner(new Options(0.2, '.*Controller#create')),
+        () => {
+          const result = scanner(options);
+          const pattern = MatchPattern.build('/Controller#create$/');
+          result.include = [(event: Event) => pattern.test(event.codeObject.fqid)];
+          return result;
+        },
         enumerateScope,
         scope
       ),
@@ -238,10 +272,12 @@ describe('assert', () => {
       join(cwd(), 'test', 'fixtures', 'schemata', 'railsSampleApp6thEd.openapiv3.yaml')
     )}`;
     const { scanner, scope, enumerateScope, Options } = incompatibleHTTPClientRequest;
+    const options = new Options();
+    options.schemata = { 'api.stripe.com': railsSampleAppSchemaURL };
     const findings = await scan(
       makePrototype(
         'incompatible-http-client-request',
-        () => scanner(new Options({ 'api.stripe.com': railsSampleAppSchemaURL })),
+        () => scanner(options),
         enumerateScope,
         scope as ScopeName
       ),
@@ -257,13 +293,10 @@ describe('assert', () => {
 
   it('too many joins', async () => {
     const { scope, enumerateScope, scanner, Options } = tooManyJoins;
+    const options = new Options();
+    options.warningLimit = 1;
     const findings = await scan(
-      makePrototype(
-        'too-many-joins',
-        () => scanner(new Options(1)),
-        enumerateScope,
-        scope as ScopeName
-      ),
+      makePrototype('too-many-joins', () => scanner(options), enumerateScope, scope as ScopeName),
       'Users_profile_profile_display_while_anonyomus.appmap.json'
     );
     expect(findings).toHaveLength(2);

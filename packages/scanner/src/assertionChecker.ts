@@ -62,7 +62,13 @@ export default class AssertionChecker {
       return;
     }
     if (verbose()) {
-      console.warn(`Asserting ${assertion.id} on event ${event.toString()}`);
+      console.warn(
+        `Asserting ${assertion.id} on ${event.codeObject.fqid} event ${event.toString()}`
+      );
+    }
+
+    if (event.codeObject.fqid === 'function:app/controllers/SessionsController#create') {
+      1 === 1;
     }
 
     if (!event.returnEvent) {

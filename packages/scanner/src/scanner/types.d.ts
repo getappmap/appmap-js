@@ -72,6 +72,5 @@ export namespace TooManyJoins {
 
 export namespace TooManyUpdates {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface Options extends WarningLimit {
-  }
+  export interface Options extends WarningLimit {}
 }

@@ -1,4 +1,4 @@
-import { Event, EventNavigator} from '@appland/models';
+import { Event, EventNavigator } from '@appland/models';
 import { AssertionSpec } from 'src/types';
 import * as types from './types';
 import Assertion from '../assertion';

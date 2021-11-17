@@ -97,14 +97,14 @@ interface MatchPatternConfig {
  */
 interface AssertionConfig {
   // id is expected to match the file name of the scanner in src/scanner.
-  readonly id: string;
+  id: string;
   // User-defined include patterns. If provided, only events for which the filter returns truthy are analyzed.
-  readonly include?: MatchPatternConfig[];
+  include?: MatchPatternConfig[];
   // User-defined exclude expression. If provided, only events for which the filter returns falsey are analyzed.
-  readonly exclude?: MatchPatternConfig[];
-  readonly description?: string;
+  exclude?: MatchPatternConfig[];
+  description?: string;
   // Properties are mapped to Assertion Options.
-  readonly properties?: Record<string, any>;
+  properties?: Record<string, any>;
 }
 
 /**

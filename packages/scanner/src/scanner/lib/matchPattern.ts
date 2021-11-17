@@ -11,8 +11,11 @@ export default class MatchPattern {
     this.expression = expression;
     if (typeof expression === 'string') {
       const expressionStr = expression as string;
-      if (expressionStr.charAt(0) === '/') {
-        this.pattern = new RegExp(expressionStr);
+      if (
+        expressionStr.charAt(0) === '/' &&
+        expressionStr.charAt(expressionStr.length - 1) === '/'
+      ) {
+        this.pattern = new RegExp(expressionStr.slice(1, expressionStr.length - 1));
       } else {
         this.pattern = new Minimatch(expressionStr).makeRe();
         if (!this.pattern) {
