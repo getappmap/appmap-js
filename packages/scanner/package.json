@@ -1,6 +1,6 @@
 {
   "name": "@applandinc/scanner",
-  "version": "1.22.1",
+  "version": "1.22.2",
   "description": "",
   "bin": "built/cli.js",
   "files": [

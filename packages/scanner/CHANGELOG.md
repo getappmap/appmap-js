@@ -1,3 +1,10 @@
+## [1.22.2](https://github.com/applandinc/scanner/compare/v1.22.1...v1.22.2) (2021-11-17)
+
+
+### Bug Fixes
+
+* Expose finding hash ([6ef2565](https://github.com/applandinc/scanner/commit/6ef256571894c9b5eae4c11ad499c2a148308d85))
+
 ## [1.22.1](https://github.com/applandinc/scanner/compare/v1.22.0...v1.22.1) (2021-11-16)
 
 
