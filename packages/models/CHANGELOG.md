@@ -1,3 +1,10 @@
+# [@appland/models-v1.7.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.7.0...@appland/models-v1.7.1) (2021-11-17)
+
+
+### Bug Fixes
+
+* Fix hash generation for events without parameters/labels ([703be7d](https://github.com/applandinc/appmap-js/commit/703be7d9cb8264c57202af2629179d9f2540deac))
+
 # [@appland/models-v1.7.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.6.0...@appland/models-v1.7.0) (2021-11-11)
 
 
