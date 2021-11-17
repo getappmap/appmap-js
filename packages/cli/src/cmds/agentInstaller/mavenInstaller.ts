@@ -1,4 +1,4 @@
-import {existsSync} from 'fs';
+import { existsSync } from 'fs';
 import os from 'os';
 import { join, sep, delimiter as pathDelimiter } from 'path';
 import { JSDOM } from 'jsdom';
@@ -104,7 +104,7 @@ export default class MavenInstaller
       doc,
       doc.createNSResolver(doc.getRootNode()),
       9 /* FIRST_ORDERED_NODE_TYPE */
-    ).singleNodeValue;
+    ).singleNodeValue as Element | null;
     if (!projectSection) {
       // Doesn't make sense to be missing the <project> section
       throw new Error(`No project section found in ${this.buildFilePath}`);

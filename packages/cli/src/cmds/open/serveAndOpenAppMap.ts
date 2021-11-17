@@ -66,7 +66,9 @@ export default async function serveAndOpenAppMap(appMapFile: string) {
       res.writeHead(404);
       res.end();
     } catch (e) {
-      console.log(e.stack);
+      if (e instanceof Error) {
+        console.log(e.stack);
+      }
       res.writeHead(500);
       res.end(); // end the response so browsers don't hang
     }
