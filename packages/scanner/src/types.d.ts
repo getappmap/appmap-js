@@ -87,6 +87,10 @@ interface Configuration {
   scanners: AssertionConfig[];
 }
 
+interface MatchPatternConfig {
+  pattern: string;
+}
+
 /**
  * AssertionConfig represents the user's configuration of an Assertion, as read from the
  * configuration file.
@@ -94,13 +98,13 @@ interface Configuration {
 interface AssertionConfig {
   // id is expected to match the file name of the scanner in src/scanner.
   readonly id: string;
-  // User-defined filter expression. If provided, only events for which the filter returns truthy are analyzed.
-  readonly include?: string[];
-  // User-defined filter expression. If provided, only events for which the filter returns falsey are analyzed.
-  readonly exclude?: string[];
+  // User-defined include patterns. If provided, only events for which the filter returns truthy are analyzed.
+  readonly include?: MatchPatternConfig[];
+  // User-defined exclude expression. If provided, only events for which the filter returns falsey are analyzed.
+  readonly exclude?: MatchPatternConfig[];
   readonly description?: string;
   // Properties are mapped to Assertion Options.
-  readonly properties?: Record<string, string | string[] | number>;
+  readonly properties?: Record<string, any>;
 }
 
 /**

@@ -1,26 +1,31 @@
+import { ValidateFunction } from 'ajv';
 import Ajv from 'ajv';
 import yaml from 'js-yaml';
 import { promises as fs } from 'fs';
-import { Script } from 'vm';
 import Assertion from '../assertion';
 import { AssertionConfig, AssertionPrototype, AssertionSpec, Configuration } from 'src/types';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import options_schema from './options-schema.json';
+import optionsSchema from './options-schema.json';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import schema from './schema.json';
+import { capitalize, verbose } from '../scanner/util';
+import { Event } from '@appland/models';
+import MatchPattern from '../scanner/lib/matchPattern';
+
+const ajv = new Ajv();
 
 function populateAssertion(assertion: Assertion, config: AssertionConfig): void {
   if (config.include && config.include.length > 0) {
-    assertion.include = config.include
-      .map((fn) => new Script(fn))
-      .map((script) => (event, appMap) => {
-        return script.runInNewContext({ event, appMap, console });
-      });
+    const patterns = config.include!.map((filter) => MatchPattern.build(filter.pattern));
+    assertion.include = patterns.map(
+      (pattern) => (event: Event) => pattern.test(event.codeObject.fqid)
+    );
   }
   if (config.exclude && config.exclude.length > 0) {
-    assertion.exclude = config.exclude
-      .map((fn) => new Script(fn))
-      .map((script) => (event, appMap) => script.runInNewContext({ event, appMap }));
+    const patterns = config.exclude!.map((filter) => MatchPattern.build(filter.pattern));
+    assertion.exclude = patterns.map(
+      (pattern) => (event: Event) => pattern.test(event.codeObject.fqid)
+    );
   }
   if (config.description) {
     assertion.description = config.description;
@@ -55,6 +60,23 @@ async function buildBuiltinAssertion(config: AssertionConfig): Promise<Assertion
   };
 }
 
+const validate = (validator: ValidateFunction, data: any, context: string): void => {
+  const valid = validator(data);
+  if (!valid) {
+    throw new Error(
+      validator
+        .errors!.map((err) => {
+          let instance = err.instancePath;
+          if (!instance || instance === '') {
+            instance = context;
+          }
+          return `${instance} ${err.message} (${err.schemaPath})`;
+        })
+        .join(', ')
+    );
+  }
+};
+
 export default class ConfigurationProvider {
   constructor(private readonly config: string | Configuration) {}
 
@@ -69,17 +91,30 @@ export default class ConfigurationProvider {
       rawConfig = this.config;
     }
 
-    const ajv = new Ajv();
-    const validate = ajv.compile(schema);
-    const valid = validate(rawConfig);
-    if (!valid) {
-      console.warn(validate.errors);
-      throw new Error(
-        validate
-          .errors!.map((err) => `${err.instancePath} ${err.message} (${err.schemaPath})`)
-          .join(', ')
-      );
-    }
+    validate(ajv.compile(schema), rawConfig, 'Scanner configuration');
+
+    rawConfig.scanners
+      .filter((scanner) => scanner.properties)
+      .forEach((scanner) => {
+        const id = scanner.id;
+        const schemaKey = [capitalize(id), 'Options'].join('.');
+        if (verbose()) {
+          console.warn(schemaKey);
+        }
+        const propertiesSchema = (optionsSchema.definitions as Record<string, any>)[schemaKey];
+        if (!propertiesSchema) {
+          return;
+        }
+        if (verbose()) {
+          console.warn(propertiesSchema);
+          console.warn(scanner.properties);
+        }
+        validate(
+          ajv.compile(propertiesSchema),
+          scanner.properties || {},
+          `${scanner.id} properties`
+        );
+      });
 
     return Promise.all(
       rawConfig.scanners.map(async (c: AssertionConfig) => buildBuiltinAssertion(c))
