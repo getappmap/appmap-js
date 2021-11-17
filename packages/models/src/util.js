@@ -717,10 +717,11 @@ export function hashEvent(e) {
 
   const content = [];
   getStaticPropValues(e).forEach((v) => content.push(v));
-  e.parameters.forEach((p) =>
-    getStaticPropValues(p).forEach((v) => content.push(v))
-  );
-  [...e.labels].forEach((l) => content.push(l));
+  if (e.parameters) {
+    e.parameters.forEach((p) =>
+      getStaticPropValues(p).forEach((v) => content.push(v))
+    );
+  }
 
   return sha256(content.join('')).toString();
 }
