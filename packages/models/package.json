@@ -3,7 +3,7 @@
   "version": "1.7.0",
   "description": "",
   "main": "dist/index.js",
-  "typings": "index.d.ts",
+  "types": "index.d.ts",
   "publishConfig": {
     "access": "public"
   },
@@ -21,8 +21,8 @@
     ]
   },
   "files": [
-    "dist/index.js",
-    "dist/index.cjs"
+    "dist",
+    "index.d.ts"
   ],
   "author": "",
   "license": "MIT",
