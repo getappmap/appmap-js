@@ -49,7 +49,7 @@ class InstallerError {
     return String(this.error);
   }
 
-  async handle(): Promise<void> {
+  async handle(): Promise<boolean> {
     UI.error();
 
     const installersAvailable = this.project?.availableInstallers
@@ -71,6 +71,7 @@ class InstallerError {
       });
 
       UI.error(`${chalk.yellow('!')} Installation has been aborted.`);
+      return true;
     } else if (this.error instanceof InvalidPathError) {
       Telemetry.sendEvent({
         name: 'install-agent:soft_failure',
@@ -83,6 +84,7 @@ class InstallerError {
       });
 
       UI.error(`${chalk.red('!')} ${this.error.message}`);
+      return true;
     } else {
       let exception: string | undefined;
       if (this.error instanceof Error) {
@@ -120,6 +122,7 @@ class InstallerError {
         },
       });
     }
+    return false;
   }
 }
 
@@ -189,8 +192,10 @@ export default {
           await installProcedure.run();
         } catch (e) {
           let installerError = new InstallerError(e, endTime(), project);
-          await installerError.handle();
-          errors.push(installerError);
+          const handled = await installerError.handle();
+          if (!handled) {
+            errors.push(installerError);
+          }
         }
       }
 
@@ -225,9 +230,10 @@ export default {
       }
     } catch (err) {
       const installerError = new InstallerError(err, 0, undefined);
-      await installerError.handle();
-
-      errors.push(installerError);
+      const handled = await installerError.handle();
+      if (!handled) {
+        errors.push(installerError);
+      }
     }
 
     // Make sure there's nothing left in the queue before we exit.
