@@ -1,5 +1,6 @@
 import sha256 from 'crypto-js/sha256';
 import sqliteParser from 'sqlite-parser';
+import { sqlNormalized } from './database';
 
 export const hasProp = (obj, prop) =>
   Object.prototype.hasOwnProperty.call(obj, prop);
@@ -664,23 +665,12 @@ export function hashHttp(e) {
 }
 
 export function hashSql(e) {
-  const { sqlQuery } = e;
-  if (!sqlQuery) {
+  const { sql } = e;
+  if (!sql) {
     return null;
   }
 
-  const normalizedSql = normalizeSQL(sqlQuery);
-  const content = [normalizedSql.action];
-
-  if (normalizedSql.columns) {
-    normalizedSql.columns.forEach((c) => content.push(c));
-  }
-
-  if (normalizedSql.tables) {
-    normalizedSql.tables.forEach((t) => content.push(t));
-  }
-
-  return sha256(content.join('')).toString();
+  return sha256(sqlNormalized(sql)).toString();
 }
 
 // Returns a unique 'hash' (or really, a key) tied to the event's core identity: SQL, HTTP, or a

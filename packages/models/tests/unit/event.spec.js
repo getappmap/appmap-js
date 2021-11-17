@@ -70,5 +70,26 @@ describe('Event', () => {
 
       expect(events.length).toEqual(callEvents.length);
     });
+
+    test('event hash', () => {
+      const expectHash = (findFn, hash) => {
+        expect(appMap.events.find(findFn).hash).toEqual(hash);
+      };
+
+      expectHash(
+        (e) => e.sql,
+        '59478e84789ea24d59b81df1524d20909a86f1b181efc4090f7f98d0bf3a59c1'
+      );
+
+      expectHash(
+        (e) => e.httpServerRequest,
+        'b2a474aa2db0d64961910ac62effe75e72c270ee5654524d8acededbfa141e3d'
+      );
+
+      expectHash(
+        (e) => e.methodId === 'encrypt',
+        'ca04cd3ed7b52a5d6e5bf28a50c4fd86550ebf7ae50b74d37562739f5e3924ba'
+      );
+    });
   });
 });
