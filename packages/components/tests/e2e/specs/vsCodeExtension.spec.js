@@ -59,7 +59,7 @@ context('VS Code Extension', () => {
       cy.get('.instructions__container').should('be.visible');
 
       cy.get('.instructions__close').click();
-      cy.get('.instructions__container').should('not.be.visible');
+      cy.get('.instructions__container').should('not.exist');
     });
 
     it('clicking HTTP server requests displays the correct data', () => {
@@ -425,7 +425,7 @@ context('VS Code Extension', () => {
 
       cy.get('.dropdown-menu').contains('Set as root').click();
 
-      cy.get('.node[data-id="json"]').should('not.be.visible');
+      cy.get('.node[data-id="json"]').should('not.exist');
 
       cy.get('.node[data-id="JSON::Ext::Generator::State"]').should(
         'be.visible'
