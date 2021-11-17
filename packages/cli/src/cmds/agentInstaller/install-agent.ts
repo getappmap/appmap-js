@@ -16,7 +16,6 @@ import { getDirectoryProperty } from './telemetryUtil';
 import { getProjects, ProjectConfiguration } from './projectConfiguration';
 import AgentInstaller from './agentInstaller';
 import { ProcessLog } from './commandRunner';
-
 interface InstallCommandOptions {
   verbose?: any;
   projectType?: string;
@@ -126,6 +125,106 @@ class InstallerError {
   }
 }
 
+const _handler = async (args: InstallCommandOptions): Promise<{exitCode: number, err: Error | null}> => {
+  const { projectType, directory, verbose: isVerbose } = args;
+  const errors: InstallerError[] = [];
+  const installers = INSTALLERS.map(
+    (constructor) => new constructor(directory)
+  );
+
+  verbose(isVerbose);
+
+  try {
+    const projects = await getProjects(
+      installers,
+      directory,
+      true,
+      projectType
+    );
+
+    for (let i = 0; i < projects.length; i++) {
+      const startTime = Date.now();
+      const endTime = () => (Date.now() - startTime) / 1000;
+      const project = projects[i];
+      const installProcedure = new AgentInstallerProcedure(
+        project.selectedInstaller as AgentInstaller,
+        project.path
+      );
+
+      console.log(
+        `Installing AppMap agent for ${chalk.blue(project.name)}...`
+      );
+
+      try {
+        await installProcedure.run();
+
+        Telemetry.sendEvent({
+          name: 'install-agent:success',
+          properties: {
+            installer: project.selectedInstaller!.name,
+            path: project.path,
+          },
+          metrics: {
+            duration: endTime(),
+          },
+        });
+      } catch (e) {
+        let installerError = new InstallerError(e, endTime(), project);
+        const handled = await installerError.handle();
+        if (handled) {
+          return {exitCode: 1, err: e as Error};
+        }
+        errors.push(installerError);
+      }
+    }
+
+    if (errors.length) {
+      const message =
+        projects.length === 1
+          ? 'Installation failed. View error details?'
+          : `${errors.length} out of ${projects.length} installations failed. View error details?`;
+
+      const { showError } = await UI.prompt(
+        {
+          name: 'showError',
+          type: 'confirm',
+          message,
+          prefix: chalk.red('!'),
+        },
+        { supressSpinner: true }
+      );
+
+      if (showError) {
+        errors.forEach((error) => {
+          UI.error(
+            projects.length > 1
+              ? prefixLines(
+                  error.message,
+                  `[${chalk.red(error.project?.name)}] `
+                )
+              : error.message
+          );
+        });
+      }
+    }
+  } catch (err) {
+    const installerError = new InstallerError(err, 0, undefined);
+    const handled = await installerError.handle();
+    if (handled) {
+      return {exitCode: 1, err: err as Error};
+    }
+    errors.push(installerError);
+  }
+
+  if (errors.length) {
+    const reason = new Error(errors.map((e) => e.message).join('\n'));
+    console.log(reason.message);
+    return {exitCode: 1, err: reason};
+  }
+
+  return {exitCode: 0, err: null}
+}
+
 export default {
   command: 'install [directory]',
   aliases: ['i', 'install-agent'],
@@ -159,101 +258,10 @@ export default {
       name: 'install-agent:start',
     });
 
-    const { projectType, directory, verbose: isVerbose } = args;
-    const errors: InstallerError[] = [];
-    const installers = INSTALLERS.map(
-      (constructor) => new constructor(directory)
-    );
+    const {exitCode, err} = await _handler(args);
 
-    verbose(isVerbose);
-
-    try {
-      const projects = await getProjects(
-        installers,
-        directory,
-        true,
-        projectType
-      );
-
-      for (let i = 0; i < projects.length; i++) {
-        const startTime = Date.now();
-        const endTime = () => (Date.now() - startTime) / 1000;
-        const project = projects[i];
-        const installProcedure = new AgentInstallerProcedure(
-          project.selectedInstaller as AgentInstaller,
-          project.path
-        );
-
-        console.log(
-          `Installing AppMap agent for ${chalk.blue(project.name)}...`
-        );
-
-        try {
-          await installProcedure.run();
-
-          Telemetry.sendEvent({
-            name: 'install-agent:success',
-            properties: {
-              installer: project.selectedInstaller!.name,
-              path: project.path,
-            },
-            metrics: {
-              duration: endTime(),
-            },
-          });
-        } catch (e) {
-          let installerError = new InstallerError(e, endTime(), project);
-          const handled = await installerError.handle();
-          if (!handled) {
-            errors.push(installerError);
-          }
-        }
-      }
-
-      if (errors.length) {
-        const message =
-          projects.length === 1
-            ? 'Installation failed. View error details?'
-            : `${errors.length} out of ${projects.length} installations failed. View error details?`;
-
-        const { showError } = await UI.prompt(
-          {
-            name: 'showError',
-            type: 'confirm',
-            message,
-            prefix: chalk.red('!'),
-          },
-          { supressSpinner: true }
-        );
-
-        if (showError) {
-          errors.forEach((error) => {
-            UI.error(
-              projects.length > 1
-                ? prefixLines(
-                    error.message,
-                    `[${chalk.red(error.project?.name)}] `
-                  )
-                : error.message
-            );
-          });
-        }
-      }
-    } catch (err) {
-      const installerError = new InstallerError(err, 0, undefined);
-      const handled = await installerError.handle();
-      if (!handled) {
-        errors.push(installerError);
-      }
-    }
-
-    // Make sure there's nothing left in the queue before we exit.
-    await Telemetry.flush();
-
-    if (errors.length) {
-      const reason = new Error(errors.map((e) => e.message).join('\n'));
-      console.log(reason.message);
-      Yargs.exit(1, reason);
-    }
+    Telemetry.flush(() => {
+      Yargs.exit(exitCode, err as any);
+    });
   },
 };
