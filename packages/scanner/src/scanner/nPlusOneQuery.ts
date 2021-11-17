@@ -5,11 +5,12 @@ import Assertion from '../assertion';
 import { SQLCount, sqlStrings } from '../database';
 
 class Options implements types.NPlusOneQuery.Options {
-  constructor(public warningLimit = 5, public errorLimit = 10) {}
+  public warningLimit = 5;
+  public errorLimit = 10;
 }
 
 // TODO: clean up according to https://github.com/applandinc/scanner/issues/43
-function scanner(options: Options = new Options()): Assertion {
+function scanner(options: Options): Assertion {
   const sqlCount: Record<string, SQLCount> = {};
 
   const matcher = (command: Event): MatchResult[] | undefined => {

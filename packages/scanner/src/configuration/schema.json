@@ -14,6 +14,33 @@
           "id": {
             "type": "string"
           },
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "$comment": "In the future, other methods besides a match pattern could be provided",
+              "required": ["pattern"],
+              "properties": {
+                "pattern": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "exclude": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["pattern"],
+              "properties": {
+                "pattern": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "properties": {
             "type": "object"
           }

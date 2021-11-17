@@ -4,16 +4,16 @@
     "IllegalPackageDependency.Options": {
       "additionalProperties": false,
       "properties": {
-        "packageNames": {
+        "allowedPackages": {
           "items": {
             "type": "string"
           },
           "type": "array"
-        },
-        "selector": {
-          "type": "string"
         }
       },
+      "required": [
+        "allowedPackages"
+      ],
       "type": "object"
     },
     "IncompatibleHttpClientRequest.Options": {
@@ -34,33 +34,17 @@
     "MissingAuthentication.Options": {
       "additionalProperties": false,
       "properties": {
-        "contentTypes": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "items": {
-                "format": "regex",
-                "type": "string"
-              },
-              "type": "array"
-            }
-          ]
+        "excludeContentTypes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
-        "routes": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "items": {
-                "format": "regex",
-                "type": "string"
-              },
-              "type": "array"
-            }
-          ]
+        "includeContentTypes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -80,14 +64,13 @@
     "QueryFromInvalidPackage.Options": {
       "additionalProperties": false,
       "properties": {
-        "allowList": {
+        "allowedPackages": {
           "items": {
-            "format": "regex",
             "type": "string"
           },
           "type": "array"
         },
-        "parentPackages": {
+        "skipQueries": {
           "items": {
             "type": "string"
           },
@@ -95,7 +78,7 @@
         }
       },
       "required": [
-        "parentPackages"
+        "allowedPackages"
       ],
       "type": "object"
     },
@@ -111,7 +94,7 @@
     "RPCWithoutCircuitBreaker.Options": {
       "additionalProperties": false,
       "properties": {
-        "label": {
+        "expectedLabel": {
           "type": "string"
         }
       },
@@ -120,16 +103,10 @@
     "SlowFunctionCall.Options": {
       "additionalProperties": false,
       "properties": {
-        "codeObjectName": {
-          "type": "string"
-        },
         "timeAllowed": {
           "type": "number"
         }
       },
-      "required": [
-        "codeObjectName"
-      ],
       "type": "object"
     },
     "SlowHTTPServerRequest.Options": {
@@ -144,28 +121,10 @@
     "SlowQuery.Options": {
       "additionalProperties": false,
       "properties": {
-        "excludeList": {
-          "items": {
-            "format": "regex",
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "includeList": {
-          "items": {
-            "format": "regex",
-            "type": "string"
-          },
-          "type": "array"
-        },
         "timeAllowed": {
           "type": "number"
         }
       },
-      "required": [
-        "includeList",
-        "excludeList"
-      ],
       "type": "object"
     },
     "TimeAllowed": {

@@ -2,23 +2,21 @@ import { Event } from '@appland/models';
 import { AssertionSpec } from 'src/types';
 import * as types from './types';
 import Assertion from '../assertion';
-import { toRegExpArray } from './util';
+import MatchPattern from './lib/matchPattern';
 
-const WHITELIST = [/BEGIN/, /COMMIT/, /ROLLBACK/, /RELEASE/, /SAVEPOINT/];
+// TODO: Use the Query AST for this.
+const WHITELIST = [/\bBEGIN\b/i, /\bCOMMIT\b/i, /\bROLLBACK\b/i, /\bRELEASE\b/i, /\bSAVEPOINT\b/i];
 
 class Options implements types.QueryFromInvalidPackage.Options {
-  private _allowList: RegExp[];
+  public allowedPackages: string[] = [];
+  private _skipQueries: MatchPattern[] = MatchPattern.buildArray(WHITELIST);
 
-  constructor(public parentPackages: string[] = [], allowList: RegExp[] = []) {
-    this._allowList = allowList;
+  testQuery(query: string): boolean {
+    return this._skipQueries.some((pattern) => pattern.test(query));
   }
 
-  get allowList(): RegExp[] {
-    return this._allowList;
-  }
-
-  set allowList(value: string[] | RegExp[]) {
-    this._allowList = toRegExpArray(value);
+  set skipQueries(value: string[]) {
+    this._skipQueries = MatchPattern.buildArray(value);
   }
 }
 
@@ -27,18 +25,15 @@ function scanner(options: Options): Assertion {
     'query-from-invalid-package',
     'Queries from invalid packages',
     (e: Event) => {
-      if (!options.parentPackages.includes(e.parent!.codeObject.packageOf)) {
+      if (!options.allowedPackages.includes(e.parent!.codeObject.packageOf)) {
         return `${e.codeObject.id} is invoked from illegal package ${
           e.parent!.codeObject.packageOf
         }`;
       }
     },
     (assertion: Assertion): void => {
-      assertion.where = (e: Event) =>
-        !!e.sqlQuery &&
-        !!e.parent &&
-        !options.allowList.concat(WHITELIST).some((pattern) => pattern.test(e.sqlQuery!));
-      assertion.description = `Query must be invoked from one of (${options.parentPackages.join(
+      assertion.where = (e: Event) => !!e.sqlQuery && !!e.parent && !options.testQuery(e.sqlQuery!);
+      assertion.description = `Query must be invoked from one of (${options.allowedPackages.join(
         ','
       )})`;
     }

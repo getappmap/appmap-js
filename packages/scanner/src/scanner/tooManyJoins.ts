@@ -9,7 +9,7 @@ export interface JoinCount extends SQLCount {
 }
 
 class Options implements types.TooManyJoins.Options {
-  constructor(public warningLimit = 5) {}
+  public warningLimit = 5;
 }
 
 // TODO: clean up (https://github.com/applandinc/scanner/issues/43)

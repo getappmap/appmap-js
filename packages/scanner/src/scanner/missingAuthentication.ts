@@ -3,7 +3,8 @@ import { rpcRequestForEvent } from '../openapi/rpcRequest';
 import * as types from './types';
 import { AssertionSpec } from '../types';
 import Assertion from '../assertion';
-import { providesAuthentication, toRegExpArray } from './util';
+import { providesAuthentication } from './util';
+import MatchPattern from './lib/matchPattern';
 
 function isPublic(event: Event): boolean {
   return event.labels.has(Public);
@@ -22,28 +23,24 @@ const authenticatedBy = (iterator: Iterator<EventNavigator>): boolean => {
 };
 
 class Options implements types.MissingAuthentication.Options {
-  private _routes: RegExp[];
-  private _contentTypes: RegExp[];
+  private _includeContentTypes: MatchPattern[] = [];
+  private _excludeContentTypes: MatchPattern[] = [];
 
-  constructor(routes: RegExp[] = [/.*/], contentTypes: RegExp[] = [/.*/]) {
-    this._routes = routes;
-    this._contentTypes = contentTypes;
+  testContentType(contentType: string): boolean {
+    return (
+      (this._includeContentTypes.length === 0 ||
+        this._includeContentTypes.some((pattern) => pattern.test(contentType))) &&
+      (this._excludeContentTypes.length === 0 ||
+        !this._excludeContentTypes.some((pattern) => pattern.test(contentType)))
+    );
   }
 
-  get routes(): RegExp[] {
-    return this._routes;
+  set includeContentTypes(value: string[]) {
+    this._includeContentTypes = MatchPattern.buildArray(value);
   }
 
-  set routes(value: RegExp[] | string[]) {
-    this._routes = toRegExpArray(value);
-  }
-
-  get contentTypes(): RegExp[] {
-    return this._contentTypes;
-  }
-
-  set contentTypes(value: RegExp[] | string[]) {
-    this._contentTypes = toRegExpArray(value);
+  set excludeContentTypes(value: string[]) {
+    this._excludeContentTypes = MatchPattern.buildArray(value);
   }
 }
 
@@ -61,8 +58,7 @@ function scanner(options: Options = new Options()): Assertion {
           e.httpServerResponse.status < 300 &&
           !!rpcRequestForEvent(e) &&
           !!rpcRequestForEvent(e)!.contentType &&
-          options.routes.some((pattern) => pattern.test(e.route!)) &&
-          options.contentTypes.some((pattern) => pattern.test(rpcRequestForEvent(e)!.contentType))
+          options.testContentType(rpcRequestForEvent(e)!.contentType)
         );
       };
       assertion.description = `HTTP server request must be authenticated`;

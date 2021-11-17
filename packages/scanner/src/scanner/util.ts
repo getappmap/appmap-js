@@ -9,6 +9,13 @@ function verbose(v: boolean | null = null): boolean {
   return isVerbose;
 }
 
+function capitalize(str: string): string {
+  if (!str || str === '') {
+    return str;
+  }
+  return [str.charAt(0).toUpperCase(), str.slice(1)].join('');
+}
+
 function emptyValue(value: string): boolean {
   return [null, undefined, ''].includes(value);
 }
@@ -98,6 +105,7 @@ const isRoot = (event: Event | undefined): boolean => {
 
 export {
   appMapDir,
+  capitalize,
   emptyValue,
   isFalsey,
   isTruthy,

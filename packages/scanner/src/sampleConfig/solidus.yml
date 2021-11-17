@@ -1,14 +1,14 @@
 scanners:
   - id: http500
   - id: illegalPackageDependency
+    include:
+      - pattern: function:app/controllers/*
     properties:
-      selector: function:app/controllers/*
-      packageNames: [ 'actionpack', 'activesupport', 'solidus_core' ]
+      allowedPackages: [ 'actionpack', 'activesupport', 'solidus_core' ]
   - id: missingContentType
   - id: missingAuthentication
-    properties:
-      routes:
-        - /\/api/\/
+    include:
+      - pattern: /\/api/\/
   - id: secretInLog
   - id: slowHttpServerRequest
     properties:
@@ -18,6 +18,5 @@ scanners:
       timeAllowed: 0.25
   - id: tooManyUpdates
   - id: updateInGetRequest
-    properties:
-      query_exclude:
-        - /^INSERT INTO "spree_order_mutexes"/
+    exclude:
+      - pattern: INSERT INTO "spree_order_mutexes"
