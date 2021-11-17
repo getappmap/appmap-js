@@ -183,6 +183,7 @@ __metadata:
     prettier: ^2.3.2
     semantic-release: ^18.0.0
     sinon: ^11.1.2
+    sqlite-parser: ^1.0.1
     supports-hyperlinks: ^2.2.0
     ts-jest: ^27.0.5
     ts-json-schema-generator: ^0.97.0

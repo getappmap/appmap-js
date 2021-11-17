@@ -53,6 +53,7 @@
     "octokat": "^0.10.0",
     "openapi-diff": "^0.23.5",
     "semantic-release": "^18.0.0",
+    "sqlite-parser": "^1.0.1",
     "supports-hyperlinks": "^2.2.0",
     "yargs": "^17.1.1"
   },
