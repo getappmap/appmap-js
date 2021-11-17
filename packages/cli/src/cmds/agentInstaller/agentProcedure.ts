@@ -8,16 +8,26 @@ import UI from '../userInteraction';
 import { run, runSync } from './commandRunner';
 import { validateConfig } from '../../service/config/validator';
 import CommandStruct from './commandStruct';
+import Telemetry from '../../telemetry';
 
 export default abstract class AgentProcedure {
   constructor(readonly installer: AgentInstaller, readonly path: string) {}
 
   async getEnvironmentForDisplay(): Promise<string[]> {
-    let env = {
+    // TS is ok with this written as let env:[name: string]: string = {...}, but
+    // babel doesn't like it. Splitting it up this way keeps them both happy: 
+    let env;
+    env = {
       'Project type': this.installer.name,
       'Project directory': resolve(this.path),
     };
-
+    if (!Telemetry.enabled) {
+      env = {
+        '!!! Telemetry disabled !!!': 'true',
+        ...env
+      };
+    }
+    
     let gitRemote;
     try {
       const stdout = runSync(
@@ -40,7 +50,7 @@ export default abstract class AgentProcedure {
     }
     return Object.entries(env)
       .filter(([_, value]) => Boolean(value))
-      .map(([key, value]) => `  ${chalk.blue(key)}: ${value.trim()}`);
+      .map(([key, value]) => `  ${chalk.blue(key)}: ${(value as string).trim()}`);
   }
 
   async verifyProject() {

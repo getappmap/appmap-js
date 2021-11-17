@@ -190,6 +190,17 @@ export default {
 
         try {
           await installProcedure.run();
+
+          Telemetry.sendEvent({
+            name: 'install-agent:success',
+            properties: {
+              installer: project.selectedInstaller!.name,
+              path: project.path,
+            },
+            metrics: {
+              duration: endTime(),
+            },
+          });
         } catch (e) {
           let installerError = new InstallerError(e, endTime(), project);
           const handled = await installerError.handle();
