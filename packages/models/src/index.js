@@ -9,3 +9,4 @@ export { default as ClassMap } from './classMap';
 export { default as CodeObject, CodeObjectType } from './codeObject';
 export * from './scanners';
 export * from './util';
+export * as Database from './database';

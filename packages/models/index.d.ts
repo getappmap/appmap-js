@@ -9,27 +9,33 @@ declare module '@appland/models' {
     | 'route'
     | 'external-service';
 
-  export abstract class ObjectBase {
+  export interface ObjectBase {
     readonly class: string;
     readonly object_id?: number;
   }
 
-  export class ParameterObject extends ObjectBase {
-    readonly name?: string;
-    readonly value: string;
+  export interface ParameterProperty {
+    readonly name: string;
+    readonly class: string;
   }
 
-  export class ExceptionObject extends ObjectBase {
+  export interface ParameterObject extends ObjectBase {
+    readonly name?: string;
+    readonly value: string;
+    readonly properties: ParameterProperty[];
+  }
+
+  export interface ExceptionObject extends ObjectBase {
     readonly message: string;
     readonly path?: string;
     readonly lineno?: number;
   }
 
-  export class ReturnValueObject extends ObjectBase {
+  export interface ReturnValueObject extends ObjectBase {
     readonly value: string;
   }
 
-  export class HttpServerRequest {
+  export interface HttpServerRequest {
     readonly headers?: Record<string, string>;
     readonly request_method: string;
     readonly path_info: string;
@@ -37,23 +43,23 @@ declare module '@appland/models' {
     readonly protocol?: string;
   }
 
-  export class HttpServerResponse {
+  export interface HttpServerResponse {
     readonly status: number;
     readonly headers?: Record<string, string>;
   }
 
-  export class HttpClientRequest {
+  export interface HttpClientRequest {
     readonly headers?: Record<string, string>;
     readonly request_method: string;
     readonly url: string;
   }
 
-  export class HttpClientResponse {
+  export interface HttpClientResponse {
     readonly status: number;
     readonly headers?: Record<string, string>;
   }
 
-  export class SqlQuery {
+  export interface SqlQuery {
     readonly database_type: string;
     readonly sql: string;
     readonly explain_sql?: string;
@@ -257,8 +263,38 @@ declare module '@appland/models' {
     build(): AppMap;
   }
 
+  export interface SQLNormalizationResult {
+    tables: string[];
+    columns: string[];
+    actions?: string[];
+    joinCount?: number;
+  }
+
+  export function buildQueryAST(sql: string): any;
   export function buildAppMap(
     data?: string | Record<string, unknown>
   ): AppMapBuilder;
   export function getSqlLabelFromString(sqlString: string): string;
+  export function normalizeSQL(sqlString: string): SQLNormalizationResult;
+
+  export namespace Database {
+    export interface SQLEvent {
+      sql: string;
+      event: Event;
+    }
+
+    export interface SQLCount {
+      count: number;
+      events: Event[];
+    }
+
+    export function countJoins(normalizedSql: string): number;
+    export function isSelect(sql: string): boolean;
+    export function sqlStrings(
+      event: Event,
+      whitelist?: string[]
+    ): Generator<SQLEvent>;
+    export function sqlNormalized(query: SqlQuery): string;
+    export function obfuscate(sql: string, adapter: string): string;
+  }
 }
