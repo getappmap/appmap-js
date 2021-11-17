@@ -73,6 +73,7 @@ export interface Finding {
   scannerId: string;
   scannerTitle: string;
   event: Event;
+  hash: string;
   scope: Event;
   condition: string;
   message?: string;
