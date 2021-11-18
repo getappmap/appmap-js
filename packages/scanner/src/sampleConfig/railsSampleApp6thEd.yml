@@ -3,7 +3,7 @@ scanners:
   - id: http500
   - id: illegalPackageDependency
     include:
-      - pattern: function:app/controllers/*
+      - regexp: ^function:app\/controllers\/
     properties:
       allowedPackages: [ 'actionpack' ]
   - id: insecureCompare
@@ -13,7 +13,7 @@ scanners:
   - id: secretInLog
   - id: slowFunctionCall
     include:
-      - pattern: function:app/controllers/*Controller#create
+      - regexp: ^function:app/controllers/\w+Controller#create$
     properties:
       timeAllowed: 0.2
   - id: slowHttpServerRequest
