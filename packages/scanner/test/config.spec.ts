@@ -23,14 +23,14 @@ describe('YAML config test', () => {
     scanners:
     - id: missingAuthentication
       include:
-      - pattern: "/^GET\\b/"
+      - regexp: '^GET\\s'
     `;
     const configObj = load(yamlConfig) as Configuration;
     const provider = new ConfigurationProvider(configObj);
     const assertionPrototypes: readonly AssertionPrototype[] = await provider.getConfig();
     expect(assertionPrototypes).toHaveLength(1);
     expect(assertionPrototypes[0].config.include!).toHaveLength(1);
-    expect(assertionPrototypes[0].config.include![0].pattern).toEqual(`/^GET\b/`);
+    expect(assertionPrototypes[0].config.include![0].regexp).toEqual(`^GET\\s`);
     const assertion = assertionPrototypes[0].build();
     expect(assertion.include).toHaveLength(1);
   });

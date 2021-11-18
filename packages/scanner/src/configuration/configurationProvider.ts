@@ -3,30 +3,34 @@ import Ajv from 'ajv';
 import yaml from 'js-yaml';
 import { promises as fs } from 'fs';
 import Assertion from '../assertion';
-import { AssertionConfig, AssertionPrototype, AssertionSpec, Configuration } from 'src/types';
+import {
+  AssertionConfig,
+  AssertionPrototype,
+  AssertionSpec,
+  Configuration,
+  EventFilter,
+  MatchPatternConfig,
+} from 'src/types';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import optionsSchema from './options-schema.json';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import schema from './schema.json';
 import { capitalize, verbose } from '../scanner/util';
-import { Event } from '@appland/models';
-import MatchPattern from '../scanner/lib/matchPattern';
+import { buildArray as buildEventFilterArray } from '../scanner/lib/matchPattern';
 
 const ajv = new Ajv();
 
+function makeFilter(patternConfigs: MatchPatternConfig[] | undefined): EventFilter[] {
+  if (!patternConfigs) {
+    return [];
+  }
+
+  return buildEventFilterArray(patternConfigs!);
+}
+
 function populateAssertion(assertion: Assertion, config: AssertionConfig): void {
-  if (config.include && config.include.length > 0) {
-    const patterns = config.include!.map((filter) => MatchPattern.build(filter.pattern));
-    assertion.include = patterns.map(
-      (pattern) => (event: Event) => pattern.test(event.codeObject.fqid)
-    );
-  }
-  if (config.exclude && config.exclude.length > 0) {
-    const patterns = config.exclude!.map((filter) => MatchPattern.build(filter.pattern));
-    assertion.exclude = patterns.map(
-      (pattern) => (event: Event) => pattern.test(event.codeObject.fqid)
-    );
-  }
+  assertion.include = makeFilter(config.include);
+  assertion.exclude = makeFilter(config.exclude);
   if (config.description) {
     assertion.description = config.description;
   }

@@ -4,7 +4,6 @@ import * as types from './types';
 import { AssertionSpec } from '../types';
 import Assertion from '../assertion';
 import { providesAuthentication } from './util';
-import MatchPattern from './lib/matchPattern';
 
 function isPublic(event: Event): boolean {
   return event.labels.has(Public);
@@ -23,8 +22,8 @@ const authenticatedBy = (iterator: Iterator<EventNavigator>): boolean => {
 };
 
 class Options implements types.MissingAuthentication.Options {
-  private _includeContentTypes: MatchPattern[] = [];
-  private _excludeContentTypes: MatchPattern[] = [];
+  private _includeContentTypes: RegExp[] = [];
+  private _excludeContentTypes: RegExp[] = [];
 
   testContentType(contentType: string): boolean {
     return (
@@ -36,11 +35,11 @@ class Options implements types.MissingAuthentication.Options {
   }
 
   set includeContentTypes(value: string[]) {
-    this._includeContentTypes = MatchPattern.buildArray(value);
+    this._includeContentTypes = value.map((pattern) => new RegExp(pattern));
   }
 
   set excludeContentTypes(value: string[]) {
-    this._excludeContentTypes = MatchPattern.buildArray(value);
+    this._excludeContentTypes = value.map((pattern) => new RegExp(pattern));
   }
 }
 

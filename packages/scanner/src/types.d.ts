@@ -88,7 +88,8 @@ interface Configuration {
 }
 
 interface MatchPatternConfig {
-  pattern: string;
+  regexp: string;
+  function: string;
 }
 
 /**

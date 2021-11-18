@@ -1,45 +1,31 @@
-import { Minimatch } from 'minimatch';
+import { AppMap, Event } from '@appland/models';
+import { EventFilter, MatchPatternConfig } from 'src/types';
+import { Script } from 'vm';
 
-export default class MatchPattern {
-  private expression: string | RegExp;
-  private pattern: RegExp;
+export function build(config: MatchPatternConfig | string | RegExp): EventFilter {
+  const filterRegExp = (pattern: RegExp) => (event: Event) => pattern.test(event.codeObject.fqid);
+  const filterString = (pattern: string) => filterRegExp(new RegExp(pattern));
+  const filterFunction = (expression: string) => {
+    const script = new Script(expression);
+    return (event: Event, appMap: AppMap) => {
+      return script.runInNewContext({ event, appMap, console });
+    };
+  };
 
-  private constructor(expression: string | RegExp) {
-    if (!expression || expression === '') {
-      throw new Error(`Match pattern must not be empty`);
-    }
-    this.expression = expression;
-    if (typeof expression === 'string') {
-      const expressionStr = expression as string;
-      if (
-        expressionStr.charAt(0) === '/' &&
-        expressionStr.charAt(expressionStr.length - 1) === '/'
-      ) {
-        this.pattern = new RegExp(expressionStr.slice(1, expressionStr.length - 1));
-      } else {
-        this.pattern = new Minimatch(expressionStr).makeRe();
-        if (!this.pattern) {
-          throw new Error(`Invalid match pattern: ${expressionStr}`);
-        }
-      }
+  if (config instanceof RegExp) {
+    return filterRegExp(config as RegExp);
+  } else if (typeof config === 'string') {
+    return filterString(config as string);
+  } else {
+    const configObj = config as MatchPatternConfig;
+    if (configObj.regexp) {
+      return filterString(configObj.regexp!);
     } else {
-      this.pattern = expression as RegExp;
+      return filterFunction(configObj.function!);
     }
   }
+}
 
-  static build(value: RegExp | string): MatchPattern {
-    return new MatchPattern(value);
-  }
-
-  static buildArray(value: RegExp[] | string[]): MatchPattern[] {
-    return value.map((item) => this.build(item));
-  }
-
-  toString(): string {
-    return this.expression.toString();
-  }
-
-  test(value: string): boolean {
-    return this.pattern.test(value);
-  }
+export function buildArray(value: MatchPatternConfig[] | RegExp[] | string[]): EventFilter[] {
+  return value.map((item) => build(item));
 }

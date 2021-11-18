@@ -19,9 +19,7 @@ import Assertion from '../src/assertion';
 import { cwd } from 'process';
 import { join, normalize } from 'path';
 import { readFile } from 'fs/promises';
-import MatchPattern from '../src/scanner/lib/matchPattern';
 import { verbose } from '../src/scanner/util';
-import { options } from 'yargs';
 
 if (process.env.VERBOSE === 'true') {
   verbose(true);
@@ -191,7 +189,7 @@ describe('assert', () => {
         'illegal-package-dependency',
         () => {
           const result = scanner(options);
-          const pattern = MatchPattern.build('query:*');
+          const pattern = new RegExp(/^query:/);
           result.include = [(event: Event) => pattern.test(event.codeObject.fqid)];
           return result;
         },
@@ -249,7 +247,7 @@ describe('assert', () => {
         'slow-function-call',
         () => {
           const result = scanner(options);
-          const pattern = MatchPattern.build('/Controller#create$/');
+          const pattern = new RegExp(/Controller#create$/);
           result.include = [(event: Event) => pattern.test(event.codeObject.fqid)];
           return result;
         },
