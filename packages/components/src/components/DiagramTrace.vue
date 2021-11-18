@@ -8,6 +8,8 @@
       :events="events"
       :selected-events="selectedEvents"
       :focused-event="focusedEvent"
+      :highlighted-event-id="highlightedEventId"
+      :highlighted-event-index="highlightedEventIndex"
       :highlight-color="highlightColor"
       :highlight-all="highlightAll"
       :highlight-style="highlightStyle"
@@ -42,6 +44,14 @@ export default {
     },
     focusedEvent: {
       type: Object,
+      default: null,
+    },
+    highlightedEventId: {
+      type: Number,
+      default: null,
+    },
+    highlightedEventIndex: {
+      type: Number,
       default: null,
     },
     zoomControls: Boolean,

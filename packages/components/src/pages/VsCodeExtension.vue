@@ -71,13 +71,14 @@
                 class="trace-view__search-arrows"
                 v-if="highlightedNodes.length"
               >
-                <div class="trace-view__search-arrow">
+                <div class="trace-view__search-arrow" @click="prevTraceFilter">
                   <ArrowSearchLeftIcon />
                 </div>
                 <div class="trace-view__search-arrows-text">
-                  <b>1</b>/{{ highlightedNodes.length }} results
+                  <b>{{ currentTraceFilterIndex + 1 }}</b
+                  >/{{ highlightedNodes.length }} results
                 </div>
-                <div class="trace-view__search-arrow">
+                <div class="trace-view__search-arrow" @click="nextTraceFilter">
                   <ArrowSearchRightIcon />
                 </div>
               </div>
@@ -87,6 +88,8 @@
               :events="filteredAppMap.rootEvents()"
               :selected-events="selectedEvent"
               :focused-event="focusedEvent"
+              :highlighted-event-id="highlightedEventId"
+              :highlighted-event-index="currentTraceFilterIndex + 1"
               :name="VIEW_FLOW"
               :zoom-controls="true"
               @clickEvent="onClickTraceEvent"
@@ -418,6 +421,7 @@ export default {
       },
       isUserFiltered: false,
       traceFilterValue: '',
+      currentTraceFilterIndex: 0,
     };
   },
 
@@ -458,6 +462,11 @@ export default {
             this.$refs.diagramFlow.focusFocused();
           });
         }
+      },
+    },
+    highlightedNodes: {
+      handler() {
+        this.currentTraceFilterIndex = 0;
       },
     },
   },
@@ -586,6 +595,12 @@ export default {
       }
 
       return nodes;
+    },
+
+    highlightedEventId() {
+      return this.highlightedNodes.length
+        ? this.highlightedNodes[this.currentTraceFilterIndex]
+        : null;
     },
 
     selectedObject() {
@@ -936,6 +951,22 @@ export default {
       });
 
       return events.filter((e) => !excludedEvents.includes(e.id));
+    },
+
+    prevTraceFilter() {
+      if (this.currentTraceFilterIndex === 0) {
+        this.currentTraceFilterIndex = this.highlightedNodes.length - 1;
+      } else {
+        this.currentTraceFilterIndex -= 1;
+      }
+    },
+
+    nextTraceFilter() {
+      if (this.currentTraceFilterIndex === this.highlightedNodes.length - 1) {
+        this.currentTraceFilterIndex = 0;
+      } else {
+        this.currentTraceFilterIndex += 1;
+      }
     },
   },
 

@@ -7,9 +7,14 @@
     />
     <v-trace-node
       :event="event"
-      :highlight="selectedEvents.includes(event)"
+      :highlight="
+        selectedEvents.includes(event) || event.id == highlightedEventId
+      "
       :highlight-color="highlightColor"
       :highlight-style="highlightStyle"
+      :highlight-index="
+        event.id == highlightedEventId ? highlightedEventIndex : 0
+      "
       :focused="focusedEvent === event"
       @expandChildren="toggleVisibility()"
       @click.native.stop="$emit('clickEvent', event)"
@@ -21,6 +26,8 @@
       :events="event.children"
       :selected-events="selectedEvents"
       :focused-event="focusedEvent"
+      :highlighted-event-id="highlightedEventId"
+      :highlighted-event-index="highlightedEventIndex"
       :highlight-color="highlightColor"
       :highlight-all="highlightAll"
       :highlight-style="highlightStyle"
@@ -64,6 +71,14 @@ export default {
     },
     focusedEvent: {
       type: Object,
+      default: null,
+    },
+    highlightedEventId: {
+      type: Number,
+      default: null,
+    },
+    highlightedEventIndex: {
+      type: Number,
       default: null,
     },
     highlightColor: String,
@@ -115,7 +130,11 @@ export default {
       );
     },
     initialize() {
-      if (this.hasSelectedEventInTree || this.hasFocusedEventInTree) {
+      if (
+        this.hasSelectedEventInTree ||
+        this.hasFocusedEventInTree ||
+        this.hasHighlightedEventInTree
+      ) {
         this.expanded = true;
       }
       this.height = this.$el.offsetHeight;
@@ -126,7 +145,8 @@ export default {
       return (
         this.expanded ||
         this.hasSelectedEventInTree ||
-        this.hasFocusedEventInTree
+        this.hasFocusedEventInTree ||
+        this.hasHighlightedEventInTree
       );
     },
     children() {
@@ -182,6 +202,15 @@ export default {
           .ancestors()
           .map((e) => e.id)
           .includes(this.event.id)
+      );
+    },
+    hasHighlightedEventInTree() {
+      return (
+        this.highlightedEventId &&
+        this.event
+          .descendants()
+          .map((e) => e.id)
+          .includes(this.highlightedEventId)
       );
     },
   },
