@@ -54,6 +54,8 @@ export interface MatchResult {
   level: Level;
   event?: Event;
   message?: string;
+  groupMessage?: string;
+  occurranceCount?: number;
   relatedEvents?: Event[];
 }
 
@@ -82,6 +84,8 @@ export interface Finding {
   scope: Event;
   condition: string;
   message?: string;
+  groupMessage?: string;
+  occurranceCount?: number;
   relatedEvents?: Event[];
 }
 
