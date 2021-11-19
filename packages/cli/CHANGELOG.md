@@ -1,3 +1,12 @@
+# [@appland/appmap-v3.13.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.13.3...@appland/appmap-v3.13.4) (2021-11-19)
+
+
+### Bug Fixes
+
+* Exit cleanly when the user aborts ([e570101](https://github.com/applandinc/appmap-js/commit/e5701017d01aa3597c2c66556a2c1a08ca3678a6))
+* Flush telemetry events before exiting ([60df8e8](https://github.com/applandinc/appmap-js/commit/60df8e83eec2b3fa3d53d6339613cf4a595c03ae))
+* Send success event ([4d05374](https://github.com/applandinc/appmap-js/commit/4d053742e6cb05f964485764a29c548ab6002582))
+
 # [@appland/appmap-v3.13.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.13.2...@appland/appmap-v3.13.3) (2021-11-11)
 
 
