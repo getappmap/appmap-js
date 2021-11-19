@@ -221,16 +221,20 @@ export default class Telemetry {
     }
   }
 
-  /**
-   * Returns a promise that is resolved once all telemetry events are sent
-   */
-  static flush(): Promise<void> {
-    return new Promise((resolve) => {
-      if (this.enabled) {
-        Telemetry.client.flush({ callback: () => resolve() });
-      } else {
-        resolve();
+  static flush(exitCB): void {
+    if (this.enabled) {
+      // Telemetry.client.flush is broken:
+      // https://github.com/microsoft/ApplicationInsights-node.js/issues/871 .
+      // As a result, we can fail to send telemetry data when exiting.
+      //
+      // If we got passed a callback, flush the data and wait for a second
+      // before calling it.
+      if (exitCB) {
+        Telemetry.client.flush();
+        setTimeout(exitCB, 1000);
       }
-    });
+    } else {
+      exitCB();
+    }
   }
 }

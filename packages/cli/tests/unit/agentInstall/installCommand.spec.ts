@@ -60,7 +60,9 @@ const invokeCommand = (
 describe('install sub-command', () => {
   let projectDir: string;
   beforeEach(() => {
+    // Stub all Telemetry methods. flush still needs to work, though.
     sinon.stub(Telemetry);
+    (Telemetry.flush as sinon.SinonStub).callThrough();
     projectDir = tmp.dirSync({} as any).name;
   });
 
@@ -638,6 +640,10 @@ packages:
       });
 
       expect(installProcedureStub).not.toBeCalled();
+      const sendEventStub = Telemetry.sendEvent as sinon.SinonStub;
+      expect(sendEventStub).toBeCalledTwice();
+      expect(sendEventStub.getCall(0)).toBeCalledWithMatch({name: 'install-agent:start'});
+      expect(sendEventStub.getCall(1)).toBeCalledWithMatch({name: 'install-agent:soft_failure'});
     });
   });
 
@@ -755,6 +761,12 @@ packages:
       });
 
       expectedStubs.forEach((stub) => expect(stub.called).toBe(true));
+      const sendEventStub = (Telemetry.sendEvent as sinon.SinonStub);
+      expect(sendEventStub).toBeCalledTimes(3);
+      expect(sendEventStub.getCall(0)).toBeCalledWithMatch({name: 'install-agent:start'});
+      expect(sendEventStub.getCall(1)).toBeCalledWithMatch({name: 'install-agent:success', properties: {installer: 'Maven'}});
+      expect(sendEventStub.getCall(2)).toBeCalledWithMatch({name: 'install-agent:success', properties: {installer: 'Gradle'}});
+      
     });
   });
 });
