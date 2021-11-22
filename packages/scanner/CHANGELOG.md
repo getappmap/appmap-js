@@ -1,3 +1,19 @@
+# [1.23.0](https://github.com/applandinc/scanner/compare/v1.22.2...v1.23.0) (2021-11-22)
+
+
+### Bug Fixes
+
+* Ensure existance of constants for all labels ([451eddb](https://github.com/applandinc/scanner/commit/451eddb50d486724edb8f3f8117ba21993e63385))
+* Update rails sample app config ([551a67d](https://github.com/applandinc/scanner/commit/551a67dd92ce2a2d02de1aed08f17431cdc2d2a5))
+
+
+### Features
+
+* Reconcile and standardize scanner options ([e5dcedb](https://github.com/applandinc/scanner/commit/e5dcedbefb4b504ff0752db6d9d51e6e11944bbd))
+* Support regexp or function as filter expression ([88a5fab](https://github.com/applandinc/scanner/commit/88a5fabaf7e6b995f8d730f3221ee7597686cfdb))
+* Validate configuration schema before scanning ([53d4e9d](https://github.com/applandinc/scanner/commit/53d4e9d1395e8020e358000c4e3a8f8f53eb7890))
+* Validate scanner properties against Options defined by JSON schema ([cbd9167](https://github.com/applandinc/scanner/commit/cbd9167a49b3725bab4cfef333750b4c5e806788))
+
 ## [1.22.2](https://github.com/applandinc/scanner/compare/v1.22.1...v1.22.2) (2021-11-17)
 
 
