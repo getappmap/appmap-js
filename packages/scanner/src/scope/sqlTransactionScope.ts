@@ -1,18 +1,9 @@
-import parseSql from 'sqlite-parser';
+import { buildQueryAST } from '@appland/models';
 import type { SqliteParser } from 'sqlite-parser';
 import type { Event } from '@appland/models';
 
 import ScopeIterator from './scopeIterator';
 import type { Scope } from 'src/types';
-
-function tryParse(sql: string): SqliteParser.ListStatement {
-  try {
-    return parseSql(sql);
-  } catch (error: unknown) {
-    console.warn(`Problem parsing ${sql}: ${String(error)}`);
-    return { type: 'statement', variant: 'list', statement: [] };
-  }
-}
 
 function isBegin(ast: SqliteParser.Statement): boolean {
   switch (ast.variant) {
@@ -69,7 +60,8 @@ function iterateTransaction(
     if (!event.isCall()) continue;
     transaction.push(event);
     if (!event.sql) continue;
-    const sql = tryParse(event.sql.sql);
+    const sql = buildQueryAST(event.sql.sql);
+    if (!sql) continue;
     if (isBegin(sql)) throw new Error('Transaction started within a transaction.');
     const end = isEnd(sql);
     if (end) {
@@ -79,7 +71,7 @@ function iterateTransaction(
   }
   return {
     scope: begin,
-    events: () => transaction[Symbol.iterator]() as Generator<Event>,
+    events: transaction[Symbol.iterator] as () => Generator<Event>,
   };
 }
 
@@ -87,8 +79,8 @@ export default class SQLTransactionScope extends ScopeIterator {
   *scopes(events: IterableIterator<Event>): Generator<Scope, void, void> {
     for (const event of events) {
       if (!event.isCall() || !event.sql) continue;
-      const sql = tryParse(event.sql.sql);
-      if (isBegin(sql) && !isEnd(sql)) {
+      const sql = buildQueryAST(event.sql.sql);
+      if (sql && isBegin(sql) && !isEnd(sql)) {
         yield iterateTransaction(event, events);
       }
     }
