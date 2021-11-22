@@ -72,6 +72,16 @@
       </ul>
     </div>
 
+    <div class="event-params" v-if="object.exceptions.length">
+      <h5>Exceptions</h5>
+      <ul class="table-01">
+        <li v-for="exception in object.exceptions" :key="exception.object_id">
+          <strong>{{ exception.class }}</strong>
+          <code>{{ exception.message }}</code>
+        </li>
+      </ul>
+    </div>
+
     <div class="event-params" v-if="hasReturnValue">
       <h5>Return value</h5>
       <ul class="table-01">
