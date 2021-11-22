@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://app.land/scanner-config.json",
+  "title": "Scanners",
+  "type": "object",
+  "properties": {
+    "scanners": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "oneOf": [
+                {
+                  "required": ["regexp"]
+                },
+                {
+                  "required": ["function"]
+                }
+              ],
+              "properties": {
+                "regexp": {
+                  "type": "string"
+                },
+                "function": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "exclude": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["pattern"],
+              "properties": {
+                "pattern": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "properties": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": ["scanners"]
+}

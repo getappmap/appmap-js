@@ -1,16 +1,14 @@
 import { Event } from '@appland/models';
 import Assertion from '../assertion';
 import * as types from './types';
-import minimatch from 'minimatch';
 import { AssertionSpec } from 'src/types';
 
 class Options implements types.IllegalPackageDependency.Options {
-  constructor(public selector: string = '*', public packageNames: string[] = []) {}
+  public allowedPackages: string[] = [];
 }
 
 function scanner(options: Options): Assertion {
-  const selectorExp = minimatch.makeRe(options.selector);
-  const packageNamesStr = options.packageNames.join(' or ');
+  const packageNamesStr = options.allowedPackages.join(' or ');
 
   return Assertion.assert(
     'illegal-package-dependency',
@@ -20,7 +18,7 @@ function scanner(options: Options): Assertion {
       if (
         !(
           e.codeObject.packageOf === parentPackage ||
-          options.packageNames.some((pkg) => parentPackage === pkg)
+          options.allowedPackages.some((pkg) => parentPackage === pkg)
         )
       ) {
         return `Code object ${e.codeObject.id} was invoked from ${parentPackage}, not from ${packageNamesStr}`;
@@ -28,11 +26,9 @@ function scanner(options: Options): Assertion {
     },
     (assertion: Assertion): void => {
       assertion.where = (e: Event) => {
-        return (
-          !!e.parent && !!e.parent!.codeObject.packageOf && selectorExp.test(e.codeObject.fqid)
-        );
+        return !!e.parent && !!e.parent!.codeObject.packageOf;
       };
-      assertion.description = `Code object ${options.selector} must be invoked from package ${packageNamesStr}`;
+      assertion.description = `Code object must be invoked from package ${packageNamesStr}`;
     }
   );
 }

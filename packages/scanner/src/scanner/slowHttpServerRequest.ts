@@ -4,10 +4,10 @@ import * as types from './types';
 import Assertion from '../assertion';
 
 class Options implements types.SlowHTTPServerRequest.Options {
-  constructor(public timeAllowed = 1) {}
+  public timeAllowed = 1;
 }
 
-function scanner(options: Options = new Options()): Assertion {
+function scanner(options: Options): Assertion {
   return Assertion.assert(
     'slow-http-server-request',
     'Slow HTTP server requests',

@@ -55,19 +55,22 @@ const scanner = function (): Assertion {
     'secret-in-log',
     'Secret in log',
     (e: Event) => {
-      if (e.codeObject.labels.has('secret')) {
+      if (e.codeObject.labels.has(Secret)) {
         recordSecrets(secrets, e);
       }
-      if (e.parameters && e.codeObject.labels.has('log')) {
+      if (e.parameters && e.codeObject.labels.has(Log)) {
         return findInLog(e);
       }
     },
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
-        e.codeObject.labels.has('log') || e.codeObject.labels.has('secret');
+        e.codeObject.labels.has(Log) || e.codeObject.labels.has(Secret);
       assertion.description = `Log contains secret-like text`;
     }
   );
 };
 
-export default { scanner, enumerateScope: true } as AssertionSpec;
+const Secret = 'secret';
+const Log = 'log';
+
+export default { Labels: [Secret, Log], scanner, enumerateScope: true } as AssertionSpec;

@@ -1,15 +1,11 @@
-import { Event, EventNavigator, Label } from '@appland/models';
+import { Event, EventNavigator } from '@appland/models';
 import { AssertionSpec } from 'src/types';
 import * as types from './types';
 import Assertion from '../assertion';
 import { RPCWithoutProtectionOptions, rpcWithoutProtection } from './lib/rpcWithoutProtection';
 
 class Options implements RPCWithoutProtectionOptions, types.RPCWithoutCircuitBreaker.Options {
-  constructor(public label: string = RPCCircuitBreaker) {}
-
-  get expectedLabel(): Label {
-    return this.label;
-  }
+  public expectedLabel: string = RPCCircuitBreaker;
 }
 
 // The circuit breaker will be found in a descendant of the httpClientRequest.

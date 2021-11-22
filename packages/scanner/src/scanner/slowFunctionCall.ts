@@ -2,22 +2,9 @@ import { Event } from '@appland/models';
 import { AssertionSpec, ScopeName } from 'src/types';
 import * as types from './types';
 import Assertion from '../assertion';
-import { toRegExp } from './util';
 
 class Options implements types.SlowFunctionCall.Options {
-  private _codeObjectRegExp: RegExp;
-
-  constructor(public timeAllowed = 0.1, codeObjectName: string | RegExp) {
-    this._codeObjectRegExp = toRegExp(codeObjectName);
-  }
-
-  get codeObjectName(): RegExp {
-    return this._codeObjectRegExp;
-  }
-
-  set codeObjectName(pattern: RegExp) {
-    this._codeObjectRegExp = toRegExp(pattern);
-  }
+  public timeAllowed = 0.1;
 }
 
 function scanner(options: Options): Assertion {
@@ -31,11 +18,7 @@ function scanner(options: Options): Assertion {
     },
     (assertion: Assertion): void => {
       assertion.where = (e: Event) =>
-        e.isFunction &&
-        !!e.returnEvent &&
-        !!e.returnEvent.elapsedTime &&
-        !!e.codeObject.id &&
-        options.codeObjectName.test(e.codeObject.id);
+        e.isFunction && !!e.returnEvent && !!e.returnEvent.elapsedTime && !!e.codeObject.id;
       assertion.description = `Slow function call (> ${options.timeAllowed * 1000}ms)`;
     }
   );

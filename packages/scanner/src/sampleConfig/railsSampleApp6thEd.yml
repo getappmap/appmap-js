@@ -2,18 +2,20 @@ scanners:
   - id: authzBeforeAuthn
   - id: http500
   - id: illegalPackageDependency
+    include:
+      - regexp: ^function:app\/controllers\/
     properties:
-      selector: function:app/controllers/*
-      packageNames: [ 'actionpack' ]
+      allowedPackages: [ 'actionpack' ]
   - id: insecureCompare
   - id: missingAuthentication
   - id: missingContentType
   - id: nPlusOneQuery
   - id: secretInLog
   - id: slowFunctionCall
+    include:
+      - regexp: ^function:app/controllers/\w+Controller#create$
     properties:
       timeAllowed: 0.2
-      codeObjectName: .*Controller#create
   - id: slowHttpServerRequest
     properties:
       timeAllowed: 0.5

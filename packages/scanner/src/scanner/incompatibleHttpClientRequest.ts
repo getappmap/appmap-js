@@ -7,7 +7,7 @@ import OpenApiDiff from 'openapi-diff';
 import { OpenAPIV3 } from 'openapi-types';
 
 class Options implements types.IncompatibleHttpClientRequest.Options {
-  constructor(public schemata: Record<string, string>) {}
+  public schemata: Record<string, string> = {};
 }
 
 const changeMessage = (change: OpenApiDiff.DiffResult<'breaking'>): string => {
@@ -19,7 +19,7 @@ const changeMessage = (change: OpenApiDiff.DiffResult<'breaking'>): string => {
     .join(', ')}`;
 };
 
-function scanner(options: Options = new Options({})): Assertion {
+function scanner(options: Options): Assertion {
   const checkCompatibility = async (event: Event): Promise<MatchResult[]> => {
     const clientFragment = forClientRequest(event);
     const serverSchema = await forURL(event.httpClientRequest!.url!, options.schemata);

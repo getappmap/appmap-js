@@ -6,25 +6,22 @@ interface WarningLimit {
   warningLimit?: number;
 }
 
+export namespace IllegalPackageDependency {
+  export interface Options {
+    allowedPackages: string[];
+  }
+}
+
 export namespace IncompatibleHttpClientRequest {
   export interface Options {
     schemata: Record<string, string>;
   }
 }
 
-export namespace IllegalPackageDependency {
-  export interface Options {
-    selector?: string;
-    packageNames?: string[];
-  }
-}
-
 export namespace MissingAuthentication {
   export interface Options {
-    // Allow list of routes to analyze. Default: all routes.
-    routes?: string | RegExp[];
-    // Allow list of content types to analyze. Default: all content types.
-    contentTypes?: string | RegExp[];
+    includeContentTypes?: string[];
+    excludeContentTypes?: string[];
   }
 }
 
@@ -36,8 +33,8 @@ export namespace NPlusOneQuery {
 
 export namespace QueryFromInvalidPackage {
   export interface Options {
-    parentPackages: string[];
-    allowList?: RegExp[];
+    allowedPackages: string[];
+    skipQueries?: string[];
   }
 }
 
@@ -49,14 +46,13 @@ export namespace QueryFromView {
 
 export namespace RPCWithoutCircuitBreaker {
   export interface Options {
-    label?: string;
+    expectedLabel?: string;
   }
 }
 
 export namespace SlowFunctionCall {
-  export interface Options extends TimeAllowed {
-    codeObjectName: string | RegExp;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  export interface Options extends TimeAllowed {}
 }
 
 export namespace SlowHTTPServerRequest {
@@ -65,10 +61,8 @@ export namespace SlowHTTPServerRequest {
 }
 
 export namespace SlowQuery {
-  export interface Options extends TimeAllowed {
-    includeList: RegExp[];
-    excludeList: RegExp[];
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  export interface Options extends TimeAllowed {}
 }
 
 export namespace TooManyJoins {

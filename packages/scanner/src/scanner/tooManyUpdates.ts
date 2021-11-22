@@ -3,30 +3,28 @@ import { AssertionSpec, MatchResult } from 'src/types';
 import * as types from './types';
 import Assertion from '../assertion';
 
+// TODO: Use the Query AST for this.
+const QueryIncludes: RegExp[] = [/\bINSERT\b/i, /\bUPDATE\b/i];
+const UpdateMethods: string[] = ['put', 'post', 'patch'];
+
 class Options implements types.TooManyUpdates.Options {
-  constructor(
-    public warningLimit: number = 20,
-    public queryIncludes: string[] = ['\\binsert\\b', '\\bupdate\\b'],
-    public updateMethods: string[] = ['put', 'post', 'patch']
-  ) {}
+  public warningLimit = 20;
 }
 
-function scanner(options: Options = new Options()): Assertion {
-  const sqlPatterns = options.queryIncludes.map((pattern) => new RegExp(pattern, 'i'));
-
+function scanner(options: Options): Assertion {
   const isUpdate = (event: Event): boolean => {
     const isSQLUpdate = (): boolean => {
       if (!event.sqlQuery) {
         return false;
       }
-      return sqlPatterns.some((pattern) => pattern.test(event.sqlQuery!));
+      return QueryIncludes.some((pattern) => pattern.test(event.sqlQuery!));
     };
 
     const isRPCUpdate = (): boolean => {
       if (!event.httpClientRequest) {
         return false;
       }
-      return options.updateMethods.includes(event.httpClientRequest!.request_method.toLowerCase());
+      return UpdateMethods.includes(event.httpClientRequest!.request_method.toLowerCase());
     };
 
     return isSQLUpdate() || isRPCUpdate();

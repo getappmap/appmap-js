@@ -4,7 +4,7 @@ import { AssertionSpec } from 'src/types';
 import Assertion from '../assertion';
 
 class Options implements types.QueryFromView.Options {
-  constructor(public forbiddenLabel: Label = 'mvc.template') {}
+  public forbiddenLabel: Label = 'mvc.template';
 }
 
 function scanner(options: Options = new Options()): Assertion {

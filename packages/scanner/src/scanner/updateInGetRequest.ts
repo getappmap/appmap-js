@@ -52,7 +52,7 @@ function scanner(options: Options = new Options()): Assertion {
       if (
         options.queryInclude.some((pattern) => e.sqlQuery!.match(pattern)) &&
         !options.queryExclude.some((pattern) => e.sqlQuery!.match(pattern)) &&
-        !e.ancestors().some((ancestor) => ancestor.codeObject.labels.has('log')) &&
+        !e.ancestors().some((ancestor) => ancestor.codeObject.labels.has(Audit)) &&
         hasHttpServerRequest()
       ) {
         return `Data update performed in ${httpServerRequest!.route}: ${e.sqlQuery}`;
@@ -64,5 +64,7 @@ function scanner(options: Options = new Options()): Assertion {
     }
   );
 }
+
+const Audit = 'audit';
 
 export default { scope: 'http_server_request', Options, scanner } as AssertionSpec;
