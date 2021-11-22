@@ -692,6 +692,43 @@ context('VS Code Extension', () => {
       });
     });
 
+    it('highlight and loop through events selected from Trace view filter', () => {
+      cy.get('.tabs .tab-btn').last().click();
+
+      cy.get('.trace-view__search-input-element').type(
+        'event:1 event:3 event:15'
+      );
+
+      cy.get('.trace-node[data-event-id="1"]')
+        .should('be.visible')
+        .should('have.class', 'highlight');
+
+      cy.get('.trace-node[data-event-id="3"]').should('not.be.visible');
+
+      cy.get('.trace-view__search-arrows-text').should(
+        'contain.text',
+        '1/3 results'
+      );
+
+      cy.get('.trace-view__search-arrow').last().click();
+
+      cy.get('.trace-node[data-event-id="3"]')
+        .should('be.visible')
+        .should('have.class', 'highlight');
+
+      cy.get('.trace-view__search-arrow').last().click();
+
+      cy.get('.trace-node[data-event-id="15"]')
+        .should('be.visible')
+        .should('have.class', 'highlight');
+
+      cy.get('.trace-view__search-arrow').first().click();
+
+      cy.get('.trace-node[data-event-id="3"]')
+        .should('be.visible')
+        .should('have.class', 'highlight');
+    });
+
     it('filters: root objects', () => {
       cy.get(
         '.node[data-id="active_support/ActiveSupport::SecurityUtils"]'
