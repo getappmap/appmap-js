@@ -580,7 +580,9 @@ export default {
       const nodes = [];
 
       if (this.traceFilterValue) {
-        const knownEventIds = this.filteredAppMap.events.map((e) => e.id);
+        const knownEventIds = this.filteredAppMap.events
+          .filter((e) => e.isCall())
+          .map((e) => e.id);
         const filterValue = this.traceFilterValue.trim().split(' ');
         if (filterValue.length) {
           filterValue.forEach((item) => {

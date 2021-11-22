@@ -696,7 +696,7 @@ context('VS Code Extension', () => {
       cy.get('.tabs .tab-btn').last().click();
 
       cy.get('.trace-view__search-input-element').type(
-        'event:1 event:3 event:15'
+        'event:1 event:3 event:15 event:99999'
       );
 
       cy.get('.trace-node[data-event-id="1"]')
