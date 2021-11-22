@@ -728,6 +728,10 @@ export default {
         state.selectedObject = `label:${this.selectedLabel}`;
       }
 
+      if (this.traceFilterValue) {
+        state.traceFilter = this.traceFilterValue;
+      }
+
       return JSON.stringify(state);
     },
 
@@ -769,6 +773,9 @@ export default {
         if (selectedObject) {
           this.$store.commit(SELECT_OBJECT, selectedObject);
         }
+      }
+      if (state.traceFilter) {
+        this.traceFilterValue = state.traceFilter;
       }
     },
 
