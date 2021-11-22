@@ -51,9 +51,11 @@ function isMetadataQuery(ast: any): boolean {
 
 function isBatched(e: Event): boolean {
   const ast = buildQueryAST(e.sqlQuery!);
-  //console.warn(JSON.stringify(ast, null, 2));
+  if (!ast) {
+    return true;
+  }
+
   return hasLimitClause(ast) || isCount(ast) || isMetadataQuery(ast);
-  // return true;
 }
 
 function isMaterialized(e: Event): boolean | undefined {
