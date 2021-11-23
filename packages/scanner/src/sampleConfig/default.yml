@@ -1,4 +1,5 @@
 scanners:
+  - id: circularDependency
   - id: http500
   - id: missingContentType
   - id: nPlusOneQuery

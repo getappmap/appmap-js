@@ -15,6 +15,10 @@ export default class Graph {
     this.isDirected = isDirected;
   }
 
+  get vertexCount(): number {
+    return Object.keys(this.vertices).length;
+  }
+
   addVertex(newVertex: GraphVertex): Graph {
     this.vertices[newVertex.getKey()] = newVertex;
 

@@ -1,11 +1,12 @@
 import { buildAppMap, Event } from '@appland/models';
-import slowHttpServerRequest from '../src/scanner/slowHttpServerRequest';
-import missingAuthentication from '../src/scanner/missingAuthentication';
-import secretInLog from '../src/scanner/secretInLog';
-import nPlusOneQuery from '../src/scanner/nPlusOneQuery';
-import tooManyUpdates from '../src/scanner/tooManyUpdates';
-import insecureCompare from '../src/scanner/insecureCompare';
+import circularDependency from '../src/scanner/circularDependency';
 import http500 from '../src/scanner/http500';
+import insecureCompare from '../src/scanner/insecureCompare';
+import missingAuthentication from '../src/scanner/missingAuthentication';
+import slowHttpServerRequest from '../src/scanner/slowHttpServerRequest';
+import nPlusOneQuery from '../src/scanner/nPlusOneQuery';
+import secretInLog from '../src/scanner/secretInLog';
+import tooManyUpdates from '../src/scanner/tooManyUpdates';
 import illegalPackageAccess from '../src/scanner/illegalPackageDependency';
 import rpcWithoutCircuitBreaker from '../src/scanner/rpcWithoutCircuitBreaker';
 import incompatibleHTTPClientRequest from '../src/scanner/incompatibleHttpClientRequest';
@@ -49,6 +50,15 @@ const makePrototype = (
 };
 
 describe('assert', () => {
+  it('circular dependency', async () => {
+    const { scope, enumerateScope, scanner } = circularDependency;
+    const findings = await scan(
+      makePrototype('circular-dependency', () => scanner(), enumerateScope, scope as ScopeName),
+      'Password_resets_password_resets.appmap.json'
+    );
+    console.warn(JSON.stringify(findings, null, 2));
+  });
+
   it('slow HTTP server request', async () => {
     const { scope, enumerateScope, scanner, Options } = slowHttpServerRequest;
     const options = new Options();
@@ -131,7 +141,7 @@ describe('assert', () => {
     expect(finding1.event.id).toEqual(133);
     expect(finding1.relatedEvents!).toHaveLength(30);
     expect(finding1.message).toEqual(
-      `30 occurrences of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
+      `30 occurrences of SQL: SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?`
     );
   });
 

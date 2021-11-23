@@ -41,7 +41,7 @@ function depthFirstSearchRecursive(
   previousVertex: GraphVertex | null,
   callbacks: Callbacks
 ) {
-  if ( !callbacks.enterVertex(currentVertex, previousVertex) ) {
+  if (!callbacks.enterVertex(currentVertex, previousVertex)) {
     return;
   }
 

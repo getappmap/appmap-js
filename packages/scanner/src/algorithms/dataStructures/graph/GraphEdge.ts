@@ -15,7 +15,7 @@ export default class GraphEdge {
     const startVertexKey = this.startVertex.getKey();
     const endVertexKey = this.endVertex.getKey();
 
-    return `${startVertexKey}_${endVertexKey}`;
+    return `${startVertexKey} - ${endVertexKey}`;
   }
 
   reverse(): GraphEdge {

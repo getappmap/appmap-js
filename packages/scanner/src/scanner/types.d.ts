@@ -12,6 +12,12 @@ export namespace IllegalPackageDependency {
   }
 }
 
+export namespace CircularDependency {
+  export interface Options {
+    ignorePackages?: string[];
+  }
+}
+
 export namespace IncompatibleHttpClientRequest {
   export interface Options {
     schemata: Record<string, string>;
