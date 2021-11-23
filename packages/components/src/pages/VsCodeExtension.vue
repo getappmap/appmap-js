@@ -464,6 +464,11 @@ export default {
         this.currentTraceFilterIndex = 0;
       },
     },
+    filteredAppMap: {
+      handler() {
+        this.clearSelection();
+      },
+    },
   },
 
   computed: {
@@ -487,10 +492,14 @@ export default {
       if (this.filters.rootObjects.length) {
         let eventBranches = [];
 
-        this.filters.rootObjects.forEach((id) => {
-          const filterRegExp = new RegExp(id, 'ig');
-          classMap.codeObjects.forEach((codeObject) => {
-            if (!filterRegExp.test(codeObject.fqid)) {
+        classMap.codeObjects.forEach((codeObject) => {
+          this.filters.rootObjects.forEach((id) => {
+            if (id.includes('*')) {
+              const filterRegExp = new RegExp(id, 'ig');
+              if (!filterRegExp.test(codeObject.fqid)) {
+                return;
+              }
+            } else if (id !== codeObject.fqid) {
               return;
             }
 
@@ -848,7 +857,6 @@ export default {
 
       this.filters.declutter.hideName.names.push(objectName);
       this.filters.declutter.hideName.on = true;
-      this.clearSelection();
     },
 
     removeHiddenName(index) {
@@ -856,7 +864,6 @@ export default {
       if (this.filters.declutter.hideName.names.length === 0) {
         this.filters.declutter.hideName.on = false;
       }
-      this.clearSelection();
     },
 
     addRootObject(fqid) {
@@ -867,12 +874,10 @@ export default {
       }
 
       this.filters.rootObjects.push(objectFqid);
-      this.clearSelection();
     },
 
     removeRootObject(index) {
       this.filters.rootObjects.splice(index, 1);
-      this.clearSelection();
     },
 
     filterMediaRequests(events) {
