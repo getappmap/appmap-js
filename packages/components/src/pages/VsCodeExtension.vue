@@ -549,13 +549,13 @@ export default {
         });
       }
 
-      const eventIds = events.filter((e) => e.isCall()).map((e) => e.id);
+      const eventIds = new Set(
+        events.filter((e) => e.isCall()).map((e) => e.id)
+      );
 
       return buildAppMap({
         events: events.filter(
-          (e) =>
-            (e.isCall() && eventIds.includes(e.id)) ||
-            eventIds.includes(e.parent_id)
+          (e) => eventIds.has(e.id) || eventIds.has(e.parent_id)
         ),
         classMap: classMap.roots.map((c) => ({ ...c.data })),
         metadata: appMap.metadata,
