@@ -155,7 +155,6 @@
                       <label class="filters__checkbox">
                         <input
                           type="checkbox"
-                          @change="setUserFiltered"
                           v-model="filters.declutter.limitRootEvents.on"
                         />
                         <CheckIcon class="filters__checkbox-icon" />
@@ -168,7 +167,6 @@
                       <label class="filters__checkbox">
                         <input
                           type="checkbox"
-                          @change="setUserFiltered"
                           v-model="filters.declutter.hideMediaRequests.on"
                         />
                         <CheckIcon class="filters__checkbox-icon" />
@@ -181,7 +179,6 @@
                       <label class="filters__checkbox">
                         <input
                           type="checkbox"
-                          @change="setUserFiltered"
                           v-model="filters.declutter.hideUnlabeled.on"
                         />
                         <CheckIcon class="filters__checkbox-icon" />
@@ -194,7 +191,6 @@
                       <label class="filters__checkbox">
                         <input
                           type="checkbox"
-                          @change="setUserFiltered"
                           v-model="filters.declutter.hideElapsedTimeUnder.on"
                         />
                         <CheckIcon class="filters__checkbox-icon" />
@@ -217,7 +213,6 @@
                       <label class="filters__checkbox">
                         <input
                           type="checkbox"
-                          @change="setUserFiltered"
                           v-model="filters.declutter.hideName.on"
                         />
                         <CheckIcon class="filters__checkbox-icon" />
@@ -419,7 +414,6 @@ export default {
           },
         },
       },
-      isUserFiltered: false,
       traceFilterValue: '',
       currentTraceFilterIndex: 0,
     };
@@ -649,7 +643,7 @@ export default {
         appMap.classMap.codeObjects.length;
 
       return (
-        !this.isUserFiltered &&
+        !this.filtersChanged &&
         !this.traceFilterValue &&
         (!hasEvents || !hasClassMap)
       );
@@ -829,10 +823,6 @@ export default {
     stopResizing() {
       document.body.style.userSelect = '';
       this.isPanelResizing = false;
-    },
-
-    setUserFiltered() {
-      this.isUserFiltered = true;
     },
 
     resetFilters() {
