@@ -1,13 +1,12 @@
 import Graph from '../../dataStructures/graph/Graph';
-import GraphEdge from '../../dataStructures/graph/GraphEdge';
 import GraphVertex from '../../dataStructures/graph/GraphVertex';
 import { Callbacks, depthFirstSearch } from '../depth-first-search';
 
 /**
  * Detect cycle in directed graph using Depth First Search.
  */
-export default function detectDirectedCycle(graph: Graph): null | Record<string, GraphEdge> {
-  let cycle: Record<string, GraphVertex> | null = null;
+export default function detectDirectedCycle(graph: Graph): Record<string, GraphVertex>[] {
+  const cycles: Record<string, GraphVertex>[] = [];
 
   // Will store parents (previous vertices) for all visited nodes.
   // This will be needed in order to specify what path exactly is a cycle.
@@ -35,11 +34,12 @@ export default function detectDirectedCycle(graph: Graph): null | Record<string,
 
   // Describe BFS callbacks.
   const callbacks: Callbacks = {
-    enterVertex: (currentVertex: GraphVertex, previousVertex: GraphVertex | null): void => {
+    enterVertex: (currentVertex: GraphVertex, previousVertex: GraphVertex | null): boolean => {
       if (graySet.has(currentVertex.getKey())) {
         // If current vertex already in grey set it means that cycle is detected.
         // Let's detect cycle path.
-        cycle = {};
+        const cycle: Record<string, GraphVertex> = {};
+        cycles.push(cycle);
 
         let currentCycleVertex = currentVertex;
         let previousCycleVertex = previousVertex;
@@ -51,6 +51,8 @@ export default function detectDirectedCycle(graph: Graph): null | Record<string,
         }
 
         cycle[currentCycleVertex.getKey()] = previousCycleVertex!;
+
+        return false;
       } else {
         // Otherwise let's add current vertex to gray set and remove it from white set.
         graySet.set(currentVertex.getKey(), currentVertex);
@@ -58,6 +60,8 @@ export default function detectDirectedCycle(graph: Graph): null | Record<string,
 
         // Update DFS parents list.
         dfsParentMap.set(currentVertex.getKey(), previousVertex!);
+
+        return true;
       }
     },
     leaveVertex: (currentVertex: GraphVertex): void => {
@@ -71,12 +75,6 @@ export default function detectDirectedCycle(graph: Graph): null | Record<string,
       _currentVertex: GraphVertex,
       nextVertex: GraphVertex
     ): boolean => {
-      // If cycle was detected we must forbid all further traversing since it will
-      // cause infinite traversal loop.
-      if (cycle) {
-        return false;
-      }
-
       // Allow traversal only for the vertices that are not in black set
       // since all black set vertices have been already visited.
       return !blackSet.has(nextVertex.getKey());
@@ -91,5 +89,5 @@ export default function detectDirectedCycle(graph: Graph): null | Record<string,
     depthFirstSearch(graph, startVertex, callbacks);
   }
 
-  return cycle;
+  return cycles;
 }

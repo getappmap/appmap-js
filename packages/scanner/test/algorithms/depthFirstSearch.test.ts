@@ -36,7 +36,7 @@ describe('depthFirstSearch', () => {
 
     expect(graph.toString()).toBe('A,B,C,G,D,E,F');
 
-    const enterVertexCallback = jest.fn();
+    const enterVertexCallback = jest.fn().mockReturnValue(true);
     const leaveVertexCallback = jest.fn();
 
     // Traverse graphs without callbacks first to check default ones.
@@ -116,7 +116,7 @@ describe('depthFirstSearch', () => {
 
     expect(graph.toString()).toBe('A,B,C,G,D,E,F');
 
-    const enterVertexCallback = jest.fn();
+    const enterVertexCallback = jest.fn().mockReturnValue(true);
     const leaveVertexCallback = jest.fn();
 
     depthFirstSearch(graph, vertexA, {

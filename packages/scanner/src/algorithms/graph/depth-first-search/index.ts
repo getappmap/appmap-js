@@ -41,7 +41,9 @@ function depthFirstSearchRecursive(
   previousVertex: GraphVertex | null,
   callbacks: Callbacks
 ) {
-  callbacks.enterVertex(currentVertex, previousVertex);
+  if ( !callbacks.enterVertex(currentVertex, previousVertex) ) {
+    return;
+  }
 
   graph.getNeighbors(currentVertex).forEach((nextVertex: GraphVertex) => {
     if (callbacks.allowTraversal(previousVertex, currentVertex, nextVertex)) {
@@ -61,7 +63,7 @@ export interface Callbacks {
     nextVertex: GraphVertex
   ) => boolean;
   // Called when DFS enters the vertex.
-  enterVertex: (currentVertex: GraphVertex, previousVertex: GraphVertex | null) => void;
+  enterVertex: (currentVertex: GraphVertex, previousVertex: GraphVertex | null) => boolean;
   // Called when DFS leaves the vertex
   leaveVertex: (currentVertex: GraphVertex, previousVertex: GraphVertex | null) => void;
 }
