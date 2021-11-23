@@ -934,11 +934,9 @@ export default {
       ];
 
       events.forEach((e) => {
-        const eventName = e.codeObject.prettyName;
-
         if (
-          eventName.startsWith('GET') &&
-          mediaFileExtensions.some((ext) => eventName.endsWith(ext))
+          e.requestMethod === 'GET' &&
+          mediaFileExtensions.some((ext) => e.requestPath.endsWith(ext))
         ) {
           excludedEvents.push(e.id);
         } else if (
