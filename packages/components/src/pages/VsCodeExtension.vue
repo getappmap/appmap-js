@@ -223,6 +223,7 @@
                           :onSubmit="addHiddenName"
                           placeholder="find names..."
                           :suggestions="hideNamesSuggestions"
+                          suggestions-placement="top"
                         />
                         <div
                           class="filters__hide"
@@ -484,6 +485,8 @@ export default {
       }, []);
 
       if (this.filters.rootObjects.length) {
+        let eventBranches = [];
+
         this.filters.rootObjects.forEach((id) => {
           const filterRegExp = new RegExp(id, 'ig');
           classMap.codeObjects.forEach((codeObject) => {
@@ -491,18 +494,19 @@ export default {
               return;
             }
 
-            const eventBranches = codeObject.allEvents.map((e) => [
-              e.id,
-              e.linkedEvent.id,
-            ]);
-
-            events = events.filter((e) =>
-              eventBranches.some(
-                (branch) => e.id >= branch[0] && e.id <= branch[1]
-              )
+            eventBranches = eventBranches.concat(
+              codeObject.allEvents.map((e) => [e.id, e.linkedEvent.id])
             );
           });
         });
+
+        if (eventBranches.length) {
+          events = events.filter((e) =>
+            eventBranches.some(
+              (branch) => e.id >= branch[0] && e.id <= branch[1]
+            )
+          );
+        }
       }
 
       if (this.filters.declutter.hideMediaRequests.on) {
@@ -666,10 +670,9 @@ export default {
       this.$store.commit(SET_APPMAP_DATA, data);
 
       const rootEvents = this.$store.state.appMap.rootEvents();
-
-      if (rootEvents.every((e) => !e.httpServerRequest)) {
-        this.filters.declutter.limitRootEvents.on = false;
-      }
+      const hasHttpRoot = rootEvents.some((e) => e.httpServerRequest);
+      this.filters.declutter.limitRootEvents.on = hasHttpRoot;
+      this.filters.declutter.limitRootEvents.default = hasHttpRoot;
 
       this.isLoading = false;
     },

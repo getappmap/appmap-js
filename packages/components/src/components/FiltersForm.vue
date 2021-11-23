@@ -46,6 +46,11 @@ export default {
       type: Array,
       default: () => [],
     },
+    suggestionsPlacement: {
+      type: String,
+      default: 'bottom',
+      validator: (value) => ['top', 'bottom'].indexOf(value) !== -1,
+    },
   },
 
   data() {
@@ -60,6 +65,9 @@ export default {
       const classList = ['filters__form'];
       if (this.showSuggestions && this.suggestionsList.length) {
         classList.push('filters__form--show-suggestions');
+      }
+      if (this.suggestionsPlacement === 'top') {
+        classList.push('filters__form--suggestions-top');
       }
       return classList;
     },
@@ -111,6 +119,10 @@ export default {
 
   &--show-suggestions {
     border-radius: 0.25rem 0.25rem 0 0;
+
+    &.filters__form--suggestions-top {
+      border-radius: 0 0 0.25rem 0.25rem;
+    }
   }
 
   &-input {
@@ -155,6 +167,12 @@ export default {
 
     .filters__form--show-suggestions & {
       display: block;
+    }
+
+    .filters__form--suggestions-top & {
+      top: auto;
+      bottom: 100%;
+      border-radius: 0.25rem 0.25rem 0 0;
     }
 
     &-item {

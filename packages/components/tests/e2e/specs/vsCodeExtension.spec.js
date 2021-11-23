@@ -743,6 +743,10 @@ context('VS Code Extension', () => {
 
       cy.get('.filters .filters__root .filters__root-icon').click();
       cy.get('.nodes .node').should('have.length', 9);
+
+      cy.get('.filters__form-input').first().focus();
+      cy.get('.filters__form-suggestions-item').eq(1).click();
+      cy.get('.nodes .node').should('have.length', 3);
     });
 
     it('filters: limit root events', () => {

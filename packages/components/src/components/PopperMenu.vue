@@ -113,6 +113,7 @@ export default {
     font-family: $appland-text-font-family;
     color: $gray6;
     background: #191919;
+    overflow: auto;
 
     .popper--v-top & {
       bottom: 100%;
