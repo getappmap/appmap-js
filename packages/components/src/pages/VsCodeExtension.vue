@@ -893,7 +893,7 @@ export default {
         'text/css',
         'video/.+',
       ].map((t) => new RegExp(t, 'i'));
-      const mediaFileExtensions = [
+      const mediaFileExtensions = new Set([
         'aac',
         'avi',
         'bmp',
@@ -936,14 +936,14 @@ export default {
         'xhtml',
         '3gp',
         '3g2',
-      ];
+      ]);
 
       events.forEach((e) => {
-        if (
-          e.requestMethod === 'GET' &&
-          mediaFileExtensions.some((ext) => e.requestPath.endsWith(ext))
-        ) {
-          excludedEvents.push(e.id);
+        if (e.requestMethod === 'GET' && e.requestPath) {
+          const pathExt = e.requestPath.match(/.*\.([\S]*)$/);
+          if (pathExt && mediaFileExtensions.has(pathExt[1])) {
+            excludedEvents.push(e.id);
+          }
         } else if (
           e.http_server_response &&
           e.http_server_response.mime_type &&
