@@ -494,18 +494,11 @@ export default {
 
         classMap.codeObjects.forEach((codeObject) => {
           this.filters.rootObjects.forEach((id) => {
-            if (id.includes('*')) {
-              const filterRegExp = new RegExp(id, 'ig');
-              if (!filterRegExp.test(codeObject.fqid)) {
-                return;
-              }
-            } else if (id !== codeObject.fqid) {
-              return;
+            if (this.isMatchedId(codeObject.fqid, id)) {
+              eventBranches = eventBranches.concat(
+                codeObject.allEvents.map((e) => [e.id, e.linkedEvent.id])
+              );
             }
-
-            eventBranches = eventBranches.concat(
-              codeObject.allEvents.map((e) => [e.id, e.linkedEvent.id])
-            );
           });
         });
 
@@ -546,13 +539,12 @@ export default {
         this.filters.declutter.hideName.on &&
         this.filters.declutter.hideName.names.length
       ) {
-        this.filters.declutter.hideName.names.forEach((fqid) => {
-          const codeObject = classMap.codeObjects.filter(
-            (co) => co.fqid === fqid
-          )[0];
-          if (codeObject) {
-            events = events.filter((e) => !codeObject.allEvents.includes(e));
-          }
+        classMap.codeObjects.forEach((codeObject) => {
+          this.filters.declutter.hideName.names.forEach((fqid) => {
+            if (this.isMatchedId(codeObject.fqid, fqid)) {
+              events = events.filter((e) => !codeObject.allEvents.includes(e));
+            }
+          });
         });
       }
 
@@ -956,6 +948,18 @@ export default {
       });
 
       return events.filter((e) => !excludedEvents.includes(e.id));
+    },
+
+    isMatchedId(objectId, query) {
+      if (query.includes('*')) {
+        const filterRegExp = new RegExp(`^${query.replace('*', '.*')}$`, 'ig');
+        if (filterRegExp.test(objectId)) {
+          return true;
+        }
+      } else if (query === objectId) {
+        return true;
+      }
+      return false;
     },
 
     prevTraceFilter() {

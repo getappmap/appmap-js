@@ -760,6 +760,17 @@ context('VS Code Extension', () => {
         .parent()
         .submit();
       cy.get('.trace .trace-node').should('have.length', 2);
+      cy.get('.filters .filters__root .filters__root-icon').click();
+
+      cy.get('.tabs .tab-btn').first().click();
+      cy.get('.nodes .node').should('have.length', 9);
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__form-input')
+        .first()
+        .type('package:*/controllers')
+        .parent()
+        .submit();
+      cy.get('.nodes .node').should('have.length', 3);
     });
 
     it('filters: limit root events', () => {

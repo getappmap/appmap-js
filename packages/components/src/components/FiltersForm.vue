@@ -4,7 +4,6 @@
       class="filters__form-input"
       type="text"
       :placeholder="placeholder"
-      ref="input"
       v-model="inputValue"
       @focus="onInputFocus"
     />
@@ -85,12 +84,13 @@ export default {
       this.showSuggestions = true;
     },
     onFormSubmit() {
+      const value = this.inputValue;
       this.showSuggestions = false;
-      this.onSubmit(this.$refs.input.value);
-      this.$refs.input.value = '';
+      this.inputValue = '';
+      this.onSubmit(value);
     },
     makeSelection(event) {
-      this.$refs.input.value = event.target.textContent;
+      this.inputValue = event.target.textContent;
       this.onFormSubmit();
     },
   },
