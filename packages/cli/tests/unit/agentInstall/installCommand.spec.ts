@@ -104,11 +104,11 @@ describe('install sub-command', () => {
     };
 
     const expectedConfig = `
-    # Fake appmap.yml
-    name: fake-app
-    packages:
-    - com.fake.Fake
-    `;
+# Fake appmap.yml
+name: fake-app
+packages:
+- path: com.fake.Fake
+`;
 
     const initAgent = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('java');
@@ -323,7 +323,7 @@ describe('install sub-command', () => {
 # Fake appmap.yml
 name: fake-app
 packages:
-- app/controllers
+- path: app/controllers
 `;
 
     const initAgent = (cmdStruct: CommandStruct) => {
@@ -483,7 +483,7 @@ packages:
 # Fake appmap.yml
 name: fake-app
 packages:
-- fake_app
+- path: fake_app
     `;
 
     const pythonVersion = (cmdStruct: CommandStruct) => {
@@ -604,6 +604,180 @@ packages:
     });
   });
 
+  describe('A JavaScript project', () => {
+    const jsTestE2E = async (
+      nodeVersion: (command: CommandStruct) => Promise<CommandReturn>,
+      installAgent: (command: CommandStruct) => Promise<CommandReturn>,
+      initAgent: (command: CommandStruct) => Promise<CommandReturn>,
+      validateAgent: (command: CommandStruct) => Promise<CommandReturn>,
+      evalResults: (err: Error | undefined, argv: any, output: string) => void
+    ) => {
+      let callIdx = 0;
+      sinon
+        .stub(commandRunner, 'run')
+        .onCall(callIdx++)
+        .callsFake(nodeVersion)
+        .onCall(callIdx++)
+        .callsFake(installAgent)
+        .onCall(callIdx++)
+        .callsFake(initAgent)
+        .onCall(callIdx++)
+        .callsFake(validateAgent)
+        .onCall(callIdx++);
+
+      return invokeCommand(projectDir, evalResults);
+    };
+
+    const nodeVersion = (cmdStruct: CommandStruct) => {
+      expect(cmdStruct.program).toEqual('node');
+      expect(cmdStruct.args).toEqual(['--version']);
+      return Promise.resolve({ stdout: 'v16.11.1', stderr: '' });
+    };
+    const expectedConfig = `
+    # Fake appmap.yml
+    name: fake-app
+    packages:
+    - path: lib
+    `;
+    
+          const initAgent = (cmdStruct: CommandStruct) => {
+            expect(cmdStruct.program).toEqual('npx');
+            const args = cmdStruct.args;
+            expect(args).toEqual(['appmap-agent-js', 'init', projectDir]);
+            const fakeConfig = `
+    {
+       "configuration": {
+         "contents": "${expectedConfig.replace(/[\n]/g, '\\n')}"
+       }
+    }`;
+            const ret = { stdout: fakeConfig, stderr: '' };
+            return Promise.resolve(ret);
+          };
+    
+          const validateAgent = (cmdStruct: CommandStruct) => {
+            expect(cmdStruct.program).toEqual('npx');
+            const args = cmdStruct.args;
+            expect(args).toEqual(['appmap-agent-js', 'status', projectDir]);
+            const ret = { stdout: '[]', stderr: '' };
+            return Promise.resolve(ret);
+          };
+    
+    describe('managed with npm', () => {
+      const projectFixture = path.join(fixtureDir, 'javascript', 'npm');
+
+      beforeEach(() => {
+        fse.copySync(projectFixture, projectDir);
+        sinon
+          .stub(inquirer, 'prompt')
+          .resolves({ result: 'npm', confirm: true });
+      });
+
+      const installAgent = (cmdStruct: CommandStruct) => {
+        expect(cmdStruct.program).toEqual('npm');
+        expect(cmdStruct.args).toEqual([
+          'install',
+          '--saveDev',
+          '@appland/appmap-agent-js@latest',
+        ]);
+        const ret = { stdout: '', stderr: '' };
+        return Promise.resolve(ret);
+      };
+
+
+      it('installs as expected', async () => {
+        const evalResults = async (err, argv, output) => {
+          expect(err).toBeNull();
+
+          const actualConfig = await fse.readFile(
+            path.join(projectDir, 'appmap.yml'),
+            { encoding: 'utf-8' }
+          );
+          expect(actualConfig).toEqual(expectedConfig);
+        };
+
+        await jsTestE2E(
+          nodeVersion,
+          installAgent,
+          initAgent,
+          validateAgent,
+          evalResults
+        );
+      });
+
+      it('fails when validation fails', async () => {
+        const msg = 'failValidate, validation failed';
+        const failValidate = () => Promise.reject(new Error(msg));
+        const evalResults = (err, argv, output) => {
+          expect(err.message).toMatch(msg);
+        };
+        await jsTestE2E(
+          nodeVersion,
+          installAgent,
+          initAgent,
+          failValidate,
+          evalResults
+        );
+      });
+    });
+    describe('managed with yarn', () => {
+      const projectFixture = path.join(fixtureDir, 'javascript', 'yarn');
+
+      beforeEach(() => {
+        fse.copySync(projectFixture, projectDir);
+        sinon
+          .stub(inquirer, 'prompt')
+          .resolves({ result: 'yarn', confirm: true });
+      });
+
+      const installAgent = (cmdStruct: CommandStruct) => {
+        expect(cmdStruct.program).toEqual('yarn');
+        expect(cmdStruct.args).toEqual([
+          'add',
+          '--dev',
+          '@appland/appmap-agent-js@latest',
+        ]);
+        const ret = { stdout: '', stderr: '' };
+        return Promise.resolve(ret);
+      };
+
+
+      it('installs as expected', async () => {
+        const evalResults = async (err, argv, output) => {
+          expect(err).toBeNull();
+
+          const actualConfig = await fse.readFile(
+            path.join(projectDir, 'appmap.yml'),
+            { encoding: 'utf-8' }
+          );
+          expect(actualConfig).toEqual(expectedConfig);
+        };
+
+        await jsTestE2E(
+          nodeVersion,
+          installAgent,
+          initAgent,
+          validateAgent,
+          evalResults
+        );
+      });
+
+      it('fails when validation fails', async () => {
+        const msg = 'failValidate, validation failed';
+        const failValidate = () => Promise.reject(new Error(msg));
+        const evalResults = (err, argv, output) => {
+          expect(err.message).toMatch(msg);
+        };
+        await jsTestE2E(
+          nodeVersion,
+          installAgent,
+          initAgent,
+          failValidate,
+          evalResults
+        );
+      });
+    });    
+
+  });
   describe('Varied project configurations', () => {
     beforeEach(() => {
       sinon.stub(commandRunner, 'run').resolves({ stdout: '', stderr: '' });
@@ -642,8 +816,12 @@ packages:
       expect(installProcedureStub).not.toBeCalled();
       const sendEventStub = Telemetry.sendEvent as sinon.SinonStub;
       expect(sendEventStub).toBeCalledTwice();
-      expect(sendEventStub.getCall(0)).toBeCalledWithMatch({name: 'install-agent:start'});
-      expect(sendEventStub.getCall(1)).toBeCalledWithMatch({name: 'install-agent:soft_failure'});
+      expect(sendEventStub.getCall(0)).toBeCalledWithMatch({
+        name: 'install-agent:start',
+      });
+      expect(sendEventStub.getCall(1)).toBeCalledWithMatch({
+        name: 'install-agent:soft_failure',
+      });
     });
   });
 
@@ -761,12 +939,19 @@ packages:
       });
 
       expectedStubs.forEach((stub) => expect(stub.called).toBe(true));
-      const sendEventStub = (Telemetry.sendEvent as sinon.SinonStub);
+      const sendEventStub = Telemetry.sendEvent as sinon.SinonStub;
       expect(sendEventStub).toBeCalledTimes(3);
-      expect(sendEventStub.getCall(0)).toBeCalledWithMatch({name: 'install-agent:start'});
-      expect(sendEventStub.getCall(1)).toBeCalledWithMatch({name: 'install-agent:success', properties: {installer: 'Maven'}});
-      expect(sendEventStub.getCall(2)).toBeCalledWithMatch({name: 'install-agent:success', properties: {installer: 'Gradle'}});
-      
+      expect(sendEventStub.getCall(0)).toBeCalledWithMatch({
+        name: 'install-agent:start',
+      });
+      expect(sendEventStub.getCall(1)).toBeCalledWithMatch({
+        name: 'install-agent:success',
+        properties: { installer: 'Maven' },
+      });
+      expect(sendEventStub.getCall(2)).toBeCalledWithMatch({
+        name: 'install-agent:success',
+        properties: { installer: 'Gradle' },
+      });
     });
   });
 });
