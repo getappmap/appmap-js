@@ -1,16 +1,19 @@
 import AgentInstaller from './agentInstaller';
 import GradleInstaller from './gradleInstaller';
 import MavenInstaller from './mavenInstaller';
+import { NpmInstaller, YarnInstaller } from './javaScriptAgentInstaller';
 import { PipInstaller, PoetryInstaller } from './pythonAgentInstaller';
 import { BundleInstaller } from './rubyAgentInstaller';
 
 type AgentInstallerConstructor = new (...args: any[]) => AgentInstaller;
 export const INSTALLERS: readonly AgentInstallerConstructor[] = [
   BundleInstaller,
-  MavenInstaller,
   GradleInstaller,
+  MavenInstaller,
+  NpmInstaller,
   PipInstaller,
   PoetryInstaller,
+  YarnInstaller
 ];
 
 /**
