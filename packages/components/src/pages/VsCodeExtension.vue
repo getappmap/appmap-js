@@ -937,11 +937,17 @@ export default {
             excludedEvents.push(e.id);
           }
         } else if (e.http_server_response) {
-          const mimeType =
-            e.http_server_response.headers &&
-            e.http_server_response.headers['content-type']
-              ? e.http_server_response.headers['content-type']
-              : e.http_server_response.mime_type; // 'mime_type' is no longer supported in the AppMap data standard, but we should keep this code for backward compatibility
+          let mimeType;
+
+          if (e.http_server_response.headers) {
+            const contentTypeKey = Object.keys(
+              e.http_server_response.headers
+            ).filter((k) => k.toLowerCase() === 'content-type')[0];
+
+            mimeType = e.http_server_response.headers[contentTypeKey];
+          } else if (e.http_server_response.mime_type) {
+            mimeType = e.http_server_response.mime_type; // 'mime_type' is no longer supported in the AppMap data standard, but we should keep this code for backward compatibility
+          }
 
           if (mimeType && mediaRegex.some((regex) => regex.test(mimeType))) {
             excludedEvents.push(e.parent_id);
