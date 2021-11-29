@@ -1,3 +1,10 @@
+# [1.24.0](https://github.com/applandinc/scanner/compare/v1.23.0...v1.24.0) (2021-11-29)
+
+
+### Features
+
+* Scanner for job not cancelled ([2ec0488](https://github.com/applandinc/scanner/commit/2ec0488f619de85c4dfaefa3a45addcdffae9816))
+
 # [1.23.0](https://github.com/applandinc/scanner/compare/v1.22.2...v1.23.0) (2021-11-22)
 
 
