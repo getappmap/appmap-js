@@ -936,14 +936,16 @@ export default {
           if (pathExt && mediaFileExtensions.has(pathExt[1])) {
             excludedEvents.push(e.id);
           }
-        } else if (
-          e.http_server_response &&
-          e.http_server_response.mime_type &&
-          mediaRegex.some(
-            (regex) => regex.test(e.http_server_response.mime_type) // 'mime_type' is no longer supported in the AppMap data standard, but we should keep this code for backward compatibility
-          )
-        ) {
-          excludedEvents.push(e.parent_id);
+        } else if (e.http_server_response) {
+          const mimeType =
+            e.http_server_response.headers &&
+            e.http_server_response.headers['content-type']
+              ? e.http_server_response.headers['content-type']
+              : e.http_server_response.mime_type; // 'mime_type' is no longer supported in the AppMap data standard, but we should keep this code for backward compatibility
+
+          if (mimeType && mediaRegex.some((regex) => regex.test(mimeType))) {
+            excludedEvents.push(e.parent_id);
+          }
         }
       });
 
