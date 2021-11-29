@@ -1,4 +1,3 @@
-import type Assertion from '../../src/assertion';
 import JobNotCancelled from '../../src/scanner/jobNotCancelled';
 import type { AssertionPrototype } from '../../src/types';
 import { scan } from '../util';

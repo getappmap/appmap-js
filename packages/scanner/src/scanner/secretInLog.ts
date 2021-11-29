@@ -73,4 +73,4 @@ const scanner = function (): Assertion {
 const Secret = 'secret';
 const Log = 'log';
 
-export default { Labels: [Secret, Log], scanner, enumerateScope: true } as AssertionSpec;
+export default { labels: [Secret, Log], scanner, enumerateScope: true } as AssertionSpec;

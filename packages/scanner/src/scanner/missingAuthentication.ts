@@ -70,7 +70,7 @@ const SecurityAuthentication = 'security.authentication';
 
 export default {
   scope: 'http_server_request',
-  Labels: [Public, SecurityAuthentication],
+  labels: [Public, SecurityAuthentication],
   enumerateScope: false,
   Options,
   scanner,

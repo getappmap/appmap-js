@@ -49,7 +49,7 @@ const SecurityAuthentication = 'security.authentication';
 const SecurityAuthorization = 'security.authorization';
 
 export default {
-  Labels: [SecurityAuthorization, SecurityAuthentication],
+  labels: [SecurityAuthorization, SecurityAuthentication],
   scope: 'http_server_request',
   enumerateScope: false,
   scanner,

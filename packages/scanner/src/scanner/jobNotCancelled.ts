@@ -1,5 +1,5 @@
 import type { Event } from '@appland/models';
-import type { MatchResult } from '../types';
+import type { AssertionSpec, MatchResult } from '../types';
 
 import Labels from '../wellKnownLabels';
 import Assertion from '../assertion';
@@ -39,5 +39,6 @@ const assertion = Assertion.assert(
 
 export default {
   scope: 'transaction',
-  scanner: () => assertion,
-};
+  labels: [Labels.JobCreate, Labels.JobCancel],
+  scanner: (): Assertion => assertion,
+} as AssertionSpec;
