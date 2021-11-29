@@ -8,6 +8,7 @@ import RootScope from './scope/rootScope';
 import HTTPServerRequestScope from './scope/httpServerRequestScope';
 import HTTPClientRequestScope from './scope/httpClientRequestScope';
 import CommandScope from './scope/commandScope';
+import SQLTransactionScope from './scope/sqlTransactionScope';
 
 export default class AssertionChecker {
   private scopes: Record<string, ScopeIterator> = {
@@ -15,6 +16,7 @@ export default class AssertionChecker {
     command: new CommandScope(),
     http_server_request: new HTTPServerRequestScope(),
     http_client_request: new HTTPClientRequestScope(),
+    transaction: new SQLTransactionScope(),
   };
 
   async check(

@@ -20,7 +20,12 @@ import Assertion from './assertion';
  * of what the code is trying to do. But, anticipating that this may sometimes happen, "root" scope is a good choice for an assertion that may flag code
  * anywhere in the AppMap.
  */
-export type ScopeName = 'root' | 'command' | 'http_client_request' | 'http_server_request';
+export type ScopeName =
+  | 'root'
+  | 'command'
+  | 'http_client_request'
+  | 'http_server_request'
+  | 'transaction';
 
 /**
  * Scope provides an Event at the root of the scope, and a Generator to iterate over its descendants.

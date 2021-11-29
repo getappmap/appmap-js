@@ -1,3 +1,4 @@
+import type { SqliteParser } from 'sqlite-parser';
 declare module '@appland/models' {
   export type CodeObjectType =
     | 'package'
@@ -262,7 +263,7 @@ declare module '@appland/models' {
     joinCount?: number;
   }
 
-  export function buildQueryAST(sql: string): any;
+  export function buildQueryAST(sql: string): SqliteParser.ListStatement | null;
   export function buildAppMap(data?: string | Record<string, unknown>): AppMapBuilder;
   export function getSqlLabelFromString(sqlString: string): string;
   export function normalizeSQL(sqlString: string): SQLNormalizationResult;
