@@ -1,3 +1,10 @@
+## [1.24.1](https://github.com/applandinc/scanner/compare/v1.24.0...v1.24.1) (2021-11-29)
+
+
+### Bug Fixes
+
+* Export labels in assertion spec ([aaf9fbb](https://github.com/applandinc/scanner/commit/aaf9fbb83785ef85161a05e77b6429144bf62ca0))
+
 # [1.24.0](https://github.com/applandinc/scanner/compare/v1.23.0...v1.24.0) (2021-11-29)
 
 
