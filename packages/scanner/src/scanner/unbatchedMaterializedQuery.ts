@@ -80,7 +80,7 @@ function scanner(): Assertion {
 const DAOMaterialize = 'dao.materialize';
 
 export default {
-  Labels: [DAOMaterialize],
+  labels: [DAOMaterialize],
   scope: 'command',
   enumerateScope: true,
   scanner,

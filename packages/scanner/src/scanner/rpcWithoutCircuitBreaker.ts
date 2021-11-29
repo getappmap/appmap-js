@@ -28,7 +28,7 @@ const RPCCircuitBreaker = 'rpc.circuit_breaker';
 
 export default {
   Options,
-  Labels: [RPCCircuitBreaker],
+  labels: [RPCCircuitBreaker],
   enumerateScope: true,
   scanner,
 } as AssertionSpec;
