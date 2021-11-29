@@ -2,7 +2,6 @@ import Graph from '../../src/algorithms/dataStructures/graph/Graph';
 import GraphVertex from '../../src/algorithms/dataStructures/graph/GraphVertex';
 import GraphEdge from '../../src/algorithms/dataStructures/graph/GraphEdge';
 import detectDirectedCycle from '../../src/algorithms/graph/detect-cycle';
-import { inspect } from 'util';
 
 describe('detectDirectedCycle', () => {
   it('should detect directed cycle', () => {
@@ -40,36 +39,17 @@ describe('detectDirectedCycle', () => {
 
     graph.addEdge(edgeFD);
 
-    expect(detectDirectedCycle(graph)).toEqual([
-      {
-        D: vertexF,
-        F: vertexE,
-        E: vertexD,
-      },
-    ]);
+    expect(
+      detectDirectedCycle(graph).map((cycle) => cycle.map((vertex) => vertex.getKey()))
+    ).toEqual([['E', 'F', 'D']]);
 
     graph.addEdge(edgeCF);
 
-    const cycles = detectDirectedCycle(graph).map((cycle) => {
-      return Object.keys(cycle).reduce((memo, key) => {
-        memo[key] = cycle[key].value;
-        return memo;
-      }, {} as Record<string, string>);
-    });
-
-    expect(cycles).toEqual([
-      {
-        A: 'D',
-        D: 'F',
-        F: 'C',
-        C: 'B',
-        B: 'A',
-      },
-      {
-        F: 'E',
-        E: 'D',
-        D: 'F',
-      },
+    expect(
+      detectDirectedCycle(graph).map((cycle) => cycle.map((vertex) => vertex.getKey()))
+    ).toEqual([
+      ['B', 'C', 'F', 'D', 'A'],
+      ['D', 'E', 'F'],
     ]);
   });
 });

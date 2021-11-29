@@ -4,9 +4,11 @@ import { Callbacks, depthFirstSearch } from '../depth-first-search';
 
 /**
  * Detect cycle in directed graph using Depth First Search.
+ *
+ * @returns the cycle of vertexes, not including the final vertex which is the same as the first.
  */
-export default function detectDirectedCycle(graph: Graph): Record<string, GraphVertex>[] {
-  const cycles: Record<string, GraphVertex>[] = [];
+export default function detectDirectedCycle(graph: Graph): GraphVertex[][] {
+  const cycles: GraphVertex[][] = [];
 
   // Will store parents (previous vertices) for all visited nodes.
   // This will be needed in order to specify what path exactly is a cycle.
@@ -38,19 +40,20 @@ export default function detectDirectedCycle(graph: Graph): Record<string, GraphV
       if (graySet.has(currentVertex.getKey())) {
         // If current vertex already in grey set it means that cycle is detected.
         // Let's detect cycle path.
-        const cycle: Record<string, GraphVertex> = {};
-        cycles.push(cycle);
+        const cycle: GraphVertex[] = [];
 
         let currentCycleVertex = currentVertex;
         let previousCycleVertex = previousVertex;
 
         while (previousCycleVertex!.getKey() !== currentVertex.getKey()) {
-          cycle[currentCycleVertex.getKey()] = previousCycleVertex!;
+          cycle.push(currentCycleVertex);
           currentCycleVertex = previousCycleVertex!;
           previousCycleVertex = dfsParentMap.get(previousCycleVertex!.getKey())!;
         }
 
-        cycle[currentCycleVertex.getKey()] = previousCycleVertex!;
+        cycle.push(currentCycleVertex!);
+
+        cycles.push(cycle.reverse());
 
         return false;
       } else {

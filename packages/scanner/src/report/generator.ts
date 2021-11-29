@@ -66,6 +66,12 @@ export default class Generator {
           this.writeln(`\tAppMap name:\t${match.appMapName}`);
           this.writeln(eventMsg);
           this.writeln(`\tScope:\t${match.scope.id} - ${match.scope.toString()}`);
+          if (match.relatedEvents) {
+            this.writeln(`\tRelated events:`);
+            for (const event of match.relatedEvents) {
+              this.writeln(`\t\t${event.id} - ${event.codeObject.packageOf}/${event.toString()}`);
+            }
+          }
           this.writeln();
         }
       });

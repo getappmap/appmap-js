@@ -51,9 +51,15 @@ const makePrototype = (
 
 describe('assert', () => {
   it('circular dependency', async () => {
-    const { scope, enumerateScope, scanner } = circularDependency;
+    const { scope, enumerateScope, scanner, Options } = circularDependency;
+    const options = new Options();
     const findings = await scan(
-      makePrototype('circular-dependency', () => scanner(), enumerateScope, scope as ScopeName),
+      makePrototype(
+        'circular-dependency',
+        () => scanner(options),
+        enumerateScope,
+        scope as ScopeName
+      ),
       'Password_resets_password_resets.appmap.json'
     );
     console.warn(JSON.stringify(findings, null, 2));
@@ -161,9 +167,9 @@ describe('assert', () => {
       'PaymentsController create no user email on file makes a onetime payment with no user, but associate with stripe'
     );
     expect(finding1.scannerId).toEqual('too-many-updates');
-    expect(finding1.event.id).toEqual(19);
-    expect(finding1.message).toEqual(`Command performs 4 SQL and RPC updates`);
-    expect(finding1.relatedEvents!).toHaveLength(4);
+    expect(finding1.event.id).toEqual(89);
+    expect(finding1.message).toEqual(`Command performs 3 SQL and RPC updates`);
+    expect(finding1.relatedEvents!).toHaveLength(3);
   });
 
   it('insecure comparison', async () => {

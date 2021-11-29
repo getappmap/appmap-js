@@ -4,6 +4,9 @@
     "CircularDependency.Options": {
       "additionalProperties": false,
       "properties": {
+        "depth": {
+          "type": "number"
+        },
         "ignorePackages": {
           "items": {
             "type": "string"

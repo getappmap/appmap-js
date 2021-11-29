@@ -15,6 +15,7 @@ export namespace IllegalPackageDependency {
 export namespace CircularDependency {
   export interface Options {
     ignorePackages?: string[];
+    depth?: number;
   }
 }
 

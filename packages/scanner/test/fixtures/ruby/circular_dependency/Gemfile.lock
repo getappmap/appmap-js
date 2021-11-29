@@ -1,0 +1,39 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport (6.1.4.1)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      tzinfo (~> 2.0)
+      zeitwerk (~> 2.3)
+    appmap (0.68.2)
+      activesupport
+      method_source
+      rack
+      reverse_markdown
+    concurrent-ruby (1.1.9)
+    i18n (1.8.11)
+      concurrent-ruby (~> 1.0)
+    method_source (1.0.0)
+    minitest (5.14.4)
+    nokogiri (1.12.5-x86_64-darwin)
+      racc (~> 1.4)
+    racc (1.6.0)
+    rack (2.2.3)
+    reverse_markdown (2.1.1)
+      nokogiri
+    tzinfo (2.0.4)
+      concurrent-ruby (~> 1.0)
+    zeitwerk (2.5.1)
+
+PLATFORMS
+  x86_64-darwin-17
+  x86_64-darwin-20
+
+DEPENDENCIES
+  appmap
+  minitest
+
+BUNDLED WITH
+   2.2.30

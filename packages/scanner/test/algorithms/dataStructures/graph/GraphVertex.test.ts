@@ -34,7 +34,7 @@ describe('GraphVertex', () => {
     expect(vertexA.hasEdge(edgeAB)).toBeTruthy();
     expect(vertexB.hasEdge(edgeAB)).toBeFalsy();
     expect(vertexA.getEdges().length).toBe(1);
-    expect(vertexA.getEdges()[0].toString()).toBe('A_B');
+    expect(vertexA.getEdges()[0].toString()).toBe('A - B');
   });
 
   it('should delete edges from vertex', () => {
@@ -56,13 +56,13 @@ describe('GraphVertex', () => {
 
     expect(vertexA.getEdges().length).toBe(2);
 
-    expect(vertexA.getEdges()[0].toString()).toBe('A_B');
-    expect(vertexA.getEdges()[1].toString()).toBe('A_C');
+    expect(vertexA.getEdges()[0].toString()).toBe('A - B');
+    expect(vertexA.getEdges()[1].toString()).toBe('A - C');
 
     vertexA.deleteEdge(edgeAB);
     expect(vertexA.hasEdge(edgeAB)).toBeFalsy();
     expect(vertexA.hasEdge(edgeAC)).toBeTruthy();
-    expect(vertexA.getEdges()[0].toString()).toBe('A_C');
+    expect(vertexA.getEdges()[0].toString()).toBe('A - C');
 
     vertexA.deleteEdge(edgeAC);
     expect(vertexA.hasEdge(edgeAB)).toBeFalsy();
