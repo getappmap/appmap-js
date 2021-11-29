@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.14.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.13.4...@appland/appmap-v3.14.0) (2021-11-29)
+
+
+### Features
+
+* Add JavaScript project installers ([eb8f934](https://github.com/applandinc/appmap-js/commit/eb8f93476b85fab1a50f767c5774d5d2fc1910a7))
+
 # [@appland/appmap-v3.13.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.13.3...@appland/appmap-v3.13.4) (2021-11-19)
 
 
