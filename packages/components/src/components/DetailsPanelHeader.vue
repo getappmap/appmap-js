@@ -18,6 +18,7 @@
       :data-type="objectType.toLowerCase()"
     >
       {{ objectType }}
+      <span v-if="objectId">{{ objectId }}</span>
     </h4>
     <h4 class="details-panel-header__details-name" :if="title">{{ title }}</h4>
     <div class="details-panel-header__ghost-link">
@@ -59,6 +60,10 @@ export default {
     },
     object: {
       type: Object,
+    },
+    objectId: {
+      type: String,
+      required: false,
     },
     title: {
       type: String,

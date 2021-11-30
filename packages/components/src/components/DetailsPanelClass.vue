@@ -11,7 +11,7 @@
         </v-details-button>
       </template>
     </v-details-panel-header>
-
+    <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
     <v-details-panel-list
       title="Functions"
       :items="object.functions"
@@ -33,6 +33,7 @@
 import { CodeObjectType } from '@appland/models';
 import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
+import VDetailsPanelFilters from '@/components/DetailsPanelFilters.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
@@ -40,6 +41,7 @@ export default {
   components: {
     VDetailsButton,
     VDetailsPanelHeader,
+    VDetailsPanelFilters,
     VDetailsPanelList,
   },
 
@@ -47,6 +49,11 @@ export default {
     object: {
       type: Object,
       required: true,
+    },
+    isRootObject: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
 

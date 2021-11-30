@@ -34,15 +34,11 @@ describe('VsCodeExtension.vue', () => {
     expect(rootWrapper.emitted().showInstructions).toBeUndefined();
     expect(rootWrapper.emitted().changeTab).toBeArrayOfSize(1);
     expect(rootWrapper.emitted().selectedObject).toBeUndefined();
-    expect(rootWrapper.emitted().clearSelection).toBeUndefined();
 
     wrapper.vm.showInstructions();
     expect(rootWrapper.emitted().showInstructions).toBeArrayOfSize(1);
 
     wrapper.vm.onChangeTab(wrapper.vm.$refs[VIEW_FLOW]);
     expect(rootWrapper.emitted().changeTab[1]).toContain(VIEW_FLOW);
-
-    wrapper.vm.clearSelection();
-    expect(rootWrapper.emitted().clearSelection).toBeArrayOfSize(1);
   });
 });

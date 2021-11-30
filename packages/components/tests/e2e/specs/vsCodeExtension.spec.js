@@ -418,20 +418,6 @@ context('VS Code Extension', () => {
       ).should('have.length', 2);
     });
 
-    it('set new root class object removes parent package', () => {
-      cy.get('.node[data-id="json"] .label__icon--expand').click();
-
-      cy.get('.node[data-id="json/JSON::Ext::Generator::State"]').rightclick();
-
-      cy.get('.dropdown-menu').contains('Set as root').click();
-
-      cy.get('.node[data-id="json"]').should('not.be.visible');
-
-      cy.get('.node[data-id="JSON::Ext::Generator::State"]').should(
-        'be.visible'
-      );
-    });
-
     it('highlights only the first ancestor available if the selected object is not visible', () => {
       cy.get('.node[data-id="app/helpers"]').rightclick();
 
@@ -706,29 +692,154 @@ context('VS Code Extension', () => {
       });
     });
 
-    it('applies filters properly', () => {
-      const listClassFor = (objType) => `.details-search__block--${objType} li`;
+    it('highlight and loop through events selected from Trace view filter', () => {
+      cy.get('.tabs .tab-btn').last().click();
+
+      cy.get('.trace-view__search-input-element').type(
+        'event:1 event:3 event:15 event:99999'
+      );
+
+      cy.get('.trace-node[data-event-id="1"]')
+        .should('be.visible')
+        .should('have.class', 'highlight');
+
+      cy.get('.trace-node[data-event-id="3"]').should('not.be.visible');
+
+      cy.get('.trace-view__search-arrows-text').should(
+        'contain.text',
+        '1/3 results'
+      );
+
+      cy.get('.trace-view__search-arrow').last().click();
+
+      cy.get('.trace-node[data-event-id="3"]')
+        .should('be.visible')
+        .should('have.class', 'highlight');
+
+      cy.get('.trace-view__search-arrow').last().click();
+
+      cy.get('.trace-node[data-event-id="15"]')
+        .should('be.visible')
+        .should('have.class', 'highlight');
+
+      cy.get('.trace-view__search-arrow').first().click();
+
+      cy.get('.trace-node[data-event-id="3"]')
+        .should('be.visible')
+        .should('have.class', 'highlight');
+    });
+
+    it('filters: root objects', () => {
+      cy.get(
+        '.node[data-id="active_support/ActiveSupport::SecurityUtils"]'
+      ).click();
+      cy.get('.details-panel-filters .details-panel-filters__item')
+        .first()
+        .click();
+      cy.get('.nodes .node').should('have.length', 2);
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters .filters__root').should('have.length', 1);
+
+      cy.get('.filters .filters__root .filters__root-icon').click();
+      cy.get('.nodes .node').should('have.length', 9);
+
+      cy.get('.filters__form-input').first().focus();
+      cy.get('.filters__form-suggestions-item').eq(1).click();
+      cy.get('.nodes .node').should('have.length', 3);
+      cy.get('.filters .filters__root .filters__root-icon').click();
+      cy.get('.nodes .node').should('have.length', 9);
 
       cy.get('.tabs .tab-btn').last().click();
-      cy.get('.popper__button').click();
+      cy.get('.trace .trace-node').should('have.length', 4);
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox').eq(0).click();
+      cy.get('.filters__form-input')
+        .first()
+        .type('route:HTTP server requests->GET /admin/orders')
+        .parent()
+        .submit();
+      cy.get('.trace .trace-node').should('have.length', 2);
+      cy.get('.filters .filters__root .filters__root-icon').click();
 
-      cy.get(listClassFor('http')).should('have.length', 3);
-      cy.get(listClassFor('labels')).should('have.length', 4);
-      cy.get(listClassFor('package')).should('have.length', 4);
-      cy.get(listClassFor('class')).should('have.length', 11);
-      cy.get(listClassFor('function')).should('have.length', 20);
-      cy.get(listClassFor('query')).should('have.length', 34);
-      cy.get('#unlabeled-events').click();
-      cy.get(listClassFor('labels')).should('have.length', 4);
-      cy.get(listClassFor('package')).should('have.length', 2);
-      cy.get(listClassFor('class')).should('have.length', 5);
-      cy.get(listClassFor('function')).should('have.length', 6);
-      cy.get('#unlabeled-events').click();
+      cy.get('.tabs .tab-btn').first().click();
+      cy.get('.nodes .node').should('have.length', 9);
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__form-input')
+        .first()
+        .type('package:*/controllers')
+        .parent()
+        .submit();
+      cy.get('.nodes .node').should('have.length', 3);
+    });
 
-      cy.get('.trace-node').should('have.length', 4);
-      cy.get('#hide-media-requests').click();
-      cy.get('.trace-node').should('have.length', 5);
-      cy.get('#hide-media-requests').click();
+    it('filters: limit root events', () => {
+      cy.get('.tabs .tab-btn').last().click();
+
+      cy.get('.trace .trace-node').should('have.length', 4);
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox').eq(0).click();
+
+      cy.get('.trace .trace-node').should('have.length', 12);
+    });
+
+    it('filters: hide media HTTP requests', () => {
+      cy.get('.tabs .tab-btn').last().click();
+
+      cy.get('.trace .trace-node').should('have.length', 4);
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox').eq(1).click();
+
+      cy.get('.trace .trace-node').should('have.length', 5);
+    });
+
+    it('filters: hide unlabeled', () => {
+      cy.get(
+        '.details-search__block--package .details-search__block-item'
+      ).should('have.length', 4);
+      cy.get(
+        '.details-search__block--class .details-search__block-item'
+      ).should('have.length', 11);
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox').eq(2).click();
+
+      cy.get(
+        '.details-search__block--package .details-search__block-item'
+      ).should('have.length', 2);
+      cy.get(
+        '.details-search__block--class .details-search__block-item'
+      ).should('have.length', 5);
+    });
+
+    it('filters: hide elapsed time under 100ms', () => {
+      cy.get('.tabs .tab-btn').last().click();
+
+      cy.get('.trace .trace-node').should('have.length', 4);
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox').eq(3).click();
+
+      cy.get('.trace .trace-node').should('have.length', 3);
+    });
+
+    it('filters: hide object', () => {
+      cy.get('.nodes .node').should('have.length', 9);
+
+      cy.get('.node[data-id="HTTP server requests"]').click();
+      cy.get('.details-panel-filters .details-panel-filters__item')
+        .eq(1)
+        .click();
+
+      cy.get('.nodes .node').should('have.length', 8);
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters .filters__hide-item').should('have.length', 1);
+
+      cy.get('.filters .filters__hide-item .filters__hide-item-icon').click();
+      cy.get('.nodes .node').should('have.length', 9);
     });
   });
 

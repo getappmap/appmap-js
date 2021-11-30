@@ -1,5 +1,8 @@
 <template>
   <div :class="classes" :style="style" :data-event-id="event.id">
+    <div v-if="highlightIndex" class="trace-node__index">
+      {{ highlightIndex }}
+    </div>
     <div :class="`trace-node__header trace-node__header--${eventType}`">
       {{ title }}
     </div>
@@ -63,6 +66,10 @@ export default {
       type: String,
       default: 'solid',
       validator: (value) => ['solid', 'dashed', 'dotted'].indexOf(value) !== -1,
+    },
+    highlightIndex: {
+      type: Number,
+      default: 0,
     },
     focused: {
       type: Boolean,
@@ -137,6 +144,7 @@ export default {
 $bg-color: $gray2;
 
 .trace-node {
+  position: relative;
   background-color: $bg-color;
   display: inline-block;
   box-shadow: 0.2em 0.2em 10px 0px rgb(0 0 0 / 60%);
@@ -166,6 +174,22 @@ $bg-color: $gray2;
       background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="rgb(235,223,144)" d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"/></svg>')
         no-repeat center;
     }
+  }
+
+  &__index {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    color: white;
+    background-color: $hotpink;
   }
 
   &__header {

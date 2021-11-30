@@ -1,6 +1,11 @@
 <template>
   <div class="details-panel-event">
-    <v-details-panel-header object-type="Event" :object="object" :title="title">
+    <v-details-panel-header
+      object-type="Event"
+      :object="object"
+      :title="title"
+      :object-id="object.id.toString()"
+    >
       <template v-slot:links>
         <v-details-button
           v-if="shouldDisplayViewEvent"

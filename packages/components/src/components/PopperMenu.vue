@@ -28,7 +28,7 @@ export default {
         );
       },
     },
-    showDot: {
+    isHighlight: {
       type: Boolean,
       default: false,
       required: false,
@@ -49,8 +49,8 @@ export default {
         `popper--h-${this.hAlign}`,
       ];
 
-      if (this.showDot) {
-        classNames.push('popper--dotted');
+      if (this.isHighlight) {
+        classNames.push('popper--highlight');
       }
 
       if (this.open) {
@@ -84,15 +84,8 @@ export default {
     line-height: 0;
     transition: $transition;
 
-    .popper--dotted &::before {
-      content: '';
-      position: absolute;
-      top: 5%;
-      right: 5%;
-      width: 0.5rem;
-      height: 0.5rem;
-      border-radius: 50%;
-      background-color: $hotpink;
+    .popper--highlight & {
+      color: $light-purple;
     }
 
     svg {
@@ -109,22 +102,18 @@ export default {
   $border-radius: 1rem;
 
   &__body {
-    border-radius: $border-radius;
+    border-radius: 0.5rem;
+    border: 1px solid $light-purple;
     position: absolute;
     width: max-content;
     height: max-content;
-    max-width: 50vw;
-    max-height: 50vh;
-    padding: 0.5rem;
+    max-width: 70vw;
+    max-height: 70vh;
+    padding: 1rem;
     font-family: $appland-text-font-family;
     color: $gray6;
-    background: $black;
-
-    &::before {
-      content: '';
-      position: absolute;
-      border: 0.3rem solid transparent;
-    }
+    background: #191919;
+    overflow: auto;
 
     .popper--v-top & {
       bottom: 100%;
@@ -137,55 +126,11 @@ export default {
     }
 
     .popper--h-left & {
-      right: 50%;
+      right: 0;
     }
 
     .popper--h-right & {
-      left: 50%;
-    }
-
-    .popper--v-top.popper--h-left & {
-      border-bottom-right-radius: 0;
-
-      &::before {
-        top: 100%;
-        right: 0;
-        border-top-color: $black;
-        border-right-color: $black;
-      }
-    }
-
-    .popper--v-top.popper--h-right & {
-      border-bottom-left-radius: 0;
-
-      &::before {
-        top: 100%;
-        left: 0;
-        border-top-color: $black;
-        border-left-color: $black;
-      }
-    }
-
-    .popper--v-bottom.popper--h-left & {
-      border-top-right-radius: 0;
-
-      &::before {
-        bottom: 100%;
-        right: 0;
-        border-bottom-color: $black;
-        border-right-color: $black;
-      }
-    }
-
-    .popper--v-bottom.popper--h-right & {
-      border-top-left-radius: 0;
-
-      &::before {
-        bottom: 100%;
-        left: 0;
-        border-bottom-color: $black;
-        border-left-color: $black;
-      }
+      left: 0;
     }
 
     h2 {

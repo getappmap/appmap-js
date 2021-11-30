@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     elapsedTime() {
-      return `${this.time.toFixed(2)}s`;
+      return `${(this.time * 1000).toFixed(0)}ms`;
     },
   },
 };

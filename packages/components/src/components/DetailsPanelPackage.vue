@@ -5,6 +5,7 @@
       :object="object"
       :title="object.name"
     />
+    <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
     <v-details-panel-list
       title="Classes"
       :items="object.classes"
@@ -23,6 +24,7 @@
 
 <script>
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
+import VDetailsPanelFilters from '@/components/DetailsPanelFilters.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
@@ -32,10 +34,16 @@ export default {
       type: Object,
       required: true,
     },
+    isRootObject: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
 
   components: {
     VDetailsPanelList,
+    VDetailsPanelFilters,
     VDetailsPanelHeader,
   },
 };

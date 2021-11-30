@@ -13,6 +13,7 @@
         :appMap="filteredAppMap"
         :selected-object="selectedObject"
         :selected-label="selectedLabel"
+        :filters-root-objects="filters.rootObjects"
       >
         <template v-slot:buttons>
           <v-details-button
@@ -52,15 +53,48 @@
         </v-tab>
 
         <v-tab name="Trace View" :is-active="isViewingFlow" :ref="VIEW_FLOW">
-          <v-diagram-trace
-            ref="diagramFlow"
-            :events="filteredAppMap.rootEvents()"
-            :selected-events="selectedEvent"
-            :focused-event="focusedEvent"
-            :name="VIEW_FLOW"
-            :zoom-controls="true"
-            @clickEvent="onClickTraceEvent"
-          />
+          <div class="trace-view">
+            <div class="trace-view__search">
+              <div class="trace-view__search-input-wrap">
+                <span class="trace-view__search-input-prefix">
+                  <SearchIcon />
+                </span>
+                <input
+                  v-model="traceFilterValue"
+                  class="trace-view__search-input-element"
+                  type="text"
+                  autocomplete="off"
+                  placeholder="search events..."
+                />
+              </div>
+              <div
+                class="trace-view__search-arrows"
+                v-if="highlightedNodes.length"
+              >
+                <div class="trace-view__search-arrow" @click="prevTraceFilter">
+                  <ArrowSearchLeftIcon />
+                </div>
+                <div class="trace-view__search-arrows-text">
+                  <b>{{ currentTraceFilterIndex + 1 }}</b
+                  >/{{ highlightedNodes.length }} results
+                </div>
+                <div class="trace-view__search-arrow" @click="nextTraceFilter">
+                  <ArrowSearchRightIcon />
+                </div>
+              </div>
+            </div>
+            <v-diagram-trace
+              ref="diagramFlow"
+              :events="filteredAppMap.rootEvents()"
+              :selected-events="selectedEvent"
+              :focused-event="focusedEvent"
+              :highlighted-event-id="highlightedEventId"
+              :highlighted-event-index="currentTraceFilterIndex + 1"
+              :name="VIEW_FLOW"
+              :zoom-controls="true"
+              @clickEvent="onClickTraceEvent"
+            />
+          </div>
         </v-tab>
         <template v-slot:notification>
           <v-notification
@@ -72,40 +106,146 @@
           />
         </template>
         <template v-slot:controls>
-          <v-popper-menu :showDot="filtersChanged">
+          <v-popper-menu :isHighlight="filtersChanged">
             <template v-slot:icon>
               <FilterIcon class="control-button__icon" />
             </template>
             <template v-slot:body>
-              <h2>Filters</h2>
-              <div>
-                <input
-                  type="checkbox"
-                  id="limit-root-events"
-                  v-model="filters.limitRootEvents.on"
-                  @change="setUserFiltered"
-                />
-                <label for="limit-root-events">Limit root events to HTTP</label>
-              </div>
-              <div>
-                <input
-                  type="checkbox"
-                  id="unlabeled-events"
-                  v-model="filters.unlabeledEvents.on"
-                  @change="setUserFiltered"
-                />
-                <label for="unlabeled-events">Show unlabeled events</label>
-              </div>
-              <div>
-                <input
-                  type="checkbox"
-                  id="hide-media-requests"
-                  v-model="filters.hideMediaRequests.on"
-                  @change="setUserFiltered"
-                />
-                <label for="hide-media-requests"
-                  >Hide media HTTP requests</label
-                >
+              <div class="filters">
+                <div class="filters__head">
+                  <FilterIcon class="filters__head-icon" />
+                  <h2 class="filters__head-text">Filters</h2>
+                  <button class="filters__head-reset" @click="resetFilters()">
+                    Reset all
+                    <ResetIcon />
+                  </button>
+                </div>
+                <div class="filters__block">
+                  <div class="filters__block-head">
+                    <h3 class="filters__block-title">Root</h3>
+                    <v-filters-form
+                      :onSubmit="addRootObject"
+                      placeholder="add new root..."
+                      :suggestions="rootObjectsSuggestions"
+                    />
+                  </div>
+                  <div
+                    class="filters__block-body filters__block-body--flex"
+                    v-if="filters.rootObjects.length"
+                  >
+                    <div
+                      class="filters__root"
+                      v-for="(id, index) in filters.rootObjects"
+                      :key="id"
+                    >
+                      {{ id }}
+                      <CloseThinIcon
+                        class="filters__root-icon"
+                        @click="removeRootObject(index)"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="filters__block">
+                  <div class="filters__block-head">
+                    <h3 class="filters__block-title">Declutter</h3>
+                  </div>
+                  <div class="filters__block-body">
+                    <div class="filters__block-row">
+                      <label class="filters__checkbox">
+                        <input
+                          type="checkbox"
+                          v-model="filters.declutter.limitRootEvents.on"
+                        />
+                        <CheckIcon class="filters__checkbox-icon" />
+                      </label>
+                      <div class="filters__block-row-content">
+                        Limit root events to HTTP
+                      </div>
+                    </div>
+                    <div class="filters__block-row">
+                      <label class="filters__checkbox">
+                        <input
+                          type="checkbox"
+                          v-model="filters.declutter.hideMediaRequests.on"
+                        />
+                        <CheckIcon class="filters__checkbox-icon" />
+                      </label>
+                      <div class="filters__block-row-content">
+                        Hide media HTTP requests
+                      </div>
+                    </div>
+                    <div class="filters__block-row">
+                      <label class="filters__checkbox">
+                        <input
+                          type="checkbox"
+                          v-model="filters.declutter.hideUnlabeled.on"
+                        />
+                        <CheckIcon class="filters__checkbox-icon" />
+                      </label>
+                      <div class="filters__block-row-content">
+                        Hide unlabeled
+                      </div>
+                    </div>
+                    <div class="filters__block-row">
+                      <label class="filters__checkbox">
+                        <input
+                          type="checkbox"
+                          v-model="filters.declutter.hideElapsedTimeUnder.on"
+                        />
+                        <CheckIcon class="filters__checkbox-icon" />
+                      </label>
+                      <div class="filters__block-row-content">
+                        Hide elapsed time under:
+                        <div class="filters__elapsed">
+                          <input
+                            type="text"
+                            class="filters__elapsed-input"
+                            v-model="
+                              filters.declutter.hideElapsedTimeUnder.time
+                            "
+                          />
+                          <span class="filters__elapsed-ms">ms</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="filters__block-row">
+                      <label class="filters__checkbox">
+                        <input
+                          type="checkbox"
+                          v-model="filters.declutter.hideName.on"
+                        />
+                        <CheckIcon class="filters__checkbox-icon" />
+                      </label>
+                      <div class="filters__block-row-content">
+                        Hide name:
+                        <v-filters-form
+                          :onSubmit="addHiddenName"
+                          placeholder="find names..."
+                          :suggestions="hideNamesSuggestions"
+                          suggestions-placement="top"
+                        />
+                        <div
+                          class="filters__hide"
+                          v-if="filters.declutter.hideName.names.length"
+                        >
+                          <div
+                            class="filters__hide-item"
+                            v-for="(name, index) in filters.declutter.hideName
+                              .names"
+                            :key="name"
+                          >
+                            {{ name }}
+                            <CloseThinIcon
+                              class="filters__hide-item-icon"
+                              @click.stop="removeHiddenName(index)"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </template>
           </v-popper-menu>
@@ -176,8 +316,14 @@
 </template>
 
 <script>
-import { CodeObjectType, ClassMap, Event, buildAppMap } from '@appland/models';
+import { CodeObjectType, Event, buildAppMap } from '@appland/models';
+import ArrowSearchLeftIcon from '@/assets/arrow-search-left.svg';
+import ArrowSearchRightIcon from '@/assets/arrow-search-right.svg';
+import CheckIcon from '@/assets/check.svg';
+import CloseThinIcon from '@/assets/close-thin.svg';
 import ReloadIcon from '@/assets/reload.svg';
+import ResetIcon from '@/assets/reset.svg';
+import SearchIcon from '@/assets/search.svg';
 import UploadIcon from '@/assets/upload.svg';
 import FilterIcon from '@/assets/filter.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
@@ -185,6 +331,7 @@ import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
+import VFiltersForm from '../components/FiltersForm.vue';
 import VInstructions from '../components/Instructions.vue';
 import VNotification from '../components/Notification.vue';
 import VPopperMenu from '../components/PopperMenu.vue';
@@ -206,13 +353,20 @@ export default {
   name: 'VSCodeExtension',
 
   components: {
+    ArrowSearchLeftIcon,
+    ArrowSearchRightIcon,
+    CheckIcon,
+    CloseThinIcon,
     ReloadIcon,
+    ResetIcon,
+    SearchIcon,
     UploadIcon,
     FilterIcon,
     VDetailsPanel,
     VDetailsButton,
     VDiagramComponent,
     VDiagramTrace,
+    VFiltersForm,
     VInstructions,
     VNotification,
     VPopperMenu,
@@ -234,22 +388,35 @@ export default {
       versionText: '',
       VIEW_COMPONENT,
       VIEW_FLOW,
-      rootCodeObject: null,
       filters: {
-        limitRootEvents: {
-          on: true,
-          default: true,
-        },
-        unlabeledEvents: {
-          on: true,
-          default: true,
-        },
-        hideMediaRequests: {
-          on: true,
-          default: true,
+        rootObjects: [],
+        declutter: {
+          limitRootEvents: {
+            on: true,
+            default: true,
+          },
+          hideMediaRequests: {
+            on: true,
+            default: true,
+          },
+          hideUnlabeled: {
+            on: false,
+            default: false,
+          },
+          hideElapsedTimeUnder: {
+            on: false,
+            default: false,
+            time: 100,
+          },
+          hideName: {
+            on: false,
+            default: false,
+            names: [],
+          },
         },
       },
-      isUserFiltered: false,
+      traceFilterValue: '',
+      currentTraceFilterIndex: 0,
     };
   },
 
@@ -292,6 +459,16 @@ export default {
         }
       },
     },
+    highlightedNodes: {
+      handler() {
+        this.currentTraceFilterIndex = 0;
+      },
+    },
+    filteredAppMap: {
+      handler() {
+        this.clearSelection();
+      },
+    },
   },
 
   computed: {
@@ -300,10 +477,10 @@ export default {
     },
     filteredAppMap() {
       const { appMap } = this.$store.state;
-      let { classMap } = appMap;
+      const { classMap } = appMap;
       let rootEvents = appMap.rootEvents();
 
-      if (this.filters.limitRootEvents.on) {
+      if (this.filters.declutter.limitRootEvents.on) {
         rootEvents = rootEvents.filter((e) => e.httpServerRequest);
       }
 
@@ -312,69 +489,119 @@ export default {
         return callTree;
       }, []);
 
-      if (this.rootCodeObject) {
-        const eventBranches = this.rootCodeObject.allEvents.map((e) => [
-          e.id,
-          e.linkedEvent.id,
-        ]);
+      if (this.filters.rootObjects.length) {
+        let eventBranches = [];
 
-        events = events.filter((e) =>
-          eventBranches.some((branch) => e.id >= branch[0] && e.id <= branch[1])
-        );
+        classMap.codeObjects.forEach((codeObject) => {
+          this.filters.rootObjects.forEach((id) => {
+            if (this.isMatchedId(codeObject.fqid, id)) {
+              eventBranches = eventBranches.concat(
+                codeObject.allEvents.map((e) => [e.id, e.linkedEvent.id])
+              );
+            }
+          });
+        });
 
-        // it's necessary to remove package wrap in Component Diagram,
-        // without this code package will be rendered in collapsed state
-        if (
-          this.rootCodeObject.type === 'class' &&
-          this.rootCodeObject.packageObject
-        ) {
-          classMap = new ClassMap([
-            classMap.codeObjects.filter(
-              (co) => co.id !== this.rootCodeObject.packageObject.id
-            ),
-          ]);
+        if (eventBranches.length) {
+          events = events.filter((e) =>
+            eventBranches.some(
+              (branch) => e.id >= branch[0] && e.id <= branch[1]
+            )
+          );
         }
       }
 
-      events = events.filter(
-        (e) =>
-          this.filters.unlabeledEvents.on ||
-          e.labels.size > 0 ||
-          e.codeObject.type !== CodeObjectType.FUNCTION
-      );
-
-      if (this.filters.hideMediaRequests.on) {
-        const mediaRegex = [
-          'application/javascript',
-          'application/ecmascript',
-          'audio/.+',
-          'font/.+',
-          'image/.+',
-          'text/javascript',
-          'text/ecmascript',
-          'text/css',
-          'video/.+',
-        ].map((t) => new RegExp(t, 'i'));
-        const excludedEvents = [];
-        events.forEach((e) => {
-          if (
-            e.http_server_response &&
-            e.http_server_response.mime_type &&
-            mediaRegex.some((regex) =>
-              regex.test(e.http_server_response.mime_type)
-            )
-          ) {
-            excludedEvents.push(e.parent_id);
-          }
-        });
-        events = events.filter((e) => !excludedEvents.includes(e.id));
+      if (this.filters.declutter.hideMediaRequests.on) {
+        events = this.filterMediaRequests(events);
       }
 
+      if (this.filters.declutter.hideUnlabeled.on) {
+        events = events.filter(
+          (e) =>
+            e.labels.size > 0 || e.codeObject.type !== CodeObjectType.FUNCTION
+        );
+      }
+
+      if (
+        this.filters.declutter.hideElapsedTimeUnder.on &&
+        this.filters.declutter.hideElapsedTimeUnder.time > 0
+      ) {
+        events = events.filter(
+          (e) =>
+            e.returnEvent &&
+            e.returnEvent.elapsedTime &&
+            e.returnEvent.elapsedTime >=
+              this.filters.declutter.hideElapsedTimeUnder.time / 1000
+        );
+      }
+
+      if (
+        this.filters.declutter.hideName.on &&
+        this.filters.declutter.hideName.names.length
+      ) {
+        classMap.codeObjects.forEach((codeObject) => {
+          this.filters.declutter.hideName.names.forEach((fqid) => {
+            if (this.isMatchedId(codeObject.fqid, fqid)) {
+              events = events.filter((e) => !codeObject.allEvents.includes(e));
+            }
+          });
+        });
+      }
+
+      const eventIds = new Set(
+        events.filter((e) => e.isCall()).map((e) => e.id)
+      );
+
       return buildAppMap({
-        events,
+        events: events.filter(
+          (e) => eventIds.has(e.id) || eventIds.has(e.parent_id)
+        ),
         classMap: classMap.roots.map((c) => ({ ...c.data })),
         metadata: appMap.metadata,
       }).build();
+    },
+
+    rootObjectsSuggestions() {
+      return this.filteredAppMap.classMap.codeObjects
+        .map((co) => co.fqid)
+        .filter((fqid) => !this.filters.rootObjects.includes(fqid));
+    },
+
+    hideNamesSuggestions() {
+      return this.filteredAppMap.classMap.codeObjects
+        .map((co) => co.fqid)
+        .filter(
+          (fqid) => !this.filters.declutter.hideName.names.includes(fqid)
+        );
+    },
+
+    highlightedNodes() {
+      const nodes = [];
+
+      if (this.traceFilterValue) {
+        const knownEventIds = this.filteredAppMap.events
+          .filter((e) => e.isCall())
+          .map((e) => e.id);
+        const filterValue = this.traceFilterValue.trim().split(' ');
+        if (filterValue.length) {
+          filterValue.forEach((item) => {
+            if (item.startsWith('event:')) {
+              const eventId = parseInt(item.replace('event:', ''), 10);
+              if (!Number.isNaN(eventId) && knownEventIds.includes(eventId)) {
+                nodes.push(eventId);
+              }
+            }
+          });
+        }
+      }
+
+      return nodes;
+    },
+
+    highlightedEventId() {
+      return this.highlightedNodes.length
+        ? this.highlightedNodes[this.currentTraceFilterIndex]
+        : null;
     },
 
     selectedObject() {
@@ -420,14 +647,21 @@ export default {
         Array.isArray(appMap.classMap.codeObjects) &&
         appMap.classMap.codeObjects.length;
 
-      return !this.isUserFiltered && (!hasEvents || !hasClassMap);
+      return (
+        !this.filtersChanged &&
+        !this.traceFilterValue &&
+        (!hasEvents || !hasClassMap)
+      );
     },
 
     filtersChanged() {
-      return Object.values(this.filters).some(
-        (f) =>
-          (typeof f.on === 'boolean' && f.on !== f.default) ||
-          (typeof on === 'function' && f.on() !== f.default)
+      return (
+        this.filters.rootObjects.length > 0 ||
+        Object.values(this.filters.declutter).some(
+          (f) =>
+            (typeof f.on === 'boolean' && f.on !== f.default) ||
+            (typeof on === 'function' && f.on() !== f.default)
+        )
       );
     },
   },
@@ -437,10 +671,9 @@ export default {
       this.$store.commit(SET_APPMAP_DATA, data);
 
       const rootEvents = this.$store.state.appMap.rootEvents();
-
-      if (rootEvents.every((e) => !e.httpServerRequest)) {
-        this.filters.limitRootEvents.on = false;
-      }
+      const hasHttpRoot = rootEvents.some((e) => e.httpServerRequest);
+      this.filters.declutter.limitRootEvents.on = hasHttpRoot;
+      this.filters.declutter.limitRootEvents.default = hasHttpRoot;
 
       this.isLoading = false;
     },
@@ -495,6 +728,10 @@ export default {
         state.selectedObject = `label:${this.selectedLabel}`;
       }
 
+      if (this.traceFilterValue) {
+        state.traceFilter = this.traceFilterValue;
+      }
+
       return JSON.stringify(state);
     },
 
@@ -537,6 +774,9 @@ export default {
           this.$store.commit(SELECT_OBJECT, selectedObject);
         }
       }
+      if (state.traceFilter) {
+        this.traceFilterValue = state.traceFilter;
+      }
     },
 
     clearSelection() {
@@ -549,8 +789,8 @@ export default {
     },
 
     resetDiagram() {
-      this.rootCodeObject = null;
       this.clearSelection();
+      this.resetFilters();
 
       this.renderKey += 1;
     },
@@ -589,14 +829,173 @@ export default {
       this.isPanelResizing = false;
     },
 
-    setUserFiltered() {
-      this.isUserFiltered = true;
+    resetFilters() {
+      this.filters.rootObjects = [];
+      Object.keys(this.filters.declutter).forEach((k) => {
+        this.filters.declutter[k].on = this.filters.declutter[k].default;
+      });
+      this.filters.declutter.hideName.names = [];
+    },
+
+    addHiddenName(name) {
+      const objectName = name.trim();
+
+      if (
+        !objectName ||
+        this.filters.declutter.hideName.names.includes(objectName)
+      ) {
+        return;
+      }
+
+      this.filters.declutter.hideName.names.push(objectName);
+      this.filters.declutter.hideName.on = true;
+    },
+
+    removeHiddenName(index) {
+      this.filters.declutter.hideName.names.splice(index, 1);
+      if (this.filters.declutter.hideName.names.length === 0) {
+        this.filters.declutter.hideName.on = false;
+      }
+    },
+
+    addRootObject(fqid) {
+      const objectFqid = fqid.trim();
+
+      if (!objectFqid || this.filters.rootObjects.includes(objectFqid)) {
+        return;
+      }
+
+      this.filters.rootObjects.push(objectFqid);
+    },
+
+    removeRootObject(index) {
+      this.filters.rootObjects.splice(index, 1);
+    },
+
+    filterMediaRequests(events) {
+      const excludedEvents = [];
+      const mediaRegex = [
+        'application/javascript',
+        'application/ecmascript',
+        'audio/.+',
+        'font/.+',
+        'image/.+',
+        'text/javascript',
+        'text/ecmascript',
+        'text/css',
+        'video/.+',
+      ].map((t) => new RegExp(t, 'i'));
+      const mediaFileExtensions = new Set([
+        'aac',
+        'avi',
+        'bmp',
+        'css',
+        'flv',
+        'gif',
+        'htm',
+        'html',
+        'ico',
+        'jpeg',
+        'jpg',
+        'js',
+        'json',
+        'jsonld',
+        'mid',
+        'midi',
+        'mjs',
+        'mov',
+        'mp3',
+        'mp4',
+        'mpeg',
+        'oga',
+        'ogg',
+        'ogv',
+        'ogx',
+        'opus',
+        'otf',
+        'png',
+        'svg',
+        'tif',
+        'tiff',
+        'ts',
+        'ttf',
+        'wav',
+        'weba',
+        'webm',
+        'webp',
+        'woff',
+        'woff2',
+        'xhtml',
+        '3gp',
+        '3g2',
+      ]);
+
+      events.forEach((e) => {
+        if (e.requestMethod === 'GET' && e.requestPath) {
+          const pathExt = e.requestPath.match(/.*\.([\S]*)$/);
+          if (pathExt && mediaFileExtensions.has(pathExt[1])) {
+            excludedEvents.push(e.id);
+          }
+        } else if (e.http_server_response) {
+          let mimeType;
+
+          if (e.http_server_response.headers) {
+            const contentTypeKey = Object.keys(
+              e.http_server_response.headers
+            ).filter((k) => k.toLowerCase() === 'content-type')[0];
+
+            mimeType = e.http_server_response.headers[contentTypeKey];
+          } else if (e.http_server_response.mime_type) {
+            mimeType = e.http_server_response.mime_type; // 'mime_type' is no longer supported in the AppMap data standard, but we should keep this code for backward compatibility
+          }
+
+          if (mimeType && mediaRegex.some((regex) => regex.test(mimeType))) {
+            excludedEvents.push(e.parent_id);
+          }
+        }
+      });
+
+      return events.filter((e) => !excludedEvents.includes(e.id));
+    },
+
+    isMatchedId(objectId, query) {
+      if (query.includes('*')) {
+        const filterRegExp = new RegExp(`^${query.replace('*', '.*')}$`, 'ig');
+        if (filterRegExp.test(objectId)) {
+          return true;
+        }
+      } else if (query === objectId) {
+        return true;
+      }
+      return false;
+    },
+
+    prevTraceFilter() {
+      if (this.currentTraceFilterIndex === 0) {
+        this.currentTraceFilterIndex = this.highlightedNodes.length - 1;
+      } else {
+        this.currentTraceFilterIndex -= 1;
+      }
+    },
+
+    nextTraceFilter() {
+      if (this.currentTraceFilterIndex === this.highlightedNodes.length - 1) {
+        this.currentTraceFilterIndex = 0;
+      } else {
+        this.currentTraceFilterIndex += 1;
+      }
     },
   },
 
   mounted() {
     this.$root.$on('makeRoot', (codeObject) => {
-      this.rootCodeObject = codeObject;
+      this.addRootObject(codeObject.fqid);
+    });
+    this.$root.$on('removeRoot', (fqid) => {
+      this.removeRootObject(this.filters.rootObjects.indexOf(fqid));
+    });
+    this.$root.$on('addHiddenName', (objectId) => {
+      this.addHiddenName(objectId);
     });
   },
 };
@@ -746,6 +1145,90 @@ code {
     }
   }
 
+  .trace-view {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+
+    &__search {
+      margin-bottom: 1.5rem;
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      font-family: $appland-text-font-family;
+
+      &-input-wrap {
+        flex: 1;
+        position: relative;
+        border-radius: $border-radius;
+        border: 2px solid $light-purple;
+
+        .details-search--empty & {
+          border-radius: $gray3;
+          pointer-events: none;
+        }
+      }
+
+      &-input-prefix {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateY(-50%);
+        text-align: center;
+        color: $base06;
+
+        svg {
+          position: relative;
+          left: 3px;
+          width: 14px;
+          height: 14px;
+          fill: $lightgray2;
+        }
+      }
+
+      &-input-element {
+        border: none;
+        width: 100%;
+        padding: 0.5rem 2rem;
+        font: inherit;
+        font-size: 0.75rem;
+        color: $base03;
+        background: transparent;
+        outline: none;
+
+        &::-webkit-placeholder,
+        &::-moz-placeholder,
+        &::placeholder {
+          color: $gray4;
+        }
+      }
+
+      &-arrows {
+        display: flex;
+        align-items: center;
+        padding: 0 1.25rem;
+
+        &-text {
+          margin: 0 0.5rem;
+          font-size: 0.75rem;
+          color: $base06;
+        }
+      }
+
+      &-arrow {
+        padding: 0.25rem;
+        font-size: 0;
+        cursor: pointer;
+      }
+    }
+  }
+
   .no-data-notice {
     display: flex;
     position: absolute;
@@ -798,6 +1281,229 @@ code {
         margin-left: -1rem;
         color: $royal;
         margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .filters {
+    width: 390px;
+    font-size: 0.75rem;
+
+    &__head {
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+
+      svg {
+        width: 1em;
+        height: 1em;
+        fill: currentColor;
+      }
+
+      &-icon {
+        margin-right: 0.75rem;
+        color: $light-purple;
+      }
+
+      &-text {
+        margin-bottom: 0;
+        color: $base01;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+
+      &-reset {
+        margin-left: auto;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem;
+        background: transparent;
+        color: $lightgray2;
+        font: inherit;
+        outline: none;
+        line-height: 1;
+        appearance: none;
+        cursor: pointer;
+        transition: color 0.3s ease-in;
+
+        &:hover,
+        &:active {
+          color: $gray5;
+          transition-timing-function: ease-out;
+        }
+
+        svg {
+          margin-left: 0.5rem;
+        }
+      }
+    }
+
+    &__block {
+      &:not(:last-child) {
+        margin-bottom: 1rem;
+      }
+
+      &-head {
+        border-radius: 0.25rem 0.25rem 0 0;
+        margin-bottom: 1px;
+        display: flex;
+        padding: 0.5rem 0.75rem;
+        line-height: 1.25rem;
+        background: #2c2b32;
+      }
+
+      &-title {
+        margin: 0 0.5rem 0 0;
+        display: inline-block;
+        font-size: 0.875rem;
+        font-weight: bold;
+        color: $base06;
+      }
+
+      &-body {
+        border-radius: 0 0 0.25rem 0.25rem;
+        padding: 1rem 0.75rem;
+        background: #2c2b32;
+
+        &--flex {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+        }
+      }
+
+      &-row {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        &:not(:last-child) {
+          margin-bottom: 1rem;
+        }
+
+        &-content {
+          margin-left: 1rem;
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          line-height: 22px;
+        }
+      }
+    }
+
+    &__root {
+      border-radius: $border-radius;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      background: $light-purple;
+      color: $gray6;
+      line-height: 1;
+
+      &-icon {
+        flex-shrink: 0;
+        margin-left: 1rem;
+        width: 1em;
+        height: 1em;
+        fill: currentColor;
+        cursor: pointer;
+      }
+    }
+
+    &__checkbox {
+      flex-shrink: 0;
+      margin: 3px 0;
+      border-radius: 2px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 1rem;
+      height: 1rem;
+      background: $light-purple;
+      cursor: pointer;
+
+      input {
+        position: absolute;
+        overflow: hidden;
+        clip: rect(1px, 1px, 1px, 1px);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+
+        &:checked + .filters__checkbox-icon {
+          display: block;
+        }
+      }
+
+      &-icon {
+        display: none;
+        width: 0.5rem;
+        height: 0.5rem;
+        fill: $base03;
+      }
+    }
+
+    &__elapsed {
+      margin-left: 0.5rem;
+      border-radius: 0.25rem;
+      display: inline-block;
+      vertical-align: middle;
+      height: 22px;
+      padding: 0 0.25rem;
+      background: #191919;
+
+      &-input {
+        display: inline-block;
+        vertical-align: middle;
+        width: 2rem;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+        font: inherit;
+        text-align: right;
+        color: inherit;
+        outline: none;
+      }
+
+      &-ms {
+        color: $lightgray2;
+      }
+    }
+
+    &__hide {
+      margin-top: 0.75rem;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 0.5rem;
+
+      &-item {
+        border-radius: 0.25rem;
+        display: inline-flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 5px 10px;
+        background: $light-purple;
+        color: $gray6;
+        line-height: 1;
+
+        &-icon {
+          flex-shrink: 0;
+          margin-left: 1rem;
+          width: 1em;
+          height: 1em;
+          fill: currentColor;
+          cursor: pointer;
+        }
       }
     }
   }
