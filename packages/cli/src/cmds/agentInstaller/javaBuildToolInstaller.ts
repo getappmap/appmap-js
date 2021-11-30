@@ -14,15 +14,14 @@ export function addJetBrainsEnv() {
   }
 
   const javaHome = path.join(jbHome, 'jbr');
-  const gradleBin = path.join(jbHome, 'lib');
-  const mvnBin = path.join(jbHome, 'plugins/maven/maven3/bin');
+  const mvnBin = path.join(jbHome, 'plugins/maven/lib/maven3/bin');
 
   // Make sure we don't override the user's settings: append to path, use the
   // existing JAVA_HOME if it's set.
   if (!process.env['JAVA_HOME']) {
       process.env['JAVA_HOME'] = javaHome;
   };
-  process.env['PATH'] = [process.env['PATH'], path.join(javaHome, 'bin'), gradleBin, mvnBin].join(path.delimiter);
+  process.env['PATH'] = [process.env['PATH'], path.join(javaHome, 'bin'), mvnBin].join(path.delimiter);
 }
 addJetBrainsEnv();
 

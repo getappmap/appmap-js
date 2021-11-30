@@ -61,7 +61,7 @@ export default class MavenInstaller
       );
     }
 
-    return 'mvn';
+    return `mvn${ext}`;
   }
 
   async verifyCommand(): Promise<CommandStruct> {
