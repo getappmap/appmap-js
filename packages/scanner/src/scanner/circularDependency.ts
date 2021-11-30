@@ -208,7 +208,10 @@ function scanner(options: Options): Assertion {
         .map((path) => {
           return {
             event: path![0],
-            message: path!.map((event) => event.codeObject.packageOf).join(' -> '),
+            message: [
+              'Cycle in package dependency graph',
+              path!.map((event) => event.codeObject.packageOf).join(' -> '),
+            ].join(': '),
             relatedEvents: path!,
           } as MatchResult;
         });
@@ -219,4 +222,4 @@ function scanner(options: Options): Assertion {
   );
 }
 
-export default { scanner, enumerateScope: false, Options } as AssertionSpec;
+export default { scanner, scope: 'command', enumerateScope: false, Options } as AssertionSpec;

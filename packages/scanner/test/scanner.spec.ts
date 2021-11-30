@@ -14,9 +14,8 @@ import slowFunctionCall from '../src/scanner/slowFunctionCall';
 import tooManyJoins from '../src/scanner/tooManyJoins';
 import authzBeforeAuthn from '../src/scanner/authzBeforeAuthn';
 import unbatchedMaterializedQuery from '../src/scanner/unbatchedMaterializedQuery';
-import { fixtureAppMapFileName, scan } from './util';
-import { AssertionConfig, AssertionPrototype, MatchPatternConfig, ScopeName } from '../src/types';
-import Assertion from '../src/assertion';
+import { fixtureAppMapFileName, makePrototype, scan } from './util';
+import { ScopeName } from '../src/types';
 import { cwd } from 'process';
 import { join, normalize } from 'path';
 import { readFile } from 'fs/promises';
@@ -26,45 +25,7 @@ if (process.env.VERBOSE === 'true') {
   verbose(true);
 }
 
-const makePrototype = (
-  id: string,
-  buildFn: () => Assertion,
-  enumerateScope: boolean | undefined,
-  scope: ScopeName | undefined,
-  include: MatchPatternConfig[] | undefined = undefined,
-  exclude: MatchPatternConfig[] | undefined = undefined
-): AssertionPrototype => {
-  const config = { id } as AssertionConfig;
-  if (include) {
-    config.include = include;
-  }
-  if (exclude) {
-    config.exclude = exclude;
-  }
-  return {
-    config: config,
-    enumerateScope: enumerateScope === true ? true : false,
-    scope: scope || 'root',
-    build: buildFn,
-  } as AssertionPrototype;
-};
-
-describe('assert', () => {
-  it('circular dependency', async () => {
-    const { scope, enumerateScope, scanner, Options } = circularDependency;
-    const options = new Options();
-    const findings = await scan(
-      makePrototype(
-        'circular-dependency',
-        () => scanner(options),
-        enumerateScope,
-        scope as ScopeName
-      ),
-      'Password_resets_password_resets.appmap.json'
-    );
-    console.warn(JSON.stringify(findings, null, 2));
-  });
-
+describe('scanner', () => {
   it('slow HTTP server request', async () => {
     const { scope, enumerateScope, scanner, Options } = slowHttpServerRequest;
     const options = new Options();
