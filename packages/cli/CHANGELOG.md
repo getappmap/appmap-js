@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.14.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.0...@appland/appmap-v3.14.1) (2021-11-30)
+
+
+### Bug Fixes
+
+* Use correct path to JB maven plugin ([7bc5880](https://github.com/applandinc/appmap-js/commit/7bc588011dee9feb759c16d731b90e843fd74435))
+* Wait for the user to pick an installer ([f16e4a3](https://github.com/applandinc/appmap-js/commit/f16e4a3a77ec72e3eb9efefdb18699c5e50f9f0f))
+
 # [@appland/appmap-v3.14.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.13.4...@appland/appmap-v3.14.0) (2021-11-29)
 
 
