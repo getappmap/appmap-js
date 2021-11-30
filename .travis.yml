@@ -3,7 +3,8 @@ os: linux
 dist: xenial
 node_js: [14]
 
-cache: false
+cache:
+  npm: false
 
 addons:
   apt:
