@@ -23,6 +23,12 @@ jobs:
     - stage: test
       script: yarn run ci
 
+    - stage: test-windows
+      os: windows
+      env:
+        - YARN_GPG=no
+      script: yarn workspace @appland/appmap test --runTestsByPath tests/unit/agentInstall/gradleInstaller.spec.ts
+      
     - stage: deploy
       if: branch != main
       script: yarn run chromatic
