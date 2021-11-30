@@ -1,3 +1,10 @@
+# [@appland/components-v1.15.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.14.2...@appland/components-v1.15.0) (2021-11-30)
+
+
+### Features
+
+* Add global filtering and event search ([#429](https://github.com/applandinc/appmap-js/issues/429)) ([675ecaf](https://github.com/applandinc/appmap-js/commit/675ecafa391c215458f5e56baec511997f501bfd))
+
 # [@appland/components-v1.14.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.14.1...@appland/components-v1.14.2) (2021-10-26)
 
 
