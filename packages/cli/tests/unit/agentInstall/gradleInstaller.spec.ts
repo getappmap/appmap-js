@@ -69,7 +69,7 @@ describe('GradleInstaller', () => {
           console.log(actual);
         }
 
-        expect(actual).toBe(expected);
+        expect(actual).toMatchSnapshot();
       });
     });
   });
