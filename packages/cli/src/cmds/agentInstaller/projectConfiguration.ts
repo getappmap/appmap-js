@@ -227,7 +227,7 @@ export async function getProjects(
     }
   }
 
-  resolveSelectedInstallers(projectConfigurations, userSpecifiedInstaller);
+  await resolveSelectedInstallers(projectConfigurations, userSpecifiedInstaller);
 
   return projectConfigurations;
 }
