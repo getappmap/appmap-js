@@ -18,6 +18,8 @@ addons:
 if: tag IS present OR commit_message !~ /^chore(release)/
 
 install:
+- yarn config get enableGlobalCache || true
+- yarn config get globalFolder || true
 - npm cache verify
 - yarn
 - yarn run build
