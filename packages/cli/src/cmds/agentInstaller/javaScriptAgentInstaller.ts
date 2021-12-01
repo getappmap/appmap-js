@@ -76,7 +76,7 @@ export class NpmInstaller
   async installAgent(): Promise<void> {
     const cmd = new CommandStruct(
       'npm',
-      ['install', '--saveDev', AGENT_PACKAGE],
+      ['install', '--saveDev', process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE],
       this.path
     );
 
@@ -118,7 +118,7 @@ export class YarnInstaller
   async installAgent(): Promise<void> {
     const cmd = new CommandStruct(
       'yarn',
-      ['add', '--dev', AGENT_PACKAGE],
+      ['add', '--dev', process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE],
       this.path
     );
 
