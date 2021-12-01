@@ -12,6 +12,7 @@ deploy:
     script: >-
       npm config set registry https://npm.pkg.github.com \
       && echo -e "machine github.com\n  login ${GH_TOKEN}" > ~/.netrc \
-      && yarn run semantic-release
+      && yarn build-native \
+      && yarn semantic-release
     on:
       branch: main
