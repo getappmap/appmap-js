@@ -7,7 +7,7 @@
         "depth": {
           "type": "number"
         },
-        "ignorePackages": {
+        "ignoredPackages": {
           "items": {
             "type": "string"
           },

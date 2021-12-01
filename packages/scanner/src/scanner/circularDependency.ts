@@ -15,17 +15,17 @@ class Cycle {
   constructor(public packages: PackageName[], public events: Map<PackageName, Event[]>) {}
 }
 
-function ignorePackage(event: Event, ignorePackages: string[]): boolean {
+function ignorePackage(event: Event, ignoredPackages: string[]): boolean {
   const myPackage: string | null = event.codeObject.packageOf;
   return (
     myPackage === '' ||
-    ignorePackages.includes(myPackage) ||
+    ignoredPackages.includes(myPackage) ||
     !event.codeObject.location ||
     isAbsolute(event.codeObject.location)
   );
 }
 
-function detectCycles(root: Event, ignorePackages: string[]): Cycle[] {
+function detectCycles(root: Event, ignoredPackages: string[]): Cycle[] {
   const graph = new Graph(true);
   const vertices = new Map<PackageName, GraphVertex>();
   const edges = new Set<string>();
@@ -49,7 +49,7 @@ function detectCycles(root: Event, ignorePackages: string[]): Cycle[] {
     parentPackage: PackageName | null
   ) => {
     let myPackage: PackageName | null = event.codeObject.packageOf;
-    if (ignorePackage(event, ignorePackages)) {
+    if (ignorePackage(event, ignoredPackages)) {
       myPackage = null;
     }
 
@@ -89,7 +89,7 @@ function detectCycles(root: Event, ignorePackages: string[]): Cycle[] {
 
  * @returns Sequence of events whose package names match the cyclePath.
  */
-const searchForCycle = (cycle: Cycle, ignorePackages: PackageName[]): Event[] | null => {
+const searchForCycle = (cycle: Cycle, ignoredPackages: PackageName[]): Event[] | null => {
   const traverseEvent = (
     event: Event,
     recordEvent: boolean,
@@ -124,7 +124,7 @@ const searchForCycle = (cycle: Cycle, ignorePackages: PackageName[]): Event[] | 
     // Traverse children of ignored or same package
     let result = event.children
       .filter(
-        (child) => child.codeObject.packageOf === myPackage || ignorePackage(child, ignorePackages)
+        (child) => child.codeObject.packageOf === myPackage || ignorePackage(child, ignoredPackages)
       )
       .map((child) => traverseEvent(child, false, cyclePath, cyclePathIndex, path))
       .filter(Boolean);
@@ -135,7 +135,7 @@ const searchForCycle = (cycle: Cycle, ignorePackages: PackageName[]): Event[] | 
         .filter(
           (child) =>
             child.codeObject.packageOf !== myPackage &&
-            !ignorePackage(child, ignorePackages) &&
+            !ignorePackage(child, ignoredPackages) &&
             cyclePath[cyclePathIndex + 1] === child.codeObject.packageOf
         )
         .map((child) => traverseEvent(child, true, cyclePath, cyclePathIndex + 1, path))
@@ -192,7 +192,7 @@ const searchForCycle = (cycle: Cycle, ignorePackages: PackageName[]): Event[] | 
 };
 
 class Options implements types.CircularDependency.Options {
-  public ignorePackages: string[] = [];
+  public ignoredPackages: string[] = [];
   public depth = 4;
 }
 
@@ -201,9 +201,9 @@ function scanner(options: Options): Assertion {
     'circular-dependency',
     'Circular package dependency',
     (event: Event): MatchResult[] => {
-      return detectCycles(event, options.ignorePackages)
+      return detectCycles(event, options.ignoredPackages)
         .filter((cycle) => cycle.packages.length + 1 >= options.depth)
-        .map((cycle) => searchForCycle(cycle, options.ignorePackages))
+        .map((cycle) => searchForCycle(cycle, options.ignoredPackages))
         .filter((path) => path)
         .map((path) => {
           return {
