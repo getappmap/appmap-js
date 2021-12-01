@@ -1,31 +1,38 @@
-import { AppMap, Event } from '@appland/models';
-import { EventFilter, MatchPatternConfig } from 'src/types';
-import { Script } from 'vm';
+import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
+import { StringFilter } from '../../types';
 
-export function build(config: MatchPatternConfig | string | RegExp): EventFilter {
-  const filterRegExp = (pattern: RegExp) => (event: Event) => pattern.test(event.codeObject.fqid);
-  const filterString = (pattern: string) => filterRegExp(new RegExp(pattern));
-  const filterFunction = (expression: string) => {
-    const script = new Script(expression);
-    return (event: Event, appMap?: AppMap) => {
-      return script.runInNewContext({ event, appMap, console });
-    };
-  };
+function matchValueString(value: string, fn: (value: string) => boolean): boolean {
+  if (!value) {
+    return false;
+  }
+  if (typeof value !== 'string') {
+    return false;
+  }
 
-  if (config instanceof RegExp) {
-    return filterRegExp(config as RegExp);
-  } else if (typeof config === 'string') {
-    return filterString(config as string);
+  return fn(value);
+}
+
+export function buildFilter(pattern: MatchPatternConfig): StringFilter {
+  if (pattern.equal) {
+    return (value: string): boolean =>
+      matchValueString(value, (value: string): boolean => value === pattern.equal!);
+  } else if (pattern.include) {
+    return (value: string): boolean =>
+      matchValueString(value, (value: string): boolean => {
+        return value.includes(pattern.include!);
+      });
   } else {
-    const configObj = config as MatchPatternConfig;
-    if (configObj.regexp) {
-      return filterString(configObj.regexp!);
-    } else {
-      return filterFunction(configObj.function!);
-    }
+    const regexp =
+      pattern.match! instanceof RegExp
+        ? pattern.match!
+        : new RegExp(pattern.match! as unknown as string);
+    return (value: string): boolean =>
+      matchValueString(value, (value: string): boolean => {
+        return regexp.test(value);
+      });
   }
 }
 
-export function buildArray(value: MatchPatternConfig[] | RegExp[] | string[]): EventFilter[] {
-  return value.map((item) => build(item));
+export function buildFilters(patterns: MatchPatternConfig[]): StringFilter[] {
+  return patterns.map(buildFilter);
 }

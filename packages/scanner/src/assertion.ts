@@ -1,9 +1,13 @@
+import { AppMap, Event } from '@appland/models';
+import { verbose } from './scanner/util';
 import { EventFilter, Matcher } from './types';
 
 export default class Assertion {
   public where?: EventFilter;
-  public include: EventFilter[];
-  public exclude: EventFilter[];
+  public includeScope: EventFilter[];
+  public excludeScope: EventFilter[];
+  public includeEvent: EventFilter[];
+  public excludeEvent: EventFilter[];
   public description?: string;
   public options?: any;
 
@@ -21,8 +25,49 @@ export default class Assertion {
   }
 
   constructor(public id: string, public summaryTitle: string, public matcher: Matcher) {
-    this.include = [];
-    this.exclude = [];
+    this.includeScope = [];
+    this.excludeScope = [];
+    this.includeEvent = [];
+    this.excludeEvent = [];
+  }
+
+  filterScope(event: Event, appMap?: AppMap): boolean {
+    if (this.includeScope.length > 0 && !this.includeScope.every((fn) => fn(event, appMap))) {
+      if (verbose()) {
+        console.warn(`\t'includeScope' clause is not satisifed.`);
+      }
+      return false;
+    }
+    if (this.excludeScope.some((fn) => fn(event, appMap))) {
+      if (verbose()) {
+        console.warn(`\t'excludeScope' clause is not satisifed.`);
+      }
+      return false;
+    }
+    return true;
+  }
+
+  filterEvent(event: Event, appMap?: AppMap): boolean {
+    if (this.where && !this.where(event, appMap)) {
+      if (verbose()) {
+        console.warn(`\t'where' clause is not satisifed.`);
+      }
+      return false;
+    }
+
+    if (this.includeEvent.length > 0 && !this.includeEvent.every((fn) => fn(event, appMap))) {
+      if (verbose()) {
+        console.warn(`\t'includeEvent' clause is not satisifed.`);
+      }
+      return false;
+    }
+    if (this.excludeEvent.some((fn) => fn(event, appMap))) {
+      if (verbose()) {
+        console.warn(`\t'excludeEvent' clause is not satisifed.`);
+      }
+      return false;
+    }
+    return true;
   }
 
   toString(): string {
@@ -35,12 +80,13 @@ export default class Assertion {
     if (this.where) {
       tokens.push(`(where ${this.where})`);
     }
-    if (this.include.length > 0) {
-      tokens.push(`(include ${this.include.join(' && ')})`);
-    }
-    if (this.exclude.length > 0) {
-      tokens.push(`(exclude ${this.exclude.join(' || ')})`);
-    }
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self: any = this;
+    ['includeScope', 'excludeScope', 'includeEvent', 'excludeEvent'].forEach((key) => {
+      if (self[key].length > 0) {
+        tokens.push(`(${key} ${self[key].join(' && ')})`);
+      }
+    });
     return tokens.join(' ');
   }
 }

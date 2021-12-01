@@ -1,6 +1,7 @@
 import { load } from 'js-yaml';
 import ConfigurationProvider from '../src/configuration/configurationProvider';
-import { AssertionPrototype, Configuration } from '../src/types';
+import Configuration from '../src/configuration/types/configuration';
+import { AssertionPrototype } from '../src/types';
 
 describe('YAML config test', () => {
   it('propagates property settings', async () => {
@@ -18,21 +19,24 @@ describe('YAML config test', () => {
     expect(assertion.description).toEqual(`Slow HTTP server request (> 251ms)`);
   });
 
-  it('converts string to MatchPattern as needed', async () => {
+  it('loads event filter', async () => {
     const yamlConfig = `
     scanners:
     - id: missingAuthentication
       include:
-      - regexp: '^GET\\s'
+        - scope:
+            property: route
+            test:
+              include: GET
     `;
     const configObj = load(yamlConfig) as Configuration;
     const provider = new ConfigurationProvider(configObj);
     const assertionPrototypes: readonly AssertionPrototype[] = await provider.getConfig();
     expect(assertionPrototypes).toHaveLength(1);
     expect(assertionPrototypes[0].config.include!).toHaveLength(1);
-    expect(assertionPrototypes[0].config.include![0].regexp).toEqual(`^GET\\s`);
+    expect(assertionPrototypes[0].config.include![0].scope!.test.include!).toEqual('GET');
     const assertion = assertionPrototypes[0].build();
-    expect(assertion.include).toHaveLength(1);
+    expect(assertion.includeScope).toHaveLength(1);
   });
 
   it('propagates Record properties', async () => {

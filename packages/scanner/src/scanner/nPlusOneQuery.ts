@@ -1,4 +1,4 @@
-import { Event } from '@appland/models';
+import { AppMap, Event } from '@appland/models';
 import { AssertionSpec, Level, MatchResult } from '../types';
 import * as types from './types';
 import Assertion from '../assertion';
@@ -13,8 +13,12 @@ class Options implements types.NPlusOneQuery.Options {
 function scanner(options: Options): Assertion {
   const sqlCount: Record<string, SQLCount> = {};
 
-  const matcher = (command: Event): MatchResult[] | undefined => {
-    for (const sqlEvent of sqlStrings(command)) {
+  function matcher(
+    command: Event,
+    _appMap?: AppMap,
+    assertion?: Assertion
+  ): MatchResult[] | undefined {
+    for (const sqlEvent of sqlStrings(command, assertion!.filterEvent.bind(assertion!))) {
       let occurrence = sqlCount[sqlEvent.sql];
       if (!occurrence) {
         occurrence = {
@@ -49,7 +53,7 @@ function scanner(options: Options): Assertion {
       }
       return matchResults;
     }, [] as MatchResult[]);
-  };
+  }
 
   return Assertion.assert(
     'n-plus-one-query',

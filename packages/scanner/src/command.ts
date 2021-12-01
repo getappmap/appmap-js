@@ -9,7 +9,7 @@ import { ValidationError, AbortError } from './errors';
 import { AssertionPrototype, Finding } from './types';
 import { Argv, Arguments } from 'yargs';
 import chalk from 'chalk';
-import loadConfiguration from './configuration';
+import { loadConfiguration } from './configuration';
 import { verbose } from './scanner/util';
 import { join } from 'path';
 import postCommitStatus from './integration/github/commitStatus';

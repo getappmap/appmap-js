@@ -3,14 +3,10 @@ import { readFile } from 'fs/promises';
 import { join } from 'path';
 import Assertion from '../src/assertion';
 import AssertionChecker from '../src/assertionChecker';
+import AssertionConfig from '../src/configuration/types/assertionConfig';
+import MatchPatternConfig from '../src/configuration/types/matchPatternConfig';
 import { verbose } from '../src/scanner/util';
-import {
-  AssertionConfig,
-  AssertionPrototype,
-  Finding,
-  MatchPatternConfig,
-  ScopeName,
-} from '../src/types';
+import { AssertionPrototype, Finding, ScopeName } from '../src/types';
 
 if (process.env.VERBOSE_SCAN === 'true') {
   verbose(true);
@@ -34,16 +30,8 @@ const makePrototype = (
   buildFn: () => Assertion,
   enumerateScope: boolean | undefined,
   scope: ScopeName | undefined,
-  include: MatchPatternConfig[] | undefined = undefined,
-  exclude: MatchPatternConfig[] | undefined = undefined
 ): AssertionPrototype => {
   const config = { id } as AssertionConfig;
-  if (include) {
-    config.include = include;
-  }
-  if (exclude) {
-    config.exclude = exclude;
-  }
   return {
     config: config,
     enumerateScope: enumerateScope === true ? true : false,

@@ -20,6 +20,9 @@ import { cwd } from 'process';
 import { join, normalize } from 'path';
 import { readFile } from 'fs/promises';
 import { verbose } from '../src/scanner/util';
+import MatchPatternConfig from '../src/configuration/types/matchPatternConfig';
+import Assertion from '../src/assertion';
+import { inspect } from 'util';
 
 if (process.env.VERBOSE === 'true') {
   verbose(true);
@@ -160,27 +163,26 @@ describe('scanner', () => {
   it('illegal package dependency', async () => {
     const { scanner, scope, enumerateScope, Options } = illegalPackageAccess;
     const options = new Options();
-    options.allowedPackages = ['app/views'];
+    options.callerPackages = [
+      { equal: 'lib/pkg_a' } as MatchPatternConfig,
+      { equal: 'lib/command' } as MatchPatternConfig,
+    ];
+    options.calleePackages = [{ equal: 'lib/pkg_b' } as MatchPatternConfig];
     const findings = await scan(
       makePrototype(
         'illegal-package-dependency',
-        () => {
-          const result = scanner(options);
-          const pattern = new RegExp(/^query:/);
-          result.include = [(event: Event) => pattern.test(event.codeObject.fqid)];
-          return result;
-        },
+        () => scanner(options),
         enumerateScope,
         scope as ScopeName
       ),
-      'Users_profile_profile_display_while_anonyomus.appmap.json'
+      'ruby/circular_dependency/tmp/appmap/minitest/Command_command.appmap.json'
     );
     expect(findings).toHaveLength(1);
     const finding = findings[0];
     expect(finding.scannerId).toEqual('illegal-package-dependency');
-    expect(finding.event.id).toEqual(48);
+    expect(finding.event.id).toEqual(4);
     expect(finding.message).toEqual(
-      `Code object Database->SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ? was invoked from app/controllers, not from app/views`
+      `Code object lib/pkg_a/PkgA::A#cycle was invoked from lib/pkg_b, not from lib/pkg_a or lib/command`
     );
   });
 
@@ -223,9 +225,9 @@ describe('scanner', () => {
       makePrototype(
         'slow-function-call',
         () => {
-          const result = scanner(options);
+          const result: Assertion = scanner(options);
           const pattern = new RegExp(/Controller#create$/);
-          result.include = [(event: Event) => pattern.test(event.codeObject.fqid)];
+          result.includeEvent = [(event: Event) => pattern.test(event.codeObject.fqid)];
           return result;
         },
         enumerateScope,

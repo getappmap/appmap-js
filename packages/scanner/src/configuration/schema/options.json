@@ -1,4 +1,5 @@
 {
+  "$id": "https://appland.com/schemas/scanner/options.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "CircularDependency.Options": {
@@ -9,7 +10,7 @@
         },
         "ignoredPackages": {
           "items": {
-            "type": "string"
+            "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
           },
           "type": "array"
         }
@@ -19,15 +20,19 @@
     "IllegalPackageDependency.Options": {
       "additionalProperties": false,
       "properties": {
-        "allowedPackages": {
+        "calleePackage": {
+          "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
+        },
+        "callerPackages": {
           "items": {
-            "type": "string"
+            "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
           },
           "type": "array"
         }
       },
       "required": [
-        "allowedPackages"
+        "callerPackages",
+        "calleePackage"
       ],
       "type": "object"
     },
@@ -46,18 +51,34 @@
       ],
       "type": "object"
     },
+    "MatchPatternConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "equal": {
+          "type": "string"
+        },
+        "include": {
+          "type": "string"
+        },
+        "match": {
+          "format": "regex",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "MissingAuthentication.Options": {
       "additionalProperties": false,
       "properties": {
         "excludeContentTypes": {
           "items": {
-            "type": "string"
+            "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
           },
           "type": "array"
         },
         "includeContentTypes": {
           "items": {
-            "type": "string"
+            "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
           },
           "type": "array"
         }
@@ -81,13 +102,13 @@
       "properties": {
         "allowedPackages": {
           "items": {
-            "type": "string"
+            "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
           },
           "type": "array"
         },
-        "skipQueries": {
+        "allowedQueries": {
           "items": {
-            "type": "string"
+            "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
           },
           "type": "array"
         }
@@ -118,6 +139,12 @@
     "SlowFunctionCall.Options": {
       "additionalProperties": false,
       "properties": {
+        "functions": {
+          "items": {
+            "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
+          },
+          "type": "array"
+        },
         "timeAllowed": {
           "type": "number"
         }

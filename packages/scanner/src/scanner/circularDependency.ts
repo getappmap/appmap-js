@@ -1,6 +1,6 @@
 import { Event } from '@appland/models';
 import Assertion from '../assertion';
-import { AssertionSpec, MatchResult } from '../types';
+import { AssertionSpec, MatchResult, StringFilter } from '../types';
 import GraphEdge from '../algorithms/dataStructures/graph/GraphEdge';
 import GraphVertex from '../algorithms/dataStructures/graph/GraphVertex';
 import Graph from '../algorithms/dataStructures/graph/Graph';
@@ -8,6 +8,8 @@ import detectDirectedCycle from '../algorithms/graph/detect-cycle';
 import { isAbsolute } from 'path';
 import * as types from './types';
 import { verbose } from './util';
+import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
+import { buildFilters } from './lib/matchPattern';
 
 type PackageName = string;
 
@@ -15,17 +17,17 @@ class Cycle {
   constructor(public packages: PackageName[], public events: Map<PackageName, Event[]>) {}
 }
 
-function ignorePackage(event: Event, ignoredPackages: string[]): boolean {
+function ignorePackage(event: Event, ignoredPackages: StringFilter[]): boolean {
   const myPackage: string | null = event.codeObject.packageOf;
   return (
     myPackage === '' ||
-    ignoredPackages.includes(myPackage) ||
+    ignoredPackages.some((filter) => filter(myPackage)) ||
     !event.codeObject.location ||
     isAbsolute(event.codeObject.location)
   );
 }
 
-function detectCycles(root: Event, ignoredPackages: string[]): Cycle[] {
+function detectCycles(root: Event, ignoredPackages: StringFilter[]): Cycle[] {
   const graph = new Graph(true);
   const vertices = new Map<PackageName, GraphVertex>();
   const edges = new Set<string>();
@@ -89,7 +91,7 @@ function detectCycles(root: Event, ignoredPackages: string[]): Cycle[] {
 
  * @returns Sequence of events whose package names match the cyclePath.
  */
-const searchForCycle = (cycle: Cycle, ignoredPackages: PackageName[]): Event[] | null => {
+const searchForCycle = (cycle: Cycle, ignoredPackages: StringFilter[]): Event[] | null => {
   const traverseEvent = (
     event: Event,
     recordEvent: boolean,
@@ -192,18 +194,20 @@ const searchForCycle = (cycle: Cycle, ignoredPackages: PackageName[]): Event[] |
 };
 
 class Options implements types.CircularDependency.Options {
-  public ignoredPackages: string[] = [];
+  public ignoredPackages: MatchPatternConfig[] = [];
   public depth = 4;
 }
 
 function scanner(options: Options): Assertion {
+  const ignoredPackages = buildFilters(options.ignoredPackages);
+
   return Assertion.assert(
     'circular-dependency',
     'Circular package dependency',
     (event: Event): MatchResult[] => {
-      return detectCycles(event, options.ignoredPackages)
+      return detectCycles(event, ignoredPackages)
         .filter((cycle) => cycle.packages.length + 1 >= options.depth)
-        .map((cycle) => searchForCycle(cycle, options.ignoredPackages))
+        .map((cycle) => searchForCycle(cycle, ignoredPackages))
         .filter((path) => path)
         .map((path) => {
           return {

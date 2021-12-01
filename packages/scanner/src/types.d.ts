@@ -1,5 +1,6 @@
 import { AppMap, Event } from '@appland/models';
 import Assertion from './assertion';
+import AssertionConfig from './configuration/types/assertionConfig';
 
 /**
  * Each Assertion in the scanner library wants to consider some set of events as it decides whether the code should be flagged or not.
@@ -40,6 +41,8 @@ interface Scope {
  */
 export type Level = 'warning' | 'error';
 
+type StringFilter = (value: string) => boolean;
+
 /**
  * EventFilter is used by Assertion to select Events that will be analyzed for findings.
  * The event filter is always applied to the Scope.scope event. If enumerateScope is true,
@@ -65,7 +68,8 @@ export interface MatchResult {
  */
 type Matcher = (
   e: Event,
-  appMap: AppMap
+  appMap: AppMap,
+  assertion: Assertion
 ) => Promise<boolean | string | MatchResult[]> | boolean | string | MatchResult[] | undefined;
 
 /**
@@ -87,34 +91,6 @@ export interface Finding {
   groupMessage?: string;
   occurranceCount?: number;
   relatedEvents?: Event[];
-}
-
-/**
- * Configuration is the code representation of the scanner configuration file.
- */
-interface Configuration {
-  scanners: AssertionConfig[];
-}
-
-interface MatchPatternConfig {
-  regexp: string;
-  function: string;
-}
-
-/**
- * AssertionConfig represents the user's configuration of an Assertion, as read from the
- * configuration file.
- */
-interface AssertionConfig {
-  // id is expected to match the file name of the scanner in src/scanner.
-  id: string;
-  // User-defined include patterns. If provided, only events for which the filter returns truthy are analyzed.
-  include?: MatchPatternConfig[];
-  // User-defined exclude expression. If provided, only events for which the filter returns falsey are analyzed.
-  exclude?: MatchPatternConfig[];
-  description?: string;
-  // Properties are mapped to Assertion Options.
-  properties?: Record<string, any>;
 }
 
 /**

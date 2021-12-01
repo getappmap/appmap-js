@@ -73,7 +73,7 @@ __metadata:
     "@types/yargs": ^17.0.2
     "@typescript-eslint/eslint-plugin": ^4.30.0
     "@typescript-eslint/parser": ^4.30.0
-    ajv: ^8.8.0
+    ajv: ^8.8.2
     ansi-escapes: ^5.0.0
     chalk: ^4.1.2
     eslint: ^7.32.0
@@ -1815,15 +1815,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^8.8.0":
-  version: 8.8.0
-  resolution: "ajv@npm:8.8.0"
+"ajv@npm:^8.8.2":
+  version: 8.8.2
+  resolution: "ajv@npm:8.8.2"
   dependencies:
     fast-deep-equal: ^3.1.1
     json-schema-traverse: ^1.0.0
     require-from-string: ^2.0.2
     uri-js: ^4.2.2
-  checksum: a2543fcc440ab4fca2d2c3d625c52cd24d7d7b61f4e07f1dd2fb4c478367a84cf6cd3cf03c61be061bf804ed4410f3e363b7e0afb44d417a0e9d4bbad67eee0a
+  checksum: 90849ef03c4f4f7051d15f655120137b89e3205537d683beebd39d95f40c0ca00ea8476cd999602d2f433863e7e4bf1b81d1869d1e07f4dcf56d71b6430a605c
   languageName: node
   linkType: hard
 

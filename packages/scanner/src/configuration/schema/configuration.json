@@ -1,0 +1,111 @@
+{
+  "$id": "https://appland.com/schemas/scanner/configuration.json",
+  "$ref": "#/definitions/Configuration",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "AssertionConfig": {
+      "additionalProperties": false,
+      "description": "AssertionConfig represents the user's configuration of an Assertion, as read from the configuration file.",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "exclude": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "event": {
+                "$ref": "#/definitions/MatchEventConfig"
+              },
+              "scope": {
+                "$ref": "#/definitions/MatchEventConfig"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "include": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "event": {
+                "$ref": "#/definitions/MatchEventConfig"
+              },
+              "scope": {
+                "$ref": "#/definitions/MatchEventConfig"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "properties": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "Configuration": {
+      "additionalProperties": false,
+      "description": "Configuration is the code representation of the scanner configuration file.",
+      "properties": {
+        "scanners": {
+          "items": {
+            "$ref": "#/definitions/AssertionConfig"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "scanners"
+      ],
+      "type": "object"
+    },
+    "MatchEventConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "property": {
+          "enum": [
+            "id",
+            "type",
+            "fqid",
+            "query",
+            "route"
+          ],
+          "type": "string"
+        },
+        "test": {
+          "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
+        }
+      },
+      "required": [
+        "property",
+        "test"
+      ],
+      "type": "object"
+    },
+    "MatchPatternConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "equal": {
+          "type": "string"
+        },
+        "include": {
+          "type": "string"
+        },
+        "match": {
+          "format": "regex",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+npx ts-json-schema-generator -i https://appland.com/schemas/scanner/configuration.json --path src/configuration/types/configuration.ts > src/configuration/schema/configuration.json
+npx ts-json-schema-generator -i https://appland.com/schemas/scanner/options.json --path src/scanner/types.d.ts > src/configuration/schema/options.json
+
+sed -i '' 's=#\/definitions\/MatchPatternConfig=https:\/\/appland.com\/schemas\/scanner\/match-pattern-config.json=g' src/configuration/schema/configuration.json
+sed -i '' 's=#\/definitions\/MatchPatternConfig=https:\/\/appland.com\/schemas\/scanner\/match-pattern-config.json=g' src/configuration/schema/options.json

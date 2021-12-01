@@ -1,4 +1,4 @@
-import { Event } from '@appland/models';
+import { AppMap, Event } from '@appland/models';
 import { AssertionSpec, MatchResult } from '../types';
 import * as types from './types';
 import Assertion from '../assertion';
@@ -15,8 +15,12 @@ class Options implements types.TooManyJoins.Options {
 // TODO: clean up (https://github.com/applandinc/scanner/issues/43)
 function scanner(options: Options = new Options()): Assertion {
   const joinCount: Record<string, JoinCount> = {};
-  const matcher = (command: Event): MatchResult[] | undefined => {
-    for (const sqlEvent of sqlStrings(command)) {
+  const matcher = (
+    command: Event,
+    _appMap: AppMap,
+    assertion: Assertion
+  ): MatchResult[] | undefined => {
+    for (const sqlEvent of sqlStrings(command, assertion.filterEvent.bind(assertion))) {
       let occurrence = joinCount[sqlEvent.sql];
 
       if (!occurrence) {

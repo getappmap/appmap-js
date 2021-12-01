@@ -1,3 +1,5 @@
+import MatchPatternConfig from '../configuration/types/matchPatternConfig';
+
 interface TimeAllowed {
   timeAllowed?: number;
 }
@@ -8,13 +10,14 @@ interface WarningLimit {
 
 export namespace IllegalPackageDependency {
   export interface Options {
-    allowedPackages: string[];
+    callerPackages: MatchPatternConfig[];
+    calleePackage: MatchPatternConfig;
   }
 }
 
 export namespace CircularDependency {
   export interface Options {
-    ignoredPackages?: string[];
+    ignoredPackages?: MatchPatternConfig[];
     depth?: number;
   }
 }
@@ -27,8 +30,8 @@ export namespace IncompatibleHttpClientRequest {
 
 export namespace MissingAuthentication {
   export interface Options {
-    includeContentTypes?: string[];
-    excludeContentTypes?: string[];
+    includeContentTypes?: MatchPatternConfig[];
+    excludeContentTypes?: MatchPatternConfig[];
   }
 }
 
@@ -40,8 +43,8 @@ export namespace NPlusOneQuery {
 
 export namespace QueryFromInvalidPackage {
   export interface Options {
-    allowedPackages: string[];
-    skipQueries?: string[];
+    allowedPackages: MatchPatternConfig[];
+    allowedQueries?: MatchPatternConfig[];
   }
 }
 
@@ -58,8 +61,9 @@ export namespace RPCWithoutCircuitBreaker {
 }
 
 export namespace SlowFunctionCall {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface Options extends TimeAllowed {}
+  export interface Options extends TimeAllowed {
+    functions?: MatchPatternConfig[];
+  }
 }
 
 export namespace SlowHTTPServerRequest {
