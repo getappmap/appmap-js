@@ -46,10 +46,20 @@ export default class EncodedFile {
     bom1: number | undefined,
     encoding: TranscodeEncoding | undefined
   } {
-    const buf = fs.readFileSync(path);
-    let bom0: number | undefined = buf.readUInt8(0);
-    let bom1: number | undefined = buf.readUInt8(1);
+    let bom0, bom1: number | undefined;
     let encoding: TranscodeEncoding | undefined;
+    const buf = fs.readFileSync(path);
+    if (!buf.length) {
+      return {
+        buf,
+        bom0,
+        bom1,
+        encoding,
+      };
+    }
+
+    bom0 = buf.readUInt8(0);
+    bom1= buf.readUInt8(1);
     if (bom0 === 0xff && bom1 === 0xfe) {
       encoding = 'utf16le';
     } else if (bom0 < 0x80) {

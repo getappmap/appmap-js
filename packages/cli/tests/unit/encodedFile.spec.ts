@@ -65,5 +65,11 @@ describe('EncodedFile', () => {
       new EncodedFile(join(fixtureDir, 'utf8.txt'));
     }).toThrowError(/Unknown encoding/);
   });
+
+  it('reads an empty file', () => {
+    const ef = new EncodedFile(join(fixtureDir, 'empty.txt'));
+    const str = ef.toString();
+    expect(str).toEqual('');
+  });
 });
 
