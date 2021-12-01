@@ -1,3 +1,10 @@
+## [1.25.1](https://github.com/applandinc/scanner/compare/v1.25.0...v1.25.1) (2021-12-01)
+
+
+### Bug Fixes
+
+* Deploy native binaries ([cda6369](https://github.com/applandinc/scanner/commit/cda6369de1fdf59abaa78dceee33e9b1e3d09c82))
+
 # [1.25.0](https://github.com/applandinc/scanner/compare/v1.24.1...v1.25.0) (2021-12-01)
 
 
