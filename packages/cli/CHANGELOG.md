@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.14.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.1...@appland/appmap-v3.14.2) (2021-12-01)
+
+
+### Bug Fixes
+
+* Allow the user to override agent package ([963e15b](https://github.com/applandinc/appmap-js/commit/963e15b5684371102247efb97456f9497c96653f))
+* EncodedFile now handles empty files ([bacf4ac](https://github.com/applandinc/appmap-js/commit/bacf4aca20f0c1364a4b4c6f7657655b6a2db794))
+
 # [@appland/appmap-v3.14.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.0...@appland/appmap-v3.14.1) (2021-11-30)
 
 
