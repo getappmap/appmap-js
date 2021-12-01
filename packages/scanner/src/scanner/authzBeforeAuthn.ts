@@ -1,7 +1,7 @@
 import { Event, EventNavigator } from '@appland/models';
 import { AssertionSpec, MatchResult } from '../types.d';
 import Assertion from '../assertion';
-import { providesAuthentication } from './util';
+import { isTruthy, providesAuthentication } from './util';
 
 function containsAuthentication(events: Generator<EventNavigator>) {
   for (const iter of events) {
@@ -21,7 +21,7 @@ function scanner(): Assertion {
         if (providesAuthentication(event.event, SecurityAuthentication)) {
           return;
         }
-        if (event.event.labels.has(SecurityAuthorization)) {
+        if (event.event.labels.has(SecurityAuthorization) && isTruthy(event.event.returnValue)) {
           // If the authorization event has a successful authentication descendant, allow this as well.
           if (containsAuthentication(event.descendants())) {
             return;
