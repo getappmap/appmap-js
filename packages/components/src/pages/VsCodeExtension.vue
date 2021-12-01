@@ -590,6 +590,13 @@ export default {
               if (!Number.isNaN(eventId) && knownEventIds.includes(eventId)) {
                 nodes.push(eventId);
               }
+            } else if (item.startsWith('label:')) {
+              const labelName = item.replace('label:', '');
+              this.filteredAppMap.events.forEach((event) => {
+                if (event.isCall() && event.labels.has(labelName)) {
+                  nodes.push(event.id);
+                }
+              });
             }
           });
         }
