@@ -17,6 +17,7 @@ addons:
 if: tag IS present OR commit_message !~ /^chore(release)/
 
 install:
+- npm cache verify
 - yarn
 - yarn run build
 
