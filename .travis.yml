@@ -6,8 +6,8 @@ node_js: [14]
 cache:
   npm: false
   directories:
-  - ~/.npm
-  - ~/AppData/Roaming/npm-cache
+  - ~/.yarn
+  - ~/AppData/Local/Yarn
   
 addons:
   apt:
