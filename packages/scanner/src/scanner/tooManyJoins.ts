@@ -13,9 +13,8 @@ class Options implements types.TooManyJoins.Options {
 }
 
 // TODO: clean up (https://github.com/applandinc/scanner/issues/43)
-const scanner = (options: Options = new Options()): Assertion => {
+function scanner(options: Options = new Options()): Assertion {
   const joinCount: Record<string, JoinCount> = {};
-
   const matcher = (command: Event): MatchResult[] | undefined => {
     for (const sqlEvent of sqlStrings(command)) {
       let occurrence = joinCount[sqlEvent.sql];
@@ -56,6 +55,6 @@ const scanner = (options: Options = new Options()): Assertion => {
       assertion.description = `SQL query has too many joins ${assertion.options}`;
     }
   );
-};
+}
 
 export default { scope: 'root', enumerateScope: false, Options, scanner } as AssertionSpec;
