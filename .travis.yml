@@ -6,11 +6,7 @@ node_js: [14]
 cache:
   npm: false
   directories:
-  - ./node_modules
-  - ./packages/validate/node_modules
-  - ./packages/diagrams/node_modules
-  - ./packages/cli/node_modules
-  - ./packages/components/node_modules
+  - ~/.npm
 
 addons:
   apt:
