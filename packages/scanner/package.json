@@ -76,7 +76,8 @@
       "built/scanner/*.js"
     ],
     "assets": [
-      "built/sampleConfig/*.yml"
+      "built/sampleConfig/*.yml",
+      "built/**/*.json"
     ],
     "outputPath": "dist"
   }
