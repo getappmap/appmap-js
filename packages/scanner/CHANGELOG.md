@@ -1,3 +1,10 @@
+## [1.25.2](https://github.com/applandinc/scanner/compare/v1.25.1...v1.25.2) (2021-12-01)
+
+
+### Bug Fixes
+
+* Pack JSON files into native binaries ([b39849a](https://github.com/applandinc/scanner/commit/b39849a29c4f658208e771e46992bca59344e20b))
+
 ## [1.25.1](https://github.com/applandinc/scanner/compare/v1.25.0...v1.25.1) (2021-12-01)
 
 
