@@ -1,3 +1,17 @@
+# [1.25.0](https://github.com/applandinc/scanner/compare/v1.24.1...v1.25.0) (2021-12-01)
+
+
+### Bug Fixes
+
+* Correct schema of scanner 'exclude' ([42f00be](https://github.com/applandinc/scanner/commit/42f00beb083d13a08e4f8ead34936cf3e6bca6ad))
+* Don't flag authz-before-authn if permission is denied ([03cf321](https://github.com/applandinc/scanner/commit/03cf321236d1d2a2cb240c1e9deed064c1a57f4e))
+* Simplify assertion exclude filter check ([14d4676](https://github.com/applandinc/scanner/commit/14d46763c96cb89bb039bc416b103acc7df21ebd))
+
+
+### Features
+
+* SQL strings can be filtered ([be3ac6f](https://github.com/applandinc/scanner/commit/be3ac6f679835757c0edb0e9d6ae7e1b65412121))
+
 ## [1.24.1](https://github.com/applandinc/scanner/compare/v1.24.0...v1.24.1) (2021-11-29)
 
 
