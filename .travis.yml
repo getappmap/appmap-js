@@ -21,7 +21,8 @@ addons:
 if: tag IS present OR commit_message !~ /^chore(release)/
 
 install:
-  - yarn && yarn run build
+- yarn
+- yarn run build
 
 if: tag !~ @appland/.+-v\d\.\d\.\d
 
