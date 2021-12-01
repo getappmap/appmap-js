@@ -17,6 +17,9 @@
               href="https://appland.com/docs/quickstart/vscode/java-step-3.html"
               >Java</a
             >&nbsp;&nbsp;|&nbsp;&nbsp;<a
+              href="https://appland.com/docs/quickstart/vscode/javascript-step-3.html"
+              >JavaScript</a
+            >&nbsp;&nbsp;|&nbsp;&nbsp;<a
               href="https://appland.com/docs/quickstart/vscode/python-step-3.html"
               >Python</a
             >&nbsp;&nbsp;|&nbsp;&nbsp;<a
@@ -27,6 +30,9 @@
           <p class="mb20" v-if="editor === 'jetbrains'">
             <a href="https://appland.com/docs/quickstart/intellij/step-3"
               >Java</a
+            >&nbsp;&nbsp;|&nbsp;&nbsp;<a
+              href="https://appland.com/docs/quickstart/webstorm/step-3"
+              >JavaScript</a
             >&nbsp;&nbsp;|&nbsp;&nbsp;<a
               href="https://appland.com/docs/quickstart/pycharm/step-3"
               >Python</a
