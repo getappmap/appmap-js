@@ -92,7 +92,7 @@ export default class AssertionChecker {
       }
       return;
     }
-    if (assertion.exclude.length > 0 && assertion.exclude.some((fn) => fn(event, appMap))) {
+    if (assertion.exclude.some((fn) => fn(event, appMap))) {
       if (verbose()) {
         console.warn(`\t'exclude' clause is not satisifed. Skipping.`);
       }

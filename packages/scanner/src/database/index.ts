@@ -10,6 +10,7 @@ import {
   normalizeSQL,
   SqlQuery,
 } from '@appland/models';
+import { EventFilter } from 'src/types';
 
 const COMPONENTS_REGEXP_MAP: Record<string, RegExp> = {
   single_quotes: /'(?:[^']|'')*?(?:\\'.*|'(?!'))/g,
@@ -175,9 +176,12 @@ export function isSelect(sql: string): boolean {
   return getSqlLabelFromString(sql) === 'SQL Select';
 }
 
-export function* sqlStrings(event: Event, whitelist: string[] = []): Generator<SQLEvent> {
+export function* sqlStrings(event: Event, filter: EventFilter = () => true): Generator<SQLEvent> {
   for (const e of new EventNavigator(event).descendants()) {
     if (!e.event.sqlQuery) {
+      continue;
+    }
+    if (!filter(e.event)) {
       continue;
     }
 
@@ -186,9 +190,6 @@ export function* sqlStrings(event: Event, whitelist: string[] = []): Generator<S
     }
 
     const sql = sqlNormalized(e.event.sql!);
-    if (whitelist.includes(sql)) {
-      continue;
-    }
 
     yield { event: e.event, sql };
   }

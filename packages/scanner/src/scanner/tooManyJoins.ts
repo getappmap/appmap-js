@@ -15,7 +15,6 @@ class Options implements types.TooManyJoins.Options {
 // TODO: clean up (https://github.com/applandinc/scanner/issues/43)
 function scanner(options: Options = new Options()): Assertion {
   const joinCount: Record<string, JoinCount> = {};
-
   const matcher = (command: Event): MatchResult[] | undefined => {
     for (const sqlEvent of sqlStrings(command)) {
       let occurrence = joinCount[sqlEvent.sql];

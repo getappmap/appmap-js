@@ -45,7 +45,7 @@ export type Level = 'warning' | 'error';
  * The event filter is always applied to the Scope.scope event. If enumerateScope is true,
  * the filter is applied to all Scope.events as well.
  */
-type EventFilter = (e: Event, appMap: AppMap) => boolean;
+type EventFilter = (e: Event, appMap?: AppMap) => boolean;
 
 /**
  * MatchResult is created by an Assertion when it matches an Event.

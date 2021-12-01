@@ -42,9 +42,19 @@
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["pattern"],
+              "oneOf": [
+                {
+                  "required": ["regexp"]
+                },
+                {
+                  "required": ["function"]
+                }
+              ],
               "properties": {
-                "pattern": {
+                "regexp": {
+                  "type": "string"
+                },
+                "function": {
                   "type": "string"
                 }
               }

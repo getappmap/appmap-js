@@ -7,7 +7,7 @@ export function build(config: MatchPatternConfig | string | RegExp): EventFilter
   const filterString = (pattern: string) => filterRegExp(new RegExp(pattern));
   const filterFunction = (expression: string) => {
     const script = new Script(expression);
-    return (event: Event, appMap: AppMap) => {
+    return (event: Event, appMap?: AppMap) => {
       return script.runInNewContext({ event, appMap, console });
     };
   };
