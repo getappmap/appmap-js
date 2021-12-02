@@ -494,7 +494,7 @@ export default {
 
         classMap.codeObjects.forEach((codeObject) => {
           this.filters.rootObjects.forEach((id) => {
-            if (this.isMatchedId(codeObject.fqid, id)) {
+            if (this.codeObjectIsMatched(codeObject, id)) {
               eventBranches = eventBranches.concat(
                 codeObject.allEvents.map((e) => [e.id, e.linkedEvent.id])
               );
@@ -541,7 +541,7 @@ export default {
       ) {
         classMap.codeObjects.forEach((codeObject) => {
           this.filters.declutter.hideName.names.forEach((fqid) => {
-            if (this.isMatchedId(codeObject.fqid, fqid)) {
+            if (this.codeObjectIsMatched(codeObject, fqid)) {
               events = events.filter((e) => !codeObject.allEvents.includes(e));
             }
           });
@@ -576,26 +576,33 @@ export default {
     },
 
     highlightedNodes() {
-      const nodes = [];
+      const nodes = new Set();
 
       if (this.traceFilterValue) {
-        const knownEventIds = this.filteredAppMap.events
-          .filter((e) => e.isCall())
-          .map((e) => e.id);
+        const knownEventIds = new Set(
+          this.filteredAppMap.events.filter((e) => e.isCall()).map((e) => e.id)
+        );
         const filterValue = this.traceFilterValue.trim().split(' ');
         if (filterValue.length) {
           filterValue.forEach((item) => {
             if (item.startsWith('event:')) {
               const eventId = parseInt(item.replace('event:', ''), 10);
-              if (!Number.isNaN(eventId) && knownEventIds.includes(eventId)) {
-                nodes.push(eventId);
+              if (!Number.isNaN(eventId) && knownEventIds.has(eventId)) {
+                nodes.add(eventId);
               }
+            } else if (item.startsWith('label:')) {
+              const labelName = item.replace('label:', '');
+              this.filteredAppMap.events.forEach((event) => {
+                if (event.isCall() && event.labels.has(labelName)) {
+                  nodes.add(event.id);
+                }
+              });
             }
           });
         }
       }
 
-      return nodes;
+      return Array.from(nodes);
     },
 
     highlightedEventId() {
@@ -958,13 +965,22 @@ export default {
       return events.filter((e) => !excludedEvents.includes(e.id));
     },
 
-    isMatchedId(objectId, query) {
+    codeObjectIsMatched(object, query) {
+      if (query.startsWith('label:')) {
+        const labelRegExp = new RegExp(
+          `^${query.replace('label:', '').replace('*', '.*')}$`,
+          'ig'
+        );
+        return Array.from(object.labels).some((label) =>
+          labelRegExp.test(label)
+        );
+      }
       if (query.includes('*')) {
         const filterRegExp = new RegExp(`^${query.replace('*', '.*')}$`, 'ig');
-        if (filterRegExp.test(objectId)) {
+        if (filterRegExp.test(object.fqid)) {
           return true;
         }
-      } else if (query === objectId) {
+      } else if (query === object.fqid) {
         return true;
       }
       return false;

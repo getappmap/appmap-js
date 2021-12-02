@@ -707,7 +707,7 @@ context('VS Code Extension', () => {
       cy.get('.tabs .tab-btn').last().click();
 
       cy.get('.trace-view__search-input-element').type(
-        'event:1 event:3 event:15 event:99999'
+        'event:1 event:3 event:15 event:99999 label:json'
       );
 
       cy.get('.trace-node[data-event-id="1"]')
@@ -718,7 +718,7 @@ context('VS Code Extension', () => {
 
       cy.get('.trace-view__search-arrows-text').should(
         'contain.text',
-        '1/3 results'
+        '1/30 results'
       );
 
       cy.get('.trace-view__search-arrow').last().click();
@@ -733,9 +733,15 @@ context('VS Code Extension', () => {
         .should('be.visible')
         .should('have.class', 'highlight');
 
+      cy.get('.trace-view__search-arrow').last().click();
+
+      cy.get('.trace-node[data-event-id="18"]')
+        .should('be.visible')
+        .should('have.class', 'highlight');
+
       cy.get('.trace-view__search-arrow').first().click();
 
-      cy.get('.trace-node[data-event-id="3"]')
+      cy.get('.trace-node[data-event-id="15"]')
         .should('be.visible')
         .should('have.class', 'highlight');
     });
