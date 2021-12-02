@@ -576,25 +576,25 @@ export default {
     },
 
     highlightedNodes() {
-      const nodes = [];
+      const nodes = new Set();
 
       if (this.traceFilterValue) {
-        const knownEventIds = this.filteredAppMap.events
-          .filter((e) => e.isCall())
-          .map((e) => e.id);
+        const knownEventIds = new Set(
+          this.filteredAppMap.events.filter((e) => e.isCall()).map((e) => e.id)
+        );
         const filterValue = this.traceFilterValue.trim().split(' ');
         if (filterValue.length) {
           filterValue.forEach((item) => {
             if (item.startsWith('event:')) {
               const eventId = parseInt(item.replace('event:', ''), 10);
-              if (!Number.isNaN(eventId) && knownEventIds.includes(eventId)) {
-                nodes.push(eventId);
+              if (!Number.isNaN(eventId) && knownEventIds.has(eventId)) {
+                nodes.add(eventId);
               }
             } else if (item.startsWith('label:')) {
               const labelName = item.replace('label:', '');
               this.filteredAppMap.events.forEach((event) => {
                 if (event.isCall() && event.labels.has(labelName)) {
-                  nodes.push(event.id);
+                  nodes.add(event.id);
                 }
               });
             }
@@ -602,7 +602,7 @@ export default {
         }
       }
 
-      return nodes;
+      return Array.from(nodes);
     },
 
     highlightedEventId() {
