@@ -1,3 +1,11 @@
+# [@appland/components-v1.16.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.15.0...@appland/components-v1.16.0) (2021-12-02)
+
+
+### Features
+
+* add links for JavaScript docs in Quickstart ([b001599](https://github.com/applandinc/appmap-js/commit/b001599180016c23189df103de5ef21d80e3ad57))
+* show event exceptions in details panel ([dfafe3c](https://github.com/applandinc/appmap-js/commit/dfafe3ce15177b2177e722db2d152b532929ef26))
+
 # [@appland/components-v1.15.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.14.2...@appland/components-v1.15.0) (2021-11-30)
 
 
