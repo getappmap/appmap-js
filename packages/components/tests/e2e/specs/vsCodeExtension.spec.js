@@ -215,6 +215,17 @@ context('VS Code Extension', () => {
         'have.class',
         'highlight'
       );
+
+      // Go back to Trace view and select event with exceptions
+      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.trace-node[data-event-id="11"]').next().click();
+      cy.get('.trace-node[data-event-id="18"]').click();
+
+      cy.get('.event-params')
+        .should('contain.text', 'Exceptions')
+        .invoke('text')
+        .should('match', /JSON::ParserError/)
+        .should('match', /767:\s+unexpected\s+token\s+at/);
     });
 
     it('show child route events count', () => {
