@@ -1,3 +1,10 @@
+# [@appland/components-v1.17.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.16.0...@appland/components-v1.17.0) (2021-12-02)
+
+
+### Features
+
+* Filter dependency map and events by label ([#475](https://github.com/applandinc/appmap-js/issues/475)) ([c6ef4c7](https://github.com/applandinc/appmap-js/commit/c6ef4c79ed229b51b9c923cef14cfa67cf775d7b))
+
 # [@appland/components-v1.16.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.15.0...@appland/components-v1.16.0) (2021-12-02)
 
 
