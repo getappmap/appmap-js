@@ -61,7 +61,7 @@ export class NpmInstaller
 
   async postInstallMessage(): Promise<string> {
     return [
-      `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
+      `Run your tests with ${chalk.blue('npx appmap-agent-js -- mocha ...')}.`,
       `By default, AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
     ].join('\n');
   }
