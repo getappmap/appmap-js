@@ -1,3 +1,4 @@
+import { resolve } from 'path';
 import CommandStruct from './commandStruct';
 
 export default abstract class AgentInstaller {
@@ -7,7 +8,7 @@ export default abstract class AgentInstaller {
   public path: string;
 
   constructor(readonly name: string, path: string) {
-    this.path = path;
+    this.path = resolve(path);
   }
 
   abstract installAgent(): Promise<void>;
