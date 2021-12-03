@@ -3,6 +3,9 @@ os: linux
 dist: xenial
 node_js: ['14.18.1']
 
+before_install:
+  - sudo apt-get update && sudo apt-get -y install jq
+
 script:
   - yarn ci
 
@@ -10,9 +13,7 @@ deploy:
   - provider: script
     skip_cleanup: true
     script: >-
-      npm config set registry https://npm.pkg.github.com \
-      && echo -e "machine github.com\n  login ${GH_TOKEN}" > ~/.netrc \
-      && yarn build-native \
-      && yarn semantic-release
+      npm config set registry https://npm.pkg.github.com \ && echo -e "machine github.com\n  login
+      ${GH_TOKEN}" > ~/.netrc \ && yarn build-native \ && yarn semantic-release
     on:
       branch: main
