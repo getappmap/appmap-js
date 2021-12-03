@@ -6,6 +6,7 @@ import CommandStruct from './commandStruct';
 import { run } from './commandRunner';
 import { getOutput } from './commandUtil';
 import { findIntelliJHome } from './jetBrainsSupport';
+import AgentInstaller from './agentInstaller';
 
 export function addJetBrainsEnv() {
   const jbHome = findIntelliJHome();
@@ -25,12 +26,12 @@ export function addJetBrainsEnv() {
 }
 addJetBrainsEnv();
 
-export default abstract class JavaBuildToolInstaller {
+export default abstract class JavaBuildToolInstaller extends AgentInstaller {
   private _agentJar?: string;
 
   protected abstract printJarPathCommand(): Promise<CommandStruct>;
-  protected constructor(readonly path: string) {
-    this.path = path;
+  protected constructor(name: string, path: string) {
+    super(name, path);
   }
 
   get documentation(): string {

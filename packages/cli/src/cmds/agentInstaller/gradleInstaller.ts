@@ -13,14 +13,9 @@ import EncodedFile from '../../encodedFile';
 
 export default class GradleInstaller
   extends JavaBuildToolInstaller
-  implements AgentInstaller
 {
-  constructor(readonly path: string) {
-    super(path);
-  }
-
-  get name(): string {
-    return 'Gradle';
+  constructor(path: string) {
+    super('Gradle', path);
   }
 
   get buildFile(): string {

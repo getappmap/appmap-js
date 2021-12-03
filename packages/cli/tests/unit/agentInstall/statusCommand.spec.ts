@@ -38,8 +38,7 @@ describe('status sub-command', () => {
       .stub(AgentStatusProcedure.prototype, 'getEnvironmentForDisplay')
       .resolves(['env']);
 
-    const installer = stubInterface<AgentInstaller>();
-    installer.verifyCommand = undefined;
+    const installer = stubInterface<AgentInstaller>({verifyCommand: undefined});
 
     getInstallersForProject = sinon
       .stub(ProjectConfiguration, 'getProjects')

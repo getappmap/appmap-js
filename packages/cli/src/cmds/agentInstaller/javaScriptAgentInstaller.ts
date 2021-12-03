@@ -8,8 +8,10 @@ import CommandStruct from './commandStruct';
 
 const AGENT_PACKAGE = '@appland/appmap-agent-js@latest';
 
-abstract class JavaScriptInstaller {
-  constructor(readonly path: string) {}
+abstract class JavaScriptInstaller extends AgentInstaller {
+  constructor(name: string, path: string) {
+    super(name, path);
+  }
 
   get documentation() {
     return 'https://appland.com/docs/reference/appmap-agent-js';
@@ -44,14 +46,9 @@ abstract class JavaScriptInstaller {
 
 export class NpmInstaller
   extends JavaScriptInstaller
-  implements AgentInstaller
 {
-  constructor(readonly path: string) {
-    super(path);
-  }
-
-  get name(): string {
-    return 'npm';
+  constructor(path: string) {
+    super('npm', path);
   }
 
   get buildFile(): string {
@@ -64,7 +61,7 @@ export class NpmInstaller
 
   async postInstallMessage(): Promise<string> {
     return [
-      `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
+      `Run your tests with ${chalk.blue('npx appmap-agent-js -- mocha ...')}.`,
       `By default, AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
     ].join('\n');
   }
@@ -82,18 +79,17 @@ export class NpmInstaller
 
     await run(cmd);
   }
+
+  async verifyCommand() {
+    return undefined;
+  }
 }
 
 export class YarnInstaller
   extends JavaScriptInstaller
-  implements AgentInstaller
 {
-  constructor(readonly path: string) {
-    super(path);
-  }
-
-  get name(): string {
-    return 'yarn';
+  constructor(path: string) {
+    super('yarn', path);
   }
 
   get buildFile(): string {
@@ -123,5 +119,9 @@ export class YarnInstaller
     );
 
     await run(cmd);
+  }
+
+  async verifyCommand() { 
+    return undefined;
   }
 }
