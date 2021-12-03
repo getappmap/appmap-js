@@ -16,11 +16,9 @@ const REGEX_GEM_DECLARATION = /^(?:gem|group|require)\s/m;
 const REGEX_GEM_DEPENDENCY = /^\s*gem\s+['|"]appmap['|"].*$/m;
 const GEM_DEPENDENCY = "gem 'appmap', :groups => [:development, :test]";
 
-export class BundleInstaller implements AgentInstaller {
-  constructor(readonly path: string) {}
-
-  get name(): string {
-    return 'Bundler';
+export class BundleInstaller extends AgentInstaller {
+  constructor(path: string) {
+    super('Bundler', path);
   }
 
   get buildFile(): string {
@@ -102,5 +100,9 @@ export class BundleInstaller implements AgentInstaller {
         : chalk.red(version.output),
       'Gem home': gemHome.ok ? gemHome.output : chalk.red(gemHome.output),
     };
+  }
+
+  async verifyCommand() {
+    return undefined;
   }
 }

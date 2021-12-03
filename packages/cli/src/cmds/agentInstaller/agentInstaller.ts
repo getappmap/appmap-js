@@ -1,16 +1,20 @@
 import CommandStruct from './commandStruct';
 
-export default interface AgentInstaller {
-  readonly path: string;
-  readonly name: string;
-  readonly buildFile?: string;
-  readonly documentation?: string;
+export default abstract class AgentInstaller {
+  public abstract buildFile: string;
+  public abstract documentation: string;
 
-  installAgent(): Promise<void>;
-  validateAgentCommand?(): Promise<CommandStruct>;
-  initCommand(): Promise<CommandStruct>;
-  verifyCommand?(): Promise<CommandStruct>;
-  postInstallMessage?(): Promise<string>;
-  environment?(): Promise<Record<string, string>>;
-  available(): Promise<boolean>;
+  public path: string;
+
+  constructor(readonly name: string, path: string) {
+    this.path = path;
+  }
+
+  abstract installAgent(): Promise<void>;
+  abstract validateAgentCommand(): Promise<CommandStruct | undefined>;
+  abstract initCommand(): Promise<CommandStruct>;
+  abstract verifyCommand(): Promise<CommandStruct | undefined>;
+  abstract postInstallMessage(): Promise<string>;
+  abstract environment(): Promise<Record<string, string>>;
+  abstract available(): Promise<boolean>;
 }

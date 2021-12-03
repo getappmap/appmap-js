@@ -12,14 +12,9 @@ import EncodedFile from '../../encodedFile';
 
 export default class MavenInstaller
   extends JavaBuildToolInstaller
-  implements AgentInstaller
 {
-  constructor(readonly path: string) {
-    super(path);
-  }
-
-  get name(): string {
-    return 'Maven';
+  constructor(path: string) {
+    super('Maven', path);
   }
 
   get buildFile(): string {

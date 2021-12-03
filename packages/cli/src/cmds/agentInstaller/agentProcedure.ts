@@ -54,8 +54,9 @@ export default abstract class AgentProcedure {
   }
 
   async verifyProject() {
-    if (this.installer.verifyCommand) {
-      await this.installer.verifyCommand().then(run);
+    const verifyCommand = await this.installer.verifyCommand();
+    if (verifyCommand) {
+      await run(verifyCommand);
     }
   }
 
@@ -69,13 +70,13 @@ export default abstract class AgentProcedure {
   }
 
   async validateProject(checkSyntax: boolean) {
-    if (!this.installer.validateAgentCommand) {
+    const validateCmd = await this.installer.validateAgentCommand();
+    if (!validateCmd) {
       return;
     }
 
     UI.status = 'Validating the AppMap agent...';
 
-    const validateCmd = await this.installer.validateAgentCommand();
     let { stdout } = await this.validateAgent(validateCmd);
 
     const validationResult = JSON.parse(stdout);

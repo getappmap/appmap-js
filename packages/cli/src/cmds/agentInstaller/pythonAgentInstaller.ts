@@ -14,8 +14,10 @@ const REGEX_PKG_DEPENDENCY = /^\s*appmap\s*[=>~]+=.*$/m;
 // include .dev0 so pip will allow prereleases
 const PKG_DEPENDENCY = 'appmap>=1.1.0.dev0';
 
-abstract class PythonInstaller {
-  constructor(readonly path: string) {}
+abstract class PythonInstaller extends AgentInstaller {
+  constructor(name:string, path: string) {
+    super(name, path);
+  }
 
   get documentation() {
     return 'https://appland.com/docs/reference/appmap-python';
@@ -42,13 +44,9 @@ abstract class PythonInstaller {
   }
 }
 
-export class PoetryInstaller extends PythonInstaller implements AgentInstaller {
-  constructor(readonly path: string) {
-    super(path);
-  }
-
-  get name(): string {
-    return 'poetry';
+export class PoetryInstaller extends PythonInstaller {
+  constructor(path: string) {
+    super('poetry', path);
   }
 
   get buildFile(): string {
@@ -83,15 +81,23 @@ export class PoetryInstaller extends PythonInstaller implements AgentInstaller {
 
     await run(cmd);
   }
-}
 
-export class PipInstaller extends PythonInstaller implements AgentInstaller {
-  constructor(readonly path: string) {
-    super(path);
+  async verifyCommand() {
+    return undefined;
   }
 
-  get name(): string {
-    return 'pip';
+  async validateCommand() {
+    return undefined;
+  }
+
+  async validateAgentCommand() {
+    return undefined;
+  }  
+}
+
+export class PipInstaller extends PythonInstaller {
+  constructor(path: string) {
+    super('pip', path);
   }
 
   get buildFile(): string {
@@ -140,5 +146,17 @@ export class PipInstaller extends PythonInstaller implements AgentInstaller {
 
   async initCommand(): Promise<CommandStruct> {
     return new CommandStruct('appmap-agent-init', [], this.path);
+  }
+
+  async verifyCommand() {
+    return undefined;
+  }
+
+  async validateCommand() {
+    return undefined;
+  }
+
+  async validateAgentCommand() {
+    return undefined;
   }
 }
