@@ -1,11 +1,12 @@
 import { buildAppMap, Event } from '@appland/models';
-import slowHttpServerRequest from '../src/scanner/slowHttpServerRequest';
-import missingAuthentication from '../src/scanner/missingAuthentication';
-import secretInLog from '../src/scanner/secretInLog';
-import nPlusOneQuery from '../src/scanner/nPlusOneQuery';
-import tooManyUpdates from '../src/scanner/tooManyUpdates';
-import insecureCompare from '../src/scanner/insecureCompare';
+import circularDependency from '../src/scanner/circularDependency';
 import http500 from '../src/scanner/http500';
+import insecureCompare from '../src/scanner/insecureCompare';
+import missingAuthentication from '../src/scanner/missingAuthentication';
+import slowHttpServerRequest from '../src/scanner/slowHttpServerRequest';
+import nPlusOneQuery from '../src/scanner/nPlusOneQuery';
+import secretInLog from '../src/scanner/secretInLog';
+import tooManyUpdates from '../src/scanner/tooManyUpdates';
 import illegalPackageAccess from '../src/scanner/illegalPackageDependency';
 import rpcWithoutCircuitBreaker from '../src/scanner/rpcWithoutCircuitBreaker';
 import incompatibleHTTPClientRequest from '../src/scanner/incompatibleHttpClientRequest';
@@ -13,9 +14,8 @@ import slowFunctionCall from '../src/scanner/slowFunctionCall';
 import tooManyJoins from '../src/scanner/tooManyJoins';
 import authzBeforeAuthn from '../src/scanner/authzBeforeAuthn';
 import unbatchedMaterializedQuery from '../src/scanner/unbatchedMaterializedQuery';
-import { fixtureAppMapFileName, scan } from './util';
-import { AssertionConfig, AssertionPrototype, MatchPatternConfig, ScopeName } from '../src/types';
-import Assertion from '../src/assertion';
+import { fixtureAppMapFileName, makePrototype, scan } from './util';
+import { ScopeName } from '../src/types';
 import { cwd } from 'process';
 import { join, normalize } from 'path';
 import { readFile } from 'fs/promises';
@@ -25,30 +25,7 @@ if (process.env.VERBOSE === 'true') {
   verbose(true);
 }
 
-const makePrototype = (
-  id: string,
-  buildFn: () => Assertion,
-  enumerateScope: boolean | undefined,
-  scope: ScopeName | undefined,
-  include: MatchPatternConfig[] | undefined = undefined,
-  exclude: MatchPatternConfig[] | undefined = undefined
-): AssertionPrototype => {
-  const config = { id } as AssertionConfig;
-  if (include) {
-    config.include = include;
-  }
-  if (exclude) {
-    config.exclude = exclude;
-  }
-  return {
-    config: config,
-    enumerateScope: enumerateScope === true ? true : false,
-    scope: scope || 'root',
-    build: buildFn,
-  } as AssertionPrototype;
-};
-
-describe('assert', () => {
+describe('scanner', () => {
   it('slow HTTP server request', async () => {
     const { scope, enumerateScope, scanner, Options } = slowHttpServerRequest;
     const options = new Options();
@@ -131,7 +108,7 @@ describe('assert', () => {
     expect(finding1.event.id).toEqual(133);
     expect(finding1.relatedEvents!).toHaveLength(30);
     expect(finding1.message).toEqual(
-      `30 occurrences of SQL "SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?"`
+      `30 occurrences of SQL: SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?`
     );
   });
 
@@ -151,9 +128,9 @@ describe('assert', () => {
       'PaymentsController create no user email on file makes a onetime payment with no user, but associate with stripe'
     );
     expect(finding1.scannerId).toEqual('too-many-updates');
-    expect(finding1.event.id).toEqual(19);
-    expect(finding1.message).toEqual(`Command performs 4 SQL and RPC updates`);
-    expect(finding1.relatedEvents!).toHaveLength(4);
+    expect(finding1.event.id).toEqual(89);
+    expect(finding1.message).toEqual(`Command performs 3 SQL and RPC updates`);
+    expect(finding1.relatedEvents!).toHaveLength(3);
   });
 
   it('insecure comparison', async () => {

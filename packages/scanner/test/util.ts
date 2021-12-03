@@ -1,21 +1,55 @@
 import { AppMap, buildAppMap } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+import Assertion from '../src/assertion';
 import AssertionChecker from '../src/assertionChecker';
 import { verbose } from '../src/scanner/util';
-import { AssertionPrototype, Finding } from '../src/types';
+import {
+  AssertionConfig,
+  AssertionPrototype,
+  Finding,
+  MatchPatternConfig,
+  ScopeName,
+} from '../src/types';
 
 if (process.env.VERBOSE_SCAN === 'true') {
   verbose(true);
 }
 
 const fixtureAppMapFileName = (file: string): string => {
-  return join(__dirname, 'fixtures', 'appmaps', file);
+  if (file.split('/').length === 1) {
+    return join(__dirname, 'fixtures', 'appmaps', file);
+  } else {
+    return join(__dirname, 'fixtures', file);
+  }
 };
 
 const fixtureAppMap = async (file: string): Promise<AppMap> => {
   const appMapBytes = await readFile(fixtureAppMapFileName(file), 'utf8');
   return buildAppMap(appMapBytes).normalize().build();
+};
+
+const makePrototype = (
+  id: string,
+  buildFn: () => Assertion,
+  enumerateScope: boolean | undefined,
+  scope: ScopeName | undefined,
+  include: MatchPatternConfig[] | undefined = undefined,
+  exclude: MatchPatternConfig[] | undefined = undefined
+): AssertionPrototype => {
+  const config = { id } as AssertionConfig;
+  if (include) {
+    config.include = include;
+  }
+  if (exclude) {
+    config.exclude = exclude;
+  }
+  return {
+    config: config,
+    enumerateScope: enumerateScope === true ? true : false,
+    scope: scope || 'root',
+    build: buildFn,
+  } as AssertionPrototype;
 };
 
 const scan = async (
@@ -40,4 +74,4 @@ const scan = async (
   return findings;
 };
 
-export { fixtureAppMap, fixtureAppMapFileName, scan };
+export { fixtureAppMap, fixtureAppMapFileName, makePrototype, scan };

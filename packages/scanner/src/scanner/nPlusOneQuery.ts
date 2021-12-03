@@ -35,7 +35,9 @@ function scanner(options: Options): Assertion {
         return {
           level: level,
           event: occurrence.events[0],
-          message: `${occurrence.count} occurrences of SQL "${sql}"`,
+          message: `${occurrence.count} occurrences of SQL: ${sql}`,
+          groupMessage: sql,
+          occurranceCount: occurrence.count,
           relatedEvents: occurrence.events,
         };
       };
