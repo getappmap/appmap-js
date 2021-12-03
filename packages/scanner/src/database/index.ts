@@ -3,7 +3,7 @@
 
 // TODO: Copied and TypeScript-ified from @appland/models
 
-import { parse } from './parse';
+import { visit } from './visit';
 import {
   buildQueryAST,
   Event,
@@ -202,15 +202,15 @@ export function countJoins(normalizedSql: string): number {
     let joins = 0;
 
     if (ast) {
-      parse(ast, {
-        'map.join': (statement: any) => {
-          joins += statement.map.length;
+      visit(ast, {
+        'map.join': (node) => {
+          joins += node.map.length;
         },
       });
     }
 
     return joins;
-  } catch (e: any) {
+  } catch (_) {
     console.warn(`Unable to analyze query "${normalizedSql}"`);
     return 0;
   }

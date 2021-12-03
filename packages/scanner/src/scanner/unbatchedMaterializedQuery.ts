@@ -1,16 +1,10 @@
-import { buildQueryAST, Event, EventNavigator } from '@appland/models';
+import { buildQueryAST, Event } from '@appland/models';
 import { AssertionSpec } from '../types';
 import Assertion from '../assertion';
-import { parse } from '../database/parse';
+import { visit } from '../database/visit';
 
 function isMaterialized(e: Event): boolean {
-  for (const ancestor of new EventNavigator(e).ancestors()) {
-    if (ancestor.event.codeObject.labels.has(DAOMaterialize)) {
-      return true;
-    }
-  }
-
-  return false;
+  return e.ancestors().some(({ labels }) => labels.has(DAOMaterialize));
 }
 
 function isApplicable(e: Event): boolean {
@@ -24,7 +18,7 @@ function isApplicable(e: Event): boolean {
     if (ast) {
       const metadataTableNames = ['sqlite_master'];
 
-      parse(ast, {
+      visit(ast, {
         'statement.select': (statement: any) => {
           isSelect = true;
 
@@ -41,8 +35,8 @@ function isApplicable(e: Event): boolean {
         'expression.limit': () => {
           hasLimitClause = true;
         },
-        'identifier.table': (statement: any) => {
-          if (metadataTableNames.includes(statement.name)) {
+        'identifier.table': (identifier: any) => {
+          if (metadataTableNames.includes(identifier.name)) {
             isMetadataQuery = true;
           }
         },
@@ -52,7 +46,7 @@ function isApplicable(e: Event): boolean {
     const isBatched = hasLimitClause || isCount || isMetadataQuery;
 
     return isSelect && !isBatched && isMaterialized(e);
-  } catch (e: any) {
+  } catch (_) {
     console.warn(`Unable to analyze query "${e.sqlQuery!}"`);
     return false;
   }
