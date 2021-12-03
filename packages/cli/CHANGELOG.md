@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.14.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.2...@appland/appmap-v3.14.3) (2021-12-03)
+
+
+### Bug Fixes
+
+* Correct post-install instructions ([ed8febd](https://github.com/applandinc/appmap-js/commit/ed8febd6bc0cd9c2ba1380ed5a9ccced7e907e2e))
+* Use an absolute path when installing ([c39a784](https://github.com/applandinc/appmap-js/commit/c39a784a646662355f1aecbc4518e2b219037d10))
+
 # [@appland/appmap-v3.14.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.1...@appland/appmap-v3.14.2) (2021-12-01)
 
 
