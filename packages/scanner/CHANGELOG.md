@@ -1,3 +1,19 @@
+# [1.26.0](https://github.com/applandinc/scanner/compare/v1.25.2...v1.26.0) (2021-12-03)
+
+
+### Bug Fixes
+
+* unbatchedMaterializedQuery handles null ast ([9433d10](https://github.com/applandinc/scanner/commit/9433d100f111b8ebf5f4537d720b4e247ade98f7))
+
+
+### Features
+
+* Add graph data structures and algorithms ported to TS ([3e56554](https://github.com/applandinc/scanner/commit/3e56554e69f742e4e79e79fd89017ac5955162df))
+* circularDependency scanner ([e24a5cc](https://github.com/applandinc/scanner/commit/e24a5ccd63cf72da8f4d95b064ac2ab228da39e0))
+* Detect all cycles in the graph ([e55b7d4](https://github.com/applandinc/scanner/commit/e55b7d4384d4c2242e7cded8b1a73cf6630fac11))
+* Display a group message and occurrance count ([e64dbf1](https://github.com/applandinc/scanner/commit/e64dbf1f0d77f5b5ba1a6e3f39b3a38cfec73c44))
+* Find specific event sequences that lead to a cycle ([b790053](https://github.com/applandinc/scanner/commit/b7900533f080b86f677c30ee35923623618ec371))
+
 ## [1.25.2](https://github.com/applandinc/scanner/compare/v1.25.1...v1.25.2) (2021-12-01)
 
 
