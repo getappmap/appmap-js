@@ -1,3 +1,10 @@
+# [1.27.0](https://github.com/applandinc/scanner/compare/v1.26.0...v1.27.0) (2021-12-04)
+
+
+### Features
+
+* implement count joins logic in the scanner ([9461db7](https://github.com/applandinc/scanner/commit/9461db7dc7b12ee13aae5c63095c7b2ac65a4b17))
+
 # [1.26.0](https://github.com/applandinc/scanner/compare/v1.25.2...v1.26.0) (2021-12-03)
 
 
