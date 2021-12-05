@@ -905,25 +905,16 @@ packages:
   });
 
   describe('Multi-project install flow', () => {
+    let expectedStubs;
+
     beforeEach(() => {
       sinon.stub(commandRunner, 'run').resolves({
         stdout: '{"configuration": { "contents": "" }, "errors": []}',
         stderr: '',
       });
       projectDir = tmp.dirSync({} as any).name;
-    });
 
-    it('installs as expected', async () => {
-      const projectFixture = path.join(fixtureDir, 'java', 'multi-project');
-      fse.copySync(projectFixture, projectDir);
-
-      sinon.stub(UI, 'prompt').resolves({
-        addSubprojects: true,
-        confirm: true,
-        selectedSubprojects: ['project-a', 'project-b'],
-      });
-
-      const expectedStubs = [
+      expectedStubs = [
         GradleInstaller.prototype,
         MavenInstaller.prototype,
       ].flatMap((prototype) => [
@@ -933,10 +924,28 @@ packages:
         sinon.stub(prototype, 'verifyCommand').resolves(),
         sinon.stub(prototype, 'validateAgentCommand').resolves(),
       ]);
+    });
+
+    it('installs as expected', async () => {
+      const projectFixture = path.join(fixtureDir, 'java', 'multi-project');
+      fse.copySync(projectFixture, projectDir);
+
+      const promptStub = sinon.stub(inquirer, 'prompt').resolves({
+        addSubprojects: true,
+        confirm: true,
+        selectedSubprojects: ['project-a', 'project-b'],
+      });;
 
       await invokeCommand(projectDir, (err) => {
         expect(err).toBeNull();
       });
+
+      // No root project, should default to choosing subproject
+      expect(promptStub.getCall(0).args).toMatchObject([
+        {type: 'confirm', 
+        message: expect.stringMatching('This directory contains sub-projects'),
+        default: true,
+      }]);
 
       expectedStubs.forEach((stub) => expect(stub.called).toBe(true));
       const sendEventStub = Telemetry.sendEvent as sinon.SinonStub;
@@ -952,6 +961,27 @@ packages:
         name: 'install-agent:success',
         properties: { installer: 'Gradle' },
       });
+    });
+
+    it('installs the root project by default', async () => {
+      const projectFixture = path.join(fixtureDir, 'java', 'multi-project-root');
+      fse.copySync(projectFixture, projectDir);
+      const promptStub = sinon.stub(inquirer, 'prompt').resolves({
+        addSubprojects: true,
+        confirm: true,
+        selectedSubprojects: ['project-a', 'project-b'],
+      });;
+
+      await invokeCommand(projectDir, (err) => {
+        expect(err).toBeNull();
+      });
+      
+      // Root project exists, should default to not choosing a sub-project.
+      expect(promptStub.getCall(0).args).toMatchObject([
+        {type: 'confirm',
+        message: expect.stringMatching('This directory contains sub-projects'),
+        default: false,
+      }]);
     });
   });
 });
