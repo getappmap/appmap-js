@@ -1,3 +1,17 @@
+# [1.28.0](https://github.com/applandinc/scanner/compare/v1.27.0...v1.28.0) (2021-12-06)
+
+
+### Bug Fixes
+
+* Perform unix- and mac-friendly JSON schema fixup ([eedcdae](https://github.com/applandinc/scanner/commit/eedcdaed9f28d47e9e028ff3b203386c4a408ddd))
+* Remove incorrect MatchPatternConfig from schema ([2986007](https://github.com/applandinc/scanner/commit/298600772247672b784d1b83aeb8bbe26da4996f))
+
+
+### Features
+
+* Implement case-insensitive pattern test ([ee0e825](https://github.com/applandinc/scanner/commit/ee0e82502347dd6ffe506ccded466cb26a3615cd))
+* Unify filter patterns ([ece354d](https://github.com/applandinc/scanner/commit/ece354d6b023eb1bdd53a7a4d2b26482ce6874b7))
+
 # [1.27.0](https://github.com/applandinc/scanner/compare/v1.26.0...v1.27.0) (2021-12-04)
 
 
