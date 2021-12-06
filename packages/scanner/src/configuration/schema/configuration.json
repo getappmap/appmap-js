@@ -90,22 +90,6 @@
         "test"
       ],
       "type": "object"
-    },
-    "MatchPatternConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "equal": {
-          "type": "string"
-        },
-        "include": {
-          "type": "string"
-        },
-        "match": {
-          "format": "regex",
-          "type": "string"
-        }
-      },
-      "type": "object"
     }
   }
 }
