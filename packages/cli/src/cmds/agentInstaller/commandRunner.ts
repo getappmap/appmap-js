@@ -70,6 +70,7 @@ class CommandOutput {
 export async function run(command: CommandStruct): Promise<CommandReturn> {
   return new Promise((resolve, reject) => {
     const cp = spawn(command.program, command.args, {
+      shell: true,
       env: command.environment,
       cwd: command.path as string,
     });
