@@ -4,6 +4,10 @@
   "type": "object",
   "properties": {
     "additionalProperties": false,
+    "ignoreCase": {
+      "type": "boolean",
+      "default": false
+    },
     "equal": {
       "type": "string"
     },
