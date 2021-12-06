@@ -1,3 +1,16 @@
+# [@appland/appmap-validate-v2.1.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-validate-v2.0.0...@appland/appmap-validate-v2.1.0) (2021-12-06)
+
+
+### Bug Fixes
+
+* fix broken bin/index.js file ([70fcaed](https://github.com/applandinc/appmap-js/commit/70fcaed1e2c04b2edbc696e03f018b8c8a76189f))
+* used appmap-scoped monotonous constraint ([34af3c8](https://github.com/applandinc/appmap-js/commit/34af3c83679e1745427b80ec8b2869b9a6eeaf08))
+
+
+### Features
+
+* add constraint for continuous indexing (start at 1) ([ed919a6](https://github.com/applandinc/appmap-js/commit/ed919a689d450991bbc4ba49c65c75794be0f042))
+
 # [@appland/appmap-validate-v2.0.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-validate-v1.0.0...@appland/appmap-validate-v2.0.0) (2021-08-12)
 
 
