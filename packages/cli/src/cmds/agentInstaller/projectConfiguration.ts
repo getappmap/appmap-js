@@ -101,7 +101,8 @@ async function resolveSelectedInstallers(
  *          undefined
  */
 async function getSubprojects(
-  dir: string
+  dir: string,
+  rootHasInstaller: boolean
 ): Promise<ProjectConfiguration[] | undefined> {
   const ents = await fs.readdir(dir, { withFileTypes: true });
   const subprojects = (
@@ -140,6 +141,7 @@ async function getSubprojects(
 
   const { addSubprojects } = await UI.prompt({
     type: 'confirm',
+    default: !rootHasInstaller,
     name: 'addSubprojects',
     message:
       'This directory contains sub-projects. Would you like to choose sub-projects for installation?',
@@ -174,8 +176,10 @@ export async function getProjects(
 ): Promise<ProjectConfiguration[]> {
   let projectConfigurations: ProjectConfiguration[] = [];
 
+  const availableInstallers = await getAvailableInstallers(dir);
+  const rootHasInstaller = !!availableInstallers.length;
   if (allowMulti) {
-    const subprojects = await getSubprojects(dir);
+    const subprojects = await getSubprojects(dir, rootHasInstaller);
     if (subprojects?.length) {
       projectConfigurations.push(...(subprojects as ProjectConfiguration[]));
     } else if (subprojects?.length === 0) {
@@ -188,7 +192,6 @@ export async function getProjects(
 
   // If there are no subprojects, we will continue by installing to the current directory.
   if (!projectConfigurations.length) {
-    const availableInstallers = await getAvailableInstallers(dir);
     if (availableInstallers.length) {
       projectConfigurations = [
         {
