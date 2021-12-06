@@ -1,3 +1,10 @@
+# [@appland/models-v1.8.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.7.1...@appland/models-v1.8.0) (2021-12-06)
+
+
+### Features
+
+* Correctly parse some PostgreSQL-specific constructs ([52e0706](https://github.com/applandinc/appmap-js/commit/52e070676405ed4567b802a347f386fec4974651))
+
 # [@appland/models-v1.7.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.7.0...@appland/models-v1.7.1) (2021-11-17)
 
 
