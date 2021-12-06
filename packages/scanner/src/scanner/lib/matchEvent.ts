@@ -11,7 +11,7 @@ export function buildFilter(pattern: MatchEventConfig): EventFilter {
     id: (e: Event) => e.codeObject.id,
     type: (e: Event) => e.codeObject.type,
     fqid: (e: Event) => e.codeObject.fqid,
-    query: (e: Event) => (e.sql ? sqlNormalized(e.sql!) : null),
+    query: (e: Event) => (e.sql ? sqlNormalized(e.sql) : null),
     route: (e: Event) => e.route,
   };
 

@@ -15,10 +15,10 @@ function scanner(options: Options): Assertion {
 
   function matcher(
     command: Event,
-    _appMap?: AppMap,
-    assertion?: Assertion
+    _appMap: AppMap,
+    assertion: Assertion
   ): MatchResult[] | undefined {
-    for (const sqlEvent of sqlStrings(command, assertion!.filterEvent.bind(assertion!))) {
+    for (const sqlEvent of sqlStrings(command, assertion.filterEvent.bind(assertion!))) {
       let occurrence = sqlCount[sqlEvent.sql];
       if (!occurrence) {
         occurrence = {
