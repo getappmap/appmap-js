@@ -3,34 +3,40 @@ import Ajv from 'ajv';
 import yaml from 'js-yaml';
 import { promises as fs } from 'fs';
 import Assertion from '../assertion';
-import {
-  AssertionConfig,
-  AssertionPrototype,
-  AssertionSpec,
-  Configuration,
-  EventFilter,
-  MatchPatternConfig,
-} from 'src/types';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import optionsSchema from './options-schema.json';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import schema from './schema.json';
+import { AssertionPrototype, AssertionSpec, EventFilter } from '../types';
+import options_schema from './schema/options.json';
+import match_pattern_config_schema from './schema/match-pattern-config.json';
+import configuration_schema from './schema/configuration.json';
 import { capitalize, verbose } from '../scanner/util';
-import { buildArray as buildEventFilterArray } from '../scanner/lib/matchPattern';
+import { buildFilters as buildEventFilterArray } from '../scanner/lib/matchEvent';
+import Configuration from './types/configuration';
+import AssertionConfig from './types/assertionConfig';
+import MatchEventConfig from './types/matchEventConfig';
 
 const ajv = new Ajv();
+ajv.addSchema(match_pattern_config_schema);
 
-function makeFilter(patternConfigs: MatchPatternConfig[] | undefined): EventFilter[] {
-  if (!patternConfigs) {
+function makeFilter(matchConfigs: MatchEventConfig[]): EventFilter[] {
+  if (!matchConfigs) {
     return [];
   }
 
-  return buildEventFilterArray(patternConfigs!);
+  return buildEventFilterArray(matchConfigs!);
 }
 
 function populateAssertion(assertion: Assertion, config: AssertionConfig): void {
-  assertion.include = makeFilter(config.include);
-  assertion.exclude = makeFilter(config.exclude);
+  assertion.includeScope = makeFilter(
+    (config.include || []).filter((item) => item.scope).map((item) => item.scope!)
+  );
+  assertion.excludeScope = makeFilter(
+    (config.exclude || []).filter((item) => item.scope).map((item) => item.scope!)
+  );
+  assertion.includeEvent = makeFilter(
+    (config.include || []).filter((item) => item.event).map((item) => item.event!)
+  );
+  assertion.excludeEvent = makeFilter(
+    (config.exclude || []).filter((item) => item.event).map((item) => item.event!)
+  );
   if (config.description) {
     assertion.description = config.description;
   }
@@ -95,7 +101,7 @@ export default class ConfigurationProvider {
       rawConfig = this.config;
     }
 
-    validate(ajv.compile(schema), rawConfig, 'Scanner configuration');
+    validate(ajv.compile(configuration_schema), rawConfig, 'Scanner configuration');
 
     rawConfig.scanners
       .filter((scanner) => scanner.properties)
@@ -105,7 +111,7 @@ export default class ConfigurationProvider {
         if (verbose()) {
           console.warn(schemaKey);
         }
-        const propertiesSchema = (optionsSchema.definitions as Record<string, any>)[schemaKey];
+        const propertiesSchema = (options_schema.definitions as Record<string, any>)[schemaKey];
         if (!propertiesSchema) {
           return;
         }

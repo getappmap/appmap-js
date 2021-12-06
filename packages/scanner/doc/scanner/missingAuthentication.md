@@ -8,15 +8,15 @@ HTTP server request is missing authentication.
 
 ### Events checked
 
-* `http_server_response.status < 300`
-* Matches whitelists of route and content type
+- `http_server_response.status < 300`
+- Matches whitelists of route and content type
 
 ### Match condition
 
-* Does not have a descendant event labeled `public`.
-* Does not have a descendant event labeled `security.authentication`.
+- Does not have a descendant event labeled `public`.
+- Does not have a descendant event labeled `security.authentication`.
 
 ### Options
 
-* `routes RegExp[]`. Default: any route.
-* `contentTypes RegExp[]`. Default: any content type.
+- `includeContentTypes MatchPatternConfig[]`. Default: any content type.
+- `excludeContentTypes MatchPatternConfig[]`. Default: any content type.

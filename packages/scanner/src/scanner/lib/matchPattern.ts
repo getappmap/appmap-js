@@ -1,31 +1,26 @@
-import { AppMap, Event } from '@appland/models';
-import { EventFilter, MatchPatternConfig } from 'src/types';
-import { Script } from 'vm';
+import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
+import { StringFilter } from '../../types';
 
-export function build(config: MatchPatternConfig | string | RegExp): EventFilter {
-  const filterRegExp = (pattern: RegExp) => (event: Event) => pattern.test(event.codeObject.fqid);
-  const filterString = (pattern: string) => filterRegExp(new RegExp(pattern));
-  const filterFunction = (expression: string) => {
-    const script = new Script(expression);
-    return (event: Event, appMap?: AppMap) => {
-      return script.runInNewContext({ event, appMap, console });
-    };
-  };
+export function buildFilter(pattern: MatchPatternConfig): StringFilter {
+  function respectIgnoreCaseFlag(value: string): string {
+    return pattern.ignoreCase ? value.toLocaleLowerCase() : value;
+  }
 
-  if (config instanceof RegExp) {
-    return filterRegExp(config as RegExp);
-  } else if (typeof config === 'string') {
-    return filterString(config as string);
+  if (pattern.equal) {
+    const testStr = respectIgnoreCaseFlag(pattern.equal!);
+    return (value: string): boolean => respectIgnoreCaseFlag(value) === testStr;
+  } else if (pattern.include) {
+    const testStr = respectIgnoreCaseFlag(pattern.include!);
+    return (value: string): boolean => respectIgnoreCaseFlag(value).includes(testStr);
   } else {
-    const configObj = config as MatchPatternConfig;
-    if (configObj.regexp) {
-      return filterString(configObj.regexp!);
-    } else {
-      return filterFunction(configObj.function!);
-    }
+    const regexp =
+      pattern.match instanceof RegExp
+        ? pattern.match
+        : new RegExp(pattern.match as unknown as string, pattern.ignoreCase ? 'i' : undefined);
+    return (value: string): boolean => regexp.test(value);
   }
 }
 
-export function buildArray(value: MatchPatternConfig[] | RegExp[] | string[]): EventFilter[] {
-  return value.map((item) => build(item));
+export function buildFilters(patterns: MatchPatternConfig[]): StringFilter[] {
+  return patterns.map(buildFilter);
 }

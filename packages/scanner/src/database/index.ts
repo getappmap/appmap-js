@@ -190,6 +190,10 @@ export function* sqlStrings(event: Event, filter: EventFilter = () => true): Gen
       continue;
     }
 
+    if (!filter(event)) {
+      continue;
+    }
+
     const sql = sqlNormalized(e.event.sql!);
 
     yield { event: e.event, sql };

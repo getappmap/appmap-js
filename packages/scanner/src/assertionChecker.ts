@@ -43,6 +43,9 @@ export default class AssertionChecker {
         console.warn(`Scope ${scope.scope}`);
       }
       const assertion = assertionPrototype.build();
+      if (!assertion.filterScope(scope.scope, appMap)) {
+        continue;
+      }
       if (assertionPrototype.enumerateScope) {
         for (const event of scope.events()) {
           await this.checkEvent(event, scope.scope, appMap, assertion, matches);
@@ -69,10 +72,6 @@ export default class AssertionChecker {
       );
     }
 
-    if (event.codeObject.fqid === 'function:app/controllers/SessionsController#create') {
-      1 === 1;
-    }
-
     if (!event.returnEvent) {
       if (verbose()) {
         console.warn(`\tEvent has no returnEvent. Skipping.`);
@@ -80,22 +79,7 @@ export default class AssertionChecker {
       return;
     }
 
-    if (assertion.where && !assertion.where(event, appMap)) {
-      if (verbose()) {
-        console.warn(`\t'where' clause is not satisifed. Skipping.`);
-      }
-      return;
-    }
-    if (assertion.include.length > 0 && !assertion.include.every((fn) => fn(event, appMap))) {
-      if (verbose()) {
-        console.warn(`\t'include' clause is not satisifed. Skipping.`);
-      }
-      return;
-    }
-    if (assertion.exclude.some((fn) => fn(event, appMap))) {
-      if (verbose()) {
-        console.warn(`\t'exclude' clause is not satisifed. Skipping.`);
-      }
+    if (!assertion.filterEvent(event, appMap)) {
       return;
     }
 
@@ -122,7 +106,7 @@ export default class AssertionChecker {
       };
     };
 
-    const matchResult = await assertion.matcher(event, appMap);
+    const matchResult = await assertion.matcher(event, appMap, assertion);
     const numFindings = findings.length;
     if (matchResult === true) {
       findings.push(buildFinding(event));
