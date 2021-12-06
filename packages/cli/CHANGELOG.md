@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.14.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.3...@appland/appmap-v3.14.4) (2021-12-06)
+
+
+### Bug Fixes
+
+* Nudge user to install in current project ([28f358e](https://github.com/applandinc/appmap-js/commit/28f358e0479a5a919eb4d2b45be79a51f8dd9799))
+
 # [@appland/appmap-v3.14.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.2...@appland/appmap-v3.14.3) (2021-12-03)
 
 
