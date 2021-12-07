@@ -3,9 +3,9 @@
   "$ref": "#/definitions/Configuration",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
-    "AssertionConfig": {
+    "CheckConfig": {
       "additionalProperties": false,
-      "description": "AssertionConfig represents the user's configuration of an Assertion, as read from the configuration file.",
+      "description": "CheckConfig represents the user's configuration of an Check, which is an instantiation of a Rule. Each CheckConfing is read from the scanners configuration file.",
       "properties": {
         "description": {
           "type": "string"
@@ -45,6 +45,9 @@
         },
         "properties": {
           "type": "object"
+        },
+        "scope": {
+          "type": "string"
         }
       },
       "required": [
@@ -56,15 +59,15 @@
       "additionalProperties": false,
       "description": "Configuration is the code representation of the scanner configuration file.",
       "properties": {
-        "scanners": {
+        "checks": {
           "items": {
-            "$ref": "#/definitions/AssertionConfig"
+            "$ref": "#/definitions/CheckConfig"
           },
           "type": "array"
         }
       },
       "required": [
-        "scanners"
+        "checks"
       ],
       "type": "object"
     },

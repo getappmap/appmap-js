@@ -1,17 +1,14 @@
 import { AppMap } from '@appland/models';
 import chalk from 'chalk';
-import { ScannerSummary } from 'src/report/scannerSummary';
-import { AssertionPrototype, Finding } from '../types';
+import Check from '../check';
+import { ScannerSummary } from '../report/scannerSummary';
+import { Finding } from '../types';
 
 export default abstract class Formatter {
   private noColors = false;
 
   abstract appMap(appMap: AppMap): string;
-  abstract result(
-    assertionPrototype: AssertionPrototype,
-    findings: Finding[],
-    index: number
-  ): string | undefined;
+  abstract result(check: Check, findings: Finding[], index: number): string | undefined;
 
   summary(summary: ScannerSummary): string {
     const matchedStr = `${summary.findingTotal} finding${summary.findingTotal === 1 ? '' : 's'}`;

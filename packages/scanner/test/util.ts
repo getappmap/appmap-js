@@ -3,7 +3,7 @@ import { readFile } from 'fs/promises';
 import { join } from 'path';
 import Assertion from '../src/assertion';
 import AssertionChecker from '../src/assertionChecker';
-import AssertionConfig from '../src/configuration/types/assertionConfig';
+import AssertionConfig from '../src/configuration/types/checkConfig';
 import MatchPatternConfig from '../src/configuration/types/matchPatternConfig';
 import { verbose } from '../src/scanner/util';
 import { AssertionPrototype, Finding, ScopeName } from '../src/types';

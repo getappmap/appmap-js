@@ -1,16 +1,17 @@
 import { AppMap, Event } from '@appland/models';
-import Assertion from './assertion';
+import Check from './check';
 import { AbortError } from './errors';
-import { AssertionPrototype, Finding } from './types';
-import { verbose } from './scanner/util';
+import { Finding } from './types';
+import { verbose } from './rules/util';
 import ScopeIterator from './scope/scopeIterator';
 import RootScope from './scope/rootScope';
 import HTTPServerRequestScope from './scope/httpServerRequestScope';
 import HTTPClientRequestScope from './scope/httpClientRequestScope';
 import CommandScope from './scope/commandScope';
 import SQLTransactionScope from './scope/sqlTransactionScope';
+import CheckInstance from './checkInstance';
 
-export default class AssertionChecker {
+export default class RuleChecker {
   private scopes: Record<string, ScopeIterator> = {
     root: new RootScope(),
     command: new CommandScope(),
@@ -19,17 +20,13 @@ export default class AssertionChecker {
     transaction: new SQLTransactionScope(),
   };
 
-  async check(
-    appMap: AppMap,
-    assertionPrototype: AssertionPrototype,
-    matches: Finding[]
-  ): Promise<void> {
+  async check(appMap: AppMap, check: Check, matches: Finding[]): Promise<void> {
     if (verbose()) {
-      console.warn(`Checking AppMap ${appMap.name} with scope ${assertionPrototype.scope}`);
+      console.warn(`Checking AppMap ${appMap.name} with scope ${check.scope}`);
     }
-    const scopeIterator = this.scopes[assertionPrototype.scope];
+    const scopeIterator = this.scopes[check.scope];
     if (!scopeIterator) {
-      throw new AbortError(`Invalid scope name "${assertionPrototype.scope}"`);
+      throw new AbortError(`Invalid scope name "${check.scope}"`);
     }
 
     const callEvents = function* (): Generator<Event> {
@@ -42,16 +39,16 @@ export default class AssertionChecker {
       if (verbose()) {
         console.warn(`Scope ${scope.scope}`);
       }
-      const assertion = assertionPrototype.build();
-      if (!assertion.filterScope(scope.scope, appMap)) {
+      const checkInstance = new CheckInstance(check);
+      if (!check.filterScope(scope.scope, appMap)) {
         continue;
       }
-      if (assertionPrototype.enumerateScope) {
+      if (checkInstance.enumerateScope) {
         for (const event of scope.events()) {
-          await this.checkEvent(event, scope.scope, appMap, assertion, matches);
+          await this.checkEvent(event, scope.scope, appMap, checkInstance, matches);
         }
       } else {
-        await this.checkEvent(scope.scope, scope.scope, appMap, assertion, matches);
+        await this.checkEvent(scope.scope, scope.scope, appMap, checkInstance, matches);
       }
     }
   }
@@ -60,7 +57,7 @@ export default class AssertionChecker {
     event: Event,
     scope: Event,
     appMap: AppMap,
-    assertion: Assertion,
+    checkInstance: CheckInstance,
     findings: Finding[]
   ): Promise<void> {
     if (!event.isCall()) {
@@ -68,7 +65,7 @@ export default class AssertionChecker {
     }
     if (verbose()) {
       console.warn(
-        `Asserting ${assertion.id} on ${event.codeObject.fqid} event ${event.toString()}`
+        `Asserting ${checkInstance.id} on ${event.codeObject.fqid} event ${event.toString()}`
       );
     }
 
@@ -79,7 +76,7 @@ export default class AssertionChecker {
       return;
     }
 
-    if (!assertion.filterEvent(event, appMap)) {
+    if (!checkInstance.filterEvent(event, appMap)) {
       return;
     }
 
@@ -93,8 +90,8 @@ export default class AssertionChecker {
       const findingEvent = matchEvent || event;
       return {
         appMapName: appMap.metadata.name,
-        scannerId: assertion.id,
-        scannerTitle: assertion.summaryTitle,
+        scannerId: checkInstance.id,
+        scannerTitle: checkInstance.title,
         event: findingEvent,
         hash: findingEvent.hash,
         scope,
@@ -102,11 +99,10 @@ export default class AssertionChecker {
         groupMessage,
         occurranceCount,
         relatedEvents,
-        condition: assertion.description || assertion.matcher.toString(),
       };
     };
 
-    const matchResult = await assertion.matcher(event, appMap, assertion);
+    const matchResult = await checkInstance.ruleLogic.matcher(event, appMap, checkInstance.check);
     const numFindings = findings.length;
     if (matchResult === true) {
       findings.push(buildFinding(event));
@@ -129,7 +125,7 @@ export default class AssertionChecker {
     if (verbose()) {
       if (findings.length > numFindings) {
         findings.forEach((finding) =>
-          console.log(`\tFinding: ${finding.scannerId} : ${finding.message || finding.condition}`)
+          console.log(`\tFinding: ${finding.scannerId} : ${finding.message}`)
         );
       }
     }

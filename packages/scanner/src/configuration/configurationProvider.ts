@@ -2,52 +2,25 @@ import { ValidateFunction } from 'ajv';
 import Ajv from 'ajv';
 import yaml from 'js-yaml';
 import { promises as fs } from 'fs';
-import Assertion from '../assertion';
-import { AssertionPrototype, AssertionSpec, EventFilter } from '../types';
+import { Rule, ScopeName } from '../types';
 import options_schema from './schema/options.json';
 import match_pattern_config_schema from './schema/match-pattern-config.json';
 import configuration_schema from './schema/configuration.json';
-import { capitalize, verbose } from '../scanner/util';
-import { buildFilters as buildEventFilterArray } from '../scanner/lib/matchEvent';
+import { capitalize, verbose } from '../rules/util';
+import { buildFilters as buildEventFilterArray } from '../rules/lib/matchEvent';
 import Configuration from './types/configuration';
-import AssertionConfig from './types/assertionConfig';
-import MatchEventConfig from './types/matchEventConfig';
+import CheckConfig from './types/checkConfig';
+import Check from '../check';
 
 const ajv = new Ajv();
 ajv.addSchema(match_pattern_config_schema);
 
-function makeFilter(matchConfigs: MatchEventConfig[]): EventFilter[] {
-  if (!matchConfigs) {
-    return [];
-  }
-
-  return buildEventFilterArray(matchConfigs!);
-}
-
-function populateAssertion(assertion: Assertion, config: AssertionConfig): void {
-  assertion.includeScope = makeFilter(
-    (config.include || []).filter((item) => item.scope).map((item) => item.scope!)
-  );
-  assertion.excludeScope = makeFilter(
-    (config.exclude || []).filter((item) => item.scope).map((item) => item.scope!)
-  );
-  assertion.includeEvent = makeFilter(
-    (config.include || []).filter((item) => item.event).map((item) => item.event!)
-  );
-  assertion.excludeEvent = makeFilter(
-    (config.exclude || []).filter((item) => item.event).map((item) => item.event!)
-  );
-  if (config.description) {
-    assertion.description = config.description;
-  }
-}
-
-async function buildBuiltinAssertion(config: AssertionConfig): Promise<AssertionPrototype> {
-  const assertionSpec: AssertionSpec = (await import(`../scanner/${config.id}`)).default;
+async function buildBuiltinCheck(config: CheckConfig): Promise<Check> {
+  const rule: Rule = (await import(`../rules/${config.id}`)).default;
 
   let options: any;
-  if (assertionSpec.Options) {
-    options = new assertionSpec.Options();
+  if (rule.Options) {
+    options = new rule.Options();
   } else {
     options = {};
   }
@@ -58,16 +31,25 @@ async function buildBuiltinAssertion(config: AssertionConfig): Promise<Assertion
     });
   }
 
-  return {
-    config: config,
-    scope: assertionSpec.scope || 'root',
-    enumerateScope: assertionSpec.enumerateScope === true ? true : false,
-    build: () => {
-      const result = assertionSpec.scanner(options);
-      populateAssertion(result, config);
-      return result;
-    },
-  };
+  const check = new Check(rule, options);
+  if (config.scope) {
+    check.scope = config.scope as ScopeName;
+  }
+
+  check.includeScope = buildEventFilterArray(
+    (config.include || []).filter((item) => item.scope).map((item) => item.scope!)
+  );
+  check.excludeScope = buildEventFilterArray(
+    (config.exclude || []).filter((item) => item.scope).map((item) => item.scope!)
+  );
+  check.includeEvent = buildEventFilterArray(
+    (config.include || []).filter((item) => item.event).map((item) => item.event!)
+  );
+  check.excludeEvent = buildEventFilterArray(
+    (config.exclude || []).filter((item) => item.event).map((item) => item.event!)
+  );
+
+  return check;
 }
 
 const validate = (validator: ValidateFunction, data: any, context: string): void => {
@@ -90,7 +72,7 @@ const validate = (validator: ValidateFunction, data: any, context: string): void
 export default class ConfigurationProvider {
   constructor(private readonly config: string | Configuration) {}
 
-  async getConfig(): Promise<AssertionPrototype[]> {
+  async getConfig(): Promise<Check[]> {
     let rawConfig: Configuration | undefined;
     if (typeof this.config === 'string') {
       const yamlConfig = await fs.readFile(this.config, 'utf-8');
@@ -103,10 +85,10 @@ export default class ConfigurationProvider {
 
     validate(ajv.compile(configuration_schema), rawConfig, 'Scanner configuration');
 
-    rawConfig.scanners
-      .filter((scanner) => scanner.properties)
-      .forEach((scanner) => {
-        const id = scanner.id;
+    rawConfig.checks
+      .filter((check) => check.properties)
+      .forEach((check) => {
+        const id = check.id;
         const schemaKey = [capitalize(id), 'Options'].join('.');
         if (verbose()) {
           console.warn(schemaKey);
@@ -117,17 +99,11 @@ export default class ConfigurationProvider {
         }
         if (verbose()) {
           console.warn(propertiesSchema);
-          console.warn(scanner.properties);
+          console.warn(check.properties);
         }
-        validate(
-          ajv.compile(propertiesSchema),
-          scanner.properties || {},
-          `${scanner.id} properties`
-        );
+        validate(ajv.compile(propertiesSchema), check.properties || {}, `${check.id} properties`);
       });
 
-    return Promise.all(
-      rawConfig.scanners.map(async (c: AssertionConfig) => buildBuiltinAssertion(c))
-    );
+    return Promise.all(rawConfig.checks.map(async (c: CheckConfig) => buildBuiltinCheck(c)));
   }
 }
