@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.14.5](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.4...@appland/appmap-v3.14.5) (2021-12-07)
+
+
+### Bug Fixes
+
+* Use a shell when running a command ([12986a5](https://github.com/applandinc/appmap-js/commit/12986a5bbaa97a8e9b671ab1308636813f06ef2d))
+
 # [@appland/appmap-v3.14.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.3...@appland/appmap-v3.14.4) (2021-12-06)
 
 
