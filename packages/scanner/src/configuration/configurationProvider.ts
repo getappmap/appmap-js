@@ -16,7 +16,7 @@ const ajv = new Ajv();
 ajv.addSchema(match_pattern_config_schema);
 
 async function buildBuiltinCheck(config: CheckConfig): Promise<Check> {
-  const rule: Rule = (await import(`../rules/${config.id}`)).default;
+  const rule: Rule = (await import(`../rules/${config.rule}`)).default;
 
   let options: any;
   if (rule.Options) {
@@ -32,8 +32,13 @@ async function buildBuiltinCheck(config: CheckConfig): Promise<Check> {
   }
 
   const check = new Check(rule, options);
+
   if (config.scope) {
     check.scope = config.scope as ScopeName;
+  }
+
+  if (config.id) {
+    check.id = config.id;
   }
 
   check.includeScope = buildEventFilterArray(
@@ -88,8 +93,8 @@ export default class ConfigurationProvider {
     rawConfig.checks
       .filter((check) => check.properties)
       .forEach((check) => {
-        const id = check.id;
-        const schemaKey = [capitalize(id), 'Options'].join('.');
+        const ruleId = check.rule;
+        const schemaKey = [capitalize(ruleId), 'Options'].join('.');
         if (verbose()) {
           console.warn(schemaKey);
         }
@@ -101,7 +106,7 @@ export default class ConfigurationProvider {
           console.warn(propertiesSchema);
           console.warn(check.properties);
         }
-        validate(ajv.compile(propertiesSchema), check.properties || {}, `${check.id} properties`);
+        validate(ajv.compile(propertiesSchema), check.properties || {}, `${ruleId} properties`);
       });
 
     return Promise.all(rawConfig.checks.map(async (c: CheckConfig) => buildBuiltinCheck(c)));

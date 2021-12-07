@@ -7,9 +7,6 @@
       "additionalProperties": false,
       "description": "CheckConfig represents the user's configuration of an Check, which is an instantiation of a Rule. Each CheckConfing is read from the scanners configuration file.",
       "properties": {
-        "description": {
-          "type": "string"
-        },
         "exclude": {
           "items": {
             "additionalProperties": false,
@@ -46,12 +43,15 @@
         "properties": {
           "type": "object"
         },
+        "rule": {
+          "type": "string"
+        },
         "scope": {
           "type": "string"
         }
       },
       "required": [
-        "id"
+        "rule"
       ],
       "type": "object"
     },

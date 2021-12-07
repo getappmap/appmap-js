@@ -3,6 +3,7 @@ import { verbose } from './rules/util';
 import { EventFilter, RuleLogic, Rule, ScopeName } from './types';
 
 export default class Check {
+  public id: string;
   public scope: ScopeName;
   public includeScope: EventFilter[];
   public excludeScope: EventFilter[];
@@ -10,6 +11,7 @@ export default class Check {
   public excludeEvent: EventFilter[];
 
   constructor(public rule: Rule, public options: Record<string, any>) {
+    this.id = rule.id;
     this.scope = rule.scope || 'root';
     this.includeScope = [];
     this.excludeScope = [];

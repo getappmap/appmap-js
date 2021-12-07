@@ -10,8 +10,10 @@ interface MatchConfig {
  * instantiation of a Rule. Each CheckConfing is read from the scanners configuration file.
  */
 export default interface CheckConfig {
-  // id is expected to match the file name of the rule in src/rules.
-  id: string;
+  // rule is expected to match the file name of the rule in src/rules.
+  rule: string;
+  // default: id
+  id?: string;
   scope?: string;
   include?: MatchConfig[];
   exclude?: MatchConfig[];
