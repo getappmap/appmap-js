@@ -8,7 +8,7 @@ describe('CommandRunner', () => {
       const unknownCmd = randomBytes(8).toString('hex');
       await expect(async () => {
         await run(new CommandStruct(unknownCmd, [], process.cwd()));
-      }).rejects.toThrow(`${unknownCmd} was not found`);
+      }).rejects.toThrow(`/bin/sh: ${unknownCmd}: command not found`);
     });
   });
 });
