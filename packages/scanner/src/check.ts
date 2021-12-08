@@ -4,14 +4,20 @@ import { EventFilter, Rule, ScopeName } from './types';
 
 export default class Check {
   public id: string;
+  public options: Record<string, any>;
   public scope: ScopeName;
   public includeScope: EventFilter[];
   public excludeScope: EventFilter[];
   public includeEvent: EventFilter[];
   public excludeEvent: EventFilter[];
 
-  constructor(public rule: Rule, public options: Record<string, any>) {
+  constructor(public rule: Rule, options?: Record<string, any>) {
+    function makeOptions() {
+      return rule.Options ? new rule.Options() : {};
+    }
+
     this.id = rule.id;
+    this.options = options || makeOptions();
     this.scope = rule.scope || 'root';
     this.includeScope = [];
     this.excludeScope = [];

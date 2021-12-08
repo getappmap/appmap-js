@@ -30,7 +30,7 @@ function build(options: Options): RuleLogic {
 export default {
   id: 'slow-function-call',
   title: 'Slow function call',
-  scope: 'root' as ScopeName,
+  scope: 'root',
   enumerateScope: true,
   Options,
   build,

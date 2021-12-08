@@ -110,7 +110,14 @@ export default class RuleChecker {
     );
     const numFindings = findings.length;
     if (matchResult === true) {
-      findings.push(buildFinding(event));
+      let finding;
+      if (checkInstance.ruleLogic.message) {
+        const message = checkInstance.ruleLogic.message(scope, event);
+        finding = buildFinding(event, message);
+      } else {
+        finding = buildFinding(event);
+      }
+      findings.push(finding);
     } else if (typeof matchResult === 'string') {
       const finding = buildFinding(event, matchResult as string);
       finding.message = matchResult as string;

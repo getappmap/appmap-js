@@ -29,7 +29,7 @@ export default class CheckInstance {
   }
 
   get enumerateScope(): boolean {
-    return this.check.rule.enumerateScope === undefined ? true : this.check.rule.enumerateScope;
+    return this.check.rule.enumerateScope;
   }
 
   filterEvent(event: Event, appMap?: AppMap): boolean {

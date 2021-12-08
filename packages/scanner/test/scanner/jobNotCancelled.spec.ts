@@ -1,16 +1,11 @@
-import JobNotCancelled from '../../src/scanner/jobNotCancelled';
-import type { AssertionPrototype } from '../../src/types';
+import Check from '../../src/check';
+import rule from '../../src/rules/jobNotCancelled';
 import { scan } from '../util';
 
-test('job not cancelled scanner', async () => {
-  const prototype: AssertionPrototype = {
-    config: { id: JobNotCancelled.scanner().id },
-    build: JobNotCancelled.scanner,
-    enumerateScope: false,
-    scope: 'transaction',
-  };
+test('job not cancelled', async () => {
+  const check = new Check(rule);
   const findings = await scan(
-    prototype,
+    check,
     'Microposts_interface_micropost_interface_with_job.appmap.json'
   );
   expect(findings).toHaveLength(1);

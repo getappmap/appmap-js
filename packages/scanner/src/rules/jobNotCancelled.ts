@@ -39,6 +39,7 @@ export default {
   id: 'job-not-cancelled',
   title: 'Job created in a rolled back transaction and not cancelled',
   scope: 'transaction',
+  enumerateScope: false,
   labels: [Labels.JobCreate, Labels.JobCancel],
   build,
 } as Rule;

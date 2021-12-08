@@ -101,6 +101,8 @@ interface RuleLogic {
   // When specified by the rule, only events which pass the where filter
   // will be passed to the matcher.
   where?: EventFilter;
+  // When specified by the rule, provides a detailed message for a finding on a specific event.
+  message?: (scope: Event, event: Event) => string;
 }
 
 interface Rule {
@@ -115,7 +117,7 @@ interface Rule {
   scope?: ScopeName;
   // Whether to pass all the events in the scope to the matcher. If false, only the scope event
   // is passed to the matcher, and the rule should traverse the scope as needed.
-  enumerateScope?: boolean;
+  enumerateScope: boolean;
   // User-defined options for the rule.
   Options?: any;
   // Function to instantiate the rule logic from configured options.
