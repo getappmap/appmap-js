@@ -8,13 +8,11 @@ export default class ProgressFormatter extends Formatter {
     return '';
   }
 
-  result(_check: Check, matches: Finding[], index: number): string | undefined {
-    const ending = index % 80 === 0 ? '\n' : '';
-
+  result(_check: Check, matches: Finding[]): string | undefined {
     if (matches.length === 0) {
-      return chalk.stderr.green('.') + ending;
+      return chalk.stderr.green('.');
     } else {
-      return chalk.stderr.magenta('!') + ending;
+      return chalk.stderr.magenta('!');
     }
   }
 }

@@ -145,7 +145,6 @@ export default {
         progressFormat === 'progress' ? new ProgressFormatter() : new PrettyFormatter();
       const checks = await loadConfiguration(config);
 
-      let index = 0;
       const findings: Finding[] = [];
 
       await Promise.all(
@@ -163,13 +162,12 @@ export default {
 
           await Promise.all(
             checks.map(async (check) => {
-              index++;
               const matchCount = findings.length;
               await checker.check(appMap, check, findings);
               const newMatches = findings.slice(matchCount, findings.length);
               newMatches.forEach((match) => (match.appMapFile = file));
 
-              const message = formatter.result(check, newMatches, index);
+              const message = formatter.result(check, newMatches);
               if (message) {
                 process.stderr.write(message);
               }
