@@ -9,10 +9,14 @@ export default class CheckInstance {
 
   constructor(check: Check) {
     this.check = check;
-    this.ruleLogic = check.rule.build(check.options);
+    this.ruleLogic = check.rule.build(check.options || {});
   }
 
-  get id(): string {
+  get checkId(): string {
+    return this.check.id;
+  }
+
+  get ruleId(): string {
     return this.check.rule.id;
   }
 
@@ -25,7 +29,7 @@ export default class CheckInstance {
   }
 
   get enumerateScope(): boolean {
-    return this.check.rule.enumerateScope || true;
+    return this.check.rule.enumerateScope === undefined ? true : this.check.rule.enumerateScope;
   }
 
   filterEvent(event: Event, appMap?: AppMap): boolean {

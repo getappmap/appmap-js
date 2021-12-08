@@ -1,6 +1,6 @@
 import { AppMap, Event } from '@appland/models';
 import { verbose } from './rules/util';
-import { EventFilter, RuleLogic, Rule, ScopeName } from './types';
+import { EventFilter, Rule, ScopeName } from './types';
 
 export default class Check {
   public id: string;

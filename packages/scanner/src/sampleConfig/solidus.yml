@@ -1,22 +1,31 @@
-scanners:
-  - id: http500
-  - id: illegalPackageDependency
-    include:
-      - pattern: function:app/controllers/*
+checks:
+  - rule: http500
+  - rule: illegalPackageDependency
     properties:
-      allowedPackages: [ 'actionpack', 'activesupport', 'solidus_core' ]
-  - id: missingContentType
-  - id: missingAuthentication
-    include:
-      - pattern: /\/api/\/
-  - id: secretInLog
-  - id: slowHttpServerRequest
+      callerPackages:
+        - equal: actionpack
+        - equal: activesupport
+        - equal: solidus_core
+      calleePackage:
+        include: app/controllers
+  - rule: missingContentType
+  - rule: missingAuthentication
+    exclude:
+      - event:
+          property: route
+          test:
+            include: /api/
+  - rule: secretInLog
+  - rule: slowHttpServerRequest
     properties:
       timeAllowed: 1.0
-  - id: slowQuery
+  - rule: slowQuery
     properties:
       timeAllowed: 0.25
-  - id: tooManyUpdates
-  - id: updateInGetRequest
+  - rule: tooManyUpdates
+  - rule: updateInGetRequest
     exclude:
-      - pattern: INSERT INTO "spree_order_mutexes"
+      - event:
+          property: query
+          test:
+            include: INSERT INTO "spree_order_mutexes"

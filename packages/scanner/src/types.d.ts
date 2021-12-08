@@ -72,7 +72,7 @@ type MatcherResult =
  * Matcher function is part of a rule. It's applied to an Event to determine whether there is a finding
  * on this event. If the Matcher returns true, a string, or a MatchResult[], then finding(s) are created.
  */
-type Matcher = (e: Event, appMap: AppMap, check: Check) => MatcherResult;
+type Matcher = (e: Event, appMap: AppMap, eventFilter: EventFilter) => MatcherResult;
 
 /**
  * Finding is the full data structure that is created when a Rule matches an Event.
@@ -83,12 +83,13 @@ type Matcher = (e: Event, appMap: AppMap, check: Check) => MatcherResult;
 interface Finding {
   appMapName: string;
   appMapFile?: string;
-  scannerId: string;
-  scannerTitle: string;
+  checkId: string;
+  ruleId: string;
+  ruleTitle: string;
   event: Event;
   hash: string;
   scope: Event;
-  message?: string;
+  message: string;
   groupMessage?: string;
   occurranceCount?: number;
   relatedEvents?: Event[];

@@ -65,7 +65,7 @@ export default class RuleChecker {
     }
     if (verbose()) {
       console.warn(
-        `Asserting ${checkInstance.id} on ${event.codeObject.fqid} event ${event.toString()}`
+        `Asserting ${checkInstance.ruleId} on ${event.codeObject.fqid} event ${event.toString()}`
       );
     }
 
@@ -90,19 +90,24 @@ export default class RuleChecker {
       const findingEvent = matchEvent || event;
       return {
         appMapName: appMap.metadata.name,
-        scannerId: checkInstance.id,
-        scannerTitle: checkInstance.title,
+        checkId: checkInstance.checkId,
+        ruleId: checkInstance.ruleId,
+        ruleTitle: checkInstance.title,
         event: findingEvent,
         hash: findingEvent.hash,
         scope,
-        message,
+        message: message || checkInstance.title,
         groupMessage,
         occurranceCount,
         relatedEvents,
       };
     };
 
-    const matchResult = await checkInstance.ruleLogic.matcher(event, appMap, checkInstance.check);
+    const matchResult = await checkInstance.ruleLogic.matcher(
+      event,
+      appMap,
+      checkInstance.filterEvent.bind(checkInstance)
+    );
     const numFindings = findings.length;
     if (matchResult === true) {
       findings.push(buildFinding(event));
@@ -125,7 +130,7 @@ export default class RuleChecker {
     if (verbose()) {
       if (findings.length > numFindings) {
         findings.forEach((finding) =>
-          console.log(`\tFinding: ${finding.scannerId} : ${finding.message}`)
+          console.log(`\tFinding: ${finding.ruleId} : ${finding.message}`)
         );
       }
     }

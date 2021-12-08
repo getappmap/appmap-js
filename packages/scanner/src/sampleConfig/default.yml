@@ -1,19 +1,19 @@
 checks:
-  - id: circularDependency
-  - id: http500
-#  - id: missingContentType
-#  - id: nPlusOneQuery
-#  - id: slowHttpServerRequest
-#  - id: slowQuery
-#  - id: tooManyJoins
-#  - id: tooManyUpdates
-#  - id: updateInGetRequest
+  - rule: circularDependency
+  - rule: http500
+  - rule: missingContentType
+  - rule: nPlusOneQuery
+#  - rule: slowHttpServerRequest
+#  - rule: slowQuery
+#  - rule: tooManyJoins
+#  - rule: tooManyUpdates
+#  - rule: updateInGetRequest
 # Required labels: secret, log
-# - id: secretInLog
+# - rule: secretInLog
 # Required labels: security.authentication, security.authorization
-# - id: authzBeforeAuthn
+# - rule: authzBeforeAuthn
 # Required labels: security.authentication
 # Optional labels: public
-# - id: missingAuthentication
+# - rule: missingAuthentication
 # Required labels: dao.materialize
-# - id: unbatchedMaterializedQuery
+# - rule: unbatchedMaterializedQuery
