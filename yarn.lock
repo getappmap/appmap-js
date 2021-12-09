@@ -56,7 +56,7 @@ __metadata:
   dependencies:
     "@appland/components": "workspace:*"
     "@appland/diagrams": "workspace:*"
-    "@appland/models": "workspace:*"
+    "@appland/models": "workspace:^1.8.1"
     "@sidvind/better-ajv-errors": ^0.9.1
     "@types/fs-extra": ^9.0.12
     "@types/inquirer": ^7.3.3
@@ -220,7 +220,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@workspace:*, @appland/models@workspace:^1.5.0, @appland/models@workspace:packages/models":
+"@appland/models@workspace:^1.5.0, @appland/models@workspace:^1.8.1, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
