@@ -1,3 +1,18 @@
+# [1.29.0](https://github.com/applandinc/scanner/compare/v1.28.0...v1.29.0) (2021-12-09)
+
+
+### Bug Fixes
+
+* Let the console handle the line breaks, because they are happening in the wrong place anyway ([51cabe7](https://github.com/applandinc/scanner/commit/51cabe77a13596b1898a32aa6b06bd61129d9365))
+
+
+### Features
+
+* Continue adding rules ([2d90d2d](https://github.com/applandinc/scanner/commit/2d90d2d6c3b1b77e322346a6a283b1a36367532a))
+* Port tests to new architecture ([07b074a](https://github.com/applandinc/scanner/commit/07b074a91e47ab8f6ba0971c1bdac9eda5bc756f))
+* Separate the rule name from check id ([633ab1f](https://github.com/applandinc/scanner/commit/633ab1f8f7ef9fad31b009baedd776b86536e093))
+* Update @appland/models for upgraded SQL parsing ([717b707](https://github.com/applandinc/scanner/commit/717b70706e1bea81efdae4cee718d1c5340ef8d6))
+
 # [1.28.0](https://github.com/applandinc/scanner/compare/v1.27.0...v1.28.0) (2021-12-06)
 
 
