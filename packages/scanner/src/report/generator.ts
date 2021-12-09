@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import chalk from 'chalk';
-import { ideLink } from '../scanner/util';
+import { ideLink } from '../rules/util';
 import { Finding } from '../types';
 import Formatter from '../formatter/formatter';
 import { ScannerSummary } from './scannerSummary';
@@ -35,14 +35,14 @@ export default class Generator {
       }
 
       findings.forEach((match) => {
-        let findingSummary = scannerSummary.findingSummary[match.scannerId];
+        let findingSummary = scannerSummary.findingSummary[match.ruleId];
         if (!findingSummary) {
           findingSummary = {
-            scannerTitle: match.scannerTitle,
+            scannerTitle: match.ruleTitle,
             findingTotal: 0,
             messages: new Set(),
           } as FindingSummary;
-          scannerSummary.findingSummary[match.scannerId] = findingSummary;
+          scannerSummary.findingSummary[match.ruleId] = findingSummary;
         }
         findingSummary.findingTotal += 1;
         if (match.message) {
@@ -59,10 +59,10 @@ export default class Generator {
         }
 
         if (this.reportFormat === 'text') {
-          const message = match.message || match.condition;
+          const message = match.message;
           this.writeln(this.reportFile ? message : chalk.magenta(message));
           this.writeln(`\tLink:\t${this.reportFile ? filePath : chalk.blue(filePath)}`);
-          this.writeln(`\tRule:\t${match.scannerId}`);
+          this.writeln(`\tRule:\t${match.ruleId}`);
           this.writeln(`\tAppMap name:\t${match.appMapName}`);
           this.writeln(eventMsg);
           this.writeln(`\tScope:\t${match.scope.id} - ${match.scope.toString()}`);

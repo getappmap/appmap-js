@@ -1,28 +1,27 @@
 import { load } from 'js-yaml';
+import Check from '../src/check';
 import ConfigurationProvider from '../src/configuration/configurationProvider';
 import Configuration from '../src/configuration/types/configuration';
-import { AssertionPrototype } from '../src/types';
 
 describe('YAML config test', () => {
   it('propagates property settings', async () => {
     const yamlConfig = `
-    scanners:
-    - id: slowHttpServerRequest
+    checks:
+    - rule: slowHttpServerRequest
       properties:
         timeAllowed: 0.251
     `;
     const configObj = load(yamlConfig) as Configuration;
     const provider = new ConfigurationProvider(configObj);
-    const assertionPrototypes: readonly AssertionPrototype[] = await provider.getConfig();
-    expect(assertionPrototypes).toHaveLength(1);
-    const assertion = assertionPrototypes[0].build();
-    expect(assertion.description).toEqual(`Slow HTTP server request (> 251ms)`);
+    const checks: readonly Check[] = await provider.getConfig();
+    expect(checks).toHaveLength(1);
+    expect(checks[0].rule.title).toEqual(`Slow HTTP server request`);
   });
 
   it('loads event filter', async () => {
     const yamlConfig = `
-    scanners:
-    - id: missingAuthentication
+    checks:
+    - rule: missingAuthentication
       include:
         - scope:
             property: route
@@ -31,28 +30,24 @@ describe('YAML config test', () => {
     `;
     const configObj = load(yamlConfig) as Configuration;
     const provider = new ConfigurationProvider(configObj);
-    const assertionPrototypes: readonly AssertionPrototype[] = await provider.getConfig();
-    expect(assertionPrototypes).toHaveLength(1);
-    expect(assertionPrototypes[0].config.include!).toHaveLength(1);
-    expect(assertionPrototypes[0].config.include![0].scope!.test.include!).toEqual('GET');
-    const assertion = assertionPrototypes[0].build();
-    expect(assertion.includeScope).toHaveLength(1);
+    const checks: readonly Check[] = await provider.getConfig();
+    expect(checks).toHaveLength(1);
+    expect(checks[0].includeScope!).toHaveLength(1);
   });
 
   it('propagates Record properties', async () => {
     const yamlConfig = `
-    scanners:
-    - id: incompatibleHttpClientRequest
+    checks:
+    - rule: incompatibleHttpClientRequest
       properties:
         schemata:
           api.railsSampleApp.com: file:///railsSampleApp.openapiv3.yaml
     `;
     const configObj = load(yamlConfig) as Configuration;
     const provider = new ConfigurationProvider(configObj);
-    const assertionPrototypes: readonly AssertionPrototype[] = await provider.getConfig();
-    expect(assertionPrototypes).toHaveLength(1);
-    const assertion = assertionPrototypes[0].build();
-    expect(assertion.options.schemata).toEqual({
+    const checks: readonly Check[] = await provider.getConfig();
+    expect(checks).toHaveLength(1);
+    expect(checks[0].options.schemata).toEqual({
       'api.railsSampleApp.com': 'file:///railsSampleApp.openapiv3.yaml',
     });
   });

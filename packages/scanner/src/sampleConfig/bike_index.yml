@@ -1,10 +1,10 @@
-scanners:
-  - id: http500
-  - id: missingContentType
-  - id: missingAuthentication
-  - id: nPlusOneQuery
-  - id: saveWithoutValidation
-  - id: secretInLog
-  - id: slowHttpServerRequest
-  - id: slowQuery
-  - id: tooManyUpdates
+checks:
+  - rule: http500
+  - rule: missingContentType
+  - rule: missingAuthentication
+  - rule: nPlusOneQuery
+  - rule: saveWithoutValidation
+  - rule: secretInLog
+  - rule: slowHttpServerRequest
+  - rule: slowQuery
+  - rule: tooManyUpdates

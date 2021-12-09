@@ -1,12 +1,10 @@
 import { AppMap, buildAppMap } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import Assertion from '../src/assertion';
-import AssertionChecker from '../src/assertionChecker';
-import AssertionConfig from '../src/configuration/types/assertionConfig';
-import MatchPatternConfig from '../src/configuration/types/matchPatternConfig';
-import { verbose } from '../src/scanner/util';
-import { AssertionPrototype, Finding, ScopeName } from '../src/types';
+import RuleChecker from '../src/ruleChecker';
+import { verbose } from '../src/rules/util';
+import { Finding } from '../src/types';
+import Check from '../src/check';
 
 if (process.env.VERBOSE_SCAN === 'true') {
   verbose(true);
@@ -25,26 +23,7 @@ const fixtureAppMap = async (file: string): Promise<AppMap> => {
   return buildAppMap(appMapBytes).normalize().build();
 };
 
-const makePrototype = (
-  id: string,
-  buildFn: () => Assertion,
-  enumerateScope: boolean | undefined,
-  scope: ScopeName | undefined,
-): AssertionPrototype => {
-  const config = { id } as AssertionConfig;
-  return {
-    config: config,
-    enumerateScope: enumerateScope === true ? true : false,
-    scope: scope || 'root',
-    build: buildFn,
-  } as AssertionPrototype;
-};
-
-const scan = async (
-  assertionPrototype: AssertionPrototype,
-  appmapFile?: string,
-  appmap?: AppMap
-): Promise<Finding[]> => {
+const scan = async (check: Check, appmapFile?: string, appmap?: AppMap): Promise<Finding[]> => {
   let appMapData: AppMap;
   if (appmapFile) {
     appMapData = await fixtureAppMap(appmapFile);
@@ -53,7 +32,7 @@ const scan = async (
   }
 
   const findings: Finding[] = [];
-  await new AssertionChecker().check(appMapData, assertionPrototype, findings);
+  await new RuleChecker().check(appMapData, check, findings);
 
   if (process.env.VERBOSE_TEST === 'true') {
     console.log(JSON.stringify(findings, null, 2));
@@ -62,4 +41,4 @@ const scan = async (
   return findings;
 };
 
-export { fixtureAppMap, fixtureAppMapFileName, makePrototype, scan };
+export { fixtureAppMap, fixtureAppMapFileName, scan };

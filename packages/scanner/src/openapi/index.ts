@@ -6,7 +6,7 @@ import { rpcRequestForEvent } from './rpcRequest';
 import { Event } from '@appland/models';
 import { OpenAPIV3 } from 'openapi-types';
 import { writeFileSync } from 'fs';
-import { verbose } from '../scanner/util';
+import { verbose } from '../rules/util';
 import { URL } from 'url';
 
 interface OpenAPIV3Fragment {

@@ -2,19 +2,19 @@ import { buildAppMap } from '@appland/models';
 import { glob as globCallback } from 'glob';
 import { promisify } from 'util';
 import { promises as fs, constants as fsConstants, PathLike } from 'fs';
-import AssertionChecker from './assertionChecker';
 import ProgressFormatter from './formatter/progressFormatter';
 import PrettyFormatter from './formatter/prettyFormatter';
 import { ValidationError, AbortError } from './errors';
-import { AssertionPrototype, Finding } from './types';
+import { Finding } from './types';
 import { Argv, Arguments } from 'yargs';
 import chalk from 'chalk';
 import { loadConfiguration } from './configuration';
-import { verbose } from './scanner/util';
+import { verbose } from './rules/util';
 import { join } from 'path';
 import postCommitStatus from './integration/github/commitStatus';
 import postPullRequestComment from './integration/github/postPullRequestComment';
 import Generator, { ReportFormat } from './report/generator';
+import RuleChecker from './ruleChecker';
 
 enum ExitCode {
   ValidationError = 1,
@@ -140,12 +140,11 @@ export default {
         files = [appmapFile];
       }
 
-      const checker = new AssertionChecker();
+      const checker = new RuleChecker();
       const formatter =
         progressFormat === 'progress' ? new ProgressFormatter() : new PrettyFormatter();
-      const assertionPrototypes = await loadConfiguration(config);
+      const checks = await loadConfiguration(config);
 
-      let index = 0;
       const findings: Finding[] = [];
 
       await Promise.all(
@@ -162,14 +161,13 @@ export default {
           process.stderr.write(formatter.appMap(appMap));
 
           await Promise.all(
-            assertionPrototypes.map(async (assertionPrototype: AssertionPrototype) => {
-              index++;
+            checks.map(async (check) => {
               const matchCount = findings.length;
-              await checker.check(appMap, assertionPrototype, findings);
+              await checker.check(appMap, check, findings);
               const newMatches = findings.slice(matchCount, findings.length);
               newMatches.forEach((match) => (match.appMapFile = file));
 
-              const message = formatter.result(assertionPrototype, newMatches, index);
+              const message = formatter.result(check, newMatches);
               if (message) {
                 process.stderr.write(message);
               }
@@ -179,7 +177,7 @@ export default {
       );
 
       const reportGenerator = new Generator(formatter, reportFormat, reportFile, ide);
-      const summary = reportGenerator.generate(findings, files.length * assertionPrototypes.length);
+      const summary = reportGenerator.generate(findings, files.length * checks.length);
 
       if (pullRequestComment && findings.length > 0) {
         try {
@@ -191,10 +189,7 @@ export default {
 
       if (commitStatus) {
         return findings.length === 0
-          ? await postCommitStatus(
-              'success',
-              `${files.length * assertionPrototypes.length} checks passed`
-            )
+          ? await postCommitStatus('success', `${files.length * checks.length} checks passed`)
           : await postCommitStatus('failure', `${findings.length} findings`);
       }
 

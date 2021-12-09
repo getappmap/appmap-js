@@ -47,14 +47,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appland/models@npm:^1.7.1":
-  version: 1.7.1
-  resolution: "@appland/models@npm:1.7.1"
+"@appland/models@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "@appland/models@npm:1.8.0"
   dependencies:
     cross-env: ^7.0.3
     crypto-js: ^4.0.0
-    sqlite-parser: ^1.0.1
-  checksum: 0b4b222762c3c5ccec956447cce8159a268575f26602998b1d7f70b3b302742113ed694373b471e0df7f78fe52bea17bca2624938bd1a886af2c5ebb7edd1604
+    sqlite-parser: applandinc/sqlite-parser
+  checksum: ca462f8c396345fcc7445429af5c53aef8231929836d4ffb3bb65d2b11307821a5a00f211425a041a4d155e9b33fa83250a0a916a25982e420d4371938585415
   languageName: node
   linkType: hard
 
@@ -62,7 +62,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@applandinc/scanner@workspace:."
   dependencies:
-    "@appland/models": ^1.7.1
+    "@appland/models": ^1.8.0
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
     "@types/glob": ^7.1.4
@@ -7693,12 +7693,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sqlite-parser@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "sqlite-parser@npm:1.0.1"
+sqlite-parser@applandinc/sqlite-parser:
+  version: 1.1.0
+  resolution: "sqlite-parser@https://github.com/applandinc/sqlite-parser.git#commit=ecd7db3afc8ca32ebf6c13612665bd334330b809"
   bin:
     sqlite-parser: bin/sqlite-parser
-  checksum: cc4131f3347a1963252619d6bd39d44e7d7e0f7ba10619412ae0bb9c7aa28dccc6baad5c97f2fad3f2295088eea176ea39bc32c20946265c5ccde4a0aa390df7
+  checksum: ee07464d79841214a854bd3f957269fc5b230ad64ff6bf6284970987d90debdcc8b2cb999512f73af46229a2ceed344f91166ffa2ed4b3e38cffddcfe5449da5
   languageName: node
   linkType: hard
 

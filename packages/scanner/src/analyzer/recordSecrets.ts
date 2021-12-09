@@ -1,5 +1,5 @@
 import { Event } from '@appland/models';
-import { emptyValue, verbose } from '../scanner/util';
+import { emptyValue, verbose } from '../rules/util';
 
 export default function (secrets: Set<string>, e: Event): void {
   if (!e.returnValue) {

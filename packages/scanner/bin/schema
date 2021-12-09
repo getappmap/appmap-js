@@ -3,7 +3,7 @@ set -e
 set -x
 
 npx ts-json-schema-generator -i https://appland.com/schemas/scanner/configuration.json --path src/configuration/types/configuration.ts > src/configuration/schema/configuration.json
-npx ts-json-schema-generator -i https://appland.com/schemas/scanner/options.json --path src/scanner/types.d.ts > src/configuration/schema/options.json
+npx ts-json-schema-generator -i https://appland.com/schemas/scanner/options.json --path src/rules/types.d.ts > src/configuration/schema/options.json
 
 fix_match_pattern_config() {
   cd src/configuration/schema

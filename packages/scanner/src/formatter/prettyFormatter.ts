@@ -1,17 +1,16 @@
 import Formatter from './formatter';
 import chalk from 'chalk';
 import { AppMap } from '@appland/models';
-import { AssertionPrototype, Finding } from '../types';
+import { Finding } from '../types';
+import Check from 'src/check';
 
 export default class PrettyFormatter extends Formatter {
   appMap(appMap: AppMap): string {
     return '\n' + appMap.metadata.name + '\n';
   }
 
-  result(assertionPrototype: AssertionPrototype, matches: Finding[]): string | undefined {
-    const readableAssertion = [assertionPrototype.config.id, assertionPrototype.config.description]
-      .filter((d) => d)
-      .join(' ');
+  result(check: Check, matches: Finding[]): string | undefined {
+    const readableAssertion = [check.rule.id, check.rule.title].filter((d) => d).join(' ');
 
     if (matches.length === 0) {
       return '\t' + chalk.stderr.green(readableAssertion) + '\n';
