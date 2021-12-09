@@ -224,6 +224,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
+    "@appland/sql-parser": ^1.1.1
     "@rollup/plugin-alias": ^3.1.2
     "@rollup/plugin-commonjs": ^18.0.0
     "@rollup/plugin-node-resolve": ^11.2.1
@@ -239,9 +240,17 @@ __metadata:
     lint-staged: ^10.5.4
     prettier: ^2.2.1
     rollup: ^2.48.0
-    sqlite-parser: applandinc/sqlite-parser
   languageName: unknown
   linkType: soft
+
+"@appland/sql-parser@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@appland/sql-parser@npm:1.1.1"
+  bin:
+    sqlite-parser: bin/sqlite-parser
+  checksum: c71b79650d201dde464888461ec3f19631401626eacfad11a185068c81baf95ae3635d125423ce51e872ab7c778801bcf17be172cb1e49fea51249a134ff4fa5
+  languageName: node
+  linkType: hard
 
 "@azure/abort-controller@npm:^1.0.0":
   version: 1.0.4
@@ -24864,15 +24873,6 @@ resolve@1.1.7:
   bin:
     sql-formatter: bin/sqlfmt.js
   checksum: ce2bd1c507bc3435cfc17184d6404e39d033541ebf0f092087623972a4cf0f72822aec0752060b9f8ed387b63e3a1c46e3d621037dd069fe15f258a83e235940
-  languageName: node
-  linkType: hard
-
-sqlite-parser@applandinc/sqlite-parser:
-  version: 1.1.0
-  resolution: "sqlite-parser@https://github.com/applandinc/sqlite-parser.git#commit=ecd7db3afc8ca32ebf6c13612665bd334330b809"
-  bin:
-    sqlite-parser: bin/sqlite-parser
-  checksum: ee07464d79841214a854bd3f957269fc5b230ad64ff6bf6284970987d90debdcc8b2cb999512f73af46229a2ceed344f91166ffa2ed4b3e38cffddcfe5449da5
   languageName: node
   linkType: hard
 

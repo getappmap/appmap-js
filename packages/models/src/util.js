@@ -1,5 +1,5 @@
 import sha256 from 'crypto-js/sha256';
-import sqliteParser from 'sqlite-parser';
+import sqliteParser from '@appland/sql-parser';
 
 export const hasProp = (obj, prop) =>
   Object.prototype.hasOwnProperty.call(obj, prop);

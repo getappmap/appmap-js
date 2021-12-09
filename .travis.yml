@@ -23,7 +23,7 @@ jobs:
     - stage: test
       script: yarn run ci
 
-    - stage: test-windows
+    - stage: test
       os: windows
       env:
         - YARN_GPG=no

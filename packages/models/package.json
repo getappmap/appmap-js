@@ -43,8 +43,8 @@
     "rollup": "^2.48.0"
   },
   "dependencies": {
+    "@appland/sql-parser": "^1.1.1",
     "cross-env": "^7.0.3",
-    "crypto-js": "^4.0.0",
-    "sqlite-parser": "applandinc/sqlite-parser"
+    "crypto-js": "^4.0.0"
   }
 }
