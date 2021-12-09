@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.14.6](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.5...@appland/appmap-v3.14.6) (2021-12-09)
+
+
+### Bug Fixes
+
+* Upgrade @appland/models in packages/cli ([115d60a](https://github.com/applandinc/appmap-js/commit/115d60a36ee21a493a31d04e8ac015757cf931a7))
+
 # [@appland/appmap-v3.14.5](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.4...@appland/appmap-v3.14.5) (2021-12-07)
 
 
