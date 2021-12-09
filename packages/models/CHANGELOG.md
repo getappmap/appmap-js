@@ -1,3 +1,10 @@
+# [@appland/models-v1.8.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.8.0...@appland/models-v1.8.1) (2021-12-09)
+
+
+### Bug Fixes
+
+* Use @appland/sql-parser ([a9335a7](https://github.com/applandinc/appmap-js/commit/a9335a7273f54c6039875270c3ea11f5b57f2333))
+
 # [@appland/models-v1.8.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.7.1...@appland/models-v1.8.0) (2021-12-06)
 
 
