@@ -3,8 +3,8 @@ import chalk from 'chalk';
 import { ideLink } from '../rules/util';
 import { Finding } from '../types';
 import Formatter from '../formatter/formatter';
-import { ScannerSummary } from './scannerSummary';
-import { FindingSummary } from './findingSummary';
+import { ScanResults } from './scanResults';
+import { Metadata } from '@appland/models';
 
 export type ReportFormat = 'text' | 'json';
 
@@ -18,57 +18,41 @@ export default class Generator {
     private ide: string | undefined
   ) {}
 
-  generate(findings: Finding[], totalAssertions: number): string {
+  generate(
+    scanSummary: ScanResults,
+    findings: Finding[],
+    appMapMetadata: Record<string, Metadata>
+  ): string {
     if (this.reportFormat === 'text' && !this.reportFile) {
       this.writeln();
     }
-
-    const scannerSummary: ScannerSummary = {
-      checkTotal: totalAssertions,
-      findingTotal: findings.length,
-      findingSummary: {},
-    };
 
     if (findings.length > 0) {
       if (this.reportFormat === 'text') {
         this.writeln(`${findings.length} findings:`);
       }
 
-      findings.forEach((match) => {
-        let findingSummary = scannerSummary.findingSummary[match.ruleId];
-        if (!findingSummary) {
-          findingSummary = {
-            scannerTitle: match.ruleTitle,
-            findingTotal: 0,
-            messages: new Set(),
-          } as FindingSummary;
-          scannerSummary.findingSummary[match.ruleId] = findingSummary;
-        }
-        findingSummary.findingTotal += 1;
-        if (match.message) {
-          findingSummary.messages.add(match.message);
-        }
-
+      findings.forEach((finding) => {
         const filePath =
-          this.ide && match.appMapFile && !this.reportFile
-            ? ideLink(match.appMapFile, this.ide, match.event.id)
-            : match.appMapFile;
-        let eventMsg = `\tEvent:\t${match.event.id} - ${match.event.toString()}`;
-        if (match.event.elapsedTime !== undefined) {
-          eventMsg += ` (${match.event.elapsedTime}s)`;
+          this.ide && finding.appMapFile && !this.reportFile
+            ? ideLink(finding.appMapFile, this.ide, finding.event.id)
+            : finding.appMapFile;
+        let eventMsg = `\tEvent:\t${finding.event.id} - ${finding.event.toString()}`;
+        if (finding.event.elapsedTime !== undefined) {
+          eventMsg += ` (${finding.event.elapsedTime}s)`;
         }
 
         if (this.reportFormat === 'text') {
-          const message = match.message;
+          const message = finding.message;
           this.writeln(this.reportFile ? message : chalk.magenta(message));
           this.writeln(`\tLink:\t${this.reportFile ? filePath : chalk.blue(filePath)}`);
-          this.writeln(`\tRule:\t${match.ruleId}`);
-          this.writeln(`\tAppMap name:\t${match.appMapName}`);
+          this.writeln(`\tRule:\t${finding.ruleId}`);
+          this.writeln(`\tAppMap name:\t${appMapMetadata[finding.appMapFile].name}`);
           this.writeln(eventMsg);
-          this.writeln(`\tScope:\t${match.scope.id} - ${match.scope.toString()}`);
-          if (match.relatedEvents) {
+          this.writeln(`\tScope:\t${finding.scope.id} - ${finding.scope.toString()}`);
+          if (finding.relatedEvents) {
             this.writeln(`\tRelated events:`);
-            for (const event of match.relatedEvents) {
+            for (const event of finding.relatedEvents) {
               this.writeln(`\t\t${event.id} - ${event.codeObject.packageOf}/${event.toString()}`);
             }
           }
@@ -77,16 +61,16 @@ export default class Generator {
       });
     }
 
-    const colouredSummary = this.formatter.summary(scannerSummary);
+    const colouredSummary = this.formatter.summary(scanSummary);
     this.formatter.disableColors();
-    const summary = this.formatter.summary(scannerSummary);
+    const summary = this.formatter.summary(scanSummary);
 
     if (this.reportFormat === 'text') {
       this.write(this.reportFile ? summary : colouredSummary);
     }
 
     if (this.reportFormat === 'json') {
-      this.write(JSON.stringify(findings, null, 2));
+      this.write(JSON.stringify(scanSummary, null, 2));
     }
 
     return summary;

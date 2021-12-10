@@ -11,7 +11,6 @@ it('slow HTTP server request', async () => {
   );
   expect(findings).toHaveLength(1);
   const finding = findings[0];
-  expect(finding.appMapName).toEqual('Password_resets password resets');
   expect(finding.ruleId).toEqual('slow-http-server-request');
   expect(finding.event.id).toEqual(411);
   expect(finding.ruleTitle).toEqual('Slow HTTP server request');

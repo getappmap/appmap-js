@@ -212,16 +212,62 @@ declare module '@appland/models' {
     changed: Event[];
   }
 
-  export interface Fingerprint {
-    appmap_digest: string;
-    canonicalization_algorithm: string;
-    digest: string;
-    fingerprint_algorithm: string;
+  export namespace Metadata {
+    export class Client {
+      name: string;
+      url: string;
+      version?: string;
+    }
+
+    export class Exception {
+      class: string;
+      message: string;
+    }
+
+    export class Framework {
+      name: string;
+      version: string;
+    }
+
+    export class Fingerprint {
+      appmap_digest: string;
+      canonicalization_algorithm: string;
+      digest: string;
+      fingerprint_algorithm: string;
+    }
+
+    export class Git {
+      repository: string;
+      branch: string;
+      commit: string;
+      status: string[];
+      tag?: string;
+      annotated_tag?: string;
+      commits_since_tag?: number;
+      commits_since_annotated_tag: number;
+    }
+
+    export class Language extends Framework {
+      engine?: string;
+    }
+
+    export class Recorder {
+      name: string;
+    }
   }
 
   export class Metadata {
     name: string;
-    fingerprints?: Fingerprint[];
+    labels?: string[];
+    app?: string;
+    client: Metadata.Client;
+    fingerprints?: Metadata.Fingerprint[];
+    frameworks?: Metadata.Framework[];
+    git?: Metadata.Git;
+    language?: Metadata.Language;
+    recorder: Metadata.Recorder;
+    testStatus?: 'succeeded' | 'failed';
+    exception: Metadata.Exception;
   }
 
   export class AppMap {

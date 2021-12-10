@@ -10,7 +10,6 @@ it('n+1 query', async () => {
   // It's important that there is only one finding, since the query repeats 30 times.
   // That's one finding; not 30 findings.
   const finding1 = findings[0];
-  expect(finding1.appMapName).toEqual('Users_profile profile display while anonyomus');
   expect(finding1.ruleId).toEqual('n-plus-one-query');
   expect(finding1.event.id).toEqual(133);
   expect(finding1.relatedEvents!).toHaveLength(30);

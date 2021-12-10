@@ -63,7 +63,7 @@ function build(options: Options): RuleLogic {
 
 export default {
   id: 'n-plus-one-query',
-  title: 'N+1 SQL queries',
+  title: 'N plus 1 SQL query',
   scope: 'command',
   enumerateScope: false,
   Options,

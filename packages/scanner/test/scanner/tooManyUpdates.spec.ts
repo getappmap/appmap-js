@@ -13,9 +13,6 @@ it('too many updates', async () => {
   // It's important that there is only one finding, since the query repeats 30 times.
   // That's one finding; not 30 findings.
   const finding1 = findings[0];
-  expect(finding1.appMapName).toEqual(
-    'PaymentsController create no user email on file makes a onetime payment with no user, but associate with stripe'
-  );
   expect(finding1.ruleId).toEqual('too-many-updates');
   expect(finding1.event.id).toEqual(89);
   expect(finding1.message).toEqual(`Command performs 3 SQL and RPC updates`);

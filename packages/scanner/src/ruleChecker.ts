@@ -20,7 +20,12 @@ export default class RuleChecker {
     transaction: new SQLTransactionScope(),
   };
 
-  async check(appMap: AppMap, check: Check, matches: Finding[]): Promise<void> {
+  async check(
+    appMapFile: string,
+    appMap: AppMap,
+    check: Check,
+    findings: Finding[]
+  ): Promise<void> {
     if (verbose()) {
       console.warn(`Checking AppMap ${appMap.name} with scope ${check.scope}`);
     }
@@ -45,10 +50,17 @@ export default class RuleChecker {
       }
       if (checkInstance.enumerateScope) {
         for (const event of scope.events()) {
-          await this.checkEvent(event, scope.scope, appMap, checkInstance, matches);
+          await this.checkEvent(event, scope.scope, appMapFile, appMap, checkInstance, findings);
         }
       } else {
-        await this.checkEvent(scope.scope, scope.scope, appMap, checkInstance, matches);
+        await this.checkEvent(
+          scope.scope,
+          scope.scope,
+          appMapFile,
+          appMap,
+          checkInstance,
+          findings
+        );
       }
     }
   }
@@ -56,6 +68,7 @@ export default class RuleChecker {
   async checkEvent(
     event: Event,
     scope: Event,
+    appMapFile: string,
     appMap: AppMap,
     checkInstance: CheckInstance,
     findings: Finding[]
@@ -89,7 +102,7 @@ export default class RuleChecker {
     ): Finding => {
       const findingEvent = matchEvent || event;
       return {
-        appMapName: appMap.metadata.name,
+        appMapFile,
         checkId: checkInstance.checkId,
         ruleId: checkInstance.ruleId,
         ruleTitle: checkInstance.title,

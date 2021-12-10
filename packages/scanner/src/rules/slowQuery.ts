@@ -14,7 +14,7 @@ function build(options: Options = new Options()): RuleLogic {
 
 export default {
   id: 'slow-query',
-  title: 'Slow SQL queries',
+  title: 'Slow SQL query',
   Options,
   enumerateScope: true,
   build,

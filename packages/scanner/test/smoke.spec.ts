@@ -38,7 +38,23 @@ describe('smoke test', () => {
     } as any);
 
     expect(processExit.calledWith(0)).toBe(true);
-    expect(JSON.parse(readFileSync(reportFile).toString())).toEqual([]);
+    const findingsReport = JSON.parse(readFileSync(reportFile).toString());
+    expect(findingsReport.summary).toBeTruthy();
+    const appMapMetadata = findingsReport.summary.appMapMetadata;
+    delete findingsReport.summary['appMapMetadata'];
+    expect(appMapMetadata).toBeTruthy();
+    expect(appMapMetadata.apps).toEqual(['spring-petclinic']);
+    expect(findingsReport).toEqual({
+      appMaps: {},
+      findings: [],
+      summary: {
+        numAppMaps: 1,
+        numChecks: 4,
+        numFindings: 0,
+        rules: ['circular-dependency', 'http-5xx', 'missing-content-type', 'n-plus-one-query'],
+        ruleLabels: [],
+      },
+    });
     unlinkSync(reportFile);
   });
 });
