@@ -88,6 +88,12 @@ export default class RuleChecker {
       relatedEvents: Event[] | undefined = undefined
     ): Finding => {
       const findingEvent = matchEvent || event;
+      // Fixes:
+      // TypeError: Cannot read property 'forEach' of undefined
+      //   at hashHttp (/Users/kgilpin/source/appland/scanner/node_modules/@appland/models/dist/index.cjs:1663:11)
+      //   at hashEvent (/Users/kgilpin/source/appland/scanner/node_modules/@appland/models/dist/index.cjs:1714:14)
+      //   at Event.get hash [as hash] (/Users/kgilpin/source/appland/scanner/node_modules/@appland/models/dist/index.cjs:3325:27)
+      findingEvent.message ||= [];
       return {
         appMapName: appMap.metadata.name,
         checkId: checkInstance.checkId,
