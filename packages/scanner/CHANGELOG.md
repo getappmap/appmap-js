@@ -1,3 +1,10 @@
+## [1.29.1](https://github.com/applandinc/scanner/compare/v1.29.0...v1.29.1) (2021-12-10)
+
+
+### Bug Fixes
+
+* Workaround for event.message being null ([b9408c9](https://github.com/applandinc/scanner/commit/b9408c9d9b3089c2fb919620461f86d8bad2ad4e))
+
 # [1.29.0](https://github.com/applandinc/scanner/compare/v1.28.0...v1.29.0) (2021-12-09)
 
 
