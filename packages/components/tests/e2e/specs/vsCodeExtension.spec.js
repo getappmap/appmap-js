@@ -707,7 +707,7 @@ context('VS Code Extension', () => {
       cy.get('.tabs .tab-btn').last().click();
 
       cy.get('.trace-view__search-input-element').type(
-        'event:1 event:3 event:15 event:99999 label:json'
+        'event:1 event:3 event:15 event:99999 label:json #link_to_edit_url'
       );
 
       cy.get('.trace-node[data-event-id="1"]')
@@ -718,7 +718,7 @@ context('VS Code Extension', () => {
 
       cy.get('.trace-view__search-arrows-text').should(
         'contain.text',
-        '1/30 results'
+        '1/32 results'
       );
 
       cy.get('.trace-view__search-arrow').last().click();
