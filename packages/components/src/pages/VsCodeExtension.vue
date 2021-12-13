@@ -88,6 +88,7 @@
               :events="filteredAppMap.rootEvents()"
               :selected-events="selectedEvent"
               :focused-event="focusedEvent"
+              :highlighted-events="highlightedNodes"
               :highlighted-event-id="highlightedEventId"
               :highlighted-event-index="currentTraceFilterIndex + 1"
               :name="VIEW_FLOW"
@@ -606,9 +607,19 @@ export default {
     },
 
     highlightedEventId() {
-      return this.highlightedNodes.length
-        ? this.highlightedNodes[this.currentTraceFilterIndex]
-        : null;
+      if (this.highlightedNodes.length) {
+        const eventId = this.highlightedNodes[this.currentTraceFilterIndex];
+        const selectedObject = this.filteredAppMap.events.find(
+          (e) => e.id === eventId
+        );
+
+        if (selectedObject) {
+          this.$store.commit(SELECT_OBJECT, selectedObject);
+        }
+
+        return eventId;
+      }
+      return null;
     },
 
     selectedObject() {

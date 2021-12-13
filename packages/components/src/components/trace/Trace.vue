@@ -6,6 +6,7 @@
       :event="event"
       :selected-events="selectedEvents"
       :focused-event="focusedEvent"
+      :highlighted-events="highlightedEvents"
       :highlighted-event-id="highlightedEventId"
       :highlighted-event-index="highlightedEventIndex"
       :highlight-color="highlightColor"
@@ -47,6 +48,10 @@ export default {
     focusedEvent: {
       type: Object,
       default: null,
+    },
+    highlightedEvents: {
+      type: Array,
+      default: () => [],
     },
     highlightedEventId: {
       type: Number,
