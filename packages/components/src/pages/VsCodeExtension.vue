@@ -562,7 +562,7 @@ export default {
     },
 
     rootObjectsSuggestions() {
-      return this.filteredAppMap.classMap.codeObjects
+      return this.$store.state.appMap.classMap.codeObjects
         .map((co) => co.fqid)
         .filter((fqid) => !this.filters.rootObjects.includes(fqid));
     },
