@@ -95,7 +95,7 @@ __metadata:
     inquirer: ^8.1.2
     jest: ^26.5.6
     jest-sinon: ^1.0.4
-    js-yaml: ^3.14.1
+    js-yaml: ^4.0.3
     jsdom: ^16.6.0
     lint-staged: ^10.5.4
     moo: ^0.5.1
@@ -116,7 +116,7 @@ __metadata:
     w3c-xmlserializer: ^2.0.0
     webpack: 5
     webpack-cli: ^4.8.0
-    yargs: ^17.0.1
+    yargs: ^17.1.1
   bin:
     appmap: built/src/cli.js
   languageName: unknown
@@ -197,7 +197,7 @@ __metadata:
     sass: ^1.26.5
     sass-loader: ^8.0.2
     sass-resources-loader: ^2.1.1
-    sql-formatter: ^2.3.3
+    sql-formatter: ^4.0.2
     start-server-and-test: ^1.11.7
     svg-to-vue: ^0.7.0
     vue: ^2.6.11
@@ -18069,7 +18069,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^3.13.1, js-yaml@npm:^3.14.1":
+"js-yaml@npm:^3.13.1":
   version: 3.14.1
   resolution: "js-yaml@npm:3.14.1"
   dependencies:
@@ -18081,7 +18081,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.1.0":
+"js-yaml@npm:^4.0.3, js-yaml@npm:^4.1.0":
   version: 4.1.0
   resolution: "js-yaml@npm:4.1.0"
   dependencies:
@@ -25839,15 +25839,6 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"sql-formatter@npm:^2.3.3":
-  version: 2.3.4
-  resolution: "sql-formatter@npm:2.3.4"
-  dependencies:
-    lodash: ^4.17.20
-  checksum: df5aa408d106946760ca14c3a1135081a603045ce1ec8bca7ce2baa3afa425ed9e2c20719f48f0c02307335d74662d90dda954f64d1a090a83a7141fd3829d1e
-  languageName: node
-  linkType: hard
-
 "sql-formatter@npm:^4.0.2":
   version: 4.0.2
   resolution: "sql-formatter@npm:4.0.2"
@@ -26160,6 +26151,17 @@ resolve@1.1.7:
     is-fullwidth-code-point: ^3.0.0
     strip-ansi: ^6.0.0
   checksum: 343e089b0e66e0f72aab4ad1d9b6f2c9cc5255844b0c83fd9b53f2a3b3fd0421bdd6cb05be96a73117eb012db0887a6c1d64ca95aaa50c518e48980483fea0ab
+  languageName: node
+  linkType: hard
+
+"string-width@npm:^4.2.3":
+  version: 4.2.3
+  resolution: "string-width@npm:4.2.3"
+  dependencies:
+    emoji-regex: ^8.0.0
+    is-fullwidth-code-point: ^3.0.0
+    strip-ansi: ^6.0.1
+  checksum: e52c10dc3fbfcd6c3a15f159f54a90024241d0f149cf8aed2982a2d801d2e64df0bf1dc351cf8e95c3319323f9f220c16e740b06faecd53e2462df1d2b5443fb
   languageName: node
   linkType: hard
 
@@ -29349,6 +29351,13 @@ typescript@^4.5.4:
   languageName: node
   linkType: hard
 
+"yargs-parser@npm:^21.0.0":
+  version: 21.0.0
+  resolution: "yargs-parser@npm:21.0.0"
+  checksum: 1e205fca1cb7a36a1585e2b94a64e641c12741b53627d338e12747f4dca3c3610cdd9bb235040621120548dd74c3ef03a8168d52a1eabfedccbe4a62462b6731
+  languageName: node
+  linkType: hard
+
 "yargs@npm:16.2.0, yargs@npm:^16.0.0, yargs@npm:^16.2.0":
   version: 16.2.0
   resolution: "yargs@npm:16.2.0"
@@ -29401,18 +29410,18 @@ typescript@^4.5.4:
   languageName: node
   linkType: hard
 
-"yargs@npm:^17.0.1":
-  version: 17.0.1
-  resolution: "yargs@npm:17.0.1"
+"yargs@npm:^17.1.1":
+  version: 17.3.0
+  resolution: "yargs@npm:17.3.0"
   dependencies:
     cliui: ^7.0.2
     escalade: ^3.1.1
     get-caller-file: ^2.0.5
     require-directory: ^2.1.1
-    string-width: ^4.2.0
+    string-width: ^4.2.3
     y18n: ^5.0.5
-    yargs-parser: ^20.2.2
-  checksum: 4ffffa5a82647e5d07840b64bed88c365b901d3d4a4c51745dddb10d177902d85014026d7224aae18c42df9ca3f75a41c5aff556e5342e2f8ffc5177d149cd17
+    yargs-parser: ^21.0.0
+  checksum: 2b687338684bf9645e9389ffdbe813fc5a2ddfede299d46fbe5ac80eb9a391e558b97861ba44d2256936ebe9d7f8135f6a38af1c76a5685eac4061008b2df57a
   languageName: node
   linkType: hard
 
