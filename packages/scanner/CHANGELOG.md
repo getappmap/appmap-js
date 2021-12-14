@@ -1,3 +1,11 @@
+# [1.30.0](https://github.com/applandinc/scanner/compare/v1.29.1...v1.30.0) (2021-12-14)
+
+
+### Features
+
+* Add additional summary data to the findings report ([5e38336](https://github.com/applandinc/scanner/commit/5e38336b273fb408457b864f9a6f0b759f6775a5))
+* Findings report includes the user-provided configuration ([ac4fda7](https://github.com/applandinc/scanner/commit/ac4fda77edcc31731a31392bca7655f7383c0213))
+
 ## [1.29.1](https://github.com/applandinc/scanner/compare/v1.29.0...v1.29.1) (2021-12-10)
 
 
