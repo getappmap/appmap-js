@@ -1,4 +1,4 @@
-import { buildAppMap } from '@appland/models';
+import { buildAppMap, Metadata } from '@appland/models';
 import { glob as globCallback } from 'glob';
 import { promisify } from 'util';
 import { promises as fs, constants as fsConstants, PathLike } from 'fs';
@@ -8,13 +8,14 @@ import { ValidationError, AbortError } from './errors';
 import { Finding } from './types';
 import { Argv, Arguments } from 'yargs';
 import chalk from 'chalk';
-import { loadConfiguration } from './configuration';
 import { verbose } from './rules/util';
 import { join } from 'path';
 import postCommitStatus from './integration/github/commitStatus';
 import postPullRequestComment from './integration/github/postPullRequestComment';
 import Generator, { ReportFormat } from './report/generator';
 import RuleChecker from './ruleChecker';
+import { ScanResults } from './report/scanResults';
+import { parseConfigFile, loadConfig } from './configuration/configurationProvider';
 
 enum ExitCode {
   ValidationError = 1,
@@ -143,8 +144,11 @@ export default {
       const checker = new RuleChecker();
       const formatter =
         progressFormat === 'progress' ? new ProgressFormatter() : new PrettyFormatter();
-      const checks = await loadConfiguration(config);
 
+      const configData = await parseConfigFile(config);
+      const checks = await loadConfig(configData);
+
+      const appMapMetadata: Record<string, Metadata> = {};
       const findings: Finding[] = [];
 
       await Promise.all(
@@ -157,13 +161,14 @@ export default {
           }
           const appMapData = await fs.readFile(file, 'utf8');
           const appMap = buildAppMap(appMapData).normalize().build();
+          appMapMetadata[file] = appMap.metadata;
 
           process.stderr.write(formatter.appMap(appMap));
 
           await Promise.all(
             checks.map(async (check) => {
               const matchCount = findings.length;
-              await checker.check(appMap, check, findings);
+              await checker.check(file, appMap, check, findings);
               const newMatches = findings.slice(matchCount, findings.length);
               newMatches.forEach((match) => (match.appMapFile = file));
 
@@ -177,11 +182,13 @@ export default {
       );
 
       const reportGenerator = new Generator(formatter, reportFormat, reportFile, ide);
-      const summary = reportGenerator.generate(findings, files.length * checks.length);
+
+      const scanSummary = new ScanResults(configData, appMapMetadata, findings, checks);
+      const summaryText = reportGenerator.generate(scanSummary, findings, appMapMetadata);
 
       if (pullRequestComment && findings.length > 0) {
         try {
-          await postPullRequestComment(summary);
+          await postPullRequestComment(summaryText);
         } catch (err) {
           console.warn('Unable to post pull request comment');
         }

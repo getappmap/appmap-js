@@ -28,7 +28,11 @@ it('authorization before (or without) authentication', async () => {
   baseAppMap.classMap.forEach(removeAuthenticationLabel);
   const appMapData = buildAppMap(JSON.stringify(baseAppMap)).normalize().build();
 
-  const findings = await scan(new Check(rule), undefined, appMapData);
+  const findings = await scan(
+    new Check(rule),
+    fixtureAppMapFileName('Test_authz_before_authn.appmap.json'),
+    appMapData
+  );
   expect(findings).toHaveLength(1);
   const finding = findings[0];
   expect(finding.ruleId).toEqual('authz-before-authn');

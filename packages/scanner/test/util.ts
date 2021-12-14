@@ -23,16 +23,16 @@ const fixtureAppMap = async (file: string): Promise<AppMap> => {
   return buildAppMap(appMapBytes).normalize().build();
 };
 
-const scan = async (check: Check, appmapFile?: string, appmap?: AppMap): Promise<Finding[]> => {
+const scan = async (check: Check, appMapFile: string, appMap?: AppMap): Promise<Finding[]> => {
   let appMapData: AppMap;
-  if (appmapFile) {
-    appMapData = await fixtureAppMap(appmapFile);
+  if (appMap) {
+    appMapData = appMap!;
   } else {
-    appMapData = appmap!;
+    appMapData = await fixtureAppMap(appMapFile);
   }
 
   const findings: Finding[] = [];
-  await new RuleChecker().check(appMapData, check, findings);
+  await new RuleChecker().check(appMapFile, appMapData, check, findings);
 
   if (process.env.VERBOSE_TEST === 'true') {
     console.log(JSON.stringify(findings, null, 2));

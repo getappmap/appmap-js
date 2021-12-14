@@ -1,5 +1,4 @@
 import { AppMap, Event } from '@appland/models';
-import Check from './check';
 
 /**
  * Each Rule in the scanner library wants to consider some set of events as it decides whether the code should be flagged or not.
@@ -81,8 +80,7 @@ type Matcher = (e: Event, appMap: AppMap, eventFilter: EventFilter) => MatcherRe
  * adds the rest of the information to build the complete finding.
  */
 interface Finding {
-  appMapName: string;
-  appMapFile?: string;
+  appMapFile: string;
   checkId: string;
   ruleId: string;
   ruleTitle: string;
