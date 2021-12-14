@@ -15,7 +15,7 @@ export type AppMapListItem = {
 export default async function listAppMap(
   mapset: number
 ): Promise<AppMapListItem[]> {
-  if (!Settings.exists) {
+  if (!Settings.valid) {
     throw new Error(`AppMap client is not configured`);
   }
 

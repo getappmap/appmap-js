@@ -8,7 +8,7 @@ import Settings from './settings';
  * Loads AppMap data from UUID.
  */
 export default async function getAppMap(uuid: string): Promise<AppMap> {
-  if (!Settings.exists) {
+  if (!Settings.valid) {
     throw new Error(`AppMap client is not configured`);
   }
 

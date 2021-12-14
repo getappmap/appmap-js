@@ -16,28 +16,24 @@ type AppLandConfig = {
 type Settings = {
   baseURL: string | undefined;
   apiKey: string | undefined;
-  exists: boolean;
+  valid: boolean;
 };
 
-/**
- * @param {string} msg
- * @returns {{baseURL: string, apiKey: string, exists: boolean}}
- */
 const failUsage = (message: string): Settings => {
   console.warn(message);
-  return { exists: false } as Settings;
+  return { valid: false } as Settings;
 };
 
-export default ((): Settings => {
+function loadFromFile(): Settings {
   const applandConfigFilePath = join(homedir(), '.appland');
-  const applandConfigStat = statSync(applandConfigFilePath);
-  if (!applandConfigStat.isFile()) {
-    return failUsage(
-      `AppMap Cloud config file ${applandConfigFilePath} does not exist`
-    );
+  let applandConfigData: Buffer | undefined;
+  try {
+    applandConfigData = readFileSync(applandConfigFilePath);
+  } catch {
+    return {} as Settings;
   }
   const applandConfig = yaml.load(
-    readFileSync(applandConfigFilePath).toString()
+    applandConfigData.toString()
   ) as AppLandConfig;
   const currentContext = applandConfig.current_context || 'default';
   const contextConfig = applandConfig.contexts[currentContext];
@@ -58,5 +54,20 @@ export default ((): Settings => {
     );
   }
 
-  return { baseURL: configURL, apiKey: configApiKey, exists: true };
+  return { baseURL: configURL, apiKey: configApiKey, valid: true };
+}
+
+function loadFromEnvironment(settings: Settings): void {
+  if (process.env.APPLAND_URL) {
+    settings.baseURL = process.env.APPLAND_URL;
+  }
+  if (process.env.APPLAND_API_KEY) {
+    settings.apiKey = process.env.APPLAND_API_KEY;
+  }
+}
+
+export default ((): Settings => {
+  const settings = loadFromFile();
+  loadFromEnvironment(settings);
+  return settings;
 })();
