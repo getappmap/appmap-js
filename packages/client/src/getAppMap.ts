@@ -1,32 +1,41 @@
-const { request: httpRequest } = require('http');
-const { request: httpsRequest } = require('https');
-const { baseURL, apiKey, exists } = require('./settings');
+import { request as httpRequest } from 'node:http';
+import { request as httpsRequest } from 'node:https';
+import { URL } from 'node:url';
+import { AppMap } from '@appland/models';
+import Settings from './settings';
 
 /**
  * Loads AppMap data from UUID.
- *
- * @param {string} uuid
- * @returns {Promise<import('./types').AppMapData>}
  */
-const getAppMap = async (uuid) => {
-  if (!exists) {
+export default async function getAppMap(uuid: string): Promise<AppMap> {
+  if (!Settings.exists) {
     throw new Error(`AppMap client is not configured`);
   }
 
   return new Promise((resolve, reject) => {
-    const getScenarioURL = new URL([baseURL, 'api/appmaps', uuid].join('/'));
+    if (!Settings.apiKey) {
+      reject(new Error(`No API key has been provided`));
+      return;
+    }
+
+    const getScenarioURL = new URL(
+      [Settings.baseURL, 'api/appmaps', uuid].join('/')
+    );
     const requestFunction =
       getScenarioURL.protocol === 'https:' ? httpsRequest : httpRequest;
-    const req = requestFunction(
+    const request = requestFunction(
       getScenarioURL,
       {
         headers: {
-          Authorization: `Bearer ${apiKey}`,
+          Authorization: `Bearer ${Settings.apiKey}`,
           Accept: 'application/json',
         },
       },
       // eslint-disable-next-line consistent-return
       (res) => {
+        if (!res.statusCode) {
+          return reject('(No status code was provided by the server)');
+        }
         if (res.statusCode >= 300) {
           return reject(res.statusCode);
         }
@@ -41,13 +50,11 @@ const getAppMap = async (uuid) => {
       }
     );
 
-    req.on('error', (e) => {
+    request.on('error', (e) => {
       reject(e);
     });
 
     // Write data to request body
-    req.end();
+    request.end();
   });
-};
-
-module.exports = getAppMap;
+}

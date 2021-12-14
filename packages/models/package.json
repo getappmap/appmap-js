@@ -23,8 +23,10 @@
   },
   "files": [
     "dist/index.js",
-    "dist/index.cjs"
+    "dist/index.cjs",
+    "types/*.d.ts"
   ],
+  "types": "types/index.d.ts",
   "author": "",
   "license": "MIT",
   "devDependencies": {
