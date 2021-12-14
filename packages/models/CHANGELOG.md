@@ -1,3 +1,10 @@
+# [@appland/models-v1.9.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.8.1...@appland/models-v1.9.0) (2021-12-14)
+
+
+### Features
+
+* Export type definitions ([bfee7ec](https://github.com/applandinc/appmap-js/commit/bfee7ec72ba63044dd82751c877b74348ebd8e88))
+
 # [@appland/models-v1.8.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.8.0...@appland/models-v1.8.1) (2021-12-09)
 
 
