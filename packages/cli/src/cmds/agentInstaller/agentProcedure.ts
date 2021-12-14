@@ -15,7 +15,7 @@ export default abstract class AgentProcedure {
 
   async getEnvironmentForDisplay(): Promise<string[]> {
     // TS is ok with this written as let env:[name: string]: string = {...}, but
-    // babel doesn't like it. Splitting it up this way keeps them both happy: 
+    // babel doesn't like it. Splitting it up this way keeps them both happy:
     let env;
     env = {
       'Project type': this.installer.name,
@@ -24,10 +24,10 @@ export default abstract class AgentProcedure {
     if (!Telemetry.enabled) {
       env = {
         '!!! Telemetry disabled !!!': 'true',
-        ...env
+        ...env,
       };
     }
-    
+
     let gitRemote;
     try {
       const stdout = runSync(
@@ -50,7 +50,9 @@ export default abstract class AgentProcedure {
     }
     return Object.entries(env)
       .filter(([_, value]) => Boolean(value))
-      .map(([key, value]) => `  ${chalk.blue(key)}: ${(value as string).trim()}`);
+      .map(
+        ([key, value]) => `  ${chalk.blue(key)}: ${(value as string).trim()}`
+      );
   }
 
   async verifyProject() {
@@ -117,9 +119,10 @@ export default abstract class AgentProcedure {
     }
   }
 
-  loadConfig() {
+  loadConfig(): Record<string, unknown> {
     // yaml.load returns undefined if the input string is empty
-    return yaml.load(fs.readFileSync(this.configPath)) || {};
+    const configContent = fs.readFileSync(this.configPath, 'utf8');
+    return (yaml.load(configContent) as Record<string, unknown>) || {};
   }
 
   get configExists(): boolean {
