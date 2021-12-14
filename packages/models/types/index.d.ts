@@ -1,3 +1,5 @@
+import type { SqliteParser } from './sqlite-parser';
+
 declare module '@appland/models' {
   export type CodeObjectType =
     | 'package'
@@ -223,14 +225,67 @@ declare module '@appland/models' {
     fingerprint_algorithm: string;
   }
 
+  export namespace Metadata {
+    export class Client {
+      name: string;
+      url: string;
+      version?: string;
+    }
+
+    export class Exception {
+      class: string;
+      message: string;
+    }
+
+    export class Framework {
+      name: string;
+      version: string;
+    }
+
+    export class Fingerprint {
+      appmap_digest: string;
+      canonicalization_algorithm: string;
+      digest: string;
+      fingerprint_algorithm: string;
+    }
+
+    export class Git {
+      repository: string;
+      branch: string;
+      commit: string;
+      status: string[];
+      tag?: string;
+      annotated_tag?: string;
+      commits_since_tag?: number;
+      commits_since_annotated_tag: number;
+    }
+
+    export class Language extends Framework {
+      engine?: string;
+    }
+
+    export class Recorder {
+      name: string;
+    }
+  }
+
   export class Metadata {
     name: string;
-    fingerprints?: Fingerprint[];
+    labels?: string[];
+    app?: string;
+    client: Metadata.Client;
+    fingerprints?: Metadata.Fingerprint[];
+    frameworks?: Metadata.Framework[];
+    git?: Metadata.Git;
+    language?: Metadata.Language;
+    recorder: Metadata.Recorder;
+    testStatus?: 'succeeded' | 'failed';
+    exception: Metadata.Exception;
   }
 
   export class AppMap {
     readonly version: string;
-    readonly metadata: Metadata & any;
+    readonly metadata: Metadata;
     readonly name: string;
     readonly rootEvent: Event;
     readonly events: readonly Event[];
@@ -270,7 +325,7 @@ declare module '@appland/models' {
     joinCount?: number;
   }
 
-  export function buildQueryAST(sql: string): any;
+  export function buildQueryAST(sql: string): SqliteParser.ListStatement | null;
   export function buildAppMap(
     data?: string | Record<string, unknown>
   ): AppMapBuilder;
