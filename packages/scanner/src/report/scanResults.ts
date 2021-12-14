@@ -1,5 +1,6 @@
 import { Metadata } from '@appland/models';
 import Check from 'src/check';
+import Configuration from 'src/configuration/types/configuration';
 import { Finding } from 'src/types';
 import { AppMapMetadata, ScanSummary } from './scanSummary';
 
@@ -65,10 +66,16 @@ function collectMetadata(metadata: Metadata[]): AppMapMetadata {
  */
 export class ScanResults {
   public summary: ScanSummary;
+  public configuration: Configuration;
   public appMaps: Record<string, Metadata>;
   public findings: Finding[];
 
-  constructor(appMapMetadata: Record<string, Metadata>, findings: Finding[], checks: Check[]) {
+  constructor(
+    configuration: Configuration,
+    appMapMetadata: Record<string, Metadata>,
+    findings: Finding[],
+    checks: Check[]
+  ) {
     this.summary = {
       numAppMaps: Object.keys(appMapMetadata).length,
       numChecks: checks.length * Object.keys(appMapMetadata).length,
@@ -77,11 +84,12 @@ export class ScanResults {
       numFindings: findings.length,
       appMapMetadata: collectMetadata(Object.values(appMapMetadata)),
     };
-    this.findings = findings;
-    const appMapFiles = new Set(this.findings.map((finding) => finding.appMapFile));
+    this.configuration = configuration;
+    const appMapFiles = new Set(findings.map((finding) => finding.appMapFile));
     this.appMaps = [...appMapFiles].reduce((memo, appMapFile) => {
       memo[appMapFile] = appMapMetadata[appMapFile];
       return memo;
     }, {} as Record<string, Metadata>);
+    this.findings = findings;
   }
 }

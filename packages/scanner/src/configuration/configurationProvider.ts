@@ -5,7 +5,6 @@ import { promises as fs } from 'fs';
 import { Rule, ScopeName } from '../types';
 import options_schema from './schema/options.json';
 import match_pattern_config_schema from './schema/match-pattern-config.json';
-import configuration_schema from './schema/configuration.json';
 import { capitalize, verbose } from '../rules/util';
 import { buildFilters as buildEventFilterArray } from '../rules/lib/matchEvent';
 import Configuration from './types/configuration';
@@ -74,41 +73,32 @@ const validate = (validator: ValidateFunction, data: any, context: string): void
   }
 };
 
-export default class ConfigurationProvider {
-  constructor(private readonly config: string | Configuration) {}
+export async function loadConfig(config: Configuration): Promise<Check[]> {
+  config.checks
+    .filter((check) => check.properties)
+    .forEach((check) => {
+      const ruleId = check.rule;
+      const schemaKey = [capitalize(ruleId), 'Options'].join('.');
+      if (verbose()) {
+        console.warn(schemaKey);
+      }
+      const propertiesSchema = (options_schema.definitions as Record<string, any>)[schemaKey];
+      if (!propertiesSchema) {
+        return;
+      }
+      if (verbose()) {
+        console.warn(propertiesSchema);
+        console.warn(check.properties);
+      }
+      validate(ajv.compile(propertiesSchema), check.properties || {}, `${ruleId} properties`);
+    });
 
-  async getConfig(): Promise<Check[]> {
-    let rawConfig: Configuration | undefined;
-    if (typeof this.config === 'string') {
-      const yamlConfig = await fs.readFile(this.config, 'utf-8');
-      rawConfig = yaml.load(yamlConfig, {
-        filename: this.config,
-      }) as Configuration;
-    } else {
-      rawConfig = this.config;
-    }
+  return Promise.all(config.checks.map(async (c: CheckConfig) => buildBuiltinCheck(c)));
+}
 
-    validate(ajv.compile(configuration_schema), rawConfig, 'Scanner configuration');
-
-    rawConfig.checks
-      .filter((check) => check.properties)
-      .forEach((check) => {
-        const ruleId = check.rule;
-        const schemaKey = [capitalize(ruleId), 'Options'].join('.');
-        if (verbose()) {
-          console.warn(schemaKey);
-        }
-        const propertiesSchema = (options_schema.definitions as Record<string, any>)[schemaKey];
-        if (!propertiesSchema) {
-          return;
-        }
-        if (verbose()) {
-          console.warn(propertiesSchema);
-          console.warn(check.properties);
-        }
-        validate(ajv.compile(propertiesSchema), check.properties || {}, `${ruleId} properties`);
-      });
-
-    return Promise.all(rawConfig.checks.map(async (c: CheckConfig) => buildBuiltinCheck(c)));
-  }
+export async function parseConfigFile(configPath: string): Promise<Configuration> {
+  const yamlConfig = await fs.readFile(configPath, 'utf-8');
+  return yaml.load(yamlConfig, {
+    filename: configPath,
+  }) as Configuration;
 }

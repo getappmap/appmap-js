@@ -47,6 +47,14 @@ describe('smoke test', () => {
     expect(findingsReport).toEqual({
       appMaps: {},
       findings: [],
+      configuration: {
+        checks: [
+          { rule: 'circularDependency' },
+          { rule: 'http500' },
+          { rule: 'missingContentType' },
+          { rule: 'nPlusOneQuery' },
+        ],
+      },
       summary: {
         numAppMaps: 1,
         numChecks: 4,

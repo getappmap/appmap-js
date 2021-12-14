@@ -1,6 +1,6 @@
 import { load } from 'js-yaml';
 import Check from '../src/check';
-import ConfigurationProvider from '../src/configuration/configurationProvider';
+import { loadConfig } from '../src/configuration/configurationProvider';
 import Configuration from '../src/configuration/types/configuration';
 
 describe('YAML config test', () => {
@@ -12,8 +12,7 @@ describe('YAML config test', () => {
         timeAllowed: 0.251
     `;
     const configObj = load(yamlConfig) as Configuration;
-    const provider = new ConfigurationProvider(configObj);
-    const checks: readonly Check[] = await provider.getConfig();
+    const checks: readonly Check[] = await loadConfig(configObj);
     expect(checks).toHaveLength(1);
     expect(checks[0].rule.title).toEqual(`Slow HTTP server request`);
   });
@@ -29,8 +28,7 @@ describe('YAML config test', () => {
               include: GET
     `;
     const configObj = load(yamlConfig) as Configuration;
-    const provider = new ConfigurationProvider(configObj);
-    const checks: readonly Check[] = await provider.getConfig();
+    const checks: readonly Check[] = await loadConfig(configObj);
     expect(checks).toHaveLength(1);
     expect(checks[0].includeScope!).toHaveLength(1);
   });
@@ -44,8 +42,7 @@ describe('YAML config test', () => {
           api.railsSampleApp.com: file:///railsSampleApp.openapiv3.yaml
     `;
     const configObj = load(yamlConfig) as Configuration;
-    const provider = new ConfigurationProvider(configObj);
-    const checks: readonly Check[] = await provider.getConfig();
+    const checks: readonly Check[] = await loadConfig(configObj);
     expect(checks).toHaveLength(1);
     expect(checks[0].options.schemata).toEqual({
       'api.railsSampleApp.com': 'file:///railsSampleApp.openapiv3.yaml',
