@@ -1168,7 +1168,6 @@ code {
     height: 100%;
 
     &__search {
-      margin-bottom: 1.5rem;
       padding: 1rem 1.25rem;
       display: flex;
       justify-content: flex-start;
