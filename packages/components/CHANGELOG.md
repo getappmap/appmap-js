@@ -1,3 +1,11 @@
+# [@appland/components-v1.17.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.17.0...@appland/components-v1.17.1) (2021-12-15)
+
+
+### Bug Fixes
+
+* remove bottom margin of Trace view filter input ([60b4e0d](https://github.com/applandinc/appmap-js/commit/60b4e0d78f459f48cc53c6a9e2c82e860ee41ad4))
+* root objects filter suggestions list objects from entire AppMap ([bb604b1](https://github.com/applandinc/appmap-js/commit/bb604b116b52feac2361641b140815ea9010790e))
+
 # [@appland/components-v1.17.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.16.0...@appland/components-v1.17.0) (2021-12-02)
 
 
