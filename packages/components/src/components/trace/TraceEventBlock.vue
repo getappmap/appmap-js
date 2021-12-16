@@ -7,7 +7,7 @@
     />
     <v-trace-node
       :event="event"
-      :filtered="highlightedEvents.includes(event.id)"
+      :filtered="highlightedEvents.has(event.id)"
       :highlight="
         selectedEvents.includes(event) || event.id == highlightedEventId
       "
@@ -76,8 +76,8 @@ export default {
       default: null,
     },
     highlightedEvents: {
-      type: Array,
-      default: () => [],
+      type: Set,
+      default: new Set(),
     },
     highlightedEventId: {
       type: Number,

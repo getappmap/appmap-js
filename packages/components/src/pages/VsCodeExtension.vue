@@ -69,14 +69,14 @@
               </div>
               <div
                 class="trace-view__search-arrows"
-                v-if="highlightedNodes.length"
+                v-if="highlightedNodes.size"
               >
                 <div class="trace-view__search-arrow" @click="prevTraceFilter">
                   <ArrowSearchLeftIcon />
                 </div>
                 <div class="trace-view__search-arrows-text">
                   <b>{{ currentTraceFilterIndex + 1 }}</b
-                  >/{{ highlightedNodes.length }} results
+                  >/{{ highlightedNodes.size }} results
                 </div>
                 <div class="trace-view__search-arrow" @click="nextTraceFilter">
                   <ArrowSearchRightIcon />
@@ -603,12 +603,14 @@ export default {
         }
       }
 
-      return Array.from(nodes);
+      return nodes;
     },
 
     highlightedEventId() {
-      if (this.highlightedNodes.length) {
-        const eventId = this.highlightedNodes[this.currentTraceFilterIndex];
+      if (this.highlightedNodes.size) {
+        const eventId = Array.from(this.highlightedNodes)[
+          this.currentTraceFilterIndex
+        ];
         const selectedObject = this.filteredAppMap.events.find(
           (e) => e.id === eventId
         );
@@ -999,14 +1001,14 @@ export default {
 
     prevTraceFilter() {
       if (this.currentTraceFilterIndex === 0) {
-        this.currentTraceFilterIndex = this.highlightedNodes.length - 1;
+        this.currentTraceFilterIndex = this.highlightedNodes.size - 1;
       } else {
         this.currentTraceFilterIndex -= 1;
       }
     },
 
     nextTraceFilter() {
-      if (this.currentTraceFilterIndex === this.highlightedNodes.length - 1) {
+      if (this.currentTraceFilterIndex === this.highlightedNodes.size - 1) {
         this.currentTraceFilterIndex = 0;
       } else {
         this.currentTraceFilterIndex += 1;

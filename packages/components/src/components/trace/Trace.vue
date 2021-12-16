@@ -50,8 +50,8 @@ export default {
       default: null,
     },
     highlightedEvents: {
-      type: Array,
-      default: () => [],
+      type: Set,
+      default: new Set(),
     },
     highlightedEventId: {
       type: Number,
