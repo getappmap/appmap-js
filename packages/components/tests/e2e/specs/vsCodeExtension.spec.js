@@ -793,6 +793,29 @@ context('VS Code Extension', () => {
       cy.get('.nodes .node').should('have.length', 3);
     });
 
+    it('filters: navigate through filter suggestions with keyboard', () => {
+      cy.get('.tabs__controls .popper__button').click();
+
+      cy.get('.filters__form-input').first().focus();
+      cy.get('.filters__form-suggestions').should('be.visible');
+      cy.get('.filters__form-suggestions-item')
+        .eq(0)
+        .should('have.class', 'filters__form-suggestions-item--selected');
+
+      cy.get('.filters__form-input').first().type('{downarrow}');
+      cy.get('.filters__form-suggestions-item')
+        .eq(1)
+        .should('have.class', 'filters__form-suggestions-item--selected');
+
+      cy.get('.filters__form-input').first().type('{uparrow}');
+      cy.get('.filters__form-suggestions-item')
+        .eq(0)
+        .should('have.class', 'filters__form-suggestions-item--selected');
+
+      cy.get('.filters__form-input').first().type('{esc}');
+      cy.get('.filters__form-suggestions').should('not.be.visible');
+    });
+
     it('filters: limit root events', () => {
       cy.get('.tabs .tab-btn').last().click();
 
