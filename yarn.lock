@@ -212,7 +212,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/diagrams@workspace:packages/diagrams"
   dependencies:
-    "@appland/models": "workspace:^1.5.0"
+    "@appland/models": "workspace:^1.9.0"
     "@rollup/plugin-commonjs": ^18.1.0
     "@rollup/plugin-node-resolve": ^13.0.0
     "@rollup/plugin-replace": ^2.4.2
@@ -243,7 +243,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@workspace:^1.5.0, @appland/models@workspace:^1.8.1, @appland/models@workspace:packages/models":
+"@appland/models@workspace:^1.5.0, @appland/models@workspace:^1.8.1, @appland/models@workspace:^1.9.0, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
