@@ -189,10 +189,10 @@ packages:
       });
 
       it('installs as expected', async () => {
-        const evalResults = async (err, argv, output) => {
+        const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = await fse.readFile(
+          const actualConfig = fse.readFileSync(
             path.join(projectDir, 'appmap.yml'),
             { encoding: 'utf-8' }
           );
@@ -265,10 +265,10 @@ packages:
       });
 
       it('installs as expected', async () => {
-        const evalResults = async (err, argv, output) => {
+        const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = await fse.readFile(
+          const actualConfig = fse.readFileSync(
             path.join(projectDir, 'appmap.yml'),
             { encoding: 'utf-8' }
           );
@@ -386,10 +386,10 @@ packages:
     };
 
     it('installs as expected', async () => {
-      const evalResults = async (err, argv, output) => {
+      const evalResults = (err, argv, output) => {
         expect(err).toBeNull();
 
-        const actualConfig = await fse.readFile(
+        const actualConfig = fse.readFileSync(
           path.join(projectDir, 'appmap.yml'),
           { encoding: 'utf-8' }
         );
@@ -529,10 +529,10 @@ packages:
       };
 
       it('installs as expected', async () => {
-        const evalResults = async (err, argv, output) => {
+        const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = await fse.readFile(
+          const actualConfig = fse.readFileSync(
             path.join(projectDir, 'appmap.yml'),
             { encoding: 'utf-8' }
           );
@@ -584,10 +584,10 @@ packages:
       };
 
       it('installs as expected', async () => {
-        const evalResults = async (err, argv, output) => {
+        const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = await fse.readFile(
+          const actualConfig = fse.readFileSync(
             path.join(projectDir, 'appmap.yml'),
             { encoding: 'utf-8' }
           );
@@ -685,10 +685,10 @@ packages:
 
 
       it('installs as expected', async () => {
-        const evalResults = async (err, argv, output) => {
+        const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = await fse.readFile(
+          const actualConfig = fse.readFileSync(
             path.join(projectDir, 'appmap.yml'),
             { encoding: 'utf-8' }
           );
@@ -742,10 +742,10 @@ packages:
 
 
       it('installs as expected', async () => {
-        const evalResults = async (err, argv, output) => {
+        const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = await fse.readFile(
+          const actualConfig = fse.readFileSync(
             path.join(projectDir, 'appmap.yml'),
             { encoding: 'utf-8' }
           );
