@@ -3,6 +3,7 @@
 import yargs from 'yargs';
 import ScanCommand from './cli/scan/command';
 import UploadCommand from './cli/upload/command';
+import CICommand from './cli/ci/command';
 
 yargs(process.argv.slice(2))
   .option('verbose', {
@@ -11,6 +12,7 @@ yargs(process.argv.slice(2))
   })
   .command(ScanCommand)
   .command(UploadCommand)
+  .command(CICommand)
   .fail((msg, err, yargs) => {
     if (msg) {
       console.log(yargs.help());
