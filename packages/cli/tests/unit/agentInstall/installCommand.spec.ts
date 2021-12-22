@@ -62,7 +62,8 @@ describe('install sub-command', () => {
   beforeEach(() => {
     // Stub all Telemetry methods. flush still needs to work, though.
     sinon.stub(Telemetry);
-    (Telemetry.flush as sinon.SinonStub).callThrough();
+    const callCB = (cb) => { return cb() };
+    (Telemetry.flush as sinon.SinonStub).callsFake(callCB);
     projectDir = tmp.dirSync({} as any).name;
   });
 
