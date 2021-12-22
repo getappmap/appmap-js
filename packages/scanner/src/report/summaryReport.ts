@@ -11,6 +11,7 @@ function summarizeFindings(findings: Finding[]): FindingSummary[] {
       findingSummary.messages.add(finding.message);
     } else {
       findingSummary = {
+        ruleId: finding.ruleId,
         ruleTitle: finding.ruleTitle,
         findingTotal: 1,
         messages: new Set([finding.message]),
@@ -22,26 +23,23 @@ function summarizeFindings(findings: Finding[]): FindingSummary[] {
   return Object.values(result);
 }
 
-export default function (summary: ScanResults, colorize: boolean): string {
+export default function (summary: ScanResults, colorize: boolean): void {
   const matchedStr = `${summary.summary.numFindings} finding${
     summary.summary.numFindings === 1 ? '' : 's'
   }`;
   const colouredMatchedStr = colorize ? chalk.stderr.magenta(matchedStr) : matchedStr;
 
-  const result: Array<string> = [];
-  result.push(`${summary.summary.numChecks} checks (${[colouredMatchedStr].join(', ')})`);
+  console.log(`${summary.summary.numChecks} checks (${[colouredMatchedStr].join(', ')})`);
 
   summarizeFindings(summary.findings)
     .sort((a, b) => a.ruleTitle.localeCompare(b.ruleTitle))
-    .forEach((findingSummary) => {
-      const casesStr = `\t- ${findingSummary.ruleTitle}: ${findingSummary.findingTotal} case(s)`;
-      result.push(colorize ? chalk.stderr.magenta(casesStr) : casesStr);
-      const uniqueMessages = [...new Set(findingSummary.messages)].sort();
+    .forEach((finding) => {
+      const casesStr = `\t- ${finding.ruleTitle} (${finding.ruleId}) : ${finding.findingTotal} case(s)`;
+      console.log(colorize ? chalk.stderr.magenta(casesStr) : casesStr);
+      const uniqueMessages = [...new Set(finding.messages)].sort();
       uniqueMessages.forEach((message) => {
         const messageStr = `\t\t${message}`;
-        result.push(colorize ? chalk.stderr.magenta(messageStr) : messageStr);
+        console.log(colorize ? chalk.stderr.magenta(messageStr) : messageStr);
       });
     });
-
-  return result.join('\n');
 }

@@ -14,6 +14,7 @@ import fetchStatus from '../../integration/appland/fetchStatus';
 import upload from '../../integration/appland/upload';
 import postCommitStatus from '../../integration/github/commitStatus';
 import { newFindings } from '../../findings';
+import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 
 import { ExitCode } from '../exitCode';
@@ -111,10 +112,9 @@ export default {
         newFindings(rawScanResults.findings, findingStatuses)
       );
 
-      const colouredSummary = summaryReport(scanResults, true);
-      process.stdout.write('\n');
-      process.stdout.write(colouredSummary);
-      process.stdout.write('\n');
+      findingsReport(scanResults.findings, scanResults.appMapMetadata);
+      console.log();
+      summaryReport(scanResults, true);
 
       if (doUpload) {
         await upload(scanResults, appId);

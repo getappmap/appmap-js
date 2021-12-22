@@ -12,6 +12,7 @@ import { ScanResults } from '../../report/scanResults';
 import { verbose } from '../../rules/util';
 import fetchStatus from '../../integration/appland/fetchStatus';
 import { newFindings } from '../../findings';
+import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 
 import { ExitCode } from '../exitCode';
@@ -127,12 +128,10 @@ export default {
         );
       }
 
-      const colouredSummary = summaryReport(scanResults, true);
-      // const reportGenerator = new Generator(ide);
-      // reportGenerator.generate(scanResults, appMapMetadata);
-      process.stdout.write('\n');
-      process.stdout.write(colouredSummary);
-      process.stdout.write('\n');
+      findingsReport(scanResults.findings, scanResults.appMapMetadata, ide);
+      console.log();
+      summaryReport(scanResults, true);
+      console.log('\n');
     } catch (err) {
       if (err instanceof ValidationError) {
         console.warn(err.message);
