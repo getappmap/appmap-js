@@ -189,6 +189,7 @@ packages:
       });
 
       it('installs as expected', async () => {
+        expect.assertions(12);
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
@@ -209,6 +210,7 @@ packages:
       });
 
       it('fails when validation fails', async () => {
+        expect.assertions(9);
         const msg = 'failValidate, validation failed';
         const failValidate = () => Promise.reject(new Error(msg));
         const evalResults = (err, argv, output) => {
@@ -265,6 +267,7 @@ packages:
       });
 
       it('installs as expected', async () => {
+        expect.assertions(12);
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
@@ -285,6 +288,7 @@ packages:
       });
 
       it('fails when validation fails', async () => {
+        expect.assertions(9);
         const msg = 'failValidate, validation failed';
         const failValidate = () => Promise.reject(new Error(msg));
         const evalResults = (err, argv, output) => {
@@ -386,6 +390,7 @@ packages:
     };
 
     it('installs as expected', async () => {
+      expect.assertions(11);
       const evalResults = (err, argv, output) => {
         expect(err).toBeNull();
 
@@ -406,6 +411,7 @@ packages:
     });
 
     it('fails when validation fails', async () => {
+      expect.assertions(8);
       const msg = 'failValidate, validation failed';
       const failValidate = () => {
         return Promise.reject(new Error(msg));
@@ -446,10 +452,12 @@ packages:
 
       const errorArray = `[{"message": "${msg}"}]`;
       it('fails for old output format', async () => {
+        expect.assertions(8);
         await testValidation(errorArray);
       });
 
       it('fails for new output format', async () => {
+        expect.assertions(8);
         const errorObj = `{"errors": ${errorArray}}`;
         await testValidation(errorObj);
       });
@@ -529,6 +537,7 @@ packages:
       };
 
       it('installs as expected', async () => {
+        expect.assertions(10);
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
@@ -584,6 +593,7 @@ packages:
       };
 
       it('installs as expected', async () => {
+        expect.assertions(10);
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
@@ -685,6 +695,7 @@ packages:
 
 
       it('installs as expected', async () => {
+        expect.assertions(10);
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
@@ -705,6 +716,7 @@ packages:
       });
 
       it('fails when validation fails', async () => {
+        expect.assertions(7);
         const msg = 'failValidate, validation failed';
         const failValidate = () => Promise.reject(new Error(msg));
         const evalResults = (err, argv, output) => {
@@ -742,6 +754,7 @@ packages:
 
 
       it('installs as expected', async () => {
+        expect.assertions(10);
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
@@ -762,6 +775,7 @@ packages:
       });
 
       it('fails when validation fails', async () => {
+        expect.assertions(7);
         const msg = 'failValidate, validation failed';
         const failValidate = () => Promise.reject(new Error(msg));
         const evalResults = (err, argv, output) => {
@@ -784,6 +798,7 @@ packages:
     });
 
     it('requests the user to select a project type if more than one exist', async () => {
+      expect.assertions(2);
       const projectFixture = path.join(fixtureDir, 'python', 'mixed');
       const { name: projectDir } = tmp.dirSync({} as any);
       await fse.copy(projectFixture, projectDir);
@@ -804,6 +819,7 @@ packages:
     });
 
     it('fails if no supported project is found', async () => {
+      expect.assertions(5);
       const { name: projectDir } = tmp.dirSync({} as any);
       const installProcedureStub = sinon
         .stub(AgentInstallerProcedure.prototype, 'run')
@@ -857,6 +873,7 @@ packages:
     });
 
     it('succeeds when the config syntax is valid', async () => {
+      expect.assertions(1);
       const validateConfig = sinon
         .stub(validator, 'validateConfig')
         .returns({ valid: true });
@@ -866,6 +883,7 @@ packages:
     });
 
     it('fails when the config syntax is invalid', async () => {
+      expect.assertions(2);
       const jsError = [
         {
           start: { line: 0, column: 0, offset: 0 },
@@ -927,6 +945,7 @@ packages:
     });
 
     it('installs as expected', async () => {
+      expect.assertions(16);
       const projectFixture = path.join(fixtureDir, 'java', 'multi-project');
       fse.copySync(projectFixture, projectDir);
 
@@ -964,6 +983,7 @@ packages:
     });
 
     it('installs the root project by default', async () => {
+      expect.assertions(2);
       const projectFixture = path.join(fixtureDir, 'java', 'multi-project-root');
       fse.copySync(projectFixture, projectDir);
       const promptStub = sinon.stub(inquirer, 'prompt').resolves({
