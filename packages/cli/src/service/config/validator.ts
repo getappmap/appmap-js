@@ -1,10 +1,10 @@
 import Ajv from 'ajv';
-import betterAjvErrors, { IOutputError } from '@sidvind/better-ajv-errors';
+import betterAjvErrors from '@sidvind/better-ajv-errors';
 
 type ValidationResult = {
   valid: boolean,
   errors?: {
-    js: IOutputError[],
+    js: betterAjvErrors.IOutputError[],
     cli: string
   }
 };

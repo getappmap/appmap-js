@@ -99,7 +99,7 @@ export default class MavenInstaller
       doc,
       doc.createNSResolver(doc.getRootNode()),
       9 /* FIRST_ORDERED_NODE_TYPE */
-    ).singleNodeValue;
+    ).singleNodeValue as HTMLElement;
     if (!projectSection) {
       // Doesn't make sense to be missing the <project> section
       throw new Error(`No project section found in ${this.buildFilePath}`);
