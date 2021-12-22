@@ -5,7 +5,7 @@ import {
   IncomingMessage,
 } from 'node:http';
 import { request as httpsRequest } from 'node:https';
-import Settings from './settings';
+import loadConfiguration from './loadConfiguration';
 
 type Request = {
   requestFunction: (
@@ -13,19 +13,23 @@ type Request = {
     options: RequestOptions,
     callback?: (response: IncomingMessage) => void
   ) => ClientRequest;
+  url: URL;
   headers: Record<string, string>;
 };
 
-export default function buildRequest() {
+export default async function buildRequest(
+  requestPath: string
+): Promise<Request> {
+  const configuration = await loadConfiguration();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const url = new URL(Settings.baseURL!);
+  const url = new URL([configuration.baseURL, requestPath].join('/'));
   const requestFunction =
     url.protocol === 'https:' ? httpsRequest : httpRequest;
   const headers = {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    Authorization: `Bearer ${Settings.apiKey!}`,
+    Authorization: `Bearer ${configuration.apiKey}`,
     Accept: 'application/json',
   };
 
-  return { requestFunction, headers } as Request;
+  return { requestFunction, url, headers } as Request;
 }

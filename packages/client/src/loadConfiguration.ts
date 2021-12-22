@@ -1,7 +1,8 @@
-import { readFileSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import yaml from 'js-yaml';
+import Configuration from './configuration';
 
 type AppLandContext = {
   url: string;
@@ -13,22 +14,22 @@ type AppLandConfig = {
   current_context: string | undefined;
 };
 
-type Settings = {
-  baseURL: string | undefined;
-  apiKey: string | undefined;
-  valid: boolean;
-};
+class Settings {
+  baseURL = 'https://app.land';
+  apiKey?: string;
+  error?: string;
+}
 
 const failUsage = (message: string): Settings => {
   console.warn(message);
-  return { valid: false } as Settings;
+  return { error: message } as Settings;
 };
 
-function loadFromFile(): Settings {
+async function loadFromFile(): Promise<Settings> {
   const applandConfigFilePath = join(homedir(), '.appland');
   let applandConfigData: Buffer | undefined;
   try {
-    applandConfigData = readFileSync(applandConfigFilePath);
+    applandConfigData = await readFile(applandConfigFilePath);
   } catch {
     return {} as Settings;
   }
@@ -54,7 +55,7 @@ function loadFromFile(): Settings {
     );
   }
 
-  return { baseURL: configURL, apiKey: configApiKey, valid: true };
+  return { baseURL: configURL, apiKey: configApiKey };
 }
 
 function loadFromEnvironment(settings: Settings): void {
@@ -66,8 +67,22 @@ function loadFromEnvironment(settings: Settings): void {
   }
 }
 
-export default ((): Settings => {
-  const settings = loadFromFile();
+let configuration: Configuration;
+
+export default async function (): Promise<Configuration> {
+  if (configuration) {
+    return configuration;
+  }
+
+  const settings = await loadFromFile();
   loadFromEnvironment(settings);
-  return settings;
-})();
+  if (!settings.apiKey) {
+    settings.error = `No API key available for AppMap server. Export APPLAND_API_KEY or configure ~/.appland`;
+  }
+  if (settings.error) {
+    throw new Error(settings.error);
+  }
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  configuration = { baseURL: settings.baseURL, apiKey: settings.apiKey! };
+  return configuration;
+}
