@@ -47,14 +47,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appland/models@npm:^1.8.0":
-  version: 1.8.0
-  resolution: "@appland/models@npm:1.8.0"
+"@appland/client@portal:/Users/kgilpin/source/appland/appmap-js/packages/client::locator=%40applandinc%2Fscanner%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@appland/client@portal:/Users/kgilpin/source/appland/appmap-js/packages/client::locator=%40applandinc%2Fscanner%40workspace%3A."
   dependencies:
+    "@appland/models": "workspace:^1.8.1"
+    js-yaml: ^4.1.0
+  languageName: node
+  linkType: soft
+
+"@appland/models@portal:/Users/kgilpin/source/appland/appmap-js/packages/models::locator=%40applandinc%2Fscanner%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@appland/models@portal:/Users/kgilpin/source/appland/appmap-js/packages/models::locator=%40applandinc%2Fscanner%40workspace%3A."
+  dependencies:
+    "@appland/sql-parser": ^1.1.1
     cross-env: ^7.0.3
     crypto-js: ^4.0.0
-    sqlite-parser: applandinc/sqlite-parser
-  checksum: ca462f8c396345fcc7445429af5c53aef8231929836d4ffb3bb65d2b11307821a5a00f211425a041a4d155e9b33fa83250a0a916a25982e420d4371938585415
+  languageName: node
+  linkType: soft
+
+"@appland/sql-parser@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@appland/sql-parser@npm:1.1.1"
+  bin:
+    sqlite-parser: bin/sqlite-parser
+  checksum: c71b79650d201dde464888461ec3f19631401626eacfad11a185068c81baf95ae3635d125423ce51e872ab7c778801bcf17be172cb1e49fea51249a134ff4fa5
   languageName: node
   linkType: hard
 
@@ -62,7 +79,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@applandinc/scanner@workspace:."
   dependencies:
-    "@appland/models": ^1.8.0
+    "@appland/client": "applandinc/appmap-js#feat/scan-with-api-key"
+    "@appland/models": "applandinc/appmap-js#feat/scan-with-api-key"
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
     "@types/glob": ^7.1.4
@@ -7690,15 +7708,6 @@ __metadata:
   version: 1.0.3
   resolution: "sprintf-js@npm:1.0.3"
   checksum: 19d79aec211f09b99ec3099b5b2ae2f6e9cdefe50bc91ac4c69144b6d3928a640bb6ae5b3def70c2e85a2c3d9f5ec2719921e3a59d3ca3ef4b2fd1a4656a0df3
-  languageName: node
-  linkType: hard
-
-sqlite-parser@applandinc/sqlite-parser:
-  version: 1.1.0
-  resolution: "sqlite-parser@https://github.com/applandinc/sqlite-parser.git#commit=ecd7db3afc8ca32ebf6c13612665bd334330b809"
-  bin:
-    sqlite-parser: bin/sqlite-parser
-  checksum: ee07464d79841214a854bd3f957269fc5b230ad64ff6bf6284970987d90debdcc8b2cb999512f73af46229a2ceed344f91166ffa2ed4b3e38cffddcfe5449da5
   languageName: node
   linkType: hard
 

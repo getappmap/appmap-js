@@ -45,7 +45,8 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "@appland/models": "^1.8.0",
+    "@appland/client": "applandinc/appmap-js#feat/scan-with-api-key",
+    "@appland/models": "applandinc/appmap-js#feat/scan-with-api-key",
     "@types/sinon": "^10.0.2",
     "ajv": "^8.8.2",
     "ansi-escapes": "^5.0.0",
@@ -80,5 +81,9 @@
       "built/**/*.json"
     ],
     "outputPath": "dist"
+  },
+  "resolutions": {
+    "@appland/models": "portal:/Users/kgilpin/source/appland/appmap-js/packages/models",
+    "@appland/client": "portal:/Users/kgilpin/source/appland/appmap-js/packages/client"
   }
 }
