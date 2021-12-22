@@ -4,10 +4,14 @@ import { join } from 'path';
 import { promisify } from 'util';
 import { Arguments, Argv } from 'yargs';
 
+import { FindingStatusListItem } from '@appland/client';
+
 import { loadConfig, parseConfigFile } from '../../configuration/configurationProvider';
 import { AbortError, ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
 import { verbose } from '../../rules/util';
+import fetchStatus from '../../integration/appland/fetchStatus';
+import { newFindings } from '../../findings';
 import summaryReport from '../../report/summaryReport';
 
 import { ExitCode } from '../exitCode';
@@ -32,7 +36,7 @@ export default {
     args.option('config', {
       describe:
         'path to assertions config file (TypeScript or YAML, check docs for configuration format)',
-      default: join(__dirname, './sampleConfig/default.yml'),
+      default: join(__dirname, '..', '..', 'sampleConfig', 'default.yml'),
       alias: 'c',
     });
     args.option('ide', {
@@ -63,7 +67,7 @@ export default {
       verbose: isVerbose,
       all: reportAllFindings,
       app: appIdArg,
-      /* ide, */
+      ide,
       reportFile,
     } = options as unknown as CommandOptions;
 
@@ -93,14 +97,14 @@ export default {
       const configData = await parseConfigFile(config);
       const checks = await loadConfig(configData);
 
-      const [rawScanResults /*, findingStatuses */] = await Promise.all<ScanResults /*,
+      const [rawScanResults, findingStatuses] = await Promise.all<
+        ScanResults,
         FindingStatusListItem[]
-        */>([
+      >([
         (async (): Promise<ScanResults> => {
           const { appMapMetadata, findings } = await scan(files, checks);
           return new ScanResults(configData, appMapMetadata, findings, checks);
         })(),
-        /*
         (async (): Promise<FindingStatusListItem[]> => {
           const appId = await resolveAppId(appIdArg, appmapDir, false);
           if (!appId) {
@@ -109,14 +113,11 @@ export default {
 
           return await fetchStatus(appId);
         })(),
-        */
       ]);
 
       // Always report the raw data
       await writeFile(reportFile, JSON.stringify(rawScanResults, null, 2));
 
-      const scanResults = rawScanResults;
-      /*
       let scanResults;
       if (reportAllFindings) {
         scanResults = rawScanResults;
@@ -125,7 +126,6 @@ export default {
           newFindings(rawScanResults.findings, findingStatuses)
         );
       }
-      */
 
       const colouredSummary = summaryReport(scanResults, true);
       // const reportGenerator = new Generator(ide);
