@@ -88,6 +88,7 @@ __metadata:
     "@types/js-yaml": ^4.0.3
     "@types/node": ^16.7.10
     "@types/sinon": ^10.0.2
+    "@types/tar-stream": ^2.2.2
     "@types/yargs": ^17.0.2
     "@typescript-eslint/eslint-plugin": ^4.30.0
     "@typescript-eslint/parser": ^4.30.0
@@ -98,6 +99,7 @@ __metadata:
     eslint-config-prettier: ^8.3.0
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^3.4.1
+    form-data: ^4.0.0
     jest: ^27.1.0
     js-yaml: ^4.1.0
     minimatch: ^3.0.4
@@ -109,6 +111,7 @@ __metadata:
     semantic-release: ^18.0.0
     sinon: ^11.1.2
     supports-hyperlinks: ^2.2.0
+    tar-stream: ^2.2.0
     ts-jest: ^27.0.5
     ts-json-schema-generator: ^0.97.0
     ts-node: ^10.2.1
@@ -1574,6 +1577,15 @@ __metadata:
   version: 2.0.1
   resolution: "@types/stack-utils@npm:2.0.1"
   checksum: 205fdbe3326b7046d7eaf5e494d8084f2659086a266f3f9cf00bccc549c8e36e407f88168ad4383c8b07099957ad669f75f2532ed4bc70be2b037330f7bae019
+  languageName: node
+  linkType: hard
+
+"@types/tar-stream@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "@types/tar-stream@npm:2.2.2"
+  dependencies:
+    "@types/node": "*"
+  checksum: 4b33bc0d53770e952d6e2e8acb8889190510326a3e255d0c6edd94136d6027ecae939a7b49188d1d02d774328d9a3742ff633d505709d1a1200b3413c88d793d
   languageName: node
   linkType: hard
 
@@ -3668,6 +3680,17 @@ __metadata:
     combined-stream: ^1.0.8
     mime-types: ^2.1.12
   checksum: b019e8d35c8afc14a2bd8a7a92fa4f525a4726b6d5a9740e8d2623c30e308fbb58dc8469f90415a856698933c8479b01646a9dff33c87cc4e76d72aedbbf860d
+  languageName: node
+  linkType: hard
+
+"form-data@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "form-data@npm:4.0.0"
+  dependencies:
+    asynckit: ^0.4.0
+    combined-stream: ^1.0.8
+    mime-types: ^2.1.12
+  checksum: 01135bf8675f9d5c61ff18e2e2932f719ca4de964e3be90ef4c36aacfc7b9cb2fceb5eca0b7e0190e3383fe51c5b37f4cb80b62ca06a99aaabfcfd6ac7c9328c
   languageName: node
   linkType: hard
 
@@ -7986,7 +8009,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar-stream@npm:^2.1.4":
+"tar-stream@npm:^2.1.4, tar-stream@npm:^2.2.0":
   version: 2.2.0
   resolution: "tar-stream@npm:2.2.0"
   dependencies:

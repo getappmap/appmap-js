@@ -2,6 +2,7 @@
 
 import yargs from 'yargs';
 import ScanCommand from './cli/scan/command';
+import UploadCommand from './cli/upload/command';
 
 yargs(process.argv.slice(2))
   .option('verbose', {
@@ -9,6 +10,7 @@ yargs(process.argv.slice(2))
     alias: 'v',
   })
   .command(ScanCommand)
+  .command(UploadCommand)
   .fail((msg, err, yargs) => {
     if (msg) {
       console.log(yargs.help());
