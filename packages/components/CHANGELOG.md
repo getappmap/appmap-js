@@ -1,3 +1,10 @@
+# [@appland/components-v1.18.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.17.3...@appland/components-v1.18.0) (2021-12-23)
+
+
+### Features
+
+* Highlight all events matching event search ([#496](https://github.com/applandinc/appmap-js/issues/496)) ([1d38bb7](https://github.com/applandinc/appmap-js/commit/1d38bb7b2deb8fcf81ddd948f3943223f3986f99))
+
 # [@appland/components-v1.17.3](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.17.2...@appland/components-v1.17.3) (2021-12-23)
 
 
