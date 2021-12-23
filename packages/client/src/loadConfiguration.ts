@@ -14,8 +14,10 @@ type AppLandConfig = {
   current_context: string | undefined;
 };
 
+const DefaultURL = 'https://app.land';
+
 class Settings {
-  baseURL = 'https://app.land';
+  baseURL = DefaultURL;
   apiKey?: string;
   error?: string;
 }
@@ -31,7 +33,7 @@ async function loadFromFile(): Promise<Settings> {
   try {
     applandConfigData = await readFile(applandConfigFilePath);
   } catch {
-    return {} as Settings;
+    return { baseURL: DefaultURL } as Settings;
   }
   const applandConfig = yaml.load(
     applandConfigData.toString()
