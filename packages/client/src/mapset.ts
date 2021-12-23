@@ -1,11 +1,11 @@
 import reportJson from './reportJson';
-import { AppMapListItem, get } from '.';
+import { App, AppMapListItem, get } from '.';
 
 export default class Mapset {
-  constructor(public id: number) {}
+  constructor(public app: App, public id: number) {}
 
   listAppMaps(): Promise<AppMapListItem[]> {
-    const requestPath = 'api/appmaps';
+    const requestPath = `api/mapsets?app=${this.app.fqname}&mapset=${this.id}`;
     return get(requestPath).then((response) =>
       reportJson<AppMapListItem[]>(response)
     );
