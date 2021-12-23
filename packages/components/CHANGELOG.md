@@ -1,3 +1,10 @@
+# [@appland/components-v1.17.3](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.17.2...@appland/components-v1.17.3) (2021-12-23)
+
+
+### Bug Fixes
+
+* Set trace container max-width to 100% ([#499](https://github.com/applandinc/appmap-js/issues/499)) ([7a3c5d4](https://github.com/applandinc/appmap-js/commit/7a3c5d43482a71b3b5b32b6741c604b26edc0f90))
+
 # [@appland/components-v1.17.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.17.1...@appland/components-v1.17.2) (2021-12-17)
 
 
