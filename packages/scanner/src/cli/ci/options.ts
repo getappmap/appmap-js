@@ -1,10 +1,7 @@
-export default interface CommandOptions {
-  app?: string;
-  appmapDir?: string;
-  config: string;
+import ScanOptions from '../scanOptions';
+
+export default interface CommandOptions extends ScanOptions {
   fail?: boolean;
-  reportFile: string;
   upload: boolean;
   updateCommitStatus: boolean;
-  verbose?: boolean;
 }

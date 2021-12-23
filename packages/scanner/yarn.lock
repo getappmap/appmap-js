@@ -103,6 +103,7 @@ __metadata:
     jest: ^27.1.0
     js-yaml: ^4.1.0
     minimatch: ^3.0.4
+    nock: ^13.2.1
     octokat: ^0.10.0
     openapi-diff: ^0.23.5
     openapi-types: ^9.3.0
@@ -5595,6 +5596,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.set@npm:^4.3.2":
+  version: 4.3.2
+  resolution: "lodash.set@npm:4.3.2"
+  checksum: a9122f49eef9f2d0fc9061a33d87f8e5b8c6b23d46e8b9e9ce1529d3588d79741bd1145a3abdfa3b13082703e65af27ff18d8a07bfc22b9be32f3fc36f763f70
+  languageName: node
+  linkType: hard
+
 "lodash.truncate@npm:^4.4.2":
   version: 4.4.2
   resolution: "lodash.truncate@npm:4.4.2"
@@ -6019,6 +6027,18 @@ __metadata:
     just-extend: ^4.0.2
     path-to-regexp: ^1.7.0
   checksum: e3843cc125163ce99b7fb0328edf427b981be32c6c719684582cf0a46fb5206173835a9a14dedac3c4833e415ab0e0493f9f4d4163572a3a0c95db39b093166d
+  languageName: node
+  linkType: hard
+
+"nock@npm:^13.2.1":
+  version: 13.2.1
+  resolution: "nock@npm:13.2.1"
+  dependencies:
+    debug: ^4.1.0
+    json-stringify-safe: ^5.0.1
+    lodash.set: ^4.3.2
+    propagate: ^2.0.0
+  checksum: b401fb8143ca88095ee34c715e2806eda2813dace4f4c4798961ad961c18003d1529f4507a79c429d2c3c768e136632ee19ee9ebfef71f0cb022df152594df1d
   languageName: node
   linkType: hard
 
@@ -7030,6 +7050,13 @@ __metadata:
   dependencies:
     read: 1
   checksum: 443a3b39ac916099988ee0161ab4e22edd1fa27e3d39a38d60e48c11ca6df3f5a90bfe44d95af06ed8659c4050b789ffe64c3f9f8e49a4bea1ea19105c98445a
+  languageName: node
+  linkType: hard
+
+"propagate@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "propagate@npm:2.0.1"
+  checksum: c4febaee2be0979e82fb6b3727878fd122a98d64a7fa3c9d09b0576751b88514a9e9275b1b92e76b364d488f508e223bd7e1dcdc616be4cdda876072fbc2a96c
   languageName: node
   linkType: hard
 

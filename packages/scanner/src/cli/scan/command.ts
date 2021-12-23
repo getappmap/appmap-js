@@ -1,16 +1,14 @@
 import { glob as globCallback } from 'glob';
 import { writeFile } from 'fs/promises';
-import { join } from 'path';
 import { promisify } from 'util';
-import { Arguments, Argv } from 'yargs';
+import { Arguments, Argv, string } from 'yargs';
 
 import { FindingStatusListItem } from '@appland/client';
 
-import { loadConfig, parseConfigFile } from '../../configuration/configurationProvider';
+import { parseConfigFile } from '../../configuration/configurationProvider';
 import { AbortError, ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
 import { verbose } from '../../rules/util';
-import fetchStatus from '../../integration/appland/fetchStatus';
 import { newFindings } from '../../findings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
@@ -19,43 +17,27 @@ import { ExitCode } from '../exitCode';
 import validateFile from '../validateFile';
 
 import CommandOptions from './options';
-import resolveAppId from '../resolveAppId';
-import scan from '../scan';
+import { default as buildScanner } from './scanner';
+import scanArgs from '../scanArgs';
 
 export default {
   command: 'scan',
   describe: 'Scan AppMaps for code behavior findings',
   builder(args: Argv): Argv {
-    args.option('appmap-dir', {
-      describe: 'directory to recursively inspect for AppMaps',
-      alias: 'd',
-    });
+    scanArgs(args);
+
     args.option('appmap-file', {
       describe: 'single file to scan',
       alias: 'f',
-    });
-    args.option('config', {
-      describe:
-        'path to assertions config file (TypeScript or YAML, check docs for configuration format)',
-      default: join(__dirname, '..', '..', 'sampleConfig', 'default.yml'),
-      alias: 'c',
     });
     args.option('ide', {
       describe: 'choose your IDE protocol to open AppMaps directly in your IDE.',
       options: ['vscode', 'x-mine', 'idea', 'pycharm'],
     });
-    args.option('report-file', {
-      describe: 'file name for findings report',
-      default: 'appland-findings.json',
-    });
     args.option('all', {
       describe: 'report all findings, including duplicates of known findings',
       default: false,
       type: 'boolean',
-    });
-    args.option('app', {
-      describe:
-        'name of the app to publish the findings for. By default, this is determined by looking in appmap.yml',
     });
 
     return args.strict();
@@ -68,12 +50,17 @@ export default {
       verbose: isVerbose,
       all: reportAllFindings,
       app: appIdArg,
+      apiKey,
       ide,
       reportFile,
     } = options as unknown as CommandOptions;
 
     if (isVerbose) {
       verbose(true);
+    }
+
+    if (apiKey) {
+      process.env.APPLAND_API_KEY = apiKey;
     }
 
     try {
@@ -96,25 +83,13 @@ export default {
       }
 
       const configData = await parseConfigFile(config);
-      const checks = await loadConfig(configData);
+
+      const scanner = buildScanner(reportAllFindings, configData, files);
 
       const [rawScanResults, findingStatuses] = await Promise.all<
         ScanResults,
         FindingStatusListItem[]
-      >([
-        (async (): Promise<ScanResults> => {
-          const { appMapMetadata, findings } = await scan(files, checks);
-          return new ScanResults(configData, appMapMetadata, findings, checks);
-        })(),
-        (async (): Promise<FindingStatusListItem[]> => {
-          const appId = await resolveAppId(appIdArg, appmapDir, false);
-          if (!appId) {
-            return [];
-          }
-
-          return await fetchStatus(appId);
-        })(),
-      ]);
+      >([scanner.scan(), scanner.fetchFindingStatus(appIdArg, appmapDir)]);
 
       // Always report the raw data
       await writeFile(reportFile, JSON.stringify(rawScanResults, null, 2));

@@ -6,15 +6,14 @@ import { ValidationError } from '../errors';
 
 export default async function (
   appIdArg: string | undefined,
-  appMapPath: string | undefined,
-  failOnError = true
-): Promise<string | undefined> {
+  appMapDir: string | undefined
+): Promise<string> {
   if (appIdArg) {
     return appIdArg;
   }
 
-  if (appMapPath) {
-    let searchPath = resolve(appMapPath);
+  if (appMapDir) {
+    let searchPath = resolve(appMapDir);
     while (searchPath !== '/' && searchPath !== '.') {
       const configPath = join(searchPath, 'appmap.yml');
 
@@ -31,7 +30,5 @@ export default async function (
     }
   }
 
-  if (failOnError) {
-    throw new ValidationError('app id was not provided and could not be resolved');
-  }
+  throw new ValidationError('app id was not provided and could not be resolved');
 }

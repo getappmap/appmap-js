@@ -41,7 +41,7 @@ export default {
     }
 
     if (appmapDir) await validateFile('directory', appmapDir!);
-    const appId = (await resolveAppId(appIdArg, appmapDir, true))!;
+    const appId = await resolveAppId(appIdArg, appmapDir);
 
     const scanResults = JSON.parse((await readFile(reportFile)).toString()) as ScanResults;
     await upload(scanResults, appId);
