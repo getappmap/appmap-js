@@ -57,6 +57,7 @@ export default {
       required: true,
       validator: (value) => value instanceof Event,
     },
+    filtered: Boolean,
     highlight: Boolean,
     highlightColor: {
       type: String,
@@ -102,6 +103,7 @@ export default {
     classes() {
       return {
         'trace-node': true,
+        filtered: this.filtered,
         highlight: this.highlight,
         focused: this.focused,
         exceptions: this.event.exceptions.length,
@@ -153,6 +155,10 @@ $bg-color: $gray2;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+
+  &.filtered {
+    outline: 4px solid $dullpink;
+  }
 
   &.highlight {
     outline: 4px solid $hotpink;

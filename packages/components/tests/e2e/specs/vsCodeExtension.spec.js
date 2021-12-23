@@ -733,6 +733,9 @@ context('VS Code Extension', () => {
         .should('be.visible')
         .should('have.class', 'highlight');
 
+      cy.get('.trace-node[data-event-id="1"]').should('have.class', 'filtered');
+      cy.get('.trace-node[data-event-id="3"]').should('have.class', 'filtered');
+
       cy.get('.trace-view__search-arrow').last().click();
 
       cy.get('.trace-node[data-event-id="18"]')
