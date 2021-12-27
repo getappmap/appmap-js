@@ -13,7 +13,7 @@
         class="filters__form-suggestions-item"
         v-for="item in suggestionsList"
         :key="item"
-        @click="makeSelection"
+        @click.stop="makeSelection"
       >
         {{ item }}
       </li>
