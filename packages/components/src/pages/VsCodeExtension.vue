@@ -752,6 +752,19 @@ export default {
         state.traceFilter = this.traceFilterValue;
       }
 
+      const { declutter } = this.filters;
+
+      state.filters = {
+        rootObjects: this.filters.rootObjects,
+        limitRootEvents: declutter.limitRootEvents.on,
+        hideMediaRequests: declutter.hideMediaRequests.on,
+        hideUnlabeled: declutter.hideUnlabeled.on,
+        hideElapsedTimeUnder: declutter.hideElapsedTimeUnder.on
+          ? declutter.hideElapsedTimeUnder.time
+          : false,
+        hideName: declutter.hideName.on ? declutter.hideName.names : false,
+      };
+
       return JSON.stringify(state);
     },
 
@@ -796,6 +809,33 @@ export default {
       }
       if (state.traceFilter) {
         this.traceFilterValue = state.traceFilter;
+      }
+
+      const { filters } = state;
+      if (filters) {
+        if ('rootObjects' in filters) {
+          this.filters.rootObjects = filters.rootObjects;
+        }
+        if ('limitRootEvents' in filters) {
+          this.filters.limitRootEvents.on = filters.limitRootEvents;
+        }
+        if ('hideMediaRequests' in filters) {
+          this.filters.hideMediaRequests.on = filters.hideMediaRequests;
+        }
+        if ('hideUnlabeled' in filters) {
+          this.filters.hideUnlabeled.on = filters.hideUnlabeled;
+        }
+        if (
+          'hideElapsedTimeUnder' in filters &&
+          filters.hideElapsedTimeUnder !== false
+        ) {
+          this.filters.hideElapsedTimeUnder.on = true;
+          this.filters.hideElapsedTimeUnder.time = filters.hideElapsedTimeUnder;
+        }
+        if ('hideName' in filters && filters.hideName !== false) {
+          this.filters.hideName.on = true;
+          this.filters.hideName.names = filters.hideName;
+        }
       }
     },
 
