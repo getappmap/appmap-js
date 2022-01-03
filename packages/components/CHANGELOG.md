@@ -1,3 +1,10 @@
+# [@appland/components-v1.18.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.18.0...@appland/components-v1.18.1) (2022-01-03)
+
+
+### Bug Fixes
+
+* Don't hide filters panel after interaction ([#507](https://github.com/applandinc/appmap-js/issues/507)) ([fda5046](https://github.com/applandinc/appmap-js/commit/fda504629cf9ebd8c3f4c90a0a5c9c00255c85a1))
+
 # [@appland/components-v1.18.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.17.3...@appland/components-v1.18.0) (2021-12-23)
 
 
