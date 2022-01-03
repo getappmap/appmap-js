@@ -142,7 +142,7 @@
                       {{ id }}
                       <CloseThinIcon
                         class="filters__root-icon"
-                        @click="removeRootObject(index)"
+                        @click.stop="removeRootObject(index)"
                       />
                     </div>
                   </div>
