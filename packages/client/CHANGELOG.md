@@ -1,3 +1,10 @@
+# [@appland/client-v1.1.1](https://github.com/applandinc/appmap-js/compare/@appland/client-v1.1.0...@appland/client-v1.1.1) (2022-01-05)
+
+
+### Bug Fixes
+
+* Add missing import of URL ([b21e5e2](https://github.com/applandinc/appmap-js/commit/b21e5e280977db5ca7ae585696564669443e120e))
+
 # [@appland/client-v1.1.0](https://github.com/applandinc/appmap-js/compare/@appland/client-v1.0.0...@appland/client-v1.1.0) (2022-01-05)
 
 
