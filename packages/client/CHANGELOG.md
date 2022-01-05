@@ -1,3 +1,10 @@
+# [@appland/client-v1.1.2](https://github.com/applandinc/appmap-js/compare/@appland/client-v1.1.1...@appland/client-v1.1.2) (2022-01-05)
+
+
+### Bug Fixes
+
+* Move main script directory to dist/src ([5b6b218](https://github.com/applandinc/appmap-js/commit/5b6b21855a65e332af66b824d48787a4fe715df0))
+
 # [@appland/client-v1.1.1](https://github.com/applandinc/appmap-js/compare/@appland/client-v1.1.0...@appland/client-v1.1.1) (2022-01-05)
 
 
