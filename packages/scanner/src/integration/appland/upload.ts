@@ -4,7 +4,7 @@ import { createHash } from 'crypto';
 import FormData from 'form-data';
 import { createGzip } from 'zlib';
 import { buildAppMap } from '@appland/models';
-import { buildRequest, handleError } from '@appland/client';
+import { buildRequest, handleError } from '@appland/client/dist/src';
 import { ScanResults } from '../../report/scanResults';
 import { IncomingMessage } from 'http';
 import { URL } from 'url';

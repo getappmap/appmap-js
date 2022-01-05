@@ -3,7 +3,7 @@ import { writeFile } from 'fs/promises';
 import { promisify } from 'util';
 import yargs, { Arguments, Argv } from 'yargs';
 
-import { FindingStatusListItem } from '@appland/client';
+import { FindingStatusListItem } from '@appland/client/dist/src';
 
 import { parseConfigFile } from '../../configuration/configurationProvider';
 import { AbortError, ValidationError } from '../../errors';

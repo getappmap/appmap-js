@@ -47,24 +47,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appland/client@portal:/Users/kgilpin/source/appland/appmap-js/packages/client::locator=%40applandinc%2Fscanner%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@appland/client@portal:/Users/kgilpin/source/appland/appmap-js/packages/client::locator=%40applandinc%2Fscanner%40workspace%3A."
+"@appland/client@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@appland/client@npm:1.1.0"
   dependencies:
-    "@appland/models": "workspace:^1.8.1"
+    "@appland/models": ^1.8.1
     js-yaml: ^4.1.0
+  checksum: 1600c9bcf0a7f6df95cc7cbfc259db52b4baae6182ddb621dbccc8ddc4b607cd296dee826d08ab5125dbb45b8c751256d62b39c155be046a18af5baab048df68
   languageName: node
-  linkType: soft
+  linkType: hard
 
-"@appland/models@portal:/Users/kgilpin/source/appland/appmap-js/packages/models::locator=%40applandinc%2Fscanner%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@appland/models@portal:/Users/kgilpin/source/appland/appmap-js/packages/models::locator=%40applandinc%2Fscanner%40workspace%3A."
+"@appland/models@npm:^1.10.0, @appland/models@npm:^1.8.1":
+  version: 1.10.0
+  resolution: "@appland/models@npm:1.10.0"
   dependencies:
     "@appland/sql-parser": ^1.1.1
     cross-env: ^7.0.3
     crypto-js: ^4.0.0
+  checksum: 6ac5234a210a7b6d05efad0c74ac553bf0e469c21c514d04a25621f13bf1d43688e8267a33a93b7a9093850d840e7e39d0fb007f96e14e5a3ff94d29027c45ab
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "@appland/sql-parser@npm:^1.1.1":
   version: 1.1.1
@@ -79,8 +81,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@applandinc/scanner@workspace:."
   dependencies:
-    "@appland/client": "applandinc/appmap-js#feat/scan-with-api-key"
-    "@appland/models": "applandinc/appmap-js#feat/scan-with-api-key"
+    "@appland/client": ^1.1.0
+    "@appland/models": ^1.10.0
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
     "@types/glob": ^7.1.4

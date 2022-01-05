@@ -1,4 +1,4 @@
-import { loadConfiguration, FindingStatusListItem } from '@appland/client';
+import { loadConfiguration, FindingStatusListItem } from '@appland/client/dist/src';
 
 import { loadConfig } from '../../configuration/configurationProvider';
 import Configuration from '../../configuration/types/configuration';
