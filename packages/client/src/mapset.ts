@@ -1,5 +1,7 @@
 import reportJson from './reportJson';
-import { App, AppMapListItem, get } from '.';
+import App from './app';
+import AppMapListItem from './appMapListItem';
+import get from './get';
 
 export default class Mapset {
   constructor(public app: App, public id: number) {}

@@ -2,7 +2,7 @@ import nock from 'nock';
 
 import * as test from './setup';
 import App from '../src/app';
-import { FindingStatusListItem } from '../src';
+import FindingStatusListItem from '../src/findingStatusListItem';
 
 const StatusData = [
   {

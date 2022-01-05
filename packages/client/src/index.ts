@@ -7,4 +7,5 @@ export { default as buildRequest } from './buildRequest';
 export { default as App } from './app';
 export { default as AppMap } from './appMap';
 export { default as Mapset } from './mapset';
-export { AppMapListItem, FindingStatusListItem } from './types';
+export { default as AppMapListItem } from './appMapListItem';
+export { default as FindingStatusListItem } from './findingStatusListItem';

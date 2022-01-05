@@ -21,12 +21,10 @@ export default async function buildRequest(
   requestPath: string
 ): Promise<Request> {
   const configuration = await loadConfiguration();
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const url = new URL([configuration.baseURL, requestPath].join('/'));
   const requestFunction =
     url.protocol === 'https:' ? httpsRequest : httpRequest;
   const headers = {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     Authorization: `Bearer ${configuration.apiKey}`,
     Accept: 'application/json',
   };

@@ -9,7 +9,6 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint",
-    "record-server": "node ./dist/bin/recordServer.js",
     "test": "jest"
   },
   "publishConfig": {

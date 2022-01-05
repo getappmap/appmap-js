@@ -13,11 +13,12 @@ async function errorMessage(
   response: IncomingMessage
 ): Promise<string> {
   let responseData: ErrorResponse | undefined;
-  if (response.headers['content-type']?.startsWith('application/json')) {
-    const chunks = [];
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const contentType = (response.headers['content-type'] || '') as string;
+  if (contentType.startsWith('application/json')) {
+    const chunks = [] as Buffer[];
     for await (const chunk of response) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      chunks.push(chunk as never);
+      chunks.push(chunk as Buffer);
     }
     const responseBody = Buffer.concat(chunks).toString();
     responseData = JSON.parse(responseBody) as ErrorResponse;
