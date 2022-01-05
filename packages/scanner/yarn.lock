@@ -47,13 +47,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appland/client@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@appland/client@npm:1.1.0"
+"@appland/client@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@appland/client@npm:1.1.1"
   dependencies:
     "@appland/models": ^1.8.1
     js-yaml: ^4.1.0
-  checksum: 1600c9bcf0a7f6df95cc7cbfc259db52b4baae6182ddb621dbccc8ddc4b607cd296dee826d08ab5125dbb45b8c751256d62b39c155be046a18af5baab048df68
+  checksum: d6ef5e6b9400f376f8aed7304fb6f8951d281fdad1232d8a94b64ed7c23515b9b304c6305a12ee263dffa6e4c2fff7c12c2a94eda2aa45e9c5b456a9a476b073
   languageName: node
   linkType: hard
 
@@ -81,7 +81,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@applandinc/scanner@workspace:."
   dependencies:
-    "@appland/client": ^1.1.0
+    "@appland/client": ^1.1.1
     "@appland/models": ^1.10.0
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1

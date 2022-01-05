@@ -46,7 +46,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "@appland/client": "^1.1.0",
+    "@appland/client": "^1.1.1",
     "@appland/models": "^1.10.0",
     "@types/sinon": "^10.0.2",
     "@types/tar-stream": "^2.2.2",
