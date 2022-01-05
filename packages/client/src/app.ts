@@ -1,4 +1,5 @@
-import { FindingStatusListItem, Mapset } from '.';
+import Mapset from './mapset';
+import FindingStatusListItem from './findingStatusListItem';
 import reportJson from './reportJson';
 import get from './get';
 

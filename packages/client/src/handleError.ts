@@ -13,8 +13,7 @@ async function errorMessage(
   response: IncomingMessage
 ): Promise<string> {
   let responseData: ErrorResponse | undefined;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const contentType = (response.headers['content-type'] || '') as string;
+  const contentType = response.headers['content-type'] || '';
   if (contentType.startsWith('application/json')) {
     const chunks = [] as Buffer[];
     for await (const chunk of response) {
@@ -38,7 +37,7 @@ async function errorMessage(
 export default function (response: IncomingMessage): Promise<IncomingMessage> {
   return new Promise((resolve, reject) => {
     if (!response.statusCode) {
-      reject('No status code was provided by the server');
+      reject(new Error('No status code was provided by the server'));
       return;
     }
     if (response.statusCode >= 300) {

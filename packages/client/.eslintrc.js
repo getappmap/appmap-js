@@ -1,3 +1,5 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 
 module.exports = {
@@ -9,6 +11,7 @@ module.exports = {
     'unicorn',
   ],
   extends: [
+    'airbnb-base',
     'airbnb-typescript/base',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
@@ -30,26 +33,25 @@ module.exports = {
   rules: {
     'unicorn/filename-case': ['error', { case: 'camelCase' }],
     'no-param-reassign': ['error', { props: false }],
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'unicorn/no-array-for-each': 'off',
     'unicorn/prevent-abbreviations': 'warn',
     '@typescript-eslint/lines-between-class-members': 'off',
+    'no-restricted-syntax': 'off',
+    'import/no-cycle': 'off',
+    'prettier/prettier': ['error'],
   },
   overrides: [
     {
-      files: ['**/*.js'],
+      files: ['*.js'],
       extends: ['eslint:recommended', 'airbnb-base', 'prettier'],
-      parser: 'babel-eslint',
       parserOptions: {
-        parser: 'babel-eslint',
-        ecmaVersion: 11,
+        project: path.join(__dirname, 'jsconfig.json'),
       },
       plugins: ['prettier'],
       rules: {
-        'no-param-reassign': ['error', { props: false }],
-        'no-underscore-dangle': ['error', { allowAfterThis: true }],
-        'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-        'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-        'prettier/prettier': ['error'],
+        'unicorn/prefer-module': 'off',
       },
     },
   ],

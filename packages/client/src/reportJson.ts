@@ -12,9 +12,10 @@ export default function <T>(response: IncomingMessage): Promise<T> {
       try {
         json = JSON.parse(data) as T;
       } catch (error) {
-        return reject(
-          `Error parsing JSON response: ${(error as Error).message}`
+        reject(
+          new Error(`Error parsing JSON response: ${(error as Error).message}`)
         );
+        return;
       }
       resolve(json);
     });
