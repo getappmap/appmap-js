@@ -12,8 +12,8 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
-    "types": ["node"]
+    "types": ["node", "jest"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", ".eslintrc.js"],
   "exclude": ["**/node_modules"]
 }

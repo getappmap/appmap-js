@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import sqlFormatter from 'sql-formatter';
+import { format as sqlFormatter } from 'sql-formatter';
 import hljs from 'highlight.js';
 import sql from 'highlight.js/lib/languages/sql';
 
@@ -23,7 +23,7 @@ export default {
 
   computed: {
     formattedSQL() {
-      return hljs.highlight(sqlFormatter.format(this.sql), {
+      return hljs.highlight(sqlFormatter(this.sql), {
         language: 'sql',
         ignoreIllegals: true,
       }).value;

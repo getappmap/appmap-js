@@ -30,7 +30,7 @@
     "@appland/diagrams": "workspace:^1.5.1",
     "@appland/models": "workspace:^1.9.0",
     "highlight.js": "^10.7.2",
-    "sql-formatter": "^2.3.3",
+    "sql-formatter": "^4.0.2",
     "vue": "^2.6.11",
     "vuex": "^3.6.0"
   },
