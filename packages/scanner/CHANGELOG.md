@@ -1,3 +1,23 @@
+# [1.31.0](https://github.com/applandinc/scanner/compare/v1.30.0...v1.31.0) (2022-01-05)
+
+
+### Bug Fixes
+
+* Remove postPullRequestComment because it doesn't work ([54f4797](https://github.com/applandinc/scanner/commit/54f4797977c8979d26b95be4890f7793af8434a7))
+* Remove unused imports ([f4e1eeb](https://github.com/applandinc/scanner/commit/f4e1eebc2e1d7cc2b1735623251d3319a496ccef))
+* Update @appland/client ([f48dbd0](https://github.com/applandinc/scanner/commit/f48dbd0bf3d0ba385ac5f8058ee64a2cca2dd12c))
+
+
+### Features
+
+* Add @appland/models and @appland/client as dependencies ([23559b8](https://github.com/applandinc/scanner/commit/23559b89dfa5bff507e6b96eaee47b82af10bccd))
+* Add CI command to scan, upload, and update commit status ([9c3908f](https://github.com/applandinc/scanner/commit/9c3908fbce819d6feffd0b6e264b6b53b23ee3ed))
+* Fetch finding status from the server and incorporate into the client output ([981729f](https://github.com/applandinc/scanner/commit/981729fccd4455b54fd32eb2c3932e813e18d2b6))
+* Refactor CLI into subcommands ([d27e05f](https://github.com/applandinc/scanner/commit/d27e05f976d0e2a0e8b3f8824e46caee17fc4c83))
+* Remove @appland/models types, use types defined in the package dependency ([f872b5c](https://github.com/applandinc/scanner/commit/f872b5c614519f54adfc029206e324642fce122d))
+* Tune the console report of findings ([34aaf65](https://github.com/applandinc/scanner/commit/34aaf6599e21f4523439a735254948d431bd5dea))
+* Upload findings to AppMap server ([9cf0148](https://github.com/applandinc/scanner/commit/9cf0148e407ef2a990a490dbdd2fbad71055044a))
+
 # [1.30.0](https://github.com/applandinc/scanner/compare/v1.29.1...v1.30.0) (2021-12-14)
 
 
