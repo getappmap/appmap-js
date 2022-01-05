@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.14.7](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.6...@appland/appmap-v3.14.7) (2022-01-05)
+
+
+### Bug Fixes
+
+* Make dependency package versions compatible with scanner ([347a4f4](https://github.com/applandinc/appmap-js/commit/347a4f4844cfa89879fbc2154066c4e6eb920786))
+
 # [@appland/appmap-v3.14.6](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.5...@appland/appmap-v3.14.6) (2021-12-09)
 
 
