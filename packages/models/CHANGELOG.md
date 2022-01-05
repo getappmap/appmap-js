@@ -1,3 +1,11 @@
+# [@appland/models-v1.10.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.9.0...@appland/models-v1.10.0) (2022-01-05)
+
+
+### Features
+
+* Add detailed types for Metadata and SqliteParser ([2b74363](https://github.com/applandinc/appmap-js/commit/2b74363cbcecfa50bbc942a20c85da8d9af745d9))
+* Use SqliteParser types ([75982aa](https://github.com/applandinc/appmap-js/commit/75982aab2c9a37aa254de50ef0e53c6b674ddbea))
+
 # [@appland/models-v1.9.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.8.1...@appland/models-v1.9.0) (2021-12-14)
 
 
