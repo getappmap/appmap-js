@@ -5,6 +5,7 @@ import {
   IncomingMessage,
 } from 'node:http';
 import { request as httpsRequest } from 'node:https';
+import { URL } from 'node:url';
 import loadConfiguration from './loadConfiguration';
 
 type Request = {
