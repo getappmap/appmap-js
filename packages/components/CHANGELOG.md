@@ -1,3 +1,11 @@
+# [@appland/components-v1.18.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.18.1...@appland/components-v1.18.2) (2022-01-05)
+
+
+### Bug Fixes
+
+* Fix sql formatter compatibility ([7fc6d20](https://github.com/applandinc/appmap-js/commit/7fc6d206fc2ac0bb30d228bd053fdebe37c008e4))
+* Make dependency package versions compatible with scanner ([347a4f4](https://github.com/applandinc/appmap-js/commit/347a4f4844cfa89879fbc2154066c4e6eb920786))
+
 # [@appland/components-v1.18.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.18.0...@appland/components-v1.18.1) (2022-01-03)
 
 
