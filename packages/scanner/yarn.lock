@@ -47,14 +47,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appland/models@npm:^1.8.0":
-  version: 1.8.0
-  resolution: "@appland/models@npm:1.8.0"
+"@appland/client@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@appland/client@npm:1.1.1"
   dependencies:
+    "@appland/models": ^1.8.1
+    js-yaml: ^4.1.0
+  checksum: d6ef5e6b9400f376f8aed7304fb6f8951d281fdad1232d8a94b64ed7c23515b9b304c6305a12ee263dffa6e4c2fff7c12c2a94eda2aa45e9c5b456a9a476b073
+  languageName: node
+  linkType: hard
+
+"@appland/models@npm:^1.10.0, @appland/models@npm:^1.8.1":
+  version: 1.10.0
+  resolution: "@appland/models@npm:1.10.0"
+  dependencies:
+    "@appland/sql-parser": ^1.1.1
     cross-env: ^7.0.3
     crypto-js: ^4.0.0
-    sqlite-parser: applandinc/sqlite-parser
-  checksum: ca462f8c396345fcc7445429af5c53aef8231929836d4ffb3bb65d2b11307821a5a00f211425a041a4d155e9b33fa83250a0a916a25982e420d4371938585415
+  checksum: 6ac5234a210a7b6d05efad0c74ac553bf0e469c21c514d04a25621f13bf1d43688e8267a33a93b7a9093850d840e7e39d0fb007f96e14e5a3ff94d29027c45ab
+  languageName: node
+  linkType: hard
+
+"@appland/sql-parser@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@appland/sql-parser@npm:1.1.1"
+  bin:
+    sqlite-parser: bin/sqlite-parser
+  checksum: c71b79650d201dde464888461ec3f19631401626eacfad11a185068c81baf95ae3635d125423ce51e872ab7c778801bcf17be172cb1e49fea51249a134ff4fa5
   languageName: node
   linkType: hard
 
@@ -62,7 +81,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@applandinc/scanner@workspace:."
   dependencies:
-    "@appland/models": ^1.8.0
+    "@appland/client": ^1.1.1
+    "@appland/models": ^1.10.0
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
     "@types/glob": ^7.1.4
@@ -70,6 +90,7 @@ __metadata:
     "@types/js-yaml": ^4.0.3
     "@types/node": ^16.7.10
     "@types/sinon": ^10.0.2
+    "@types/tar-stream": ^2.2.2
     "@types/yargs": ^17.0.2
     "@typescript-eslint/eslint-plugin": ^4.30.0
     "@typescript-eslint/parser": ^4.30.0
@@ -80,9 +101,11 @@ __metadata:
     eslint-config-prettier: ^8.3.0
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^3.4.1
+    form-data: ^4.0.0
     jest: ^27.1.0
     js-yaml: ^4.1.0
     minimatch: ^3.0.4
+    nock: ^13.2.1
     octokat: ^0.10.0
     openapi-diff: ^0.23.5
     openapi-types: ^9.3.0
@@ -91,6 +114,7 @@ __metadata:
     semantic-release: ^18.0.0
     sinon: ^11.1.2
     supports-hyperlinks: ^2.2.0
+    tar-stream: ^2.2.0
     ts-jest: ^27.0.5
     ts-json-schema-generator: ^0.97.0
     ts-node: ^10.2.1
@@ -1556,6 +1580,15 @@ __metadata:
   version: 2.0.1
   resolution: "@types/stack-utils@npm:2.0.1"
   checksum: 205fdbe3326b7046d7eaf5e494d8084f2659086a266f3f9cf00bccc549c8e36e407f88168ad4383c8b07099957ad669f75f2532ed4bc70be2b037330f7bae019
+  languageName: node
+  linkType: hard
+
+"@types/tar-stream@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "@types/tar-stream@npm:2.2.2"
+  dependencies:
+    "@types/node": "*"
+  checksum: 4b33bc0d53770e952d6e2e8acb8889190510326a3e255d0c6edd94136d6027ecae939a7b49188d1d02d774328d9a3742ff633d505709d1a1200b3413c88d793d
   languageName: node
   linkType: hard
 
@@ -3653,6 +3686,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"form-data@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "form-data@npm:4.0.0"
+  dependencies:
+    asynckit: ^0.4.0
+    combined-stream: ^1.0.8
+    mime-types: ^2.1.12
+  checksum: 01135bf8675f9d5c61ff18e2e2932f719ca4de964e3be90ef4c36aacfc7b9cb2fceb5eca0b7e0190e3383fe51c5b37f4cb80b62ca06a99aaabfcfd6ac7c9328c
+  languageName: node
+  linkType: hard
+
 "form-data@npm:~2.3.2":
   version: 2.3.3
   resolution: "form-data@npm:2.3.3"
@@ -5554,6 +5598,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.set@npm:^4.3.2":
+  version: 4.3.2
+  resolution: "lodash.set@npm:4.3.2"
+  checksum: a9122f49eef9f2d0fc9061a33d87f8e5b8c6b23d46e8b9e9ce1529d3588d79741bd1145a3abdfa3b13082703e65af27ff18d8a07bfc22b9be32f3fc36f763f70
+  languageName: node
+  linkType: hard
+
 "lodash.truncate@npm:^4.4.2":
   version: 4.4.2
   resolution: "lodash.truncate@npm:4.4.2"
@@ -5978,6 +6029,18 @@ __metadata:
     just-extend: ^4.0.2
     path-to-regexp: ^1.7.0
   checksum: e3843cc125163ce99b7fb0328edf427b981be32c6c719684582cf0a46fb5206173835a9a14dedac3c4833e415ab0e0493f9f4d4163572a3a0c95db39b093166d
+  languageName: node
+  linkType: hard
+
+"nock@npm:^13.2.1":
+  version: 13.2.1
+  resolution: "nock@npm:13.2.1"
+  dependencies:
+    debug: ^4.1.0
+    json-stringify-safe: ^5.0.1
+    lodash.set: ^4.3.2
+    propagate: ^2.0.0
+  checksum: b401fb8143ca88095ee34c715e2806eda2813dace4f4c4798961ad961c18003d1529f4507a79c429d2c3c768e136632ee19ee9ebfef71f0cb022df152594df1d
   languageName: node
   linkType: hard
 
@@ -6992,6 +7055,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"propagate@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "propagate@npm:2.0.1"
+  checksum: c4febaee2be0979e82fb6b3727878fd122a98d64a7fa3c9d09b0576751b88514a9e9275b1b92e76b364d488f508e223bd7e1dcdc616be4cdda876072fbc2a96c
+  languageName: node
+  linkType: hard
+
 "psl@npm:^1.1.28, psl@npm:^1.1.33":
   version: 1.8.0
   resolution: "psl@npm:1.8.0"
@@ -7693,15 +7763,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-sqlite-parser@applandinc/sqlite-parser:
-  version: 1.1.0
-  resolution: "sqlite-parser@https://github.com/applandinc/sqlite-parser.git#commit=ecd7db3afc8ca32ebf6c13612665bd334330b809"
-  bin:
-    sqlite-parser: bin/sqlite-parser
-  checksum: ee07464d79841214a854bd3f957269fc5b230ad64ff6bf6284970987d90debdcc8b2cb999512f73af46229a2ceed344f91166ffa2ed4b3e38cffddcfe5449da5
-  languageName: node
-  linkType: hard
-
 "sshpk@npm:^1.7.0":
   version: 1.16.1
   resolution: "sshpk@npm:1.16.1"
@@ -7977,7 +8038,7 @@ sqlite-parser@applandinc/sqlite-parser:
   languageName: node
   linkType: hard
 
-"tar-stream@npm:^2.1.4":
+"tar-stream@npm:^2.1.4, tar-stream@npm:^2.2.0":
   version: 2.2.0
   resolution: "tar-stream@npm:2.2.0"
   dependencies:

@@ -2,8 +2,6 @@ import { AppMap, Event } from '@appland/models';
 import { EventFilter, Level, MatchResult, Rule, RuleLogic } from '../types';
 import * as types from './types';
 import { SQLCount, sqlStrings } from '../database';
-import Check from 'src/check';
-import CheckInstance from 'src/checkInstance';
 
 class Options implements types.NPlusOneQuery.Options {
   public warningLimit = 5;

@@ -6,6 +6,9 @@ node_js: ['14.18.1']
 before_install:
   - sudo apt-get update && sudo apt-get -y install jq
 
+install:
+  - yarn
+
 script:
   - yarn ci
 

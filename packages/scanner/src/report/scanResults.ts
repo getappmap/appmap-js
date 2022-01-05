@@ -70,6 +70,9 @@ export class ScanResults {
   public appMaps: Record<string, Metadata>;
   public findings: Finding[];
 
+  appMapMetadata: Record<string, Metadata>;
+  checks: Check[];
+
   constructor(
     configuration: Configuration,
     appMapMetadata: Record<string, Metadata>,
@@ -91,5 +94,12 @@ export class ScanResults {
       return memo;
     }, {} as Record<string, Metadata>);
     this.findings = findings;
+
+    this.appMapMetadata = appMapMetadata;
+    this.checks = checks;
+  }
+
+  withFindings(findings: Finding[]): ScanResults {
+    return new ScanResults(this.configuration, this.appMapMetadata, findings, this.checks);
   }
 }
