@@ -76,7 +76,7 @@ export default {
 
       const configData = await parseConfigFile(config);
 
-      const scanner = buildScanner(true, configData, files);
+      const scanner = buildScanner(false, configData, files);
 
       const [rawScanResults, findingStatuses] = await Promise.all<
         ScanResults,
