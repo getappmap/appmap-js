@@ -1,3 +1,10 @@
+## [1.31.1](https://github.com/applandinc/scanner/compare/v1.31.0...v1.31.1) (2022-01-06)
+
+
+### Bug Fixes
+
+* ci command always merges server finding status ([091b932](https://github.com/applandinc/scanner/commit/091b932d12ae91e71afb494124a0c027baae580e))
+
 # [1.31.0](https://github.com/applandinc/scanner/compare/v1.30.0...v1.31.0) (2022-01-05)
 
 
