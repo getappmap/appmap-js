@@ -1,3 +1,10 @@
+## [1.31.2](https://github.com/applandinc/scanner/compare/v1.31.1...v1.31.2) (2022-01-06)
+
+
+### Bug Fixes
+
+* Upload all findings from ci ([ba0190d](https://github.com/applandinc/scanner/commit/ba0190ded67d74cf8697a5736e9a277fce18ab10))
+
 ## [1.31.1](https://github.com/applandinc/scanner/compare/v1.31.0...v1.31.1) (2022-01-06)
 
 
