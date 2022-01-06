@@ -95,7 +95,7 @@ export default {
       summaryReport(scanResults, true);
 
       if (doUpload) {
-        await upload(scanResults, appId);
+        await upload(rawScanResults, appId);
       }
 
       if (updateCommitStatus) {
