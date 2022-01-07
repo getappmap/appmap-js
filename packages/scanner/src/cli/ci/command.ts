@@ -91,7 +91,6 @@ export default {
       );
 
       findingsReport(scanResults.findings, scanResults.appMapMetadata);
-      console.log();
       summaryReport(scanResults, true);
 
       if (doUpload) {

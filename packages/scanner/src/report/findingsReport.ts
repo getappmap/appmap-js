@@ -13,7 +13,10 @@ export default function (
   appMapMetadata: Record<string, Metadata>,
   ide?: string
 ): void {
-  writeln(`${findings.length} findings:`);
+  if (findings.length === 0) {
+    return;
+  }
+  console.log();
   findings.forEach((finding) => {
     const filePath =
       ide && finding.appMapFile
