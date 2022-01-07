@@ -1,3 +1,10 @@
+# [@appland/models-v1.10.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.10.0...@appland/models-v1.10.1) (2022-01-07)
+
+
+### Bug Fixes
+
+* descandants performs DFS traversal ([ae136cb](https://github.com/applandinc/appmap-js/commit/ae136cb669283534b9073e273f798ad0803e88ae))
+
 # [@appland/models-v1.10.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.9.0...@appland/models-v1.10.0) (2022-01-05)
 
 
