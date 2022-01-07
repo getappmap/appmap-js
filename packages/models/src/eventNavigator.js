@@ -76,32 +76,19 @@ export default class EventNavigator {
   }
 
   *descendants(filterFn = () => true) {
-    if (!this.event.children || this.event.children.length === 0) {
-      return;
-    }
-
-    // We want to traverse in order. So we use this type of traversal,
-    // rather than pushing all the events onto a queue. We avoid using
-    // Array.shift which can be expensive.
-    const queue = [this.event.children];
-    let queueIndex = 0;
-    let childIndex = 0;
-
-    while (queueIndex < queue.length) {
-      const event = queue[queueIndex][childIndex];
-      if (filterFn(event)) {
-        yield new EventNavigator(event);
+    function* traverseChildren(/** @type {Event[]} */ children) {
+      if (!children || children.length === 0) {
+        return;
       }
-      if (childIndex === queue[queueIndex].length - 1) {
-        queueIndex += 1;
-        childIndex = 0;
-      } else {
-        childIndex += 1;
-      }
-      if (event.children.length > 0) {
-        queue.push(event.children);
+      for (let i = 0; i < children.length; i += 1) {
+        const event = children[i];
+        if (filterFn(event)) {
+          yield new EventNavigator(event);
+          yield* traverseChildren(event.children);
+        }
       }
     }
+    yield* traverseChildren(this.event.children);
   }
 
   hasLabel(label) {

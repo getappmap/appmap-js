@@ -7,5 +7,4 @@ export { default as EventSource } from './eventSource';
 export { default as CallTree } from './callTree/callTree';
 export { default as ClassMap } from './classMap';
 export { default as CodeObject, CodeObjectType } from './codeObject';
-export * from './scanners';
 export * from './util';
