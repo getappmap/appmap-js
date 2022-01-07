@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.14.8](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.7...@appland/appmap-v3.14.8) (2022-01-07)
+
+
+### Bug Fixes
+
+* Fix the path to static assets for the open command ([eed3e3e](https://github.com/applandinc/appmap-js/commit/eed3e3eaebff1484f4310bcf3c6f48d21098842e))
+
 # [@appland/appmap-v3.14.7](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.6...@appland/appmap-v3.14.7) (2022-01-05)
 
 
