@@ -1,3 +1,17 @@
+# [1.32.0](https://github.com/applandinc/scanner/compare/v1.31.2...v1.32.0) (2022-01-07)
+
+
+### Bug Fixes
+
+* Fix default config path ([bb28a87](https://github.com/applandinc/scanner/commit/bb28a87ff25f99d86a44e17b0d7b3cd50a68b32c))
+* Tweak the findings output ([b16f552](https://github.com/applandinc/scanner/commit/b16f5520703a99eff6b51bcf6ce5c3406c13cfb2))
+* Update @appland/models for DFS dependency traversal fix ([bacc707](https://github.com/applandinc/scanner/commit/bacc70748c4df5352bb181f764929c99ffe026a2))
+
+
+### Features
+
+* Print the path to the scanner config file ([531f531](https://github.com/applandinc/scanner/commit/531f53125b3faf0a619c409ee2dd8fd30d308aba))
+
 ## [1.31.2](https://github.com/applandinc/scanner/compare/v1.31.1...v1.31.2) (2022-01-06)
 
 
