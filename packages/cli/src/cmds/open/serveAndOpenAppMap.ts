@@ -13,7 +13,7 @@ export default async function serveAndOpenAppMap(appMapFile: string) {
   const builtDir = join(__dirname, '../../../built');
   const baseDir = (await exists(builtDir))
     ? builtDir
-    : join(__dirname, '../..');
+    : join(__dirname, '../../..');
 
   const server = createServer(async (req, res) => {
     // Once a request is received, the server can be closed.
