@@ -57,7 +57,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appland/models@npm:^1.10.0, @appland/models@npm:^1.8.1":
+"@appland/models@npm:^1.10.1":
+  version: 1.10.1
+  resolution: "@appland/models@npm:1.10.1"
+  dependencies:
+    "@appland/sql-parser": ^1.1.1
+    cross-env: ^7.0.3
+    crypto-js: ^4.0.0
+  checksum: dcb71d9d68f045b567b12be0327df1d926c915996adef145206ae8ee976520588efb80fc35ac739a7ab05088dd1191af1be7e0399398e5e3583d921d60f28378
+  languageName: node
+  linkType: hard
+
+"@appland/models@npm:^1.8.1":
   version: 1.10.0
   resolution: "@appland/models@npm:1.10.0"
   dependencies:
@@ -82,7 +93,7 @@ __metadata:
   resolution: "@applandinc/scanner@workspace:."
   dependencies:
     "@appland/client": ^1.1.1
-    "@appland/models": ^1.10.0
+    "@appland/models": ^1.10.1
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
     "@types/glob": ^7.1.4

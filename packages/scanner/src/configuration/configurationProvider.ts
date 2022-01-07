@@ -97,6 +97,7 @@ export async function loadConfig(config: Configuration): Promise<Check[]> {
 }
 
 export async function parseConfigFile(configPath: string): Promise<Configuration> {
+  console.log(`Using scanner configuration file ${configPath}`);
   const yamlConfig = await fs.readFile(configPath, 'utf-8');
   return yaml.load(yamlConfig, {
     filename: configPath,

@@ -9,7 +9,7 @@ export default function (args: Argv): void {
   args.option('config', {
     describe:
       'path to assertions config file (TypeScript or YAML, check docs for configuration format)',
-    default: join(__dirname, './sampleConfig/default.yml'),
+    default: join(__dirname, '../sampleConfig/default.yml'),
     alias: 'c',
   });
   args.option('report-file', {
