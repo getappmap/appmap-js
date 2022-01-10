@@ -1,5 +1,5 @@
 {
-  "name": "@applandinc/scanner",
+  "name": "@appland/scanner",
   "version": "1.32.0",
   "description": "",
   "bin": "built/cli.js",
@@ -18,7 +18,7 @@
     "semantic-release": "semantic-release"
   },
   "author": "AppLand, Inc.",
-  "license": "MIT",
+  "license": "Commons Clause + MIT",
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
