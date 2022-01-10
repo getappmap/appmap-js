@@ -79,18 +79,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appland/sql-parser@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@appland/sql-parser@npm:1.1.1"
-  bin:
-    sqlite-parser: bin/sqlite-parser
-  checksum: c71b79650d201dde464888461ec3f19631401626eacfad11a185068c81baf95ae3635d125423ce51e872ab7c778801bcf17be172cb1e49fea51249a134ff4fa5
-  languageName: node
-  linkType: hard
-
-"@applandinc/scanner@workspace:.":
+"@appland/scanner@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@applandinc/scanner@workspace:."
+  resolution: "@appland/scanner@workspace:."
   dependencies:
     "@appland/client": ^1.1.1
     "@appland/models": ^1.10.1
@@ -135,6 +126,15 @@ __metadata:
     scanner: built/cli.js
   languageName: unknown
   linkType: soft
+
+"@appland/sql-parser@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@appland/sql-parser@npm:1.1.1"
+  bin:
+    sqlite-parser: bin/sqlite-parser
+  checksum: c71b79650d201dde464888461ec3f19631401626eacfad11a185068c81baf95ae3635d125423ce51e872ab7c778801bcf17be172cb1e49fea51249a134ff4fa5
+  languageName: node
+  linkType: hard
 
 "@babel/code-frame@npm:7.12.11":
   version: 7.12.11
