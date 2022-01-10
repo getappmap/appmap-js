@@ -6,11 +6,5 @@ module.exports = {
     '@semantic-release/changelog', // append release notes to CHANGELOG.md
     '@semantic-release/npm', // publish to NPM using current login and config, bump `version`
     '@semantic-release/git', // commit code changes (CHANGELOG.md, package.json)
-    [
-      '@semantic-release/github',
-      {
-        assets: 'dist/*.tgz',
-      },
-    ], // add a GitHub release
   ],
 };
