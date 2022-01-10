@@ -16,7 +16,7 @@ deploy:
   - provider: script
     skip_cleanup: true
     script: >-
-      yarn build-native \
+      echo -e "machine github.com\n  login ${GH_TOKEN}" > ~/.netrc \
         && yarn semantic-release
     on:
       branch: main
