@@ -28,14 +28,7 @@ function stringEquals(e: Event): string | boolean | import('../types').MatchResu
   }
 
   // BCrypted strings are safe to compare using equals()
-  if (args.every(isBcrypt)) {
-    return;
-  }
-  if (!args.every(isSecret)) {
-    return;
-  }
-
-  return true;
+  return args.some(isSecret) && !args.some(isBcrypt);
 }
 
 function build(): RuleLogic {
