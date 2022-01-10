@@ -27,6 +27,16 @@ describe('VsCodeExtension.vue', () => {
 
     wrapper.vm.setState('{"selectedObject":"class:app/models/User"}');
     expect(wrapper.vm.selectedObject.id).toMatch('app/models/User');
+
+    wrapper.vm.setState(
+      '{"currentView":"viewFlow","filters":{"rootObjects":[],"limitRootEvents":false,"hideMediaRequests":true,"hideUnlabeled":false,"hideElapsedTimeUnder":100,"hideName":false}}'
+    );
+    expect(wrapper.vm.filters.declutter.limitRootEvents.on).toBe(false);
+    expect(wrapper.vm.filters.declutter.hideMediaRequests.on).toBe(true);
+    expect(wrapper.vm.filters.declutter.hideUnlabeled.on).toBe(false);
+    expect(wrapper.vm.filters.declutter.hideElapsedTimeUnder.on).toBe(true);
+    expect(wrapper.vm.filters.declutter.hideElapsedTimeUnder.time).toBe(100);
+    expect(wrapper.vm.filters.declutter.hideName.on).toBe(false);
   });
 
   it('emits user events', () => {

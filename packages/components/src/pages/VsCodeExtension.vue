@@ -814,27 +814,29 @@ export default {
       const { filters } = state;
       if (filters) {
         if ('rootObjects' in filters) {
-          this.filters.rootObjects = filters.rootObjects;
+          this.filters.declutter.rootObjects = filters.rootObjects;
         }
         if ('limitRootEvents' in filters) {
-          this.filters.limitRootEvents.on = filters.limitRootEvents;
+          this.filters.declutter.limitRootEvents.on = filters.limitRootEvents;
         }
         if ('hideMediaRequests' in filters) {
-          this.filters.hideMediaRequests.on = filters.hideMediaRequests;
+          this.filters.declutter.hideMediaRequests.on =
+            filters.hideMediaRequests;
         }
         if ('hideUnlabeled' in filters) {
-          this.filters.hideUnlabeled.on = filters.hideUnlabeled;
+          this.filters.declutter.hideUnlabeled.on = filters.hideUnlabeled;
         }
         if (
           'hideElapsedTimeUnder' in filters &&
           filters.hideElapsedTimeUnder !== false
         ) {
-          this.filters.hideElapsedTimeUnder.on = true;
-          this.filters.hideElapsedTimeUnder.time = filters.hideElapsedTimeUnder;
+          this.filters.declutter.hideElapsedTimeUnder.on = true;
+          this.filters.declutter.hideElapsedTimeUnder.time =
+            filters.hideElapsedTimeUnder;
         }
         if ('hideName' in filters && filters.hideName !== false) {
-          this.filters.hideName.on = true;
-          this.filters.hideName.names = filters.hideName;
+          this.filters.declutter.hideName.on = true;
+          this.filters.declutter.hideName.names = filters.hideName;
         }
       }
     },
