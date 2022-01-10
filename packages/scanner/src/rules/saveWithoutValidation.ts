@@ -6,7 +6,7 @@ const validatedBy = (iterator: Iterator<EventNavigator>): boolean => {
   while (!i.done) {
     if (
       i.value.event.methodId !== undefined &&
-      ['valid?', 'validate'].includes(i.value.event.methodId!)
+      ['valid?', 'validate'].includes(i.value.event.methodId!) // TODO: change this to use labels
     ) {
       return true;
     }

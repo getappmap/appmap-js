@@ -1,5 +1,5 @@
 import { Event } from '@appland/models';
-import { MatcherResult, Rule, RuleLogic } from 'src/types';
+import { Rule, RuleLogic } from 'src/types';
 import { rpcRequestForEvent } from '../openapi/rpcRequest';
 
 const isRedirect = (status: number) => [301, 302, 303, 307, 308].includes(status);
