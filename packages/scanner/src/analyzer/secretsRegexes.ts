@@ -14,4 +14,9 @@ const REGEXES: { [key: string]: RegExp[] } = Object.keys(regexData).reduce((memo
   return memo;
 }, {} as { [key: string]: RegExp[] });
 
+const AnySecretRE = new RegExp('(?:' + Object.values(regexData).flat().join(')|(?:') + ')');
+
+// Check if a string contains any defined secret regex
+export const looksSecret = AnySecretRE.test.bind(AnySecretRE);
+
 export default REGEXES;

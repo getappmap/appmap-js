@@ -1,6 +1,6 @@
 import { Event } from '@appland/models';
 import recordSecrets from '../analyzer/recordSecrets';
-import SecretsRegexes from '../analyzer/secretsRegexes';
+import { looksSecret } from '../analyzer/secretsRegexes';
 import { Rule, RuleLogic } from '../types.d';
 
 const BCRYPT_REGEXP = /^[$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][./0-9a-zA-Z]{53}$/;
@@ -19,10 +19,7 @@ function stringEquals(e: Event): boolean {
   }
 
   function isSecret(str: string): boolean {
-    if (secrets.has(str)) {
-      return true;
-    }
-    return Object.values(SecretsRegexes).some((res) => res.some((re) => re.test(str)));
+    return secrets.has(str) || looksSecret(str);
   }
 
   // BCrypted strings are safe to compare using equals()
