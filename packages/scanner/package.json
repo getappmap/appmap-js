@@ -68,7 +68,7 @@
     "url": "https://github.com/applandinc/scanner.git"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "packageManager": "yarn@3.1.0",
   "pkg": {
