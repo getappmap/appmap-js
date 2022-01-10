@@ -68,44 +68,33 @@ documentation for each rule to see it's pattern filters and other configurable p
 We use `yarn` for package management. Run `yarn` to install dependencies and `yarn build` to emit
 JavaScript. To run without first emitting JavaScript to the filesystem, use `yarn start`.
 
-## Access to the private package
+## Installation
 
-The `scanner` is released as a private package on Github Packages. To include it as a dependency add
-these lines to your `.npmrc`:
-
-```
-@applandinc:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-
-Create a [new personal token](https://github.com/settings/tokens/new) that has `read:packages` scope
-(or use existing one if any). Export it in your CLI:
+Install like any other Node.js package, using `yarn` or `npm`:
 
 ```bash
-export GITHUB_TOKEN=yourtokenhere
+yarn add --dev @appland/scanner
 ```
 
-Add the package with `yarn`:
+Then, you may find it convenient to add some scripts to your `package.json`:
+
+```
+  "scripts": {
+    "scan": "npx @appland/scanner scan --appmap-dir tmp/appmap",
+    "scan-ci": "npx @appland/scanner ci --appmap-dir tmp/appmap",
+  },
+```
+
+**Note** `tmp/appmap` is the standard AppMap location for some AppMap agents, but not all. Consult
+your agent documentation and settings to configure the `--appmap-dir`.
+
+## Scan locally
 
 ```bash
-yarn add @applandinc/scanner
+yarn run scan
 ```
 
-## Writing findings to a report
-
-It is possible to export scanner findings to a file in human or machine readable formats.
-
-Text format (default):
-
-```bash
-yarn scanner -d tmp/appmap --report-file=report.txt
-```
-
-JSON format:
-
-```bash
-yarn scanner -d tmp/appmap --report=json --report-file=report.json
-```
+Findings will be printed to the console, and saved to `appland-findings.json`.
 
 ## CI integration
 
@@ -117,24 +106,9 @@ When using Appmap Scanner in CI you can post findings summary as a commit status
 - `repo` for posting PR comments
 - `repo:status` for posting commit statuses
 
-### Commit status
-
 ```bash
-yarn scanner -d tmp/appmap --commit-status=github
+yarn run scan-ci
 ```
-
-### PR comment
-
-```bash
-yarn scanner -d tmp/appmap --pull-request-comment=github
-```
-
-## New scanner ideas
-
-- Ensure that a "circuit breaker" library is used each time an RPC is made. Learn more at
-  https://netflixtechblog.com/making-the-netflix-api-more-resilient-a8ec62159c2d
-- Devise `Recoverable` tokens can be
-  [leaked into the logs](https://github.com/heartcombo/devise#password-reset-tokens-and-rails-logs).
 
 ## Development
 
