@@ -1,3 +1,10 @@
+# [1.33.0](https://github.com/applandinc/scanner/compare/v1.32.0...v1.33.0) (2022-01-10)
+
+
+### Features
+
+* Publish to NPM ([b39f16d](https://github.com/applandinc/scanner/commit/b39f16d5ab867528d8bcf3cfda67f71e59064a7d))
+
 # [1.32.0](https://github.com/applandinc/scanner/compare/v1.31.2...v1.32.0) (2022-01-07)
 
 
