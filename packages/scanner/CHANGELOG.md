@@ -1,3 +1,10 @@
+## [1.33.1](https://github.com/applandinc/scanner/compare/v1.33.0...v1.33.1) (2022-01-10)
+
+
+### Bug Fixes
+
+* Mark package as public ([aa18d96](https://github.com/applandinc/scanner/commit/aa18d96110057c8bb1711e7142ef1f0a7df509be))
+
 # [1.33.0](https://github.com/applandinc/scanner/compare/v1.32.0...v1.33.0) (2022-01-10)
 
 
