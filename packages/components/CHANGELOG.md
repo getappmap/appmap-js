@@ -1,3 +1,10 @@
+# [@appland/components-v1.19.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.18.2...@appland/components-v1.19.0) (2022-01-11)
+
+
+### Features
+
+* Add keyboard navigation for filter suggestions ([#492](https://github.com/applandinc/appmap-js/issues/492)) ([a34216c](https://github.com/applandinc/appmap-js/commit/a34216cfd066f8cf43e6311bc73d435d23bfc671))
+
 # [@appland/components-v1.18.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.18.1...@appland/components-v1.18.2) (2022-01-05)
 
 
