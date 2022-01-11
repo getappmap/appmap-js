@@ -707,7 +707,7 @@ context('VS Code Extension', () => {
       cy.get('.tabs .tab-btn').last().click();
 
       cy.get('.trace-view__search-input-element').type(
-        'event:1 event:3 event:15 event:99999 label:json'
+        'event:1 event:3 event:15 event:99999 label:json #link_to_edit_url'
       );
 
       cy.get('.trace-node[data-event-id="1"]')
@@ -718,7 +718,7 @@ context('VS Code Extension', () => {
 
       cy.get('.trace-view__search-arrows-text').should(
         'contain.text',
-        '1/30 results'
+        '1/32 results'
       );
 
       cy.get('.trace-view__search-arrow').last().click();
@@ -791,6 +791,29 @@ context('VS Code Extension', () => {
         .parent()
         .submit();
       cy.get('.nodes .node').should('have.length', 3);
+    });
+
+    it('filters: navigate through filter suggestions with keyboard', () => {
+      cy.get('.tabs__controls .popper__button').click();
+
+      cy.get('.filters__form-input').first().focus();
+      cy.get('.filters__form-suggestions').should('be.visible');
+      cy.get('.filters__form-suggestions-item')
+        .eq(0)
+        .should('have.class', 'filters__form-suggestions-item--selected');
+
+      cy.get('.filters__form-input').first().type('{downarrow}');
+      cy.get('.filters__form-suggestions-item')
+        .eq(1)
+        .should('have.class', 'filters__form-suggestions-item--selected');
+
+      cy.get('.filters__form-input').first().type('{uparrow}');
+      cy.get('.filters__form-suggestions-item')
+        .eq(0)
+        .should('have.class', 'filters__form-suggestions-item--selected');
+
+      cy.get('.filters__form-input').first().type('{esc}');
+      cy.get('.filters__form-suggestions').should('not.be.visible');
     });
 
     it('filters: limit root events', () => {

@@ -1,6 +1,7 @@
 <template>
   <form :class="classes" @submit.prevent="onFormSubmit">
     <input
+      ref="input"
       class="filters__form-input"
       type="text"
       :placeholder="placeholder"
@@ -8,12 +9,17 @@
       @focus="onInputFocus"
     />
     <PlusIcon class="filters__form-plus" @click="onFormSubmit" />
-    <ul v-if="suggestionsList.length" class="filters__form-suggestions">
+    <ul
+      ref="suggestionsList"
+      v-if="suggestionsList.length"
+      class="filters__form-suggestions"
+    >
       <li
-        class="filters__form-suggestions-item"
-        v-for="item in suggestionsList"
+        :class="getSuggestionClasses(index)"
+        v-for="(item, index) in suggestionsList"
         :key="item"
         @click.stop="makeSelection"
+        :data-index="index"
       >
         {{ item }}
       </li>
@@ -56,7 +62,28 @@ export default {
     return {
       showSuggestions: false,
       inputValue: '',
+      selectedSuggestion: 0,
     };
+  },
+
+  watch: {
+    selectedSuggestion: {
+      handler(selectedSuggestion) {
+        const selected =
+          this.$refs.suggestionsList.querySelectorAll('li')[selectedSuggestion];
+
+        if (selected.offsetTop < this.$refs.suggestionsList.scrollTop) {
+          this.$refs.suggestionsList.scrollTop = selected.offsetTop;
+        } else if (
+          selected.offsetTop >=
+          this.$refs.suggestionsList.scrollTop +
+            this.$refs.suggestionsList.offsetHeight
+        ) {
+          this.$refs.suggestionsList.scrollTop =
+            selected.offsetTop - selected.offsetHeight * 2;
+        }
+      },
+    },
   },
 
   computed: {
@@ -80,10 +107,26 @@ export default {
   },
 
   methods: {
+    getSuggestionClasses(index) {
+      const classes = ['filters__form-suggestions-item'];
+      if (index === this.selectedSuggestion) {
+        classes.push('filters__form-suggestions-item--selected');
+      }
+      return classes;
+    },
     onInputFocus() {
       this.showSuggestions = true;
+      this.selectedSuggestion = 0;
     },
     onFormSubmit() {
+      if (
+        this.$refs.input === window.document.activeElement &&
+        this.showSuggestions &&
+        this.suggestionsList.length
+      ) {
+        this.inputValue = this.suggestionsList[this.selectedSuggestion];
+      }
+
       const value = this.inputValue;
       this.showSuggestions = false;
       this.inputValue = '';
@@ -93,14 +136,44 @@ export default {
       this.inputValue = event.target.textContent;
       this.onFormSubmit();
     },
-  },
-
-  mounted() {
-    window.addEventListener('click', (event) => {
+    onWindowClick(event) {
       if (!getEventTarget(event.target, this.$el)) {
         this.showSuggestions = false;
       }
-    });
+    },
+    onWindowKeyUp(event) {
+      if (this.$refs.input !== window.document.activeElement) {
+        return;
+      }
+
+      switch (event.key) {
+        case 'Escape':
+          this.showSuggestions = false;
+          break;
+        case 'ArrowDown':
+          if (this.selectedSuggestion !== this.suggestionsList.length - 1) {
+            this.selectedSuggestion += 1;
+          }
+          break;
+        case 'ArrowUp':
+          if (this.selectedSuggestion !== 0) {
+            this.selectedSuggestion -= 1;
+          }
+          break;
+        default:
+          break;
+      }
+    },
+  },
+
+  created() {
+    window.addEventListener('click', this.onWindowClick);
+    window.addEventListener('keyup', this.onWindowKeyUp, true);
+  },
+
+  destroyed() {
+    window.removeEventListener('click', this.onWindowClick);
+    window.removeEventListener('keyup', this.onWindowKeyUp, true);
   },
 };
 </script>
@@ -184,6 +257,7 @@ export default {
       color: $base09;
       cursor: pointer;
 
+      &--selected,
       &:hover,
       &:active {
         color: $gray6;

@@ -598,6 +598,15 @@ export default {
                   nodes.add(event.id);
                 }
               });
+            } else {
+              this.filteredAppMap.events.forEach((event) => {
+                if (
+                  event.isCall() &&
+                  event.toString().toLowerCase().includes(item.toLowerCase())
+                ) {
+                  nodes.add(event.id);
+                }
+              });
             }
           });
         }
