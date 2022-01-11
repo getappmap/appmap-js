@@ -28,15 +28,27 @@ describe('VsCodeExtension.vue', () => {
     wrapper.vm.setState('{"selectedObject":"class:app/models/User"}');
     expect(wrapper.vm.selectedObject.id).toMatch('app/models/User');
 
-    wrapper.vm.setState(
-      '{"currentView":"viewFlow","filters":{"rootObjects":[],"limitRootEvents":false,"hideMediaRequests":true,"hideUnlabeled":false,"hideElapsedTimeUnder":100,"hideName":false}}'
+    wrapper.vm.clearSelection();
+
+    const appState =
+      '{"currentView":"viewComponent","filters":{"rootObjects":["package:app/controllers"],"limitRootEvents":false,"hideMediaRequests":false,"hideUnlabeled":true,"hideElapsedTimeUnder":100,"hideName":["package:json"]}}';
+
+    wrapper.vm.setState(appState);
+
+    expect(wrapper.vm.filters.declutter.rootObjects).toContain(
+      'package:app/controllers'
     );
     expect(wrapper.vm.filters.declutter.limitRootEvents.on).toBe(false);
-    expect(wrapper.vm.filters.declutter.hideMediaRequests.on).toBe(true);
-    expect(wrapper.vm.filters.declutter.hideUnlabeled.on).toBe(false);
+    expect(wrapper.vm.filters.declutter.hideMediaRequests.on).toBe(false);
+    expect(wrapper.vm.filters.declutter.hideUnlabeled.on).toBe(true);
     expect(wrapper.vm.filters.declutter.hideElapsedTimeUnder.on).toBe(true);
     expect(wrapper.vm.filters.declutter.hideElapsedTimeUnder.time).toBe(100);
-    expect(wrapper.vm.filters.declutter.hideName.on).toBe(false);
+    expect(wrapper.vm.filters.declutter.hideName.on).toBe(true);
+    expect(wrapper.vm.filters.declutter.hideName.names).toContain(
+      'package:json'
+    );
+
+    expect(wrapper.vm.getState()).toEqual(appState);
   });
 
   it('emits user events', () => {

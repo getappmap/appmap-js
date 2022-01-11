@@ -755,7 +755,7 @@ export default {
       const { declutter } = this.filters;
 
       state.filters = {
-        rootObjects: this.filters.rootObjects,
+        rootObjects: declutter.rootObjects,
         limitRootEvents: declutter.limitRootEvents.on,
         hideMediaRequests: declutter.hideMediaRequests.on,
         hideUnlabeled: declutter.hideUnlabeled.on,
