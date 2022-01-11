@@ -7,15 +7,11 @@
     />
     <v-trace-node
       :event="event"
-      :filtered="highlightedEvents.has(event.id)"
-      :highlight="
-        selectedEvents.includes(event) || event.id == highlightedEventId
-      "
+      :filtered="highlightedEvents.has(event)"
+      :highlight="selectedEvents.includes(event) || event === highlightedEvent"
       :highlight-color="highlightColor"
       :highlight-style="highlightStyle"
-      :highlight-index="
-        event.id == highlightedEventId ? highlightedEventIndex : 0
-      "
+      :highlight-index="event === highlightedEvent ? highlightedEventIndex : 0"
       :focused="focusedEvent === event"
       @expandChildren="toggleVisibility()"
       @click.native.stop="$emit('clickEvent', event)"
@@ -28,7 +24,7 @@
       :selected-events="selectedEvents"
       :focused-event="focusedEvent"
       :highlighted-events="highlightedEvents"
-      :highlighted-event-id="highlightedEventId"
+      :highlighted-event="highlightedEvent"
       :highlighted-event-index="highlightedEventIndex"
       :highlight-color="highlightColor"
       :highlight-all="highlightAll"
@@ -79,8 +75,8 @@ export default {
       type: Set,
       default: new Set(),
     },
-    highlightedEventId: {
-      type: Number,
+    highlightedEvent: {
+      type: Event,
       default: null,
     },
     highlightedEventIndex: {

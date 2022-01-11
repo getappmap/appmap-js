@@ -76,14 +76,17 @@
               </div>
               <div
                 class="trace-view__search-arrows"
-                v-if="highlightedNodes.size"
+                v-if="highlightedNodes.length"
               >
                 <div class="trace-view__search-arrow" @click="prevTraceFilter">
                   <ArrowSearchLeftIcon />
                 </div>
                 <div class="trace-view__search-arrows-text">
-                  <b>{{ currentTraceFilterIndex + 1 }}</b
-                  >/{{ highlightedNodes.size }} results
+                  <span v-if="Number.isInteger(currentTraceFilterIndex)">
+                    <b>{{ currentTraceFilterIndex + 1 }}</b>
+                    /
+                  </span>
+                  {{ highlightedNodes.length }} results
                 </div>
                 <div class="trace-view__search-arrow" @click="nextTraceFilter">
                   <ArrowSearchRightIcon />
@@ -95,8 +98,8 @@
               :events="filteredAppMap.rootEvents()"
               :selected-events="selectedEvent"
               :focused-event="focusedEvent"
-              :highlighted-events="highlightedNodes"
-              :highlighted-event-id="highlightedEventId"
+              :highlighted-events="new Set(highlightedNodes)"
+              :highlighted-event="highlightedEvent"
               :highlighted-event-index="currentTraceFilterIndex + 1"
               :name="VIEW_FLOW"
               :zoom-controls="true"
@@ -445,8 +448,21 @@ export default {
     },
     '$store.getters.selectedObject': {
       handler(selectedObject) {
-        if (selectedObject && !(selectedObject instanceof Event)) {
-          this.setView(VIEW_COMPONENT);
+        if (selectedObject) {
+          if (!(selectedObject instanceof Event)) {
+            this.setView(VIEW_COMPONENT);
+          }
+
+          if (selectedObject instanceof Event) {
+            const highlightedIndex = this.highlightedNodes.findIndex(
+              (e) => e === selectedObject
+            );
+
+            this.currentTraceFilterIndex =
+              highlightedIndex >= 0 ? highlightedIndex : undefined;
+          }
+        } else {
+          this.currentTraceFilterIndex = undefined;
         }
 
         this.$root.$emit('stateChanged', 'selectedObject');
@@ -470,6 +486,12 @@ export default {
     highlightedNodes: {
       handler() {
         this.currentTraceFilterIndex = 0;
+        this.selectCurrentHighlightedEvent();
+      },
+    },
+    currentTraceFilterIndex: {
+      handler() {
+        this.selectCurrentHighlightedEvent();
       },
     },
     filteredAppMap: {
@@ -583,61 +605,83 @@ export default {
         );
     },
 
+    eventsById() {
+      return this.filteredAppMap.events.reduce((map, e) => {
+        map[e.id] = e.callEvent;
+        return map;
+      }, {});
+    },
+
+    eventsByLabel() {
+      return this.filteredAppMap.events
+        .filter((e) => e.isCall())
+        .reduce((map, e) => {
+          e.labels.forEach((label) => {
+            map[label] = map[label] || [];
+            map[label].push(e.callEvent);
+          });
+          return map;
+        }, {});
+    },
+
     highlightedNodes() {
       const nodes = new Set();
+      const seachQuery = this.traceFilterValue.trim();
 
-      if (this.traceFilterValue) {
-        const knownEventIds = new Set(
-          this.filteredAppMap.events.filter((e) => e.isCall()).map((e) => e.id)
-        );
-        const filterValue = this.traceFilterValue.trim().split(' ');
-        if (filterValue.length) {
-          filterValue.forEach((item) => {
-            if (item.startsWith('event:')) {
-              const eventId = parseInt(item.replace('event:', ''), 10);
-              if (!Number.isNaN(eventId) && knownEventIds.has(eventId)) {
-                nodes.add(eventId);
+      if (seachQuery) {
+        const queryTerms = seachQuery.split(' ');
+
+        queryTerms.forEach((term) => {
+          const [query, text] = term.split(':');
+          switch (query) {
+            case 'event': {
+              const eventId = parseInt(text, 10);
+              if (Number.isNaN(eventId)) {
+                break;
               }
-            } else if (item.startsWith('label:')) {
-              const labelName = item.replace('label:', '');
-              this.filteredAppMap.events.forEach((event) => {
-                if (event.isCall() && event.labels.has(labelName)) {
-                  nodes.add(event.id);
-                }
-              });
-            } else {
-              this.filteredAppMap.events.forEach((event) => {
+
+              const event = this.eventsById[eventId];
+              if (event) {
+                nodes.add(event);
+              }
+
+              break;
+            }
+
+            case 'label': {
+              const events = this.eventsByLabel[text];
+
+              if (events) {
+                events.forEach((e) => nodes.add(e));
+              }
+
+              break;
+            }
+
+            default: {
+              // Perform a full text search using query
+              if (term.length < 3) {
+                break;
+              }
+
+              this.filteredAppMap.events.forEach((e) => {
                 if (
-                  event.isCall() &&
-                  event.toString().toLowerCase().includes(item.toLowerCase())
+                  e.isCall() &&
+                  e.toString().toLowerCase().includes(term.toString())
                 ) {
-                  nodes.add(event.id);
+                  nodes.add(e);
                 }
               });
             }
-          });
-        }
+          }
+        });
       }
 
-      return nodes;
+      return Array.from(nodes).sort((a, b) => a.id - b.id);
     },
 
-    highlightedEventId() {
-      if (this.highlightedNodes.size) {
-        const eventId = Array.from(this.highlightedNodes)[
-          this.currentTraceFilterIndex
-        ];
-        const selectedObject = this.filteredAppMap.events.find(
-          (e) => e.id === eventId
-        );
-
-        if (selectedObject) {
-          this.$store.commit(SELECT_OBJECT, selectedObject);
-        }
-
-        return eventId;
-      }
-      return null;
+    highlightedEvent() {
+      return this.highlightedNodes[this.currentTraceFilterIndex];
     },
 
     selectedObject() {
@@ -858,6 +902,7 @@ export default {
     },
 
     clearSelection() {
+      this.currentTraceFilterIndex = 0;
       this.$store.commit(CLEAR_OBJECT_STACK);
       this.$root.$emit('clearSelection');
     },
@@ -1062,18 +1107,63 @@ export default {
     },
 
     prevTraceFilter() {
-      if (this.currentTraceFilterIndex === 0) {
-        this.currentTraceFilterIndex = this.highlightedNodes.size - 1;
-      } else {
+      if (this.highlightedNodes.length === 0) {
+        return;
+      }
+
+      if (Number.isFinite(this.currentTraceFilterIndex)) {
         this.currentTraceFilterIndex -= 1;
+      } else {
+        const [selectedEvent] = this.selectedEvent;
+        if (selectedEvent) {
+          const previousEvent = this.highlightedNodes
+            .filter((e) => e.id < selectedEvent.id)
+            .pop();
+          this.currentTraceFilterIndex = this.highlightedNodes.findIndex(
+            (e) => e === previousEvent
+          );
+        } else {
+          this.currentTraceFilterIndex = -1;
+        }
+      }
+
+      if (this.currentTraceFilterIndex < 0) {
+        this.currentTraceFilterIndex = this.highlightedNodes.length - 1;
       }
     },
 
     nextTraceFilter() {
-      if (this.currentTraceFilterIndex === this.highlightedNodes.size - 1) {
-        this.currentTraceFilterIndex = 0;
-      } else {
+      if (this.highlightedNodes.length === 0) {
+        return;
+      }
+
+      if (Number.isFinite(this.currentTraceFilterIndex)) {
         this.currentTraceFilterIndex += 1;
+      } else {
+        const [selectedEvent] = this.selectedEvent;
+        if (selectedEvent) {
+          const previousEvent = this.highlightedNodes
+            .filter((e) => e.id > selectedEvent.id)
+            .shift();
+          this.currentTraceFilterIndex = this.highlightedNodes.findIndex(
+            (e) => e === previousEvent
+          );
+        } else {
+          this.currentTraceFilterIndex = 0;
+        }
+      }
+
+      if (
+        this.currentTraceFilterIndex >= this.highlightedNodes.length ||
+        this.currentTraceFilterIndex < 0
+      ) {
+        this.currentTraceFilterIndex = 0;
+      }
+    },
+
+    selectCurrentHighlightedEvent() {
+      if (this.highlightedEvent) {
+        this.$store.commit(SELECT_OBJECT, this.highlightedEvent);
       }
     },
   },
