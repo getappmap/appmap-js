@@ -126,9 +126,6 @@ export default {
         'connection-icon--connected': this.event.children.length > 0,
       };
     },
-    // selectedEvent() {
-    //   return this.$selectedEvent();
-    // },
   },
 
   methods: {
