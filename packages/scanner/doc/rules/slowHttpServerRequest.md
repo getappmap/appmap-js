@@ -1,25 +1,28 @@
-## Description
+---
+title: Slow HTTP server request
+id: slow-http-server-request
+---
 
 Ensures that HTTP server request elapsed time does not exceed a threshold.
 
-## Rule logic
+### Rule logic
 
 Checks HTTP server requests to see if the elapsed time exceeds the configured threshold.
 
-## Notes
+### Notes
 
 This rule is most useful when applied to code that is specifically designed to test application
 performance.
 
-## Resolution
+### Resolution
 
 Optimize the request elapsed time using a profiler, SQL tuning, etc.
 
-## Options
+### Options
 
 - `timeAllowed` max time allowed for the request.
 
-## Examples
+### Examples
 
 ```yaml
 - rule: slowHttpServerRequest

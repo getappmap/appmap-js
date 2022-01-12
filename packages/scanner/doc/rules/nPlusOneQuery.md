@@ -1,15 +1,19 @@
-## Description
+---
+title: N plus one query
+id: n-plus-one-query
+---
+
 
 Finds occurrances of a query being repeated within a loop.
 
-## Rule logic
+### Rule logic
 
 Within each command, SQL queries are normalized, grouped, and counted.
 
 If the number of duplicate instances of a normalized query exceeds the threshold, it's reported as a
 finding.
 
-## Notes
+### Notes
 
 N plus one queries typically occur when a
 [data access object (DAO)](https://en.wikipedia.org/wiki/Data_access_object) has a one-to-many or
@@ -17,7 +21,7 @@ many-to-many relationship, and the relationship is enumerated within a loop. The
 separate query to fetch each related record. If the number of related objects is large, or if each
 one is fairly expensive to fetch, application performance suffers.
 
-## Resolution
+### Resolution
 
 DAO libraries typically offer a feature called "eager loading". For example:
 
@@ -28,12 +32,12 @@ DAO libraries typically offer a feature called "eager loading". For example:
 Enable eager loading on the association in question to fetch the data efficiently, without repeated,
 identical queries.
 
-## Options
+### Options
 
 - `warningLimit` Threshold for reporting a warning. Default: 5.
 - `errorLimit` Threshold for reporting an error. Default: 10.
 
-## Examples
+### Examples
 
 ```yaml
 - rule: nPlusOneQuery

@@ -1,25 +1,28 @@
-## Description
+---
+title: Slow query
+id: slow-query
+---
 
 Ensures that SQL query elapsed time does not exceed a threshold.
 
-## Rule logic
+### Rule logic
 
 Checks all configured queries to see if the elapsed time exceeds the configured threshold.
 
-## Notes
+### Notes
 
 This rule is most useful when applied to code that is specifically designed to test application
 performance.
 
-## Resolution
+### Resolution
 
 Optimize the elapsed time using SQL tuning.
 
-## Options
+### Options
 
 - `timeAllowed` max time allowed for the query.
 
-## Examples
+### Examples
 
 ```yaml
 - rule: slowQuery

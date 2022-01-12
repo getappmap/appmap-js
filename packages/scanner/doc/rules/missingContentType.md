@@ -1,26 +1,29 @@
-## Description
+---
+title: Missing content type
+id: missing-content-type
+---
 
 Finds HTTP server requests that don't provide a `Content-Type` header in the response.
 
-## Rule logic
+### Rule logic
 
 Every HTTP server request is checked. If the status code indicates redirect or "No content", then
 the rule passes. Otherwise, a finding is issued if the response is missing a `Content-Type` header.
 
-## Notes
+### Notes
 
 When a response is missing the `Content-Type` header, it's unclear to clients how to handle the
 response data. Bugs are likely to result.
 
-## Resolution
+### Resolution
 
 Provide a `Content-Type` in the response.
 
-## Options
+### Options
 
 None
 
-## Examples
+### Examples
 
 ```yaml
 - rule: missingContentType

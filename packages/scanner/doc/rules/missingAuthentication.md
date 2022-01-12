@@ -1,9 +1,12 @@
-## Description
+---
+title: Missing authentication
+id: missing-authentication
+---
 
 An HTTP server request is missing authentication. In this case, the request may be serving assets
 that should be protected by authentication - but no authentication is actually happening.
 
-## Rule logic
+### Rule logic
 
 This rule checks all HTTP server requests that satisfy the following conditions:
 
@@ -15,7 +18,7 @@ Each matching request, any event that satisfies either of these conditions will 
 1. Has label `public`.
 2. Has label `security.authentication`, and returns a truthy value.
 
-## Notes
+### Notes
 
 If a request does not require an authenticated user (e.g. because it contains completely public
 information), then this rule can be satisfied by calling any function labeled `public`.
@@ -23,7 +26,7 @@ information), then this rule can be satisfied by calling any function labeled `p
 If the `security.authentication` event returns a falsey value (`false`, `null`, etc), then
 authentication is assumed to be denied, and the rule is not satisfied.
 
-## Resolution
+### Resolution
 
 If the request is designed to be public, and the omission of authentication is intentionaly, modify
 the code so that it calls a function labeled `public`.
@@ -31,12 +34,12 @@ the code so that it calls a function labeled `public`.
 Otherwise, modify the code so that it calls a function labeled `security.authentication` which
 returns a truthy result (for example, a User object).
 
-## Options
+### Options
 
 - `includeContentTypes MatchPatternConfig[]`. Default: empty - including all content types.
 - `excludeContentTypes MatchPatternConfig[]`. Default: empty - excluding no content types.
 
-## Examples
+### Examples
 
 ```yaml
 - rule: missingAuthentication

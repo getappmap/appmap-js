@@ -1,9 +1,12 @@
-## Description
+---
+title: Query from view
+id: query-from-view
+---
 
 Ensures that SQL queries are not performed directly from the view layer. This helps to make the code
 more maintainable by encapsulating access to the database.
 
-## Notes
+### Notes
 
 Performing SQL queries directly from the view layer introduces several maintainability concerns:
 
@@ -12,21 +15,21 @@ Performing SQL queries directly from the view layer introduces several maintaina
    implementation.
 3. Performance can be adversely and unexpectedly affected by minor changes to the view.
 
-## Rule logic
+### Rule logic
 
 Each query is tested to see if it has an ancestor event with the view label.
 
-## Resolution
+### Resolution
 
 Data objects which are passed to the view layer for rendering should not have access to the
 database. Disable database access in some way, or transfer data from DAO objects into plain old
 structs.
 
-## Options
+### Options
 
 - `forbiddenLabel`. Label which identifies the view layer. Default: `mvc.template`.
 
-## Examples
+### Examples
 
 ```yaml
 - rule: queryFromView

@@ -1,15 +1,18 @@
-## Description
+---
+title: Too many updates
+id: too-many-updates
+---
 
 Verifies that the number of SQL and RPC updates performed by a command does not exceed a threshold.
 
-## Rule logic
+### Rule logic
 
 Counts the number of SQL and RPC updates in each command. A SQL update is any `INSERT` or `UPDATE`
 query. An RPC update is an HTTP client request that uses `PUT`, `POST`, or `PATCH`.
 
 If the number of updates exceeds the threshold, a finding is reported.
 
-## Notes
+### Notes
 
 As a codebase evolves, sometimes a request can start to make more and more SQL and RPC updates.There
 are several negative repercussions of this:
@@ -19,17 +22,17 @@ are several negative repercussions of this:
    leaving the system in an inconsistent state.
 3. The performance of the command degrades as it does more and more work.
 
-## Resolution
+### Resolution
 
 Consider refactoring the command into multiple commands.
 
 Schedule a job to perform some of the work offline.
 
-## Options
+### Options
 
 - `warningLimit` the maximum number of joins allowed.
 
-## Examples
+### Examples
 
 ```yaml
 - rule: tooManyUpdates

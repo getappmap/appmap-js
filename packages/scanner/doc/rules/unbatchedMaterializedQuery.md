@@ -1,8 +1,11 @@
-## Description
+---
+title: Unbatched materialized query
+id: unbatched-materialized-query
+---
 
 Finds large data sets that are queried from the database and loaded into memory.
 
-## Rule logic
+### Rule logic
 
 Examines all SQL SELECT queries (as opposed to insert/update). If the query satisfies any of the
 following conditions:
@@ -16,7 +19,7 @@ then the query is skipped.
 Otherwise, the rule checks to see if the query has an ancestor labeled `dao.materialize`. If so,
 it's emitted as a finding.
 
-## Notes
+### Notes
 
 Materializing large amounts of data code objects is a frequent cause of poor performance and memory
 exhaustion.
@@ -24,7 +27,7 @@ exhaustion.
 A `COUNT` or `LIMIT` clause is a good indication that the code is taking steps to limit the amount
 of data that's loaded into memory.
 
-## Resolution
+### Resolution
 
 If data is being loaded into memory from an un-LIMITed query:
 
@@ -33,11 +36,11 @@ If data is being loaded into memory from an un-LIMITed query:
 - If the data is being loaded solely for presentation purposes, fetch data in batches - e.g. with a
   pagination library.
 
-## Options
+### Options
 
 None
 
-## Examples
+### Examples
 
 ```yaml
 - rule: unbatchedMaterializedQuery

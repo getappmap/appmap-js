@@ -1,26 +1,29 @@
-## Description
+---
+title: Slow function call
+id: slow-function-call
+---
 
 Ensures that function elapsed time does not exceed a threshold.
 
-## Rule logic
+### Rule logic
 
 Checks all configured functions to see if the elapsed time exceeds the configured threshold.
 
-## Notes
+### Notes
 
 This rule is most useful when applied to code that is specifically designed to test application
 performance.
 
-## Resolution
+### Resolution
 
 Optimize the function elapsed time using a profiler, SQL tuning, etc.
 
-## Options
+### Options
 
 - `functions: MatchPatternConfig[]` list of functions to check. Required.
 - `timeAllowed` max time allowed for the function.
 
-## Examples
+### Examples
 
 ```yaml
 - rule: slowFunctionCall

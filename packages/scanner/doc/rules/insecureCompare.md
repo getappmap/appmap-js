@@ -1,4 +1,7 @@
-## Description
+---
+title: Insecure compare
+id: insecure-compare
+---
 
 Identifies cases in which secrets are being compared directly using `string.equals`.
 
@@ -7,7 +10,7 @@ about the secret through [timing attacks](https://en.wikipedia.org/wiki/Timing_a
 short-circuting (returning false on first mismatch). This can allow the attacker to significantly
 speed up brute forcing, turning an intractable exponential problem into a linear one.
 
-## Rule logic
+### Rule logic
 
 The rule looks for events labeled `secret` and `string.equals`.
 
@@ -17,7 +20,7 @@ On encountering `string.equals` it looks at the arguments and the receiver. If a
 is a previously seen secret, or matches a list of known secret-like regular expressions, the
 comparison is flagged as insecure, unless any of the arguments is a BCrypt digest.
 
-## Notes
+### Notes
 
 When generating appmaps, ensure that string comparison functions (such as `String#==` in Ruby and
 `String.equals` in Java) are traced and correctly labeled with `string.equals`. Any functions you
@@ -31,18 +34,18 @@ It's advisable to only trace string equality on a limited subset of tests (perha
 touch secret related functionality); alas, this is not something easily attainable with current
 AppMap recorders and requires swapping or modifying configuration files.
 
-## Resolution
+### Resolution
 
 To fix this issue, either hash values before comparing or use a constant-time comparison in such
 operations. Constant-time comparison functions always compare every character of the string,
 removing the timing side channel. You can usually find functions like this in cryptographic and
 utility libraries, eg. `ActiveSupport::SecurityUtils.secure_compare`.
 
-## Options
+### Options
 
 None
 
-## Examples
+### Examples
 
 ```yaml
 - rule: insecureCompare

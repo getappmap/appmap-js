@@ -1,25 +1,28 @@
-## Description
+---
+title: Too many joins
+id: too-many-joins
+---
 
 Verifies that the number of joins in SQL queries does not exceed a threshold.
 
-## Rule logic
+### Rule logic
 
 Counts the number of joins in each SQL query. If the count exceeds the configured threshold, a
 finding is reported.
 
-## Notes
+### Notes
 
 Queries with too many joins often have poor or unpredictable performance.
 
-## Resolution
+### Resolution
 
 Rewrite the query to use fewer joins, or break the query into more than one query.
 
-## Options
+### Options
 
 - `warningLimit` the maximum number of joins allowed.
 
-## Examples
+### Examples
 
 ```yaml
 - rule: slowQuery
