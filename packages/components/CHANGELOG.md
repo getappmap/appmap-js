@@ -1,3 +1,10 @@
+# [@appland/components-v1.20.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.19.0...@appland/components-v1.20.0) (2022-01-12)
+
+
+### Features
+
+* Add get/set global filters state API ([#509](https://github.com/applandinc/appmap-js/issues/509)) ([3230f02](https://github.com/applandinc/appmap-js/commit/3230f02d49af864edddcb62139293c1187dadd74))
+
 # [@appland/components-v1.19.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.18.2...@appland/components-v1.19.0) (2022-01-11)
 
 
