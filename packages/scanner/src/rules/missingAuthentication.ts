@@ -69,6 +69,7 @@ export default {
   title: 'Unauthenticated HTTP server request',
   scope: 'http_server_request',
   labels: [Public, SecurityAuthentication],
+  impactDomain: 'Security',
   enumerateScope: false,
   Options,
   build,

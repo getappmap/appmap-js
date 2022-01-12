@@ -24,6 +24,7 @@ export default {
   id: 'query-from-view',
   title: 'Queries from view',
   Options,
+  impactDomain: 'Maintainability',
   enumerateScope: true,
   build,
 } as Rule;

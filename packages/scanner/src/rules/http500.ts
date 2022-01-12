@@ -14,5 +14,6 @@ export default {
   title: 'HTTP 5xx status code',
   scope: 'http_server_request',
   enumerateScope: false,
+  impactDomain: 'Stability',
   build,
 } as Rule;

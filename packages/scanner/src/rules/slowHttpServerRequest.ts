@@ -18,6 +18,7 @@ export default {
   title: 'Slow HTTP server request',
   scope: 'http_server_request',
   enumerateScope: false,
+  impactDomain: 'Performance',
   Options,
   build,
 } as Rule;

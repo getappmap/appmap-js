@@ -63,6 +63,7 @@ export default {
   id: 'n-plus-one-query',
   title: 'N plus 1 SQL query',
   scope: 'command',
+  impactDomain: 'Performance',
   enumerateScope: false,
   Options,
   build,

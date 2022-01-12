@@ -39,6 +39,7 @@ export default {
   id: 'query-from-invalid-package',
   title: 'Queries from invalid packages',
   Options,
+  impactDomain: 'Maintainability',
   enumerateScope: true,
   build,
 } as Rule;

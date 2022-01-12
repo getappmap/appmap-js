@@ -1,4 +1,5 @@
 import { AppMap, Event } from '@appland/models';
+import { URL } from 'url';
 
 /**
  * Each Rule in the scanner library wants to consider some set of events as it decides whether the code should be flagged or not.
@@ -25,6 +26,11 @@ export type ScopeName =
   | 'http_client_request'
   | 'http_server_request'
   | 'transaction';
+
+/**
+ * Indicates the aspect of software quality that is most relevant to a rule.
+ */
+export type ImpactDomain = 'Security' | 'Performance' | 'Maintainability' | 'Stability';
 
 /**
  * Scope provides an Event at the root of the scope, and a Generator to iterate over its descendants.
@@ -116,6 +122,8 @@ interface Rule {
   // Whether to pass all the events in the scope to the matcher. If false, only the scope event
   // is passed to the matcher, and the rule should traverse the scope as needed.
   enumerateScope: boolean;
+  impactDomain?: ImpactDomain;
+  references?: Record<string, URL>;
   // User-defined options for the rule.
   Options?: any;
   // Function to instantiate the rule logic from configured options.

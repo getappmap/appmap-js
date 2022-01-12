@@ -42,6 +42,7 @@ export default {
   title: 'Illegal use of code by a non-whitelisted package',
   scope: 'command' as ScopeName,
   enumerateScope: true,
+  impactDomain: 'Maintainability',
   Options,
   build,
 } as Rule;

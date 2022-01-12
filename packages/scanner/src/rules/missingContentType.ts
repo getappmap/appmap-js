@@ -26,6 +26,7 @@ export default {
   id: 'missing-content-type',
   title: 'HTTP server request without a Content-Type header',
   scope: 'http_server_request',
+  impactDomain: 'Stability',
   enumerateScope: false,
   build,
 } as Rule;

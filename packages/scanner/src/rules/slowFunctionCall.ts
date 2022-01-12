@@ -31,6 +31,7 @@ export default {
   id: 'slow-function-call',
   title: 'Slow function call',
   scope: 'root',
+  impactDomain: 'Performance',
   enumerateScope: true,
   Options,
   build,

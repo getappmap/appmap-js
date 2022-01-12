@@ -65,6 +65,7 @@ export default {
   id: 'secret-in-log',
   title: 'Secret in log',
   labels: [Secret, Log],
+  impactDomain: 'Security',
   enumerateScope: true,
   build,
 } as Rule;

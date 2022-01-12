@@ -46,6 +46,7 @@ export default {
   title: 'Authorization performed before authentication',
   labels: [SecurityAuthorization, SecurityAuthentication],
   scope: 'http_server_request' as ScopeName,
+  impactDomain: 'Security',
   enumerateScope: false,
   build,
 } as Rule;

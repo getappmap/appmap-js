@@ -27,5 +27,6 @@ export default {
   id: 'save-without-validation',
   title: 'Save without validation',
   enumerateScope: true,
+  impactDomain: 'Stability',
   build,
 } as Rule;

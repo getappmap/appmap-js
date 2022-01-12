@@ -227,6 +227,7 @@ export default {
   title: 'Circular package dependency',
   scope: 'command',
   Options,
+  impactDomain: 'Maintainability',
   enumerateScope: false,
   build,
 } as Rule;

@@ -25,6 +25,7 @@ export default {
   title: 'RPC without circuit breaker',
   Options,
   labels: [RPCCircuitBreaker],
+  impactDomain: 'Stability',
   enumerateScope: true,
   build,
 } as Rule;

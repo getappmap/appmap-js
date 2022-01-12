@@ -67,5 +67,6 @@ export default {
   labels: [DAOMaterialize],
   scope: 'command',
   enumerateScope: true,
+  impactDomain: 'Performance',
   build,
 } as Rule;

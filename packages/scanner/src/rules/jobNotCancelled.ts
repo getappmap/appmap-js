@@ -41,5 +41,6 @@ export default {
   scope: 'transaction',
   enumerateScope: false,
   labels: [Labels.JobCreate, Labels.JobCancel],
+  impactDomain: 'Stability',
   build,
 } as Rule;

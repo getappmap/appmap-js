@@ -59,6 +59,7 @@ export default {
   id: 'too-many-joins',
   title: 'Too many joins',
   scope: 'command',
+  impactDomain: 'Performance',
   enumerateScope: false,
   Options,
   build,

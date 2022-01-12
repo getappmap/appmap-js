@@ -66,6 +66,7 @@ export default {
   title: 'Too many SQL and RPC updates performed in one command',
   scope: 'command',
   enumerateScope: false,
+  impactDomain: 'Maintainability',
   Options,
   build,
 } as Rule;
