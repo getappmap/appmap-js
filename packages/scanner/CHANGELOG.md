@@ -1,3 +1,10 @@
+## [1.33.2](https://github.com/applandinc/scanner/compare/v1.33.1...v1.33.2) (2022-01-12)
+
+
+### Bug Fixes
+
+* Flag insecure comparison correctly in more cases ([abaf078](https://github.com/applandinc/scanner/commit/abaf078a37ccc8dfe9b85074e26924b130a422c7))
+
 ## [1.33.1](https://github.com/applandinc/scanner/compare/v1.33.0...v1.33.1) (2022-01-10)
 
 
