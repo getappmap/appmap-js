@@ -1,6 +1,6 @@
-import { Event, ParameterObject } from '@appland/models';
+import { ParameterObject } from '@appland/models';
 import { MatchResult, Rule, RuleLogic } from 'src/types';
-import SecretsRegexes from '../analyzer/secretsRegexes';
+import SecretsRegexes, { looksSecret } from '../analyzer/secretsRegexes';
 import { emptyValue } from './util';
 import recordSecrets from '../analyzer/recordSecrets';
 
@@ -10,36 +10,29 @@ class Match {
 
 const secrets: Set<string> = new Set();
 
-const findMatchingValue = (regexps: RegExp[], parameters: readonly ParameterObject[]): Match[] => {
+const findInLog = (parameters: readonly ParameterObject[]): MatchResult[] | undefined => {
   const matches: Match[] = [];
-  parameters
-    .filter((parameter) => !emptyValue(parameter.value))
-    .forEach((parameter) => {
-      const value = parameter.value;
-      regexps
-        .filter((regexp) => regexp.test(value))
-        .forEach((regexp) => {
-          matches.push(new Match(regexp, value));
-        });
-    });
-  return matches;
-};
 
-const findInLog = (e: Event): MatchResult[] | undefined => {
-  const matches: Match[] = Object.keys(SecretsRegexes).reduce((memo, key) => {
-    const matches = findMatchingValue(SecretsRegexes[key], e.parameters!);
-    matches.forEach((match) => memo.push(match));
-    return memo;
-  }, [] as Match[]);
+  for (const { value } of parameters) {
+    if (emptyValue(value)) continue;
 
-  e.parameters!.filter((parameter) => !emptyValue(parameter.value)).forEach((parameter) => {
-    const value = parameter.value;
-    secrets.forEach((secret) => {
-      if (value.includes(secret)) {
-        matches.push(new Match(secret, value));
-      }
-    });
-  });
+    const patterns: (RegExp | string)[] = [];
+
+    if (looksSecret(value)) {
+      // Only look for the exact matching regexes if it matches the catchall regex
+      patterns.push(
+        ...Object.values(SecretsRegexes)
+          .flat()
+          .filter((re) => re.test(value))
+      );
+    }
+
+    for (const secret of secrets) {
+      if (value.includes(secret)) patterns.push(secret);
+    }
+
+    matches.push(...patterns.map((pattern) => new Match(pattern, value)));
+  }
 
   if (matches.length > 0) {
     return matches.map((match) => ({
@@ -56,7 +49,7 @@ function build(): RuleLogic {
         recordSecrets(secrets, e);
       }
       if (e.parameters && e.codeObject.labels.has(Log)) {
-        return findInLog(e);
+        return findInLog(e.parameters);
       }
     },
     where: (e) => {
