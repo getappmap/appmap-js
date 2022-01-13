@@ -1,6 +1,10 @@
 ---
-title: Job not canceled
-id: job-not-canceled
+id: job-not-cancelled
+name: Job not cancelled
+title: Job created in a rolled back transaction and not cancelled
+references:
+  CWE-672: https://cwe.mitre.org/data/definitions/672.html
+impactDomain: Stability
 ---
 
 Finds jobs which are created in a transaction, and not cancelled when the transaction is rolled

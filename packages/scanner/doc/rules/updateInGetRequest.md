@@ -1,6 +1,8 @@
 ---
-title: Update in GET request
 id: update-in-get-request
+name: Update in get request
+title: Data update performed in GET or HEAD request
+impactDomain: Maintainability
 ---
 
 Finds SQL updates that are performed in an HTTP server `GET` request.

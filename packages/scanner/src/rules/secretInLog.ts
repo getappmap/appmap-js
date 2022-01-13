@@ -1,7 +1,7 @@
 import { ParameterObject } from '@appland/models';
 import { MatchResult, Rule, RuleLogic } from 'src/types';
 import SecretsRegexes, { looksSecret } from '../analyzer/secretsRegexes';
-import { emptyValue } from './util';
+import { emptyValue } from './lib/util';
 import recordSecrets from '../analyzer/recordSecrets';
 import { URL } from 'url';
 

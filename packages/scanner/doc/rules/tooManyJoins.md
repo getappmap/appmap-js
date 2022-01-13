@@ -1,6 +1,10 @@
 ---
-title: Too many joins
 id: too-many-joins
+name: Too many joins
+title: Too many joins
+references:
+  CWE-1049: https://cwe.mitre.org/data/definitions/1049.html
+impactDomain: Performance
 ---
 
 Verifies that the number of joins in SQL queries does not exceed a threshold.

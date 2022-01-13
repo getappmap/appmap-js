@@ -2,7 +2,7 @@ import { AppMap, Event } from '@appland/models';
 import Check from './check';
 import { AbortError } from './errors';
 import { Finding } from './types';
-import { verbose } from './rules/util';
+import { verbose } from './rules/lib/util';
 import ScopeIterator from './scope/scopeIterator';
 import RootScope from './scope/rootScope';
 import HTTPServerRequestScope from './scope/httpServerRequestScope';

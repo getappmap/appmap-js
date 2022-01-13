@@ -1,6 +1,10 @@
 ---
-title: Insecure compare
 id: insecure-compare
+name: Insecure compare
+title: Insecure comparison of secrets
+references:
+  CWE-208: https://cwe.mitre.org/data/definitions/208.html
+impactDomain: Security
 ---
 
 Identifies cases in which secrets are being compared directly using `string.equals`.

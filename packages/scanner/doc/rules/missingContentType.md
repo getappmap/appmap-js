@@ -1,6 +1,8 @@
 ---
-title: Missing content type
 id: missing-content-type
+name: Missing content type
+title: HTTP server request without a Content-Type header
+impactDomain: Stability
 ---
 
 Finds HTTP server requests that don't provide a `Content-Type` header in the response.

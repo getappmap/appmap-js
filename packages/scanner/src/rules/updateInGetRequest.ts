@@ -1,6 +1,6 @@
 import { Event } from '@appland/models';
 import { Rule, RuleLogic } from 'src/types';
-import { toRegExpArray } from './util';
+import { toRegExpArray } from './lib/util';
 
 class Options {
   private _queryInclude: RegExp[];

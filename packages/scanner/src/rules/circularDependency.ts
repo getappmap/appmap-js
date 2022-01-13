@@ -6,7 +6,7 @@ import Graph from '../algorithms/dataStructures/graph/Graph';
 import detectDirectedCycle from '../algorithms/graph/detect-cycle';
 import { isAbsolute } from 'path';
 import * as types from './types';
-import { verbose } from './util';
+import { verbose } from './lib/util';
 import MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
 import { URL } from 'url';

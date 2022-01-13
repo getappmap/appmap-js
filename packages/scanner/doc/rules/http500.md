@@ -1,6 +1,10 @@
 ---
-title: HTTP 500
-id: http-500
+id: http-5xx
+name: HTTP 5xx
+title: HTTP 5xx status code
+references:
+  CWE-394: https://cwe.mitre.org/data/definitions/394.html
+impactDomain: Stability
 ---
 
 Identifies when an HTTP server requset has returned a 5xx status code. 5xx status codes generally

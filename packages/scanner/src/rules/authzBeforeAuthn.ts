@@ -1,5 +1,5 @@
 import { Event, EventNavigator } from '@appland/models';
-import { isTruthy, providesAuthentication } from './util';
+import { isTruthy, providesAuthentication } from './lib/util';
 import { MatcherResult, Rule, RuleLogic, ScopeName } from '../types.d';
 import { URL } from 'url';
 

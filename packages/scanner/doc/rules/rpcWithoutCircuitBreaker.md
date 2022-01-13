@@ -1,6 +1,8 @@
 ---
-title: RPC without circuit breaker
 id: rpc-without-circuit-breaker
+name: RPC without circuit breaker
+title: RPC without circuit breaker
+impactDomain: Stability
 ---
 
 Identifies HTTP client requests which do not utilize a

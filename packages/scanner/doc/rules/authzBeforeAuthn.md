@@ -1,6 +1,10 @@
 ---
-title: Authz before authn
 id: authz-before-authn
+name: Authz before authn
+title: Authorization performed before authentication
+references:
+  CWE-863: https://cwe.mitre.org/data/definitions/863.html
+impactDomain: Security
 ---
 
 Determines when authorization logic is applied to a user identity that has not been properly

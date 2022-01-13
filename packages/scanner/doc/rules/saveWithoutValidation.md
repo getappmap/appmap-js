@@ -1,6 +1,10 @@
 ---
-title: Save without validation
 id: save-without-validation
+name: Save without validation
+title: Save without validation
+references:
+  CWE-20: https://cwe.mitre.org/data/definitions/20.html
+impactDomain: Stability
 ---
 
 Ensures that data saved by data access object is validated first.

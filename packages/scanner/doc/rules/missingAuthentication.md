@@ -1,6 +1,10 @@
 ---
-title: Missing authentication
 id: missing-authentication
+name: Missing authentication
+title: Unauthenticated HTTP server request
+references:
+  CWE-306: https://cwe.mitre.org/data/definitions/306.html
+impactDomain: Security
 ---
 
 An HTTP server request is missing authentication. In this case, the request may be serving assets

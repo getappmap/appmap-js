@@ -1,6 +1,8 @@
 ---
-title: Slow query
 id: slow-query
+name: Slow query
+title: Slow SQL query
+impactDomain: Performance
 ---
 
 Ensures that SQL query elapsed time does not exceed a threshold.

@@ -1,6 +1,10 @@
 ---
-title: Unbatched materialized query
 id: unbatched-materialized-query
+name: Unbatched materialized query
+title: Unbatched materialized SQL query
+references:
+  CWE-1049: https://cwe.mitre.org/data/definitions/1049.html
+impactDomain: Performance
 ---
 
 Finds large data sets that are queried from the database and loaded into memory.

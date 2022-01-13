@@ -1,6 +1,10 @@
 ---
-title: Secret in log
 id: secret-in-log
+name: Secret in log
+title: Secret in log
+references:
+  CWE-532: https://cwe.mitre.org/data/definitions/532.html
+impactDomain: Security
 ---
 
 Identifies when a known or assumed secret is written to a log. Logs are often transported into other

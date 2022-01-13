@@ -2,7 +2,7 @@ import { Event, EventNavigator } from '@appland/models';
 import { rpcRequestForEvent } from '../openapi/rpcRequest';
 import * as types from './types';
 import { Rule, RuleLogic, StringFilter } from '../types';
-import { providesAuthentication } from './util';
+import { providesAuthentication } from './lib/util';
 import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
 import { URL } from 'url';

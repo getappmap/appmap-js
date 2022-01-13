@@ -8,7 +8,7 @@ import { FindingStatusListItem } from '@appland/client/dist/src';
 import { parseConfigFile } from '../../configuration/configurationProvider';
 import { AbortError, ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
-import { verbose } from '../../rules/util';
+import { verbose } from '../../rules/lib/util';
 import upload from '../../integration/appland/upload';
 import postCommitStatus from '../../integration/github/commitStatus';
 import { newFindings } from '../../findings';

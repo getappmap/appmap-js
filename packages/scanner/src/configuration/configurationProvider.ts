@@ -5,7 +5,7 @@ import { promises as fs } from 'fs';
 import { Rule, ScopeName } from '../types';
 import options_schema from './schema/options.json';
 import match_pattern_config_schema from './schema/match-pattern-config.json';
-import { capitalize, verbose } from '../rules/util';
+import { capitalize, verbose } from '../rules/lib/util';
 import { buildFilters as buildEventFilterArray } from '../rules/lib/matchEvent';
 import Configuration from './types/configuration';
 import CheckConfig from './types/checkConfig';
