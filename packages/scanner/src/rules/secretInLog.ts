@@ -3,6 +3,7 @@ import { MatchResult, Rule, RuleLogic } from 'src/types';
 import SecretsRegexes, { looksSecret } from '../analyzer/secretsRegexes';
 import { emptyValue } from './util';
 import recordSecrets from '../analyzer/recordSecrets';
+import { URL } from 'url';
 
 class Match {
   constructor(public regexp: RegExp | string, public value: string) {}
@@ -67,5 +68,8 @@ export default {
   labels: [Secret, Log],
   impactDomain: 'Security',
   enumerateScope: true,
+  references: {
+    'CWE-532': new URL('https://cwe.mitre.org/data/definitions/532.html'),
+  },
   build,
 } as Rule;

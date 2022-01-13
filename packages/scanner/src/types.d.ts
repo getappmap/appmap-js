@@ -127,5 +127,5 @@ interface Rule {
   // User-defined options for the rule.
   Options?: any;
   // Function to instantiate the rule logic from configured options.
-  build: (options: Record<string, any>) => RuleLogic;
+  build: (options: any) => RuleLogic;
 }

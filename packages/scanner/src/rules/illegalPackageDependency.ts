@@ -3,6 +3,7 @@ import types from './types';
 import { MatcherResult, Rule, RuleLogic, ScopeName } from '../types';
 import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
 import { buildFilter, buildFilters } from './lib/matchPattern';
+import { URL } from 'url';
 
 class Options implements types.IllegalPackageDependency.Options {
   public callerPackages: MatchPatternConfig[] = [];
@@ -43,6 +44,9 @@ export default {
   scope: 'command' as ScopeName,
   enumerateScope: true,
   impactDomain: 'Maintainability',
+  references: {
+    'CWE-1120': new URL('https://cwe.mitre.org/data/definitions/1120.html'),
+  },
   Options,
   build,
 } as Rule;

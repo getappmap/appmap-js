@@ -1,6 +1,7 @@
 import { Event, Label } from '@appland/models';
 import * as types from './types';
 import { Rule, RuleLogic } from 'src/types';
+import { URL } from 'url';
 
 class Options implements types.QueryFromView.Options {
   public forbiddenLabel: Label = 'mvc.template';
@@ -26,5 +27,8 @@ export default {
   Options,
   impactDomain: 'Maintainability',
   enumerateScope: true,
+  references: {
+    'CWE-1057': new URL('https://cwe.mitre.org/data/definitions/1057.html'),
+  },
   build,
 } as Rule;

@@ -9,6 +9,7 @@ import * as types from './types';
 import { verbose } from './util';
 import MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
+import { URL } from 'url';
 
 type PackageName = string;
 
@@ -228,6 +229,9 @@ export default {
   scope: 'command',
   Options,
   impactDomain: 'Maintainability',
+  references: {
+    'CWE-1047': new URL('https://cwe.mitre.org/data/definitions/1047.html'),
+  },
   enumerateScope: false,
   build,
 } as Rule;

@@ -5,6 +5,7 @@ import { Rule, RuleLogic, StringFilter } from '../types';
 import { providesAuthentication } from './util';
 import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
+import { URL } from 'url';
 
 function isPublic(event: Event): boolean {
   return event.labels.has(Public);
@@ -71,6 +72,9 @@ export default {
   labels: [Public, SecurityAuthentication],
   impactDomain: 'Security',
   enumerateScope: false,
+  references: {
+    'CWE-306': new URL('https://cwe.mitre.org/data/definitions/306.html'),
+  },
   Options,
   build,
 } as Rule;

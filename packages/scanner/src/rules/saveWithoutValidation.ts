@@ -1,4 +1,5 @@
 import { Event, EventNavigator } from '@appland/models';
+import { URL } from 'url';
 import { Rule, RuleLogic } from '../types';
 
 const validatedBy = (iterator: Iterator<EventNavigator>): boolean => {
@@ -28,5 +29,8 @@ export default {
   title: 'Save without validation',
   enumerateScope: true,
   impactDomain: 'Stability',
+  references: {
+    'CWE-20': new URL('https://cwe.mitre.org/data/definitions/20.html'),
+  },
   build,
 } as Rule;
