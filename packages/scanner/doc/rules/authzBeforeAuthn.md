@@ -1,5 +1,5 @@
 ---
-id: authz-before-authn
+rule: authz-before-authn
 name: Authz before authn
 title: Authorization performed before authentication
 references:

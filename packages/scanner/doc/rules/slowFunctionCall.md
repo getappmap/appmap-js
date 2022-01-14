@@ -1,5 +1,5 @@
 ---
-id: slow-function-call
+rule: slow-function-call
 name: Slow function call
 title: Slow function call
 impactDomain: Performance

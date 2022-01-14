@@ -1,5 +1,5 @@
 ---
-id: save-without-validation
+rule: save-without-validation
 name: Save without validation
 title: Save without validation
 references:

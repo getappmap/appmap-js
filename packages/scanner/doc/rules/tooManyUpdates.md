@@ -1,5 +1,5 @@
 ---
-id: too-many-updates
+rule: too-many-updates
 name: Too many updates
 title: Too many SQL and RPC updates performed in one command
 impactDomain: Maintainability

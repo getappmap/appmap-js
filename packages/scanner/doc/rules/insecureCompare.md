@@ -1,5 +1,5 @@
 ---
-id: insecure-compare
+rule: insecure-compare
 name: Insecure compare
 title: Insecure comparison of secrets
 references:

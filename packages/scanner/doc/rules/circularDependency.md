@@ -1,5 +1,5 @@
 ---
-id: circular-dependency
+rule: circular-dependency
 name: Circular dependency
 title: Circular package dependency
 references:

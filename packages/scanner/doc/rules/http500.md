@@ -1,5 +1,5 @@
 ---
-id: http-500
+rule: http-500
 name: HTTP 500
 title: HTTP 500 status code
 references:

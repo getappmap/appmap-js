@@ -1,5 +1,5 @@
 ---
-id: illegal-package-dependency
+rule: illegal-package-dependency
 name: Illegal package dependency
 title: Illegal use of code by a non-whitelisted package
 references:

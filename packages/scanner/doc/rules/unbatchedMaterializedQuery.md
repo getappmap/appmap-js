@@ -1,5 +1,5 @@
 ---
-id: unbatched-materialized-query
+rule: unbatched-materialized-query
 name: Unbatched materialized query
 title: Unbatched materialized SQL query
 references:

@@ -1,5 +1,5 @@
 ---
-id: slow-query
+rule: slow-query
 name: Slow query
 title: Slow SQL query
 impactDomain: Performance

@@ -1,5 +1,5 @@
 ---
-id: missing-authentication
+rule: missing-authentication
 name: Missing authentication
 title: Unauthenticated HTTP server request
 references:

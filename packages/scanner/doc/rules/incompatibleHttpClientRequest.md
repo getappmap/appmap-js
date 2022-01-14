@@ -1,5 +1,5 @@
 ---
-id: incompatible-http-client-request
+rule: incompatible-http-client-request
 name: Incompatible HTTP client request
 title: Incompatible HTTP client request
 impactDomain: Stability

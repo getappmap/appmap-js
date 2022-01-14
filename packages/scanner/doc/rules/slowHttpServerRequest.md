@@ -1,5 +1,5 @@
 ---
-id: slow-http-server-request
+rule: slow-http-server-request
 name: Slow HTTP server request
 title: Slow HTTP server request
 impactDomain: Performance

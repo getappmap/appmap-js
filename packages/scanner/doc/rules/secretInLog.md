@@ -1,5 +1,5 @@
 ---
-id: secret-in-log
+rule: secret-in-log
 name: Secret in log
 title: Secret in log
 references:

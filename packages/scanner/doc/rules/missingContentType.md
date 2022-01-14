@@ -1,5 +1,5 @@
 ---
-id: missing-content-type
+rule: missing-content-type
 name: Missing content type
 title: HTTP server request without a Content-Type header
 impactDomain: Stability

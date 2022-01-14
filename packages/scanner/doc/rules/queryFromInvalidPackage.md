@@ -1,5 +1,5 @@
 ---
-id: query-from-invalid-package
+rule: query-from-invalid-package
 name: Query from invalid package
 title: Queries from invalid packages
 references:

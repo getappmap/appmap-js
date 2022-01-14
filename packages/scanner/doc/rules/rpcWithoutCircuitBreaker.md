@@ -1,5 +1,5 @@
 ---
-id: rpc-without-circuit-breaker
+rule: rpc-without-circuit-breaker
 name: RPC without circuit breaker
 title: RPC without circuit breaker
 impactDomain: Stability

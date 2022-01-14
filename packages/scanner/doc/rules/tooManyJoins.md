@@ -1,5 +1,5 @@
 ---
-id: too-many-joins
+rule: too-many-joins
 name: Too many joins
 title: Too many joins
 references:

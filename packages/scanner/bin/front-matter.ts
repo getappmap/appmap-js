@@ -22,7 +22,7 @@ function toTitleWord(word: string): string {
 }
 
 type FrontMatter = {
-  id: string;
+  rule: string;
   name: string;
   title: string;
   impactDomain?: string;
@@ -40,7 +40,7 @@ Promise.all(
       const ruleWords = rule.id.split('-');
       const ruleFirstWord = ruleWords[0];
       const frontMatter: FrontMatter = {
-        id: rule.id,
+        rule: rule.id,
         name: [
           toTitleWord([ruleFirstWord[0].toUpperCase(), ruleFirstWord.substring(1)].join('')),
           ruleWords.slice(1).map(toTitleWord).join(' '),

@@ -1,5 +1,5 @@
 ---
-id: n-plus-one-query
+rule: n-plus-one-query
 name: N plus one query
 title: N plus 1 SQL query
 references:

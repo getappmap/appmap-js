@@ -1,5 +1,5 @@
 ---
-id: job-not-cancelled
+rule: job-not-cancelled
 name: Job not cancelled
 title: Job created in a rolled back transaction and not cancelled
 references:

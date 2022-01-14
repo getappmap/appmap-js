@@ -1,5 +1,5 @@
 ---
-id: query-from-view
+rule: query-from-view
 name: Query from view
 title: Queries from view
 references:
