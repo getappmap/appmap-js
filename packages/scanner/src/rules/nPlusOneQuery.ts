@@ -2,6 +2,7 @@ import { AppMap, Event } from '@appland/models';
 import { EventFilter, Level, MatchResult, Rule, RuleLogic } from '../types';
 import * as types from './types';
 import { SQLCount, sqlStrings } from '../database';
+import { URL } from 'url';
 
 class Options implements types.NPlusOneQuery.Options {
   public warningLimit = 5;
@@ -63,7 +64,11 @@ export default {
   id: 'n-plus-one-query',
   title: 'N plus 1 SQL query',
   scope: 'command',
+  impactDomain: 'Performance',
   enumerateScope: false,
   Options,
+  references: {
+    'CWE-1073': new URL('https://cwe.mitre.org/data/definitions/1073.html'),
+  },
   build,
 } as Rule;

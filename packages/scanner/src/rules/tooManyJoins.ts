@@ -2,6 +2,7 @@ import { AppMap, Event } from '@appland/models';
 import { EventFilter, MatchResult, Rule, RuleLogic } from '../types';
 import * as types from './types';
 import { countJoins, SQLCount, sqlStrings } from '../database';
+import { URL } from 'url';
 
 export interface JoinCount extends SQLCount {
   joins: number;
@@ -59,7 +60,11 @@ export default {
   id: 'too-many-joins',
   title: 'Too many joins',
   scope: 'command',
+  impactDomain: 'Performance',
   enumerateScope: false,
+  references: {
+    'CWE-1049': new URL('https://cwe.mitre.org/data/definitions/1049.html'),
+  },
   Options,
   build,
 } as Rule;

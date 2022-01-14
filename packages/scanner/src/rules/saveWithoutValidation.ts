@@ -1,4 +1,5 @@
 import { Event, EventNavigator } from '@appland/models';
+import { URL } from 'url';
 import { Rule, RuleLogic } from '../types';
 
 const validatedBy = (iterator: Iterator<EventNavigator>): boolean => {
@@ -6,7 +7,7 @@ const validatedBy = (iterator: Iterator<EventNavigator>): boolean => {
   while (!i.done) {
     if (
       i.value.event.methodId !== undefined &&
-      ['valid?', 'validate'].includes(i.value.event.methodId!)
+      ['valid?', 'validate'].includes(i.value.event.methodId!) // TODO: change this to use labels
     ) {
       return true;
     }
@@ -27,5 +28,9 @@ export default {
   id: 'save-without-validation',
   title: 'Save without validation',
   enumerateScope: true,
+  impactDomain: 'Stability',
+  references: {
+    'CWE-20': new URL('https://cwe.mitre.org/data/definitions/20.html'),
+  },
   build,
 } as Rule;

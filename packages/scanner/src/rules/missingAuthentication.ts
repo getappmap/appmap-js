@@ -2,9 +2,10 @@ import { Event, EventNavigator } from '@appland/models';
 import { rpcRequestForEvent } from '../openapi/rpcRequest';
 import * as types from './types';
 import { Rule, RuleLogic, StringFilter } from '../types';
-import { providesAuthentication } from './util';
+import { providesAuthentication } from './lib/util';
 import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
+import { URL } from 'url';
 
 function isPublic(event: Event): boolean {
   return event.labels.has(Public);
@@ -69,7 +70,11 @@ export default {
   title: 'Unauthenticated HTTP server request',
   scope: 'http_server_request',
   labels: [Public, SecurityAuthentication],
+  impactDomain: 'Security',
   enumerateScope: false,
+  references: {
+    'CWE-306': new URL('https://cwe.mitre.org/data/definitions/306.html'),
+  },
   Options,
   build,
 } as Rule;

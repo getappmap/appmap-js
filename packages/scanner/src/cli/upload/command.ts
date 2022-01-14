@@ -3,7 +3,7 @@ import { readFile } from 'fs/promises';
 
 import upload from '../../integration/appland/upload';
 import { ScanResults } from '../../report/scanResults';
-import { verbose } from '../../rules/util';
+import { verbose } from '../../rules/lib/util';
 
 import validateFile from '../validateFile';
 

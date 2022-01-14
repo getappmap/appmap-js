@@ -1,6 +1,6 @@
 import { Event } from '@appland/models';
 import { Rule, RuleLogic } from 'src/types';
-import { toRegExpArray } from './util';
+import { toRegExpArray } from './lib/util';
 
 class Options {
   private _queryInclude: RegExp[];
@@ -66,6 +66,7 @@ export default {
   title: 'Data update performed in GET or HEAD request',
   scope: 'http_server_request',
   labels: [Audit],
+  impactDomain: 'Maintainability',
   Options,
   build,
 } as Rule;

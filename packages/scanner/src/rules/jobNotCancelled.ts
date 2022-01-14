@@ -2,6 +2,7 @@ import type { Event } from '@appland/models';
 import type { MatchResult, Rule, RuleLogic } from '../types';
 import Labels from '../wellKnownLabels';
 import { hasTransactionDetails } from '../scope/sqlTransactionScope';
+import { URL } from 'url';
 
 function build(): RuleLogic {
   function matcher(event: Event): MatchResult[] | undefined {
@@ -41,5 +42,9 @@ export default {
   scope: 'transaction',
   enumerateScope: false,
   labels: [Labels.JobCreate, Labels.JobCancel],
+  impactDomain: 'Stability',
+  references: {
+    'CWE-672': new URL('https://cwe.mitre.org/data/definitions/672.html'),
+  },
   build,
 } as Rule;

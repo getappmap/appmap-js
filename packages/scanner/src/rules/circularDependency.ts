@@ -6,9 +6,10 @@ import Graph from '../algorithms/dataStructures/graph/Graph';
 import detectDirectedCycle from '../algorithms/graph/detect-cycle';
 import { isAbsolute } from 'path';
 import * as types from './types';
-import { verbose } from './util';
+import { verbose } from './lib/util';
 import MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
+import { URL } from 'url';
 
 type PackageName = string;
 
@@ -227,6 +228,10 @@ export default {
   title: 'Circular package dependency',
   scope: 'command',
   Options,
+  impactDomain: 'Maintainability',
+  references: {
+    'CWE-1047': new URL('https://cwe.mitre.org/data/definitions/1047.html'),
+  },
   enumerateScope: false,
   build,
 } as Rule;

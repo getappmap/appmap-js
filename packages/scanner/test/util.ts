@@ -2,7 +2,7 @@ import { AppMap, buildAppMap } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import RuleChecker from '../src/ruleChecker';
-import { verbose } from '../src/rules/util';
+import { verbose } from '../src/rules/lib/util';
 import { Finding } from '../src/types';
 import Check from '../src/check';
 

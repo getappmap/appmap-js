@@ -9,6 +9,6 @@ it('http 500', async () => {
   );
   expect(findings).toHaveLength(1);
   const finding = findings[0];
-  expect(finding.ruleId).toEqual('http-5xx');
+  expect(finding.ruleId).toEqual('http-500');
   expect(finding.event.id).toEqual(1789);
 });

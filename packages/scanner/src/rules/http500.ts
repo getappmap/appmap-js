@@ -1,4 +1,5 @@
 import { Event } from '@appland/models';
+import { URL } from 'url';
 import { Rule, RuleLogic } from '../types';
 
 function build(): RuleLogic {
@@ -10,9 +11,13 @@ function build(): RuleLogic {
 }
 
 export default {
-  id: 'http-5xx',
-  title: 'HTTP 5xx status code',
+  id: 'http-500',
+  title: 'HTTP 500 status code',
   scope: 'http_server_request',
   enumerateScope: false,
+  impactDomain: 'Stability',
+  references: {
+    'CWE-394': new URL('https://cwe.mitre.org/data/definitions/394.html'),
+  },
   build,
 } as Rule;

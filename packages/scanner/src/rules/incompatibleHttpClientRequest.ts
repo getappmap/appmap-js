@@ -49,6 +49,7 @@ export default {
   title: 'Incompatible HTTP client request',
   scope: 'http_client_request',
   enumerateScope: false,
+  impactDomain: 'Stability',
   Options,
   build,
 } as Rule;

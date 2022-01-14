@@ -1,4 +1,5 @@
 import { Event } from '@appland/models';
+import { URL } from 'url';
 import recordSecrets from '../analyzer/recordSecrets';
 import { looksSecret } from '../analyzer/secretsRegexes';
 import { Rule, RuleLogic } from '../types.d';
@@ -56,5 +57,9 @@ export default {
   title: 'Insecure comparison of secrets',
   labels: [Secret, StringEquals],
   enumerateScope: true,
+  impactDomain: 'Security',
+  references: {
+    'CWE-208': new URL('https://cwe.mitre.org/data/definitions/208.html'),
+  },
   build,
 } as Rule;

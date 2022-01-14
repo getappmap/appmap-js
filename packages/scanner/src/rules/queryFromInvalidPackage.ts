@@ -3,6 +3,7 @@ import { Rule, RuleLogic } from 'src/types';
 import * as types from './types';
 import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
+import { URL } from 'url';
 
 // TODO: Use the Query AST for this.
 const WHITELIST = [/\bBEGIN\b/i, /\bCOMMIT\b/i, /\bROLLBACK\b/i, /\bRELEASE\b/i, /\bSAVEPOINT\b/i];
@@ -39,6 +40,10 @@ export default {
   id: 'query-from-invalid-package',
   title: 'Queries from invalid packages',
   Options,
+  impactDomain: 'Maintainability',
   enumerateScope: true,
+  references: {
+    'CWE-1057': new URL('https://cwe.mitre.org/data/definitions/1057.html'),
+  },
   build,
 } as Rule;

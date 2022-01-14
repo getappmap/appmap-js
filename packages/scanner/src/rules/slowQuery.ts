@@ -16,6 +16,7 @@ export default {
   id: 'slow-query',
   title: 'Slow SQL query',
   Options,
+  impactDomain: 'Performance',
   enumerateScope: true,
   build,
 } as Rule;

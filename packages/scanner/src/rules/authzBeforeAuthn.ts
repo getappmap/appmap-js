@@ -1,6 +1,7 @@
 import { Event, EventNavigator } from '@appland/models';
-import { isTruthy, providesAuthentication } from './util';
+import { isTruthy, providesAuthentication } from './lib/util';
 import { MatcherResult, Rule, RuleLogic, ScopeName } from '../types.d';
+import { URL } from 'url';
 
 function containsAuthentication(events: Generator<EventNavigator>) {
   for (const iter of events) {
@@ -46,6 +47,10 @@ export default {
   title: 'Authorization performed before authentication',
   labels: [SecurityAuthorization, SecurityAuthentication],
   scope: 'http_server_request' as ScopeName,
+  impactDomain: 'Security',
   enumerateScope: false,
+  references: {
+    'CWE-863': new URL('https://cwe.mitre.org/data/definitions/863.html'),
+  },
   build,
 } as Rule;
