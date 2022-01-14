@@ -1,3 +1,10 @@
+# [@appland/client-v1.1.3](https://github.com/applandinc/appmap-js/compare/@appland/client-v1.1.2...@appland/client-v1.1.3) (2022-01-14)
+
+
+### Bug Fixes
+
+* Drop `node` protocol from imports ([116bb78](https://github.com/applandinc/appmap-js/commit/116bb7845a811703af639a1d5d0b6c6d0a336284))
+
 # [@appland/client-v1.1.2](https://github.com/applandinc/appmap-js/compare/@appland/client-v1.1.1...@appland/client-v1.1.2) (2022-01-05)
 
 
