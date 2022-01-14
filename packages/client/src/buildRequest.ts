@@ -3,9 +3,9 @@ import {
   ClientRequest,
   RequestOptions,
   IncomingMessage,
-} from 'node:http';
-import { request as httpsRequest } from 'node:https';
-import { URL } from 'node:url';
+} from 'http';
+import { request as httpsRequest } from 'https';
+import { URL } from 'url';
 import loadConfiguration from './loadConfiguration';
 
 type Request = {

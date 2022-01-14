@@ -1,6 +1,6 @@
-import { readFile } from 'node:fs/promises';
-import { homedir } from 'node:os';
-import { join } from 'node:path';
+import { readFile } from 'fs/promises';
+import { homedir } from 'os';
+import path from 'path';
 import yaml from 'js-yaml';
 import Configuration from './configuration';
 
@@ -28,7 +28,7 @@ const failUsage = (message: string): Settings => {
 };
 
 async function loadFromFile(): Promise<Settings> {
-  const applandConfigFilePath = join(homedir(), '.appland');
+  const applandConfigFilePath = path.join(homedir(), '.appland');
   let applandConfigData: Buffer | undefined;
   try {
     applandConfigData = await readFile(applandConfigFilePath);

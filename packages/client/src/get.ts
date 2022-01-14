@@ -1,4 +1,4 @@
-import { IncomingMessage } from 'node:http';
+import { IncomingMessage } from 'http';
 
 import buildRequest from './buildRequest';
 import handleError from './handleError';

@@ -37,6 +37,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'unicorn/no-array-for-each': 'off',
     'unicorn/prevent-abbreviations': 'warn',
+    'unicorn/prefer-node-protocol': 'off',
     '@typescript-eslint/lines-between-class-members': 'off',
     'no-restricted-syntax': 'off',
     'import/no-cycle': 'off',

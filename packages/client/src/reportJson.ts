@@ -1,4 +1,4 @@
-import { IncomingMessage } from 'node:http';
+import { IncomingMessage } from 'http';
 
 export default function <T>(response: IncomingMessage): Promise<T> {
   return new Promise((resolve, reject) => {
