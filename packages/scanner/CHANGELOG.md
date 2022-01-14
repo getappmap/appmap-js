@@ -1,3 +1,10 @@
+## [1.34.1](https://github.com/applandinc/scanner/compare/v1.34.0...v1.34.1) (2022-01-14)
+
+
+### Bug Fixes
+
+* Upgrade @appland/client to v1.1.3 ([223441a](https://github.com/applandinc/scanner/commit/223441ab9c768482cdc3a1320c3913990401b0ff))
+
 # [1.34.0](https://github.com/applandinc/scanner/compare/v1.33.2...v1.34.0) (2022-01-14)
 
 
