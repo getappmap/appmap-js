@@ -1,6 +1,6 @@
-import { readFile } from 'node:fs/promises';
-import { homedir } from 'node:os';
-import { join } from 'node:path';
+import { readFile } from 'fs/promises';
+import { homedir } from 'os';
+import { join } from 'path';
 import yaml from 'js-yaml';
 import Configuration from './configuration';
 
