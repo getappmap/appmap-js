@@ -26,6 +26,7 @@ type FrontMatter = {
   name: string;
   title: string;
   impactDomain?: string;
+  scope: string;
   labels?: string[];
   references?: any;
 };
@@ -57,6 +58,9 @@ Promise.all(
       }
       if (rule.labels) {
         frontMatter.labels = rule.labels;
+      }
+      if (rule.scope) {
+        frontMatter.scope = rule.scope;
       }
       const docFileName = `./doc/rules/${name}.md`;
       const docFile = (await readFile(docFileName)).toString();
