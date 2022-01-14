@@ -5,6 +5,9 @@ title: Unauthenticated HTTP server request
 references:
   CWE-306: https://cwe.mitre.org/data/definitions/306.html
 impactDomain: Security
+labels:
+  - public
+  - security.authentication
 ---
 
 An HTTP server request is missing authentication. In this case, the request may be serving assets

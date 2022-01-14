@@ -5,6 +5,8 @@ title: Unbatched materialized SQL query
 references:
   CWE-1049: https://cwe.mitre.org/data/definitions/1049.html
 impactDomain: Performance
+labels:
+  - dao.materialize
 ---
 
 Finds large data sets that are queried from the database and loaded into memory.

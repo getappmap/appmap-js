@@ -5,6 +5,9 @@ title: Job created in a rolled back transaction and not cancelled
 references:
   CWE-672: https://cwe.mitre.org/data/definitions/672.html
 impactDomain: Stability
+labels:
+  - job.create
+  - job.cancel
 ---
 
 Finds jobs which are created in a transaction, and not cancelled when the transaction is rolled

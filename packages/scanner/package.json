@@ -7,14 +7,15 @@
     "built"
   ],
   "scripts": {
-    "build": "mkdir -p built && cp -r src/sampleConfig built && tsc && ./bin/front-matter",
+    "build": "mkdir -p built && cp -r src/sampleConfig built && tsc && yarn schema && yarn doc",
     "build-native": "yarn build && ./bin/build-native",
     "start": "ts-node src/cli.ts",
+    "doc": "ts-node ./bin/front-matter.ts",
     "schema": "./bin/schema",
     "schema-up-to-date": "git diff --exit-code src/configuration/schema/options.json",
     "doc-up-to-date": "git diff --exit-code doc/rules/",
     "lint": "eslint src --ext .ts",
-    "ci": "yarn lint && yarn build && yarn schema && yarn schema-up-to-date && yarn doc-up-to-date && yarn test",
+    "ci": "yarn lint && yarn build && yarn schema-up-to-date && yarn doc-up-to-date && yarn test",
     "test": "jest",
     "semantic-release": "semantic-release"
   },

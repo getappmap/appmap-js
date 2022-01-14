@@ -5,6 +5,9 @@ title: Insecure comparison of secrets
 references:
   CWE-208: https://cwe.mitre.org/data/definitions/208.html
 impactDomain: Security
+labels:
+  - secret
+  - string.equals
 ---
 
 Identifies cases in which secrets are being compared directly using `string.equals`.
