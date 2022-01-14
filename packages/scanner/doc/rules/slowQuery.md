@@ -22,7 +22,7 @@ Optimize the elapsed time using SQL tuning.
 
 ### Options
 
-- `timeAllowed` max time allowed for the query.
+- `timeAllowed` max time (in seconds) allowed for the query.
 
 ### Examples
 

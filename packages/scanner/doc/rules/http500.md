@@ -1,20 +1,20 @@
 ---
-id: http-5xx
-name: HTTP 5xx
-title: HTTP 5xx status code
+id: http-500
+name: HTTP 500
+title: HTTP 500 status code
 references:
   CWE-394: https://cwe.mitre.org/data/definitions/394.html
 impactDomain: Stability
 ---
 
-Identifies when an HTTP server requset has returned a 5xx status code. 5xx status codes generally
-indicate an unanticipated problem in the backend that is not handled in a predictable way. 5xx
-status codes are also hard for client code to handle, because they don't indicate any particular
+Identifies when an HTTP server requset has returned a 500 status code. HTTP 500 status code
+generally indicate an unanticipated problem in the backend that is not handled in a predictable way.
+500 status codes are also hard for client code to handle, because they don't indicate any particular
 problem or suggest a solution.
 
 ### Rule logic
 
-Any HTTP 5xx status code that's returned by an HTTP server request will be emitted as a finding by
+An HTTP 500 status code that's returned by an HTTP server request will be emitted as a finding by
 this rule.
 
 ### Resolution

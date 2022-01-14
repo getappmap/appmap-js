@@ -27,7 +27,7 @@ architectural constraint.
 
 The code which is illegally calling into the `calleePackage` should be refactored to call one of the
 allowed `callerPackages` instead. If the needed functionality is not available on a `callerPackage`,
-then one of the `callerPackages` should be modify to provide it.
+then one of the `callerPackages` should be modified to provide it.
 
 ### Options
 

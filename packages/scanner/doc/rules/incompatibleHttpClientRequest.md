@@ -10,7 +10,7 @@ Detects HTTP client requests which are incompatible with a published OpenAPI sch
 ### Rule logic
 
 Each HTTP client request is converted to an OpenAPI schema document. This is done by examining the
-request method, request URI, parameters, body, headers, etc and representing them as OpenAPI. Then,
+request method, request URI, parameters, body, headers, etc. and representing them as OpenAPI. Then,
 the client OpenAPI schema is compared to the published server OpenAPI schema. If any breaking
 changes are detected between the client request and the published server schema, these are reported
 as findings.

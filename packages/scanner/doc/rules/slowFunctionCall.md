@@ -23,7 +23,7 @@ Optimize the function elapsed time using a profiler, SQL tuning, etc.
 ### Options
 
 - `functions: MatchPatternConfig[]` list of functions to check. Required.
-- `timeAllowed` max time allowed for the function.
+- `timeAllowed` max time (in seconds) allowed for the function.
 
 ### Examples
 

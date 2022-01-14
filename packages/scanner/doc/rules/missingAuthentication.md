@@ -20,7 +20,7 @@ This rule checks all HTTP server requests that satisfy the following conditions:
 - HTTP status code is `< 300`
 - Matches include and exclude lists of content type (by default, these are empty).
 
-Each matching request, any event that satisfies either of these conditions will satisfy the rule:
+For each matching request, any event that satisfies either of these conditions will satisfy the rule:
 
 1. Has label `public`.
 2. Has label `security.authentication`, and returns a truthy value.
@@ -43,8 +43,8 @@ returns a truthy result (for example, a User object).
 
 ### Options
 
-- `includeContentTypes MatchPatternConfig[]`. Default: empty - including all content types.
-- `excludeContentTypes MatchPatternConfig[]`. Default: empty - excluding no content types.
+- `includeContentTypes: MatchPatternConfig[]`. Default: empty - including all content types.
+- `excludeContentTypes: MatchPatternConfig[]`. Default: empty - excluding no content types.
 
 ### Examples
 

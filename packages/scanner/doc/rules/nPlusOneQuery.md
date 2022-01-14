@@ -8,7 +8,7 @@ impactDomain: Performance
 ---
 
 
-Finds occurrances of a query being repeated within a loop.
+Finds occurrences of a query being repeated within a loop.
 
 ### Rule logic
 

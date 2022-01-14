@@ -24,12 +24,14 @@ reported.
 
 ### Notes
 
-This rule is designed for use with job queues that do not automatically roll back with the
-transaction. If the job queue is the database and the same connection is used for the job queue and
-for the request, then this scan is not needed.
+It's recommended to program delayed jobs defensively to check for data and silently do nothing if
+that data is missing (eg. due to a rollback or a duplicate job); job details in this design are
+stored in the database and the queue entries only reference them.
 
-If the job queue is stored externally, such as a message queue or Redis, then queued jobs will not
-auto-cancel when the transaction is rolled back.
+This rule is designed for use when this practice is impossible or not followed, and with external
+job queues that do not automatically roll back with the transaction. If the job queue is the
+database and the same connection is used for the job queue and for the request, then this check is
+not needed.
 
 ### Resolution
 

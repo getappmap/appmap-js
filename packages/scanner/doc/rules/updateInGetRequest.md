@@ -29,8 +29,8 @@ Perform data updates in `PUT`, `POST`, or `PATCH` requests.
 
 ### Options
 
-- `queryInclude RegExp[]`. Default: `[/\binsert\b/i, /\bupdate\b/i]`.
-- `queryExclude RegExp[]`. Default: empty.
+- `queryInclude: RegExp[]`. Default: `[/\binsert\b/i, /\bupdate\b/i]`.
+- `queryExclude: RegExp[]`. Default: empty.
 
 ### Examples
 

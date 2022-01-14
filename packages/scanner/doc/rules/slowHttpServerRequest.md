@@ -22,7 +22,7 @@ Optimize the request elapsed time using a profiler, SQL tuning, etc.
 
 ### Options
 
-- `timeAllowed` max time allowed for the request.
+- `timeAllowed` max time (in seconds) allowed for the request.
 
 ### Examples
 
