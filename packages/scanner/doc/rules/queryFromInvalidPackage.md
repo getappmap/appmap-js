@@ -27,8 +27,10 @@ the allowed packages.
 
 ### Options
 
-- `allowedPackages: MatchPatternConfig[]`. Packages which are allowed to make queries. Required.
-- `allowedQueries: MatchPatternConfig[]`. Queries which are allowed from anywhere. Default:
+- `allowedPackages: `[MatchPatternConfig](/docs/analysis/match-pattern-config.html)`[]`. Packages
+  which are allowed to make queries. Required.
+- `allowedQueries: `[MatchPatternConfig](/docs/analysis/match-pattern-config.html)`[]`. Queries which
+  are allowed from anywhere. Default:
   `[/\bBEGIN\b/i, /\bCOMMIT\b/i, /\bROLLBACK\b/i, /\bRELEASE\b/i, /\bSAVEPOINT\b/i]`.
 
 ### Examples

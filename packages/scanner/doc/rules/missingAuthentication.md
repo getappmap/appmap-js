@@ -44,8 +44,10 @@ returns a truthy result (for example, a User object).
 
 ### Options
 
-- `includeContentTypes: MatchPatternConfig[]`. Default: empty - including all content types.
-- `excludeContentTypes: MatchPatternConfig[]`. Default: empty - excluding no content types.
+- `includeContentTypes: ` [MatchPatternConfig](/docs/analysis/match-pattern-config.html)`[]`.
+  Default: empty - including all content types.
+- `excludeContentTypes: ` [MatchPatternConfig](/docs/analysis/match-pattern-config.html)`[]`.
+  Default: empty - excluding no content types.
 
 ### Examples
 

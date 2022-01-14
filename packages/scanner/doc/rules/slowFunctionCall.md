@@ -23,7 +23,8 @@ Optimize the function elapsed time using a profiler, SQL tuning, etc.
 
 ### Options
 
-- `functions: MatchPatternConfig[]` list of functions to check. Required.
+- `functions: `[MatchPatternConfig](/docs/analysis/match-pattern-config.html)`[]` list of functions
+  to check. Required.
 - `timeAllowed` max time (in seconds) allowed for the function.
 
 ### Examples

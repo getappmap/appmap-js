@@ -41,8 +41,9 @@ refactor some of the code into a new package, class, or library.
 ### Options
 
 - `depth`. Minimum number of packages in a path that will be reported. Default: 4.
-- `ignoredPackages: MatchPatternConfig[]`. Packages which match this pattern are not included in the
-  dependency graph. Default: empty - including all packages.
+- `ignoredPackages: ` [MatchPatternConfig](/docs/analysis/match-pattern-config.html)`[]`. Packages
+  which match this pattern are not included in the dependency graph. Default: empty - including all
+  packages.
 
 ### Examples
 

@@ -32,9 +32,10 @@ then one of the `callerPackages` should be modified to provide it.
 
 ### Options
 
-- `callerPackages: MatchPatternConfig[]`. Packages which are allowed to call the `calleePackage`.
-  Required.
-- `calleePackage: MatchPatternConfig`. Package whose callers should be checked. Required.
+- `callerPackages: ` [MatchPatternConfig](/docs/analysis/match-pattern-config.html)`[]`. Packages
+  which are allowed to call the `calleePackage`. Required.
+- `calleePackage: `[MatchPatternConfig](/docs/analysis/match-pattern-config.html). Package whose
+  callers should be checked. Required.
 
 ### Examples
 
