@@ -5,6 +5,7 @@ title: N plus 1 SQL query
 references:
   CWE-1073: https://cwe.mitre.org/data/definitions/1073.html
 impactDomain: Performance
+scope: command
 ---
 
 

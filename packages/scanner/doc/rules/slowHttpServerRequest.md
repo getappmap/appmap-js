@@ -3,6 +3,7 @@ id: slow-http-server-request
 name: Slow HTTP server request
 title: Slow HTTP server request
 impactDomain: Performance
+scope: http_server_request
 ---
 
 Ensures that HTTP server request elapsed time does not exceed a threshold.

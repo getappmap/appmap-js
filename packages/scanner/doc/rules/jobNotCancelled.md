@@ -8,6 +8,7 @@ impactDomain: Stability
 labels:
   - job.create
   - job.cancel
+scope: transaction
 ---
 
 Finds jobs which are created in a transaction, and not cancelled when the transaction is rolled

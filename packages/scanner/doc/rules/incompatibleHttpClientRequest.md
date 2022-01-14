@@ -3,6 +3,7 @@ id: incompatible-http-client-request
 name: Incompatible HTTP client request
 title: Incompatible HTTP client request
 impactDomain: Stability
+scope: http_client_request
 ---
 
 Detects HTTP client requests which are incompatible with a published OpenAPI schema.

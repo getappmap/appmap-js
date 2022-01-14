@@ -5,6 +5,7 @@ title: HTTP 500 status code
 references:
   CWE-394: https://cwe.mitre.org/data/definitions/394.html
 impactDomain: Stability
+scope: http_server_request
 ---
 
 Identifies when an HTTP server requset has returned a 500 status code. HTTP 500 status code

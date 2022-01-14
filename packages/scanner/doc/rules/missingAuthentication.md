@@ -8,6 +8,7 @@ impactDomain: Security
 labels:
   - public
   - security.authentication
+scope: http_server_request
 ---
 
 An HTTP server request is missing authentication. In this case, the request may be serving assets

@@ -26,7 +26,7 @@ type FrontMatter = {
   name: string;
   title: string;
   impactDomain?: string;
-  scope: string;
+  scope?: string;
   labels?: string[];
   references?: any;
 };

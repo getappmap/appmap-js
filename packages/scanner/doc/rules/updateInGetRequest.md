@@ -5,6 +5,7 @@ title: Data update performed in GET or HEAD request
 impactDomain: Maintainability
 labels:
   - audit
+scope: http_server_request
 ---
 
 Finds SQL updates that are performed in an HTTP server `GET` request.

@@ -3,6 +3,7 @@ id: too-many-updates
 name: Too many updates
 title: Too many SQL and RPC updates performed in one command
 impactDomain: Maintainability
+scope: command
 ---
 
 Verifies that the number of SQL and RPC updates performed by a command does not exceed a threshold.

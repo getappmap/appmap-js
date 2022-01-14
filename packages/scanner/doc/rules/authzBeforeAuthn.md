@@ -8,6 +8,7 @@ impactDomain: Security
 labels:
   - security.authorization
   - security.authentication
+scope: http_server_request
 ---
 
 Determines when authorization logic is applied to a user identity that has not been properly

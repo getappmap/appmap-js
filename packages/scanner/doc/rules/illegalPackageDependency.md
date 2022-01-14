@@ -5,6 +5,7 @@ title: Illegal use of code by a non-whitelisted package
 references:
   CWE-1120: https://cwe.mitre.org/data/definitions/1120.html
 impactDomain: Maintainability
+scope: command
 ---
 
 Ensures that all calls to a specified `callee` package come from an approved `caller` package. This
