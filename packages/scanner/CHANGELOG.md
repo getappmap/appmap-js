@@ -1,3 +1,20 @@
+# [1.34.0](https://github.com/applandinc/scanner/compare/v1.33.2...v1.34.0) (2022-01-14)
+
+
+### Bug Fixes
+
+* Replace id with rule in rule doc front matter (reqd by Jekyll) ([ac5391d](https://github.com/applandinc/scanner/commit/ac5391d00672747ac956610275659cc1a110c742))
+
+
+### Features
+
+* Add references to rule definitions ([d9d29d7](https://github.com/applandinc/scanner/commit/d9d29d7b9a949deae1c746ad9d8bb3c4229e41ee))
+* Add scope to rule doc front matter ([660582d](https://github.com/applandinc/scanner/commit/660582d9e22781a20c77abf9082f50c528f2341c))
+* Add scope to rule doc front matter ([9fa209b](https://github.com/applandinc/scanner/commit/9fa209bba9c3336a8b73ea09075b424c19dd4299))
+* Generate front matter from Rule info ([e1f64fd](https://github.com/applandinc/scanner/commit/e1f64fda238a0b78ec8f4b9301bd1546296ccd7b))
+* Include labels in rule doc front matter ([e4d26ec](https://github.com/applandinc/scanner/commit/e4d26ec3c4ac0d2b51f4f7fe90f900cce120db96))
+* Publish to NPM ([8dc5c85](https://github.com/applandinc/scanner/commit/8dc5c85f48d291048e24aa95212a575e89ad4175))
+
 ## [1.33.2](https://github.com/applandinc/scanner/compare/v1.33.1...v1.33.2) (2022-01-12)
 
 
