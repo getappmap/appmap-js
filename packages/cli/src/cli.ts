@@ -30,7 +30,7 @@ const OpenCommand = require('./cmds/open/open');
 const RecordCommand = require('./cmds/record/record');
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
-
+import PruneCommand from './cmds/prune/prune';
 class DiffCommand {
   public appMapNames: any;
   public baseDir?: string;
@@ -590,6 +590,7 @@ yargs(process.argv.slice(2))
   .command(OpenCommand)
   .command(RecordCommand)
   .command(StatusCommand)
+  .command(PruneCommand)
   .strict()
   .demandCommand()
   .help().argv;
