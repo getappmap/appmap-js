@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.15.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.8...@appland/appmap-v3.15.0) (2022-01-18)
+
+
+### Features
+
+* Port prune subcommand ([fd1d724](https://github.com/applandinc/appmap-js/commit/fd1d7240c2ce8d1fb3227713ab78a1a9761e14a5))
+
 # [@appland/appmap-v3.14.8](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.7...@appland/appmap-v3.14.8) (2022-01-07)
 
 
