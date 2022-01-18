@@ -2,6 +2,8 @@
 rule: too-many-updates
 name: Too many updates
 title: Too many SQL and RPC updates performed in one command
+references:
+  CWE-1048: https://cwe.mitre.org/data/definitions/1048.html
 impactDomain: Maintainability
 scope: command
 ---
