@@ -1,3 +1,10 @@
+# [@appland/models-v1.11.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.10.1...@appland/models-v1.11.0) (2022-01-18)
+
+
+### Features
+
+* Port prune subcommand ([fd1d724](https://github.com/applandinc/appmap-js/commit/fd1d7240c2ce8d1fb3227713ab78a1a9761e14a5))
+
 # [@appland/models-v1.10.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.10.0...@appland/models-v1.10.1) (2022-01-07)
 
 
