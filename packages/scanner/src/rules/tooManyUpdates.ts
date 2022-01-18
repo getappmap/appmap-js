@@ -1,5 +1,6 @@
 import { Event, EventNavigator } from '@appland/models';
 import { MatchResult, Rule, RuleLogic } from 'src/types';
+import { URL } from 'url';
 import * as types from './types';
 
 // TODO: Use the Query AST for this.
@@ -67,6 +68,9 @@ export default {
   scope: 'command',
   enumerateScope: false,
   impactDomain: 'Maintainability',
+  references: {
+    'CWE-1048': new URL('https://cwe.mitre.org/data/definitions/1048.html'),
+  },
   Options,
   build,
 } as Rule;

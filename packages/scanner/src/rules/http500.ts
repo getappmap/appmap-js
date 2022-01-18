@@ -17,7 +17,7 @@ export default {
   enumerateScope: false,
   impactDomain: 'Stability',
   references: {
-    'CWE-394': new URL('https://cwe.mitre.org/data/definitions/394.html'),
+    'CWE-392': new URL('https://cwe.mitre.org/data/definitions/392.html'),
   },
   build,
 } as Rule;
