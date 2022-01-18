@@ -1,3 +1,10 @@
+# [1.35.0](https://github.com/applandinc/scanner/compare/v1.34.1...v1.35.0) (2022-01-18)
+
+
+### Features
+
+* Update CWE references ([b036dcd](https://github.com/applandinc/scanner/commit/b036dcde862b61ad5aa09a2fe4747c6971a3853c))
+
 ## [1.34.1](https://github.com/applandinc/scanner/compare/v1.34.0...v1.34.1) (2022-01-14)
 
 
