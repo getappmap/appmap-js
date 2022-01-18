@@ -1,18 +1,10 @@
 #!/usr/bin/env ts-node
 
-import { lstatSync, readdirSync } from 'fs';
 import { readFile, writeFile } from 'fs/promises';
 import { dump } from 'js-yaml';
 
 import { Rule } from '../src/types';
-
-function isRuleFile(ruleFile: string): boolean {
-  return !lstatSync(ruleFilePath('.', ruleFile)).isDirectory() && ruleFile !== 'types.d.ts';
-}
-
-function ruleFilePath(prefix: string, ruleFile: string): string {
-  return `${prefix}/src/rules/${ruleFile}`;
-}
+import { allRules, ruleFilePath } from './util';
 
 function toTitleWord(word: string): string {
   if (['http', 'rpc', 'sql'].includes(word.toLowerCase())) {
@@ -21,7 +13,12 @@ function toTitleWord(word: string): string {
   return word;
 }
 
-type FrontMatter = {
+type LabelFrontMatter = {
+  name: string;
+  rules: string[];
+};
+
+type RuleFrontMatter = {
   rule: string;
   name: string;
   title: string;
@@ -31,42 +28,62 @@ type FrontMatter = {
   references?: any;
 };
 
+async function writeFrontMatter(docFileName: string, frontMatter: any) {
+  const docFile = (await readFile(docFileName)).toString();
+  const docFileTokens = docFile.split('---');
+  const docBody = docFileTokens[docFileTokens.length - 1];
+  const newDocBody = ['', '\n' + dump(frontMatter), docBody].join('---');
+  writeFile(docFileName, newDocBody);
+}
+
+const labelRules: Record<string, Rule[]> = {};
+
 Promise.all(
-  readdirSync('./src/rules')
-    .filter(isRuleFile)
-    .map(async (ruleFileName: string) => {
-      const rule: Rule = (await import(ruleFilePath('..', ruleFileName))).default;
-      const name = ruleFileName.split('.')[0];
-      const ruleWords = rule.id.split('-');
-      const ruleFirstWord = ruleWords[0];
-      const frontMatter: FrontMatter = {
-        rule: rule.id,
-        name: [
-          toTitleWord([ruleFirstWord[0].toUpperCase(), ruleFirstWord.substring(1)].join('')),
-          ruleWords.slice(1).map(toTitleWord).join(' '),
-        ].join(' '),
-        title: rule.title,
+  allRules().map(async (ruleFileName: string) => {
+    const rule: Rule = (await import(ruleFilePath('..', ruleFileName))).default;
+
+    (rule.labels || []).forEach((label) => {
+      if (!labelRules[label]) labelRules[label] = [];
+
+      labelRules[label].push(rule);
+    });
+
+    const name = ruleFileName.split('.')[0];
+    const ruleWords = rule.id.split('-');
+    const ruleFirstWord = ruleWords[0];
+    const frontMatter: RuleFrontMatter = {
+      rule: rule.id,
+      name: [
+        toTitleWord([ruleFirstWord[0].toUpperCase(), ruleFirstWord.substring(1)].join('')),
+        ruleWords.slice(1).map(toTitleWord).join(' '),
+      ].join(' '),
+      title: rule.title,
+    };
+    if (rule.references) {
+      frontMatter.references = Object.keys(rule.references).reduce((memo, name) => {
+        memo[name] = rule.references![name].toString();
+        return memo;
+      }, {} as Record<string, string>);
+    }
+    if (rule.impactDomain) {
+      frontMatter.impactDomain = rule.impactDomain;
+    }
+    if (rule.labels) {
+      frontMatter.labels = rule.labels;
+    }
+    if (rule.scope) {
+      frontMatter.scope = rule.scope;
+    }
+    return writeFrontMatter(`./doc/rules/${name}.md`, frontMatter);
+  })
+).then(() =>
+  Promise.all(
+    Object.keys(labelRules).map((label) => {
+      const frontMatter: LabelFrontMatter = {
+        name: label,
+        rules: labelRules[label].map((rule) => rule.id),
       };
-      if (rule.references) {
-        frontMatter.references = Object.keys(rule.references).reduce((memo, name) => {
-          memo[name] = rule.references![name].toString();
-          return memo;
-        }, {} as Record<string, string>);
-      }
-      if (rule.impactDomain) {
-        frontMatter.impactDomain = rule.impactDomain;
-      }
-      if (rule.labels) {
-        frontMatter.labels = rule.labels;
-      }
-      if (rule.scope) {
-        frontMatter.scope = rule.scope;
-      }
-      const docFileName = `./doc/rules/${name}.md`;
-      const docFile = (await readFile(docFileName)).toString();
-      const docFileTokens = docFile.split('---');
-      const docBody = docFileTokens[docFileTokens.length - 1];
-      const newDocBody = ['', '\n' + dump(frontMatter), docBody].join('---');
-      writeFile(docFileName, newDocBody);
+      return writeFrontMatter(`./doc/labels/${label}.md`, frontMatter);
     })
+  )
 );
