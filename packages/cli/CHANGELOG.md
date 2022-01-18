@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.15.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.15.0...@appland/appmap-v3.15.1) (2022-01-18)
+
+
+### Bug Fixes
+
+* Add missing dependency on JSONStream ([748876d](https://github.com/applandinc/appmap-js/commit/748876dcb3fc5ff0fe2be831343ff93fc92054df))
+
 # [@appland/appmap-v3.15.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.14.8...@appland/appmap-v3.15.0) (2022-01-18)
 
 
