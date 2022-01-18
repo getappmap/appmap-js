@@ -3,7 +3,7 @@ rule: http-500
 name: HTTP 500
 title: HTTP 500 status code
 references:
-  CWE-394: https://cwe.mitre.org/data/definitions/394.html
+  CWE-392: https://cwe.mitre.org/data/definitions/392.html
 impactDomain: Stability
 scope: http_server_request
 ---

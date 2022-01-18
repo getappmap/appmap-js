@@ -4,6 +4,7 @@ name: Illegal package dependency
 title: Illegal use of code by a non-whitelisted package
 references:
   CWE-1120: https://cwe.mitre.org/data/definitions/1120.html
+  CWE-1154: https://cwe.mitre.org/data/definitions/1154.html
 impactDomain: Maintainability
 scope: command
 ---
