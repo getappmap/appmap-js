@@ -1,3 +1,10 @@
+## [1.35.1](https://github.com/applandinc/scanner/compare/v1.35.0...v1.35.1) (2022-01-19)
+
+
+### Bug Fixes
+
+* Upload the entire findings JSON ([f502d0e](https://github.com/applandinc/scanner/commit/f502d0e646980b580a81c3f87e800e2b6459732a))
+
 # [1.35.0](https://github.com/applandinc/scanner/compare/v1.34.1...v1.35.0) (2022-01-18)
 
 
