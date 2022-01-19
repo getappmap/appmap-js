@@ -36,9 +36,8 @@ it('authorization before (or without) authentication', async () => {
   expect(findings).toHaveLength(1);
   const finding = findings[0];
   expect(finding.ruleId).toEqual('authz-before-authn');
-  expect(finding.event.id).toEqual(1);
+  expect(finding.event.id).toEqual(16);
   expect(finding.message).toEqual(
     `MicropostsController#correct_user provides authorization, but the request is not authenticated`
   );
-  expect(finding.relatedEvents!.map((e) => e.id)).toEqual([16]);
 });
