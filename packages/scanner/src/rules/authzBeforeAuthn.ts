@@ -26,9 +26,8 @@ function build(): RuleLogic {
           return [
             {
               level: 'error',
-              event: rootEvent,
+              event: event.event,
               message: `${event.event} provides authorization, but the request is not authenticated`,
-              relatedEvents: [event.event],
             },
           ];
         }

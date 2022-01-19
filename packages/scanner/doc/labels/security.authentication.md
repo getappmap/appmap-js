@@ -5,6 +5,6 @@ rules:
   - missing-authentication
 ---
 
-Indicates that a function verifies the identity of the user in an RPC request.
+Verifies the identity of an application user.
 
 Returns `truthy` if the user identity is confirmed; otherwise `falsey`.

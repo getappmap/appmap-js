@@ -4,7 +4,8 @@ rules:
   - job-not-cancelled
 ---
 
-Indicates that a scheduled background job is being created.
+Schedules a background job for execution. Background jobs run in a separate thread or process from
+the web application request - therefore they do not block the response.
 
 ## Examples
 

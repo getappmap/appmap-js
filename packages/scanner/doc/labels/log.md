@@ -4,7 +4,7 @@ rules:
   - secret-in-log
 ---
 
-Indicates that a message is being written to the application log.
+Writes a message to the application log.
 
 ## Examples
 

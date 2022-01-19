@@ -4,4 +4,4 @@ rules:
   - update-in-get-request
 ---
 
-Indicates that a function is writing an audit record.
+Writes an audit record, i.e. a permanent record of some application activity.
