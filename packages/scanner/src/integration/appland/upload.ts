@@ -43,7 +43,10 @@ export default async function (scanResults: ScanResults, appId: string): Promise
     );
   }
 
-  tarStream.entry({ name: 'app.scanner.json' }, JSON.stringify({ findings: clonedFindings }));
+  tarStream.entry(
+    { name: 'app.scanner.json' },
+    JSON.stringify({ ...scanResults, ...{ findings: clonedFindings } })
+  );
   tarStream.finalize();
 
   const gzip = createGzip();
