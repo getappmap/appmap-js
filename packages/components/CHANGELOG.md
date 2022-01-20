@@ -1,3 +1,10 @@
+# [@appland/components-v1.21.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.20.0...@appland/components-v1.21.0) (2022-01-20)
+
+
+### Features
+
+* Show filter suggestions when pressing Enter in empty input ([#508](https://github.com/applandinc/appmap-js/issues/508)) ([4cc3a09](https://github.com/applandinc/appmap-js/commit/4cc3a09501810663a9f239a9aff307f6074f283d))
+
 # [@appland/components-v1.20.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.19.0...@appland/components-v1.20.0) (2022-01-12)
 
 
