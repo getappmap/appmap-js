@@ -127,10 +127,17 @@ export default {
         this.inputValue = this.suggestionsList[this.selectedSuggestion];
       }
 
-      const value = this.inputValue;
+      const value = this.inputValue.trim();
       this.showSuggestions = false;
+
       this.inputValue = '';
-      this.onSubmit(value);
+
+      if (value) {
+        this.showSuggestions = false;
+        this.onSubmit(value);
+      } else {
+        this.showSuggestions = true;
+      }
     },
     makeSelection(event) {
       this.inputValue = event.target.textContent;
