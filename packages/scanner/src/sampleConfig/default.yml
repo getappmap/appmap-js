@@ -1,19 +1,26 @@
 checks:
+  - rule: authzBeforeAuthn
   - rule: circularDependency
+  - rule: deserializationOfUntrustedData
   - rule: http500
+  # - rule: illegalPackageDependency
+  # - rule: incompatibleHttpClientRequest
+  # - rule: insecureCompare
+  # - rule: jobNotCancelled
+  - rule: logoutWithoutSessionReset
+  - rule: missingAuthentication
   - rule: missingContentType
   - rule: nPlusOneQuery
-#  - rule: slowHttpServerRequest
-#  - rule: slowQuery
-#  - rule: tooManyJoins
-#  - rule: tooManyUpdates
-#  - rule: updateInGetRequest
-# Required labels: secret, log
-# - rule: secretInLog
-# Required labels: security.authentication, security.authorization
-# - rule: authzBeforeAuthn
-# Required labels: security.authentication
-# Optional labels: public
-# - rule: missingAuthentication
-# Required labels: dao.materialize
-# - rule: unbatchedMaterializedQuery
+  # - rule: queryFromInvalidPackage
+  - rule: queryFromView
+  # - rule: rpcWithoutCircuitBreaker
+  - rule: saveWithoutValidation
+  - rule: secretInLog
+  #  - rule: slowFunctionCall
+  #  - rule: slowHttpServerRequest
+  #  - rule: slowQuery
+  - rule: tooManyJoins
+  - rule: tooManyUpdates
+  - rule: updateInGetRequest
+  - rule: unbatchedMaterializedQuery
+  - rule: updateInGetRequest
