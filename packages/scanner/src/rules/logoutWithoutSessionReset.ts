@@ -2,13 +2,9 @@ import { Event, EventNavigator } from '@appland/models';
 import { MatchResult, Rule, RuleLogic } from 'src/types';
 import { URL } from 'url';
 
-function clearsSession(event: Event, label: string): boolean {
-  return event.labels.has(label);
-}
-
 function containsSessionClear(events: Generator<EventNavigator>) {
   for (const iter of events) {
-    if (clearsSession(iter.event, HTTPSessionClear)) {
+    if (iter.event.labels.has(HTTPSessionClear)) {
       return true;
     }
   }
