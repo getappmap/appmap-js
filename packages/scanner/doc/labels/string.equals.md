@@ -4,10 +4,10 @@ rules:
   - insecure-compare
 ---
 
-Comparison of two strings for equality.
+Compares two strings for equality.
 
-The function receiver should be a string, and the function should take one argument that is the other
-string.
+The function receiver should be a string, and the function should take one argument that is the
+other string.
 
 Returns `truthy` if the strings are equal; otherwise `falsey`.
 

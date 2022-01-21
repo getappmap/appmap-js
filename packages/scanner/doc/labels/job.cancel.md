@@ -4,7 +4,7 @@ rules:
   - job-not-cancelled
 ---
 
-Indicates that a scheduled background job is being canceled.
+Cancels execution of a background job.
 
 ## Examples
 
