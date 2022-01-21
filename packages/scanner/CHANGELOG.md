@@ -1,3 +1,17 @@
+# [1.36.0](https://github.com/applandinc/scanner/compare/v1.35.1...v1.36.0) (2022-01-21)
+
+
+### Bug Fixes
+
+* authz-before-authn finding event is the event that provides authorization ([30c4b50](https://github.com/applandinc/scanner/commit/30c4b503e7005a9d5efe21e72d1a99e596551e79))
+
+
+### Features
+
+* Add more rules to default config ([06a2bf5](https://github.com/applandinc/scanner/commit/06a2bf5735db83df91771caa5855c57971b43eff))
+* Add rule deserialization-of-untrusted-data ([cb80d48](https://github.com/applandinc/scanner/commit/cb80d48553895b450274629a2e2a085a7b648a98))
+* Add rule logout-without-session-reset ([d7ae001](https://github.com/applandinc/scanner/commit/d7ae001e490540e94d422db93102f5fba1dfb234))
+
 ## [1.35.1](https://github.com/applandinc/scanner/compare/v1.35.0...v1.35.1) (2022-01-19)
 
 
