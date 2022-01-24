@@ -1,3 +1,10 @@
+## [1.36.1](https://github.com/applandinc/scanner/compare/v1.36.0...v1.36.1) (2022-01-24)
+
+
+### Bug Fixes
+
+* Only process a couple appmaps at a time ([0ec9a37](https://github.com/applandinc/scanner/commit/0ec9a377991213d7dd1fe5f152d037ee52ccd86f))
+
 # [1.36.0](https://github.com/applandinc/scanner/compare/v1.35.1...v1.36.0) (2022-01-21)
 
 
