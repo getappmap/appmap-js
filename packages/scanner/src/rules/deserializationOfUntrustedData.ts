@@ -36,7 +36,10 @@ function allArgumentsSanitized(rootEvent: Event, event: Event): boolean {
 function build(): RuleLogic {
   function matcher(rootEvent: Event): MatchResult[] | undefined {
     for (const event of new EventNavigator(rootEvent).descendants()) {
-      if (event.event.labels.has(DeserializeUnsafe)) {
+      if (
+        event.event.labels.has(DeserializeUnsafe) &&
+        !event.event.ancestors().find((ancestor) => ancestor.labels.has(DeserializeSafe))
+      ) {
         if (allArgumentsSanitized(rootEvent, event.event)) {
           return;
         } else {
@@ -58,12 +61,13 @@ function build(): RuleLogic {
 }
 
 const DeserializeUnsafe = 'deserialize.unsafe';
+const DeserializeSafe = 'deserialize.safe';
 const Sanitize = 'sanitize';
 
 export default {
   id: 'deserialization-of-untrusted-data',
   title: 'Deserialization of untrusted data',
-  labels: [DeserializeUnsafe, Sanitize],
+  labels: [DeserializeUnsafe, DeserializeSafe, Sanitize],
   impactDomain: 'Security',
   enumerateScope: false,
   references: {

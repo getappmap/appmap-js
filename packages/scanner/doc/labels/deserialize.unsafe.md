@@ -2,7 +2,9 @@
 name: deserialize.unsafe
 rules:
   - deserialization-of-untrusted-data
----## Examples
+---
+
+## Examples
 
 - Ruby [YAML.unsafe_load](https://docs.ruby-lang.org/en/3.0/Psych.html#method-c-unsafe_load)
 - Ruby [Marshal.load](https://docs.ruby-lang.org/en/3.0/Marshal.html#method-c-load)
