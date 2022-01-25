@@ -66,6 +66,13 @@
                   autocomplete="off"
                   placeholder="search events..."
                 />
+                <span
+                  v-if="traceFilterValue"
+                  class="trace-view__search-input-suffix"
+                  @click="clearTraceFilterInput"
+                >
+                  <CloseThinIcon />
+                </span>
               </div>
               <div
                 class="trace-view__search-arrows"
@@ -900,6 +907,10 @@ export default {
       this.$root.$emit('clearSelection');
     },
 
+    clearTraceFilterInput() {
+      this.traceFilterValue = '';
+    },
+
     goBack() {
       this.$store.commit(POP_OBJECT_STACK);
     },
@@ -1375,6 +1386,34 @@ code {
         &::-moz-placeholder,
         &::placeholder {
           color: $gray4;
+        }
+      }
+
+      &-input-suffix {
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        width: 1rem;
+        height: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateY(-50%);
+        text-align: center;
+        color: $lightgray2;
+        transition: color 0.3s ease-in;
+        cursor: pointer;
+
+        &:hover,
+        &:active {
+          color: $gray5;
+          transition-timing-function: ease-out;
+        }
+
+        svg {
+          width: 14px;
+          height: 14px;
+          fill: currentColor;
         }
       }
 
