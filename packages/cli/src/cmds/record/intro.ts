@@ -6,11 +6,11 @@ export default async function () {
   the instructions in the AppMap documentation. Choose the most suitable link here,
   then configure and launch your app process. Press enter wen you're ready to continue.`);
   UI.progress(`
-  Rails:    https://appland.com/docs/reference/appmap-ruby.html#remote-recording
-  Django:   https://appland.com/docs/reference/appmap-python.html#django
-  Flask:    https://appland.com/docs/reference/appmap-python.html#flask
-  Java - IntelliJ: (TBD)
-  Java - Raw JDK:  (TBD)
+  Rails:      https://appland.com/docs/reference/appmap-ruby.html#remote-recording
+  Django:     https://appland.com/docs/reference/appmap-python.html#django
+  Flask:      https://appland.com/docs/reference/appmap-python.html#flask
+  Java:       https://appland.com/docs/reference/appmap-java.html#remote-recording
+  JavaScript: https://appland.com/docs/reference/appmap-agent-js.html#remote-recording
       `);
 
   return ready();
