@@ -1,3 +1,10 @@
+# [1.37.0](https://github.com/applandinc/scanner/compare/v1.36.1...v1.37.0) (2022-01-25)
+
+
+### Features
+
+* Update rule deserializationOfUntrustedData and add a test ([25fa0b5](https://github.com/applandinc/scanner/commit/25fa0b5cb746857c7234eba18160530b795a9acb))
+
 ## [1.36.1](https://github.com/applandinc/scanner/compare/v1.36.0...v1.36.1) (2022-01-24)
 
 
