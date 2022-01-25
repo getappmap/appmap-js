@@ -634,7 +634,7 @@ export default {
         queryTerms.forEach((term) => {
           const [query, text] = term.split(':');
           switch (query) {
-            case 'event': {
+            case 'id': {
               const eventId = parseInt(text, 10);
               if (Number.isNaN(eventId)) {
                 break;

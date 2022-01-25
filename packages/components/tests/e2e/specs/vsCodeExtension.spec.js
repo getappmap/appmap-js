@@ -715,8 +715,7 @@ context('VS Code Extension', () => {
       cy.get('.trace-view__search-input-suffix').click();
       cy.get('.trace-view__search-input-element').should('have.value', '');
 
-      let eventQuery =
-        'event:1 label:json event:3 event:15 event:99999 #link_to_edit_url';
+      let eventQuery = 'id:1 label:json id:3 id:15 id:99999 #link_to_edit_url';
       cy.get('.trace-view__search-input-element').type(eventQuery);
 
       cy.get('.trace-node[data-event-id="1"]')
