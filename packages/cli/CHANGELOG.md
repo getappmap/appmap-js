@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.16.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.15.1...@appland/appmap-v3.16.0) (2022-01-25)
+
+
+### Features
+
+* Add remote recording doc links for Java and JavaScript ([f40affe](https://github.com/applandinc/appmap-js/commit/f40affeb705d30b7bc682d388e37abc0487c7adf))
+
 # [@appland/appmap-v3.15.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.15.0...@appland/appmap-v3.15.1) (2022-01-18)
 
 
