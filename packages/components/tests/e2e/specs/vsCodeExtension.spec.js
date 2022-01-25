@@ -819,6 +819,19 @@ context('VS Code Extension', () => {
       cy.get('.trace-view__search-arrows-text').contains('4 / 27 results');
     });
 
+    it('only searches trace view after typing a certain number of characters', () => {
+      cy.get('.tabs .tab-btn').last().click();
+
+      cy.get('.trace-view__search-input-element').type('o');
+      cy.get('.trace-node.filtered').should('not.exist');
+
+      cy.get('.trace-view__search-input-element').type('r');
+      cy.get('.trace-node.filtered').should('not.exist');
+
+      cy.get('.trace-view__search-input-element').type('d');
+      cy.get('.trace-node.filtered').should('exist');
+    });
+
     it('filters: root objects', () => {
       cy.get(
         '.node[data-id="active_support/ActiveSupport::SecurityUtils"]'
