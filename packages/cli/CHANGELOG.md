@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.16.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.16.0...@appland/appmap-v3.16.1) (2022-01-25)
+
+
+### Bug Fixes
+
+* Add supports-hyperlinks dependency ([308c4bd](https://github.com/applandinc/appmap-js/commit/308c4bd250f36bf88df3e249fe9d36a9266980b2))
+
 # [@appland/appmap-v3.16.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.15.1...@appland/appmap-v3.16.0) (2022-01-25)
 
 
