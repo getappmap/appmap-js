@@ -108,6 +108,7 @@ __metadata:
     semver: ^7.3.5
     sinon: ^11.1.2
     style-loader: ^3.2.1
+    supports-hyperlinks: ^2.2.0
     tmp: ^0.2.1
     ts-jest: ^26.0.0
     ts-node: ^10.2.1
@@ -27378,7 +27379,7 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"supports-hyperlinks@npm:^2.0.0, supports-hyperlinks@npm:^2.1.0":
+"supports-hyperlinks@npm:^2.0.0, supports-hyperlinks@npm:^2.1.0, supports-hyperlinks@npm:^2.2.0":
   version: 2.2.0
   resolution: "supports-hyperlinks@npm:2.2.0"
   dependencies:

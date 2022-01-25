@@ -1,13 +1,11 @@
 import serveAndOpenAppMap from './serveAndOpenAppMap';
+import supportsHyperlinks from 'supports-hyperlinks';
 
 // See also: https://github.com/applandinc/scanner/pull/9/files#diff-3294a832ea2276e554177e0b3007cc2d401c082912c7fbde49fa09141bf1aed1R1
 function hyperlink(filePath: string, link: string): string {
   const OSC = '\u001B]';
   const BEL = '\u0007';
   const SEP = ';';
-
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const supportsHyperlinks = require('supports-hyperlinks');
 
   if (!supportsHyperlinks.stdout) {
     return filePath;
