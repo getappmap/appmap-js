@@ -706,6 +706,15 @@ context('VS Code Extension', () => {
     it('highlight and loop through events selected from Trace view filter', () => {
       cy.get('.tabs .tab-btn').last().click();
 
+      cy.get('.trace-view__search-input-suffix').should('not.exist');
+      cy.get('.trace-view__search-input-element').type('example');
+      cy.get('.trace-view__search-input-element').should(
+        'have.value',
+        'example'
+      );
+      cy.get('.trace-view__search-input-suffix').click();
+      cy.get('.trace-view__search-input-element').should('have.value', '');
+
       cy.get('.trace-view__search-input-element').type(
         'event:1 event:3 event:15 event:99999 label:json #link_to_edit_url'
       );
