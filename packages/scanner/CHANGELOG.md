@@ -1,3 +1,10 @@
+# [1.38.0](https://github.com/applandinc/scanner/compare/v1.37.1...v1.38.0) (2022-01-26)
+
+
+### Features
+
+* Deduplicate findings in the report ([49b2db9](https://github.com/applandinc/scanner/commit/49b2db920ed702e54915574a322f286825f0d8e2))
+
 ## [1.37.1](https://github.com/applandinc/scanner/compare/v1.37.0...v1.37.1) (2022-01-25)
 
 
