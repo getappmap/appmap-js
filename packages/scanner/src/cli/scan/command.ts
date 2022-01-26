@@ -19,6 +19,8 @@ import validateFile from '../validateFile';
 import CommandOptions from './options';
 import { default as buildScanner } from './scanner';
 import scanArgs from '../scanArgs';
+import { Metadata } from '@appland/models';
+import { AppMapMetadata } from 'src/report/scanSummary';
 
 export default {
   command: 'scan',
@@ -92,7 +94,7 @@ export default {
       >([scanner.scan(), scanner.fetchFindingStatus(appIdArg, appmapDir)]);
 
       // Always report the raw data
-      await writeFile(reportFile, JSON.stringify(rawScanResults, null, 2));
+      await writeFile(reportFile, formatReport(rawScanResults));
 
       let scanResults;
       if (reportAllFindings) {
@@ -124,3 +126,48 @@ export default {
     }
   },
 };
+
+function metadataFilter({
+  apps: { length: apps },
+  clients: { length: clients },
+  frameworks: { length: frameworks },
+  git: { length: git },
+  languages: { length: languages },
+  recorders: { length: recorders },
+}: AppMapMetadata) {
+  const filtered = Object.entries({
+    app: apps < 2,
+    client: clients < 2,
+    git: git < 2,
+    language: languages < 2,
+    recorder: recorders < 2,
+  })
+    .filter(([, v]) => v)
+    .map(([k]) => k);
+
+  return function (metadata: Metadata): Partial<Metadata> {
+    return Object.fromEntries(
+      Object.entries(metadata).filter(([k, v]) => {
+        if (filtered.includes(k)) return false;
+        if (k === 'frameworks') return ((v || []) as never[]).length !== frameworks;
+        return true;
+      })
+    );
+  };
+}
+
+// Formats a report to JSON. Does some data deduplication.
+function formatReport(rawScanResults: ScanResults): string {
+  const {
+    summary: { appMapMetadata: summaryMeta },
+    appMapMetadata,
+  } = { ...rawScanResults };
+
+  // remove metadata that's common between appmaps
+  const filter = metadataFilter(summaryMeta);
+  const metadata = Object.fromEntries(
+    Object.entries(appMapMetadata).map(([id, metadata]) => [id, filter(metadata)])
+  );
+
+  return JSON.stringify({ ...rawScanResults, appMapMetadata: metadata }, null, 2);
+}
