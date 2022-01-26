@@ -66,18 +66,12 @@ function collectMetadata(metadata: Metadata[]): AppMapMetadata {
  */
 export class ScanResults {
   public summary: ScanSummary;
-  public configuration: Configuration;
-  public appMaps: Record<string, Metadata>;
-  public findings: Finding[];
-
-  appMapMetadata: Record<string, Metadata>;
-  checks: Check[];
 
   constructor(
-    configuration: Configuration,
-    appMapMetadata: Record<string, Metadata>,
-    findings: Finding[],
-    checks: Check[]
+    public configuration: Configuration,
+    public appMapMetadata: Record<string, Metadata>,
+    public findings: Finding[],
+    public checks: Check[]
   ) {
     this.summary = {
       numAppMaps: Object.keys(appMapMetadata).length,
@@ -87,16 +81,6 @@ export class ScanResults {
       numFindings: findings.length,
       appMapMetadata: collectMetadata(Object.values(appMapMetadata)),
     };
-    this.configuration = configuration;
-    const appMapFiles = new Set(findings.map((finding) => finding.appMapFile));
-    this.appMaps = [...appMapFiles].reduce((memo, appMapFile) => {
-      memo[appMapFile] = appMapMetadata[appMapFile];
-      return memo;
-    }, {} as Record<string, Metadata>);
-    this.findings = findings;
-
-    this.appMapMetadata = appMapMetadata;
-    this.checks = checks;
   }
 
   withFindings(findings: Finding[]): ScanResults {

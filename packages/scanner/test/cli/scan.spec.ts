@@ -57,7 +57,6 @@ describe('scan', () => {
     );
     expect(Object.keys(scanResults).sort()).toEqual([
       'appMapMetadata',
-      'appMaps',
       'checks',
       'configuration',
       'findings',
