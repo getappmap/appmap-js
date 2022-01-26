@@ -4,8 +4,6 @@ Code scanning, linting, assertions and alerts.
 
 Provides consistent ways to filter (include and exclude) the AppMap events and property values.
 
-# Rule configuration
-
 ## Event filters
 
 Two standard event filters are provided that can be used with every rule: `include` and `exclude`.
@@ -62,6 +60,297 @@ finds slow function calls within a specific package:
 The configuration YAML is validated against the rule schema before the scan is run. Any errors in
 the configuration are reported, and must be fixed before the scan can continue. Consult the
 documentation for each rule to see it's pattern filters and other configurable properties.
+
+## Finding hash
+
+TODO: This section is WIP, as the hash algorithm is being upgraded.
+
+To enable de-duplication of findings, a hash is calculated for each finding. The hash is the
+`sha256` digest of a canonical content string for the finding.
+
+The digest is then the `sha256` of the content string, in hex.
+
+**Finding properties**
+
+- `rule` id.
+- `check` properties.
+
+**Event properties**
+
+The identifying properties of the primary event are included in the digest.
+
+[`function`](https://github.com/applandinc/appmap#function-call-attributes)
+
+- `defined_class`, `method_id`, `receiver`, `static`.
+- For each `parameter`: `name` and `class`
+
+[`http_server_request`](https://github.com/applandinc/appmap#http-server-request-call-attributes)
+
+- For each parameter: `name` and `class`.
+- For `http_server_response`: `status_code`, `headers`.
+- For `http_server_request`: `request_method`, `path_info`, `normalized_path_info`, `protocol`,
+  `headers`.
+
+[`http_client_request`](https://github.com/applandinc/appmap#http-client-request-call-attributes)
+
+- For each parameter: `name` and `class`.
+- For `http_client_reqeust`: `request_method`, `url`, `headers`
+- For `http_client_response`: `status_code`, `headers`
+
+[`sql_query`](https://github.com/applandinc/appmap#sql-query-call-attributes)
+
+- SQL action, column names, and table names.
+
+_Note_ The following fields are never included in the digest:
+[`id, value, thread_id, elapsed, object_id, lineno, path`](https://github.com/applandinc/appmap-js/blob/a9335a7273f54c6039875270c3ea11f5b57f2333/packages/models/src/util.js#L353)
+
+## Findings output file
+
+### `summary`
+
+Summarizes key information about the scan, including: number of AppMaps scanned, number of checks
+performed, list of rules utilized, list of labels utilized, number of findings, and an enumeration
+of all the distinct values in AppMap metadata.
+
+_Example_
+
+```json
+"summary": {
+  "numAppMaps": 507,
+  "numChecks": 8112,
+  "rules": [
+    "authz-before-authn",
+    ...
+    "update-in-get-request"
+  ],
+  "ruleLabels": [
+    "audit",
+    ...
+    "security.logout"
+  ],
+  "numFindings": 91,
+  "appMapMetadata": {
+    "labels": [],
+    "apps": [
+      "appland/appmap-server"
+    ],
+    "clients": [
+      {
+        "name": "appmap",
+        "url": "https://github.com/applandinc/appmap-ruby",
+        "version": "0.70.2"
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "rails",
+        "version": "6.1.4.1"
+      },
+      {
+        "name": "rspec",
+        "version": "3.10.1"
+      }
+    ],
+    "git": [
+      {
+        "repository": "git@github.com:applandinc/appmap-server.git",
+        "branch": "master",
+        "commit": "3b028018ec1f84e2c351d01d1dac45aeeae887b6"
+      },
+      {
+        "repository": "git@github.com:applandinc/appmap-server.git",
+        "branch": "master",
+        "commit": "3b028018ec1f84e2c351d01d1dac45aeeae887b6",
+        "status": [
+          "D .npmrc",
+          "M appmap.yml",
+          "M package-lock.json",
+          "M package.json"
+        ]
+      }
+    ],
+    "languages": [
+      {
+        "name": "ruby",
+        "engine": "ruby",
+        "version": "3.0.1"
+      }
+    ],
+    "recorders": [
+      {
+        "name": "rspec"
+      }
+    ],
+    "testStatuses": [],
+    "exceptions": []
+  }
+}
+```
+
+### `configuration`
+
+Provides the configuration file, as JSON, that was used to configure the scanner.
+
+_Example_
+
+```json
+"configuration": {
+  "checks": [
+    {
+      "rule": "authzBeforeAuthn"
+    },
+    {
+      "rule": "circularDependency",
+      "properties": {
+        "ignoredPackages": [
+          {
+            "equal": "app/models/concerns"
+          },
+          {
+            "equal": "app/controllers/concerns"
+          }
+        ]
+      }
+    },
+    {
+      "rule": "http500"
+    }
+  ]
+}
+```
+
+### `appMapMetadata`
+
+Contains the metadata for each AppMap that was scanned. `appMapMetadata` is a JSON object, whose
+keys are AppMap file names, and values are AppMap metadata objects. Each metadata object contains
+all the metadata values, _except_ for those values which are the same across all AppMaps. Those
+values can be found in `summary.appMapMetadata`. For example, using the `summary` example given
+above, the `app`, `labels`, `languages`, `recorders`, `testStatuses` and `exceptions` will all be
+omitted from `appMapMetadata`.
+
+_Example_
+
+```json
+"appMapMetadata": {
+  "tmp/appmap/rspec/API_APIKeysController_create_a_new_api_key.appmap.json": {
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/applandinc/appmap-ruby",
+      "version": "0.70.1"
+    },
+    "git": {
+      "repository": "git@github.com:applandinc/appmap-server.git",
+      "branch": "master",
+      "commit": "3b028018ec1f84e2c351d01d1dac45aeeae887b6"
+    },
+    "name": "API::APIKeysController create a new api key",
+    "source_location": "spec/requests/api_api_keys_spec.rb",
+    "test_status": "succeeded",
+    ...
+  }
+}
+```
+
+### `checks`
+
+Lists the configured checks that were performed on each AppMap. Each entry is a Check object that
+includes the properties of the check as configured by the `configuration`.
+
+_Example_
+
+```json
+"checks": [
+  {
+    "rule": {
+      "id": "authz-before-authn",
+      "title": "Authorization performed before authentication",
+      "labels": [
+        "security.authorization",
+        "security.authentication"
+      ],
+      "scope": "http_server_request",
+      "impactDomain": "Security",
+      "enumerateScope": false,
+      "references": {
+        "CWE-863": "https://cwe.mitre.org/data/definitions/863.html"
+      }
+    },
+    "id": "authz-before-authn",
+    "options": {},
+    "scope": "http_server_request",
+    "includeScope": [],
+    "excludeScope": [],
+    "includeEvent": [],
+    "excludeEvent": []
+  },
+  {
+    "rule": {
+      "id": "circular-dependency",
+      "title": "Circular package dependency",
+      "scope": "command",
+      "impactDomain": "Maintainability",
+      "references": {
+        "CWE-1047": "https://cwe.mitre.org/data/definitions/1047.html"
+      },
+      "enumerateScope": false
+    }
+  }
+]
+```
+
+### `findings`
+
+Lists the findings that are reported by this scan. Findings are de-duplicated by comparing their
+`hash` values. Therefore, each unique finding hash is only reported once.
+
+Note that the `appMapFile` of each finding will be available in the `appMapMetadata` section of the
+findings JSON document. Similarly, details of the `checkId` can be obtained from the `checks`
+section.
+
+_Example_
+
+```json
+"findings": [
+  {
+    "appMapFile": "tmp/appmap/rspec/API_ScannerJobsController_create_logged_in_uploads_a_scanner_job_from_a_tarball.appmap.json",
+    "checkId": "slow-function-call",
+    "ruleId": "slow-function-call",
+    "ruleTitle": "Slow function call",
+    "event": {
+      "id": 125,
+      "event": "call",
+      "thread_id": 76340,
+      "defined_class": "Scanner",
+      "method_id": "publish_from_upload",
+      "path": "app/models/scanner.rb",
+      "lineno": 397,
+      "static": true,
+      "receiver": {
+        "class": "Module",
+        "object_id": 1380300,
+        "value": "Scanner"
+      }
+    },
+    "hash": "a2bfc16512fadf8536355610fcaa63b391596dc0f60d7ef7f885a4eb6ec8f7c1",
+    "scope": {
+      "id": 29,
+      "event": "call",
+      "thread_id": 76340,
+      "http_server_request": {
+        "request_method": "POST",
+        "path_info": "/api/scanner_jobs",
+        "normalized_path_info": "/api/scanner_jobs",
+        "headers": {
+          "Host": "www.example.com",
+          "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+          "Authorization": "Bearer YWRtaW46NzM4NzVmOWYtMmQ4Ni00YWIwLTk5OWEtMWUwNjc2NGE5NTUw"
+        }
+      }
+    },
+    "message": "Slow app/models/Scanner.publish_from_upload call (0.538877ms)"
+  }
+]
+```
 
 ## Development
 
