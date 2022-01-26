@@ -1,0 +1,4 @@
+/.yarn/releases/** binary
+/.yarn/plugins/** binary
+/packages/components/src/stories/data/** binary
+*.appmap.json binary
