@@ -830,9 +830,6 @@ export default {
 
     setState(serializedState) {
       const state = JSON.parse(serializedState);
-      if (state.currentView) {
-        this.setView(state.currentView);
-      }
       if (state.selectedObject) {
         const fqid = state.selectedObject;
         const [match, type, object] = fqid.match(/^([a-z]+):(.+)/);
@@ -857,6 +854,20 @@ export default {
           }
 
           selectedObject = events.find((e) => e.id === eventId);
+
+          // It's possible that we're trying to select an object that does not exist in the filtered
+          // set. If we're unable to find an object, we'll look for it in the unfiltered set.
+          if (!selectedObject) {
+            selectedObject = this.$store.state.appMap.events.find(
+              (e) => e.id === eventId
+            );
+
+            if (selectedObject) {
+              Object.keys(this.filters.declutter).forEach((k) => {
+                this.filters.declutter[k].on = false;
+              });
+            }
+          }
         } else {
           selectedObject = classMap.codeObjects.find(
             (obj) => obj.fqid === fqid
@@ -867,6 +878,7 @@ export default {
           this.$store.commit(SELECT_OBJECT, selectedObject);
         }
       }
+
       if (state.traceFilter) {
         this.traceFilterValue = state.traceFilter;
       }
@@ -898,6 +910,12 @@ export default {
           this.filters.declutter.hideName.on = true;
           this.filters.declutter.hideName.names = filters.hideName;
         }
+      }
+
+      if (state.currentView) {
+        this.$nextTick(() => {
+          this.setView(state.currentView);
+        });
       }
     },
 

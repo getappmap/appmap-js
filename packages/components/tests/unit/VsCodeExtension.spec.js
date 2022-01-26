@@ -2,6 +2,7 @@ import { mount, createWrapper } from '@vue/test-utils';
 import VsCodeExtension from '@/pages/VsCodeExtension.vue';
 import { VIEW_FLOW } from '@/store/vsCode';
 import data from './fixtures/user_page_scenario.appmap.json';
+import Vue from 'vue';
 
 describe('VsCodeExtension.vue', () => {
   let wrapper;
@@ -49,6 +50,19 @@ describe('VsCodeExtension.vue', () => {
     );
 
     expect(wrapper.vm.getState()).toEqual(appState);
+  });
+
+  it('toggles filters off if selectedObject is outside of the filtered set', async () => {
+    wrapper.vm.setState('{"selectedObject":"event:3"}');
+    expect(wrapper.vm.selectedObject.toString()).toMatch('Net::HTTP#request');
+
+    Object.values(wrapper.vm.filters.declutter).forEach((filter) => {
+      expect(filter.on).toBe(false);
+    });
+
+    await Vue.nextTick();
+
+    expect(wrapper.text()).toMatch('Net::HTTP#request');
   });
 
   it('emits user events', () => {
