@@ -156,18 +156,39 @@ function metadataFilter({
   };
 }
 
+function uniq<T, K>(entries: Iterable<T>, key: (x: T) => K): Iterable<T> {
+  const result = new Map<K, T>();
+
+  for (const entry of entries) {
+    const k = key(entry);
+    if (result.has(k)) continue;
+    result.set(k, entry);
+  }
+
+  return result.values();
+}
+
 // Formats a report to JSON. Does some data deduplication.
 function formatReport(rawScanResults: ScanResults): string {
-  const {
-    summary: { appMapMetadata: summaryMeta },
-    appMapMetadata,
-  } = { ...rawScanResults };
+  const { summary, appMapMetadata, findings } = { ...rawScanResults };
 
   // remove metadata that's common between appmaps
-  const filter = metadataFilter(summaryMeta);
+  const filter = metadataFilter(summary.appMapMetadata);
   const metadata = Object.fromEntries(
     Object.entries(appMapMetadata).map(([id, metadata]) => [id, filter(metadata)])
   );
 
-  return JSON.stringify({ ...rawScanResults, appMapMetadata: metadata }, null, 2);
+  // only keep one finding of the same hash
+  const uniqueFindings = [...uniq(findings, ({ hash }) => hash)];
+
+  return JSON.stringify(
+    {
+      ...rawScanResults,
+      summary: { ...summary, numFindings: uniqueFindings.length },
+      appMapMetadata: metadata,
+      findings: uniqueFindings,
+    },
+    null,
+    2
+  );
 }
