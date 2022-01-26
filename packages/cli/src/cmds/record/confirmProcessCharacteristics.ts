@@ -43,21 +43,27 @@ using a reverse-lookup by port number.`);
     tcp: number[];
   }
 
-  await portPid(requestOptions.port).then(async (pids: Pids) => {
+  const pids = await portPid(requestOptions.port).then(async (pids: Pids) => {
     if (pids && pids.tcp.length > 0) {
-      return Promise.all(pids.tcp.map(printPid));
+      await Promise.all(pids.tcp.map(printPid));
+      return pids;
     } else {
       UI.error(`No process found on port ${requestOptions.port}`);
     }
   });
 
+  async function confirm(): Promise<boolean> {
+    const { looksGood } = await UI.prompt({
+      type: 'confirm',
+      name: 'looksGood',
+      message: `Is this your server running at localhost:${requestOptions.port}?`,
+      default: 'y',
+    });
+    return looksGood;
+  }
+
   UI.progress('');
-  const { looksGood } = await UI.prompt({
-    type: 'confirm',
-    name: 'looksGood',
-    message: 'Does this look right?',
-    default: 'y',
-  });
+  const looksGood = pids && (await confirm());
   if (!looksGood) {
     const { reconfigureOrRetry } = await UI.prompt({
       type: 'list',
