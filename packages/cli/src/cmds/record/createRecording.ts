@@ -5,7 +5,7 @@ import { promises as fs } from 'fs';
 
 export default async function createRecording(
   requestOptions: RequestOptions
-): Promise<string> {
+): Promise<string | undefined> {
   await UI.prompt({
     type: 'confirm',
     name: 'startRecording',
@@ -32,7 +32,12 @@ export default async function createRecording(
 
   const data = await rr.stop();
 
-  UI.success(`Recording has finished, with ${data!.length} bytes of data.`);
+  if (data) {
+    UI.success(`Recording has finished, with ${data.length} bytes of data.`);
+  } else {
+    UI.warn(`Recording was stopped, but no data was obtained.`);
+    return;
+  }
 
   const { appMapName } = await UI.prompt({
     type: 'input',

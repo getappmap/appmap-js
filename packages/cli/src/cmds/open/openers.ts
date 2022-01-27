@@ -1,5 +1,6 @@
 import serveAndOpenAppMap from './serveAndOpenAppMap';
 import supportsHyperlinks from 'supports-hyperlinks';
+import { join, resolve } from 'path';
 
 // See also: https://github.com/applandinc/scanner/pull/9/files#diff-3294a832ea2276e554177e0b3007cc2d401c082912c7fbde49fa09141bf1aed1R1
 function hyperlink(filePath: string, link: string): string {
@@ -27,16 +28,23 @@ function hyperlink(filePath: string, link: string): string {
   ].join('');
 }
 
+export function abspath(file: string) {
+  return resolve(process.cwd(), file);
+}
+
 export async function openInBrowser(appMapFile: string) {
   await serveAndOpenAppMap(appMapFile);
 }
 
+export function vscodeURL(appMapFile: string) {
+  return join('vscode://file/', abspath(appMapFile));
+}
+
 export async function openInVSCode(appMapFile: string) {
-  const link = 'vscode://file/' + appMapFile;
-  console.log(hyperlink(appMapFile, link));
+  console.log(hyperlink(appMapFile, vscodeURL(appMapFile)));
 }
 
 export async function openInTool(appMapFile: string, toolId?: string) {
-  const link = `${toolId}://open?file=${appMapFile}`;
+  const link = `${toolId}://open?file=${abspath(appMapFile)}`;
   console.log(hyperlink(appMapFile, link));
 }

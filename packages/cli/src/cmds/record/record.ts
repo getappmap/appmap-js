@@ -26,7 +26,9 @@ export const handler = async (argv) => {
     await configureConnection(requestOptions);
     await testConnection(requestOptions);
     const appMapFile = await createRecording(requestOptions);
-    await showAppMap(appMapFile);
+    if (appMapFile) {
+      await showAppMap(appMapFile);
+    }
   };
 
   return runCommand(commandFn);
