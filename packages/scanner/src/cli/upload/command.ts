@@ -44,6 +44,6 @@ export default {
     const appId = await resolveAppId(appIdArg, appmapDir);
 
     const scanResults = JSON.parse((await readFile(reportFile)).toString()) as ScanResults;
-    await upload(scanResults, appId);
+    await upload(scanResults, appId, appmapDir);
   },
 };

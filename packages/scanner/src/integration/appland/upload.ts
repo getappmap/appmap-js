@@ -1,62 +1,45 @@
-import { pack } from 'tar-stream';
 import { promises as fs } from 'fs';
-import { createHash } from 'crypto';
-import FormData from 'form-data';
-import { createGzip } from 'zlib';
-import { buildAppMap } from '@appland/models';
-import { buildRequest, handleError } from '@appland/client/dist/src';
-import { ScanResults } from '../../report/scanResults';
 import { IncomingMessage } from 'http';
 import { URL } from 'url';
+import { buildRequest, handleError } from '@appland/client/dist/src';
 
-export default async function (scanResults: ScanResults, appId: string): Promise<void> {
-  const normalizedFilePaths: { [key: string]: string } = {};
+import { ScanResults } from '../../report/scanResults';
+import { AppMap as AppMapClient } from './appMap';
+import { Mapset as MapsetClient } from './mapset';
+import { join } from 'path';
+
+export default async function (
+  scanResults: ScanResults,
+  appId: string,
+  appmapDir: string
+): Promise<URL> {
+  process.stderr.write(`Uploading findings to application '${appId}'\n`);
+
   const { findings } = scanResults;
-  for (const finding of findings) {
-    if (!finding.appMapFile) {
-      continue;
-    }
-
-    const hash = createHash('sha256').update(finding.appMapFile).digest('hex');
-    normalizedFilePaths[finding.appMapFile] = `${hash}.appmap.json`;
-  }
-
-  const clonedFindings = findings.map((finding) => {
-    const clone = { ...finding };
-    if (clone.appMapFile) {
-      clone.appMapFile = normalizedFilePaths[clone.appMapFile];
-    }
-    return clone;
-  });
 
   const relevantFilePaths = [
     ...new Set(findings.filter((f) => f.appMapFile).map((f) => f.appMapFile)),
   ] as string[];
-  const tarStream = pack();
 
+  // TODO: Can do these in parallel
+  const appMapIds: Record<string, string> = {};
   for (const filePath of relevantFilePaths) {
-    const buffer = await fs.readFile(filePath);
-
-    tarStream.entry(
-      { name: normalizedFilePaths[filePath] },
-      JSON.stringify(buildAppMap(buffer.toString()).normalize().build().toJSON())
-    );
+    console.log(`Uploading AppMap ${filePath}`);
+    const buffer = await fs.readFile(join(appmapDir, filePath));
+    const appMap = await AppMapClient.upload(buffer);
+    if (appMap) {
+      appMapIds[filePath] = appMap.uuid;
+    }
   }
 
-  tarStream.entry(
-    { name: 'app.scanner.json' },
-    JSON.stringify({ ...scanResults, ...{ findings: clonedFindings } })
-  );
-  tarStream.finalize();
+  const mapsetId = MapsetClient.create(appId, Object.values(appMapIds));
 
-  const gzip = createGzip();
-  tarStream.pipe(gzip);
+  const uploadData = JSON.stringify({
+    scanResults,
+    mapsetId,
+    appId,
+  });
 
-  const form = new FormData();
-  form.append('findings_data', gzip, 'findings.tgz');
-  form.append('app_id', appId);
-
-  process.stderr.write(`Uploading findings to application '${appId}'\n`);
   const request = await buildRequest('api/scanner_jobs');
   return new Promise<IncomingMessage>((resolve, reject) => {
     const req = request.requestFunction(
@@ -64,22 +47,25 @@ export default async function (scanResults: ScanResults, appId: string): Promise
       {
         method: 'POST',
         headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': uploadData.length,
           ...request.headers,
-          ...form.getHeaders(),
         },
       },
       resolve
     );
     req.on('error', reject);
-    form.pipe(req);
+    req.write(uploadData);
+    req.end();
   })
     .then(handleError)
-    .then((response: IncomingMessage) => {
+    .then((response: IncomingMessage): URL => {
       let message = `Uploaded ${scanResults.findings.length} findings`;
       if (response.headers.location) {
         const uploadURL = new URL(response.headers.location, request.url.href);
         message += ` to ${uploadURL}`;
       }
       console.log(message);
+      return request.url;
     });
 }
