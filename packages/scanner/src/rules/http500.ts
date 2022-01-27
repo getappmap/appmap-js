@@ -4,8 +4,7 @@ import { Rule, RuleLogic } from '../types';
 
 function build(): RuleLogic {
   return {
-    matcher: (e: Event) =>
-      e.httpServerResponse!.status >= 500 && e.httpServerResponse!.status < 600,
+    matcher: (e: Event) => e.httpServerResponse!.status === 500,
     where: (e: Event) => !!e.httpServerResponse,
   };
 }
