@@ -94,6 +94,7 @@ interface Finding {
   hash: string;
   scope: Event;
   message: string;
+  stack: string[];
   groupMessage?: string;
   occurranceCount?: number;
   relatedEvents?: Event[];

@@ -107,6 +107,10 @@ export default class RuleChecker {
       //   at hashEvent (/Users/kgilpin/source/appland/scanner/node_modules/@appland/models/dist/index.cjs:1714:14)
       //   at Event.get hash [as hash] (/Users/kgilpin/source/appland/scanner/node_modules/@appland/models/dist/index.cjs:3325:27)
       findingEvent.message ||= [];
+      const stack: string[] = [
+        findingEvent.codeObject.location,
+        ...findingEvent.ancestors().map((ancestor) => ancestor.codeObject.location),
+      ].filter(Boolean);
       return {
         appMapFile,
         checkId: checkInstance.checkId,
@@ -114,12 +118,13 @@ export default class RuleChecker {
         ruleTitle: checkInstance.title,
         event: findingEvent,
         hash: findingEvent.hash,
+        stack,
         scope,
         message: message || checkInstance.title,
         groupMessage,
         occurranceCount,
         relatedEvents,
-      };
+      } as Finding;
     };
 
     const matchResult = await checkInstance.ruleLogic.matcher(

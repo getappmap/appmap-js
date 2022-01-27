@@ -1,4 +1,4 @@
-import { Rule, RuleLogic, ScopeName } from 'src/types';
+import { Rule, RuleLogic } from 'src/types';
 import * as types from './types';
 import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
