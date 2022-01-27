@@ -7,7 +7,7 @@
       :selected-events="selectedEvents"
       :focused-event="focusedEvent"
       :highlighted-events="highlightedEvents"
-      :highlighted-event-id="highlightedEventId"
+      :highlighted-event="highlightedEvent"
       :highlighted-event-index="highlightedEventIndex"
       :highlight-color="highlightColor"
       :highlight-all="highlightAll"
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { Event } from '@appland/models';
 import VTraceEventBlock from './TraceEventBlock.vue';
 
 export default {
@@ -53,8 +54,8 @@ export default {
       type: Set,
       default: new Set(),
     },
-    highlightedEventId: {
-      type: Number,
+    highlightedEvent: {
+      type: Event,
       default: null,
     },
     highlightedEventIndex: {

@@ -9,7 +9,7 @@
       :selected-events="selectedEvents"
       :focused-event="focusedEvent"
       :highlighted-events="highlightedEvents"
-      :highlighted-event-id="highlightedEventId"
+      :highlighted-event="highlightedEvent"
       :highlighted-event-index="highlightedEventIndex"
       :highlight-color="highlightColor"
       :highlight-all="highlightAll"
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { Event } from '@appland/models';
 import VTrace from '@/components/trace/Trace.vue';
 import VContainer from '@/components/Container.vue';
 import { VIEW_FLOW, SELECT_OBJECT, CLEAR_OBJECT_STACK } from '@/store/vsCode';
@@ -51,8 +52,8 @@ export default {
       type: Set,
       default: new Set(),
     },
-    highlightedEventId: {
-      type: Number,
+    highlightedEvent: {
+      type: Event,
       default: null,
     },
     highlightedEventIndex: {

@@ -706,9 +706,17 @@ context('VS Code Extension', () => {
     it('highlight and loop through events selected from Trace view filter', () => {
       cy.get('.tabs .tab-btn').last().click();
 
-      cy.get('.trace-view__search-input-element').type(
-        'event:1 event:3 event:15 event:99999 label:json #link_to_edit_url'
+      cy.get('.trace-view__search-input-suffix').should('not.exist');
+      cy.get('.trace-view__search-input-element').type('example');
+      cy.get('.trace-view__search-input-element').should(
+        'have.value',
+        'example'
       );
+      cy.get('.trace-view__search-input-suffix').click();
+      cy.get('.trace-view__search-input-element').should('have.value', '');
+
+      let eventQuery = 'id:1 label:json id:3 id:15 id:99999 #link_to_edit_url';
+      cy.get('.trace-view__search-input-element').type(eventQuery);
 
       cy.get('.trace-node[data-event-id="1"]')
         .should('be.visible')
@@ -716,10 +724,7 @@ context('VS Code Extension', () => {
 
       cy.get('.trace-node[data-event-id="3"]').should('not.be.visible');
 
-      cy.get('.trace-view__search-arrows-text').should(
-        'contain.text',
-        '1/32 results'
-      );
+      cy.get('.trace-view__search-arrows-text').contains('1 / 32 results');
 
       cy.get('.trace-view__search-arrow').last().click();
 
@@ -747,6 +752,84 @@ context('VS Code Extension', () => {
       cy.get('.trace-node[data-event-id="15"]')
         .should('be.visible')
         .should('have.class', 'highlight');
+
+      cy.get('.trace-node[data-event-id="13"]')
+        .click()
+        .should('have.class', 'highlight');
+      cy.get('.trace-node[data-event-id="1"]').should('have.class', 'filtered');
+      cy.get('.trace-node[data-event-id="3"]').should('have.class', 'filtered');
+      cy.get('.trace-node[data-event-id="15"]').should(
+        'not.have.class',
+        'highlight'
+      );
+      cy.get('.trace-view__search-arrows-text').should(
+        'contain.text',
+        '32 results'
+      );
+
+      cy.get('.details-panel__buttons').contains('Clear selection').click();
+
+      cy.get('.trace-node[data-event-id="13"]').should(
+        'not.have.class',
+        'highlight'
+      );
+      cy.get('.trace-node[data-event-id="1"]').should(
+        'not.have.class',
+        'highlight'
+      );
+      cy.get('.trace-view__search-input-element').should(
+        'have.value',
+        eventQuery
+      );
+      cy.get('.trace-view__search-arrows-text').should('be.visible');
+    });
+
+    it('moves the active event filter selection as expected', () => {
+      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.trace-view__search-input-element').type('label:json');
+      cy.get('.trace-view__search-arrows-text').contains('1 / 27 results');
+      cy.get('.trace-view__search-arrow').last().click();
+      cy.get('.trace-view__search-arrows-text').contains('2 / 27 results');
+      cy.get('.trace-view__search-arrow').first().click();
+      cy.get('.trace-view__search-arrows-text').contains('1 / 27 results');
+      cy.get('.trace-view__search-arrow').first().click();
+      cy.get('.trace-view__search-arrows-text').contains('27 / 27 results');
+      cy.get('.trace-node.highlight').should('have.length', 1);
+      cy.get('.details-panel__buttons').contains('Clear selection').click();
+      cy.get('.trace-view__search-arrows-text').contains('27 results');
+      cy.get('.trace-node.highlight').should('not.exist');
+      cy.get('.trace-node.filtered').should('have.length', 19);
+
+      cy.get('.trace-view__search-arrow').first().click();
+      cy.get('.trace-view__search-arrows-text').contains('27 / 27 results');
+      cy.get('.details-panel__buttons').contains('Clear selection').click();
+
+      cy.get('.trace-view__search-arrow').last().click();
+      cy.get('.trace-view__search-arrows-text').contains('1 / 27 results');
+      cy.get('.details-panel__buttons').contains('Clear selection').click();
+
+      cy.get('.trace-node[data-event-id="28"]').click();
+      cy.get('.trace-view__search-arrows-text').contains('27 results');
+      cy.get('.trace-view__search-arrow').first().click();
+      cy.get('.trace-view__search-arrows-text').contains('2 / 27 results');
+
+      cy.get('.trace-node[data-event-id="38"]').click();
+      cy.get('.trace-view__search-arrows-text').contains('27 results');
+      cy.get('.trace-view__search-arrow').last().click();
+      cy.get('.trace-view__search-arrows-text').contains('4 / 27 results');
+    });
+
+    it('only searches trace view after typing a certain number of characters', () => {
+      cy.get('.tabs .tab-btn').last().click();
+
+      cy.get('.trace-view__search-input-element').type('o');
+      cy.get('.trace-node.filtered').should('not.exist');
+
+      cy.get('.trace-view__search-input-element').type('r');
+      cy.get('.trace-node.filtered').should('not.exist');
+
+      cy.get('.trace-view__search-input-element').type('d');
+      cy.get('.trace-node.filtered').should('exist');
     });
 
     it('filters: root objects', () => {

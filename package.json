@@ -30,7 +30,6 @@
     "@semantic-release/github": "^7.2.3",
     "@semantic-release/release-notes-generator": "^9.0.2",
     "@vue/cli-plugin-eslint": "~4.5.0",
-    "cypress": "3.8.3",
     "eslint": "^7.25.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",
