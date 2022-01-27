@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.17.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.16.1...@appland/appmap-v3.17.0) (2022-01-27)
+
+
+### Bug Fixes
+
+* Don't prompt the user for confirmation if the process was obviously not found ([c1e7aea](https://github.com/applandinc/appmap-js/commit/c1e7aea7977b2e74b1b8f137b78435b980d0e997))
+* Handle the case when no data is obtained from recording ([16b0a98](https://github.com/applandinc/appmap-js/commit/16b0a98b9676f7491144948c370d2f4c6eba60ff))
+
+
+### Features
+
+* Shortcut the record 'open' step when running in the VSCode terminal ([85d7a75](https://github.com/applandinc/appmap-js/commit/85d7a754a2da457aa39719ebdd0f75416f04e3dd))
+
 # [@appland/appmap-v3.16.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.16.0...@appland/appmap-v3.16.1) (2022-01-25)
 
 
