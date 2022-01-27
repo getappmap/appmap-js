@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.17.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.17.0...@appland/appmap-v3.17.1) (2022-01-27)
+
+
+### Bug Fixes
+
+* Handle spaces in CommandStruct.args ([30c65cc](https://github.com/applandinc/appmap-js/commit/30c65cc710f8d363c94f24ad697617452d4c5192))
+
 # [@appland/appmap-v3.17.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.16.1...@appland/appmap-v3.17.0) (2022-01-27)
 
 
