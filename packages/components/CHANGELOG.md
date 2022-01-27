@@ -1,3 +1,16 @@
+# [@appland/components-v1.22.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.21.0...@appland/components-v1.22.0) (2022-01-27)
+
+
+### Bug Fixes
+
+* Allow selection of events outside the event filter ([8f95d58](https://github.com/applandinc/appmap-js/commit/8f95d58e6e760b0e6069abd9ccb773377a65db7f))
+* Rename "event" search query to "id" ([5418d00](https://github.com/applandinc/appmap-js/commit/5418d0043b2d5eedb171edd5869f5f80271aa961))
+
+
+### Features
+
+* Add a clear input button to event filter bar ([470ae74](https://github.com/applandinc/appmap-js/commit/470ae74866b148f307c34e742ed828ade4e8335f))
+
 # [@appland/components-v1.21.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.20.0...@appland/components-v1.21.0) (2022-01-20)
 
 
