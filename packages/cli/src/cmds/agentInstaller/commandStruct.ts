@@ -3,14 +3,26 @@ import { env } from 'process';
 
 export default class CommandStruct {
   readonly environment: NodeJS.ProcessEnv;
+  readonly args: string[];
 
   constructor(
     readonly program: string,
-    readonly args: readonly string[],
+    args: readonly string[],
     readonly path: PathLike,
     environment: NodeJS.ProcessEnv = {}
   ) {
     this.environment = { ...env, ...environment };
+    this.args = args.map((a) => {
+      if (!a.includes(' ')) {
+        return a;
+      }
+
+      // There shouldn't be a need to embed quotes, so raise an error if the caller tries.
+      if (a.includes('"')) {
+        throw new Error("Don't embed quotes in args");
+      }
+      return `"${a}"`;
+    });
   }
 
   toString() {
