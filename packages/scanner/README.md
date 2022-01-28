@@ -63,46 +63,11 @@ documentation for each rule to see it's pattern filters and other configurable p
 
 ## Finding hash
 
-TODO: This section is WIP, as the hash algorithm is being upgraded.
-
 To enable de-duplication of findings, a hash is calculated for each finding. The hash is the
-`sha256` digest of a canonical content string for the finding.
-
-The digest is then the `sha256` of the content string, in hex.
-
-**Finding properties**
-
-- `rule` id.
-- `check` properties.
-
-**Event properties**
-
-The identifying properties of the primary event are included in the digest.
-
-[`function`](https://github.com/applandinc/appmap#function-call-attributes)
-
-- `defined_class`, `method_id`, `receiver`, `static`.
-- For each `parameter`: `name` and `class`
-
-[`http_server_request`](https://github.com/applandinc/appmap#http-server-request-call-attributes)
-
-- For each parameter: `name` and `class`.
-- For `http_server_response`: `status_code`, `headers`.
-- For `http_server_request`: `request_method`, `path_info`, `normalized_path_info`, `protocol`,
-  `headers`.
-
-[`http_client_request`](https://github.com/applandinc/appmap#http-client-request-call-attributes)
-
-- For each parameter: `name` and `class`.
-- For `http_client_reqeust`: `request_method`, `url`, `headers`
-- For `http_client_response`: `status_code`, `headers`
-
-[`sql_query`](https://github.com/applandinc/appmap#sql-query-call-attributes)
-
-- SQL action, column names, and table names.
-
-_Note_ The following fields are never included in the digest:
-[`id, value, thread_id, elapsed, object_id, lineno, path`](https://github.com/applandinc/appmap-js/blob/a9335a7273f54c6039875270c3ea11f5b57f2333/packages/models/src/util.js#L353)
+`sha256` digest of a canonical content string for the finding. The canonical content string combines
+stable data from the finding, such as the rule id, normalized event, etc. See 
+[appmap-js/packages/models/src/event/hash.js](https://github.com/applandinc/appmap-js/blob/959a8c93c9be37d40a8f4a0e7d44ee211730641e/packages/models/src/event/hash.js)
+for details.
 
 ## Findings output file
 
