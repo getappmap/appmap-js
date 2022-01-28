@@ -1,0 +1,7 @@
+plugins {
+  id("com.appland.appmap") version "0.0.0-dev"
+}
+
+repositories {
+  mavenCentral()
+}
