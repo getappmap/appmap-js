@@ -193,7 +193,7 @@ ${whitespace.padLine(pluginSpec)}
   private selectPluginSpec() {
     const pluginSpecKotlinSyntax = `id("com.appland.appmap") version "1.1.0"`;
     const pluginSpecGroovySyntax = `id 'com.appland.appmap' version '1.1.0'`;
-    return this.identifyGradleFile.includes(this.buildGradleKtsFileName) ? pluginSpecKotlinSyntax : pluginSpecGroovySyntax;
+    return this.identifyGradleFile.endsWith('.gradle.kts') ? pluginSpecKotlinSyntax : pluginSpecGroovySyntax;
   }
 
   /**
