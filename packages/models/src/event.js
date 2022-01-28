@@ -1,9 +1,5 @@
-import {
-  addHiddenProperty,
-  hasProp,
-  hashEvent,
-  identityHashEvent,
-} from './util';
+import { addHiddenProperty, hasProp, identityHashEvent } from './util';
+import hashEvent from './event/hash';
 
 // This class supercedes `CallTree` and `CallNode`. Events are stored in a flat
 // array and can also be traversed like a tree via `parent` and `children`.
@@ -395,6 +391,12 @@ export default class Event {
       .filter(Boolean);
   }
 
+  get qualifiedMethodId() {
+    const { definedClass, isStatic, methodId } = this;
+    if (!definedClass) return undefined;
+    return `${definedClass}${isStatic ? '.' : '#'}${methodId}`;
+  }
+
   toString() {
     const { sqlQuery } = this;
     if (sqlQuery) {
@@ -406,7 +408,6 @@ export default class Event {
       return route;
     }
 
-    const { definedClass, isStatic, methodId } = this;
-    return `${definedClass}${isStatic ? '.' : '#'}${methodId}`;
+    return this.qualifiedMethodId;
   }
 }
