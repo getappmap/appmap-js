@@ -34,6 +34,10 @@ export default function (
     writeln(`\tAppMap name:\t${appMapMetadata[finding.appMapFile].name}`);
     writeln(eventMsg);
     writeln(`\tScope:\t${finding.scope.id} - ${finding.scope.toString()}`);
+    if (finding.stack.length > 0) {
+      writeln(`\tStack trace:`);
+      finding.stack.forEach((frame) => console.log(`\t\t${frame}`));
+    }
     writeln();
   });
 }
