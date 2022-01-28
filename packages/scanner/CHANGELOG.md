@@ -1,3 +1,15 @@
+# [1.39.0](https://github.com/applandinc/scanner/compare/v1.38.0...v1.39.0) (2022-01-28)
+
+
+### Bug Fixes
+
+* http-500 looks for 500 status specifically ([02a406f](https://github.com/applandinc/scanner/commit/02a406f50da3fbb33b2f758150a056011610a4cf))
+
+
+### Features
+
+* Print stack trace in CLI finding output ([edfb41a](https://github.com/applandinc/scanner/commit/edfb41af083902b71676a2899bcac6aa04b0a820))
+
 # [1.38.0](https://github.com/applandinc/scanner/compare/v1.37.1...v1.38.0) (2022-01-26)
 
 
