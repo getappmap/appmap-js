@@ -1,3 +1,15 @@
+# [@appland/components-v1.23.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.22.0...@appland/components-v1.23.0) (2022-01-28)
+
+
+### Bug Fixes
+
+* Object selection is retained when switching filters ([d151701](https://github.com/applandinc/appmap-js/commit/d151701311c8ad8002451cd0aaf63067266dec1c))
+
+
+### Features
+
+* Remove filters if setState selectedObject is not in filtered set ([9e81e21](https://github.com/applandinc/appmap-js/commit/9e81e21f10f3139b99880cd9c3f5247ac71e1adf))
+
 # [@appland/components-v1.22.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.21.0...@appland/components-v1.22.0) (2022-01-27)
 
 
