@@ -973,6 +973,22 @@ context('VS Code Extension', () => {
       cy.get('.filters .filters__hide-item .filters__hide-item-icon').click();
       cy.get('.nodes .node').should('have.length', 9);
     });
+
+    it('object selection is retained when changing filters', () => {
+      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.trace-node[data-event-id="1"]').click();
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox').eq(0).click();
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.trace-node[data-event-id="1"].highlight').should('exist');
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox').eq(0).click();
+
+      cy.get('.trace-node[data-event-id="1"].highlight').should('exist');
+    });
   });
 
   context('No HTTP appmap', () => {

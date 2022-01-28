@@ -496,7 +496,9 @@ export default {
     },
     filteredAppMap: {
       handler() {
-        this.clearSelection();
+        if (this.selectedObject) {
+          this.setSelectedObject(this.selectedObject.fqid);
+        }
       },
     },
   },
@@ -826,6 +828,36 @@ export default {
       };
 
       return JSON.stringify(state);
+    },
+
+    setSelectedObject(fqid) {
+      const [match, type, object] = fqid.match(/^([a-z]+):(.+)/);
+
+      if (!match) {
+        return;
+      }
+
+      if (type === 'label') {
+        this.$store.commit(SELECT_LABEL, object);
+        return;
+      }
+
+      const { classMap, events } = this.filteredAppMap;
+      let selectedObject = null;
+
+      if (type === 'event') {
+        const eventId = parseInt(object, 10);
+
+        if (Number.isNaN(eventId)) {
+          return;
+        }
+
+        selectedObject = events.find((e) => e.id === eventId);
+      } else {
+        selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
+      }
+
+      this.$store.commit(SELECT_OBJECT, selectedObject);
     },
 
     setState(serializedState) {
