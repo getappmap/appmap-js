@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import { IncomingMessage } from 'http';
 import { URL } from 'url';
+import { AppMap as AppMapStruct } from '@appland/models';
 import { buildRequest, handleError } from '@appland/client/dist/src';
 
 import { ScanResults } from '../../report/scanResults';
@@ -21,23 +22,48 @@ export default async function (
     ...new Set(findings.filter((f) => f.appMapFile).map((f) => f.appMapFile)),
   ] as string[];
 
-  // TODO: Can do these in parallel
-  const appMapIds: Record<string, string> = {};
+  const appMapUUIDByFileName: Record<string, string> = {};
+  const branchCount: Record<string, number> = {};
+  const commitCount: Record<string, number> = {};
+
+  // TODO: Can do these in concurrent batches
   for (const filePath of relevantFilePaths) {
     console.log(`Uploading AppMap ${filePath}`);
     const buffer = await fs.readFile(join(appmapDir, filePath));
-    const appMap = await AppMapClient.upload(buffer);
+    const appMapStruct = JSON.parse(buffer.toString()) as AppMapStruct;
+    const branch = appMapStruct.metadata.git?.branch;
+    const commit = appMapStruct.metadata.git?.commit;
+    if (branch) {
+      branchCount[branch] ||= 1;
+      branchCount[branch] += 1;
+    }
+    if (commit) {
+      commitCount[commit] ||= 1;
+      commitCount[commit] += 1;
+    }
+
+    const appMap = await AppMapClient.upload(buffer, { app: appId });
     if (appMap) {
-      appMapIds[filePath] = appMap.uuid;
+      appMapUUIDByFileName[filePath] = appMap.uuid;
     }
   }
 
-  const mapsetId = MapsetClient.create(appId, Object.values(appMapIds));
+  const mostFrequent = (counts: Record<string, number>): string => {
+    const maxCount = Object.values(counts).reduce((max, count) => Math.max(max, count), 0);
+    return Object.entries(counts).find((e) => e[1] === maxCount)![0];
+  };
+
+  const branch = mostFrequent(branchCount);
+  const commit = mostFrequent(commitCount);
+  const mapset = await MapsetClient.create(appId, Object.values(appMapUUIDByFileName), {
+    branch,
+    commit,
+  });
 
   const uploadData = JSON.stringify({
-    scanResults,
-    mapsetId,
-    appId,
+    scan_results: scanResults,
+    mapset: mapset.id,
+    appmap_uuid_by_file_name: appMapUUIDByFileName,
   });
 
   const request = await buildRequest('api/scanner_jobs');
