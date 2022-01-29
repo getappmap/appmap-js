@@ -1,16 +1,24 @@
 import { IncomingMessage } from 'http';
 
 import { buildRequest, handleError } from '@appland/client/dist/src';
+import FormData from 'form-data';
 
 export type UploadAppMapResponse = {
   uuid: string;
 };
 
+export type CreateOptions = {
+  app?: string;
+};
+
 export class AppMap {
-  static async upload(data: Buffer): Promise<UploadAppMapResponse> {
-    const payload = JSON.stringify({
-      data: data.toString(),
-    });
+  static async upload(data: Buffer, options: CreateOptions = {}): Promise<UploadAppMapResponse> {
+    const form = new FormData();
+    form.append('data', data.toString());
+    if (options.app) {
+      form.append('app', options.app);
+    }
+
     const request = await buildRequest('api/appmaps');
     return new Promise<IncomingMessage>((resolve, reject) => {
       const req = request.requestFunction(
@@ -18,16 +26,14 @@ export class AppMap {
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': payload.length,
             ...request.headers,
+            ...form.getHeaders(),
           },
         },
         resolve
       );
       req.on('error', reject);
-      req.write(payload);
-      req.end();
+      form.pipe(req);
     })
       .then(handleError)
       .then((response: IncomingMessage) => {
