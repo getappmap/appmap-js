@@ -87,6 +87,7 @@ __metadata:
     "@appland/models": ^1.10.1
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
+    "@types/async": ^3.2.12
     "@types/glob": ^7.1.4
     "@types/jest": ^27.0.1
     "@types/js-yaml": ^4.0.3
@@ -98,6 +99,7 @@ __metadata:
     "@typescript-eslint/parser": ^4.30.0
     ajv: ^8.8.2
     ansi-escapes: ^5.0.0
+    async: ^3.2.3
     chalk: ^4.1.2
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
@@ -1420,6 +1422,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/async@npm:^3.2.12":
+  version: 3.2.12
+  resolution: "@types/async@npm:3.2.12"
+  checksum: 7312830df42cab4c82b7aaeb9da8c0f52e5e2c3befbf24062669812890d42354ebfcb98c0a731e048dd445170ae9978a4c6447c95b03747d82d77fca26a8a2d7
+  languageName: node
+  linkType: hard
+
 "@types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14":
   version: 7.1.16
   resolution: "@types/babel__core@npm:7.1.16"
@@ -2085,6 +2094,13 @@ __metadata:
   version: 2.0.0
   resolution: "astral-regex@npm:2.0.0"
   checksum: 876231688c66400473ba505731df37ea436e574dd524520294cc3bbc54ea40334865e01fa0d074d74d036ee874ee7e62f486ea38bc421ee8e6a871c06f011766
+  languageName: node
+  linkType: hard
+
+"async@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "async@npm:3.2.3"
+  checksum: c4bee57ab2249af3dc83ca3ef9acfa8e822c0d5e5aa41bae3eaf7f673648343cd64ecd7d26091ffd357f3f044428b17b5f00098494b6cf8b6b3e9681f0636ca1
   languageName: node
   linkType: hard
 

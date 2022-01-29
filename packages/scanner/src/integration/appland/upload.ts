@@ -1,6 +1,8 @@
 import { promises as fs } from 'fs';
 import { IncomingMessage } from 'http';
 import { URL } from 'url';
+import { queue } from 'async';
+
 import { AppMap as AppMapStruct } from '@appland/models';
 import { buildRequest, handleError } from '@appland/client/dist/src';
 
@@ -14,7 +16,7 @@ export default async function (
   appId: string,
   appmapDir: string
 ): Promise<URL> {
-  process.stderr.write(`Uploading findings to application '${appId}'\n`);
+  console.warn(`Uploading AppMaps and findings to application '${appId}'`);
 
   const { findings } = scanResults;
 
@@ -26,8 +28,7 @@ export default async function (
   const branchCount: Record<string, number> = {};
   const commitCount: Record<string, number> = {};
 
-  // TODO: Can do these in concurrent batches
-  for (const filePath of relevantFilePaths) {
+  const q = queue(async (filePath: string, callback) => {
     console.log(`Uploading AppMap ${filePath}`);
     const buffer = await fs.readFile(join(appmapDir, filePath));
     const appMapStruct = JSON.parse(buffer.toString()) as AppMapStruct;
@@ -46,9 +47,18 @@ export default async function (
     if (appMap) {
       appMapUUIDByFileName[filePath] = appMap.uuid;
     }
-  }
+    callback();
+  }, 5);
+  q.error((err, filePath: string) => {
+    console.error(`An error occurred uploading ${filePath}: ${err}`);
+  });
+  console.log(`Uploading ${relevantFilePaths.length} AppMaps`);
+  q.push(relevantFilePaths);
+  await q.drain();
 
-  const mostFrequent = (counts: Record<string, number>): string => {
+  const mostFrequent = (counts: Record<string, number>): string | undefined => {
+    if (Object.keys(counts).length === 0) return;
+
     const maxCount = Object.values(counts).reduce((max, count) => Math.max(max, count), 0);
     return Object.entries(counts).find((e) => e[1] === maxCount)![0];
   };
@@ -59,6 +69,8 @@ export default async function (
     branch,
     commit,
   });
+
+  console.warn('Uploading findings');
 
   const uploadData = JSON.stringify({
     scan_results: scanResults,
