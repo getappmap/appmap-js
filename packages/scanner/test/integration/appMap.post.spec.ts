@@ -1,15 +1,11 @@
 import nock from 'nock';
 
 import * as test from './setup';
-import { AppMap, CreateOptions, UploadAppMapResponse } from '../../src/integration/appland/appMap';
+import { AppMap, CreateOptions } from '../../src/integration/appland/appMap';
 
 const AppMapData = {
   uuid: 'the-uuid',
 };
-
-async function uploadAppMap(data: Buffer, options: CreateOptions): Promise<UploadAppMapResponse> {
-  return AppMap.upload(data, options);
-}
 
 describe('appMap', () => {
   describe('post', () => {
@@ -27,8 +23,8 @@ describe('appMap', () => {
         )
         .matchHeader('Content-Type', /^multipart\/form-data; boundary/)
         .matchHeader('Accept', /^application\/json;?/)
-        .reply(200, AppMapData, ['Content-Type', 'application/json']);
-      expect(await uploadAppMap(data, options)).toEqual(AppMapData);
+        .reply(201, AppMapData, ['Content-Type', 'application/json']);
+      expect(await AppMap.upload(data, options)).toEqual(AppMapData);
     });
   });
 });

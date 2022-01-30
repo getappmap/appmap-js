@@ -3,9 +3,10 @@ import { IncomingMessage } from 'http';
 import { buildRequest, handleError } from '@appland/client/dist/src';
 
 export type CreateResponse = {
-  id: string;
-  created_at: Date;
-  updated_at: Date;
+  id: number;
+  name?: string;
+  created_at: string;
+  updated_at: string;
   user_id: number;
   app_id: number;
   branch?: string;
@@ -31,7 +32,7 @@ export class Mapset {
 
     const payload = JSON.stringify({
       app: appId,
-      scenarios: appMapIds,
+      appmaps: appMapIds,
       ...options,
     });
     const request = await buildRequest('api/mapsets');
