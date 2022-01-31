@@ -15,5 +15,5 @@ it('slow HTTP server request', async () => {
   expect(finding.event.id).toEqual(411);
   expect(finding.ruleTitle).toEqual('Slow HTTP server request');
   expect(finding.message).toEqual('Slow HTTP server request (> 500ms)');
-  expect(finding.hash).toEqual('a96c5258fc9f590493abcc9342c368e5b2262e95b7d38deded1dcbf97a2126d0');
+  expect(finding.hash).toEqual('c34836c5dc38a527f7a6d6c4867d60e7c8af09a3498735bb83746157d456b8a2');
 });
