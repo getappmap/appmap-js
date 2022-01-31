@@ -25,19 +25,6 @@ export default class MavenInstaller
     return join(this.path, this.buildFile);
   }
 
-  async postInstallMessage(): Promise<string> {
-    const mvn = this.runCommand();
-
-    return [
-      `The AppMap agent will automatically record your tests when you run ${chalk.blue(
-        `${mvn} test`
-      )}`,
-      `By default, AppMap files will be output to ${chalk.blue(
-        'target/appmap'
-      )}`,
-    ].join('\n');
-  }
-
   async available(): Promise<boolean> {
     return await exists(this.buildFilePath);
   }

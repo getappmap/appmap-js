@@ -79,13 +79,9 @@ export default class AgentInstallerProcedure extends AgentProcedure {
       chalk.green('Success! The AppMap agent has been installed.'),
     ];
 
-    if (this.installer.postInstallMessage) {
-      successMessage.push('', await this.installer.postInstallMessage(), '');
-    }
-
     if (this.installer.documentation) {
       successMessage.push(
-        'For more information, visit',
+        'For more information on recording AppMaps, visit',
         chalk.blue(this.installer.documentation)
       );
     }
