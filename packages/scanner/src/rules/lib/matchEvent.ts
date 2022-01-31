@@ -1,7 +1,6 @@
 import { Event } from '@appland/models';
-import { sqlNormalized } from '../../database';
 import MatchEventConfig from '../../configuration/types/matchEventConfig';
-import { EventFilter } from '../../types';
+import { AppMapIndex, EventFilter } from '../../types';
 import { buildFilter as buildMatchPattern } from './matchPattern';
 
 export function buildFilter(pattern: MatchEventConfig): EventFilter {
@@ -11,16 +10,16 @@ export function buildFilter(pattern: MatchEventConfig): EventFilter {
     id: (e: Event) => e.codeObject.id,
     type: (e: Event) => e.codeObject.type,
     fqid: (e: Event) => e.codeObject.fqid,
-    query: (e: Event) => (e.sql ? sqlNormalized(e.sql) : null),
+    query: (e: Event, appMapIndex: AppMapIndex) => (e.sql ? appMapIndex.sqlNormalized(e) : null),
     route: (e: Event) => e.route,
   };
 
-  return (event: Event): boolean => {
+  return (event: Event, appMapIndex: AppMapIndex): boolean => {
     const fn = propertyFn[pattern.property];
     if (!fn) {
       throw new Error(`Unrecognized Event filter property: ${pattern.property}`);
     }
-    const value = fn(event);
+    const value = fn(event, appMapIndex);
     if (!value) {
       return false;
     }

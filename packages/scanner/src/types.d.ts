@@ -1,4 +1,5 @@
 import { AppMap, Event } from '@appland/models';
+import { SqliteParser } from '@appland/models/types/sqlite-parser';
 import { URL } from 'url';
 
 /**
@@ -47,7 +48,7 @@ type StringFilter = (value: string) => boolean;
  * The event filter is always applied to the Scope.scope event. If enumerateScope is true,
  * the filter is applied to all Scope.events as well.
  */
-type EventFilter = (e: Event, appMap?: AppMap) => boolean;
+type EventFilter = (e: Event, appMapIndex: AppMapIndex) => boolean;
 
 /**
  * MatchResult is created by a rule when it matches an Event.
@@ -70,8 +71,14 @@ type MatcherResult =
 
 type EventType = 'http_server_request' | 'http_client_request' | 'sql_query' | 'function';
 
+export type QueryAST = SqliteParser.ListStatement | null;
+
 interface AppMapIndex {
   appMap: AppMap;
+
+  sqlAST(event: Event): QueryAST;
+
+  sqlNormalized(event: Event): string;
 
   forType(type: EventType, rootEvent?: Event | undefined): Event[];
 

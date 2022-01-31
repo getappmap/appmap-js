@@ -16,10 +16,10 @@ function build(options: Options): RuleLogic {
 
   function matcher(
     command: Event,
-    _appMapIndex: AppMapIndex,
+    appMapIndex: AppMapIndex,
     eventFilter: EventFilter
   ): MatchResult[] | undefined {
-    for (const sqlEvent of sqlStrings(command, eventFilter)) {
+    for (const sqlEvent of sqlStrings(command, appMapIndex, eventFilter)) {
       let occurrence = sqlCount[sqlEvent.sql];
       if (!occurrence) {
         occurrence = {

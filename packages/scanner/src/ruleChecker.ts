@@ -39,7 +39,7 @@ export default class RuleChecker {
         console.warn(`Scope ${scope.scope}`);
       }
       const checkInstance = new CheckInstance(check);
-      if (!check.filterScope(scope.scope, appMapIndex.appMap)) {
+      if (!check.filterScope(scope.scope, appMapIndex)) {
         continue;
       }
       if (checkInstance.enumerateScope) {
@@ -90,7 +90,7 @@ export default class RuleChecker {
       return;
     }
 
-    if (!checkInstance.filterEvent(event, appMapIndex.appMap)) {
+    if (!checkInstance.filterEvent(event, appMapIndex)) {
       return;
     }
 

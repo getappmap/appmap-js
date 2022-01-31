@@ -18,16 +18,16 @@ function build(options: Options = new Options()): RuleLogic {
   const joinCount: Record<string, JoinCount> = {};
   function matcher(
     command: Event,
-    _appMapIndex: AppMapIndex,
+    appMapIndex: AppMapIndex,
     eventFilter: EventFilter
   ): MatchResult[] | undefined {
-    for (const sqlEvent of sqlStrings(command, eventFilter)) {
+    for (const sqlEvent of sqlStrings(command, appMapIndex, eventFilter)) {
       let occurrence = joinCount[sqlEvent.sql];
 
       if (!occurrence) {
         occurrence = {
           count: 1,
-          joins: countJoins(sqlEvent.sql),
+          joins: countJoins(appMapIndex.sqlAST(sqlEvent.event)),
           events: [sqlEvent.event],
         };
         joinCount[sqlEvent.sql] = occurrence;

@@ -4,14 +4,8 @@
 // TODO: Copied and TypeScript-ified from @appland/models
 
 import { visit } from './visit';
-import {
-  buildQueryAST,
-  Event,
-  EventNavigator,
-  getSqlLabelFromString,
-  SqlQuery,
-} from '@appland/models';
-import { EventFilter } from 'src/types';
+import { Event, getSqlLabelFromString, SqlQuery } from '@appland/models';
+import { AppMapIndex, EventFilter, QueryAST } from '../types';
 
 const COMPONENTS_REGEXP_MAP: Record<string, RegExp> = {
   single_quotes: /'(?:[^']|'')*?(?:\\'.*|'(?!'))/g,
@@ -177,45 +171,43 @@ export function isSelect(sql: string): boolean {
   return getSqlLabelFromString(sql) === 'SQL Select';
 }
 
-export function* sqlStrings(event: Event, filter: EventFilter = () => true): Generator<SQLEvent> {
-  for (const e of new EventNavigator(event).descendants()) {
-    if (!e.event.sqlQuery) {
+export function* sqlStrings(
+  event: Event,
+  appMapIndex: AppMapIndex,
+  filter: EventFilter = () => true
+): Generator<SQLEvent> {
+  for (const evt of appMapIndex.forType('sql_query', event)) {
+    if (!evt.sqlQuery) {
       continue;
     }
-    if (!filter(e.event)) {
-      continue;
-    }
-
-    if (!isSelect(e.event.sqlQuery!)) {
-      continue;
-    }
-
-    if (!filter(event)) {
+    if (!filter(evt, appMapIndex)) {
       continue;
     }
 
-    const sql = sqlNormalized(e.event.sql!);
+    if (!isSelect(evt.sqlQuery!)) {
+      continue;
+    }
 
-    yield { event: e.event, sql };
+    if (!filter(evt, appMapIndex)) {
+      continue;
+    }
+
+    const sql = appMapIndex.sqlNormalized(evt);
+
+    yield { event: evt, sql };
   }
 }
 
-export function countJoins(normalizedSql: string): number {
-  try {
-    const ast = buildQueryAST(normalizedSql);
-    let joins = 0;
+export function countJoins(ast: QueryAST): number {
+  let joins = 0;
 
-    if (ast) {
-      visit(ast, {
-        'map.join': (node) => {
-          joins += node.map.length;
-        },
-      });
-    }
-
-    return joins;
-  } catch (_) {
-    console.warn(`Unable to analyze query "${normalizedSql}"`);
-    return 0;
+  if (ast) {
+    visit(ast, {
+      'map.join': (node) => {
+        joins += node.map.length;
+      },
+    });
   }
+
+  return joins;
 }

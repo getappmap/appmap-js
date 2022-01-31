@@ -1,5 +1,6 @@
-import { AppMap, Event } from '@appland/models';
-import { EventType } from './types';
+import { AppMap, buildQueryAST, Event } from '@appland/models';
+import { sqlNormalized } from './database';
+import { EventType, QueryAST } from './types';
 
 function isDescendantOf(event: Event, rootEvent: Event): boolean {
   return !!event.ancestors().find((ancestor) => ancestor === rootEvent);
@@ -15,9 +16,12 @@ function filterEvents(events: Event[], rootEvent: Event | undefined): Event[] {
 
 const SpecializedTypes = ['sql_query', 'http_client_request', 'http_server_request'];
 
+const ASTBySQLString: Record<string, QueryAST> = {};
+
 export default class AppMapIndex {
   eventsByLabel: Record<string, Event[]> = {};
   eventsByType: Record<string, Event[]> = {};
+  sqlNormalizedByEventId: Record<number, string> = {};
 
   constructor(public appMap: AppMap) {
     const events = appMap.events;
@@ -46,6 +50,34 @@ export default class AppMapIndex {
         });
       }
     }
+  }
+
+  sqlAST(event: Event): QueryAST {
+    if (!event.sql) throw new Error(`${event.fqid} is not a SQL query`);
+
+    const sql = this.sqlNormalized(event);
+    let ast = ASTBySQLString[sql];
+    if (!ast) {
+      try {
+        ast = buildQueryAST(sql);
+      } catch {
+        console.warn(`Unable to parse query: ${sql}`);
+        ast = [] as any as QueryAST;
+      }
+      ASTBySQLString[sql] = ast;
+    }
+    return ast;
+  }
+
+  sqlNormalized(event: Event): string {
+    if (!event.sql) throw new Error(`${event.fqid} is not a SQL query`);
+
+    let sql = this.sqlNormalizedByEventId[event.id];
+    if (!sql) {
+      sql = sqlNormalized(event.sql);
+      this.sqlNormalizedByEventId[event.id] = sql;
+    }
+    return sql;
   }
 
   forType(type: EventType, rootEvent?: Event): Event[] {
