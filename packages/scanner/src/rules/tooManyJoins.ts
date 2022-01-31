@@ -1,5 +1,5 @@
-import { AppMap, Event } from '@appland/models';
-import { EventFilter, MatchResult, Rule, RuleLogic } from '../types';
+import { Event } from '@appland/models';
+import { AppMapIndex, EventFilter, MatchResult, Rule, RuleLogic } from '../types';
 import * as types from './types';
 import { countJoins, SQLCount, sqlStrings } from '../database';
 import { URL } from 'url';
@@ -18,7 +18,7 @@ function build(options: Options = new Options()): RuleLogic {
   const joinCount: Record<string, JoinCount> = {};
   function matcher(
     command: Event,
-    _appMap: AppMap,
+    _appMapIndex: AppMapIndex,
     eventFilter: EventFilter
   ): MatchResult[] | undefined {
     for (const sqlEvent of sqlStrings(command, eventFilter)) {

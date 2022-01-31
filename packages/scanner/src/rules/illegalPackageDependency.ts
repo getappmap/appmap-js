@@ -42,7 +42,8 @@ function build(options: Options): RuleLogic {
 export default {
   id: 'illegal-package-dependency',
   title: 'Illegal use of code by a non-whitelisted package',
-  scope: 'command' as ScopeName,
+  // scope: //*[@command]
+  scope: 'command',
   enumerateScope: true,
   impactDomain: 'Maintainability',
   references: {

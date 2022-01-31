@@ -1,5 +1,5 @@
-import { AppMap, Event } from '@appland/models';
-import { EventFilter, Level, MatchResult, Rule, RuleLogic } from '../types';
+import { Event } from '@appland/models';
+import { AppMapIndex, EventFilter, Level, MatchResult, Rule, RuleLogic } from '../types';
 import * as types from './types';
 import { SQLCount, sqlStrings } from '../database';
 import { URL } from 'url';
@@ -16,7 +16,7 @@ function build(options: Options): RuleLogic {
 
   function matcher(
     command: Event,
-    _appMap: AppMap,
+    _appMapIndex: AppMapIndex,
     eventFilter: EventFilter
   ): MatchResult[] | undefined {
     for (const sqlEvent of sqlStrings(command, eventFilter)) {

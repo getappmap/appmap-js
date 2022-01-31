@@ -1,5 +1,6 @@
 import { Event, EventNavigator } from '@appland/models';
-import { Scope } from 'src/types';
+import assert from 'assert';
+import { AppMapIndex, Scope } from 'src/types';
 import ScopeIterator from './scopeIterator';
 
 class ScopeImpl implements Scope {
@@ -25,8 +26,11 @@ const Command = 'command';
 const Job = 'job';
 
 export default class CommandScope extends ScopeIterator {
-  *scopes(events: Generator<Event>): Generator<Scope> {
-    for (const event of events) {
+  *scopes(appMapIndex: AppMapIndex): Generator<Scope> {
+    const events = appMapIndex.appMap.events;
+    for (let index = 0; index < events.length; index++) {
+      const event = events[index];
+      // TODO: Use pseudo-label @scope.command
       if (
         event.isCall() &&
         (event.codeObject.labels.has(Command) ||
@@ -35,7 +39,8 @@ export default class CommandScope extends ScopeIterator {
       ) {
         yield new ScopeImpl(event);
 
-        this.advanceToReturnEvent(event, events);
+        index = event.returnEvent.id - 1;
+        assert(events[index] === event.returnEvent);
       }
     }
   }

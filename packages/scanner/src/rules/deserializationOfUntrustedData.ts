@@ -37,6 +37,7 @@ function allArgumentsSanitized(rootEvent: Event, event: Event): boolean {
 function build(): RuleLogic {
   function matcher(rootEvent: Event): MatchResult[] | undefined {
     for (const event of new EventNavigator(rootEvent).descendants()) {
+      // events: //*[@authorization && truthy?(returnValue) && not(preceding::*[@authentication]) && not(descendant::*[@authentication])]
       if (
         event.event.labels.has(DeserializeUnsafe) &&
         !event.event.ancestors().find((ancestor) => ancestor.labels.has(DeserializeSafe))
@@ -71,6 +72,7 @@ export default {
   labels: [DeserializeUnsafe, DeserializeSafe, Sanitize],
   impactDomain: 'Security',
   enumerateScope: false,
+  // scope: //*[@command]
   references: {
     'CWE-502': new URL('https://cwe.mitre.org/data/definitions/502.html'),
     'Ruby Security': new URL('https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html'),

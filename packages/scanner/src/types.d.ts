@@ -20,12 +20,7 @@ import { URL } from 'url';
  * of what the code is trying to do. But, anticipating that this may sometimes happen, "root" scope is a good choice for a rule that may flag code
  * anywhere in the AppMap.
  */
-export type ScopeName =
-  | 'root'
-  | 'command'
-  | 'http_client_request'
-  | 'http_server_request'
-  | 'transaction';
+export type ScopeName = 'root' | 'command' | 'http_client_request' | 'http_server_request';
 
 /**
  * Indicates the aspect of software quality that is most relevant to a rule.
@@ -73,11 +68,21 @@ type MatcherResult =
   | MatchResult[]
   | undefined;
 
+type EventType = 'http_server_request' | 'http_client_request' | 'sql_query' | 'function';
+
+interface AppMapIndex {
+  appMap: AppMap;
+
+  forType(type: EventType, rootEvent?: Event | undefined): Event[];
+
+  forLabel(label: string, rootEvent?: Event | undefined): Event[];
+}
+
 /**
  * Matcher function is part of a rule. It's applied to an Event to determine whether there is a finding
  * on this event. If the Matcher returns true, a string, or a MatchResult[], then finding(s) are created.
  */
-type Matcher = (e: Event, appMap: AppMap, eventFilter: EventFilter) => MatcherResult;
+type Matcher = (e: Event, appMapIndex: AppMapIndex, eventFilter: EventFilter) => MatcherResult;
 
 /**
  * Finding is the full data structure that is created when a Rule matches an Event.

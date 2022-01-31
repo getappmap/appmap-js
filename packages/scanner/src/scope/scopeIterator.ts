@@ -1,8 +1,9 @@
 import { Event } from '@appland/models';
-import { Scope } from 'src/types';
+import AppMapIndex from '../appMapIndex';
+import { Scope } from '../types';
 
 export default abstract class ScopeIterator {
-  abstract scopes(events: Generator<Event>): Generator<Scope>;
+  abstract scopes(appMapIndex: AppMapIndex): Generator<Scope>;
 
   // Scan ahead past the return event of the yielded scope.
   protected advanceToReturnEvent(scopeEvent: Event, events: Generator<Event>): void {
