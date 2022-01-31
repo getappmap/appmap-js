@@ -102,7 +102,6 @@ export class YarnInstaller
 
   async postInstallMessage(): Promise<string> {
     return [
-      `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
       `By default, AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
     ].join('\n');
   }
