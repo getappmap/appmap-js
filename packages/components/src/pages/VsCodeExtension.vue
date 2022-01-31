@@ -54,45 +54,19 @@
 
         <v-tab name="Trace View" :is-active="isViewingFlow" :ref="VIEW_FLOW">
           <div class="trace-view">
-            <div class="trace-view__search">
-              <div class="trace-view__search-input-wrap">
-                <span class="trace-view__search-input-prefix">
-                  <SearchIcon />
-                </span>
-                <input
-                  v-model="traceFilterValue"
-                  class="trace-view__search-input-element"
-                  type="text"
-                  autocomplete="off"
-                  placeholder="search events..."
-                />
-                <span
-                  v-if="traceFilterValue"
-                  class="trace-view__search-input-suffix"
-                  @click="clearTraceFilterInput"
-                >
-                  <CloseThinIcon />
-                </span>
-              </div>
-              <div
-                class="trace-view__search-arrows"
-                v-if="highlightedNodes.length"
-              >
-                <div class="trace-view__search-arrow" @click="prevTraceFilter">
-                  <ArrowSearchLeftIcon />
-                </div>
-                <div class="trace-view__search-arrows-text">
-                  <span v-if="Number.isInteger(currentTraceFilterIndex)">
-                    <b>{{ currentTraceFilterIndex + 1 }}</b>
-                    /
-                  </span>
-                  {{ highlightedNodes.length }} results
-                </div>
-                <div class="trace-view__search-arrow" @click="nextTraceFilter">
-                  <ArrowSearchRightIcon />
-                </div>
-              </div>
-            </div>
+            <v-trace-filter
+              ref="traceFilter"
+              :nodesLength="highlightedNodes.length"
+              :currentIndex="currentTraceFilterIndex"
+              :suggestions="eventsSuggestions"
+              @onChange="
+                (value) => {
+                  this.traceFilterValue = value;
+                }
+              "
+              @onPrevArrow="prevTraceFilter"
+              @onNextArrow="nextTraceFilter"
+            />
             <v-diagram-trace
               ref="diagramFlow"
               :events="filteredAppMap.rootEvents()"
@@ -328,13 +302,10 @@
 
 <script>
 import { CodeObjectType, Event, buildAppMap } from '@appland/models';
-import ArrowSearchLeftIcon from '@/assets/arrow-search-left.svg';
-import ArrowSearchRightIcon from '@/assets/arrow-search-right.svg';
 import CheckIcon from '@/assets/check.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
 import ReloadIcon from '@/assets/reload.svg';
 import ResetIcon from '@/assets/reset.svg';
-import SearchIcon from '@/assets/search.svg';
 import UploadIcon from '@/assets/upload.svg';
 import FilterIcon from '@/assets/filter.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
@@ -348,6 +319,7 @@ import VNotification from '../components/Notification.vue';
 import VPopperMenu from '../components/PopperMenu.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
+import VTraceFilter from '../components/trace/TraceFilter.vue';
 import {
   store,
   SET_APPMAP_DATA,
@@ -364,13 +336,10 @@ export default {
   name: 'VSCodeExtension',
 
   components: {
-    ArrowSearchLeftIcon,
-    ArrowSearchRightIcon,
     CheckIcon,
     CloseThinIcon,
     ReloadIcon,
     ResetIcon,
-    SearchIcon,
     UploadIcon,
     FilterIcon,
     VDetailsPanel,
@@ -383,6 +352,7 @@ export default {
     VPopperMenu,
     VTabs,
     VTab,
+    VTraceFilter,
     DiagramGray,
   },
 
@@ -605,6 +575,13 @@ export default {
         .filter(
           (fqid) => !this.filters.declutter.hideName.names.includes(fqid)
         );
+    },
+
+    eventsSuggestions() {
+      const highlightedIds = new Set(this.highlightedNodes.map((e) => e.id));
+      return this.filteredAppMap.events.filter(
+        (e) => e.isCall() && !highlightedIds.has(e.id)
+      );
     },
 
     eventsById() {
@@ -912,7 +889,7 @@ export default {
       }
 
       if (state.traceFilter) {
-        this.traceFilterValue = state.traceFilter;
+        this.$refs.traceFilter.setValue(state.traceFilter);
       }
 
       const { filters } = state;
@@ -955,10 +932,6 @@ export default {
       this.currentTraceFilterIndex = 0;
       this.$store.commit(CLEAR_OBJECT_STACK);
       this.$root.$emit('clearSelection');
-    },
-
-    clearTraceFilterInput() {
-      this.traceFilterValue = '';
     },
 
     goBack() {
@@ -1381,110 +1354,6 @@ code {
     flex-direction: column;
     width: 100%;
     height: 100%;
-
-    &__search {
-      padding: 1rem 1.25rem;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      font-family: $appland-text-font-family;
-
-      &-input-wrap {
-        flex: 1;
-        position: relative;
-        border-radius: $border-radius;
-        border: 2px solid $light-purple;
-
-        .details-search--empty & {
-          border-radius: $gray3;
-          pointer-events: none;
-        }
-      }
-
-      &-input-prefix {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        width: 2rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transform: translateY(-50%);
-        text-align: center;
-        color: $base06;
-
-        svg {
-          position: relative;
-          left: 3px;
-          width: 14px;
-          height: 14px;
-          fill: $lightgray2;
-        }
-      }
-
-      &-input-element {
-        border: none;
-        width: 100%;
-        padding: 0.5rem 2rem;
-        font: inherit;
-        font-size: 0.75rem;
-        color: $base03;
-        background: transparent;
-        outline: none;
-
-        &::-webkit-placeholder,
-        &::-moz-placeholder,
-        &::placeholder {
-          color: $gray4;
-        }
-      }
-
-      &-input-suffix {
-        position: absolute;
-        top: 50%;
-        right: 5px;
-        width: 1rem;
-        height: 1rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transform: translateY(-50%);
-        text-align: center;
-        color: $lightgray2;
-        transition: color 0.3s ease-in;
-        cursor: pointer;
-
-        &:hover,
-        &:active {
-          color: $gray5;
-          transition-timing-function: ease-out;
-        }
-
-        svg {
-          width: 14px;
-          height: 14px;
-          fill: currentColor;
-        }
-      }
-
-      &-arrows {
-        display: flex;
-        align-items: center;
-        padding: 0 1.25rem;
-
-        &-text {
-          margin: 0 0.5rem;
-          font-size: 0.75rem;
-          color: $base06;
-        }
-      }
-
-      &-arrow {
-        padding: 0.25rem;
-        font-size: 0;
-        cursor: pointer;
-      }
-    }
   }
 
   .no-data-notice {
