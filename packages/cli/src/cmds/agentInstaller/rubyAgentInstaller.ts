@@ -33,13 +33,6 @@ export class BundleInstaller extends AgentInstaller {
     return 'https://appland.com/docs/reference/appmap-ruby';
   }
 
-  async postInstallMessage(): Promise<string> {
-    return [
-      `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
-      `AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
-    ].join('\n');
-  }
-
   async available(): Promise<boolean> {
     return await exists(this.buildFilePath);
   }

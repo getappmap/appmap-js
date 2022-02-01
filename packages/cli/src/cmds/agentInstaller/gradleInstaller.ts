@@ -34,17 +34,6 @@ export default class GradleInstaller
     );
   }
 
-  async postInstallMessage(): Promise<string> {
-    let gradleBin = await this.runCommand();
-
-    return [
-      `Record your tests by running ${chalk.blue(`${gradleBin} appmap test`)}`,
-      `By default, AppMap files will be output to ${chalk.blue(
-        'build/appmap'
-      )}`,
-    ].join('\n');
-  }
-
   async available(): Promise<boolean> {
     return await exists(this.buildFilePath);
   }

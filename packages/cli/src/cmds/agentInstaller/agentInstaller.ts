@@ -15,7 +15,6 @@ export default abstract class AgentInstaller {
   abstract validateAgentCommand(): Promise<CommandStruct | undefined>;
   abstract initCommand(): Promise<CommandStruct>;
   abstract verifyCommand(): Promise<CommandStruct | undefined>;
-  abstract postInstallMessage(): Promise<string>;
   abstract environment(): Promise<Record<string, string>>;
   abstract available(): Promise<boolean>;
 }

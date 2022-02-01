@@ -21,9 +21,6 @@ class FakeInstaller extends AgentInstaller {
   verifyCommand(): Promise<commandStruct> {
     throw new Error("Method not implemented.");
   }
-  postInstallMessage(): Promise<string> {
-    throw new Error("Method not implemented.");
-  }
   environment(): Promise<Record<string, string>> {
     throw new Error("Method not implemented.");
   }

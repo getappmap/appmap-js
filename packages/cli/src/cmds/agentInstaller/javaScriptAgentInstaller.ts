@@ -59,13 +59,6 @@ export class NpmInstaller
     return join(this.path, this.buildFile);
   }
 
-  async postInstallMessage(): Promise<string> {
-    return [
-      `Run your tests with ${chalk.blue('npx appmap-agent-js -- mocha ...')}.`,
-      `By default, AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
-    ].join('\n');
-  }
-
   async available(): Promise<boolean> {
     return await exists(this.buildFilePath);
   }
@@ -98,13 +91,6 @@ export class YarnInstaller
 
   get buildFilePath(): string {
     return join(this.path, this.buildFile);
-  }
-
-  async postInstallMessage(): Promise<string> {
-    return [
-      `Run your tests with ${chalk.blue('APPMAP=true')} in the environment.`,
-      `By default, AppMap files will be output to ${chalk.blue('tmp/appmap')}.`,
-    ].join('\n');
   }
 
   async available(): Promise<boolean> {
