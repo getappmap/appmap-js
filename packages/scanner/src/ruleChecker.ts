@@ -10,6 +10,7 @@ import HTTPClientRequestScope from './scope/httpClientRequestScope';
 import CommandScope from './scope/commandScope';
 import SQLTransactionScope from './scope/sqlTransactionScope';
 import CheckInstance from './checkInstance';
+import { createHash } from 'crypto';
 
 export default class RuleChecker {
   private scopes: Record<string, ScopeIterator> = {
@@ -111,13 +112,18 @@ export default class RuleChecker {
         findingEvent.codeObject.location,
         ...findingEvent.ancestors().map((ancestor) => ancestor.codeObject.location),
       ].filter(Boolean);
+
+      const hash = createHash('sha256');
+      hash.update(findingEvent.hash);
+      hash.update(checkInstance.ruleId);
+
       return {
         appMapFile,
         checkId: checkInstance.checkId,
         ruleId: checkInstance.ruleId,
         ruleTitle: checkInstance.title,
         event: findingEvent,
-        hash: findingEvent.hash,
+        hash: hash.digest('hex'),
         stack,
         scope,
         message: message || checkInstance.title,
