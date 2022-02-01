@@ -1,3 +1,10 @@
+## [1.39.1](https://github.com/applandinc/scanner/compare/v1.39.0...v1.39.1) (2022-02-01)
+
+
+### Bug Fixes
+
+* Finding hash now includes rule id ([10db345](https://github.com/applandinc/scanner/commit/10db345ef472a45ad2d892a4b1df6bc7f70681cf))
+
 # [1.39.0](https://github.com/applandinc/scanner/compare/v1.38.0...v1.39.0) (2022-01-28)
 
 
