@@ -76,7 +76,7 @@ export type QueryAST = SqliteParser.ListStatement | null;
 interface AppMapIndex {
   appMap: AppMap;
 
-  sqlAST(event: Event): QueryAST;
+  sqlAST(event: Event): QueryAST | undefined;
 
   sqlNormalized(event: Event): string;
 

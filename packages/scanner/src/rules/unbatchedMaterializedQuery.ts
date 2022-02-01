@@ -1,5 +1,5 @@
 import { Event } from '@appland/models';
-import { AppMapIndex, MatchResult, QueryAST, Rule, RuleLogic } from '../types';
+import { AppMapIndex, QueryAST, Rule, RuleLogic } from '../types';
 import { visit } from '../database/visit';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
@@ -8,7 +8,9 @@ function isMaterialized(event: Event): boolean {
   return event.ancestors().some(({ labels }) => labels.has(DAOMaterialize));
 }
 
-function isApplicable(event: Event, ast: QueryAST): boolean {
+function isApplicable(event: Event, ast: QueryAST | undefined): boolean {
+  if (!ast) return false;
+
   let isSelect = false;
   let isCount = false;
   let hasLimitClause = false;

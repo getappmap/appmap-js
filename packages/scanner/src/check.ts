@@ -1,4 +1,4 @@
-import { AppMap, Event } from '@appland/models';
+import { Event } from '@appland/models';
 import { verbose } from './rules/lib/util';
 import { AppMapIndex, EventFilter, Rule, ScopeName } from './types';
 

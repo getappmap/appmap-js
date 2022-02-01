@@ -47,37 +47,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appland/client@npm:^1.1.3":
-  version: 1.1.3
-  resolution: "@appland/client@npm:1.1.3"
+"@appland/client@portal:/Users/kgilpin/source/appland/appmap-js/packages/client::locator=%40appland%2Fscanner%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@appland/client@portal:/Users/kgilpin/source/appland/appmap-js/packages/client::locator=%40appland%2Fscanner%40workspace%3A."
   dependencies:
-    "@appland/models": ^1.8.1
+    "@appland/models": "workspace:^1.8.1"
     js-yaml: ^4.1.0
-  checksum: 9049a3500ca7cd41f08ec061a8990e02561793d1e39c6470734c079b8c7d9ffbcbde792bef702f409fdffec6152819762b24a8e6478ea6af6dc7e42386767f76
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@appland/models@npm:^1.10.1":
-  version: 1.10.1
-  resolution: "@appland/models@npm:1.10.1"
+"@appland/models@portal:/Users/kgilpin/source/appland/appmap-js/packages/models::locator=%40appland%2Fscanner%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@appland/models@portal:/Users/kgilpin/source/appland/appmap-js/packages/models::locator=%40appland%2Fscanner%40workspace%3A."
   dependencies:
     "@appland/sql-parser": ^1.1.1
     cross-env: ^7.0.3
     crypto-js: ^4.0.0
-  checksum: dcb71d9d68f045b567b12be0327df1d926c915996adef145206ae8ee976520588efb80fc35ac739a7ab05088dd1191af1be7e0399398e5e3583d921d60f28378
   languageName: node
-  linkType: hard
-
-"@appland/models@npm:^1.8.1":
-  version: 1.10.0
-  resolution: "@appland/models@npm:1.10.0"
-  dependencies:
-    "@appland/sql-parser": ^1.1.1
-    cross-env: ^7.0.3
-    crypto-js: ^4.0.0
-  checksum: 6ac5234a210a7b6d05efad0c74ac553bf0e469c21c514d04a25621f13bf1d43688e8267a33a93b7a9093850d840e7e39d0fb007f96e14e5a3ff94d29027c45ab
-  languageName: node
-  linkType: hard
+  linkType: soft
 
 "@appland/scanner@workspace:.":
   version: 0.0.0-use.local
@@ -91,6 +78,7 @@ __metadata:
     "@types/glob": ^7.1.4
     "@types/jest": ^27.0.1
     "@types/js-yaml": ^4.0.3
+    "@types/lru-cache": ^5.1.1
     "@types/node": ^16.7.10
     "@types/sinon": ^10.0.2
     "@types/tar-stream": ^2.2.2
@@ -108,6 +96,7 @@ __metadata:
     form-data: ^4.0.0
     jest: ^27.4.7
     js-yaml: ^4.1.0
+    lru-cache: ^6.0.0
     minimatch: ^3.0.4
     nock: ^13.2.2
     octokat: ^0.10.0
@@ -1777,6 +1766,13 @@ __metadata:
   version: 7.0.9
   resolution: "@types/json-schema@npm:7.0.9"
   checksum: 259d0e25f11a21ba5c708f7ea47196bd396e379fddb79c76f9f4f62c945879dc21657904914313ec2754e443c5018ea8372362f323f30e0792897fdb2098a705
+  languageName: node
+  linkType: hard
+
+"@types/lru-cache@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "@types/lru-cache@npm:5.1.1"
+  checksum: e1d6c0085f61b16ec5b3073ec76ad1be4844ea036561c3f145fc19f71f084b58a6eb600b14128aa95809d057d28f1d147c910186ae51219f58366ffd2ff2e118
   languageName: node
   linkType: hard
 

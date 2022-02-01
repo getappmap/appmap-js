@@ -1,6 +1,7 @@
-import { AppMap, buildQueryAST, Event } from '@appland/models';
+import { AppMap, sqlWarning, buildQueryAST, Event } from '@appland/models';
 import { sqlNormalized } from './database';
 import { EventType, QueryAST } from './types';
+import LRUCache from 'lru-cache';
 
 function isDescendantOf(event: Event, rootEvent: Event): boolean {
   return !!event.ancestors().find((ancestor) => ancestor === rootEvent);
@@ -15,13 +16,12 @@ function filterEvents(events: Event[], rootEvent: Event | undefined): Event[] {
 }
 
 const SpecializedTypes = ['sql_query', 'http_client_request', 'http_server_request'];
-
-const ASTBySQLString: Record<string, QueryAST> = {};
+const NormalizedSQLBySQLString = new LRUCache<string, string>({ max: 2000 });
+const ASTBySQLString = new LRUCache<string, QueryAST>({ max: 2000 });
 
 export default class AppMapIndex {
   eventsByLabel: Record<string, Event[]> = {};
   eventsByType: Record<string, Event[]> = {};
-  sqlNormalizedByEventId: Record<number, string> = {};
 
   constructor(public appMap: AppMap) {
     const events = appMap.events;
@@ -52,19 +52,21 @@ export default class AppMapIndex {
     }
   }
 
-  sqlAST(event: Event): QueryAST {
+  sqlAST(event: Event): QueryAST | undefined {
     if (!event.sql) throw new Error(`${event.fqid} is not a SQL query`);
 
     const sql = this.sqlNormalized(event);
-    let ast = ASTBySQLString[sql];
+    let ast = ASTBySQLString.get(sql);
     if (!ast) {
       try {
         ast = buildQueryAST(sql);
       } catch {
-        console.warn(`Unable to parse query: ${sql}`);
+        sqlWarning(`Unable to parse query: ${sql}`);
         ast = [] as any as QueryAST;
       }
-      ASTBySQLString[sql] = ast;
+      if (ast) {
+        ASTBySQLString.set(sql, ast);
+      }
     }
     return ast;
   }
@@ -72,10 +74,11 @@ export default class AppMapIndex {
   sqlNormalized(event: Event): string {
     if (!event.sql) throw new Error(`${event.fqid} is not a SQL query`);
 
-    let sql = this.sqlNormalizedByEventId[event.id];
+    const cacheKey = [event.sql.database_type, event.sql.sql].join(':');
+    let sql = NormalizedSQLBySQLString.get(cacheKey);
     if (!sql) {
       sql = sqlNormalized(event.sql);
-      this.sqlNormalizedByEventId[event.id] = sql;
+      NormalizedSQLBySQLString.set(cacheKey, sql);
     }
     return sql;
   }

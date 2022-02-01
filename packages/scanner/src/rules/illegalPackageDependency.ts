@@ -1,6 +1,6 @@
 import { Event } from '@appland/models';
 import types from './types';
-import { MatcherResult, Rule, RuleLogic, ScopeName } from '../types';
+import { MatcherResult, Rule, RuleLogic } from '../types';
 import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
 import { buildFilter, buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
