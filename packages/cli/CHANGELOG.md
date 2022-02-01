@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.17.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.17.1...@appland/appmap-v3.17.2) (2022-02-01)
+
+
+### Bug Fixes
+
+* Fix JS post-install message ([3821584](https://github.com/applandinc/appmap-js/commit/3821584c045cbb1f70c148a48d3df1cb10d7f2a7))
+* Remove post-install message ([716c5a9](https://github.com/applandinc/appmap-js/commit/716c5a96a1d587496921e756995e7cd8831ff616))
+
 # [@appland/appmap-v3.17.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.17.0...@appland/appmap-v3.17.1) (2022-01-27)
 
 
