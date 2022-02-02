@@ -1,23 +1,29 @@
-import { createWriteStream } from 'fs';
+import { open, write } from 'fs';
 
-const SqlWarningFileName = 'sql_warning.txt';
-let /** @type {WriteStream} */ SqlWarningFile;
+let SqlWarningFileName = 'sql_warning.txt';
+let messages /** @type {string[]} */ = [];
+let writeMessage = (msg) => messages.push(msg);
+
+process.on('exit', () => {
+  if (!messages) return;
+
+  [...new Set(messages)].forEach((msg) => console.warn(msg));
+});
 
 // eslint-disable-next-line import/prefer-default-export
 export function warn(/** @type {string} */ message) {
-  function writeMessage(msg) {
-    SqlWarningFile.write([msg, '\n'].join(''));
-  }
+  if (SqlWarningFileName) {
+    open(SqlWarningFileName, 'w', (err, fd) => {
+      if (err || !fd) return;
 
-  let messages = [];
-  if (!SqlWarningFile) {
-    SqlWarningFile = createWriteStream(SqlWarningFileName);
-    SqlWarningFile.on('open', () => {
+      writeMessage = (msg) => write(fd, [msg, '\n'].join(''), () => {});
+
       messages.forEach(writeMessage);
       messages = null;
     });
+    // Try only once
+    SqlWarningFileName = null;
   }
-  if (messages) {
-    messages.push(message);
-  }
+
+  writeMessage(message);
 }
