@@ -1,3 +1,18 @@
+# [1.40.0](https://github.com/applandinc/scanner/compare/v1.39.1...v1.40.0) (2022-02-02)
+
+
+### Bug Fixes
+
+* Improve Mapset and Findings upload ([055758b](https://github.com/applandinc/scanner/commit/055758ba3a23a90a62f125ca8eec8cb796471d7b))
+* Remove redundant rule in default.yml sample config ([72ad9f8](https://github.com/applandinc/scanner/commit/72ad9f8f4def9a7ca2f4534545cc72413a86034e))
+* Remove unused import ([bfc3fe6](https://github.com/applandinc/scanner/commit/bfc3fe67823984c20a8055c6843df73996f83856))
+* Use FormData to efficiently upload AppMaps ([b8b43ee](https://github.com/applandinc/scanner/commit/b8b43ee0626207d5302312749cfd7fa5a288c966))
+
+
+### Features
+
+* Upload AppMaps, then create a Mapset, then Findings ([3403834](https://github.com/applandinc/scanner/commit/3403834dd50c446e7fa59a67038e48016d0e9f1c))
+
 ## [1.39.1](https://github.com/applandinc/scanner/compare/v1.39.0...v1.39.1) (2022-02-01)
 
 
