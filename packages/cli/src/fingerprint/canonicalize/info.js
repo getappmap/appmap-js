@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-const { analyzeQuery } = require('../../database');
+const { analyzeSQL } = require('@appland/models');
 const EventTree = require('./eventTree');
 
 /**
@@ -11,7 +11,7 @@ class Canonicalize extends EventTree {
     return {
       kind: 'sql',
       sql: {
-        analyzed_query: analyzeQuery(event.sql),
+        analyzed_query: analyzeSQL(event.sqlQuery),
       },
     };
   }

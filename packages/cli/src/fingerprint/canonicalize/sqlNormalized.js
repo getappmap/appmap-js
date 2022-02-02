@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-const { obfuscate } = require('../../database');
+const { normalizeSQL } = require('@appland/models');
 const Unique = require('./unique');
 
 /**
@@ -12,7 +12,7 @@ class Canonicalize extends Unique {
    * @param {Event} event
    */
   sql(event) {
-    return obfuscate(event.sqlQuery, event.sql.database_type);
+    return normalizeSQL(event.sqlQuery, event.sql.database_type);
   }
 }
 

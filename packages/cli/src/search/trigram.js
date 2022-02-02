@@ -1,4 +1,4 @@
-const { obfuscate } = require('../database');
+const { normalizeSQL } = require('@appland/models');
 
 /** @typedef {import('./types').CodeObject} CodeObject */
 /** @typedef {import('./types').Event} Event */
@@ -8,7 +8,7 @@ const normalizeId = (
   /** @type {Event} */ evt
 ) => {
   if (co && co.type === 'query') {
-    return obfuscate(evt.sqlQuery, evt.sql.database_type);
+    return normalizeSQL(evt.sqlQuery, evt.sql.database_type);
   }
 
   return co.id;

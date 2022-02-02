@@ -1,5 +1,5 @@
 // @ts-nocheck
-const { analyzeQuery, obfuscate } = require('./database');
+const { analyzeSQL, normalizeSQL } = require('@appland/models');
 const { formatValue, formatHttpServerRequest } = require('./utils');
 
 /** @typedef {import('./search/types').Trigram} Trigram */
@@ -86,7 +86,7 @@ class FunctionStats {
         this.eventMatches
           .map((e) => [e.event].concat(e.descendants).filter((d) => d.sql))
           .flat()
-          .map((e) => obfuscate(e.sqlQuery, e.sql.database_type))
+          .map((e) => normalizeSQL(e.sqlQuery, e.sql.database_type))
       ),
     ].sort();
   }
@@ -97,7 +97,7 @@ class FunctionStats {
         this.eventMatches
           .map((e) => [e.event].concat(e.descendants).filter((d) => d.sql))
           .flat()
-          .map((e) => analyzeQuery(e.sql))
+          .map((e) => analyzeSQL(e.sqlQuery))
           .filter((e) => typeof e === 'object')
           .map((sql) => sql.tables)
           .flat()

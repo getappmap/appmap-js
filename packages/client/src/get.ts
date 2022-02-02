@@ -3,7 +3,9 @@ import { IncomingMessage } from 'http';
 import buildRequest from './buildRequest';
 import handleError from './handleError';
 
-export default async function (requestPath: string): Promise<IncomingMessage> {
+export default async function get(
+  requestPath: string
+): Promise<IncomingMessage> {
   const request = await buildRequest(requestPath);
   return new Promise<IncomingMessage>((resolve, reject) => {
     request

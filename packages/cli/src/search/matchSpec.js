@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-const { analyzeQuery, obfuscate } = require('../database');
+const { analyzeSQL, normalizeSQL } = require('@appland/models');
 
 /**
  * @typedef {import('./types').CodeObject} CodeObject
@@ -80,9 +80,9 @@ function matchQuery(expectedQuery) {
     // TODO: Brute force is probably not a good idea.
     // Need to store the database type on the codeObject.
     return (
-      obfuscate(codeObject.name, 'mysql') === expectedQuery ||
-      obfuscate(codeObject.name, 'postgres') === expectedQuery ||
-      obfuscate(codeObject.name, 'sqlite') === expectedQuery
+      normalizeSQL(codeObject.name, 'mysql') === expectedQuery ||
+      normalizeSQL(codeObject.name, 'postgres') === expectedQuery ||
+      normalizeSQL(codeObject.name, 'sqlite') === expectedQuery
     );
   };
   fn.toJSON = () => `query ${expectedQuery}`;
@@ -99,7 +99,7 @@ function matchTable(tableName) {
       return false;
     }
 
-    const queryInfo = /** @type {SQLInfo} */ analyzeQuery({
+    const queryInfo = /** @type {SQLInfo} */ analyzeSQL({
       sql: codeObject.name,
       database_type: codeObject.database_type,
     });

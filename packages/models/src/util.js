@@ -1,5 +1,6 @@
 import sha256 from 'crypto-js/sha256';
-import sqliteParser from '@appland/sql-parser';
+import analyze from './sql/analyze';
+import normalize from './sql/normalize';
 
 export const hasProp = (obj, prop) =>
   Object.prototype.hasOwnProperty.call(obj, prop);
@@ -138,6 +139,7 @@ export function getSqlLabelFromString(sqlString) {
 
   return ['SQL', capitalizeString(queryType) || null].join(' ');
 }
+
 export function getSqlLabel(event) {
   if (hasProp(event, 'sql_query') === false) {
     return null;
@@ -367,170 +369,6 @@ function getStaticPropValues(obj) {
     .map((k) => obj[k]);
 }
 
-export function buildQueryAST(sql) {
-  const parseSQL = sql.replace(/\s+returning\s+\*/i, '');
-  try {
-    return sqliteParser(parseSQL);
-  } catch (e) {
-    console.warn(`Unable to parse ${parseSQL} : ${e.message}`);
-    return null;
-  }
-}
-
-/* eslint-disable no-inner-declarations */
-function parseNormalizeSQL(sql) {
-  const ast = buildQueryAST(sql);
-  if (!ast) {
-    return null;
-  }
-
-  try {
-    const actions = [];
-    const columns = [];
-    const tables = [];
-    let joins = 0;
-
-    function parse(statement) {
-      const tokens = ['type', 'variant']
-        .map((propertyName) => statement[propertyName])
-        .filter((value) => value);
-
-      const key = tokens.join('.');
-      // eslint-disable-next-line no-use-before-define
-      let parser = parsers[key];
-      if (!parser) {
-        // eslint-disable-next-line no-use-before-define
-        parser = parseStatement;
-      }
-
-      const parserList = Array.isArray(parser) ? parser : [parser];
-      parserList.forEach((prs) => prs(statement));
-    }
-
-    function parseStatement(statement) {
-      const reservedWords = ['type', 'variant', 'name', 'value'];
-      Object.keys(statement)
-        .filter((property) => !reservedWords.includes(property))
-        .map((propertyName) => statement[propertyName])
-        .forEach((property) => {
-          if (Array.isArray(property)) {
-            property.forEach(parse);
-          } else if (typeof property === 'object') {
-            parse(property);
-          } else if (
-            typeof property === 'string' ||
-            typeof property === 'boolean'
-          ) {
-            // pass
-          } else {
-            console.warn(
-              `Unrecognized subexpression: ${typeof property} ${property}`
-            );
-          }
-        });
-    }
-
-    function parseList(listElements, statement) {
-      listElements.forEach((listElement) => {
-        const subExpression = statement[listElement];
-        if (Array.isArray(subExpression)) {
-          subExpression.forEach(parse);
-        } else if (typeof subExpression === 'object') {
-          parse(subExpression);
-        } else {
-          console.warn(`Unrecognized subexpression: ${subExpression}`);
-        }
-      });
-    }
-    const nop = () => {};
-    function parseIdentifierExpression(statement) {
-      if (statement.format === 'table') {
-        tables.push(statement.name);
-      }
-      parseList(['columns'], statement);
-    }
-    function recordAction(action) {
-      return () => {
-        actions.push(action);
-      };
-    }
-
-    const parsers = {
-      'literal.text': nop,
-      'literal.decimal': nop,
-      'identifier.star': (statement) => columns.push(statement.name),
-      'identifier.column': (statement) => columns.push(statement.name),
-      'identifier.table': (statement) => tables.push(statement.name),
-      'identifier.expression': parseIdentifierExpression,
-      'statement.select': [recordAction('select'), parseStatement],
-      'statement.insert': [recordAction('insert'), parseStatement],
-      'statement.update': [recordAction('update'), parseStatement],
-      'statement.delete': [recordAction('delete'), parseStatement],
-      'statement.pragma': nop,
-      'map.join': [
-        (statement) => {
-          joins += statement.map.length;
-        },
-        parseStatement,
-      ],
-    };
-
-    parse(ast);
-
-    function unique(list) {
-      return [...new Set(list)];
-    }
-    const uniqueActions = unique(actions).sort();
-
-    return {
-      actions: uniqueActions,
-      tables: unique(tables).sort(),
-      columns: unique(columns).sort(),
-      joinCount: joins,
-    };
-  } catch (e) {
-    console.warn(`Unable to interpret AST tree for ${sql} : ${e.message}`);
-    return null;
-  }
-}
-/* eslint-enable no-inner-declarations */
-
-function dumbNormalizeSQL(sql) {
-  const sqlLower = sql.toLowerCase().trim();
-  if (sqlLower.indexOf('pragma') === 0) {
-    return {
-      tables: [],
-      columns: [],
-    };
-  }
-
-  const stopWords = ['where', 'limit', 'order by', 'group by', 'values', 'set'];
-  const stopWordLocations = stopWords
-    .map((word) => sqlLower.indexOf(` ${word}`))
-    .filter((index) => index !== -1)
-    .sort();
-  if (stopWordLocations.length > 0) {
-    const subSQL = sql.slice(0, stopWordLocations[0] - 1);
-    return subSQL.replace(
-      /\s([\w_]+)\(\s+'?[w\d]+'?\)\s+\)(?:\s|^)/g,
-      '$1(...)'
-    );
-  }
-
-  console.warn(`Unparseable: ${sql}`);
-  return 'Unparseable';
-}
-
-/**
- * It's essential to normalize SQL to remove trivial differences like WHERE clauses on
- * generated id values, timestamps, etc.
- *
- * @param {string} sql
- */
-export function normalizeSQL(sql) {
-  return parseNormalizeSQL(sql) || dumbNormalizeSQL(sql);
-}
-
 // #region ========= BEGIN UNUSED CODE =========
 // These are called from Event.compare, but that method may be removed.
 // Don't merge me!
@@ -555,97 +393,6 @@ export function appMapObjectCompare(a, b) {
   return props.filter((k) => a[k] !== b[k]);
 }
 
-export function sqlCompare(a, b) {
-  let { sqlQuery: sqlQueryA } = a;
-  let { sqlQuery: sqlQueryB } = b;
-
-  if (sqlQueryA === sqlQueryB) {
-    return true;
-  }
-
-  if (!sqlQueryA || !sqlQueryB) {
-    return false;
-  }
-
-  sqlQueryA = normalizeSQL(sqlQueryA);
-  sqlQueryB = normalizeSQL(sqlQueryB);
-
-  if (sqlQueryA.action !== sqlQueryB.action) {
-    return false;
-  }
-
-  const allColumns = [...sqlQueryA.columns, ...sqlQueryB.columns];
-  const allTables = [...sqlQueryA.tables, ...sqlQueryB.tables];
-
-  return (
-    allColumns.find(
-      (c) => !sqlQueryA.columns.includes(c) || !sqlQueryB.columns.includes(c)
-    ) === undefined &&
-    allTables.find(
-      (c) => !sqlQueryA.tables.includes(c) || !sqlQueryB.tables.includes(c)
-    ) === undefined
-  );
-}
-
-export function arrayCompare(a, b) {
-  if (a === b) {
-    return true;
-  }
-
-  if (!a || !b) {
-    return false;
-  }
-
-  const lengthA = a ? a.length || 0 : 0;
-  const lengthB = b ? b.length || 0 : 0;
-
-  if (lengthA !== lengthB) {
-    return false;
-  }
-
-  for (let i = 0; i < lengthA; i += 1) {
-    if (!appMapObjectCompare(a[i], b[i])) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-export function httpCompare(a, b) {
-  const {
-    message: messageA,
-    httpServerRequest: httpServerRequestA,
-    httpServerResponse: httpServerResponseA,
-  } = a;
-
-  const {
-    message: messageB,
-    httpServerRequest: httpServerRequestB,
-    httpServerResponse: httpServerResponseB,
-  } = b;
-
-  return (
-    arrayCompare(messageA, messageB) &&
-    appMapObjectCompare(httpServerRequestA, httpServerRequestB) &&
-    appMapObjectCompare(httpServerResponseA, httpServerResponseB)
-  );
-}
-
-export function setCompare(a, b) {
-  if (a === b) {
-    return true;
-  }
-
-  if (!a || !b) {
-    return false;
-  }
-
-  const allItems = [...new Set([...a, ...b])];
-  return allItems.find((i) => !a.has(i) || !b.has(i)) === undefined;
-}
-// #endregion ========= END UNUSED CODE =========
-
 export function hashHttp(e) {
   const { httpServerRequest } = e;
   if (!httpServerRequest) {
@@ -663,21 +410,24 @@ export function hashHttp(e) {
   return sha256(content.join('')).toString();
 }
 
-export function hashSql(e) {
+export function hashSql(/** @type {Event} */ e) {
   const { sqlQuery } = e;
   if (!sqlQuery) {
     return null;
   }
 
-  const normalizedSql = normalizeSQL(sqlQuery);
-  const content = [normalizedSql.action];
+  const analyzedSql = analyze(sqlQuery);
+  if (!analyzedSql) {
+    return normalize(sqlQuery, e.sql.database);
+  }
+  const content = [analyzedSql.action];
 
-  if (normalizedSql.columns) {
-    normalizedSql.columns.forEach((c) => content.push(c));
+  if (analyzedSql.columns) {
+    analyzedSql.columns.forEach((c) => content.push(c));
   }
 
-  if (normalizedSql.tables) {
-    normalizedSql.tables.forEach((t) => content.push(t));
+  if (analyzedSql.tables) {
+    analyzedSql.tables.forEach((t) => content.push(t));
   }
 
   return sha256(content.join('')).toString();
@@ -694,7 +444,7 @@ export function identityHashEvent(e) {
 
   const { sqlQuery } = e;
   if (sqlQuery) {
-    const queryOps = normalizeSQL(sqlQuery);
+    const queryOps = analyze(sqlQuery);
     const content = ['sql', queryOps.action, ...queryOps.tables]
       .filter(Boolean)
       .join('');

@@ -318,17 +318,19 @@ declare module '@appland/models' {
     build(): AppMap;
   }
 
-  export interface SQLNormalizationResult {
+  export type SQLAnalysis = {
+    actions: string[];
     tables: string[];
     columns: string[];
-    actions?: string[];
-    joinCount?: number;
-  }
+    joinCount: number;
+  };
 
-  export function buildQueryAST(sql: string): SqliteParser.ListStatement | null;
+  export function analyzeSQL(sql: string): SQLAnalysis;
+  export function parseSQL(sql: string): SqliteParser.ListStatement | null;
+  export function normalizeSQL(sql: string, adapter: string): string;
+  export function sqlWarning(message: string): void;
+
   export function buildAppMap(
     data?: string | Record<string, unknown>
   ): AppMapBuilder;
-  export function getSqlLabelFromString(sqlString: string): string;
-  export function normalizeSQL(sqlString: string): SQLNormalizationResult;
 }

@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-const { analyzeQuery } = require('../../database');
+const { analyzeSQL } = require('@appland/models');
 const Unique = require('./unique');
 
 /**
@@ -12,7 +12,7 @@ class Canonicalize extends Unique {
    * @param {Event} event
    */
   sql(event) {
-    const analyzedQuery = analyzeQuery(event.sql);
+    const analyzedQuery = analyzeSQL(event.sqlQuery);
     if (typeof analyzedQuery === 'object') {
       return analyzedQuery.tables;
     }

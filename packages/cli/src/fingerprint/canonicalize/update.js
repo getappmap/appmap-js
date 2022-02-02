@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-const { analyzeQuery, obfuscate } = require('../../database');
+const { analyzeSQL, normalizeSQL } = require('@appland/models');
 const EventTree = require('./eventTree');
 
 /**
@@ -14,7 +14,7 @@ class Canonicalize extends EventTree {
    * @param {Event} event
    */
   sql(event) {
-    const analyzedQuery = analyzeQuery(event.sql);
+    const analyzedQuery = analyzeSQL(event.sqlQuery);
     if (typeof analyzedQuery === 'string') {
       const sqlLower = event.sqlQuery.toLowerCase();
       if (
@@ -24,7 +24,7 @@ class Canonicalize extends EventTree {
         return {
           kind: 'sql',
           sql: {
-            normalized_query: obfuscate(
+            normalized_query: normalizeSQL(
               event.sqlQuery,
               event.sql.database_type
             ),
