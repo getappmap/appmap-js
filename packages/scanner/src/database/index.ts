@@ -1,10 +1,7 @@
+import { EventNavigator, Event } from '@appland/models';
 import { visit } from './visit';
-import { Event } from '@appland/models';
 import { AppMapIndex, EventFilter, QueryAST } from '../types';
 import { URL } from 'url';
-import { EventNavigator } from '@appland/models';
-import appMap from '@appland/client/dist/src/appMap';
-import { normalizeSQL } from '@appland/models';
 
 export interface SQLEvent {
   sql: string;
@@ -150,7 +147,7 @@ export function* sqlStrings(
       continue;
     }
 
-    const sql = normalizeSQL(e.event.sql.sql, e.event.sql.database_type);
+    const sql = appMapIndex.sqlNormalized(e.event);
 
     yield { event: e.event, sql };
   }

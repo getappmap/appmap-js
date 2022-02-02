@@ -60,6 +60,7 @@ function iterateTransaction(
     if (!event.isCall()) continue;
     transaction.push(event);
     if (!event.sql) continue;
+    // TODO: This should be routing through the AppMapIndex AST cache.
     const sql = parseSQL(event.sql.sql);
     if (!sql) continue;
     if (isBegin(sql)) throw new Error('Transaction started within a transaction.');
