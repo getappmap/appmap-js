@@ -1,5 +1,4 @@
-import { AppMap, sqlWarning, buildQueryAST, Event } from '@appland/models';
-import { sqlNormalized } from './database';
+import { AppMap, sqlWarning, normalizeSQL, parseSQL, Event } from '@appland/models';
 import { EventType, QueryAST } from './types';
 import LRUCache from 'lru-cache';
 
@@ -59,7 +58,7 @@ export default class AppMapIndex {
     let ast = ASTBySQLString.get(sql);
     if (!ast) {
       try {
-        ast = buildQueryAST(sql);
+        ast = parseSQL(sql);
       } catch {
         sqlWarning(`Unable to parse query: ${sql}`);
         ast = [] as any as QueryAST;
@@ -77,7 +76,7 @@ export default class AppMapIndex {
     const cacheKey = [event.sql.database_type, event.sql.sql].join(':');
     let sql = NormalizedSQLBySQLString.get(cacheKey);
     if (!sql) {
-      sql = sqlNormalized(event.sql);
+      sql = normalizeSQL(event.sql.sql, event.sql.database_type);
       NormalizedSQLBySQLString.set(cacheKey, sql);
     }
     return sql;

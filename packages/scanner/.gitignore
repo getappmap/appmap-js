@@ -15,5 +15,6 @@ tmp
 # Misc
 .tmp
 appland-findings.json
+findings.*.json
 findings.json
 findings.json.*
