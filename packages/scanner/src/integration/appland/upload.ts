@@ -1,4 +1,3 @@
-import { promises as fs } from 'fs';
 import { IncomingMessage } from 'http';
 import { URL } from 'url';
 import { queue } from 'async';
@@ -7,9 +6,10 @@ import { AppMap as AppMapStruct } from '@appland/models';
 import { buildRequest, handleError } from '@appland/client/dist/src';
 
 import { ScanResults } from '../../report/scanResults';
-import { AppMap as AppMapClient } from './appMap';
+import { AppMap as AppMapClient, UploadAppMapResponse } from './appMap';
 import { Mapset as MapsetClient } from './mapset';
 import { join } from 'path';
+import { readFile } from 'fs/promises';
 
 export default async function (
   scanResults: ScanResults,
@@ -28,26 +28,32 @@ export default async function (
   const branchCount: Record<string, number> = {};
   const commitCount: Record<string, number> = {};
 
-  const q = queue(async (filePath: string, callback) => {
+  const q = queue((filePath: string, callback) => {
     console.log(`Uploading AppMap ${filePath}`);
-    const buffer = await fs.readFile(join(appmapDir, filePath));
-    const appMapStruct = JSON.parse(buffer.toString()) as AppMapStruct;
-    const branch = appMapStruct.metadata.git?.branch;
-    const commit = appMapStruct.metadata.git?.commit;
-    if (branch) {
-      branchCount[branch] ||= 1;
-      branchCount[branch] += 1;
-    }
-    if (commit) {
-      commitCount[commit] ||= 1;
-      commitCount[commit] += 1;
-    }
 
-    const appMap = await AppMapClient.upload(buffer, { app: appId });
-    if (appMap) {
-      appMapUUIDByFileName[filePath] = appMap.uuid;
-    }
-    callback();
+    readFile(join(appmapDir, filePath))
+      .then((buffer: Buffer) => {
+        const appMapStruct = JSON.parse(buffer.toString()) as AppMapStruct;
+        const branch = appMapStruct.metadata.git?.branch;
+        const commit = appMapStruct.metadata.git?.commit;
+        if (branch) {
+          branchCount[branch] ||= 1;
+          branchCount[branch] += 1;
+        }
+        if (commit) {
+          commitCount[commit] ||= 1;
+          commitCount[commit] += 1;
+        }
+
+        return AppMapClient.upload(buffer, { app: appId });
+      })
+      .then((appMap: UploadAppMapResponse) => {
+        if (appMap) {
+          appMapUUIDByFileName[filePath] = appMap.uuid;
+        }
+      })
+      .then(() => callback())
+      .catch(callback);
   }, 5);
   q.error((err, filePath: string) => {
     console.error(`An error occurred uploading ${filePath}: ${err}`);
