@@ -1,30 +1,39 @@
-import { Event } from '@appland/models';
-import { isTruthy } from './lib/util';
-import { AppMapIndex, MatcherResult, Rule, RuleLogic } from '../types.d';
+import { Event, EventNavigator } from '@appland/models';
+import { isTruthy, providesAuthentication } from './lib/util';
+import { MatcherResult, Rule, RuleLogic, ScopeName } from '../types.d';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
 
+function containsAuthentication(events: Generator<EventNavigator>) {
+  for (const iter of events) {
+    if (providesAuthentication(iter.event, SecurityAuthentication)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function build(): RuleLogic {
-  function matcher(rootEvent: Event, appMapIndex: AppMapIndex): MatcherResult {
-    const authorizers = appMapIndex
-      .forLabel(SecurityAuthorization, rootEvent)
-      .filter((event) => isTruthy(event.returnValue));
-
-    if (authorizers.length === 0) return;
-
-    const authenticators = appMapIndex.forLabel(SecurityAuthentication, rootEvent);
-
-    if (authenticators.length > 0 && authenticators[0].id < authorizers[0].id) return;
-
-    return authorizers
-      .filter((event) => appMapIndex.forLabel(SecurityAuthentication, event).length === 0)
-      .map((event) => {
-        return {
-          level: 'error',
-          event: event,
-          message: `${event} provides authorization, but the request is not authenticated`,
-        };
-      });
+  function matcher(rootEvent: Event): MatcherResult {
+    for (const event of new EventNavigator(rootEvent).descendants()) {
+      if (providesAuthentication(event.event, SecurityAuthentication)) {
+        return;
+      }
+      if (event.event.labels.has(SecurityAuthorization) && isTruthy(event.event.returnValue)) {
+        // If the authorization event has a successful authentication descendant, allow this as well.
+        if (containsAuthentication(event.descendants())) {
+          return;
+        } else {
+          return [
+            {
+              level: 'error',
+              event: event.event,
+              message: `${event.event} provides authorization, but the request is not authenticated`,
+            },
+          ];
+        }
+      }
+    }
   }
 
   return { matcher };
@@ -37,8 +46,7 @@ export default {
   id: 'authz-before-authn',
   title: 'Authorization performed before authentication',
   labels: [SecurityAuthorization, SecurityAuthentication],
-  // //http_server_request
-  scope: 'http_server_request',
+  scope: 'http_server_request' as ScopeName,
   impactDomain: 'Security',
   enumerateScope: false,
   references: {

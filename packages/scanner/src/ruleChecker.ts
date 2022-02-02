@@ -8,6 +8,7 @@ import RootScope from './scope/rootScope';
 import HTTPServerRequestScope from './scope/httpServerRequestScope';
 import HTTPClientRequestScope from './scope/httpClientRequestScope';
 import CommandScope from './scope/commandScope';
+import SQLTransactionScope from './scope/sqlTransactionScope';
 import CheckInstance from './checkInstance';
 import { createHash } from 'crypto';
 import { cloneEvent } from './eventUtil';
@@ -18,6 +19,7 @@ export default class RuleChecker {
     command: new CommandScope(),
     http_server_request: new HTTPServerRequestScope(),
     http_client_request: new HTTPClientRequestScope(),
+    transaction: new SQLTransactionScope(),
   };
 
   async check(
@@ -34,7 +36,14 @@ export default class RuleChecker {
       throw new AbortError(`Invalid scope name "${check.scope}"`);
     }
 
-    for (const scope of scopeIterator.scopes(appMapIndex)) {
+    const callEvents = function* (): Generator<Event> {
+      const events = appMapIndex.appMap.events;
+      for (let i = 0; i < events.length; i++) {
+        yield events[i];
+      }
+    };
+
+    for (const scope of scopeIterator.scopes(callEvents())) {
       if (verbose()) {
         console.warn(`Scope ${scope.scope}`);
       }

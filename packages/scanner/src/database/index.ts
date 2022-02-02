@@ -2,6 +2,9 @@ import { visit } from './visit';
 import { Event } from '@appland/models';
 import { AppMapIndex, EventFilter, QueryAST } from '../types';
 import { URL } from 'url';
+import { EventNavigator } from '@appland/models';
+import appMap from '@appland/client/dist/src/appMap';
+import { normalizeSQL } from '@appland/models';
 
 export interface SQLEvent {
   sql: string;
@@ -131,25 +134,25 @@ export function* sqlStrings(
   appMapIndex: AppMapIndex,
   filter: EventFilter = () => true
 ): Generator<SQLEvent> {
-  for (const evt of appMapIndex.forType('sql_query', event)) {
-    if (!evt.sqlQuery) {
+  for (const e of new EventNavigator(event).descendants()) {
+    if (!e.event.sql) {
       continue;
     }
-    if (!filter(evt, appMapIndex)) {
-      continue;
-    }
-
-    if (!isSelect(evt.sqlQuery!)) {
+    if (!filter(e.event, appMapIndex)) {
       continue;
     }
 
-    if (!filter(evt, appMapIndex)) {
+    if (!isSelect(e.event.sqlQuery!)) {
       continue;
     }
 
-    const sql = appMapIndex.sqlNormalized(evt);
+    if (!filter(event, appMapIndex)) {
+      continue;
+    }
 
-    yield { event: evt, sql };
+    const sql = normalizeSQL(e.event.sql.sql, e.event.sql.database_type);
+
+    yield { event: e.event, sql };
   }
 }
 

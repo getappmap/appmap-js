@@ -21,7 +21,12 @@ import { URL } from 'url';
  * of what the code is trying to do. But, anticipating that this may sometimes happen, "root" scope is a good choice for a rule that may flag code
  * anywhere in the AppMap.
  */
-export type ScopeName = 'root' | 'command' | 'http_client_request' | 'http_server_request';
+export type ScopeName =
+  | 'root'
+  | 'command'
+  | 'http_client_request'
+  | 'http_server_request'
+  | 'transaction';
 
 /**
  * Indicates the aspect of software quality that is most relevant to a rule.
@@ -79,10 +84,6 @@ interface AppMapIndex {
   sqlAST(event: Event): QueryAST | undefined;
 
   sqlNormalized(event: Event): string;
-
-  forType(type: EventType, rootEvent?: Event | undefined): Event[];
-
-  forLabel(label: string, rootEvent?: Event | undefined): Event[];
 }
 
 /**
