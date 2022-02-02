@@ -1,3 +1,10 @@
+## [1.40.1](https://github.com/applandinc/scanner/compare/v1.40.0...v1.40.1) (2022-02-02)
+
+
+### Bug Fixes
+
+* Resolve a case of unhandled promises during upload ([1bf5f90](https://github.com/applandinc/scanner/commit/1bf5f908236fc0ee9f9410fc889f0afad05b5c48))
+
 # [1.40.0](https://github.com/applandinc/scanner/compare/v1.39.1...v1.40.0) (2022-02-02)
 
 
