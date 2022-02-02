@@ -21,6 +21,5 @@ checks:
   #  - rule: slowQuery
   - rule: tooManyJoins
   - rule: tooManyUpdates
-  - rule: updateInGetRequest
   - rule: unbatchedMaterializedQuery
   - rule: updateInGetRequest
