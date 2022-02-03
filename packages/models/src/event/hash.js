@@ -1,11 +1,14 @@
 import sha256 from 'crypto-js/sha256';
+import normalize from '../sql/normalize';
 import parse from '../sql/parse';
 
 // returns a JSON of SQL query AST
 // with all literals replaced by variables
 // and all variable names removed
-function abstractSqlAstJSON(query) {
+function abstractSqlAstJSON(query, databaseType) {
   const ast = parse(query);
+  if (!ast) return normalize(query, databaseType);
+
   return JSON.stringify(ast, (_, value) => {
     switch (value.type) {
       case 'variable':
@@ -24,7 +27,7 @@ function abstractSqlAstJSON(query) {
 // For function calls it's the qualified function id.
 function callEventToString(event) {
   const { sqlQuery, route } = event;
-  if (sqlQuery) return abstractSqlAstJSON(sqlQuery);
+  if (sqlQuery) return abstractSqlAstJSON(sqlQuery, event.sql.database_type);
   if (route) return route;
   return event.qualifiedMethodId;
 }

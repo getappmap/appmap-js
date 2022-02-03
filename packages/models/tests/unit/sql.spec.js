@@ -72,7 +72,9 @@ describe('parse SQL', () => {
         }
       )
     ).toBeNull();
-    expect(err).toEqual(`Syntax error found near Star (SELECT Results Clause)`);
+    expect(err.toString()).toEqual(
+      `Syntax error found near Star (SELECT Results Clause): SELECT users.*, a.* JOIN addresses a ON a.user_id = users.id`
+    );
   });
 });
 

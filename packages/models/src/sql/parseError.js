@@ -6,6 +6,6 @@ export default class ParseError extends Error {
   }
 
   toString() {
-    return `Unable to parse ${this.sql} : ${this.message}`;
+    return `${this.message}: ${this.sql}`;
   }
 }
