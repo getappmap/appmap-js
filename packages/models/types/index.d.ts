@@ -325,10 +325,19 @@ declare module '@appland/models' {
     joinCount: number;
   };
 
-  export function analyzeSQL(sql: string): SQLAnalysis;
-  export function parseSQL(sql: string): SqliteParser.ListStatement | null;
+  export class ParseError extends Error {}
+
+  export type OnSQLParseError = (error: ParseError) => void;
+
+  export function analyzeSQL(
+    sql: string,
+    errorCallback: OnSQLParseError
+  ): SQLAnalysis;
+  export function parseSQL(
+    sql: string,
+    errorCallback?: OnSQLParseError
+  ): SqliteParser.ListStatement | null;
   export function normalizeSQL(sql: string, adapter: string): string;
-  export function sqlWarning(message: string): void;
 
   export function buildAppMap(
     data?: string | Record<string, unknown>

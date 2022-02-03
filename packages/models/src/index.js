@@ -8,7 +8,6 @@ export { default as CallTree } from './callTree/callTree';
 export { default as ClassMap } from './classMap';
 export { default as CodeObject, CodeObjectType } from './codeObject';
 export { default as analyzeSQL } from './sql/analyze';
-export { warn as sqlWarning } from './sql/log';
 export { default as normalizeSQL } from './sql/normalize';
 export { default as parseSQL } from './sql/parse';
 export * from './util';

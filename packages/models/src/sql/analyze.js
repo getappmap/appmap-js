@@ -1,8 +1,8 @@
 /* eslint-disable no-inner-declarations */
 import parseAST from './parse';
 
-export default function analyze(sql) {
-  const ast = parseAST(sql);
+export default function analyze(sql, errorCallback = () => {}) {
+  const ast = parseAST(sql, errorCallback);
   if (!ast) {
     return null;
   }
