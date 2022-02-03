@@ -1,11 +1,11 @@
 import sha256 from 'crypto-js/sha256';
-import { buildQueryAST } from '../util';
+import parse from '../sql/parse';
 
 // returns a JSON of SQL query AST
 // with all literals replaced by variables
 // and all variable names removed
 function abstractSqlAstJSON(query) {
-  const ast = buildQueryAST(query);
+  const ast = parse(query);
   return JSON.stringify(ast, (_, value) => {
     switch (value.type) {
       case 'variable':

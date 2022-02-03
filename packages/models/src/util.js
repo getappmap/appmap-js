@@ -351,16 +351,6 @@ export function buildLabels(classMap, events) {
 // ~2. This is awfully wasteful, slow and inaccurate but it works for now. -DB
 export const sizeof = (obj) => JSON.stringify(obj).length;
 
-const DYNAMIC_FIELDS = new Set([
-  'id',
-  'value',
-  'thread_id',
-  'elapsed',
-  'object_id',
-  'lineno',
-  'path',
-]);
-
 // Returns a unique 'hash' (or really, a key) tied to the event's core identity: SQL, HTTP, or a
 // specific method on a specific class. This is _really_ naive. The idea is that this better finds
 // a singular change versus an existing object that has been removed and a new object added in its
