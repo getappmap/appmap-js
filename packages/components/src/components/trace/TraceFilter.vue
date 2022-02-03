@@ -106,10 +106,11 @@ export default {
         } else if (
           selected.offsetTop >=
           this.$refs.suggestionsList.scrollTop +
-            this.$refs.suggestionsList.offsetHeight
+            this.$refs.suggestionsList.offsetHeight -
+            2
         ) {
           this.$refs.suggestionsList.scrollTop =
-            selected.offsetTop - selected.offsetHeight * 2;
+            selected.offsetTop - selected.offsetHeight * 4;
         }
       },
     },
@@ -177,6 +178,7 @@ export default {
       switch (event.key) {
         case 'Escape':
           this.showSuggestions = false;
+          this.$refs.input.blur();
           break;
         case 'ArrowDown':
           if (this.selectedSuggestion !== this.suggestions.length - 1) {
