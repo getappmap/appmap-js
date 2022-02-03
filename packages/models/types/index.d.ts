@@ -169,6 +169,8 @@ declare module '@appland/models' {
     readonly hash: string;
     readonly identityHash: string;
 
+    constructor(data?: any);
+
     linkedEvent: Event;
     next?: Event;
     previous?: Event;
