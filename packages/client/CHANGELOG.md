@@ -1,3 +1,10 @@
+# [@appland/client-v1.2.0](https://github.com/applandinc/appmap-js/compare/@appland/client-v1.1.3...@appland/client-v1.2.0) (2022-02-03)
+
+
+### Features
+
+* Refactor SQL utilities into @appland/models ([ef8a9be](https://github.com/applandinc/appmap-js/commit/ef8a9bebb08f08959272af24f8a8069514107681))
+
 # [@appland/client-v1.1.3](https://github.com/applandinc/appmap-js/compare/@appland/client-v1.1.2...@appland/client-v1.1.3) (2022-01-14)
 
 
