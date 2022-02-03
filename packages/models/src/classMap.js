@@ -150,7 +150,17 @@ export default class ClassMap {
       validCodeObjects.has(obj)
     );
 
-    this.roots = this.roots.filter((obj) => validCodeObjects.has(obj));
+    function filterCodeObjects(objectsList, allObjects) {
+      return objectsList.filter((obj) => {
+        if (allObjects.has(obj)) {
+          obj.children = filterCodeObjects(obj.children, allObjects);
+          return true;
+        }
+        return false;
+      });
+    }
+
+    this.roots = filterCodeObjects(this.roots, validCodeObjects);
 
     Object.keys(this.codeObjectsByLocation).forEach((obj) => {
       if (!validCodeObjects.has(obj)) {
