@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.18.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.17.2...@appland/appmap-v3.18.0) (2022-02-03)
+
+
+### Features
+
+* Refactor SQL utilities into @appland/models ([ef8a9be](https://github.com/applandinc/appmap-js/commit/ef8a9bebb08f08959272af24f8a8069514107681))
+
 # [@appland/appmap-v3.17.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.17.1...@appland/appmap-v3.17.2) (2022-02-01)
 
 
