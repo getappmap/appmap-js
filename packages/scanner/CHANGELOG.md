@@ -1,3 +1,10 @@
+## [1.40.2](https://github.com/applandinc/scanner/compare/v1.40.1...v1.40.2) (2022-02-03)
+
+
+### Bug Fixes
+
+* Upload no longer appends AppMap directory to files ([6e28b1c](https://github.com/applandinc/scanner/commit/6e28b1cd01e0d70b175d568702caacb267d435d2))
+
 ## [1.40.1](https://github.com/applandinc/scanner/compare/v1.40.0...v1.40.1) (2022-02-02)
 
 
