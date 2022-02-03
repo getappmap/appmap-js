@@ -1,6 +1,5 @@
 import sha256 from 'crypto-js/sha256';
 import analyze from './sql/analyze';
-import normalize from './sql/normalize';
 
 export const hasProp = (obj, prop) =>
   Object.prototype.hasOwnProperty.call(obj, prop);
@@ -352,87 +351,6 @@ export function buildLabels(classMap, events) {
 // ~2. This is awfully wasteful, slow and inaccurate but it works for now. -DB
 export const sizeof = (obj) => JSON.stringify(obj).length;
 
-const DYNAMIC_FIELDS = new Set([
-  'id',
-  'value',
-  'thread_id',
-  'elapsed',
-  'object_id',
-  'lineno',
-  'path',
-]);
-
-function getStaticPropValues(obj) {
-  return Object.getOwnPropertyNames(obj)
-    .filter((k) => typeof obj[k] !== 'object' && !DYNAMIC_FIELDS.has(k))
-    .sort()
-    .map((k) => obj[k]);
-}
-
-// #region ========= BEGIN UNUSED CODE =========
-// These are called from Event.compare, but that method may be removed.
-// Don't merge me!
-
-export function appMapObjectCompare(a, b) {
-  if (a === b) {
-    return true;
-  }
-
-  if (!a || !b) {
-    return false;
-  }
-
-  const props = [
-    ...new Set([
-      ...Object.getOwnPropertyNames(a),
-      ...Object.getOwnPropertyNames(b),
-    ]),
-  ].filter((k) => !DYNAMIC_FIELDS.has(k));
-
-  // return the props that differ
-  return props.filter((k) => a[k] !== b[k]);
-}
-
-export function hashHttp(e) {
-  const { httpServerRequest } = e;
-  if (!httpServerRequest) {
-    return null;
-  }
-
-  const { message, httpServerResponse } = e;
-  const content = [];
-  message.forEach((m) =>
-    getStaticPropValues(m).forEach((v) => content.push(v))
-  );
-  getStaticPropValues(httpServerResponse).forEach((v) => content.push(v));
-  getStaticPropValues(httpServerRequest).forEach((v) => content.push(v));
-
-  return sha256(content.join('')).toString();
-}
-
-export function hashSql(/** @type {Event} */ e) {
-  const { sqlQuery } = e;
-  if (!sqlQuery) {
-    return null;
-  }
-
-  const analyzedSql = analyze(sqlQuery);
-  if (!analyzedSql) {
-    return normalize(sqlQuery, e.sql.database);
-  }
-  const content = [analyzedSql.action];
-
-  if (analyzedSql.columns) {
-    analyzedSql.columns.forEach((c) => content.push(c));
-  }
-
-  if (analyzedSql.tables) {
-    analyzedSql.tables.forEach((t) => content.push(t));
-  }
-
-  return sha256(content.join('')).toString();
-}
-
 // Returns a unique 'hash' (or really, a key) tied to the event's core identity: SQL, HTTP, or a
 // specific method on a specific class. This is _really_ naive. The idea is that this better finds
 // a singular change versus an existing object that has been removed and a new object added in its
@@ -452,28 +370,6 @@ export function identityHashEvent(e) {
   }
 
   return e.toString();
-}
-
-export function hashEvent(e) {
-  let hash = hashHttp(e);
-  if (hash) {
-    return hash;
-  }
-
-  hash = hashSql(e);
-  if (hash) {
-    return hash;
-  }
-
-  const content = [];
-  getStaticPropValues(e).forEach((v) => content.push(v));
-  if (e.parameters) {
-    e.parameters.forEach((p) =>
-      getStaticPropValues(p).forEach((v) => content.push(v))
-    );
-  }
-
-  return sha256(content.join('')).toString();
 }
 
 export function resolveDifferences(arr1, arr2) {
