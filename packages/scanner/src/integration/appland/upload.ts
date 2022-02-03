@@ -8,14 +8,9 @@ import { buildRequest, handleError } from '@appland/client/dist/src';
 import { ScanResults } from '../../report/scanResults';
 import { AppMap as AppMapClient, UploadAppMapResponse } from './appMap';
 import { Mapset as MapsetClient } from './mapset';
-import { join } from 'path';
 import { readFile } from 'fs/promises';
 
-export default async function (
-  scanResults: ScanResults,
-  appId: string,
-  appmapDir: string
-): Promise<URL> {
+export default async function (scanResults: ScanResults, appId: string): Promise<URL> {
   console.warn(`Uploading AppMaps and findings to application '${appId}'`);
 
   const { findings } = scanResults;
@@ -31,7 +26,7 @@ export default async function (
   const q = queue((filePath: string, callback) => {
     console.log(`Uploading AppMap ${filePath}`);
 
-    readFile(join(appmapDir, filePath))
+    readFile(filePath)
       .then((buffer: Buffer) => {
         const appMapStruct = JSON.parse(buffer.toString()) as AppMapStruct;
         const branch = appMapStruct.metadata.git?.branch;

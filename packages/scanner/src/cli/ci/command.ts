@@ -78,10 +78,8 @@ export default {
 
       const scanner = buildScanner(false, configData, files);
 
-      const [rawScanResults, findingStatuses] = await Promise.all<
-        ScanResults,
-        FindingStatusListItem[]
-      >([scanner.scan(), scanner.fetchFindingStatus(appIdArg, appmapDir)]);
+      const [rawScanResults, findingStatuses]: [ScanResults, FindingStatusListItem[]] =
+        await Promise.all([scanner.scan(), scanner.fetchFindingStatus(appIdArg, appmapDir)]);
 
       // Always report the raw data
       await writeFile(reportFile, JSON.stringify(rawScanResults, null, 2));
@@ -94,7 +92,7 @@ export default {
       summaryReport(scanResults, true);
 
       if (doUpload) {
-        await upload(rawScanResults, appId, appmapDir);
+        await upload(rawScanResults, appId);
       }
 
       if (updateCommitStatus) {
