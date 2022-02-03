@@ -1,5 +1,4 @@
 // @ts-ignore
-const { normalizeSQL } = require('@appland/models');
 
 // https://github.com/newrelic/newrelic-ruby-agent/blob/dev/lib/new_relic/agent/database/obfuscation_helpers.rb
 // License: https://github.com/newrelic/newrelic-ruby-agent/blob/main/LICENSE
@@ -86,13 +85,6 @@ const DIALECT_COMPONENTS = {
 
 const PLACEHOLDER = '?';
 
-function obfuscateSingleQuoteLiterals(sql) {
-  if (!COMPONENTS_REGEXP_MAP.single_quotes.test(sql)) {
-    return sql;
-  }
-  return sql.gsub(COMPONENTS_REGEXP_MAP.single_quotes, PLACEHOLDER);
-}
-
 /**
  * @param {string} dialect
  * @returns {RegExp[]}
@@ -117,9 +109,6 @@ function detectUnmatchedPairs(obfuscated, adapter) {
   return CLEANUP_REGEXP.mysql.test(obfuscated);
 }
 
-const FAILED_TO_OBFUSCATE_MESSAGE =
-  'Failed to obfuscate SQL query - quote characters remained after obfuscation';
-
 /**
  * Replaces literal query parameters with parameter symbols (e.g. '?');
  *
@@ -127,7 +116,7 @@ const FAILED_TO_OBFUSCATE_MESSAGE =
  * @param {string} adapter
  * @returns {string}
  */
-function obfuscate(sql, adapter) {
+export default function normalize(sql, adapter) {
   /** @type {RegExp[]} */ let regexp;
   switch (adapter) {
     case 'mysql':
@@ -155,41 +144,7 @@ function obfuscate(sql, adapter) {
   // eslint-disable-next-line no-return-assign
   regexp.forEach((re) => (obfuscated = obfuscated.replace(re, PLACEHOLDER)));
   if (detectUnmatchedPairs(obfuscated, adapter)) {
-    obfuscated = FAILED_TO_OBFUSCATE_MESSAGE;
+    obfuscated = sql;
   }
   return obfuscated;
 }
-
-const QUERY_CACHE = {};
-
-function analyzeQuery(
-  /** @type {import('./search/types').SQL | string} */ query
-) {
-  if (typeof query === 'string') {
-    // This is a problem because we don't know what SQL dialect to apply.
-    console.warn(`No database_type available for ${query}`);
-    return normalizeSQL(query);
-  }
-
-  const { sql, database_type: databaseType } = query;
-
-  if (sql && databaseType) {
-    const obfuscatedSQL = obfuscate(sql, databaseType);
-
-    const cachedResult = QUERY_CACHE[obfuscatedSQL];
-    if (cachedResult) {
-      return cachedResult;
-    }
-
-    const result = normalizeSQL(obfuscatedSQL);
-    QUERY_CACHE[obfuscatedSQL] = result;
-    return result;
-  }
-
-  console.warn(
-    `sql or database_type not available for ${JSON.stringify(query)}`
-  );
-  return normalizeSQL(sql);
-}
-
-module.exports = { analyzeQuery, obfuscate, obfuscateSingleQuoteLiterals };

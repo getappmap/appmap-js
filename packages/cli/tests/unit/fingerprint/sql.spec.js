@@ -1,9 +1,9 @@
-const { normalizeSQL } = require('@appland/models');
+const { analyzeSQL } = require('@appland/models');
 
 describe('Normalize SQL', () => {
   test('Simple SELECT', () => {
     const sql = 'SELECT * FROM users';
-    const result = normalizeSQL(sql);
+    const result = analyzeSQL(sql);
     expect(result).toEqual({
       actions: ['select'],
       columns: ['*'],
@@ -13,7 +13,7 @@ describe('Normalize SQL', () => {
   });
   test('Simple INSERT', () => {
     const sql = `INSERT INTO users (login) VALUES ('fred')`;
-    const result = normalizeSQL(sql);
+    const result = analyzeSQL(sql);
     expect(result).toEqual({
       actions: ['insert'],
       columns: ['login'],
@@ -23,7 +23,7 @@ describe('Normalize SQL', () => {
   });
   test('INSERT RETURNING', () => {
     const sql = `INSERT INTO users (login) VALUES ('fred') RETURNING *`;
-    const result = normalizeSQL(sql);
+    const result = analyzeSQL(sql);
     expect(result).toEqual({
       actions: ['insert'],
       columns: ['login'],
@@ -33,7 +33,7 @@ describe('Normalize SQL', () => {
   });
   test('Simple UPDATE', () => {
     const sql = `UPDATE users SET login = 'fred'`;
-    const result = normalizeSQL(sql);
+    const result = analyzeSQL(sql);
     expect(result).toEqual({
       actions: ['update'],
       columns: ['login'],
@@ -43,7 +43,7 @@ describe('Normalize SQL', () => {
   });
   test('SELECT with JOIN', () => {
     const sql = `SELECT users.*, a.* FROM users JOIN addresses a ON a.user_id = users.id`;
-    const result = normalizeSQL(sql);
+    const result = analyzeSQL(sql);
     expect(result).toEqual({
       actions: ['select'],
       columns: ['a.*', 'a.user_id', 'users.*', 'users.id'],
@@ -54,7 +54,7 @@ describe('Normalize SQL', () => {
 
   test('SELECT with multiple tables in FROM and JOIN', () => {
     const sql = `SELECT users.*, a.* FROM users, payments JOIN addresses a ON a.user_id = users.id`;
-    const result = normalizeSQL(sql);
+    const result = analyzeSQL(sql);
     expect(result).toEqual({
       actions: ['select'],
       columns: ['a.*', 'a.user_id', 'users.*', 'users.id'],
@@ -65,7 +65,7 @@ describe('Normalize SQL', () => {
 
   test('SELECT with self join', () => {
     const sql = `SELECT u1.* FROM users u1 JOIN users u2 ON u1.admin_id = u2.id`;
-    const result = normalizeSQL(sql);
+    const result = analyzeSQL(sql);
     expect(result).toEqual({
       actions: ['select'],
       columns: ['u1.*', 'u1.admin_id', 'u2.id'],
@@ -76,7 +76,7 @@ describe('Normalize SQL', () => {
 
   test('SELECT with sub-query', () => {
     const sql = `SELECT * FROM users WHERE id IN (SELECT id FROM ids)`;
-    const result = normalizeSQL(sql);
+    const result = analyzeSQL(sql);
     expect(result).toEqual({
       actions: ['select'],
       columns: ['*', 'id'],
@@ -87,7 +87,7 @@ describe('Normalize SQL', () => {
 
   test('SELECT with LEFT JOIN', () => {
     const sql = `SELECT u1.* FROM users u1 LEFT JOIN users u2 ON u1.admin_id = u2.id`;
-    const result = normalizeSQL(sql);
+    const result = analyzeSQL(sql);
     expect(result).toEqual({
       actions: ['select'],
       columns: ['u1.*', 'u1.admin_id', 'u2.id'],
@@ -98,7 +98,7 @@ describe('Normalize SQL', () => {
 
   test('SELECT with RIGHT JOIN', () => {
     const sql = `SELECT u1.* FROM users u1 RIGHT JOIN users u2 ON u1.admin_id = u2.id`;
-    const result = normalizeSQL(sql);
+    const result = analyzeSQL(sql);
     expect(result).toEqual({
       actions: ['select'],
       columns: ['u1.*', 'u1.admin_id', 'u2.id'],
@@ -109,7 +109,7 @@ describe('Normalize SQL', () => {
 
   test('SELECT with INNER JOIN', () => {
     const sql = `SELECT u1.* FROM users u1 INNER JOIN users u2 ON u1.admin_id = u2.id`;
-    const result = normalizeSQL(sql);
+    const result = analyzeSQL(sql);
     expect(result).toEqual({
       actions: ['select'],
       columns: ['u1.*', 'u1.admin_id', 'u2.id'],
@@ -120,7 +120,7 @@ describe('Normalize SQL', () => {
 
   test('SELECT with FULL OUTER JOIN', () => {
     const sql = `SELECT u1.* FROM users u1 FULL OUTER JOIN users u2 ON u1.admin_id = u2.id`;
-    const result = normalizeSQL(sql);
+    const result = analyzeSQL(sql);
     expect(result).toEqual({
       actions: ['select'],
       columns: ['u1.*', 'u1.admin_id', 'u2.id'],
@@ -133,7 +133,7 @@ describe('Normalize SQL', () => {
     const sql = `SELECT \`Album\`.\`Title\`
                  FROM \`Album\` AS \`Album\`
                  GROUP BY \`Album\`.\`Title\``;
-    const result = normalizeSQL(sql);
+    const result = analyzeSQL(sql);
     expect(result).toEqual({
       actions: ['select'],
       columns: ['Album.Title'],

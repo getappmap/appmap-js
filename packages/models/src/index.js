@@ -7,4 +7,7 @@ export { default as EventSource } from './eventSource';
 export { default as CallTree } from './callTree/callTree';
 export { default as ClassMap } from './classMap';
 export { default as CodeObject, CodeObjectType } from './codeObject';
+export { default as analyzeSQL } from './sql/analyze';
+export { default as normalizeSQL } from './sql/normalize';
+export { default as parseSQL } from './sql/parse';
 export * from './util';
