@@ -1,3 +1,11 @@
+# [@appland/models-v1.12.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.12.0...@appland/models-v1.12.1) (2022-02-03)
+
+
+### Bug Fixes
+
+* Improved event hash ([5b14997](https://github.com/applandinc/appmap-js/commit/5b14997c53cc692f04dda50465e0933149daabbf))
+* SQL event hash falls back on query normalization ([735e74c](https://github.com/applandinc/appmap-js/commit/735e74c1baaa7f3e369a3fbbcdf645de0f2fc73f))
+
 # [@appland/models-v1.12.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.11.0...@appland/models-v1.12.0) (2022-02-03)
 
 
