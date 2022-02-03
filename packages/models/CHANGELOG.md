@@ -1,3 +1,16 @@
+# [@appland/models-v1.12.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.11.0...@appland/models-v1.12.0) (2022-02-03)
+
+
+### Bug Fixes
+
+* Specify event constructor type definition ([dacf26d](https://github.com/applandinc/appmap-js/commit/dacf26dc7b74d6bc0ba41fbea2ea17b18b01843a))
+
+
+### Features
+
+* Callback function on SQL parse error ([1ca4f53](https://github.com/applandinc/appmap-js/commit/1ca4f5314f8c0c82d6c37378517048a486426bdc))
+* Refactor SQL utilities into @appland/models ([ef8a9be](https://github.com/applandinc/appmap-js/commit/ef8a9bebb08f08959272af24f8a8069514107681))
+
 # [@appland/models-v1.11.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.10.1...@appland/models-v1.11.0) (2022-01-18)
 
 
