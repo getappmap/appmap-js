@@ -88,6 +88,8 @@ export default {
 
       const scanner = buildScanner(reportAllFindings, configData, files);
 
+      const startTime = Date.now();
+
       const [rawScanResults, findingStatuses] = await Promise.all<
         ScanResults,
         FindingStatusListItem[]
@@ -109,6 +111,14 @@ export default {
       console.log();
       summaryReport(scanResults, true);
       console.log('\n');
+      const elapsed = Date.now() - startTime;
+
+      const numChecks = scanResults.checks.length * scanResults.summary.numAppMaps;
+      console.log(
+        `Performed ${numChecks} checks in ${elapsed}ms (${Math.floor(
+          numChecks / (elapsed / 1000.0)
+        )} checks/sec)`
+      );
     } catch (err) {
       if (err instanceof ValidationError) {
         console.warn(err.message);

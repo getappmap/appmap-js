@@ -1,6 +1,6 @@
-import { AppMap, Event } from '@appland/models';
+import { Event } from '@appland/models';
 import { verbose } from './rules/lib/util';
-import { EventFilter, Rule, ScopeName } from './types';
+import { AppMapIndex, EventFilter, Rule, ScopeName } from './types';
 
 export default class Check {
   public id: string;
@@ -25,14 +25,14 @@ export default class Check {
     this.excludeEvent = [];
   }
 
-  filterScope(event: Event, appMap?: AppMap): boolean {
-    if (this.includeScope.length > 0 && !this.includeScope.every((fn) => fn(event, appMap))) {
+  filterScope(event: Event, appMapIndex: AppMapIndex): boolean {
+    if (this.includeScope.length > 0 && !this.includeScope.every((fn) => fn(event, appMapIndex))) {
       if (verbose()) {
         console.warn(`\t'includeScope' clause is not satisifed.`);
       }
       return false;
     }
-    if (this.excludeScope.some((fn) => fn(event, appMap))) {
+    if (this.excludeScope.some((fn) => fn(event, appMapIndex))) {
       if (verbose()) {
         console.warn(`\t'excludeScope' clause is not satisifed.`);
       }

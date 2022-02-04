@@ -1,4 +1,5 @@
 import { AppMap, Event } from '@appland/models';
+import { SqliteParser } from '@appland/models/types/sqlite-parser';
 import { URL } from 'url';
 
 /**
@@ -52,7 +53,7 @@ type StringFilter = (value: string) => boolean;
  * The event filter is always applied to the Scope.scope event. If enumerateScope is true,
  * the filter is applied to all Scope.events as well.
  */
-type EventFilter = (e: Event, appMap?: AppMap) => boolean;
+type EventFilter = (e: Event, appMapIndex: AppMapIndex) => boolean;
 
 /**
  * MatchResult is created by a rule when it matches an Event.
@@ -73,11 +74,23 @@ type MatcherResult =
   | MatchResult[]
   | undefined;
 
+type EventType = 'http_server_request' | 'http_client_request' | 'sql_query' | 'function';
+
+export type QueryAST = SqliteParser.ListStatement | null;
+
+interface AppMapIndex {
+  appMap: AppMap;
+
+  sqlAST(event: Event): QueryAST | undefined;
+
+  sqlNormalized(event: Event): string;
+}
+
 /**
  * Matcher function is part of a rule. It's applied to an Event to determine whether there is a finding
  * on this event. If the Matcher returns true, a string, or a MatchResult[], then finding(s) are created.
  */
-type Matcher = (e: Event, appMap: AppMap, eventFilter: EventFilter) => MatcherResult;
+type Matcher = (e: Event, appMapIndex: AppMapIndex, eventFilter: EventFilter) => MatcherResult;
 
 /**
  * Finding is the full data structure that is created when a Rule matches an Event.

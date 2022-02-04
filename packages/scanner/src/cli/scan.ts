@@ -6,6 +6,7 @@ import RuleChecker from '../ruleChecker';
 import { Finding } from '../types';
 
 import progressReporter from './progressReporter';
+import AppMapIndex from '../appMapIndex';
 
 type Result = {
   appMapMetadata: Record<string, Metadata>;
@@ -35,12 +36,13 @@ export default async function scan(files: string[], checks: Check[]): Promise<Re
     }
     const appMapData = await readFile(file, 'utf8');
     const appMap = buildAppMap(appMapData).normalize().build();
+    const appMapIndex = new AppMapIndex(appMap);
     appMapMetadata[file] = appMap.metadata;
 
     await Promise.all(
       checks.map(async (check) => {
         const matchCount = findings.length;
-        await checker.check(file, appMap, check, findings);
+        await checker.check(file, appMapIndex, check, findings);
         const newMatches = findings.slice(matchCount, findings.length);
         newMatches.forEach((match) => (match.appMapFile = file));
         process.stderr.write(progressReporter(newMatches));

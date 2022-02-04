@@ -13,9 +13,10 @@ function build(): RuleLogic {
 export default {
   id: 'http-500',
   title: 'HTTP 500 status code',
-  scope: 'http_server_request',
+  scope: 'http_server_request', //http_server_request
   enumerateScope: false,
   impactDomain: 'Stability',
+  // scope: //http_server_request
   references: {
     'CWE-392': new URL('https://cwe.mitre.org/data/definitions/392.html'),
   },

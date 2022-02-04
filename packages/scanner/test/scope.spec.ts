@@ -36,7 +36,7 @@ describe('scope', () => {
       const appmap = await fixtureAppMap(
         'org_springframework_samples_petclinic_owner_OwnerControllerTests_testInitCreationForm.appmap.json'
       );
-      const scopeGenerator = new CommandScope().scopes(callEvents(appmap));
+      const scopeGenerator: Generator<Scope> = new CommandScope().scopes(callEvents(appmap));
       const scopes = Array.from(scopeGenerator);
       expect(scopes.map((scope) => scope.scope.id)).toEqual([1]);
       expect(scopes.map((scope) => scope.scope.toString())).toEqual(['GET /owners/new']);

@@ -1,4 +1,4 @@
-import { buildQueryAST } from '@appland/models';
+import { parseSQL } from '@appland/models';
 import type { SqliteParser } from 'sqlite-parser';
 import type { Event } from '@appland/models';
 
@@ -60,7 +60,8 @@ function iterateTransaction(
     if (!event.isCall()) continue;
     transaction.push(event);
     if (!event.sql) continue;
-    const sql = buildQueryAST(event.sql.sql);
+    // TODO: This should be routing through the AppMapIndex AST cache.
+    const sql = parseSQL(event.sql.sql);
     if (!sql) continue;
     if (isBegin(sql)) throw new Error('Transaction started within a transaction.');
     const end = isEnd(sql);
@@ -79,7 +80,7 @@ export default class SQLTransactionScope extends ScopeIterator {
   *scopes(events: IterableIterator<Event>): Generator<Scope, void, void> {
     for (const event of events) {
       if (!event.isCall() || !event.sql) continue;
-      const sql = buildQueryAST(event.sql.sql);
+      const sql = parseSQL(event.sql.sql);
       if (sql && isBegin(sql) && !isEnd(sql)) {
         yield iterateTransaction(event, events);
       }

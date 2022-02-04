@@ -30,7 +30,7 @@ export default function (summary: ScanResults, colorize: boolean): void {
   const colouredMatchedStr = colorize ? chalk.stderr.magenta(matchedStr) : matchedStr;
 
   console.log();
-  console.log(`${summary.summary.numChecks} checks (${[colouredMatchedStr].join(', ')})`);
+  console.log(colouredMatchedStr);
 
   summarizeFindings(summary.findings)
     .sort((a, b) => a.ruleTitle.localeCompare(b.ruleTitle))

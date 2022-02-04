@@ -5,6 +5,7 @@ import RuleChecker from '../src/ruleChecker';
 import { verbose } from '../src/rules/lib/util';
 import { Finding } from '../src/types';
 import Check from '../src/check';
+import AppMapIndex from '../src/appMapIndex';
 
 if (process.env.VERBOSE_SCAN === 'true') {
   verbose(true);
@@ -30,9 +31,10 @@ const scan = async (check: Check, appMapFile: string, appMap?: AppMap): Promise<
   } else {
     appMapData = await fixtureAppMap(appMapFile);
   }
+  const appMapIndex = new AppMapIndex(appMapData);
 
   const findings: Finding[] = [];
-  await new RuleChecker().check(appMapFile, appMapData, check, findings);
+  await new RuleChecker().check(appMapFile, appMapIndex, check, findings);
 
   if (process.env.VERBOSE_TEST === 'true') {
     console.log(JSON.stringify(findings, null, 2));

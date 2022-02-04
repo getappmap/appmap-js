@@ -57,6 +57,7 @@ export default {
   id: 'insecure-compare',
   title: 'Insecure comparison of secrets',
   labels: [Secret, StringEquals],
+  // scope: //*[@command]
   enumerateScope: true,
   impactDomain: 'Security',
   references: {

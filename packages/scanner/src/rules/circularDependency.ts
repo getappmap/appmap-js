@@ -227,6 +227,7 @@ function build(options: Options): RuleLogic {
 export default {
   id: 'circular-dependency',
   title: 'Circular package dependency',
+  // scope: //*[@command]
   scope: 'command',
   Options,
   impactDomain: 'Maintainability',

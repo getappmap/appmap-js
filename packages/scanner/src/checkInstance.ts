@@ -1,7 +1,7 @@
-import { AppMap, Event } from '@appland/models';
+import { Event } from '@appland/models';
 import Check from './check';
 import { verbose } from './rules/lib/util';
-import { RuleLogic, ScopeName } from './types';
+import { AppMapIndex, RuleLogic, ScopeName } from './types';
 
 export default class CheckInstance {
   check: Check;
@@ -32,8 +32,8 @@ export default class CheckInstance {
     return this.check.rule.enumerateScope;
   }
 
-  filterEvent(event: Event, appMap?: AppMap): boolean {
-    if (this.ruleLogic.where && !this.ruleLogic.where(event, appMap)) {
+  filterEvent(event: Event, appMapIndex: AppMapIndex): boolean {
+    if (this.ruleLogic.where && !this.ruleLogic.where(event, appMapIndex)) {
       if (verbose()) {
         console.warn(`\t'where' clause is not satisifed.`);
       }
@@ -42,14 +42,14 @@ export default class CheckInstance {
 
     if (
       this.check.includeEvent.length > 0 &&
-      !this.check.includeEvent.every((fn) => fn(event, appMap))
+      !this.check.includeEvent.every((fn) => fn(event, appMapIndex))
     ) {
       if (verbose()) {
         console.warn(`\t'includeEvent' clause is not satisifed.`);
       }
       return false;
     }
-    if (this.check.excludeEvent.some((fn) => fn(event, appMap))) {
+    if (this.check.excludeEvent.some((fn) => fn(event, appMapIndex))) {
       if (verbose()) {
         console.warn(`\t'excludeEvent' clause is not satisifed.`);
       }

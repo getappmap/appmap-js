@@ -1,7 +1,7 @@
-import { AppMap, Event } from '@appland/models';
+import { Event } from '@appland/models';
 import Check from './check';
 import { AbortError } from './errors';
-import { Finding } from './types';
+import { AppMapIndex, Finding } from './types';
 import { verbose } from './rules/lib/util';
 import ScopeIterator from './scope/scopeIterator';
 import RootScope from './scope/rootScope';
@@ -24,12 +24,12 @@ export default class RuleChecker {
 
   async check(
     appMapFile: string,
-    appMap: AppMap,
+    appMapIndex: AppMapIndex,
     check: Check,
     findings: Finding[]
   ): Promise<void> {
     if (verbose()) {
-      console.warn(`Checking AppMap ${appMap.name} with scope ${check.scope}`);
+      console.warn(`Checking AppMap ${appMapIndex.appMap.name} with scope ${check.scope}`);
     }
     const scopeIterator = this.scopes[check.scope];
     if (!scopeIterator) {
@@ -37,8 +37,9 @@ export default class RuleChecker {
     }
 
     const callEvents = function* (): Generator<Event> {
-      for (let i = 0; i < appMap.events.length; i++) {
-        yield appMap.events[i];
+      const events = appMapIndex.appMap.events;
+      for (let i = 0; i < events.length; i++) {
+        yield events[i];
       }
     };
 
@@ -47,19 +48,26 @@ export default class RuleChecker {
         console.warn(`Scope ${scope.scope}`);
       }
       const checkInstance = new CheckInstance(check);
-      if (!check.filterScope(scope.scope, appMap)) {
+      if (!check.filterScope(scope.scope, appMapIndex)) {
         continue;
       }
       if (checkInstance.enumerateScope) {
         for (const event of scope.events()) {
-          await this.checkEvent(event, scope.scope, appMapFile, appMap, checkInstance, findings);
+          await this.checkEvent(
+            event,
+            scope.scope,
+            appMapFile,
+            appMapIndex,
+            checkInstance,
+            findings
+          );
         }
       } else {
         await this.checkEvent(
           scope.scope,
           scope.scope,
           appMapFile,
-          appMap,
+          appMapIndex,
           checkInstance,
           findings
         );
@@ -71,7 +79,7 @@ export default class RuleChecker {
     event: Event,
     scope: Event,
     appMapFile: string,
-    appMap: AppMap,
+    appMapIndex: AppMapIndex,
     checkInstance: CheckInstance,
     findings: Finding[]
   ): Promise<void> {
@@ -91,7 +99,7 @@ export default class RuleChecker {
       return;
     }
 
-    if (!checkInstance.filterEvent(event, appMap)) {
+    if (!checkInstance.filterEvent(event, appMapIndex)) {
       return;
     }
 
@@ -136,7 +144,7 @@ export default class RuleChecker {
 
     const matchResult = await checkInstance.ruleLogic.matcher(
       event,
-      appMap,
+      appMapIndex,
       checkInstance.filterEvent.bind(checkInstance)
     );
     const numFindings = findings.length;

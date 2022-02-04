@@ -15,5 +15,7 @@ tmp
 # Misc
 .tmp
 appland-findings.json
+findings.*.json
 findings.json
+sql_warning.txt
 findings.json.*

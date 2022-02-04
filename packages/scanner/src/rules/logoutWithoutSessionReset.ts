@@ -15,7 +15,9 @@ function containsSessionClear(events: Generator<EventNavigator>) {
 function build(): RuleLogic {
   function matcher(rootEvent: Event): MatchResult[] | undefined {
     for (const event of new EventNavigator(rootEvent).descendants()) {
+      // .//*[@security.logout]
       if (event.event.labels.has(SecurityLogout)) {
+        // .//*[@http.session.clear]
         if (containsSessionClear(event.descendants())) {
           return;
         } else {
