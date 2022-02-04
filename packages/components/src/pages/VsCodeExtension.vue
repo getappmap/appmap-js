@@ -646,7 +646,10 @@ export default {
               this.filteredAppMap.events.forEach((e) => {
                 if (
                   e.isCall() &&
-                  e.toString().toLowerCase().includes(term.toString())
+                  e
+                    .toString()
+                    .toLowerCase()
+                    .includes(term.toString().toLowerCase())
                 ) {
                   nodes.add(e);
                 }
