@@ -3,6 +3,7 @@ import type { MatchResult, Rule, RuleLogic } from '../types';
 import Labels from '../wellKnownLabels';
 import { hasTransactionDetails } from '../scope/sqlTransactionScope';
 import { URL } from 'url';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 function build(): RuleLogic {
   function matcher(event: Event): MatchResult[] | undefined {
@@ -46,5 +47,7 @@ export default {
   references: {
     'CWE-672': new URL('https://cwe.mitre.org/data/definitions/672.html'),
   },
+  description: parseRuleDescription('jobNotCancelled'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#job-not-cancelled',
   build,
 } as Rule;

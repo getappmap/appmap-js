@@ -3,6 +3,7 @@ import { EventFilter, Level, MatchResult, Rule, RuleLogic } from '../types';
 import * as types from './types';
 import { SQLCount, sqlStrings } from '../database';
 import { URL } from 'url';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 class Options implements types.NPlusOneQuery.Options {
   public warningLimit = 5;
@@ -70,5 +71,7 @@ export default {
   references: {
     'CWE-1073': new URL('https://cwe.mitre.org/data/definitions/1073.html'),
   },
+  description: parseRuleDescription('nPlusOneQuery'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#n-plus-one-query',
   build,
 } as Rule;

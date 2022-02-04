@@ -4,6 +4,7 @@ import { MatchResult, Rule, RuleLogic } from '../types';
 import * as types from './types';
 import OpenApiDiff from 'openapi-diff';
 import { OpenAPIV3 } from 'openapi-types';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 class Options implements types.IncompatibleHttpClientRequest.Options {
   public schemata: Record<string, string> = {};
@@ -50,6 +51,8 @@ export default {
   scope: 'http_client_request',
   enumerateScope: false,
   impactDomain: 'Stability',
+  description: parseRuleDescription('incompatibleHttpClientRequest'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#incompatible-http-client-request',
   Options,
   build,
 } as Rule;

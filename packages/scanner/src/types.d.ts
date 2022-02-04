@@ -115,6 +115,10 @@ interface Rule {
   id: string;
   // Simple text description of the rule.
   title: string;
+  // Longer text description of the rule.
+  description: string;
+  // URL to the documentation.
+  url?: string;
   // labels which the rule depends on.
   labels?: string[];
   // Specifies which sub-tree events will be identified as "root events of concern".

@@ -1,6 +1,7 @@
 import { Event, EventNavigator } from '@appland/models';
 import { MatchResult, Rule, RuleLogic } from 'src/types';
 import { URL } from 'url';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 function containsSessionClear(events: Generator<EventNavigator>) {
   for (const iter of events) {
@@ -52,5 +53,7 @@ export default {
       'https://guides.rubyonrails.org/security.html#session-fixation-countermeasures'
     ),
   },
+  description: parseRuleDescription('logoutWithoutSessionReset'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#logout-without-session-reset',
   build,
 } as Rule;

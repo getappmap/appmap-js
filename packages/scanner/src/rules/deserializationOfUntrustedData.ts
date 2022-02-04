@@ -1,6 +1,7 @@
 import { Event, EventNavigator } from '@appland/models';
 import { MatchResult, Rule, RuleLogic } from '../types';
 import { URL } from 'url';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 function sanitizesData(event: Event, objectId: number, label: string): boolean {
   return (
@@ -74,5 +75,7 @@ export default {
     'CWE-502': new URL('https://cwe.mitre.org/data/definitions/502.html'),
     'Ruby Security': new URL('https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html'),
   },
+  description: parseRuleDescription('deserializationOfUntrustedData'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#deserialization-of-untrusted-data',
   build,
 } as Rule;

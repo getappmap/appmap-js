@@ -1,6 +1,7 @@
 import { Event } from '@appland/models';
 import { Rule, RuleLogic } from 'src/types';
 import { toRegExpArray } from './lib/util';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 class Options {
   private _queryInclude: RegExp[];
@@ -67,6 +68,8 @@ export default {
   scope: 'http_server_request',
   labels: [Audit],
   impactDomain: 'Maintainability',
+  description: parseRuleDescription('updateInGetRequest'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#update-in-get-request',
   Options,
   build,
 } as Rule;
