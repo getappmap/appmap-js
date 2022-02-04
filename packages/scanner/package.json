@@ -4,7 +4,8 @@
   "description": "",
   "bin": "built/cli.js",
   "files": [
-    "built"
+    "built",
+    "doc"
   ],
   "scripts": {
     "build": "mkdir -p built && cp -r src/sampleConfig built && tsc && yarn schema && yarn doc",
