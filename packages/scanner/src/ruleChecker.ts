@@ -11,6 +11,7 @@ import CommandScope from './scope/commandScope';
 import SQLTransactionScope from './scope/sqlTransactionScope';
 import CheckInstance from './checkInstance';
 import { createHash } from 'crypto';
+import { cloneEvent } from './eventUtil';
 
 export default class RuleChecker {
   private scopes: Record<string, ScopeIterator> = {
@@ -122,14 +123,14 @@ export default class RuleChecker {
         checkId: checkInstance.checkId,
         ruleId: checkInstance.ruleId,
         ruleTitle: checkInstance.title,
-        event: findingEvent,
+        event: cloneEvent(findingEvent),
         hash: hash.digest('hex'),
         stack,
-        scope,
+        scope: cloneEvent(scope),
         message: message || checkInstance.title,
         groupMessage,
         occurranceCount,
-        relatedEvents,
+        relatedEvents: relatedEvents?.map((event) => cloneEvent(event)),
       } as Finding;
     };
 
