@@ -47,31 +47,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appland/client@portal:/Users/kgilpin/source/appland/appmap-js/packages/client::locator=%40appland%2Fscanner%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@appland/client@portal:/Users/kgilpin/source/appland/appmap-js/packages/client::locator=%40appland%2Fscanner%40workspace%3A."
+"@appland/client@npm:^1.1.3":
+  version: 1.2.0
+  resolution: "@appland/client@npm:1.2.0"
   dependencies:
-    "@appland/models": "workspace:^1.8.1"
+    "@appland/models": ^1.8.1
     js-yaml: ^4.1.0
+  checksum: a6d966a3ea8e3c914596503d766ff3a6dd01c1879f4c9c187a29c9de0da26646e58babd18bcbbc998207707a22ca4f71777fb99b2c01ae9b50b26f2bf8592a13
   languageName: node
-  linkType: soft
+  linkType: hard
 
-"@appland/models@portal:/Users/kgilpin/source/appland/appmap-js/packages/models::locator=%40appland%2Fscanner%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@appland/models@portal:/Users/kgilpin/source/appland/appmap-js/packages/models::locator=%40appland%2Fscanner%40workspace%3A."
+"@appland/models@npm:^1.12.1, @appland/models@npm:^1.8.1":
+  version: 1.12.1
+  resolution: "@appland/models@npm:1.12.1"
   dependencies:
     "@appland/sql-parser": ^1.1.1
-    cross-env: ^7.0.3
     crypto-js: ^4.0.0
+  checksum: 560dda5f7f7abe1fbe93a61ab706eec7d274edd9c0915ace1081285cacbb2cc582cd74c4785843d03e99d5ba8dadfb27bce250dafa12ee623283aa3399bc8d56
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "@appland/scanner@workspace:.":
   version: 0.0.0-use.local
   resolution: "@appland/scanner@workspace:."
   dependencies:
     "@appland/client": ^1.1.3
-    "@appland/models": ^1.10.1
+    "@appland/models": ^1.12.1
     "@appland/sql-parser": ^1.1.1
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
@@ -3111,19 +3112,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-env@npm:^7.0.3":
-  version: 7.0.3
-  resolution: "cross-env@npm:7.0.3"
-  dependencies:
-    cross-spawn: ^7.0.1
-  bin:
-    cross-env: src/bin/cross-env.js
-    cross-env-shell: src/bin/cross-env-shell.js
-  checksum: 26f2f3ea2ab32617f57effb70d329c2070d2f5630adc800985d8b30b56e8bf7f5f439dd3a0358b79cee6f930afc23cf8e23515f17ccfb30092c6b62c6b630a79
-  languageName: node
-  linkType: hard
-
-"cross-spawn@npm:^7.0.1, cross-spawn@npm:^7.0.2, cross-spawn@npm:^7.0.3":
+"cross-spawn@npm:^7.0.2, cross-spawn@npm:^7.0.3":
   version: 7.0.3
   resolution: "cross-spawn@npm:7.0.3"
   dependencies:

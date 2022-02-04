@@ -1,6 +1,7 @@
-import { AppMap, sqlWarning, normalizeSQL, parseSQL, Event } from '@appland/models';
+import { AppMap, normalizeSQL, parseSQL, Event } from '@appland/models';
 import { QueryAST } from './types';
 import LRUCache from 'lru-cache';
+import sqlWarning from './sqlWarning';
 
 const NormalizedSQLBySQLString = new LRUCache<string, string>({ max: 10000 });
 const ASTBySQLString = new LRUCache<string, QueryAST>({ max: 1000 });
@@ -14,13 +15,8 @@ export default class AppMapIndex {
     const sql = this.sqlNormalized(event);
     let ast = ASTBySQLString.get(sql);
     if (!ast) {
-      try {
-        ast = parseSQL(sql);
-      } catch {
-        sqlWarning(`Unable to parse query: ${sql}`);
-      }
-      ast ||= [] as any as QueryAST;
-      ASTBySQLString.set(sql, ast);
+      ast = parseSQL(sql, sqlWarning);
+      ast ? ASTBySQLString.set(sql, ast) : ASTBySQLString.set(sql, [] as any);
     }
     return ast;
   }

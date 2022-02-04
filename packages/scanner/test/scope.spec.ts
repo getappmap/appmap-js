@@ -1,5 +1,4 @@
 import { AppMap, Event } from '@appland/models';
-import AppMapIndex from '../src/appMapIndex';
 import CommandScope from '../src/scope/commandScope';
 import RootScope from '../src/scope/rootScope';
 import { Scope } from '../src/types';
