@@ -1,3 +1,10 @@
+## [1.40.3](https://github.com/applandinc/scanner/compare/v1.40.2...v1.40.3) (2022-02-04)
+
+
+### Bug Fixes
+
+* Prevent accumulation of AppMap data while scanning ([cd8ff93](https://github.com/applandinc/scanner/commit/cd8ff93846f436e7d73a125304bbb5e7c568cd8d))
+
 ## [1.40.2](https://github.com/applandinc/scanner/compare/v1.40.1...v1.40.2) (2022-02-03)
 
 
