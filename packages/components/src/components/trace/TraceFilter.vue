@@ -23,11 +23,11 @@
       >
         <li
           :class="getSuggestionClasses(index)"
-          v-for="(item, index) in suggestions"
-          :key="item.id"
-          @click.stop="makeSelection(item.id)"
+          v-for="(item, index) in suggestionsList"
+          :key="item"
+          @click.stop="makeSelection(item)"
         >
-          {{ item.toString() }}
+          {{ item }}
         </li>
       </ul>
     </form>
@@ -126,6 +126,11 @@ export default {
 
       return classList;
     },
+    suggestionsList() {
+      return this.suggestions
+        .map((e) => e.toString())
+        .filter((e, i, arr) => arr.indexOf(e) === i);
+    },
   },
 
   methods: {
@@ -158,12 +163,13 @@ export default {
         this.showSuggestions &&
         this.suggestions.length
       ) {
-        this.makeSelection(this.suggestions[this.selectedSuggestion].id);
+        this.makeSelection(
+          this.suggestions[this.selectedSuggestion].toString()
+        );
       }
     },
-    makeSelection(eventId) {
-      this.filterValue = `${this.filterValue} id:${eventId}`.trim();
-      this.showSuggestions = false;
+    makeSelection(eventName) {
+      this.filterValue = `${this.filterValue} "${eventName}"`.trim();
     },
     onWindowClick(event) {
       if (!getEventTarget(event.target, this.$refs.form)) {

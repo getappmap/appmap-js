@@ -605,58 +605,73 @@ export default {
 
     highlightedNodes() {
       const nodes = new Set();
-      const seachQuery = this.traceFilterValue.trim();
+      const searchQuery = this.traceFilterValue.trim();
 
-      if (seachQuery) {
-        const queryTerms = seachQuery.split(' ');
+      if (searchQuery) {
+        const queryTerms = searchQuery.match(/(?:[^\s"]+|"[^"]*")+/g);
 
-        queryTerms.forEach((term) => {
-          const [query, text] = term.split(':');
-          switch (query) {
-            case 'id': {
-              const eventId = parseInt(text, 10);
-              if (Number.isNaN(eventId)) {
-                break;
-              }
-
-              const event = this.eventsById[eventId];
-              if (event) {
-                nodes.add(event);
-              }
-
-              break;
-            }
-
-            case 'label': {
-              const events = this.eventsByLabel[text];
-
-              if (events) {
-                events.forEach((e) => nodes.add(e));
-              }
-
-              break;
-            }
-
-            default: {
-              // Perform a full text search using query
-              if (term.length < 3) {
-                break;
-              }
+        if (queryTerms) {
+          queryTerms.forEach((term) => {
+            // search for event name
+            if (/^".+"$/g.test(term)) {
+              const eventName = term.slice(1, -1);
 
               this.filteredAppMap.events.forEach((e) => {
-                if (
-                  e.isCall() &&
-                  e
-                    .toString()
-                    .toLowerCase()
-                    .includes(term.toString().toLowerCase())
-                ) {
+                if (e.isCall() && e.toString() === eventName) {
                   nodes.add(e);
                 }
               });
+
+              return;
             }
-          }
-        });
+
+            const [query, text] = term.split(':');
+            switch (query) {
+              case 'id': {
+                const eventId = parseInt(text, 10);
+                if (Number.isNaN(eventId)) {
+                  break;
+                }
+
+                const event = this.eventsById[eventId];
+                if (event) {
+                  nodes.add(event);
+                }
+
+                break;
+              }
+
+              case 'label': {
+                const events = this.eventsByLabel[text];
+
+                if (events) {
+                  events.forEach((e) => nodes.add(e));
+                }
+
+                break;
+              }
+
+              default: {
+                // Perform a full text search using query
+                if (term.length < 3) {
+                  break;
+                }
+
+                this.filteredAppMap.events.forEach((e) => {
+                  if (
+                    e.isCall() &&
+                    e
+                      .toString()
+                      .toLowerCase()
+                      .includes(term.toString().toLowerCase())
+                  ) {
+                    nodes.add(e);
+                  }
+                });
+              }
+            }
+          });
+        }
       }
 
       return Array.from(nodes).sort((a, b) => a.id - b.id);
