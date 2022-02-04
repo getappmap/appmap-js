@@ -2,6 +2,7 @@ import { Event, EventNavigator } from '@appland/models';
 import * as types from './types';
 import { RPCWithoutProtectionOptions, rpcWithoutProtection } from './lib/rpcWithoutProtection';
 import { Rule, RuleLogic } from 'src/types';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 class Options implements RPCWithoutProtectionOptions, types.RPCWithoutCircuitBreaker.Options {
   public expectedLabel: string = RPCCircuitBreaker;
@@ -27,5 +28,7 @@ export default {
   labels: [RPCCircuitBreaker],
   impactDomain: 'Stability',
   enumerateScope: true,
+  description: parseRuleDescription('rpcWithoutCircuitBreaker'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#rpc-without-circuit-breaker',
   build,
 } as Rule;

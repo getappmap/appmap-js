@@ -1,6 +1,7 @@
 import { Event, EventNavigator } from '@appland/models';
 import { URL } from 'url';
 import { Rule, RuleLogic } from '../types';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 const validatedBy = (iterator: Iterator<EventNavigator>): boolean => {
   let i: IteratorResult<EventNavigator> = iterator.next();
@@ -32,5 +33,7 @@ export default {
   references: {
     'CWE-20': new URL('https://cwe.mitre.org/data/definitions/20.html'),
   },
+  description: parseRuleDescription('saveWithoutValidation'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#save-without-validation',
   build,
 } as Rule;

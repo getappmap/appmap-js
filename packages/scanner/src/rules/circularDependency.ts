@@ -10,6 +10,7 @@ import { verbose } from './lib/util';
 import MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 type PackageName = string;
 
@@ -233,5 +234,7 @@ export default {
     'CWE-1047': new URL('https://cwe.mitre.org/data/definitions/1047.html'),
   },
   enumerateScope: false,
+  description: parseRuleDescription('circularDependency'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#circular-dependency',
   build,
 } as Rule;

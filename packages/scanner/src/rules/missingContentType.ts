@@ -1,6 +1,7 @@
 import { Event } from '@appland/models';
 import { Rule, RuleLogic } from 'src/types';
 import { rpcRequestForEvent } from '../openapi/rpcRequest';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 const isRedirect = (status: number) => [301, 302, 303, 307, 308].includes(status);
 const hasContent = (status: number) => status !== 204;
@@ -28,5 +29,7 @@ export default {
   scope: 'http_server_request',
   impactDomain: 'Stability',
   enumerateScope: false,
+  description: parseRuleDescription('missingContentType'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#missing-content-type',
   build,
 } as Rule;

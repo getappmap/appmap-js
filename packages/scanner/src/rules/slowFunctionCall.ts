@@ -2,6 +2,7 @@ import { Rule, RuleLogic } from 'src/types';
 import * as types from './types';
 import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 class Options implements types.SlowFunctionCall.Options {
   public functions: MatchPatternConfig[] = [];
@@ -33,6 +34,8 @@ export default {
   scope: 'root',
   impactDomain: 'Performance',
   enumerateScope: true,
+  description: parseRuleDescription('slowFunctionCall'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#slow-function-call',
   Options,
   build,
 } as Rule;

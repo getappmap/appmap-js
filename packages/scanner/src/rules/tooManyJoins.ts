@@ -3,6 +3,7 @@ import { EventFilter, MatchResult, Rule, RuleLogic } from '../types';
 import * as types from './types';
 import { countJoins, SQLCount, sqlStrings } from '../database';
 import { URL } from 'url';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 export interface JoinCount extends SQLCount {
   joins: number;
@@ -65,6 +66,8 @@ export default {
   references: {
     'CWE-1049': new URL('https://cwe.mitre.org/data/definitions/1049.html'),
   },
+  description: parseRuleDescription('tooManyJoins'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#too-many-joins',
   Options,
   build,
 } as Rule;

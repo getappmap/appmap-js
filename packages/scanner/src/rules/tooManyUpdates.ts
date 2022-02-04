@@ -2,6 +2,7 @@ import { Event, EventNavigator } from '@appland/models';
 import { MatchResult, Rule, RuleLogic } from 'src/types';
 import { URL } from 'url';
 import * as types from './types';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 // TODO: Use the Query AST for this.
 const QueryIncludes: RegExp[] = [/\bINSERT\b/i, /\bUPDATE\b/i];
@@ -71,6 +72,8 @@ export default {
   references: {
     'CWE-1048': new URL('https://cwe.mitre.org/data/definitions/1048.html'),
   },
+  description: parseRuleDescription('tooManyUpdates'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#too-many-updates',
   Options,
   build,
 } as Rule;

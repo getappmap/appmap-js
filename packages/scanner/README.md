@@ -238,7 +238,9 @@ _Example_
       "enumerateScope": false,
       "references": {
         "CWE-863": "https://cwe.mitre.org/data/definitions/863.html"
-      }
+      },
+      "description": "Determines when authorization logic is applied to a user identity that has not been properly verified. Because the the user's identity has not been verified yet, the outcome of the authorization check cannot be trusted. A malicious user might be able to get themselves authorized as a different user than they really are - or they may not be logged in at all.",
+      "url": "https://appland.com/docs/analysis/rules-reference.html#authz-before-authn"
     },
     "id": "authz-before-authn",
     "options": {},
@@ -257,7 +259,9 @@ _Example_
       "references": {
         "CWE-1047": "https://cwe.mitre.org/data/definitions/1047.html"
       },
-      "enumerateScope": false
+      "enumerateScope": false,
+      "description": "Finds cycles in the package dependency graph. Cyclic dependencies make code hard to maintain because all the code in the cycle is inter-dependent. While it might look like the code in the different packages has separate functions, in essence all the code in the cycle acts like one big package.",
+      "url": "https://appland.com/docs/analysis/rules-reference.html#circular-dependency"
     }
   }
 ]

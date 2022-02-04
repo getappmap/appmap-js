@@ -4,6 +4,7 @@ import SecretsRegexes, { looksSecret } from '../analyzer/secretsRegexes';
 import { emptyValue } from './lib/util';
 import recordSecrets from '../analyzer/recordSecrets';
 import { URL } from 'url';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 class Match {
   constructor(public regexp: RegExp | string, public value: string) {}
@@ -71,5 +72,7 @@ export default {
   references: {
     'CWE-532': new URL('https://cwe.mitre.org/data/definitions/532.html'),
   },
+  description: parseRuleDescription('secretInLog'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#secret-in-log',
   build,
 } as Rule;

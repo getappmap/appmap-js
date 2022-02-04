@@ -3,6 +3,7 @@ import { URL } from 'url';
 import recordSecrets from '../analyzer/recordSecrets';
 import { looksSecret } from '../analyzer/secretsRegexes';
 import { Rule, RuleLogic } from '../types.d';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 const BCRYPT_REGEXP = /^[$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][./0-9a-zA-Z]{53}$/;
 
@@ -61,5 +62,7 @@ export default {
   references: {
     'CWE-208': new URL('https://cwe.mitre.org/data/definitions/208.html'),
   },
+  description: parseRuleDescription('insecureCompare'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#insecure-compare',
   build,
 } as Rule;

@@ -2,6 +2,7 @@ import { buildQueryAST, Event } from '@appland/models';
 import { Rule, RuleLogic } from '../types';
 import { visit } from '../database/visit';
 import { URL } from 'url';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 function isMaterialized(e: Event): boolean {
   return e.ancestors().some(({ labels }) => labels.has(DAOMaterialize));
@@ -72,5 +73,7 @@ export default {
   references: {
     'CWE-1049': new URL('https://cwe.mitre.org/data/definitions/1049.html'),
   },
+  description: parseRuleDescription('unbatchedMaterializedQuery'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#unbatched-materialized-query',
   build,
 } as Rule;

@@ -6,6 +6,7 @@ import { providesAuthentication } from './lib/util';
 import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
+import parseRuleDescription from './lib/parseRuleDescription';
 
 function isPublic(event: Event): boolean {
   return event.labels.has(Public);
@@ -75,6 +76,8 @@ export default {
   references: {
     'CWE-306': new URL('https://cwe.mitre.org/data/definitions/306.html'),
   },
+  description: parseRuleDescription('missingAuthentication'),
+  url: 'https://appland.com/docs/analysis/rules-reference.html#missing-authentication',
   Options,
   build,
 } as Rule;
