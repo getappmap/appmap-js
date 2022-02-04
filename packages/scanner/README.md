@@ -280,44 +280,64 @@ _Example_
 
 ```json
 "findings": [
-  {
-    "appMapFile": "tmp/appmap/rspec/API_ScannerJobsController_create_logged_in_uploads_a_scanner_job_from_a_tarball.appmap.json",
-    "checkId": "slow-function-call",
-    "ruleId": "slow-function-call",
-    "ruleTitle": "Slow function call",
-    "event": {
-      "id": 125,
-      "event": "call",
-      "thread_id": 76340,
-      "defined_class": "Scanner",
-      "method_id": "publish_from_upload",
-      "path": "app/models/scanner.rb",
-      "lineno": 397,
-      "static": true,
-      "receiver": {
-        "class": "Module",
-        "object_id": 1380300,
-        "value": "Scanner"
-      }
-    },
-    "hash": "a2bfc16512fadf8536355610fcaa63b391596dc0f60d7ef7f885a4eb6ec8f7c1",
-    "scope": {
-      "id": 29,
-      "event": "call",
-      "thread_id": 76340,
-      "http_server_request": {
-        "request_method": "POST",
-        "path_info": "/api/scanner_jobs",
-        "normalized_path_info": "/api/scanner_jobs",
-        "headers": {
-          "Host": "www.example.com",
-          "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
-          "Authorization": "Bearer YWRtaW46NzM4NzVmOWYtMmQ4Ni00YWIwLTk5OWEtMWUwNjc2NGE5NTUw"
+    {
+      "appMapFile": "./tmp/appmap/rspec/Extensions_Upload_processing_logged_in_appmap_with_org_name_with_org_membership_is_added_to_the_specified_org.appmap.json",
+      "checkId": "illegal-package-dependency",
+      "ruleId": "illegal-package-dependency",
+      "ruleTitle": "Illegal use of code by a non-whitelisted package",
+      "event": {
+        "id": 244,
+        "event": "call",
+        "thread_id": 461760,
+        "defined_class": "DAO::Scenario",
+        "method_id": "validate",
+        "path": "app/models/dao/scenario.rb",
+        "lineno": 149,
+        "static": false,
+        "receiver": {
+          "class": "DAO::Scenario",
+          "object_id": 501420,
+          "value": "#<DAO::Scenario:0x00007f7f50cd6a78>"
         }
-      }
-    },
-    "message": "Slow app/models/Scanner.publish_from_upload call (0.538877ms)"
-  }
+      },
+      "hash": "a3a2be87f722fe53e9fbbb57dd1acd82d8cf76d3c346556e8e495cd0a91eba2e",
+      "stack": [
+        "app/models/dao/scenario.rb:149",
+        "app/controllers/concerns/mute_logging.rb:4",
+        "app/models/scenario/save_scenario.rb:11",
+        "app/models/scenario/build.rb:68",
+        "app/controllers/scenario_uploads_controller.rb:60",
+        "app/controllers/scenario_uploads_controller.rb:44",
+        "app/controllers/concerns/with_authentication.rb:6",
+        "app/controllers/concerns/in_transaction.rb:8"
+      ],
+      "scope": {
+        "id": 11,
+        "event": "call",
+        "thread_id": 461760,
+        "http_server_request": {
+          "request_method": "GET",
+          "path_info": "/scenario_uploads/1",
+          "normalized_path_info": "/scenario_uploads/{id}",
+          "headers": {
+            "Host": "127.0.0.1:61019",
+            "Connection": "keep-alive",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/97.0.4692.99 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-User": "?1",
+            "Sec-Fetch-Dest": "document",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "en-US",
+            "Cookie": "appland_session=YKhMDBpgpV0hwKaBkxlaq%2BVzBRK2u6r%2BU%2BnFmJ61y5Q6TxptqxED597yhcmKqSTLfs%2FExRKU8WJ8iN7pV5Si7i0iJfPMa32ubjqMx0wVtcZ%2Fxo%2BwIcDF%2FI6Qaf7cU6oj6DaErr8GElQTTlA0TdRBrCgo43no%2BD4pSwkXvweqR175ZrCN%2FrjBZElvLaxyoY8kKsABEEtmI2aRcCcDJylP1hVrAI6%2BcWgVhb42ITJ8%2BuN0KiZDZSJWOsQFW6l656tyDDjC3UQvf65u5zvDAbqhIJkSEBXfn8p7c7I%2Bo8Cc9UWjLCNTCV%2BTL5iJ5qKDLHb7sHQftnOymCkyc%2FM57Bute59Lmyk6ZsNj4Y3Zbv6upszqyfJMhPyvcESz6BZCrzEGJudCueDtwNAnBPu3zE%2B1xQcKMpmF1R8Jw7ds41i90fFE0tkUCaiDzHdZUveVQKm7N%2F9pgTKE7a%2FyrevoPBKjpsqOrG%2BLe1Xhc%2FyWZBzXKbaTkHIRhoLijV9vGRH%2F%2Fk%2B9uZW0uhyfnoLDJB7af2vArKwNhEwuCBsXybPmyDDq2oLq8fMyWeVOpY7H44pGHho1D1qQdVfBzrLVoUG%2FqAbBSh0roHl%2FFjfRKmSil6iTQWQSNkemb73NNAsg3U2lI2AcjoNCzZHJS8S7iIpbZonabSR7AKyssx%2BSRYjdTsy5FplO--DN1nLB2Gux0u9W7x--RCmfYC53sopFkHidZ1uSNA%3D%3D",
+            "Version": "HTTP/1.1"
+          }
+        }
+      },
+      "message": "Code object app/models/dao/DAO::Scenario#validate was invoked from app/controllers/concerns, not from ^app/models/?"
+    }
 ]
 ```
 
