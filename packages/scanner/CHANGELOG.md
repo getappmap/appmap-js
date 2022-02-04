@@ -1,3 +1,10 @@
+## [1.41.1](https://github.com/applandinc/scanner/compare/v1.41.0...v1.41.1) (2022-02-04)
+
+
+### Bug Fixes
+
+* use relative path for doc files ([2e0b5d6](https://github.com/applandinc/scanner/commit/2e0b5d6febd7ccbe20b4ed489fbc964c68054df1))
+
 # [1.41.0](https://github.com/applandinc/scanner/compare/v1.40.3...v1.41.0) (2022-02-04)
 
 
