@@ -1,3 +1,25 @@
+# [1.42.0](https://github.com/applandinc/scanner/compare/v1.41.1...v1.42.0) (2022-02-04)
+
+
+### Bug Fixes
+
+* Integrate the SQL cache and collect performance data ([b0d393b](https://github.com/applandinc/scanner/commit/b0d393b4ab12ce3baeeaebadad1c0184aacc2927))
+* Missing import ([042a79c](https://github.com/applandinc/scanner/commit/042a79cca1552adea0cc7f6339c4eb1abe2e00da))
+
+
+### Features
+
+* Accelerate scanning by indexing the AppMap ([5414da1](https://github.com/applandinc/scanner/commit/5414da1f628fbd44912c7c89b7f174d438162027))
+* Cache normalized SQL and query AST ([ba3377f](https://github.com/applandinc/scanner/commit/ba3377f002c69379447ab89b83933e6ace7190a5))
+* LRU cache for queries ([14883dd](https://github.com/applandinc/scanner/commit/14883ddd5af636db0320934692b4bf92f223069f))
+* Update @appland/models and implement sqlWarning ([460e2a3](https://github.com/applandinc/scanner/commit/460e2a380b98f2c144cf835445c2da4cae7efa32))
+* Update SQL parser ([691c051](https://github.com/applandinc/scanner/commit/691c051602b2f328a1c6d9eeeac704e3aead684d))
+
+
+### Reverts
+
+* Remove cache of events by type and label ([28374c2](https://github.com/applandinc/scanner/commit/28374c297d516a0f0a89fce50adedd6ff7044f4f))
+
 ## [1.41.1](https://github.com/applandinc/scanner/compare/v1.41.0...v1.41.1) (2022-02-04)
 
 
