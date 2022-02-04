@@ -1,3 +1,10 @@
+# [1.41.0](https://github.com/applandinc/scanner/compare/v1.40.3...v1.41.0) (2022-02-04)
+
+
+### Features
+
+* add description and doc url to rule definitions ([0c237e4](https://github.com/applandinc/scanner/commit/0c237e4d3a4b6a3d6d2c12000d09ffb86fcd390d))
+
 ## [1.40.3](https://github.com/applandinc/scanner/compare/v1.40.2...v1.40.3) (2022-02-04)
 
 
