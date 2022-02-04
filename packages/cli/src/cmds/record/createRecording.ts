@@ -30,7 +30,7 @@ export default async function createRecording(
     default: 'y',
   });
 
-  const data = await rr.stop();
+  let data = await rr.stop();
 
   if (data) {
     UI.success(`Recording has finished, with ${data.length} bytes of data.`);
@@ -46,9 +46,14 @@ export default async function createRecording(
     default: 'My recording',
   });
 
+  const jsonData = JSON.parse(data);
+  jsonData['metadata'] = jsonData['metadata'] || {};
+  jsonData['metadata']['name'] = appMapName;
+  data = JSON.stringify(jsonData);
+
   const fileName = `${appMapName}.appmap.json`;
   UI.status = `Saving recording to ${fileName}`;
-  fs.writeFile(fileName, data!);
+  fs.writeFile(fileName, data);
 
   UI.success('AppMap saved');
 
