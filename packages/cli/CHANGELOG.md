@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.18.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.18.0...@appland/appmap-v3.18.1) (2022-02-04)
+
+
+### Bug Fixes
+
+* Set the metadata name property before writing out AppMap data ([b784cd6](https://github.com/applandinc/appmap-js/commit/b784cd6a835f940d7e97f3f62e76aff001c54c55))
+
 # [@appland/appmap-v3.18.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.17.2...@appland/appmap-v3.18.0) (2022-02-03)
 
 
