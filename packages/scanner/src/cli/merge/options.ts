@@ -1,7 +1,7 @@
 export default interface CommandOptions {
   verbose?: boolean;
-  reportFile: string;
-  appmapDir: string;
+  mergeKey: string;
   app?: string;
-  mergeKey?: string;
+  fail?: boolean;
+  updateCommitStatus: boolean;
 }

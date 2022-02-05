@@ -44,6 +44,9 @@ export default {
       default: true,
       type: 'boolean',
     });
+    args.option('merge-key', {
+      describe: 'build job identifier. This is used to merge findings from parallelized scans',
+    });
 
     return args.strict();
   },
@@ -57,6 +60,7 @@ export default {
       reportFile,
       upload: doUpload,
       updateCommitStatus,
+      mergeKey,
     } = options as unknown as CommandOptions;
 
     if (isVerbose) {
@@ -92,7 +96,7 @@ export default {
       summaryReport(scanResults, true);
 
       if (doUpload) {
-        await upload(rawScanResults, appId);
+        await upload(rawScanResults, appId, mergeKey);
       }
 
       if (updateCommitStatus) {

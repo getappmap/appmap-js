@@ -6,11 +6,22 @@ import { AppMap as AppMapStruct } from '@appland/models';
 import { buildRequest, handleError } from '@appland/client/dist/src';
 
 import { ScanResults } from '../../report/scanResults';
-import { AppMap as AppMapClient, UploadAppMapResponse } from './appMap';
+import { AppMap as AppMapClient, CreateOptions, UploadAppMapResponse } from './appMap';
 import { Mapset as MapsetClient } from './mapset';
 import { readFile } from 'fs/promises';
 
-export default async function (scanResults: ScanResults, appId: string): Promise<URL> {
+type ScanResultsCreateOptions = {
+  scan_results: ScanResults;
+  mapset: number;
+  appmap_uuid_by_file_name: Record<string, string>;
+  merge_key?: string;
+};
+
+export default async function (
+  scanResults: ScanResults,
+  appId: string,
+  mergeKey?: string
+): Promise<URL> {
   console.warn(`Uploading AppMaps and findings to application '${appId}'`);
 
   const { findings } = scanResults;
@@ -22,6 +33,10 @@ export default async function (scanResults: ScanResults, appId: string): Promise
   const appMapUUIDByFileName: Record<string, string> = {};
   const branchCount: Record<string, number> = {};
   const commitCount: Record<string, number> = {};
+
+  const uploadOptions = {
+    app: appId,
+  } as CreateOptions;
 
   const q = queue((filePath: string, callback) => {
     console.log(`Uploading AppMap ${filePath}`);
@@ -40,7 +55,7 @@ export default async function (scanResults: ScanResults, appId: string): Promise
           commitCount[commit] += 1;
         }
 
-        return AppMapClient.upload(buffer, { app: appId });
+        return AppMapClient.upload(buffer, uploadOptions);
       })
       .then((appMap: UploadAppMapResponse) => {
         if (appMap) {
@@ -73,11 +88,13 @@ export default async function (scanResults: ScanResults, appId: string): Promise
 
   console.warn('Uploading findings');
 
-  const uploadData = JSON.stringify({
+  const scanResultsOptions = {
     scan_results: scanResults,
     mapset: mapset.id,
     appmap_uuid_by_file_name: appMapUUIDByFileName,
-  });
+  } as ScanResultsCreateOptions;
+  if (mergeKey) scanResultsOptions.merge_key = mergeKey;
+  const scanResultsData = JSON.stringify(scanResultsOptions);
 
   const request = await buildRequest('api/scanner_jobs');
   return new Promise<IncomingMessage>((resolve, reject) => {
@@ -87,14 +104,14 @@ export default async function (scanResults: ScanResults, appId: string): Promise
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': uploadData.length,
+          'Content-Length': scanResultsData.length,
           ...request.headers,
         },
       },
       resolve
     );
     req.on('error', reject);
-    req.write(uploadData);
+    req.write(scanResultsData);
     req.end();
   })
     .then(handleError)

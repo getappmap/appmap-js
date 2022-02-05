@@ -26,6 +26,9 @@ export default {
       describe:
         'name of the app to publish the findings for. By default, this is determined by looking in appmap.yml',
     });
+    args.option('merge-key', {
+      describe: 'build job identifier. This is used to merge findings from parallelized scans',
+    });
     return args.strict();
   },
   async handler(options: Arguments): Promise<void> {
@@ -34,6 +37,7 @@ export default {
       reportFile,
       appmapDir,
       app: appIdArg,
+      mergeKey,
     } = options as unknown as CommandOptions;
 
     if (isVerbose) {
@@ -44,6 +48,6 @@ export default {
     const appId = await resolveAppId(appIdArg, appmapDir);
 
     const scanResults = JSON.parse((await readFile(reportFile)).toString()) as ScanResults;
-    await upload(scanResults, appId);
+    await upload(scanResults, appId, mergeKey);
   },
 };
