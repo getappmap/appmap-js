@@ -712,7 +712,8 @@ context('VS Code Extension', () => {
       cy.get('.trace-filter__suffix').click();
       cy.get('.trace-filter__input').should('have.value', '');
 
-      let eventQuery = 'id:1 label:json id:3 id:15 id:99999 #link_to_edit_url';
+      let eventQuery =
+        'id:1 label:json id:3 id:15 id:99999 %#link_to_edit_url%';
       cy.get('.trace-filter__input').type(eventQuery);
 
       cy.get('.trace-node[data-event-id="1"]')
@@ -813,13 +814,13 @@ context('VS Code Extension', () => {
     it('only searches trace view after typing a certain number of characters', () => {
       cy.get('.tabs .tab-btn').last().click();
 
-      cy.get('.trace-filter__input').type('o');
+      cy.get('.trace-filter__input').type('%o');
       cy.get('.trace-node.filtered').should('not.exist');
 
       cy.get('.trace-filter__input').type('r');
       cy.get('.trace-node.filtered').should('not.exist');
 
-      cy.get('.trace-filter__input').type('d');
+      cy.get('.trace-filter__input').type('d%');
       cy.get('.trace-node.filtered').should('exist');
     });
 

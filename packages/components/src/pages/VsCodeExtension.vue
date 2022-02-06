@@ -625,6 +625,23 @@ export default {
               return;
             }
 
+            // full-text search
+            if (/^%.+%$/g.test(term)) {
+              const searchString = term.slice(1, -1).toString().toLowerCase();
+              if (searchString.length < 3) {
+                return;
+              }
+
+              this.filteredAppMap.events.forEach((e) => {
+                if (
+                  e.isCall() &&
+                  e.toString().toLowerCase().includes(searchString)
+                ) {
+                  nodes.add(e);
+                }
+              });
+            }
+
             const [query, text] = term.split(':');
             switch (query) {
               case 'id': {
@@ -651,24 +668,8 @@ export default {
                 break;
               }
 
-              default: {
-                // Perform a full text search using query
-                if (term.length < 3) {
-                  break;
-                }
-
-                this.filteredAppMap.events.forEach((e) => {
-                  if (
-                    e.isCall() &&
-                    e
-                      .toString()
-                      .toLowerCase()
-                      .includes(term.toString().toLowerCase())
-                  ) {
-                    nodes.add(e);
-                  }
-                });
-              }
+              default:
+                break;
             }
           });
         }

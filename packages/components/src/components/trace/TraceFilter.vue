@@ -127,9 +127,25 @@ export default {
       return classList;
     },
     suggestionsList() {
-      return this.suggestions
+      let suggestions = this.suggestions
         .map((e) => e.toString())
         .filter((e, i, arr) => arr.indexOf(e) === i);
+
+      const terms = this.filterValue.match(/(?:[^\s"]+|"[^"]*")+/g);
+      const lastTerm = terms ? terms[terms.length - 1] : null;
+      if (
+        lastTerm &&
+        !/^".+"$/g.test(lastTerm) &&
+        !/^%.+%$/g.test(lastTerm) &&
+        !/^id:.+$/g.test(lastTerm) &&
+        !/^label:.+$/g.test(lastTerm)
+      ) {
+        suggestions = suggestions.filter((item) =>
+          new RegExp(lastTerm, 'ig').test(item)
+        );
+      }
+
+      return suggestions;
     },
   },
 
@@ -161,15 +177,28 @@ export default {
       if (
         this.$refs.input === window.document.activeElement &&
         this.showSuggestions &&
-        this.suggestions.length
+        this.suggestionsList.length
       ) {
         this.makeSelection(
-          this.suggestions[this.selectedSuggestion].toString()
+          this.suggestionsList[this.selectedSuggestion].toString()
         );
       }
     },
     makeSelection(eventName) {
-      this.filterValue = `${this.filterValue} "${eventName}"`.trim();
+      const terms = this.filterValue.match(/(?:[^\s"]+|"[^"]*")+/g);
+      const lastTerm = terms ? terms[terms.length - 1] : null;
+      if (
+        lastTerm &&
+        !/^".+"$/g.test(lastTerm) &&
+        !/^%.+%$/g.test(lastTerm) &&
+        !/^id:.+$/g.test(lastTerm) &&
+        !/^label:.+$/g.test(lastTerm)
+      ) {
+        terms.pop();
+      }
+      this.filterValue = `${
+        terms ? terms.join(' ') : ''
+      } "${eventName}"`.trim();
     },
     onWindowClick(event) {
       if (!getEventTarget(event.target, this.$refs.form)) {
@@ -187,7 +216,7 @@ export default {
           this.$refs.input.blur();
           break;
         case 'ArrowDown':
-          if (this.selectedSuggestion !== this.suggestions.length - 1) {
+          if (this.selectedSuggestion !== this.suggestionsList.length - 1) {
             this.selectedSuggestion += 1;
           }
           break;
