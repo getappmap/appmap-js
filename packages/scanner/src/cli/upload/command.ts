@@ -9,6 +9,7 @@ import validateFile from '../validateFile';
 
 import CommandOptions from './options';
 import resolveAppId from '../resolveAppId';
+import reportUploadURL from '../reportUploadURL';
 
 export default {
   command: 'upload',
@@ -48,6 +49,8 @@ export default {
     const appId = await resolveAppId(appIdArg, appmapDir);
 
     const scanResults = JSON.parse((await readFile(reportFile)).toString()) as ScanResults;
-    await upload(scanResults, appId, mergeKey);
+    const uploadResponse = await upload(scanResults, appId, mergeKey);
+
+    reportUploadURL(uploadResponse.summary.numFindings, uploadResponse.url);
   },
 };

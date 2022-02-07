@@ -3,15 +3,12 @@ import { Arguments, Argv } from 'yargs';
 import CommandOptions from './options';
 import { ScanResults } from '../../integration/appland/scanResults';
 import resolveAppId from '../resolveAppId';
+import updateCommitStatus from '../updateCommitStatus';
 
 export default {
   command: 'merge <merge-key>',
   describe: 'Merge scan results from parallel scans',
   builder(args: Argv): Argv {
-    args.option('api-key', {
-      describe:
-        'AppMap server API key. Use of this option is discouraged; set APPLAND_API_KEY instead',
-    });
     args.option('app', {
       describe:
         'name of the app to publish the findings for. By default, this is determined by looking in appmap.yml',
@@ -23,7 +20,7 @@ export default {
     });
     args.option('update-commit-status', {
       describe: 'update commit status in SCM system',
-      default: true,
+      default: false,
       type: 'boolean',
     });
 
@@ -38,10 +35,8 @@ export default {
     const {
       verbose: isVerbose,
       app: appIdArg,
-      /*
-      fail,
-      updateCommitStatus,
-      */
+      fail: failOption,
+      updateCommitStatus: updateCommitStatusOption,
       mergeKey,
     } = options as unknown as CommandOptions;
 
@@ -52,8 +47,14 @@ export default {
     const appId = await resolveAppId(appIdArg, '.');
 
     const mergeResults = await ScanResults.merge(appId, mergeKey);
-    console.warn(mergeResults);
+    console.warn(`Merged results to ${mergeResults.url}`);
 
-    // It also has to collect the final findings, and fail the build if so instructed.
+    if (updateCommitStatusOption) {
+      await updateCommitStatus(mergeResults.summary.numFindings, mergeResults.summary.numChecks);
+    }
+
+    if (failOption) {
+      fail(mergeResults.summary.numFindings);
+    }
   },
 };

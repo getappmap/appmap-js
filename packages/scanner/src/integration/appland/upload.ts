@@ -1,14 +1,16 @@
 import { IncomingMessage } from 'http';
-import { URL } from 'url';
 import { queue } from 'async';
+import { readFile } from 'fs/promises';
 
 import { AppMap as AppMapStruct } from '@appland/models';
-import { buildRequest, handleError } from '@appland/client/dist/src';
+import { buildRequest, handleError, reportJSON } from '@appland/client/dist/src';
 
 import { ScanResults } from '../../report/scanResults';
 import { AppMap as AppMapClient, CreateOptions, UploadAppMapResponse } from './appMap';
 import { Mapset as MapsetClient } from './mapset';
-import { readFile } from 'fs/promises';
+import Location from './location';
+import ScannerJob from './scannerJob';
+import { URL } from 'url';
 
 type ScanResultsCreateOptions = {
   scan_results: ScanResults;
@@ -17,11 +19,13 @@ type ScanResultsCreateOptions = {
   merge_key?: string;
 };
 
+export interface UploadResponse extends ScannerJob, Location {}
+
 export default async function (
   scanResults: ScanResults,
   appId: string,
   mergeKey?: string
-): Promise<URL> {
+): Promise<UploadResponse> {
   console.warn(`Uploading AppMaps and findings to application '${appId}'`);
 
   const { findings } = scanResults;
@@ -97,6 +101,7 @@ export default async function (
   const scanResultsData = JSON.stringify(scanResultsOptions);
 
   const request = await buildRequest('api/scanner_jobs');
+  let uploadURL: URL;
   return new Promise<IncomingMessage>((resolve, reject) => {
     const req = request.requestFunction(
       request.url,
@@ -115,13 +120,14 @@ export default async function (
     req.end();
   })
     .then(handleError)
-    .then((response: IncomingMessage): URL => {
-      let message = `Uploaded ${scanResults.findings.length} findings`;
+    .then((response) => {
       if (response.headers.location) {
-        const uploadURL = new URL(response.headers.location, request.url.href);
-        message += ` to ${uploadURL}`;
+        uploadURL = new URL(response.headers.location, request.url.href);
       }
-      console.log(message);
-      return request.url;
+      return reportJSON<UploadResponse>(response);
+    })
+    .then((uploadResponse) => {
+      uploadResponse.url = uploadURL;
+      return uploadResponse;
     });
 }

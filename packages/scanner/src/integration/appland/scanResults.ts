@@ -1,10 +1,11 @@
 import { IncomingMessage } from 'http';
 
-import { buildRequest, handleError } from '@appland/client/dist/src';
+import { buildRequest, handleError, reportJSON } from '@appland/client/dist/src';
+import Location from './location';
+import ScannerJob from './scannerJob';
+import { URL } from 'url';
 
-export type MergeResponse = {
-  id: number;
-};
+export interface MergeResponse extends ScannerJob, Location {}
 
 export class ScanResults {
   static async merge(appId: string, mergeKey: string): Promise<MergeResponse> {
@@ -15,6 +16,7 @@ export class ScanResults {
       merge_key: mergeKey,
     });
     const request = await buildRequest('api/scanner_jobs/merge');
+    let uploadURL: URL;
     return new Promise<IncomingMessage>((resolve, reject) => {
       const req = request.requestFunction(
         request.url,
@@ -33,18 +35,15 @@ export class ScanResults {
       req.end();
     })
       .then(handleError)
-      .then((response: IncomingMessage) => {
-        return new Promise<MergeResponse>((resolve, reject) => {
-          const responseData: Buffer[] = [];
-          response
-            .on('data', (chunk: Buffer) => {
-              responseData.push(Buffer.from(chunk));
-            })
-            .on('end', () => {
-              resolve(JSON.parse(Buffer.concat(responseData).toString()) as MergeResponse);
-            })
-            .on('error', reject);
-        });
+      .then((response) => {
+        if (response.headers.location) {
+          uploadURL = new URL(response.headers.location, request.url.href);
+        }
+        return reportJSON<MergeResponse>(response);
+      })
+      .then((uploadResponse) => {
+        uploadResponse.url = uploadURL;
+        return uploadResponse;
       });
   }
 }
