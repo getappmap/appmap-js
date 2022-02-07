@@ -2,7 +2,7 @@ import { loadConfiguration, FindingStatusListItem } from '@appland/client/dist/s
 
 import { loadConfig } from '../../configuration/configurationProvider';
 import Configuration from '../../configuration/types/configuration';
-import fetchStatus from '../../integration/appland/fetchStatus';
+import fetchStatus from '../../integration/appland/app/listFindingStatus';
 
 import resolveAppId from '../resolveAppId';
 import scan from '../scan';

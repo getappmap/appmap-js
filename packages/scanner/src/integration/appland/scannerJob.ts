@@ -1,5 +1,5 @@
 import { Configuration } from '@appland/client';
-import { ScanSummary } from 'src/report/scanSummary';
+import { ScanSummary } from '../../report/scanSummary';
 
 export default interface ScannerJob {
   id: number;

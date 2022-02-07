@@ -1,16 +1,16 @@
 import { IncomingMessage } from 'http';
 import { queue } from 'async';
 import { readFile } from 'fs/promises';
+import { URL } from 'url';
 
 import { AppMap as AppMapStruct } from '@appland/models';
 import { buildRequest, handleError, reportJSON } from '@appland/client/dist/src';
 
-import { ScanResults } from '../../report/scanResults';
-import { AppMap as AppMapClient, CreateOptions, UploadAppMapResponse } from './appMap';
-import { Mapset as MapsetClient } from './mapset';
-import Location from './location';
-import ScannerJob from './scannerJob';
-import { URL } from 'url';
+import { ScanResults } from '../../../report/scanResults';
+import { create as createAppMap, CreateOptions, UploadAppMapResponse } from '../appMap/create';
+import { create as createMapset } from '../mapset/create';
+import Location from '../location';
+import ScannerJob from '../scannerJob';
 
 type ScanResultsCreateOptions = {
   scan_results: ScanResults;
@@ -21,7 +21,7 @@ type ScanResultsCreateOptions = {
 
 export interface UploadResponse extends ScannerJob, Location {}
 
-export default async function (
+export async function create(
   scanResults: ScanResults,
   appId: string,
   mergeKey?: string
@@ -59,7 +59,7 @@ export default async function (
           commitCount[commit] += 1;
         }
 
-        return AppMapClient.upload(buffer, uploadOptions);
+        return createAppMap(buffer, uploadOptions);
       })
       .then((appMap: UploadAppMapResponse) => {
         if (appMap) {
@@ -85,7 +85,7 @@ export default async function (
 
   const branch = mostFrequent(branchCount);
   const commit = mostFrequent(commitCount);
-  const mapset = await MapsetClient.create(appId, Object.values(appMapUUIDByFileName), {
+  const mapset = await createMapset(appId, Object.values(appMapUUIDByFileName), {
     branch,
     commit,
   });

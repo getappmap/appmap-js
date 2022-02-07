@@ -1,7 +1,7 @@
 import nock from 'nock';
 
 import * as test from './setup';
-import { AppMap, CreateOptions } from '../../src/integration/appland/appMap';
+import { create, CreateOptions } from '../../src/integration/appland/appMap/create';
 
 const AppMapData = {
   uuid: 'the-uuid',
@@ -24,7 +24,7 @@ describe('appMap', () => {
         .matchHeader('Content-Type', /^multipart\/form-data; boundary/)
         .matchHeader('Accept', /^application\/json;?/)
         .reply(201, AppMapData, ['Content-Type', 'application/json']);
-      expect(await AppMap.upload(data, options)).toEqual(AppMapData);
+      expect(await create(data, options)).toEqual(AppMapData);
     });
   });
 });

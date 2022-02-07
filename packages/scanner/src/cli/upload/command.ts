@@ -1,7 +1,7 @@
 import { Arguments, Argv } from 'yargs';
 import { readFile } from 'fs/promises';
 
-import upload from '../../integration/appland/upload';
+import { create as createScannerJob } from '../../integration/appland/scannerJob/create';
 import { ScanResults } from '../../report/scanResults';
 import { verbose } from '../../rules/lib/util';
 
@@ -49,7 +49,7 @@ export default {
     const appId = await resolveAppId(appIdArg, appmapDir);
 
     const scanResults = JSON.parse((await readFile(reportFile)).toString()) as ScanResults;
-    const uploadResponse = await upload(scanResults, appId, mergeKey);
+    const uploadResponse = await createScannerJob(scanResults, appId, mergeKey);
 
     reportUploadURL(uploadResponse.summary.numFindings, uploadResponse.url);
   },

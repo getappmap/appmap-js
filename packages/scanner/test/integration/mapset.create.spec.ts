@@ -1,8 +1,12 @@
 import nock from 'nock';
 
 import * as test from './setup';
-import { CreateOptions, CreateResponse, Mapset } from '../../src/integration/appland/mapset';
-import { AppMap } from '../../src/integration/appland/appMap';
+import {
+  CreateOptions,
+  CreateResponse,
+  create as createMapset,
+} from '../../src/integration/appland/mapset/create';
+import { create as createAppMap } from '../../src/integration/appland/appMap/create';
 import { readFile } from 'fs/promises';
 
 const MapsetData = {
@@ -21,7 +25,7 @@ describe('mapset', () => {
         const data = await readFile(
           'test/fixtures/appmaps/Microposts_interface_micropost_interface_with_job.appmap.json'
         );
-        const appMap = await AppMap.upload(data, {
+        const appMap = await createAppMap(data, {
           app: test.AppId,
         });
         appMapId = appMap.uuid;
@@ -44,7 +48,7 @@ describe('mapset', () => {
         .matchHeader('Content-Type', /^application\/json;?/)
         .matchHeader('Accept', /^application\/json;?/)
         .reply(201, MapsetData, ['Content-Type', 'application/json']);
-      expect(await Mapset.create(test.AppId, [appMapId], options)).toEqual(MapsetData);
+      expect(await createMapset(test.AppId, [appMapId], options)).toEqual(MapsetData);
     });
   });
 });

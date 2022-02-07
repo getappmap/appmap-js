@@ -1,7 +1,7 @@
 import { verbose } from '../../rules/lib/util';
 import { Arguments, Argv } from 'yargs';
 import CommandOptions from './options';
-import { ScanResults } from '../../integration/appland/scanResults';
+import { merge as mergeScannerJob } from '../../integration/appland/scannerJob/merge';
 import resolveAppId from '../resolveAppId';
 import updateCommitStatus from '../updateCommitStatus';
 
@@ -46,7 +46,7 @@ export default {
 
     const appId = await resolveAppId(appIdArg, '.');
 
-    const mergeResults = await ScanResults.merge(appId, mergeKey);
+    const mergeResults = await mergeScannerJob(appId, mergeKey);
     console.warn(`Merged results to ${mergeResults.url}`);
 
     if (updateCommitStatusOption) {
