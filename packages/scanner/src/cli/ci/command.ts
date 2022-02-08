@@ -1,7 +1,7 @@
 import { glob as globCallback } from 'glob';
 import { writeFile } from 'fs/promises';
 import { promisify } from 'util';
-import yargs, { Arguments, Argv } from 'yargs';
+import { Arguments, Argv } from 'yargs';
 
 import { FindingStatusListItem } from '@appland/client/dist/src';
 
@@ -9,8 +9,7 @@ import { parseConfigFile } from '../../configuration/configurationProvider';
 import { AbortError, ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
 import { verbose } from '../../rules/lib/util';
-import upload from '../../integration/appland/upload';
-import postCommitStatus from '../../integration/github/commitStatus';
+import { create as uploadScannerJob } from '../../integration/appland/scannerJob/create';
 import { newFindings } from '../../findings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
@@ -22,6 +21,8 @@ import { default as buildScanner } from '../scan/scanner';
 
 import CommandOptions from './options';
 import scanArgs from '../scanArgs';
+import updateCommitStatus from '../updateCommitStatus';
+import reportUploadURL from '../reportUploadURL';
 
 export default {
   command: 'ci',
@@ -36,13 +37,16 @@ export default {
     });
     args.option('update-commit-status', {
       describe: 'update commit status in SCM system',
-      default: true,
+      default: false,
       type: 'boolean',
     });
     args.option('upload', {
       describe: 'upload findings to AppMap server',
       default: true,
       type: 'boolean',
+    });
+    args.option('merge-key', {
+      describe: 'build job identifier. This is used to merge findings from parallelized scans',
     });
 
     return args.strict();
@@ -52,11 +56,12 @@ export default {
       appmapDir,
       config,
       verbose: isVerbose,
-      fail,
+      fail: failOption,
       app: appIdArg,
       reportFile,
       upload: doUpload,
-      updateCommitStatus,
+      updateCommitStatus: updateCommitStatusOption,
+      mergeKey,
     } = options as unknown as CommandOptions;
 
     if (isVerbose) {
@@ -92,28 +97,16 @@ export default {
       summaryReport(scanResults, true);
 
       if (doUpload) {
-        await upload(rawScanResults, appId);
+        const uploadResponse = await uploadScannerJob(rawScanResults, appId, mergeKey);
+        reportUploadURL(uploadResponse.summary.numFindings, uploadResponse.url);
       }
 
-      if (updateCommitStatus) {
-        if (scanResults.findings.length > 0) {
-          await postCommitStatus(
-            'failure',
-            `${scanResults.summary.numChecks} checks, ${scanResults.findings.length} findings. See CI job log for details.`
-          );
-          console.log(
-            `Commit status updated to: failure (${scanResults.findings.length} findings)`
-          );
-        } else {
-          await postCommitStatus('success', `${scanResults.summary.numChecks} checks passed`);
-          console.log(`Commit status updated to: success.`);
-        }
+      if (updateCommitStatusOption) {
+        await updateCommitStatus(scanResults.findings.length, scanResults.summary.numChecks);
       }
 
-      if (fail) {
-        if (scanResults.findings.length > 0) {
-          yargs.exit(1, new Error(`${scanResults.findings.length} findings`));
-        }
+      if (failOption) {
+        fail(scanResults.findings.length);
       }
     } catch (err) {
       if (err instanceof ValidationError) {

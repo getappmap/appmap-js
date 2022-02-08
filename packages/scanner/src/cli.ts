@@ -4,6 +4,7 @@ import yargs from 'yargs';
 import ScanCommand from './cli/scan/command';
 import UploadCommand from './cli/upload/command';
 import CICommand from './cli/ci/command';
+import MergeCommand from './cli/merge/command';
 
 yargs(process.argv.slice(2))
   .option('verbose', {
@@ -13,6 +14,7 @@ yargs(process.argv.slice(2))
   .command(ScanCommand)
   .command(UploadCommand)
   .command(CICommand)
+  .command(MergeCommand)
   .fail((msg, err, yargs) => {
     if (msg) {
       console.log(yargs.help());

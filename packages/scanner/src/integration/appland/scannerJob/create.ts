@@ -1,16 +1,36 @@
 import { IncomingMessage } from 'http';
-import { URL } from 'url';
 import { queue } from 'async';
+import { readFile } from 'fs/promises';
+import { URL } from 'url';
 
 import { AppMap as AppMapStruct } from '@appland/models';
-import { buildRequest, handleError } from '@appland/client/dist/src';
+import { buildRequest, handleError, reportJSON } from '@appland/client/dist/src';
 
-import { ScanResults } from '../../report/scanResults';
-import { AppMap as AppMapClient, UploadAppMapResponse } from './appMap';
-import { Mapset as MapsetClient } from './mapset';
-import { readFile } from 'fs/promises';
+import { ScanResults } from '../../../report/scanResults';
+import {
+  create as createAppMap,
+  CreateOptions as CreateAppMapOptions,
+  UploadAppMapResponse,
+} from '../appMap/create';
+import { create as createMapset } from '../mapset/create';
+import Location from '../location';
+import ScannerJob from '../scannerJob';
+import { verbose } from 'src/rules/lib/util';
 
-export default async function (scanResults: ScanResults, appId: string): Promise<URL> {
+type CreateOptions = {
+  scan_results: ScanResults;
+  mapset: number;
+  appmap_uuid_by_file_name: Record<string, string>;
+  merge_key?: string;
+};
+
+export interface UploadResponse extends ScannerJob, Location {}
+
+export async function create(
+  scanResults: ScanResults,
+  appId: string,
+  mergeKey?: string
+): Promise<UploadResponse> {
   console.warn(`Uploading AppMaps and findings to application '${appId}'`);
 
   const { findings } = scanResults;
@@ -22,6 +42,10 @@ export default async function (scanResults: ScanResults, appId: string): Promise
   const appMapUUIDByFileName: Record<string, string> = {};
   const branchCount: Record<string, number> = {};
   const commitCount: Record<string, number> = {};
+
+  const createAppMapOptions = {
+    app: appId,
+  } as CreateAppMapOptions;
 
   const q = queue((filePath: string, callback) => {
     console.log(`Uploading AppMap ${filePath}`);
@@ -40,7 +64,7 @@ export default async function (scanResults: ScanResults, appId: string): Promise
           commitCount[commit] += 1;
         }
 
-        return AppMapClient.upload(buffer, { app: appId });
+        return createAppMap(buffer, createAppMapOptions);
       })
       .then((appMap: UploadAppMapResponse) => {
         if (appMap) {
@@ -66,20 +90,23 @@ export default async function (scanResults: ScanResults, appId: string): Promise
 
   const branch = mostFrequent(branchCount);
   const commit = mostFrequent(commitCount);
-  const mapset = await MapsetClient.create(appId, Object.values(appMapUUIDByFileName), {
+  const mapset = await createMapset(appId, Object.values(appMapUUIDByFileName), {
     branch,
     commit,
   });
 
   console.warn('Uploading findings');
 
-  const uploadData = JSON.stringify({
+  const createScannerJobOptions = {
     scan_results: scanResults,
     mapset: mapset.id,
     appmap_uuid_by_file_name: appMapUUIDByFileName,
-  });
+  } as CreateOptions;
+  if (mergeKey) createScannerJobOptions.merge_key = mergeKey;
+  const scanResultsData = JSON.stringify(createScannerJobOptions);
 
   const request = await buildRequest('api/scanner_jobs');
+  let uploadURL: URL;
   return new Promise<IncomingMessage>((resolve, reject) => {
     const req = request.requestFunction(
       request.url,
@@ -87,24 +114,25 @@ export default async function (scanResults: ScanResults, appId: string): Promise
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': uploadData.length,
+          'Content-Length': scanResultsData.length,
           ...request.headers,
         },
       },
       resolve
     );
     req.on('error', reject);
-    req.write(uploadData);
+    req.write(scanResultsData);
     req.end();
   })
     .then(handleError)
-    .then((response: IncomingMessage): URL => {
-      let message = `Uploaded ${scanResults.findings.length} findings`;
+    .then((response) => {
       if (response.headers.location) {
-        const uploadURL = new URL(response.headers.location, request.url.href);
-        message += ` to ${uploadURL}`;
+        uploadURL = new URL(response.headers.location, request.url.href);
       }
-      console.log(message);
-      return request.url;
+      return reportJSON<UploadResponse>(response);
+    })
+    .then((uploadResponse) => {
+      uploadResponse.url = uploadURL;
+      return uploadResponse;
     });
 }

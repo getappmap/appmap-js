@@ -1,15 +1,15 @@
 import nock from 'nock';
 
 import * as test from './setup';
-import { AppMap, CreateOptions } from '../../src/integration/appland/appMap';
+import { create, CreateOptions } from '../../src/integration/appland/appMap/create';
 
 const AppMapData = {
   uuid: 'the-uuid',
 };
 
 describe('appMap', () => {
-  describe('post', () => {
-    it('is created', async () => {
+  describe('create', () => {
+    it('succeeds', async () => {
       const data = Buffer.from(JSON.stringify({}));
       const options = {
         app: test.AppId,
@@ -24,7 +24,7 @@ describe('appMap', () => {
         .matchHeader('Content-Type', /^multipart\/form-data; boundary/)
         .matchHeader('Accept', /^application\/json;?/)
         .reply(201, AppMapData, ['Content-Type', 'application/json']);
-      expect(await AppMap.upload(data, options)).toEqual(AppMapData);
+      expect(await create(data, options)).toEqual(AppMapData);
     });
   });
 });
