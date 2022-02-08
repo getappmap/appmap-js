@@ -7,12 +7,17 @@ import { AppMap as AppMapStruct } from '@appland/models';
 import { buildRequest, handleError, reportJSON } from '@appland/client/dist/src';
 
 import { ScanResults } from '../../../report/scanResults';
-import { create as createAppMap, CreateOptions, UploadAppMapResponse } from '../appMap/create';
+import {
+  create as createAppMap,
+  CreateOptions as CreateAppMapOptions,
+  UploadAppMapResponse,
+} from '../appMap/create';
 import { create as createMapset } from '../mapset/create';
 import Location from '../location';
 import ScannerJob from '../scannerJob';
+import { verbose } from 'src/rules/lib/util';
 
-type ScanResultsCreateOptions = {
+type CreateOptions = {
   scan_results: ScanResults;
   mapset: number;
   appmap_uuid_by_file_name: Record<string, string>;
@@ -38,9 +43,9 @@ export async function create(
   const branchCount: Record<string, number> = {};
   const commitCount: Record<string, number> = {};
 
-  const uploadOptions = {
+  const createAppMapOptions = {
     app: appId,
-  } as CreateOptions;
+  } as CreateAppMapOptions;
 
   const q = queue((filePath: string, callback) => {
     console.log(`Uploading AppMap ${filePath}`);
@@ -59,7 +64,7 @@ export async function create(
           commitCount[commit] += 1;
         }
 
-        return createAppMap(buffer, uploadOptions);
+        return createAppMap(buffer, createAppMapOptions);
       })
       .then((appMap: UploadAppMapResponse) => {
         if (appMap) {
@@ -92,13 +97,13 @@ export async function create(
 
   console.warn('Uploading findings');
 
-  const scanResultsOptions = {
+  const createScannerJobOptions = {
     scan_results: scanResults,
     mapset: mapset.id,
     appmap_uuid_by_file_name: appMapUUIDByFileName,
-  } as ScanResultsCreateOptions;
-  if (mergeKey) scanResultsOptions.merge_key = mergeKey;
-  const scanResultsData = JSON.stringify(scanResultsOptions);
+  } as CreateOptions;
+  if (mergeKey) createScannerJobOptions.merge_key = mergeKey;
+  const scanResultsData = JSON.stringify(createScannerJobOptions);
 
   const request = await buildRequest('api/scanner_jobs');
   let uploadURL: URL;

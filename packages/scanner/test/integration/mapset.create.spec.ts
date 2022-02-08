@@ -18,8 +18,8 @@ const MapsetData = {
 } as CreateResponse;
 
 describe('mapset', () => {
-  describe('post', () => {
-    it('is created', async () => {
+  describe('create', () => {
+    it('succeeds', async () => {
       let appMapId;
       if (process.env.RECORD == 'true') {
         const data = await readFile(

@@ -8,8 +8,8 @@ const AppMapData = {
 };
 
 describe('appMap', () => {
-  describe('post', () => {
-    it('is created', async () => {
+  describe('create', () => {
+    it('succeeds', async () => {
       const data = Buffer.from(JSON.stringify({}));
       const options = {
         app: test.AppId,

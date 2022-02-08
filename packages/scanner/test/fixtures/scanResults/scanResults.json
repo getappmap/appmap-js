@@ -1,0 +1,476 @@
+{
+  "summary": {
+    "numChecks": 1000,
+    "appMapMetadata": {
+      "git": [
+        {
+          "commit": "d7fb6ffb8e296915c85b24339b33645b5c8f927c",
+          "branch": "main"
+        }
+      ]
+    }
+  },
+  "configuration": {
+    "arbitraryKey": "arbitraryValue"
+  },
+  "findings": [
+    {
+      "appMapName": "activating multiple users sends email notifications to them",
+      "checkId": "too-many-updates",
+      "ruleId": "too-many-updates",
+      "ruleTitle": "Too many SQL and RPC updates performed in one command",
+      "event": {
+        "sql_query": {
+          "sql": "UPDATE \"django_session\" SET \"session_data\" = 'NTc1MmU5YjU5OTg2ZmEyOWJhMjNmMmZhZDc0NTE5MzA2YjNjZWZiMzp7Il9hdXRoX3VzZXJfaWQiOiIyMjE0IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoibWlzYWdvLnVzZXJzLmF1dGhiYWNrZW5kcy5NaXNhZ29CYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiYzM2NWJlMGFiYmJlNTJkYTJlYzMzOThiOTFjNDQzZTkyYzgyNTVlOCIsIm1pc2Fnb19hZG1pbl9zZXNzaW9uX3Rva2VuIjoiMjk3MTYwZWMzNDUxYjQyMjBmMzlkNWUzNjFlZjhhODEiLCJtaXNhZ29fYWRtaW5fc2Vzc2lvbl91cGRhdGVkIjoxNjM3MjEwMTc0fQ==', \"expire_date\" = '2021-12-02T04:36:14.381083+00:00'::timestamptz WHERE \"django_session\".\"session_key\" = 'ofkw0znvj5pgesc7zds74l232h4ipale'",
+          "database_type": "postgresql",
+          "server_version": "10.0.19"
+        },
+        "id": 940,
+        "event": "call",
+        "thread_id": 1
+      },
+      "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "scope": {
+        "static": true,
+        "id": 1,
+        "event": "call",
+        "thread_id": 1,
+        "defined_class": "misago.users.admin.tests.test_users_mass_actions",
+        "method_id": "test_activating_multiple_users_sends_email_notifications_to_them",
+        "path": "misago/users/admin/tests/test_users_mass_actions.py",
+        "lineno": 48
+      },
+      "message": "Command performs 23 SQL and RPC updates",
+      "relatedEvents": [
+        {
+          "sql_query": {
+            "sql": "UPDATE \"django_session\" SET \"session_data\" = 'NTc1MmU5YjU5OTg2ZmEyOWJhMjNmMmZhZDc0NTE5MzA2YjNjZWZiMzp7Il9hdXRoX3VzZXJfaWQiOiIyMjE0IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoibWlzYWdvLnVzZXJzLmF1dGhiYWNrZW5kcy5NaXNhZ29CYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiYzM2NWJlMGFiYmJlNTJkYTJlYzMzOThiOTFjNDQzZTkyYzgyNTVlOCIsIm1pc2Fnb19hZG1pbl9zZXNzaW9uX3Rva2VuIjoiMjk3MTYwZWMzNDUxYjQyMjBmMzlkNWUzNjFlZjhhODEiLCJtaXNhZ29fYWRtaW5fc2Vzc2lvbl91cGRhdGVkIjoxNjM3MjEwMTc0fQ==', \"expire_date\" = '2021-12-02T04:36:14.381083+00:00'::timestamptz WHERE \"django_session\".\"session_key\" = 'ofkw0znvj5pgesc7zds74l232h4ipale'",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 940,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_user\" (\"password\", \"last_login\", \"is_superuser\", \"username\", \"slug\", \"email\", \"email_hash\", \"joined_on\", \"joined_from_ip\", \"is_hiding_presence\", \"rank_id\", \"title\", \"requires_activation\", \"is_staff\", \"acl_key\", \"is_active\", \"is_active_staff_message\", \"is_deleting_account\", \"avatar_tmp\", \"avatar_src\", \"avatar_crop\", \"avatars\", \"is_avatar_locked\", \"avatar_lock_user_message\", \"avatar_lock_staff_message\", \"signature\", \"signature_parsed\", \"signature_checksum\", \"is_signature_locked\", \"signature_lock_user_message\", \"signature_lock_staff_message\", \"followers\", \"following\", \"limits_private_thread_invites_to\", \"unread_private_threads\", \"sync_unread_private_threads\", \"subscribe_to_started_threads\", \"subscribe_to_replied_threads\", \"threads\", \"posts\", \"last_posted_on\", \"profile_fields\", \"agreements\", \"sso_id\") VALUES ('!FQRWXBt0vrpYIfAupkWgemhKBXfXwQ1MNSZzc8m8', '2021-11-18T04:36:14.259910+00:00'::timestamptz, false, 'User0', 'user0', 'user0@gmail.com', '92142d94467f32e4ee184fd6ad21b903', '2021-11-18T04:36:14.259910+00:00'::timestamptz, NULL, false, 2, NULL, 1, false, NULL, true, NULL, false, '', '', NULL, '[{\"size\": 400, \"url\": \"http://placekitten.com/400/400\"}, {\"size\": 200, \"url\": \"http://placekitten.com/200/200\"}, {\"size\": 100, \"url\": \"http://placekitten.com/100/100\"}]', false, NULL, NULL, NULL, NULL, NULL, false, NULL, NULL, 0, 0, 0, 0, false, 0, 0, 0, 0, NULL, ''::hstore, '{}'::integer[], NULL) RETURNING \"misago_users_user\".\"id\"",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 19,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_user\" (\"password\", \"last_login\", \"is_superuser\", \"username\", \"slug\", \"email\", \"email_hash\", \"joined_on\", \"joined_from_ip\", \"is_hiding_presence\", \"rank_id\", \"title\", \"requires_activation\", \"is_staff\", \"acl_key\", \"is_active\", \"is_active_staff_message\", \"is_deleting_account\", \"avatar_tmp\", \"avatar_src\", \"avatar_crop\", \"avatars\", \"is_avatar_locked\", \"avatar_lock_user_message\", \"avatar_lock_staff_message\", \"signature\", \"signature_parsed\", \"signature_checksum\", \"is_signature_locked\", \"signature_lock_user_message\", \"signature_lock_staff_message\", \"followers\", \"following\", \"limits_private_thread_invites_to\", \"unread_private_threads\", \"sync_unread_private_threads\", \"subscribe_to_started_threads\", \"subscribe_to_replied_threads\", \"threads\", \"posts\", \"last_posted_on\", \"profile_fields\", \"agreements\", \"sso_id\") VALUES ('!4bbodZey31rD4n3H49hYlmoPOcyxURPmnUcLxsXM', '2021-11-18T04:36:14.269940+00:00'::timestamptz, false, 'User1', 'user1', 'user1@gmail.com', '59029276955677351421b3ff6bf5ee4c', '2021-11-18T04:36:14.269940+00:00'::timestamptz, NULL, false, 2, NULL, 1, false, NULL, true, NULL, false, '', '', NULL, '[{\"size\": 400, \"url\": \"http://placekitten.com/400/400\"}, {\"size\": 200, \"url\": \"http://placekitten.com/200/200\"}, {\"size\": 100, \"url\": \"http://placekitten.com/100/100\"}]', false, NULL, NULL, NULL, NULL, NULL, false, NULL, NULL, 0, 0, 0, 0, false, 0, 0, 0, 0, NULL, ''::hstore, '{}'::integer[], NULL) RETURNING \"misago_users_user\".\"id\"",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 69,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_user\" (\"password\", \"last_login\", \"is_superuser\", \"username\", \"slug\", \"email\", \"email_hash\", \"joined_on\", \"joined_from_ip\", \"is_hiding_presence\", \"rank_id\", \"title\", \"requires_activation\", \"is_staff\", \"acl_key\", \"is_active\", \"is_active_staff_message\", \"is_deleting_account\", \"avatar_tmp\", \"avatar_src\", \"avatar_crop\", \"avatars\", \"is_avatar_locked\", \"avatar_lock_user_message\", \"avatar_lock_staff_message\", \"signature\", \"signature_parsed\", \"signature_checksum\", \"is_signature_locked\", \"signature_lock_user_message\", \"signature_lock_staff_message\", \"followers\", \"following\", \"limits_private_thread_invites_to\", \"unread_private_threads\", \"sync_unread_private_threads\", \"subscribe_to_started_threads\", \"subscribe_to_replied_threads\", \"threads\", \"posts\", \"last_posted_on\", \"profile_fields\", \"agreements\", \"sso_id\") VALUES ('!bgFhJzDuLwRgeC13lnlPVjHF6Zn59UOZZBTxngKM', '2021-11-18T04:36:14.279918+00:00'::timestamptz, false, 'User2', 'user2', 'user2@gmail.com', 'fa7c3fcb670a58aa3e90a391ea533c99', '2021-11-18T04:36:14.279918+00:00'::timestamptz, NULL, false, 2, NULL, 1, false, NULL, true, NULL, false, '', '', NULL, '[{\"size\": 400, \"url\": \"http://placekitten.com/400/400\"}, {\"size\": 200, \"url\": \"http://placekitten.com/200/200\"}, {\"size\": 100, \"url\": \"http://placekitten.com/100/100\"}]', false, NULL, NULL, NULL, NULL, NULL, false, NULL, NULL, 0, 0, 0, 0, false, 0, 0, 0, 0, NULL, ''::hstore, '{}'::integer[], NULL) RETURNING \"misago_users_user\".\"id\"",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 119,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_user\" (\"password\", \"last_login\", \"is_superuser\", \"username\", \"slug\", \"email\", \"email_hash\", \"joined_on\", \"joined_from_ip\", \"is_hiding_presence\", \"rank_id\", \"title\", \"requires_activation\", \"is_staff\", \"acl_key\", \"is_active\", \"is_active_staff_message\", \"is_deleting_account\", \"avatar_tmp\", \"avatar_src\", \"avatar_crop\", \"avatars\", \"is_avatar_locked\", \"avatar_lock_user_message\", \"avatar_lock_staff_message\", \"signature\", \"signature_parsed\", \"signature_checksum\", \"is_signature_locked\", \"signature_lock_user_message\", \"signature_lock_staff_message\", \"followers\", \"following\", \"limits_private_thread_invites_to\", \"unread_private_threads\", \"sync_unread_private_threads\", \"subscribe_to_started_threads\", \"subscribe_to_replied_threads\", \"threads\", \"posts\", \"last_posted_on\", \"profile_fields\", \"agreements\", \"sso_id\") VALUES ('!TQdafTGifRkZ2IyEbbFLnQqg60o7hU3LBe1Icq1M', '2021-11-18T04:36:14.289585+00:00'::timestamptz, false, 'User3', 'user3', 'user3@gmail.com', 'a3012064ea70afa9351e80e4a62b5dcb', '2021-11-18T04:36:14.289585+00:00'::timestamptz, NULL, false, 2, NULL, 1, false, NULL, true, NULL, false, '', '', NULL, '[{\"size\": 400, \"url\": \"http://placekitten.com/400/400\"}, {\"size\": 200, \"url\": \"http://placekitten.com/200/200\"}, {\"size\": 100, \"url\": \"http://placekitten.com/100/100\"}]', false, NULL, NULL, NULL, NULL, NULL, false, NULL, NULL, 0, 0, 0, 0, false, 0, 0, 0, 0, NULL, ''::hstore, '{}'::integer[], NULL) RETURNING \"misago_users_user\".\"id\"",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 169,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_user\" (\"password\", \"last_login\", \"is_superuser\", \"username\", \"slug\", \"email\", \"email_hash\", \"joined_on\", \"joined_from_ip\", \"is_hiding_presence\", \"rank_id\", \"title\", \"requires_activation\", \"is_staff\", \"acl_key\", \"is_active\", \"is_active_staff_message\", \"is_deleting_account\", \"avatar_tmp\", \"avatar_src\", \"avatar_crop\", \"avatars\", \"is_avatar_locked\", \"avatar_lock_user_message\", \"avatar_lock_staff_message\", \"signature\", \"signature_parsed\", \"signature_checksum\", \"is_signature_locked\", \"signature_lock_user_message\", \"signature_lock_staff_message\", \"followers\", \"following\", \"limits_private_thread_invites_to\", \"unread_private_threads\", \"sync_unread_private_threads\", \"subscribe_to_started_threads\", \"subscribe_to_replied_threads\", \"threads\", \"posts\", \"last_posted_on\", \"profile_fields\", \"agreements\", \"sso_id\") VALUES ('!Ft8C5cNWzRbUwLzfmeEnznGNWAO6BYrYfKcfUkRd', '2021-11-18T04:36:14.299157+00:00'::timestamptz, false, 'User4', 'user4', 'user4@gmail.com', 'de934b5a66b34c72636d2e34ad075e8d', '2021-11-18T04:36:14.299157+00:00'::timestamptz, NULL, false, 2, NULL, 1, false, NULL, true, NULL, false, '', '', NULL, '[{\"size\": 400, \"url\": \"http://placekitten.com/400/400\"}, {\"size\": 200, \"url\": \"http://placekitten.com/200/200\"}, {\"size\": 100, \"url\": \"http://placekitten.com/100/100\"}]', false, NULL, NULL, NULL, NULL, NULL, false, NULL, NULL, 0, 0, 0, 0, false, 0, 0, 0, 0, NULL, ''::hstore, '{}'::integer[], NULL) RETURNING \"misago_users_user\".\"id\"",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 219,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "UPDATE \"misago_users_user\" SET \"requires_activation\" = 0 WHERE \"misago_users_user\".\"id\" IN (2219, 2218, 2217, 2216, 2215)",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 723,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "UPDATE \"misago_users_online\" SET \"last_click\" = '2021-11-18T04:36:14.379855+00:00'::timestamptz WHERE \"misago_users_online\".\"user_id\" = 2214",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 933,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_user_roles\" (\"user_id\", \"role_id\") VALUES (2215, 1) RETURNING \"misago_users_user_roles\".\"id\"",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 28,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "UPDATE \"misago_users_user\" SET \"acl_key\" = '92a09fed2d57' WHERE \"misago_users_user\".\"id\" = 2215",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 38,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_online\" (\"user_id\", \"last_click\") VALUES (2215, '2021-11-18T04:36:14.259910+00:00'::timestamptz)",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 42,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_user_roles\" (\"user_id\", \"role_id\") VALUES (2216, 1) RETURNING \"misago_users_user_roles\".\"id\"",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 78,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "UPDATE \"misago_users_user\" SET \"acl_key\" = '92a09fed2d57' WHERE \"misago_users_user\".\"id\" = 2216",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 88,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_online\" (\"user_id\", \"last_click\") VALUES (2216, '2021-11-18T04:36:14.269940+00:00'::timestamptz)",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 92,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_user_roles\" (\"user_id\", \"role_id\") VALUES (2217, 1) RETURNING \"misago_users_user_roles\".\"id\"",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 128,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "UPDATE \"misago_users_user\" SET \"acl_key\" = '92a09fed2d57' WHERE \"misago_users_user\".\"id\" = 2217",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 138,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_online\" (\"user_id\", \"last_click\") VALUES (2217, '2021-11-18T04:36:14.279918+00:00'::timestamptz)",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 142,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_user_roles\" (\"user_id\", \"role_id\") VALUES (2218, 1) RETURNING \"misago_users_user_roles\".\"id\"",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 178,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "UPDATE \"misago_users_user\" SET \"acl_key\" = '92a09fed2d57' WHERE \"misago_users_user\".\"id\" = 2218",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 188,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_online\" (\"user_id\", \"last_click\") VALUES (2218, '2021-11-18T04:36:14.289585+00:00'::timestamptz)",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 192,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_user_roles\" (\"user_id\", \"role_id\") VALUES (2219, 1) RETURNING \"misago_users_user_roles\".\"id\"",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 228,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "UPDATE \"misago_users_user\" SET \"acl_key\" = '92a09fed2d57' WHERE \"misago_users_user\".\"id\" = 2219",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 238,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "INSERT INTO \"misago_users_online\" (\"user_id\", \"last_click\") VALUES (2219, '2021-11-18T04:36:14.299157+00:00'::timestamptz)",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 242,
+          "event": "call",
+          "thread_id": 1
+        }
+      ],
+      "condition": "Too many SQL and RPC updates performed in one transaction",
+      "appMapFile": "Misago/tmp/appmap/pytest/test_activating_multiple_users_sends_email_notifications_to_them.appmap.json"
+    },
+    {
+      "appMapName": "active theme styles are included in page html",
+      "checkId": "n-plus-one-query",
+      "ruleId": "n-plus-one-query",
+      "ruleTitle": "N+1 SQL queries",
+      "event": {
+        "sql_query": {
+          "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'footer') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+          "database_type": "postgresql",
+          "server_version": "10.0.19"
+        },
+        "id": 712,
+        "event": "call",
+        "thread_id": 1
+      },
+      "hash": "b89a2fd3adcdbccbe5bdf3e021073bee5e3c82593e9b6ecc1a3fca724e4e1971",
+      "scope": {
+        "http_server_request": {
+          "request_method": "GET",
+          "protocol": "HTTP/1.1",
+          "path_info": "/",
+          "normalized_path_info": "/",
+          "headers": {
+            "Cookie": ""
+          }
+        },
+        "id": 12,
+        "event": "call",
+        "thread_id": 1
+      },
+      "message": "16 occurrences of SQL \"SELECT ?.?, ?.?, ?.?, ?.?, ?.?, ?.?, ?.?, ?.? FROM ? WHERE NOT (?.? = ?) ORDER BY ?.? ASC  LIMIT ?\"",
+      "relatedEvents": [
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'footer') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 712,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'navbar') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 714,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'footer') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 677,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'navbar') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 709,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'footer') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 672,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'navbar') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 674,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'footer') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 704,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'navbar') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 706,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'footer') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 663,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'navbar') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 665,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'footer') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 695,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'navbar') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 697,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'footer') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 656,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'navbar') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 660,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'footer') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 688,
+          "event": "call",
+          "thread_id": 1
+        },
+        {
+          "sql_query": {
+            "sql": "SELECT \"misago_menus_menuitem\".\"id\", \"misago_menus_menuitem\".\"menu\", \"misago_menus_menuitem\".\"title\", \"misago_menus_menuitem\".\"url\", \"misago_menus_menuitem\".\"order\", \"misago_menus_menuitem\".\"css_class\", \"misago_menus_menuitem\".\"target_blank\", \"misago_menus_menuitem\".\"rel\" FROM \"misago_menus_menuitem\" WHERE NOT (\"misago_menus_menuitem\".\"menu\" = 'navbar') ORDER BY \"misago_menus_menuitem\".\"order\" ASC  LIMIT 21",
+            "database_type": "postgresql",
+            "server_version": "10.0.19"
+          },
+          "id": 692,
+          "event": "call",
+          "thread_id": 1
+        }
+      ],
+      "condition": "SQL query should not be repeated within the same command",
+      "appMapFile": "Misago/tmp/appmap/pytest/test_active_theme_styles_are_included_in_page_html.appmap.json"
+    }
+  ]
+}
