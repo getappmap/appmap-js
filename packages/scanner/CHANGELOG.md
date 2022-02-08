@@ -1,3 +1,11 @@
+# [1.43.0](https://github.com/applandinc/scanner/compare/v1.42.0...v1.43.0) (2022-02-08)
+
+
+### Features
+
+* Add CLI 'merge' command ([5144b3d](https://github.com/applandinc/scanner/commit/5144b3d883946697442ce5393512367e53db752c))
+* Implement 'merge' command options --fail and --update-commit-status ([49706c2](https://github.com/applandinc/scanner/commit/49706c2ffc7ec7450c5138da8abf3d5f16a49166))
+
 # [1.42.0](https://github.com/applandinc/scanner/compare/v1.41.1...v1.42.0) (2022-02-04)
 
 
