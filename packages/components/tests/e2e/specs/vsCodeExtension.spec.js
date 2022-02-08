@@ -824,6 +824,40 @@ context('VS Code Extension', () => {
       cy.get('.trace-node.filtered').should('exist');
     });
 
+    it('displays Trace view filter suggestions', () => {
+      cy.get('.tabs .tab-btn').last().click();
+
+      cy.get('.trace-filter__input').focus();
+      cy.get('.trace-filter__suggestions').should('be.visible');
+
+      cy.get('.trace-filter__suggestions-item')
+        .contains('GET /admin/orders')
+        .click();
+      cy.get('.trace-filter__input').should(
+        'have.value',
+        '"GET /admin/orders"'
+      );
+      cy.get('.trace-filter__arrows-text').contains('1 / 2 results');
+
+      cy.get('.trace-filter__input').focus().type('{enter}');
+      cy.get('.trace-filter__input').should(
+        'have.value',
+        '"GET /admin/orders" "GET /admin"'
+      );
+      cy.get('.trace-filter__suggestions').should('be.visible');
+      cy.get('.trace-filter__arrows-text').contains('1 / 3 results');
+
+      cy.get('.trace-filter__input').focus().type('{esc}');
+      cy.get('.trace-filter__suggestions').should('not.be.visible');
+      cy.get('.trace-filter__input').should('not.be.focused');
+
+      cy.get('.trace-filter__input').focus().type(' select');
+      cy.get('.trace-filter__suggestions').should('be.visible');
+      cy.get('.trace-filter__suggestions-item')
+        .first()
+        .should('contain.text', 'SELECT');
+    });
+
     it('filters: root objects', () => {
       cy.get(
         '.node[data-id="active_support/ActiveSupport::SecurityUtils"]'
