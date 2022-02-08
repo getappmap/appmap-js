@@ -59,7 +59,7 @@ context('VS Code Extension', () => {
       cy.get('.instructions__container').should('be.visible');
 
       cy.get('.instructions__close').click();
-      cy.get('.instructions__container').should('not.be.visible');
+      cy.get('.instructions__container').should('not.exist');
     });
 
     it('clicking HTTP server requests displays the correct data', () => {
@@ -722,7 +722,7 @@ context('VS Code Extension', () => {
         .should('be.visible')
         .should('have.class', 'highlight');
 
-      cy.get('.trace-node[data-event-id="3"]').should('not.be.visible');
+      cy.get('.trace-node[data-event-id="3"]').should('not.exist');
 
       cy.get('.trace-view__search-arrows-text').contains('1 / 32 results');
 
@@ -1000,7 +1000,9 @@ context('VS Code Extension', () => {
 
     it('disable "Limit root events to HTTP" filter', () => {
       cy.get('.popper__button').click();
-      cy.get('#limit-root-events').should('not.be.checked');
+      cy.get('.filters__checkbox input[type="checkbox"]')
+        .first()
+        .should('not.be.checked');
     });
   });
 
