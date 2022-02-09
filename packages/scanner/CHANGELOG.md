@@ -1,3 +1,10 @@
+## [1.44.1](https://github.com/applandinc/scanner/compare/v1.44.0...v1.44.1) (2022-02-09)
+
+
+### Bug Fixes
+
+* Fix 'merge --fail' ([3d371d9](https://github.com/applandinc/scanner/commit/3d371d9cb4512162d8ce6806ee22943ab0143877))
+
 # [1.44.0](https://github.com/applandinc/scanner/compare/v1.43.0...v1.44.0) (2022-02-09)
 
 
