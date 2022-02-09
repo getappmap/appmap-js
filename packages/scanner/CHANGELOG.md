@@ -1,3 +1,10 @@
+# [1.44.0](https://github.com/applandinc/scanner/compare/v1.43.0...v1.44.0) (2022-02-09)
+
+
+### Features
+
+* Upgrade SQL parser ([6b585e6](https://github.com/applandinc/scanner/commit/6b585e6ea16048f0e57643d6f20528f5da0aadda))
+
 # [1.43.0](https://github.com/applandinc/scanner/compare/v1.42.0...v1.43.0) (2022-02-08)
 
 
