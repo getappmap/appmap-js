@@ -23,6 +23,7 @@ import CommandOptions from './options';
 import scanArgs from '../scanArgs';
 import updateCommitStatus from '../updateCommitStatus';
 import reportUploadURL from '../reportUploadURL';
+import fail from '../fail';
 
 export default {
   command: 'ci',
