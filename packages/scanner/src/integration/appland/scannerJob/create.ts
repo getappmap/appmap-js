@@ -53,6 +53,7 @@ export async function create(
     readFile(filePath)
       .then((buffer: Buffer) => {
         const appMapStruct = JSON.parse(buffer.toString()) as AppMapStruct;
+        const metadata = appMapStruct.metadata;
         const branch = appMapStruct.metadata.git?.branch;
         const commit = appMapStruct.metadata.git?.commit;
         if (branch) {
@@ -64,7 +65,7 @@ export async function create(
           commitCount[commit] += 1;
         }
 
-        return createAppMap(buffer, createAppMapOptions);
+        return createAppMap(buffer, { ...createAppMapOptions, metadata });
       })
       .then((appMap: UploadAppMapResponse) => {
         if (appMap) {

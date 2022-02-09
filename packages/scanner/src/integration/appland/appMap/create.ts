@@ -2,6 +2,7 @@ import { IncomingMessage } from 'http';
 
 import { buildRequest, handleError } from '@appland/client/dist/src';
 import FormData from 'form-data';
+import { Metadata } from '@appland/models';
 
 export type UploadAppMapResponse = {
   uuid: string;
@@ -9,6 +10,7 @@ export type UploadAppMapResponse = {
 
 export type CreateOptions = {
   app?: string;
+  metadata?: Metadata;
 };
 
 export async function create(
@@ -17,6 +19,9 @@ export async function create(
 ): Promise<UploadAppMapResponse> {
   const form = new FormData();
   form.append('data', data.toString());
+  if (options.metadata) {
+    form.append('metadata', JSON.stringify(options.metadata));
+  }
   if (options.app) {
     form.append('app', options.app);
   }
