@@ -1,3 +1,4 @@
 {
+  "pageLoadTimeout": 120000,
   "pluginsFile": "tests/e2e/plugins/index.cjs"
 }
