@@ -4,6 +4,7 @@ import CommandOptions from './options';
 import { merge as mergeScannerJob } from '../../integration/appland/scannerJob/merge';
 import resolveAppId from '../resolveAppId';
 import updateCommitStatus from '../updateCommitStatus';
+import fail from '../fail';
 
 export default {
   command: 'merge <merge-key>',
