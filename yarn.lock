@@ -257,7 +257,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
-    "@appland/sql-parser": ^1.1.1
+    "@appland/sql-parser": ^1.3.0
     "@rollup/plugin-alias": ^3.1.2
     "@rollup/plugin-commonjs": ^18.0.0
     "@rollup/plugin-node-resolve": ^11.2.1
@@ -276,12 +276,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/sql-parser@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@appland/sql-parser@npm:1.1.1"
+"@appland/sql-parser@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "@appland/sql-parser@npm:1.3.0"
   bin:
     sqlite-parser: bin/sqlite-parser
-  checksum: c71b79650d201dde464888461ec3f19631401626eacfad11a185068c81baf95ae3635d125423ce51e872ab7c778801bcf17be172cb1e49fea51249a134ff4fa5
+  checksum: b985be260dfff9b933f0967ddbca007be8540dfc81ec1eba946f4d8236c5a5b66c041fe844d82de26fd1d14d6afc458f693ad6f9693404fc8bb4c59f1285aca0
   languageName: node
   linkType: hard
 
