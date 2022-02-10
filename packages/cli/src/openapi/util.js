@@ -19,6 +19,8 @@ function classNameToOpenAPIType(className) {
       case 'trueclass':
       case 'falseclass':
         return 'boolean';
+      case 'string':
+        return 'string';
       default:
         return undefined;
     }
@@ -58,7 +60,7 @@ function classNameToOpenAPIType(className) {
   const mapped = mapper(className.toLowerCase());
   if (!mapped && !unrecognizedTypes.has(className)) {
     console.warn(
-      `Warning: don't know how to map "${className}" to an OpenAPI type. You'll need to update the generated file.`
+      `Warning: Don't know how to map "${className}" to an OpenAPI type. You'll need to update the generated file.`
     );
     unrecognizedTypes.add(className);
     return className;
