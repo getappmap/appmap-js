@@ -1,3 +1,10 @@
+# [@appland/models-v1.13.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.12.1...@appland/models-v1.13.0) (2022-02-10)
+
+
+### Features
+
+* Upgrade SQL parser ([da5475e](https://github.com/applandinc/appmap-js/commit/da5475e47cb3943ea83c8380042178f7b289583f))
+
 # [@appland/models-v1.12.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.12.0...@appland/models-v1.12.1) (2022-02-03)
 
 
