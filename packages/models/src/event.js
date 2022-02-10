@@ -4,6 +4,17 @@ import hashEvent from './event/hash';
 // This class supercedes `CallTree` and `CallNode`. Events are stored in a flat
 // array and can also be traversed like a tree via `parent` and `children`.
 export default class Event {
+  static contentType(...messages) {
+    const msg = messages.find(
+      (message) => (message?.headers || {})['Content-Type']
+    );
+    if (!msg) {
+      return;
+    }
+
+    return msg.headers['Content-Type'];
+  }
+
   constructor(obj) {
     let data = obj;
 
@@ -169,6 +180,14 @@ export default class Event {
       return this.httpClientRequest.request_method;
     }
     return null;
+  }
+
+  get requestContentType() {
+    return Event.contentType(this.httpServerRequest, this.httpClientRequest);
+  }
+
+  get responseContentType() {
+    return Event.contentType(this.httpServerResponse, this.httpClientResponse);
   }
 
   get route() {

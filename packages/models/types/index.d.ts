@@ -159,6 +159,8 @@ declare module '@appland/models' {
     readonly definedClass?: string | null;
     readonly requestPath?: string | null;
     readonly requestMethod?: string | null;
+    readonly requestContentType?: string;
+    readonly responseContentType?: string;
     readonly route?: string | null;
     readonly sqlQuery?: string | null;
     readonly fqid: string;
