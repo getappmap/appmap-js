@@ -219,7 +219,7 @@ __metadata:
     sass-loader: ^8.0.2
     sass-resources-loader: ^2.1.1
     sql-formatter: ^4.0.2
-    start-server-and-test: ^1.11.7
+    start-server-and-test: ^1.14.0
     svg-to-vue: ^0.7.0
     vue: ^2.6.11
     vue-jest: ^3.0.7
@@ -25660,7 +25660,7 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"start-server-and-test@npm:^1.11.7":
+"start-server-and-test@npm:^1.14.0":
   version: 1.14.0
   resolution: "start-server-and-test@npm:1.14.0"
   dependencies:
