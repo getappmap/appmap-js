@@ -1,0 +1,4750 @@
+{
+  "version": "1.5.1",
+  "metadata": {
+    "app": "sample_app_6th_ed",
+    "language": { "name": "ruby", "engine": "ruby", "version": "3.0.2" },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/applandinc/appmap-ruby",
+      "version": "0.72.1"
+    },
+    "frameworks": [
+      { "name": "rails", "version": "6.0.4.1" },
+      { "name": "minitest", "version": "5.11.3" }
+    ],
+    "git": {
+      "repository": "git@github.com:land-of-apps/sample_app_6th_ed.git",
+      "branch": "appmap-e2e",
+      "commit": "d34613cd296aa443ababfb3a8912124eade0b582",
+      "status": [
+        "D  .npmrc",
+        "M Gemfile",
+        "M Gemfile.lock",
+        "M app/controllers/sessions_controller.rb",
+        "M app/helpers/sessions_helper.rb",
+        "M appland-scanner.yml",
+        "M appmap.yml",
+        "M package.json",
+        "M swagger/openapi.yaml",
+        "M swagger/openapi_stable.yaml",
+        "M yarn.lock",
+        "?? appland-findings.json"
+      ],
+      "git_last_annotated_tag": null,
+      "git_last_tag": null,
+      "git_commits_since_last_annotated_tag": null,
+      "git_commits_since_last_tag": null
+    },
+    "name": "Users_signup invalid signup information",
+    "source_location": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/test/integration/users_signup_test.rb:9",
+    "recorder": { "name": "minitest" },
+    "test_status": "succeeded"
+  },
+  "classMap": [
+    {
+      "name": "activesupport",
+      "type": "package",
+      "children": [
+        {
+          "name": "ActiveSupport",
+          "type": "class",
+          "children": [
+            {
+              "name": "Callbacks",
+              "type": "class",
+              "children": [
+                {
+                  "name": "CallbackSequence",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "invoke_before",
+                      "type": "function",
+                      "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb:512",
+                      "static": false,
+                      "labels": ["mvc.before_action"]
+                    },
+                    {
+                      "name": "invoke_after",
+                      "type": "function",
+                      "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb:516",
+                      "static": false,
+                      "labels": ["mvc.after_action"]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "logger",
+      "type": "package",
+      "children": [
+        {
+          "name": "Logger",
+          "type": "class",
+          "children": [
+            {
+              "name": "LogDevice",
+              "type": "class",
+              "children": [
+                {
+                  "name": "write",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb:31",
+                  "static": false,
+                  "labels": ["log"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "actionpack",
+      "type": "package",
+      "children": [
+        {
+          "name": "ActionController",
+          "type": "class",
+          "children": [
+            {
+              "name": "Instrumentation",
+              "type": "class",
+              "children": [
+                {
+                  "name": "process_action",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19",
+                  "static": false,
+                  "labels": ["mvc.controller"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ActionDispatch",
+          "type": "class",
+          "children": [
+            {
+              "name": "Request",
+              "type": "class",
+              "children": [
+                {
+                  "name": "Session",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "[]",
+                      "type": "function",
+                      "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:91",
+                      "static": false,
+                      "labels": ["http.session.read"],
+                      "comment": "# Returns value of the key stored in the session or\n# +nil+ if the given key is not found in the session.\n"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Cookies",
+              "type": "class",
+              "children": [
+                {
+                  "name": "CookieJar",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "update",
+                      "type": "function",
+                      "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb:333",
+                      "static": false,
+                      "labels": ["http.session.write"]
+                    },
+                    {
+                      "name": "[]",
+                      "type": "function",
+                      "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb:317",
+                      "static": false,
+                      "labels": ["http.session.read"],
+                      "comment": "# Returns the value of the cookie by +name+, or +nil+ if no such cookie exists.\n"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "app",
+      "type": "package",
+      "children": [
+        {
+          "name": "controllers",
+          "type": "package",
+          "children": [
+            {
+              "name": "UsersController",
+              "type": "class",
+              "children": [
+                {
+                  "name": "new",
+                  "type": "function",
+                  "location": "app/controllers/users_controller.rb:19",
+                  "static": false,
+                  "labels": ["public"],
+                  "comment": "# @label public\n"
+                },
+                {
+                  "name": "create",
+                  "type": "function",
+                  "location": "app/controllers/users_controller.rb:24",
+                  "static": false,
+                  "labels": ["public"],
+                  "comment": "# @label public\n"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "views",
+          "type": "package",
+          "children": [
+            {
+              "name": "app_views_users_new_html_erb",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "app/views/users/new.html.erb",
+                  "static": true,
+                  "labels": ["mvc.template"]
+                }
+              ]
+            },
+            {
+              "name": "app_views_layouts_application_html_erb",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "app/views/layouts/application.html.erb",
+                  "static": true,
+                  "labels": ["mvc.template"]
+                }
+              ]
+            },
+            {
+              "name": "app_views_shared__error_messages_html_erb",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "app/views/shared/_error_messages.html.erb",
+                  "static": true,
+                  "labels": ["mvc.template"]
+                }
+              ]
+            },
+            {
+              "name": "app_views_layouts__shim_html_erb",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "app/views/layouts/_shim.html.erb",
+                  "static": true,
+                  "labels": ["mvc.template"]
+                }
+              ]
+            },
+            {
+              "name": "app_views_layouts__header_html_erb",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "app/views/layouts/_header.html.erb",
+                  "static": true,
+                  "labels": ["mvc.template"]
+                }
+              ]
+            },
+            {
+              "name": "app_views_layouts__footer_html_erb",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "app/views/layouts/_footer.html.erb",
+                  "static": true,
+                  "labels": ["mvc.template"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "helpers",
+          "type": "package",
+          "children": [
+            {
+              "name": "ApplicationHelper",
+              "type": "class",
+              "children": [
+                {
+                  "name": "full_title",
+                  "type": "function",
+                  "location": "app/helpers/application_helper.rb:4",
+                  "static": false,
+                  "comment": "# Returns the full title on a per-page basis.\n"
+                }
+              ]
+            },
+            {
+              "name": "SessionsHelper",
+              "type": "class",
+              "children": [
+                {
+                  "name": "logged_in?",
+                  "type": "function",
+                  "location": "app/helpers/sessions_helper.rb:35",
+                  "static": false,
+                  "labels": ["security.authentication"],
+                  "comment": "# Returns true if the user is logged in, false otherwise.\n# @label security.authentication\n"
+                },
+                {
+                  "name": "current_user",
+                  "type": "function",
+                  "location": "app/helpers/sessions_helper.rb:16",
+                  "static": false,
+                  "comment": "# Returns the user corresponding to the remember token cookie.\n"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "actionview",
+      "type": "package",
+      "children": [
+        {
+          "name": "ActionView",
+          "type": "class",
+          "children": [
+            {
+              "name": "Resolver",
+              "type": "class",
+              "children": [
+                {
+                  "name": "find_all",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb:116",
+                  "static": false,
+                  "labels": ["mvc.template.resolver"],
+                  "comment": "# Normalizes the arguments and passes it on to find_templates.\n"
+                }
+              ]
+            },
+            {
+              "name": "TemplateRenderer",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/renderer/template_renderer.rb:7",
+                  "labels": ["mvc.view"]
+                }
+              ]
+            },
+            {
+              "name": "PartialRenderer",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/renderer/partial_renderer.rb:294",
+                  "labels": ["mvc.view"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "json",
+      "type": "package",
+      "children": [
+        {
+          "name": "JSON",
+          "type": "class",
+          "children": [
+            {
+              "name": "Ext",
+              "type": "class",
+              "children": [
+                {
+                  "name": "Parser",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "location": "JSON::Ext::Parser#parse",
+                      "static": false,
+                      "labels": ["format.json.parse", "deserialize.safe"]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": 4505,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 75980,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 21340,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6bd0e9730>"
+      }
+    },
+    {
+      "id": 4506,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4505,
+      "elapsed": 5.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 21360 }
+    },
+    {
+      "id": 4507,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 75980,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 21340,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6bd0e9730>"
+      }
+    },
+    {
+      "id": 4508,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4507,
+      "elapsed": 1.0e-5,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6bd0e9280 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 21380
+      }
+    },
+    {
+      "id": 4509,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 76000,
+          "value": "  \u001b[1m\u001b[35m (0.1ms)\u001b[0m  \u001b[1m\u001b[36mbegin transaction\u001b[0m\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4510,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4509,
+      "elapsed": 4.4e-5,
+      "return_value": { "class": "Integer", "value": "56", "object_id": 113 }
+    },
+    {
+      "id": 4511,
+      "event": "call",
+      "thread_id": 4940,
+      "sql_query": {
+        "sql": "begin transaction",
+        "database_type": "sqlite",
+        "server_version": "3.36.0"
+      }
+    },
+    {
+      "id": 4512,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4511,
+      "elapsed": 0.00018
+    },
+    {
+      "id": 4513,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 76020,
+          "value": "------------------------------------------------\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4514,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4513,
+      "elapsed": 1.2e-5,
+      "return_value": { "class": "Integer", "value": "49", "object_id": 99 }
+    },
+    {
+      "id": 4515,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 76040,
+          "value": "UsersSignupTest: test_invalid_signup_information\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4516,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4515,
+      "elapsed": 9.0e-6,
+      "return_value": { "class": "Integer", "value": "49", "object_id": 99 }
+    },
+    {
+      "id": 4517,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 76060,
+          "value": "------------------------------------------------\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4518,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4517,
+      "elapsed": 9.0e-6,
+      "return_value": { "class": "Integer", "value": "49", "object_id": 99 }
+    },
+    {
+      "id": 4519,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 76080,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 22220,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6bd8f2d50>"
+      }
+    },
+    {
+      "id": 4520,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4519,
+      "elapsed": 2.6e-5,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6bd8f28a0 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 22320
+      }
+    },
+    {
+      "id": 4521,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 76080,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 22220,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6bd8f2d50>"
+      }
+    },
+    {
+      "id": 4522,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4521,
+      "elapsed": 1.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 22340 }
+    },
+    {
+      "id": 4523,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 76100,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 22440,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6bf123258>"
+      }
+    },
+    {
+      "id": 4524,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4523,
+      "elapsed": 4.8e-5,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6bf1229c0 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 22540
+      }
+    },
+    {
+      "id": 4525,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 76100,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 22440,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6bf123258>"
+      }
+    },
+    {
+      "id": 4526,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4525,
+      "elapsed": 2.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 22560 }
+    },
+    {
+      "id": 4527,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 76120,
+          "value": "Started GET \"/signup\" for 127.0.0.1 at 2022-02-10 14:42:56 -0500\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4528,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4527,
+      "elapsed": 1.2e-5,
+      "return_value": { "class": "Integer", "value": "65", "object_id": 131 }
+    },
+    {
+      "id": 4529,
+      "event": "call",
+      "thread_id": 4940,
+      "http_server_request": {
+        "request_method": "GET",
+        "path_info": "/signup",
+        "normalized_path_info": "/signup",
+        "headers": {
+          "Host": "www.example.com",
+          "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
+        }
+      },
+      "message": [
+        {
+          "name": "controller",
+          "class": "String",
+          "value": "users",
+          "object_id": 75460
+        },
+        {
+          "name": "action",
+          "class": "String",
+          "value": "new",
+          "object_id": 75480
+        }
+      ]
+    },
+    {
+      "id": 4530,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionController::Instrumentation",
+      "method_id": "process_action",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb",
+      "lineno": 19,
+      "static": false,
+      "parameters": [
+        {
+          "name": "args",
+          "class": "Array",
+          "object_id": 76160,
+          "value": "[\"new\"]",
+          "kind": "rest"
+        }
+      ],
+      "receiver": {
+        "class": "UsersController",
+        "object_id": 76180,
+        "value": "#<UsersController:0x00007ff6dd7812d0>"
+      }
+    },
+    {
+      "id": 4531,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 76200,
+          "value": "Processing by UsersController#new as HTML\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4532,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4531,
+      "elapsed": 1.1e-5,
+      "return_value": { "class": "Integer", "value": "42", "object_id": 85 }
+    },
+    {
+      "id": 4533,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 76220,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 51020,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6dd5f8a08>"
+      }
+    },
+    {
+      "id": 4534,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionDispatch::Request::Session",
+      "method_id": "[]",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb",
+      "lineno": 91,
+      "static": false,
+      "parameters": [
+        {
+          "name": "key",
+          "class": "Symbol",
+          "object_id": 8150428,
+          "value": "_turbolinks_location",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Request::Session",
+        "object_id": 76240,
+        "value": "#<ActionDispatch::Request::Session:0x00007ff6dd782360>"
+      }
+    },
+    {
+      "id": 4535,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionDispatch::Cookies::CookieJar",
+      "method_id": "update",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb",
+      "lineno": 333,
+      "static": false,
+      "parameters": [
+        {
+          "name": "other_hash",
+          "class": "Hash",
+          "object_id": 76260,
+          "value": "{}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "object_id": 76280,
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6dd7722a8>"
+      }
+    },
+    {
+      "id": 4536,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4535,
+      "elapsed": 5.0e-6,
+      "return_value": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6dd7722a8>",
+        "object_id": 76280
+      }
+    },
+    {
+      "id": 4537,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionDispatch::Cookies::CookieJar",
+      "method_id": "[]",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb",
+      "lineno": 317,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 30460,
+          "value": "_sample_app_session",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "object_id": 76280,
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6dd7722a8>"
+      }
+    },
+    {
+      "id": 4538,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4537,
+      "elapsed": 2.0e-6
+    },
+    {
+      "id": 4539,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4534,
+      "elapsed": 0.000145
+    },
+    {
+      "id": 4540,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4533,
+      "elapsed": 0.000273,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6dd5d7a60 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 51240
+      }
+    },
+    {
+      "id": 4541,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "UsersController",
+      "method_id": "new",
+      "path": "app/controllers/users_controller.rb",
+      "lineno": 19,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "UsersController",
+        "object_id": 76180,
+        "value": "#<UsersController:0x00007ff6dd7812d0>"
+      }
+    },
+    {
+      "id": 4542,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4541,
+      "elapsed": 6.1e-5,
+      "return_value": {
+        "class": "User",
+        "value": "#<User:0x00007ff6dd76b048>",
+        "object_id": 76300
+      }
+    },
+    {
+      "id": 4543,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 76320,
+          "value": "new",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 51340,
+          "value": "users",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 76340,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 76360,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4544,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4543,
+      "elapsed": 9.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<ActionView::Template app/views/users/new.html.erb locals=[]>]",
+        "object_id": 68100
+      }
+    },
+    {
+      "id": 4545,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "app_views_users_new_html_erb",
+      "method_id": "render",
+      "path": "app/views/users/new.html.erb",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::TemplateRenderer",
+        "object_id": 78380,
+        "value": "#<ActionView::TemplateRenderer:0x00007ff6dd762510>"
+      }
+    },
+    {
+      "id": 4546,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 76380,
+          "value": "new",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 51340,
+          "value": "users",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 76400,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 76420,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4547,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4546,
+      "elapsed": 5.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<ActionView::Template app/views/users/new.html.erb locals=[]>]",
+        "object_id": 68100
+      }
+    },
+    {
+      "id": 4548,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 76440,
+          "value": "users",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 76460,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 76480,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 76500,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4549,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4548,
+      "elapsed": 4.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 30780 }
+    },
+    {
+      "id": 4550,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 76440,
+          "value": "users",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 76460,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 76480,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 76500,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30800,
+        "value": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actiontext-6.0.4.1/app/views"
+      }
+    },
+    {
+      "id": 4551,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4550,
+      "elapsed": 4.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 30780 }
+    },
+    {
+      "id": 4552,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 76440,
+          "value": "users",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 76460,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 76480,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 76500,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30820,
+        "value": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionmailbox-6.0.4.1/app/views"
+      }
+    },
+    {
+      "id": 4553,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4552,
+      "elapsed": 4.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 30780 }
+    },
+    {
+      "id": 4554,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 76520,
+          "value": "application",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 76540,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 76560,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 76580,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4555,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4554,
+      "elapsed": 3.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<ActionView::Template app/views/layouts/application.html.erb locals=[]>]",
+        "object_id": 30920
+      }
+    },
+    {
+      "id": 4556,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 76600,
+          "value": "  Rendering users/new.html.erb within layouts/application\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4557,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4556,
+      "elapsed": 1.1e-5,
+      "return_value": { "class": "Integer", "value": "58", "object_id": 117 }
+    },
+    {
+      "id": 4558,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "app_views_shared__error_messages_html_erb",
+      "method_id": "render",
+      "path": "app/views/shared/_error_messages.html.erb",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 78400,
+        "value": "#<ActionView::PartialRenderer:0x00007ff6dd737b08>"
+      }
+    },
+    {
+      "id": 4559,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 76620,
+          "value": "error_messages",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 76640,
+          "value": "shared",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 76400,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 76660,
+          "value": "[:object]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4560,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4559,
+      "elapsed": 5.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<ActionView::Template app/views/shared/_error_messages.html.erb locals=[\"object\"]>]",
+        "object_id": 68440
+      }
+    },
+    {
+      "id": 4561,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 76680,
+          "value": "  Rendered shared/_error_messages.html.erb (Duration: 0.0ms | Allocations: 26)\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4562,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4561,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "79", "object_id": 159 }
+    },
+    {
+      "id": 4563,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4558,
+      "elapsed": 0.00022
+    },
+    {
+      "id": 4564,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 76700,
+          "value": "  Rendered users/new.html.erb within layouts/application (Duration: 0.9ms | Allocations: 1214)\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4565,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4564,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "95", "object_id": 191 }
+    },
+    {
+      "id": 4566,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ApplicationHelper",
+      "method_id": "full_title",
+      "path": "app/helpers/application_helper.rb",
+      "lineno": 4,
+      "static": false,
+      "parameters": [
+        {
+          "name": "page_title",
+          "class": "ActiveSupport::SafeBuffer",
+          "object_id": 76720,
+          "value": "Sign up",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 76740,
+        "value": "#<#<Class:0x00007ff68d36e710>:0x00007ff6dd762a88>"
+      }
+    },
+    {
+      "id": 4567,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4566,
+      "elapsed": 6.0e-6,
+      "return_value": {
+        "class": "ActiveSupport::SafeBuffer",
+        "value": "Sign up | Ruby on Rails Tutorial Sample App",
+        "object_id": 76760
+      }
+    },
+    {
+      "id": 4568,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 76780,
+          "value": "[Webpacker] Everything's up-to-date. Nothing to do\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4569,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4568,
+      "elapsed": 1.1e-5,
+      "return_value": { "class": "Integer", "value": "51", "object_id": 103 }
+    },
+    {
+      "id": 4570,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 76800,
+        "value": "#<JSON::Ext::Parser:0x00007ff6dd700860>"
+      }
+    },
+    {
+      "id": 4571,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4570,
+      "elapsed": 8.0e-6,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"application.js\"=>\"/packs-test/js/application-282e38cccf1002dcb2f6.js\", \"application.js.map\"=>\"/pac",
+        "object_id": 76820
+      }
+    },
+    {
+      "id": 4572,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "app_views_layouts__shim_html_erb",
+      "method_id": "render",
+      "path": "app/views/layouts/_shim.html.erb",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 78420,
+        "value": "#<ActionView::PartialRenderer:0x00007ff6dd6fa6b8>"
+      }
+    },
+    {
+      "id": 4573,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 76840,
+          "value": "shim",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 76860,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 76400,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 76880,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4574,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4573,
+      "elapsed": 6.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<ActionView::Template app/views/layouts/_shim.html.erb locals=[]>]",
+        "object_id": 41780
+      }
+    },
+    {
+      "id": 4575,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 76900,
+          "value": "  Rendered layouts/_shim.html.erb (Duration: 0.0ms | Allocations: 13)\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4576,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4575,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "70", "object_id": 141 }
+    },
+    {
+      "id": 4577,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4572,
+      "elapsed": 0.000205
+    },
+    {
+      "id": 4578,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "app_views_layouts__header_html_erb",
+      "method_id": "render",
+      "path": "app/views/layouts/_header.html.erb",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 78440,
+        "value": "#<ActionView::PartialRenderer:0x00007ff6dd6eaf60>"
+      }
+    },
+    {
+      "id": 4579,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 76920,
+          "value": "header",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 76940,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 76400,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 76960,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4580,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4579,
+      "elapsed": 4.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<ActionView::Template app/views/layouts/_header.html.erb locals=[]>]",
+        "object_id": 41900
+      }
+    },
+    {
+      "id": 4581,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "SessionsHelper",
+      "method_id": "logged_in?",
+      "path": "app/helpers/sessions_helper.rb",
+      "lineno": 35,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 76740,
+        "value": "#<#<Class:0x00007ff68d36e710>:0x00007ff6dd762a88>"
+      }
+    },
+    {
+      "id": 4582,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "SessionsHelper",
+      "method_id": "current_user",
+      "path": "app/helpers/sessions_helper.rb",
+      "lineno": 16,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 76740,
+        "value": "#<#<Class:0x00007ff68d36e710>:0x00007ff6dd762a88>"
+      }
+    },
+    {
+      "id": 4583,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionDispatch::Request::Session",
+      "method_id": "[]",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb",
+      "lineno": 91,
+      "static": false,
+      "parameters": [
+        {
+          "name": "key",
+          "class": "Symbol",
+          "object_id": 7606108,
+          "value": "user_id",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Request::Session",
+        "object_id": 76240,
+        "value": "#<ActionDispatch::Request::Session:0x00007ff6dd782360>"
+      }
+    },
+    {
+      "id": 4584,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4583,
+      "elapsed": 6.0e-6
+    },
+    {
+      "id": 4585,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionDispatch::Cookies::CookieJar",
+      "method_id": "[]",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb",
+      "lineno": 317,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 76980,
+          "value": "user_id",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "object_id": 76280,
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6dd7722a8>"
+      }
+    },
+    {
+      "id": 4586,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4585,
+      "elapsed": 2.0e-6
+    },
+    {
+      "id": 4587,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4582,
+      "elapsed": 7.2e-5
+    },
+    {
+      "id": 4588,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4581,
+      "elapsed": 9.7e-5
+    },
+    {
+      "id": 4589,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77000,
+          "value": "  Rendered layouts/_header.html.erb (Duration: 0.2ms | Allocations: 329)\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4590,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4589,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "73", "object_id": 147 }
+    },
+    {
+      "id": 4591,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4578,
+      "elapsed": 0.000385
+    },
+    {
+      "id": 4592,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionDispatch::Request::Session",
+      "method_id": "[]",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb",
+      "lineno": 91,
+      "static": false,
+      "parameters": [
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 41980,
+          "value": "flash",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Request::Session",
+        "object_id": 76240,
+        "value": "#<ActionDispatch::Request::Session:0x00007ff6dd782360>"
+      }
+    },
+    {
+      "id": 4593,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4592,
+      "elapsed": 4.0e-6
+    },
+    {
+      "id": 4594,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "app_views_layouts__footer_html_erb",
+      "method_id": "render",
+      "path": "app/views/layouts/_footer.html.erb",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 78460,
+        "value": "#<ActionView::PartialRenderer:0x00007ff6dd6d1dd0>"
+      }
+    },
+    {
+      "id": 4595,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77020,
+          "value": "footer",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 77040,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 76400,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77060,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4596,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4595,
+      "elapsed": 5.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<ActionView::Template app/views/layouts/_footer.html.erb locals=[]>]",
+        "object_id": 42060
+      }
+    },
+    {
+      "id": 4597,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77080,
+          "value": "  Rendered layouts/_footer.html.erb (Duration: 0.0ms | Allocations: 57)\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4598,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4597,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "72", "object_id": 145 }
+    },
+    {
+      "id": 4599,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4594,
+      "elapsed": 0.000231
+    },
+    {
+      "id": 4600,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4545,
+      "elapsed": 0.0046
+    },
+    {
+      "id": 4601,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 76220,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 51020,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6dd5f8a08>"
+      }
+    },
+    {
+      "id": 4602,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4601,
+      "elapsed": 1.2e-5,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6dd5d7d30 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 55860
+      }
+    },
+    {
+      "id": 4603,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77100,
+          "value": "Completed 200 OK in 5ms (Views: 4.7ms | ActiveRecord: 0.0ms | Allocations: 6204)\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4604,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4603,
+      "elapsed": 9.0e-6,
+      "return_value": { "class": "Integer", "value": "81", "object_id": 163 }
+    },
+    {
+      "id": 4605,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4530,
+      "elapsed": 0.005662,
+      "return_value": {
+        "class": "User",
+        "value": "#<User:0x00007ff6dd76b048>",
+        "object_id": 76300
+      }
+    },
+    {
+      "id": 4606,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4529,
+      "elapsed": 0.005716,
+      "http_server_response": {
+        "status_code": 200,
+        "headers": {
+          "X-Frame-Options": "SAMEORIGIN",
+          "X-XSS-Protection": "1; mode=block",
+          "X-Content-Type-Options": "nosniff",
+          "X-Download-Options": "noopen",
+          "X-Permitted-Cross-Domain-Policies": "none",
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+          "Content-Type": "text/html; charset=utf-8"
+        }
+      }
+    },
+    {
+      "id": 4607,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 77120,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 42180,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff68d017670>"
+      }
+    },
+    {
+      "id": 4608,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4607,
+      "elapsed": 4.2e-5,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff68d016d60 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 42200
+      }
+    },
+    {
+      "id": 4609,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 77120,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 42180,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff68d017670>"
+      }
+    },
+    {
+      "id": 4610,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4609,
+      "elapsed": 9.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff68d0172b0 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 42220
+      }
+    },
+    {
+      "id": 4611,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77160,
+          "value": "  \u001b[1m\u001b[35m (0.1ms)\u001b[0m  \u001b[1m\u001b[34mSELECT COUNT(*) FROM \"users\"\u001b[0m\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4612,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4611,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "67", "object_id": 135 }
+    },
+    {
+      "id": 4613,
+      "event": "call",
+      "thread_id": 4940,
+      "sql_query": {
+        "sql": "SELECT COUNT(*) FROM \"users\"",
+        "database_type": "sqlite",
+        "server_version": "3.36.0"
+      }
+    },
+    {
+      "id": 4614,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4613,
+      "elapsed": 0.000155
+    },
+    {
+      "id": 4615,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 77180,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 22440,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6bf123258>"
+      }
+    },
+    {
+      "id": 4616,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4615,
+      "elapsed": 2.9e-5,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6bf1229c0 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 22540
+      }
+    },
+    {
+      "id": 4617,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 77180,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 22440,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6bf123258>"
+      }
+    },
+    {
+      "id": 4618,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4617,
+      "elapsed": 2.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 22560 }
+    },
+    {
+      "id": 4619,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77200,
+          "value": "Started POST \"/users\" for 127.0.0.1 at 2022-02-10 14:42:56 -0500\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4620,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4619,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "65", "object_id": 131 }
+    },
+    {
+      "id": 4621,
+      "event": "call",
+      "thread_id": 4940,
+      "http_server_request": {
+        "request_method": "POST",
+        "path_info": "/users",
+        "normalized_path_info": "/users",
+        "headers": {
+          "Host": "www.example.com",
+          "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      },
+      "message": [
+        {
+          "name": "user",
+          "class": "ActiveSupport::HashWithIndifferentAccess",
+          "value": "{\"name\"=>\"\", \"email\"=>\"user@invalid\", \"password\"=>\"[FILTERED]\", \"password_confirmation\"=>\"[FILTERED]",
+          "object_id": 78480,
+          "properties": [
+            { "name": "name", "class": "String" },
+            { "name": "email", "class": "String" },
+            { "name": "password", "class": "String" },
+            { "name": "password_confirmation", "class": "String" }
+          ]
+        },
+        {
+          "name": "controller",
+          "class": "String",
+          "value": "users",
+          "object_id": 59100
+        },
+        {
+          "name": "action",
+          "class": "String",
+          "value": "create",
+          "object_id": 75620
+        }
+      ]
+    },
+    {
+      "id": 4622,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionController::Instrumentation",
+      "method_id": "process_action",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb",
+      "lineno": 19,
+      "static": false,
+      "parameters": [
+        {
+          "name": "args",
+          "class": "Array",
+          "object_id": 77240,
+          "value": "[\"create\"]",
+          "kind": "rest"
+        }
+      ],
+      "receiver": {
+        "class": "UsersController",
+        "object_id": 77260,
+        "value": "#<UsersController:0x00007ff6dd68af98>"
+      }
+    },
+    {
+      "id": 4623,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77280,
+          "value": "Processing by UsersController#create as HTML\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4624,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4623,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "45", "object_id": 91 }
+    },
+    {
+      "id": 4625,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77300,
+          "value": "  Parameters: {\"user\"=>{\"name\"=>\"\", \"email\"=>\"user@invalid\", \"password\"=>\"[FILTERED]\", \"password_con",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4626,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4625,
+      "elapsed": 8.0e-6,
+      "return_value": { "class": "Integer", "value": "127", "object_id": 255 }
+    },
+    {
+      "id": 4627,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 77320,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 51020,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6dd5f8a08>"
+      }
+    },
+    {
+      "id": 4628,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionDispatch::Request::Session",
+      "method_id": "[]",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb",
+      "lineno": 91,
+      "static": false,
+      "parameters": [
+        {
+          "name": "key",
+          "class": "Symbol",
+          "object_id": 8150428,
+          "value": "_turbolinks_location",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Request::Session",
+        "object_id": 77340,
+        "value": "#<ActionDispatch::Request::Session:0x00007ff6dd68be48>"
+      }
+    },
+    {
+      "id": 4629,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionDispatch::Cookies::CookieJar",
+      "method_id": "update",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb",
+      "lineno": 333,
+      "static": false,
+      "parameters": [
+        {
+          "name": "other_hash",
+          "class": "Hash",
+          "object_id": 77360,
+          "value": "{}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "object_id": 77380,
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6dd67bbb0>"
+      }
+    },
+    {
+      "id": 4630,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4629,
+      "elapsed": 3.0e-6,
+      "return_value": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6dd67bbb0>",
+        "object_id": 77380
+      }
+    },
+    {
+      "id": 4631,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionDispatch::Cookies::CookieJar",
+      "method_id": "[]",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb",
+      "lineno": 317,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 30460,
+          "value": "_sample_app_session",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "object_id": 77380,
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6dd67bbb0>"
+      }
+    },
+    {
+      "id": 4632,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4631,
+      "elapsed": 2.0e-6
+    },
+    {
+      "id": 4633,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4628,
+      "elapsed": 9.8e-5
+    },
+    {
+      "id": 4634,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4627,
+      "elapsed": 0.000201,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6dd5d7a60 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 51240
+      }
+    },
+    {
+      "id": 4635,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "UsersController",
+      "method_id": "create",
+      "path": "app/controllers/users_controller.rb",
+      "lineno": 24,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "UsersController",
+        "object_id": 77260,
+        "value": "#<UsersController:0x00007ff6dd68af98>"
+      }
+    },
+    {
+      "id": 4636,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 77400,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 59780,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6dd798700>"
+      }
+    },
+    {
+      "id": 4637,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4636,
+      "elapsed": 2.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 59800 }
+    },
+    {
+      "id": 4638,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 77420,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 59840,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6dd7937a0>"
+      }
+    },
+    {
+      "id": 4639,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77440,
+          "value": "  \u001b[1m\u001b[35m (0.0ms)\u001b[0m  \u001b[1m\u001b[35mSAVEPOINT active_record_1\u001b[0m\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4640,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4639,
+      "elapsed": 1.2e-5,
+      "return_value": { "class": "Integer", "value": "64", "object_id": 129 }
+    },
+    {
+      "id": 4641,
+      "event": "call",
+      "thread_id": 4940,
+      "sql_query": {
+        "sql": "SAVEPOINT active_record_1",
+        "database_type": "sqlite",
+        "server_version": "3.36.0"
+      }
+    },
+    {
+      "id": 4642,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4641,
+      "elapsed": 9.3e-5
+    },
+    {
+      "id": 4643,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77460,
+          "value": "  \u001b[1m\u001b[36mUser Exists? (0.0ms)\u001b[0m  \u001b[1m\u001b[34mSELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = ?",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4644,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4643,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "156", "object_id": 313 }
+    },
+    {
+      "id": 4645,
+      "event": "call",
+      "thread_id": 4940,
+      "sql_query": {
+        "sql": "SELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?",
+        "database_type": "sqlite",
+        "server_version": "3.36.0"
+      }
+    },
+    {
+      "id": 4646,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4645,
+      "elapsed": 0.000113
+    },
+    {
+      "id": 4647,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4638,
+      "elapsed": 0.001332,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6dd791928 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 59880
+      }
+    },
+    {
+      "id": 4648,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 77420,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 59840,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6dd7937a0>"
+      }
+    },
+    {
+      "id": 4649,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4648,
+      "elapsed": 2.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 59900 }
+    },
+    {
+      "id": 4650,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 77400,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 59780,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6dd798700>"
+      }
+    },
+    {
+      "id": 4651,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4650,
+      "elapsed": 8.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6dd7983e0 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 59920
+      }
+    },
+    {
+      "id": 4652,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77480,
+          "value": "  \u001b[1m\u001b[35m (0.0ms)\u001b[0m  \u001b[1m\u001b[31mROLLBACK TO SAVEPOINT active_record_1\u001b[0m\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4653,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4652,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "76", "object_id": 153 }
+    },
+    {
+      "id": 4654,
+      "event": "call",
+      "thread_id": 4940,
+      "sql_query": {
+        "sql": "ROLLBACK TO SAVEPOINT active_record_1",
+        "database_type": "sqlite",
+        "server_version": "3.36.0"
+      }
+    },
+    {
+      "id": 4655,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4654,
+      "elapsed": 8.2e-5
+    },
+    {
+      "id": 4656,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "app_views_users_new_html_erb",
+      "method_id": "render",
+      "path": "app/views/users/new.html.erb",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::TemplateRenderer",
+        "object_id": 78500,
+        "value": "#<ActionView::TemplateRenderer:0x00007ff6dd63ae80>"
+      }
+    },
+    {
+      "id": 4657,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77500,
+          "value": "new",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 51340,
+          "value": "users",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 77520,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77540,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4658,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4657,
+      "elapsed": 6.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<ActionView::Template app/views/users/new.html.erb locals=[]>]",
+        "object_id": 68100
+      }
+    },
+    {
+      "id": 4659,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77560,
+          "value": "users",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 77580,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 77600,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77620,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4660,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4659,
+      "elapsed": 4.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 30780 }
+    },
+    {
+      "id": 4661,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77560,
+          "value": "users",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 77580,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 77600,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77620,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30800,
+        "value": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actiontext-6.0.4.1/app/views"
+      }
+    },
+    {
+      "id": 4662,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4661,
+      "elapsed": 4.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 30780 }
+    },
+    {
+      "id": 4663,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77560,
+          "value": "users",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 77580,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 77600,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77620,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30820,
+        "value": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionmailbox-6.0.4.1/app/views"
+      }
+    },
+    {
+      "id": 4664,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4663,
+      "elapsed": 3.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 30780 }
+    },
+    {
+      "id": 4665,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77640,
+          "value": "application",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 77660,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 77680,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77700,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4666,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4665,
+      "elapsed": 4.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<ActionView::Template app/views/layouts/application.html.erb locals=[]>]",
+        "object_id": 30920
+      }
+    },
+    {
+      "id": 4667,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77720,
+          "value": "  Rendering users/new.html.erb within layouts/application\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4668,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4667,
+      "elapsed": 1.1e-5,
+      "return_value": { "class": "Integer", "value": "58", "object_id": 117 }
+    },
+    {
+      "id": 4669,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "app_views_shared__error_messages_html_erb",
+      "method_id": "render",
+      "path": "app/views/shared/_error_messages.html.erb",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 78520,
+        "value": "#<ActionView::PartialRenderer:0x00007ff6dd61b828>"
+      }
+    },
+    {
+      "id": 4670,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77740,
+          "value": "error_messages",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 77760,
+          "value": "shared",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 77520,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 77780,
+          "value": "[:object]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4671,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4670,
+      "elapsed": 6.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<ActionView::Template app/views/shared/_error_messages.html.erb locals=[\"object\"]>]",
+        "object_id": 68440
+      }
+    },
+    {
+      "id": 4672,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77800,
+          "value": "  Rendered shared/_error_messages.html.erb (Duration: 0.4ms | Allocations: 559)\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4673,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4672,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "80", "object_id": 161 }
+    },
+    {
+      "id": 4674,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4669,
+      "elapsed": 0.000581
+    },
+    {
+      "id": 4675,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77820,
+          "value": "  Rendered users/new.html.erb within layouts/application (Duration: 1.2ms | Allocations: 1764)\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4676,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4675,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "95", "object_id": 191 }
+    },
+    {
+      "id": 4677,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ApplicationHelper",
+      "method_id": "full_title",
+      "path": "app/helpers/application_helper.rb",
+      "lineno": 4,
+      "static": false,
+      "parameters": [
+        {
+          "name": "page_title",
+          "class": "ActiveSupport::SafeBuffer",
+          "object_id": 77840,
+          "value": "Sign up",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 77860,
+        "value": "#<#<Class:0x00007ff68d36e710>:0x00007ff6dd63b5b0>"
+      }
+    },
+    {
+      "id": 4678,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4677,
+      "elapsed": 6.0e-6,
+      "return_value": {
+        "class": "ActiveSupport::SafeBuffer",
+        "value": "Sign up | Ruby on Rails Tutorial Sample App",
+        "object_id": 77880
+      }
+    },
+    {
+      "id": 4679,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 77900,
+          "value": "[Webpacker] Everything's up-to-date. Nothing to do\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4680,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4679,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "51", "object_id": 103 }
+    },
+    {
+      "id": 4681,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 77920,
+        "value": "#<JSON::Ext::Parser:0x00007ff6dd5a6578>"
+      }
+    },
+    {
+      "id": 4682,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4681,
+      "elapsed": 6.0e-6,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"application.js\"=>\"/packs-test/js/application-282e38cccf1002dcb2f6.js\", \"application.js.map\"=>\"/pac",
+        "object_id": 77940
+      }
+    },
+    {
+      "id": 4683,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "app_views_layouts__shim_html_erb",
+      "method_id": "render",
+      "path": "app/views/layouts/_shim.html.erb",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 78540,
+        "value": "#<ActionView::PartialRenderer:0x00007ff6dd5a4750>"
+      }
+    },
+    {
+      "id": 4684,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 77960,
+          "value": "shim",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 77980,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 77520,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 78000,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4685,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4684,
+      "elapsed": 5.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<ActionView::Template app/views/layouts/_shim.html.erb locals=[]>]",
+        "object_id": 41780
+      }
+    },
+    {
+      "id": 4686,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 78020,
+          "value": "  Rendered layouts/_shim.html.erb (Duration: 0.0ms | Allocations: 12)\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4687,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4686,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "70", "object_id": 141 }
+    },
+    {
+      "id": 4688,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4683,
+      "elapsed": 0.0002
+    },
+    {
+      "id": 4689,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "app_views_layouts__header_html_erb",
+      "method_id": "render",
+      "path": "app/views/layouts/_header.html.erb",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 78560,
+        "value": "#<ActionView::PartialRenderer:0x00007ff6dd59ce10>"
+      }
+    },
+    {
+      "id": 4690,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 78040,
+          "value": "header",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 78060,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 77520,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 78080,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4691,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4690,
+      "elapsed": 4.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<ActionView::Template app/views/layouts/_header.html.erb locals=[]>]",
+        "object_id": 41900
+      }
+    },
+    {
+      "id": 4692,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "SessionsHelper",
+      "method_id": "logged_in?",
+      "path": "app/helpers/sessions_helper.rb",
+      "lineno": 35,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 77860,
+        "value": "#<#<Class:0x00007ff68d36e710>:0x00007ff6dd63b5b0>"
+      }
+    },
+    {
+      "id": 4693,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "SessionsHelper",
+      "method_id": "current_user",
+      "path": "app/helpers/sessions_helper.rb",
+      "lineno": 16,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 77860,
+        "value": "#<#<Class:0x00007ff68d36e710>:0x00007ff6dd63b5b0>"
+      }
+    },
+    {
+      "id": 4694,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionDispatch::Request::Session",
+      "method_id": "[]",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb",
+      "lineno": 91,
+      "static": false,
+      "parameters": [
+        {
+          "name": "key",
+          "class": "Symbol",
+          "object_id": 7606108,
+          "value": "user_id",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Request::Session",
+        "object_id": 77340,
+        "value": "#<ActionDispatch::Request::Session:0x00007ff6dd68be48>"
+      }
+    },
+    {
+      "id": 4695,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4694,
+      "elapsed": 6.0e-6
+    },
+    {
+      "id": 4696,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionDispatch::Cookies::CookieJar",
+      "method_id": "[]",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb",
+      "lineno": 317,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 78100,
+          "value": "user_id",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "object_id": 77380,
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6dd67bbb0>"
+      }
+    },
+    {
+      "id": 4697,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4696,
+      "elapsed": 2.0e-6
+    },
+    {
+      "id": 4698,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4693,
+      "elapsed": 6.1e-5
+    },
+    {
+      "id": 4699,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4692,
+      "elapsed": 8.2e-5
+    },
+    {
+      "id": 4700,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 78120,
+          "value": "  Rendered layouts/_header.html.erb (Duration: 0.2ms | Allocations: 328)\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4701,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4700,
+      "elapsed": 9.0e-6,
+      "return_value": { "class": "Integer", "value": "73", "object_id": 147 }
+    },
+    {
+      "id": 4702,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4689,
+      "elapsed": 0.000353
+    },
+    {
+      "id": 4703,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionDispatch::Request::Session",
+      "method_id": "[]",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb",
+      "lineno": 91,
+      "static": false,
+      "parameters": [
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 41980,
+          "value": "flash",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Request::Session",
+        "object_id": 77340,
+        "value": "#<ActionDispatch::Request::Session:0x00007ff6dd68be48>"
+      }
+    },
+    {
+      "id": 4704,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4703,
+      "elapsed": 4.0e-6
+    },
+    {
+      "id": 4705,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "app_views_layouts__footer_html_erb",
+      "method_id": "render",
+      "path": "app/views/layouts/_footer.html.erb",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 78580,
+        "value": "#<ActionView::PartialRenderer:0x00007ff6dd58daa0>"
+      }
+    },
+    {
+      "id": 4706,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb",
+      "lineno": 116,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 78140,
+          "value": "footer",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 78160,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 77520,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Object",
+          "object_id": 30560,
+          "value": "#<Object:0x00007ff6bf069330>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 78180,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 30600,
+        "value": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/app/views"
+      }
+    },
+    {
+      "id": 4707,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4706,
+      "elapsed": 4.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<ActionView::Template app/views/layouts/_footer.html.erb locals=[]>]",
+        "object_id": 42060
+      }
+    },
+    {
+      "id": 4708,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 78200,
+          "value": "  Rendered layouts/_footer.html.erb (Duration: 0.0ms | Allocations: 56)\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4709,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4708,
+      "elapsed": 9.0e-6,
+      "return_value": { "class": "Integer", "value": "72", "object_id": 145 }
+    },
+    {
+      "id": 4710,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4705,
+      "elapsed": 0.00021
+    },
+    {
+      "id": 4711,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4656,
+      "elapsed": 0.004553
+    },
+    {
+      "id": 4712,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4635,
+      "elapsed": 0.007903,
+      "return_value": {
+        "class": "ActionView::OutputBuffer",
+        "value": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Sign up | Ruby on Rails Tutorial Sample App</title>\n    <",
+        "object_id": 78220
+      }
+    },
+    {
+      "id": 4713,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 77320,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 51020,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6dd5f8a08>"
+      }
+    },
+    {
+      "id": 4714,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4713,
+      "elapsed": 5.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6dd5d7d30 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 55860
+      }
+    },
+    {
+      "id": 4715,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 78240,
+          "value": "Completed 200 OK in 8ms (Views: 4.7ms | ActiveRecord: 0.1ms | Allocations: 8991)\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4716,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4715,
+      "elapsed": 1.1e-5,
+      "return_value": { "class": "Integer", "value": "81", "object_id": 163 }
+    },
+    {
+      "id": 4717,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4622,
+      "elapsed": 0.008441,
+      "return_value": {
+        "class": "ActionView::OutputBuffer",
+        "value": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Sign up | Ruby on Rails Tutorial Sample App</title>\n    <",
+        "object_id": 78220
+      }
+    },
+    {
+      "id": 4718,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4621,
+      "elapsed": 0.008482,
+      "http_server_response": {
+        "status_code": 200,
+        "headers": {
+          "X-Frame-Options": "SAMEORIGIN",
+          "X-XSS-Protection": "1; mode=block",
+          "X-Content-Type-Options": "nosniff",
+          "X-Download-Options": "noopen",
+          "X-Permitted-Cross-Domain-Policies": "none",
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+          "Content-Type": "text/html; charset=utf-8"
+        }
+      }
+    },
+    {
+      "id": 4719,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 78260,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 42180,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff68d017670>"
+      }
+    },
+    {
+      "id": 4720,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4719,
+      "elapsed": 3.0e-5,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff68d016d60 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 42200
+      }
+    },
+    {
+      "id": 4721,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 78260,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 42180,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff68d017670>"
+      }
+    },
+    {
+      "id": 4722,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4721,
+      "elapsed": 7.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff68d0172b0 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 42220
+      }
+    },
+    {
+      "id": 4723,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 78300,
+          "value": "  \u001b[1m\u001b[35m (0.0ms)\u001b[0m  \u001b[1m\u001b[34mSELECT COUNT(*) FROM \"users\"\u001b[0m\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4724,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4723,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "67", "object_id": 135 }
+    },
+    {
+      "id": 4725,
+      "event": "call",
+      "thread_id": 4940,
+      "sql_query": {
+        "sql": "SELECT COUNT(*) FROM \"users\"",
+        "database_type": "sqlite",
+        "server_version": "3.36.0"
+      }
+    },
+    {
+      "id": 4726,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4725,
+      "elapsed": 0.000103
+    },
+    {
+      "id": 4727,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 78320,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 44940,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6dd63b7b8>"
+      }
+    },
+    {
+      "id": 4728,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4727,
+      "elapsed": 5.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 44960 }
+    },
+    {
+      "id": 4729,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 78320,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 44940,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6dd63b7b8>"
+      }
+    },
+    {
+      "id": 4730,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4729,
+      "elapsed": 1.5e-5,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6dd63b510 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 44980
+      }
+    },
+    {
+      "id": 4731,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "Logger::LogDevice",
+      "method_id": "write",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb",
+      "lineno": 31,
+      "static": false,
+      "parameters": [
+        {
+          "name": "message",
+          "class": "String",
+          "object_id": 78340,
+          "value": "  \u001b[1m\u001b[35m (0.0ms)\u001b[0m  \u001b[1m\u001b[31mrollback transaction\u001b[0m\n",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Logger::LogDevice",
+        "object_id": 13400,
+        "value": "#<Logger::LogDevice:0x00007ff6cea18b38>"
+      }
+    },
+    {
+      "id": 4732,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4731,
+      "elapsed": 1.0e-5,
+      "return_value": { "class": "Integer", "value": "59", "object_id": 119 }
+    },
+    {
+      "id": 4733,
+      "event": "call",
+      "thread_id": 4940,
+      "sql_query": {
+        "sql": "rollback transaction",
+        "database_type": "sqlite",
+        "server_version": "3.36.0"
+      }
+    },
+    {
+      "id": 4734,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4733,
+      "elapsed": 8.4e-5
+    },
+    {
+      "id": 4735,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 78360,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 21240,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6f8106d90>"
+      }
+    },
+    {
+      "id": 4736,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4735,
+      "elapsed": 3.0e-6,
+      "return_value": { "class": "Array", "value": "[]", "object_id": 21260 }
+    },
+    {
+      "id": 4737,
+      "event": "call",
+      "thread_id": 4940,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 78360,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 21240,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6f8106d90>"
+      }
+    },
+    {
+      "id": 4738,
+      "event": "return",
+      "thread_id": 4940,
+      "parent_id": 4737,
+      "elapsed": 7.0e-6,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6f81069d0 /Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesuppo",
+        "object_id": 21280
+      }
+    }
+  ]
+}

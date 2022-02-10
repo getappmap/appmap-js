@@ -9,7 +9,7 @@ export default class Event {
       (message) => (message?.headers || {})['Content-Type']
     );
     if (!msg) {
-      return;
+      return null;
     }
 
     return msg.headers['Content-Type'];

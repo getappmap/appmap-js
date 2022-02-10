@@ -1,4 +1,3 @@
-const { EventNavigator } = require('@appland/models');
 const Response = require('./response');
 const Schema = require('./schema');
 const { messageToOpenAPISchema, bestPathInfo } = require('./util');
@@ -32,7 +31,6 @@ class Method {
         return memo;
       }, {});
 
-    let description;
     const schemata = {};
     const parameters = [];
     let securitySchemeId;
@@ -45,49 +43,12 @@ class Method {
       }
 
       let schema = null;
-      if (event.httpServerRequest.mime_type) {
-        const mimeType = event.httpServerRequest.mime_type.split(';')[0];
-        if (!schemata[mimeType]) {
-          schemata[mimeType] = new Schema();
+      if (event.requestContentType) {
+        const contentType = event.requestContentType.split(';')[0];
+        if (!schemata[contentType]) {
+          schemata[contentType] = new Schema();
         }
-        schema = schemata[mimeType];
-      }
-
-      const actionName = messages
-        .filter((msg) => msg.name === 'action')
-        .map((msg) => msg.value)[0];
-      if (actionName) {
-        const bestCommentOrCodeObjectName = (() => {
-          const descendants = new EventNavigator(event).descendants();
-          let iter = descendants.next();
-          let controller = null;
-          while (!iter.done) {
-            const evt = iter.value;
-            if (
-              evt.event.codeObject.packageOf.indexOf('app/controllers') === 0 &&
-              evt.event.codeObject.name === actionName
-            ) {
-              controller = evt.event;
-              break;
-            }
-            iter = descendants.next();
-          }
-          if (!controller) {
-            return null;
-          }
-          const { comment } = controller.codeObject.data;
-          if (comment) {
-            const lines = comment
-              .split('\n')
-              .map((line) => line.replace(/^\s*#\s*/, '').trim())
-              .filter((line) => line && line.length > 0);
-            return lines.join('\n');
-          }
-          return controller.codeObject.name;
-        })();
-        if (!description) {
-          description = bestCommentOrCodeObjectName;
-        }
+        schema = schemata[contentType];
       }
 
       messages.forEach((message) => {
@@ -123,9 +84,6 @@ class Method {
     const response = {
       responses,
     };
-    if (description) {
-      response.description = description;
-    }
     if (securitySchemeId) {
       const securityObj = {};
       securityObj[securitySchemeId] = [];
