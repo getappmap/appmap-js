@@ -18,7 +18,7 @@
       </span>
       <ul
         ref="suggestionsList"
-        v-if="suggestions.length"
+        v-if="suggestionsList.length"
         class="trace-filter__suggestions"
       >
         <li
@@ -120,7 +120,7 @@ export default {
     formClasses() {
       const classList = ['trace-filter__form'];
 
-      if (this.showSuggestions && this.suggestions.length) {
+      if (this.showSuggestions && this.suggestionsList.length) {
         classList.push('trace-filter__form--show-suggestions');
       }
 
@@ -201,7 +201,10 @@ export default {
       } "${eventName}"`.trim();
     },
     onWindowClick(event) {
-      if (!getEventTarget(event.target, this.$refs.form)) {
+      if (
+        !getEventTarget(event.target, this.$refs.form) &&
+        this.$refs.input !== window.document.activeElement
+      ) {
         this.showSuggestions = false;
       }
     },
