@@ -87,12 +87,15 @@ const PLACEHOLDER = '?';
 
 /**
  * @param {string} dialect
- * @returns {RegExp[]}
+ * @returns {RegExp}
  */
 function generateRegexp(dialect) {
   const components = DIALECT_COMPONENTS[dialect];
-  // No Regexp.union in JS
-  return components.map((component) => COMPONENTS_REGEXP_MAP[component]);
+  const regexData = components.map(
+    (component) => COMPONENTS_REGEXP_MAP[component].source
+  );
+  const union = `(?:${regexData.flat().join(')|(?:')})`;
+  return new RegExp(union, 'gi');
 }
 
 const MYSQL_COMPONENTS_REGEXP = generateRegexp('mysql');
@@ -140,9 +143,7 @@ export default function normalize(sql, adapter) {
       regexp = FALLBACK_REGEXP;
   }
 
-  let obfuscated = sql;
-  // eslint-disable-next-line no-return-assign
-  regexp.forEach((re) => (obfuscated = obfuscated.replace(re, PLACEHOLDER)));
+  let obfuscated = sql.replace(regexp, PLACEHOLDER);
   if (detectUnmatchedPairs(obfuscated, adapter)) {
     obfuscated = sql;
   }
