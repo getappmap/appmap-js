@@ -1,21 +1,28 @@
-import { messageToOpenAPISchema } from '../../src/openapi/util';
+import { readFile } from 'fs/promises';
 
-const message = (c) => ({message: {class: c}});
-const expected = (t, i?) => { 
-  const r = {expected: {type: t}}; 
+import {
+  messageToOpenAPISchema,
+  parseHTTPServerRequests,
+} from '../../src/openapi/util';
+import Model from '../../src/openapi/model';
+import { buildAppMap } from '@appland/models';
+
+const message = (c) => ({ message: { class: c } });
+const expected = (t, i?) => {
+  const r = { expected: { type: t } };
   if (i) {
-    r.expected['items'] = {type: i};
+    r.expected['items'] = { type: i };
   }
   return r;
 };
 
 const mapping = (c, t, i?) => ({
   ...message(c),
-  ...expected(t, i)
+  ...expected(t, i),
 });
 
 const multi = (classes, t) => {
-  return classes.map((c) => ({...message(c), ...expected(t)}));
+  return classes.map((c) => ({ ...message(c), ...expected(t) }));
 };
 
 const mappingExamples = (mappings) => {
@@ -26,6 +33,84 @@ const mappingExamples = (mappings) => {
     });
   });
 };
+
+describe('openapi', () => {
+  it('works as expected', async () => {
+    const appmapData = JSON.parse(
+      (
+        await readFile(
+          'tests/fixture/appmaps/Users_signup_invalid_signup_information.appmap.json'
+        )
+      ).toString()
+    );
+
+    const model = new Model();
+    const appmap = buildAppMap().source(appmapData).normalize().build();
+    appmap.events
+      .filter((e) => e.httpServerRequest)
+      .forEach((request) => model.addRequest(request));
+
+    expect(model.openapi()).toEqual({
+      paths: {
+        '/signup': {
+          get: {
+            responses: {
+              '200': {
+                content: {
+                  'text/html': {},
+                },
+                description: 'OK',
+              },
+            },
+          },
+        },
+        '/users': {
+          post: {
+            responses: {
+              '200': {
+                content: {
+                  'text/html': {},
+                },
+                description: 'OK',
+              },
+            },
+            requestBody: {
+              content: {
+                'application/x-www-form-urlencoded': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      user: {
+                        type: 'object',
+                        properties: {
+                          name: {
+                            type: 'string',
+                          },
+                          email: {
+                            type: 'string',
+                          },
+                          password: {
+                            type: 'string',
+                          },
+                          password_confirmation: {
+                            type: 'string',
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        securitySchemes: {},
+      },
+    });
+  });
+});
 
 describe('messageToOpenAPISchema', () => {
   describe('for Ruby types', () => {
@@ -39,7 +124,7 @@ describe('messageToOpenAPISchema', () => {
 
     mappingExamples(rubyMappings);
   });
-  
+
   describe('for Python type', () => {
     const pythonMappings = [
       mapping('builtins.bool', 'boolean'),
@@ -60,6 +145,5 @@ describe('messageToOpenAPISchema', () => {
     ];
 
     mappingExamples(javaMappings);
-  });    
-
+  });
 });

@@ -11,10 +11,9 @@ class Response {
     const mimeTypes = () => {
       return this.events
         .filter(
-          (event) =>
-            event.httpServerResponse && event.httpServerResponse.mime_type
+          (event) => event.httpServerResponse && event.responseContentType
         )
-        .map((event) => event.httpServerResponse.mime_type.split(';')[0]);
+        .map((event) => event.responseContentType.split(';')[0]);
     };
     const content = [...new Set(mimeTypes())]
       .sort()
