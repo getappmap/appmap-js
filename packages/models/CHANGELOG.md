@@ -1,3 +1,15 @@
+# [@appland/models-v1.14.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.13.0...@appland/models-v1.14.0) (2022-02-11)
+
+
+### Bug Fixes
+
+* Expect Content-Type header instead of mime_type field ([0886d8c](https://github.com/applandinc/appmap-js/commit/0886d8cf667e1b5b5325d26fd882a7586db29c25))
+
+
+### Features
+
+* Provide Event#requestContentType and #responseContentType ([31a6ff3](https://github.com/applandinc/appmap-js/commit/31a6ff37b53e2e58e5561a70a4417ec75416ef1a))
+
 # [@appland/models-v1.13.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.12.1...@appland/models-v1.13.0) (2022-02-10)
 
 
