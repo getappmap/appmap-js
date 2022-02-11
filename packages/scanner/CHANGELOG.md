@@ -1,3 +1,10 @@
+## [1.44.3](https://github.com/applandinc/scanner/compare/v1.44.2...v1.44.3) (2022-02-11)
+
+
+### Bug Fixes
+
+* Provide the `metadata` param during AppMap creation ([fc1b39b](https://github.com/applandinc/scanner/commit/fc1b39bb5fc3323ae582fb499c4b9425898a5afe))
+
 ## [1.44.2](https://github.com/applandinc/scanner/compare/v1.44.1...v1.44.2) (2022-02-10)
 
 
