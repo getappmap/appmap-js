@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.18.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.18.1...@appland/appmap-v3.18.2) (2022-02-11)
+
+
+### Bug Fixes
+
+* Expect Content-Type header instead of mime_type field ([0886d8c](https://github.com/applandinc/appmap-js/commit/0886d8cf667e1b5b5325d26fd882a7586db29c25))
+* Recognize Ruby String type ([f045bc5](https://github.com/applandinc/appmap-js/commit/f045bc570f7d3bd857068f72930d7ba3394a467e))
+
 # [@appland/appmap-v3.18.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.18.0...@appland/appmap-v3.18.1) (2022-02-04)
 
 
