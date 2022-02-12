@@ -1,3 +1,11 @@
+# [@appland/models-v1.14.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.14.0...@appland/models-v1.14.1) (2022-02-12)
+
+
+### Bug Fixes
+
+* Update sql parser ([a69d0d1](https://github.com/applandinc/appmap-js/commit/a69d0d166793c3d7c369634bb07c021693831560))
+* When normalizing SQL don't replace comments with a placeholder ([e3b2e03](https://github.com/applandinc/appmap-js/commit/e3b2e03f4b9a81cde39d419c98bc7cc41ab35ec7))
+
 # [@appland/models-v1.14.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.13.0...@appland/models-v1.14.0) (2022-02-11)
 
 
