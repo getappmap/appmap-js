@@ -23,7 +23,7 @@ export async function merge(appId: string, mergeKey: string): Promise<MergeRespo
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': payload.length,
+          'Content-Length': Buffer.byteLength(payload),
           ...request.headers,
         },
       },
