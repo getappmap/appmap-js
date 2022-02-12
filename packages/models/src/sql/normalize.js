@@ -4,6 +4,9 @@
 // License: https://github.com/newrelic/newrelic-ruby-agent/blob/main/LICENSE
 // Apache License 2.0
 
+const COMMENTS_REGEXP =
+  /(?:(?:#|--).*?(?=\r|\n|$))|(?:\/\*(?:[^/]|\/[^*])*?(?:\*\/|\/\*.*))/gi;
+
 const COMPONENTS_REGEXP_MAP = {
   single_quotes: /'(?:[^']|'')*?(?:\\'.*|'(?!'))/g,
   double_quotes: /"(?:[^"]|"")*?(?:\\".*|"(?!"))/g,
@@ -12,8 +15,6 @@ const COMPONENTS_REGEXP_MAP = {
   numeric_literals: /-?\b(?:[0-9]+\.)?[0-9]+([eE][+-]?[0-9]+)?\b/g,
   boolean_literals: /\b(?:true|false|null)\b/gi,
   hexadecimal_literals: /0x[0-9a-fA-F]+/g,
-  comments: /(?:#|--).*?(?=\r|\n|$)/gi,
-  multi_line_comments: /\/\*(?:[^/]|\/[^*])*?(?:\*\/|\/\*.*)/g,
   oracle_quoted_strings:
     /q'\[.*?(?:\]'|$)|q'\{.*?(?:\}'|$)|q'<.*?(?:>'|$)|q'\(.*?(?:\)'|$)/g,
 };
@@ -45,8 +46,6 @@ const DIALECT_COMPONENTS = {
     'numeric_literals',
     'boolean_literals',
     'hexadecimal_literals',
-    'comments',
-    'multi_line_comments',
   ],
   postgres: [
     'single_quotes',
@@ -54,32 +53,20 @@ const DIALECT_COMPONENTS = {
     'uuids',
     'numeric_literals',
     'boolean_literals',
-    'comments',
-    'multi_line_comments',
   ],
   sqlite: [
     'single_quotes',
     'numeric_literals',
     'boolean_literals',
     'hexadecimal_literals',
-    'comments',
-    'multi_line_comments',
   ],
-  oracle: [
-    'single_quotes',
-    'oracle_quoted_strings',
-    'numeric_literals',
-    'comments',
-    'multi_line_comments',
-  ],
+  oracle: ['single_quotes', 'oracle_quoted_strings', 'numeric_literals'],
   cassandra: [
     'single_quotes',
     'uuids',
     'numeric_literals',
     'boolean_literals',
     'hexadecimal_literals',
-    'comments',
-    'multi_line_comments',
   ],
 };
 
@@ -87,12 +74,15 @@ const PLACEHOLDER = '?';
 
 /**
  * @param {string} dialect
- * @returns {RegExp[]}
+ * @returns {RegExp}
  */
 function generateRegexp(dialect) {
   const components = DIALECT_COMPONENTS[dialect];
-  // No Regexp.union in JS
-  return components.map((component) => COMPONENTS_REGEXP_MAP[component]);
+  const regexData = components.map(
+    (component) => COMPONENTS_REGEXP_MAP[component].source
+  );
+  const union = `(?:${regexData.flat().join(')|(?:')})`;
+  return new RegExp(union, 'gi');
 }
 
 const MYSQL_COMPONENTS_REGEXP = generateRegexp('mysql');
@@ -140,9 +130,9 @@ export default function normalize(sql, adapter) {
       regexp = FALLBACK_REGEXP;
   }
 
-  let obfuscated = sql;
-  // eslint-disable-next-line no-return-assign
-  regexp.forEach((re) => (obfuscated = obfuscated.replace(re, PLACEHOLDER)));
+  let obfuscated = sql
+    .replace(regexp, PLACEHOLDER)
+    .replace(COMMENTS_REGEXP, '');
   if (detectUnmatchedPairs(obfuscated, adapter)) {
     obfuscated = sql;
   }
