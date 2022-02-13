@@ -18,7 +18,10 @@ export default {
   title: 'Pages/VS Code',
   component: VVsCodeExtension,
   parameters: {
-    chromatic: { delay: 1000 },
+    chromatic: {
+      delay: 1000,
+      diffThreshold: 1,
+    },
   },
   argTypes: {
     scenario: {
