@@ -13,7 +13,7 @@ class Canonicalize extends Unique {
    */
   sql(event) {
     const analyzedQuery = analyzeSQL(event.sqlQuery);
-    if (typeof analyzedQuery === 'object') {
+    if (analyzedQuery && typeof analyzedQuery === 'object') {
       return analyzedQuery.tables;
     }
 

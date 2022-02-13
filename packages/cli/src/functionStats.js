@@ -98,6 +98,7 @@ class FunctionStats {
           .map((e) => [e.event].concat(e.descendants).filter((d) => d.sql))
           .flat()
           .map((e) => analyzeSQL(e.sqlQuery))
+          .filter(Boolean)
           .filter((e) => typeof e === 'object')
           .map((sql) => sql.tables)
           .flat()
