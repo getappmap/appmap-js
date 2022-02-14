@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.18.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.18.2...@appland/appmap-v3.18.3) (2022-02-14)
+
+
+### Bug Fixes
+
+* Ensure availability of Event.requestContentType ([73f44ed](https://github.com/applandinc/appmap-js/commit/73f44ede6fca001b757bd67ade8afc6459262822))
+* typeof null is object - handle this ([8740248](https://github.com/applandinc/appmap-js/commit/8740248b62c129f2203f29a8be8dfe82051fdd60))
+
 # [@appland/appmap-v3.18.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.18.1...@appland/appmap-v3.18.2) (2022-02-11)
 
 
