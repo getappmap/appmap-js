@@ -16,7 +16,7 @@ class Canonicalize extends EventTree {
         normalized_query: normalizeSQL(event.sqlQuery, event.sql.database_type),
       },
     };
-    if (typeof analyzedQuery === 'object') {
+    if (analyzedQuery && typeof analyzedQuery === 'object') {
       result.analyzed_query = analyzedQuery;
     }
     return result;
