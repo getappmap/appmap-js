@@ -1,3 +1,16 @@
+# [1.45.0](https://github.com/applandinc/scanner/compare/v1.44.3...v1.45.0) (2022-02-14)
+
+
+### Bug Fixes
+
+* Pick up SQL parser fixes ([01904db](https://github.com/applandinc/scanner/commit/01904db4c12ea5f85028c34b066b9cc9bc2ec546))
+* Specify Content-Length in bytes rather than chars ([b24c6a4](https://github.com/applandinc/scanner/commit/b24c6a4f32b0bb7360777ab72aa090c4b91fa810))
+
+
+### Features
+
+* Pare down the default scan config ([7f48e77](https://github.com/applandinc/scanner/commit/7f48e774b5a48af8657b736dfb619145f9785426))
+
 ## [1.44.3](https://github.com/applandinc/scanner/compare/v1.44.2...v1.44.3) (2022-02-11)
 
 
