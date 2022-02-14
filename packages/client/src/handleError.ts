@@ -34,7 +34,9 @@ async function errorMessage(
   return [`HTTP ${statusCode}`, message].filter(Boolean).join(': ');
 }
 
-export default function (response: IncomingMessage): Promise<IncomingMessage> {
+export default function handleError(
+  response: IncomingMessage
+): Promise<IncomingMessage> {
   return new Promise((resolve, reject) => {
     if (!response.statusCode) {
       reject(new Error('No status code was provided by the server'));
