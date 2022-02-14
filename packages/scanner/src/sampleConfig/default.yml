@@ -1,25 +1,25 @@
 checks:
   - rule: authzBeforeAuthn
   - rule: circularDependency
-  - rule: deserializationOfUntrustedData
+  # - rule: deserializationOfUntrustedData
   - rule: http500
   # - rule: illegalPackageDependency
   # - rule: incompatibleHttpClientRequest
   # - rule: insecureCompare
   # - rule: jobNotCancelled
   - rule: logoutWithoutSessionReset
-  - rule: missingAuthentication
+  # - rule: missingAuthentication
   - rule: missingContentType
   - rule: nPlusOneQuery
   # - rule: queryFromInvalidPackage
   - rule: queryFromView
   # - rule: rpcWithoutCircuitBreaker
-  - rule: saveWithoutValidation
+  # - rule: saveWithoutValidation
   - rule: secretInLog
   #  - rule: slowFunctionCall
   #  - rule: slowHttpServerRequest
   #  - rule: slowQuery
   - rule: tooManyJoins
   - rule: tooManyUpdates
-  - rule: unbatchedMaterializedQuery
+  # - rule: unbatchedMaterializedQuery
   - rule: updateInGetRequest

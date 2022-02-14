@@ -42,7 +42,7 @@ export async function create(
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': payload.length,
+          'Content-Length': Buffer.byteLength(payload),
           ...request.headers,
         },
       },

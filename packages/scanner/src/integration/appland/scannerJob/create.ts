@@ -115,7 +115,7 @@ export async function create(
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': scanResultsData.length,
+          'Content-Length': Buffer.byteLength(scanResultsData),
           ...request.headers,
         },
       },
