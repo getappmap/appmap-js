@@ -1,3 +1,11 @@
+# [@appland/client-v1.3.0](https://github.com/applandinc/appmap-js/compare/@appland/client-v1.2.0...@appland/client-v1.3.0) (2022-02-15)
+
+
+### Features
+
+* Clarify types ([e8d2cf3](https://github.com/applandinc/appmap-js/commit/e8d2cf37018796544de67bf66257993901c5dafa))
+* Facilitate client retry ([3e28e6e](https://github.com/applandinc/appmap-js/commit/3e28e6ee83f630fb8500730b0dfd36e4ca8e1087))
+
 # [@appland/client-v1.2.0](https://github.com/applandinc/appmap-js/compare/@appland/client-v1.1.3...@appland/client-v1.2.0) (2022-02-03)
 
 
