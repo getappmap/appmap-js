@@ -839,12 +839,15 @@ context('VS Code Extension', () => {
       );
       cy.get('.trace-filter__arrows-text').contains('1 / 2 results');
 
-      cy.get('.trace-filter__input').focus().type('{enter}');
+      cy.get('.trace-filter__input')
+        .focus()
+        .type('{downarrow}')
+        .type('{enter}');
       cy.get('.trace-filter__input').should(
         'have.value',
         '"GET /admin/orders" "GET /admin"'
       );
-      cy.get('.trace-filter__suggestions').should('be.visible');
+      cy.get('.trace-filter__suggestions').should('not.be.visible');
       cy.get('.trace-filter__arrows-text').contains('1 / 3 results');
 
       cy.get('.trace-filter__input').focus().type('{esc}');

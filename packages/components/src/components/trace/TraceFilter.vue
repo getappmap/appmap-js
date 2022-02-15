@@ -86,7 +86,7 @@ export default {
     return {
       filterValue: '',
       showSuggestions: false,
-      selectedSuggestion: 0,
+      selectedSuggestion: false,
     };
   },
 
@@ -98,6 +98,10 @@ export default {
     },
     selectedSuggestion: {
       handler(selectedSuggestion) {
+        if (selectedSuggestion === false) {
+          return;
+        }
+
         const selected =
           this.$refs.suggestionsList.querySelectorAll('li')[selectedSuggestion];
 
@@ -171,18 +175,22 @@ export default {
     },
     onInputFocus() {
       this.showSuggestions = true;
-      this.selectedSuggestion = 0;
+      this.selectedSuggestion = false;
     },
     onFormSubmit() {
       if (
         this.$refs.input === window.document.activeElement &&
         this.showSuggestions &&
-        this.suggestionsList.length
+        this.suggestionsList.length &&
+        this.selectedSuggestion !== false
       ) {
         this.makeSelection(
           this.suggestionsList[this.selectedSuggestion].toString()
         );
       }
+
+      this.$refs.input.blur();
+      this.showSuggestions = false;
     },
     makeSelection(eventName) {
       const terms = this.filterValue.match(/(?:[^\s"]+|"[^"]*")+/g);
@@ -219,16 +227,27 @@ export default {
           this.$refs.input.blur();
           break;
         case 'ArrowDown':
-          if (this.selectedSuggestion !== this.suggestionsList.length - 1) {
+          if (
+            this.selectedSuggestion !== false &&
+            this.selectedSuggestion !== this.suggestionsList.length - 1
+          ) {
             this.selectedSuggestion += 1;
+          } else {
+            this.selectedSuggestion = 0;
           }
           break;
         case 'ArrowUp':
-          if (this.selectedSuggestion !== 0) {
+          if (
+            this.selectedSuggestion !== false &&
+            this.selectedSuggestion !== 0
+          ) {
             this.selectedSuggestion -= 1;
+          } else {
+            this.selectedSuggestion = this.suggestionsList.length - 1;
           }
           break;
         default:
+          this.selectedSuggestion = false;
           break;
       }
     },
