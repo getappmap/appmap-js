@@ -8,7 +8,7 @@ import { request as httpsRequest } from 'https';
 import { URL } from 'url';
 import loadConfiguration from './loadConfiguration';
 
-type Request = {
+export type Request = {
   requestFunction: (
     url: string | URL,
     options: RequestOptions,

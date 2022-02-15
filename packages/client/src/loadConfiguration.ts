@@ -71,7 +71,7 @@ function loadFromEnvironment(settings: Settings): void {
 
 let configuration: Configuration;
 
-export default async function (): Promise<Configuration> {
+export default async function loadConfiguration(): Promise<Configuration> {
   if (configuration) {
     return configuration;
   }
