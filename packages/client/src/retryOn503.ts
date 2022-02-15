@@ -7,7 +7,6 @@ export default function retry(
   return (response: IncomingMessage): Promise<IncomingMessage> => {
     return new Promise((resolve, reject) => {
       if (response.statusCode === 503) {
-        // console.warn(response.statusCode);
         retryHandler(resolve, reject);
         return;
       }
