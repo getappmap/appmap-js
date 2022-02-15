@@ -1,3 +1,10 @@
+# [1.46.0](https://github.com/applandinc/scanner/compare/v1.45.0...v1.46.0) (2022-02-15)
+
+
+### Features
+
+* Retry AppMap upload on failure ([136b59a](https://github.com/applandinc/scanner/commit/136b59a5d2f75e1ebfb533f19341680aa3050239))
+
 # [1.45.0](https://github.com/applandinc/scanner/compare/v1.44.3...v1.45.0) (2022-02-14)
 
 
