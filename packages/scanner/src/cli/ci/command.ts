@@ -98,7 +98,7 @@ export default {
       summaryReport(scanResults, true);
 
       if (doUpload) {
-        const uploadResponse = await upload('.', rawScanResults, appId, mergeKey, {
+        const uploadResponse = await upload(rawScanResults, appId, mergeKey, {
           maxRetries: 3,
         });
         reportUploadURL(uploadResponse.summary.numFindings, uploadResponse.url);

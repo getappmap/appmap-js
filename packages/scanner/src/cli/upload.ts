@@ -19,7 +19,6 @@ import {
 import { RetryOptions } from '../integration/appland/retryOptions';
 
 export default async function create(
-  findingsDir: string,
   scanResults: ScanResults,
   appId: string,
   mergeKey?: string,
@@ -44,7 +43,7 @@ export default async function create(
   const q = queue((filePath: string, callback) => {
     if (verbose()) console.log(`Uploading AppMap ${filePath}`);
 
-    readFile(join(findingsDir, filePath))
+    readFile(filePath)
       .then((buffer: Buffer) => {
         const appMapStruct = JSON.parse(buffer.toString()) as AppMapStruct;
         const metadata = appMapStruct.metadata;

@@ -49,7 +49,7 @@ export default {
     const appId = await resolveAppId(appIdArg, appmapDir);
 
     const scanResults = JSON.parse((await readFile(reportFile)).toString()) as ScanResults;
-    const uploadResponse = await upload(findingsDir, scanResults, appId, mergeKey, {
+    const uploadResponse = await upload(scanResults, appId, mergeKey, {
       maxRetries: 3,
     });
 
