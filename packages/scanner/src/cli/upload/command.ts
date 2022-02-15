@@ -1,15 +1,15 @@
 import { Arguments, Argv } from 'yargs';
 import { readFile } from 'fs/promises';
 
-import { create as createScannerJob } from '../../integration/appland/scannerJob/create';
 import { ScanResults } from '../../report/scanResults';
 import { verbose } from '../../rules/lib/util';
 
 import validateFile from '../validateFile';
-
-import CommandOptions from './options';
 import resolveAppId from '../resolveAppId';
 import reportUploadURL from '../reportUploadURL';
+
+import CommandOptions from './options';
+import upload from '../upload';
 
 export default {
   command: 'upload',
@@ -49,7 +49,9 @@ export default {
     const appId = await resolveAppId(appIdArg, appmapDir);
 
     const scanResults = JSON.parse((await readFile(reportFile)).toString()) as ScanResults;
-    const uploadResponse = await createScannerJob(scanResults, appId, mergeKey);
+    const uploadResponse = await upload(scanResults, appId, mergeKey, {
+      maxRetries: 3,
+    });
 
     reportUploadURL(uploadResponse.summary.numFindings, uploadResponse.url);
   },
