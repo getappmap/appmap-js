@@ -13,13 +13,14 @@ export type UploadAppMapResponse = {
 export type CreateOptions = {
   app?: string;
   metadata?: Metadata;
-} & RetryOptions;
+};
 
 export async function create(
   data: Buffer,
-  options: CreateOptions = {}
+  options: CreateOptions,
+  retryOptions: RetryOptions = {}
 ): Promise<UploadAppMapResponse> {
-  const retrier = retry(makeRequest);
+  const retrier = retry(`Upload AppMap`, retryOptions, makeRequest);
 
   async function makeRequest(): Promise<IncomingMessage> {
     const form = new FormData();

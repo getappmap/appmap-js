@@ -5,24 +5,33 @@ import {
   RetryHandler,
   ResolveFunction,
 } from '@appland/client/dist/src/retryHandler';
+import { verbose } from '../../rules/lib/util';
 
-const RetryDelay = 1000;
+const RetryDelay = 500;
 const MaxRetries = 3;
 
 export default function retry(
-  retryFn: () => Promise<IncomingMessage>,
-  retryOptions?: RetryOptions
+  description: string,
+  retryOptions: RetryOptions,
+  retryFn: () => Promise<IncomingMessage>
 ): RetryHandler {
+  const maxRetries = retryOptions.maxRetries ?? MaxRetries;
+  const retryDelay = retryOptions.retryDelay ?? RetryDelay;
+
   let retryCount = 0;
-  const retryDelay = retryOptions?.retryDelay ?? RetryDelay;
-  const maxRetries = retryOptions?.maxRetries ?? MaxRetries;
+
+  function computeDelay(): number {
+    return retryDelay * Math.pow(2, retryCount - 1);
+  }
 
   return (resolve: ResolveFunction, reject: RejectFunction): void => {
     retryCount += 1;
-    // console.warn(retryCount);
     if (retryCount > maxRetries) {
-      reject(new Error('Unable to create AppMap: Max retries exceeded.'));
+      reject(new Error(`${description} failed: Max retries exceeded.`));
     }
-    setTimeout(() => retryFn().then(resolve).catch(reject), retryDelay * retryCount * retryCount);
+    if (verbose()) {
+      console.log(`Retrying ${description} in ${computeDelay()}ms`);
+    }
+    setTimeout(() => retryFn().then(resolve).catch(reject), computeDelay());
   };
 }

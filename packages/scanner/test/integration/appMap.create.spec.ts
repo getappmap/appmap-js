@@ -1,7 +1,7 @@
 import nock, { RequestBodyMatcher } from 'nock';
 
 import * as test from './setup';
-import { create, CreateOptions } from '../../src/integration/appland/appMap/create';
+import { create } from '../../src/integration/appland/appMap/create';
 import { Metadata } from '@appland/models';
 import assert from 'assert';
 
@@ -78,7 +78,7 @@ describe('appMap', () => {
         .reply(201, AppMapData, ['Content-Type', 'application/json']);
 
       expect(
-        await create(Buffer.from(JSON.stringify({})), { retryDelay: 0, maxRetries: 1 })
+        await create(Buffer.from(JSON.stringify({})), {}, { retryDelay: 0, maxRetries: 1 })
       ).toEqual(AppMapData);
     });
   });
@@ -94,7 +94,7 @@ describe('appMap', () => {
         )
         .reply(503);
 
-      create(Buffer.from(JSON.stringify({})), { retryDelay: 0, maxRetries: 1 })
+      create(Buffer.from(JSON.stringify({})), {}, { retryDelay: 0, maxRetries: 1 })
         .then(() => {
           assert('AppMap creation should have failed');
         })

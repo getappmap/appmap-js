@@ -9,7 +9,6 @@ import { parseConfigFile } from '../../configuration/configurationProvider';
 import { AbortError, ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
 import { verbose } from '../../rules/lib/util';
-import { create as uploadScannerJob } from '../../integration/appland/scannerJob/create';
 import { newFindings } from '../../findings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
@@ -17,6 +16,7 @@ import summaryReport from '../../report/summaryReport';
 import { ExitCode } from '../exitCode';
 import resolveAppId from '../resolveAppId';
 import validateFile from '../validateFile';
+import upload from '../upload';
 import { default as buildScanner } from '../scan/scanner';
 
 import CommandOptions from './options';
@@ -98,7 +98,9 @@ export default {
       summaryReport(scanResults, true);
 
       if (doUpload) {
-        const uploadResponse = await uploadScannerJob(rawScanResults, appId, mergeKey);
+        const uploadResponse = await upload('.', rawScanResults, appId, mergeKey, {
+          maxRetries: 3,
+        });
         reportUploadURL(uploadResponse.summary.numFindings, uploadResponse.url);
       }
 
