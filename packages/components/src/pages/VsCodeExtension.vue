@@ -1005,6 +1005,25 @@ export default {
       }
     },
 
+    viewSource() {
+      switch (this.selectedObject.type) {
+        case CodeObjectType.CLASS:
+          this.$root.$emit('viewSource', this.selectedObject.locations[0]);
+          break;
+        case CodeObjectType.FUNCTION:
+          this.$root.$emit('viewSource', this.selectedObject.location);
+          break;
+        case CodeObjectType.EVENT:
+          this.$root.$emit(
+            'viewSource',
+            this.selectedObject.codeObject.location
+          );
+          break;
+        default:
+          break;
+      }
+    },
+
     clearSelection() {
       this.currentTraceFilterIndex = 0;
       this.$store.commit(CLEAR_OBJECT_STACK);
