@@ -35,17 +35,21 @@ export default {
 
 <style scoped lang="scss">
 .v-details-panel-labels {
-  list-style-type: none;
-  padding: 0;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: $border-radius;
+  padding: 0.5rem;
+  color: $base03;
+  background-color: rgba(0, 0, 0, 0.1);
 
   h5 {
+    margin: 0 0 0.5rem;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
     color: $base03;
-    font-size: 1.1rem;
-    font-weight: 500;
-    line-height: 1.2;
-    padding: 0;
-    margin: 0 0 1rem 0;
+    background-color: $base11;
   }
 
   .labels {
@@ -55,18 +59,19 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
+    gap: 0.5rem;
 
     &__item {
-      margin: 0 0.25rem 0.25rem 0;
-      border-radius: 0.25rem;
-      padding: 0.1rem 0.3rem;
-      background: $base11;
-      color: $base01;
+      border: 1px solid $base15;
+      border-radius: $border-radius;
+      font-size: 0.75rem;
+      padding: 0.5rem;
+      color: $base03;
       cursor: pointer;
 
       &:hover,
       &:active {
-        background: $base11;
+        color: $base06;
       }
     }
   }

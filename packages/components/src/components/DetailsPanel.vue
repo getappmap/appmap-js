@@ -4,9 +4,6 @@
       <AppMapLogo width="70" />
     </h3>
     <div class="details-panel__content">
-      <div class="details-panel__notification">
-        <slot name="notification" />
-      </div>
       <div class="details-panel__buttons">
         <slot name="buttons" />
       </div>
@@ -155,17 +152,14 @@ export default {
 
   &__buttons {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     justify-content: flex-start;
     align-items: flex-start;
+    gap: 0.5rem;
 
-    button {
+    & > *:last-child {
       margin-bottom: 1rem;
     }
-  }
-
-  &__notification:not(:empty) {
-    padding: 0 0 1rem;
   }
 }
 </style>

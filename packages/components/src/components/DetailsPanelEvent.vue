@@ -5,16 +5,7 @@
       :object="object"
       :title="title"
       :object-id="object.id.toString()"
-    >
-      <template v-slot:links>
-        <v-details-button
-          v-if="shouldDisplayViewEvent"
-          @click.native="viewEvent"
-        >
-          Show in Trace
-        </v-details-button>
-      </template>
-    </v-details-panel-header>
+    />
 
     <v-sql-code
       v-if="hasSql"
@@ -24,9 +15,13 @@
 
     <div class="event-params" v-if="hasParameters">
       <h5>Parameters</h5>
-      <ul class="table-01">
-        <li v-for="(param, index) in object.parameters" :key="index">
-          <strong>{{ param.name }}</strong>
+      <ul class="event-params__list">
+        <li
+          class="event-params__item"
+          v-for="(param, index) in object.parameters"
+          :key="index"
+        >
+          <p class="event-params__item-key">{{ param.name }}</p>
           <code>{{ param.value }}</code>
         </li>
       </ul>
@@ -34,10 +29,16 @@
 
     <div class="event-params" v-if="hasMessage">
       <h5>Parameters</h5>
-      <ul class="table-01">
-        <li v-for="(param, index) in object.message" :key="index">
-          <i>{{ param.class }}</i>
-          <strong>{{ param.name }}</strong>
+      <ul class="event-params__list">
+        <li
+          class="event-params__item"
+          v-for="(param, index) in object.message"
+          :key="index"
+        >
+          <p class="event-params__item-key">
+            {{ param.name }}:
+            <span class="event-params__item-class">{{ param.class }}</span>
+          </p>
           <code>{{ param.value }}</code>
         </li>
       </ul>
@@ -45,10 +46,16 @@
 
     <div class="event-params" v-if="requestHeaders.length">
       <h5>Request headers</h5>
-      <ul class="table-01">
-        <li v-for="param in requestHeaders" :key="param.name">
-          <i>{{ param.class }}</i>
-          <strong>{{ param.name }}</strong>
+      <ul class="event-params__list">
+        <li
+          class="event-params__item"
+          v-for="param in requestHeaders"
+          :key="param.name"
+        >
+          <p class="event-params__item-key">
+            {{ param.name }}:
+            <span class="event-params__item-class">{{ param.class }}</span>
+          </p>
           <code>{{ param.value }}</code>
         </li>
       </ul>
@@ -56,9 +63,13 @@
 
     <div class="event-params" v-if="Object.keys(httpServerResponse).length">
       <h5>HTTP response details</h5>
-      <ul class="table-01">
-        <li v-for="(v, k) in httpServerResponse" :key="k">
-          <strong>{{ k }}</strong>
+      <ul class="event-params__list">
+        <li
+          class="event-params__item"
+          v-for="(v, k) in httpServerResponse"
+          :key="k"
+        >
+          <p class="event-params__item-key">{{ k }}</p>
           <code>{{ v }}</code>
         </li>
       </ul>
@@ -66,9 +77,13 @@
 
     <div class="event-params" v-if="responseHeaders.length">
       <h5>Response headers</h5>
-      <ul class="table-01">
-        <li v-for="param in responseHeaders" :key="param.name">
-          <strong>{{ param.name }}</strong>
+      <ul class="event-params__list">
+        <li
+          class="event-params__item"
+          v-for="param in responseHeaders"
+          :key="param.name"
+        >
+          <p class="event-params__item-key">{{ param.name }}</p>
           <code>{{ param.value }}</code>
         </li>
       </ul>
@@ -76,9 +91,13 @@
 
     <div class="event-params" v-if="object.exceptions.length">
       <h5>Exceptions</h5>
-      <ul class="table-01">
-        <li v-for="exception in object.exceptions" :key="exception.object_id">
-          <strong>{{ exception.class }}</strong>
+      <ul class="event-params__list">
+        <li
+          class="event-params__item"
+          v-for="exception in object.exceptions"
+          :key="exception.object_id"
+        >
+          <p class="event-params__item-key">{{ exception.class }}</p>
           <code>{{ exception.message }}</code>
         </li>
       </ul>
@@ -86,9 +105,9 @@
 
     <div class="event-params" v-if="hasReturnValue">
       <h5>Return value</h5>
-      <ul class="table-01">
-        <li>
-          <i>{{ object.returnValue.class }}</i>
+      <ul class="event-params__list">
+        <li class="event-params__item">
+          <p class="event-params__item-key">{{ object.returnValue.class }}</p>
           <code>{{ object.returnValue.value }}</code>
         </li>
       </ul>
@@ -101,16 +120,13 @@
 
 <script>
 import { getSqlLabel } from '@appland/models';
-import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import VSqlCode from '@/components/SqlCode.vue';
-import { SET_VIEW, VIEW_FLOW } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel-event',
   components: {
-    VDetailsButton,
     VDetailsPanelList,
     VDetailsPanelHeader,
     VSqlCode,
@@ -188,61 +204,73 @@ export default {
       return Boolean(this.object.returnValue);
     },
 
-    shouldDisplayViewEvent() {
-      return this.$store.state.currentView !== VIEW_FLOW;
-    },
-
     caller() {
       return this.object.parent ? [this.object.parent] : null;
-    },
-  },
-
-  methods: {
-    viewEvent() {
-      this.$store.commit(SET_VIEW, VIEW_FLOW);
     },
   },
 };
 </script>
 
 <style scoped lang="scss">
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: local('IBM Plex Mono'),
+    url(../assets/fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf)
+      format('truetype');
+}
 .details-panel-event {
   h3 {
     padding: 0;
   }
   .event-params {
-    padding: 0;
-    color: $base11;
+    margin-bottom: 1rem;
+    border-radius: $border-radius;
+    padding: 0.5rem;
+    color: $base03;
+    background-color: rgba(0, 0, 0, 0.1);
+
     h5 {
+      margin: 0 0 0.25rem;
+      border-radius: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+      text-transform: uppercase;
       color: $base03;
-      font-size: 1.1rem;
-      font-weight: 500;
-      line-height: 1.2;
-      margin: 0 0 0.25rem 0;
+      background-color: $base11;
+    }
+
+    &__list {
+      margin: 0;
       padding: 0;
+      list-style-type: none;
     }
-    .table-01 {
-      font-size: 14px;
-      font-family: sans-serif;
-      font-weight: 500;
-      li {
-        padding: 0.5rem 0;
-      }
-    }
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0 0 1.5rem 0;
-    width: 100%;
-    li {
-      width: 100%;
-      border-bottom: 1px solid $gray3;
-      padding: 0.5rem 0;
+
+    &__item {
+      border-bottom: 1px solid #333a4d;
+      padding: 0 0 0.25rem;
       transition: $transition;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      font-size: 0.75rem;
+      font-family: 'IBM Plex Mono', 'Helvetica Monospaced', Helvetica, Arial;
+
+      &-key {
+        margin: 0.25rem 0;
+      }
+
+      &-class {
+        color: $teal;
+      }
+
+      code {
+        border-radius: $border-radius;
+        padding: 0.5rem;
+        background-color: rgba(0, 0, 0, 0.1);
+        color: inherit;
+      }
+
       a {
         margin: 0;
         width: 100%;
@@ -253,7 +281,7 @@ export default {
 </style>
 <style scoped>
 .details-panel-event >>> .sql-code {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   padding: 0;
 }
 </style>

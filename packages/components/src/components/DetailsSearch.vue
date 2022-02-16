@@ -9,7 +9,7 @@
           class="details-search__input-element"
           type="text"
           autocomplete="off"
-          placeholder="search code objects..."
+          placeholder="Search for code objects"
           ref="searchInput"
           v-model="filter"
         />
@@ -221,7 +221,7 @@ export default {
   padding: 0;
 
   &__form {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     padding: 0;
   }
 
@@ -270,19 +270,21 @@ export default {
     &::-webkit-placeholder,
     &::-moz-placeholder,
     &::placeholder {
-      color: $gray4;
+      color: $lightgray2;
     }
   }
 
   &__block {
     margin-bottom: 1rem;
+    border-radius: $border-radius;
+    padding: 0.5rem;
+    color: $base03;
+    background-color: rgba(0, 0, 0, 0.1);
 
     &-title {
       margin: 0 0 0.25rem;
-      border-radius: 4px;
-      display: inline-block;
+      border-radius: 0.25rem;
       padding: 0.25rem 0.5rem;
-      color: $base01;
       font-size: 0.75rem;
       font-weight: bold;
       text-transform: uppercase;
@@ -337,7 +339,6 @@ export default {
       padding: 0.25rem 0;
       min-height: 2rem;
       font-size: 0.9em;
-      color: $base03;
       cursor: pointer;
       overflow: hidden;
       z-index: 0;
@@ -349,7 +350,7 @@ export default {
 
       &-count {
         margin-left: 1rem;
-        border-radius: 0.5rem;
+        border-radius: $border-radius;
         display: inline-block;
         padding: 0.25rem 0.5rem;
         font-size: 0.8rem;
@@ -362,8 +363,9 @@ export default {
       .details-search__block--labels & {
         margin: 0.25rem;
         border: 1px solid $base15;
-        border-radius: 4px;
+        border-radius: $border-radius;
         display: inline-flex;
+        font-size: 0.75rem;
         padding: 0.25rem 0.5rem;
 
         &-count {

@@ -16,13 +16,6 @@
         :filters-root-objects="filters.rootObjects"
       >
         <template v-slot:buttons>
-          <v-details-button
-            icon="clear"
-            v-if="selectedObject || selectedLabel"
-            @click.native="clearSelection"
-          >
-            Clear selection
-          </v-details-button>
           <v-details-button icon="back" v-if="canGoBack" @click.native="goBack">
             Back to
             <b v-if="prevSelectedObject && prevSelectedObject.name">
@@ -33,6 +26,26 @@
               }}
             </b>
             <span v-else>previous</span>
+          </v-details-button>
+          <v-details-button
+            v-if="selectedObjectHasSource"
+            icon="source"
+            @click.native="viewSource"
+          >
+            View source
+          </v-details-button>
+          <v-details-button
+            v-if="selectedEvent[0] && !isViewingFlow"
+            @click.native="setView(VIEW_FLOW)"
+          >
+            Show in Trace
+          </v-details-button>
+          <v-details-button
+            icon="clear"
+            v-if="selectedObject || selectedLabel"
+            @click.native="clearSelection"
+          >
+            Clear selection
           </v-details-button>
         </template>
       </v-details-panel>
@@ -700,6 +713,22 @@ export default {
       return this.$store.getters.selectedLabel;
     },
 
+    selectedObjectHasSource() {
+      if (
+        this.selectedObject &&
+        (this.selectedObject.type === CodeObjectType.CLASS ||
+          this.selectedObject.type === CodeObjectType.FUNCTION ||
+          (this.selectedObject.type === CodeObjectType.EVENT &&
+            !this.selectedObject.hasSql &&
+            !this.selectedObject.http_server_request &&
+            this.selectedObject.codeObject &&
+            this.selectedObject.codeObject.location))
+      ) {
+        return true;
+      }
+      return false;
+    },
+
     focusedEvent() {
       return this.$store.getters.focusedEvent;
     },
@@ -953,6 +982,25 @@ export default {
           });
         }
       });
+    },
+
+    viewSource() {
+      switch (this.selectedObject.type) {
+        case CodeObjectType.CLASS:
+          this.$root.$emit('viewSource', this.selectedObject.locations[0]);
+          break;
+        case CodeObjectType.FUNCTION:
+          this.$root.$emit('viewSource', this.selectedObject.location);
+          break;
+        case CodeObjectType.EVENT:
+          this.$root.$emit(
+            'viewSource',
+            this.selectedObject.codeObject.location
+          );
+          break;
+        default:
+          break;
+      }
     },
 
     clearSelection() {

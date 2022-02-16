@@ -246,8 +246,8 @@ context('VS Code Extension', () => {
       cy.get('.event-params')
         .should('contain.text', 'Parameters')
         .invoke('text')
-        .should('match', /String\s+controller\s+spree\/admin\/orders/)
-        .should('match', /String\s+action\s+index/);
+        .should('match', /controller:\s+String\s+spree\/admin\/orders/)
+        .should('match', /action:\s+String\s+index/);
 
       cy.get('.event-params')
         .should('contain.text', 'HTTP response')
@@ -437,7 +437,7 @@ context('VS Code Extension', () => {
           cy.get('.list-item').first().click();
         });
 
-      cy.get('.details-panel-header button').contains('Show in').click();
+      cy.get('.details-panel__buttons button').contains('Show in').click();
 
       cy.get('.trace').should('be.visible');
       cy.get('.trace .trace-node').should('have.length', 38);

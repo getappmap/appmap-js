@@ -4,8 +4,7 @@
       object-type="Class"
       :object="object"
       :title="object.name"
-    >
-    </v-details-panel-header>
+    />
     <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
     <v-details-panel-list
       title="Functions"
