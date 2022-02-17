@@ -73,7 +73,7 @@ __metadata:
   dependencies:
     "@appland/client": ^1.3.0
     "@appland/models": ^1.14.1
-    "@appland/sql-parser": ^1.4.0
+    "@appland/sql-parser": ^1.5.0
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
     "@types/async": ^3.2.12
@@ -128,6 +128,15 @@ __metadata:
   bin:
     sqlite-parser: bin/sqlite-parser
   checksum: 0fd2788e9b4cddefc9ee5fdd1a483d70f9a7e73bd1d6fca5273bc86ae9690f85c4bb27057fd006050e3ac07cc66c0783c5b1cb6dca4a10479a9c9fed76e607ce
+  languageName: node
+  linkType: hard
+
+"@appland/sql-parser@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@appland/sql-parser@npm:1.5.0"
+  bin:
+    sqlite-parser: bin/sqlite-parser
+  checksum: 28fdd0863384a6635251eab884c404e1153aa6c9cca90dd4799112e3b609800b655066f6c97bf35caf38c63b26203123179702a95d70cfdabeadc41854f87e00
   languageName: node
   linkType: hard
 
