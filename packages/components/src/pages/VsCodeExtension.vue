@@ -605,10 +605,13 @@ export default {
 
     highlightedNodes() {
       const nodes = new Set();
-      const searchQuery = this.traceFilterValue.trim();
 
-      if (searchQuery) {
-        const queryTerms = searchQuery.match(/(?:[^\s"]+|"[^"]*")+/g);
+      if (this.traceFilterValue) {
+        const queryTerms = this.traceFilterValue.match(/(?:[^\s"]+|"[^"]*")+/g);
+
+        if (!this.traceFilterValue.endsWith(' ')) {
+          queryTerms.pop();
+        }
 
         if (queryTerms) {
           queryTerms.forEach((term) => {
@@ -623,23 +626,6 @@ export default {
               });
 
               return;
-            }
-
-            // full-text search
-            if (/^%.+%$/g.test(term)) {
-              const searchString = term.slice(1, -1).toString().toLowerCase();
-              if (searchString.length < 3) {
-                return;
-              }
-
-              this.filteredAppMap.events.forEach((e) => {
-                if (
-                  e.isCall() &&
-                  e.toString().toLowerCase().includes(searchString)
-                ) {
-                  nodes.add(e);
-                }
-              });
             }
 
             const [query, text] = term.split(':');
@@ -668,8 +654,20 @@ export default {
                 break;
               }
 
-              default:
-                break;
+              default: {
+                // Perform a full text search using query
+                if (term.length < 3) {
+                  break;
+                }
+                this.filteredAppMap.events.forEach((e) => {
+                  if (
+                    e.isCall() &&
+                    e.toString().toLowerCase().includes(term.toString())
+                  ) {
+                    nodes.add(e);
+                  }
+                });
+              }
             }
           });
         }

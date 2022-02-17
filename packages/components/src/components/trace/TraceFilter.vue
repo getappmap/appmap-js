@@ -135,18 +135,19 @@ export default {
         .map((e) => e.toString())
         .filter((e, i, arr) => arr.indexOf(e) === i);
 
-      const terms = this.filterValue.match(/(?:[^\s"]+|"[^"]*")+/g);
-      const lastTerm = terms ? terms[terms.length - 1] : null;
-      if (
-        lastTerm &&
-        !/^".+"$/g.test(lastTerm) &&
-        !/^%.+%$/g.test(lastTerm) &&
-        !/^id:.+$/g.test(lastTerm) &&
-        !/^label:.+$/g.test(lastTerm)
-      ) {
-        suggestions = suggestions.filter((item) =>
-          new RegExp(lastTerm, 'ig').test(item)
-        );
+      if (!this.filterValue.endsWith(' ')) {
+        const terms = this.filterValue.match(/(?:[^\s"]+|"[^"]*")+/g);
+        const lastTerm = terms ? terms[terms.length - 1] : null;
+        if (
+          lastTerm &&
+          !/^".+"$/g.test(lastTerm) &&
+          !/^id:.+$/g.test(lastTerm) &&
+          !/^label:.+$/g.test(lastTerm)
+        ) {
+          suggestions = suggestions.filter((item) =>
+            new RegExp(lastTerm, 'ig').test(item)
+          );
+        }
       }
 
       return suggestions;
@@ -187,6 +188,8 @@ export default {
         this.makeSelection(
           this.suggestionsList[this.selectedSuggestion].toString()
         );
+      } else {
+        this.filterValue += ' ';
       }
 
       this.$refs.input.blur();
@@ -196,17 +199,17 @@ export default {
       const terms = this.filterValue.match(/(?:[^\s"]+|"[^"]*")+/g);
       const lastTerm = terms ? terms[terms.length - 1] : null;
       if (
+        !this.filterValue.endsWith(' ') &&
         lastTerm &&
         !/^".+"$/g.test(lastTerm) &&
-        !/^%.+%$/g.test(lastTerm) &&
         !/^id:.+$/g.test(lastTerm) &&
         !/^label:.+$/g.test(lastTerm)
       ) {
         terms.pop();
       }
       this.filterValue = `${
-        terms ? terms.join(' ') : ''
-      } "${eventName}"`.trim();
+        terms ? terms.map((t) => `${t} `) : ''
+      }"${eventName}" `;
     },
     onWindowClick(event) {
       if (

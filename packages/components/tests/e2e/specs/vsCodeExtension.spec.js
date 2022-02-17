@@ -712,9 +712,8 @@ context('VS Code Extension', () => {
       cy.get('.trace-filter__suffix').click();
       cy.get('.trace-filter__input').should('have.value', '');
 
-      let eventQuery =
-        'id:1 label:json id:3 id:15 id:99999 %#link_to_edit_url%';
-      cy.get('.trace-filter__input').type(eventQuery);
+      let eventQuery = 'id:1 label:json id:3 id:15 id:99999 #link_to_edit_url';
+      cy.get('.trace-filter__input').type(eventQuery).type('{enter}');
 
       cy.get('.trace-node[data-event-id="1"]')
         .should('be.visible')
@@ -772,13 +771,13 @@ context('VS Code Extension', () => {
         'not.have.class',
         'highlight'
       );
-      cy.get('.trace-filter__input').should('have.value', eventQuery);
+      cy.get('.trace-filter__input').should('have.value', eventQuery + ' ');
       cy.get('.trace-filter__arrows-text').should('be.visible');
     });
 
     it('moves the active event filter selection as expected', () => {
       cy.get('.tabs .tab-btn').last().click();
-      cy.get('.trace-filter__input').type('label:json');
+      cy.get('.trace-filter__input').type('label:json').type('{enter}');
       cy.get('.trace-filter__arrows-text').contains('1 / 27 results');
       cy.get('.trace-filter__arrow').last().click();
       cy.get('.trace-filter__arrows-text').contains('2 / 27 results');
@@ -814,13 +813,16 @@ context('VS Code Extension', () => {
     it('only searches trace view after typing a certain number of characters', () => {
       cy.get('.tabs .tab-btn').last().click();
 
-      cy.get('.trace-filter__input').type('%o');
+      cy.get('.trace-filter__input').type('o');
       cy.get('.trace-node.filtered').should('not.exist');
 
       cy.get('.trace-filter__input').type('r');
       cy.get('.trace-node.filtered').should('not.exist');
 
-      cy.get('.trace-filter__input').type('d%');
+      cy.get('.trace-filter__input').type('d');
+      cy.get('.trace-node.filtered').should('not.exist');
+
+      cy.get('.trace-filter__input').type('{enter}');
       cy.get('.trace-node.filtered').should('exist');
     });
 
@@ -835,7 +837,7 @@ context('VS Code Extension', () => {
         .click();
       cy.get('.trace-filter__input').should(
         'have.value',
-        '"GET /admin/orders"'
+        '"GET /admin/orders" '
       );
       cy.get('.trace-filter__arrows-text').contains('1 / 2 results');
 
@@ -845,7 +847,7 @@ context('VS Code Extension', () => {
         .type('{enter}');
       cy.get('.trace-filter__input').should(
         'have.value',
-        '"GET /admin/orders" "GET /admin"'
+        '"GET /admin/orders" "GET /admin" '
       );
       cy.get('.trace-filter__suggestions').should('not.be.visible');
       cy.get('.trace-filter__arrows-text').contains('1 / 3 results');
@@ -854,7 +856,7 @@ context('VS Code Extension', () => {
       cy.get('.trace-filter__suggestions').should('not.be.visible');
       cy.get('.trace-filter__input').should('not.be.focused');
 
-      cy.get('.trace-filter__input').focus().type(' select');
+      cy.get('.trace-filter__input').focus().type('select');
       cy.get('.trace-filter__suggestions').should('be.visible');
       cy.get('.trace-filter__suggestions-item')
         .first()
