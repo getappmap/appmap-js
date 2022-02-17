@@ -46,7 +46,7 @@
     "rollup": "^2.48.0"
   },
   "dependencies": {
-    "@appland/sql-parser": "^1.4.0",
+    "@appland/sql-parser": "^1.5.0",
     "crypto-js": "^4.0.0"
   }
 }
