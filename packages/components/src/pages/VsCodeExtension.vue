@@ -36,6 +36,7 @@
           </v-details-button>
           <v-details-button
             v-if="selectedEvent[0] && !isViewingFlow"
+            icon="trace"
             @click.native="setView(VIEW_FLOW)"
           >
             Show in Trace
