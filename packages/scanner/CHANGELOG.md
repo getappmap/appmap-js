@@ -1,3 +1,10 @@
+## [1.46.1](https://github.com/applandinc/scanner/compare/v1.46.0...v1.46.1) (2022-02-17)
+
+
+### Bug Fixes
+
+* Update SQL parser ([10be27e](https://github.com/applandinc/scanner/commit/10be27e8b365eb9080dfc8ff6edb2ee0d3fadd15))
+
 # [1.46.0](https://github.com/applandinc/scanner/compare/v1.45.0...v1.46.0) (2022-02-15)
 
 
