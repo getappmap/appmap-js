@@ -12,6 +12,7 @@
         autocomplete="off"
         placeholder="search events..."
         @focus="onInputFocus"
+        @blur="onInputBlur"
       />
       <span v-if="filterValue" class="trace-filter__suffix" @click="clearValue">
         <CloseThinIcon />
@@ -131,23 +132,21 @@ export default {
       return classList;
     },
     suggestionsList() {
-      let suggestions = this.suggestions
-        .map((e) => e.toString())
-        .filter((e, i, arr) => arr.indexOf(e) === i);
+      let { suggestions } = this;
+      const lastTermRegex = this.filterValue.includes('"')
+        ? /([^"]*)$/
+        : /([^\s]*)$/;
+      const lastTerm = this.filterValue.match(lastTermRegex).pop().trim();
 
-      if (!this.filterValue.endsWith(' ')) {
-        const terms = this.filterValue.match(/(?:[^\s"]+|"[^"]*")+/g);
-        const lastTerm = terms ? terms[terms.length - 1] : null;
-        if (
-          lastTerm &&
-          !/^".+"$/g.test(lastTerm) &&
-          !/^id:.+$/g.test(lastTerm) &&
-          !/^label:.+$/g.test(lastTerm)
-        ) {
-          suggestions = suggestions.filter((item) =>
-            new RegExp(lastTerm, 'ig').test(item)
-          );
-        }
+      if (
+        lastTerm &&
+        !/^".+"$/g.test(lastTerm) &&
+        !/^id:.+$/g.test(lastTerm) &&
+        !/^label:.+$/g.test(lastTerm)
+      ) {
+        suggestions = suggestions.filter((item) =>
+          new RegExp(lastTerm, 'ig').test(item)
+        );
       }
 
       return suggestions;
@@ -178,6 +177,11 @@ export default {
       this.showSuggestions = true;
       this.selectedSuggestion = false;
     },
+    onInputBlur() {
+      if (!this.filterValue.endsWith(' ')) {
+        this.filterValue += ' ';
+      }
+    },
     onFormSubmit() {
       if (
         this.$refs.input === window.document.activeElement &&
@@ -188,8 +192,6 @@ export default {
         this.makeSelection(
           this.suggestionsList[this.selectedSuggestion].toString()
         );
-      } else {
-        this.filterValue += ' ';
       }
 
       this.$refs.input.blur();
@@ -207,9 +209,7 @@ export default {
       ) {
         terms.pop();
       }
-      this.filterValue = `${
-        terms ? terms.map((t) => `${t} `) : ''
-      }"${eventName}" `;
+      this.filterValue = `${terms ? `${terms.join(' ')} ` : ''}"${eventName}" `;
     },
     onWindowClick(event) {
       if (

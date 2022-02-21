@@ -579,9 +579,12 @@ export default {
 
     eventsSuggestions() {
       const highlightedIds = new Set(this.highlightedNodes.map((e) => e.id));
-      return this.filteredAppMap.events.filter(
-        (e) => e.isCall() && !highlightedIds.has(e.id)
+      const uniqueEventNames = new Set(
+        this.filteredAppMap.events
+          .filter((e) => e.isCall() && !highlightedIds.has(e.id))
+          .map((e) => e.toString())
       );
+      return Array.from(uniqueEventNames);
     },
 
     eventsById() {
@@ -607,13 +610,15 @@ export default {
       const nodes = new Set();
 
       if (this.traceFilterValue) {
-        const queryTerms = this.traceFilterValue.match(/(?:[^\s"]+|"[^"]*")+/g);
-
-        if (!this.traceFilterValue.endsWith(' ')) {
-          queryTerms.pop();
-        }
+        const queryTerms = this.traceFilterValue.match(
+          /(?:[^\s"]+|"[^"]*"|"[^"]*)+/g
+        );
 
         if (queryTerms) {
+          if (!this.traceFilterValue.endsWith(' ')) {
+            queryTerms.pop();
+          }
+
           queryTerms.forEach((term) => {
             // search for event name
             if (/^".+"$/g.test(term)) {
@@ -662,7 +667,10 @@ export default {
                 this.filteredAppMap.events.forEach((e) => {
                   if (
                     e.isCall() &&
-                    e.toString().toLowerCase().includes(term.toString())
+                    e
+                      .toString()
+                      .toLowerCase()
+                      .includes(term.toString().toLowerCase())
                   ) {
                     nodes.add(e);
                   }

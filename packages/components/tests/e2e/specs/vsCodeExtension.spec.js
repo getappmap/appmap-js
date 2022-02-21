@@ -841,10 +841,7 @@ context('VS Code Extension', () => {
       );
       cy.get('.trace-filter__arrows-text').contains('1 / 2 results');
 
-      cy.get('.trace-filter__input')
-        .focus()
-        .type('{downarrow}')
-        .type('{enter}');
+      cy.get('.trace-filter__input').type('{downarrow}').type('{enter}');
       cy.get('.trace-filter__input').should(
         'have.value',
         '"GET /admin/orders" "GET /admin" '
@@ -852,15 +849,20 @@ context('VS Code Extension', () => {
       cy.get('.trace-filter__suggestions').should('not.be.visible');
       cy.get('.trace-filter__arrows-text').contains('1 / 3 results');
 
-      cy.get('.trace-filter__input').focus().type('{esc}');
+      cy.get('.trace-filter__input').type('{esc}');
       cy.get('.trace-filter__suggestions').should('not.be.visible');
       cy.get('.trace-filter__input').should('not.be.focused');
 
-      cy.get('.trace-filter__input').focus().type('select');
+      cy.get('.trace-filter__input').type('select');
       cy.get('.trace-filter__suggestions').should('be.visible');
       cy.get('.trace-filter__suggestions-item')
         .first()
         .should('contain.text', 'SELECT');
+
+      cy.get('.trace-filter__suffix').click();
+      cy.get('.trace-filter__input').type('"GET /admin');
+      cy.get('.trace-filter__suggestions').should('be.visible');
+      cy.get('.trace-filter__suggestions-item').should('have.length', 3);
     });
 
     it('filters: root objects', () => {
