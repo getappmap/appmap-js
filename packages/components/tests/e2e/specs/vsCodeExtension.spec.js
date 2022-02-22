@@ -853,11 +853,25 @@ context('VS Code Extension', () => {
       cy.get('.trace-filter__suggestions').should('not.be.visible');
       cy.get('.trace-filter__input').should('not.be.focused');
 
+      cy.get('.trace-filter__suffix').click();
       cy.get('.trace-filter__input').type('select');
       cy.get('.trace-filter__suggestions').should('be.visible');
+      cy.get('.trace-filter__suggestions-item').should('have.length', 34);
       cy.get('.trace-filter__suggestions-item')
         .first()
         .should('contain.text', 'SELECT');
+      cy.get('.trace-filter__input').type('{enter}');
+      cy.get('.trace-filter__arrows-text').contains('1 / 41 results');
+
+      cy.get('.trace-filter__suffix').click();
+      cy.get('.trace-filter__input').type('SELECT');
+      cy.get('.trace-filter__suggestions').should('be.visible');
+      cy.get('.trace-filter__suggestions-item').should('have.length', 34);
+      cy.get('.trace-filter__suggestions-item')
+        .first()
+        .should('contain.text', 'SELECT');
+      cy.get('.trace-filter__input').type('{enter}');
+      cy.get('.trace-filter__arrows-text').contains('1 / 41 results');
 
       cy.get('.trace-filter__suffix').click();
       cy.get('.trace-filter__input').type('"GET /admin');
