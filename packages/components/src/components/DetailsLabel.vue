@@ -1,8 +1,8 @@
 <template>
   <div class="details-label">
     <div class="details-label__header">
+      <h4 class="details-label__header-title">{{ label }}</h4>
       <span class="details-label__header-type">Label</span>
-      <h2 class="details-label__header-title">{{ label }}</h2>
     </div>
     <v-details-panel-list title="Routes" :items="labelInfo.route" />
     <v-details-panel-list title="Packages" :items="labelInfo.package" />
@@ -47,24 +47,20 @@ export default {
 
   &__header {
     margin: 0 0 1rem;
-    display: flex;
-    flex-direction: column;
+
+    &-title {
+      margin: 0 0 0.2rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: $gray6;
+    }
 
     &-type {
-      margin: 0 0 0.2rem;
+      margin: 0;
+      color: $gray4;
       text-transform: uppercase;
       font-size: 0.75rem;
       line-height: 1;
-      font-weight: 700;
-      color: $base11;
-    }
-
-    &-title {
-      color: $gray6;
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-top: 0;
-      margin-bottom: 0.8rem;
     }
   }
 }

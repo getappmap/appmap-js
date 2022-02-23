@@ -67,10 +67,10 @@ context('VS Code Extension', () => {
         .contains('Outbound connections')
         .parent()
         .within(() => {
-          cy.get('.list-item').contains('Digest::Instance#digest').click();
+          cy.get('.list__item').contains('Digest::Instance#digest').click();
         });
 
-      cy.get('.list-item:nth-child(16)').click();
+      cy.get('.list__item:nth-child(16)').click();
       cy.get('button').contains('Show in Trace').click();
       cy.get('.trace-node.highlight').should('be.visible');
     });
@@ -78,22 +78,26 @@ context('VS Code Extension', () => {
     it('applies filter from search input', () => {
       cy.get('.details-search__input-element').type('json');
 
-      cy.get(
-        '.details-search__block--labels .details-search__block-item'
-      ).should('have.length', 1);
-      cy.get(
-        '.details-search__block--package .details-search__block-item'
-      ).should('have.length', 1);
-      cy.get(
-        '.details-search__block--class .details-search__block-item'
-      ).should('have.length', 2);
-      cy.get(
-        '.details-search__block--function .details-search__block-item'
-      ).should('have.length', 2);
+      cy.get('.details-search .list--labels .list__item').should(
+        'have.length',
+        1
+      );
+      cy.get('.details-search .list--package .list__item').should(
+        'have.length',
+        1
+      );
+      cy.get('.details-search .list--class .list__item').should(
+        'have.length',
+        2
+      );
+      cy.get('.details-search .list--function .list__item').should(
+        'have.length',
+        2
+      );
     });
 
     it('filters out objects that do not originate from an HTTP server request', () => {
-      cy.get('.details-search__block-list').contains('crypto').click();
+      cy.get('.details-search .list').contains('crypto').click();
       cy.get('.v-details-panel-list')
         .contains('Events')
         .parent()
@@ -243,13 +247,13 @@ context('VS Code Extension', () => {
         .should('contain.text', 'Event')
         .should('contain.text', 'GET /admin/orders');
 
-      cy.get('.event-params')
+      cy.get('.details-panel-event .list')
         .should('contain.text', 'Parameters')
         .invoke('text')
         .should('match', /controller:\s+String\s+spree\/admin\/orders/)
         .should('match', /action:\s+String\s+index/);
 
-      cy.get('.event-params')
+      cy.get('.details-panel-event .list')
         .should('contain.text', 'HTTP response')
         .invoke('text')
         .should('match', /status\s+200/)
@@ -273,7 +277,7 @@ context('VS Code Extension', () => {
       cy.get('.trace-node[data-event-id="11"]').next().click();
       cy.get('.trace-node[data-event-id="18"]').click();
 
-      cy.get('.event-params')
+      cy.get('.details-panel-event .list')
         .should('contain.text', 'Exceptions')
         .invoke('text')
         .should('match', /JSON::ParserError/)
@@ -283,10 +287,10 @@ context('VS Code Extension', () => {
     it('show child route events count', () => {
       cy.get('.details-search').should('be.visible');
 
-      cy.get('.details-search__block-item')
+      cy.get('.details-search .list__item')
         .contains('GET /admin/orders')
         .within(() => {
-          cy.get('.details-search__block-item-count').should(
+          cy.get('.details-search__list-item-count').should(
             'contain.text',
             '2'
           );
@@ -298,10 +302,10 @@ context('VS Code Extension', () => {
 
       cy.get(`.node[data-type="http"]`)
         .click()
-        .get('.list-item')
+        .get('.list__item')
         .first()
         .click()
-        .get('.list-item')
+        .get('.list__item')
         .first()
         .click()
         .get('.tabs .tab-btn')
@@ -321,7 +325,7 @@ context('VS Code Extension', () => {
     it('http server requests can navigate to route', () => {
       cy.get(`.node[data-type="http"]`)
         .click()
-        .get('.list-item')
+        .get('.list__item')
         .first()
         .click();
 
@@ -337,7 +341,7 @@ context('VS Code Extension', () => {
         .contains('Classes')
         .parent()
         .within(() => {
-          cy.get('.list-item').contains('OrdersHelper').click();
+          cy.get('.list__item').contains('OrdersHelper').click();
         });
 
       cy.get('.details-panel-header')
@@ -352,7 +356,7 @@ context('VS Code Extension', () => {
         .contains('Functions')
         .parent()
         .within(() => {
-          cy.get('.list-item').contains('menu_items').click();
+          cy.get('.list__item').contains('menu_items').click();
         });
 
       cy.get('.details-panel-header')
@@ -367,7 +371,7 @@ context('VS Code Extension', () => {
         .contains('Functions')
         .parent()
         .within(() => {
-          cy.get('.list-item').contains('menu_items').click();
+          cy.get('.list__item').contains('menu_items').click();
         });
 
       cy.get('.details-panel-header')
@@ -378,7 +382,7 @@ context('VS Code Extension', () => {
         .contains('Events')
         .parent()
         .within(() => {
-          cy.get('.list-item').first().click();
+          cy.get('.list__item').first().click();
         });
 
       cy.get('.details-panel-header')
@@ -393,14 +397,14 @@ context('VS Code Extension', () => {
         .contains('Classes')
         .parent()
         .within(() => {
-          cy.get('.list-item').contains('OrdersController').click();
+          cy.get('.list__item').contains('OrdersController').click();
         });
 
       cy.get('.v-details-panel-list')
         .contains('Queries')
         .parent()
         .within(() => {
-          cy.get('.list-item').first().click();
+          cy.get('.list__item').first().click();
         });
 
       cy.get('.details-panel-header')
@@ -434,7 +438,7 @@ context('VS Code Extension', () => {
         .contains('Queries')
         .parent()
         .within(() => {
-          cy.get('.list-item').first().click();
+          cy.get('.list__item').first().click();
         });
 
       cy.get('.details-panel__buttons button').contains('Show in').click();
@@ -463,7 +467,7 @@ context('VS Code Extension', () => {
       cy.get('.node[data-id="app/helpers"]').click();
 
       cy.get('.v-details-panel-list').within(() => {
-        cy.get('.list-item').first().click();
+        cy.get('.list__item').first().click();
       });
 
       cy.get('.cluster[data-id="app/helpers"]').should('have.length', 1);
@@ -476,9 +480,10 @@ context('VS Code Extension', () => {
 
       cy.get('.dropdown-menu').contains('Set as root').click();
 
-      cy.get(
-        '.details-search__block--class .details-search__block-item'
-      ).should('have.length', 2);
+      cy.get('.details-search .list--class .list__item').should(
+        'have.length',
+        2
+      );
     });
 
     it('highlights only the first ancestor available if the selected object is not visible', () => {
@@ -494,7 +499,7 @@ context('VS Code Extension', () => {
         .contains('Functions')
         .parent()
         .within(() => {
-          cy.get('.list-item').first().click();
+          cy.get('.list__item').first().click();
         });
 
       cy.get('.edgePath.highlight').should('have.length', 1);
@@ -554,7 +559,7 @@ context('VS Code Extension', () => {
         .contains('Functions')
         .parent()
         .within(() => {
-          cy.get('.list-item').contains('menu_items').click();
+          cy.get('.list__item').contains('menu_items').click();
         });
 
       cy.get('.tabs .tab-btn').last().click();
@@ -573,25 +578,27 @@ context('VS Code Extension', () => {
         .contains('Classes')
         .parent()
         .within(() => {
-          cy.get('.list-item').contains('Instance').click();
+          cy.get('.list__item').contains('Instance').click();
         });
 
       cy.get('.v-details-panel-list')
         .contains('Functions')
         .parent()
         .within(() => {
-          cy.get('.list-item').contains('digest').click();
+          cy.get('.list__item').contains('digest').click();
         });
 
-      cy.get('.v-details-panel-labels').within(() => {
-        cy.get('.labels__item').contains('security').click();
-      });
+      cy.get('.details-panel__content .list')
+        .last()
+        .within(() => {
+          cy.get('.list__item').contains('security').click();
+        });
 
       cy.get('.v-details-panel-list')
         .contains('Functions')
         .parent()
         .within(() => {
-          cy.get('.list-item').should('have.length', 4);
+          cy.get('.list__item').should('have.length', 4);
         });
     });
 
@@ -606,7 +613,7 @@ context('VS Code Extension', () => {
         .contains('Functions')
         .parent()
         .within(() => {
-          cy.get('.list-item').contains('secure_compare').click();
+          cy.get('.list__item').contains('secure_compare').click();
         });
 
       cy.get('.details-panel-header__parent').should('have.length', 2);
@@ -615,18 +622,16 @@ context('VS Code Extension', () => {
         .contains('Events')
         .parent()
         .within(() => {
-          cy.get('.list-item').first().click();
+          cy.get('.list__item').first().click();
         });
 
       cy.get('.details-panel-header__parent').should('have.length', 3);
     });
 
     it('does not back link to a large query when clicking a query from the search panel', () => {
-      cy.get(
-        '.details-search__block--query > .details-search__block-list > :nth-child(1)'
-      ).click();
+      cy.get('.details-search .list--query > ul > :nth-child(1)').click();
 
-      cy.get('.list-item:nth-child(1)').click();
+      cy.get('.list__item:nth-child(1)').click();
 
       cy.get('.details-panel__buttons')
         .invoke('text')
@@ -642,7 +647,7 @@ context('VS Code Extension', () => {
         .contains('Outbound connections')
         .parent()
         .within(() => {
-          cy.get('.list-item').contains('Digest::Instance#digest').click();
+          cy.get('.list__item').contains('Digest::Instance#digest').click();
         });
 
       cy.get('.list-item__event-quickview').each((el) => {
@@ -667,14 +672,14 @@ context('VS Code Extension', () => {
     });
 
     it('renders HTTP client requests correctly', () => {
-      cy.get('.details-search__block--external-service')
+      cy.get('.details-search .list--external-service')
         .contains('External services')
-        .get('.details-search__block-item')
+        .get('.list__item')
         .contains('127.0.0.1:9515')
         .click();
 
       cy.get('.node.external-service.highlight').should('exist');
-      cy.get('.list-item').contains('POST http://127.0.0.1:9515');
+      cy.get('.list__item').contains('POST http://127.0.0.1:9515');
       cy.get('button').contains('Clear selection').click();
 
       cy.get('.node.external-service')
@@ -682,9 +687,9 @@ context('VS Code Extension', () => {
         .click()
         .should('have.class', 'highlight');
 
-      cy.get('.list-item').contains('POST http://127.0.0.1:9515').click();
+      cy.get('.list__item').contains('POST http://127.0.0.1:9515').click();
 
-      cy.get('.event-params')
+      cy.get('.details-panel-event .list')
         .contains('Request headers')
         .parent()
         .within(() => {
@@ -704,14 +709,14 @@ context('VS Code Extension', () => {
             .contains('gzip;q=1.0,deflate;q=0.6,identity;q=0.3');
         });
 
-      cy.get('.event-params')
+      cy.get('.details-panel-event .list')
         .contains('HTTP response details')
         .parent()
         .within(() => {
           cy.get('li').contains('status').parent().contains('200');
         });
 
-      cy.get('.event-params')
+      cy.get('.details-panel-event .list')
         .contains('Response headers')
         .parent()
         .within(() => {
@@ -1045,22 +1050,26 @@ context('VS Code Extension', () => {
     });
 
     it('filters: hide unlabeled', () => {
-      cy.get(
-        '.details-search__block--package .details-search__block-item'
-      ).should('have.length', 4);
-      cy.get(
-        '.details-search__block--class .details-search__block-item'
-      ).should('have.length', 11);
+      cy.get('.details-search .list--package .list__item').should(
+        'have.length',
+        4
+      );
+      cy.get('.details-search .list--class .list__item').should(
+        'have.length',
+        11
+      );
 
       cy.get('.tabs__controls .popper__button').click();
       cy.get('.filters__checkbox').eq(2).click();
 
-      cy.get(
-        '.details-search__block--package .details-search__block-item'
-      ).should('have.length', 2);
-      cy.get(
-        '.details-search__block--class .details-search__block-item'
-      ).should('have.length', 5);
+      cy.get('.details-search .list--package .list__item').should(
+        'have.length',
+        2
+      );
+      cy.get('.details-search .list--class .list__item').should(
+        'have.length',
+        5
+      );
     });
 
     it('filters: hide elapsed time under 100ms', () => {

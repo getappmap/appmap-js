@@ -15,40 +15,38 @@
         />
       </div>
     </form>
-    <section
-      :class="`details-search__block details-search__block--${type}`"
+    <v-list
       v-for="type in Object.keys(listItems)"
       :key="type"
+      :title="listItems[type].title"
+      :type="type"
+      :itemsType="type === 'labels' ? 'cloud' : 'default'"
     >
-      <h2 class="details-search__block-title">
-        {{ listItems[type].title }}
-      </h2>
-      <ul class="details-search__block-list">
-        <li
-          class="details-search__block-item"
-          v-for="(item, index) in listItems[type].data"
-          :key="index"
-          @click="selectObject(type, item.object)"
+      <v-list-item
+        v-for="(item, index) in listItems[type].data"
+        :key="index"
+        @click.native="selectObject(type, item.object)"
+      >
+        {{
+          type !== 'query' && item.object.prettyName
+            ? item.object.prettyName
+            : item.object.name || item.object
+        }}
+        <span
+          v-if="item.childrenCount > 1"
+          class="details-search__list-item-count"
         >
-          {{
-            type !== 'query' && item.object.prettyName
-              ? item.object.prettyName
-              : item.object.name || item.object
-          }}
-          <span
-            v-if="item.childrenCount > 1"
-            class="details-search__block-item-count"
-          >
-            {{ item.childrenCount }}
-          </span>
-        </li>
-      </ul>
-    </section>
+          {{ item.childrenCount }}
+        </span>
+      </v-list-item>
+    </v-list>
   </div>
 </template>
 
 <script>
 import { CodeObject, AppMap, CodeObjectType } from '@appland/models';
+import VList from '@/components/common/List.vue';
+import VListItem from '@/components/common/ListItem.vue';
 import SearchIcon from '@/assets/search.svg';
 import { SELECT_OBJECT, SELECT_LABEL } from '../store/vsCode';
 
@@ -56,6 +54,8 @@ export default {
   name: 'v-details-search',
 
   components: {
+    VList,
+    VListItem,
     SearchIcon,
   },
 
@@ -274,105 +274,16 @@ export default {
     }
   }
 
-  &__block {
-    margin-bottom: 1rem;
+  &__list-item-count {
+    margin-left: 0.5rem;
     border-radius: $border-radius;
-    padding: 0.5rem;
-    color: $base03;
-    background-color: rgba(0, 0, 0, 0.1);
-
-    &-title {
-      margin: 0 0 0.25rem;
-      border-radius: 0.25rem;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.75rem;
-      font-weight: bold;
-      text-transform: uppercase;
-
-      .details-search__block--http & {
-        background-color: #542168;
-      }
-
-      .details-search__block--external-service & {
-        background-color: $yellow;
-        color: $base19;
-      }
-
-      .details-search__block--labels & {
-        background-color: $base11;
-      }
-
-      .details-search__block--package & {
-        background-color: $teal;
-      }
-
-      .details-search__block--class &,
-      .details-search__block--function & {
-        background-color: $blue;
-      }
-
-      .details-search__block--query & {
-        background-color: $royal;
-      }
-
-      .details-search__block--empty & {
-        background-color: $gray3;
-      }
-    }
-
-    &-list {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-
-      .details-search__block--labels & {
-        margin: 0 -0.25rem -0.25rem;
-      }
-    }
-
-    &-item {
-      position: relative;
-      border-bottom: 1px solid $gray2;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.25rem 0;
-      min-height: 2rem;
-      font-size: 0.9em;
-      cursor: pointer;
-      overflow: hidden;
-      z-index: 0;
-
-      &:hover,
-      &:active {
-        color: $base06;
-      }
-
-      &-count {
-        margin-left: 1rem;
-        border-radius: $border-radius;
-        display: inline-block;
-        padding: 0.25rem 0.5rem;
-        font-size: 0.8rem;
-        line-height: 1;
-        color: currentColor;
-        background-color: rgba(0, 0, 0, 0.2);
-        white-space: nowrap;
-      }
-
-      .details-search__block--labels & {
-        margin: 0.25rem;
-        border: 1px solid $base15;
-        border-radius: $border-radius;
-        display: inline-flex;
-        font-size: 0.75rem;
-        padding: 0.25rem 0.5rem;
-
-        &-count {
-          margin-left: 0.5rem;
-        }
-      }
-    }
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    line-height: 1;
+    color: currentColor;
+    background-color: rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
   }
 }
 </style>

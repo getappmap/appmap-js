@@ -13,105 +13,71 @@
       :database="object.sql.database_type"
     />
 
-    <div class="event-params" v-if="hasParameters">
-      <h5>Parameters</h5>
-      <ul class="event-params__list">
-        <li
-          class="event-params__item"
-          v-for="(param, index) in object.parameters"
-          :key="index"
-        >
-          <p class="event-params__item-key">{{ param.name }}</p>
-          <code>{{ param.value }}</code>
-        </li>
-      </ul>
-    </div>
+    <v-list v-if="hasParameters" title="Parameters">
+      <v-list-item-param
+        v-for="(param, index) in object.parameters"
+        :key="index"
+        :name="param.name"
+        :value="param.value"
+      />
+    </v-list>
 
-    <div class="event-params" v-if="hasMessage">
-      <h5>Parameters</h5>
-      <ul class="event-params__list">
-        <li
-          class="event-params__item"
-          v-for="(param, index) in object.message"
-          :key="index"
-        >
-          <p class="event-params__item-key">
-            {{ param.name }}:
-            <span class="event-params__item-class">{{ param.class }}</span>
-          </p>
-          <code>{{ param.value }}</code>
-        </li>
-      </ul>
-    </div>
+    <v-list v-if="hasMessage" title="Parameters">
+      <v-list-item-param
+        v-for="(param, index) in object.message"
+        :key="index"
+        :name="param.name"
+        :className="param.class"
+        :value="param.value"
+      />
+    </v-list>
 
-    <div class="event-params" v-if="requestHeaders.length">
-      <h5>Request headers</h5>
-      <ul class="event-params__list">
-        <li
-          class="event-params__item"
-          v-for="param in requestHeaders"
-          :key="param.name"
-        >
-          <p class="event-params__item-key">
-            {{ param.name }}:
-            <span class="event-params__item-class">{{ param.class }}</span>
-          </p>
-          <code>{{ param.value }}</code>
-        </li>
-      </ul>
-    </div>
+    <v-list v-if="requestHeaders.length" title="Request headers">
+      <v-list-item-param
+        v-for="param in requestHeaders"
+        :key="param.name"
+        :name="param.name"
+        :className="param.class"
+        :value="param.value"
+      />
+    </v-list>
 
-    <div class="event-params" v-if="Object.keys(httpServerResponse).length">
-      <h5>HTTP response details</h5>
-      <ul class="event-params__list">
-        <li
-          class="event-params__item"
-          v-for="(v, k) in httpServerResponse"
-          :key="k"
-        >
-          <p class="event-params__item-key">{{ k }}</p>
-          <code>{{ v }}</code>
-        </li>
-      </ul>
-    </div>
+    <v-list
+      v-if="Object.keys(httpServerResponse).length"
+      title="HTTP response details"
+    >
+      <v-list-item-param
+        v-for="(v, k) in httpServerResponse"
+        :key="k"
+        :name="k"
+        :value="v"
+      />
+    </v-list>
 
-    <div class="event-params" v-if="responseHeaders.length">
-      <h5>Response headers</h5>
-      <ul class="event-params__list">
-        <li
-          class="event-params__item"
-          v-for="param in responseHeaders"
-          :key="param.name"
-        >
-          <p class="event-params__item-key">{{ param.name }}</p>
-          <code>{{ param.value }}</code>
-        </li>
-      </ul>
-    </div>
+    <v-list v-if="responseHeaders.length" title="Response headers">
+      <v-list-item-param
+        v-for="param in responseHeaders"
+        :key="param.name"
+        :name="param.name"
+        :value="param.value"
+      />
+    </v-list>
 
-    <div class="event-params" v-if="object.exceptions.length">
-      <h5>Exceptions</h5>
-      <ul class="event-params__list">
-        <li
-          class="event-params__item"
-          v-for="exception in object.exceptions"
-          :key="exception.object_id"
-        >
-          <p class="event-params__item-key">{{ exception.class }}</p>
-          <code>{{ exception.message }}</code>
-        </li>
-      </ul>
-    </div>
+    <v-list v-if="object.exceptions.length" title="Exceptions">
+      <v-list-item-param
+        v-for="exception in object.exceptions"
+        :key="exception.object_id"
+        :name="exception.class"
+        :value="exception.message"
+      />
+    </v-list>
 
-    <div class="event-params" v-if="hasReturnValue">
-      <h5>Return value</h5>
-      <ul class="event-params__list">
-        <li class="event-params__item">
-          <p class="event-params__item-key">{{ object.returnValue.class }}</p>
-          <code>{{ object.returnValue.value }}</code>
-        </li>
-      </ul>
-    </div>
+    <v-list v-if="hasReturnValue" title="Return value">
+      <v-list-item-param
+        :name="object.returnValue.class"
+        :value="object.returnValue.value"
+      />
+    </v-list>
 
     <v-details-panel-list title="Caller" :items="caller" />
     <v-details-panel-list title="Children" :items="object.children" />
@@ -122,6 +88,8 @@
 import { getSqlLabel } from '@appland/models';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
+import VList from '@/components/common/List.vue';
+import VListItemParam from '@/components/common/ListItemParam.vue';
 import VSqlCode from '@/components/SqlCode.vue';
 
 export default {
@@ -129,6 +97,8 @@ export default {
   components: {
     VDetailsPanelList,
     VDetailsPanelHeader,
+    VList,
+    VListItemParam,
     VSqlCode,
   },
   props: {
@@ -221,61 +191,6 @@ export default {
 .details-panel-event {
   h3 {
     padding: 0;
-  }
-  .event-params {
-    margin-bottom: 1rem;
-    border-radius: $border-radius;
-    padding: 0.5rem;
-    color: $base03;
-    background-color: rgba(0, 0, 0, 0.1);
-
-    h5 {
-      margin: 0 0 0.25rem;
-      border-radius: 0.25rem;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.75rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      color: $base03;
-      background-color: $base11;
-    }
-
-    &__list {
-      margin: 0;
-      padding: 0;
-      list-style-type: none;
-    }
-
-    &__item {
-      border-bottom: 1px solid #333a4d;
-      padding: 0 0 0.25rem;
-      transition: $transition;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      font-family: 'IBM Plex Mono', 'Helvetica Monospaced', Helvetica, Arial;
-
-      &-key {
-        margin: 0.25rem 0;
-      }
-
-      &-class {
-        color: $teal;
-      }
-
-      code {
-        border-radius: $border-radius;
-        padding: 0.5rem;
-        background-color: rgba(0, 0, 0, 0.1);
-        color: inherit;
-      }
-
-      a {
-        margin: 0;
-        width: 100%;
-      }
-    }
   }
 }
 </style>

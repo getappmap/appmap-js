@@ -16,7 +16,7 @@ describe('DetailsPanelList.vue', () => {
       },
     });
 
-    expect(wrapper.get('.list-item').text()).toMatch('itemA');
+    expect(wrapper.get('.list__item').text()).toMatch('itemA');
     expect(wrapper.get('.list-item__count').text()).toMatch('3');
   });
 });
