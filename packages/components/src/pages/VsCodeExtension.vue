@@ -30,6 +30,7 @@
           <v-details-button
             v-if="selectedObjectHasSource"
             icon="source"
+            ref="viewSource"
             @click.native="viewSource"
           >
             View source

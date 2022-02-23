@@ -1,6 +1,6 @@
 import { mount, createWrapper } from '@vue/test-utils';
 import VsCodeExtension from '@/pages/VsCodeExtension.vue';
-import { VIEW_FLOW } from '@/store/vsCode';
+import { store, VIEW_FLOW } from '@/store/vsCode';
 import data from './fixtures/user_page_scenario.appmap.json';
 import Vue from 'vue';
 
@@ -86,5 +86,20 @@ describe('VsCodeExtension.vue', () => {
 
     wrapper.vm.onChangeTab(wrapper.vm.$refs[VIEW_FLOW]);
     expect(rootWrapper.emitted().changeTab[1]).toContain(VIEW_FLOW);
+  });
+
+  it('view source emits an event from root', () => {
+    const event = store.state.appMap.events.find(
+      (e) => e.isCall() && e.codeObject && e.codeObject.location
+    );
+
+    wrapper.vm.setState(`{"selectedObject":"event:${event.id}"}`);
+
+    setTimeout(() => {
+      wrapper.get('.details-btn:nth-child(2)').trigger('click');
+
+      const [[location]] = rootWrapper.emitted().viewSource;
+      expect(location).toBe(event.codeObject.location);
+    }, 0);
   });
 });
