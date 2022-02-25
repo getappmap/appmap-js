@@ -83,6 +83,27 @@ class AppMapBuilder extends EventSource {
     return this;
   }
 
+  // balance the stack by adding dummy returns to calls which never return
+  addDummyReturns() {
+    return this.stack((events) => {
+      events
+        .filter((e) => e.isCall() && !e.returnEvent)
+        .reverse()
+        .map((e) => {
+          const returnEvent = new Event({
+            event: 'return',
+            thread_id: e.thread_id,
+            parent_id: e.id,
+          });
+          returnEvent.link(e);
+          return returnEvent;
+        })
+        .forEach((e) => events.push(e));
+
+      return events;
+    });
+  }
+
   // normalize the appmap data before returning an Appmap model
   normalize() {
     // Re-index events
@@ -113,24 +134,7 @@ class AppMapBuilder extends EventSource {
       /* eslint-enable no-param-reassign */
     });
 
-    // Balance the stack by adding dummy returns to calls which never return
-    return this.stack((events) => {
-      events
-        .filter((e) => e.isCall() && !e.returnEvent)
-        .reverse()
-        .map((e) => {
-          const returnEvent = new Event({
-            event: 'return',
-            thread_id: e.thread_id,
-            parent_id: e.id,
-          });
-          returnEvent.link(e);
-          return returnEvent;
-        })
-        .forEach((e) => events.push(e));
-
-      return events;
-    });
+    return this.addDummyReturns();
   }
 
   // Cut down the size of the event array before creating the Appmap model

@@ -560,7 +560,9 @@ export default {
         ),
         classMap: classMap.roots.map((c) => ({ ...c.data })),
         metadata: appMap.metadata,
-      }).build();
+      })
+        .addDummyReturns()
+        .build();
     },
 
     rootObjectsSuggestions() {
