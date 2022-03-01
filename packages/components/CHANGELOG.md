@@ -1,3 +1,10 @@
+# [@appland/components-v1.24.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.23.0...@appland/components-v1.24.0) (2022-03-01)
+
+
+### Features
+
+* Add auto-complete suggestions list for Trace view filter ([#534](https://github.com/applandinc/appmap-js/issues/534)) ([4614a3c](https://github.com/applandinc/appmap-js/commit/4614a3ce816871c018cb51e1aeb3270feec263f5))
+
 # [@appland/components-v1.23.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.22.0...@appland/components-v1.23.0) (2022-01-28)
 
 
