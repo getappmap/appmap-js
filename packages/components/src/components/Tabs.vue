@@ -71,6 +71,7 @@ export default {
   height: 100%;
 
   &__header {
+    position: relative;
     border-bottom: 1px solid $lightgray2;
     height: 44px;
     display: flex;
@@ -78,6 +79,7 @@ export default {
     align-items: center;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
+    z-index: 1;
   }
 
   &__notification {
