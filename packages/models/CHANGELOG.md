@@ -1,3 +1,10 @@
+# [@appland/models-v1.14.2](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.14.1...@appland/models-v1.14.2) (2022-03-01)
+
+
+### Bug Fixes
+
+* Update SQL parser ([8020ec3](https://github.com/applandinc/appmap-js/commit/8020ec3758e98f85d7fb36a040c444017ca98849))
+
 # [@appland/models-v1.14.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.14.0...@appland/models-v1.14.1) (2022-02-12)
 
 
