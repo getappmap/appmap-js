@@ -48,7 +48,9 @@ export default async function createRecording(
 
   const fileName = `${appMapName}.appmap.json`;
   UI.status = `Saving recording to ${fileName}`;
-  fs.writeFile(fileName, data!);
+  const appMap = JSON.parse(data!);
+  appMap.metadata['name'] = appMapName;
+  fs.writeFile(fileName, JSON.stringify(appMap));
 
   UI.success('AppMap saved');
 
