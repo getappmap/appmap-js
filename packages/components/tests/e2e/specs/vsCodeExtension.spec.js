@@ -1086,4 +1086,33 @@ context('VS Code Extension', () => {
       cy.get('.no-data-notice').should('exist');
     });
   });
+
+  context('Appmap without return events', () => {
+    beforeEach(() => {
+      cy.visit(
+        'http://localhost:6006/iframe.html?id=pages-vs-code-extension-no-return-events--extension-no-return-events&viewMode=story'
+      );
+    });
+
+    it('shows events without return events', () => {
+      cy.get('.node').should('have.length', 1).should('have.text', 'GET /');
+
+      cy.get('.details-search__block--http .details-search__block-item').should(
+        'have.length',
+        1
+      );
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox').eq(0).click();
+
+      cy.get('.node').should('have.length', 2);
+
+      cy.get(
+        '.details-search__block--class .details-search__block-item'
+      ).should('have.length', 1);
+      cy.get(
+        '.details-search__block--function .details-search__block-item'
+      ).should('have.length', 2);
+    });
+  });
 });

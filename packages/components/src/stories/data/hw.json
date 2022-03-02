@@ -1,0 +1,151 @@
+{
+  "events": [
+    {
+      "event": "call",
+      "http_server_request": {
+        "headers": {
+          "Accept": "*/*",
+          "User-Agent": "curl/7.77.0",
+          "Host": "localhost:8181"
+        },
+        "path_info": "/",
+        "protocol": "HTTP/1.1",
+        "request_method": "GET"
+      },
+      "id": 13,
+      "thread_id": 24
+    },
+    {
+      "defined_class": "org.apache.http.examples.nio.HelloWorldServer$HelloWorldHandler",
+      "event": "call",
+      "id": 14,
+      "lineno": 27,
+      "method_id": "handle",
+      "parameters": [
+        {
+          "class": "org.apache.http.message.BasicHttpRequest",
+          "kind": "req",
+          "name": "request",
+          "object_id": 326985738,
+          "value": "GET / [Host: localhost:8181, User-Agent: curl/7.77.0, Accept: */*]"
+        },
+        {
+          "class": "org.apache.http.message.BasicHttpResponse",
+          "kind": "req",
+          "name": "response",
+          "object_id": 359439153,
+          "value": "HTTP/1.1 200 OK []"
+        },
+        {
+          "class": "org.apache.http.protocol.BasicHttpContext",
+          "kind": "req",
+          "name": "context",
+          "object_id": 661111052,
+          "value": "{http.request=GET / [Host: localhost:8181, User-Agent: curl/7.77.0, Accept: */*], http.connection=0:0:0:0:0:0:0:1:8181<->0:0:0:0:0:0:0:1:49407}"
+        }
+      ],
+      "path": "org/apache/http/examples/nio/HelloWorldServer.java",
+      "receiver": {
+        "class": "org.apache.http.examples.nio.HelloWorldServer$HelloWorldHandler",
+        "object_id": 880446414,
+        "value": "org.apache.http.examples.nio.HelloWorldServer$HelloWorldHandler@347a8bce"
+      },
+      "static": false,
+      "thread_id": 24
+    },
+    {
+      "defined_class": "org.apache.http.examples.nio.HelloWorldServer$HelloWorldHandler",
+      "event": "call",
+      "id": 15,
+      "lineno": 20,
+      "method_id": "sayHello",
+      "path": "org/apache/http/examples/nio/HelloWorldServer.java",
+      "receiver": {
+        "class": "org.apache.http.examples.nio.HelloWorldServer$HelloWorldHandler",
+        "object_id": 880446414,
+        "value": "org.apache.http.examples.nio.HelloWorldServer$HelloWorldHandler@347a8bce"
+      },
+      "static": false,
+      "thread_id": 24
+    },
+    {
+      "event": "return",
+      "id": 16,
+      "parent_id": 15,
+      "return_value": {
+        "class": "java.lang.String",
+        "object_id": 1491942951,
+        "value": "<body><html><h1>Hello World!</h1></html></body>"
+      },
+      "thread_id": 24
+    }
+  ],
+  "classMap": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "location": "org/apache/http/examples/nio/HelloWorldServer.java:27",
+                              "name": "handle",
+                              "static": false,
+                              "type": "function"
+                            },
+                            {
+                              "location": "org/apache/http/examples/nio/HelloWorldServer.java:20",
+                              "name": "sayHello",
+                              "static": false,
+                              "type": "function"
+                            }
+                          ],
+                          "location": "org/apache/http/examples/nio/HelloWorldServer.java",
+                          "name": "HelloWorldServer$HelloWorldHandler",
+                          "static": true,
+                          "type": "class"
+                        }
+                      ],
+                      "name": "nio",
+                      "type": "package"
+                    }
+                  ],
+                  "name": "examples",
+                  "type": "package"
+                }
+              ],
+              "name": "http",
+              "type": "package"
+            }
+          ],
+          "name": "apache",
+          "type": "package"
+        }
+      ],
+      "name": "org",
+      "type": "package"
+    }
+  ],
+  "version": "1.2",
+  "metadata": {
+    "app": "httpcore",
+    "language": {
+      "name": "java",
+      "version": "11.0.12+7",
+      "engine": "OpenJDK 64-Bit Server VM"
+    },
+    "client": {
+      "name": "appmap-java",
+      "url": "https://github.com/appland/appmap-java"
+    },
+    "recorder": { "name": "remote_recording" },
+    "recording": {},
+    "framework": {}
+  }
+}
