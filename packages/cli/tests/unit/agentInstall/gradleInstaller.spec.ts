@@ -23,53 +23,55 @@ describe('GradleInstaller', () => {
   });
 
   describe('installAgent', () => {
-    const expectedExt = '.gradle.expected';
-    const testExt = '.gradle';
-    const files = glob.sync(path.join(dataDir, `*${testExt}`));
+    ['.gradle', '.gradle.kts'].forEach((testExt) => {
+      const expectedExt = `${testExt}.expected`;
+      const files = glob.sync(path.join(dataDir, `*${testExt}`));
 
-    files.forEach((file) => {
-      const test = path.basename(file, testExt);
+      files.forEach((file) => {
+        const test = path.basename(file, testExt);
 
-      // By default, we'll run all test. This is here to make it easy to skip
-      // them by name: change true to false, and check for the test name of
-      // interest.
-      const testFn = (true || test === 'extra-repo-block')? it : xit;
+        // By default, we'll run all test. This is here to make it easy to skip
+        // them by name: change true to false, and check for the test name of
+        // interest.
+        const testFn = (true || test === 'extra-repo-block') ? it : xit;
 
-      const actualFile = `${test}.gradle`;
+        const actualFile = `${test}${testExt}`;
 
-      testFn(`transforms ${actualFile} as expected`, async () => {
-        const gradle = new GradleInstaller('.');
+        testFn(`transforms ${actualFile} as expected`, async () => {
+          const gradle = new GradleInstaller('.');
 
-        sinon
-          .stub(inquirer, 'prompt')
-          .resolves({ addMavenCentral: 'Yes', userWillContinue: 'Continue' });
+          sinon
+            .stub(inquirer, 'prompt')
+            .resolves({ addMavenCentral: 'Yes', userWillContinue: 'Continue' });
 
-        sinon
-          .stub(gradle, 'buildFilePath')
-          .value(path.join(dataDir, actualFile));
+          sinon
+            .stub(gradle, 'identifyGradleFile')
+            .value(actualFile);
 
-        const efWrite = sinon.stub(EncodedFile.prototype, 'write');
+          sinon
+            .stub(gradle, 'buildFilePath')
+            .value(path.join(dataDir, actualFile));
 
-        const ignoreWhitespaceDiff = false;
+          const efWrite = sinon.stub(EncodedFile.prototype, 'write');
 
-        let expected = await fs.readFile(
-          path.join(dataDir, `${test}${expectedExt}`),
-          'utf-8'
-        );
-        if (ignoreWhitespaceDiff) {
-          expected = expected.replace(/[^\S\r\n]+/g, '');
-        }
-        await gradle.installAgent();
+          const ignoreWhitespaceDiff = false;
 
-        let actual = efWrite.getCall(-1).args[0].toString();
-        if (ignoreWhitespaceDiff) {
-          actual = actual.replace(/[^\S\r\n]+/g, '');
-        }
-        if (actual !== expected) {
-          console.log(actual);
-        }
+          let expected = await fs.readFile(
+            path.join(dataDir, `${test}${expectedExt}`),
+            'utf-8'
+          );
+          if (ignoreWhitespaceDiff) {
+            expected = expected.replace(/[^\S\r\n]+/g, '');
+          }
+          await gradle.installAgent();
 
-        expect(actual).toMatchSnapshot();
+          let actual = efWrite.getCall(-1).args[0].toString();
+          if (ignoreWhitespaceDiff) {
+            actual = actual.replace(/[^\S\r\n]+/g, '');
+          }
+          expect(actual).toBe(expected);
+          expect(actual).toMatchSnapshot();
+        });
       });
     });
   });

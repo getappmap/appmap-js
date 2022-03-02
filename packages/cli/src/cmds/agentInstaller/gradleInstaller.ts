@@ -1,3 +1,4 @@
+import fs from 'fs';
 import os from 'os';
 import { join, sep } from 'path';
 import chalk from 'chalk';
@@ -18,12 +19,30 @@ export default class GradleInstaller
     super('Gradle', path);
   }
 
-  get buildFile(): string {
+  private get buildGradleFileName(): string {
     return 'build.gradle';
   }
 
+  private get buildGradleKtsFileName(): string {
+    return 'build.gradle.kts';
+  }
+
+  get buildFile(): string {
+    return this.buildGradleFileName;
+  }
+
   get buildFilePath(): string {
-    return join(this.path, this.buildFile);
+    return join(this.path, this.identifyGradleFile);
+  }
+
+  /**
+   * If a build.gradle.kts file is present in the project, the installer will
+   * choose that file as the build file.
+   * If not, the installer will pick the build.gradle.
+   */
+  get identifyGradleFile(): string {
+    const buildGradleKtsExists: boolean = fs.existsSync(join(this.path, this.buildGradleKtsFileName));
+    return buildGradleKtsExists ? this.buildGradleKtsFileName : this.buildGradleFileName;
   }
 
   async printJarPathCommand(): Promise<CommandStruct> {
@@ -90,7 +109,7 @@ export default class GradleInstaller
     parseResult: GradleParseResult,
     whitespace: Whitespace
   ): Promise<{ updatedSrc: string; offset: number }> {
-    const pluginSpec = `id 'com.appland.appmap' version '1.1.0'`;
+    const pluginSpec = this.selectPluginSpec();
 
     const lines = parseResult.plugins
       ? buildFileSource
@@ -158,6 +177,12 @@ ${whitespace.padLine(pluginSpec)}
     const offset = parseResult.plugins.rbrace + 1;
 
     return { updatedSrc, offset };
+  }
+
+  private selectPluginSpec() {
+    const pluginSpecKotlinSyntax = `id("com.appland.appmap") version "1.1.0"`;
+    const pluginSpecGroovySyntax = `id 'com.appland.appmap' version '1.1.0'`;
+    return this.identifyGradleFile.endsWith('.gradle.kts') ? pluginSpecKotlinSyntax : pluginSpecGroovySyntax;
   }
 
   /**
