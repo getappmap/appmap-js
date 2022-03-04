@@ -10,6 +10,7 @@ Vue.use(Vuex);
 
 export const SELECT_OBJECT = 'selectObject';
 export const SELECT_LABEL = 'selectLabel';
+export const SELECT_REFERENCE = 'selectReference';
 export const SET_APPMAP_DATA = 'setAppMapData';
 export const POP_OBJECT_STACK = 'popObjectStack';
 export const CLEAR_OBJECT_STACK = 'clearObjectStack';
@@ -24,24 +25,25 @@ export function buildStore() {
       appMap: new AppMap(),
       selectionStack: [],
       currentView: VIEW_COMPONENT,
-      selectedLabel: null,
       focusedEvent: null,
     },
 
     getters: {
       selectedObject(state) {
-        return state.selectionStack[state.selectionStack.length - 1];
+        const obj = state.selectionStack[state.selectionStack.length - 1];
+        return obj ? obj.data : null;
+      },
+      selectedObjectType(state) {
+        const obj = state.selectionStack[state.selectionStack.length - 1];
+        return obj ? obj.type : null;
       },
       canPopStack(state) {
         return state.selectionStack.length > 1;
       },
       prevSelectedObject(state) {
         return state.selectionStack.length > 1
-          ? state.selectionStack[state.selectionStack.length - 2]
+          ? state.selectionStack[state.selectionStack.length - 2].data
           : null;
-      },
-      selectedLabel(state) {
-        return state.selectedLabel;
       },
       focusedEvent(state) {
         return state.focusedEvent;
@@ -60,11 +62,34 @@ export function buildStore() {
 
       [SELECT_OBJECT](state, selection) {
         if (Array.isArray(selection)) {
-          state.selectionStack.push(...selection);
+          selection.forEach((obj) => {
+            state.selectionStack.push({
+              type: 'object',
+              data: obj,
+            });
+          });
         } else {
-          state.selectionStack.push(selection);
+          state.selectionStack.push({
+            type: 'object',
+            data: selection,
+          });
         }
-        state.selectedLabel = null;
+        state.focusedEvent = null;
+      },
+
+      [SELECT_LABEL](state, label) {
+        state.selectionStack.push({
+          type: 'label',
+          data: label,
+        });
+        state.focusedEvent = null;
+      },
+
+      [SELECT_REFERENCE](state, reference) {
+        state.selectionStack.push({
+          type: 'reference',
+          data: reference,
+        });
         state.focusedEvent = null;
       },
 
@@ -74,13 +99,6 @@ export function buildStore() {
 
       [CLEAR_OBJECT_STACK](state) {
         state.selectionStack = [];
-        state.selectedLabel = null;
-        state.focusedEvent = null;
-      },
-
-      [SELECT_LABEL](state, label) {
-        state.selectionStack = [];
-        state.selectedLabel = label;
         state.focusedEvent = null;
       },
 

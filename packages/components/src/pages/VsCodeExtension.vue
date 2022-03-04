@@ -12,13 +12,17 @@
       <v-details-panel
         :appMap="filteredAppMap"
         :selected-object="selectedObject"
-        :selected-label="selectedLabel"
+        :selected-object-type="selectedObjectType"
         :filters-root-objects="filters.rootObjects"
       >
         <template v-slot:buttons>
-          <v-details-button icon="back" v-if="canGoBack" @click.native="goBack">
+          <v-details-button
+            icon="back"
+            v-if="prevSelectedObject"
+            @click.native="goBack"
+          >
             Back to
-            <b v-if="prevSelectedObject && prevSelectedObject.name">
+            <b v-if="prevSelectedObject.name">
               {{
                 prevSelectedObject.type === 'query'
                   ? prevSelectedObject.prettyName
@@ -44,7 +48,7 @@
           </v-details-button>
           <v-details-button
             icon="clear"
-            v-if="selectedObject || selectedLabel"
+            v-if="selectedObject"
             @click.native="clearSelection"
           >
             Clear selection
@@ -453,11 +457,6 @@ export default {
         this.$root.$emit('stateChanged', 'selectedObject');
       },
     },
-    '$store.getters.selectedLabel': {
-      handler() {
-        this.$root.$emit('stateChanged', 'selectedObject');
-      },
-    },
     '$store.getters.focusedEvent': {
       handler(event) {
         if (event) {
@@ -707,12 +706,12 @@ export default {
       return this.$store.getters.selectedObject;
     },
 
-    selectedEvent() {
-      return this.selectedObject instanceof Event ? [this.selectedObject] : [];
+    selectedObjectType() {
+      return this.$store.getters.selectedObjectType;
     },
 
-    selectedLabel() {
-      return this.$store.getters.selectedLabel;
+    selectedEvent() {
+      return this.selectedObject instanceof Event ? [this.selectedObject] : [];
     },
 
     selectedObjectHasSource() {
@@ -749,10 +748,6 @@ export default {
 
     prevSelectedObject() {
       return this.$store.getters.prevSelectedObject;
-    },
-
-    canGoBack() {
-      return this.$store.getters.canPopStack;
     },
 
     isEmptyAppMap() {
@@ -837,10 +832,14 @@ export default {
         currentView: this.currentView,
       };
 
-      if (this.selectedObject && this.selectedObject.fqid) {
+      if (
+        this.selectedObjectType === 'object' &&
+        this.selectedObject &&
+        this.selectedObject.fqid
+      ) {
         state.selectedObject = this.selectedObject.fqid;
-      } else if (this.selectedLabel) {
-        state.selectedObject = `label:${this.selectedLabel}`;
+      } else if (this.selectedObjectType === 'label') {
+        state.selectedObject = `label:${this.selectedObject}`;
       }
 
       if (this.traceFilterValue) {

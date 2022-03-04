@@ -5,7 +5,10 @@
       <span class="list__item-param-class">{{ className }}</span>
     </p>
     <p v-else class="list__item-param-key">{{ name }}</p>
-    <code>{{ value }}</code>
+    <code>
+      {{ value }}
+      <slot />
+    </code>
   </li>
 </template>
 
@@ -43,6 +46,10 @@ export default {
   code {
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: $border-radius;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    min-height: 35px;
     padding: 0.5rem;
     background-color: rgba(0, 0, 0, 0.1);
     color: inherit;

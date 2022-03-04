@@ -8,13 +8,10 @@
         <slot name="buttons" />
       </div>
       <keep-alive>
-        <v-details-search
-          v-if="!selectedObject && !selectedLabel"
-          :appMap="appMap"
-        />
+        <v-details-search v-if="!selectedObject" :appMap="appMap" />
       </keep-alive>
       <component
-        v-if="selectedObject"
+        v-if="selectedObjectType == 'object' && selectedObject"
         :is="detailsType"
         :object="selectedObject"
         :is-root-object="isRootObject"
@@ -22,7 +19,10 @@
       />
       <v-list
         v-if="
-          selectedObject && selectedObject.labels && selectedObject.labels.size
+          selectedObjectType == 'object' &&
+          selectedObject &&
+          selectedObject.labels &&
+          selectedObject.labels.size
         "
         title="Labels"
         itemsType="cloud"
@@ -36,8 +36,13 @@
         </v-list-item>
       </v-list>
       <v-details-label
-        v-if="selectedLabel"
-        :label="selectedLabel"
+        v-if="selectedObjectType === 'label'"
+        :label="selectedObject"
+        :appMap="appMap"
+      />
+      <v-details-references
+        v-if="selectedObjectType === 'reference'"
+        :param="selectedObject"
         :appMap="appMap"
       />
     </div>
@@ -58,6 +63,7 @@ import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
 import VDetailsPanelQuery from '@/components/DetailsPanelQuery.vue';
 import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
 import VDetailsPanelExternalService from '@/components/DetailsPanelExternalService.vue';
+import VDetailsReferences from '@/components/DetailsReferences.vue';
 import VDetailsSearch from '@/components/DetailsSearch.vue';
 import VList from '@/components/common/List.vue';
 import VListItem from '@/components/common/ListItem.vue';
@@ -78,6 +84,7 @@ export default {
     VDetailsPanelQuery,
     VDetailsPanelRoute,
     VDetailsPanelExternalService,
+    VDetailsReferences,
     VDetailsSearch,
     VList,
     VListItem,
@@ -86,9 +93,9 @@ export default {
     subtitle: String,
     appMap: AppMap,
     selectedObject: {
-      type: Object,
+      type: [Object, String],
     },
-    selectedLabel: {
+    selectedObjectType: {
       type: String,
     },
     filtersRootObjects: {

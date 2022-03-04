@@ -21,7 +21,8 @@ describe('VsCodeExtension.vue', () => {
 
   it('sets the selected object by FQID', () => {
     wrapper.vm.setState('{"selectedObject":"label:json"}');
-    expect(wrapper.vm.selectedLabel).toMatch('json');
+    expect(wrapper.vm.selectedObjectType).toMatch('label');
+    expect(wrapper.vm.selectedObject).toMatch('json');
 
     wrapper.vm.setState('{"selectedObject":"event:44"}');
     expect(wrapper.vm.selectedObject.toString()).toMatch('User.find_by_id!');
