@@ -593,9 +593,12 @@ context('VS Code Extension', () => {
           cy.get('.list-item').contains('Digest::Instance#digest').click();
         });
 
-      cy.get('.list-item__event-quickview').each((el) => {
+      cy.get('.list-item__event-quickview').each((el, idx) => {
         cy.wrap(el).click();
         cy.get('.trace-node.focused').should('be.visible');
+        if (idx == 5) {
+          return false;
+        }
       });
     });
 
@@ -608,7 +611,7 @@ context('VS Code Extension', () => {
       cy.get('body').trigger('keydown', { keycode: 38 }); // arrow up
       cy.get('.trace-node.highlight').should('be.visible');
 
-      for (let i = 0; i < 50; ++i) {
+      for (let i = 0; i < 5; ++i) {
         cy.get('body').trigger('keydown', { keycode: 40 }); // arrow down
         cy.get('.trace-node.highlight').should('be.visible');
       }
