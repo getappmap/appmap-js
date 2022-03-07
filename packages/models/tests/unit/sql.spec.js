@@ -99,6 +99,15 @@ describe('normalize SQL', () => {
     );
   });
 
+  test('handles backslashes and escapes in strings correctly', () => {
+    expect(normalize("SELECT '''hello world''' AS quoted")).toEqual(
+      'SELECT ? AS quoted'
+    );
+    expect(normalize("SELECT '\\' AS backslash")).toEqual(
+      'SELECT ? AS backslash'
+    );
+  });
+
   // TODO: I would prefer if the whitespace was collapsed, but it's OK for now.
   test('handles comments embedded in multiline SQL', () => {
     expect(

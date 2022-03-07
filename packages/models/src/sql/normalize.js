@@ -8,7 +8,7 @@ const COMMENTS_REGEXP =
   /(?:(?:#|--).*?(?=\r|\n|$))|(?:\/\*(?:[^/]|\/[^*])*?(?:\*\/|\/\*.*))/gi;
 
 const COMPONENTS_REGEXP_MAP = {
-  single_quotes: /'(?:[^']|'')*?(?:\\'.*|'(?!'))/g,
+  single_quotes: /'(?:[^']|'')*?(?:'(?!'))/g,
   double_quotes: /"(?:[^"]|"")*?(?:\\".*|"(?!"))/g,
   dollar_quotes: /(\$(?!\d)[^$]*?\$).*?(?:\1|$)/g,
   uuids: /\{?(?:[0-9a-fA-F]-*){32}\}?/g,
