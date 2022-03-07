@@ -412,8 +412,12 @@ export default class Event {
 
   get qualifiedMethodId() {
     const { definedClass, isStatic, methodId } = this;
-    if (!definedClass) return undefined;
-    return `${definedClass}${isStatic ? '.' : '#'}${methodId}`;
+    let ret = `[${this.orig_id}] `;
+    ret += `${definedClass}${isStatic ? '.' : '#'}${methodId}`;
+    if (!isStatic) {
+      ret += `(${this.receiver.value.split('.').slice(-1)})`;
+    }
+    return ret;
   }
 
   toString() {
