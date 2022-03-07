@@ -929,6 +929,24 @@ context('VS Code Extension', () => {
       cy.get('.nodes .node').should('have.length', 3);
     });
 
+    it('filters: when child of package was set as root - another children are filtered out', () => {
+      cy.get('.nodes .node').should('have.length', 9);
+
+      cy.get('.tabs__controls .popper__button').click();
+
+      cy.get('.filters__form-input')
+        .first()
+        .type('class:json/JSON::Ext::Generator::State')
+        .parent()
+        .submit();
+
+      cy.get('.nodes .node').should('have.length', 1);
+      cy.get('.nodes .node')
+        .first()
+        .should('have.class', 'class')
+        .should('have.attr', 'data-id', 'json/JSON::Ext::Generator::State');
+    });
+
     it('filters: navigate through filter suggestions with keyboard', () => {
       cy.get('.tabs__controls .popper__button').click();
 
