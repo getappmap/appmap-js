@@ -438,7 +438,10 @@ export default {
     '$store.getters.selectedObject': {
       handler(selectedObject) {
         if (selectedObject) {
-          if (!(selectedObject instanceof Event)) {
+          if (
+            !(selectedObject instanceof Event) &&
+            !Object.prototype.hasOwnProperty.call(selectedObject, 'object_id')
+          ) {
             this.setView(VIEW_COMPONENT);
           }
 

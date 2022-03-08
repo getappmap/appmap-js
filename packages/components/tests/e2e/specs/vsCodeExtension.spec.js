@@ -450,6 +450,47 @@ context('VS Code Extension', () => {
         .should('contain.text', 'SQL Select');
     });
 
+    it('shows "Find references" view when clicking icon near event parameter', () => {
+      cy.get('.details-search .list--labels .list__item')
+        .contains('security')
+        .click();
+      cy.get('.v-details-panel-list')
+        .contains('Events')
+        .parent()
+        .within(() => {
+          cy.get('.list__item').first().click();
+        });
+      cy.get('.details-panel-event__find-references')
+        .first()
+        .within((icon) => {
+          cy.wrap(icon).click();
+        });
+
+      cy.get('.details-references__header-title').should(
+        'have.text',
+        'Find references'
+      );
+      cy.get('.list__item-param')
+        .invoke('text')
+        .should(
+          'match',
+          /a:\s+String\s+6f1d4cb7ab7e13064d2f85fda5e215631b844ab5/
+        );
+      cy.get('.details-references__item').should('have.length', 18);
+      cy.get(
+        '.details-references__item:nth-child(1) .details-references__badge'
+      ).should('have.length', 2);
+
+      cy.get('.details-references__item').first().click();
+      cy.get('.trace-node.focused').should('be.visible');
+
+      cy.get('.details-references__item').first().dblclick();
+      cy.get('.details-panel-header__details-name').should(
+        'have.text',
+        'ActiveSupport::SecurityUtils.secure_compare'
+      );
+    });
+
     it('clears when "Clear selection" button was clicked', () => {
       cy.get(`.nodes .node[data-type="http"]`)
         .click()

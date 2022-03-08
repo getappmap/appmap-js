@@ -9,7 +9,13 @@
       />
     </div>
     <v-list title="Matches">
-      <v-list-item v-for="item in matchedEvents" :key="item.event.id">
+      <v-list-item
+        class="details-references__item"
+        v-for="item in matchedEvents"
+        :key="item.event.id"
+        @click.native="focusEvent(item.event)"
+        @dblclick.native="selectEvent(item.event)"
+      >
         {{ item.event.toString() }}
         <div class="details-references__badges">
           <span
@@ -33,6 +39,7 @@ import { AppMap } from '@appland/models';
 import VList from '@/components/common/List.vue';
 import VListItem from '@/components/common/ListItem.vue';
 import VListItemParam from '@/components/common/ListItemParam.vue';
+import { SELECT_OBJECT, SET_FOCUSED_EVENT } from '@/store/vsCode';
 
 export default {
   name: 'v-details-references',
@@ -92,6 +99,18 @@ export default {
       return Object.values(events);
     },
   },
+  methods: {
+    focusEvent(event) {
+      if (this.$store) {
+        this.$store.commit(SET_FOCUSED_EVENT, event);
+      }
+    },
+    selectEvent(event) {
+      if (this.$store) {
+        this.$store.commit(SELECT_OBJECT, event);
+      }
+    },
+  },
 };
 </script>
 
@@ -108,6 +127,10 @@ export default {
       font-weight: 700;
       color: $base03;
     }
+  }
+
+  &__item {
+    user-select: none;
   }
 
   &__badges {
