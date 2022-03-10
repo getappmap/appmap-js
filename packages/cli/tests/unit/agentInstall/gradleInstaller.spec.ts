@@ -1,5 +1,4 @@
 import path from 'path';
-import { promises as fs } from 'fs';
 import glob from 'glob';
 import sinon from 'sinon';
 import inquirer from 'inquirer';
@@ -24,7 +23,6 @@ describe('GradleInstaller', () => {
 
   describe('installAgent', () => {
     ['.gradle', '.gradle.kts'].forEach((testExt) => {
-      const expectedExt = `${testExt}.expected`;
       const files = glob.sync(path.join(dataDir, `*${testExt}`));
 
       files.forEach((file) => {
@@ -54,22 +52,10 @@ describe('GradleInstaller', () => {
 
           const efWrite = sinon.stub(EncodedFile.prototype, 'write');
 
-          const ignoreWhitespaceDiff = false;
 
-          let expected = await fs.readFile(
-            path.join(dataDir, `${test}${expectedExt}`),
-            'utf-8'
-          );
-          if (ignoreWhitespaceDiff) {
-            expected = expected.replace(/[^\S\r\n]+/g, '');
-          }
           await gradle.installAgent();
 
           let actual = efWrite.getCall(-1).args[0].toString();
-          if (ignoreWhitespaceDiff) {
-            actual = actual.replace(/[^\S\r\n]+/g, '');
-          }
-          expect(actual).toBe(expected);
           expect(actual).toMatchSnapshot();
         });
       });
