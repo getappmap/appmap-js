@@ -1,3 +1,11 @@
+# [@appland/models-v1.14.3](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.14.2...@appland/models-v1.14.3) (2022-03-10)
+
+
+### Bug Fixes
+
+* Filter out package children when children are not selected by root ([#538](https://github.com/applandinc/appmap-js/issues/538)) ([38698e5](https://github.com/applandinc/appmap-js/commit/38698e52d9e98c9f50ddaa23935347c2fd03e4f3))
+* Normalize SQL strings with backslashes correctly ([715bd13](https://github.com/applandinc/appmap-js/commit/715bd13e6136d1496730f82d8a51da08702e7135))
+
 # [@appland/models-v1.14.2](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.14.1...@appland/models-v1.14.2) (2022-03-01)
 
 
