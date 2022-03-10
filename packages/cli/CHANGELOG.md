@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.19.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.18.3...@appland/appmap-v3.19.0) (2022-03-10)
+
+
+### Features
+
+* check identifyGradleFile ends gradle.kts ([71c09f2](https://github.com/applandinc/appmap-js/commit/71c09f2af6d0a9476f3541c9247e332d62463875))
+* Support gradle projects with build file written in kotlin script (build.gradle.kts) ([53c5e02](https://github.com/applandinc/appmap-js/commit/53c5e022ec9d97487b0245dcf3aed2711223b6c1))
+
 # [@appland/appmap-v3.18.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.18.2...@appland/appmap-v3.18.3) (2022-02-14)
 
 
