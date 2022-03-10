@@ -1,3 +1,10 @@
+# [@appland/components-v1.24.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.24.0...@appland/components-v1.24.1) (2022-03-10)
+
+
+### Bug Fixes
+
+* Filter out package children when children are not selected by root ([#538](https://github.com/applandinc/appmap-js/issues/538)) ([38698e5](https://github.com/applandinc/appmap-js/commit/38698e52d9e98c9f50ddaa23935347c2fd03e4f3))
+
 # [@appland/components-v1.24.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.23.0...@appland/components-v1.24.0) (2022-03-01)
 
 
