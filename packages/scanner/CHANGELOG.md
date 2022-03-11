@@ -1,3 +1,10 @@
+## [1.46.2](https://github.com/applandinc/scanner/compare/v1.46.1...v1.46.2) (2022-03-11)
+
+
+### Bug Fixes
+
+* Don't error out on extra BEGIN when detecting transactions ([b3938f4](https://github.com/applandinc/scanner/commit/b3938f4397c7c2b9727e707a7df370881ae2cc65))
+
 ## [1.46.1](https://github.com/applandinc/scanner/compare/v1.46.0...v1.46.1) (2022-02-17)
 
 
