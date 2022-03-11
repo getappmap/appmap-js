@@ -63,13 +63,28 @@ function iterateTransaction(
     // TODO: This should be routing through the AppMapIndex AST cache.
     const sql = parseSQL(event.sql.sql);
     if (!sql) continue;
-    if (isBegin(sql)) throw new Error('Transaction started within a transaction.');
+
+    // This is normally a noop which generates a SQL warning.
+    // It can also happen if there's more than one SQL connection used
+    // and the new transaction is open in a different one than before.
+    // We currently don't track the separate connections, so we have to
+    // assume this is the same one and issue a warning.
+    if (isBegin(sql))
+      console.warn(`SQL transaction started within a transaction in event ${event.id}`);
+
     const end = isEnd(sql);
     if (end) {
       begin.transaction = { status: end.action, events: transaction };
       break;
     }
   }
+
+  if (!begin.transaction) {
+    // Transaction was still active at the end of appmap;
+    // assume it was aborted.
+    begin.transaction = { status: 'rollback', events: transaction };
+  }
+
   return {
     scope: begin,
     events: transaction[Symbol.iterator] as () => Generator<Event>,
