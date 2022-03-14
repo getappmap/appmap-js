@@ -481,10 +481,10 @@ context('VS Code Extension', () => {
         '.details-references__item:nth-child(1) .details-references__badge'
       ).should('have.length', 2);
 
-      cy.get('.details-references__item').first().click();
+      cy.get('.details-references__event-quickview').first().click();
       cy.get('.trace-node.focused').should('be.visible');
 
-      cy.get('.details-references__item').first().dblclick();
+      cy.get('.details-references__item').first().click();
       cy.get('.details-panel-header__details-name').should(
         'have.text',
         'ActiveSupport::SecurityUtils.secure_compare'

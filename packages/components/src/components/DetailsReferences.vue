@@ -13,28 +13,48 @@
         class="details-references__item"
         v-for="item in matchedEvents"
         :key="item.event.id"
-        @click.native="focusEvent(item.event)"
-        @dblclick.native="selectEvent(item.event)"
+        @click.native="selectEvent(item.event)"
       >
-        {{ item.event.toString() }}
+        <div class="details-references__text">
+          <span>{{ item.event.toString() }}</span>
+          <span>
+            Matched in
+            <span
+              class="details-references__match"
+              v-for="(match, i) in item.match"
+              :key="i"
+            >
+              <span v-if="match.type === 'param'"
+                >parameter <b>{{ match.value }}</b></span
+              ><span v-if="match.type === 'sql'"><b>SQL query</b></span
+              ><span v-if="match.type === 'return'"><b>return value</b></span>
+            </span>
+          </span>
+        </div>
         <div class="details-references__badges">
-          <span
-            v-if="item.match.includes('value')"
-            class="details-references__badge"
+          <span v-if="item.type.has('value')" class="details-references__badge"
             >Value</span
           >
           <span
-            v-if="item.match.includes('reference')"
+            v-if="item.type.has('reference')"
             class="details-references__badge"
             >Reference</span
           >
         </div>
+        <span
+          class="details-references__event-quickview"
+          @click.stop="focusEvent(item.event)"
+          title="View event in Trace view"
+        >
+          <EyeIcon />
+        </span>
       </v-list-item>
     </v-list>
   </div>
 </template>
 
 <script>
+import EyeIcon from '@/assets/eye.svg';
 import { AppMap } from '@appland/models';
 import VList from '@/components/common/List.vue';
 import VListItem from '@/components/common/ListItem.vue';
@@ -44,6 +64,7 @@ import { SELECT_OBJECT, SET_FOCUSED_EVENT } from '@/store/vsCode';
 export default {
   name: 'v-details-references',
   components: {
+    EyeIcon,
     VList,
     VListItem,
     VListItemParam,
@@ -57,46 +78,78 @@ export default {
   },
   computed: {
     matchedEvents() {
-      const events = {};
-      const regex = new RegExp(this.param.value, 'i');
+      const events = [];
+      const matchValue = this.param.value.toLowerCase();
 
       this.appMap.events.forEach((event) => {
         if (!event.isCall()) {
           return;
         }
-        // find by value
-        if (
-          (event.parameters &&
-            event.parameters.some((param) => regex.test(param.value))) ||
-          (event.message &&
-            event.message.some((msg) => regex.test(msg.value))) ||
-          (event.sqlQuery && regex.test(event.sqlQuery)) ||
-          (event.returnValue && regex.test(event.returnValue.value))
-        ) {
-          events[event.id] = { event, match: ['value'] };
+
+        const matchData = {
+          event,
+          type: new Set(),
+          match: [],
+        };
+
+        if (event.parameters) {
+          event.parameters.forEach((param) => {
+            if (param.value && param.value.toLowerCase().includes(matchValue)) {
+              matchData.type.add('value');
+              matchData.match.push({
+                type: 'param',
+                value: param.name,
+              });
+            }
+            if (this.param.object_id === param.object_id) {
+              matchData.type.add('reference');
+            }
+          });
         }
-        // find by reference
+
+        if (event.message) {
+          event.message.forEach((msg) => {
+            if (msg.value && msg.value.toLowerCase().includes(matchValue)) {
+              matchData.type.add('value');
+              matchData.match.push({
+                type: 'param',
+                value: msg.name,
+              });
+            }
+            if (this.param.object_id === msg.object_id) {
+              matchData.type.add('reference');
+            }
+          });
+        }
+
         if (
-          (event.parameters &&
-            event.parameters.some(
-              (param) => this.param.object_id === param.object_id
-            )) ||
-          (event.message &&
-            event.message.some(
-              (msg) => this.param.object_id === msg.object_id
-            )) ||
-          (event.returnValue &&
-            this.param.object_id === event.returnValue.object_id)
+          event.sqlQuery &&
+          event.sqlQuery.toLowerCase().includes(matchValue)
         ) {
-          if (events[event.id]) {
-            events[event.id].match.push('reference');
-          } else {
-            events[event.id] = { event, match: ['reference'] };
+          matchData.type.add('value');
+          matchData.match.push({
+            type: 'sql',
+          });
+        }
+
+        if (event.returnValue) {
+          if (event.returnValue.value.toLowerCase().includes(matchValue)) {
+            matchData.type.add('value');
+            matchData.match.push({
+              type: 'return',
+            });
           }
+          if (this.param.object_id === event.returnValue.object_id) {
+            matchData.type.add('reference');
+          }
+        }
+
+        if (matchData.type.size) {
+          events.push(matchData);
         }
       });
 
-      return Object.values(events);
+      return events;
     },
   },
   methods: {
@@ -133,8 +186,23 @@ export default {
     user-select: none;
   }
 
+  &__text {
+    margin-right: 0.5rem;
+    display: flex;
+    flex-direction: column;
+
+    span:nth-child(2) {
+      margin-top: 0.25rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  &__match:not(:last-child)::after {
+    content: ', ';
+  }
+
   &__badges {
-    margin-left: 0.5rem;
+    margin-left: auto;
     flex-shrink: 0;
     display: inline-flex;
   }
@@ -148,6 +216,25 @@ export default {
 
     & + & {
       margin-left: 0.25rem;
+    }
+  }
+
+  &__event-quickview {
+    margin-left: 0.25rem;
+    padding: 0.25rem;
+    color: $gray4;
+    line-height: 0;
+    cursor: pointer;
+
+    &:hover,
+    &:active {
+      color: $gray5;
+    }
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      fill: currentColor;
     }
   }
 }
