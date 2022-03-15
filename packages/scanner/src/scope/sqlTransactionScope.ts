@@ -54,7 +54,7 @@ function iterateTransaction(
 ): Scope {
   // since we can only go through the tail once,
   // we have to keep the list of events in the transaction
-  const transaction: Event[] = [];
+  const transaction = [begin];
   for (let next = tail.next(); !next.done; next = tail.next()) {
     const event = next.value;
     if (!event.isCall()) continue;
@@ -87,7 +87,7 @@ function iterateTransaction(
 
   return {
     scope: begin,
-    events: transaction[Symbol.iterator] as () => Generator<Event>,
+    events: transaction[Symbol.iterator].bind(transaction) as () => Generator<Event>,
   };
 }
 

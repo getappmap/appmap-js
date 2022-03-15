@@ -1,0 +1,84 @@
+{
+  "events": [
+    {
+      "id": 98892,
+      "event": "call",
+      "thread_id": 1105200,
+      "sql_query": {
+        "sql": "BEGIN",
+        "database_type": "postgres",
+        "server_version": 120008
+      }
+    },
+    {
+      "id": 98908,
+      "event": "call",
+      "thread_id": 1105200,
+      "sql_query": {
+        "sql": "SELECT * FROM \"users\" WHERE (\"id\" = 1) LIMIT 1",
+        "database_type": "postgres",
+        "server_version": 120008
+      }
+    },
+    {
+      "id": 99073,
+      "event": "call",
+      "thread_id": 1105200,
+      "sql_query": {
+        "sql": "COMMIT",
+        "database_type": "postgres",
+        "server_version": 120008
+      }
+    },
+    {
+      "id": 99190,
+      "event": "call",
+      "thread_id": 1105200,
+      "sql_query": {
+        "sql": "BEGIN",
+        "database_type": "postgres",
+        "server_version": 120008
+      }
+    },
+    {
+      "id": 99193,
+      "event": "call",
+      "thread_id": 1105200,
+      "sql_query": {
+        "sql": "SELECT * FROM \"users\" WHERE (\"id\" = 1) LIMIT 1",
+        "database_type": "postgres",
+        "server_version": 120008
+      }
+    },
+    {
+      "id": 99195,
+      "event": "call",
+      "thread_id": 1105200,
+      "sql_query": {
+        "sql": "ROLLBACK",
+        "database_type": "postgres",
+        "server_version": 120008
+      }
+    },
+    {
+      "id": 99198,
+      "event": "call",
+      "thread_id": 1105200,
+      "sql_query": {
+        "sql": "BEGIN",
+        "database_type": "postgres",
+        "server_version": 120008
+      }
+    },
+    {
+      "id": 99214,
+      "event": "call",
+      "thread_id": 661360,
+      "sql_query": {
+        "sql": "BEGIN",
+        "database_type": "postgres",
+        "server_version": 120008
+      }
+    }
+  ]
+}
