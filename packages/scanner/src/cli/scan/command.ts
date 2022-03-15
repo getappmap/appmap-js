@@ -86,7 +86,11 @@ export default {
 
       const configData = await parseConfigFile(config);
 
-      const scanner = buildScanner(reportAllFindings, configData, files);
+      const scanner = await buildScanner(reportAllFindings, configData, files).catch(
+        (error: Error) => {
+          throw new ValidationError(error.message + '\nUse --all to perform an offline scan.');
+        }
+      );
 
       const startTime = Date.now();
 
