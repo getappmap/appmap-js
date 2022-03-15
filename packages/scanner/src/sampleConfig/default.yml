@@ -2,8 +2,7 @@ checks:
   - rule: authzBeforeAuthn
   - rule: circularDependency
   # - rule: deserializationOfUntrustedData
-  # - rule: evalOfUntrustedCode
-  # - rule: execOfUntrustedCommand
+  - rule: execOfUntrustedCommand
   - rule: http500
   # - rule: illegalPackageDependency
   # - rule: incompatibleHttpClientRequest
