@@ -9,7 +9,7 @@ impactDomain: Security
 labels:
   - deserialize.unsafe
   - deserialize.safe
-  - sanitize
+  - deserialize.sanitize
 ---
 
 Finds occurrances of deserialization in which the mechanism employed is known to be unsafe, and the

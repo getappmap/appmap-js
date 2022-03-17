@@ -1,7 +1,8 @@
 checks:
   - rule: authzBeforeAuthn
   - rule: circularDependency
-  # - rule: deserializationOfUntrustedData
+  - rule: deserializationOfUntrustedData
+  - rule: execOfUntrustedCommand
   - rule: http500
   # - rule: illegalPackageDependency
   # - rule: incompatibleHttpClientRequest

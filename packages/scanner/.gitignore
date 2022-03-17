@@ -18,4 +18,5 @@ appland-findings.json
 findings.*.json
 findings.json
 sql_warning.txt
+*.code-workspace
 findings.json.*

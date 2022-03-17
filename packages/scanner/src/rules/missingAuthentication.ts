@@ -9,7 +9,7 @@ import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
 
 function isPublic(event: Event): boolean {
-  return event.labels.has(Public);
+  return event.labels.has(AccessPublic);
 }
 
 const authenticatedBy = (iterator: Iterator<EventNavigator>): boolean => {
@@ -63,14 +63,14 @@ function build(options: Options = new Options()): RuleLogic {
     matcher,
   };
 }
-const Public = 'public';
+const AccessPublic = 'access.public';
 const SecurityAuthentication = 'security.authentication';
 
 export default {
   id: 'missing-authentication',
   title: 'Unauthenticated HTTP server request',
   scope: 'http_server_request',
-  labels: [Public, SecurityAuthentication],
+  labels: [AccessPublic, SecurityAuthentication],
   impactDomain: 'Security',
   enumerateScope: false,
   references: {
