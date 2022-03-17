@@ -2,10 +2,10 @@ import { Event } from '@appland/models';
 import { Scope } from 'src/types';
 
 export default abstract class ScopeIterator {
-  abstract scopes(events: Generator<Event>): Generator<Scope>;
+  abstract scopes(events: Iterable<Event>): Generator<Scope>;
 
   // Scan ahead past the return event of the yielded scope.
-  protected advanceToReturnEvent(scopeEvent: Event, events: Generator<Event>): void {
+  protected advanceToReturnEvent(scopeEvent: Event, events: Iterator<Event>): void {
     // Don't use for...of events here, it doesn't work with an outer for...of on the same events generator.
     let eventResult = events.next();
     while (!eventResult.done) {

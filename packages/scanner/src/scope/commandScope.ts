@@ -25,7 +25,7 @@ const Command = 'command';
 const Job = 'job';
 
 export default class CommandScope extends ScopeIterator {
-  *scopes(events: Generator<Event>): Generator<Scope> {
+  *scopes(events: IterableIterator<Event>): Generator<Scope> {
     for (const event of events) {
       if (
         event.isCall() &&
