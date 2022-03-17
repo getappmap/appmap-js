@@ -1,3 +1,19 @@
+# [1.47.0](https://github.com/applandinc/scanner/compare/v1.46.3...v1.47.0) (2022-03-17)
+
+
+### Bug Fixes
+
+* Don't fail doc parsing on new docs ([58761f6](https://github.com/applandinc/scanner/commit/58761f6112af8dcd8735b90cd1ba30ea4c08770d))
+
+
+### Features
+
+* Enable deserializationOfUntrustedData by default ([b99b729](https://github.com/applandinc/scanner/commit/b99b7292e602f20a072543439dea02560b21d250))
+* Enable execOfUntrustedCommand by default ([998c2fe](https://github.com/applandinc/scanner/commit/998c2feb6c75925f5fb9b2035d285ec54b08d9be))
+* Rename 'sanitize' to 'deserialize.sanitize' ([0403ebb](https://github.com/applandinc/scanner/commit/0403ebb3ff49da22137dbcaf729c67b2231750ea))
+* Rename label 'public' to 'access.public' ([098ae70](https://github.com/applandinc/scanner/commit/098ae70825388a9195e38a29b355ba59cf457d6b))
+* Rule for exec-of-untrusted-command ([bea4fb3](https://github.com/applandinc/scanner/commit/bea4fb319972ded78f7d2858c4344ac3a3c05a03))
+
 ## [1.46.3](https://github.com/applandinc/scanner/compare/v1.46.2...v1.46.3) (2022-03-17)
 
 
