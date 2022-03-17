@@ -4,4 +4,4 @@ rules:
   - exec-of-untrusted-command
 ---
 
-# TODO
+Indicates that a function performs an OS system command.

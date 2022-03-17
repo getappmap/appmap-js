@@ -1,4 +1,5 @@
 import { Event, EventNavigator } from '@appland/models';
+import { URL } from 'url';
 import { MatchResult, Rule, RuleLogic } from '../types';
 import parseRuleDescription from './lib/parseRuleDescription';
 import precedingEvents from './lib/precedingEvents';
@@ -9,7 +10,7 @@ function allArgumentsSanitized(rootEvent: Event, event: Event): boolean {
     .filter((parameter) => parameter.object_id)
     .every((parameter): boolean => {
       for (const candidate of precedingEvents(rootEvent, event)) {
-        if (sanitizesData(candidate.event, parameter.object_id!, Sanitize)) {
+        if (sanitizesData(candidate.event, parameter.object_id!, ExecSanitize)) {
           return true;
         }
       }
@@ -46,16 +47,18 @@ function build(): RuleLogic {
 
 const Exec = 'system.exec';
 const ExecSafe = 'system.exec.safe';
-const Sanitize = 'system.exec.sanitize';
+const ExecSanitize = 'system.exec.sanitize';
 
 export default {
   id: 'exec-of-untrusted-command',
   title: 'Execution of untrusted system command',
-  labels: [Exec, ExecSafe, Sanitize],
+  labels: [Exec, ExecSafe, ExecSanitize],
   impactDomain: 'Security',
   enumerateScope: false,
   // scope: //*[@command]
-  references: {},
+  references: {
+    'CWE-78': new URL('https://cwe.mitre.org/data/definitions/78.html'),
+  },
   description: parseRuleDescription('execOfUntrustedCommand'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#exec-of-untrusted-command',
   build,

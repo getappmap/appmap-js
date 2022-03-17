@@ -6,7 +6,7 @@ references:
   CWE-306: https://cwe.mitre.org/data/definitions/306.html
 impactDomain: Security
 labels:
-  - public
+  - access.public
   - security.authentication
 scope: http_server_request
 ---
