@@ -1,5 +1,5 @@
 ---
-name: public
+name: access.public
 rules:
   - missing-authentication
 ---
