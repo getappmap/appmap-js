@@ -1,3 +1,11 @@
+## [1.46.3](https://github.com/applandinc/scanner/compare/v1.46.2...v1.46.3) (2022-03-17)
+
+
+### Bug Fixes
+
+* Better error message when server not configured ([e9c7c35](https://github.com/applandinc/scanner/commit/e9c7c35ad809efc1abdc883aa7b8345bf1752aab))
+* Correctly enumerate transaction events ([ecc9bfc](https://github.com/applandinc/scanner/commit/ecc9bfcab8e5b0c35a21db98d5bbfd4d6aca2c5f))
+
 ## [1.46.2](https://github.com/applandinc/scanner/compare/v1.46.1...v1.46.2) (2022-03-11)
 
 
