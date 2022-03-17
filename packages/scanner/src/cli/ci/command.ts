@@ -82,7 +82,7 @@ export default {
 
       const configData = await parseConfigFile(config);
 
-      const scanner = buildScanner(false, configData, files);
+      const scanner = await buildScanner(false, configData, files);
 
       const [rawScanResults, findingStatuses]: [ScanResults, FindingStatusListItem[]] =
         await Promise.all([scanner.scan(), scanner.fetchFindingStatus(appIdArg, appmapDir)]);
