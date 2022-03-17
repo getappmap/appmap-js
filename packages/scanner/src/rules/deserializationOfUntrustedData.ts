@@ -10,7 +10,7 @@ function allArgumentsSanitized(rootEvent: Event, event: Event): boolean {
     .filter((parameter) => parameter.object_id)
     .every((parameter): boolean => {
       for (const candidate of precedingEvents(rootEvent, event)) {
-        if (sanitizesData(candidate.event, parameter.object_id!, Sanitize)) {
+        if (sanitizesData(candidate.event, parameter.object_id!, DeserializeSanitize)) {
           return true;
         }
       }
@@ -48,12 +48,12 @@ function build(): RuleLogic {
 
 const DeserializeUnsafe = 'deserialize.unsafe';
 const DeserializeSafe = 'deserialize.safe';
-const Sanitize = 'sanitize';
+const DeserializeSanitize = 'deserialize.sanitize';
 
 export default {
   id: 'deserialization-of-untrusted-data',
   title: 'Deserialization of untrusted data',
-  labels: [DeserializeUnsafe, DeserializeSafe, Sanitize],
+  labels: [DeserializeUnsafe, DeserializeSafe, DeserializeSanitize],
   impactDomain: 'Security',
   enumerateScope: false,
   // scope: //*[@command]
