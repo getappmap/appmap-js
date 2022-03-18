@@ -104,11 +104,12 @@ export default class RuleChecker {
     }
 
     const buildFinding = (
-      matchEvent: Event | undefined = undefined,
-      message: string | undefined = undefined,
-      groupMessage: string | undefined = undefined,
-      occurranceCount: number | undefined = undefined,
-      relatedEvents: Event[] | undefined = undefined
+      matchEvent?: Event,
+      message?: string,
+      groupMessage?: string,
+      occurranceCount?: number,
+      // matchEvent will be added to additionalEvents to create the relatedEvents array
+      additionalEvents?: Event[]
     ): Finding => {
       const findingEvent = matchEvent || event;
       // Fixes:
@@ -126,6 +127,18 @@ export default class RuleChecker {
       hash.update(findingEvent.hash);
       hash.update(checkInstance.ruleId);
 
+      const uniqueEvents = new Set<number>();
+      const relatedEvents: Array<Event> = [];
+      [cloneEvent(findingEvent)]
+        .concat((additionalEvents || []).map((event) => cloneEvent(event)))
+        .forEach((event) => {
+          if (uniqueEvents.has(event.id)) {
+            return;
+          }
+          uniqueEvents.add(event.id);
+          relatedEvents.push(event);
+        });
+
       return {
         appMapFile,
         checkId: checkInstance.checkId,
@@ -138,7 +151,7 @@ export default class RuleChecker {
         message: message || checkInstance.title,
         groupMessage,
         occurranceCount,
-        relatedEvents: relatedEvents?.map((event) => cloneEvent(event)),
+        relatedEvents: relatedEvents.sort((event) => event.id),
       } as Finding;
     };
 
