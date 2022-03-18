@@ -21,7 +21,6 @@ function build(): RuleLogic {
     if (missing === 0) return;
 
     const result: MatchResult = {
-      level: 'error',
       event: event,
       message: `${missing} jobs created but not cancelled in this rolled back transaction`,
       // if there's a mismatch and there are cancellations we can't tell

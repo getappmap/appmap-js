@@ -31,7 +31,6 @@ function build(): RuleLogic {
         } else {
           return [
             {
-              level: 'error',
               event: event.event,
               message: `${event.event} deserializes untrusted data`,
             },

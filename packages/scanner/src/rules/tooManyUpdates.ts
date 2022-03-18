@@ -49,7 +49,6 @@ function build(options: Options): RuleLogic {
     if (events.length > options.warningLimit) {
       return [
         {
-          level: 'error',
           message: `Command performs ${events.length} SQL and RPC updates`,
           event: events[0],
           relatedEvents: events,
