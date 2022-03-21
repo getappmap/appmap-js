@@ -129,15 +129,13 @@ export default class RuleChecker {
 
       const uniqueEvents = new Set<number>();
       const relatedEvents: Array<Event> = [];
-      [cloneEvent(findingEvent)]
-        .concat((additionalEvents || []).map((event) => cloneEvent(event)))
-        .forEach((event) => {
-          if (uniqueEvents.has(event.id)) {
-            return;
-          }
-          uniqueEvents.add(event.id);
-          relatedEvents.push(event);
-        });
+      [findingEvent].concat((additionalEvents || []).map(cloneEvent)).forEach((event) => {
+        if (uniqueEvents.has(event.id)) {
+          return;
+        }
+        uniqueEvents.add(event.id);
+        relatedEvents.push(event);
+      });
 
       return {
         appMapFile,
