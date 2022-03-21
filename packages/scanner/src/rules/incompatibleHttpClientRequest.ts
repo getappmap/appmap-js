@@ -34,7 +34,7 @@ function build(options: Options): RuleLogic {
     } as OpenAPIV3.Document;
     const changes = await breakingChanges(clientSchema, serverSchema);
     return changes.map((change: OpenApiDiff.DiffResult<'breaking'>) => ({
-      level: 'error',
+      event,
       message: changeMessage(change),
     }));
   }

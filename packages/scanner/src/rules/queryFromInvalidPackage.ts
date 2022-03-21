@@ -1,5 +1,5 @@
 import { Event } from '@appland/models';
-import { Rule, RuleLogic } from 'src/types';
+import { MatchResult, Rule, RuleLogic } from 'src/types';
 import * as types from './types';
 import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
@@ -20,11 +20,18 @@ function build(options: Options): RuleLogic {
   const allowedPackages = buildFilters(options.allowedPackages);
   const allowedQueries = buildFilters(options.allowedQueries);
 
-  function matcher(e: Event) {
+  function matcher(e: Event): MatchResult[] | undefined {
     if (!allowedPackages.some((filter) => filter(e.parent!.codeObject.packageOf))) {
-      return `${e.codeObject.id} is invoked from illegal package ${e.parent!.codeObject.packageOf}`;
+      return [
+        {
+          event: e,
+          message: `${e.codeObject.id} is invoked from illegal package ${
+            e.parent!.codeObject.packageOf
+          }`,
+          relatedEvents: [e.parent!],
+        },
+      ];
     }
-    return false;
   }
 
   function where(e: Event) {

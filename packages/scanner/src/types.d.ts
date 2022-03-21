@@ -59,9 +59,9 @@ type EventFilter = (e: Event, appMapIndex: AppMapIndex) => boolean;
  * MatchResult is created by a rule when it matches an Event.
  */
 export interface MatchResult {
-  level: Level;
-  event?: Event;
-  message?: string;
+  level?: Level;
+  event: Event;
+  message: string;
   groupMessage?: string;
   occurranceCount?: number;
   relatedEvents?: Event[];

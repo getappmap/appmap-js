@@ -10,7 +10,18 @@ class Options implements types.QueryFromView.Options {
 
 function build(options: Options = new Options()): RuleLogic {
   function matcher(e: Event) {
-    return e.ancestors().some((e: Event) => e.codeObject.labels.has(options.forbiddenLabel));
+    const forbiddenAncestor = e
+      .ancestors()
+      .find((e: Event) => e.codeObject.labels.has(options.forbiddenLabel));
+    if (forbiddenAncestor) {
+      return [
+        {
+          event: e,
+          message: `SQL query is invoked from invalid event ${forbiddenAncestor}, labeled ${options.forbiddenLabel}`,
+          relatedEvents: [forbiddenAncestor],
+        },
+      ];
+    }
   }
   function where(e: Event) {
     return !!e.sqlQuery;

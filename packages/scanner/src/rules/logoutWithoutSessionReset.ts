@@ -23,7 +23,6 @@ function build(): RuleLogic {
         } else {
           return [
             {
-              level: 'error',
               event: event.event,
               message: `${event.event} logs out the user, but the HTTP session is not cleared`,
             },

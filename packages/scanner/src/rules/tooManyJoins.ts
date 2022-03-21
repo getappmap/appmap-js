@@ -42,7 +42,6 @@ function build(options: Options = new Options()): RuleLogic {
 
       if (occurrence.joins >= options.warningLimit) {
         matchResults.push({
-          level: 'warning',
           event: occurrence.events[0],
           message: `${occurrence.joins} join${occurrence.joins > 1 ? 's' : ''} in SQL "${sql}"`,
           relatedEvents: occurrence.events,

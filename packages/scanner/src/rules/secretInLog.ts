@@ -1,4 +1,4 @@
-import { ParameterObject } from '@appland/models';
+import { Event, ParameterObject } from '@appland/models';
 import { MatchResult, Rule, RuleLogic } from 'src/types';
 import SecretsRegexes, { looksSecret } from '../analyzer/secretsRegexes';
 import { emptyValue } from './lib/util';
@@ -12,10 +12,12 @@ class Match {
 
 const secrets: Set<string> = new Set();
 
-const findInLog = (parameters: readonly ParameterObject[]): MatchResult[] | undefined => {
+const findInLog = (event: Event): MatchResult[] | undefined => {
+  if (!event.parameters) return;
+
   const matches: Match[] = [];
 
-  for (const { value } of parameters) {
+  for (const { value } of event.parameters) {
     if (emptyValue(value)) continue;
 
     const patterns: (RegExp | string)[] = [];
@@ -38,7 +40,7 @@ const findInLog = (parameters: readonly ParameterObject[]): MatchResult[] | unde
 
   if (matches.length > 0) {
     return matches.map((match) => ({
-      level: 'error',
+      event,
       message: `${match.value} contains secret ${match.regexp}`,
     }));
   }
@@ -50,8 +52,8 @@ function build(): RuleLogic {
       if (e.codeObject.labels.has(Secret)) {
         recordSecrets(secrets, e);
       }
-      if (e.parameters && e.codeObject.labels.has(Log)) {
-        return findInLog(e.parameters);
+      if (e.codeObject.labels.has(Log)) {
+        return findInLog(e);
       }
     },
     where: (e) => {
