@@ -1,3 +1,11 @@
+# [1.48.0](https://github.com/applandinc/scanner/compare/v1.47.0...v1.48.0) (2022-03-21)
+
+
+### Features
+
+* Add additional relatedEvents ([91ad9c1](https://github.com/applandinc/scanner/commit/91ad9c1b497f7ea2fb53b3797d005fdbab1165c7))
+* relatedEvents contains the match event ([a0885de](https://github.com/applandinc/scanner/commit/a0885defdf690098e58593735d8a90d058018255))
+
 # [1.47.0](https://github.com/applandinc/scanner/compare/v1.46.3...v1.47.0) (2022-03-17)
 
 
