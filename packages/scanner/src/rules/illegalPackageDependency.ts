@@ -1,6 +1,6 @@
 import { Event } from '@appland/models';
 import types from './types';
-import { MatcherResult, Rule, RuleLogic } from '../types';
+import { MatchResult, Rule, RuleLogic } from '../types';
 import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
 import { buildFilter, buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
@@ -19,7 +19,7 @@ function build(options: Options): RuleLogic {
     return !!e.parent && !!e.parent!.codeObject.packageOf && calleePattern(e.codeObject.packageOf);
   }
 
-  function matcher(e: Event): MatcherResult {
+  function matcher(e: Event): MatchResult[] | undefined {
     const packageNamesStr = options.callerPackages
       .map((config) => config.equal || config.include || config.match)
       .map(String)
@@ -32,7 +32,13 @@ function build(options: Options): RuleLogic {
         callerPatterns.some((pattern) => pattern(parentPackage))
       )
     ) {
-      return `Code object ${e.codeObject.id} was invoked from ${parentPackage}, not from ${packageNamesStr}`;
+      return [
+        {
+          event: e,
+          message: `Code object ${e.codeObject.id} was invoked from ${parentPackage}, not from ${packageNamesStr}`,
+          relatedEvents: [e.parent!],
+        },
+      ];
     }
   }
 
