@@ -43,6 +43,9 @@ function isFalsey(valueObj: ReturnValueObject): boolean {
   if (valueObj.class === 'Array' && valueObj.value === '[]') {
     return true;
   }
+  if (valueObj.class === 'Symbol' && valueObj.value === ':failure') {
+    return true;
+  }
   if (valueObj.value === '') {
     return true;
   }
