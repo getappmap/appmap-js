@@ -21,8 +21,8 @@ class ScopeImpl implements Scope {
   }
 }
 
-const Command = 'command';
-const Job = 'job';
+const Command = 'command.perform';
+const Job = 'job.perform';
 
 export default class CommandScope extends ScopeIterator {
   *scopes(events: IterableIterator<Event>): Generator<Scope> {
