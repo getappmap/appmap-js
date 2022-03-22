@@ -1,7 +1,7 @@
 import { Event } from '@appland/models';
 import Check from './check';
 import { AbortError } from './errors';
-import { AppMapIndex, Finding } from './types';
+import { AppMapIndex, Finding, ScopeName } from './types';
 import { verbose } from './rules/lib/util';
 import ScopeIterator from './scope/scopeIterator';
 import RootScope from './scope/rootScope';
@@ -28,12 +28,31 @@ export default class RuleChecker {
     check: Check,
     findings: Finding[]
   ): Promise<void> {
-    if (verbose()) {
-      console.warn(`Checking AppMap ${appMapIndex.appMap.name} with scope ${check.scope}`);
+    const numScopesChecked = await this.checkScope(
+      appMapFile,
+      appMapIndex,
+      check,
+      check.scope,
+      findings
+    );
+    if (numScopesChecked === 0 && check.scope === 'command') {
+      await this.checkScope(appMapFile, appMapIndex, check, 'root', findings);
     }
-    const scopeIterator = this.scopes[check.scope];
+  }
+
+  async checkScope(
+    appMapFile: string,
+    appMapIndex: AppMapIndex,
+    check: Check,
+    scope: ScopeName,
+    findings: Finding[]
+  ): Promise<number> {
+    if (verbose()) {
+      console.warn(`Checking AppMap ${appMapIndex.appMap.name} with scope ${scope}`);
+    }
+    const scopeIterator = this.scopes[scope];
     if (!scopeIterator) {
-      throw new AbortError(`Invalid scope name "${check.scope}"`);
+      throw new AbortError(`Invalid scope name "${scope}"`);
     }
 
     const callEvents = function* (): Generator<Event> {
@@ -43,7 +62,9 @@ export default class RuleChecker {
       }
     };
 
+    let numScopes = 0;
     for (const scope of scopeIterator.scopes(callEvents())) {
+      numScopes += 1;
       if (verbose()) {
         console.warn(`Scope ${scope.scope}`);
       }
@@ -73,6 +94,7 @@ export default class RuleChecker {
         );
       }
     }
+    return numScopes;
   }
 
   async checkEvent(

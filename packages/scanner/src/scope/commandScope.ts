@@ -1,5 +1,6 @@
 import { Event, EventNavigator } from '@appland/models';
 import { Scope } from 'src/types';
+import RootScope from './rootScope';
 import ScopeIterator from './scopeIterator';
 
 class ScopeImpl implements Scope {
@@ -20,7 +21,6 @@ class ScopeImpl implements Scope {
   }
 }
 
-// TODO: Document the usage of these labels.
 const Command = 'command';
 const Job = 'job';
 
