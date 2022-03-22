@@ -67,7 +67,6 @@ export default {
   id: 'unbatched-materialized-query',
   title: 'Unbatched materialized SQL query',
   labels: [DAOMaterialize],
-  scope: 'command',
   enumerateScope: true,
   impactDomain: 'Performance',
   references: {

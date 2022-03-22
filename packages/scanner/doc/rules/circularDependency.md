@@ -5,7 +5,6 @@ title: Circular package dependency
 references:
   CWE-1047: https://cwe.mitre.org/data/definitions/1047.html
 impactDomain: Maintainability
-scope: command
 ---
 
 Finds cycles in the package dependency graph. Cyclic dependencies make code hard to maintain,

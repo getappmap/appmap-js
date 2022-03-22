@@ -7,7 +7,6 @@ references:
 impactDomain: Performance
 labels:
   - dao.materialize
-scope: command
 ---
 
 Finds large data sets that are queried from the database and loaded into memory.
