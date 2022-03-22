@@ -16,7 +16,6 @@ export default {
   scope: 'http_server_request', //http_server_request
   enumerateScope: false,
   impactDomain: 'Stability',
-  // scope: //http_server_request
   references: {
     'CWE-392': new URL('https://cwe.mitre.org/data/definitions/392.html'),
   },

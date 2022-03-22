@@ -54,7 +54,6 @@ export default {
   labels: [Exec, ExecSafe, ExecSanitize],
   impactDomain: 'Security',
   enumerateScope: false,
-  // scope: //*[@command]
   references: {
     'CWE-78': new URL('https://cwe.mitre.org/data/definitions/78.html'),
   },
