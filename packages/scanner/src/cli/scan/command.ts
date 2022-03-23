@@ -20,6 +20,7 @@ import { default as buildScanner } from './scanner';
 import scanArgs from '../scanArgs';
 import { Metadata } from '@appland/models';
 import { AppMapMetadata } from 'src/report/scanSummary';
+import resolveAppId from '../resolveAppId';
 
 export default {
   command: 'scan',
@@ -71,6 +72,11 @@ export default {
       throw new ValidationError('Either --appmap-dir or --appmap-file is required');
     }
 
+    let appId = appIdArg;
+    if (!reportAllFindings) {
+      appId = await resolveAppId(appIdArg, appmapDir);
+    }
+
     let files: string[] = [];
     if (appmapDir) {
       await validateFile('directory', appmapDir!);
@@ -95,7 +101,7 @@ export default {
     const [rawScanResults, findingStatuses] = await Promise.all<
       ScanResults,
       FindingStatusListItem[]
-    >([scanner.scan(), scanner.fetchFindingStatus(appIdArg, appmapDir)]);
+    >([scanner.scan(), scanner.fetchFindingStatus(appId, appmapDir)]);
 
     // Always report the raw data
     await writeFile(reportFile, formatReport(rawScanResults));

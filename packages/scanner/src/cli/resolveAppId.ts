@@ -2,12 +2,13 @@ import { constants as fsConstants } from 'fs';
 import { access, readFile } from 'fs/promises';
 import { load } from 'js-yaml';
 import { dirname, join, resolve } from 'path';
+import { exists } from '../integration/appland/app/exists';
 import { ValidationError } from '../errors';
 
-export default async function (
+async function resolveAppId(
   appIdArg: string | undefined,
   appMapDir: string | undefined
-): Promise<string> {
+): Promise<string | undefined> {
   if (appIdArg) {
     return appIdArg;
   }
@@ -29,6 +30,21 @@ export default async function (
       if (config.name) return config.name;
     }
   }
+}
 
-  throw new ValidationError('app id was not provided and could not be resolved');
+export default async function (
+  appIdArg: string | undefined,
+  appMapDir: string | undefined
+): Promise<string> {
+  const appId = await resolveAppId(appIdArg, appMapDir);
+  if (!appId) throw new ValidationError('App was not provided and could not be resolved');
+
+  const appExists = await exists(appId);
+  if (!appExists) {
+    throw new ValidationError(
+      `App "${appId}" is not valid or does not exist.\nPlease fix the app name in the appmap.yml file, or override it with the --app option.`
+    );
+  }
+
+  return appId;
 }
