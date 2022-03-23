@@ -1,6 +1,6 @@
 import { Event, EventNavigator } from '@appland/models';
 import { isTruthy, providesAuthentication } from './lib/util';
-import { MatcherResult, Rule, RuleLogic, ScopeName } from '../types.d';
+import { MatcherResult, Rule, RuleLogic } from '../types.d';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
 
@@ -45,7 +45,7 @@ export default {
   id: 'authz-before-authn',
   title: 'Authorization performed before authentication',
   labels: [SecurityAuthorization, SecurityAuthentication],
-  scope: 'http_server_request' as ScopeName,
+  scope: 'http_server_request',
   impactDomain: 'Security',
   enumerateScope: false,
   references: {

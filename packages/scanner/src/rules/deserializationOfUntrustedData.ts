@@ -55,7 +55,6 @@ export default {
   labels: [DeserializeUnsafe, DeserializeSafe, DeserializeSanitize],
   impactDomain: 'Security',
   enumerateScope: false,
-  // scope: //*[@command]
   references: {
     'CWE-502': new URL('https://cwe.mitre.org/data/definitions/502.html'),
     'Ruby Security': new URL('https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html'),

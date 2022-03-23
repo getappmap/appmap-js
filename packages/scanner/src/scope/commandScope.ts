@@ -1,5 +1,6 @@
 import { Event, EventNavigator } from '@appland/models';
 import { Scope } from 'src/types';
+import RootScope from './rootScope';
 import ScopeIterator from './scopeIterator';
 
 class ScopeImpl implements Scope {
@@ -20,9 +21,8 @@ class ScopeImpl implements Scope {
   }
 }
 
-// TODO: Document the usage of these labels.
-const Command = 'command';
-const Job = 'job';
+const Command = 'command.perform';
+const Job = 'job.perform';
 
 export default class CommandScope extends ScopeIterator {
   *scopes(events: IterableIterator<Event>): Generator<Scope> {

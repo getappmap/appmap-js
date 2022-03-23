@@ -1,4 +1,4 @@
-import { Event, ParameterObject } from '@appland/models';
+import { Event } from '@appland/models';
 import { MatchResult, Rule, RuleLogic } from 'src/types';
 import SecretsRegexes, { looksSecret } from '../analyzer/secretsRegexes';
 import { emptyValue } from './lib/util';

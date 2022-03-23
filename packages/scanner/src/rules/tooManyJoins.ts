@@ -59,7 +59,6 @@ function build(options: Options = new Options()): RuleLogic {
 export default {
   id: 'too-many-joins',
   title: 'Too many joins',
-  scope: 'command',
   impactDomain: 'Performance',
   enumerateScope: false,
   references: {

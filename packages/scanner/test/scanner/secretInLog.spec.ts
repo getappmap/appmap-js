@@ -23,3 +23,20 @@ it('secret in log file', async () => {
     expect(finding.event.id).toEqual(817);
   }
 });
+
+it('parses out multiple secrets from function return value', async () => {
+  const check = new Check(rule);
+  const findings = await scan(
+    check,
+    'appmaps/secretInLog/Confirmation_already_confirmed_user_should_not_be_able_to_confirm_the_account_again.appmap.json'
+  );
+  expect(findings).toHaveLength(3);
+  {
+    const finding = findings[0];
+    expect(finding.ruleId).toEqual('secret-in-log');
+    expect(finding.event.id).toEqual(221);
+    expect(finding.message).toEqual(
+      `REQUESTING PAGE: GET /users/confirmation?confirmation_token=axzHC1xW-8DtxWrstsJd with {} and HTTP he (...9 more characters) contains secret axzHC1xW-8DtxWrstsJd`
+    );
+  }
+});

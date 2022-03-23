@@ -1,1 +1,210 @@
-{"version":"1.5.1","metadata":{"app":"circular_dependency","language":{"name":"ruby","engine":"ruby","version":"3.0.1"},"client":{"name":"appmap","url":"https://github.com/applandinc/appmap-ruby","version":"0.68.2"},"git":{"repository":"git@github.com:applandinc/scanner","branch":"feat/circular-dependency","commit":"fe01f3d94b2a26474dffb645d273dec12a12623a","status":["M ../../../../.prettierrc.cjs","D ../../../../src/algorithms/dataStructures/linked-list/__test__/LinkedList.test.js","D ../../../../src/algorithms/dataStructures/linked-list/__test__/LinkedListNode.test.js","M ../../../../src/algorithms/graph/detect-cycle/index.ts","M ../../../../src/scanner/circularDependency.ts","M ../../../../src/scanner/tooManyJoins.ts","M ../../../../src/scanner/tooManyUpdates.ts","M ../../../algorithms/dataStructures/graph/GraphEdge.test.ts","M ../../../algorithms/dataStructures/graph/GraphVertex.test.ts","M ../../../algorithms/detectDirectedCycle.test.ts","D ../../../graph/Graph.test.js","M ../../../scanner.spec.ts","?? ../../../../scan.log","?? ../"],"git_last_annotated_tag":null,"git_last_tag":"v1.24.1","git_commits_since_last_annotated_tag":null,"git_commits_since_last_tag":0},"name":"Command command","source_location":"test/command_test.rb:6","frameworks":[{"name":"minitest","version":"5.14.4"}],"recorder":{"name":"minitest"},"test_status":"succeeded"},"classMap":[{"name":"lib/command","type":"package","children":[{"name":"Command","type":"class","children":[{"name":"invoke","type":"function","location":"lib/command/command.rb:5","static":true,"labels":["command"],"comment":"# @label command\n"}]}]},{"name":"lib/pkg_a","type":"package","children":[{"name":"PkgA","type":"class","children":[{"name":"A","type":"class","children":[{"name":"invoke","type":"function","location":"lib/pkg_a/a.rb:5","static":false},{"name":"cycle","type":"function","location":"lib/pkg_a/a.rb:9","static":false}]}]}]},{"name":"lib/pkg_b","type":"package","children":[{"name":"PkgB","type":"class","children":[{"name":"B","type":"class","children":[{"name":"invoke","type":"function","location":"lib/pkg_b/b.rb:5","static":false}]}]}]}],"events":[{"id":1,"event":"call","thread_id":1820,"defined_class":"Command","method_id":"invoke","path":"lib/command/command.rb","lineno":5,"static":true,"parameters":[],"receiver":{"class":"Class","object_id":1800,"value":"Command"}},{"id":2,"event":"call","thread_id":1820,"defined_class":"PkgA::A","method_id":"invoke","path":"lib/pkg_a/a.rb","lineno":5,"static":false,"parameters":[],"receiver":{"class":"PkgA::A","object_id":1840,"value":"#<PkgA::A:0x00007fe41804bd08>"}},{"id":3,"event":"call","thread_id":1820,"defined_class":"PkgB::B","method_id":"invoke","path":"lib/pkg_b/b.rb","lineno":5,"static":false,"parameters":[],"receiver":{"class":"PkgB::B","object_id":1860,"value":"#<PkgB::B:0x00007fe41804b1f0>"}},{"id":4,"event":"call","thread_id":1820,"defined_class":"PkgA::A","method_id":"cycle","path":"lib/pkg_a/a.rb","lineno":9,"static":false,"parameters":[],"receiver":{"class":"PkgA::A","object_id":1880,"value":"#<PkgA::A:0x00007fe41804a728>"}},{"id":5,"event":"return","thread_id":1820,"parent_id":4,"elapsed":4.0e-06,"return_value":{"class":"String","value":"cycle encountered","object_id":1900}},{"id":6,"event":"return","thread_id":1820,"parent_id":3,"elapsed":8.1e-05,"return_value":{"class":"String","value":"cycle encountered","object_id":1900}},{"id":7,"event":"return","thread_id":1820,"parent_id":2,"elapsed":0.000141,"return_value":{"class":"String","value":"cycle encountered","object_id":1900}},{"id":8,"event":"return","thread_id":1820,"parent_id":1,"elapsed":0.000229,"return_value":{"class":"String","value":"cycle encountered","object_id":1900}}]}
+{
+  "version": "1.5.1",
+  "metadata": {
+    "app": "circular_dependency",
+    "language": { "name": "ruby", "engine": "ruby", "version": "3.0.1" },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/applandinc/appmap-ruby",
+      "version": "0.68.2"
+    },
+    "git": {
+      "repository": "git@github.com:applandinc/scanner",
+      "branch": "feat/circular-dependency",
+      "commit": "fe01f3d94b2a26474dffb645d273dec12a12623a",
+      "status": [
+        "M ../../../../.prettierrc.cjs",
+        "D ../../../../src/algorithms/dataStructures/linked-list/__test__/LinkedList.test.js",
+        "D ../../../../src/algorithms/dataStructures/linked-list/__test__/LinkedListNode.test.js",
+        "M ../../../../src/algorithms/graph/detect-cycle/index.ts",
+        "M ../../../../src/scanner/circularDependency.ts",
+        "M ../../../../src/scanner/tooManyJoins.ts",
+        "M ../../../../src/scanner/tooManyUpdates.ts",
+        "M ../../../algorithms/dataStructures/graph/GraphEdge.test.ts",
+        "M ../../../algorithms/dataStructures/graph/GraphVertex.test.ts",
+        "M ../../../algorithms/detectDirectedCycle.test.ts",
+        "D ../../../graph/Graph.test.js",
+        "M ../../../scanner.spec.ts",
+        "?? ../../../../scan.log",
+        "?? ../"
+      ],
+      "git_last_annotated_tag": null,
+      "git_last_tag": "v1.24.1",
+      "git_commits_since_last_annotated_tag": null,
+      "git_commits_since_last_tag": 0
+    },
+    "name": "Command command",
+    "source_location": "test/command_test.rb:6",
+    "frameworks": [{ "name": "minitest", "version": "5.14.4" }],
+    "recorder": { "name": "minitest" },
+    "test_status": "succeeded"
+  },
+  "classMap": [
+    {
+      "name": "lib/command",
+      "type": "package",
+      "children": [
+        {
+          "name": "Command",
+          "type": "class",
+          "children": [
+            {
+              "name": "invoke",
+              "type": "function",
+              "location": "lib/command/command.rb:5",
+              "static": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "lib/pkg_a",
+      "type": "package",
+      "children": [
+        {
+          "name": "PkgA",
+          "type": "class",
+          "children": [
+            {
+              "name": "A",
+              "type": "class",
+              "children": [
+                {
+                  "name": "invoke",
+                  "type": "function",
+                  "location": "lib/pkg_a/a.rb:5",
+                  "static": false
+                },
+                {
+                  "name": "cycle",
+                  "type": "function",
+                  "location": "lib/pkg_a/a.rb:9",
+                  "static": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "lib/pkg_b",
+      "type": "package",
+      "children": [
+        {
+          "name": "PkgB",
+          "type": "class",
+          "children": [
+            {
+              "name": "B",
+              "type": "class",
+              "children": [
+                {
+                  "name": "invoke",
+                  "type": "function",
+                  "location": "lib/pkg_b/b.rb:5",
+                  "static": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "event": "call",
+      "thread_id": 1820,
+      "defined_class": "Command",
+      "method_id": "invoke",
+      "path": "lib/command/command.rb",
+      "lineno": 5,
+      "static": true,
+      "parameters": [],
+      "receiver": { "class": "Class", "object_id": 1800, "value": "Command" }
+    },
+    {
+      "id": 2,
+      "event": "call",
+      "thread_id": 1820,
+      "defined_class": "PkgA::A",
+      "method_id": "invoke",
+      "path": "lib/pkg_a/a.rb",
+      "lineno": 5,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PkgA::A",
+        "object_id": 1840,
+        "value": "#<PkgA::A:0x00007fe41804bd08>"
+      }
+    },
+    {
+      "id": 3,
+      "event": "call",
+      "thread_id": 1820,
+      "defined_class": "PkgB::B",
+      "method_id": "invoke",
+      "path": "lib/pkg_b/b.rb",
+      "lineno": 5,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PkgB::B",
+        "object_id": 1860,
+        "value": "#<PkgB::B:0x00007fe41804b1f0>"
+      }
+    },
+    {
+      "id": 4,
+      "event": "call",
+      "thread_id": 1820,
+      "defined_class": "PkgA::A",
+      "method_id": "cycle",
+      "path": "lib/pkg_a/a.rb",
+      "lineno": 9,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PkgA::A",
+        "object_id": 1880,
+        "value": "#<PkgA::A:0x00007fe41804a728>"
+      }
+    },
+    {
+      "id": 5,
+      "event": "return",
+      "thread_id": 1820,
+      "parent_id": 4,
+      "elapsed": 4.0e-6,
+      "return_value": { "class": "String", "value": "cycle encountered", "object_id": 1900 }
+    },
+    {
+      "id": 6,
+      "event": "return",
+      "thread_id": 1820,
+      "parent_id": 3,
+      "elapsed": 8.1e-5,
+      "return_value": { "class": "String", "value": "cycle encountered", "object_id": 1900 }
+    },
+    {
+      "id": 7,
+      "event": "return",
+      "thread_id": 1820,
+      "parent_id": 2,
+      "elapsed": 0.000141,
+      "return_value": { "class": "String", "value": "cycle encountered", "object_id": 1900 }
+    },
+    {
+      "id": 8,
+      "event": "return",
+      "thread_id": 1820,
+      "parent_id": 1,
+      "elapsed": 0.000229,
+      "return_value": { "class": "String", "value": "cycle encountered", "object_id": 1900 }
+    }
+  ]
+}

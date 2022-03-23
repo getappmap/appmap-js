@@ -1,4 +1,4 @@
-import { Event } from '@appland/models';
+import { Event, ReturnValueObject } from '@appland/models';
 import { isAbsolute } from 'path';
 
 let isVerbose = false;
@@ -33,7 +33,7 @@ function appMapDir(appMapFileName: string): string {
 }
 
 // eslint-disable-next-line
-function isFalsey(valueObj: any): boolean {
+function isFalsey(valueObj: ReturnValueObject): boolean {
   if (!valueObj) {
     return true;
   }
@@ -43,6 +43,9 @@ function isFalsey(valueObj: any): boolean {
   if (valueObj.class === 'Array' && valueObj.value === '[]') {
     return true;
   }
+  if (valueObj.class === 'Symbol' && valueObj.value === ':failure') {
+    return true;
+  }
   if (valueObj.value === '') {
     return true;
   }
@@ -50,10 +53,25 @@ function isFalsey(valueObj: any): boolean {
   return false;
 }
 
-const isTruthy = (valueObj: any): boolean => !isFalsey(valueObj);
+function isArray(valueObj: ReturnValueObject): boolean {
+  return valueObj.class === 'Array';
+}
+
+function parseValue(valueObj: ReturnValueObject): string[] {
+  if (isArray(valueObj) && valueObj.value.length > 2) {
+    return valueObj.value
+      .slice(1, valueObj.value.length - 1)
+      .split(',')
+      .map((v) => v.trim());
+  }
+
+  return [valueObj.value];
+}
+
+const isTruthy = (valueObj: ReturnValueObject): boolean => !isFalsey(valueObj);
 
 function providesAuthentication(event: Event, label: string): boolean {
-  return event.returnValue && event.labels.has(label) && isTruthy(event.returnValue.value);
+  return event.returnValue && event.labels.has(label) && isTruthy(event.returnValue);
 }
 
 function ideLink(filePath: string, ide: string, eventId: number): string {
@@ -111,6 +129,7 @@ export {
   isTruthy,
   ideLink,
   isRoot,
+  parseValue,
   providesAuthentication,
   toRegExp,
   responseContentType,
