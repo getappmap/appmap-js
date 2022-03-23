@@ -1,3 +1,18 @@
+# [1.49.0](https://github.com/applandinc/scanner/compare/v1.48.0...v1.49.0) (2022-03-23)
+
+
+### Bug Fixes
+
+* Extract multiple secrets from a return value ([3607a93](https://github.com/applandinc/scanner/commit/3607a93a33e94172456699c08ab0056f7205cf6c))
+* Recognize Symbol :failure as return value ([12849f9](https://github.com/applandinc/scanner/commit/12849f9d98d59813b30ed15b04e3eaa567410384))
+* Switch from command scope to root scope ([8372ef5](https://github.com/applandinc/scanner/commit/8372ef522750f01d0c776bf1e7e7629a91134551))
+
+
+### Features
+
+* Command scope falls back on root scope ([3940eff](https://github.com/applandinc/scanner/commit/3940eff634ac326053dee3c776f20c6c0208ce4c))
+* Rename job and command labels ([112050e](https://github.com/applandinc/scanner/commit/112050ed26066244101ea4fe48a5652d21273b28))
+
 # [1.48.0](https://github.com/applandinc/scanner/compare/v1.47.0...v1.48.0) (2022-03-21)
 
 
