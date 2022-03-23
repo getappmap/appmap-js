@@ -1,5 +1,5 @@
 import { Event } from '@appland/models';
-import { AppMapIndex, Rule, RuleLogic } from '../types';
+import { AppMapIndex, MatchResult, Rule, RuleLogic } from '../types';
 import { visit } from '../database/visit';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
@@ -53,9 +53,20 @@ function isApplicable(e: Event, appMapIndex: AppMapIndex): boolean {
   }
 }
 
+function matcher(event: Event, appMapIndex: AppMapIndex): MatchResult[] | undefined {
+  if (isApplicable(event, appMapIndex)) {
+    return [
+      {
+        event: event,
+        message: `Unbatched materialized SQL query: ${event.sqlQuery}`,
+      },
+    ];
+  }
+}
+
 function build(): RuleLogic {
   return {
-    matcher: (e, appMapIndex: AppMapIndex) => isApplicable(e, appMapIndex),
+    matcher,
     where: (e) => !!e.sqlQuery,
   };
 }

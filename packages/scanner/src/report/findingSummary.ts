@@ -6,5 +6,6 @@ export interface FindingSummary {
   ruleId: string;
   ruleTitle: string;
   findingTotal: number;
-  messages: Set<string>;
+  findingHashes: Set<string>;
+  messages: string[];
 }

@@ -121,6 +121,10 @@ const isRoot = (event: Event | undefined): boolean => {
   );
 };
 
+function pluralize(word: string, count: number): string {
+  return count === 1 ? word : [word, 's'].join('');
+}
+
 export {
   appMapDir,
   capitalize,
@@ -130,6 +134,7 @@ export {
   ideLink,
   isRoot,
   parseValue,
+  pluralize,
   providesAuthentication,
   toRegExp,
   responseContentType,

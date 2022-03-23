@@ -1,7 +1,7 @@
 import { Event, EventNavigator } from '@appland/models';
 import { rpcRequestForEvent } from '../openapi/rpcRequest';
 import * as types from './types';
-import { Rule, RuleLogic, StringFilter } from '../types';
+import { MatchResult, Rule, RuleLogic, StringFilter } from '../types';
 import { providesAuthentication } from './lib/util';
 import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
@@ -44,8 +44,15 @@ function build(options: Options = new Options()): RuleLogic {
     );
   }
 
-  function matcher(event: Event): boolean {
-    return !authenticatedBy(new EventNavigator(event).descendants());
+  function matcher(event: Event): MatchResult[] | undefined {
+    if (!authenticatedBy(new EventNavigator(event).descendants())) {
+      return [
+        {
+          event: event,
+          message: `Unauthenticated HTTP server request: ${event.route}`,
+        },
+      ];
+    }
   }
 
   function where(e: Event) {
