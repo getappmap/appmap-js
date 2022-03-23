@@ -5,6 +5,9 @@ import ScanCommand from './cli/scan/command';
 import UploadCommand from './cli/upload/command';
 import CICommand from './cli/ci/command';
 import MergeCommand from './cli/merge/command';
+import { verbose } from './rules/lib/util';
+import { AbortError, ValidationError } from './errors';
+import { ExitCode } from './cli/exitCode';
 
 yargs(process.argv.slice(2))
   .option('verbose', {
@@ -17,10 +20,24 @@ yargs(process.argv.slice(2))
   .command(MergeCommand)
   .fail((msg, err, yargs) => {
     if (msg) {
-      console.log(yargs.help());
-      console.log(msg);
+      console.warn(yargs.help());
+      console.warn(msg);
     } else if (err) {
-      console.error(err);
+      if (verbose()) {
+        console.error(err);
+      } else {
+        console.error(err.message);
+      }
+
+      if (err instanceof ValidationError) {
+        process.exit(ExitCode.ValidationError);
+      }
+      if (err instanceof AbortError) {
+        process.exit(ExitCode.AbortError);
+      }
+      if (err instanceof Error) {
+        process.exit(ExitCode.RuntimeError);
+      }
     }
     process.exit(1);
   })
