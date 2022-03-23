@@ -23,5 +23,6 @@ export default function (args: Argv): void {
   args.option('app', {
     describe:
       'name of the app to publish the findings for. By default, this is determined by looking in appmap.yml',
+    alias: 'a',
   });
 }
