@@ -1,3 +1,11 @@
+## [1.49.1](https://github.com/applandinc/scanner/compare/v1.49.0...v1.49.1) (2022-03-23)
+
+
+### Bug Fixes
+
+* Print count of total and unique findings ([8252b19](https://github.com/applandinc/scanner/commit/8252b19d7df08d4ae1843390d3e9d20e0cadad8a))
+* Provide more complete finding messages ([484d7d2](https://github.com/applandinc/scanner/commit/484d7d291368cec957e1c5322017c25c78b101db))
+
 # [1.49.0](https://github.com/applandinc/scanner/compare/v1.48.0...v1.49.0) (2022-03-23)
 
 
