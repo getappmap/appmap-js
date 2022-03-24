@@ -21,7 +21,7 @@ Finds all events labeled `deserialize.unsafe`, that are not a descendant of an e
 `deserialize.safe`. For each of these events, all event parameters are checked.
 
 Each parameter whose type is `string` or `object` is verified to ensure that it's trusted. For data
-to be trusted, it must be the return value of a function labeled `sanitize`.
+to be trusted, it must be the return value of a function labeled `deserialize.sanitize`.
 
 ### Notes
 
@@ -31,8 +31,8 @@ that executes code shortly after deserialization.
 ### Resolution
 
 If you can guarantee that you are using unsafe deserialization in a safe way, but it's not possible
-to obtain the raw data from a function labeled `sanitize`, you can wrap the deserialization in a
-function labeled `deserialize.safe`.
+to obtain the raw data from a function labeled `deserialize.sanitize`, you can wrap the
+deserialization in a function labeled `deserialize.safe`.
 
 If you need to deserialize untrusted data, JSON is often a good choice as it is only capable of
 returning ‘primitive’ types such as strings, arrays, hashes, numbers and nil. If you need to
