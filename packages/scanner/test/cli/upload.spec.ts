@@ -4,6 +4,11 @@ import { chdir, cwd } from 'process';
 import nock from 'nock';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import * as vars from '../../src/integration/vars';
+import * as mapsets from '../../src/integration/appland/mapset/create';
+import * as scannerJobs from '../../src/integration/appland/scannerJob/create';
+import upload from '../../src/cli/upload';
+import sinon from 'sinon';
 
 const dir = cwd();
 
@@ -107,5 +112,27 @@ describe('upload', () => {
     expect(uploadResponse.configuration).toEqual({
       arbitraryKey: 'arbitraryValue',
     });
+  });
+
+  it('resolves commit and branch information from the environment', async () => {
+    const expectedBranch = 'feat/new-feature';
+    const expectedCommit = 'f71f84edf28e5f5cbf7649efc95773cbc5a73db7';
+    sinon.stub(vars, 'branch').returns(expectedBranch);
+    sinon.stub(vars, 'sha').returns(expectedCommit);
+    sinon.stub(scannerJobs, 'create');
+    const appId = MapsetData.app_id.toString();
+    const mapsetsCreate = sinon
+      .stub(mapsets, 'create')
+      .resolves({ id: 1 } as mapsets.CreateResponse);
+
+    await upload(ScanResults, appId);
+
+    expect(mapsetsCreate.calledOnce).toBe(true);
+    expect(mapsetsCreate.getCall(0).args[2]).toMatchObject({
+      branch: expectedBranch,
+      commit: expectedCommit,
+    });
+
+    sinon.restore();
   });
 });

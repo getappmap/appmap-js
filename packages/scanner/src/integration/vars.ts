@@ -6,10 +6,12 @@ function token(): string | undefined {
 
 function sha(): string | undefined {
   return (
+    process.env.APPMAP_COMMIT ||
     process.env.CIRCLE_SHA1 ||
     process.env.TRAVIS_PULL_REQUEST_SHA ||
     process.env.TRAVIS_COMMIT ||
-    process.env.CI_COMMIT_ID
+    process.env.CI_COMMIT_ID ||
+    process.env.GITHUB_SHA
   );
 }
 
@@ -32,6 +34,17 @@ function repo(): string | undefined {
     process.env.CIRCLE_PROJECT_REPONAME ||
     extractSlug(process.env.TRAVIS_REPO_SLUG, 1) ||
     extractSlug(process.env.CI_REPO_NAME, 1)
+  );
+}
+
+function branch(): string | undefined {
+  return (
+    process.env.APPMAP_BRANCH ||
+    process.env.CIRCLE_BRANCH ||
+    process.env.TRAVIS_BRANCH ||
+    process.env.CI_COMMIT_REF_NAME ||
+    process.env.CI_BRANCH ||
+    process.env.GITHUB_REF_NAME
   );
 }
 
@@ -76,6 +89,7 @@ function validateRepo(): void {
 }
 
 export {
+  branch,
   token,
   owner,
   sha,

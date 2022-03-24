@@ -1,6 +1,5 @@
 import { queue } from 'async';
 import { readFile } from 'fs/promises';
-import { join } from 'path';
 
 import { AppMap as AppMapStruct } from '@appland/models';
 
@@ -17,6 +16,7 @@ import {
   UploadResponse,
 } from '../integration/appland/scannerJob/create';
 import { RetryOptions } from '../integration/appland/retryOptions';
+import { branch as branchFromEnv, sha as commitFromEnv } from '../integration/vars';
 
 export default async function create(
   scanResults: ScanResults,
@@ -82,8 +82,8 @@ export default async function create(
     return Object.entries(counts).find((e) => e[1] === maxCount)![0];
   };
 
-  const branch = mostFrequent(branchCount);
-  const commit = mostFrequent(commitCount);
+  const branch = branchFromEnv() || mostFrequent(branchCount);
+  const commit = commitFromEnv() || mostFrequent(commitCount);
   const mapset = await createMapset(
     appId,
     Object.values(appMapUUIDByFileName),

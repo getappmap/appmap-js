@@ -65,7 +65,7 @@ documentation for each rule to see it's pattern filters and other configurable p
 
 To enable de-duplication of findings, a hash is calculated for each finding. The hash is the
 `sha256` digest of a canonical content string for the finding. The canonical content string combines
-stable data from the finding, such as the rule id, normalized event, etc. See 
+stable data from the finding, such as the rule id, normalized event, etc. See
 [appmap-js/packages/models/src/event/hash.js](https://github.com/applandinc/appmap-js/blob/959a8c93c9be37d40a8f4a0e7d44ee211730641e/packages/models/src/event/hash.js)
 for details.
 
@@ -387,6 +387,11 @@ When using Appmap Scanner in CI you can post findings summary as a commit status
 ```bash
 yarn run scan-ci
 ```
+
+When uploading findings to [app.land](https://app.land), branch and commit information will be
+resolved from the environment if possible. If we do not yet support your CI provider or you have a
+non-standard configuration, you may provide your own overrides by setting `APPMAP_BRANCH` and
+`APPMAP_COMMIT`. Note that this is only necessary when Git is in a detached HEAD state.
 
 ## Development
 
