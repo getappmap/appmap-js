@@ -5,4 +5,7 @@ export default interface CommandOptions extends ScanOptions {
   upload: boolean;
   updateCommitStatus: boolean;
   mergeKey?: string;
+  branch?: string;
+  commit?: string;
+  environment?: string;
 }

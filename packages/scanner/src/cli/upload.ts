@@ -1,6 +1,5 @@
 import { queue } from 'async';
 import { readFile } from 'fs/promises';
-import { join } from 'path';
 
 import { AppMap as AppMapStruct } from '@appland/models';
 
@@ -11,18 +10,35 @@ import {
   CreateOptions as CreateAppMapOptions,
   UploadAppMapResponse,
 } from '../integration/appland/appMap/create';
-import { create as createMapset } from '../integration/appland/mapset/create';
+import {
+  create as createMapset,
+  CreateOptions as CreateMapsetOptions,
+} from '../integration/appland/mapset/create';
 import {
   create as createScannerJob,
   UploadResponse,
 } from '../integration/appland/scannerJob/create';
 import { RetryOptions } from '../integration/appland/retryOptions';
+import { branch as branchFromEnv, sha as commitFromEnv } from '../integration/vars';
+import { stat } from 'fs/promises';
+import { join } from 'path';
+
+async function fileExists(file: string): Promise<boolean> {
+  try {
+    await stat(file);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
 export default async function create(
   scanResults: ScanResults,
   appId: string,
+  appMapDir: string,
   mergeKey?: string,
-  options: RetryOptions = {}
+  mapsetOptions: CreateMapsetOptions = {},
+  retryOptions: RetryOptions = {}
 ): Promise<UploadResponse> {
   if (verbose()) console.log(`Uploading AppMaps and findings to application '${appId}'`);
 
@@ -40,10 +56,16 @@ export default async function create(
     app: appId,
   } as CreateAppMapOptions;
 
-  const q = queue((filePath: string, callback) => {
+  const q = queue(async (filePath: string, callback) => {
     if (verbose()) console.log(`Uploading AppMap ${filePath}`);
 
-    readFile(filePath)
+    const filePaths = [filePath, join(appMapDir, filePath)];
+
+    const filePathsExist = await Promise.all(filePaths.map(fileExists));
+    const fullPath = filePaths.find((_, fileIndex) => filePathsExist[fileIndex]);
+    if (!fullPath) throw new Error(`File ${filePath} not found`);
+
+    readFile(fullPath)
       .then((buffer: Buffer) => {
         const appMapStruct = JSON.parse(buffer.toString()) as AppMapStruct;
         const metadata = appMapStruct.metadata;
@@ -58,14 +80,17 @@ export default async function create(
           commitCount[commit] += 1;
         }
 
-        return createAppMap(buffer, Object.assign(options, { ...createAppMapOptions, metadata }));
+        return createAppMap(
+          buffer,
+          Object.assign(retryOptions, { ...createAppMapOptions, metadata })
+        );
       })
       .then((appMap: UploadAppMapResponse) => {
         if (appMap) {
           appMapUUIDByFileName[filePath] = appMap.uuid;
         }
       })
-      .then(() => callback())
+      .then(() => callback(null))
       .catch(callback);
   }, 3);
   q.error((err, filePath: string) => {
@@ -82,18 +107,16 @@ export default async function create(
     return Object.entries(counts).find((e) => e[1] === maxCount)![0];
   };
 
-  const branch = mostFrequent(branchCount);
-  const commit = mostFrequent(commitCount);
+  mapsetOptions.branch ||= branchFromEnv() || mostFrequent(branchCount);
+  mapsetOptions.commit ||= commitFromEnv() || mostFrequent(commitCount);
   const mapset = await createMapset(
     appId,
     Object.values(appMapUUIDByFileName),
-    Object.assign(options, {
-      branch,
-      commit,
-    })
+    mapsetOptions,
+    retryOptions
   );
 
   console.warn('Uploading findings');
 
-  return createScannerJob(scanResults, mapset.id, appMapUUIDByFileName, { mergeKey }, options);
+  return createScannerJob(scanResults, mapset.id, appMapUUIDByFileName, { mergeKey }, retryOptions);
 }

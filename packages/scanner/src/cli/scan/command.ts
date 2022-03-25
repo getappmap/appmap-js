@@ -6,14 +6,13 @@ import { Arguments, Argv } from 'yargs';
 import { FindingStatusListItem } from '@appland/client/dist/src';
 
 import { parseConfigFile } from '../../configuration/configurationProvider';
-import { AbortError, ValidationError } from '../../errors';
+import { ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
 import { verbose } from '../../rules/lib/util';
 import { newFindings } from '../../findings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 
-import { ExitCode } from '../exitCode';
 import validateFile from '../validateFile';
 
 import CommandOptions from './options';
@@ -65,79 +64,63 @@ export default {
       process.env.APPLAND_API_KEY = apiKey;
     }
 
-    try {
-      if (appmapFile && appmapDir) {
-        throw new ValidationError('Use --appmap-dir or --appmap-file, but not both');
-      }
-      if (!appmapFile && !appmapDir) {
-        throw new ValidationError('Either --appmap-dir or --appmap-file is required');
-      }
-
-      let files: string[] = [];
-      if (appmapDir) {
-        await validateFile('directory', appmapDir!);
-        const glob = promisify(globCallback);
-        files = await glob(`${appmapDir}/**/*.appmap.json`);
-      }
-      if (appmapFile) {
-        await validateFile('file', appmapFile);
-        files = [appmapFile];
-      }
-
-      const configData = await parseConfigFile(config);
-
-      const scanner = await buildScanner(reportAllFindings, configData, files).catch(
-        (error: Error) => {
-          throw new ValidationError(error.message + '\nUse --all to perform an offline scan.');
-        }
-      );
-
-      const startTime = Date.now();
-
-      const [rawScanResults, findingStatuses] = await Promise.all<
-        ScanResults,
-        FindingStatusListItem[]
-      >([scanner.scan(), scanner.fetchFindingStatus(appIdArg, appmapDir)]);
-
-      // Always report the raw data
-      await writeFile(reportFile, formatReport(rawScanResults));
-
-      let scanResults;
-      if (reportAllFindings) {
-        scanResults = rawScanResults;
-      } else {
-        scanResults = rawScanResults.withFindings(
-          newFindings(rawScanResults.findings, findingStatuses)
-        );
-      }
-
-      findingsReport(scanResults.findings, scanResults.appMapMetadata, ide);
-      console.log();
-      summaryReport(scanResults, true);
-      console.log('\n');
-      const elapsed = Date.now() - startTime;
-
-      const numChecks = scanResults.checks.length * scanResults.summary.numAppMaps;
-      console.log(
-        `Performed ${numChecks} checks in ${elapsed}ms (${Math.floor(
-          numChecks / (elapsed / 1000.0)
-        )} checks/sec)`
-      );
-    } catch (err) {
-      if (err instanceof ValidationError) {
-        console.warn(err.message);
-        return process.exit(ExitCode.ValidationError);
-      }
-      if (err instanceof AbortError) {
-        return process.exit(ExitCode.AbortError);
-      }
-      if (!verbose && err instanceof Error) {
-        console.error(err.message);
-        return process.exit(ExitCode.RuntimeError);
-      }
-
-      throw err;
+    if (appmapFile && appmapDir) {
+      throw new ValidationError('Use --appmap-dir or --appmap-file, but not both');
     }
+    if (!appmapFile && !appmapDir) {
+      throw new ValidationError('Either --appmap-dir or --appmap-file is required');
+    }
+
+    let files: string[] = [];
+    if (appmapDir) {
+      await validateFile('directory', appmapDir!);
+      const glob = promisify(globCallback);
+      files = await glob(`${appmapDir}/**/*.appmap.json`);
+    }
+    if (appmapFile) {
+      await validateFile('file', appmapFile);
+      files = [appmapFile];
+    }
+
+    const configData = await parseConfigFile(config);
+
+    const scanner = await buildScanner(reportAllFindings, configData, files).catch(
+      (error: Error) => {
+        throw new ValidationError(error.message + '\nUse --all to perform an offline scan.');
+      }
+    );
+
+    const startTime = Date.now();
+
+    const [rawScanResults, findingStatuses] = await Promise.all<
+      ScanResults,
+      FindingStatusListItem[]
+    >([scanner.scan(), scanner.fetchFindingStatus(appIdArg, appmapDir)]);
+
+    // Always report the raw data
+    await writeFile(reportFile, formatReport(rawScanResults));
+
+    let scanResults;
+    if (reportAllFindings) {
+      scanResults = rawScanResults;
+    } else {
+      scanResults = rawScanResults.withFindings(
+        newFindings(rawScanResults.findings, findingStatuses)
+      );
+    }
+
+    findingsReport(scanResults.findings, scanResults.appMapMetadata, ide);
+    console.log();
+    summaryReport(scanResults, true);
+    console.log('\n');
+    const elapsed = Date.now() - startTime;
+
+    const numChecks = scanResults.checks.length * scanResults.summary.numAppMaps;
+    console.log(
+      `Performed ${numChecks} checks in ${elapsed}ms (${Math.floor(
+        numChecks / (elapsed / 1000.0)
+      )} checks/sec)`
+    );
   },
 };
 

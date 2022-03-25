@@ -10,11 +10,14 @@ import reportUploadURL from '../reportUploadURL';
 
 import CommandOptions from './options';
 import upload from '../upload';
+import codeVersionArgs from '../codeVersionArgs';
 
 export default {
   command: 'upload',
   describe: 'Upload Findings to the AppMap Server',
   builder(args: Argv): Argv {
+    codeVersionArgs(args);
+
     args.option('appmap-dir', {
       describe: 'base directory of AppMaps',
       alias: 'd',
@@ -39,19 +42,29 @@ export default {
       appmapDir,
       app: appIdArg,
       mergeKey,
+      branch,
+      commit,
+      environment,
     } = options as unknown as CommandOptions;
 
     if (isVerbose) {
       verbose(true);
     }
 
-    if (appmapDir) await validateFile('directory', appmapDir!);
+    await validateFile('directory', appmapDir!);
     const appId = await resolveAppId(appIdArg, appmapDir);
 
     const scanResults = JSON.parse((await readFile(reportFile)).toString()) as ScanResults;
-    const uploadResponse = await upload(scanResults, appId, mergeKey, {
-      maxRetries: 3,
-    });
+    const uploadResponse = await upload(
+      scanResults,
+      appId,
+      appmapDir,
+      mergeKey,
+      { branch, commit, environment },
+      {
+        maxRetries: 3,
+      }
+    );
 
     reportUploadURL(uploadResponse.summary.numFindings, uploadResponse.url);
   },
