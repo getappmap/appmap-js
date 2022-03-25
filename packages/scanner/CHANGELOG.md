@@ -1,3 +1,16 @@
+# [1.50.0](https://github.com/applandinc/scanner/compare/v1.49.1...v1.50.0) (2022-03-25)
+
+
+### Bug Fixes
+
+* resolve AppMap path via appMapDir ([ef398a4](https://github.com/applandinc/scanner/commit/ef398a43d3cc37e6b26a265151b3a518f82d49d2))
+
+
+### Features
+
+* Add branch, commit, environment CLI options ([bffa805](https://github.com/applandinc/scanner/commit/bffa805e18936d2b78a8bda546b5bf8bef46ac5b))
+* Resolve git branch and commit from the environment if available ([105f055](https://github.com/applandinc/scanner/commit/105f0559357b7efc25ca0f0ca21832165ad2a0a4))
+
 ## [1.49.1](https://github.com/applandinc/scanner/compare/v1.49.0...v1.49.1) (2022-03-23)
 
 
