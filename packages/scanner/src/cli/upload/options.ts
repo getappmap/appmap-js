@@ -4,4 +4,7 @@ export default interface CommandOptions {
   appmapDir: string;
   app?: string;
   mergeKey?: string;
+  branch?: string;
+  commit?: string;
+  environment?: string;
 }

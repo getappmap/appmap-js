@@ -1,6 +1,5 @@
 import * as test from '../integration/setup';
-import { create } from '../../src/integration/appland/scannerJob/create';
-import { chdir, cwd } from 'process';
+import Command from '../../src/cli/upload/command';
 import nock from 'nock';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -10,18 +9,12 @@ import * as scannerJobs from '../../src/integration/appland/scannerJob/create';
 import upload from '../../src/cli/upload';
 import sinon from 'sinon';
 
-const dir = cwd();
+import CommandOptions from '../../src/cli/upload/options';
 
 const FixtureDir = 'test/fixtures/scanResults';
 const ScanResults = JSON.parse(readFileSync(join(FixtureDir, 'scanResults.json')).toString());
 const AppMapData1 = { uuid: '5123211e-66e1-4184-b5a9-32976a6ebc85' };
 const AppMapData2 = { uuid: '1d10c86f-02ec-4f60-ac46-94282c87f0f1' };
-const AppMapUUIDByFileName = {
-  'Misago/tmp/appmap/pytest/test_activating_multiple_users_sends_email_notifications_to_them.appmap.json':
-    AppMapData1.uuid,
-  'Misago/tmp/appmap/pytest/test_active_theme_styles_are_included_in_page_html.appmap.json':
-    AppMapData2.uuid,
-};
 const MapsetData = {
   id: 135,
   created_at: '2022-02-08T14:15:47.435Z',
@@ -38,80 +31,52 @@ const ScannerJobData = {
   configuration: ScanResults.configuration,
 };
 
+const StandardOptions = {
+  verbose: true,
+  app: test.AppId,
+  appmapDir: FixtureDir,
+  reportFile: join(FixtureDir, 'scanResults.json'),
+} as CommandOptions;
+
 describe('upload', () => {
-  beforeEach(() => chdir(FixtureDir));
-
-  afterEach(() => chdir(dir));
-
-  it('succeeds', async () => {
-    [AppMapData1, AppMapData2].forEach((appMapData) => {
-      nock('http://localhost:3000')
-        .post(`/api/appmaps`, /Content-Disposition: form-data/)
-        .matchHeader(
-          'Authorization',
-          'Bearer a2dpbHBpbkBnbWFpbC5jb206NzU4Y2NmYTYtNjYwNS00N2Y0LTgxYWUtNTg2MmEyY2M0ZjY5'
-        )
-        .matchHeader('Content-Type', /^multipart\/form-data; boundary/)
-        .matchHeader('Accept', /^application\/json;?/)
-        .reply(201, appMapData, ['Content-Type', 'application/json']);
+  it('runs with default arguments', async () => {
+    const localhost = nock('http://localhost:3000');
+    localhost.head(`/api/${test.AppId}`).reply(204).persist();
+    localhost.post(`/api/appmaps`).reply(201, AppMapData1, ['Content-Type', 'application/json']);
+    localhost.post(`/api/appmaps`).reply(201, AppMapData2, ['Content-Type', 'application/json']);
+    localhost.post(`/api/mapsets`).reply(201, MapsetData, ['Content-Type', 'application/json']);
+    localhost.post(`/api/scanner_jobs`).reply(201, ScannerJobData, {
+      location: `http://localhost:3000/scanner_jobs/${ScannerJobData.id}`,
     });
 
-    nock('http://localhost:3000', { encodedQueryParams: true })
-      .post('/api/mapsets', {
+    await Command.handler(StandardOptions as any);
+  });
+
+  it('accepts branch and environment', async () => {
+    const localhost = nock('http://localhost:3000');
+    localhost.head(`/api/${test.AppId}`).reply(204).persist();
+    localhost.post(`/api/appmaps`).reply(201, AppMapData1, ['Content-Type', 'application/json']);
+    localhost.post(`/api/appmaps`).reply(201, AppMapData2, ['Content-Type', 'application/json']);
+    localhost
+      .post(`/api/mapsets`, {
         app: test.AppId,
         appmaps: [AppMapData1.uuid, AppMapData2.uuid],
+        branch: 'feat/my-branch',
+        commit: '1234567890',
+        environment: 'ci',
       })
-      .matchHeader(
-        'Authorization',
-        'Bearer a2dpbHBpbkBnbWFpbC5jb206NzU4Y2NmYTYtNjYwNS00N2Y0LTgxYWUtNTg2MmEyY2M0ZjY5'
-      )
-      .reply(201, MapsetData);
-
-    nock('http://localhost:3000', { encodedQueryParams: true })
-      .post('/api/scanner_jobs')
-      .matchHeader(
-        'Authorization',
-        'Bearer a2dpbHBpbkBnbWFpbC5jb206NzU4Y2NmYTYtNjYwNS00N2Y0LTgxYWUtNTg2MmEyY2M0ZjY5'
-      )
-      .reply(201, ScannerJobData, {
-        location: `http://localhost:3000/scanner_jobs/${ScannerJobData.id}`,
-      });
-
-    const uploadResponse = await create(
-      ScanResults,
-      MapsetData.id,
-      AppMapUUIDByFileName,
-      {},
-      {
-        maxRetries: 1,
-      }
-    );
-    expect(Object.keys(uploadResponse)).toEqual([
-      'id',
-      'mapset_id',
-      'created_at',
-      'updated_at',
-      'summary',
-      'configuration',
-      'url',
-    ]);
-    expect(uploadResponse.url.toString()).toEqual(
-      `http://localhost:3000/scanner_jobs/${uploadResponse.id}`
-    );
-    expect(uploadResponse.summary).toEqual({
-      numChecks: 1000,
-      appMapMetadata: {
-        git: [
-          {
-            branch: 'main',
-            commit: 'd7fb6ffb8e296915c85b24339b33645b5c8f927c',
-          },
-        ],
-      },
+      .reply(201, MapsetData, ['Content-Type', 'application/json']);
+    localhost.post(`/api/scanner_jobs`).reply(201, ScannerJobData, {
+      location: `http://localhost:3000/scanner_jobs/${ScannerJobData.id}`,
     });
-    expect(uploadResponse.configuration).toEqual({
-      arbitraryKey: 'arbitraryValue',
-    });
+
+    await Command.handler(
+      Object.assign({}, StandardOptions, {
+        branch: 'feat/my-branch',
+        commit: '1234567890',
+        environment: 'ci',
+      }) as any
+    );
   });
 
   it('resolves commit and branch information from the environment', async () => {
@@ -125,7 +90,7 @@ describe('upload', () => {
       .stub(mapsets, 'create')
       .resolves({ id: 1 } as mapsets.CreateResponse);
 
-    await upload(ScanResults, appId);
+    await upload(ScanResults, appId, FixtureDir);
 
     expect(mapsetsCreate.calledOnce).toBe(true);
     expect(mapsetsCreate.getCall(0).args[2]).toMatchObject({

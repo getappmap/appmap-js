@@ -24,12 +24,14 @@ import scanArgs from '../scanArgs';
 import updateCommitStatus from '../updateCommitStatus';
 import reportUploadURL from '../reportUploadURL';
 import fail from '../fail';
+import codeVersionArgs from '../codeVersionArgs';
 
 export default {
   command: 'ci',
   describe: 'Scan AppMaps, report findings to AppMap Server, and update SCM status',
   builder(args: Argv): Argv {
     scanArgs(args);
+    codeVersionArgs(args);
 
     args.option('fail', {
       describe: 'exit with non-zero status if there are any new findings',
@@ -63,6 +65,9 @@ export default {
       upload: doUpload,
       updateCommitStatus: updateCommitStatusOption,
       mergeKey,
+      commit,
+      branch,
+      environment,
     } = options as unknown as CommandOptions;
 
     if (isVerbose) {
@@ -98,9 +103,20 @@ export default {
       summaryReport(scanResults, true);
 
       if (doUpload) {
-        const uploadResponse = await upload(rawScanResults, appId, mergeKey, {
-          maxRetries: 3,
-        });
+        const uploadResponse = await upload(
+          rawScanResults,
+          appId,
+          appmapDir,
+          mergeKey,
+          {
+            branch,
+            commit,
+            environment,
+          },
+          {
+            maxRetries: 3,
+          }
+        );
         reportUploadURL(uploadResponse.summary.numFindings, uploadResponse.url);
       }
 

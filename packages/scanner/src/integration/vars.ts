@@ -6,7 +6,6 @@ function token(): string | undefined {
 
 function sha(): string | undefined {
   return (
-    process.env.APPMAP_COMMIT ||
     process.env.CIRCLE_SHA1 ||
     process.env.TRAVIS_PULL_REQUEST_SHA ||
     process.env.TRAVIS_COMMIT ||
@@ -39,7 +38,6 @@ function repo(): string | undefined {
 
 function branch(): string | undefined {
   return (
-    process.env.APPMAP_BRANCH ||
     process.env.CIRCLE_BRANCH ||
     process.env.TRAVIS_BRANCH ||
     process.env.CI_COMMIT_REF_NAME ||

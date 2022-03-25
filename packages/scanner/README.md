@@ -390,8 +390,9 @@ yarn run scan-ci
 
 When uploading findings to [app.land](https://app.land), branch and commit information will be
 resolved from the environment if possible. If we do not yet support your CI provider or you have a
-non-standard configuration, you may provide your own overrides by setting `APPMAP_BRANCH` and
-`APPMAP_COMMIT`. Note that this is only necessary when Git is in a detached HEAD state.
+non-standard configuration, you may provide your own overrides using the `-b` (branch) and `-c`
+(commit) options to the `upload` and `ci` commands. Note that this is only necessary when Git is in
+a detached HEAD state.
 
 ## Development
 
