@@ -1,3 +1,15 @@
+# [1.51.0](https://github.com/applandinc/scanner/compare/v1.50.0...v1.51.0) (2022-03-25)
+
+
+### Bug Fixes
+
+* Validate appId before running command ([45af060](https://github.com/applandinc/scanner/commit/45af060df4d1f34990162f0089d85ec80569fc9d))
+
+
+### Features
+
+* 'a' is an alias for 'app' ([4b2d9c7](https://github.com/applandinc/scanner/commit/4b2d9c74b40d41b71c1702fee8f08d7a7d1d1ed2))
+
 # [1.50.0](https://github.com/applandinc/scanner/compare/v1.49.1...v1.50.0) (2022-03-25)
 
 
