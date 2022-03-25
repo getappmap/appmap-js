@@ -159,6 +159,11 @@ export default class RuleChecker {
         relatedEvents.push(event);
       });
 
+      // Update event hash with unique hashes of related events
+      new Set(relatedEvents.map((e) => e.hash)).forEach((eventHash) => {
+        hash.update(eventHash);
+      });
+
       return {
         appMapFile,
         checkId: checkInstance.checkId,
