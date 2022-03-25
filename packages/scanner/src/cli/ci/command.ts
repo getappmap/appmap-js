@@ -80,10 +80,10 @@ export default {
       }
 
       await validateFile('directory', appmapDir!);
+      const appId = await resolveAppId(appIdArg, appmapDir);
+
       const glob = promisify(globCallback);
       const files = await glob(`${appmapDir}/**/*.appmap.json`);
-
-      const appId = await resolveAppId(appIdArg, appmapDir);
 
       const configData = await parseConfigFile(config);
 

@@ -1,14 +1,14 @@
 import { join } from 'path';
 import nock from 'nock';
 import sinon from 'sinon';
+import * as test from '../integration/setup';
 import Command from '../../src/cli/scan/command';
 import { fixtureAppMapFileName } from '../util';
 import { readFileSync, unlinkSync } from 'fs';
 import { ScanResults } from '../../src/report/scanResults';
 
 const ReportFile = 'appland-findings.json';
-const ApiKey = 'dummy';
-const AppId = 'my-org/my-app';
+const AppId = test.AppId;
 const StandardOptions = {
   appmapFile: fixtureAppMapFileName(
     'org_springframework_samples_petclinic_owner_OwnerControllerTests_testInitCreationForm.appmap.json'
@@ -17,8 +17,6 @@ const StandardOptions = {
   reportFile: ReportFile,
   app: AppId,
 };
-
-beforeEach(() => sinon.stub(process.stdout, 'write'));
 
 afterEach(() => {
   try {
@@ -32,6 +30,7 @@ afterEach(() => nock.cleanAll());
 
 describe('scan', () => {
   it('errors with default options and without AppMap server API key', async () => {
+    delete process.env.APPLAND_API_KEY;
     try {
       await Command.handler(StandardOptions as any);
       throw new Error(`Expected this command to fail`);
@@ -41,8 +40,10 @@ describe('scan', () => {
   });
 
   it('runs with server access disabled', async () => {
+    delete process.env.APPLAND_API_KEY;
+    delete process.env.APPLAND_URL;
     await Command.handler(
-      Object.assign(StandardOptions, {
+      Object.assign({}, StandardOptions, {
         all: true,
       } as any)
     );
@@ -64,11 +65,24 @@ describe('scan', () => {
     ]);
   });
 
+  it('errors when the provided appId is not valid', async () => {
+    nock('http://localhost:3000').head(`/api/${AppId}`).reply(404);
+
+    try {
+      await Command.handler(StandardOptions as any);
+      throw new Error(`Expected this command to fail`);
+    } catch (e) {
+      expect((e as any).message).toMatch(
+        /App "myorg\/sample_app_6th_ed" is not valid or does not exist./
+      );
+    }
+  });
+
   it('integrates server finding status with local findings', async () => {
-    nock('http://localhost:3000').get(`/api/${AppId}/finding_status`);
+    const localhost = nock('http://localhost:3000');
+    localhost.head(`/api/${AppId}`).reply(204).persist();
+    localhost.get(`/api/${AppId}/finding_status`).reply(200, JSON.stringify([]));
 
-    await Command.handler(Object.assign(StandardOptions, { apiKey: ApiKey }) as any);
-
-    expect(nock.isDone()).toBeTruthy();
+    await Command.handler(StandardOptions as any);
   });
 });
