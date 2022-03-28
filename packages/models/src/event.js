@@ -161,10 +161,14 @@ export default class Event {
 
   get requestPath() {
     if (this.httpServerRequest) {
-      return (
-        this.httpServerRequest.normalized_path_info ||
-        this.httpServerRequest.path_info
-      );
+      const normalizedPathInfo = this.httpServerRequest.normalized_path_info
+        ? this.httpServerRequest.normalized_path_info.toString()
+        : '';
+      const pathInfo = this.httpServerRequest.path_info
+        ? this.httpServerRequest.path_info.toString()
+        : '';
+
+      return normalizedPathInfo || pathInfo;
     }
     if (this.httpClientRequest) {
       return this.httpClientRequest.url;
