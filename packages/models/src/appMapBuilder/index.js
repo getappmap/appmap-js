@@ -109,6 +109,16 @@ class AppMapBuilder extends EventSource {
         }
       }
 
+      // Normalize path info
+      const { httpServerRequest } = event;
+      if (httpServerRequest && httpServerRequest.normalized_path_info) {
+        httpServerRequest.normalized_path_info =
+          httpServerRequest.normalized_path_info.toString();
+      }
+      if (httpServerRequest && httpServerRequest.path_info) {
+        httpServerRequest.path_info = httpServerRequest.path_info.toString();
+      }
+
       return event;
       /* eslint-enable no-param-reassign */
     });
