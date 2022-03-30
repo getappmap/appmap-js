@@ -1,3 +1,10 @@
+# [@appland/models-v1.14.4](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.14.3...@appland/models-v1.14.4) (2022-03-30)
+
+
+### Bug Fixes
+
+* Normalize HTTP server request path info ([#558](https://github.com/applandinc/appmap-js/issues/558)) ([a130aac](https://github.com/applandinc/appmap-js/commit/a130aac0180600df94a7a4b570f25ec4fa4ecb51))
+
 # [@appland/models-v1.14.3](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.14.2...@appland/models-v1.14.3) (2022-03-10)
 
 
