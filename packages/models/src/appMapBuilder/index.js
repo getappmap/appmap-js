@@ -85,6 +85,14 @@ class AppMapBuilder extends EventSource {
 
   // normalize the appmap data before returning an Appmap model
   normalize() {
+    // Remove credentials from git repository url
+    if (/^https?/.test(this.data.metadata?.git?.repository)) {
+      const url = new URL(this.data.metadata.git.repository);
+      url.username = '';
+      url.password = '';
+      this.data.metadata.git.repository = url.toString();
+    }
+
     // Re-index events
     let eventId = 1;
     this.event((event) => {
