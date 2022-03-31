@@ -1,4 +1,5 @@
 const { buildAppMap } = require('@appland/models');
+const { verbose } = require('../utils');
 
 const unrecognizedTypes = new Set();
 
@@ -59,11 +60,13 @@ function classNameToOpenAPIType(className) {
   const mapper = (t) => mapRubyType(t) || mapPythonType(t) || mapJavaType(t);
   const mapped = mapper(className.toLowerCase());
   if (!mapped && !unrecognizedTypes.has(className)) {
-    console.warn(
-      `Warning: Don't know how to map "${className}" to an OpenAPI type. You'll need to update the generated file.`
-    );
+    if (verbose()) {
+      console.warn(
+        `Warning: Don't know how to map "${className}" to an OpenAPI type. You'll need to update the generated file.`
+      );
+    }
     unrecognizedTypes.add(className);
-    return className;
+    return 'object';
   }
   return mapped;
 }

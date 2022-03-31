@@ -117,7 +117,7 @@ describe('messageToOpenAPISchema', () => {
     const rubyMappings = [
       mapping('Array', 'array', 'string'),
       mapping('NilClass', 'string'),
-      mapping('MyClass', 'MyClass'),
+      mapping('MyClass', 'object'),
       ...multi(['Hash', 'ActiveSupport::HashWithIndifferentAccess'], 'object'),
       ...multi(['TrueClass', 'FalseClass'], 'boolean'),
     ];
@@ -132,7 +132,7 @@ describe('messageToOpenAPISchema', () => {
       mapping('builtins.int', 'integer'),
       mapping('builtins.list', 'array', 'string'),
       mapping('builtins.str', 'string'),
-      mapping('MyPythonClass', 'MyPythonClass'),
+      mapping('MyPythonClass', 'object'),
     ];
 
     mappingExamples(pythonMappings);
@@ -141,7 +141,7 @@ describe('messageToOpenAPISchema', () => {
   describe('for Java Types', () => {
     const javaMappings = [
       mapping('java.lang.String', 'string'),
-      mapping('com.example.MyClass', 'com.example.MyClass'),
+      mapping('com.example.MyClass', 'object'),
     ];
 
     mappingExamples(javaMappings);
