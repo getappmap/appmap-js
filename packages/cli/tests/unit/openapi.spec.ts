@@ -1,11 +1,10 @@
 import { readFile } from 'fs/promises';
 
-import {
-  messageToOpenAPISchema,
-  parseHTTPServerRequests,
-} from '../../src/openapi/util';
+import { messageToOpenAPISchema } from '../../src/openapi/util';
 import Model from '../../src/openapi/model';
+import SecuritySchemes from '../../src/openapi/securitySchemes';
 import { buildAppMap } from '@appland/models';
+import { rpcRequestForEvent } from '../../src/openapi/rpcRequest';
 
 const message = (c) => ({ message: { class: c } });
 const expected = (t, i?) => {
@@ -39,62 +38,63 @@ describe('openapi', () => {
     const appmapData = JSON.parse(
       (
         await readFile(
-          'tests/fixture/appmaps/Users_signup_invalid_signup_information.appmap.json'
+          'tests/fixtures/appmaps/Users_signup_invalid_signup_information.appmap.json'
         )
       ).toString()
     );
 
     const model = new Model();
+    const securitySchemes = new SecuritySchemes();
     const appmap = buildAppMap().source(appmapData).normalize().build();
     appmap.events
       .filter((e) => e.httpServerRequest)
-      .forEach((request) => model.addRequest(request));
+      .forEach((request) => model.addRpcRequest(rpcRequestForEvent(request)!));
 
+    // TODO: This is weak, we need an example with auth
+    expect(securitySchemes.openapi()).toEqual({});
     expect(model.openapi()).toEqual({
-      paths: {
-        '/signup': {
-          get: {
-            responses: {
-              '200': {
-                content: {
-                  'text/html': {},
-                },
-                description: 'OK',
+      '/signup': {
+        get: {
+          responses: {
+            '200': {
+              content: {
+                'text/html': {},
               },
+              description: 'OK',
             },
           },
         },
-        '/users': {
-          post: {
-            responses: {
-              '200': {
-                content: {
-                  'text/html': {},
-                },
-                description: 'OK',
-              },
-            },
-            requestBody: {
+      },
+      '/users': {
+        post: {
+          responses: {
+            '200': {
               content: {
-                'application/x-www-form-urlencoded': {
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      user: {
-                        type: 'object',
-                        properties: {
-                          name: {
-                            type: 'string',
-                          },
-                          email: {
-                            type: 'string',
-                          },
-                          password: {
-                            type: 'string',
-                          },
-                          password_confirmation: {
-                            type: 'string',
-                          },
+                'text/html': {},
+              },
+              description: 'OK',
+            },
+          },
+          requestBody: {
+            content: {
+              'application/x-www-form-urlencoded': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    user: {
+                      type: 'object',
+                      properties: {
+                        name: {
+                          type: 'string',
+                        },
+                        email: {
+                          type: 'string',
+                        },
+                        password: {
+                          type: 'string',
+                        },
+                        password_confirmation: {
+                          type: 'string',
                         },
                       },
                     },
@@ -104,9 +104,6 @@ describe('openapi', () => {
             },
           },
         },
-      },
-      components: {
-        securitySchemes: {},
       },
     });
   });

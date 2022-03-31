@@ -1,7 +1,36 @@
-const { buildAppMap } = require('@appland/models');
-const { verbose } = require('../utils');
+import { ParameterObject, ParameterProperty } from '@appland/models';
+import { OpenAPIV3 } from 'openapi-types';
+import { verbose } from '../utils';
 
 const unrecognizedTypes = new Set();
+
+interface Scheme {
+  schemeId: string;
+  scheme: OpenAPIV3.SecuritySchemeObject;
+}
+
+function parseScheme(authorization: string): Scheme {
+  const tokens = authorization.split(/\s/);
+  if (tokens.length === 1) {
+    return {
+      schemeId: 'api_key',
+      scheme: {
+        type: 'apiKey',
+        name: 'authorization',
+        in: 'header',
+      } as OpenAPIV3.ApiKeySecurityScheme,
+    };
+  }
+
+  const schemeId = tokens[0].toLowerCase();
+  return {
+    schemeId,
+    scheme: {
+      type: 'http',
+      scheme: schemeId,
+    } as OpenAPIV3.HttpSecurityScheme,
+  };
+}
 
 function classNameToOpenAPIType(className) {
   if (!className || className === '') {
@@ -71,59 +100,42 @@ function classNameToOpenAPIType(className) {
   return mapped;
 }
 
-function messageToOpenAPISchema(message) {
+function messageToOpenAPISchema(message: ParameterObject): any {
   const type = classNameToOpenAPIType(message.class);
-  const result = { type };
-  /*
-  if (message.value) {
-    let example;
-    try {
-      example = JSON.parse(message.value);
-    } catch (e) {
-      example = message.value;
-    }
-    if (example && example !== '') {
-      result.example = example.toString();
-    }
-  }
-  */
+  const result = { type } as any;
   if (type === 'array') {
     // This is our best guess right now.
     result.items = { type: 'string' };
   } else if (type === 'object' && message.properties) {
-    result.properties = message.properties.reduce((memo, msgProperty) => {
-      // eslint-disable-next-line no-param-reassign
-      memo[msgProperty.name] = {
-        type: classNameToOpenAPIType(msgProperty.class),
-      };
-      return memo;
-    }, {});
+    result.properties = message.properties.reduce(
+      (memo, msgProperty: ParameterProperty) => {
+        const type = classNameToOpenAPIType(msgProperty.class);
+        if (type === 'array') {
+          // eslint-disable-next-line no-param-reassign
+          memo[msgProperty.name] = {} as OpenAPIV3.ArraySchemaObject;
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          memo[msgProperty.name] = {
+            type,
+          } as OpenAPIV3.NonArraySchemaObject;
+        }
+        return memo;
+      },
+      {} as Record<
+        string,
+        OpenAPIV3.NonArraySchemaObject | OpenAPIV3.ArraySchemaObject
+      >
+    );
   }
 
   return result;
 }
 
-function parseHTTPServerRequests(source, collector) {
-  const appmap = buildAppMap().source(source).normalize().build();
-
-  appmap.events.filter((e) => e.httpServerRequest).forEach(collector);
-}
-
-function ensureString(value) {
+function ensureString(value: any): string {
   if (Array.isArray(value)) {
     return value.join('');
   }
   return value.toString();
 }
 
-function bestPathInfo(httpServerRequest) {
-  return ensureString(
-    httpServerRequest.normalized_path_info || httpServerRequest.path_info || ''
-  );
-}
-
-module.exports = {
-  bestPathInfo,
-  messageToOpenAPISchema,
-  parseHTTPServerRequests,
-};
+export { ensureString, messageToOpenAPISchema, parseScheme };
