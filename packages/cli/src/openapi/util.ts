@@ -112,7 +112,7 @@ function messageToOpenAPISchema(message: ParameterObject): any {
         const type = classNameToOpenAPIType(msgProperty.class);
         if (type === 'array') {
           // eslint-disable-next-line no-param-reassign
-          memo[msgProperty.name] = {} as OpenAPIV3.ArraySchemaObject;
+          memo[msgProperty.name] = { type } as OpenAPIV3.ArraySchemaObject;
         } else {
           // eslint-disable-next-line no-param-reassign
           memo[msgProperty.name] = {

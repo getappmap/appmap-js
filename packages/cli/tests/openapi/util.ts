@@ -13,6 +13,21 @@ const clientAppMap = buildAppMap()
   )
   .normalize()
   .build();
-const httpClientRequests = clientAppMap.events.filter((e: Event) => !!e.httpClientRequest);
+const httpClientRequests = clientAppMap.events.filter(
+  (e: Event) => !!e.httpClientRequest
+);
 
-export { clientAppMap, httpClientRequests };
+// POST /api/mapsets
+const serverAppMap = buildAppMap()
+  .source(
+    readFileSync(
+      'tests/fixtures/appmaps/POST_api_mapsets_logged_in_as_a_member_of_the_app_organization_with_one_scenario_with_bare_app_name_creates_a_mapset_with_a_scenario.appmap.json'
+    ).toString()
+  )
+  .normalize()
+  .build();
+const httpServerRequests = serverAppMap.events.filter(
+  (e: Event) => !!e.httpServerRequest
+);
+
+export { clientAppMap, httpClientRequests, serverAppMap, httpServerRequests };

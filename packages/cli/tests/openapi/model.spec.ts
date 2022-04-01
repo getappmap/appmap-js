@@ -1,22 +1,65 @@
 import { rpcRequestForEvent } from '../../src/openapi/rpcRequest';
 import Model from '../../src/openapi/model';
-import { httpClientRequests } from './util';
+import { httpClientRequests, httpServerRequests } from './util';
 
 describe('openapi.method', () => {
   it('http_client_request', async () => {
-    const postTokenRequest = rpcRequestForEvent(httpClientRequests[0])!;
-    expect(postTokenRequest.status).toEqual(200);
+    const request = rpcRequestForEvent(httpClientRequests[0])!;
+    expect(request.status).toEqual(200);
 
     const model = new Model();
-    model.addRpcRequest(postTokenRequest);
+    model.addRpcRequest(request);
     expect(model.openapi()).toEqual({
       '/v1/tokens': {
         post: {
-          responses: { 200: { content: { 'application/json': {} }, description: 'OK' } },
+          responses: {
+            200: { content: { 'application/json': {} }, description: 'OK' },
+          },
           security: [{ bearer: [] }],
         },
       },
     });
   });
-  // TODO: http_server_request
+  it('http_server_request', async () => {
+    const request = rpcRequestForEvent(httpServerRequests[0])!;
+    expect(request.status).toEqual(201);
+
+    const model = new Model();
+    model.addRpcRequest(request);
+    expect(model.openapi()).toEqual({
+      '/api/mapsets': {
+        post: {
+          responses: {
+            201: {
+              content: { 'application/json': {} },
+              description: 'Created',
+            },
+          },
+          security: [{ bearer: [] }],
+          requestBody: {
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    mapset: {
+                      type: 'object',
+                      properties: {
+                        app: {
+                          type: 'string',
+                        },
+                        appmaps: {
+                          type: 'array',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  });
 });
