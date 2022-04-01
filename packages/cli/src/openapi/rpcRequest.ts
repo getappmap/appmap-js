@@ -1,4 +1,4 @@
-import { Event, ParameterObject } from '@appland/models';
+import { Event, ParameterObject, ReturnValueObject } from '@appland/models';
 import { OpenAPIV3 } from 'openapi-types';
 import { URL } from 'url';
 import { ensureString } from './util';
@@ -6,6 +6,7 @@ import { ensureString } from './util';
 export interface RPCRequest {
   status: number;
   parameters: readonly ParameterObject[];
+  returnValue?: ReturnValueObject;
   requestHeaders: Record<string, string>;
   responseHeaders: Record<string, string>;
   requestContentType: string;
@@ -23,6 +24,10 @@ class ServerRPCRequest implements RPCRequest {
 
   get parameters() {
     return this.event.message || [];
+  }
+
+  get returnValue() {
+    return this.event.returnValue;
   }
 
   get requestHeaders() {
@@ -62,6 +67,10 @@ class ClientRPCRequest implements RPCRequest {
 
   get parameters() {
     return this.event.parameters || [];
+  }
+
+  get returnValue() {
+    return this.event.returnValue;
   }
 
   get requestHeaders() {

@@ -16,15 +16,19 @@ declare module '@appland/models' {
     readonly object_id?: number;
   }
 
+  export interface ValueBase extends ObjectBase {
+    readonly value: string;
+    readonly size?: number;
+    readonly properties?: ParameterProperty[];
+  }
+
   export interface ParameterProperty {
     readonly name: string;
     readonly class: string;
   }
 
-  export interface ParameterObject extends ObjectBase {
+  export interface ParameterObject extends ValueBase {
     readonly name?: string;
-    readonly value: string;
-    readonly properties: ParameterProperty[];
   }
 
   export interface ExceptionObject extends ObjectBase {
@@ -33,9 +37,7 @@ declare module '@appland/models' {
     readonly lineno?: number;
   }
 
-  export interface ReturnValueObject extends ObjectBase {
-    readonly value: string;
-  }
+  export interface ReturnValueObject extends ValueBase {}
 
   export interface HttpServerRequest {
     readonly headers?: Record<string, string>;

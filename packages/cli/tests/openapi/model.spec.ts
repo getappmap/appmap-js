@@ -31,7 +31,41 @@ describe('openapi.method', () => {
         post: {
           responses: {
             201: {
-              content: { 'application/json': {} },
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      id: {
+                        type: 'integer',
+                      },
+                      name: {
+                        type: 'string',
+                      },
+                      created_at: {
+                        type: 'string',
+                      },
+                      updated_at: {
+                        type: 'string',
+                      },
+                      user_id: { type: 'integer' },
+                      app_id: { type: 'integer' },
+                      branch: {
+                        type: 'string',
+                      },
+                      commit: {
+                        type: 'string',
+                      },
+                      environment: {
+                        type: 'string',
+                      },
+                      version: {
+                        type: 'string',
+                      },
+                    },
+                  },
+                },
+              },
               description: 'Created',
             },
           },

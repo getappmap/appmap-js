@@ -1,4 +1,4 @@
-import { ParameterObject, ParameterProperty } from '@appland/models';
+import { ParameterProperty, ValueBase } from '@appland/models';
 import { OpenAPIV3 } from 'openapi-types';
 import { verbose } from '../utils';
 
@@ -37,7 +37,7 @@ function classNameToOpenAPIType(className) {
     return 'unknown';
   }
 
-  const mapRubyType = (t) => {
+  const mapRubyType = (t: string): string | undefined => {
     switch (t) {
       case 'array':
         return 'array';
@@ -46,19 +46,22 @@ function classNameToOpenAPIType(className) {
         return 'object';
       case 'nilclass':
         return 'string';
+      case 'integer':
+        return 'integer';
+      case 'float':
+      case 'numeric':
+        return 'number';
       case 'trueclass':
       case 'falseclass':
         return 'boolean';
       case 'string':
         return 'string';
-      default:
-        return undefined;
     }
   };
 
-  const mapPythonType = (t) => {
+  const mapPythonType = (t: string): string | undefined => {
     if (!t.startsWith('builtins.')) {
-      return undefined;
+      return;
     }
 
     switch (t.substr(9)) {
@@ -72,21 +75,18 @@ function classNameToOpenAPIType(className) {
         return 'array';
       case 'str':
         return 'string';
-      default:
-        return undefined;
     }
   };
 
-  const mapJavaType = (t) => {
+  const mapJavaType = (t: string): string | undefined => {
     switch (t) {
       case 'java.lang.string':
         return 'string';
-      default:
-        return undefined;
     }
   };
 
-  const mapper = (t) => mapRubyType(t) || mapPythonType(t) || mapJavaType(t);
+  const mapper = (t: string): string | undefined =>
+    mapRubyType(t) || mapPythonType(t) || mapJavaType(t);
   const mapped = mapper(className.toLowerCase());
   if (!mapped && !unrecognizedTypes.has(className)) {
     if (verbose()) {
@@ -100,7 +100,7 @@ function classNameToOpenAPIType(className) {
   return mapped;
 }
 
-function messageToOpenAPISchema(message: ParameterObject): any {
+function messageToOpenAPISchema(message: ValueBase): any {
   const type = classNameToOpenAPIType(message.class);
   const result = { type } as any;
   if (type === 'array') {
