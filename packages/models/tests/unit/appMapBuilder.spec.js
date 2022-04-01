@@ -8,7 +8,7 @@ test('build', () => {
 
   expect(numCodeObjects).toEqual(50);
   expect(appMap.events.length).toEqual(815);
-  expect(Object.keys(appMap.metadata).length).toEqual(9);
+  expect(Object.keys(appMap.metadata).length).toEqual(10);
 });
 
 test('build with data source in constructor', () => {
@@ -18,7 +18,7 @@ test('build with data source in constructor', () => {
 
   expect(numCodeObjects).toEqual(50);
   expect(appMap.events.length).toEqual(815);
-  expect(Object.keys(appMap.metadata).length).toEqual(9);
+  expect(Object.keys(appMap.metadata).length).toEqual(10);
 });
 
 describe('normalize', () => {
@@ -59,6 +59,37 @@ describe('normalize', () => {
       }
 
       expect(e.thread_id).toEqual(currentThreadId);
+    });
+  });
+
+  it('removes credentials from git repository urls', () => {
+    function normalizeRepository(repository) {
+      const appMapData = {
+        metadata: {
+          git: { repository },
+        },
+        events: [],
+        classMap: [],
+      };
+
+      return buildAppMap(appMapData).normalize().build().metadata.git
+        .repository;
+    }
+
+    Object.entries({
+      'https://github.com/organization/repository':
+        'https://github.com/organization/repository',
+
+      'https://username@github.com/organization/repository':
+        'https://github.com/organization/repository',
+
+      'http://username:password@github.com/organization/repository':
+        'http://github.com/organization/repository',
+
+      'https://username:password@github.com/organization/repository.git':
+        'https://github.com/organization/repository.git',
+    }).forEach(([actual, expected]) => {
+      expect(normalizeRepository(actual)).toEqual(expected);
     });
   });
 });
