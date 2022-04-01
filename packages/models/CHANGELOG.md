@@ -1,3 +1,10 @@
+# [@appland/models-v1.14.5](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.14.4...@appland/models-v1.14.5) (2022-04-01)
+
+
+### Bug Fixes
+
+* remove credentials from git repository URLs ([#560](https://github.com/applandinc/appmap-js/issues/560)) ([42cc0f9](https://github.com/applandinc/appmap-js/commit/42cc0f9043a9b2209a1343b2d019141c4044d491))
+
 # [@appland/models-v1.14.4](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.14.3...@appland/models-v1.14.4) (2022-03-30)
 
 
