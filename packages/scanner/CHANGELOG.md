@@ -1,3 +1,10 @@
+## [1.51.1](https://github.com/applandinc/scanner/compare/v1.51.0...v1.51.1) (2022-04-01)
+
+
+### Bug Fixes
+
+* Upgrade `@appland/models` to v1.14.5 ([68f2382](https://github.com/applandinc/scanner/commit/68f2382812ef19f5c273a895f51c7e42f58cb7b5))
+
 # [1.51.0](https://github.com/applandinc/scanner/compare/v1.50.0...v1.51.0) (2022-03-25)
 
 
