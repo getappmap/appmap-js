@@ -2,6 +2,7 @@ import StatusCodes from './statusCodes';
 import { OpenAPIV3 } from 'openapi-types';
 import { RPCRequest } from './rpcRequest';
 import { messageToOpenAPISchema } from './util';
+import SchemaInferrer from './schemaInferrer';
 
 export default class Response {
   rpcRequests: RPCRequest[] = [];
@@ -17,7 +18,7 @@ export default class Response {
         .map((ct) => ct!.split(';')[0]);
     };
 
-    const schemata: Record<string, OpenAPIV3.SchemaObject> = {};
+    const schemata: Record<string, SchemaInferrer> = {};
 
     this.rpcRequests.forEach((rpcRequest) => {
       const returnValue = rpcRequest.returnValue;
@@ -26,21 +27,23 @@ export default class Response {
       if (rpcRequest.responseContentType) {
         const mimeType = rpcRequest.responseContentType!.split(';')[0];
         if (!schemata[mimeType]) {
-          // TODO: Merge these instead of overwriting
-          schemata[mimeType] = messageToOpenAPISchema(returnValue);
+          schemata[mimeType] = new SchemaInferrer();
         }
+        schemata[mimeType].addExample(returnValue);
       }
     });
 
     const content = [...new Set(contentTypes())]
       .sort()
       .reduce((memo, mimeType) => {
-        // eslint-disable-next-line no-param-reassign
         memo[mimeType] = {};
-        const schema = schemata[mimeType];
-        if (schema) {
-          memo[mimeType].schema = schema;
-        }
+
+        if (!schemata[mimeType]) return memo;
+
+        // eslint-disable-next-line no-param-reassign
+        const schema = schemata[mimeType].openapi();
+        if (schema) memo[mimeType].schema = schema;
+
         return memo;
       }, {} as Record<string, OpenAPIV3.MediaTypeObject>);
     return { content, description: StatusCodes[this.statusCode] };

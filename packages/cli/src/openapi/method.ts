@@ -2,7 +2,7 @@ import { ParameterObject } from '@appland/models';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 import Response from './response';
 import { RPCRequest } from './rpcRequest';
-import Schema from './schema';
+import ObjectSchema from './objectSchema';
 import { messageToOpenAPISchema, parseScheme } from './util';
 
 const bodyParamMethods = new Set(['delete', 'put', 'post', 'patch']);
@@ -31,7 +31,7 @@ export default class Method {
         return memo;
       }, {} as Record<string, OpenAPIV3.ResponseObject>);
 
-    const schemata: Record<string, Schema> = {};
+    const schemata: Record<string, ObjectSchema> = {};
     const parameters: OpenAPIV3_1.ParameterObject[] = [];
     let securitySchemeId: string | undefined;
 
@@ -47,11 +47,11 @@ export default class Method {
         }
       }
 
-      let schema: Schema | undefined;
+      let schema: ObjectSchema | undefined;
       if (rpcRequest.requestContentType) {
         const mimeType = rpcRequest.requestContentType!.split(';')[0];
         if (!schemata[mimeType]) {
-          schemata[mimeType] = new Schema();
+          schemata[mimeType] = new ObjectSchema();
         }
         schema = schemata[mimeType];
       }
