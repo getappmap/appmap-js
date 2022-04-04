@@ -40,12 +40,12 @@ function classNameToOpenAPIType(className) {
   const mapRubyType = (t: string): string | undefined => {
     switch (t) {
       case 'array':
+      case 'sequel::postgres::pgarray':
         return 'array';
       case 'hash':
+      case 'sequel::postgres::jsonbhash':
       case 'activesupport::hashwithindifferentaccess':
         return 'object';
-      case 'nilclass':
-        return 'string';
       case 'integer':
         return 'integer';
       case 'float':
@@ -54,6 +54,8 @@ function classNameToOpenAPIType(className) {
       case 'trueclass':
       case 'falseclass':
         return 'boolean';
+      case 'nilclass':
+        return 'unknown';
       case 'string':
         return 'string';
     }
@@ -102,18 +104,17 @@ function classNameToOpenAPIType(className) {
 
 function messageToOpenAPISchema(message: ValueBase): any {
   const type = classNameToOpenAPIType(message.class);
+  if (type === 'unknown') return;
+
   const result = { type } as any;
-  if (type === 'array') {
-    // This is our best guess right now.
-    result.items = { type: 'string' };
-  } else if (type === 'object' && message.properties) {
-    result.properties = message.properties.reduce(
+  if (message.properties) {
+    const properties = message.properties.reduce(
       (memo, msgProperty: ParameterProperty) => {
         const type = classNameToOpenAPIType(msgProperty.class);
         if (type === 'array') {
           // eslint-disable-next-line no-param-reassign
           memo[msgProperty.name] = { type } as OpenAPIV3.ArraySchemaObject;
-        } else {
+        } else if (type !== 'unknown') {
           // eslint-disable-next-line no-param-reassign
           memo[msgProperty.name] = {
             type,
@@ -126,6 +127,15 @@ function messageToOpenAPISchema(message: ValueBase): any {
         OpenAPIV3.NonArraySchemaObject | OpenAPIV3.ArraySchemaObject
       >
     );
+    if (type === 'array') {
+      result.items = { type: 'object', properties };
+    } else {
+      result.properties = properties;
+    }
+  } else {
+    if (type === 'array') {
+      result.items = { type: 'string' };
+    }
   }
 
   return result;

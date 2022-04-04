@@ -1,0 +1,64 @@
+---
+- id: 1693
+  event: call
+  thread_id: 87240
+  http_server_request:
+    request_method: GET
+    path_info: "/api/appmaps"
+    normalized_path_info: "/api/appmaps"
+    headers:
+      Host: www.example.com
+      Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+      Authorization: Bearer YWxpY2U6MDE2MmM2NDItMTI1ZS00ZjdhLWEyOTItMGM1NzcxM2RjYTFj
+      Content-Length: '0'
+  message:
+  - name: labels
+    class: Array
+    value: "[label4]"
+    object_id: 119700
+    properties:
+  - name: mapsets
+    class: Array
+    value: "[unassigned]"
+    object_id: 119720
+    properties:
+  - name: controller
+    class: String
+    value: api/appmaps
+    object_id: 103220
+  - name: action
+    class: String
+    value: index
+    object_id: 103240
+- id: 1794
+  event: return
+  thread_id: 87240
+  parent_id: 1693
+  elapsed: 0.009565
+  return_value:
+    class: Array
+    value: '[#<struct Scenario::ApiItem mapset_id=nil, scenario_uuid="40ed2c64-52b6-4844-bb67-dee1aaf54043",
+      code]'
+    object_id: 119460
+    size: 1
+    properties:
+    - name: mapset_id
+      class: NilClass
+    - name: scenario_uuid
+      class: String
+    - name: code_objects
+      class: Array
+    - name: metadata
+      class: Sequel::Postgres::JSONBHash
+    - name: labels
+      class: Sequel::Postgres::PGArray
+  http_server_response:
+    status_code: 200
+    headers:
+      X-Frame-Options: SAMEORIGIN
+      X-XSS-Protection: 1; mode=block
+      X-Content-Type-Options: nosniff
+      X-Download-Options: noopen
+      X-Permitted-Cross-Domain-Policies: none
+      Referrer-Policy: strict-origin-when-cross-origin
+      Content-Type: application/json; charset=utf-8

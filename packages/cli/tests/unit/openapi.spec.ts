@@ -8,6 +8,8 @@ import { rpcRequestForEvent } from '../../src/openapi/rpcRequest';
 
 const message = (c) => ({ message: { class: c } });
 const expected = (t, i?) => {
+  if (!t) return { expected: undefined };
+
   const r = { expected: { type: t } };
   if (i) {
     r.expected['items'] = { type: i };
@@ -26,7 +28,7 @@ const multi = (classes, t) => {
 
 const mappingExamples = (mappings) => {
   mappings.forEach((m) => {
-    it(`maps from ${m.message.class} to ${m.expected.type}`, () => {
+    it(`maps from ${m.message.class} to ${m.expected?.type}`, () => {
       const actual = messageToOpenAPISchema(m.message);
       expect(actual).toStrictEqual(m.expected);
     });
@@ -113,7 +115,7 @@ describe('messageToOpenAPISchema', () => {
   describe('for Ruby types', () => {
     const rubyMappings = [
       mapping('Array', 'array', 'string'),
-      mapping('NilClass', 'string'),
+      mapping('NilClass', undefined),
       mapping('MyClass', 'object'),
       ...multi(['Hash', 'ActiveSupport::HashWithIndifferentAccess'], 'object'),
       ...multi(['TrueClass', 'FalseClass'], 'boolean'),

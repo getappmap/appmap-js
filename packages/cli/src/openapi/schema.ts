@@ -27,7 +27,8 @@ export default class Schema {
         if (properties[message.name!]) {
           return;
         }
-        properties[message.name!] = messageToOpenAPISchema(message);
+        const schema = messageToOpenAPISchema(message);
+        if (schema) properties[message.name!] = schema;
       });
     if (Object.keys(properties).length === 0) {
       return null;

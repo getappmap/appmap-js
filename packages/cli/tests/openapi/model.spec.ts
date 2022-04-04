@@ -39,9 +39,6 @@ describe('openapi.method', () => {
                       id: {
                         type: 'integer',
                       },
-                      name: {
-                        type: 'string',
-                      },
                       created_at: {
                         type: 'string',
                       },
@@ -50,18 +47,6 @@ describe('openapi.method', () => {
                       },
                       user_id: { type: 'integer' },
                       app_id: { type: 'integer' },
-                      branch: {
-                        type: 'string',
-                      },
-                      commit: {
-                        type: 'string',
-                      },
-                      environment: {
-                        type: 'string',
-                      },
-                      version: {
-                        type: 'string',
-                      },
                     },
                   },
                 },
