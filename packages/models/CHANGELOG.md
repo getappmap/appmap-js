@@ -1,3 +1,10 @@
+# [@appland/models-v1.15.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.14.5...@appland/models-v1.15.0) (2022-04-05)
+
+
+### Features
+
+* Add OpenAPI response schema by mime type ([fb96895](https://github.com/applandinc/appmap-js/commit/fb96895e071aaa010a43aaa53da7e5e480a590d8))
+
 # [@appland/models-v1.14.5](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.14.4...@appland/models-v1.14.5) (2022-04-01)
 
 
