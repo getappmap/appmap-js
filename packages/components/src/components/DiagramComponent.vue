@@ -111,9 +111,6 @@ export default {
           .on('edge', (edge) => this.selectObject({ ...edge, type: 'edge' }))
           .on('collapse', () => this.highlightSelectedComponent(false))
           .on('expand', () => this.highlightSelectedComponent(false))
-          .on('viewSource', (location) =>
-            this.$root.$emit('viewSource', location)
-          )
           .on('makeRoot', (codeObject) => {
             this.$root.$emit('makeRoot', codeObject);
           });
