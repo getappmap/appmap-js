@@ -1,5 +1,5 @@
 <template>
-  <div class="details-panel-header">
+  <div class="details-panel-header" data-cy="left-panel-header">
     <div class="details-panel-header__parents" v-if="parents.length">
       <div
         class="details-panel-header__parent"
@@ -21,6 +21,7 @@
       <span v-if="objectId">{{ objectId }}</span>
     </h4>
     <h4 class="details-panel-header__details-name" :if="title">{{ title }}</h4>
+    <v-source-code-link :object="object" />
     <div class="details-panel-header__ghost-link">
       <slot name="links" />
     </div>
@@ -37,6 +38,7 @@ import VNodeTypeRouteIcon from '@/assets/node-types/route.svg';
 import VNodeTypeDatabaseIcon from '@/assets/node-types/database.svg';
 import VNodeTypeQueryIcon from '@/assets/node-types/query.svg';
 import VNodeTypeExternalServiceIcon from '@/assets/node-types/external-service.svg';
+import VSourceCodeLink from '@/components/SourceCodeLink.vue';
 import { SELECT_OBJECT } from '@/store/vsCode';
 
 export default {
@@ -51,6 +53,7 @@ export default {
     VNodeTypeDatabaseIcon,
     VNodeTypeQueryIcon,
     VNodeTypeExternalServiceIcon,
+    VSourceCodeLink,
   },
 
   props: {

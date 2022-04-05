@@ -6,6 +6,58 @@ context('VS Code Extension', () => {
       );
     });
 
+    it('displays source locations as expected', () => {
+      cy.get(
+        '.node[data-id="active_support/ActiveSupport::SecurityUtils"]'
+      ).click();
+      cy.get(
+        '[data-cy="left-panel-header"] [data-cy="source-location"]'
+      ).contains(
+        '/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb'
+      );
+
+      cy.get('.node[data-id="lib/Spree::BackendConfiguration"]').click('');
+      cy.get(
+        '[data-cy="left-panel-header"] [data-cy="source-location"]'
+      ).contains('lib/spree/backend_configuration.rb');
+
+      cy.get('.node[data-id="app/controllers"]').click();
+      cy.get(
+        '[data-cy="left-panel-header"] [data-cy="source-location"]'
+      ).should('not.exist');
+    });
+
+    it('provides an external link to source when available', () => {
+      cy.get('.node[data-id="lib/Spree::BackendConfiguration"]').click('');
+      cy.get(
+        '[data-cy="left-panel-header"] [data-cy="source-location"] [data-cy="external-link"]'
+      ).should('exist');
+
+      cy.get('.node[data-id="app/controllers"]').click('');
+      cy.get(
+        '[data-cy="left-panel-header"] [data-cy="source-location"] [data-cy="external-link"]'
+      ).should('not.exist');
+    });
+
+    it('displays a warning below source code links when applicable', () => {
+      cy.get(
+        '.node[data-id="active_support/ActiveSupport::SecurityUtils"]'
+      ).click();
+      cy.get(
+        '[data-cy="left-panel-header"] [data-cy="source-location-error"]'
+      ).contains('External source not available');
+
+      cy.get('.node[data-id="app/controllers"]').click();
+      cy.get(
+        '[data-cy="left-panel-header"] [data-cy="source-location-error"]'
+      ).should('not.exist');
+
+      cy.get('.node[data-id="lib/Spree::BackendConfiguration"]').click();
+      cy.get(
+        '[data-cy="left-panel-header"] [data-cy="source-location-error"]'
+      ).should('not.exist');
+    });
+
     it('pans to the correct location when selecting "View in Trace"', () => {
       cy.get(
         '.node.class[data-id="active_support/ActiveSupport::SecurityUtils"]'
