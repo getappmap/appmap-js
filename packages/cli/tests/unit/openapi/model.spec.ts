@@ -1,5 +1,5 @@
-import { rpcRequestForEvent } from '../../src/openapi/rpcRequest';
-import Model from '../../src/openapi/model';
+import { rpcRequestForEvent } from '../../../src/openapi/rpcRequest';
+import Model from '../../../src/openapi/model';
 import { httpClientRequests, httpServerRequests } from './util';
 
 describe('openapi.method', () => {

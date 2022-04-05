@@ -1,5 +1,5 @@
-import { rpcRequestForEvent } from '../../src/openapi/rpcRequest';
-import SecuritySchemes from '../../src/openapi/securitySchemes';
+import { rpcRequestForEvent } from '../../../src/openapi/rpcRequest';
+import SecuritySchemes from '../../../src/openapi/securitySchemes';
 import { httpClientRequests, httpServerRequests } from './util';
 
 describe('openapi.securitySchemes', () => {

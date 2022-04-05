@@ -1,6 +1,6 @@
 import { join, normalize } from 'path';
 import { cwd } from 'process';
-import provider from '../../src/openapi/provider';
+import provider from '../../../src/openapi/provider';
 
 describe('openapi.provider', () => {
   it('caches the schema', async () => {

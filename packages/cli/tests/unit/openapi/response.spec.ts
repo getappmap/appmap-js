@@ -1,8 +1,8 @@
 import { load, YAMLException } from 'js-yaml';
 import { readFileSync } from 'fs';
-import Response from '../../src/openapi/response';
+import Response from '../../../src/openapi/response';
 import { Event } from '@appland/models';
-import { rpcRequestForEvent } from '../../src/openapi/rpcRequest';
+import { rpcRequestForEvent } from '../../../src/openapi/rpcRequest';
 
 const fixtureData = load(
   readFileSync(
