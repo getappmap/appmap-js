@@ -1,3 +1,13 @@
+# [@appland/appmap-v3.20.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.19.0...@appland/appmap-v3.20.0) (2022-04-05)
+
+
+### Features
+
+* Add OpenAPI response schema by mime type ([fb96895](https://github.com/applandinc/appmap-js/commit/fb96895e071aaa010a43aaa53da7e5e480a590d8))
+* Best-effort inference of schema from multiple examples ([d76f3c4](https://github.com/applandinc/appmap-js/commit/d76f3c4c5e665a7d261ed21d77093bb56762cfe7))
+* Don't emit openapi item when type is nil/unknown ([6e0831a](https://github.com/applandinc/appmap-js/commit/6e0831a682d1ae50152c95d6b6e5825a7c9f5009))
+* Emit 'object' for unrecognized type ([651b5ae](https://github.com/applandinc/appmap-js/commit/651b5ae0921ba5cfa79ba46618a79390f43a8f56))
+
 # [@appland/appmap-v3.19.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.18.3...@appland/appmap-v3.19.0) (2022-03-10)
 
 
