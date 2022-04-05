@@ -25,7 +25,7 @@ export default class Response {
       if (!returnValue) return;
 
       if (rpcRequest.responseContentType) {
-        const mimeType = rpcRequest.responseContentType!.split(';')[0];
+        const mimeType = rpcRequest.responseContentType.split(';')[0];
         if (!schemata[mimeType]) {
           schemata[mimeType] = new SchemaInferrer();
         }
