@@ -1,21 +1,31 @@
 import { join } from 'path';
 import { verbose } from '../utils';
 
-const { promises: fsp, statSync } = require('fs');
-const { queue } = require('async');
-const { glob } = require('glob');
-const yaml = require('js-yaml');
-const { parseHTTPServerRequests } = require('./util');
-const Model = require('./model');
+import { promises as fsp, statSync } from 'fs';
+import { queue } from 'async';
+import { glob } from 'glob';
+import yaml from 'js-yaml';
+import Model from './model';
+import { Event } from '@appland/models';
+import { Arguments, Argv } from 'yargs';
+import parseHTTPServerRequests from './parseHTTPServerRequests';
+import { rpcRequestForEvent } from './rpcRequest';
+import SecuritySchemes from './securitySchemes';
 
-class OpenAPICommand {
-  constructor(directory) {
+export class OpenAPICommand {
+  directory: string;
+  count: number;
+  model: Model;
+  securitySchemes: SecuritySchemes;
+
+  constructor(directory: string) {
     this.directory = directory;
+    this.model = new Model();
+    this.securitySchemes = new SecuritySchemes();
+    this.count = 0;
   }
 
-  async execute() {
-    this.count = 0;
-    this.model = new Model();
+  async execute(): Promise<any> {
     const q = queue(this.collectAppMap.bind(this), 5);
     q.pause();
     // Make sure the directory exists -- if it doesn't, the glob below just returns nothing.
@@ -27,22 +37,31 @@ class OpenAPICommand {
       q.error(reject);
       q.resume();
     });
-    return this.model.openapi();
+
+    return {
+      paths: this.model.openapi(),
+      securitySchemes: this.securitySchemes.openapi(),
+    };
   }
 
-  async collectAppMap(file) {
+  async collectAppMap(file: string): Promise<void> {
     this.count += 1;
     try {
-      parseHTTPServerRequests(JSON.parse(await fsp.readFile(file)), (e) =>
-        this.model.addRequest(e)
+      parseHTTPServerRequests(
+        JSON.parse((await fsp.readFile(file)).toString()),
+        (e: Event) => {
+          const request = rpcRequestForEvent(e)!;
+          this.model.addRpcRequest(request);
+          this.securitySchemes.addRpcRequest(request);
+        }
       );
     } catch (e) {
-      throw new Error(`Error parsing ${file}`, { cause: e });
+      throw new Error(`Error parsing ${file}: ${e}`);
     }
   }
 }
 
-async function loadTemplate(fileName) {
+async function loadTemplate(fileName: string): Promise<any> {
   if (!fileName) {
     // eslint-disable-next-line no-param-reassign
     fileName = join(__dirname, '../../resources/openapi-template.yaml');
@@ -54,8 +73,9 @@ module.exports = {
   command: 'openapi',
   aliases: ['swagger'],
   describe: 'Generate OpenAPI from AppMaps in a directory',
-  builder(args) {
+  builder(args: Argv) {
     args.option('appmap-dir', {
+      alias: ['d'],
       describe: 'directory to recursively inspect for AppMaps',
       default: 'tmp/appmap',
       requiresArg: true,
@@ -77,11 +97,11 @@ module.exports = {
     });
     return args.strict();
   },
-  async handler(argv) {
+  async handler(argv: Arguments | any) {
     verbose(argv.verbose);
     const { openapiTitle, openapiVersion } = argv;
 
-    function tryConfigure(path, fn) {
+    function tryConfigure(path: string, fn: () => void) {
       try {
         fn();
       } catch {
