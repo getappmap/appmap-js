@@ -1,3 +1,10 @@
+# [1.52.0](https://github.com/applandinc/scanner/compare/v1.51.1...v1.52.0) (2022-04-07)
+
+
+### Features
+
+* Rule can be specified in a directory ([e929407](https://github.com/applandinc/scanner/commit/e929407c738aa0f29e55a22de6a06496c87b02ca))
+
 ## [1.51.1](https://github.com/applandinc/scanner/compare/v1.51.0...v1.51.1) (2022-04-01)
 
 
