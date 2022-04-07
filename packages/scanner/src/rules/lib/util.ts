@@ -121,6 +121,23 @@ const isRoot = (event: Event | undefined): boolean => {
   );
 };
 
+// Attribution: https://github.com/shahata/dasherize
+// MIT License
+function dasherize(str: string): string {
+  return str.replace(
+    /[A-Z0-9](?:(?=[^A-Z0-9])|[A-Z0-9]*(?=[A-Z0-9][^A-Z0-9]|$))/g,
+    function (s, i) {
+      return (i > 0 ? '-' : '') + s.toLowerCase();
+    }
+  );
+}
+
+// Literally StackOverflow
+function camelize(text: string): string {
+  text = text.replace(/[-_\s.]+(.)?/g, (_, c) => (c ? c.toUpperCase() : ''));
+  return text.slice(0, 1).toLowerCase() + text.slice(1);
+}
+
 function pluralize(word: string, count: number): string {
   return count === 1 ? word : [word, 's'].join('');
 }
@@ -134,6 +151,8 @@ export {
   ideLink,
   isRoot,
   parseValue,
+  camelize,
+  dasherize,
   pluralize,
   providesAuthentication,
   toRegExp,
