@@ -3,6 +3,7 @@ import VDetailsPanel from '@/components/DetailsPanel.vue';
 import VDetailsButton from '@/components/DetailsButton.vue';
 import scenario from '@/stories/data/scenario.json';
 import { buildStore, SET_APPMAP_DATA } from '@/store/vsCode';
+import bindResolvePath from './support/resolvePath';
 
 const store = buildStore();
 store.commit(SET_APPMAP_DATA, scenario);
@@ -35,6 +36,9 @@ const Template = (args, { argTypes }) => ({
       </template>
     </v-details-panel>
   `,
+  created() {
+    bindResolvePath(this);
+  },
   store,
 });
 

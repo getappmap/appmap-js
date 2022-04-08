@@ -13,13 +13,6 @@
         >
           Show in Trace
         </v-details-button>
-        <v-details-button
-          v-if="hasSource"
-          @click.native="viewSource"
-          ref="viewSource"
-        >
-          View source
-        </v-details-button>
       </template>
     </v-details-panel-header>
 
@@ -183,14 +176,6 @@ export default {
       return response;
     },
 
-    hasSource() {
-      return (
-        !this.hasSql &&
-        !this.object.http_server_request &&
-        this.location !== null
-      );
-    },
-
     hasSql() {
       return Boolean(this.object.sql);
     },
@@ -206,23 +191,11 @@ export default {
     caller() {
       return this.object.parent ? [this.object.parent] : null;
     },
-
-    location() {
-      let loc = null;
-      if (this.object.codeObject) {
-        loc = this.object.codeObject.location || null;
-      }
-      return loc;
-    },
   },
 
   methods: {
     viewEvent() {
       this.$store.commit(SET_VIEW, VIEW_FLOW);
-    },
-
-    viewSource() {
-      this.$root.$emit('viewSource', this.location);
     },
   },
 };

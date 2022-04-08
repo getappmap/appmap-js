@@ -5,11 +5,6 @@
       :object="object"
       :title="object.name"
     >
-      <template v-slot:links>
-        <v-details-button @click.native="viewSource">
-          View source
-        </v-details-button>
-      </template>
     </v-details-panel-header>
     <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
     <v-details-panel-list
@@ -31,7 +26,6 @@
 
 <script>
 import { CodeObjectType } from '@appland/models';
-import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelFilters from '@/components/DetailsPanelFilters.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
@@ -39,7 +33,6 @@ import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 export default {
   name: 'v-details-panel-class',
   components: {
-    VDetailsButton,
     VDetailsPanelHeader,
     VDetailsPanelFilters,
     VDetailsPanelList,
@@ -70,12 +63,6 @@ export default {
       // We don't currently have a panel for query objects.
       // Instead, link to the query events.
       return this.object.sqlQueries.map((obj) => obj.events).flat();
-    },
-  },
-
-  methods: {
-    viewSource() {
-      this.$root.$emit('viewSource', this.object.locations[0]);
     },
   },
 };

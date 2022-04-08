@@ -153,17 +153,6 @@ const COMPONENT_OPTIONS = {
           )
           .on('execute', (obj) => componentDiagram.collapse(obj)),
       (item) =>
-        item
-          .text('View source')
-          .selector('g.node.class')
-          .transform((e) => {
-            const node = componentDiagram.graph.node(e.dataset.id);
-            return node.codeObject.locations[0];
-          })
-          .on('execute', (location) =>
-            componentDiagram.emit('viewSource', location)
-          ),
-      (item) =>
         item.text('Reset view').on('execute', () => {
           componentDiagram.render(componentDiagram.classMap);
         }),
