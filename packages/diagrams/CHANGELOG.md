@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.5.2](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.5.1...@appland/diagrams-v1.5.2) (2022-04-08)
+
+
+### Bug Fixes
+
+* Drop `view source` from context menu ([dcaa770](https://github.com/applandinc/appmap-js/commit/dcaa770f07dfc694a75ee7abbbb1f9c9735d71a3))
+
 # [@appland/diagrams-v1.5.1](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.5.0...@appland/diagrams-v1.5.1) (2021-12-17)
 
 
