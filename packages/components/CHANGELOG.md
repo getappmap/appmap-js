@@ -1,3 +1,23 @@
+# [@appland/components-v2.0.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.24.1...@appland/components-v2.0.0) (2022-04-08)
+
+
+### Bug Fixes
+
+* Drop `view source` from context menu ([dcaa770](https://github.com/applandinc/appmap-js/commit/dcaa770f07dfc694a75ee7abbbb1f9c9735d71a3))
+
+
+### Features
+
+* Improve user feedback for `view source` ([e64f272](https://github.com/applandinc/appmap-js/commit/e64f2725ca1bc1e22b02c8f66f4fe85fdb0d47d4))
+
+
+### BREAKING CHANGES
+
+* This change alters the `viewSource` event emit by the
+VsCodeExtension view. It now requires the owner listen for and respond
+to a `request-resolve-location` event, providing a raw location to be
+transformed and sent back in a `response-resolve-location` event.
+
 # [@appland/components-v1.24.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.24.0...@appland/components-v1.24.1) (2022-03-10)
 
 
