@@ -4,19 +4,15 @@ import ps from 'ps-node';
 import { RequestOptions } from 'https';
 import configureHostAndPort from './configureHostAndPort';
 import ready from './ready';
+import { ExitCode } from './exitCode';
 
 export default async function confirmProcessCharacteristics(
   requestOptions: RequestOptions
 ) {
   if (requestOptions.hostname !== 'localhost') {
-    UI.progress(
-      `Since your app isn't running on localhost, I can't look up its info by port number. So let's continue with the process.`
-    );
     return;
   }
 
-  UI.progress(`OK, since your app is running on localhost, I'm going to try and get more info about it
-using a reverse-lookup by port number.`);
   UI.status = `Looking up the application process info`;
 
   const printPid = async (pid: number): Promise<void> => {
@@ -48,7 +44,13 @@ using a reverse-lookup by port number.`);
       await Promise.all(pids.tcp.map(printPid));
       return pids;
     } else {
-      UI.error(`No process found on port ${requestOptions.port}`);
+      UI.error(`No process found on port ${requestOptions.port}.`);
+      UI.progress(
+        `It looks like you need to start your app (make sure you have the AppMap agent enabled).`
+      );
+      UI.progress(
+        `Or maybe your app is running, but it's on a different host and/or port.`
+      );
     }
   });
 
@@ -67,16 +69,17 @@ using a reverse-lookup by port number.`);
   if (!looksGood) {
     const { reconfigureOrRetry } = await UI.prompt({
       type: 'list',
-      choices: ['reconfigure', 'retry'],
+      choices: ['reconfigure', 'retry', 'quit'],
       name: 'reconfigureOrRetry',
-      message:
-        'Do you want to change the hostname and port number? Or do you want to adjust your app process parameters, restart it, and then I will retry?',
+      message: 'How would you like to proceed?',
     });
 
     if (reconfigureOrRetry === 'reconfigure') {
       await configureHostAndPort(requestOptions);
+    } else if (reconfigureOrRetry === 'quit') {
+      process.exit(ExitCode.Quit);
     } else {
-      await ready();
+      // Try again
     }
 
     await confirmProcessCharacteristics(requestOptions);

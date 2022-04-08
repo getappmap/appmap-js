@@ -1,34 +1,30 @@
 import { RequestOptions } from 'http';
 import UI from '../userInteraction';
+import { readSetting, writeSetting } from './configuration';
 
 export default async function (options: RequestOptions) {
-  options.hostname = null;
-  options.port = null;
-
-  const { useLocalhost } = await UI.prompt({
-    type: 'confirm',
-    name: 'useLocalhost',
-    message: 'Is your app running on localhost (your machine)?',
-    default: 'y',
+  const { hostname } = await UI.prompt({
+    type: 'input',
+    name: 'hostname',
+    message: 'Enter the hostname that your server is running on:',
+    default: await readSetting('dev_server.host', 'localhost'),
   });
-  if (!useLocalhost) {
-    options.hostname = await UI.prompt({
-      type: 'input',
-      name: 'hostname',
-      message: 'Enter the hostname that your server is running on:',
-    })['hostname'];
-  } else {
-    options.hostname = 'localhost';
-  }
 
-  while (!options.port) {
+  options.hostname = hostname;
+  await writeSetting('dev_server.host', hostname);
+
+  let port: number | undefined;
+  while (!port) {
     const { portNumber: answer } = await UI.prompt({
-      type: 'number',
+      type: 'input',
       name: 'portNumber',
       message: 'Enter the port number on which your server is listening:',
+      default: await readSetting('dev_server.port', 3000),
     });
-    if (answer) {
-      options.port = answer;
+    port = parseInt(answer);
+    if (port !== NaN) {
+      await writeSetting('dev_server.port', port);
+      options.port = port;
     }
   }
 }
