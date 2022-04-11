@@ -1,6 +1,6 @@
 <template>
   <div class="trace-node__body--sql">
-    <v-sql-code :sql="event.sqlQuery" />
+    <v-sql-code :sql="event.sqlQuery" :database="event.sql.database_type" />
   </div>
 </template>
 

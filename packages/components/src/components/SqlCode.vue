@@ -10,6 +10,18 @@ import hljs from 'highlight.js';
 import sql from 'highlight.js/lib/languages/sql';
 
 hljs.registerLanguage('sql', sql);
+const supportedSqlDialects = new Set([
+  'sql',
+  'mariadb',
+  'mysql',
+  'postgresql',
+  'db2',
+  'plsql',
+  'n1ql',
+  'redshift',
+  'spark',
+  'tsql',
+]);
 
 export default {
   name: 'v-sql-code',
@@ -19,11 +31,33 @@ export default {
       type: String,
       required: true,
     },
+    database: {
+      type: String,
+    },
   },
 
   computed: {
+    sqlDialect() {
+      if (this.database && supportedSqlDialects.has(this.database)) {
+        return this.database;
+      }
+
+      return 'sql';
+    },
+
     formattedSQL() {
-      return hljs.highlight(sqlFormatter(this.sql), {
+      let formattedSql = this.sql;
+
+      try {
+        formattedSql = sqlFormatter(this.sql, {
+          language: this.sqlDialect,
+        });
+      } catch (e) {
+        console.info(`Failed to format the following ${this.sqlDialect} query`);
+        console.info(this.sql);
+      }
+
+      return hljs.highlight(formattedSql, {
         language: 'sql',
         ignoreIllegals: true,
       }).value;
