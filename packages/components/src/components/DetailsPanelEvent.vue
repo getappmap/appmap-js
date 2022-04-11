@@ -16,7 +16,11 @@
       </template>
     </v-details-panel-header>
 
-    <v-sql-code v-if="hasSql" :sql="object.sql.sql" />
+    <v-sql-code
+      v-if="hasSql"
+      :sql="object.sql.sql"
+      :database="object.sql.database_type"
+    />
 
     <div class="event-params" v-if="hasParameters">
       <h5>Parameters</h5>
