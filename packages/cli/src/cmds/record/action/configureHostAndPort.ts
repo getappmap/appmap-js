@@ -1,8 +1,10 @@
-import { RequestOptions } from 'http';
-import UI from '../userInteraction';
-import { readSetting, writeSetting } from './configuration';
+import { requestOptions } from '../configuration';
+import UI from '../../userInteraction';
+import { readSetting, writeSetting } from '../configuration';
 
-export default async function (options: RequestOptions) {
+export default async function configureHostAndPort() {
+  const ro = await requestOptions();
+
   const { hostname } = await UI.prompt({
     type: 'input',
     name: 'hostname',
@@ -10,7 +12,7 @@ export default async function (options: RequestOptions) {
     default: await readSetting('dev_server.host', 'localhost'),
   });
 
-  options.hostname = hostname;
+  ro.hostname = hostname;
   await writeSetting('dev_server.host', hostname);
 
   let port: number | undefined;
@@ -24,7 +26,7 @@ export default async function (options: RequestOptions) {
     port = parseInt(answer);
     if (port !== NaN) {
       await writeSetting('dev_server.port', port);
-      options.port = port;
+      ro.port = port;
     }
   }
 }

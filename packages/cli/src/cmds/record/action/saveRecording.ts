@@ -1,10 +1,10 @@
 import { writeFile } from 'fs/promises';
-import UI from '../userInteraction';
-import RemoteRecording from './remoteRecording';
+import UI from '../../userInteraction';
+import { requestOptions } from '../configuration';
+import RemoteRecording from '../remoteRecording';
 
-export default async function saveRecording(
-  rr: RemoteRecording
-): Promise<string | undefined> {
+export default async function saveRecording(): Promise<string | undefined> {
+  const rr = new RemoteRecording(await requestOptions());
   let data = await rr.stop();
 
   if (data) {

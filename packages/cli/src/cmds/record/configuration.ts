@@ -1,5 +1,6 @@
 import { existsSync } from 'fs';
 import { readFile, writeFile } from 'fs/promises';
+import { RequestOptions } from 'http';
 import { dump, load } from 'js-yaml';
 
 let AppMapFile = 'appmap.yml';
@@ -25,6 +26,21 @@ async function writeConfig(config: any): Promise<void> {
   await writeFile(AppMapFile, dump(config));
 }
 
+export async function requestOptions(): Promise<RequestOptions> {
+  const requestOptions = {} as RequestOptions;
+
+  requestOptions.hostname = (
+    await readSetting('dev_server.host', 'localhost')
+  ).toString();
+  requestOptions.port = await readSetting('dev_server.port', 3000);
+  requestOptions.path = (await readSetting('dev_server.path', '/')).toString();
+  requestOptions.protocol = (
+    await readSetting('dev_server.protocol', 'http:')
+  ).toString();
+
+  return requestOptions;
+}
+
 export async function readSetting(
   path: string,
   defaultValue: string | number
@@ -40,7 +56,7 @@ export async function readSetting(
   }
   if (typeof entry === 'object') return defaultValue;
 
-  return entry;
+  return entry || defaultValue;
 }
 
 export async function writeSetting(path: string, value: string | number) {

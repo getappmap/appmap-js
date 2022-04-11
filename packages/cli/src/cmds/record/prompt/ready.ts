@@ -1,4 +1,4 @@
-import UI from '../userInteraction';
+import UI from '../../userInteraction';
 
 export default async function ready() {
   const { ready } = await UI.prompt({

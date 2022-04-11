@@ -1,0 +1,22 @@
+import promptRecordingInProgress, {
+  RecordingAction,
+} from '../prompt/recordingInProgress';
+import cancelRecording from '../action/cancelRecording';
+import serverAvailableAndReady from './agentAvailableAndReady';
+import saveRecording from '../action/saveRecording';
+import { State } from '../types/state';
+import abort from './abort';
+
+export default async function agentIsRecording(): Promise<State> {
+  const recordingAction = await promptRecordingInProgress();
+
+  if (recordingAction === RecordingAction.Cancel) {
+    await cancelRecording();
+    return serverAvailableAndReady;
+  } else if (recordingAction === RecordingAction.Save) {
+    await saveRecording();
+    return serverAvailableAndReady;
+  } else {
+    return abort;
+  }
+}

@@ -1,19 +1,19 @@
 import sinon from 'sinon';
-import * as configuration from '../../../src/cmds/record/configuration';
-import UI from '../../../src/cmds/userInteraction';
-import configureHostAndPort from '../../../src/cmds/record/configureHostAndPort';
+import * as configuration from '../../../../src/cmds/record/configuration';
+import UI from '../../../../src/cmds/userInteraction';
+import configureHostAndPort from '../../../../src/cmds/record/action/configureHostAndPort';
 import { RequestOptions } from 'https';
 
 describe('record.configureHostAndPort', () => {
   let readSetting: sinon.SinonStub,
     writeSetting: sinon.SinonStub,
     prompt: sinon.SinonStub,
-    options: RequestOptions;
+    options: RequestOptions = {};
 
   beforeEach(() => {
+    readSetting = sinon.stub(configuration, 'requestOptions').resolves(options);
     readSetting = sinon.stub(configuration, 'readSetting');
     writeSetting = sinon.stub(configuration, 'writeSetting');
-    options = {} as RequestOptions;
     prompt = sinon.stub(UI, 'prompt');
   });
 
@@ -28,7 +28,7 @@ describe('record.configureHostAndPort', () => {
     readSetting.withArgs('dev_server.host', 'localhost').resolves('myhost');
     readSetting.withArgs('dev_server.port', 3000).resolves(3000);
 
-    await configureHostAndPort(options);
+    await configureHostAndPort();
 
     expect(options.hostname).toEqual('myhost');
     expect(options.port).toEqual(3000);
@@ -49,7 +49,7 @@ describe('record.configureHostAndPort', () => {
     readSetting.withArgs('dev_server.host', 'localhost').resolves('myhost');
     readSetting.withArgs('dev_server.port', 3000).resolves(3000);
 
-    await configureHostAndPort(options);
+    await configureHostAndPort();
 
     expect(options.hostname).toEqual('myhost');
     expect(options.port).toEqual(3000);
