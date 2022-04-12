@@ -52,6 +52,16 @@ describe('VsCodeExtension.vue', () => {
     expect(wrapper.vm.getState()).toEqual(appState);
   });
 
+  it('changes views and modifies the trace filter after setState', async () => {
+    const appState = '{"currentView":"viewFlow","traceFilter":"id:44"}';
+    wrapper.vm.setState(appState);
+
+    await Vue.nextTick();
+
+    expect(wrapper.vm.isViewingFlow).toBe(true);
+    expect(wrapper.vm.$refs.traceFilter).toBeTruthy();
+  });
+
   it('toggles filters off if selectedObject is outside of the filtered set', async () => {
     wrapper.vm.setState('{"selectedObject":"event:3"}');
     expect(wrapper.vm.selectedObject.toString()).toMatch('Net::HTTP#request');
