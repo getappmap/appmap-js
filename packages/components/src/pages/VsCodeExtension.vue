@@ -1681,7 +1681,7 @@ code {
   height: 0px;
 }
 ::-webkit-scrollbar-thumb {
-  background: $gray4;
+  background: $gray2;
   border: 0;
   border-radius: 50px;
 }
@@ -1690,7 +1690,7 @@ code {
   background: $gray5;
 }
 ::-webkit-scrollbar-track {
-  background: $gray3;
+  background: $black;
   border: 0;
   border-radius: 50px;
 }
