@@ -1,31 +1,43 @@
 import UI from '../../userInteraction';
-import { readSetting, requestOptions, writeSetting } from '../configuration';
-import ready from '../prompt/ready';
+import {
+  readConfigOption,
+  readSetting,
+  requestOptions,
+  writeConfigOption,
+  writeSetting,
+} from '../configuration';
 
 export default async function configureRemainingRequestOptions() {
-  const ro = await requestOptions();
+  const defaultPath = await readConfigOption('dev_server.path', '/');
+  const { baseURL: path } = await UI.prompt({
+    type: 'input',
+    name: 'baseURL',
+    message: `Enter the base URL of your application:`,
+    default: defaultPath,
+  });
 
-  ro.path = (
-    await UI.prompt({
-      type: 'input',
-      name: 'baseURL',
-      message: `Enter the base URL of your application:`,
-      default: await readSetting('dev_server.path', '/'),
-    })
-  )['baseURL'];
+  if (path !== defaultPath) {
+    await writeConfigOption('dev_server.path', path);
+  }
 
-  if (ro.path) await writeSetting('dev_server.path', ro.path);
+  const defaultProtocol = await readConfigOption(
+    'dev_server.protocol',
+    'http:'
+  );
 
   const { useSSL } = await UI.prompt({
     type: 'confirm',
     name: 'useSSL',
     message: 'Does your application require SSL / HTTPS?',
-    default: (await readSetting('dev_server.protocol', 'http:')) === 'https:',
+    default: defaultProtocol === 'https:',
   });
-  ro.protocol = useSSL ? 'https:' : 'http:';
 
-  await writeSetting('dev_server.protocol', ro.protocol);
+  const protocol = useSSL ? 'https:' : 'http:';
+  if (protocol !== defaultProtocol) {
+    await writeConfigOption('dev_server.protocol', protocol);
+  }
 
+  const ro = await requestOptions();
   UI.progress(
     `Here's the URL I will use to try and connect to the AppMap agent:\n`
   );
@@ -33,6 +45,4 @@ export default async function configureRemainingRequestOptions() {
     `${ro.protocol}//${ro.hostname}:${ro.port}${ro.path}_appmap/record`
   );
   UI.progress('');
-
-  await ready();
 }

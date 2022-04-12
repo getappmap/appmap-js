@@ -2,7 +2,7 @@ import { verbose } from '../../utils';
 import runCommand from '../runCommand';
 import showAppMap from '../open/showAppMap';
 import yargs from 'yargs';
-import { setAppMapFile } from './configuration';
+import { setAppMapConfigFilePath } from './configuration';
 import initial from './state/initial';
 import { State } from './types/state';
 import { FileName } from './types/fileName';
@@ -23,7 +23,7 @@ export const builder = (args: yargs.Argv) => {
 
 export const handler = async (argv: any) => {
   verbose(argv.verbose);
-  if (argv.appmapConfig) setAppMapFile(argv.appmapConfig);
+  if (argv.appmapConfig) setAppMapConfigFilePath(argv.appmapConfig);
 
   const commandFn = async () => {
     let state: State | undefined = initial;

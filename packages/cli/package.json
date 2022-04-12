@@ -32,6 +32,7 @@
     "@types/jsdom": "^16.2.13",
     "@types/node": "^16.6.2",
     "@types/sinon": "^10.0.2",
+    "@types/tmp": "^0.2.3",
     "@types/w3c-xmlserializer": "^2.0.2",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^9.0.1",

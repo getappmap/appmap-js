@@ -1,44 +1,31 @@
 import sinon from 'sinon';
+
 import * as configuration from '../../../../src/cmds/record/configuration';
 import UI from '../../../../src/cmds/userInteraction';
 import configureHostAndPort from '../../../../src/cmds/record/action/configureHostAndPort';
-import { RequestOptions } from 'https';
+import TempConfig from '../tempConfig';
 
 describe('record.configureHostAndPort', () => {
-  let readSetting: sinon.SinonStub,
-    writeSetting: sinon.SinonStub,
-    prompt: sinon.SinonStub,
-    options: RequestOptions = {};
+  let config: TempConfig;
+  let prompt: sinon.SinonStub;
 
-  beforeEach(() => {
-    readSetting = sinon.stub(configuration, 'requestOptions').resolves(options);
-    readSetting = sinon.stub(configuration, 'readSetting');
-    writeSetting = sinon.stub(configuration, 'writeSetting');
-    prompt = sinon.stub(UI, 'prompt');
-  });
+  beforeEach(() => (config = new TempConfig()));
+  beforeEach(() => config.initialize());
+  beforeEach(() => (prompt = sinon.stub(UI, 'prompt')));
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(() => config.cleanup());
+  afterEach(() => sinon.restore());
 
   it('accepts and saves host and port', async () => {
     prompt.onCall(0).resolves({ hostname: 'myhost' });
     prompt.onCall(1).resolves({ portNumber: '3000' });
 
-    readSetting.withArgs('dev_server.host', 'localhost').resolves('myhost');
-    readSetting.withArgs('dev_server.port', 3000).resolves(3000);
-
     await configureHostAndPort();
 
-    expect(options.hostname).toEqual('myhost');
-    expect(options.port).toEqual(3000);
+    const ro = await configuration.requestOptions();
 
-    expect(
-      writeSetting.calledWithExactly('dev_server.host', 'myhost')
-    ).toBeTruthy();
-    expect(
-      writeSetting.calledWithExactly('dev_server.port', 3000)
-    ).toBeTruthy();
+    expect(ro.hostname).toEqual('myhost');
+    expect(ro.port).toEqual(3000);
   });
 
   it('re-prompts for malformed port', async () => {
@@ -46,12 +33,10 @@ describe('record.configureHostAndPort', () => {
     prompt.onCall(1).resolves({ portNumber: 'blarg' });
     prompt.onCall(2).resolves({ portNumber: '3000' });
 
-    readSetting.withArgs('dev_server.host', 'localhost').resolves('myhost');
-    readSetting.withArgs('dev_server.port', 3000).resolves(3000);
-
     await configureHostAndPort();
 
-    expect(options.hostname).toEqual('myhost');
-    expect(options.port).toEqual(3000);
+    const ro = await configuration.requestOptions();
+    expect(ro.hostname).toEqual('myhost');
+    expect(ro.port).toEqual(3000);
   });
 });
