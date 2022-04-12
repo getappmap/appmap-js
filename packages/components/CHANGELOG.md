@@ -1,3 +1,10 @@
+# [@appland/components-v2.0.3](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.0.2...@appland/components-v2.0.3) (2022-04-12)
+
+
+### Bug Fixes
+
+* Delay mutation of the trace filter until the view has changed ([82ad351](https://github.com/applandinc/appmap-js/commit/82ad351e01f83dd1df3c7b5621afb2e43f863a87))
+
 # [@appland/components-v2.0.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.0.1...@appland/components-v2.0.2) (2022-04-12)
 
 
