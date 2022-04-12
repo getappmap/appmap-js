@@ -1,9 +1,9 @@
 <template>
-  <div :class="classes" v-if="sourceLocation">
+  <div :class="classes" v-if="sourceLocation" @click="viewSource">
     <div class="source-code-link__path" data-cy="source-location">
       {{ sourceLocation }}
       <v-external-link-icon
-        v-if="externalLink"
+        v-if="externalUrl"
         data-cy="external-link"
         class="source-code-link__extern-link"
       />
@@ -40,9 +40,9 @@ export default {
 
   data() {
     return {
-      sourceLocation: null,
-      sourceLocationError: null,
-      externalLink: false,
+      sourceLocation: undefined,
+      sourceLocationError: undefined,
+      externalUrl: undefined,
     };
   },
 
@@ -72,7 +72,7 @@ export default {
       return {
         'source-code-link': true,
         'source-code-link--has-external-link':
-          this.$data.sourceLocation && this.$data.externalLink,
+          this.$data.sourceLocation && this.$data.externalUrl,
       };
     },
   },
@@ -83,7 +83,7 @@ export default {
         this.$root.$emit('viewSource', {
           location: this.$data.sourceLocation,
           error: this.$data.sourceLocationError,
-          external: this.$data.externalLink,
+          externalUrl: this.$data.externalUrl,
         });
       }
     },
@@ -91,11 +91,11 @@ export default {
     onResolveLocation(response) {
       this.$data.sourceLocation = response.location;
       this.$data.sourceLocationError = response.error;
-      this.$data.externalLink = response.external;
+      this.$data.externalUrl = response.externalUrl;
     },
 
     requestLocation() {
-      this.sourceLocation = null;
+      this.sourceLocation = undefined;
       if (this.defaultLocation) {
         this.$root.$emit('request-resolve-location', this.defaultLocation);
       }
@@ -118,15 +118,15 @@ export default {
   display: flex;
   flex-direction: column;
   margin-bottom: 1em;
+  color: $gray4;
+  transition: $transition;
 
   &__path {
     flex-direction: row;
-    border: 1px solid rgba(0, 0, 0, 0.1);
     font-family: monospace;
     border-radius: 8px;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: #2c2b32;
     padding: 0.6em;
-    color: #e7e7e7;
     display: flex;
     align-items: center;
   }
@@ -139,7 +139,7 @@ export default {
     margin-left: auto;
 
     path {
-      fill: #e7e7e7;
+      fill: #716e85;
     }
   }
 
@@ -163,7 +163,12 @@ export default {
     &:hover {
       cursor: pointer;
       color: #fff;
-      background-color: rgba(127, 127, 127, 0.05);
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+
+      path {
+        fill: #fff !important;
+      }
     }
   }
 }

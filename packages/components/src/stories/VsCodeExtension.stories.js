@@ -48,13 +48,7 @@ export const extension = (args, { argTypes }) => ({
       this.$refs.vsCode.loadData(scenario);
     }
 
-    this.$root.$on('request-resolve-location', (location) => {
-      this.$root.$emit('response-resolve-location', {
-        location,
-        error: location.startsWith('/') && 'External source not available',
-        external: !location.startsWith('/'),
-      });
-    });
+    bindResolvePath(this);
   },
 });
 

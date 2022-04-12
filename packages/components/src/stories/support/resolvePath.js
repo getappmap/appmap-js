@@ -5,7 +5,12 @@ export default function resolvePath(vm) {
     vm.$root.$emit('response-resolve-location', {
       location,
       error: isAbsolute && 'External source not available',
-      external: !isAbsolute,
+      externalUrl:
+        !isAbsolute &&
+        `https://github.com/example-org/example-repo/blob/master/${location.replace(
+          /:(\d+)$/,
+          '#L$1'
+        )}`,
     });
   });
 }
