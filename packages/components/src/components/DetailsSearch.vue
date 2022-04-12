@@ -330,7 +330,7 @@ export default {
 
     &-item {
       position: relative;
-      border-bottom: 1px solid $base15;
+      border-bottom: 1px solid $gray2;
       display: flex;
       justify-content: space-between;
       align-items: center;

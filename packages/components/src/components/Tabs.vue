@@ -72,7 +72,7 @@ export default {
 
   &__header {
     position: relative;
-    border-bottom: 1px solid $lightgray2;
+    border-bottom: 1px solid $gray2;
     height: 44px;
     display: flex;
     justify-content: flex-start;

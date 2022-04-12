@@ -195,7 +195,8 @@ export default {
   align-items: center;
   height: 22px;
   padding: 0 0.5rem;
-  background: #191919;
+  border: 1px solid $gray2;
+  background: $black;
 
   &--show-suggestions {
     border-radius: 0.25rem 0.25rem 0 0;
@@ -235,15 +236,15 @@ export default {
     left: 0;
     right: 0;
     border-radius: 0 0 0.25rem 0.25rem;
-    border-top: 1px solid #2c2b32;
+    border: 1px solid $gray2;
     margin: 0;
     padding: 0;
     max-height: 66px;
     list-style: none;
     overflow-x: hidden;
     overflow-y: auto;
-    background: #191919;
     z-index: 1000;
+    background: $black;
 
     .filters__form--show-suggestions & {
       display: block;
@@ -268,7 +269,7 @@ export default {
       &:hover,
       &:active {
         color: $gray6;
-        background-color: $base19;
+        background-color: $gray2;
       }
     }
   }

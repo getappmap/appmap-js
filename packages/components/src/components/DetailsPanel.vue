@@ -122,7 +122,6 @@ export default {
   height: 100%;
   padding: 1rem;
   color: $gray6;
-  background-color: $vs-code-gray1;
   word-break: break-word;
   border-right: 1px solid $base15;
   overflow: auto;

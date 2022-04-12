@@ -91,12 +91,11 @@ export default {
 .details-panel-filters {
   margin-bottom: 1rem;
   border-radius: 0.25rem;
-  background: #2c2b32;
   font-size: 0.75rem;
   font-family: $appland-text-font-family;
 
   &__head {
-    border-bottom: 1px solid #333a4d;
+    border-bottom: 1px solid $gray2;
     padding: 0.25rem 0.75rem;
     display: flex;
     justify-content: flex-start;
@@ -153,7 +152,7 @@ export default {
     padding: 0.25rem 0.75rem;
     font-size: 0.875rem;
     line-height: 1.25rem;
-    color: #494756;
+    color: $gray2;
     cursor: pointer;
 
     &:hover,
@@ -162,7 +161,7 @@ export default {
     }
 
     &:not(:last-child) {
-      border-bottom: 1px solid #333a4d;
+      border-bottom: 1px solid $gray2;
     }
 
     &::before {
