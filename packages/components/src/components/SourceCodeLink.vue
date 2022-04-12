@@ -3,7 +3,7 @@
     <div class="source-code-link__path" data-cy="source-location">
       {{ sourceLocation }}
       <v-external-link-icon
-        v-if="externalLink"
+        v-if="externalUrl"
         data-cy="external-link"
         class="source-code-link__extern-link"
       />
@@ -40,9 +40,9 @@ export default {
 
   data() {
     return {
-      sourceLocation: null,
-      sourceLocationError: null,
-      externalLink: false,
+      sourceLocation: undefined,
+      sourceLocationError: undefined,
+      externalUrl: undefined,
     };
   },
 
@@ -72,7 +72,7 @@ export default {
       return {
         'source-code-link': true,
         'source-code-link--has-external-link':
-          this.$data.sourceLocation && this.$data.externalLink,
+          this.$data.sourceLocation && this.$data.externalUrl,
       };
     },
   },
@@ -83,7 +83,7 @@ export default {
         this.$root.$emit('viewSource', {
           location: this.$data.sourceLocation,
           error: this.$data.sourceLocationError,
-          external: this.$data.externalLink,
+          externalUrl: this.$data.externalUrl,
         });
       }
     },
@@ -91,11 +91,11 @@ export default {
     onResolveLocation(response) {
       this.$data.sourceLocation = response.location;
       this.$data.sourceLocationError = response.error;
-      this.$data.externalLink = response.external;
+      this.$data.externalUrl = response.externalUrl;
     },
 
     requestLocation() {
-      this.sourceLocation = null;
+      this.sourceLocation = undefined;
       if (this.defaultLocation) {
         this.$root.$emit('request-resolve-location', this.defaultLocation);
       }
