@@ -1,3 +1,10 @@
+# [@appland/components-v2.0.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.0.0...@appland/components-v2.0.1) (2022-04-12)
+
+
+### Bug Fixes
+
+* Use database hints to format SQL ([6c2022b](https://github.com/applandinc/appmap-js/commit/6c2022b79f4d21f51e31be50ac1073c1b8fe3c31))
+
 # [@appland/components-v2.0.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v1.24.1...@appland/components-v2.0.0) (2022-04-08)
 
 
