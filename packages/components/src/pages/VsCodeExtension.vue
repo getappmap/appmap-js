@@ -913,10 +913,6 @@ export default {
         }
       }
 
-      if (state.traceFilter) {
-        this.$refs.traceFilter.setValue(state.traceFilter);
-      }
-
       const { filters } = state;
       if (filters) {
         if ('rootObjects' in filters) {
@@ -946,11 +942,17 @@ export default {
         }
       }
 
-      if (state.currentView) {
-        this.$nextTick(() => {
+      this.$nextTick(() => {
+        if (state.currentView) {
           this.setView(state.currentView);
-        });
-      }
+        }
+
+        if (state.traceFilter) {
+          this.$nextTick(() => {
+            this.$refs.traceFilter.setValue(state.traceFilter);
+          });
+        }
+      });
     },
 
     clearSelection() {
