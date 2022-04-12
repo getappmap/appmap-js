@@ -1,5 +1,5 @@
 <template>
-  <div :class="classes" v-if="sourceLocation">
+  <div :class="classes" v-if="sourceLocation" @click="viewSource">
     <div class="source-code-link__path" data-cy="source-location">
       {{ sourceLocation }}
       <v-external-link-icon
