@@ -66,14 +66,14 @@ export async function requestOptions(): Promise<RequestOptions> {
   const requestOptions = {} as RequestOptions;
 
   requestOptions.hostname = (
-    await readSetting('dev_server.host', 'localhost')
+    await readSetting('remote_recording.host', 'localhost')
   ).toString();
-  requestOptions.port = await readSetting('dev_server.port', 3000);
+  requestOptions.port = await readSetting('remote_recording.port', 3000);
   requestOptions.path = (
-    await readConfigOption('dev_server.path', '/')
+    await readConfigOption('remote_recording.path', '/')
   ).toString();
   requestOptions.protocol = (
-    await readConfigOption('dev_server.protocol', 'http:')
+    await readConfigOption('remote_recording.protocol', 'http:')
   ).toString();
 
   return requestOptions;

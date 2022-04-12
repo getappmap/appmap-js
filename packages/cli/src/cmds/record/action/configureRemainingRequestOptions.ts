@@ -8,7 +8,7 @@ import {
 } from '../configuration';
 
 export default async function configureRemainingRequestOptions() {
-  const defaultPath = await readConfigOption('dev_server.path', '/');
+  const defaultPath = await readConfigOption('remote_recording.path', '/');
   const { baseURL: path } = await UI.prompt({
     type: 'input',
     name: 'baseURL',
@@ -17,11 +17,11 @@ export default async function configureRemainingRequestOptions() {
   });
 
   if (path !== defaultPath) {
-    await writeConfigOption('dev_server.path', path);
+    await writeConfigOption('remote_recording.path', path);
   }
 
   const defaultProtocol = await readConfigOption(
-    'dev_server.protocol',
+    'remote_recording.protocol',
     'http:'
   );
 
@@ -34,7 +34,7 @@ export default async function configureRemainingRequestOptions() {
 
   const protocol = useSSL ? 'https:' : 'http:';
   if (protocol !== defaultProtocol) {
-    await writeConfigOption('dev_server.protocol', protocol);
+    await writeConfigOption('remote_recording.protocol', protocol);
   }
 
   const ro = await requestOptions();

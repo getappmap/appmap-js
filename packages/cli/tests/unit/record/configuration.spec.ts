@@ -24,7 +24,10 @@ describe('configuration', () => {
     });
     describe('with non-default config', () => {
       it('returns modified request options', async () => {
-        await configuration.writeConfigOption('dev_server.path', '/myapp');
+        await configuration.writeConfigOption(
+          'remote_recording.path',
+          '/myapp'
+        );
         const options = await configuration.requestOptions();
         expect(options).toEqual({
           hostname: 'localhost',
@@ -36,7 +39,7 @@ describe('configuration', () => {
     });
     describe('with non-default setting', () => {
       it('returns modified request options', async () => {
-        await configuration.writeSetting('dev_server.host', 'myhost');
+        await configuration.writeSetting('remote_recording.host', 'myhost');
         const options = await configuration.requestOptions();
         expect(options).toEqual({
           hostname: 'myhost',

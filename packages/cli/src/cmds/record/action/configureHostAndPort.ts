@@ -2,7 +2,10 @@ import UI from '../../userInteraction';
 import { readSetting, writeSetting } from '../configuration';
 
 export default async function configureHostAndPort() {
-  const defaultHostname = await readSetting('dev_server.host', 'localhost');
+  const defaultHostname = await readSetting(
+    'remote_recording.host',
+    'localhost'
+  );
   const { hostname } = await UI.prompt({
     type: 'input',
     name: 'hostname',
@@ -11,11 +14,11 @@ export default async function configureHostAndPort() {
   });
 
   if (hostname !== defaultHostname) {
-    await writeSetting('dev_server.host', hostname);
+    await writeSetting('remote_recording.host', hostname);
   }
 
   let port: number | undefined;
-  const defaultPort = await readSetting('dev_server.port', 3000);
+  const defaultPort = await readSetting('remote_recording.port', 3000);
   while (!port) {
     const { portNumber: answer } = await UI.prompt({
       type: 'input',
@@ -25,7 +28,7 @@ export default async function configureHostAndPort() {
     });
     port = parseInt(answer);
     if (port !== NaN && port !== defaultPort) {
-      await writeSetting('dev_server.port', port);
+      await writeSetting('remote_recording.port', port);
     }
   }
 }
