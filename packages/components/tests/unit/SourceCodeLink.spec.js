@@ -4,7 +4,7 @@ import scenario from '@/stories/data/scenario.json';
 import { buildAppMap } from '@appland/models';
 
 describe('SourceCodeLink.vue', () => {
-  it('view source emits an event from root', () => {
+  it('view source emits an event from root', async () => {
     const appMap = buildAppMap(scenario).normalize().build();
     const event = appMap.events.find((e) => e.isCall() && e.path);
     const wrapper = mount(SourceCodeLink, {
@@ -12,22 +12,26 @@ describe('SourceCodeLink.vue', () => {
         object: event,
       },
     });
+    const expected = {
+      location: event.path,
+      error: 'This is a warning',
+      externalUrl: 'https://example.com',
+    };
 
-    requestAnimationFrame(() => {
-      wrapper.vm.$root.$emit('response-resolve-location', {
-        location: event.path,
-        external: true,
-      });
+    wrapper.vm.$root.$emit('response-resolve-location', expected);
 
-      wrapper.find('[data-cy="external-link"]').trigger('click');
+    await new Promise((resolve) => wrapper.vm.$nextTick(() => resolve()));
 
-      const rootWrapper = createWrapper(wrapper.vm.$root);
-      const events = rootWrapper.emitted();
-      const [[requestLocation]] = events['request-resolve-location'];
-      expect(requestLocation).toBe(event.path);
+    wrapper.find('[data-cy="external-link"]').trigger('click');
 
-      const [[location]] = events.viewSource;
-      expect(location).toBe(event.path);
-    });
+    const rootWrapper = createWrapper(wrapper.vm.$root);
+    const events = rootWrapper.emitted();
+    const [[requestLocation]] = events['request-resolve-location'];
+    expect(requestLocation).toBe(`${event.path}:${event.lineno}`);
+
+    const [[{ location, externalUrl, error }]] = events.viewSource;
+    expect(location).toBe(expected.location);
+    expect(externalUrl).toBe(expected.externalUrl);
+    expect(error).toBe(expected.error);
   });
 });
