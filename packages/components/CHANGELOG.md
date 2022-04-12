@@ -1,3 +1,12 @@
+# [@appland/components-v2.0.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.0.1...@appland/components-v2.0.2) (2022-04-12)
+
+
+### Bug Fixes
+
+* Allow external source URLs to be cached at resolve time ([b3ebddd](https://github.com/applandinc/appmap-js/commit/b3ebdddc739140724b5162ae5a11a39f0dbea65e))
+* The `viewSource` event was never being emitted ([8f90c4b](https://github.com/applandinc/appmap-js/commit/8f90c4bd7dcfd0e88d6c7a3759c45a463e2eb859))
+* Use existing colors for view source links ([db212c1](https://github.com/applandinc/appmap-js/commit/db212c15f3bef2e771358a455463ffb7decdcc69))
+
 # [@appland/components-v2.0.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.0.0...@appland/components-v2.0.1) (2022-04-12)
 
 
