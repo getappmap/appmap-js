@@ -117,7 +117,7 @@ export default {
 .source-code-link {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1em;
+  margin: 1em 0;
   color: $gray4;
   transition: $transition;
 
