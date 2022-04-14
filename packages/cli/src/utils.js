@@ -1,5 +1,5 @@
 /* eslint-disable func-names */
-const { promises: fsp } = require('fs');
+const { constants: fsConstants, promises: fsp } = require('fs');
 const fsExtra = require('fs-extra');
 const { queue } = require('async');
 const glob = require('glob');
@@ -8,7 +8,7 @@ const { sep: pathSep, join: joinPath } = require('path');
 const { buildAppMap } = require('@appland/models');
 
 let isVerbose = false;
-function verbose(v = null) {
+function verbose(/** @type {boolean|null} */ v = null) {
   if (v !== null) {
     isVerbose = v;
   }
@@ -158,7 +158,7 @@ function formatHttpServerRequest(event) {
 function exists(path) {
   return new Promise((resolve) => {
     fsp
-      .access(path)
+      .access(path, fsConstants.R_OK)
       .then(() => {
         resolve(true);
       })
