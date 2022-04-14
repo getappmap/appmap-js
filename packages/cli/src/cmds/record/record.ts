@@ -1,33 +1,40 @@
 import { verbose } from '../../utils';
 import runCommand from '../runCommand';
-import { RequestOptions } from 'http';
-import intro from './intro';
-import configureConnection from './configureConnection';
-import testConnection from './testConnection';
-import createRecording from './createRecording';
 import showAppMap from '../open/showAppMap';
+import yargs from 'yargs';
+import { setAppMapConfigFilePath } from './configuration';
+import initial from './state/initial';
+import { State } from './types/state';
+import { FileName } from './types/fileName';
 
 export const command = 'record';
 export const describe =
   'Create an AppMap via interactive recording, aka remote recording.';
 
-export const builder = (args) => {
+export const builder = (args: yargs.Argv) => {
+  args.option('appmap-config', {
+    describe: 'AppMap config file to check for default options.',
+    type: 'string',
+    alias: 'c',
+  });
+
   return args.strict();
 };
 
-export const handler = async (argv) => {
+export const handler = async (argv: any) => {
   verbose(argv.verbose);
+  if (argv.appmapConfig) setAppMapConfigFilePath(argv.appmapConfig);
 
   const commandFn = async () => {
-    await intro();
+    let state: State | undefined = initial;
 
-    let requestOptions: RequestOptions = {};
+    while (state && typeof state === 'function') {
+      const newState = await state();
+      state = newState;
+    }
 
-    await configureConnection(requestOptions);
-    await testConnection(requestOptions);
-    const appMapFile = await createRecording(requestOptions);
-    if (appMapFile) {
-      await showAppMap(appMapFile);
+    if (typeof state === 'string') {
+      await showAppMap(state as FileName);
     }
   };
 

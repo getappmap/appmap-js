@@ -1,6 +1,6 @@
 import { request as httpsRequest } from 'https';
 import { IncomingMessage, request as httpRequest, RequestOptions } from 'http';
-import { RemoteRecordingStatus } from './types';
+import { RemoteRecordingStatus } from './types/remoteRecordingStatus';
 import { appendFileSync } from 'fs';
 
 const HTTP = {

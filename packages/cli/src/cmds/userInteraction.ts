@@ -26,23 +26,29 @@ export class UserInteraction {
     return result;
   }
 
+  async confirm(msg: string) {
+    await inquirer.prompt({ type: 'input', name: 'confirm', message: msg });
+  }
+
   progress(msg: string) {
     console.log(msg);
   }
 
-  success(msg: string) {
+  success(msg?: string) {
     if (this.spinner.isSpinning) {
       this.spinner.succeed();
     }
 
-    console.log(
-      boxen(msg, {
-        padding: 1,
-        margin: 1,
-        borderStyle: 'round',
-        align: 'center',
-      })
-    );
+    if (msg) {
+      console.log(
+        boxen(msg, {
+          padding: 1,
+          margin: 1,
+          borderStyle: 'round',
+          align: 'center',
+        })
+      );
+    }
   }
 
   error(msg?: any) {
