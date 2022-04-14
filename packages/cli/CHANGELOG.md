@@ -1,3 +1,12 @@
+# [@appland/appmap-v3.21.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.20.0...@appland/appmap-v3.21.0) (2022-04-14)
+
+
+### Features
+
+* Reorganize code into states, actions, and tests ([a62c923](https://github.com/applandinc/appmap-js/commit/a62c92386a9a8388b7b39cfb54c1b83b4896fba5))
+* Split dev_server options between config and settings ([0cde0c2](https://github.com/applandinc/appmap-js/commit/0cde0c23d0f607e36b6947d87363ab5424576215))
+* Upgrade UX of the 'record' command ([573749f](https://github.com/applandinc/appmap-js/commit/573749fdcb79e10b8dc8fe8ef328eb74b524b1b6))
+
 # [@appland/appmap-v3.20.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.19.0...@appland/appmap-v3.20.0) (2022-04-05)
 
 
