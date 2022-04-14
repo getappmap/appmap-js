@@ -1,7 +1,7 @@
 import UI from '../../userInteraction';
 import configureHostAndPort from '../action/configureHostAndPort';
 import { State } from '../types/state';
-import initial from './initial';
+import initial from './record_remote';
 
 // No process could be contact on the configured host and port.
 // Prompt the user to start the agent process, and then start over.

@@ -2,11 +2,7 @@ import { networkInterfaces } from 'os';
 import { randomBytes, createHash, BinaryLike } from 'crypto';
 import * as os from 'os';
 import { name, version } from '../package.json';
-import {
-  TelemetryClient,
-  setup as AppInsights,
-  defaultClient as AppInsightsClient,
-} from 'applicationinsights';
+import { TelemetryClient, setup as AppInsights } from 'applicationinsights';
 import Conf from 'conf';
 
 const config = new Conf();
@@ -221,7 +217,7 @@ export default class Telemetry {
     }
   }
 
-  static flush(exitCB): void {
+  static flush(exitCB: Function): void {
     if (this.enabled) {
       // Telemetry.client.flush is broken:
       // https://github.com/microsoft/ApplicationInsights-node.js/issues/871 .

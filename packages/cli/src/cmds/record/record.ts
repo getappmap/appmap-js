@@ -3,15 +3,28 @@ import runCommand from '../runCommand';
 import showAppMap from '../open/showAppMap';
 import yargs from 'yargs';
 import { setAppMapConfigFilePath } from './configuration';
-import initial from './state/initial';
 import { State } from './types/state';
 import { FileName } from './types/fileName';
+import { chdir } from 'process';
 
-export const command = 'record';
+export const command = 'record [mode]';
 export const describe =
   'Create an AppMap via interactive recording, aka remote recording.';
 
 export const builder = (args: yargs.Argv) => {
+  args.positional('mode', {
+    type: 'string',
+    choices: ['test', 'remote'],
+    default: 'remote',
+    required: true,
+  });
+
+  args.option('directory', {
+    describe: 'Working directory for the command.',
+    type: 'string',
+    alias: 'd',
+  });
+
   args.option('appmap-config', {
     describe: 'AppMap config file to check for default options.',
     type: 'string',
@@ -23,12 +36,23 @@ export const builder = (args: yargs.Argv) => {
 
 export const handler = async (argv: any) => {
   verbose(argv.verbose);
-  if (argv.appmapConfig) setAppMapConfigFilePath(argv.appmapConfig);
 
   const commandFn = async () => {
-    let state: State | undefined = initial;
+    const { directory, appmapConfig } = argv;
+    if (directory) {
+      if (verbose()) console.log(`Using working directory ${directory}`);
+      chdir(directory);
+    }
+
+    if (appmapConfig) setAppMapConfigFilePath(appmapConfig);
+
+    const { mode } = argv;
+    let state: State | string | undefined = (
+      await import(`./state/record_${mode}`)
+    ).default as State;
 
     while (state && typeof state === 'function') {
+      if (verbose()) console.warn(`Entering state: ${state.name}`);
       const newState = await state();
       state = newState;
     }

@@ -1,5 +1,5 @@
 /* eslint-disable func-names */
-const { constants: fsConstants, promises: fsp } = require('fs');
+const { promises: fsp } = require('fs');
 const fsExtra = require('fs-extra');
 const { queue } = require('async');
 const glob = require('glob');
@@ -158,7 +158,7 @@ function formatHttpServerRequest(event) {
 function exists(path) {
   return new Promise((resolve) => {
     fsp
-      .access(path, fsConstants.R_OK)
+      .access(path)
       .then(() => {
         resolve(true);
       })

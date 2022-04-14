@@ -4,8 +4,15 @@ import { RequestOptions } from 'http';
 import { dump, load } from 'js-yaml';
 import { join } from 'path';
 
-let AppMapConfigFilePath = join(process.cwd(), 'appmap.yml');
+let AppMapConfigFilePath = 'appmap.yml';
 let AppMapSettingsFilePath = join(process.env.HOME || '', '.appmaprc');
+
+export type AppMapConfig = {
+  name: string;
+  language?: string;
+  testCommands?: string[];
+  appMapDir?: string[];
+};
 
 // Returns the previous config file path.
 export function setAppMapConfigFilePath(appMapFile: string): string {
@@ -24,17 +31,17 @@ export function setAppMapSettingsFilePath(appMapFile: string): string {
   return oldPath;
 }
 
-async function readConfig(): Promise<any | undefined> {
+export async function readConfig(): Promise<AppMapConfig | undefined> {
   let fileContents: Buffer | undefined;
   try {
     fileContents = await readFile(AppMapConfigFilePath);
   } catch {
     return;
   }
-  return load(fileContents.toString());
+  return load(fileContents.toString()) as AppMapConfig;
 }
 
-async function readAllSettings(): Promise<any> {
+export async function readAllSettings(): Promise<any> {
   let settings: any;
   try {
     const fileContents = await readFile(AppMapSettingsFilePath);

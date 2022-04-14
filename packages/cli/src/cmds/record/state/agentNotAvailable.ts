@@ -5,7 +5,7 @@ import detectProcessCharacteristics from '../action/detectProcessCharacteristics
 import isAgentAvailable from '../test/isAgentAvailable';
 import { State } from '../types/state';
 import agentProcessNotRunning from './agentProcessNotRunning';
-import initial from './initial';
+import initial from './record_remote';
 
 // The agent was not reachable using the configured settings. This may be because:
 // * The agent process isn't running.

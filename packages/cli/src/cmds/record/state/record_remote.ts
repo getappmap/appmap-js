@@ -5,9 +5,9 @@ import agentIsRecording from './agentIsRecording';
 import agentNotAvailable from './agentNotAvailable';
 import { State } from '../types/state';
 
-// This is the initial state of the record command. From here, the connection to the AppMap
+// This is the initial state of remote recording. From here, the connection to the AppMap
 // agent must be configured and verified, and then the recording will be run.
-export default async function initial(): Promise<State> {
+export default async function remote(): Promise<State> {
   if (await isAgentAvailable()) {
     if (!(await isRecordingInProgress())) {
       return agentAvailableAndReady;
