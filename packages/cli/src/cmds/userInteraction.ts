@@ -1,4 +1,4 @@
-import inquirer, { QuestionCollection } from 'inquirer';
+import inquirer, { Answers, QuestionCollection } from 'inquirer';
 import ora, { Ora } from 'ora';
 import boxen from 'boxen';
 import { verbose } from '../utils';
@@ -10,7 +10,10 @@ interface SpinnerOptions {
 export class UserInteraction {
   private spinner: Ora = ora();
 
-  async prompt(questions: QuestionCollection, opts?: SpinnerOptions) {
+  async prompt(
+    questions: QuestionCollection,
+    opts?: SpinnerOptions
+  ): Promise<Answers> {
     const wasSpinning = this.spinner.isSpinning;
     if (wasSpinning) {
       this.spinner.stop();

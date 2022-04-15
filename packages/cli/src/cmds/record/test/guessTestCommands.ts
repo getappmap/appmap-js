@@ -1,13 +1,12 @@
-import { exists } from '../../../utils';
+import { exists, verbose } from '../../../utils';
 import UI from '../../userInteraction';
 import {
-  AppMapConfig,
   readConfig,
   TestCommand,
-  writeConfigOption,
 } from '../configuration';
+import TestCaseRecording from '../testCaseRecording';
 
-export default async function inferTestCommands(): Promise<
+export default async function guessTestCommands(): Promise<
   TestCommand[] | undefined
 > {
   const config = await readConfig();
@@ -34,8 +33,13 @@ export default async function inferTestCommands(): Promise<
           } as TestCommand)
       );
 
-    UI.progress(`Guessing test commands for Ruby:\n${testCommands.join('\n')}`);
-    await writeConfigOption('test_recording.test_commands', testCommands);
+    const commandStrings = testCommands.map(
+      (cmd) => `${TestCaseRecording.envString(cmd.env)}${cmd.command}`
+    );
+    if (verbose())
+      console.log(
+        `Guessed test commands for Ruby:\n${commandStrings.join('\n')}`
+      );
 
     return testCommands;
   }

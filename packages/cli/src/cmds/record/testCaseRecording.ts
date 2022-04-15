@@ -108,15 +108,10 @@ export default class TestCaseRecording {
     }
 
     for (const cmd of TestCommands) {
-      const envStr =
-        Object.keys(cmd.env).length > 0
-          ? Object.keys(cmd.env)
-              .map((key) => [key, cmd.env[key]].join('='))
-              .join(' ')
-          : undefined;
-
       UI.progress(
-        `Running test command: ${envStr ? `${envStr} ` : ''}${cmd.command}`
+        `Running test command: ${TestCaseRecording.envString(cmd.env)}${
+          cmd.command
+        }`
       );
       const args = cmd.command.split(' ');
       const proc = spawn(args[0], args.slice(1), {
@@ -126,5 +121,16 @@ export default class TestCaseRecording {
       });
       await waitForProcess(proc);
     }
+  }
+
+  static envString(env: Record<string, string>) {
+    const str =
+      Object.keys(env).length > 0
+        ? Object.keys(env)
+            .sort()
+            .map((key) => [key, env[key]].join('='))
+            .join(' ')
+        : undefined;
+    return str ? `${str} ` : '';
   }
 }

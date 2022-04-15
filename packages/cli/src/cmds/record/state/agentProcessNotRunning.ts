@@ -14,10 +14,12 @@ export default async function agentProcessNotRunning(): Promise<State> {
   );
   UI.progress(``);
 
-  UI.progress(`To create a recording, you need to run your app using
-the instructions in the AppMap documentation. Choose the most suitable link here,
-then configure and launch your app process. Once you've done that, come back to this terminal
-and we will try again.`);
+  UI.progress(
+    `To create a recording, you need to run your app using ` +
+      `the instructions in the AppMap documentation. Choose the most suitable link here, ` +
+      `then configure and launch your app process. Once you've done that, come back to this terminal ` +
+      `and we will try again.`
+  );
   UI.progress(`
   Rails:      https://appland.com/docs/reference/appmap-ruby.html#remote-recording
   Django:     https://appland.com/docs/reference/appmap-python.html#django
