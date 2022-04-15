@@ -1,6 +1,6 @@
 import areTestCommandsConfigured from '../test/areTestCommandsConfigured';
 import { State } from '../types/state';
-import obtainTestCommands from './obtainTestCommands';
+import testCommandsNeeded from './testCommandsNeeded';
 import testCommandsAvailable from './testCommandsAvailable';
 
 // This is the initial state of test case recording. From here, the record command is
@@ -9,6 +9,6 @@ export default async function test(): Promise<State> {
   if (await areTestCommandsConfigured()) {
     return testCommandsAvailable;
   } else {
-    return obtainTestCommands;
+    return testCommandsNeeded;
   }
 }

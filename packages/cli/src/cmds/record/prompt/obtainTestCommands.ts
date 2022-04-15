@@ -2,10 +2,8 @@ import UI from '../../userInteraction';
 import { writeConfigOption } from '../configuration';
 import guessTestCommands from '../test/guessTestCommands';
 import TestCaseRecording from '../testCaseRecording';
-import { State } from '../types/state';
-import testCommandsAvailable from './testCommandsAvailable';
 
-export default async function obtainTestCommands(): Promise<State> {
+export default async function obtainTestCommands(): Promise<void> {
   UI.progress(``);
   UI.progress(
     `In order to record test cases, you need to provide a command that I can use to run the tests. ` +
@@ -41,8 +39,7 @@ export default async function obtainTestCommands(): Promise<State> {
       );
       UI.progress(``);
       await UI.confirm('Press enter to continue');
-
-      return testCommandsAvailable;
+      return;
     }
   }
 
@@ -72,6 +69,4 @@ export default async function obtainTestCommands(): Promise<State> {
     UI.progress(`To run the tests, I will run the following command:`);
     UI.progress(`${TestCaseRecording.envString(env)}${testCommand}`);
   }
-
-  return testCommandsAvailable;
 }
