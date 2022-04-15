@@ -1,8 +1,8 @@
-import { existsSync, writeFileSync, writeSync } from 'fs';
+import { existsSync } from 'fs';
 import { readFile, writeFile } from 'fs/promises';
 import { RequestOptions } from 'http';
 import { dump, load } from 'js-yaml';
-import { join } from 'path';
+import { isAbsolute, join } from 'path';
 
 let AppMapConfigFilePath = 'appmap.yml';
 let AppMapSettingsFilePath = join(process.env.HOME || '', '.appmaprc');
@@ -67,24 +67,30 @@ export async function readConfig(): Promise<AppMapConfig | undefined> {
   return config;
 }
 
+function settingsKey(): string {
+  return isAbsolute(AppMapConfigFilePath)
+    ? AppMapConfigFilePath
+    : join(process.cwd(), AppMapConfigFilePath);
+}
+
 export async function readAllSettings(): Promise<AppMapSettings> {
   let settings: any;
   try {
     const fileContents = await readFile(AppMapSettingsFilePath);
     settings = load(fileContents.toString()) as any;
     // Make sure settings is an object.
-    settings[AppMapConfigFilePath];
+    settings[settingsKey()];
   } catch {
     settings = {};
   }
-  if (!settings[AppMapConfigFilePath]) {
-    settings[AppMapConfigFilePath] = {};
+  if (!settings[settingsKey()]) {
+    settings[settingsKey()] = {};
   }
   return settings;
 }
 
 async function readSettings(): Promise<any> {
-  return (await readAllSettings())[AppMapConfigFilePath];
+  return (await readAllSettings())[settingsKey()];
 }
 
 async function writeConfig(config: any) {
@@ -117,7 +123,7 @@ export async function requestOptions(): Promise<RequestOptions> {
 
 export async function readSetting(
   path: string,
-  defaultValue: string | number
+  defaultValue: string | number | TestCommand[]
 ): Promise<string | number | TestCommand[]> {
   const settings = await readSettings();
   return findOption(settings, path, defaultValue);
@@ -148,9 +154,12 @@ function findOption(
   return entry || defaultValue;
 }
 
-export async function writeSetting(path: string, value: string | number) {
+export async function writeSetting(
+  path: string,
+  value: string | number | TestCommand[]
+) {
   const allSettings = await readAllSettings();
-  const settings = allSettings[AppMapConfigFilePath];
+  const settings = allSettings[settingsKey()];
   mergeConfigData(settings, path, value);
   await writeSettings(allSettings);
 }
