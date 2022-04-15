@@ -2,12 +2,7 @@ import { ChildProcess, exec, spawn } from 'child_process';
 import { kill } from 'process';
 import { verbose } from '../../utils';
 import UI from '../userInteraction';
-import {
-  AppMapConfig,
-  readConfig,
-  readConfigOption,
-  TestCommand,
-} from './configuration';
+import { readConfig, readConfigOption, TestCommand } from './configuration';
 
 let TestCommands: TestCommand[] = [];
 

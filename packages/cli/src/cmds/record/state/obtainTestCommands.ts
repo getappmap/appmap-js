@@ -35,7 +35,7 @@ export default async function obtainTestCommands(): Promise<State> {
       UI.progress(``);
       UI.progress(
         `I've written this test command to your AppMap configuration file (appmap.yml). ` +
-          `The next time you run this program, it will be used automatically. You can change it in the appamp.yml ` +
+          `The next time you run this program, it will be used automatically. You can change it in the appmap.yml ` +
           `if you want to. You can also delete it, in which case you'll be prompted again next time. And, you can also add ` +
           `additional test commands to that file.`
       );
