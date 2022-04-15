@@ -2,7 +2,14 @@ import { ChildProcess, exec, spawn } from 'child_process';
 import { kill } from 'process';
 import { verbose } from '../../utils';
 import UI from '../userInteraction';
-import { AppMapConfig, readConfig, readConfigOption } from './configuration';
+import {
+  AppMapConfig,
+  readConfig,
+  readConfigOption,
+  TestCommand,
+} from './configuration';
+
+let TestCommands: TestCommand[] = [];
 
 let TestCaseProcesses: ChildProcess[] = [];
 
@@ -25,7 +32,7 @@ export default class TestCaseRecording {
     let testCommands = (await readConfigOption(
       'test_recording.test_commands',
       []
-    )) as string[];
+    )) as TestCommand[];
 
     if (testCommands.length === 0)
       throw new Error(`No test commands are configured`);
@@ -49,55 +56,75 @@ export default class TestCaseRecording {
       }
     }
 
-    TestCaseProcesses = testCommands.map((cmd) => {
-      UI.progress(`Running test command: ${cmd}`);
-      const args = cmd.split(' ');
-      return spawn(args[0], args.slice(1), {
-        shell: true,
-        stdio: ['ignore', 'inherit', 'inherit'],
-      });
-    });
+    TestCommands = testCommands;
   }
 
   static async waitFor(maxTime: number | undefined) {
     if (maxTime) UI.progress(`Running tests for up to ${maxTime} seconds.`);
 
-    await Promise.all(
-      TestCaseProcesses.map(
-        (process) =>
-          new Promise((resolve) => {
-            let reported = false;
-            let interruptTimeout: NodeJS.Timeout | undefined;
+    let waitTime = maxTime;
+    async function waitForProcess(
+      process: ChildProcess
+    ): Promise<number | null | undefined> {
+      const startTime = Date.now();
+      return new Promise((resolve) => {
+        let reported = false;
+        let interruptTimeout: NodeJS.Timeout | undefined;
 
-            function interrupt() {
-              if (process.pid) {
-                if (verbose())
-                  UI.progress(
-                    `Sending SIGTERM to ${process.pid} after ${maxTime} seconds.`
-                  );
-                kill(process.pid, 'SIGTERM');
-              }
-            }
-
-            function report(exitCode?: number | null) {
-              if (reported) return;
-
-              reported = true;
-              if (interruptTimeout) clearTimeout(interruptTimeout);
+        function interrupt() {
+          if (process.pid) {
+            if (verbose())
               UI.progress(
-                `Exit status: ${exitCode !== null ? exitCode : 'timeout'}`
+                `Sending SIGTERM to ${process.pid} after ${maxTime} seconds.`
               );
-              resolve(exitCode);
-            }
+            kill(process.pid, 'SIGTERM');
+          }
+        }
 
-            if (process.exitCode) return report(process.exitCode);
+        function report(exitCode?: number | null) {
+          if (reported) return;
 
-            process.on('exit', report);
-            if (maxTime) {
-              interruptTimeout = setTimeout(interrupt, maxTime * 1000);
-            }
-          })
-      )
-    );
+          reported = true;
+          const elapsed = Date.now() - startTime;
+          if (waitTime) {
+            waitTime -= elapsed / 1000;
+          }
+          if (interruptTimeout) clearTimeout(interruptTimeout);
+          if (exitCode !== 0) {
+            UI.progress(
+              `Test command finished with non-zero exit code ${exitCode}`
+            );
+          }
+          resolve(exitCode);
+        }
+
+        if (process.exitCode) return report(process.exitCode);
+
+        process.on('exit', report);
+        if (waitTime) {
+          interruptTimeout = setTimeout(interrupt, waitTime * 1000);
+        }
+      });
+    }
+
+    for (const cmd of TestCommands) {
+      const envStr =
+        Object.keys(cmd.env).length > 0
+          ? Object.keys(cmd.env)
+              .map((key) => [key, cmd.env[key]].join('='))
+              .join(' ')
+          : undefined;
+
+      UI.progress(
+        `Running test command: ${envStr ? `${envStr} ` : ''}${cmd.command}`
+      );
+      const args = cmd.command.split(' ');
+      const proc = spawn(args[0], args.slice(1), {
+        env: Object.assign(process.env, cmd.env),
+        shell: true,
+        stdio: ['ignore', 'inherit', 'inherit'],
+      });
+      await waitForProcess(proc);
+    }
   }
 }

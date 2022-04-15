@@ -10,7 +10,7 @@ export default async function startTestCases() {
       type: 'input',
       name: 'maxTime',
       message:
-        'Enter the maximum time (in seconds) to allow test cases to run:',
+        'Enter the maximum time (in seconds) to allow test cases to run (-1 to run forever):',
       default: defaultMaxTime,
     });
     if (maxTime !== defaultMaxTime)

@@ -1,13 +1,13 @@
-import { readConfig, readConfigOption, readSetting } from '../configuration';
+import { readConfigOption, TestCommand } from '../configuration';
 import inferTestCommands from '../state/inferTestCommands';
 
 export default async function areTestCasesConfigured(): Promise<boolean> {
-  let testCommands: string[] | undefined = (await readConfigOption(
+  let testCommands: TestCommand[] | undefined = (await readConfigOption(
     'test_recording.test_commands',
     []
-  )) as string[];
+  )) as TestCommand[];
 
-  testCommands ||= await inferTestCommands();
+  if (!testCommands || testCommands.length === 0) await inferTestCommands();
 
   return true;
 }

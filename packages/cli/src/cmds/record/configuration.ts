@@ -7,13 +7,18 @@ import { join } from 'path';
 let AppMapConfigFilePath = 'appmap.yml';
 let AppMapSettingsFilePath = join(process.env.HOME || '', '.appmaprc');
 
-type RemoteRecordingConfig = {
+export type RemoteRecordingConfig = {
   path?: string;
   protocol?: string;
 };
 
-type TestRecordingConfig = {
-  test_commands?: string[];
+export type TestCommand = {
+  env: Record<string, string>;
+  command: string;
+};
+
+export type TestRecordingConfig = {
+  test_commands?: TestCommand[];
 };
 
 export type AppMapConfig = {
@@ -113,15 +118,15 @@ export async function requestOptions(): Promise<RequestOptions> {
 export async function readSetting(
   path: string,
   defaultValue: string | number
-): Promise<string | number | string[]> {
+): Promise<string | number | TestCommand[]> {
   const settings = await readSettings();
   return findOption(settings, path, defaultValue);
 }
 
 export async function readConfigOption(
   path: string,
-  defaultValue: string | number | string[]
-): Promise<string | number | string[]> {
+  defaultValue: string | number | TestCommand[]
+): Promise<string | number | TestCommand[]> {
   const config = await readConfig();
   return findOption(config, path, defaultValue);
 }
@@ -129,8 +134,8 @@ export async function readConfigOption(
 function findOption(
   data: any,
   path: string,
-  defaultValue: string | number | string[]
-): string | number | string[] {
+  defaultValue: string | number | TestCommand[]
+): string | number | TestCommand[] {
   if (!data) return defaultValue;
 
   const tokens = path.split('.');
@@ -152,7 +157,7 @@ export async function writeSetting(path: string, value: string | number) {
 
 export async function writeConfigOption(
   path: string,
-  value: string | number | string[]
+  value: string | number | TestCommand[]
 ) {
   const config = await readConfig();
   if (!config) return;
@@ -164,7 +169,7 @@ export async function writeConfigOption(
 function mergeConfigData(
   data: any,
   path: string,
-  value: string | number | string[]
+  value: string | number | TestCommand[]
 ): void {
   const tokens = path.split('.');
   const lastToken = tokens.pop()!;
