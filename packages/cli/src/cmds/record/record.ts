@@ -7,6 +7,8 @@ import { State } from './types/state';
 import { FileName } from './types/fileName';
 import { chdir } from 'process';
 
+import initial from './state/initial';
+
 export const command = 'record [mode]';
 export const describe =
   'Create an AppMap via interactive recording, aka remote recording.';
@@ -15,8 +17,6 @@ export const builder = (args: yargs.Argv) => {
   args.positional('mode', {
     type: 'string',
     choices: ['test', 'remote'],
-    default: 'remote',
-    required: true,
   });
 
   args.option('directory', {
@@ -47,9 +47,12 @@ export const handler = async (argv: any) => {
     if (appmapConfig) setAppMapConfigFilePath(appmapConfig);
 
     const { mode } = argv;
-    let state: State | string | undefined = (
-      await import(`./state/record_${mode}`)
-    ).default as State;
+    let state: State | string | undefined;
+    if (mode) {
+      state = (await import(`./state/record_${mode}`)).default as State;
+    } else {
+      state = initial;
+    }
 
     while (state && typeof state === 'function') {
       if (verbose()) console.warn(`Entering state: ${state.name}`);
