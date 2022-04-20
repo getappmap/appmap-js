@@ -89,14 +89,14 @@ export default {
 
 <style lang="scss" scoped>
 .details-panel-filters {
-  margin-bottom: 1rem;
   border-radius: 0.25rem;
   font-size: 0.75rem;
   font-family: $appland-text-font-family;
+  margin: 0 -1rem 1rem -1rem;
 
   &__head {
     border-bottom: 1px solid $gray2;
-    padding: 0.25rem 0.75rem;
+    padding: 0.25rem 1rem;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -149,10 +149,10 @@ export default {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 0.25rem 0.75rem;
+    padding: 0.25rem 1rem;
     font-size: 0.875rem;
     line-height: 1.25rem;
-    color: $gray2;
+    color: $gray4;
     cursor: pointer;
 
     &:hover,
