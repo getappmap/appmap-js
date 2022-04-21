@@ -30,6 +30,10 @@ export default {
     object: {
       type: Object,
     },
+    static: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   watch: {
@@ -103,12 +107,19 @@ export default {
   },
 
   beforeMount() {
-    this.$root.$on('response-resolve-location', this.onResolveLocation);
-    this.requestLocation();
+    if (!this.static) {
+      this.$root.$on('response-resolve-location', this.onResolveLocation);
+      this.requestLocation();
+    } else if (this.defaultLocation) {
+      this.$data.sourceLocation = this.defaultLocation;
+      this.$data.externalUrl = this.defaultLocation;
+    }
   },
 
   beforeDestroy() {
-    this.$root.$off('response-resolve-location', this.onResolveLocation);
+    if (!this.static) {
+      this.$root.$off('response-resolve-location', this.onResolveLocation);
+    }
   },
 };
 </script>
