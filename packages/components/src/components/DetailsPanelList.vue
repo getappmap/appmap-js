@@ -101,7 +101,7 @@ export default {
   margin: 0 -1rem 1.5rem;
 
   h5 {
-    border-bottom: 1px solid #333a4d;
+    border-bottom: 1px solid $gray2;
     color: $base03;
     font-size: 0.75rem;
     font-weight: 700;
@@ -119,7 +119,7 @@ export default {
 
     .list-item {
       position: relative;
-      border-bottom: 1px solid #333a4d;
+      border-bottom: 1px solid $gray2;
       display: flex;
       justify-content: space-between;
       align-items: center;

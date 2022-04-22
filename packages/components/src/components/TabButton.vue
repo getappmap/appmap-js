@@ -33,7 +33,7 @@ export default {
   position: relative;
   bottom: -1px;
   appearance: none;
-  border: 1px solid $lightgray2;
+  border: 1px solid $gray2;
   border-radius: 0.25rem 0.25rem 0 0;
   background-color: transparent;
   cursor: pointer;
@@ -59,7 +59,7 @@ export default {
   }
 
   &--active {
-    border-bottom-color: $vs-code-gray1;
+    border-bottom-color: $black;
     cursor: default;
     color: $base03;
 

@@ -1260,7 +1260,7 @@ code {
   min-width: 800px;
   height: 100vh;
   color: $base11;
-  background-color: $vs-code-gray1;
+  background-color: $black;
 
   &.app--loading {
     .loader {
@@ -1299,7 +1299,6 @@ code {
       position: relative;
       grid-column: 1;
       width: 420px;
-      background-color: $gray2;
     }
 
     &--right {
@@ -1445,6 +1444,8 @@ code {
 
     &__head {
       margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid $gray2;
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -1504,9 +1505,10 @@ code {
         border-radius: 0.25rem 0.25rem 0 0;
         margin-bottom: 1px;
         display: flex;
-        padding: 0.5rem 0.75rem;
+        padding: 0.5rem 0rem;
         line-height: 1.25rem;
-        background: #2c2b32;
+        background: $black;
+        border-bottom: 1px solid $gray2;
       }
 
       &-title {
@@ -1520,7 +1522,7 @@ code {
       &-body {
         border-radius: 0 0 0.25rem 0.25rem;
         padding: 1rem 0.75rem;
-        background: #2c2b32;
+        background: $black;
 
         &--flex {
           display: flex;
@@ -1610,7 +1612,7 @@ code {
       vertical-align: middle;
       height: 22px;
       padding: 0 0.25rem;
-      background: #191919;
+      border: 1px solid $gray2;
 
       &-input {
         display: inline-block;
@@ -1681,7 +1683,7 @@ code {
   height: 0px;
 }
 ::-webkit-scrollbar-thumb {
-  background: $gray4;
+  background: $gray2;
   border: 0;
   border-radius: 50px;
 }
@@ -1690,7 +1692,7 @@ code {
   background: $gray5;
 }
 ::-webkit-scrollbar-track {
-  background: $gray3;
+  background: $black;
   border: 0;
   border-radius: 50px;
 }

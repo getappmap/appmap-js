@@ -109,10 +109,11 @@ export default {
     height: max-content;
     max-width: 70vw;
     max-height: 70vh;
+    margin-top: 1.5rem;
     padding: 1rem;
     font-family: $appland-text-font-family;
     color: $gray6;
-    background: #191919;
+    background: $black;
     overflow: auto;
 
     .popper--v-top & {
@@ -122,7 +123,7 @@ export default {
 
     .popper--v-bottom & {
       top: 100%;
-      margin-top: 0.8rem;
+      margin-top: 1.5rem;
     }
 
     .popper--h-left & {

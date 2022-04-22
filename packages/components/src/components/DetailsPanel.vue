@@ -38,7 +38,7 @@
 
 <script>
 import { Event, AppMap } from '@appland/models';
-import AppMapLogo from '@/assets/appmap-logo.svg';
+import AppMapLogo from '@/assets/appmap-full-logo.svg';
 import VDetailsLabel from '@/components/DetailsLabel.vue';
 import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
 import VDetailsPanelDatabase from '@/components/DetailsPanelDatabase.vue';
@@ -122,7 +122,6 @@ export default {
   height: 100%;
   padding: 1rem;
   color: $gray6;
-  background-color: $vs-code-gray1;
   word-break: break-word;
   border-right: 1px solid $base15;
   overflow: auto;
@@ -134,7 +133,8 @@ export default {
     align-items: center;
 
     svg {
-      max-width: 10rem;
+      max-width: 20rem;
+      width: 100%;
     }
   }
 
