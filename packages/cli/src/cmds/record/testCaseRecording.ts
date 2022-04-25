@@ -2,7 +2,12 @@ import { ChildProcess, exec, spawn } from 'child_process';
 import { kill } from 'process';
 import { verbose } from '../../utils';
 import UI from '../userInteraction';
-import { readConfig, readConfigOption, TestCommand } from './configuration';
+import {
+  readConfig,
+  readConfigOption,
+  readSetting,
+  TestCommand,
+} from './configuration';
 
 let TestCommands: TestCommand[] = [];
 
@@ -14,14 +19,10 @@ const DiagnosticCommands: Record<string, string[]> = {
 
 export default class TestCaseRecording {
   static async start() {
-    const config = await readConfig();
-    if (!config) throw new Error(`AppMap config file was not found`);
-    if (!config.language)
-      throw new Error(`AppMap config 'language' is not set`);
-
     TestCaseProcesses.forEach((process) => {
       if (process.pid) kill(process.pid);
     });
+    TestCommands = [];
     TestCaseProcesses = [];
 
     let testCommands = (await readConfigOption(
@@ -33,7 +34,11 @@ export default class TestCaseRecording {
       throw new Error(`No test commands are configured`);
 
     if (verbose()) {
-      const diagnosticCommands = DiagnosticCommands[config.language!];
+      const language = (await readConfigOption(
+        'language',
+        'undefined'
+      )) as string;
+      const diagnosticCommands = DiagnosticCommands[language];
       if (diagnosticCommands) {
         await Promise.all(
           diagnosticCommands.map((cmd) => {
@@ -54,13 +59,21 @@ export default class TestCaseRecording {
     TestCommands = testCommands;
   }
 
-  static async waitFor(maxTime: number | undefined) {
-    if (maxTime) UI.progress(`Running tests for up to ${maxTime} seconds.`);
+  static async waitFor() {
+    let maxTime: number | undefined = (await readSetting(
+      'test_recording.max_time',
+      -1
+    )) as number;
+
+    if (maxTime === -1) maxTime = undefined;
+
+    if (maxTime) UI.progress(`Running tests for up to ${maxTime} seconds`);
 
     let waitTime = maxTime;
     async function waitForProcess(
       process: ChildProcess
     ): Promise<number | null | undefined> {
+      const commandStr = process.spawnargs.join(' ');
       const startTime = Date.now();
       return new Promise((resolve) => {
         let reported = false;
@@ -68,10 +81,9 @@ export default class TestCaseRecording {
 
         function interrupt() {
           if (process.pid) {
-            if (verbose())
-              UI.progress(
-                `Sending SIGTERM to ${process.pid} after ${maxTime} seconds.`
-              );
+            UI.progress(
+              `Stopping test command after ${maxTime} seconds: ${commandStr}`
+            );
             kill(process.pid, 'SIGTERM');
           }
         }
@@ -85,9 +97,9 @@ export default class TestCaseRecording {
             waitTime -= elapsed / 1000;
           }
           if (interruptTimeout) clearTimeout(interruptTimeout);
-          if (exitCode !== 0) {
+          if (exitCode && exitCode !== 0) {
             UI.progress(
-              `Test command finished with non-zero exit code ${exitCode}`
+              `Test command failed with status code ${exitCode}: ${commandStr}`
             );
           }
           resolve(exitCode);
@@ -103,6 +115,7 @@ export default class TestCaseRecording {
     }
 
     for (const cmd of TestCommands) {
+      cmd.env ||= {};
       UI.progress(
         `Running test command: ${TestCaseRecording.envString(cmd.env)}${
           cmd.command

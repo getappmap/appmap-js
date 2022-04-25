@@ -1,6 +1,6 @@
 import UI from '../../userInteraction';
 import { writeConfigOption } from '../configuration';
-import guessTestCommands from '../test/guessTestCommands';
+import guessTestCommands from '../action/guessTestCommands';
 import TestCaseRecording from '../testCaseRecording';
 
 export default async function obtainTestCommands(): Promise<void> {

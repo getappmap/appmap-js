@@ -1,5 +1,4 @@
 import TestCaseRecording from '../testCaseRecording';
-import testCasesRunning from '../state/testCasesRunning';
 import UI from '../../userInteraction';
 import { readSetting, writeSetting } from '../configuration';
 
@@ -18,5 +17,4 @@ export default async function startTestCases() {
   }
 
   await TestCaseRecording.start();
-  return testCasesRunning;
 }

@@ -12,10 +12,12 @@ export type RemoteRecordingConfig = {
   protocol?: string;
 };
 
-export type TestCommand = {
-  env: Record<string, string>;
-  command: string;
-};
+export class TestCommand {
+  constructor(
+    public command: string,
+    public env: Record<string, string> = {}
+  ) {}
+}
 
 export type TestRecordingConfig = {
   test_commands?: TestCommand[];

@@ -1,22 +1,15 @@
 import { exists, verbose } from '../../../utils';
-import UI from '../../userInteraction';
-import {
-  readConfig,
-  TestCommand,
-} from '../configuration';
+import { readConfigOption, TestCommand } from '../configuration';
 import TestCaseRecording from '../testCaseRecording';
 
 export default async function guessTestCommands(): Promise<
   TestCommand[] | undefined
 > {
-  const config = await readConfig();
-  if (!config) return;
-  if (!config.language) return;
-
-  if (config.language === 'ruby') {
+  const language = await readConfigOption('language', 'undefined');
+  if (language === 'ruby') {
     const env = { APPMAP: 'true', DISABLE_SPRING: 'true' };
     const testCommandForDirectory: Record<string, string> = {
-      rspec: 'bundle exec rspec',
+      spec: 'bundle exec rspec',
       test: 'bundle exec rake test',
     };
     const dirExists = await Promise.all(

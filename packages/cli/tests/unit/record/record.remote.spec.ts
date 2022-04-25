@@ -13,16 +13,14 @@ import * as detectProcessCharacteristics from '../../../src/cmds/record/action/d
 import * as agentProcessNotRunning from '../../../src/cmds/record/state/agentProcessNotRunning';
 import * as configureHostAndPort from '../../../src/cmds/record/action/configureHostAndPort';
 
-describe('record command', () => {
-  let readSetting: sinon.SinonStub,
-    writeSetting: sinon.SinonStub,
-    prompt: sinon.SinonStub,
+describe('record remote', () => {
+  let prompt: sinon.SinonStub,
     options: RequestOptions = {};
 
   beforeEach(() => {
-    readSetting = sinon.stub(configuration, 'requestOptions').resolves(options);
-    readSetting = sinon.stub(configuration, 'readSetting');
-    writeSetting = sinon.stub(configuration, 'writeSetting');
+    sinon.stub(configuration, 'requestOptions').resolves(options);
+    sinon.stub(configuration, 'readSetting');
+    sinon.stub(configuration, 'writeSetting');
     prompt = sinon.stub(UI, 'prompt');
   });
 
