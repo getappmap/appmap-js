@@ -6,7 +6,7 @@ export default async function startRecording() {
   const ro = await requestOptions();
 
   UI.progress('');
-  await UI.confirm('Press enter to start recording');
+  await UI.continue('Press enter to start recording');
 
   const rr = new RemoteRecording(ro);
   await rr.start();
