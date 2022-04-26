@@ -25,7 +25,6 @@ export type TestRecordingConfig = {
 
 export type AppMapConfig = {
   name: string;
-  language?: string;
   appmap_dir?: string;
   test_recording?: TestRecordingConfig;
   remote_recording?: RemoteRecordingConfig;
@@ -33,11 +32,6 @@ export type AppMapConfig = {
 
 export type AppMapSettings = {
   max_time?: number;
-};
-
-const DefaultAppMapDir: Record<string, string> = {
-  ruby: 'tmp/appmap',
-  python: 'tmp/appmap',
 };
 
 // Returns the previous config file path.
@@ -64,9 +58,7 @@ export async function readConfig(): Promise<AppMapConfig | undefined> {
   } catch {
     return;
   }
-  const config = load(fileContents.toString()) as AppMapConfig;
-  if (config.language) config.appmap_dir ||= DefaultAppMapDir[config.language];
-  return config;
+  return load(fileContents.toString()) as AppMapConfig;
 }
 
 function settingsKey(): string {
