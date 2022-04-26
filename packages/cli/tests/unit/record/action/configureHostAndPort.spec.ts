@@ -5,7 +5,7 @@ import UI from '../../../../src/cmds/userInteraction';
 import configureHostAndPort from '../../../../src/cmds/record/action/configureHostAndPort';
 import TempConfig from '../tempConfig';
 
-describe('record.configureHostAndPort', () => {
+describe('record.action.configureHostAndPort', () => {
   let config: TempConfig;
   let prompt: sinon.SinonStub;
 

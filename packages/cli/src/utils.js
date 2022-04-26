@@ -8,7 +8,7 @@ const { sep: pathSep, join: joinPath } = require('path');
 const { buildAppMap } = require('@appland/models');
 
 let isVerbose = false;
-function verbose(v = null) {
+function verbose(/** @type {boolean|null} */ v = null) {
   if (v !== null) {
     isVerbose = v;
   }

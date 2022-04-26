@@ -2,7 +2,7 @@ import { RequestOptions } from 'http';
 import sinon from 'sinon';
 import UI from '../../../src/cmds/userInteraction';
 import { State } from '../../../src/cmds/record/types/state';
-import * as initial from '../../../src/cmds/record/state/initial';
+import * as remote from '../../../src/cmds/record/state/record_remote';
 import * as configuration from '../../../src/cmds/record/configuration';
 import * as isAgentAvailable from '../../../src/cmds/record/test/isAgentAvailable';
 import * as isRecordingInProgress from '../../../src/cmds/record/test/isRecordingInProgress';
@@ -13,16 +13,14 @@ import * as detectProcessCharacteristics from '../../../src/cmds/record/action/d
 import * as agentProcessNotRunning from '../../../src/cmds/record/state/agentProcessNotRunning';
 import * as configureHostAndPort from '../../../src/cmds/record/action/configureHostAndPort';
 
-describe('record command', () => {
-  let readSetting: sinon.SinonStub,
-    writeSetting: sinon.SinonStub,
-    prompt: sinon.SinonStub,
+describe('record remote', () => {
+  let prompt: sinon.SinonStub,
     options: RequestOptions = {};
 
   beforeEach(() => {
-    readSetting = sinon.stub(configuration, 'requestOptions').resolves(options);
-    readSetting = sinon.stub(configuration, 'readSetting');
-    writeSetting = sinon.stub(configuration, 'writeSetting');
+    sinon.stub(configuration, 'requestOptions').resolves(options);
+    sinon.stub(configuration, 'readSetting');
+    sinon.stub(configuration, 'writeSetting');
     prompt = sinon.stub(UI, 'prompt');
   });
 
@@ -34,7 +32,7 @@ describe('record command', () => {
     beforeEach(() => sinon.stub(isAgentAvailable, 'default').resolves(false));
 
     it('tries to get the agent ready', async () => {
-      const next = await initial.default();
+      const next = await remote.default();
       expect(next).toEqual(agentNotAvailable.default);
     });
 
@@ -44,13 +42,13 @@ describe('record command', () => {
       );
 
       it('tries to get the agent running', async () => {
-        let next: State | string | undefined = await initial.default();
+        let next: State | string | undefined = await remote.default();
         next = await next();
         expect(next).toEqual(agentProcessNotRunning.default);
 
         sinon.stub(configureHostAndPort, 'default').resolves();
 
-        expect(await (next as State)()).toEqual(initial.default);
+        expect(await (next as State)()).toEqual(remote.default);
       });
     });
   });
@@ -64,7 +62,7 @@ describe('record command', () => {
       );
 
       it('is ready to record', async () => {
-        const next = await initial.default();
+        const next = await remote.default();
         expect(next).toEqual(agentAvailableAndReady.default);
       });
     });
@@ -74,7 +72,7 @@ describe('record command', () => {
       );
 
       it('tries to handle the existing recording', async () => {
-        const next = await initial.default();
+        const next = await remote.default();
         expect(next).toEqual(agentIsRecording.default);
       });
     });

@@ -1,11 +1,44 @@
-import { existsSync, writeFileSync, writeSync } from 'fs';
+import { existsSync } from 'fs';
 import { readFile, writeFile } from 'fs/promises';
 import { RequestOptions } from 'http';
 import { dump, load } from 'js-yaml';
-import { join } from 'path';
+import { isAbsolute, join } from 'path';
 
-let AppMapConfigFilePath = join(process.cwd(), 'appmap.yml');
+let AppMapConfigFilePath = 'appmap.yml';
 let AppMapSettingsFilePath = join(process.env.HOME || '', '.appmaprc');
+
+export type RemoteRecordingConfig = {
+  path?: string;
+  protocol?: string;
+};
+
+export class TestCommand {
+  constructor(
+    public command: string,
+    public env: Record<string, string> = {}
+  ) {}
+}
+
+export type TestRecordingConfig = {
+  test_commands?: TestCommand[];
+};
+
+export type AppMapConfig = {
+  name: string;
+  language?: string;
+  appmap_dir?: string;
+  test_recording?: TestRecordingConfig;
+  remote_recording?: RemoteRecordingConfig;
+};
+
+export type AppMapSettings = {
+  max_time?: number;
+};
+
+const DefaultAppMapDir: Record<string, string> = {
+  ruby: 'tmp/appmap',
+  python: 'tmp/appmap',
+};
 
 // Returns the previous config file path.
 export function setAppMapConfigFilePath(appMapFile: string): string {
@@ -24,34 +57,42 @@ export function setAppMapSettingsFilePath(appMapFile: string): string {
   return oldPath;
 }
 
-async function readConfig(): Promise<any | undefined> {
+export async function readConfig(): Promise<AppMapConfig | undefined> {
   let fileContents: Buffer | undefined;
   try {
     fileContents = await readFile(AppMapConfigFilePath);
   } catch {
     return;
   }
-  return load(fileContents.toString());
+  const config = load(fileContents.toString()) as AppMapConfig;
+  if (config.language) config.appmap_dir ||= DefaultAppMapDir[config.language];
+  return config;
 }
 
-async function readAllSettings(): Promise<any> {
+function settingsKey(): string {
+  return isAbsolute(AppMapConfigFilePath)
+    ? AppMapConfigFilePath
+    : join(process.cwd(), AppMapConfigFilePath);
+}
+
+export async function readAllSettings(): Promise<AppMapSettings> {
   let settings: any;
   try {
     const fileContents = await readFile(AppMapSettingsFilePath);
     settings = load(fileContents.toString()) as any;
     // Make sure settings is an object.
-    settings[AppMapConfigFilePath];
+    settings[settingsKey()];
   } catch {
     settings = {};
   }
-  if (!settings[AppMapConfigFilePath]) {
-    settings[AppMapConfigFilePath] = {};
+  if (!settings[settingsKey()]) {
+    settings[settingsKey()] = {};
   }
   return settings;
 }
 
 async function readSettings(): Promise<any> {
-  return (await readAllSettings())[AppMapConfigFilePath];
+  return (await readAllSettings())[settingsKey()];
 }
 
 async function writeConfig(config: any) {
@@ -68,7 +109,10 @@ export async function requestOptions(): Promise<RequestOptions> {
   requestOptions.hostname = (
     await readSetting('remote_recording.host', 'localhost')
   ).toString();
-  requestOptions.port = await readSetting('remote_recording.port', 3000);
+  requestOptions.port = (await readSetting(
+    'remote_recording.port',
+    3000
+  )) as number;
   requestOptions.path = (
     await readConfigOption('remote_recording.path', '/')
   ).toString();
@@ -81,16 +125,16 @@ export async function requestOptions(): Promise<RequestOptions> {
 
 export async function readSetting(
   path: string,
-  defaultValue: string | number
-): Promise<string | number> {
+  defaultValue: string | number | TestCommand[]
+): Promise<string | number | TestCommand[]> {
   const settings = await readSettings();
   return findOption(settings, path, defaultValue);
 }
 
 export async function readConfigOption(
   path: string,
-  defaultValue: string | number
-): Promise<string | number> {
+  defaultValue: string | number | TestCommand[]
+): Promise<string | number | TestCommand[]> {
   const config = await readConfig();
   return findOption(config, path, defaultValue);
 }
@@ -98,8 +142,8 @@ export async function readConfigOption(
 function findOption(
   data: any,
   path: string,
-  defaultValue: string | number
-): string | number {
+  defaultValue: string | number | TestCommand[]
+): string | number | TestCommand[] {
   if (!data) return defaultValue;
 
   const tokens = path.split('.');
@@ -108,19 +152,24 @@ function findOption(
     if (!entry) return defaultValue;
     entry = entry[token];
   }
-  if (typeof entry === 'object') return defaultValue;
 
   return entry || defaultValue;
 }
 
-export async function writeSetting(path: string, value: string | number) {
+export async function writeSetting(
+  path: string,
+  value: string | number | TestCommand[]
+) {
   const allSettings = await readAllSettings();
-  const settings = allSettings[AppMapConfigFilePath];
+  const settings = allSettings[settingsKey()];
   mergeConfigData(settings, path, value);
   await writeSettings(allSettings);
 }
 
-export async function writeConfigOption(path: string, value: string | number) {
+export async function writeConfigOption(
+  path: string,
+  value: string | number | TestCommand[]
+) {
   const config = await readConfig();
   if (!config) return;
 
@@ -131,7 +180,7 @@ export async function writeConfigOption(path: string, value: string | number) {
 function mergeConfigData(
   data: any,
   path: string,
-  value: string | number
+  value: string | number | TestCommand[]
 ): void {
   const tokens = path.split('.');
   const lastToken = tokens.pop()!;

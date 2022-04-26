@@ -5,7 +5,7 @@ import UI from '../../../../src/cmds/userInteraction';
 import configureRemainingRequestOptions from '../../../../src/cmds/record/action/configureRemainingRequestOptions';
 import TempConfig from '../tempConfig';
 
-describe('record.configureRemainingRequestOptions', () => {
+describe('record.action.configureRemainingRequestOptions', () => {
   let config: TempConfig;
   let prompt: sinon.SinonStub;
 

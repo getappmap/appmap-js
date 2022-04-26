@@ -1,7 +1,4 @@
 import * as configuration from '../../../src/cmds/record/configuration';
-import tmp from 'tmp';
-import { promisify } from 'util';
-import { unlink, writeFile } from 'fs/promises';
 import TempConfig from './tempConfig';
 
 describe('configuration', () => {
