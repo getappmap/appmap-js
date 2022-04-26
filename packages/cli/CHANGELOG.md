@@ -1,3 +1,18 @@
+# [@appland/appmap-v3.22.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.21.0...@appland/appmap-v3.22.0) (2022-04-26)
+
+
+### Bug Fixes
+
+* Fix hash key of saved settings ([26f54f4](https://github.com/applandinc/appmap-js/commit/26f54f479047b38b667c27b7d12c280d4d91413c))
+
+
+### Features
+
+* 'record test' sub-command ([9471f7f](https://github.com/applandinc/appmap-js/commit/9471f7f5de90a0f7ba52086d7385371ee50ecf23))
+* Prompt for test commands ([93ae6f6](https://github.com/applandinc/appmap-js/commit/93ae6f6a4b0d97c4338480c1943d1ac32a0cd6d7))
+* Recording mode argument is optional ([44b3575](https://github.com/applandinc/appmap-js/commit/44b35751ea025c6c4a33b60f6e51089ea0a709bc))
+* Set a time limit on test case execution ([a6c2803](https://github.com/applandinc/appmap-js/commit/a6c28037123f087e7d40deecc6de1b2274820f43))
+
 # [@appland/appmap-v3.21.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.20.0...@appland/appmap-v3.21.0) (2022-04-14)
 
 
