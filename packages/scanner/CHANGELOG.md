@@ -1,3 +1,10 @@
+## [1.52.2](https://github.com/applandinc/scanner/compare/v1.52.1...v1.52.2) (2022-04-27)
+
+
+### Bug Fixes
+
+* Disable circular-dependency in default config ([0fb1864](https://github.com/applandinc/scanner/commit/0fb18644dc6a211f509138689a758d634f02a4bf))
+
 ## [1.52.1](https://github.com/applandinc/scanner/compare/v1.52.0...v1.52.1) (2022-04-27)
 
 
