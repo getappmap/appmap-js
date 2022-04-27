@@ -1,3 +1,10 @@
+## [1.52.1](https://github.com/applandinc/scanner/compare/v1.52.0...v1.52.1) (2022-04-27)
+
+
+### Bug Fixes
+
+* Don't traverse a null property value ([eab7ca4](https://github.com/applandinc/scanner/commit/eab7ca4fd18c5473656d4cf473638ec125612832))
+
 # [1.52.0](https://github.com/applandinc/scanner/compare/v1.51.1...v1.52.0) (2022-04-07)
 
 
