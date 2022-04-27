@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.23.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.23.0...@appland/appmap-v3.23.1) (2022-04-27)
+
+
+### Bug Fixes
+
+* Don't match events that have no return event ([31dca43](https://github.com/applandinc/appmap-js/commit/31dca43b25af18a8927fda0ebfec3f52dca8268f))
+
 # [@appland/appmap-v3.23.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.22.0...@appland/appmap-v3.23.0) (2022-04-27)
 
 
