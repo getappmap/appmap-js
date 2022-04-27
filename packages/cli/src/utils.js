@@ -7,6 +7,12 @@ const os = require('os');
 const { sep: pathSep, join: joinPath } = require('path');
 const { buildAppMap } = require('@appland/models');
 
+const StartTime = Date.now();
+
+function endTime() {
+  return (Date.now() - StartTime) / 1000;
+}
+
 let isVerbose = false;
 function verbose(/** @type {boolean|null} */ v = null) {
   if (v !== null) {
@@ -180,6 +186,7 @@ function prefixLines(str, prefix) {
 
 module.exports = {
   baseName,
+  endTime,
   formatValue,
   formatHttpServerRequest,
   listAppMapFiles,

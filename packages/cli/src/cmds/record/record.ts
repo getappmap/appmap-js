@@ -1,4 +1,4 @@
-import { verbose } from '../../utils';
+import { endTime, verbose } from '../../utils';
 import runCommand from '../runCommand';
 import showAppMap from '../open/showAppMap';
 import yargs from 'yargs';
@@ -8,6 +8,7 @@ import { FileName } from './types/fileName';
 import { chdir } from 'process';
 
 import initial from './state/initial';
+import Telemetry from '../../telemetry';
 
 export const command = 'record [mode]';
 export const describe =
@@ -34,7 +35,7 @@ export const builder = (args: yargs.Argv) => {
   return args.strict();
 };
 
-export const handler = async (argv: any) => {
+export async function handler(argv: any) {
   verbose(argv.verbose);
 
   const commandFn = async () => {
@@ -56,14 +57,33 @@ export const handler = async (argv: any) => {
 
     while (state && typeof state === 'function') {
       if (verbose()) console.warn(`Entering state: ${state.name}`);
+
+      Telemetry.sendEvent({
+        name: `record:${state.name}`,
+        metrics: {
+          duration: endTime(),
+        },
+      });
+
       const newState = await state();
+
       state = newState;
     }
 
     if (typeof state === 'string') {
+      Telemetry.sendEvent({
+        name: `record:showAppMap`,
+        properties: {
+          fileName: state as FileName,
+        },
+        metrics: {
+          duration: endTime(),
+        },
+      });
+
       await showAppMap(state as FileName);
     }
   };
 
-  return runCommand(commandFn);
-};
+  return runCommand('record', commandFn);
+}

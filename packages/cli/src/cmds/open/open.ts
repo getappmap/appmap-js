@@ -1,8 +1,10 @@
-import { exists, verbose } from '../../utils';
+import { exists, listAppMapFiles, verbose } from '../../utils';
 import chalk from 'chalk';
 import UI from '../userInteraction';
 import runCommand from '../runCommand';
 import showAppMap from './showAppMap';
+import { ValidationError } from '../errors';
+import Telemetry from '../../telemetry';
 
 export const command = 'open [appmap-file]';
 export const describe = 'Open an AppMap in the system default browser';
@@ -24,15 +26,19 @@ export const handler = async (argv) => {
 
     if (!appmapFile) {
       UI.error(`AppMap file argument is required.`);
-      process.exit(1);
+      throw new ValidationError();
     }
     if (!(await exists(appmapFile))) {
       UI.error(`AppMap file ${chalk.red(appmapFile)} does not exist.`);
-      process.exit(1);
+      throw new ValidationError();
     }
 
     await showAppMap(appmapFile);
   };
 
-  return runCommand(commandFn);
+  Telemetry.sendEvent({
+    name: `open:open`,
+  });
+
+  return runCommand('open', commandFn);
 };

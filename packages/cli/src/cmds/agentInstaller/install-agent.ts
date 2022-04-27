@@ -6,7 +6,7 @@ import {
   InvalidPathError,
   ValidationError,
 } from '../errors';
-import { prefixLines, verbose } from '../../utils';
+import { endTime, prefixLines, verbose } from '../../utils';
 import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
 import UI from '../userInteraction';
@@ -143,8 +143,6 @@ const _handler = async (args: InstallCommandOptions): Promise<{exitCode: number,
     );
 
     for (let i = 0; i < projects.length; i++) {
-      const startTime = Date.now();
-      const endTime = () => (Date.now() - startTime) / 1000;
       const project = projects[i];
       const installProcedure = new AgentInstallerProcedure(
         project.selectedInstaller as AgentInstaller,

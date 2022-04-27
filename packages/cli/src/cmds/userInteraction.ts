@@ -46,7 +46,7 @@ export class UserInteraction {
     console.log(msg);
   }
 
-  success(msg?: string) {
+  success(msg?: string, align: 'center' | 'left' | 'right' = 'center') {
     if (this.spinner.isSpinning) {
       this.spinner.succeed();
     }
@@ -57,7 +57,7 @@ export class UserInteraction {
           padding: 1,
           margin: 1,
           borderStyle: 'round',
-          align: 'center',
+          textAlignment: align,
         })
       );
     }
