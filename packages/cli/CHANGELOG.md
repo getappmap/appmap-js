@@ -1,3 +1,18 @@
+# [@appland/appmap-v3.24.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.23.1...@appland/appmap-v3.24.0) (2022-04-27)
+
+
+### Bug Fixes
+
+* Fix test command guessing for Ruby ([7905910](https://github.com/applandinc/appmap-js/commit/790591005576d4c27b796819466476d4f277be2a))
+* Suggest test recording before remote ([d905f7e](https://github.com/applandinc/appmap-js/commit/d905f7e6d74e40d87b34ce865621a52fee270d52))
+
+
+### Features
+
+* 'record' command finishes by prompting with next steps ([ec9766e](https://github.com/applandinc/appmap-js/commit/ec9766ef17ace1e4ac8cb128a30c320dc7ae202b))
+* install command prompts the user to run 'record' ([585008a](https://github.com/applandinc/appmap-js/commit/585008a17a42f024c3fabd9b8a6a6ee43c042e17))
+* Telemetry for 'record' ([afc19a9](https://github.com/applandinc/appmap-js/commit/afc19a953c43f74736d63949ad6a866e3bf5ee15))
+
 # [@appland/appmap-v3.23.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.23.0...@appland/appmap-v3.23.1) (2022-04-27)
 
 
