@@ -1,3 +1,17 @@
+# [@appland/appmap-v3.23.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.22.0...@appland/appmap-v3.23.0) (2022-04-27)
+
+
+### Bug Fixes
+
+* Prompt for test command ([b9abca2](https://github.com/applandinc/appmap-js/commit/b9abca2352904f9692c49b7fced893f4be351a6d))
+
+
+### Features
+
+* Add UI.continue ([36d948f](https://github.com/applandinc/appmap-js/commit/36d948f7257671d2cb64d8eee09058d07a180a77))
+* Boldly print if the agent is available or not ([5c25abd](https://github.com/applandinc/appmap-js/commit/5c25abdf4c3c223113e7923a66caed53771f369b))
+* Guess 'mvn test' command ([65534a8](https://github.com/applandinc/appmap-js/commit/65534a8c356450eab92bb9568edad413b17f9ba8))
+
 # [@appland/appmap-v3.22.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.21.0...@appland/appmap-v3.22.0) (2022-04-26)
 
 
