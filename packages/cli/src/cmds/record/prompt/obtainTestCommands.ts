@@ -22,12 +22,7 @@ export default async function obtainTestCommands(): Promise<void> {
       `${TestCaseRecording.envString(testCommand.env)}${testCommand.command}`
     );
     UI.progress(``);
-    const { useTestCommand } = await UI.prompt({
-      name: 'useTestCommand',
-      type: 'confirm',
-      message: 'Use this suggested test command?',
-    });
-    if (useTestCommand) {
+    if (await UI.confirm('Use this suggested test command?')) {
       await writeConfigOption('test_recording.test_commands', [testCommand]);
 
       UI.progress(``);
@@ -38,7 +33,7 @@ export default async function obtainTestCommands(): Promise<void> {
           `additional test commands to that file.`
       );
       UI.progress(``);
-      await UI.confirm('Press enter to continue');
+      await UI.continue('Press enter to continue');
       return;
     }
   }
@@ -57,16 +52,29 @@ export default async function obtainTestCommands(): Promise<void> {
       message: 'Environment variables:',
     });
 
-    const env = envVars
-      .toString()
-      .split(/\s+/)
-      .reduce((acc: Record<string, string>, curr: string) => {
-        const [key, value] = curr.split('=', 2);
-        acc[key] = value;
-        return acc;
-      }, {});
+    let env = {};
+    if (envVars.toString().trim() !== '') {
+      env = envVars
+        .toString()
+        .trim()
+        .split(/\s+/)
+        .reduce((acc: Record<string, string>, curr: string) => {
+          const [key, value] = curr.split('=', 2);
+          acc[key] = value;
+          return acc;
+        }, {});
+    }
 
     UI.progress(`To run the tests, I will run the following command:`);
+    UI.progress('');
     UI.progress(`${TestCaseRecording.envString(env)}${testCommand}`);
+    UI.progress('');
+
+    confirmed = await UI.confirm(`Continue with this command?`);
+    if (confirmed) {
+      await writeConfigOption('test_recording.test_commands', [
+        { env, command: testCommand },
+      ]);
+    }
   }
 }

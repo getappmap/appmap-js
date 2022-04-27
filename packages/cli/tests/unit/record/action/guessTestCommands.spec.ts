@@ -15,9 +15,11 @@ describe('record.action.guessTestCommands', () => {
         .resolves('ruby');
     });
 
-    describe('when test dirs exist', () => {
-      it('provides rspec and minitest commands', async () => {
-        const stubAccess = sinon.stub(fsp, 'access').resolves();
+    describe('when test path exists', () => {
+      it('provides test command', async () => {
+        const stubAccess = sinon.stub(fsp, 'access');
+        stubAccess.withArgs('Gemfile/spec', fsConstants.R_OK).resolves();
+        stubAccess.rejects();
 
         const testCommands = await guessTestCommands();
         expect(testCommands).toEqual([
@@ -25,22 +27,13 @@ describe('record.action.guessTestCommands', () => {
             env: { APPMAP: 'true', DISABLE_SPRING: 'true' },
             command: 'bundle exec rspec',
           },
-          {
-            env: { APPMAP: 'true', DISABLE_SPRING: 'true' },
-            command: 'bundle exec rake test',
-          },
-        ]);
-
-        expect(stubAccess.getCalls().map((c) => c.firstArg)).toEqual([
-          'spec',
-          'test',
         ]);
       });
     });
     describe('without test dirs', () => {
       it('provides no commands commands', async () => {
-        const stubUtils = sinon.stub(fsp, 'access').rejects();
-
+        sinon.stub(fsp, 'access').rejects();
+        
         const testCommands = await guessTestCommands();
         expect(testCommands).toEqual([]);
       });

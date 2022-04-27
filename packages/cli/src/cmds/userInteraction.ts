@@ -29,8 +29,17 @@ export class UserInteraction {
     return result;
   }
 
-  async confirm(msg: string) {
+  async continue(msg: string): Promise<void> {
     await inquirer.prompt({ type: 'input', name: 'confirm', message: msg });
+  }
+
+  async confirm(msg: string): Promise<boolean> {
+    const { confirm } = await inquirer.prompt({
+      type: 'confirm',
+      name: 'confirm',
+      message: msg,
+    });
+    return confirm;
   }
 
   progress(msg: string) {

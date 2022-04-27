@@ -1,6 +1,6 @@
 import { ChildProcess, exec, spawn } from 'child_process';
 import { kill } from 'process';
-import { verbose } from '../../utils';
+import { exists, verbose } from '../../utils';
 import UI from '../userInteraction';
 import {
   readConfig,
@@ -14,7 +14,7 @@ let TestCommands: TestCommand[] = [];
 let TestCaseProcesses: ChildProcess[] = [];
 
 const DiagnosticCommands: Record<string, string[]> = {
-  ruby: ['ruby -v', 'bundle info rails', 'bundle info actionpack'],
+  Gemfile: ['ruby -v', 'bundle info rails', 'bundle info actionpack'],
 };
 
 export default class TestCaseRecording {
@@ -34,26 +34,27 @@ export default class TestCaseRecording {
       throw new Error(`No test commands are configured`);
 
     if (verbose()) {
-      const language = (await readConfigOption(
-        'language',
-        'undefined'
-      )) as string;
-      const diagnosticCommands = DiagnosticCommands[language];
-      if (diagnosticCommands) {
-        await Promise.all(
-          diagnosticCommands.map((cmd) => {
-            return new Promise((resolve) => {
-              const args = cmd.split(' ');
-              const process = spawn(args[0], args.slice(1), {
-                shell: true,
-                stdio: ['ignore', 'inherit', 'inherit'],
-              });
-              process.on('error', resolve);
-              process.on('exit', resolve);
+      const pathExists = await Promise.all(
+        Object.keys(DiagnosticCommands).map(async (path) => await exists(path))
+      );
+      const diagnosticCommands = Object.keys(DiagnosticCommands)
+        .filter((_, idx) => pathExists[idx])
+        .map((path) => DiagnosticCommands[path])
+        .flat();
+
+      await Promise.all(
+        diagnosticCommands.map((cmd) => {
+          return new Promise((resolve) => {
+            const args = cmd.split(' ');
+            const process = spawn(args[0], args.slice(1), {
+              shell: true,
+              stdio: ['ignore', 'inherit', 'inherit'],
             });
-          })
-        );
-      }
+            process.on('error', resolve);
+            process.on('exit', resolve);
+          });
+        })
+      );
     }
 
     TestCommands = testCommands;
