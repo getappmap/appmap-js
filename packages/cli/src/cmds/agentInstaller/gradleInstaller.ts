@@ -3,7 +3,6 @@ import os from 'os';
 import { join, sep } from 'path';
 import chalk from 'chalk';
 import CommandStruct from './commandStruct';
-import AgentInstaller from './agentInstaller';
 import { verbose, exists } from '../../utils';
 import UI from '../userInteraction';
 import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
