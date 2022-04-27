@@ -169,7 +169,9 @@ class FindEvents {
 
     appmap.events.forEach((/** @type {Event} */ event) => {
       if (event.isCall()) {
-        enter(event);
+        if (event.returnEvent) {
+          enter(event);
+        }
       } else {
         leave(event);
       }
