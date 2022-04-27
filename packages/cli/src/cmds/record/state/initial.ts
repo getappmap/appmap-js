@@ -3,8 +3,8 @@ import { State } from '../types/state';
 
 export default async function initial(): Promise<State> {
   const choices = {
-    'remote recording': 'remote',
     'test cases': 'test',
+    'remote recording': 'remote',
   };
 
   const { method: methodName } = await UI.prompt({
