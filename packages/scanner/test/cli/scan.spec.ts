@@ -53,7 +53,7 @@ describe('scan', () => {
     const appMapMetadata = scanResults.summary.appMapMetadata;
     expect(appMapMetadata.apps).toEqual(['spring-petclinic']);
     const checks = scanResults.configuration.checks;
-    ['circularDependency', 'http500', 'nPlusOneQuery'].forEach((rule) =>
+    ['http500', 'nPlusOneQuery'].forEach((rule) =>
       expect(checks.map((check) => check.rule)).toContain(rule)
     );
     expect(Object.keys(scanResults).sort()).toEqual([

@@ -1,6 +1,6 @@
 checks:
   - rule: authzBeforeAuthn
-  - rule: circularDependency
+  # - rule: circularDependency
   - rule: deserializationOfUntrustedData
   - rule: execOfUntrustedCommand
   - rule: http500
