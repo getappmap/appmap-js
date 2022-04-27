@@ -18,7 +18,8 @@ describe('record.action.guessTestCommands', () => {
     describe('when test path exists', () => {
       it('provides test command', async () => {
         const stubAccess = sinon.stub(fsp, 'access');
-        stubAccess.withArgs('Gemfile/spec', fsConstants.R_OK).resolves();
+        stubAccess.withArgs('Gemfile', fsConstants.R_OK).resolves();
+        stubAccess.withArgs('spec', fsConstants.R_OK).resolves();
         stubAccess.rejects();
 
         const testCommands = await guessTestCommands();
@@ -33,7 +34,7 @@ describe('record.action.guessTestCommands', () => {
     describe('without test dirs', () => {
       it('provides no commands commands', async () => {
         sinon.stub(fsp, 'access').rejects();
-        
+
         const testCommands = await guessTestCommands();
         expect(testCommands).toEqual([]);
       });
