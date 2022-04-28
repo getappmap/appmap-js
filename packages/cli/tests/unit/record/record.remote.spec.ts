@@ -12,10 +12,16 @@ import * as agentNotAvailable from '../../../src/cmds/record/state/agentNotAvail
 import * as detectProcessCharacteristics from '../../../src/cmds/record/action/detectProcessCharacteristics';
 import * as agentProcessNotRunning from '../../../src/cmds/record/state/agentProcessNotRunning';
 import * as configureHostAndPort from '../../../src/cmds/record/action/configureHostAndPort';
+import RecordContext from '../../../src/cmds/record/recordContext';
+import { inspect } from 'util';
 
 describe('record remote', () => {
   let prompt: sinon.SinonStub,
-    options: RequestOptions = {};
+    options: RequestOptions = {},
+    recordContext: RecordContext,
+    appMapDir = '.';
+
+  beforeEach(() => (recordContext = new RecordContext(appMapDir)));
 
   beforeEach(() => {
     sinon.stub(configuration, 'requestOptions').resolves(options);
@@ -32,7 +38,16 @@ describe('record remote', () => {
     beforeEach(() => sinon.stub(isAgentAvailable, 'default').resolves(false));
 
     it('tries to get the agent ready', async () => {
-      const next = await remote.default();
+      recordContext.recordMethod = 'remote';
+
+      const next = await remote.default(recordContext);
+      expect(inspect(recordContext)).toEqual(
+        `RecordContext {
+  appMapDir: '.',
+  recordMethod: 'remote',
+  url: 'http://localhost:3000/'
+}`
+      );
       expect(next).toEqual(agentNotAvailable.default);
     });
 
@@ -42,13 +57,21 @@ describe('record remote', () => {
       );
 
       it('tries to get the agent running', async () => {
-        let next: State | string | undefined = await remote.default();
-        next = await next();
+        let next: State | string | undefined = await remote.default(
+          recordContext
+        );
+        next = await next(recordContext);
+        expect(inspect(recordContext)).toEqual(
+          `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
+        );
         expect(next).toEqual(agentProcessNotRunning.default);
 
         sinon.stub(configureHostAndPort, 'default').resolves();
 
-        expect(await (next as State)()).toEqual(remote.default);
+        expect(await (next as State)(recordContext)).toEqual(remote.default);
+        expect(inspect(recordContext)).toEqual(
+          `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
+        );
       });
     });
   });
@@ -62,7 +85,10 @@ describe('record remote', () => {
       );
 
       it('is ready to record', async () => {
-        const next = await remote.default();
+        const next = await remote.default(recordContext);
+        expect(inspect(recordContext)).toEqual(
+          `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
+        );
         expect(next).toEqual(agentAvailableAndReady.default);
       });
     });
@@ -72,7 +98,10 @@ describe('record remote', () => {
       );
 
       it('tries to handle the existing recording', async () => {
-        const next = await remote.default();
+        const next = await remote.default(recordContext);
+        expect(inspect(recordContext)).toEqual(
+          `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
+        );
         expect(next).toEqual(agentIsRecording.default);
       });
     });

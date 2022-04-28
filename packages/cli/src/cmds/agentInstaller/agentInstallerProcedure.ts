@@ -87,8 +87,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
     UI.success(successMessage.join('\n'));
 
     UI.success(
-      `The next step is to generate AppMaps. You can consult the AppMap documentation,
-or dive right in with:
+      `The next step is to generate AppMaps. You can consult the AppMap documentation, or dive right in with:
 
     npx @appland/appmap record
 `,

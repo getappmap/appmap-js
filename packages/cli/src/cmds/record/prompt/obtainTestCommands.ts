@@ -1,5 +1,5 @@
 import UI from '../../userInteraction';
-import { writeConfigOption } from '../configuration';
+import { TestCommand, writeConfigOption } from '../configuration';
 import guessTestCommands from '../action/guessTestCommands';
 import TestCaseRecording from '../testCaseRecording';
 
@@ -18,9 +18,7 @@ export default async function obtainTestCommands(): Promise<void> {
     UI.progress(`Here's a suggested test command for your project:`);
     UI.progress(``);
     // TODO: Colorize
-    UI.progress(
-      `${TestCaseRecording.envString(testCommand.env)}${testCommand.command}`
-    );
+    UI.progress(TestCommand.toString(testCommand));
     UI.progress(``);
     if (await UI.confirm('Use this suggested test command?')) {
       await writeConfigOption('test_recording.test_commands', [testCommand]);

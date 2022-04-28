@@ -1,5 +1,5 @@
 import { ChildProcess, exec, spawn } from 'child_process';
-import { kill } from 'process';
+import { exitCode, kill } from 'process';
 import { exists, verbose } from '../../utils';
 import UI from '../userInteraction';
 import {
@@ -60,7 +60,7 @@ export default class TestCaseRecording {
     TestCommands = testCommands;
   }
 
-  static async waitFor() {
+  static async waitFor(): Promise<number[]> {
     let maxTime: number | undefined = (await readSetting(
       'test_recording.max_time',
       -1
@@ -71,9 +71,7 @@ export default class TestCaseRecording {
     if (maxTime) UI.progress(`Running tests for up to ${maxTime} seconds`);
 
     let waitTime = maxTime;
-    async function waitForProcess(
-      process: ChildProcess
-    ): Promise<number | null | undefined> {
+    async function waitForProcess(process: ChildProcess): Promise<number> {
       const commandStr = process.spawnargs.join(' ');
       const startTime = Date.now();
       return new Promise((resolve) => {
@@ -89,7 +87,7 @@ export default class TestCaseRecording {
           }
         }
 
-        function report(exitCode?: number | null) {
+        function report(exitCode: number) {
           if (reported) return;
 
           reported = true;
@@ -115,6 +113,7 @@ export default class TestCaseRecording {
       });
     }
 
+    const exitCodes: number[] = [];
     for (const cmd of TestCommands) {
       cmd.env ||= {};
       UI.progress(
@@ -128,8 +127,10 @@ export default class TestCaseRecording {
         shell: true,
         stdio: ['ignore', 'inherit', 'inherit'],
       });
-      await waitForProcess(proc);
+      const exitCode = await waitForProcess(proc);
+      exitCodes.push(exitCode);
     }
+    return exitCodes;
   }
 
   static envString(env: Record<string, string>) {
