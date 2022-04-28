@@ -13,7 +13,7 @@ checks:
   - rule: missingContentType
   - rule: nPlusOneQuery
   # - rule: queryFromInvalidPackage
-  - rule: queryFromView
+  # - rule: queryFromView
   # - rule: rpcWithoutCircuitBreaker
   # - rule: saveWithoutValidation
   - rule: secretInLog
