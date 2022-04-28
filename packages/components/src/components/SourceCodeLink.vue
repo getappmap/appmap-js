@@ -107,19 +107,16 @@ export default {
   },
 
   beforeMount() {
-    if (!this.static) {
+    if (this.static) {
+      this.$root.$once('response-resolve-location', this.onResolveLocation);
+    } else {
       this.$root.$on('response-resolve-location', this.onResolveLocation);
-      this.requestLocation();
-    } else if (this.defaultLocation) {
-      this.$data.sourceLocation = this.defaultLocation;
-      this.$data.externalUrl = this.defaultLocation;
     }
+    this.requestLocation();
   },
 
   beforeDestroy() {
-    if (!this.static) {
-      this.$root.$off('response-resolve-location', this.onResolveLocation);
-    }
+    this.$root.$off('response-resolve-location', this.onResolveLocation);
   },
 };
 </script>
