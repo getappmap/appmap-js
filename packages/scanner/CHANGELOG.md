@@ -1,3 +1,10 @@
+## [1.52.3](https://github.com/applandinc/scanner/compare/v1.52.2...v1.52.3) (2022-04-28)
+
+
+### Bug Fixes
+
+* Don't enable query-from-view by default ([3c87485](https://github.com/applandinc/scanner/commit/3c87485333f18638c18b5a61542691b71d86bda8))
+
 ## [1.52.2](https://github.com/applandinc/scanner/compare/v1.52.1...v1.52.2) (2022-04-27)
 
 
