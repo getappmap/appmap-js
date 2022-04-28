@@ -98,10 +98,10 @@ export default {
 
     const startTime = Date.now();
 
-    const [rawScanResults, findingStatuses] = await Promise.all<
-      ScanResults,
-      FindingStatusListItem[]
-    >([scanner.scan(), scanner.fetchFindingStatus(appId, appmapDir)]);
+    const [rawScanResults, findingStatuses] = await Promise.all([
+      scanner.scan(),
+      scanner.fetchFindingStatus(appId, appmapDir),
+    ]);
 
     // Always report the raw data
     await writeFile(reportFile, formatReport(rawScanResults));
