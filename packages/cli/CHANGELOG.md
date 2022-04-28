@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.25.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.24.0...@appland/appmap-v3.25.0) (2022-04-28)
+
+
+### Features
+
+* Extended telemetry for the 'record' command ([99f1450](https://github.com/applandinc/appmap-js/commit/99f145038dda0ff91c3def394529edfd6b1fbff7))
+
 # [@appland/appmap-v3.24.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.23.1...@appland/appmap-v3.24.0) (2022-04-27)
 
 
