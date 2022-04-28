@@ -1,0 +1,5366 @@
+{
+  "version": "1.5.1",
+  "metadata": {
+    "app": "bike_index",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "2.7.3"
+    },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/applandinc/appmap-ruby",
+      "version": "0.59.1"
+    },
+    "frameworks": [
+      {
+        "name": "rails",
+        "version": "5.2.5"
+      },
+      {
+        "name": "rspec",
+        "version": "3.9.3"
+      }
+    ],
+    "git": {
+      "repository": "git@github.com:land-of-apps/bike_index.git",
+      "branch": "appmap",
+      "commit": "44020baa94ca7287b4aa4f39b00bacea4573bab6",
+      "status": [
+        "?? .byebug_history",
+        "?? swagger/"
+      ],
+      "git_last_annotated_tag": null,
+      "git_last_tag": null,
+      "git_commits_since_last_annotated_tag": null,
+      "git_commits_since_last_tag": null
+    },
+    "name": "PaymentsController create no user email on file makes a onetime payment with no user, but associate with stripe",
+    "source_location": "spec/controllers/payments_controller_spec.rb",
+    "recorder": {
+      "name": "rspec"
+    },
+    "test_status": "succeeded",
+    "fingerprints": [
+      {
+        "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+        "canonicalization_algorithm": "classDependencies",
+        "digest": "0cdbaadf864a4ec94f857b7e07dc4694531295dfa86461a01d47c48f839d544c",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+        "canonicalization_algorithm": "classes",
+        "digest": "b4a15dee0db8d25095fcedb01fcd803c9b9cbf37e7fa3f3b7c0e7fe994967a96",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+        "canonicalization_algorithm": "httpClientRequests",
+        "digest": "3e3a68928d5b7f29c9642c91c45a98aaa53f309fc1a1959843ca9e64341d7420",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+        "canonicalization_algorithm": "httpServerRequests",
+        "digest": "944cfc0b005a6735fba49133780323ec7e77ef5e0a95749e322b1f9f520760fd",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+        "canonicalization_algorithm": "info",
+        "digest": "db0ccf7ca4fe68c90e6cf67db3e332b14cdb8e649d4624a347dab43bee4c9a40",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+        "canonicalization_algorithm": "labels",
+        "digest": "81ce007095c70c0026f4b23a1c6c9442bea153f5d36de8eb32320d6420d2463f",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+        "canonicalization_algorithm": "packageDependencies",
+        "digest": "006b65f265916b5ec4b0f95787f5cbfc38a42a8f3012522fcb36a2a1d5c2927d",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+        "canonicalization_algorithm": "packages",
+        "digest": "d03204cda17134ed2775a16c8f1155dda76e1acaac6d6e81adf3428f3d0c617c",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+        "canonicalization_algorithm": "sqlNormalized",
+        "digest": "5aa9be7a7ce600dd712dd5fe0c55b7ea673e32410e4677523cc62322f53dd216",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+        "canonicalization_algorithm": "sqlTables",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+        "canonicalization_algorithm": "trace",
+        "digest": "001d722b9d172f9d0fce75b6046f6f0ecef14bf004e4207ec5978cf331e1bdb1",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+        "canonicalization_algorithm": "update",
+        "digest": "d098ad93426f1f036d7a3bcb0e4216ee4517840dc10b90daf9703dd15ffb7356",
+        "fingerprint_algorithm": "sha256"
+      }
+    ]
+  },
+  "classMap": [
+    {
+      "name": "vcr",
+      "type": "package",
+      "children": [
+        {
+          "name": "VCR",
+          "type": "class",
+          "children": [
+            {
+              "name": "use_cassette",
+              "type": "function",
+              "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr.rb:178",
+              "static": true,
+              "comment": "# Inserts a cassette using the given name and options, runs the given\n# block, and ejects the cassette.\n#\n# @example\n#   VCR.use_cassette('twitter', :record => :new_episodes) do\n#     # make an HTTP request\n#   end\n#\n# @param (see #insert_cassette)\n# @option (see #insert_cassette)\n# @yield Block to run while this cassette is in use.\n# @yieldparam cassette [(optional) VCR::Cassette] the cassette that has\n#  been inserted.\n# @raise (see #insert_cassette)\n# @return [void]\n# @see #insert_cassette\n# @see #eject_cassette\n"
+            },
+            {
+              "name": "HTTPInteraction",
+              "type": "class",
+              "children": [
+                {
+                  "name": "from_hash",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr/structs.rb:523",
+                  "static": true,
+                  "comment": "# Constructs a new instance from a hash.\n#\n# @param [Hash] hash the hash to use to construct the instance.\n# @return [HTTPInteraction] the HTTP interaction\n"
+                }
+              ]
+            },
+            {
+              "name": "LibraryHooks",
+              "type": "class",
+              "children": [
+                {
+                  "name": "WebMock",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "global_hook_disabled?",
+                      "type": "function",
+                      "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr/library_hooks/webmock.rb:27",
+                      "static": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "library_hooks",
+              "type": "function",
+              "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr.rb:345",
+              "static": true,
+              "comment": "# @private\n"
+            },
+            {
+              "name": "eject_cassette",
+              "type": "function",
+              "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr.rb:153",
+              "static": true,
+              "comment": "# Ejects the current cassette. The cassette will no longer be used.\n# In addition, any newly recorded HTTP interactions will be written to\n# disk.\n#\n# @param options [Hash] Eject options.\n# @option options :skip_no_unused_interactions_assertion [Boolean]\n#  If `true` is given, this will skip the \"no unused HTTP interactions\"\n#  assertion enabled by the `:allow_unused_http_interactions => false`\n#  cassette option. This is intended for use when your test has had\n#  an error, but your test framework has already handled it.\n# @return [VCR::Cassette, nil] the ejected cassette if there was one\n"
+            },
+            {
+              "name": "Cassette",
+              "type": "class",
+              "children": [
+                {
+                  "name": "Persisters",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "FileSystem",
+                      "type": "class",
+                      "children": [
+                        {
+                          "name": "[]=",
+                          "type": "function",
+                          "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr/cassette/persisters/file_system.rb:33",
+                          "static": true,
+                          "comment": "# Sets the cassette for the given storage key (file name).\n#\n# @param [String] file_name the file name\n# @param [String] content the content to store\n"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "yaml",
+      "type": "package",
+      "children": [
+        {
+          "name": "Psych",
+          "type": "class",
+          "children": [
+            {
+              "name": "load",
+              "type": "function",
+              "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/psych.rb:271",
+              "static": true,
+              "labels": [
+                "format.yaml.parse"
+              ],
+              "comment": "###\n# Load +yaml+ in to a Ruby data structure.  If multiple documents are\n# provided, the object contained in the first document will be returned.\n# +filename+ will be used in the exception message if any exception\n# is raised while parsing.  If +yaml+ is empty, it returns\n# the specified +fallback+ return value, which defaults to +false+.\n#\n# Raises a Psych::SyntaxError when a YAML syntax error is detected.\n#\n# Example:\n#\n#   Psych.load(\"--- a\")             # => 'a'\n#   Psych.load(\"---\\n - a\\n - b\")   # => ['a', 'b']\n#\n#   begin\n#     Psych.load(\"--- `\", filename: \"file.txt\")\n#   rescue Psych::SyntaxError => ex\n#     ex.file    # => 'file.txt'\n#     ex.message # => \"(file.txt): found character that cannot start any token\"\n#   end\n#\n# When the optional +symbolize_names+ keyword argument is set to a\n# true value, returns symbols for keys in Hash objects (default: strings).\n#\n#   Psych.load(\"---\\n foo: bar\")                         # => {\"foo\"=>\"bar\"}\n#   Psych.load(\"---\\n foo: bar\", symbolize_names: true)  # => {:foo=>\"bar\"}\n#\n# Raises a TypeError when `yaml` parameter is NilClass\n#\n# NOTE: This method *should not* be used to parse untrusted documents, such as\n# YAML documents that are supplied via user input.  Instead, please use the\n# safe_load method.\n#\n"
+            },
+            {
+              "name": "parse",
+              "type": "function",
+              "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/psych.rb:384",
+              "static": true,
+              "labels": [
+                "format.yaml.parse"
+              ],
+              "comment": "###\n# Parse a YAML string in +yaml+.  Returns the Psych::Nodes::Document.\n# +filename+ is used in the exception message if a Psych::SyntaxError is\n# raised.\n#\n# Raises a Psych::SyntaxError when a YAML syntax error is detected.\n#\n# Example:\n#\n#   Psych.parse(\"---\\n - a\\n - b\") # => #<Psych::Nodes::Document:0x00>\n#\n#   begin\n#     Psych.parse(\"--- `\", filename: \"file.txt\")\n#   rescue Psych::SyntaxError => ex\n#     ex.file    # => 'file.txt'\n#     ex.message # => \"(file.txt): found character that cannot start any token\"\n#   end\n#\n# See Psych::Nodes for more information about YAML AST.\n"
+            },
+            {
+              "name": "parse_stream",
+              "type": "function",
+              "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/psych.rb:448",
+              "static": true,
+              "labels": [
+                "format.yaml.parse"
+              ],
+              "comment": "###\n# Parse a YAML string in +yaml+.  Returns the Psych::Nodes::Stream.\n# This method can handle multiple YAML documents contained in +yaml+.\n# +filename+ is used in the exception message if a Psych::SyntaxError is\n# raised.\n#\n# If a block is given, a Psych::Nodes::Document node will be yielded to the\n# block as it's being parsed.\n#\n# Raises a Psych::SyntaxError when a YAML syntax error is detected.\n#\n# Example:\n#\n#   Psych.parse_stream(\"---\\n - a\\n - b\") # => #<Psych::Nodes::Stream:0x00>\n#\n#   Psych.parse_stream(\"--- a\\n--- b\") do |node|\n#     node # => #<Psych::Nodes::Document:0x00>\n#   end\n#\n#   begin\n#     Psych.parse_stream(\"--- `\", filename: \"file.txt\")\n#   rescue Psych::SyntaxError => ex\n#     ex.file    # => 'file.txt'\n#     ex.message # => \"(file.txt): found character that cannot start any token\"\n#   end\n#\n# Raises a TypeError when NilClass is passed.\n#\n# See Psych::Nodes for more information about YAML AST.\n"
+            },
+            {
+              "name": "dump",
+              "type": "function",
+              "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/psych.rb:506",
+              "static": true,
+              "labels": [
+                "format.yaml.generate"
+              ],
+              "comment": "###\n# call-seq:\n#   Psych.dump(o)               -> string of yaml\n#   Psych.dump(o, options)      -> string of yaml\n#   Psych.dump(o, io)           -> io object passed in\n#   Psych.dump(o, io, options)  -> io object passed in\n#\n# Dump Ruby object +o+ to a YAML string.  Optional +options+ may be passed in\n# to control the output format.  If an IO object is passed in, the YAML will\n# be dumped to that IO object.\n#\n# Currently supported options are:\n#\n# [<tt>:indentation</tt>]   Number of space characters used to indent.\n#                           Acceptable value should be in <tt>0..9</tt> range,\n#                           otherwise option is ignored.\n#\n#                           Default: <tt>2</tt>.\n# [<tt>:line_width</tt>]    Max character to wrap line at.\n#\n#                           Default: <tt>0</tt> (meaning \"wrap at 81\").\n# [<tt>:canonical</tt>]     Write \"canonical\" YAML form (very verbose, yet\n#                           strictly formal).\n#\n#                           Default: <tt>false</tt>.\n# [<tt>:header</tt>]        Write <tt>%YAML [version]</tt> at the beginning of document.\n#\n#                           Default: <tt>false</tt>.\n#\n# Example:\n#\n#   # Dump an array, get back a YAML string\n#   Psych.dump(['a', 'b'])  # => \"---\\n- a\\n- b\\n\"\n#\n#   # Dump an array to an IO object\n#   Psych.dump(['a', 'b'], StringIO.new)  # => #<StringIO:0x000001009d0890>\n#\n#   # Dump an array with indentation set\n#   Psych.dump(['a', ['b']], indentation: 3) # => \"---\\n- a\\n-  - b\\n\"\n#\n#   # Dump an array to an IO with indentation set\n#   Psych.dump(['a', ['b']], StringIO.new, indentation: 3)\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "stripe",
+      "type": "package",
+      "children": [
+        {
+          "name": "Stripe",
+          "type": "class",
+          "children": [
+            {
+              "name": "APIOperations",
+              "type": "class",
+              "children": [
+                {
+                  "name": "Create",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "create",
+                      "type": "function",
+                      "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/api_operations/create.rb:4",
+                      "static": true
+                    }
+                  ]
+                },
+                {
+                  "name": "List",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "all",
+                      "type": "function",
+                      "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/api_operations/list.rb:4",
+                      "static": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Util",
+              "type": "class",
+              "children": [
+                {
+                  "name": "normalize_headers",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/util.rb:252",
+                  "static": true,
+                  "comment": "# Normalizes header keys so that they're all lower case and each\n# hyphen-delimited section starts with a single capitalized letter. For\n# example, `request-id` becomes `Request-Id`. This is useful for extracting\n# certain key values when the user could have set them with a variety of\n# diffent naming schemes.\n"
+                }
+              ]
+            },
+            {
+              "name": "StripeClient",
+              "type": "class",
+              "children": [
+                {
+                  "name": "RequestLogContext",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "dup_from_response",
+                      "type": "function",
+                      "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/stripe_client.rb:524",
+                      "static": false,
+                      "comment": "# The idea with this method is that we might want to update some of\n# context information because a response that we've received from the API\n# contains information that's more authoritative than what we started\n# with for a request. For example, we should trust whatever came back in\n# a `Stripe-Version` header beyond what configuration information that we\n# might have had available.\n"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "json",
+      "type": "package",
+      "children": [
+        {
+          "name": "JSON",
+          "type": "class",
+          "children": [
+            {
+              "name": "Ext",
+              "type": "class",
+              "children": [
+                {
+                  "name": "Generator",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "State",
+                      "type": "class",
+                      "children": [
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "location": "JSON::Ext::Generator::State#generate",
+                          "static": false,
+                          "labels": [
+                            "format.json.generate"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "net/http",
+      "type": "package",
+      "children": [
+        {
+          "name": "Net",
+          "type": "class",
+          "children": [
+            {
+              "name": "HTTP",
+              "type": "class",
+              "children": [
+                {
+                  "name": "request",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/net/http.rb:1481",
+                  "labels": [
+                    "protocol.http"
+                  ],
+                  "comment": "# Sends an HTTPRequest object +req+ to the HTTP server.\n#\n# If +req+ is a Net::HTTP::Post or Net::HTTP::Put request containing\n# data, the data is also sent. Providing data for a Net::HTTP::Head or\n# Net::HTTP::Get request results in an ArgumentError.\n#\n# Returns an HTTPResponse object.\n#\n# When called with a block, passes an HTTPResponse object to the block.\n# The body of the response will not have been read yet;\n# the block can process it using HTTPResponse#read_body,\n# if desired.\n#\n# This method never raises Net::* exceptions.\n#\n"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "actionpack",
+      "type": "package",
+      "children": [
+        {
+          "name": "ActionDispatch",
+          "type": "class",
+          "children": [
+            {
+              "name": "Cookies",
+              "type": "class",
+              "children": [
+                {
+                  "name": "CookieJar",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "update",
+                      "type": "function",
+                      "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-5.2.5/lib/action_dispatch/middleware/cookies.rb:344",
+                      "static": false,
+                      "labels": [
+                        "http.session.read"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ActionController",
+          "type": "class",
+          "children": [
+            {
+              "name": "Instrumentation",
+              "type": "class",
+              "children": [
+                {
+                  "name": "process_action",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-5.2.5/lib/action_controller/metal/instrumentation.rb:19",
+                  "static": false,
+                  "labels": [
+                    "mvc.controller"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "activesupport",
+      "type": "package",
+      "children": [
+        {
+          "name": "ActiveSupport",
+          "type": "class",
+          "children": [
+            {
+              "name": "Callbacks",
+              "type": "class",
+              "children": [
+                {
+                  "name": "CallbackSequence",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "invoke_before",
+                      "type": "function",
+                      "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:512",
+                      "static": false,
+                      "labels": [
+                        "mvc.before_action"
+                      ]
+                    },
+                    {
+                      "name": "invoke_after",
+                      "type": "function",
+                      "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:516",
+                      "static": false,
+                      "labels": [
+                        "mvc.after_action"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "app/controllers",
+      "type": "package",
+      "children": [
+        {
+          "name": "ControllerHelpers",
+          "type": "class",
+          "children": [
+            {
+              "name": "enable_rack_profiler",
+              "type": "function",
+              "location": "app/controllers/concerns/controller_helpers.rb:30",
+              "static": false
+            },
+            {
+              "name": "controller_namespace",
+              "type": "function",
+              "location": "app/controllers/concerns/controller_helpers.rb:196",
+              "static": false
+            },
+            {
+              "name": "page_id",
+              "type": "function",
+              "location": "app/controllers/concerns/controller_helpers.rb:201",
+              "static": false,
+              "comment": "# This is overridden in FeedbacksController and InfoController\n"
+            },
+            {
+              "name": "user_root_url",
+              "type": "function",
+              "location": "app/controllers/concerns/controller_helpers.rb:85",
+              "static": false
+            },
+            {
+              "name": "append_info_to_payload",
+              "type": "function",
+              "location": "app/controllers/concerns/controller_helpers.rb:21",
+              "static": false
+            },
+            {
+              "name": "forwarded_ip_address",
+              "type": "function",
+              "location": "app/controllers/concerns/controller_helpers.rb:26",
+              "static": false
+            }
+          ]
+        },
+        {
+          "name": "PaymentsController",
+          "type": "class",
+          "children": [
+            {
+              "name": "create",
+              "type": "function",
+              "location": "app/controllers/payments_controller.rb:7",
+              "static": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "app/models",
+      "type": "package",
+      "children": [
+        {
+          "name": "User",
+          "type": "class",
+          "children": [
+            {
+              "name": "from_auth",
+              "type": "function",
+              "location": "app/models/user.rb:124",
+              "static": true
+            },
+            {
+              "name": "fuzzy_confirmed_or_unconfirmed_email_find",
+              "type": "function",
+              "location": "app/models/user.rb:90",
+              "static": true
+            },
+            {
+              "name": "fuzzy_email_find",
+              "type": "function",
+              "location": "app/models/user.rb:82",
+              "static": true
+            },
+            {
+              "name": "fuzzy_unconfirmed_primary_email_find",
+              "type": "function",
+              "location": "app/models/user.rb:86",
+              "static": true
+            }
+          ]
+        },
+        {
+          "name": "UserEmail",
+          "type": "class",
+          "children": [
+            {
+              "name": "fuzzy_user_find",
+              "type": "function",
+              "location": "app/models/user_email.rb:41",
+              "static": true
+            },
+            {
+              "name": "fuzzy_find",
+              "type": "function",
+              "location": "app/models/user_email.rb:31",
+              "static": true
+            }
+          ]
+        },
+        {
+          "name": "Payment",
+          "type": "class",
+          "children": [
+            {
+              "name": "set_calculated_attributes",
+              "type": "function",
+              "location": "app/models/payment.rb:55",
+              "static": false
+            },
+            {
+              "name": "email_or_organization_present",
+              "type": "function",
+              "location": "app/models/payment.rb:68",
+              "static": false
+            },
+            {
+              "name": "send_invoice_email",
+              "type": "function",
+              "location": "app/models/payment.rb:64",
+              "static": false
+            },
+            {
+              "name": "update_associations",
+              "type": "function",
+              "location": "app/models/payment.rb:74",
+              "static": false
+            }
+          ]
+        },
+        {
+          "name": "Amountable",
+          "type": "class",
+          "children": [
+            {
+              "name": "amount",
+              "type": "function",
+              "location": "app/models/concerns/amountable.rb:7",
+              "static": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "app/services",
+      "type": "package",
+      "children": [
+        {
+          "name": "EmailNormalizer",
+          "type": "class",
+          "children": [
+            {
+              "name": "normalize",
+              "type": "function",
+              "location": "app/services/email_normalizer.rb:2",
+              "static": true
+            }
+          ]
+        },
+        {
+          "name": "ParamsNormalizer",
+          "type": "class",
+          "children": [
+            {
+              "name": "boolean",
+              "type": "function",
+              "location": "app/services/params_normalizer.rb:2",
+              "static": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sidekiq",
+      "type": "package",
+      "children": [
+        {
+          "name": "Sidekiq",
+          "type": "class",
+          "children": [
+            {
+              "name": "Worker",
+              "type": "class",
+              "children": [
+                {
+                  "name": "ClassMethods",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "perform_async",
+                      "type": "function",
+                      "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/sidekiq-6.2.1/lib/sidekiq/worker.rb:199",
+                      "static": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "load_json",
+              "type": "function",
+              "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/sidekiq-6.2.1/lib/sidekiq.rb:179",
+              "static": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "actionview",
+      "type": "package",
+      "children": [
+        {
+          "name": "ActionView",
+          "type": "class",
+          "children": [
+            {
+              "name": "Resolver",
+              "type": "class",
+              "children": [
+                {
+                  "name": "find_all",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb:145",
+                  "static": false,
+                  "labels": [
+                    "mvc.template.resolver"
+                  ],
+                  "comment": "# Normalizes the arguments and passes it on to find_templates.\n"
+                }
+              ]
+            },
+            {
+              "name": "Renderer",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionview-5.2.5/lib/action_view/renderer/renderer.rb:21",
+                  "labels": [
+                    "mvc.view"
+                  ],
+                  "comment": "# Main render entry point shared by Action View and Action Controller.\n"
+                }
+              ]
+            },
+            {
+              "name": "TemplateRenderer",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionview-5.2.5/lib/action_view/renderer/template_renderer.rb:7",
+                  "labels": [
+                    "mvc.view"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "PartialRenderer",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionview-5.2.5/lib/action_view/renderer/partial_renderer.rb:297",
+                  "labels": [
+                    "mvc.view"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "app/views",
+      "type": "package",
+      "children": [
+        {
+          "name": "app_views_payments_create_html_haml",
+          "type": "class",
+          "children": [
+            {
+              "name": "render",
+              "type": "function",
+              "location": "app/views/payments/create.html.haml",
+              "static": true,
+              "labels": [
+                "mvc.template"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "app_views_layouts_payments_layout_html_haml",
+          "type": "class",
+          "children": [
+            {
+              "name": "render",
+              "type": "function",
+              "location": "app/views/layouts/payments_layout.html.haml",
+              "static": true,
+              "labels": [
+                "mvc.template"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "app_views_layouts__revised_messages_html_haml",
+          "type": "class",
+          "children": [
+            {
+              "name": "render",
+              "type": "function",
+              "location": "app/views/layouts/_revised_messages.html.haml",
+              "static": true,
+              "labels": [
+                "mvc.template"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "wicked_pdf",
+      "type": "package",
+      "children": [
+        {
+          "name": "WickedPdf",
+          "type": "class",
+          "children": [
+            {
+              "name": "PdfHelper",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/wicked_pdf-1.4.0/lib/wicked_pdf/pdf_helper.rb:29",
+                  "static": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "app/helpers",
+      "type": "package",
+      "children": [
+        {
+          "name": "HeaderTagHelper",
+          "type": "class",
+          "children": [
+            {
+              "name": "header_tags",
+              "type": "function",
+              "location": "app/helpers/header_tag_helper.rb:2",
+              "static": false
+            },
+            {
+              "name": "header_tag_array",
+              "type": "function",
+              "location": "app/helpers/header_tag_helper.rb:8",
+              "static": false,
+              "comment": "# Everything below here is an internal method, not private for testing purposes\n"
+            },
+            {
+              "name": "page_with_custom_header_tags?",
+              "type": "function",
+              "location": "app/helpers/header_tag_helper.rb:13",
+              "static": false
+            },
+            {
+              "name": "default_meta_hash",
+              "type": "function",
+              "location": "app/helpers/header_tag_helper.rb:52",
+              "static": false
+            },
+            {
+              "name": "page_description",
+              "type": "function",
+              "location": "app/helpers/header_tag_helper.rb:38",
+              "static": false
+            },
+            {
+              "name": "auto_description",
+              "type": "function",
+              "location": "app/helpers/header_tag_helper.rb:47",
+              "static": false
+            },
+            {
+              "name": "page_description=",
+              "type": "function",
+              "location": "app/helpers/header_tag_helper.rb:23",
+              "static": false
+            },
+            {
+              "name": "page_title",
+              "type": "function",
+              "location": "app/helpers/header_tag_helper.rb:27",
+              "static": false
+            },
+            {
+              "name": "auto_title",
+              "type": "function",
+              "location": "app/helpers/header_tag_helper.rb:42",
+              "static": false
+            },
+            {
+              "name": "page_title=",
+              "type": "function",
+              "location": "app/helpers/header_tag_helper.rb:19",
+              "static": false
+            },
+            {
+              "name": "page_image",
+              "type": "function",
+              "location": "app/helpers/header_tag_helper.rb:34",
+              "static": false
+            },
+            {
+              "name": "social_meta_content_tags",
+              "type": "function",
+              "location": "app/helpers/header_tag_helper.rb:69",
+              "static": false
+            },
+            {
+              "name": "main_header_tags",
+              "type": "function",
+              "location": "app/helpers/header_tag_helper.rb:73",
+              "static": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": 588999,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "VCR",
+      "method_id": "use_cassette",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr.rb",
+      "lineno": 178,
+      "static": true,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 4506460,
+          "value": "payments_controller-noemail",
+          "kind": "req"
+        },
+        {
+          "name": "options",
+          "class": "Hash",
+          "object_id": 4506480,
+          "value": "{:match_requests_on=>[:path], :re_record_interval=>30 days}",
+          "kind": "opt"
+        },
+        {
+          "name": "block",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "block"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 489060,
+        "value": "VCR"
+      }
+    },
+    {
+      "id": 589000,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Psych",
+      "method_id": "load",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/psych.rb",
+      "lineno": 271,
+      "static": true,
+      "parameters": [
+        {
+          "name": "yaml",
+          "class": "String",
+          "object_id": 4506500,
+          "value": "---\nhttp_interactions:\n- request:\n    method: post\n    uri: https://api.stripe.com/v1/customers/cus_",
+          "kind": "req"
+        },
+        {
+          "name": "legacy_filename",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        },
+        {
+          "name": "filename",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        },
+        {
+          "name": "fallback",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        },
+        {
+          "name": "symbolize_names",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 490060,
+        "value": "Psych"
+      }
+    },
+    {
+      "id": 589001,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Psych",
+      "method_id": "parse",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/psych.rb",
+      "lineno": 384,
+      "static": true,
+      "parameters": [
+        {
+          "name": "yaml",
+          "class": "String",
+          "object_id": 4506500,
+          "value": "---\nhttp_interactions:\n- request:\n    method: post\n    uri: https://api.stripe.com/v1/customers/cus_",
+          "kind": "req"
+        },
+        {
+          "name": "legacy_filename",
+          "class": "Hash",
+          "object_id": 4506520,
+          "value": "{:filename=>nil}",
+          "kind": "opt"
+        },
+        {
+          "name": "filename",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        },
+        {
+          "name": "fallback",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 490060,
+        "value": "Psych"
+      }
+    },
+    {
+      "id": 589002,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Psych",
+      "method_id": "parse_stream",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/psych.rb",
+      "lineno": 448,
+      "static": true,
+      "parameters": [
+        {
+          "name": "yaml",
+          "class": "String",
+          "object_id": 4506500,
+          "value": "---\nhttp_interactions:\n- request:\n    method: post\n    uri: https://api.stripe.com/v1/customers/cus_",
+          "kind": "req"
+        },
+        {
+          "name": "legacy_filename",
+          "class": "Hash",
+          "object_id": 4506540,
+          "value": "{:filename=>nil}",
+          "kind": "opt"
+        },
+        {
+          "name": "filename",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        },
+        {
+          "name": "block",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "block"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 490060,
+        "value": "Psych"
+      }
+    },
+    {
+      "id": 589003,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589002,
+      "elapsed": 0.004199
+    },
+    {
+      "id": 589004,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589001,
+      "elapsed": 0.004339,
+      "return_value": {
+        "class": "Psych::Nodes::Document",
+        "value": "#<Psych::Nodes::Document:0x00007ff6e99de288>",
+        "object_id": 4506560
+      }
+    },
+    {
+      "id": 589005,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589000,
+      "elapsed": 0.006339,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"http_interactions\"=>[{\"request\"=>{\"method\"=>\"post\", \"uri\"=>\"https://api.stripe.com/v1/customers/cu",
+        "object_id": 4506580
+      }
+    },
+    {
+      "id": 589006,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "VCR::HTTPInteraction",
+      "method_id": "from_hash",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr/structs.rb",
+      "lineno": 523,
+      "static": true,
+      "parameters": [
+        {
+          "name": "hash",
+          "class": "Hash",
+          "object_id": 4506600,
+          "value": "{\"request\"=>{\"method\"=>\"post\", \"uri\"=>\"https://api.stripe.com/v1/customers/cus_JLuXayeaSs6A0w\", \"bod",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 490180,
+        "value": "VCR::HTTPInteraction"
+      }
+    },
+    {
+      "id": 589007,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589006,
+      "elapsed": 0.000175,
+      "return_value": {
+        "class": "VCR::HTTPInteraction",
+        "value": "#<struct VCR::HTTPInteraction request=#<struct VCR::Request method=:post, uri=\"https://api.stripe.co",
+        "object_id": 4506620
+      }
+    },
+    {
+      "id": 589008,
+      "event": "call",
+      "thread_id": 67680,
+      "sql_query": {
+        "sql": "SELECT COUNT(*) FROM \"payments\"",
+        "database_type": "postgres"
+      }
+    },
+    {
+      "id": 589009,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589008,
+      "elapsed": 0.000379
+    },
+    {
+      "id": 589010,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Stripe::APIOperations::Create",
+      "method_id": "create",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/api_operations/create.rb",
+      "lineno": 4,
+      "static": true,
+      "parameters": [
+        {
+          "name": "params",
+          "class": "Hash",
+          "object_id": 4506640,
+          "value": "{:card=>{:number=>\"4242424242424242\", :exp_month=>12, :exp_year=>2025, :cvc=>\"314\"}}",
+          "kind": "opt"
+        },
+        {
+          "name": "opts",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 2442380,
+        "value": "Stripe::Token"
+      }
+    },
+    {
+      "id": 589011,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 4506660,
+          "value": "{:bindings_version=>\"3.3.2\", :lang=>\"ruby\", :lang_version=>\"2.7.3 p183 (2021-04-05)\", :platform=>\"x8",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 4506680,
+        "value": "#<JSON::Ext::Generator::State:0x00007ff6e8b6a2d8>"
+      }
+    },
+    {
+      "id": 589012,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589011,
+      "elapsed": 0.000012,
+      "return_value": {
+        "class": "String",
+        "value": "{\"bindings_version\":\"3.3.2\",\"lang\":\"ruby\",\"lang_version\":\"2.7.3 p183 (2021-04-05)\",\"platform\":\"x86_6",
+        "object_id": 4506700
+      }
+    },
+    {
+      "id": 589013,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Stripe::Util",
+      "method_id": "normalize_headers",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/util.rb",
+      "lineno": 252,
+      "static": true,
+      "parameters": [
+        {
+          "name": "headers",
+          "class": "Hash",
+          "object_id": 4506720,
+          "value": "{}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 2442480,
+        "value": "Stripe::Util"
+      }
+    },
+    {
+      "id": 589014,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589013,
+      "elapsed": 0.000007,
+      "return_value": {
+        "class": "Hash",
+        "value": "{}",
+        "object_id": 4506740
+      }
+    },
+    {
+      "id": 589015,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "VCR::LibraryHooks::WebMock",
+      "method_id": "global_hook_disabled?",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr/library_hooks/webmock.rb",
+      "lineno": 27,
+      "static": true,
+      "parameters": [
+        {
+          "name": "request",
+          "class": "WebMock::RequestSignature",
+          "object_id": 4506760,
+          "value": "POST https://api.stripe.com/v1/tokens with body 'card[number]=4242424242424242&card[exp_month]=12&ca",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 490020,
+        "value": "VCR::LibraryHooks::WebMock"
+      }
+    },
+    {
+      "id": 589016,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589015,
+      "elapsed": 0.000008
+    },
+    {
+      "id": 589017,
+      "event": "call",
+      "thread_id": 67680,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "https://api.stripe.com/v1/tokens",
+        "headers": {
+          "User-Agent": "Stripe/v1 RubyBindings/3.3.2",
+          "Authorization": "Bearer sk_test_tQGLxDke5HeZD6iTD1QyVZvV",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-Stripe-Client-User-Agent": "{\"bindings_version\":\"3.3.2\",\"lang\":\"ruby\",\"lang_version\":\"2.7.3 p183 (2021-04-05)\",\"platform\":\"x86_64-darwin20\",\"engine\":\"ruby\",\"publisher\":\"stripe\",\"uname\":\"Darwin hachiko.local 20.4.0 Darwin Kernel Version 20.4.0: Fri Mar  5 01:14:14 PST 2021; root:xnu-7195.101.1~3/RELEASE_X86_64 x86_64\",\"hostname\":\"hachiko.local\"}",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+          "Accept": "*/*"
+        }
+      }
+    },
+    {
+      "id": 589018,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589017,
+      "elapsed": 0.481399,
+      "http_client_response": {
+        "headers": {
+          "Server": "nginx",
+          "Date": "Thu, 08 Jul 2021 18:08:41 GMT",
+          "Content-Type": "application/json",
+          "Content-Length": "801",
+          "Connection": "keep-alive",
+          "Access-Control-Allow-Credentials": "true",
+          "Access-Control-Allow-Methods": "GET, POST, HEAD, OPTIONS, DELETE",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required",
+          "Access-Control-Max-Age": "300",
+          "Cache-Control": "no-cache, no-store",
+          "Request-Id": "req_04sQPPWgHWaZGB",
+          "Stripe-Version": "2014-12-08",
+          "X-Stripe-C-Cost": "5",
+          "Strict-Transport-Security": "max-age=31556926; includeSubDomains; preload"
+        },
+        "status": 200
+      }
+    },
+    {
+      "id": 589019,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "VCR",
+      "method_id": "library_hooks",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr.rb",
+      "lineno": 345,
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "Module",
+        "object_id": 489060,
+        "value": "VCR"
+      }
+    },
+    {
+      "id": 589020,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589019,
+      "elapsed": 0.000007,
+      "return_value": {
+        "class": "VCR::LibraryHooks",
+        "value": "#<VCR::LibraryHooks:0x00007ff6ec8cb780>",
+        "object_id": 2854500
+      }
+    },
+    {
+      "id": 589021,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Stripe::StripeClient::RequestLogContext",
+      "method_id": "dup_from_response",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/stripe_client.rb",
+      "lineno": 524,
+      "static": false,
+      "parameters": [
+        {
+          "name": "resp",
+          "class": "Faraday::Response",
+          "object_id": 4506780,
+          "value": "#<Faraday::Response:0x00007ff6e8be1ef0>",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Stripe::StripeClient::RequestLogContext",
+        "object_id": 4506800,
+        "value": "#<Stripe::StripeClient::RequestLogContext:0x00007ff6e8b68118>"
+      }
+    },
+    {
+      "id": 589022,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589021,
+      "elapsed": 0.000019,
+      "return_value": {
+        "class": "Stripe::StripeClient::RequestLogContext",
+        "value": "#<Stripe::StripeClient::RequestLogContext:0x00007ff6e8be14a0>",
+        "object_id": 4506820
+      }
+    },
+    {
+      "id": 589023,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589010,
+      "elapsed": 0.568,
+      "return_value": {
+        "class": "Stripe::Token",
+        "value": "{\n  \"id\": \"tok_0JB1ePm0T0GBfX0vH2eKWqMI\",\n  \"object\": \"token\",\n  \"card\": {\n    \"id\": \"card_0JB1ePm0T",
+        "object_id": 4506840
+      }
+    },
+    {
+      "id": 589024,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActionDispatch::Cookies::CookieJar",
+      "method_id": "update",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-5.2.5/lib/action_dispatch/middleware/cookies.rb",
+      "lineno": 344,
+      "static": false,
+      "parameters": [
+        {
+          "name": "other_hash",
+          "class": "ActiveSupport::HashWithIndifferentAccess",
+          "object_id": 4506860,
+          "value": "{}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "object_id": 4506880,
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6e8c115b0>"
+      }
+    },
+    {
+      "id": 589025,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589024,
+      "elapsed": 0.000008,
+      "return_value": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6e8c115b0>",
+        "object_id": 4506880
+      }
+    },
+    {
+      "id": 589026,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActionDispatch::Cookies::CookieJar",
+      "method_id": "update",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-5.2.5/lib/action_dispatch/middleware/cookies.rb",
+      "lineno": 344,
+      "static": false,
+      "parameters": [
+        {
+          "name": "other_hash",
+          "class": "ActiveSupport::HashWithIndifferentAccess",
+          "object_id": 4506860,
+          "value": "{}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "object_id": 4506880,
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6e8c115b0>"
+      }
+    },
+    {
+      "id": 589027,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589026,
+      "elapsed": 0.000006,
+      "return_value": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6e8c115b0>",
+        "object_id": 4506880
+      }
+    },
+    {
+      "id": 589028,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActionDispatch::Cookies::CookieJar",
+      "method_id": "update",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-5.2.5/lib/action_dispatch/middleware/cookies.rb",
+      "lineno": 344,
+      "static": false,
+      "parameters": [
+        {
+          "name": "other_hash",
+          "class": "ActiveSupport::HashWithIndifferentAccess",
+          "object_id": 4506860,
+          "value": "{}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "object_id": 4506900,
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6e8c1bbc8>"
+      }
+    },
+    {
+      "id": 589029,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589028,
+      "elapsed": 0.000006,
+      "return_value": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6e8c1bbc8>",
+        "object_id": 4506900
+      }
+    },
+    {
+      "id": 589030,
+      "event": "call",
+      "thread_id": 67680,
+      "http_server_request": {
+        "request_method": "POST",
+        "path_info": "/payments",
+        "mime_type": "application/x-www-form-urlencoded",
+        "normalized_path_info": "/payments",
+        "headers": {
+          "Host": "test.host",
+          "User-Agent": "Rails Testing"
+        }
+      },
+      "message": [
+        {
+          "name": "is_payment",
+          "class": "String",
+          "value": "1",
+          "object_id": 4507660
+        },
+        {
+          "name": "stripe_amount",
+          "class": "String",
+          "value": "4000",
+          "object_id": 4520860
+        },
+        {
+          "name": "stripe_email",
+          "class": "String",
+          "value": "test_user@test.com",
+          "object_id": 4507040
+        },
+        {
+          "name": "stripe_token",
+          "class": "String",
+          "value": "tok_0JB1ePm0T0GBfX0vH2eKWqMI",
+          "object_id": 4520880
+        },
+        {
+          "name": "controller",
+          "class": "String",
+          "value": "payments",
+          "object_id": 4499520
+        },
+        {
+          "name": "action",
+          "class": "String",
+          "value": "create",
+          "object_id": 4520900
+        }
+      ]
+    },
+    {
+      "id": 589031,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActionController::Instrumentation",
+      "method_id": "process_action",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-5.2.5/lib/action_controller/metal/instrumentation.rb",
+      "lineno": 19,
+      "static": false,
+      "parameters": [
+        {
+          "name": "args",
+          "class": "Array",
+          "object_id": 4506940,
+          "value": "[\"create\"]",
+          "kind": "rest"
+        }
+      ],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589032,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 4506980,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 1496620,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6edf0a910>"
+      }
+    },
+    {
+      "id": 589033,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "enable_rack_profiler",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 30,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589034,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActionDispatch::Cookies::CookieJar",
+      "method_id": "update",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-5.2.5/lib/action_dispatch/middleware/cookies.rb",
+      "lineno": 344,
+      "static": false,
+      "parameters": [
+        {
+          "name": "other_hash",
+          "class": "Hash",
+          "object_id": 4507000,
+          "value": "{}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "object_id": 4507020,
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6e8c2ae70>"
+      }
+    },
+    {
+      "id": 589035,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589034,
+      "elapsed": 0.000007,
+      "return_value": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6e8c2ae70>",
+        "object_id": 4507020
+      }
+    },
+    {
+      "id": 589036,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "User",
+      "method_id": "from_auth",
+      "path": "app/models/user.rb",
+      "lineno": 124,
+      "static": true,
+      "parameters": [
+        {
+          "name": "auth",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 89720,
+        "value": "User"
+      }
+    },
+    {
+      "id": 589037,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589036,
+      "elapsed": 0.000005
+    },
+    {
+      "id": 589038,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589033,
+      "elapsed": 0.000456
+    },
+    {
+      "id": 589039,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589032,
+      "elapsed": 0.000626,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6edf0a1b8 /Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesuppo",
+        "object_id": 1496680
+      }
+    },
+    {
+      "id": 589040,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "controller_namespace",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 196,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589041,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589040,
+      "elapsed": 0.000009
+    },
+    {
+      "id": 589042,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "User",
+      "method_id": "from_auth",
+      "path": "app/models/user.rb",
+      "lineno": 124,
+      "static": true,
+      "parameters": [
+        {
+          "name": "auth",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 89720,
+        "value": "User"
+      }
+    },
+    {
+      "id": 589043,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589042,
+      "elapsed": 0.000005
+    },
+    {
+      "id": 589044,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 4506980,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 1496700,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6edf0b770>"
+      }
+    },
+    {
+      "id": 589045,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589044,
+      "elapsed": 0.000083,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6edf0aa00 /Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesuppo",
+        "object_id": 1496720
+      }
+    },
+    {
+      "id": 589046,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "PaymentsController",
+      "method_id": "create",
+      "path": "app/controllers/payments_controller.rb",
+      "lineno": 7,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589047,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "User",
+      "method_id": "from_auth",
+      "path": "app/models/user.rb",
+      "lineno": 124,
+      "static": true,
+      "parameters": [
+        {
+          "name": "auth",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 89720,
+        "value": "User"
+      }
+    },
+    {
+      "id": 589048,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589047,
+      "elapsed": 0.000005
+    },
+    {
+      "id": 589049,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "User",
+      "method_id": "fuzzy_confirmed_or_unconfirmed_email_find",
+      "path": "app/models/user.rb",
+      "lineno": 90,
+      "static": true,
+      "parameters": [
+        {
+          "name": "email",
+          "class": "String",
+          "object_id": 4507040,
+          "value": "test_user@test.com",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 89720,
+        "value": "User"
+      }
+    },
+    {
+      "id": 589050,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "User",
+      "method_id": "fuzzy_email_find",
+      "path": "app/models/user.rb",
+      "lineno": 82,
+      "static": true,
+      "parameters": [
+        {
+          "name": "email",
+          "class": "String",
+          "object_id": 4507040,
+          "value": "test_user@test.com",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 89720,
+        "value": "User"
+      }
+    },
+    {
+      "id": 589051,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "UserEmail",
+      "method_id": "fuzzy_user_find",
+      "path": "app/models/user_email.rb",
+      "lineno": 41,
+      "static": true,
+      "parameters": [
+        {
+          "name": "str",
+          "class": "String",
+          "object_id": 4507040,
+          "value": "test_user@test.com",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 122640,
+        "value": "UserEmail"
+      }
+    },
+    {
+      "id": 589052,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "UserEmail",
+      "method_id": "fuzzy_find",
+      "path": "app/models/user_email.rb",
+      "lineno": 31,
+      "static": true,
+      "parameters": [
+        {
+          "name": "str",
+          "class": "String",
+          "object_id": 4507040,
+          "value": "test_user@test.com",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 122640,
+        "value": "UserEmail"
+      }
+    },
+    {
+      "id": 589053,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "EmailNormalizer",
+      "method_id": "normalize",
+      "path": "app/services/email_normalizer.rb",
+      "lineno": 2,
+      "static": true,
+      "parameters": [
+        {
+          "name": "email",
+          "class": "String",
+          "object_id": 4507040,
+          "value": "test_user@test.com",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 123500,
+        "value": "EmailNormalizer"
+      }
+    },
+    {
+      "id": 589054,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589053,
+      "elapsed": 0.000006,
+      "return_value": {
+        "class": "String",
+        "value": "test_user@test.com",
+        "object_id": 4507060
+      }
+    },
+    {
+      "id": 589055,
+      "event": "call",
+      "thread_id": 67680,
+      "sql_query": {
+        "sql": "SELECT  \"user_emails\".* FROM \"user_emails\" WHERE (confirmation_token IS NULL) AND \"user_emails\".\"email\" = $1 LIMIT $2",
+        "database_type": "postgres"
+      }
+    },
+    {
+      "id": 589056,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589055,
+      "elapsed": 0.000511
+    },
+    {
+      "id": 589057,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589052,
+      "elapsed": 0.004281
+    },
+    {
+      "id": 589058,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589051,
+      "elapsed": 0.004411
+    },
+    {
+      "id": 589059,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589050,
+      "elapsed": 0.004598
+    },
+    {
+      "id": 589060,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "User",
+      "method_id": "fuzzy_unconfirmed_primary_email_find",
+      "path": "app/models/user.rb",
+      "lineno": 86,
+      "static": true,
+      "parameters": [
+        {
+          "name": "email",
+          "class": "String",
+          "object_id": 4507040,
+          "value": "test_user@test.com",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 89720,
+        "value": "User"
+      }
+    },
+    {
+      "id": 589061,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "EmailNormalizer",
+      "method_id": "normalize",
+      "path": "app/services/email_normalizer.rb",
+      "lineno": 2,
+      "static": true,
+      "parameters": [
+        {
+          "name": "email",
+          "class": "String",
+          "object_id": 4507040,
+          "value": "test_user@test.com",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 123500,
+        "value": "EmailNormalizer"
+      }
+    },
+    {
+      "id": 589062,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589061,
+      "elapsed": 0.000007,
+      "return_value": {
+        "class": "String",
+        "value": "test_user@test.com",
+        "object_id": 4507080
+      }
+    },
+    {
+      "id": 589063,
+      "event": "call",
+      "thread_id": 67680,
+      "sql_query": {
+        "sql": "SELECT  \"users\".* FROM \"users\" WHERE \"users\".\"email\" = $1 LIMIT $2",
+        "database_type": "postgres"
+      }
+    },
+    {
+      "id": 589064,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589063,
+      "elapsed": 0.000347
+    },
+    {
+      "id": 589065,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589060,
+      "elapsed": 0.003663
+    },
+    {
+      "id": 589066,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589049,
+      "elapsed": 0.008548
+    },
+    {
+      "id": 589067,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Stripe::APIOperations::List",
+      "method_id": "all",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/api_operations/list.rb",
+      "lineno": 4,
+      "static": true,
+      "parameters": [
+        {
+          "name": "filters",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        },
+        {
+          "name": "opts",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 2445040,
+        "value": "Stripe::Customer"
+      }
+    },
+    {
+      "id": 589068,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 4507100,
+          "value": "{:bindings_version=>\"3.3.2\", :lang=>\"ruby\", :lang_version=>\"2.7.3 p183 (2021-04-05)\", :platform=>\"x8",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 4507120,
+        "value": "#<JSON::Ext::Generator::State:0x00007ff6e8df80b8>"
+      }
+    },
+    {
+      "id": 589069,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589068,
+      "elapsed": 0.000011,
+      "return_value": {
+        "class": "String",
+        "value": "{\"bindings_version\":\"3.3.2\",\"lang\":\"ruby\",\"lang_version\":\"2.7.3 p183 (2021-04-05)\",\"platform\":\"x86_6",
+        "object_id": 4507140
+      }
+    },
+    {
+      "id": 589070,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Stripe::Util",
+      "method_id": "normalize_headers",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/util.rb",
+      "lineno": 252,
+      "static": true,
+      "parameters": [
+        {
+          "name": "headers",
+          "class": "Hash",
+          "object_id": 4507160,
+          "value": "{}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 2442480,
+        "value": "Stripe::Util"
+      }
+    },
+    {
+      "id": 589071,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589070,
+      "elapsed": 0.000007,
+      "return_value": {
+        "class": "Hash",
+        "value": "{}",
+        "object_id": 4507180
+      }
+    },
+    {
+      "id": 589072,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "VCR::LibraryHooks::WebMock",
+      "method_id": "global_hook_disabled?",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr/library_hooks/webmock.rb",
+      "lineno": 27,
+      "static": true,
+      "parameters": [
+        {
+          "name": "request",
+          "class": "WebMock::RequestSignature",
+          "object_id": 4507200,
+          "value": "GET https://api.stripe.com/v1/customers with headers {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 490020,
+        "value": "VCR::LibraryHooks::WebMock"
+      }
+    },
+    {
+      "id": 589073,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589072,
+      "elapsed": 0.000007
+    },
+    {
+      "id": 589074,
+      "event": "call",
+      "thread_id": 67680,
+      "http_client_request": {
+        "request_method": "GET",
+        "url": "https://api.stripe.com/v1/customers",
+        "headers": {
+          "User-Agent": "Stripe/v1 RubyBindings/3.3.2",
+          "Authorization": "Bearer sk_test_tQGLxDke5HeZD6iTD1QyVZvV",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-Stripe-Client-User-Agent": "{\"bindings_version\":\"3.3.2\",\"lang\":\"ruby\",\"lang_version\":\"2.7.3 p183 (2021-04-05)\",\"platform\":\"x86_64-darwin20\",\"engine\":\"ruby\",\"publisher\":\"stripe\",\"uname\":\"Darwin hachiko.local 20.4.0 Darwin Kernel Version 20.4.0: Fri Mar  5 01:14:14 PST 2021; root:xnu-7195.101.1~3/RELEASE_X86_64 x86_64\",\"hostname\":\"hachiko.local\"}",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+          "Accept": "*/*"
+        }
+      }
+    },
+    {
+      "id": 589075,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589074,
+      "elapsed": 0.514341,
+      "http_client_response": {
+        "headers": {
+          "Server": "nginx",
+          "Date": "Thu, 08 Jul 2021 18:08:42 GMT",
+          "Content-Type": "application/json",
+          "Content-Length": "51794",
+          "Connection": "keep-alive",
+          "Access-Control-Allow-Credentials": "true",
+          "Access-Control-Allow-Methods": "GET, POST, HEAD, OPTIONS, DELETE",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required",
+          "Access-Control-Max-Age": "300",
+          "Cache-Control": "no-cache, no-store",
+          "Request-Id": "req_yr7mwEKKSGBBJQ",
+          "Stripe-Version": "2014-12-08",
+          "X-Stripe-C-Cost": "0",
+          "Strict-Transport-Security": "max-age=31556926; includeSubDomains; preload"
+        },
+        "status": 200
+      }
+    },
+    {
+      "id": 589076,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "VCR",
+      "method_id": "library_hooks",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr.rb",
+      "lineno": 345,
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "Module",
+        "object_id": 489060,
+        "value": "VCR"
+      }
+    },
+    {
+      "id": 589077,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589076,
+      "elapsed": 0.000008,
+      "return_value": {
+        "class": "VCR::LibraryHooks",
+        "value": "#<VCR::LibraryHooks:0x00007ff6ec8cb780>",
+        "object_id": 2854500
+      }
+    },
+    {
+      "id": 589078,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Stripe::StripeClient::RequestLogContext",
+      "method_id": "dup_from_response",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/stripe_client.rb",
+      "lineno": 524,
+      "static": false,
+      "parameters": [
+        {
+          "name": "resp",
+          "class": "Faraday::Response",
+          "object_id": 4507220,
+          "value": "#<Faraday::Response:0x00007ff6e9a24e90>",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Stripe::StripeClient::RequestLogContext",
+        "object_id": 4507240,
+        "value": "#<Stripe::StripeClient::RequestLogContext:0x00007ff6e8e024c8>"
+      }
+    },
+    {
+      "id": 589079,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589078,
+      "elapsed": 0.000015,
+      "return_value": {
+        "class": "Stripe::StripeClient::RequestLogContext",
+        "value": "#<Stripe::StripeClient::RequestLogContext:0x00007ff6e9a24440>",
+        "object_id": 4507260
+      }
+    },
+    {
+      "id": 589080,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589067,
+      "elapsed": 0.637308,
+      "return_value": {
+        "class": "Stripe::ListObject",
+        "value": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"cus_JnA0JVDwH8BjTl\",\n      \"object\": \"customer\"",
+        "object_id": 4507280
+      }
+    },
+    {
+      "id": 589081,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 4507300,
+          "value": "{:bindings_version=>\"3.3.2\", :lang=>\"ruby\", :lang_version=>\"2.7.3 p183 (2021-04-05)\", :platform=>\"x8",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 4507320,
+        "value": "#<JSON::Ext::Generator::State:0x00007ff6ea12c008>"
+      }
+    },
+    {
+      "id": 589082,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589081,
+      "elapsed": 0.000011,
+      "return_value": {
+        "class": "String",
+        "value": "{\"bindings_version\":\"3.3.2\",\"lang\":\"ruby\",\"lang_version\":\"2.7.3 p183 (2021-04-05)\",\"platform\":\"x86_6",
+        "object_id": 4507340
+      }
+    },
+    {
+      "id": 589083,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Stripe::Util",
+      "method_id": "normalize_headers",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/util.rb",
+      "lineno": 252,
+      "static": true,
+      "parameters": [
+        {
+          "name": "headers",
+          "class": "Hash",
+          "object_id": 4507360,
+          "value": "{}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 2442480,
+        "value": "Stripe::Util"
+      }
+    },
+    {
+      "id": 589084,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589083,
+      "elapsed": 0.000006,
+      "return_value": {
+        "class": "Hash",
+        "value": "{}",
+        "object_id": 4507380
+      }
+    },
+    {
+      "id": 589085,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "VCR::LibraryHooks::WebMock",
+      "method_id": "global_hook_disabled?",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr/library_hooks/webmock.rb",
+      "lineno": 27,
+      "static": true,
+      "parameters": [
+        {
+          "name": "request",
+          "class": "WebMock::RequestSignature",
+          "object_id": 4507400,
+          "value": "POST https://api.stripe.com/v1/customers/cus_JnA0JVDwH8BjTl with body 'card=tok_0JB1ePm0T0GBfX0vH2eK",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 490020,
+        "value": "VCR::LibraryHooks::WebMock"
+      }
+    },
+    {
+      "id": 589086,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589085,
+      "elapsed": 0.000007
+    },
+    {
+      "id": 589087,
+      "event": "call",
+      "thread_id": 67680,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "https://api.stripe.com/v1/customers/cus_JnA0JVDwH8BjTl",
+        "headers": {
+          "User-Agent": "Stripe/v1 RubyBindings/3.3.2",
+          "Authorization": "Bearer sk_test_tQGLxDke5HeZD6iTD1QyVZvV",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-Stripe-Client-User-Agent": "{\"bindings_version\":\"3.3.2\",\"lang\":\"ruby\",\"lang_version\":\"2.7.3 p183 (2021-04-05)\",\"platform\":\"x86_64-darwin20\",\"engine\":\"ruby\",\"publisher\":\"stripe\",\"uname\":\"Darwin hachiko.local 20.4.0 Darwin Kernel Version 20.4.0: Fri Mar  5 01:14:14 PST 2021; root:xnu-7195.101.1~3/RELEASE_X86_64 x86_64\",\"hostname\":\"hachiko.local\"}",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+          "Accept": "*/*"
+        }
+      }
+    },
+    {
+      "id": 589088,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589087,
+      "elapsed": 0.799219,
+      "http_client_response": {
+        "headers": {
+          "Server": "nginx",
+          "Date": "Thu, 08 Jul 2021 18:08:43 GMT",
+          "Content-Type": "application/json",
+          "Content-Length": "2872",
+          "Connection": "keep-alive",
+          "Access-Control-Allow-Credentials": "true",
+          "Access-Control-Allow-Methods": "GET, POST, HEAD, OPTIONS, DELETE",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required",
+          "Access-Control-Max-Age": "300",
+          "Cache-Control": "no-cache, no-store",
+          "Request-Id": "req_2snU0xu1Yq4B3W",
+          "Stripe-Version": "2014-12-08",
+          "X-Stripe-C-Cost": "5",
+          "Strict-Transport-Security": "max-age=31556926; includeSubDomains; preload"
+        },
+        "status": 200
+      }
+    },
+    {
+      "id": 589089,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "VCR",
+      "method_id": "library_hooks",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr.rb",
+      "lineno": 345,
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "Module",
+        "object_id": 489060,
+        "value": "VCR"
+      }
+    },
+    {
+      "id": 589090,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589089,
+      "elapsed": 0.000007,
+      "return_value": {
+        "class": "VCR::LibraryHooks",
+        "value": "#<VCR::LibraryHooks:0x00007ff6ec8cb780>",
+        "object_id": 2854500
+      }
+    },
+    {
+      "id": 589091,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Stripe::StripeClient::RequestLogContext",
+      "method_id": "dup_from_response",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/stripe_client.rb",
+      "lineno": 524,
+      "static": false,
+      "parameters": [
+        {
+          "name": "resp",
+          "class": "Faraday::Response",
+          "object_id": 4507420,
+          "value": "#<Faraday::Response:0x00007ff6ea1ae738>",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Stripe::StripeClient::RequestLogContext",
+        "object_id": 4507440,
+        "value": "#<Stripe::StripeClient::RequestLogContext:0x00007ff6ea136418>"
+      }
+    },
+    {
+      "id": 589092,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589091,
+      "elapsed": 0.000016,
+      "return_value": {
+        "class": "Stripe::StripeClient::RequestLogContext",
+        "value": "#<Stripe::StripeClient::RequestLogContext:0x00007ff6ea1adce8>",
+        "object_id": 4507460
+      }
+    },
+    {
+      "id": 589093,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 4507480,
+          "value": "{:bindings_version=>\"3.3.2\", :lang=>\"ruby\", :lang_version=>\"2.7.3 p183 (2021-04-05)\", :platform=>\"x8",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 4507500,
+        "value": "#<JSON::Ext::Generator::State:0x00007ff6eaca0a88>"
+      }
+    },
+    {
+      "id": 589094,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589093,
+      "elapsed": 0.000012,
+      "return_value": {
+        "class": "String",
+        "value": "{\"bindings_version\":\"3.3.2\",\"lang\":\"ruby\",\"lang_version\":\"2.7.3 p183 (2021-04-05)\",\"platform\":\"x86_6",
+        "object_id": 4507520
+      }
+    },
+    {
+      "id": 589095,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Stripe::Util",
+      "method_id": "normalize_headers",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/util.rb",
+      "lineno": 252,
+      "static": true,
+      "parameters": [
+        {
+          "name": "headers",
+          "class": "Hash",
+          "object_id": 4507540,
+          "value": "{}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 2442480,
+        "value": "Stripe::Util"
+      }
+    },
+    {
+      "id": 589096,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589095,
+      "elapsed": 0.000007,
+      "return_value": {
+        "class": "Hash",
+        "value": "{}",
+        "object_id": 4507560
+      }
+    },
+    {
+      "id": 589097,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "VCR::LibraryHooks::WebMock",
+      "method_id": "global_hook_disabled?",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr/library_hooks/webmock.rb",
+      "lineno": 27,
+      "static": true,
+      "parameters": [
+        {
+          "name": "request",
+          "class": "WebMock::RequestSignature",
+          "object_id": 4507580,
+          "value": "POST https://api.stripe.com/v1/charges with body 'customer=cus_JnA0JVDwH8BjTl&amount=4000&descriptio",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 490020,
+        "value": "VCR::LibraryHooks::WebMock"
+      }
+    },
+    {
+      "id": 589098,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589097,
+      "elapsed": 0.000006
+    },
+    {
+      "id": 589099,
+      "event": "call",
+      "thread_id": 67680,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "https://api.stripe.com/v1/charges",
+        "headers": {
+          "User-Agent": "Stripe/v1 RubyBindings/3.3.2",
+          "Authorization": "Bearer sk_test_tQGLxDke5HeZD6iTD1QyVZvV",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-Stripe-Client-User-Agent": "{\"bindings_version\":\"3.3.2\",\"lang\":\"ruby\",\"lang_version\":\"2.7.3 p183 (2021-04-05)\",\"platform\":\"x86_64-darwin20\",\"engine\":\"ruby\",\"publisher\":\"stripe\",\"uname\":\"Darwin hachiko.local 20.4.0 Darwin Kernel Version 20.4.0: Fri Mar  5 01:14:14 PST 2021; root:xnu-7195.101.1~3/RELEASE_X86_64 x86_64\",\"hostname\":\"hachiko.local\"}",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+          "Accept": "*/*"
+        }
+      }
+    },
+    {
+      "id": 589100,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589099,
+      "elapsed": 0.976272,
+      "http_client_response": {
+        "headers": {
+          "Server": "nginx",
+          "Date": "Thu, 08 Jul 2021 18:08:44 GMT",
+          "Content-Type": "application/json",
+          "Content-Length": "3651",
+          "Connection": "keep-alive",
+          "Access-Control-Allow-Credentials": "true",
+          "Access-Control-Allow-Methods": "GET, POST, HEAD, OPTIONS, DELETE",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required",
+          "Access-Control-Max-Age": "300",
+          "Cache-Control": "no-cache, no-store",
+          "Request-Id": "req_rr7galpprxH58o",
+          "Stripe-Version": "2014-12-08",
+          "X-Stripe-C-Cost": "8",
+          "Strict-Transport-Security": "max-age=31556926; includeSubDomains; preload"
+        },
+        "status": 200
+      }
+    },
+    {
+      "id": 589101,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "VCR",
+      "method_id": "library_hooks",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr.rb",
+      "lineno": 345,
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "Module",
+        "object_id": 489060,
+        "value": "VCR"
+      }
+    },
+    {
+      "id": 589102,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589101,
+      "elapsed": 0.000007,
+      "return_value": {
+        "class": "VCR::LibraryHooks",
+        "value": "#<VCR::LibraryHooks:0x00007ff6ec8cb780>",
+        "object_id": 2854500
+      }
+    },
+    {
+      "id": 589103,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Stripe::StripeClient::RequestLogContext",
+      "method_id": "dup_from_response",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/stripe_client.rb",
+      "lineno": 524,
+      "static": false,
+      "parameters": [
+        {
+          "name": "resp",
+          "class": "Faraday::Response",
+          "object_id": 4507600,
+          "value": "#<Faraday::Response:0x00007ff6ead0ab90>",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Stripe::StripeClient::RequestLogContext",
+        "object_id": 4507620,
+        "value": "#<Stripe::StripeClient::RequestLogContext:0x00007ff6eacaae98>"
+      }
+    },
+    {
+      "id": 589104,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589103,
+      "elapsed": 0.000016,
+      "return_value": {
+        "class": "Stripe::StripeClient::RequestLogContext",
+        "value": "#<Stripe::StripeClient::RequestLogContext:0x00007ff6ead0a140>",
+        "object_id": 4507640
+      }
+    },
+    {
+      "id": 589105,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ParamsNormalizer",
+      "method_id": "boolean",
+      "path": "app/services/params_normalizer.rb",
+      "lineno": 2,
+      "static": true,
+      "parameters": [
+        {
+          "name": "param",
+          "class": "String",
+          "object_id": 4507660,
+          "value": "1",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 232160,
+        "value": "ParamsNormalizer"
+      }
+    },
+    {
+      "id": 589106,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589105,
+      "elapsed": 0.000012,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 589107,
+      "event": "call",
+      "thread_id": 67680,
+      "sql_query": {
+        "sql": "SAVEPOINT active_record_2",
+        "database_type": "postgres"
+      }
+    },
+    {
+      "id": 589108,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589107,
+      "elapsed": 0.000289
+    },
+    {
+      "id": 589109,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 4507680,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 2445960,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6b5efb8a8>"
+      }
+    },
+    {
+      "id": 589110,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Payment",
+      "method_id": "set_calculated_attributes",
+      "path": "app/models/payment.rb",
+      "lineno": 55,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "Payment",
+        "object_id": 4507700,
+        "value": "#<Payment:0x00007ff6eadb8858>"
+      }
+    },
+    {
+      "id": 589111,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "User",
+      "method_id": "fuzzy_confirmed_or_unconfirmed_email_find",
+      "path": "app/models/user.rb",
+      "lineno": 90,
+      "static": true,
+      "parameters": [
+        {
+          "name": "email",
+          "class": "String",
+          "object_id": 4507720,
+          "value": "test_user@test.com",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 89720,
+        "value": "User"
+      }
+    },
+    {
+      "id": 589112,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "User",
+      "method_id": "fuzzy_email_find",
+      "path": "app/models/user.rb",
+      "lineno": 82,
+      "static": true,
+      "parameters": [
+        {
+          "name": "email",
+          "class": "String",
+          "object_id": 4507720,
+          "value": "test_user@test.com",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 89720,
+        "value": "User"
+      }
+    },
+    {
+      "id": 589113,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "UserEmail",
+      "method_id": "fuzzy_user_find",
+      "path": "app/models/user_email.rb",
+      "lineno": 41,
+      "static": true,
+      "parameters": [
+        {
+          "name": "str",
+          "class": "String",
+          "object_id": 4507720,
+          "value": "test_user@test.com",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 122640,
+        "value": "UserEmail"
+      }
+    },
+    {
+      "id": 589114,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "UserEmail",
+      "method_id": "fuzzy_find",
+      "path": "app/models/user_email.rb",
+      "lineno": 31,
+      "static": true,
+      "parameters": [
+        {
+          "name": "str",
+          "class": "String",
+          "object_id": 4507720,
+          "value": "test_user@test.com",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 122640,
+        "value": "UserEmail"
+      }
+    },
+    {
+      "id": 589115,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "EmailNormalizer",
+      "method_id": "normalize",
+      "path": "app/services/email_normalizer.rb",
+      "lineno": 2,
+      "static": true,
+      "parameters": [
+        {
+          "name": "email",
+          "class": "String",
+          "object_id": 4507720,
+          "value": "test_user@test.com",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 123500,
+        "value": "EmailNormalizer"
+      }
+    },
+    {
+      "id": 589116,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589115,
+      "elapsed": 0.000006,
+      "return_value": {
+        "class": "String",
+        "value": "test_user@test.com",
+        "object_id": 4507740
+      }
+    },
+    {
+      "id": 589117,
+      "event": "call",
+      "thread_id": 67680,
+      "sql_query": {
+        "sql": "SELECT  \"user_emails\".* FROM \"user_emails\" WHERE (confirmation_token IS NULL) AND \"user_emails\".\"email\" = $1 LIMIT $2",
+        "database_type": "postgres"
+      }
+    },
+    {
+      "id": 589118,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589117,
+      "elapsed": 0.000466
+    },
+    {
+      "id": 589119,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589114,
+      "elapsed": 0.004775
+    },
+    {
+      "id": 589120,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589113,
+      "elapsed": 0.004973
+    },
+    {
+      "id": 589121,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589112,
+      "elapsed": 0.005173
+    },
+    {
+      "id": 589122,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "User",
+      "method_id": "fuzzy_unconfirmed_primary_email_find",
+      "path": "app/models/user.rb",
+      "lineno": 86,
+      "static": true,
+      "parameters": [
+        {
+          "name": "email",
+          "class": "String",
+          "object_id": 4507720,
+          "value": "test_user@test.com",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 89720,
+        "value": "User"
+      }
+    },
+    {
+      "id": 589123,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "EmailNormalizer",
+      "method_id": "normalize",
+      "path": "app/services/email_normalizer.rb",
+      "lineno": 2,
+      "static": true,
+      "parameters": [
+        {
+          "name": "email",
+          "class": "String",
+          "object_id": 4507720,
+          "value": "test_user@test.com",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 123500,
+        "value": "EmailNormalizer"
+      }
+    },
+    {
+      "id": 589124,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589123,
+      "elapsed": 0.000009,
+      "return_value": {
+        "class": "String",
+        "value": "test_user@test.com",
+        "object_id": 4507760
+      }
+    },
+    {
+      "id": 589125,
+      "event": "call",
+      "thread_id": 67680,
+      "sql_query": {
+        "sql": "SELECT  \"users\".* FROM \"users\" WHERE \"users\".\"email\" = $1 LIMIT $2",
+        "database_type": "postgres"
+      }
+    },
+    {
+      "id": 589126,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589125,
+      "elapsed": 0.000346
+    },
+    {
+      "id": 589127,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589122,
+      "elapsed": 0.004315
+    },
+    {
+      "id": 589128,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589111,
+      "elapsed": 0.009848
+    },
+    {
+      "id": 589129,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589110,
+      "elapsed": 0.010107
+    },
+    {
+      "id": 589130,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589109,
+      "elapsed": 0.010275,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6b5efb678 /Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesuppo",
+        "object_id": 2446020
+      }
+    },
+    {
+      "id": 589131,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 4507780,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 2446060,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6b5ef8158>"
+      }
+    },
+    {
+      "id": 589132,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Payment",
+      "method_id": "email_or_organization_present",
+      "path": "app/models/payment.rb",
+      "lineno": 68,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "Payment",
+        "object_id": 4507700,
+        "value": "#<Payment:0x00007ff6eadb8858>"
+      }
+    },
+    {
+      "id": 589133,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589132,
+      "elapsed": 0.000009
+    },
+    {
+      "id": 589134,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589131,
+      "elapsed": 0.000188,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6b585fb70 /Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesuppo",
+        "object_id": 2446080
+      }
+    },
+    {
+      "id": 589135,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 4507780,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 2446060,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6b5ef8158>"
+      }
+    },
+    {
+      "id": 589136,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589135,
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 2446100
+      }
+    },
+    {
+      "id": 589137,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 4507800,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 2446140,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6b585ee78>"
+      }
+    },
+    {
+      "id": 589138,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589137,
+      "elapsed": 0.000031,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6b585e810 /Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesuppo",
+        "object_id": 2446160
+      }
+    },
+    {
+      "id": 589139,
+      "event": "call",
+      "thread_id": 67680,
+      "sql_query": {
+        "sql": "INSERT INTO \"payments\" (\"stripe_id\", \"first_payment_date\", \"amount_cents\", \"created_at\", \"updated_at\", \"email\", \"kind\") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING \"id\"",
+        "database_type": "postgres"
+      }
+    },
+    {
+      "id": 589140,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589139,
+      "elapsed": 0.000504
+    },
+    {
+      "id": 589141,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 4507820,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 2446200,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6b585db40>"
+      }
+    },
+    {
+      "id": 589142,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Payment",
+      "method_id": "send_invoice_email",
+      "path": "app/models/payment.rb",
+      "lineno": 64,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "Payment",
+        "object_id": 4507700,
+        "value": "#<Payment:0x00007ff6eadb8858>"
+      }
+    },
+    {
+      "id": 589143,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Sidekiq::Worker::ClassMethods",
+      "method_id": "perform_async",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/sidekiq-6.2.1/lib/sidekiq/worker.rb",
+      "lineno": 199,
+      "static": true,
+      "parameters": [
+        {
+          "name": "args",
+          "class": "Array",
+          "object_id": 4507840,
+          "value": "[17]",
+          "kind": "rest"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 2446240,
+        "value": "EmailReceiptWorker"
+      }
+    },
+    {
+      "id": 589144,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 4507860,
+          "value": "{\"retry\"=>3, \"queue\"=>\"notify\", \"backtrace\"=>true, \"class\"=>\"EmailReceiptWorker\", \"args\"=>[17], \"jid",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 4507880,
+        "value": "#<JSON::Ext::Generator::State:0x00007ff70c9bcea8>"
+      }
+    },
+    {
+      "id": 589145,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589144,
+      "elapsed": 0.000014,
+      "return_value": {
+        "class": "String",
+        "value": "{\"retry\":3,\"queue\":\"notify\",\"backtrace\":true,\"class\":\"EmailReceiptWorker\",\"args\":[17],\"jid\":\"080a416",
+        "object_id": 4507900
+      }
+    },
+    {
+      "id": 589146,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Sidekiq",
+      "method_id": "load_json",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/sidekiq-6.2.1/lib/sidekiq.rb",
+      "lineno": 179,
+      "static": true,
+      "parameters": [
+        {
+          "name": "string",
+          "class": "String",
+          "object_id": 4507900,
+          "value": "{\"retry\":3,\"queue\":\"notify\",\"backtrace\":true,\"class\":\"EmailReceiptWorker\",\"args\":[17],\"jid\":\"080a416",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 124280,
+        "value": "Sidekiq"
+      }
+    },
+    {
+      "id": 589147,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589146,
+      "elapsed": 0.00002,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"retry\"=>3, \"queue\"=>\"notify\", \"backtrace\"=>true, \"class\"=>\"EmailReceiptWorker\", \"args\"=>[17], \"jid",
+        "object_id": 4507920
+      }
+    },
+    {
+      "id": 589148,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589143,
+      "elapsed": 0.000388,
+      "return_value": {
+        "class": "String",
+        "value": "080a41664308b6fa8398fa49",
+        "object_id": 4507940
+      }
+    },
+    {
+      "id": 589149,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589142,
+      "elapsed": 0.000528,
+      "return_value": {
+        "class": "String",
+        "value": "080a41664308b6fa8398fa49",
+        "object_id": 4507940
+      }
+    },
+    {
+      "id": 589150,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589141,
+      "elapsed": 0.000705,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6b585d870 /Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesuppo",
+        "object_id": 2446360
+      }
+    },
+    {
+      "id": 589151,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 4507800,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 2446140,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6b585ee78>"
+      }
+    },
+    {
+      "id": 589152,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589151,
+      "elapsed": 0.000014,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6b585e608 /Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesuppo",
+        "object_id": 2446380
+      }
+    },
+    {
+      "id": 589153,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 4507960,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 124060,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6ec2c0ef8>"
+      }
+    },
+    {
+      "id": 589154,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589153,
+      "elapsed": 0.000013,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6ec2c0c28 /Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesuppo",
+        "object_id": 124080
+      }
+    },
+    {
+      "id": 589155,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 4507960,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 124060,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6ec2c0ef8>"
+      }
+    },
+    {
+      "id": 589156,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589155,
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 124100
+      }
+    },
+    {
+      "id": 589157,
+      "event": "call",
+      "thread_id": 67680,
+      "sql_query": {
+        "sql": "RELEASE SAVEPOINT active_record_2",
+        "database_type": "postgres"
+      }
+    },
+    {
+      "id": 589158,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589157,
+      "elapsed": 0.000315
+    },
+    {
+      "id": 589159,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_before",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 512,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 4507980,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 2446440,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6b5e89230>"
+      }
+    },
+    {
+      "id": 589160,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589159,
+      "elapsed": 0.000006,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 2446460
+      }
+    },
+    {
+      "id": 589161,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 4507980,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 2446440,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6b5e89230>"
+      }
+    },
+    {
+      "id": 589162,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Payment",
+      "method_id": "update_associations",
+      "path": "app/models/payment.rb",
+      "lineno": 74,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "Payment",
+        "object_id": 4507700,
+        "value": "#<Payment:0x00007ff6eadb8858>"
+      }
+    },
+    {
+      "id": 589163,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589162,
+      "elapsed": 0.000031,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 589164,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589161,
+      "elapsed": 0.000163,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Proc:0x00007ff6b5e89000 /Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesuppo",
+        "object_id": 2446940
+      }
+    },
+    {
+      "id": 589165,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589046,
+      "elapsed": 2.601199
+    },
+    {
+      "id": 589166,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb",
+      "lineno": 145,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 4508000,
+          "value": "create",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 4499520,
+          "value": "payments",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 4508020,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Concurrent::Map",
+          "object_id": 232320,
+          "value": "#<Concurrent::Map:0x00007ff6ed2f2da8>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 4508040,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 232360,
+        "value": "/Users/kgilpin/source/land-of-apps/bike_index/app/views"
+      }
+    },
+    {
+      "id": 589167,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589166,
+      "elapsed": 0.000017,
+      "return_value": {
+        "class": "Array",
+        "value": "[app/views/payments/create.html.haml]",
+        "object_id": 4505620
+      }
+    },
+    {
+      "id": 589168,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "WickedPdf::PdfHelper",
+      "method_id": "render",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/wicked_pdf-1.4.0/lib/wicked_pdf/pdf_helper.rb",
+      "lineno": 29,
+      "static": false,
+      "parameters": [
+        {
+          "name": "options",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        },
+        {
+          "name": "args",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "rest"
+        },
+        {
+          "name": "block",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "block"
+        }
+      ],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589169,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "inline_template",
+      "method_id": "render",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Renderer",
+        "object_id": 4520920,
+        "value": "#<ActionView::Renderer:0x00007ff70ca8c298>"
+      }
+    },
+    {
+      "id": 589170,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "app_views_payments_create_html_haml",
+      "method_id": "render",
+      "path": "app/views/payments/create.html.haml",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::TemplateRenderer",
+        "object_id": 4520940,
+        "value": "#<ActionView::TemplateRenderer:0x00007ff70ca97b20>"
+      }
+    },
+    {
+      "id": 589171,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb",
+      "lineno": 145,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 4508060,
+          "value": "create",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 4499520,
+          "value": "payments",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 4508080,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Concurrent::Map",
+          "object_id": 232320,
+          "value": "#<Concurrent::Map:0x00007ff6ed2f2da8>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 4508100,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 232360,
+        "value": "/Users/kgilpin/source/land-of-apps/bike_index/app/views"
+      }
+    },
+    {
+      "id": 589172,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589171,
+      "elapsed": 0.000012,
+      "return_value": {
+        "class": "Array",
+        "value": "[app/views/payments/create.html.haml]",
+        "object_id": 4505620
+      }
+    },
+    {
+      "id": 589173,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb",
+      "lineno": 145,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 4508120,
+          "value": "payments_layout",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 4508140,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 4508160,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Concurrent::Map",
+          "object_id": 232320,
+          "value": "#<Concurrent::Map:0x00007ff6ed2f2da8>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 4508180,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 232360,
+        "value": "/Users/kgilpin/source/land-of-apps/bike_index/app/views"
+      }
+    },
+    {
+      "id": 589174,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589173,
+      "elapsed": 0.000012,
+      "return_value": {
+        "class": "Array",
+        "value": "[app/views/layouts/payments_layout.html.haml]",
+        "object_id": 2275500
+      }
+    },
+    {
+      "id": 589175,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Amountable",
+      "method_id": "amount",
+      "path": "app/models/concerns/amountable.rb",
+      "lineno": 7,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "Payment",
+        "object_id": 4507700,
+        "value": "#<Payment:0x00007ff6eadb8858>"
+      }
+    },
+    {
+      "id": 589176,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589175,
+      "elapsed": 0.000018,
+      "return_value": {
+        "class": "Integer",
+        "value": "40",
+        "object_id": 81
+      }
+    },
+    {
+      "id": 589177,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "header_tags",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 2,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589178,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "header_tag_array",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 8,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589179,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "page_with_custom_header_tags?",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 13,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589180,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "controller_namespace",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 196,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589181,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589180,
+      "elapsed": 0.000007
+    },
+    {
+      "id": 589182,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589179,
+      "elapsed": 0.000135
+    },
+    {
+      "id": 589183,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "default_meta_hash",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 52,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589184,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "page_description",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 38,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589185,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "auto_description",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 47,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589186,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "controller_namespace",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 196,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589187,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589186,
+      "elapsed": 0.000007
+    },
+    {
+      "id": 589188,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "page_id",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 201,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589189,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "controller_namespace",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 196,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589190,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589189,
+      "elapsed": 0.000006
+    },
+    {
+      "id": 589191,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589188,
+      "elapsed": 0.000193,
+      "return_value": {
+        "class": "String",
+        "value": "payments_create",
+        "object_id": 4508220
+      }
+    },
+    {
+      "id": 589192,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589185,
+      "elapsed": 0.000615,
+      "return_value": {
+        "class": "String",
+        "value": "The best bike registry: Simple, secure and free.",
+        "object_id": 4508240
+      }
+    },
+    {
+      "id": 589193,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "page_description=",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 23,
+      "static": false,
+      "parameters": [
+        {
+          "name": "val",
+          "class": "String",
+          "object_id": 4508240,
+          "value": "The best bike registry: Simple, secure and free.",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589194,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589193,
+      "elapsed": 0.000281,
+      "return_value": {
+        "class": "String",
+        "value": "The best bike registry: Simple, secure and free.",
+        "object_id": 4508280
+      }
+    },
+    {
+      "id": 589195,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589184,
+      "elapsed": 0.001207,
+      "return_value": {
+        "class": "String",
+        "value": "The best bike registry: Simple, secure and free.",
+        "object_id": 4508240
+      }
+    },
+    {
+      "id": 589196,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "page_description",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 38,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589197,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589196,
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "String",
+        "value": "The best bike registry: Simple, secure and free.",
+        "object_id": 4508280
+      }
+    },
+    {
+      "id": 589198,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "page_title",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 27,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589199,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "auto_title",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 42,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589200,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "controller_namespace",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 196,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589201,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589200,
+      "elapsed": 0.000005
+    },
+    {
+      "id": 589202,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "page_id",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 201,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589203,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589202,
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "String",
+        "value": "payments_create",
+        "object_id": 4508220
+      }
+    },
+    {
+      "id": 589204,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "controller_namespace",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 196,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589205,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589204,
+      "elapsed": 0.000005
+    },
+    {
+      "id": 589206,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "page_id",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 201,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589207,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589206,
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "String",
+        "value": "payments_create",
+        "object_id": 4508220
+      }
+    },
+    {
+      "id": 589208,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589199,
+      "elapsed": 0.00058,
+      "return_value": {
+        "class": "String",
+        "value": "Thanks for your support!",
+        "object_id": 4508300
+      }
+    },
+    {
+      "id": 589209,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "page_title=",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 19,
+      "static": false,
+      "parameters": [
+        {
+          "name": "val",
+          "class": "String",
+          "object_id": 4508300,
+          "value": "Thanks for your support!",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589210,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589209,
+      "elapsed": 0.000222,
+      "return_value": {
+        "class": "String",
+        "value": "Thanks for your support!",
+        "object_id": 4508340
+      }
+    },
+    {
+      "id": 589211,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589198,
+      "elapsed": 0.001063,
+      "return_value": {
+        "class": "String",
+        "value": "Thanks for your support!",
+        "object_id": 4508300
+      }
+    },
+    {
+      "id": 589212,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "page_title",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 27,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589213,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589212,
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "String",
+        "value": "Thanks for your support!",
+        "object_id": 4508340
+      }
+    },
+    {
+      "id": 589214,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "page_image",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 34,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589215,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589214,
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "String",
+        "value": "/bike_index.png",
+        "object_id": 233760
+      }
+    },
+    {
+      "id": 589216,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "page_image",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 34,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589217,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589216,
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "String",
+        "value": "/bike_index.png",
+        "object_id": 233760
+      }
+    },
+    {
+      "id": 589218,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "page_image",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 34,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589219,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589218,
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "String",
+        "value": "/bike_index.png",
+        "object_id": 233760
+      }
+    },
+    {
+      "id": 589220,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589183,
+      "elapsed": 0.003201,
+      "return_value": {
+        "class": "Hash",
+        "value": "{\"og:description\"=>\"The best bike registry: Simple, secure and free.\", \"twitter:description\"=>\"The b",
+        "object_id": 4508360
+      }
+    },
+    {
+      "id": 589221,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "social_meta_content_tags",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 69,
+      "static": false,
+      "parameters": [
+        {
+          "name": "meta_hash",
+          "class": "Hash",
+          "object_id": 4508380,
+          "value": "{\"og:description\"=>\"The best bike registry: Simple, secure and free.\", \"twitter:description\"=>\"The b",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589222,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589221,
+      "elapsed": 0.000123,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"<meta content=\\\"The best bike registry: Simple, secure and free.\\\" property=\\\"og:description\\\"></m",
+        "object_id": 4508400
+      }
+    },
+    {
+      "id": 589223,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "main_header_tags",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 73,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589224,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "page_title",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 27,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589225,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589224,
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "String",
+        "value": "Thanks for your support!",
+        "object_id": 4508340
+      }
+    },
+    {
+      "id": 589226,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "HeaderTagHelper",
+      "method_id": "page_description",
+      "path": "app/helpers/header_tag_helper.rb",
+      "lineno": 38,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::Base",
+        "object_id": 4508200,
+        "value": "#<#<Class:0x00007ff6eeac2b90>:0x00007ff70ca8c130>"
+      }
+    },
+    {
+      "id": 589227,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589226,
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "String",
+        "value": "The best bike registry: Simple, secure and free.",
+        "object_id": 4508280
+      }
+    },
+    {
+      "id": 589228,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589223,
+      "elapsed": 0.000319,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"<meta charset=\\\"utf-8\\\" />\", \"<meta http-equiv=\\\"Content-Language\\\" content=\\\"en\\\" />\", \"<meta htt",
+        "object_id": 4508420
+      }
+    },
+    {
+      "id": 589229,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589178,
+      "elapsed": 0.004334,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"<meta content=\\\"The best bike registry: Simple, secure and free.\\\" property=\\\"og:description\\\"></m",
+        "object_id": 4508440
+      }
+    },
+    {
+      "id": 589230,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589177,
+      "elapsed": 0.004497,
+      "return_value": {
+        "class": "ActiveSupport::SafeBuffer",
+        "value": "<meta content=\"The best bike registry: Simple, secure and free.\" property=\"og:description\"></meta>\n<",
+        "object_id": 4508460
+      }
+    },
+    {
+      "id": 589231,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "page_id",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 201,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589232,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589231,
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "String",
+        "value": "payments_create",
+        "object_id": 4508220
+      }
+    },
+    {
+      "id": 589233,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "app_views_layouts__revised_messages_html_haml",
+      "method_id": "render",
+      "path": "app/views/layouts/_revised_messages.html.haml",
+      "static": true,
+      "parameters": [],
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 4520960,
+        "value": "#<ActionView::PartialRenderer:0x00007ff70caec2b0>"
+      }
+    },
+    {
+      "id": 589234,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActionView::Resolver",
+      "method_id": "find_all",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb",
+      "lineno": 145,
+      "static": false,
+      "parameters": [
+        {
+          "name": "name",
+          "class": "String",
+          "object_id": 4508480,
+          "value": "revised_messages",
+          "kind": "req"
+        },
+        {
+          "name": "prefix",
+          "class": "String",
+          "object_id": 4508500,
+          "value": "layouts",
+          "kind": "opt"
+        },
+        {
+          "name": "partial",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "opt"
+        },
+        {
+          "name": "details",
+          "class": "Hash",
+          "object_id": 4508080,
+          "value": "{:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby, :",
+          "kind": "opt"
+        },
+        {
+          "name": "key",
+          "class": "Concurrent::Map",
+          "object_id": 232320,
+          "value": "#<Concurrent::Map:0x00007ff6ed2f2da8>",
+          "kind": "opt"
+        },
+        {
+          "name": "locals",
+          "class": "Array",
+          "object_id": 4508520,
+          "value": "[]",
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "ActionView::OptimizedFileSystemResolver",
+        "object_id": 232360,
+        "value": "/Users/kgilpin/source/land-of-apps/bike_index/app/views"
+      }
+    },
+    {
+      "id": 589235,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589234,
+      "elapsed": 0.000015,
+      "return_value": {
+        "class": "Array",
+        "value": "[app/views/layouts/_revised_messages.html.haml]",
+        "object_id": 237160
+      }
+    },
+    {
+      "id": 589236,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589233,
+      "elapsed": 0.000555
+    },
+    {
+      "id": 589237,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "user_root_url",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 85,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589238,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "User",
+      "method_id": "from_auth",
+      "path": "app/models/user.rb",
+      "lineno": 124,
+      "static": true,
+      "parameters": [
+        {
+          "name": "auth",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 89720,
+        "value": "User"
+      }
+    },
+    {
+      "id": 589239,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589238,
+      "elapsed": 0.000005
+    },
+    {
+      "id": 589240,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589237,
+      "elapsed": 0.000622,
+      "return_value": {
+        "class": "String",
+        "value": "http://test.host/",
+        "object_id": 4508540
+      }
+    },
+    {
+      "id": 589241,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589170,
+      "elapsed": 0.008553
+    },
+    {
+      "id": 589242,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589169,
+      "elapsed": 0.008599
+    },
+    {
+      "id": 589243,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589168,
+      "elapsed": 0.008852,
+      "return_value": {
+        "class": "ActionView::OutputBuffer",
+        "value": "<!DOCTYPE html>\n<html lang='en' style='min-height: 100%;'>\n<head>\n<meta content=\"The best bike regis",
+        "object_id": 4508560
+      }
+    },
+    {
+      "id": 589244,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActiveSupport::Callbacks::CallbackSequence",
+      "method_id": "invoke_after",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb",
+      "lineno": 516,
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "ActiveSupport::Callbacks::Filters::Environment",
+          "object_id": 4506980,
+          "value": null,
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActiveSupport::Callbacks::CallbackSequence",
+        "object_id": 1496700,
+        "value": "#<ActiveSupport::Callbacks::CallbackSequence:0x00007ff6edf0b770>"
+      }
+    },
+    {
+      "id": 589245,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589244,
+      "elapsed": 0.000006,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 1496780
+      }
+    },
+    {
+      "id": 589246,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "append_info_to_payload",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 21,
+      "static": false,
+      "parameters": [
+        {
+          "name": "payload",
+          "class": "Hash",
+          "object_id": 4508580,
+          "value": "{:controller=>\"PaymentsController\", :action=>\"create\", :params=>{\"is_payment\"=>\"1\", \"stripe_amount\"=",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589247,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ControllerHelpers",
+      "method_id": "forwarded_ip_address",
+      "path": "app/controllers/concerns/controller_helpers.rb",
+      "lineno": 26,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "PaymentsController",
+        "object_id": 4506960,
+        "value": "#<PaymentsController:0x00007ff6e99c55d0>"
+      }
+    },
+    {
+      "id": 589248,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589247,
+      "elapsed": 0.000015,
+      "return_value": {
+        "class": "String",
+        "value": "0.0.0.0",
+        "object_id": 290660
+      }
+    },
+    {
+      "id": 589249,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589246,
+      "elapsed": 0.000278,
+      "return_value": {
+        "class": "String",
+        "value": "0.0.0.0",
+        "object_id": 290660
+      }
+    },
+    {
+      "id": 589250,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589031,
+      "elapsed": 2.614139
+    },
+    {
+      "id": 589251,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589030,
+      "elapsed": 2.61429,
+      "http_server_response": {
+        "mime_type": "text/html; charset=utf-8",
+        "status": 200
+      }
+    },
+    {
+      "id": 589252,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "ActionDispatch::Cookies::CookieJar",
+      "method_id": "update",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-5.2.5/lib/action_dispatch/middleware/cookies.rb",
+      "lineno": 344,
+      "static": false,
+      "parameters": [
+        {
+          "name": "other_hash",
+          "class": "Hash",
+          "object_id": 4508620,
+          "value": "{}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "object_id": 4506880,
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6e8c115b0>"
+      }
+    },
+    {
+      "id": 589253,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589252,
+      "elapsed": 0.00001,
+      "return_value": {
+        "class": "ActionDispatch::Cookies::CookieJar",
+        "value": "#<ActionDispatch::Cookies::CookieJar:0x00007ff6e8c115b0>",
+        "object_id": 4506880
+      }
+    },
+    {
+      "id": 589254,
+      "event": "call",
+      "thread_id": 67680,
+      "sql_query": {
+        "sql": "SELECT COUNT(*) FROM \"payments\"",
+        "database_type": "postgres"
+      }
+    },
+    {
+      "id": 589255,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589254,
+      "elapsed": 0.00037
+    },
+    {
+      "id": 589256,
+      "event": "call",
+      "thread_id": 67680,
+      "sql_query": {
+        "sql": "SELECT  \"payments\".* FROM \"payments\" ORDER BY \"payments\".\"id\" DESC LIMIT $1",
+        "database_type": "postgres"
+      }
+    },
+    {
+      "id": 589257,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589256,
+      "elapsed": 0.000368
+    },
+    {
+      "id": 589258,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "VCR",
+      "method_id": "eject_cassette",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr.rb",
+      "lineno": 153,
+      "static": true,
+      "parameters": [
+        {
+          "name": "options",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 489060,
+        "value": "VCR"
+      }
+    },
+    {
+      "id": 589259,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "Psych",
+      "method_id": "dump",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/psych.rb",
+      "lineno": 506,
+      "static": true,
+      "parameters": [
+        {
+          "name": "o",
+          "class": "Hash",
+          "object_id": 4508640,
+          "value": "{\"http_interactions\"=>[{\"request\"=>{\"method\"=>\"post\", \"uri\"=>\"https://api.stripe.com/v1/customers/cu",
+          "kind": "req"
+        },
+        {
+          "name": "io",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        },
+        {
+          "name": "options",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 490060,
+        "value": "Psych"
+      }
+    },
+    {
+      "id": 589260,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589259,
+      "elapsed": 0.009521,
+      "return_value": {
+        "class": "String",
+        "value": "---\nhttp_interactions:\n- request:\n    method: post\n    uri: https://api.stripe.com/v1/customers/cus_",
+        "object_id": 4520800
+      }
+    },
+    {
+      "id": 589261,
+      "event": "call",
+      "thread_id": 67680,
+      "defined_class": "VCR::Cassette::Persisters::FileSystem",
+      "method_id": "[]=",
+      "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr/cassette/persisters/file_system.rb",
+      "lineno": 33,
+      "static": true,
+      "parameters": [
+        {
+          "name": "file_name",
+          "class": "String",
+          "object_id": 4520820,
+          "value": "payments_controller-noemail.yml",
+          "kind": "req"
+        },
+        {
+          "name": "content",
+          "class": "String",
+          "object_id": 4520800,
+          "value": "---\nhttp_interactions:\n- request:\n    method: post\n    uri: https://api.stripe.com/v1/customers/cus_",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 2863680,
+        "value": "VCR::Cassette::Persisters::FileSystem"
+      }
+    },
+    {
+      "id": 589262,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589261,
+      "elapsed": 0.001612,
+      "return_value": {
+        "class": "Integer",
+        "value": "216197",
+        "object_id": 432395
+      }
+    },
+    {
+      "id": 589263,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 589258,
+      "elapsed": 0.024295,
+      "return_value": {
+        "class": "VCR::Cassette",
+        "value": "#<VCR::Cassette:0x00007ff6e99d6a38>",
+        "object_id": 4520840
+      }
+    },
+    {
+      "id": 589264,
+      "event": "return",
+      "thread_id": 67680,
+      "parent_id": 588999,
+      "elapsed": 3.230832,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    }
+  ]
+}

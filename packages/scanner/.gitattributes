@@ -1,0 +1,5 @@
+*.appmap.json filter=lfs diff=lfs merge=lfs -text binary
+*.openapiv3.yaml filter=lfs diff=lfs merge=lfs -text binary
+/.yarn/releases/** binary
+/.yarn/plugins/** binary
+* !text !filter !merge !diff
