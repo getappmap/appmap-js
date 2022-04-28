@@ -1,6 +1,8 @@
 type Callback = (node: any, callbacks?: Record<string, Callback>) => void;
 
 export function visit(node: any, callbacks?: Record<string, Callback>): void {
+  if (node === null) return;
+
   const { type, variant } = node;
   const key = [type, variant].filter(Boolean).join('.');
 
@@ -13,7 +15,7 @@ function visitNode(node: any, callbacks?: Record<string, Callback>): void {
     if (['type', 'variant', 'name', 'value'].includes(key)) continue;
     if (Array.isArray(property)) {
       for (const subNode of property) visit(subNode, callbacks);
-    } else if (typeof property === 'object' && property !== null) {
+    } else if (typeof property === 'object') {
       visit(property, callbacks);
     } else if (typeof property === 'string' || typeof property === 'boolean') {
       // pass
