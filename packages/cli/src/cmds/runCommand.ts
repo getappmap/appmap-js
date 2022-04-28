@@ -54,7 +54,8 @@ export default async function runCommand(
       Telemetry.sendEvent({
         name: `${commandPrefix}:error`,
         properties: {
-          error: err.message,
+          errorMessage: err.message,
+          errorStack: err.stack,
         },
       });
 

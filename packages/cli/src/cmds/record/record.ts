@@ -9,6 +9,7 @@ import { chdir } from 'process';
 
 import initial from './state/initial';
 import Telemetry from '../../telemetry';
+import RecordContext from './recordContext';
 
 export const command = 'record [mode]';
 export const describe =
@@ -47,25 +48,47 @@ export async function handler(argv: any) {
 
     if (appmapConfig) setAppMapConfigFilePath(appmapConfig);
 
+    const recordContext = new RecordContext(directory || '.');
+    await recordContext.initialize();
+
     const { mode } = argv;
-    let state: State | string | undefined;
-    if (mode) {
-      state = (await import(`./state/record_${mode}`)).default as State;
-    } else {
-      state = initial;
+
+    async function initialState(): Promise<State> {
+      if (mode) {
+        recordContext.recordMethod = mode;
+        return (await import(`./state/record_${mode}`)).default as State;
+      } else {
+        return initial;
+      }
     }
 
+    let state: State | string | undefined = await initialState();
     while (state && typeof state === 'function') {
       if (verbose()) console.warn(`Entering state: ${state.name}`);
 
-      Telemetry.sendEvent({
-        name: `record:${state.name}`,
-        metrics: {
-          duration: endTime(),
-        },
-      });
-
-      const newState = await state();
+      let errorMessage: string | undefined;
+      let newState: State | string | undefined;
+      try {
+        newState = await state(recordContext);
+      } catch (err) {
+        errorMessage = (err as any).toString();
+        throw err;
+      } finally {
+        const properties = recordContext.properties();
+        if (errorMessage) {
+          properties.errorMessage = errorMessage;
+        }
+        Telemetry.sendEvent({
+          name: `record:${state.name}`,
+          properties,
+          metrics: Object.assign(
+            {
+              duration: endTime(),
+            },
+            recordContext.metrics()
+          ),
+        });
+      }
 
       state = newState;
     }

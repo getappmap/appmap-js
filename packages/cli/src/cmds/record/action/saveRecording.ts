@@ -1,9 +1,12 @@
 import { writeFile } from 'fs/promises';
 import UI from '../../userInteraction';
 import { requestOptions } from '../configuration';
+import RecordContext from '../recordContext';
 import RemoteRecording from '../remoteRecording';
 
-export default async function saveRecording(): Promise<string | undefined> {
+export default async function saveRecording(
+  recordContext: RecordContext
+): Promise<string | undefined> {
   const rr = new RemoteRecording(await requestOptions());
   let data = await rr.stop();
 
@@ -22,12 +25,16 @@ export default async function saveRecording(): Promise<string | undefined> {
   });
 
   const jsonData = JSON.parse(data);
+
+  if (jsonData.events) recordContext.appMapEventCount = jsonData.events.length;
+
   jsonData['metadata'] = jsonData['metadata'] || {};
   jsonData['metadata']['name'] = appMapName;
   data = JSON.stringify(jsonData);
 
   const fileName = `${appMapName}.appmap.json`;
   UI.status = `Saving recording to ${fileName}`;
+
   await writeFile(fileName, data);
 
   UI.success('AppMap saved');

@@ -2,6 +2,7 @@ import UI from '../../userInteraction';
 import configureHostAndPort from '../action/configureHostAndPort';
 import configureRemainingRequestOptions from '../action/configureRemainingRequestOptions';
 import detectProcessCharacteristics from '../action/detectProcessCharacteristics';
+import RecordContext from '../recordContext';
 import isAgentAvailable from '../test/isAgentAvailable';
 import { State } from '../types/state';
 import agentProcessNotRunning from './agentProcessNotRunning';
@@ -12,7 +13,9 @@ import initial from './record_remote';
 // * The agent process is running, but the agent isn't reachable (e.g. security filter?).
 // * The host/port parameters are wrong.
 // * The host/port parameters are right, but the agent URL is different than the default.
-export default async function agentNotAvailable(): Promise<State> {
+export default async function agentNotAvailable(
+  recordContext: RecordContext
+): Promise<State> {
   if (!(await detectProcessCharacteristics())) {
     return agentProcessNotRunning;
   }
@@ -38,6 +41,8 @@ For case (3), you can configure the application URL path and protocol.
   );
 
   await configureRemainingRequestOptions();
+
+  await recordContext.populateURL();
 
   return initial;
 }

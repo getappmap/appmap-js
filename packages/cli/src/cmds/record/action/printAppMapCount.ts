@@ -1,22 +1,11 @@
-import { config } from 'yargs';
-import { listAppMapFiles, verbose } from '../../../utils';
 import UI from '../../userInteraction';
-import { readConfig } from '../configuration';
+import countAppMaps from './countAppMaps';
 
-export default async function printAppMapCount() {
-  let fileCount = 0;
-
-  const configuredAppMapDir = (await readConfig())?.appmap_dir;
-  const appMapDir = configuredAppMapDir || '.';
-
-  // This function is too verbose to be useful in this context.
-  const v = verbose();
-  verbose(false);
-  await listAppMapFiles(appMapDir, (_fileName: string) => (fileCount += 1));
-  verbose(v);
+export default async function printAppMapCount(appMapDir: string) {
+  const appMapCount = await countAppMaps(appMapDir);
 
   UI.success(
-    `There are now ${fileCount} AppMap files in directory '${appMapDir}'.`
+    `There are now ${appMapCount} AppMap files in directory '${appMapDir}'.`
   );
   UI.success(
     `To generate OpenAPI from the AppMaps, run:

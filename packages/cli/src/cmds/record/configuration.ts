@@ -3,6 +3,7 @@ import { readFile, writeFile } from 'fs/promises';
 import { RequestOptions } from 'http';
 import { dump, load } from 'js-yaml';
 import { isAbsolute, join } from 'path';
+import TestCaseRecording from './testCaseRecording';
 
 let AppMapConfigFilePath = 'appmap.yml';
 let AppMapSettingsFilePath = join(process.env.HOME || '', '.appmaprc');
@@ -17,6 +18,10 @@ export class TestCommand {
     public command: string,
     public env: Record<string, string> = {}
   ) {}
+
+  static toString(cmd: TestCommand): string {
+    return `${TestCaseRecording.envString(cmd.env)}${cmd.command}`;
+  }
 }
 
 export type TestRecordingConfig = {
@@ -113,6 +118,11 @@ export async function requestOptions(): Promise<RequestOptions> {
   ).toString();
 
   return requestOptions;
+}
+
+export async function locationString(): Promise<string> {
+  const ro = await requestOptions();
+  return `${ro.protocol}//${ro.hostname}:${ro.port}${ro.path}`;
 }
 
 export async function readSetting(
