@@ -1,0 +1,22 @@
+node_modules
+built
+dist
+tmp
+
+# Yarn files
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+# Misc
+.tmp
+appland-findings.json
+findings.*.json
+findings.json
+sql_warning.txt
+*.code-workspace
+findings.json.*

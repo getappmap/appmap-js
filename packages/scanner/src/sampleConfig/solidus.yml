@@ -1,0 +1,31 @@
+checks:
+  - rule: http500
+  - rule: illegalPackageDependency
+    properties:
+      callerPackages:
+        - equal: actionpack
+        - equal: activesupport
+        - equal: solidus_core
+      calleePackage:
+        include: app/controllers
+  - rule: missingContentType
+  - rule: missingAuthentication
+    exclude:
+      - event:
+          property: route
+          test:
+            include: /api/
+  - rule: secretInLog
+  - rule: slowHttpServerRequest
+    properties:
+      timeAllowed: 1.0
+  - rule: slowQuery
+    properties:
+      timeAllowed: 0.25
+  - rule: tooManyUpdates
+  - rule: updateInGetRequest
+    exclude:
+      - event:
+          property: query
+          test:
+            include: INSERT INTO "spree_order_mutexes"

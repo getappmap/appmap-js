@@ -32,7 +32,7 @@ export class OpenAPICommand {
     statSync(this.directory);
     const files = glob.sync(`${this.directory}/**/*.appmap.json`);
     files.forEach((f) => q.push(f));
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       q.drain(resolve);
       q.error(reject);
       q.resume();

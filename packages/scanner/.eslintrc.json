@@ -1,0 +1,29 @@
+{
+  "root": true,
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "prettier"],
+  "rules": {
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "format": null,
+        "leadingUnderscore": "require",
+        "selector": "variableLike",
+        "modifiers": ["unused"]
+      },
+      { "selector": "variableLike", "format": ["camelCase", "PascalCase", "UPPER_CASE"] },
+      {
+        "selector": "variable",
+        "modifiers": ["exported"],
+        "format": ["camelCase", "PascalCase", "UPPER_CASE"]
+      }
+    ],
+    "@typescript-eslint/no-non-null-assertion": "off"
+  }
+}
