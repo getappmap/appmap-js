@@ -131,7 +131,8 @@ export default class RuleChecker {
       groupMessage?: string,
       occurranceCount?: number,
       // matchEvent will be added to additionalEvents to create the relatedEvents array
-      additionalEvents?: Event[]
+      additionalEvents?: Event[],
+      properties: Record<string, any> = {}
     ): Finding => {
       const findingEvent = matchEvent || event;
       // Fixes:
@@ -177,6 +178,7 @@ export default class RuleChecker {
         groupMessage,
         occurranceCount,
         relatedEvents: relatedEvents.sort((event) => event.id),
+        properties,
       } as Finding;
     };
 
@@ -206,7 +208,8 @@ export default class RuleChecker {
           mr.message,
           mr.groupMessage,
           mr.occurranceCount,
-          mr.relatedEvents
+          mr.relatedEvents,
+          mr.properties
         );
         findings.push(finding);
       });

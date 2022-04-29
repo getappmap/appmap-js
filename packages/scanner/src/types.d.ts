@@ -65,6 +65,7 @@ export interface MatchResult {
   groupMessage?: string;
   occurranceCount?: number;
   relatedEvents?: Event[];
+  properties?: { [key: string]: any };
 }
 
 type MatcherResult =
@@ -111,6 +112,7 @@ interface Finding {
   groupMessage?: string;
   occurranceCount?: number;
   relatedEvents?: Event[];
+  properties: { [key: string]: any };
 }
 
 interface RuleLogic {

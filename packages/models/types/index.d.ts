@@ -287,6 +287,7 @@ declare module '@appland/models' {
     recorder: Metadata.Recorder;
     testStatus?: 'succeeded' | 'failed';
     exception: Metadata.Exception;
+    source_location: string;
   }
 
   export class AppMap {

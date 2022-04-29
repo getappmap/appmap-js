@@ -63,6 +63,8 @@ export default async function obtainTestCommands(): Promise<void> {
         }, {});
     }
 
+    Test command must not be empty
+
     UI.progress(`To run the tests, I will run the following command:`);
     UI.progress('');
     UI.progress(`${TestCaseRecording.envString(env)}${testCommand}`);
