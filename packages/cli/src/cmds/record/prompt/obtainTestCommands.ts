@@ -38,11 +38,16 @@ export default async function obtainTestCommands(): Promise<void> {
 
   let confirmed = false;
   while (!confirmed) {
-    const { testCommand } = await UI.prompt({
-      name: 'testCommand',
-      type: 'input',
-      message: 'Test command (without env vars):',
-    });
+    let testCommand: any;
+    do {
+      testCommand = (
+        await UI.prompt({
+          name: 'testCommand',
+          type: 'input',
+          message: 'Test command (without env vars):',
+        })
+      )['testCommand'];
+    } while (!testCommand);
 
     const { envVars } = await UI.prompt({
       name: 'envVars',
