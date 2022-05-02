@@ -17,7 +17,7 @@ it('n+1 query', async () => {
   expect(finding1.relatedEvents!).toHaveLength(30);
   expect(finding1.hash).toEqual(EXPECTED_HASH);
   expect(finding1.message).toEqual(
-    `30 occurrences of SQL: SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?`
+    `app_views_microposts__micropost_html_erb.render[120] contains 30 occurrences of SQL: SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?`
   );
 });
 
