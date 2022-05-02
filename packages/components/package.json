@@ -10,7 +10,7 @@
     "watch": "cross-env NODE_ENV=production rollup --watch --config rollup.config.js --format es",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "cypress run",
-    "test": "npm run test:unit && server-test 'npm run storybook -- --ci --quiet' http://localhost:6006/iframe.html 'npm run test:e2e -- --headless --record false'",
+    "test": "npm run test:unit && node .storybook/run.js",
     "lint": "eslint --ext .js --ext .vue src",
     "pre-commit": "lint-staged",
     "storybook": "start-storybook -p 6006",
