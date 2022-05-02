@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.52.5](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.52.4...@appland/scanner-v1.52.5) (2022-05-02)
+
+
+### Bug Fixes
+
+* Fix front matter for self-contained rules ([e02b454](https://github.com/applandinc/appmap-js/commit/e02b45443f1eeb2dff564d588559c258ce457446))
+
 ## [1.52.4](https://github.com/applandinc/scanner/compare/v1.52.3...v1.52.4) (2022-04-28)
 
 
