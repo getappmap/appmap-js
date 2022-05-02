@@ -5,6 +5,20 @@ const exec = promisify(require('child_process').exec);
 
 const dependentPackages = ['components', 'models'];
 
+function isTag() {
+  return Boolean(process.env['TRAVIS_TAG']);
+}
+
+async function isBranch(branch) {
+  let currentBranch = process.env['TRAVIS_BRANCH'];
+  if (!currentBranch) {
+    const { stdout } = await exec('git branch --show-current');
+    currentBranch = stdout.trim();
+  }
+
+  return currentBranch === branch;
+}
+
 async function hasDependencyChanged() {
   const { stdout: changedFiles } = await exec(
     'git diff origin/main --name-only'
@@ -33,5 +47,8 @@ async function runStorybook() {
 }
 
 (async () => {
-  (await hasDependencyChanged()) && (await runStorybook());
+  const shouldRunStorybook =
+    (await isBranch('main')) || isTag() || (await hasDependencyChanged());
+
+  shouldRunStorybook() && (await runStorybook());
 })();
