@@ -30,10 +30,6 @@ export default {
     object: {
       type: Object,
     },
-    static: {
-      type: Boolean,
-      default: false,
-    },
   },
 
   watch: {
@@ -62,6 +58,10 @@ export default {
     defaultLocation() {
       if (!this.object) {
         return undefined;
+      }
+
+      if (typeof this.object === 'string') {
+        return this.object;
       }
 
       return (
@@ -107,11 +107,7 @@ export default {
   },
 
   beforeMount() {
-    if (this.static) {
-      this.$root.$once('response-resolve-location', this.onResolveLocation);
-    } else {
-      this.$root.$on('response-resolve-location', this.onResolveLocation);
-    }
+    this.$root.$on('response-resolve-location', this.onResolveLocation);
     this.requestLocation();
   },
 

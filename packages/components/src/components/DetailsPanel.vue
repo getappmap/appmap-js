@@ -7,8 +7,7 @@
       class="details-panel__source"
       v-if="!selectedObject && !selectedLabel && sourceLocationObject"
     >
-      <h4 class="details-panel__source-title">Test case</h4>
-      <v-source-code-link :object="sourceLocationObject" :static="true" />
+      <v-source-code-link :object="sourceLocationObject" />
     </div>
     <div class="details-panel__content">
       <div class="details-panel__notification">
@@ -119,12 +118,11 @@ export default {
       );
     },
     sourceLocationObject() {
-      if (this.appMap.metadata.source_location) {
-        return {
-          location: this.appMap.metadata.source_location,
-        };
+      let sourceLocation;
+      if (this.appMap && this.appMap.metadata) {
+        sourceLocation = this.appMap.metadata.source_location;
       }
-      return null;
+      return sourceLocation;
     },
   },
 };
