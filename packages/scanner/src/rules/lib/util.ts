@@ -124,12 +124,11 @@ const isRoot = (event: Event | undefined): boolean => {
 // Attribution: https://github.com/shahata/dasherize
 // MIT License
 function dasherize(str: string): string {
-  return str.replace(
-    /[A-Z0-9](?:(?=[^A-Z0-9])|[A-Z0-9]*(?=[A-Z0-9][^A-Z0-9]|$))/g,
-    function (s, i) {
+  return str
+    .replace(/[A-Z0-9](?:(?=[^A-Z0-9])|[A-Z0-9]*(?=[A-Z0-9][^A-Z0-9]|$))/g, function (s, i) {
       return (i > 0 ? '-' : '') + s.toLowerCase();
-    }
-  );
+    })
+    .replace(/--+/g, '-');
 }
 
 // Literally StackOverflow
