@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.25.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.25.0...@appland/appmap-v3.25.1) (2022-05-02)
+
+
+### Bug Fixes
+
+* Test commands must not be blank ([f7a6e21](https://github.com/applandinc/appmap-js/commit/f7a6e2119f32a988826aa0a3a0558213a23beb67))
+
 # [@appland/appmap-v3.25.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.24.0...@appland/appmap-v3.25.0) (2022-04-28)
 
 
