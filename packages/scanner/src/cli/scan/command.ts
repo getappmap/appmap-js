@@ -3,8 +3,6 @@ import { writeFile } from 'fs/promises';
 import { promisify } from 'util';
 import { Arguments, Argv } from 'yargs';
 
-import { FindingStatusListItem } from '@appland/client/dist/src';
-
 import { parseConfigFile } from '../../configuration/configurationProvider';
 import { ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
