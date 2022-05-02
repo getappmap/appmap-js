@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.53.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.52.5...@appland/scanner-v1.53.0) (2022-05-02)
+
+
+### Features
+
+* Show 0-100% progress bar ([570cc3b](https://github.com/applandinc/appmap-js/commit/570cc3bfa255f6f448100b3c38e667fe6187b242))
+
 # [@appland/scanner-v1.52.5](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.52.4...@appland/scanner-v1.52.5) (2022-05-02)
 
 
