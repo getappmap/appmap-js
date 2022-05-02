@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+import cliProgress from 'cli-progress';
 import { readFile } from 'fs/promises';
 import { buildAppMap, Metadata } from '@appland/models';
 
@@ -5,7 +7,6 @@ import Check from '../check';
 import RuleChecker from '../ruleChecker';
 import { Finding } from '../types';
 
-import progressReporter from './progressReporter';
 import AppMapIndex from '../appMapIndex';
 
 type Result = {
@@ -27,6 +28,23 @@ export default async function scan(files: string[], checks: Check[]): Promise<Re
   const appMapMetadata: Record<string, Metadata> = {};
   const findings: Finding[] = [];
 
+  function newProgress() {
+    if (process.stdout.isTTY) {
+      return new cliProgress.SingleBar(
+        { format: `Scanning [{bar}] {percentage}% | {value}/{total}`, stopOnComplete: true },
+        cliProgress.Presets.shades_classic
+      );
+    }
+
+    return {
+      increment: () => {},
+      start: () => {},
+    };
+  }
+
+  const progress = newProgress();
+  progress.start(files.length * checks.length, 0);
+
   await batch(files, 2, async (file: string) => {
     // TODO: Improve this by respecting .gitignore, or similar.
     // For now, this addresses the main problem of encountering appmap-js and its appmap.json files
@@ -43,9 +61,9 @@ export default async function scan(files: string[], checks: Check[]): Promise<Re
       checks.map(async (check) => {
         const matchCount = findings.length;
         await checker.check(file, appMapIndex, check, findings);
+        progress.increment();
         const newMatches = findings.slice(matchCount, findings.length);
         newMatches.forEach((match) => (match.appMapFile = file));
-        process.stderr.write(progressReporter(newMatches));
       })
     );
   });

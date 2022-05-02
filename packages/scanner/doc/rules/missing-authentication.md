@@ -21,15 +21,16 @@ This rule checks all HTTP server requests that satisfy the following conditions:
 - HTTP status code is `< 300`
 - Matches include and exclude lists of content type (by default, these are empty).
 
-For each matching request, any event that satisfies either of these conditions will satisfy the rule:
+For each matching request, any event that satisfies either of these conditions will satisfy the
+rule:
 
-1. Has label `public`.
+1. Has label `access.public`.
 2. Has label `security.authentication`, and returns a truthy value.
 
 ### Notes
 
 If a request does not require an authenticated user (e.g. because it contains completely public
-information), then this rule can be satisfied by calling any function labeled `public`.
+information), then this rule can be satisfied by calling any function labeled `access.public`.
 
 If the `security.authentication` event returns a falsey value (`false`, `null`, etc), then
 authentication is assumed to be denied, and the rule is not satisfied.
@@ -37,7 +38,7 @@ authentication is assumed to be denied, and the rule is not satisfied.
 ### Resolution
 
 If the request is designed to be public, and the omission of authentication is intentionaly, modify
-the code so that it calls a function labeled `public`.
+the code so that it calls a function labeled `access.public`.
 
 Otherwise, modify the code so that it calls a function labeled `security.authentication` which
 returns a truthy result (for example, a User object).

@@ -308,6 +308,7 @@ __metadata:
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
     "@types/async": ^3.2.12
+    "@types/cli-progress": ^3.9.2
     "@types/glob": ^7.2.0
     "@types/jest": ^27.4.1
     "@types/js-yaml": ^4.0.3
@@ -322,6 +323,7 @@ __metadata:
     ansi-escapes: ^5.0.0
     async: ^3.2.3
     chalk: ^4.1.2
+    cli-progress: ^3.11.0
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-node: ^11.1.0
@@ -5460,6 +5462,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cli-progress@npm:^3.9.2":
+  version: 3.9.2
+  resolution: "@types/cli-progress@npm:3.9.2"
+  dependencies:
+    "@types/node": "*"
+  checksum: 371ecb29c45dce7127b4a8626521d908ce7dfaea6a537fcd491b12aea3a8ff58452eb1b33e0d2e0724c81b56df3930195e521e12fe979518deb5329a7a884a02
+  languageName: node
+  linkType: hard
+
 "@types/color-convert@npm:^2.0.0":
   version: 2.0.0
   resolution: "@types/color-convert@npm:2.0.0"
@@ -10059,6 +10070,15 @@ __metadata:
   bin:
     highlight: bin/highlight
   checksum: 0a60e60545e39efea78c1732a25b91692017ec40fb6e9497208dc0eeeae69991d3923a8d6e4edd0543db3c395ed14529a33dd4d0353f1679c5b6dded792a8496
+  languageName: node
+  linkType: hard
+
+"cli-progress@npm:^3.11.0":
+  version: 3.11.0
+  resolution: "cli-progress@npm:3.11.0"
+  dependencies:
+    string-width: ^4.2.3
+  checksum: aed20534e440d7073b03b5225cc1a3ec06436b5f390b4d7a77d17d8edb2734cdb107cdeb5fc1ab031ef195e2d0cdc3653a3e8d91e4f56520448aa71289233e7b
   languageName: node
   linkType: hard
 
