@@ -73,5 +73,26 @@ describe('record.prompt.obtainTestCommands', () => {
     beforeAll(() => sinon.stub(guessTestCommands, 'default').resolves([]));
 
     it('prompts for test command and env', promptForTestCommandAndEnv);
+
+    it('test command must not be blank', async () => {
+      const stubPrompt = sinon.stub(UI, 'prompt');
+      const stubWrite = sinon.stub(configuration, 'writeConfigOption');
+
+      stubPrompt.onFirstCall().resolves({ testCommand: null });
+      stubPrompt.onSecondCall().resolves({ testCommand: '' });
+      stubPrompt.onThirdCall().resolves({ testCommand: testCommand.command });
+      stubPrompt.onCall(3).resolves({ envVars: '' });
+
+      stubConfirm.withArgs(`Continue with this command?`).resolves(true);
+
+      await obtainTestCommands();
+
+      expect(stubWrite.getCalls().map((c) => c.firstArg)).toEqual([
+        'test_recording.test_commands',
+      ]);
+      expect(stubWrite.getCalls().map((c) => c.args[1])).toEqual([
+        [testCommand],
+      ]);
+    });
   });
 });
