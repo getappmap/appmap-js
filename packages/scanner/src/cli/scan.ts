@@ -24,6 +24,11 @@ async function batch<T>(
 }
 
 export default async function scan(files: string[], checks: Check[]): Promise<Result> {
+  // TODO: Improve this by respecting .gitignore, or similar.
+  // For now, this addresses the main problem of encountering appmap-js and its appmap.json files
+  // in a bundled node_modules.
+  files = files.filter((file) => !file.split('/').includes('node_modules'));
+
   const checker = new RuleChecker();
   const appMapMetadata: Record<string, Metadata> = {};
   const findings: Finding[] = [];
@@ -31,7 +36,7 @@ export default async function scan(files: string[], checks: Check[]): Promise<Re
   function newProgress() {
     if (process.stdout.isTTY) {
       return new cliProgress.SingleBar(
-        { format: `Scanning [{bar}] {percentage}% | {value}/{total}`, stopOnComplete: true },
+        { format: `Scanning [{bar}] {percentage}% | {value}/{total}` },
         cliProgress.Presets.shades_classic
       );
     }
@@ -39,6 +44,7 @@ export default async function scan(files: string[], checks: Check[]): Promise<Re
     return {
       increment: () => {},
       start: () => {},
+      stop: () => {},
     };
   }
 
@@ -46,12 +52,6 @@ export default async function scan(files: string[], checks: Check[]): Promise<Re
   progress.start(files.length * checks.length, 0);
 
   await batch(files, 2, async (file: string) => {
-    // TODO: Improve this by respecting .gitignore, or similar.
-    // For now, this addresses the main problem of encountering appmap-js and its appmap.json files
-    // in a bundled node_modules.
-    if (file.split('/').includes('node_modules')) {
-      return null;
-    }
     const appMapData = await readFile(file, 'utf8');
     const appMap = buildAppMap(appMapData).normalize().build();
     const appMapIndex = new AppMapIndex(appMap);
@@ -66,7 +66,10 @@ export default async function scan(files: string[], checks: Check[]): Promise<Re
         newMatches.forEach((match) => (match.appMapFile = file));
       })
     );
+    return null;
   });
+
+  progress.stop();
 
   return { appMapMetadata, findings };
 }
