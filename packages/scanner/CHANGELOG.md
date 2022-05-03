@@ -1,3 +1,11 @@
+# [@appland/scanner-v1.54.1](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.54.0...@appland/scanner-v1.54.1) (2022-05-03)
+
+
+### Bug Fixes
+
+* Metadata rule title ([8d87864](https://github.com/applandinc/appmap-js/commit/8d878645001457d02487fd564498e8b858362f72))
+* Progress bar exit ([f311bb2](https://github.com/applandinc/appmap-js/commit/f311bb2af258e6a140c9a09c64ae71ebc43c52f7))
+
 # [@appland/scanner-v1.54.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.53.0...@appland/scanner-v1.54.0) (2022-05-03)
 
 
