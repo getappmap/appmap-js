@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.54.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.53.0...@appland/scanner-v1.54.0) (2022-05-03)
+
+
+### Features
+
+* N+1 queries must have the same common ancestor ([7edb88b](https://github.com/applandinc/appmap-js/commit/7edb88b3dc3938e9edc718b8279e980abbc06423))
+
 # [@appland/scanner-v1.53.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.52.5...@appland/scanner-v1.53.0) (2022-05-02)
 
 
