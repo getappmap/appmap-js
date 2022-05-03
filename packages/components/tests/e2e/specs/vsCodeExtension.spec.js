@@ -7,6 +7,11 @@ context('VS Code Extension', () => {
     });
 
     it('displays source locations as expected', () => {
+      cy.get('.details-panel__source').should('exist');
+      cy.get('.details-panel__source .source-code-link__path').contains(
+        'spec/system/application_spec.rb'
+      );
+
       cy.get(
         '.node[data-id="active_support/ActiveSupport::SecurityUtils"]'
       ).click();

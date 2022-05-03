@@ -3,6 +3,12 @@
     <h3 class="details-panel__title">
       <AppMapLogo width="70" />
     </h3>
+    <div
+      class="details-panel__source"
+      v-if="!selectedObject && !selectedLabel && sourceLocationObject"
+    >
+      <v-source-code-link :object="sourceLocationObject" />
+    </div>
     <div class="details-panel__content">
       <div class="details-panel__notification">
         <slot name="notification" />
@@ -53,6 +59,7 @@ import VDetailsPanelExternalService from '@/components/DetailsPanelExternalServi
 import VDetailsPanelLabels from '@/components/DetailsPanelLabels.vue';
 import VDetailsSearch from '@/components/DetailsSearch.vue';
 import VPopper from '@/components/Popper.vue';
+import VSourceCodeLink from '@/components/SourceCodeLink.vue';
 
 export default {
   name: 'v-details-panel',
@@ -72,6 +79,7 @@ export default {
     VDetailsPanelLabels,
     VDetailsSearch,
     VPopper,
+    VSourceCodeLink,
   },
   props: {
     subtitle: String,
@@ -109,6 +117,13 @@ export default {
         this.filtersRootObjects.includes(this.selectedObject.fqid)
       );
     },
+    sourceLocationObject() {
+      let sourceLocation;
+      if (this.appMap && this.appMap.metadata) {
+        sourceLocation = this.appMap.metadata.source_location;
+      }
+      return sourceLocation;
+    },
   },
 };
 </script>
@@ -135,6 +150,16 @@ export default {
     svg {
       max-width: 20rem;
       width: 100%;
+    }
+  }
+
+  &__source {
+    margin-bottom: 1rem;
+
+    &-title {
+      margin: 0 0 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 400;
     }
   }
 

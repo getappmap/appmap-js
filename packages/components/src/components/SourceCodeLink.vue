@@ -60,6 +60,10 @@ export default {
         return undefined;
       }
 
+      if (typeof this.object === 'string') {
+        return this.object;
+      }
+
       return (
         (this.object.path &&
           [this.object.path, this.object.lineno].filter(Boolean).join(':')) ||
