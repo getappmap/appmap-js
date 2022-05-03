@@ -38,7 +38,7 @@ function loadFromDir(ruleName: string): () => Promise<Rule | undefined> {
     let rule: (options: any) => RuleLogic;
     let options: any;
     try {
-      metadata = await import(`../rules/${ruleName}/metadata`);
+      metadata = (await import(`../rules/${ruleName}/metadata`)).default;
     } catch (e) {
       return;
     }
