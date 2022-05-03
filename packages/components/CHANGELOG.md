@@ -1,3 +1,10 @@
+# [@appland/components-v2.1.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.0.3...@appland/components-v2.1.0) (2022-05-03)
+
+
+### Features
+
+* Add link to test file to details panel ([#569](https://github.com/applandinc/appmap-js/issues/569)) ([a6cb5a6](https://github.com/applandinc/appmap-js/commit/a6cb5a62172838efabfc7c55e7a3db4ff82adf8a))
+
 # [@appland/components-v2.0.3](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.0.2...@appland/components-v2.0.3) (2022-04-12)
 
 
