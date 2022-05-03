@@ -1,7 +1,7 @@
 import { Event } from '@appland/models';
 import { AppMapIndex, EventFilter, Level, MatchResult, Rule, RuleLogic } from '../types';
 import * as types from './types';
-import { SQLCount, sqlStrings } from '../database';
+import { SQLEvent, sqlStrings } from '../database';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
 
@@ -10,50 +10,73 @@ class Options implements types.NPlusOneQuery.Options {
   public errorLimit = 10;
 }
 
-// TODO: clean up according to https://github.com/applandinc/scanner/issues/43
 function build(options: Options): RuleLogic {
-  const sqlCount: Record<string, SQLCount> = {};
-
   function matcher(
     command: Event,
     appMapIndex: AppMapIndex,
     eventFilter: EventFilter
   ): MatchResult[] | undefined {
-    for (const sqlEvent of sqlStrings(command, appMapIndex, eventFilter)) {
-      let occurrence = sqlCount[sqlEvent.sql];
-      if (!occurrence) {
-        occurrence = {
-          count: 1,
-          events: [sqlEvent.event],
-        };
-        sqlCount[sqlEvent.sql] = occurrence;
-      } else {
-        occurrence.count += 1;
-        occurrence.events.push(sqlEvent.event);
-      }
+    const sqlEvents = sqlStrings(command, appMapIndex, eventFilter);
+
+    let sqlRollup: Record<string, SQLEvent[]> = {};
+    const eventsById: Record<string, Event> = {};
+    appMapIndex.appMap.events.forEach((event) => {
+      eventsById[event.id] = event;
+    });
+
+    for (const sqlEvent of sqlEvents) {
+      if (!sqlEvent.event.parent) continue;
+
+      const key = [sqlEvent.event.parent.id, sqlEvent.sql].join('\n');
+      sqlRollup[key] ||= [];
+      sqlRollup[key].push(sqlEvent);
     }
 
-    return Object.keys(sqlCount).reduce((matchResults, sql) => {
-      const occurrence = sqlCount[sql];
+    const matchResults: MatchResult[] = [];
+    do {
+      [...Object.keys(sqlRollup)].forEach((key) => {
+        const events = sqlRollup[key];
+        const [ancestorId, sql] = key.split('\n');
+        const ancestor = eventsById[parseInt(ancestorId)]!;
+        const occurranceCount = events.length;
+        if (occurranceCount > options.warningLimit) {
+          const buildMatchResult = (level: Level): MatchResult => {
+            return {
+              level: level,
+              event: events[0].event,
+              message: `${ancestor.toString()}[${
+                ancestor.id
+              }] contains ${occurranceCount} occurrences of SQL: ${sql}`,
+              groupMessage: sql,
+              occurranceCount: occurranceCount,
+              relatedEvents: events.map((e) => e.event),
+            };
+          };
 
-      const buildMatchResult = (level: Level): MatchResult => {
-        return {
-          level: level,
-          event: occurrence.events[0],
-          message: `${occurrence.count} occurrences of SQL: ${sql}`,
-          groupMessage: sql,
-          occurranceCount: occurrence.count,
-          relatedEvents: occurrence.events,
-        };
-      };
+          if (occurranceCount >= options.errorLimit) {
+            matchResults.push(buildMatchResult('error'));
+          } else if (occurranceCount >= options.warningLimit) {
+            matchResults.push(buildMatchResult('warning'));
+          }
+        }
+      });
 
-      if (occurrence.count >= options.errorLimit) {
-        matchResults.push(buildMatchResult('error'));
-      } else if (occurrence.count >= options.warningLimit) {
-        matchResults.push(buildMatchResult('warning'));
-      }
-      return matchResults;
-    }, [] as MatchResult[]);
+      const newRollup: Record<string, SQLEvent[]> = {};
+      Object.keys(sqlRollup).forEach((key) => {
+        const events = sqlRollup[key];
+        if (events.length >= options.warningLimit) return;
+
+        const [ancestorId, sql] = key.split('\n');
+        const ancestor = eventsById[parseInt(ancestorId)]!;
+        if (ancestor.parent) {
+          const parentKey = [ancestor.parent.id, sql].join('\n');
+          newRollup[parentKey] = (newRollup[parentKey] || []).concat(events);
+        }
+      }, {} as Record<string, SQLEvent[]>);
+      sqlRollup = newRollup;
+    } while (Object.keys(sqlRollup).length > 0);
+
+    return matchResults;
   }
 
   return {
