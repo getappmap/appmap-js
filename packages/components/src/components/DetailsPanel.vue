@@ -110,6 +110,7 @@ export default {
         kind = 'event';
       }
       return `v-details-panel-${kind}`;
+      5;
     },
     isRootObject() {
       return (

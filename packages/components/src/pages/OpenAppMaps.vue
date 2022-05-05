@@ -45,21 +45,17 @@
 
 <script>
 import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
-
 export default {
   name: 'QuickstartDocsOpenAppMaps',
-
   components: {
     QuickstartLayout,
   },
-
   props: {
     appmaps: {
       type: Array,
       default: () => [],
     },
   },
-
   methods: {
     openAppmap(path) {
       this.$root.$emit('openAppmap', path);
