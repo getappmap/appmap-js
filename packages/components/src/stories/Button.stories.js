@@ -16,7 +16,7 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VButton },
-  template: '<v-button @onClick="onClick" v-bind="$props" />',
+  template: '<v-button v-bind="$props" />',
 });
 
 export const Primary = Template.bind({});
