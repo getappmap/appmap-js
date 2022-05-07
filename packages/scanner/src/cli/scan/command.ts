@@ -84,8 +84,8 @@ export default {
       files = await glob(`${appmapDir}/**/*.appmap.json`);
     }
     if (appmapFile) {
-      await validateFile('file', appmapFile);
-      files = [appmapFile];
+      files = typeof appmapFile === 'string' ? [appmapFile] : appmapFile;
+      await Promise.all(files.map(async (file) => validateFile('file', file)));
     }
 
     const configData = await parseConfigFile(config);
