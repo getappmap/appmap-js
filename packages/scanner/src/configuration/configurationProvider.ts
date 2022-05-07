@@ -1,7 +1,7 @@
 import { ValidateFunction } from 'ajv';
 import Ajv from 'ajv';
 import yaml from 'js-yaml';
-import { promises as fs } from 'fs';
+import { exists, promises as fs } from 'fs';
 
 import { Rule, RuleLogic, ScopeName } from '../types';
 import Check from '../check';
@@ -16,6 +16,8 @@ import match_pattern_config_schema from './schema/match-pattern-config.json';
 import Configuration from './types/configuration';
 import CheckConfig from './types/checkConfig';
 import { URL } from 'url';
+import { promisify } from 'util';
+import { join } from 'path';
 
 const ajv = new Ajv();
 ajv.addSchema(match_pattern_config_schema);
@@ -192,6 +194,9 @@ export async function loadConfig(config: Configuration): Promise<Check[]> {
 }
 
 export async function parseConfigFile(configPath: string): Promise<Configuration> {
+  if (!(await promisify(exists)(configPath))) {
+    configPath = join(__dirname, '../sampleConfig/default.yml');
+  }
   console.log(`Using scanner configuration file ${configPath}`);
   const yamlConfig = await fs.readFile(configPath, 'utf-8');
   return yaml.load(yamlConfig, {

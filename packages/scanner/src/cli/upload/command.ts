@@ -24,7 +24,7 @@ export default {
     });
     args.option('report-file', {
       describe: 'file containing the findings report',
-      default: 'appland-findings.json',
+      default: 'appmap-findings.json',
     });
     args.option('app', {
       describe:

@@ -7,7 +7,7 @@ import { fixtureAppMapFileName } from '../util';
 import { readFileSync, unlinkSync } from 'fs';
 import { ScanResults } from '../../src/report/scanResults';
 
-const ReportFile = 'appland-findings.json';
+const ReportFile = 'appmap-findings.json';
 const AppId = test.AppId;
 const StandardOptions = {
   appmapFile: fixtureAppMapFileName(
