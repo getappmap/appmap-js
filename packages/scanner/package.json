@@ -77,7 +77,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "yarn@3.1.0",
   "pkg": {
     "targets": [
       "node14-linux-x64",
