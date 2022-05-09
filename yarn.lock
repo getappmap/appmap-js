@@ -323,6 +323,7 @@ __metadata:
     ansi-escapes: ^5.0.0
     async: ^3.2.3
     chalk: ^4.1.2
+    chokidar: ^3.5.3
     cli-progress: ^3.11.0
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
@@ -9837,7 +9838,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.4.1, chokidar@npm:^3.4.2, chokidar@npm:^3.5.1":
+"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.4.1, chokidar@npm:^3.4.2, chokidar@npm:^3.5.1, chokidar@npm:^3.5.3":
   version: 3.5.3
   resolution: "chokidar@npm:3.5.3"
   dependencies:
