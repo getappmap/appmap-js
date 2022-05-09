@@ -3,7 +3,7 @@ const Unique = require('./unique');
 
 class Canonicalize extends Unique {
   functionCall(event) {
-    if (event.isFunction) {
+    if (event.isFunction && event.codeObject.classObject) {
       return event.codeObject.classObject.id;
     }
 
