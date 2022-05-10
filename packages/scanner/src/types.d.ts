@@ -62,6 +62,9 @@ export interface MatchResult {
   level?: Level;
   event: Event;
   message: string;
+  description?: string;
+  participatingEvents?: Record<string, Event>;
+  volatileData?: Record<string, string | number>;
   groupMessage?: string;
   occurranceCount?: number;
   relatedEvents?: Event[];
@@ -112,6 +115,20 @@ interface Finding {
   occurranceCount?: number;
   relatedEvents?: Event[];
   impactDomain?: ImpactDomain;
+  // NOTE: These fields are experimental at this time.
+  // An extended description of the finding. The text of this description can use Markdown, plus an
+  // extended syntax.
+  //
+  // Examples:
+  // {value} Locate the indicated key (value) in volatileData, and format as text.
+  // {value as regexp} Locate the indicated key (value) in volatileData, and format as a regexp.
+  // {logEvent as url} Locate the indicated key (logEvent) in participatingEvents, and format as a URL.
+  // {logEvent as prettyName} Locate the indicated key (logEvent) in participatingEvents, and format
+  // as a prettified event or code object name.
+  description?: string;
+  // Map of events by functional role name; for example, logEvent, secret, scope, etc.
+  participatingEvents?: Record<string, Event>;
+  volatileData?: Record<string, string | number>;
 }
 
 interface RuleLogic {
