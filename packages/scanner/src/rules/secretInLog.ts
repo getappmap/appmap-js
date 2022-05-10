@@ -2,15 +2,27 @@ import { Event } from '@appland/models';
 import { MatchResult, Rule, RuleLogic } from '../types';
 import SecretsRegexes, { looksSecret } from '../analyzer/secretsRegexes';
 import { emptyValue } from './lib/util';
-import recordSecrets from '../analyzer/recordSecrets';
+import recordSecrets, { Secret } from '../analyzer/recordSecrets';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
 
 class Match {
-  constructor(public pattern: RegExp | string, public value: string) {}
+  private constructor(
+    public pattern: RegExp | string,
+    public value: string,
+    public generatorEvent?: Event
+  ) {}
+
+  static fromPattern(pattern: RegExp, value: string): Match {
+    return new Match(pattern, value);
+  }
+
+  static fromSecret(secret: Secret, value: string): Match {
+    return new Match(secret.value, value, secret.generatorEvent);
+  }
 }
 
-const secrets: Set<string> = new Set();
+const secrets: Secret[] = [];
 
 const findInLog = (event: Event): MatchResult[] | undefined => {
   if (!event.parameters) return;
@@ -20,29 +32,48 @@ const findInLog = (event: Event): MatchResult[] | undefined => {
   for (const { value } of event.parameters) {
     if (emptyValue(value)) continue;
 
-    const patterns: (RegExp | string)[] = [];
-
     if (looksSecret(value)) {
       // Only look for the exact matching regexes if it matches the catchall regex
-      patterns.push(
+      matches.push(
         ...Object.values(SecretsRegexes)
           .flat()
           .filter((re) => re.test(value))
+          .map((re) => Match.fromPattern(re, value))
       );
     }
 
     for (const secret of secrets) {
-      if (value.includes(secret)) patterns.push(secret);
+      if (value.includes(secret.value)) {
+        matches.push(Match.fromSecret(secret, value));
+      }
     }
-
-    matches.push(...patterns.map((pattern) => new Match(pattern, value)));
   }
 
   if (matches.length > 0) {
-    return matches.map((match) => ({
-      event,
-      message: `Log event contains secret data: ${match.value}`,
-    }));
+    return matches.map((match) => {
+      const { pattern, value } = match;
+      const relatedEvents: Event[] = match.generatorEvent ? [match.generatorEvent] : [];
+      const stableData = { logEvent: event, generatorEvent: match.generatorEvent };
+      const volatileData = { logMessage: value } as any;
+      if (pattern instanceof RegExp) {
+        volatileData.pattern = pattern;
+      } else {
+        volatileData.secret = pattern;
+      }
+      return {
+        event,
+        message: `Log message exposes secret ${
+          match.generatorEvent ? match.generatorEvent.codeObject.prettyName || 'data' : 'data'
+        } "${pattern}": ${value}`,
+        relatedEvents,
+        stableData: Object.fromEntries(
+          Object.entries(stableData)
+            .filter(([, v]) => v)
+            .map(([k, v]) => [k, v!.fqid])
+        ),
+        volatileData,
+      };
+    });
   }
 };
 
