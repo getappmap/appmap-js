@@ -1,8 +1,6 @@
-import { writeFile } from 'fs/promises';
 import { Arguments, Argv } from 'yargs';
 
 import { parseConfigFile } from '../../configuration/configurationProvider';
-import Configuration from '../../configuration/types/configuration';
 import { ValidationError } from '../../errors';
 import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
 
