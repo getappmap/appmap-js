@@ -1,3 +1,12 @@
+# [@appland/scanner-v1.55.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.54.1...@appland/scanner-v1.55.0) (2022-05-10)
+
+
+### Features
+
+* Change default file names ([e173fbb](https://github.com/applandinc/appmap-js/commit/e173fbbe464c8076133f91e04ecdb531dd80c13f))
+* Read appmap_dir from appmap.yml ([b0b6b0d](https://github.com/applandinc/appmap-js/commit/b0b6b0db45eec8c0b8fa96d0f3005677a43f813b))
+* Support repeated appmap-file option ([62edf68](https://github.com/applandinc/appmap-js/commit/62edf68a00d2e169cfbfed5e63246b5fbec947d7))
+
 # [@appland/scanner-v1.54.1](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.54.0...@appland/scanner-v1.54.1) (2022-05-03)
 
 
