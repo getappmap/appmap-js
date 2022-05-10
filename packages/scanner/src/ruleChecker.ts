@@ -126,8 +126,11 @@ export default class RuleChecker {
     }
 
     const buildFinding = (
-      matchEvent?: Event,
+      matchEvent: Event,
+      participatingEvents: Record<string, Event>,
+      volatileData: Record<string, string | number>,
       message?: string,
+      description?: string,
       groupMessage?: string,
       occurranceCount?: number,
       // matchEvent will be added to additionalEvents to create the relatedEvents array
@@ -145,10 +148,6 @@ export default class RuleChecker {
         ...findingEvent.ancestors().map((ancestor) => ancestor.codeObject.location),
       ].filter(Boolean);
 
-      const hash = createHash('sha256');
-      hash.update(findingEvent.hash);
-      hash.update(checkInstance.ruleId);
-
       const uniqueEvents = new Set<number>();
       const relatedEvents: Array<Event> = [];
       [findingEvent].concat((additionalEvents || []).map(cloneEvent)).forEach((event) => {
@@ -159,24 +158,37 @@ export default class RuleChecker {
         relatedEvents.push(event);
       });
 
-      // Update event hash with unique hashes of related events
-      new Set(relatedEvents.map((e) => e.hash)).forEach((eventHash) => {
-        hash.update(eventHash);
-      });
+      participatingEvents = Object.fromEntries(
+        Object.entries(participatingEvents).map(([k, v]) => [k, cloneEvent(v)])
+      );
+      participatingEvents.scope = cloneEvent(scope);
+      participatingEvents.event = cloneEvent(event);
 
+      // Update event hash with unique hashes of related events
+      const hashV1 = createHash('sha256');
+      {
+        hashV1.update(findingEvent.hash);
+        hashV1.update(checkInstance.ruleId);
+        [...new Set(relatedEvents.map((e) => e.hash))].sort().forEach((eventHash) => {
+          hashV1.update(eventHash);
+        });
+      }
       return {
         appMapFile,
         checkId: checkInstance.checkId,
         ruleId: checkInstance.ruleId,
         ruleTitle: checkInstance.title,
         event: cloneEvent(findingEvent),
-        hash: hash.digest('hex'),
+        hash: hashV1.digest('hex'),
         stack,
         scope: cloneEvent(scope),
         message: message || checkInstance.title,
         groupMessage,
         occurranceCount,
         relatedEvents: relatedEvents.sort((event) => event.id),
+        description,
+        participatingEvents,
+        volatileData,
       } as Finding;
     };
 
@@ -190,20 +202,23 @@ export default class RuleChecker {
       let finding;
       if (checkInstance.ruleLogic.message) {
         const message = checkInstance.ruleLogic.message(scope, event);
-        finding = buildFinding(event, message);
+        finding = buildFinding(event, {}, {}, message);
       } else {
-        finding = buildFinding(event);
+        finding = buildFinding(event, {}, {});
       }
       findings.push(finding);
     } else if (typeof matchResult === 'string') {
-      const finding = buildFinding(event, matchResult as string);
+      const finding = buildFinding(event, {}, {}, matchResult as string);
       finding.message = matchResult as string;
       findings.push(finding);
     } else if (matchResult) {
       matchResult.forEach((mr) => {
         const finding = buildFinding(
           mr.event,
+          mr.participatingEvents || {},
+          mr.volatileData || {},
           mr.message,
+          mr.description,
           mr.groupMessage,
           mr.occurranceCount,
           mr.relatedEvents
