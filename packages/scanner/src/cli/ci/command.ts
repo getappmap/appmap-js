@@ -8,7 +8,7 @@ import { FindingStatusListItem } from '@appland/client/dist/src';
 import { parseConfigFile } from '../../configuration/configurationProvider';
 import { AbortError, ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
-import { verbose } from '../../rules/lib/util';
+import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
 import { newFindings } from '../../findings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
@@ -55,8 +55,8 @@ export default {
     return args.strict();
   },
   async handler(options: Arguments): Promise<void> {
+    let { appmapDir } = options as unknown as CommandOptions;
     const {
-      appmapDir,
       config,
       verbose: isVerbose,
       fail: failOption,
@@ -76,6 +76,10 @@ export default {
 
     try {
       if (!appmapDir) {
+        appmapDir = await appmapDirFromConfig();
+      }
+      if (!appmapDir) {
+        appmapDir = await appmapDirFromConfig();
         throw new ValidationError('--appmap-dir is required');
       }
 

@@ -6,13 +6,12 @@ import { Arguments, Argv } from 'yargs';
 import { parseConfigFile } from '../../configuration/configurationProvider';
 import { ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
-import { verbose } from '../../rules/lib/util';
+import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
 import { newFindings } from '../../findings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 
 import validateFile from '../validateFile';
-
 import CommandOptions from './options';
 import { default as buildScanner } from './scanner';
 import scanArgs from '../scanArgs';
@@ -27,7 +26,7 @@ export default {
     scanArgs(args);
 
     args.option('appmap-file', {
-      describe: 'single file to scan',
+      describe: 'single file to scan, or repeat this option to scan multiple specific files',
       alias: 'f',
     });
     args.option('ide', {
@@ -43,8 +42,8 @@ export default {
     return args.strict();
   },
   async handler(options: Arguments): Promise<void> {
+    let { appmapDir } = options as unknown as CommandOptions;
     const {
-      appmapDir,
       appmapFile,
       config,
       verbose: isVerbose,
@@ -67,6 +66,9 @@ export default {
       throw new ValidationError('Use --appmap-dir or --appmap-file, but not both');
     }
     if (!appmapFile && !appmapDir) {
+      appmapDir = await appmapDirFromConfig();
+    }
+    if (!appmapFile && !appmapDir) {
       throw new ValidationError('Either --appmap-dir or --appmap-file is required');
     }
 
@@ -82,8 +84,8 @@ export default {
       files = await glob(`${appmapDir}/**/*.appmap.json`);
     }
     if (appmapFile) {
-      await validateFile('file', appmapFile);
-      files = [appmapFile];
+      files = typeof appmapFile === 'string' ? [appmapFile] : appmapFile;
+      await Promise.all(files.map(async (file) => validateFile('file', file)));
     }
 
     const configData = await parseConfigFile(config);

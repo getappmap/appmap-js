@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { Argv } from 'yargs';
 
 export default function (args: Argv): void {
@@ -9,12 +8,12 @@ export default function (args: Argv): void {
   args.option('config', {
     describe:
       'path to assertions config file (TypeScript or YAML, check docs for configuration format)',
-    default: join(__dirname, '../sampleConfig/default.yml'),
+    default: 'appmap-scanner.yml',
     alias: 'c',
   });
   args.option('report-file', {
     describe: 'file name for findings report',
-    default: 'appland-findings.json',
+    default: 'appmap-findings.json',
   });
   args.option('api-key', {
     describe:
