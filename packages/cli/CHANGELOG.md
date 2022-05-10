@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.25.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.25.1...@appland/appmap-v3.25.2) (2022-05-10)
+
+
+### Bug Fixes
+
+* Safely handle code object with no classObject ([10cb8a7](https://github.com/applandinc/appmap-js/commit/10cb8a7c4de6760cc6a9ed43a0408586ebb23970))
+
 # [@appland/appmap-v3.25.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.25.0...@appland/appmap-v3.25.1) (2022-05-02)
 
 
