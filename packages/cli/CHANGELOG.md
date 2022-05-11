@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.25.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.25.2...@appland/appmap-v3.25.3) (2022-05-11)
+
+
+### Bug Fixes
+
+* await for locationString ([c8f7da7](https://github.com/applandinc/appmap-js/commit/c8f7da7d0daa5d64f1fac85c853c7e98b56e126c))
+* don't print progress to a non-tty stream ([b1b785f](https://github.com/applandinc/appmap-js/commit/b1b785f950fc0465ca3787c073447ede3db1c4f3))
+
 # [@appland/appmap-v3.25.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.25.1...@appland/appmap-v3.25.2) (2022-05-10)
 
 
