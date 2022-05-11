@@ -7,7 +7,7 @@ import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
 
 class Match {
-  constructor(public regexp: RegExp | string, public value: string) {}
+  constructor(public pattern: RegExp | string, public value: string) {}
 }
 
 const secrets: Set<string> = new Set();
@@ -41,7 +41,7 @@ const findInLog = (event: Event): MatchResult[] | undefined => {
   if (matches.length > 0) {
     return matches.map((match) => ({
       event,
-      message: `${match.value} contains secret ${match.regexp}`,
+      message: `Log event contains secret data: ${match.value}`,
     }));
   }
 };

@@ -14,9 +14,6 @@ tmp
 
 # Misc
 .tmp
-appland-findings.json
-findings.*.json
-findings.json
+appmap-findings.json
 sql_warning.txt
 *.code-workspace
-findings.json.*

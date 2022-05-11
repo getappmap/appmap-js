@@ -4,6 +4,8 @@ import { access } from 'fs/promises';
 import { ValidationError } from '../errors';
 
 export default async function (kind: string, path: string): Promise<void> {
+  if (path === '.') return;
+
   try {
     await access(path as PathLike, fsConstants.R_OK);
   } catch {

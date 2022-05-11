@@ -526,7 +526,7 @@ yargs(process.argv.slice(2))
         const cmd = new FingerprintWatchCommand(argv.appmapDir);
         await cmd.execute();
 
-        if (!argv.verbose) {
+        if (!argv.verbose && process.stdout.isTTY) {
           process.stdout.write('\x1B[?25l');
           const consoleLabel = 'AppMaps processed: 0';
           process.stdout.write(consoleLabel);
@@ -573,13 +573,11 @@ yargs(process.argv.slice(2))
     if (msg) {
       console.log(yargs.help());
       console.log(msg);
-    }
-    else if (err) {
+    } else if (err) {
       if (err.cause) {
         console.error(err.message);
         console.error(err.cause);
-      }
-      else {
+      } else {
         console.error(err);
       }
     }

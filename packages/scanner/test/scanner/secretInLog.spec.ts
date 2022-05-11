@@ -14,7 +14,7 @@ it('secret in log file', async () => {
     expect(finding.ruleId).toEqual('secret-in-log');
     expect(finding.event.id).toEqual(695);
     expect(finding.message).toEqual(
-      `[2f025606-b6f0-4b64-8595-006f32f4d5d0] Started GET "/account_activations/-6SputWUtvALn3TLCfoYvA/edit contains secret -6SputWUtvALn3TLCfoYvA`
+      `Log event contains secret data: [2f025606-b6f0-4b64-8595-006f32f4d5d0] Started GET "/account_activations/-6SputWUtvALn3TLCfoYvA/edit`
     );
   }
   {
@@ -36,7 +36,7 @@ it('parses out multiple secrets from function return value', async () => {
     expect(finding.ruleId).toEqual('secret-in-log');
     expect(finding.event.id).toEqual(221);
     expect(finding.message).toEqual(
-      `REQUESTING PAGE: GET /users/confirmation?confirmation_token=axzHC1xW-8DtxWrstsJd with {} and HTTP he (...9 more characters) contains secret axzHC1xW-8DtxWrstsJd`
+      `Log event contains secret data: REQUESTING PAGE: GET /users/confirmation?confirmation_token=axzHC1xW-8DtxWrstsJd with {} and HTTP he (...9 more characters)`
     );
   }
 });
