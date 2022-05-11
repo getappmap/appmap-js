@@ -1,13 +1,12 @@
-import { writeFile } from 'fs/promises';
 import * as chokidar from 'chokidar';
 
-import { ValidationError } from '../../errors';
 import Configuration from '../../configuration/types/configuration';
 
 import { formatReport } from './formatReport';
 import { default as buildScanner } from './scanner';
 import { exists } from 'fs';
 import { promisify } from 'util';
+import { writeFileAtomically } from '../../rules/lib/util';
 
 type WatchScanOptions = {
   appmapDir: string;
@@ -46,7 +45,7 @@ export class Watcher {
     const rawScanResults = await scanner.scan();
 
     // Always report the raw data
-    await writeFile(reportFile, formatReport(rawScanResults));
+    return writeFileAtomically(reportFile, formatReport(rawScanResults));
   }
 }
 

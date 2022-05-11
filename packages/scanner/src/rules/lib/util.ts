@@ -1,8 +1,10 @@
 import { Event, ReturnValueObject } from '@appland/models';
 import { exists } from 'fs';
-import { readFile } from 'fs/promises';
+import { move, mkdtemp, rm, rmdir } from 'fs-extra';
+import { readFile, rename, writeFile } from 'fs/promises';
 import { load } from 'js-yaml';
-import { isAbsolute } from 'path';
+import { tmpdir } from 'os';
+import { basename, isAbsolute, join } from 'path';
 import { promisify } from 'util';
 
 export async function appmapDirFromConfig(): Promise<string | undefined> {
@@ -12,6 +14,17 @@ export async function appmapDirFromConfig(): Promise<string | undefined> {
     if (appMapConfigData && typeof appMapConfigData === 'object') {
       return (appMapConfigData as any)['appmap_dir'] as string;
     }
+  }
+}
+
+export async function writeFileAtomically(fileName: string, data: any): Promise<void> {
+  const tmpDir = await mkdtemp(tmpdir() + '/');
+  const tempFileName = join(tmpDir, basename(fileName));
+  try {
+    await writeFile(tempFileName, data);
+    await rename(tempFileName, fileName);
+  } finally {
+    await rm(tmpDir, { recursive: true }).catch((err) => console.warn(err));
   }
 }
 

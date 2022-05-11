@@ -1,5 +1,4 @@
 import { promisify } from 'util';
-import { writeFile } from 'fs/promises';
 import { glob as globCallback } from 'glob';
 
 import validateFile from '../validateFile';
@@ -11,6 +10,7 @@ import { newFindings } from '../../findings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 import { formatReport } from './formatReport';
+import { writeFileAtomically } from '../../rules/lib/util';
 
 type SingleScanOptions = {
   appmapFile?: string | string[];
@@ -47,7 +47,7 @@ export default async function singleScan(options: SingleScanOptions): Promise<vo
   ]);
 
   // Always report the raw data
-  await writeFile(reportFile, formatReport(rawScanResults));
+  await writeFileAtomically(reportFile, formatReport(rawScanResults));
 
   let scanResults;
   if (reportAllFindings) {
