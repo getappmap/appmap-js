@@ -20,12 +20,15 @@ function build(options: Options): RuleLogic {
   }
 
   function matcher(e: Event): MatchResult[] | undefined {
+    const parent = e.parent;
+    if (!parent) return;
+
     const packageNamesStr = options.callerPackages
       .map((config) => config.equal || config.include || config.match)
       .map(String)
       .join(' or ');
 
-    const parentPackage = e.parent!.codeObject.packageOf;
+    const parentPackage = parent.codeObject.packageOf;
     if (
       !(
         e.codeObject.packageOf === parentPackage ||
@@ -36,7 +39,7 @@ function build(options: Options): RuleLogic {
         {
           event: e,
           message: `Code object ${e.codeObject.id} was invoked from ${parentPackage}, not from ${packageNamesStr}`,
-          relatedEvents: [e.parent!],
+          participatingEvents: { parent },
         },
       ];
     }
