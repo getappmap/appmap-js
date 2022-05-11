@@ -52,7 +52,6 @@ const findInLog = (event: Event): MatchResult[] | undefined => {
   if (matches.length > 0) {
     return matches.map((match) => {
       const { pattern, value } = match;
-      const relatedEvents: Event[] = match.generatorEvent ? [match.generatorEvent] : [];
       const participatingEvents: Record<string, Event> = { logEvent: event };
       if (match.generatorEvent) {
         participatingEvents.generatorEvent = match.generatorEvent;
@@ -76,7 +75,6 @@ const findInLog = (event: Event): MatchResult[] | undefined => {
           match.generatorEvent ? match.generatorEvent.codeObject.prettyName || 'data' : 'data'
         } "${pattern}": ${value}`,
         description,
-        relatedEvents,
         participatingEvents,
         volatileData,
       };
