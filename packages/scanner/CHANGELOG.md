@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.56.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.55.0...@appland/scanner-v1.56.0) (2022-05-11)
+
+
+### Features
+
+* Add --watch flag to scan command ([51cb6fc](https://github.com/applandinc/appmap-js/commit/51cb6fc168e1b416587077e26c09d4e54dc9565b))
+
 # [@appland/scanner-v1.55.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.54.1...@appland/scanner-v1.55.0) (2022-05-10)
 
 
