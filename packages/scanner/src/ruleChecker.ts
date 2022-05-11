@@ -133,7 +133,8 @@ export default class RuleChecker {
       description?: string,
       groupMessage?: string,
       occurranceCount?: number,
-      // matchEvent will be added to additionalEvents to create the relatedEvents array
+      // matchEvent will be added to additionalEvents and participatingEvents.values
+      // to create the relatedEvents array
       additionalEvents?: Event[]
     ): Finding => {
       const findingEvent = matchEvent || event;
@@ -150,21 +151,21 @@ export default class RuleChecker {
 
       const uniqueEvents = new Set<number>();
       const relatedEvents: Array<Event> = [];
-      [findingEvent].concat((additionalEvents || []).map(cloneEvent)).forEach((event) => {
+
+      function addRelatedEvent(event: Event): void {
         if (uniqueEvents.has(event.id)) {
           return;
         }
         uniqueEvents.add(event.id);
-        relatedEvents.push(event);
-      });
+        relatedEvents.push(cloneEvent(event));
+      }
 
-      participatingEvents = Object.fromEntries(
-        Object.entries(participatingEvents).map(([k, v]) => [k, cloneEvent(v)])
-      );
-      participatingEvents.scope = cloneEvent(scope);
-      participatingEvents.event = cloneEvent(event);
+      addRelatedEvent(findingEvent);
+      (additionalEvents || []).forEach(addRelatedEvent);
 
-      // Update event hash with unique hashes of related events
+      // Update event hash with unique hashes of related events.
+      // Preserve the finding hash for now, by not including participatingEvents values.
+      // This maintains backwards compatibility while we rethink the hash algorithm.
       const hashV1 = createHash('sha256');
       {
         hashV1.update(findingEvent.hash);
@@ -173,6 +174,9 @@ export default class RuleChecker {
           hashV1.update(eventHash);
         });
       }
+
+      Object.values(participatingEvents).forEach(addRelatedEvent);
+
       return {
         appMapFile,
         checkId: checkInstance.checkId,
@@ -188,7 +192,9 @@ export default class RuleChecker {
         relatedEvents: relatedEvents.sort((event) => event.id),
         impactDomain: checkInstance.checkImpactDomain,
         description,
-        participatingEvents,
+        participatingEvents: Object.fromEntries(
+          Object.entries(participatingEvents).map(([k, v]) => [k, cloneEvent(v)])
+        ),
         volatileData,
       } as Finding;
     };
