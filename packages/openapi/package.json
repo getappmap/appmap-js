@@ -1,0 +1,36 @@
+{
+  "name": "@appland/openapi",
+  "description": "Shared code for OpenAPI support in AppLand products",
+  "version": "0.0.1",
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/jest": "^27.4.1",
+    "@types/js-yaml": "^4.0.5",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
+    "eslint": "^8.4.1",
+    "jest": "^27.4.7",
+    "openapi-types": "^10.0.0",
+    "ts-jest": "^27.1.4",
+    "typescript": "^4.4.2"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applandinc/appmap-js.git",
+    "directory": "packages/openapi"
+  }
+}

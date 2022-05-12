@@ -1,12 +1,12 @@
 import { load, YAMLException } from 'js-yaml';
 import { readFileSync } from 'fs';
-import Response from '../../../src/openapi/response';
+import Response from '../src/response';
 import { Event } from '@appland/models';
-import { rpcRequestForEvent } from '../../../src/openapi/rpcRequest';
+import { rpcRequestForEvent } from '../src/rpcRequest';
 
 const fixtureData = load(
   readFileSync(
-    'tests/fixtures/appmap_fragments/http_server_response_with_object_list.yaml'
+    'test/data/http_server_response_with_object_list.yaml'
   ).toString()
 ) as any;
 

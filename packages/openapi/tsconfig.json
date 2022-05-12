@@ -1,0 +1,9 @@
+{
+  "extends": "@tsconfig/recommended/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "types": ["node", "jest"],
+    "declaration": true
+  },
+  "include": ["src", "test"]
+}

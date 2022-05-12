@@ -1,33 +1,37 @@
 import { readFile } from 'fs/promises';
 
-import { messageToOpenAPISchema } from '../../src/openapi/util';
-import Model from '../../src/openapi/model';
-import SecuritySchemes from '../../src/openapi/securitySchemes';
+import { messageToOpenAPISchema } from '../src/util';
+import Model from '../src/model';
+import SecuritySchemes from '../src/securitySchemes';
 import { buildAppMap } from '@appland/models';
-import { rpcRequestForEvent } from '../../src/openapi/rpcRequest';
+import { rpcRequestForEvent } from '../src/rpcRequest';
+import { OpenAPIV3 } from 'openapi-types';
 
-const message = (c) => ({ message: { class: c } });
-const expected = (t, i?) => {
+type ClassName = string;
+type SchemaObjectType = OpenAPIV3.ArraySchemaObjectType | OpenAPIV3.NonArraySchemaObjectType;
+
+const message = (c: ClassName) => ({ message: { class: c } });
+const expected = (t?: SchemaObjectType, i?: SchemaObjectType) => {
   if (!t) return { expected: undefined };
 
-  const r = { expected: { type: t } };
+  const r: any = { expected: { type: t } };
   if (i) {
     r.expected['items'] = { type: i };
   }
   return r;
 };
 
-const mapping = (c, t, i?) => ({
+const mapping = (c: ClassName, t?: SchemaObjectType, i?: SchemaObjectType) => ({
   ...message(c),
   ...expected(t, i),
 });
 
-const multi = (classes, t) => {
+const multi = (classes: ClassName[], t: SchemaObjectType) => {
   return classes.map((c) => ({ ...message(c), ...expected(t) }));
 };
 
-const mappingExamples = (mappings) => {
-  mappings.forEach((m) => {
+const mappingExamples = (mappings: any) => {
+  mappings.forEach((m: any) => {
     it(`maps from ${m.message.class} to ${m.expected?.type}`, () => {
       const actual = messageToOpenAPISchema(m.message);
       expect(actual).toStrictEqual(m.expected);
@@ -40,7 +44,7 @@ describe('openapi', () => {
     const appmapData = JSON.parse(
       (
         await readFile(
-          'tests/fixtures/appmaps/Users_signup_invalid_signup_information.appmap.json'
+          'test/data/Users_signup_invalid_signup_information.appmap.json'
         )
       ).toString()
     );

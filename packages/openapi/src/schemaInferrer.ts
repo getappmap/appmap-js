@@ -8,7 +8,7 @@ function mergeProperties(a: any, b: any): any {
 
   return Object.keys(a)
     .concat(Object.keys(b))
-    .reduce((memo, key) => {
+    .reduce<any>((memo, key) => {
       memo[key] = mergeType(a[key] || {}, b[key] || {});
       return memo;
     }, {});

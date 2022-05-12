@@ -80,6 +80,7 @@ __metadata:
     "@appland/components": "workspace:*"
     "@appland/diagrams": "workspace:*"
     "@appland/models": "workspace:^1.14.1"
+    "@appland/openapi": "workspace:packages/openapi"
     "@sidvind/better-ajv-errors": ^0.9.1
     "@types/fs-extra": ^9.0.12
     "@types/inquirer": ^7.3.3
@@ -124,7 +125,6 @@ __metadata:
     lint-staged: ^10.5.4
     moo: ^0.5.1
     open: ^8.2.1
-    openapi-types: ^10.0.0
     ora: ^5.4.1
     port-pid: ^0.0.7
     prettier: ^2.2.1
@@ -294,6 +294,24 @@ __metadata:
     lint-staged: ^10.5.4
     prettier: ^2.2.1
     rollup: ^2.48.0
+  languageName: unknown
+  linkType: soft
+
+"@appland/openapi@workspace:packages/openapi":
+  version: 0.0.0-use.local
+  resolution: "@appland/openapi@workspace:packages/openapi"
+  dependencies:
+    "@tsconfig/recommended": ^1.0.1
+    "@types/jest": ^27.4.1
+    "@types/js-yaml": ^4.0.5
+    "@typescript-eslint/eslint-plugin": ^5.7.0
+    "@typescript-eslint/parser": ^5.7.0
+    eslint: ^8.4.1
+    jest: ^27.4.7
+    js-yaml: ^4.1.0
+    openapi-types: ^10.0.0
+    ts-jest: ^27.1.4
+    typescript: ^4.4.2
   languageName: unknown
   linkType: soft
 
@@ -5396,6 +5414,13 @@ __metadata:
   version: 1.0.2
   resolution: "@tsconfig/node16@npm:1.0.2"
   checksum: ca94d3639714672bbfd55f03521d3f56bb6a25479bd425da81faf21f13e1e9d15f40f97377dedbbf477a5841c5b0c8f4cd1b391f33553d750b9202c54c2c07aa
+  languageName: node
+  linkType: hard
+
+"@tsconfig/recommended@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@tsconfig/recommended@npm:1.0.1"
+  checksum: 5f781e6a26277ee86dd0f1d575d18133627908ddf7c78acdcab0e40d0b7f21f4e1462eb8f98b74cda1d05d15fb3629ceea4c622ee031d62e31e7a99281c49294
   languageName: node
   linkType: hard
 
@@ -25767,6 +25792,8 @@ resolve@1.1.7:
     "@semantic-release/git": ^9.0.0
     "@semantic-release/github": ^7.2.3
     "@semantic-release/release-notes-generator": ^9.0.2
+    "@types/jest": ^27.4.1
+    "@types/node": ^17.0.2
     "@vue/cli-plugin-eslint": ~4.5.0
     eslint: ^7.25.0
     eslint-config-airbnb-base: ^14.2.1

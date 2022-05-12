@@ -1,6 +1,5 @@
 import { ParameterProperty, ValueBase } from '@appland/models';
 import { OpenAPIV3 } from 'openapi-types';
-import { verbose } from '../utils';
 
 const unrecognizedTypes = new Set();
 
@@ -32,7 +31,7 @@ function parseScheme(authorization: string): Scheme {
   };
 }
 
-function classNameToOpenAPIType(className) {
+function classNameToOpenAPIType(className?: string) {
   if (!className || className === '') {
     return 'unknown';
   }
@@ -146,6 +145,14 @@ function ensureString(value: any): string {
     return value.join('');
   }
   return value.toString();
+}
+
+let isVerbose = false;
+export function verbose(v?: boolean) {
+  if (v !== undefined) {
+    isVerbose = v;
+  }
+  return isVerbose;
 }
 
 export { ensureString, messageToOpenAPISchema, parseScheme };

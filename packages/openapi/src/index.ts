@@ -5,6 +5,8 @@ import { rpcRequestForEvent } from './rpcRequest';
 import { Event } from '@appland/models';
 import { OpenAPIV3 } from 'openapi-types';
 import { URL } from 'url';
+export { default as parseHTTPServerRequests } from './parseHTTPServerRequests';
+export { verbose } from './util';
 
 interface OpenAPIV3Fragment {
   paths: OpenAPIV3.PathItemObject;
@@ -32,4 +34,4 @@ const forURL = async (
   return provider(new URL(url).host, openapiSchemata);
 };
 
-export { forClientRequest, forURL };
+export { Model, forClientRequest, forURL, rpcRequestForEvent, SecuritySchemes };
