@@ -3,17 +3,17 @@ import { OpenAPIV3 } from 'openapi-types';
 import SchemaInferrer from './schemaInferrer';
 
 export default class ObjectSchema {
-  examples: ParameterObject[];
+  examples: Required<ParameterObject>[];
 
   constructor() {
     this.examples = [];
   }
 
   addExample(message: ParameterObject): void {
-    if (!message.name) {
-      return;
+    const hasName = (p: ParameterObject): p is Required<ParameterObject> => !!p.name;
+    if (hasName(message)) {
+      this.examples.push(message);
     }
-    this.examples.push(message);
   }
 
   get empty(): boolean {
@@ -24,12 +24,12 @@ export default class ObjectSchema {
     const schemata: Record<string, SchemaInferrer> = {};
     this.examples
       .filter((message) => message.name)
-      .sort((a, b) => a.name!.localeCompare(b.name!))
+      .sort((a, b) => a.name.localeCompare(b.name))
       .forEach((message) => {
-        if (!schemata[message.name!]) {
-          schemata[message.name!] = new SchemaInferrer();
+        if (!schemata[message.name]) {
+          schemata[message.name] = new SchemaInferrer();
         }
-        schemata[message.name!].addExample(message);
+        schemata[message.name].addExample(message);
       });
     if (Object.keys(schemata).length === 0) {
       return;

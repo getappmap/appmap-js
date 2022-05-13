@@ -7,14 +7,14 @@ import { readFile } from 'fs/promises';
 
 type Loader = (url: URL) => Promise<Buffer>;
 
-const URLLoader = (protocol: any) => {
+const URLLoader = (protocol: Pick<typeof http, 'get'>) => {
   return (url: URL): Promise<Buffer> => {
     return new Promise((resolve, reject) => {
       protocol
         .get(url)
         .on('response', (response: IncomingMessage) => {
           if (response.statusCode !== 200) {
-            return reject(`${response.statusCode} ${response.statusMessage}`);
+            return reject(`${response.statusCode || ''} ${response.statusMessage || ''}`);
           }
 
           const data: Buffer[] = [];

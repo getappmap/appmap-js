@@ -2,49 +2,43 @@ import { ValueBase } from '@appland/models';
 import { OpenAPIV3 } from 'openapi-types';
 import { messageToOpenAPISchema } from './util';
 
-function mergeProperties(a: any, b: any): any {
-  a ||= {};
-  b ||= {};
+type Properties = { [name: string]: OpenAPIV3.SchemaObject };
 
-  return Object.keys(a)
-    .concat(Object.keys(b))
-    .reduce<any>((memo, key) => {
-      memo[key] = mergeType(a[key] || {}, b[key] || {});
-      return memo;
-    }, {});
-}
+function mergeProperties(props1?: Properties, props2?: Properties): Properties {
+  const a = props1 || {};
+  const b = props2 || {};
 
-// Merge type, items and properties of schema objects.
-function mergeType(
-  a: any,
-  b?: any
-): OpenAPIV3.ArraySchemaObject | OpenAPIV3.NonArraySchemaObject {
-  if (b === null || b === undefined) return a;
-
-  const result = Object.assign({}, a);
-  if (!a.type) {
-    result.type = b.type;
-  } else if (b.type === 'array') {
-    result.type = 'array';
-  } else if (b.type === 'object') {
-    result.type = 'object';
-  }
-
-  if (a.items || b.items) {
-    result.items = mergeType(a.items || {}, b.items);
-    if (a.items?.properties || b.items?.properties) {
-      result.items.properties = mergeProperties(
-        a.items?.properties,
-        b.items?.properties
-      );
-    }
-  } else {
-    if (a.properties || b.properties) {
-      result.properties = mergeProperties(a.properties, b.properties);
-    }
+  const result: Properties = {};
+  const props = new Set([...Object.keys(a), ...Object.keys(b)]);
+  for (const key of props) {
+    const merged = mergeType(a[key], b[key]);
+    if (merged) result[key] = merged;
   }
 
   return result;
+}
+
+
+// Merge type, items and properties of schema objects.
+function mergeType(
+  a?: OpenAPIV3.SchemaObject,
+  b?: OpenAPIV3.SchemaObject
+): OpenAPIV3.SchemaObject | undefined {
+  if (!b || !a) return a;
+  if (b.type !== a.type) return a;
+
+  if (a.type === 'array' && b.type === 'array') {
+    if ('type' in a.items && 'type' in b.items) {
+      const merged = mergeType(a.items, b.items);
+      if (merged) return { ...a, items: merged };
+    }
+  }
+
+  if ('properties' in a && 'properties' in b) {
+    return { ...a, properties: mergeProperties(a.properties as Properties, b.properties as Properties) };
+  }
+
+  return a;
 }
 
 export default class SchemaInferrer {
@@ -55,12 +49,10 @@ export default class SchemaInferrer {
   }
 
   openapi(): OpenAPIV3.SchemaObject | undefined {
-    if (this.examples.length === 0) return;
+    const schemas = this.examples.map(messageToOpenAPISchema).filter(Boolean);
+    if (schemas.length === 0) return;
 
-    return this.examples.reduce((memo, example) => {
-      const schema = messageToOpenAPISchema(example);
-      return mergeType(memo, schema);
-    }, {} as any);
+    return schemas.reduce(mergeType);
   }
 
   addExample(value: ValueBase): void {

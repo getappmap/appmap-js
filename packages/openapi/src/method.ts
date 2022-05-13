@@ -49,7 +49,7 @@ export default class Method {
 
       let schema: ObjectSchema | undefined;
       if (rpcRequest.requestContentType) {
-        const mimeType = rpcRequest.requestContentType!.split(';')[0];
+        const mimeType = rpcRequest.requestContentType.split(';')[0];
         if (!schemata[mimeType]) {
           schemata[mimeType] = new ObjectSchema();
         }
@@ -74,10 +74,12 @@ export default class Method {
             schema.addExample(message);
           }
         } else {
+          const schema = messageToOpenAPISchema(message);
+          if (!schema) return;
           const parameter = {
             name: message.name,
             in: inLocation,
-            schema: messageToOpenAPISchema(message),
+            schema,
           } as OpenAPIV3.ParameterObject;
           if (parameter.in === 'path') {
             parameter.required = true;

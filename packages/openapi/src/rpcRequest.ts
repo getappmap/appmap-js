@@ -9,17 +9,20 @@ export interface RPCRequest {
   returnValue?: ReturnValueObject;
   requestHeaders: Record<string, string>;
   responseHeaders: Record<string, string>;
-  requestContentType: string;
-  responseContentType: string;
+  requestContentType?: string;
+  responseContentType?: string;
   requestMethod: OpenAPIV3.HttpMethods;
   requestPath: string;
 }
 
+type ServerRpcEvent = Event & Required<Pick<Event, 'httpServerRequest' | 'httpServerResponse'>>;
+type ClientRpcEvent = Event & Required<Pick<Event, 'httpClientRequest' | 'httpClientResponse'>>;
+
 class ServerRPCRequest implements RPCRequest {
-  constructor(private event: Event) {}
+  constructor(private event: ServerRpcEvent) { }
 
   get status() {
-    return this.event.httpServerResponse!.status;
+    return this.event.httpServerResponse.status;
   }
 
   get parameters() {
@@ -39,11 +42,11 @@ class ServerRPCRequest implements RPCRequest {
   }
 
   get requestContentType() {
-    return this.event.requestContentType!;
+    return this.event.requestContentType;
   }
 
   get responseContentType() {
-    return this.event.responseContentType!;
+    return this.event.responseContentType;
   }
 
   get requestMethod() {
@@ -52,17 +55,17 @@ class ServerRPCRequest implements RPCRequest {
 
   get requestPath() {
     return ensureString(
-      this.event.httpServerRequest!.normalized_path_info ||
-        this.event.httpServerRequest!.path_info
+      this.event.httpServerRequest.normalized_path_info ||
+        this.event.httpServerRequest.path_info
     );
   }
 }
 
 class ClientRPCRequest implements RPCRequest {
-  constructor(private event: Event) {}
+  constructor(private event: ClientRpcEvent) {}
 
   get status() {
-    return this.event.httpClientResponse!.status;
+    return this.event.httpClientResponse.status;
   }
 
   get parameters() {
@@ -82,11 +85,11 @@ class ClientRPCRequest implements RPCRequest {
   }
 
   get requestContentType() {
-    return this.event.requestContentType!;
+    return this.event.requestContentType;
   }
 
   get responseContentType() {
-    return this.event.responseContentType!;
+    return this.event.responseContentType;
   }
 
   get requestMethod() {
@@ -95,14 +98,19 @@ class ClientRPCRequest implements RPCRequest {
 
   get requestPath() {
     // TODO: Back-substitute query parameters into the URL.
-    return new URL(this.event.httpClientRequest!.url).pathname;
+    return new URL(this.event.httpClientRequest.url).pathname;
   }
 }
 
+function isServerEvent(event: Event): event is ServerRpcEvent {
+  return !!event.httpServerRequest && !!event.httpServerResponse;
+}
+
+function isClientEvent(event: Event): event is ClientRpcEvent {
+  return !!event.httpClientRequest && !!event.httpClientResponse;
+}
+
 export function rpcRequestForEvent(event: Event): RPCRequest | undefined {
-  if (event.httpServerRequest && event.httpServerResponse) {
-    return new ServerRPCRequest(event);
-  } else if (event.httpClientRequest && event.httpClientResponse) {
-    return new ClientRPCRequest(event);
-  }
+  if (isServerEvent(event)) return new ServerRPCRequest(event);
+  if (isClientEvent(event)) return new ClientRPCRequest(event);
 }

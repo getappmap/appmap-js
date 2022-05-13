@@ -31,12 +31,13 @@ function parseScheme(authorization: string): Scheme {
   };
 }
 
-function classNameToOpenAPIType(className?: string) {
-  if (!className || className === '') {
-    return 'unknown';
-  }
+type OptSchemaObjectType = OpenAPIV3.SchemaObject['type'];
+type OptObjectTypeOrUnknown = OptSchemaObjectType | 'unknown';
 
-  const mapRubyType = (t: string): string | undefined => {
+function classNameToOpenAPIType(className?: string): OptSchemaObjectType {
+  if (!className || className === '') return;
+
+  const mapRubyType = (t: string): OptObjectTypeOrUnknown => {
     switch (t) {
       case 'array':
       case 'sequel::postgres::pgarray':
@@ -60,7 +61,7 @@ function classNameToOpenAPIType(className?: string) {
     }
   };
 
-  const mapPythonType = (t: string): string | undefined => {
+  const mapPythonType = (t: string): OptSchemaObjectType => {
     if (!t.startsWith('builtins.')) {
       return;
     }
@@ -79,14 +80,14 @@ function classNameToOpenAPIType(className?: string) {
     }
   };
 
-  const mapJavaType = (t: string): string | undefined => {
+  const mapJavaType = (t: string): OptSchemaObjectType => {
     switch (t) {
       case 'java.lang.string':
         return 'string';
     }
   };
 
-  const mapper = (t: string): string | undefined =>
+  const mapper = (t: string): OptObjectTypeOrUnknown =>
     mapRubyType(t) || mapPythonType(t) || mapJavaType(t);
   const mapped = mapper(className.toLowerCase());
   if (!mapped && !unrecognizedTypes.has(className)) {
@@ -98,14 +99,14 @@ function classNameToOpenAPIType(className?: string) {
     unrecognizedTypes.add(className);
     return 'object';
   }
+  if (mapped === 'unknown') return;
   return mapped;
 }
 
-function messageToOpenAPISchema(message: ValueBase): any {
+function messageToOpenAPISchema(message: ValueBase): OpenAPIV3.SchemaObject | undefined {
   const type = classNameToOpenAPIType(message.class);
-  if (type === 'unknown') return;
+  if (type === undefined) return;
 
-  const result = { type } as any;
   if (message.properties) {
     const properties = message.properties.reduce(
       (memo, msgProperty: ParameterProperty) => {
@@ -113,7 +114,7 @@ function messageToOpenAPISchema(message: ValueBase): any {
         if (type === 'array') {
           // eslint-disable-next-line no-param-reassign
           memo[msgProperty.name] = { type } as OpenAPIV3.ArraySchemaObject;
-        } else if (type !== 'unknown') {
+        } else if (type) {
           // eslint-disable-next-line no-param-reassign
           memo[msgProperty.name] = {
             type,
@@ -127,20 +128,20 @@ function messageToOpenAPISchema(message: ValueBase): any {
       >
     );
     if (type === 'array') {
-      result.items = { type: 'object', properties };
+      return { type: 'array', items: { type: 'object', properties } };
     } else {
-      result.properties = properties;
+      return { type: 'object', properties };
     }
   } else {
     if (type === 'array') {
-      result.items = { type: 'string' };
+      return { type: 'array', items: { type: 'string' } };
     }
   }
 
-  return result;
+  return { type };
 }
 
-function ensureString(value: any): string {
+function ensureString(value: Array<string> | string): string {
   if (Array.isArray(value)) {
     return value.join('');
   }

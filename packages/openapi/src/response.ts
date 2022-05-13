@@ -1,7 +1,6 @@
 import StatusCodes from './statusCodes';
 import { OpenAPIV3 } from 'openapi-types';
 import { RPCRequest } from './rpcRequest';
-import { messageToOpenAPISchema } from './util';
 import SchemaInferrer from './schemaInferrer';
 
 export default class Response {
@@ -14,8 +13,8 @@ export default class Response {
     const contentTypes = () => {
       return this.rpcRequests
         .map((rpcRequest) => rpcRequest.responseContentType)
-        .filter((ct) => ct)
-        .map((ct) => ct!.split(';')[0]);
+        .filter((ct): ct is string => !!ct)
+        .map((ct) => ct.split(';')[0]);
     };
 
     const schemata: Record<string, SchemaInferrer> = {};

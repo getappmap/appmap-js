@@ -1,8 +1,7 @@
 import { buildAppMap, Event } from '@appland/models';
-import { rpcRequestForEvent } from './rpcRequest';
 
 export default function parseHTTPServerRequests(
-  source: any,
+  source: string | Record<string, unknown>,
   collector: (event: Event) => void
 ) {
   const appmap = buildAppMap().source(source).normalize().build();
