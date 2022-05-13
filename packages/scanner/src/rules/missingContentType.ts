@@ -1,5 +1,5 @@
 import { Event } from '@appland/models';
-import { Rule, RuleLogic } from 'src/types';
+import { Rule, RuleLogic } from '../types';
 import { rpcRequestForEvent } from '../openapi/rpcRequest';
 import parseRuleDescription from './lib/parseRuleDescription';
 

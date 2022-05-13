@@ -1,5 +1,5 @@
 import { Event } from '@appland/models';
-import { Scope } from 'src/types';
+import { Scope } from '../types';
 
 export default abstract class ScopeIterator {
   abstract scopes(events: Iterable<Event>): Generator<Scope>;

@@ -1,4 +1,4 @@
-import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
+import MatchPatternConfig from '../../configuration/types/matchPatternConfig';
 import { StringFilter } from '../../types';
 
 export function buildFilter(pattern: MatchPatternConfig): StringFilter {

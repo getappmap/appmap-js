@@ -1,5 +1,5 @@
 import { Event } from '@appland/models';
-import { Scope } from 'src/types';
+import { Scope } from '../types';
 import ScopeImpl from './scopeImpl';
 import ScopeIterator from './scopeIterator';
 

@@ -1,6 +1,6 @@
 import { Event, Label } from '@appland/models';
 import * as types from './types';
-import { Rule, RuleLogic } from 'src/types';
+import { Rule, RuleLogic } from '../types';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
 

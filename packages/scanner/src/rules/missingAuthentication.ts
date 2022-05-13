@@ -3,7 +3,7 @@ import { rpcRequestForEvent } from '../openapi/rpcRequest';
 import * as types from './types';
 import { MatchResult, Rule, RuleLogic, StringFilter } from '../types';
 import { providesAuthentication } from './lib/util';
-import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
+import MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';

@@ -8,7 +8,7 @@
     "doc"
   ],
   "scripts": {
-    "build": "mkdir -p built && cp -r src/sampleConfig built && tsc && yarn schema && yarn doc",
+    "build": "mkdir -p built && cp -r src/sampleConfig built && tsc -p tsconfig.build.json && yarn schema && yarn doc",
     "build-native": "yarn build && ./bin/build-native",
     "start": "ts-node src/cli.ts",
     "doc": "ts-node ./bin/verify-rules-doc.ts && ts-node ./bin/verify-labels-doc.ts && ts-node ./bin/front-matter.ts",

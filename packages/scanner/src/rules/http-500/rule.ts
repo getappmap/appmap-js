@@ -1,5 +1,5 @@
 import { Event } from '@appland/models';
-import { RuleLogic } from 'src/types';
+import { RuleLogic } from '../../types';
 
 export default function rule(): RuleLogic {
   return {

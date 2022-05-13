@@ -1,7 +1,7 @@
 import { Metadata } from '@appland/models';
-import Check from 'src/check';
-import Configuration from 'src/configuration/types/configuration';
-import { Finding } from 'src/types';
+import Check from '../check';
+import Configuration from '../configuration/types/configuration';
+import { Finding } from '../types';
 import { AppMapMetadata, ScanSummary } from './scanSummary';
 
 function collectMetadata(metadata: Metadata[]): AppMapMetadata {
