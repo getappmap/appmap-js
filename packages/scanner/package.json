@@ -12,7 +12,7 @@
     "build-native": "yarn build && ./bin/build-native",
     "start": "ts-node src/cli.ts",
     "doc": "ts-node ./bin/verify-rules-doc.ts && ts-node ./bin/verify-labels-doc.ts && ts-node ./bin/front-matter.ts",
-    "schema": "./bin/schema",
+    "schema": "ts-node ./bin/schema.ts",
     "schema-up-to-date": "git diff --exit-code src/configuration/schema/options.json",
     "doc-up-to-date": "git diff --exit-code doc/",
     "lint": "eslint src --ext .ts",
