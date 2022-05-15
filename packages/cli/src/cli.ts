@@ -24,13 +24,14 @@ const FindCodeObjects = require('./search/findCodeObjects');
 const FindEvents = require('./search/findEvents');
 const FunctionStats = require('./functionStats');
 const Inspect = require('./inspect');
-const OpenAPICommand = require('./openapi/command');
+import * as OpenAPICommand from './cmds/openapi';
 const InventoryCommand = require('./inventoryCommand');
 const OpenCommand = require('./cmds/open/open');
 const RecordCommand = require('./cmds/record/record');
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
 import PruneCommand from './cmds/prune/prune';
+
 class DiffCommand {
   public appMapNames: any;
   public baseDir?: string;

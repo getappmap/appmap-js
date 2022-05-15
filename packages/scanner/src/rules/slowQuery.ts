@@ -1,4 +1,4 @@
-import { Rule, RuleLogic } from 'src/types';
+import { Rule, RuleLogic } from '../types';
 import * as types from './types';
 import parseRuleDescription from './lib/parseRuleDescription';
 

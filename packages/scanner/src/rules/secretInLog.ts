@@ -1,5 +1,5 @@
 import { Event } from '@appland/models';
-import { MatchResult, Rule, RuleLogic } from 'src/types';
+import { MatchResult, Rule, RuleLogic } from '../types';
 import SecretsRegexes, { looksSecret } from '../analyzer/secretsRegexes';
 import { emptyValue } from './lib/util';
 import recordSecrets from '../analyzer/recordSecrets';

@@ -1,7 +1,7 @@
 import { Event, EventNavigator } from '@appland/models';
 import * as types from './types';
 import { RPCWithoutProtectionOptions, rpcWithoutProtection } from './lib/rpcWithoutProtection';
-import { Rule, RuleLogic } from 'src/types';
+import { Rule, RuleLogic } from '../types';
 import parseRuleDescription from './lib/parseRuleDescription';
 
 class Options implements RPCWithoutProtectionOptions, types.RPCWithoutCircuitBreaker.Options {

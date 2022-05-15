@@ -1,5 +1,5 @@
 import { Event, EventNavigator } from '@appland/models';
-import { MatchResult, Rule, RuleLogic } from 'src/types';
+import { MatchResult, Rule, RuleLogic } from '../types';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
 

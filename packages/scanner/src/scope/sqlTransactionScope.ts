@@ -3,7 +3,7 @@ import type { SqliteParser } from 'sqlite-parser';
 import type { Event } from '@appland/models';
 
 import ScopeIterator from './scopeIterator';
-import type { Scope } from 'src/types';
+import type { Scope } from '../types';
 
 function isBegin(ast: SqliteParser.Statement): boolean {
   switch (ast.variant) {

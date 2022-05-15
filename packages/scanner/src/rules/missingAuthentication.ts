@@ -1,9 +1,9 @@
 import { Event, EventNavigator } from '@appland/models';
-import { rpcRequestForEvent } from '../openapi/rpcRequest';
+import { rpcRequestForEvent } from '@appland/openapi';
 import * as types from './types';
 import { MatchResult, Rule, RuleLogic, StringFilter } from '../types';
 import { providesAuthentication } from './lib/util';
-import MatchPatternConfig from 'src/configuration/types/matchPatternConfig';
+import MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
@@ -33,9 +33,12 @@ function build(options: Options = new Options()): RuleLogic {
   const includeContentTypes = buildFilters(options.includeContentTypes);
   const excludeContentTypes = buildFilters(options.excludeContentTypes);
 
-  function testContentType(contentType: string): boolean {
+  function testContentType(contentType?: string): boolean {
+    if (!contentType) return false;
+    const content = contentType;
+
     function test(filter: StringFilter): boolean {
-      return filter(contentType);
+      return filter(content);
     }
 
     return (
@@ -61,8 +64,8 @@ function build(options: Options = new Options()): RuleLogic {
       e.httpServerResponse !== undefined &&
       e.httpServerResponse.status < 300 &&
       !!rpcRequestForEvent(e) &&
-      !!rpcRequestForEvent(e)!.contentType &&
-      testContentType(rpcRequestForEvent(e)!.contentType)
+      !!rpcRequestForEvent(e)!.responseContentType &&
+      testContentType(rpcRequestForEvent(e)!.responseContentType)
     );
   }
   return {

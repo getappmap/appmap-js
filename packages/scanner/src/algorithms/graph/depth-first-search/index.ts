@@ -1,5 +1,5 @@
-import Graph from 'src/algorithms/dataStructures/graph/Graph';
-import GraphVertex from 'src/algorithms/dataStructures/graph/GraphVertex';
+import Graph from '../../dataStructures/graph/Graph';
+import GraphVertex from '../../dataStructures/graph/GraphVertex';
 
 /**
  * @param {Callbacks} [callbacks]
