@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.56.1](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.56.0...@appland/scanner-v1.56.1) (2022-05-16)
+
+
+### Bug Fixes
+
+* Have scanner prune AppMaps before uploading ([1de9f55](https://github.com/applandinc/appmap-js/commit/1de9f55fa25668a8bfe95def458bf8d5aa7dbae3))
+
 # [@appland/scanner-v1.56.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.55.0...@appland/scanner-v1.56.0) (2022-05-11)
 
 
