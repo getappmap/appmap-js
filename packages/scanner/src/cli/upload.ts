@@ -1,7 +1,7 @@
 import { queue } from 'async';
 import { readFile } from 'fs/promises';
 
-import { AppMap as AppMapStruct } from '@appland/models';
+import { AppMap as AppMapStruct, Metadata } from '@appland/models';
 
 import { verbose } from '../rules/lib/util';
 import { ScanResults } from '../report/scanResults';
@@ -22,6 +22,7 @@ import { RetryOptions } from '../integration/appland/retryOptions';
 import { branch as branchFromEnv, sha as commitFromEnv } from '../integration/vars';
 import { stat } from 'fs/promises';
 import { join } from 'path';
+import { maxAppMapSize, pruneAppMap } from './upload/pruneAppMap';
 
 async function fileExists(file: string): Promise<boolean> {
   try {
@@ -67,10 +68,20 @@ export default async function create(
 
     readFile(fullPath)
       .then((buffer: Buffer) => {
-        const appMapStruct = JSON.parse(buffer.toString()) as AppMapStruct;
-        const metadata = appMapStruct.metadata;
-        const branch = appMapStruct.metadata.git?.branch;
-        const commit = appMapStruct.metadata.git?.commit;
+        const maxSize = maxAppMapSize();
+        const appMapJson = JSON.parse(buffer.toString());
+        let metadata: Metadata = (appMapJson as AppMapStruct).metadata;
+        if (buffer.byteLength > maxSize) {
+          console.warn(`${fullPath} is larger than ${maxSize / 1024}K, pruning it`);
+          const prunedAppMap = pruneAppMap(appMapJson, maxSize);
+          metadata = prunedAppMap.metadata;
+          buffer = Buffer.from(JSON.stringify(prunedAppMap));
+        }
+        return { metadata, buffer };
+      })
+      .then(({ metadata, buffer }) => {
+        const branch = metadata.git?.branch;
+        const commit = metadata.git?.commit;
         if (branch) {
           branchCount[branch] ||= 1;
           branchCount[branch] += 1;

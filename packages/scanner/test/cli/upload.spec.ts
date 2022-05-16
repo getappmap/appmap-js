@@ -7,6 +7,7 @@ import * as vars from '../../src/integration/vars';
 import * as mapsets from '../../src/integration/appland/mapset/create';
 import * as scannerJobs from '../../src/integration/appland/scannerJob/create';
 import upload from '../../src/cli/upload';
+import * as appMapPruning from '../../src/cli/upload/pruneAppMap';
 import sinon from 'sinon';
 
 import CommandOptions from '../../src/cli/upload/options';
@@ -97,6 +98,33 @@ describe('upload', () => {
       branch: expectedBranch,
       commit: expectedCommit,
     });
+
+    sinon.restore();
+  });
+
+  it('the max size for uploads is less than 48MB by default', () => {
+    expect(appMapPruning.maxAppMapSize()).toBeLessThan(48 * 1024 * 1024);
+  });
+
+  it('prunes large AppMaps before uploading', async() => {
+    const localhost = nock('http://localhost:3000');
+    localhost.post(`/api/appmaps`).reply(201, AppMapData1, ['Content-Type', 'application/json']);
+    localhost.post(`/api/appmaps`).reply(201, AppMapData2, ['Content-Type', 'application/json']);
+    localhost.post(`/api/mapsets`).reply(201, MapsetData, ['Content-Type', 'application/json']);
+    localhost.post(`/api/scanner_jobs`).reply(201, ScannerJobData, {
+      location: `http://localhost:3000/scanner_jobs/${ScannerJobData.id}`,
+    });
+
+    const appId = MapsetData.app_id.toString();
+
+    // There are two fixture AppMaps. One is smaller than 500K, the other is larger. So, setting the
+    // max size to 500K will exercise both the pruning and non-pruning paths.
+    sinon.stub(appMapPruning, 'maxAppMapSize').returns(500 * 1024);
+    const pruneAppMap = sinon.stub(appMapPruning, 'pruneAppMap').callThrough();
+    
+    await upload(ScanResults, appId, FixtureDir);
+
+    expect(pruneAppMap.callCount).toBe(1);
 
     sinon.restore();
   });
