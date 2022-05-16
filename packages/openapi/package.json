@@ -27,6 +27,9 @@
   "dependencies": {
     "js-yaml": "^4.1.0"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/applandinc/appmap-js.git",
