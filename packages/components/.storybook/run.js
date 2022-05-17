@@ -50,5 +50,5 @@ async function runStorybook() {
   const shouldRunStorybook =
     (await isBranch('main')) || isTag() || (await hasDependencyChanged());
 
-  shouldRunStorybook() && (await runStorybook());
+  shouldRunStorybook && (await runStorybook());
 })();
