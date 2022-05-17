@@ -25,6 +25,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
+    "@appland/models": "workspace:packages/models",
     "js-yaml": "^4.1.0"
   },
   "publishConfig": {
