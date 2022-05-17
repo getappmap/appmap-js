@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.25.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.25.3...@appland/appmap-v3.25.4) (2022-05-17)
+
+
+### Bug Fixes
+
+* Move index directory into place more robustly ([8139e44](https://github.com/applandinc/appmap-js/commit/8139e44ab1046b482ab6181926679291699d6d6b))
+
 # [@appland/appmap-v3.25.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.25.2...@appland/appmap-v3.25.3) (2022-05-11)
 
 
