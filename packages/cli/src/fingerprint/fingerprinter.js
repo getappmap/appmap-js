@@ -44,12 +44,16 @@ class Fingerprinter {
 
   // eslint-disable-next-line class-methods-use-this
   async fingerprint(appMapFileName) {
+    const appMapCreatedAt = await mtime(appMapFileName);
+    if (!appMapCreatedAt) {
+      return;
+    }
+
     if (verbose()) {
       console.warn(`Fingerprinting ${appMapFileName}`);
     }
 
     const indexDir = baseName(appMapFileName);
-    const appMapCreatedAt = await mtime(appMapFileName);
     const mtimeFileName = joinPath(indexDir, 'mtime');
     const versionFileName = joinPath(indexDir, 'version');
 
@@ -84,7 +88,7 @@ class Fingerprinter {
           `${appMapFileName} created at ${appMapCreatedAt}, indexed at ${indexedAt}`
         );
       }
-      return indexedAt === appMapCreatedAt;
+      return indexedAt >= appMapCreatedAt;
     };
 
     if ((await versionUpToDate()) && (await indexUpToDate())) {
@@ -94,7 +98,17 @@ class Fingerprinter {
       return;
     }
 
-    const data = await fsp.readFile(appMapFileName);
+    let data;
+    try {
+      data = await fsp.readFile(appMapFileName);
+    } catch (e) {
+      if (e.code !== 'ENOENT') {
+        console.warn(`${appMapFileName} does not exist. Skipping...`);
+        return;
+      }
+      throw e;
+    }
+
     if (verbose()) {
       console.warn(`Read ${data.length} bytes`);
     }

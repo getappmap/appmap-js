@@ -1,11 +1,18 @@
 /* eslint-disable func-names */
-const { constants: fsConstants, promises: fsp } = require('fs');
+const {
+  constants: fsConstants,
+  promises: fsp,
+  rm,
+  readdir,
+  utimes,
+} = require('fs');
 const fsExtra = require('fs-extra');
 const { queue } = require('async');
 const glob = require('glob');
 const os = require('os');
-const { sep: pathSep, join: joinPath } = require('path');
+const { sep: pathSep, join: joinPath, basename, join } = require('path');
 const { buildAppMap } = require('@appland/models');
+const { rename } = require('fs/promises');
 
 const StartTime = Date.now();
 
@@ -99,6 +106,23 @@ async function listAppMapFiles(directory, fn) {
   );
 }
 
+/**
+ * @param {PathLike} path
+ * @returns {Promise<boolean>}
+ */
+function exists(path) {
+  return new Promise((resolve) => {
+    fsp
+      .access(path, fsConstants.R_OK)
+      .then(() => {
+        resolve(true);
+      })
+      .catch(() => {
+        resolve(false);
+      });
+  });
+}
+
 async function loadAppMap(filePath) {
   return buildAppMap()
     .source(JSON.parse(await fsp.readFile(filePath)))
@@ -106,30 +130,81 @@ async function loadAppMap(filePath) {
     .build();
 }
 
-const renameFile = async (oldName, newName) => {
-  await fsExtra.move(oldName, newName, { clobber: true });
-};
+const renameFile = async (oldName, newName) =>
+  fsExtra.move(oldName, newName, { clobber: true });
+
+/**
+ * @param {string} path
+ */
+async function touch(path) {
+  return new Promise((resolve) => {
+    const time = Date.now();
+    utimes(path, time, time, (utimesErr) => {
+      if (utimesErr) {
+        console.warn(utimesErr);
+      }
+      return resolve();
+    });
+  });
+}
 
 /**
  * Builds a directory using a tempdir, which is renamed at the end to
  * a specified directory name.
  *
  * @param {string} dirName
- * @param {function} fn
+ * @param {function} contentFunction
  */
-const buildDirectory = async (dirName, fn) => {
-  const tempDir = await fsp.mkdtemp(
-    (await fsp.realpath(os.tmpdir())) + pathSep
-  );
+const buildDirectory = async (dirName, contentFunction) => {
+  const tempPath = await fsp.realpath(os.tmpdir());
+  const tempDir = await fsp.mkdtemp(tempPath + pathSep);
+  const discardDir = await fsp.mkdtemp(tempPath + pathSep);
+
   try {
-    await fn(tempDir);
-    await renameFile(tempDir, dirName);
+    await contentFunction(tempDir);
   } catch (err) {
-    fsExtra.remove(tempDir).catch((e) => {
+    rm(tempDir, { recursive: true }, (e) => {
       console.warn(`Unable to remove (cleanup) tempdir: ${e.message}`);
     });
     throw err;
   }
+
+  // Move dirName to a temp dir
+  // Move tempDir to the final dirName
+  try {
+    await rename(dirName, join(discardDir, basename(dirName)));
+    setTimeout(
+      () =>
+        rm(discardDir, { recursive: true }, (err) => {
+          if (err) console.warn(err);
+        }),
+      0
+    );
+  } catch (e) {
+    if (e.code !== 'ENOENT') {
+      console.log(`Unable to rename ${dirName} to ${discardDir}: ${e.message}`);
+      throw e;
+    }
+  }
+  try {
+    await rename(tempDir, dirName);
+  } catch (e) {
+    console.log(`Unable to rename ${tempDir} to ${dirName}: ${e.message}`);
+    return;
+  }
+
+  // Touch all the created files. This is to ensure that file watchers are notified, because
+  // when the directory is renamed into place, filesystem watchers may not report on all the
+  // files inside the directory.
+  readdir(dirName, (readErr, files) => {
+    if (readErr) {
+      console.warn(`Unable to read directory ${dirName}: ${readErr.message}`);
+      return;
+    }
+    files
+      .filter((file) => !['.', '..'].includes(file))
+      .map((file) => touch(join(dirName, file)));
+  });
 };
 
 function formatValue(value) {
@@ -155,23 +230,6 @@ function formatHttpServerRequest(event) {
         : '<none>',
   };
   return [data.method, data.path, `(${data.statusCode})`].join(' ');
-}
-
-/**
- * @param {PathLike} path
- * @returns {Promise<boolean>}
- */
-function exists(path) {
-  return new Promise((resolve) => {
-    fsp
-      .access(path, fsConstants.R_OK)
-      .then(() => {
-        resolve(true);
-      })
-      .catch(() => {
-        resolve(false);
-      });
-  });
 }
 
 /**
