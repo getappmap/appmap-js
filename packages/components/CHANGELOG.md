@@ -1,3 +1,10 @@
+# [@appland/components-v2.1.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.1.0...@appland/components-v2.1.1) (2022-05-18)
+
+
+### Bug Fixes
+
+* Update source code link prop types ([#590](https://github.com/applandinc/appmap-js/issues/590)) ([cd8cd20](https://github.com/applandinc/appmap-js/commit/cd8cd206691b2bce34558b0272682d633e418cfb))
+
 # [@appland/components-v2.1.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.0.3...@appland/components-v2.1.0) (2022-05-03)
 
 
