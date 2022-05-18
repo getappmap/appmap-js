@@ -28,7 +28,7 @@ export default {
   components: { VExternalLinkIcon, VWarningIcon },
   props: {
     object: {
-      type: Object,
+      type: [Object, String],
     },
   },
 
