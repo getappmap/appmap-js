@@ -109,12 +109,12 @@ describe('telemetry', () => {
       expect(properties['common.os']).not.toHaveLength(0);
       expect(properties['common.platformversion']).not.toHaveLength(0);
       expect(properties['common.arch']).not.toHaveLength(0);
-      expect(properties['appmap.cli.version']).toBe(version);
+      expect(properties['appland.telemetry.version']).toBe(version);
       expect(properties['appmap.cli.machineId']).toBe(Telemetry.machineId);
       expect(properties['appmap.cli.sessionId']).toBe(Telemetry.session.id);
-      expect(typeof properties['appmap.cli.args']).toBe('string');
-      expect(properties['appmap.cli.prop']).toBe('value');
-      expect(measurements['appmap.cli.metric']).toBe(1);
+      expect(typeof properties['appland.telemetry.args']).toBe('string');
+      expect(properties['appland.telemetry.prop']).toBe('value');
+      expect(measurements['appland.telemetry.metric']).toBe(1);
     });
 
     it('does not send undefined properties', () => {

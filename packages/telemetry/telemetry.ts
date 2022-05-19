@@ -1,11 +1,21 @@
 import { networkInterfaces } from 'os';
 import { randomBytes, createHash, BinaryLike } from 'crypto';
 import * as os from 'os';
-import { name, version } from './package.json';
+import { sync as readPackageUpSync } from 'read-pkg-up';
 import { TelemetryClient, setup as AppInsights } from 'applicationinsights';
 import Conf from 'conf';
 
-const config = new Conf();
+const { name, version } = (() => {
+  const result = readPackageUpSync({ cwd:__dirname })?.packageJson;
+  if (!result) throw 'cannot find package.json';
+  return result;
+})();
+
+const config = new Conf({
+  projectName: '@appland/appmap', // make sure all tools use the same config files
+  projectVersion: '0.0.1' // note this is actually config version
+});
+
 const invalidMacAddresses = new Set([
   '00:00:00:00:00:00',
   'ff:ff:ff:ff:ff:ff',
@@ -108,9 +118,13 @@ interface TelemetryData {
   metrics?: Record<string, number | undefined>;
 }
 
-const propPrefix = 'appmap.cli.';
+const propPrefix =
+  name === '@appland/appmap'
+    ? 'appmap.cli.'
+    : (name.replace('@', '').replace('/', '.') + '.');
+
 /**
- * Append `appmap.cli.` to the name of each property and drop undefined values
+ * Append the prefix to the name of each property and drop undefined values
  */
 const transformProps = <T>(
   obj: Record<string, T | undefined>
@@ -119,7 +133,7 @@ const transformProps = <T>(
 
   for (const [k, v] of Object.entries(obj)) {
     if (v === undefined) continue;
-    const prefixedKey = k.startsWith('appmap.cli.') ? k : `${propPrefix}${k}`;
+    const prefixedKey = k.startsWith(propPrefix) ? k : `${propPrefix}${k}`;
     result[prefixedKey] = v;
   }
 
@@ -177,17 +191,19 @@ export default class Telemetry {
 
   static sendEvent(data: TelemetryData): void {
     try {
-      const transformedProperties = transformProps(data.properties || {});
+      const transformedProperties = transformProps({
+        version: version,
+        args: process.argv.slice(1).join(' '),
+        ...data.properties
+      });
       const transformedMetrics = transformProps(data.metrics || {});
       const properties = {
         'common.source': name,
         'common.os': os.platform(),
         'common.platformversion': os.release(),
         'common.arch': os.arch(),
-        'appmap.cli.version': version,
         'appmap.cli.machineId': Telemetry.machineId,
         'appmap.cli.sessionId': Telemetry.session.id,
-        'appmap.cli.args': process.argv.slice(1).join(' '),
         ...transformedProperties,
       };
 

@@ -95,6 +95,7 @@
     "ora": "^5.4.1",
     "port-pid": "^0.0.7",
     "ps-node": "^0.1.6",
+    "read-pkg-up": "^7.0.1",
     "semver": "^7.3.5",
     "supports-hyperlinks": "^2.2.0",
     "w3c-xmlserializer": "^2.0.0",

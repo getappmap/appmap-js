@@ -129,6 +129,7 @@ __metadata:
     port-pid: ^0.0.7
     prettier: ^2.2.1
     ps-node: ^0.1.6
+    read-pkg-up: ^7.0.1
     semver: ^7.3.5
     sinon: ^11.1.2
     style-loader: ^3.2.1
@@ -396,6 +397,7 @@ __metadata:
     conf: ^10.0.2
     eslint: ^8.4.1
     jest: ^27.4.7
+    read-pkg-up: ^7.0.1
     sinon: ^13.0.1
     ts-jest: ^27.1.4
     typescript: ^4.5.4

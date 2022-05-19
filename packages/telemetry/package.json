@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "applicationinsights": "^2.1.4",
-    "conf": "^10.0.2"
+    "conf": "^10.0.2",
+    "read-pkg-up": "^7.0.1"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",
