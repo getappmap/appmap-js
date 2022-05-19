@@ -341,10 +341,12 @@ __metadata:
     "@typescript-eslint/parser": ^4.30.0
     ajv: ^8.8.2
     ansi-escapes: ^5.0.0
+    applicationinsights: ^2.1.4
     async: ^3.2.3
     chalk: ^4.1.2
     chokidar: ^3.5.3
     cli-progress: ^3.11.0
+    conf: ^10.0.2
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-node: ^11.1.0
@@ -363,6 +365,7 @@ __metadata:
     pkg: ^5.5.2
     prettier: ^2.3.2
     pretty-format: ^27.4.6
+    read-pkg-up: ^7.0.1
     semantic-release: ^19.0.2
     sinon: ^13.0.1
     supports-hyperlinks: ^2.2.0

@@ -8,6 +8,7 @@ import MergeCommand from './cli/merge/command';
 import { verbose } from './rules/lib/util';
 import { AbortError, ValidationError } from './errors';
 import { ExitCode } from './cli/exitCode';
+import Telemetry from './telemetry';
 
 yargs(process.argv.slice(2))
   .option('verbose', {
@@ -43,4 +44,8 @@ yargs(process.argv.slice(2))
   })
   .strict()
   .demandCommand()
-  .help().argv;
+  .help()
+  .parseAsync()
+  .then(() => {
+    Telemetry.flush(() => null);
+  });
