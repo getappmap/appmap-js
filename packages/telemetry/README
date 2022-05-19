@@ -1,0 +1,4 @@
+Shared telemetry code.
+
+Note this is not separately compiled project. 
+Tests live here, but telemetry.ts should simply be symlinked into the respective project repository.

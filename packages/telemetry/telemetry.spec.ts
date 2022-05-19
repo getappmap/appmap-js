@@ -1,8 +1,8 @@
 import sinon, { SinonSpy } from 'sinon';
 import Conf from 'conf';
 import * as os from 'os';
-import Telemetry from '../../src/telemetry';
-import { name as appName, version } from '../../package.json';
+import Telemetry from './telemetry';
+import { name as appName, version } from './package.json';
 
 const sandbox = sinon.createSandbox();
 const invalidExpiration = () => Date.now() - 1000 * 60 * 60;
