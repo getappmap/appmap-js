@@ -74,77 +74,61 @@ export default {
       verbose(true);
     }
 
-    try {
-      if (!appmapDir) {
-        appmapDir = await appmapDirFromConfig();
-      }
-      if (!appmapDir) {
-        appmapDir = await appmapDirFromConfig();
-        throw new ValidationError('--appmap-dir is required');
-      }
+    if (!appmapDir) {
+      appmapDir = await appmapDirFromConfig();
+    }
+    if (!appmapDir) {
+      appmapDir = await appmapDirFromConfig();
+      throw new ValidationError('--appmap-dir is required');
+    }
 
-      await validateFile('directory', appmapDir!);
-      const appId = await resolveAppId(appIdArg, appmapDir);
+    await validateFile('directory', appmapDir!);
+    const appId = await resolveAppId(appIdArg, appmapDir);
 
-      const glob = promisify(globCallback);
-      const files = await glob(`${appmapDir}/**/*.appmap.json`);
+    const glob = promisify(globCallback);
+    const files = await glob(`${appmapDir}/**/*.appmap.json`);
 
-      const configData = await parseConfigFile(config);
+    const configData = await parseConfigFile(config);
 
-      const scanner = await buildScanner(false, configData, files);
+    const scanner = await buildScanner(false, configData, files);
 
-      const [rawScanResults, findingStatuses]: [ScanResults, FindingStatusListItem[]] =
-        await Promise.all([scanner.scan(), scanner.fetchFindingStatus(appIdArg, appmapDir)]);
+    const [rawScanResults, findingStatuses]: [ScanResults, FindingStatusListItem[]] =
+      await Promise.all([scanner.scan(), scanner.fetchFindingStatus(appIdArg, appmapDir)]);
 
-      // Always report the raw data
-      await writeFile(reportFile, JSON.stringify(rawScanResults, null, 2));
+    // Always report the raw data
+    await writeFile(reportFile, JSON.stringify(rawScanResults, null, 2));
 
-      const scanResults = rawScanResults.withFindings(
-        newFindings(rawScanResults.findings, findingStatuses)
+    const scanResults = rawScanResults.withFindings(
+      newFindings(rawScanResults.findings, findingStatuses)
+    );
+
+    findingsReport(scanResults.findings, scanResults.appMapMetadata);
+    summaryReport(scanResults, true);
+
+    if (doUpload) {
+      const uploadResponse = await upload(
+        rawScanResults,
+        appId,
+        appmapDir,
+        mergeKey,
+        {
+          branch,
+          commit,
+          environment,
+        },
+        {
+          maxRetries: 3,
+        }
       );
+      reportUploadURL(uploadResponse.summary.numFindings, uploadResponse.url);
+    }
 
-      findingsReport(scanResults.findings, scanResults.appMapMetadata);
-      summaryReport(scanResults, true);
+    if (updateCommitStatusOption) {
+      await updateCommitStatus(scanResults.findings.length, scanResults.summary.numChecks);
+    }
 
-      if (doUpload) {
-        const uploadResponse = await upload(
-          rawScanResults,
-          appId,
-          appmapDir,
-          mergeKey,
-          {
-            branch,
-            commit,
-            environment,
-          },
-          {
-            maxRetries: 3,
-          }
-        );
-        reportUploadURL(uploadResponse.summary.numFindings, uploadResponse.url);
-      }
-
-      if (updateCommitStatusOption) {
-        await updateCommitStatus(scanResults.findings.length, scanResults.summary.numChecks);
-      }
-
-      if (failOption) {
-        fail(scanResults.findings.length);
-      }
-    } catch (err) {
-      if (err instanceof ValidationError) {
-        console.warn(err.message);
-        return process.exit(ExitCode.ValidationError);
-      }
-      if (err instanceof AbortError) {
-        return process.exit(ExitCode.AbortError);
-      }
-      if (!verbose && err instanceof Error) {
-        console.error(err.message);
-        return process.exit(ExitCode.RuntimeError);
-      }
-
-      throw err;
+    if (failOption) {
+      fail(scanResults.findings.length);
     }
   },
 };

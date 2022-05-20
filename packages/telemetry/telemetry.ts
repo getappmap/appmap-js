@@ -100,7 +100,7 @@ class Session {
   }
 }
 
-interface TelemetryData {
+export interface TelemetryData {
   name: string;
   properties?: Record<string, string | undefined>;
   metrics?: Record<string, number | undefined>;
