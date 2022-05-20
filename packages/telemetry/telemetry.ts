@@ -6,14 +6,14 @@ import { TelemetryClient, setup as AppInsights } from 'applicationinsights';
 import Conf from 'conf';
 
 const { name, version } = (() => {
-  const result = readPackageUpSync({ cwd:__dirname })?.packageJson;
+  const result = readPackageUpSync({ cwd: __dirname })?.packageJson;
   if (!result) throw 'cannot find package.json';
   return result;
 })();
 
 const config = new Conf({
   projectName: '@appland/appmap', // make sure all tools use the same config files
-  projectVersion: '0.0.1' // note this is actually config version
+  projectVersion: '0.0.1', // note this is actually config version
 });
 
 const invalidMacAddresses = new Set([
@@ -26,13 +26,7 @@ const invalidMacAddresses = new Set([
 // obfuscation to mitigate key scraping bots on GitHub. The key is split on
 // hypens and base64 encoded without padding.
 // key.split('-').map((x) => x.toString('base64').replace(/=*/, ''))
-const INSTRUMENTATION_KEY = [
-  'NTBjMWE1YzI',
-  'NDliNA',
-  'NDkxMw',
-  'YjdjYw',
-  'ODZhNzhkNDA3NDVm',
-]
+const INSTRUMENTATION_KEY = ['NTBjMWE1YzI', 'NDliNA', 'NDkxMw', 'YjdjYw', 'ODZhNzhkNDA3NDVm']
   .map((x) => Buffer.from(x, 'base64').toString('utf8'))
   .join('-');
 
@@ -71,15 +65,9 @@ class Session {
 
   constructor() {
     const sessionId = config.get('sessionId') as string | undefined;
-    const sessionExpiration = config.get('sessionExpiration') as
-      | number
-      | undefined;
+    const sessionExpiration = config.get('sessionExpiration') as number | undefined;
 
-    if (
-      sessionId &&
-      sessionExpiration &&
-      !Session.beyondExpiration(sessionExpiration)
-    ) {
+    if (sessionId && sessionExpiration && !Session.beyondExpiration(sessionExpiration)) {
       this.id = sessionId;
       this.expiration = sessionExpiration;
     } else {
@@ -119,16 +107,12 @@ interface TelemetryData {
 }
 
 const propPrefix =
-  name === '@appland/appmap'
-    ? 'appmap.cli.'
-    : (name.replace('@', '').replace('/', '.') + '.');
+  name === '@appland/appmap' ? 'appmap.cli.' : name.replace('@', '').replace('/', '.') + '.';
 
 /**
  * Append the prefix to the name of each property and drop undefined values
  */
-const transformProps = <T>(
-  obj: Record<string, T | undefined>
-): Record<string, T> => {
+const transformProps = <T>(obj: Record<string, T | undefined>): Record<string, T> => {
   const result: Record<string, T> = {};
 
   for (const [k, v] of Object.entries(obj)) {
@@ -138,7 +122,7 @@ const transformProps = <T>(
   }
 
   return result;
-}
+};
 
 export default class Telemetry {
   private static _session?: Session;
@@ -194,7 +178,7 @@ export default class Telemetry {
       const transformedProperties = transformProps({
         version: version,
         args: process.argv.slice(1).join(' '),
-        ...data.properties
+        ...data.properties,
       });
       const transformedMetrics = transformProps(data.metrics || {});
       const properties = {
