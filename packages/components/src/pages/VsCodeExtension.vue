@@ -644,6 +644,14 @@ export default {
                 const event = this.eventsById[eventId];
                 if (event) {
                   nodes.add(event);
+                } else if (this.filters.declutter.limitRootEvents.on) {
+                  // when event is not present in filtered AppMap, but it's a root event - disable "Limit root events to HTTP" filter
+                  const rootEvents = this.$store.state.appMap.rootEvents();
+                  if (rootEvents.some((e) => e.id === eventId)) {
+                    this.$nextTick(() => {
+                      this.filters.declutter.limitRootEvents.on = false;
+                    });
+                  }
                 }
 
                 break;
@@ -949,6 +957,10 @@ export default {
 
         if (state.traceFilter) {
           this.$nextTick(() => {
+            if (!state.traceFilter.endsWith(' ')) {
+              state.traceFilter += ' ';
+            }
+
             this.$refs.traceFilter.setValue(state.traceFilter);
           });
         }
