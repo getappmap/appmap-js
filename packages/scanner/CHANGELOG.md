@@ -1,3 +1,11 @@
+# [@appland/scanner-v1.57.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.56.1...@appland/scanner-v1.57.0) (2022-05-23)
+
+
+### Features
+
+* Collect scanning telemetry ([adc71b7](https://github.com/applandinc/appmap-js/commit/adc71b7d43ae302ac3b85b8577a01bdcfa0176ea))
+* Send telemetry on scanning errors ([0828a8a](https://github.com/applandinc/appmap-js/commit/0828a8a5a61247ab923e2fe9b302970accd3b10d))
+
 # [@appland/scanner-v1.56.1](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.56.0...@appland/scanner-v1.56.1) (2022-05-16)
 
 
