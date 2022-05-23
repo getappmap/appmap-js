@@ -11,6 +11,8 @@ import { newFindings } from '../../findings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 import { formatReport } from './formatReport';
+import Telemetry from '../../telemetry';
+import { ScanResults } from '../../report/scanResults';
 
 type SingleScanOptions = {
   appmapFile?: string | string[];
@@ -70,4 +72,23 @@ export default async function singleScan(options: SingleScanOptions): Promise<vo
       numChecks / (elapsed / 1000.0)
     )} checks/sec)`
   );
+
+  sendTelemetry(scanResults, elapsed);
+}
+
+function sendTelemetry(scanResults: ScanResults, msElapsed: number) {
+  const rules = [...new Set(scanResults.checks.map(({ id }) => id))];
+
+  Telemetry.sendEvent({
+    name: 'scan:completed',
+    properties: {
+      rules: rules.join(', '),
+    },
+    metrics: {
+      duration: msElapsed / 1000,
+      numRules: rules.length,
+      numAppMaps: scanResults.summary.numAppMaps,
+      numFindings: scanResults.findings.length,
+    },
+  });
 }

@@ -5,6 +5,10 @@ node_js: [14]
 
 cache: false
 
+git:
+  # required to enable symlinks on windows
+  symlinks: true
+
 addons:
   apt:
     packages:

@@ -2,7 +2,8 @@
 
 set -e
 
-workspaces="$(yarn run yarn-changed-workspaces -b origin/main | grep '^@' | tr '\n' ',')"
+workspaces="$(yarn run yarn-changed-workspaces -b $1 | grep '^@' | tr '\n' ',')"
+shift
 tasks="$@"
 
 for t in $tasks; do

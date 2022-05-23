@@ -1,0 +1,32 @@
+{
+  "name": "@appland/telemetry",
+  "private": true,
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint telemetry.ts",
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "dependencies": {
+    "applicationinsights": "^2.1.4",
+    "conf": "^10.0.2",
+    "read-pkg-up": "^7.0.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.1",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.3.0",
+    "jest": "^27.4.7",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.3.2",
+    "sinon": "^13.0.1",
+    "ts-jest": "^27.1.4",
+    "typescript": "^4.5.4"
+  }
+}

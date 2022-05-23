@@ -8,6 +8,29 @@ import MergeCommand from './cli/merge/command';
 import { verbose } from './rules/lib/util';
 import { AbortError, ValidationError } from './errors';
 import { ExitCode } from './cli/exitCode';
+import Telemetry from './telemetry';
+import { TelemetryData } from './telemetry';
+
+function errorInfo(err: Error) {
+  if (err instanceof ValidationError)
+    return { label: 'validation-error', code: ExitCode.ValidationError };
+  else if (err instanceof AbortError) return { label: 'abort', code: ExitCode.AbortError };
+  else return { label: 'error', code: ExitCode.RuntimeError };
+}
+
+function handleError(err: Error) {
+  const { label, code } = errorInfo(err);
+  process.exitCode = code;
+
+  const telemetry: TelemetryData = {
+    name: [process.argv[2], label].join(':'),
+    properties: { error: err.message },
+  };
+
+  if (label === 'error') telemetry.properties!.errorStack = err.stack;
+
+  Telemetry.sendEvent(telemetry);
+}
 
 yargs(process.argv.slice(2))
   .option('verbose', {
@@ -28,19 +51,12 @@ yargs(process.argv.slice(2))
       } else {
         console.error(err.message);
       }
-
-      if (err instanceof ValidationError) {
-        process.exit(ExitCode.ValidationError);
-      }
-      if (err instanceof AbortError) {
-        process.exit(ExitCode.AbortError);
-      }
-      if (err instanceof Error) {
-        process.exit(ExitCode.RuntimeError);
-      }
     }
-    process.exit(1);
+    process.exitCode = ExitCode.ValidationError;
   })
+  .exitProcess(false)
   .strict()
   .demandCommand()
-  .help().argv;
+  .help()
+  .parseAsync()
+  .catch(handleError);

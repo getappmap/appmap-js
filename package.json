@@ -3,8 +3,8 @@
   "private": true,
   "husky": {
     "hooks": {
-      "pre-commit": "ci/foreach-changed-run pre-commit",
-      "pre-push": "ci/foreach-changed-run build lint test"
+      "pre-commit": "ci/foreach-changed-run HEAD pre-commit",
+      "pre-push": "ci/foreach-changed-run origin/main build lint test"
     }
   },
   "workspaces": [
