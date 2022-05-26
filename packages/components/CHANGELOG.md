@@ -1,3 +1,10 @@
+# [@appland/components-v2.2.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.1.1...@appland/components-v2.2.0) (2022-05-26)
+
+
+### Features
+
+* Add usage guide frontend ([90f5afe](https://github.com/applandinc/appmap-js/commit/90f5afec85e49ee794a60dc334eff11f840f9026))
+
 # [@appland/components-v2.1.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.1.0...@appland/components-v2.1.1) (2022-05-18)
 
 
