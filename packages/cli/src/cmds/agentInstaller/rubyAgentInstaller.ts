@@ -21,6 +21,14 @@ export class BundleInstaller extends AgentInstaller {
     super('Bundler', path);
   }
 
+  get language(): string {
+    return 'ruby';
+  }
+
+  get appmap_dir(): string {
+    return 'tmp/appmap';
+  }
+
   get buildFile(): string {
     return 'Gemfile';
   }
@@ -47,7 +55,10 @@ export class BundleInstaller extends AgentInstaller {
 
       if (gemExists) {
         // Replace the existing gem declaration entirely
-        gemfile = gemfile.replace(REGEX_GEM_DEPENDENCY, `${os.EOL}${GEM_DEPENDENCY}`);
+        gemfile = gemfile.replace(
+          REGEX_GEM_DEPENDENCY,
+          `${os.EOL}${GEM_DEPENDENCY}`
+        );
       } else {
         // Insert a new gem declaration
         const chars = gemfile.split('');
@@ -57,9 +68,7 @@ export class BundleInstaller extends AgentInstaller {
 
       encodedFile.write(gemfile);
     } else {
-      encodedFile.write(
-        `${gemfile}${os.EOL}${GEM_DEPENDENCY}${os.EOL}`
-      );
+      encodedFile.write(`${gemfile}${os.EOL}${GEM_DEPENDENCY}${os.EOL}`);
     }
 
     await run(new CommandStruct('bundle', ['install'], this.path));

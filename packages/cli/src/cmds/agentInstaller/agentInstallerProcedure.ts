@@ -8,6 +8,7 @@ import { AbortError, ValidationError } from '../errors';
 import { run } from './commandRunner';
 import UI from '../userInteraction';
 import AgentProcedure from './agentProcedure';
+import { dump, load } from 'js-yaml';
 
 export default class AgentInstallerProcedure extends AgentProcedure {
   async run(): Promise<void> {
@@ -65,12 +66,27 @@ export default class AgentInstallerProcedure extends AgentProcedure {
     await this.verifyProject();
 
     const appMapYml = this.configPath;
+    const initCommand = await this.installer.initCommand();
+    const { stdout } = await run(initCommand);
+    const json = JSON.parse(stdout);
+    const configContents = (load(json.configuration.contents) as any) || {};
     if (!useExistingAppMapYml) {
-      const initCommand = await this.installer.initCommand();
-      const { stdout } = await run(initCommand);
-      const json = JSON.parse(stdout);
-
-      fs.writeFileSync(appMapYml, json.configuration.contents);
+      configContents.language = this.installer.language;
+      configContents.appmap_dir = this.installer.appmap_dir;
+      fs.writeFileSync(appMapYml, dump(configContents));
+    } else {
+      let dirty = false;
+      const updateField = (fieldName: string): void => {
+        if (!configContents[fieldName]) {
+          UI.success(`Updating ${fieldName} in appmap.yml`);
+          configContents[fieldName] = this.installer[fieldName];
+          dirty = true;
+        }
+      };
+      ['language', 'appmap_dir'].forEach(updateField);
+      if (dirty) {
+        fs.writeFileSync(appMapYml, dump(configContents));
+      }
     }
 
     await this.validateProject(useExistingAppMapYml);

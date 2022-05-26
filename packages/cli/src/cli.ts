@@ -290,7 +290,6 @@ yargs(process.argv.slice(2))
       });
       args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
-        default: 'tmp/appmap',
       });
       args.option('base-dir', {
         describe: 'directory to prepend to each dependency source file',
@@ -309,6 +308,12 @@ yargs(process.argv.slice(2))
     async (argv) => {
       verbose(argv.verbose);
 
+      let { appmapDir } = argv;
+      if (!appmapDir) {
+        appmapDir = await appmapDirFromConfig();
+      }
+      assertAppMapDir(appmapDir);
+
       let { files } = argv;
       if (argv.stdinFiles) {
         const stdinFileStr = readFileSync(0).toString();
@@ -320,10 +325,10 @@ yargs(process.argv.slice(2))
       }
 
       if (verbose()) {
-        console.warn(`Testing AppMaps in ${argv.appmapDir}`);
+        console.warn(`Testing AppMaps in ${appmapDir}`);
       }
 
-      const depends = new Depends(argv.appmapDir);
+      const depends = new Depends(appmapDir);
       if (argv.baseDir) {
         depends.baseDir = argv.baseDir;
       }
@@ -377,6 +382,12 @@ yargs(process.argv.slice(2))
     async (argv) => {
       verbose(argv.verbose);
 
+      let { appmapDir } = argv;
+      if (!appmapDir) {
+        appmapDir = await appmapDirFromConfig();
+      }
+      assertAppMapDir(appmapDir);
+
       const newProgress = () => {
         if (argv.interactive) {
           return new cliProgress.SingleBar(
@@ -393,12 +404,12 @@ yargs(process.argv.slice(2))
       };
 
       console.warn('Indexing the AppMap database');
-      await new FingerprintDirectoryCommand(argv.appmapDir).execute();
+      await new FingerprintDirectoryCommand(appmapDir).execute();
 
       console.warn('Finding matching AppMaps');
       let progress = newProgress();
       const codeObjectId = argv.codeObject;
-      const finder = new FindCodeObjects(argv.appmapDir, codeObjectId);
+      const finder = new FindCodeObjects(appmapDir, codeObjectId);
       const codeObjectMatches = await finder.find(
         (count) => progress.start(count, 0),
         progress.increment.bind(progress)
@@ -523,8 +534,14 @@ yargs(process.argv.slice(2))
     async (argv) => {
       verbose(argv.verbose);
 
+      let { appmapDir } = argv;
+      if (!appmapDir) {
+        appmapDir = await appmapDirFromConfig();
+      }
+      assertAppMapDir(appmapDir);
+
       if (argv.watch) {
-        const cmd = new FingerprintWatchCommand(argv.appmapDir);
+        const cmd = new FingerprintWatchCommand(appmapDir);
         await cmd.execute();
 
         if (!argv.verbose && process.stdout.isTTY) {
@@ -541,7 +558,7 @@ yargs(process.argv.slice(2))
           });
         }
       } else {
-        const cmd = new FingerprintDirectoryCommand(argv.appmapDir);
+        const cmd = new FingerprintDirectoryCommand(appmapDir);
         await cmd.execute();
       }
     }
@@ -559,9 +576,15 @@ yargs(process.argv.slice(2))
     async (argv) => {
       verbose(argv.verbose);
 
-      await new FingerprintDirectoryCommand(argv.appmapDir).execute();
+      let { appmapDir } = argv;
+      if (!appmapDir) {
+        appmapDir = await appmapDirFromConfig();
+      }
+      assertAppMapDir(appmapDir);
 
-      const inventory = await new InventoryCommand(argv.appmapDir).execute();
+      await new FingerprintDirectoryCommand(appmapDir).execute();
+
+      const inventory = await new InventoryCommand(appmapDir).execute();
       console.log(yaml.dump(inventory));
     }
   )

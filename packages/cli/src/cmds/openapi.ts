@@ -4,7 +4,13 @@ import { promises as fsp, statSync } from 'fs';
 import { queue } from 'async';
 import { glob } from 'glob';
 import yaml from 'js-yaml';
-import { Model, parseHTTPServerRequests, rpcRequestForEvent, SecuritySchemes, verbose } from '@appland/openapi';
+import {
+  Model,
+  parseHTTPServerRequests,
+  rpcRequestForEvent,
+  SecuritySchemes,
+  verbose,
+} from '@appland/openapi';
 import { Event } from '@appland/models';
 import { Arguments, Argv } from 'yargs';
 
@@ -95,7 +101,14 @@ module.exports = {
   },
   async handler(argv: Arguments | any) {
     verbose(argv.verbose);
+
+    let { appmapDir } = argv;
     const { openapiTitle, openapiVersion } = argv;
+
+    if (!appmapDir) {
+      appmapDir = await appmapDirFromConfig();
+    }
+    assertAppMapDir(appmapDir);
 
     function tryConfigure(path: string, fn: () => void) {
       try {
@@ -105,7 +118,7 @@ module.exports = {
       }
     }
 
-    const openapi = await new OpenAPICommand(argv.appmapDir).execute();
+    const openapi = await new OpenAPICommand(appmapDir).execute();
 
     const template = await loadTemplate(argv.openapiTemplate);
     template.paths = openapi.paths;
