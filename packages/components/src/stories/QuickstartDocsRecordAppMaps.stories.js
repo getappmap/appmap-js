@@ -1,4 +1,4 @@
-import RecordAppMaps from '@/pages/quickstart-docs/RecordAppMaps.vue';
+import RecordAppMaps from '@/pages/install-guide/RecordAppMaps.vue';
 
 export default {
   title: 'Pages/VS Code/Quickstart Docs/Record App Maps',

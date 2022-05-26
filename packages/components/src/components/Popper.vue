@@ -145,8 +145,11 @@ $border-color: $gray4;
     }
 
     &--success {
-      border-color: #88b811;
-      color: #88b811;
+      border-color: $color-highlight;
+
+      &::before {
+        border-color: inherit;
+      }
     }
   }
 }

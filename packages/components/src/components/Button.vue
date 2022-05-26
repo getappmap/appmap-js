@@ -1,12 +1,12 @@
 <template>
-  <button type="button" :class="classes" @click="onClick" :disabled="disabled">
+  <button type="button" :class="classes" :disabled="disabled">
     {{ label }}
   </button>
 </template>
 
 <script>
 export default {
-  name: 'appland-button',
+  name: 'v-button',
   props: {
     label: {
       type: String,
@@ -37,12 +37,6 @@ export default {
       return ['btn', `btn--${this.size}`, `btn--${this.kind}`];
     },
   },
-
-  methods: {
-    onClick() {
-      this.$emit('onClick');
-    },
-  },
 };
 </script>
 
@@ -50,9 +44,13 @@ export default {
 .btn {
   border-radius: 8px;
   border-style: none;
-  color: $gray6;
-  padding: 0.5em 1em;
+  color: $color-background;
+  font-weight: bold;
+  padding: 0.75em 1.5em;
   text-align: center;
+  cursor: pointer;
+  transition: 0.25s ease background-color;
+  user-select: none;
 
   &:disabled {
     background-color: $gray6;
@@ -60,21 +58,39 @@ export default {
   }
 
   &--primary {
-    background-color: $hotpink;
+    background-color: $color-highlight;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    &:active {
+      background-color: rgba(255, 255, 255, 0.65);
+    }
   }
   &--secondary {
     background-color: $blue;
   }
   &--ghost {
     background-color: inherit;
-    border: 1px solid $gray4;
+    border: 1px solid $color-highlight;
     border-style: solid;
-    color: $gray4;
+    color: $color-highlight;
 
     &:disabled {
       background-color: inherit;
       border-color: $gray6;
       color: $gray6;
+    }
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.9);
+      border-color: rgba(255, 255, 255, 0.9);
+    }
+
+    &:active {
+      color: rgba(255, 255, 255, 0.9);
+      border-color: rgba(255, 255, 255, 0.65);
     }
   }
 

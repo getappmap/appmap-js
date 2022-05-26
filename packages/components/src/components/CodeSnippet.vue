@@ -1,13 +1,15 @@
 <template>
   <div class="code-snippet">
-    <input
+    <span
       type="text"
-      class="code-snippet__input"
+      class="input code-snippet__input"
+      role="textbox"
       ref="input"
-      v-model="clipboardText"
-      @focus="onInputFocus"
+      @click="onInputFocus"
       @copy="onCopy"
-    />
+    >
+      {{ clipboardText }}
+    </span>
     <v-popper placement="top" ref="popper">
       <button
         class="code-snippet__btn"
@@ -26,7 +28,7 @@ import ClipboardIcon from '@/assets/clipboard.svg';
 import VPopper from './Popper.vue';
 
 export default {
-  name: 'CodeSnippet',
+  name: 'VCodeSnippet',
   components: {
     ClipboardIcon,
     VPopper,
@@ -50,7 +52,7 @@ export default {
   },
   methods: {
     onInputFocus() {
-      this.$refs.input.select();
+      window.getSelection().selectAllChildren(this.$refs.input);
     },
     copyToClipboard() {
       const text = this.clipboardText.trim();
@@ -83,19 +85,21 @@ export default {
 .code-snippet {
   margin: 1rem 0;
   border-radius: $border-radius;
-  border: 2px solid #3794ff;
+  border: 1px solid $color-highlight;
   display: flex;
   align-items: stretch;
   color: white;
+  background-color: rgba(0, 0, 0, 0.25);
+  max-width: 100%;
 
   &__input {
     flex: 1;
     font-family: monospace;
-    color: white;
+    color: $color-foreground;
     padding: 0.75rem 1.25rem;
     margin: 0;
     border: none;
-    border-right: 1px solid #3794ff;
+    border-right: 1px solid $color-highlight;
     border-radius: 0;
     background: transparent;
     outline: none;
@@ -108,16 +112,27 @@ export default {
     padding: 0 1rem;
     margin: 0;
     border: none;
-    border-radius: 0;
-    color: #3794ff;
-    background: transparent;
+    border-radius: 0 6px 6px 0;
+    color: $color-foreground-light;
+    background-color: $color-highlight;
+    opacity: 0.85;
     outline: none;
     appearance: none;
     cursor: pointer;
+    transition: 0.25s ease opacity;
 
     &[disabled] {
       opacity: 0.5;
       pointer-events: none;
+    }
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.9);
+      opacity: 1;
+    }
+
+    &:active {
+      color: rgba(255, 255, 255, 0.65);
     }
 
     &-icon {

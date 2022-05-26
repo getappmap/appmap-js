@@ -1,18 +1,20 @@
 <template>
   <div class="qs">
     <div class="qs-container">
-      <slot />
-    </div>
-    <div class="qs-help">
-      <HelpIcon class="qs-help__icon" />
-      <div class="qs-help__text">
-        Stuck?
-        <a
-          href="https://appland.com/appmap/support"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Contact an AppLand developer directly.</a
-        >
+      <div class="qs-content">
+        <slot />
+      </div>
+      <div class="qs-help">
+        <HelpIcon class="qs-help__icon" />
+        <div class="qs-help__text">
+          Stuck?
+          <a
+            href="https://appland.com/appmap/support"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Contact an AppLand developer directly.</a
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -45,8 +47,8 @@ body {
 ::selection,
 ::-moz-selection,
 ::-webkit-selection {
-  background-color: #2a84ef;
-  color: white;
+  background-color: $color-highlight;
+  color: $color-foreground;
 }
 
 .qs {
@@ -54,11 +56,12 @@ body {
   width: 100%;
   min-height: 100vh;
   padding: 10px 22px;
-  font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  color: $base07;
-  background-color: $vs-code-gray1;
+  font-family: $font-family;
+  font-size: $font-size;
+  font-weight: $font-weight;
+  line-height: 1.75;
+  color: $color-foreground;
+  background-color: $color-background;
 
   h1,
   h2,
@@ -83,7 +86,7 @@ body {
   }
 
   a {
-    color: #2a84ef;
+    color: $color-link;
     text-decoration: none;
   }
 
@@ -102,15 +105,24 @@ body {
 
     li::marker {
       content: '> ';
-      color: #2a84ef;
+      color: $color-link;
     }
   }
 }
 
 .qs-container {
+  max-width: 1280px;
+  margin: auto;
+}
+
+.qs-content {
   margin-bottom: 12px;
+  background: $color-tile-background;
+  filter: $shadow-tile;
+  max-width: 1280px;
   border-radius: 8px;
-  background: #1a1a1a;
+  margin: 1em auto;
+  padding: 2em;
 }
 
 .qs-button {
@@ -174,8 +186,6 @@ a.qs-button {
 }
 
 .qs-step {
-  padding: 32px 37px;
-
   &__head {
     margin-bottom: 30px;
   }
@@ -274,7 +284,7 @@ a.qs-button {
     td {
       padding-top: 2px;
       padding-bottom: 2px;
-      color: #2a84ef;
+      color: $color-link;
       white-space: normal;
     }
   }
@@ -284,5 +294,21 @@ a.qs-button {
   margin: 20px 0;
   font-size: 16px;
   color: $hotpink;
+}
+
+header {
+  margin-block-end: 2em;
+}
+
+article {
+  margin-bottom: 2.5em;
+}
+
+.center {
+  margin: auto;
+}
+
+.fit {
+  width: fit-content;
 }
 </style>

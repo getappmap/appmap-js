@@ -110,3 +110,19 @@ $base13: #454545;
 $base15: #424750;
 $base19: #292929;
 $alert-success: #7fc14a;
+
+// Editor common
+$color-background: var(--vscode-editor-background, $vs-code-gray1);
+$color-highlight: var(--vscode-list-highlightForeground, #3794ff);
+$color-foreground: var(--vscode-editor-foreground, $base07);
+$color-foreground-light: var(--vscode-inputOption-activeForeground, white);
+$font-family: var(--vscode-font-family, $appland-text-font-family);
+$font-size: var(--vscode-font-size, 14px);
+$font-weight: var(--vscode-font-weight, normal);
+$color-success: var(--vscode-terminal-ansiGreen, #44cf6c);
+$color-error: var(--vscode-terminal-ansiRed, #cd1414);
+$color-warning: var(--vscode-terminal-ansiYellow, #ecc30b);
+$color-link: var(--vscode-textLink-foreground, #2a84ef);
+$color-tile-background: var(--vscode-welcomePage-tileBackground, #252526);
+$color-tile-shadow: var(--vscode-welcomePage-tileShadow, rgba(0, 0, 0, 0.36));
+$shadow-tile: drop-shadow(2px 2px 2px $color-tile-shadow);
