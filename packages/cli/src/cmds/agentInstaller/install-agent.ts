@@ -125,7 +125,9 @@ class InstallerError {
   }
 }
 
-const _handler = async (args: InstallCommandOptions): Promise<{exitCode: number, err: Error | null}> => {
+const _handler = async (
+  args: InstallCommandOptions
+): Promise<{ exitCode: number; err: Error | null }> => {
   const { projectType, directory, verbose: isVerbose } = args;
   const errors: InstallerError[] = [];
   const installers = INSTALLERS.map(
@@ -149,9 +151,7 @@ const _handler = async (args: InstallCommandOptions): Promise<{exitCode: number,
         project.path
       );
 
-      console.log(
-        `Installing AppMap agent for ${chalk.blue(project.name)}...`
-      );
+      console.log(`Installing AppMap agent for ${chalk.blue(project.name)}...`);
 
       try {
         await installProcedure.run();
@@ -170,7 +170,7 @@ const _handler = async (args: InstallCommandOptions): Promise<{exitCode: number,
         let installerError = new InstallerError(e, endTime(), project);
         const handled = await installerError.handle();
         if (handled) {
-          return {exitCode: 1, err: e as Error};
+          return { exitCode: 1, err: e as Error };
         }
         errors.push(installerError);
       }
@@ -209,7 +209,7 @@ const _handler = async (args: InstallCommandOptions): Promise<{exitCode: number,
     const installerError = new InstallerError(err, 0, undefined);
     const handled = await installerError.handle();
     if (handled) {
-      return {exitCode: 1, err: err as Error};
+      return { exitCode: 1, err: err as Error };
     }
     errors.push(installerError);
   }
@@ -217,11 +217,11 @@ const _handler = async (args: InstallCommandOptions): Promise<{exitCode: number,
   if (errors.length) {
     const reason = new Error(errors.map((e) => e.message).join('\n'));
     console.log(reason.message);
-    return {exitCode: 1, err: reason};
+    return { exitCode: 1, err: reason };
   }
 
-  return {exitCode: 0, err: null}
-}
+  return { exitCode: 0, err: null };
+};
 
 export default {
   command: 'install [directory]',
@@ -244,8 +244,15 @@ export default {
       default: undefined,
       alias: 'p',
     });
+
+    args.option('directory', {
+      describe: 'Directory in which to install.',
+      type: 'string',
+      alias: 'd',
+    });
+
     args.positional('directory', {
-      describe: 'directory in which to install',
+      describe: 'Directory in which to install (deprecated; use -d)',
       default: '.',
     });
     return args.strict();
@@ -256,7 +263,7 @@ export default {
       name: 'install-agent:start',
     });
 
-    const {exitCode, err} = await _handler(args);
+    const { exitCode, err } = await _handler(args);
 
     Telemetry.flush(() => {
       Yargs.exit(exitCode, err as any);

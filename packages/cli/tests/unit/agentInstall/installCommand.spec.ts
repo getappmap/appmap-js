@@ -49,7 +49,7 @@ const invokeCommand = (
       description: 'Run with verbose logging',
     })
     .parse(
-      `install-agent ${debugSwitch} ${projectDir}`,
+      `install-agent ${debugSwitch} -d ${projectDir}`,
       {},
       (err, argv, output) => {
         evalResults(err, argv, output);
@@ -62,7 +62,9 @@ describe('install sub-command', () => {
   beforeEach(() => {
     // Stub all Telemetry methods. flush still needs to work, though.
     sinon.stub(Telemetry);
-    const callCB = (cb) => { return cb() };
+    const callCB = (cb) => {
+      return cb();
+    };
     (Telemetry.flush as sinon.SinonStub).callsFake(callCB);
     projectDir = tmp.dirSync({} as any).name;
   });
@@ -650,29 +652,29 @@ packages:
     packages:
     - path: lib
     `;
-    
-          const initAgent = (cmdStruct: CommandStruct) => {
-            expect(cmdStruct.program).toEqual('npx');
-            const args = cmdStruct.args;
-            expect(args).toEqual(['appmap-agent-js', 'init', projectDir]);
-            const fakeConfig = `
+
+    const initAgent = (cmdStruct: CommandStruct) => {
+      expect(cmdStruct.program).toEqual('npx');
+      const args = cmdStruct.args;
+      expect(args).toEqual(['appmap-agent-js', 'init', projectDir]);
+      const fakeConfig = `
     {
        "configuration": {
          "contents": "${expectedConfig.replace(/[\n]/g, '\\n')}"
        }
     }`;
-            const ret = { stdout: fakeConfig, stderr: '' };
-            return Promise.resolve(ret);
-          };
-    
-          const validateAgent = (cmdStruct: CommandStruct) => {
-            expect(cmdStruct.program).toEqual('npx');
-            const args = cmdStruct.args;
-            expect(args).toEqual(['appmap-agent-js', 'status', projectDir]);
-            const ret = { stdout: '[]', stderr: '' };
-            return Promise.resolve(ret);
-          };
-    
+      const ret = { stdout: fakeConfig, stderr: '' };
+      return Promise.resolve(ret);
+    };
+
+    const validateAgent = (cmdStruct: CommandStruct) => {
+      expect(cmdStruct.program).toEqual('npx');
+      const args = cmdStruct.args;
+      expect(args).toEqual(['appmap-agent-js', 'status', projectDir]);
+      const ret = { stdout: '[]', stderr: '' };
+      return Promise.resolve(ret);
+    };
+
     describe('managed with npm', () => {
       const projectFixture = path.join(fixtureDir, 'javascript', 'npm');
 
@@ -693,7 +695,6 @@ packages:
         const ret = { stdout: '', stderr: '' };
         return Promise.resolve(ret);
       };
-
 
       it('installs as expected', async () => {
         expect.assertions(10);
@@ -753,7 +754,6 @@ packages:
         return Promise.resolve(ret);
       };
 
-
       it('installs as expected', async () => {
         expect.assertions(10);
         const evalResults = (err, argv, output) => {
@@ -790,8 +790,7 @@ packages:
           evalResults
         );
       });
-    });    
-
+    });
   });
   describe('Varied project configurations', () => {
     beforeEach(() => {
@@ -954,7 +953,7 @@ packages:
         addSubprojects: true,
         confirm: true,
         selectedSubprojects: ['project-a', 'project-b'],
-      });;
+      });
 
       await invokeCommand(projectDir, (err) => {
         expect(err).toBeNull();
@@ -962,10 +961,14 @@ packages:
 
       // No root project, should default to choosing subproject
       expect(promptStub.getCall(0).args).toMatchObject([
-        {type: 'confirm', 
-        message: expect.stringMatching('This directory contains sub-projects'),
-        default: true,
-      }]);
+        {
+          type: 'confirm',
+          message: expect.stringMatching(
+            'This directory contains sub-projects'
+          ),
+          default: true,
+        },
+      ]);
 
       expectedStubs.forEach((stub) => expect(stub.called).toBe(true));
       const sendEventStub = Telemetry.sendEvent as sinon.SinonStub;
@@ -985,24 +988,32 @@ packages:
 
     it('installs the root project by default', async () => {
       expect.assertions(2);
-      const projectFixture = path.join(fixtureDir, 'java', 'multi-project-root');
+      const projectFixture = path.join(
+        fixtureDir,
+        'java',
+        'multi-project-root'
+      );
       fse.copySync(projectFixture, projectDir);
       const promptStub = sinon.stub(inquirer, 'prompt').resolves({
         addSubprojects: true,
         confirm: true,
         selectedSubprojects: ['project-a', 'project-b'],
-      });;
+      });
 
       await invokeCommand(projectDir, (err) => {
         expect(err).toBeNull();
       });
-      
+
       // Root project exists, should default to not choosing a sub-project.
       expect(promptStub.getCall(0).args).toMatchObject([
-        {type: 'confirm',
-        message: expect.stringMatching('This directory contains sub-projects'),
-        default: false,
-      }]);
+        {
+          type: 'confirm',
+          message: expect.stringMatching(
+            'This directory contains sub-projects'
+          ),
+          default: false,
+        },
+      ]);
     });
   });
 });
