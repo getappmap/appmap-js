@@ -18,6 +18,14 @@ export default class GradleInstaller extends JavaBuildToolInstaller {
     super(GradleInstaller.identifier, path);
   }
 
+  get language(): string {
+    return 'java';
+  }
+
+  get appmap_dir(): string {
+    return 'build/appmap';
+  }
+
   private get buildGradleFileName(): string {
     return 'build.gradle';
   }

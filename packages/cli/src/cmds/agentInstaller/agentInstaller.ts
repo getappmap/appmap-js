@@ -13,6 +13,8 @@ export default abstract class AgentInstaller {
     this.path = resolve(path);
   }
 
+  abstract get language(): string;
+  abstract get appmap_dir(): string;
   abstract installAgent(): Promise<void>;
 
   abstract checkConfigCommand(): Promise<CommandStruct | undefined>;

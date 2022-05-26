@@ -10,6 +10,8 @@ import Telemetry from '../../telemetry';
 import CommandStruct from './commandStruct';
 import { formatValidationError } from './ValidationResult';
 import { GitStatus } from './types/state';
+import { dump, load } from 'js-yaml';
+import { readFile } from 'fs/promises';
 
 export default class AgentInstallerProcedure extends AgentProcedure {
   async run(): Promise<void> {
@@ -38,6 +40,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
     }
 
     let useExistingAppMapYml = false;
+    let existingConfig: any;
     if (this.configExists) {
       const USE_EXISTING = 'Use existing';
       const OVERWRITE = 'Overwrite';
@@ -56,7 +59,14 @@ export default class AgentInstallerProcedure extends AgentProcedure {
       }
 
       if (overwriteAppMapYml === USE_EXISTING) {
-        useExistingAppMapYml = true;
+        try {
+          existingConfig = this.loadConfig();
+          useExistingAppMapYml = true;
+        } catch {
+          throw new AbortError(
+            'An appmap.yml file exists but is not valid. Please remove it or fix it and try again.'
+          );
+        }
       }
     }
 
@@ -73,14 +83,29 @@ export default class AgentInstallerProcedure extends AgentProcedure {
 
       await this.verifyProject();
 
-      const appMapYml = this.configPath;
-
       if (!useExistingAppMapYml) {
         const initCommand = await this.installer.initCommand();
         const { stdout } = await run(initCommand);
-        const json = JSON.parse(stdout);
+        const initCommandOutput = JSON.parse(stdout);
+        const recommendedConfig = (load(initCommandOutput.configuration.contents) as any) || {};
 
-        fs.writeFileSync(appMapYml, json.configuration.contents);
+        recommendedConfig.language = this.installer.language;
+        recommendedConfig.appmap_dir = this.installer.appmap_dir;
+
+        this.writeConfigFile(recommendedConfig);
+      } else {
+        let dirty = false;
+        const updateField = (fieldName: string): void => {
+          if (!existingConfig[fieldName]) {
+            UI.success(`Updating ${fieldName} in appmap.yml`);
+            existingConfig[fieldName] = this.installer[fieldName];
+            dirty = true;
+          }
+        };
+        ['language', 'appmap_dir'].forEach(updateField);
+        if (dirty) {
+          this.writeConfigFile(existingConfig);
+        }
       }
 
       const result = await this.validateProject(useExistingAppMapYml);
@@ -161,5 +186,9 @@ export default class AgentInstallerProcedure extends AgentProcedure {
         throw e;
       }
     }
+  }
+
+  writeConfigFile(config: Record<string, any>) {
+    fs.writeFileSync(this.configPath, dump(config));
   }
 }

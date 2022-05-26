@@ -21,6 +21,7 @@ import * as validator from '../../../src/service/config/validator';
 import 'jest-sinon';
 import GradleInstaller from '../../../src/cmds/agentInstaller/gradleInstaller';
 import MavenInstaller from '../../../src/cmds/agentInstaller/mavenInstaller';
+import { dump } from 'js-yaml';
 
 import * as openTicket from '../../../src/lib/ticket/openTicket';
 import { withStubbedTelemetry } from '../../helper';
@@ -90,11 +91,23 @@ describe('install sub-command', () => {
       return invokeCommand(projectDir, evalResults);
     };
 
-    const expectedConfig = `
-# Fake appmap.yml
-name: fake-app
+    const providedConfig = `name: fake-app
 packages:
-- path: com.fake.Fake
+  - path: com.fake.Fake
+    `;
+
+    const expectedMavenConfig = `name: fake-app
+packages:
+  - path: com.fake.Fake
+language: java
+appmap_dir: target/appmap
+`;
+
+    const expectedGradleConfig = `name: fake-app
+packages:
+  - path: com.fake.Fake
+language: java
+appmap_dir: build/appmap
 `;
 
     const initAgent = (cmdStruct: CommandStruct) => {
@@ -104,7 +117,7 @@ packages:
       const fakeConfig = `
     {
        "configuration": {
-         "contents": "${expectedConfig.replace(/[\n]/g, '\\n')}"
+         "contents": "${providedConfig.replace(/[\n]/g, '\\n')}"
        }
     }`;
       const ret = { stdout: fakeConfig, stderr: '' };
@@ -174,7 +187,7 @@ packages:
           const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
             encoding: 'utf-8',
           });
-          expect(actualConfig).toEqual(expectedConfig);
+          expect(actualConfig).toEqual(expectedGradleConfig);
         };
         await testE2E(
           verifyJavaVersion,
@@ -246,7 +259,7 @@ packages:
           const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
             encoding: 'utf-8',
           });
-          expect(actualConfig).toEqual(expectedConfig);
+          expect(actualConfig).toEqual(expectedMavenConfig);
         };
         await testE2E(
           verifyJavaVersion,
@@ -302,11 +315,16 @@ packages:
       return Promise.resolve(ret);
     };
 
-    const expectedConfig = `
-# Fake appmap.yml
-name: fake-app
+    const providedConfig = `name: fake-app
 packages:
-- path: app/controllers
+  - path: app/controllers
+`;
+
+    const expectedConfig = `name: fake-app
+packages:
+  - path: app/controllers
+language: ruby
+appmap_dir: tmp/appmap
 `;
 
     const initAgent = (cmdStruct: CommandStruct) => {
@@ -316,7 +334,7 @@ packages:
       const fakeConfig = `
 {
    "configuration": {
-     "contents": "${expectedConfig.replace(/[\n]/g, '\\n')}"
+     "contents": "${providedConfig.replace(/[\n]/g, '\\n')}"
    }
 }`;
       const ret = { stdout: fakeConfig, stderr: '' };
@@ -477,12 +495,17 @@ packages:
       return Promise.resolve({ stdout: '/usr/local', stderr: '' });
     };
 
-    const expectedConfig = `
-# Fake appmap.yml
-name: fake-app
+    const providedConfig = `name: fake-app
 packages:
-- path: fake_app
-    `;
+  - path: fake_app
+`;
+
+    const expectedConfig = `name: fake-app
+packages:
+  - path: fake_app
+language: python
+appmap_dir: tmp/appmap
+`;
 
     describe('managed with pip', () => {
       const projectFixture = path.join(fixtureDir, 'python', 'pip');
@@ -532,9 +555,9 @@ packages:
         expect(cmdStruct.args).toEqual(['-m', 'appmap.command.appmap_agent_init']);
         const fakeConfig = `
 {
-  "configuration": {
-    "contents": "${expectedConfig.replace(/[\n]/g, '\\n')}"
-  }
+   "configuration": {
+     "contents": "${providedConfig.replace(/[\n]/g, '\\n')}"
+   }
 }`;
         const ret = { stdout: fakeConfig, stderr: '' };
         return Promise.resolve(ret);
@@ -750,12 +773,18 @@ packages:
       expect(cmdStruct.args).toEqual(['--version']);
       return Promise.resolve({ stdout: 'v16.11.1', stderr: '' });
     };
-    const expectedConfig = `
-    # Fake appmap.yml
-    name: fake-app
-    packages:
-    - path: lib
-    `;
+
+    const providedConfig = `name: fake-app
+packages:
+  - path: lib
+`;
+
+    const expectedConfig = `name: fake-app
+packages:
+  - path: lib
+language: javascript
+appmap_dir: tmp/appmap
+`;
 
     const initAgent = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('npx');
@@ -764,7 +793,7 @@ packages:
       const fakeConfig = `
     {
        "configuration": {
-         "contents": "${expectedConfig.replace(/[\n]/g, '\\n')}"
+         "contents": "${providedConfig.replace(/[\n]/g, '\\n')}"
        }
     }`;
       const ret = { stdout: fakeConfig, stderr: '' };
@@ -1000,6 +1029,11 @@ packages:
       });
 
       sinon.stub(BundleInstaller.prototype, 'checkCurrentConfig').resolves();
+      sinon.stub(commandRunner, 'run').resolves({
+        stdout: '{"configuration": { "contents": "{}" }, "errors": []}',
+        stderr: '',
+      });
+
       sinon.stub(BundleInstaller.prototype, 'installAgent').resolves();
 
       sinon.stub(AgentInstallerProcedure.prototype, 'configExists').value(true);
@@ -1016,6 +1050,18 @@ packages:
       await invokeCommand(projectDir, () => {});
 
       expect(validateConfig).toBeCalled();
+    });
+
+    it('merges language and appmap_dir into existing config', async () => {
+      expect.assertions(2);
+      const validateConfig = sinon.stub(validator, 'validateConfig').returns({ valid: true });
+      await invokeCommand(projectDir, () => {});
+
+      expect(validateConfig).toBeCalled();
+      const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
+        encoding: 'utf-8',
+      });
+      expect(actualConfig).toEqual(dump({ language: 'ruby', appmap_dir: 'tmp/appmap' }));
     });
 
     it('fails when the config syntax is invalid', async () => {
@@ -1040,7 +1086,7 @@ packages:
           js: jsError,
         },
       };
-      const validateConfig = sinon.stub(validator, 'validateConfig').returns(validationResult);
+      sinon.stub(validator, 'validateConfig').returns(validationResult);
 
       const installProcedureStub = sinon
         .stub(AgentInstallerProcedure.prototype, 'run')

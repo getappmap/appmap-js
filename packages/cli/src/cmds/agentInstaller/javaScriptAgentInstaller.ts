@@ -14,6 +14,14 @@ abstract class JavaScriptInstaller extends AgentInstaller {
     super(name, path);
   }
 
+  get language(): string {
+    return 'javascript';
+  }
+
+  get appmap_dir(): string {
+    return 'tmp/appmap';
+  }
+
   get documentation() {
     return 'https://appland.com/docs/reference/appmap-agent-js';
   }

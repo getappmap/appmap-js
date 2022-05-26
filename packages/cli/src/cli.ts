@@ -271,12 +271,16 @@ yargs(process.argv.slice(2))
     'depends [files]',
     'Compute a list of AppMaps that are out of date',
     (args) => {
+      args.option('directory', {
+        describe: 'program working directory',
+        type: 'string',
+        alias: 'd',
+      });
       args.positional('files', {
         describe: 'provide an explicit list of dependency files',
       });
       args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
-        default: 'tmp/appmap',
       });
       args.option('base-dir', {
         describe: 'directory to prepend to each dependency source file',
@@ -293,6 +297,8 @@ yargs(process.argv.slice(2))
     },
     async (argv) => {
       verbose(argv.verbose);
+      handleWorkingDirectory(argv.directory);
+      const appmapDir = await locateAppMapDir(argv.appmapDir);
 
       let { files } = argv;
       if (argv.stdinFiles) {
@@ -305,10 +311,10 @@ yargs(process.argv.slice(2))
       }
 
       if (verbose()) {
-        console.warn(`Testing AppMaps in ${argv.appmapDir}`);
+        console.warn(`Testing AppMaps in ${appmapDir}`);
       }
 
-      const depends = new Depends(argv.appmapDir);
+      const depends = new Depends(appmapDir);
       if (argv.baseDir) {
         depends.baseDir = argv.baseDir;
       }
@@ -343,21 +349,27 @@ yargs(process.argv.slice(2))
     'index',
     'Compute fingerprints and update index files for all appmaps in a directory',
     (args) => {
+      args.option('directory', {
+        describe: 'program working directory',
+        type: 'string',
+        alias: 'd',
+      });
       args.option('watch', {
         describe: 'watch the directory for changes to appmaps',
         boolean: true,
       });
       args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
-        default: 'tmp/appmap',
       });
       return args.strict();
     },
     async (argv) => {
       verbose(argv.verbose);
+      handleWorkingDirectory(argv.directory);
+      const appmapDir = await locateAppMapDir(argv.appmapDir);
 
       if (argv.watch) {
-        const cmd = new FingerprintWatchCommand(argv.appmapDir);
+        const cmd = new FingerprintWatchCommand(appmapDir);
         await cmd.execute();
 
         if (!argv.verbose && process.stdout.isTTY) {
@@ -374,7 +386,7 @@ yargs(process.argv.slice(2))
           });
         }
       } else {
-        const cmd = new FingerprintDirectoryCommand(argv.appmapDir);
+        const cmd = new FingerprintDirectoryCommand(appmapDir);
         await cmd.execute();
       }
     }

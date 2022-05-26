@@ -9,6 +9,12 @@ class FakeInstaller extends AgentInstaller {
     super('Fake', path);
   }
 
+  get language(): string {
+    return 'Method not implemented';
+  }
+  get appmap_dir(): string {
+    return 'Method not implemented';
+  }
   installAgent(): Promise<void> {
     throw new Error('Method not implemented.');
   }
