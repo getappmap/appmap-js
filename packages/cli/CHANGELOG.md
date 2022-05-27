@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.26.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.25.4...@appland/appmap-v3.26.0) (2022-05-27)
+
+
+### Features
+
+* install command accepts -d for target directory ([efc817c](https://github.com/applandinc/appmap-js/commit/efc817c4de78ea6912e03db5d36ab4a77fcfa0ae))
+
 # [@appland/appmap-v3.25.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.25.3...@appland/appmap-v3.25.4) (2022-05-17)
 
 
