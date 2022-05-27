@@ -2,7 +2,7 @@
   "name": "@appland/appmap",
   "version": "3.27.0",
   "description": "",
-  "bin": "built/src/cli.js",
+  "bin": "built/cli.js",
   "publishConfig": {
     "access": "public"
   },
