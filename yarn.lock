@@ -145,7 +145,7 @@ __metadata:
     webpack-cli: ^4.8.0
     yargs: ^17.1.1
   bin:
-    appmap: built/src/cli.js
+    appmap: built/cli.js
   languageName: unknown
   linkType: soft
 
