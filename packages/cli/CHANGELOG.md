@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.27.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.0...@appland/appmap-v3.27.1) (2022-05-27)
+
+
+### Bug Fixes
+
+* Correct packages/cli bin script location ([5aafd90](https://github.com/applandinc/appmap-js/commit/5aafd90aab3c328a7ada80c80958c1139787c6fe))
+
 # [@appland/appmap-v3.27.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.26.0...@appland/appmap-v3.27.0) (2022-05-27)
 
 
