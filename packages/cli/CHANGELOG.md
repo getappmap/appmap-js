@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.27.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.26.0...@appland/appmap-v3.27.0) (2022-05-27)
+
+
+### Features
+
+* Save remote recordings to $appmap_dir/remote ([81cd0c4](https://github.com/applandinc/appmap-js/commit/81cd0c4ab495fb9b7d35f0c894de7abfb0625adc))
+
 # [@appland/appmap-v3.26.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.25.4...@appland/appmap-v3.26.0) (2022-05-27)
 
 
