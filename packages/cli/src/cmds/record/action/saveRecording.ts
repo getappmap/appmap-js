@@ -1,6 +1,8 @@
+import { mkdirp } from 'fs-extra';
 import { writeFile } from 'fs/promises';
+import { join } from 'path';
 import UI from '../../userInteraction';
-import { requestOptions } from '../configuration';
+import { readConfigOption, requestOptions } from '../configuration';
 import RecordContext from '../recordContext';
 import RemoteRecording from '../remoteRecording';
 
@@ -33,11 +35,17 @@ export default async function saveRecording(
   data = JSON.stringify(jsonData);
 
   const fileName = `${appMapName}.appmap.json`;
-  UI.status = `Saving recording to ${fileName}`;
+  const outputDir = join(
+    (await readConfigOption('appmap_dir', 'tmp/appmap')) as string,
+    'remote'
+  );
+  await mkdirp(outputDir);
 
-  await writeFile(fileName, data);
+  UI.status = `Saving recording to ${fileName} in directory ${outputDir}`;
+
+  await writeFile(join(outputDir, fileName), data);
 
   UI.success('AppMap saved');
 
-  return fileName;
+  return join(outputDir, fileName);
 }
