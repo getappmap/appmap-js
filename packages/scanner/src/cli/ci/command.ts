@@ -6,7 +6,6 @@ import { Arguments, Argv } from 'yargs';
 import { FindingStatusListItem } from '@appland/client/dist/src';
 
 import { parseConfigFile } from '../../configuration/configurationProvider';
-import { ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
 import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
 import { newFindings } from '../../findings';
@@ -14,7 +13,6 @@ import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 
 import resolveAppId from '../resolveAppId';
-import validateFile from '../validateFile';
 import upload from '../upload';
 import { default as buildScanner } from '../scan/scanner';
 
@@ -24,6 +22,7 @@ import updateCommitStatus from '../updateCommitStatus';
 import reportUploadURL from '../reportUploadURL';
 import fail from '../fail';
 import codeVersionArgs from '../codeVersionArgs';
+import assert from 'assert';
 
 export default {
   command: 'ci',
@@ -76,12 +75,8 @@ export default {
     if (!appmapDir) {
       appmapDir = await appmapDirFromConfig();
     }
-    if (!appmapDir) {
-      appmapDir = await appmapDirFromConfig();
-      throw new ValidationError('--appmap-dir is required');
-    }
+    assert(appmapDir, 'appmapDir must be provided as a command option, or available in appmap.yml');
 
-    await validateFile('directory', appmapDir!);
     const appId = await resolveAppId(appIdArg, appmapDir);
 
     const glob = promisify(globCallback);

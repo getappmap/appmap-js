@@ -13,6 +13,8 @@ import {
 } from '@appland/openapi';
 import { Event } from '@appland/models';
 import { Arguments, Argv } from 'yargs';
+import { appmapDirFromConfig } from '../lib/appmapDirFromConfig';
+import assert from 'assert';
 
 export class OpenAPICommand {
   directory: string;
@@ -108,7 +110,10 @@ module.exports = {
     if (!appmapDir) {
       appmapDir = await appmapDirFromConfig();
     }
-    assertAppMapDir(appmapDir);
+    assert(
+      appmapDir,
+      'appmapDir must be provided as a command option, or available in appmap.yml'
+    );
 
     function tryConfigure(path: string, fn: () => void) {
       try {

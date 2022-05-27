@@ -3,13 +3,13 @@ import { Arguments, Argv } from 'yargs';
 import { ValidationError } from '../../errors';
 import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
 
-import validateFile from '../validateFile';
 import CommandOptions from './options';
 import scanArgs from '../scanArgs';
 import resolveAppId from '../resolveAppId';
 import singleScan from './singleScan';
 import watchScan from './watchScan';
 import { parseConfigFile } from '../../configuration/configurationProvider';
+import assert from 'assert';
 
 export default {
   command: 'scan',
@@ -74,9 +74,12 @@ export default {
       );
     }
     if (!appmapFile && !appmapDir) {
-      appmapDir = (await appmapDirFromConfig()) || '.';
+      appmapDir = await appmapDirFromConfig();
+      assert(
+        appmapDir,
+        'appmapDir must be provided as a command option, or available in appmap.yml'
+      );
     }
-    if (appmapDir) await validateFile('directory', appmapDir);
 
     if (watch) {
       const watchAppMapDir = appmapDir!;

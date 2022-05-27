@@ -32,6 +32,7 @@ export default async function singleScan(options: SingleScanOptions): Promise<vo
     const glob = promisify(globCallback);
     files = await glob(`${appmapDir}/**/*.appmap.json`);
   }
+
   if (appmapFile) {
     files = typeof appmapFile === 'string' ? [appmapFile] : appmapFile;
     await Promise.all(files.map(async (file) => validateFile('file', file)));

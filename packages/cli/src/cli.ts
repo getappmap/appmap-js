@@ -31,6 +31,8 @@ const RecordCommand = require('./cmds/record/record');
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
 import PruneCommand from './cmds/prune/prune';
+import { appmapDirFromConfig } from './lib/appmapDirFromConfig';
+import assert from 'assert';
 
 class DiffCommand {
   public appMapNames: any;
@@ -290,6 +292,7 @@ yargs(process.argv.slice(2))
       });
       args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
+        alias: 'd',
       });
       args.option('base-dir', {
         describe: 'directory to prepend to each dependency source file',
@@ -312,7 +315,10 @@ yargs(process.argv.slice(2))
       if (!appmapDir) {
         appmapDir = await appmapDirFromConfig();
       }
-      assertAppMapDir(appmapDir);
+      assert(
+        appmapDir,
+        'appmapDir must be provided as a command option, or available in appmap.yml'
+      );
 
       let { files } = argv;
       if (argv.stdinFiles) {
@@ -370,7 +376,7 @@ yargs(process.argv.slice(2))
       });
       args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
-        default: 'tmp/appmap',
+        alias: 'd',
       });
       args.option('interactive', {
         describe: 'interact with the output via CLI',
@@ -386,7 +392,10 @@ yargs(process.argv.slice(2))
       if (!appmapDir) {
         appmapDir = await appmapDirFromConfig();
       }
-      assertAppMapDir(appmapDir);
+      assert(
+        appmapDir,
+        'appmapDir must be provided as a command option, or available in appmap.yml'
+      );
 
       const newProgress = () => {
         if (argv.interactive) {
@@ -527,7 +536,7 @@ yargs(process.argv.slice(2))
       });
       args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
-        default: 'tmp/appmap',
+        alias: 'd',
       });
       return args.strict();
     },
@@ -538,7 +547,10 @@ yargs(process.argv.slice(2))
       if (!appmapDir) {
         appmapDir = await appmapDirFromConfig();
       }
-      assertAppMapDir(appmapDir);
+      assert(
+        appmapDir,
+        'appmapDir must be provided as a command option, or available in appmap.yml'
+      );
 
       if (argv.watch) {
         const cmd = new FingerprintWatchCommand(appmapDir);
@@ -569,7 +581,7 @@ yargs(process.argv.slice(2))
     (args) => {
       args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
-        default: 'tmp/appmap',
+        alias: 'd',
       });
       return args.strict();
     },
@@ -580,7 +592,10 @@ yargs(process.argv.slice(2))
       if (!appmapDir) {
         appmapDir = await appmapDirFromConfig();
       }
-      assertAppMapDir(appmapDir);
+      assert(
+        appmapDir,
+        'appmapDir must be provided as a command option, or available in appmap.yml'
+      );
 
       await new FingerprintDirectoryCommand(appmapDir).execute();
 
