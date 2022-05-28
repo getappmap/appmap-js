@@ -18,5 +18,5 @@ export default interface CheckConfig {
   include?: MatchConfig[];
   exclude?: MatchConfig[];
   // Properties are mapped to rule Options.
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
 }

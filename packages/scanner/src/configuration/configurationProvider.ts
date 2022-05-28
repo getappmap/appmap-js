@@ -3,7 +3,7 @@ import Ajv from 'ajv';
 import yaml from 'js-yaml';
 import { exists, promises as fs } from 'fs';
 
-import { Rule, RuleLogic, ScopeName } from '../types';
+import { Rule, ScopeName } from '../types';
 import Check from '../check';
 
 import { camelize, capitalize, dasherize, verbose } from '../rules/lib/util';
@@ -37,8 +37,8 @@ function loadFromFile(ruleName: string): () => Promise<Rule | undefined> {
 function loadFromDir(ruleName: string): () => Promise<Rule | undefined> {
   return async () => {
     let metadata: Metadata;
-    let rule: (options: any) => RuleLogic;
-    let options: any;
+    let rule: Rule['build'];
+    let options: unknown;
     try {
       metadata = (await import(`../rules/${ruleName}/metadata`)).default;
     } catch (e) {
@@ -92,7 +92,7 @@ async function buildBuiltinCheck(config: CheckConfig): Promise<Check> {
     console.log(`Loaded rule: ${rule}`);
   }
 
-  let options: any;
+  let options: typeof rule['Options'];
   if (rule.Options) {
     options = new rule.Options();
   } else {
@@ -135,7 +135,7 @@ async function buildBuiltinCheck(config: CheckConfig): Promise<Check> {
   return check;
 }
 
-const validate = (validator: ValidateFunction, data: any, context: string): void => {
+const validate = (validator: ValidateFunction, data: unknown, context: string): void => {
   const valid = validator(data);
   if (!valid) {
     throw new Error(
@@ -170,6 +170,10 @@ export async function loadRule(ruleName: string): Promise<Rule> {
   return rule;
 }
 
+function hasDefinition(key: string): key is keyof typeof options_schema.definitions {
+  return key in options_schema.definitions;
+}
+
 export async function loadConfig(config: Configuration): Promise<Check[]> {
   config.checks
     .filter((check) => check.properties)
@@ -179,10 +183,10 @@ export async function loadConfig(config: Configuration): Promise<Check[]> {
       if (verbose()) {
         console.warn(schemaKey);
       }
-      const propertiesSchema = (options_schema.definitions as Record<string, any>)[schemaKey];
-      if (!propertiesSchema) {
+      if (!hasDefinition(schemaKey)) {
         return;
       }
+      const propertiesSchema = options_schema.definitions[schemaKey];
       if (verbose()) {
         console.warn(propertiesSchema);
         console.warn(check.properties);

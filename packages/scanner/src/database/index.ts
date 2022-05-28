@@ -159,7 +159,7 @@ export function countJoins(ast: QueryAST | undefined): number {
   let joins = 0;
   visit(ast, {
     'map.join': (node) => {
-      joins += node.map.length;
+      joins += (node.map ?? []).length;
     },
   });
 

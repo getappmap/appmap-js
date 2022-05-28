@@ -1,16 +1,23 @@
-type Callback = (node: any, callbacks?: Record<string, Callback>) => void;
+import { SqliteParser } from '@appland/models/types/sqlite-parser';
 
-export function visit(node: any, callbacks?: Record<string, Callback>): void {
+type Callbacks = {
+  [Node in SqliteParser.Node as `${Node['type']}.${Node['variant']}`]?: (node: Node) => void;
+};
+
+export function visit(node: SqliteParser.Node, callbacks: Callbacks): void {
   if (node === null) return;
 
   const { type, variant } = node;
-  const key = [type, variant].filter(Boolean).join('.');
+  const key = [type, variant].filter(Boolean).join('.') as keyof Callbacks;
 
-  if (callbacks !== undefined && key in callbacks) callbacks[key](node, callbacks);
+  if (key in callbacks) {
+    const callback = callbacks[key] as (node: SqliteParser.Node) => void;
+    callback(node);
+  }
   visitNode(node, callbacks);
 }
 
-function visitNode(node: any, callbacks?: Record<string, Callback>): void {
+function visitNode(node: SqliteParser.Node, callbacks: Callbacks): void {
   for (const [key, property] of Object.entries(node)) {
     if (['type', 'variant', 'name', 'value'].includes(key)) continue;
     if (Array.isArray(property)) {

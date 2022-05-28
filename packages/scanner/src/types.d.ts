@@ -143,7 +143,7 @@ interface Rule {
   impactDomain?: ImpactDomain;
   references?: Record<string, URL>;
   // User-defined options for the rule.
-  Options?: any;
+  Options?: Class;
   // Function to instantiate the rule logic from configured options.
-  build: (options: any) => RuleLogic;
+  build: (options: this['Options']) => RuleLogic;
 }

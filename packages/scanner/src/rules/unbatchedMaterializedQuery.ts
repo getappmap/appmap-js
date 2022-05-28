@@ -20,7 +20,7 @@ function isApplicable(e: Event, appMapIndex: AppMapIndex): boolean {
       const metadataTableNames = ['sqlite_master'];
 
       visit(ast, {
-        'statement.select': (statement: any) => {
+        'statement.select': (statement) => {
           isSelect = true;
 
           if (
@@ -36,7 +36,7 @@ function isApplicable(e: Event, appMapIndex: AppMapIndex): boolean {
         'expression.limit': () => {
           hasLimitClause = true;
         },
-        'identifier.table': (identifier: any) => {
+        'identifier.table': (identifier) => {
           if (metadataTableNames.includes(identifier.name)) {
             isMetadataQuery = true;
           }
