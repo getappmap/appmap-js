@@ -34,6 +34,7 @@
     "@types/sinon": "^10.0.2",
     "@types/tmp": "^0.2.3",
     "@types/w3c-xmlserializer": "^2.0.2",
+    "@types/write-file-atomic": "^4.0.0",
     "copy-webpack-plugin": "^9.0.1",
     "crypto": "^1.0.1",
     "css-loader": "^6.2.0",
@@ -99,6 +100,7 @@
     "semver": "^7.3.5",
     "supports-hyperlinks": "^2.2.0",
     "w3c-xmlserializer": "^2.0.0",
+    "write-file-atomic": "^4.0.1",
     "yargs": "^17.1.1"
   }
 }
