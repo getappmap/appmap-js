@@ -10,7 +10,8 @@ export async function appmapDirFromConfig(): Promise<string | undefined> {
   if (appMapConfigExists) {
     const appMapConfigData = load((await readFile('appmap.yml')).toString());
     if (appMapConfigData && typeof appMapConfigData === 'object') {
-      return (appMapConfigData as any)['appmap_dir'] as string;
+      const configData: { appmap_dir?: string } = appMapConfigData;
+      return configData['appmap_dir'];
     }
   }
 }

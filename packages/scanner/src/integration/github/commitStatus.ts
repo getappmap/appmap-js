@@ -14,7 +14,7 @@ type CommitStatusState = 'pending' | 'success' | 'error' | 'failure';
 export default function postCommitStatus(
   state: CommitStatusState,
   description: string
-): Promise<any> {
+): Promise<unknown> {
   validateToken();
   validateRepo();
   validateOwner();

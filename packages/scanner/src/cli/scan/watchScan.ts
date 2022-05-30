@@ -1,7 +1,6 @@
 import { writeFile } from 'fs/promises';
 import * as chokidar from 'chokidar';
 
-import { ValidationError } from '../../errors';
 import Configuration from '../../configuration/types/configuration';
 
 import { formatReport } from './formatReport';

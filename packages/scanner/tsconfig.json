@@ -3,7 +3,6 @@
   "compilerOptions": {
     "outDir": "built",
     "types": ["node", "jest"],
-    "paths": {"sqlite-parser": ["./types/sqlite-parser.d.ts"]},
     "resolveJsonModule": true
   },
   "include": ["src", "test"]

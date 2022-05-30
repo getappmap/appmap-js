@@ -3,14 +3,9 @@ const { join: joinPath } = require('path');
 const fsp = require('fs').promises;
 const semver = require('semver');
 const { buildAppMap } = require('@appland/models');
+const writeFileAtomic = require('write-file-atomic');
 
-const {
-  verbose,
-  baseName,
-  buildDirectory,
-  mtime,
-  renameFile,
-} = require('../utils');
+const { verbose, baseName, ctime } = require('../utils');
 const { algorithms, canonicalize } = require('./canonicalize');
 
 /**
@@ -44,7 +39,7 @@ class Fingerprinter {
 
   // eslint-disable-next-line class-methods-use-this
   async fingerprint(appMapFileName) {
-    const appMapCreatedAt = await mtime(appMapFileName);
+    const appMapCreatedAt = await ctime(appMapFileName);
     if (!appMapCreatedAt) {
       return;
     }
@@ -115,6 +110,7 @@ class Fingerprinter {
 
     let appmapData;
     try {
+      // TODO: Should we normalize, compress, etc here?
       appmapData = JSON.parse(data.toString());
     } catch (err) {
       if (err instanceof SyntaxError) {
@@ -143,56 +139,56 @@ class Fingerprinter {
     appmapData.metadata.fingerprints = fingerprints;
     const appmap = buildAppMap(appmapData).normalize().build();
 
-    await buildDirectory(indexDir, async (tempDir) => {
-      await Promise.all(
-        Object.keys(algorithms).map(async (algorithmName) => {
-          const canonicalForm = canonicalize(algorithmName, appmap);
-          const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
+    await fsp.mkdir(indexDir, { recursive: true });
 
-          if (this.printCanonicalAppMaps) {
-            await fsp.writeFile(
-              joinPath(tempDir, `canonical.${algorithmName}.json`),
-              canonicalJSON
-            );
-          }
+    await Promise.all(
+      Object.keys(algorithms).map(async (algorithmName) => {
+        const canonicalForm = canonicalize(algorithmName, appmap);
+        const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
 
-          const fingerprintDigest = createHash('sha256')
-            .update(canonicalJSON)
-            .digest('hex');
-          if (verbose()) {
-            console.warn(`Computed digest for ${algorithmName}`);
-          }
-          fingerprints.push({
-            appmap_digest: appmapDigest,
-            canonicalization_algorithm: algorithmName,
-            digest: fingerprintDigest,
-            fingerprint_algorithm: 'sha256',
-          });
-        })
-      );
+        if (this.printCanonicalAppMaps) {
+          await writeFileAtomic(
+            joinPath(indexDir, `canonical.${algorithmName}.json`),
+            canonicalJSON
+          );
+        }
 
-      appmapData.metadata.fingerprints.sort((a, b) =>
-        a.canonicalization_algorithm.localeCompare(b.canonicalization_algorithm)
-      );
+        const fingerprintDigest = createHash('sha256')
+          .update(canonicalJSON)
+          .digest('hex');
+        if (verbose()) {
+          console.warn(`Computed digest for ${algorithmName}`);
+        }
+        fingerprints.push({
+          appmap_digest: appmapDigest,
+          canonicalization_algorithm: algorithmName,
+          digest: fingerprintDigest,
+          fingerprint_algorithm: 'sha256',
+        });
+      })
+    );
 
-      await fsp.writeFile(
-        joinPath(tempDir, 'appmap.json'),
-        JSON.stringify(appmapData, null, 2)
-      );
-      await renameFile(joinPath(tempDir, 'appmap.json'), appMapFileName);
-      const appMapIndexedAt = await mtime(appMapFileName);
-      await fsp.writeFile(joinPath(tempDir, 'mtime'), `${appMapIndexedAt}`);
-      await fsp.writeFile(joinPath(tempDir, 'ctime'), `${appMapCreatedAt}`);
-      await fsp.writeFile(joinPath(tempDir, 'version'), VERSION);
-      await fsp.writeFile(
-        joinPath(tempDir, 'metadata.json'),
-        JSON.stringify(appmap.metadata, null, 2)
-      );
-      await fsp.writeFile(
-        joinPath(tempDir, 'classMap.json'),
-        JSON.stringify(appmap.classMap, null, 2)
-      );
-    });
+    appmapData.metadata.fingerprints.sort((a, b) =>
+      a.canonicalization_algorithm.localeCompare(b.canonicalization_algorithm)
+    );
+
+    await writeFileAtomic(appMapFileName, JSON.stringify(appmapData, null, 2));
+    const appMapIndexedAt = await ctime(appMapFileName);
+    await writeFileAtomic(joinPath(indexDir, 'ctime'), `${appMapCreatedAt}`);
+    await writeFileAtomic(joinPath(indexDir, 'version'), VERSION);
+    await writeFileAtomic(
+      joinPath(indexDir, 'classMap.json'),
+      JSON.stringify(appmap.classMap, null, 2)
+    );
+    await writeFileAtomic(
+      joinPath(indexDir, 'metadata.json'),
+      JSON.stringify(appmap.metadata, null, 2)
+    );
+
+    // NOTE: mtime needs to be written last.
+    // Downstream code will watch for this file and assume
+    // indexing is complete once it changes.
+    await writeFileAtomic(joinPath(indexDir, 'mtime'), `${appMapIndexedAt}`);
     this.counterFn();
   }
 }

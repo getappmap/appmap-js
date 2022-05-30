@@ -62,7 +62,8 @@
           }
         },
         "properties": {
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {}
         }
       },
       "required": [

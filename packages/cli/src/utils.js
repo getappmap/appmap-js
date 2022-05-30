@@ -1,18 +1,9 @@
 /* eslint-disable func-names */
-const {
-  constants: fsConstants,
-  promises: fsp,
-  rm,
-  readdir,
-  utimes,
-} = require('fs');
-const fsExtra = require('fs-extra');
+const { constants: fsConstants, promises: fsp } = require('fs');
 const { queue } = require('async');
 const glob = require('glob');
-const os = require('os');
-const { sep: pathSep, join: joinPath, basename, join } = require('path');
+const { join: joinPath } = require('path');
 const { buildAppMap } = require('@appland/models');
-const { rename } = require('fs/promises');
 
 const StartTime = Date.now();
 
@@ -28,11 +19,11 @@ function verbose(/** @type {boolean|null} */ v = null) {
   return isVerbose;
 }
 
-function baseName(fileName) {
+function baseName(/** @type string */ fileName) {
   return fileName.substring(0, fileName.length - '.appmap.json'.length);
 }
 
-async function mtime(filePath) {
+async function ctime(filePath) {
   let fileStat;
   try {
     fileStat = await fsp.stat(filePath);
@@ -45,6 +36,18 @@ async function mtime(filePath) {
   return fileStat.ctime.getTime();
 }
 
+async function mtime(filePath) {
+  let fileStat;
+  try {
+    fileStat = await fsp.stat(filePath);
+  } catch (e) {
+    return null;
+  }
+  if (!fileStat.isFile()) {
+    return null;
+  }
+  return fileStat.mtime.getTime();
+}
 /**
  * Call a function with each matching file. No guarantee is given that
  * files will be processed in any particular order.
@@ -130,83 +133,6 @@ async function loadAppMap(filePath) {
     .build();
 }
 
-const renameFile = async (oldName, newName) =>
-  fsExtra.move(oldName, newName, { clobber: true });
-
-/**
- * @param {string} path
- */
-async function touch(path) {
-  return new Promise((resolve) => {
-    const time = Date.now();
-    utimes(path, time, time, (utimesErr) => {
-      if (utimesErr) {
-        console.warn(utimesErr);
-      }
-      return resolve();
-    });
-  });
-}
-
-/**
- * Builds a directory using a tempdir, which is renamed at the end to
- * a specified directory name.
- *
- * @param {string} dirName
- * @param {function} contentFunction
- */
-const buildDirectory = async (dirName, contentFunction) => {
-  const tempPath = await fsp.realpath(os.tmpdir());
-  const tempDir = await fsp.mkdtemp(tempPath + pathSep);
-  const discardDir = await fsp.mkdtemp(tempPath + pathSep);
-
-  try {
-    await contentFunction(tempDir);
-  } catch (err) {
-    rm(tempDir, { recursive: true }, (e) => {
-      console.warn(`Unable to remove (cleanup) tempdir: ${e.message}`);
-    });
-    throw err;
-  }
-
-  // Move dirName to a temp dir
-  // Move tempDir to the final dirName
-  try {
-    await rename(dirName, join(discardDir, basename(dirName)));
-    setTimeout(
-      () =>
-        rm(discardDir, { recursive: true }, (err) => {
-          if (err) console.warn(err);
-        }),
-      0
-    );
-  } catch (e) {
-    if (e.code !== 'ENOENT') {
-      console.log(`Unable to rename ${dirName} to ${discardDir}: ${e.message}`);
-      throw e;
-    }
-  }
-  try {
-    await rename(tempDir, dirName);
-  } catch (e) {
-    console.log(`Unable to rename ${tempDir} to ${dirName}: ${e.message}`);
-    return;
-  }
-
-  // Touch all the created files. This is to ensure that file watchers are notified, because
-  // when the directory is renamed into place, filesystem watchers may not report on all the
-  // files inside the directory.
-  readdir(dirName, (readErr, files) => {
-    if (readErr) {
-      console.warn(`Unable to read directory ${dirName}: ${readErr.message}`);
-      return;
-    }
-    files
-      .filter((file) => !['.', '..'].includes(file))
-      .map((file) => touch(join(dirName, file)));
-  });
-};
-
 function formatValue(value) {
   if (!value) {
     return 'Null';
@@ -249,11 +175,10 @@ module.exports = {
   formatHttpServerRequest,
   listAppMapFiles,
   loadAppMap,
+  ctime,
   mtime,
   verbose,
   processFiles,
-  buildDirectory,
-  renameFile,
   exists,
   prefixLines,
 };

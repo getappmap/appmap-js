@@ -4,60 +4,53 @@ import Configuration from '../configuration/types/configuration';
 import { Finding } from '../types';
 import { AppMapMetadata, ScanSummary } from './scanSummary';
 
+class DistinctItems<T> {
+  private members: Record<string, T> = {};
+
+  push(...items: (T | undefined)[]) {
+    for (const item of items) {
+      if (item === undefined) continue;
+      const key = JSON.stringify(item);
+      if (!(key in this.members)) this.members[key] = item;
+    }
+  }
+
+  [Symbol.iterator]() {
+    return Object.values(this.members)[Symbol.iterator]();
+  }
+}
+
 function collectMetadata(metadata: Metadata[]): AppMapMetadata {
-  const uniqueApps = new Set();
-  const uniqueLabels = new Set();
-  const uniqueClients = new Set();
-  const uniqueFrameworks = new Set();
-  const uniqueGit = new Set();
-  const uniqueLanguages = new Set();
-  const uniqueRecorders = new Set();
-  const uniqueExceptions = new Set();
+  const uniqueApps = new DistinctItems<string>();
+  const uniqueLabels = new DistinctItems<string>();
+  const uniqueClients = new DistinctItems<Metadata['client']>();
+  const uniqueFrameworks = new DistinctItems<Metadata.Framework>();
+  const uniqueGit = new DistinctItems<Metadata.Git>();
+  const uniqueLanguages = new DistinctItems<Metadata.Language>();
+  const uniqueRecorders = new DistinctItems<Metadata.Recorder>();
+  const uniqueExceptions = new DistinctItems<Metadata.Exception>();
 
-  function pushDistinctItem(unique: Set<any>, members: Array<any>, item: any | undefined): void {
-    if (item === undefined) {
-      return;
-    }
-
-    const key = JSON.stringify(item);
-    if (!unique.has(key)) {
-      unique.add(key);
-      members.push(item);
-    }
+  for (const item of metadata) {
+    uniqueApps.push(item.app);
+    uniqueLabels.push(...(item.labels ?? []));
+    uniqueClients.push(item.client);
+    uniqueFrameworks.push(...(item.frameworks ?? []));
+    uniqueGit.push(item.git);
+    uniqueLanguages.push(item.language);
+    uniqueRecorders.push(item.recorder);
+    uniqueExceptions.push(item.exception);
   }
-
-  function pushDistinctItems(
-    unique: Set<any>,
-    members: Array<any>,
-    items: any[] | undefined
-  ): void {
-    (items || []).forEach((item) => pushDistinctItem(unique, members, item));
-  }
-
-  return metadata.reduce(
-    (memo, appMapMetadata) => {
-      pushDistinctItem(uniqueApps, memo.apps, appMapMetadata.app);
-      pushDistinctItems(uniqueLabels, memo.labels, appMapMetadata.labels);
-      pushDistinctItem(uniqueClients, memo.clients, appMapMetadata.client);
-      pushDistinctItems(uniqueFrameworks, memo.frameworks, appMapMetadata.frameworks);
-      pushDistinctItem(uniqueGit, memo.git, appMapMetadata.git);
-      pushDistinctItem(uniqueLanguages, memo.languages, appMapMetadata.language);
-      pushDistinctItem(uniqueRecorders, memo.recorders, appMapMetadata.recorder);
-      pushDistinctItem(uniqueExceptions, memo.recorders, appMapMetadata.exception);
-      return memo;
-    },
-    {
-      labels: [],
-      apps: [],
-      clients: [],
-      frameworks: [],
-      git: [],
-      languages: [],
-      recorders: [],
-      testStatuses: [],
-      exceptions: [],
-    } as AppMapMetadata
-  );
+  return {
+    labels: [...uniqueLabels],
+    apps: [...uniqueApps],
+    clients: [...uniqueClients],
+    frameworks: [...uniqueFrameworks],
+    git: [...uniqueGit],
+    languages: [...uniqueLanguages],
+    recorders: [...uniqueRecorders],
+    testStatuses: [],
+    exceptions: [...uniqueExceptions],
+  };
 }
 
 /**

@@ -16,7 +16,7 @@ export default class AppMapIndex {
     let ast = ASTBySQLString.get(sql);
     if (!ast) {
       ast = parseSQL(sql, sqlWarning);
-      ast ? ASTBySQLString.set(sql, ast) : ASTBySQLString.set(sql, [] as any);
+      ast ? ASTBySQLString.set(sql, ast) : ASTBySQLString.set(sql, null);
     }
     return ast;
   }

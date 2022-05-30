@@ -1,5 +1,5 @@
 import { parseSQL } from '@appland/models';
-import type { SqliteParser } from 'sqlite-parser';
+import type { SqliteParser } from '@appland/models/types/sqlite-parser';
 import type { Event } from '@appland/models';
 
 import ScopeIterator from './scopeIterator';

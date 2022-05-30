@@ -4,14 +4,14 @@ import { AppMapIndex, EventFilter, Rule, ScopeName } from './types';
 
 export default class Check {
   public id: string;
-  public options: Record<string, any>;
+  public options: Record<string, unknown>;
   public scope: ScopeName;
   public includeScope: EventFilter[];
   public excludeScope: EventFilter[];
   public includeEvent: EventFilter[];
   public excludeEvent: EventFilter[];
 
-  constructor(public rule: Rule, options?: Record<string, any>) {
+  constructor(public rule: Rule, options?: Record<string, unknown>) {
     function makeOptions() {
       return rule.Options ? new rule.Options() : {};
     }
@@ -43,13 +43,11 @@ export default class Check {
 
   toString(): string {
     const tokens = [`[${this.rule.id}]`];
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self: any = this;
-    ['includeScope', 'excludeScope', 'includeEvent', 'excludeEvent'].forEach((key) => {
-      if (self[key].length > 0) {
-        tokens.push(`(${key} ${self[key].join(' && ')})`);
+    for (const key of ['includeScope', 'excludeScope', 'includeEvent', 'excludeEvent'] as const) {
+      if (this[key].length > 0) {
+        tokens.push(`(${key} ${this[key].join(' && ')})`);
       }
-    });
+    }
     return tokens.join(' ');
   }
 }

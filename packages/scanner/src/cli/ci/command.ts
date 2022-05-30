@@ -6,14 +6,13 @@ import { Arguments, Argv } from 'yargs';
 import { FindingStatusListItem } from '@appland/client/dist/src';
 
 import { parseConfigFile } from '../../configuration/configurationProvider';
-import { AbortError, ValidationError } from '../../errors';
+import { ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
 import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
 import { newFindings } from '../../findings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 
-import { ExitCode } from '../exitCode';
 import resolveAppId from '../resolveAppId';
 import validateFile from '../validateFile';
 import upload from '../upload';
