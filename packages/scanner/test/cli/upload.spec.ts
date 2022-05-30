@@ -12,6 +12,7 @@ import sinon from 'sinon';
 
 import CommandOptions from '../../src/cli/upload/options';
 
+process.env['APPMAP_TELEMETRY_DISABLED'] = 'true';
 const FixtureDir = 'test/fixtures/scanResults';
 const ScanResults = JSON.parse(readFileSync(join(FixtureDir, 'scanResults.json')).toString());
 const AppMapData1 = { uuid: '5123211e-66e1-4184-b5a9-32976a6ebc85' };
@@ -121,7 +122,7 @@ describe('upload', () => {
     // max size to 500K will exercise both the pruning and non-pruning paths.
     sinon.stub(appMapPruning, 'maxAppMapSize').returns(500 * 1024);
     const pruneAppMap = sinon.stub(appMapPruning, 'pruneAppMap').callThrough();
-    
+
     await upload(ScanResults, appId, FixtureDir);
 
     expect(pruneAppMap.callCount).toBe(1);

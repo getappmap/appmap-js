@@ -12,6 +12,7 @@ import { Watcher } from '../../src/cli/scan/watchScan';
 import { parseConfigFile } from '../../src/configuration/configurationProvider';
 import { tmpdir } from 'os';
 
+process.env['APPMAP_TELEMETRY_DISABLED'] = 'true';
 const ReportFile = 'appmap-findings.json';
 const AppId = test.AppId;
 const ConfigFilePath = join(__dirname, '..', '..', 'src', 'sampleConfig', 'default.yml');
