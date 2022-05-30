@@ -36,6 +36,18 @@ async function ctime(filePath) {
   return fileStat.ctime.getTime();
 }
 
+async function mtime(filePath) {
+  let fileStat;
+  try {
+    fileStat = await fsp.stat(filePath);
+  } catch (e) {
+    return null;
+  }
+  if (!fileStat.isFile()) {
+    return null;
+  }
+  return fileStat.mtime.getTime();
+}
 /**
  * Call a function with each matching file. No guarantee is given that
  * files will be processed in any particular order.
@@ -164,6 +176,7 @@ module.exports = {
   listAppMapFiles,
   loadAppMap,
   ctime,
+  mtime,
   verbose,
   processFiles,
   exists,

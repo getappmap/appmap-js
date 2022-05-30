@@ -110,6 +110,7 @@ class Fingerprinter {
 
     let appmapData;
     try {
+      // TODO: Should we normalize, compress, etc here?
       appmapData = JSON.parse(data.toString());
     } catch (err) {
       if (err instanceof SyntaxError) {
