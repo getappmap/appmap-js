@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.27.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.1...@appland/appmap-v3.27.2) (2022-05-30)
+
+
+### Bug Fixes
+
+* compare AppMap ctime to dependency mtime ([fd41733](https://github.com/applandinc/appmap-js/commit/fd4173372718cfabbe8c542d9bf757286404eb4d))
+* Indexing no longer causes EXDEV on Linux ([f8b0481](https://github.com/applandinc/appmap-js/commit/f8b0481881cc48715b1dcaa6a3caeaf0782d7b08))
+
 # [@appland/appmap-v3.27.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.0...@appland/appmap-v3.27.1) (2022-05-27)
 
 
