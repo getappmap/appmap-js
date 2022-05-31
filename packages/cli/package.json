@@ -95,6 +95,7 @@
     "open": "^8.2.1",
     "ora": "^5.4.1",
     "port-pid": "^0.0.7",
+    "pretty-bytes": "^5.6.0",
     "ps-node": "^0.1.6",
     "read-pkg-up": "^7.0.1",
     "semver": "^7.3.5",
