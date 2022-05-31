@@ -1,4 +1,5 @@
 const { queue } = require('async');
+const { default: FileTooLargeError } = require('./fileTooLargeError');
 const Fingerprinter = require('./fingerprinter');
 
 class FingerprintQueue {
@@ -17,7 +18,16 @@ class FingerprintQueue {
   async process() {
     return new Promise((resolve, reject) => {
       this.queue.drain(resolve);
-      this.queue.error(reject);
+      this.queue.error((error) => {
+        if (error instanceof FileTooLargeError) {
+          console.warn(
+            [
+              `Skipped: ${error.message}`,
+              'Tip: consider recording a shorter interaction or removing some classes from appmap.yml.',
+            ].join('\n')
+          );
+        } else reject(error);
+      });
       this.queue.resume();
     });
   }

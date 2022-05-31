@@ -4,12 +4,17 @@ const fsp = require('fs').promises;
 const semver = require('semver');
 const { buildAppMap } = require('@appland/models');
 const writeFileAtomic = require('write-file-atomic');
+const { default: FileTooLargeError } = require('./fileTooLargeError');
 
 const { verbose, baseName, ctime } = require('../utils');
 const { algorithms, canonicalize } = require('./canonicalize');
 
 /**
  * CHANGELOG
+ *
+ * # 1.1.2
+ *
+ * * Reject large appmaps instead of breaking randomly.
  *
  * # 1.1.1
  *
@@ -22,7 +27,9 @@ const { algorithms, canonicalize } = require('./canonicalize');
  * * Fix handling of parent assignment in normalization.
  * * sql can contain the analysis (action, tables, columns), and/or the normalized query string.
  */
-const VERSION = '1.1.1';
+const VERSION = '1.1.2';
+
+const MAX_APPMAP_SIZE = 50 * 1000 * 1000;
 
 class Fingerprinter {
   /**
@@ -91,6 +98,12 @@ class Fingerprinter {
         console.warn('Fingerprint is up to date. Skipping...');
       }
       return;
+    }
+
+    {
+      const stat = await fsp.stat(appMapFileName);
+      if (stat.size > MAX_APPMAP_SIZE)
+        throw new FileTooLargeError(appMapFileName, stat.size, MAX_APPMAP_SIZE);
     }
 
     let data;
