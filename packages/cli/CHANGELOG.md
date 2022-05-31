@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.27.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.2...@appland/appmap-v3.27.3) (2022-05-31)
+
+
+### Bug Fixes
+
+* Warn and reject too large AppMaps instead of raising an error ([901756f](https://github.com/applandinc/appmap-js/commit/901756f4a506f58098dd7ad0204b8c8edc0e0d0a))
+
 # [@appland/appmap-v3.27.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.1...@appland/appmap-v3.27.2) (2022-05-30)
 
 
