@@ -112,9 +112,12 @@ export default {
       return 'good';
     },
     installCommand() {
-      return `npx @appland/appmap install ${
-        this.selectedProject ? this.selectedProject.path : ''
-      }`;
+      return [
+        'npx @appland/appmap install',
+        this.selectedProject && `-d ${this.selectedProject.path}`,
+      ]
+        .filter(Boolean)
+        .join(' ');
     },
   },
 

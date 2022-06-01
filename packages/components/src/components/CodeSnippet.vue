@@ -47,7 +47,10 @@ export default {
   },
   data() {
     return {
-      hasClipboardAPI: false,
+      hasClipboardAPI:
+        navigator &&
+        navigator.clipboard &&
+        typeof navigator.clipboard.writeText === 'function',
     };
   },
   methods: {
@@ -67,16 +70,6 @@ export default {
       const text = this.clipboardText.trim();
       this.$root.$emit('clipboard', text);
     },
-  },
-
-  mounted() {
-    if (
-      navigator &&
-      navigator.clipboard &&
-      typeof navigator.clipboard.writeText === 'function'
-    ) {
-      this.hasClipboardAPI = true;
-    }
   },
 };
 </script>

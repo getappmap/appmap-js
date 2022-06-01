@@ -15,7 +15,7 @@
             </a>
             <div class="center fit">
               <v-code-snippet
-                clipboard-text="npx @appland/appmap record test"
+                :clipboard-text="command"
                 :message-success="clipboardSuccess"
               />
             </div>
@@ -38,10 +38,6 @@
                 &nbsp;&nbsp;|&nbsp;&nbsp;
               </template>
             </template>
-          </p>
-          <p class="mb20" v-if="completed">
-            Success! Continue on to the next step to learn how to investigate
-            one of the 19 findings identified.
           </p>
         </article>
       </main>
@@ -102,6 +98,14 @@ export default {
   },
 
   computed: {
+    command() {
+      return [
+        'npx @appland/appmap record test',
+        this.project && `-d ${this.project.path}`,
+      ]
+        .filter(Boolean)
+        .join(' ');
+    },
     completed() {
       return this.selectedProject && this.selectedProject.appMapsRecorded;
     },
