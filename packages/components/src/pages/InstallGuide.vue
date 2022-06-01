@@ -1,18 +1,22 @@
 <template>
-  <v-multi-page ref="page">
+  <v-multi-page ref="page" :disabled-pages="disabledPages">
     <v-project-picker
+      id="project-picker"
       :projects="projects"
       :message-success="messageCopiedCommand"
     />
     <v-record-app-maps
+      id="record-appmaps"
       :editor="editor"
       :project="selectedProject"
-      :complete="selectedProject && selectedProject.appMapsRecorded"
+      :complete="hasRecorded"
     />
+    <v-open-app-maps id="open-appmaps" :app-maps="appMaps" />
     <v-investigate-findings
-      :scanned="selectedProject && selectedProject.analysisPerformed"
-      :num-findings="selectedProject && selectedProject.numFindings"
-      :project-path="selectedProject && selectedProject.path"
+      id="investigate-findings"
+      :scanned="hasFindings"
+      :num-findings="numFindings"
+      :project-path="path"
     />
   </v-multi-page>
 </template>
@@ -21,12 +25,17 @@
 import VMultiPage from '@/pages/MultiPage.vue';
 import VProjectPicker from '@/pages/install-guide/ProjectPicker.vue';
 import VRecordAppMaps from '@/pages/install-guide/RecordAppMaps.vue';
+import VOpenAppMaps from '@/pages/install-guide/OpenAppMaps.vue';
 import VInvestigateFindings from '@/pages/install-guide/InvestigateFindings.vue';
 
 export default {
   name: 'install-guide',
 
   props: {
+    disabledPages: {
+      type: Set,
+      default: () => new Set(),
+    },
     messageCopiedCommand: {
       type: String,
       default: '<b>Copied!</b><br/>Paste this command<br/>into your terminal.',
@@ -48,11 +57,30 @@ export default {
     };
   },
 
+  computed: {
+    hasRecorded() {
+      return this.selectedProject && this.selectedProject.appMapsRecorded;
+    },
+    hasFindings() {
+      return this.selectedProject && this.selectedProject.analysisPerformed;
+    },
+    appMaps() {
+      return (this.selectedProject && this.selectedProject.appMaps) || [];
+    },
+    numFindings() {
+      return this.selectedProject && this.selectedProject.numFindings;
+    },
+    path() {
+      return this.selectedProject && this.selectedProject.path;
+    },
+  },
+
   components: {
     VMultiPage,
     VProjectPicker,
     VRecordAppMaps,
     VInvestigateFindings,
+    VOpenAppMaps,
   },
 
   methods: {
@@ -63,7 +91,6 @@ export default {
 
   mounted() {
     this.$root.$on('select-project', (project) => {
-      console.log('root selecting', project);
       this.selectedProject = project;
     });
   },

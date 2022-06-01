@@ -45,7 +45,7 @@
           </p>
         </article>
       </main>
-      <v-navigation-buttons />
+      <v-navigation-buttons :first="first" :last="last" />
     </section>
   </QuickstartLayout>
 </template>
@@ -54,6 +54,7 @@
 import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VCodeSnippet from '@/components/CodeSnippet.vue';
+import Navigation from '@/components/mixins/navigation';
 
 const documentationUrls = {
   vscode: {
@@ -82,6 +83,8 @@ export default {
     VNavigationButtons,
     VCodeSnippet,
   },
+
+  mixins: [Navigation],
 
   props: {
     clipboardSuccess: {

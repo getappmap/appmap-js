@@ -14,7 +14,7 @@
           </div>
         </article>
       </main>
-      <v-navigation-buttons />
+      <v-navigation-buttons :first="first" :last="last" />
     </section>
   </v-quickstart-layout>
 </template>
@@ -23,6 +23,7 @@
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VCodeSnippet from '@/components/CodeSnippet.vue';
+import Navigation from '@/components/mixins/navigation';
 
 export default {
   name: 'Analyze',
@@ -32,6 +33,8 @@ export default {
     VNavigationButtons,
     VCodeSnippet,
   },
+
+  mixins: [Navigation],
 
   computed: {
     command() {

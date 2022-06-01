@@ -1,8 +1,10 @@
-<template>
-  <div><slot /></div>
-</template>
-
 <script>
+function vNodeId(vnode) {
+  return vnode && vnode.data && vnode.data.attrs && vnode.data.attrs.id
+    ? vnode.data.attrs.id
+    : '';
+}
+
 export default {
   name: 'multi-page',
 
@@ -11,47 +13,65 @@ export default {
       type: Number,
       default: 0,
     },
+    disabledPages: {
+      type: Set,
+      default: () => new Set(),
+    },
   },
 
   data() {
+    const firstSlot = this.$slots.default.filter((vnode) => vnode.tag)[0];
+    const currentPage = vNodeId(firstSlot);
     return {
-      currentPage: 0,
+      currentPage,
     };
   },
 
-  watch: {
-    currentPage: {
-      handler() {
-        this.updatePage();
-      },
-      immediate: true,
-    },
+  render(h) {
+    return h(
+      'div',
+      this.slots().map((vnode) => {
+        const nodeId = vNodeId(vnode);
+        return h(
+          'div',
+          {
+            style: {
+              display: nodeId === this.currentPage ? '' : 'none',
+            },
+          },
+          [vnode]
+        );
+      })
+    );
   },
 
   methods: {
+    slots() {
+      return this.$slots.default.filter(
+        (vnode) => vnode.tag && !this.disabledPages.has(vNodeId(vnode))
+      );
+    },
+
+    getPageId(dir) {
+      const slots = this.slots();
+      const pageIndex = slots.findIndex((v) => vNodeId(v) === this.currentPage);
+      const numSlots = slots.length;
+      const nextIndex = Math.max(0, Math.min(pageIndex + dir, numSlots));
+      return vNodeId(slots[nextIndex]);
+    },
+
     next() {
-      this.jumpTo(this.currentPage + 1);
+      const nextId = this.getPageId(1);
+      this.jumpTo(nextId);
     },
 
     previous() {
-      this.jumpTo(this.currentPage - 1);
+      const prevId = this.getPageId(-1);
+      this.jumpTo(prevId);
     },
 
-    jumpTo(pageIndex) {
-      const numPages = this.$children.length;
-      this.currentPage = Math.max(Math.min(pageIndex, numPages - 1), 0);
-    },
-
-    updatePage() {
-      this.$nextTick(() => {
-        const currentComponent = this.$children[this.currentPage];
-        this.$children.forEach((component) => {
-          if (component.$el) {
-            component.$el.style.display =
-              component === currentComponent ? '' : 'none';
-          }
-        });
-      });
+    jumpTo(pageId) {
+      this.currentPage = pageId;
     },
   },
 
@@ -59,7 +79,12 @@ export default {
     this.$root.$on('page-next', this.next);
     this.$root.$on('page-previous', this.previous);
     this.$root.$on('page-jump-to', this.jumpTo);
-    this.updatePage();
+
+    const slots = this.slots();
+    slots.forEach(({ componentInstance: vm }, i) => {
+      vm.$set(vm, 'first', i === 0);
+      vm.$set(vm, 'last', i === slots.length - 1);
+    });
   },
 };
 </script>

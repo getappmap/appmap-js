@@ -52,7 +52,7 @@
             It looks like the AppMap agent is installed. Continue on to the next
             step.
           </article>
-          <v-navigation-buttons :first="true" />
+          <v-navigation-buttons :first="first" :last="last" />
         </template>
         <template v-if="quality == 'bad'">
           <article>
@@ -78,6 +78,7 @@ import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VCodeSnippet from '@/components/CodeSnippet.vue';
 import VProjectPickerTable from '@/components/install-guide/ProjectPickerTable.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
+import Navigation from '@/components/mixins/navigation';
 
 export default {
   name: 'ProjectPicker',
@@ -88,6 +89,8 @@ export default {
     VProjectPickerTable,
     VNavigationButtons,
   },
+
+  mixins: [Navigation],
 
   props: {
     messageSuccess: {

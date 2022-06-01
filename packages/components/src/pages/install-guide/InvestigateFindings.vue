@@ -19,7 +19,7 @@
         </article>
         <article v-else>Waiting on your first analysis results.</article>
       </main>
-      <v-navigation-buttons :last="true" />
+      <v-navigation-buttons :first="first" :last="last" />
     </section>
   </v-quickstart-layout>
 </template>
@@ -28,6 +28,7 @@
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VButton from '@/components/Button.vue';
+import Navigation from '@/components/mixins/navigation';
 
 export default {
   name: 'InvestigateFindings',
@@ -37,6 +38,8 @@ export default {
     VNavigationButtons,
     VButton,
   },
+
+  mixins: [Navigation],
 
   props: {
     scanned: Boolean,
