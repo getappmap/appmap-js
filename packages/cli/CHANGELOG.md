@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.27.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.3...@appland/appmap-v3.27.4) (2022-06-01)
+
+
+### Bug Fixes
+
+* Openapi template is packaged correctly and the command works again ([1c98f95](https://github.com/applandinc/appmap-js/commit/1c98f9547b3a2aaab6956c016839d862058b3216))
+
 # [@appland/appmap-v3.27.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.2...@appland/appmap-v3.27.3) (2022-05-31)
 
 
