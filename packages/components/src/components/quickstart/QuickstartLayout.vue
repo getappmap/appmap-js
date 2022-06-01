@@ -88,6 +88,11 @@ body {
   a {
     color: $color-link;
     text-decoration: none;
+    transition: $transition;
+
+    &:hover {
+      color: $color-foreground-light;
+    }
   }
 
   code {
