@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 
@@ -32,9 +31,6 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       process: 'process/browser',
-    }),
-    new CopyPlugin({
-      patterns: [{ from: 'resources', to: 'resources' }],
     }),
   ],
   resolve: {
