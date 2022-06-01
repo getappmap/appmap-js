@@ -7,7 +7,8 @@
     "access": "public"
   },
   "files": [
-    "built"
+    "built",
+    "resources"
   ],
   "scripts": {
     "lint": "eslint 'src/**/*.js' 'tests/**/*.js'",
@@ -35,7 +36,6 @@
     "@types/tmp": "^0.2.3",
     "@types/w3c-xmlserializer": "^2.0.2",
     "@types/write-file-atomic": "^4.0.0",
-    "copy-webpack-plugin": "^9.0.1",
     "crypto": "^1.0.1",
     "css-loader": "^6.2.0",
     "eslint": "^7.25.0",

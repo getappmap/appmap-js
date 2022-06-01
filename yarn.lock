@@ -103,7 +103,6 @@ __metadata:
     cli-progress: ^3.9.0
     conf: ^10.0.2
     console-table-printer: ^2.9.0
-    copy-webpack-plugin: ^9.0.1
     crypto: ^1.0.1
     crypto-js: ^4.0.0
     css-loader: ^6.2.0
@@ -10728,22 +10727,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"copy-webpack-plugin@npm:^9.0.1":
-  version: 9.1.0
-  resolution: "copy-webpack-plugin@npm:9.1.0"
-  dependencies:
-    fast-glob: ^3.2.7
-    glob-parent: ^6.0.1
-    globby: ^11.0.3
-    normalize-path: ^3.0.0
-    schema-utils: ^3.1.1
-    serialize-javascript: ^6.0.0
-  peerDependencies:
-    webpack: ^5.1.0
-  checksum: 06cb4fb6fc99a95ccfd3169115ee57f64953e5b4075900fc8faab98b7e7d3fcd6915b125fdb98c919cfd55e581a8444f5c6b9dbb342cbd60b154d8fb3f79f2b9
-  languageName: node
-  linkType: hard
-
 "core-js-compat@npm:^3.20.2, core-js-compat@npm:^3.21.0, core-js-compat@npm:^3.6.5, core-js-compat@npm:^3.8.1":
   version: 3.21.0
   resolution: "core-js-compat@npm:3.21.0"
@@ -13702,7 +13685,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.2.7, fast-glob@npm:^3.2.9":
+"fast-glob@npm:^3.2.9":
   version: 3.2.11
   resolution: "fast-glob@npm:3.2.11"
   dependencies:
