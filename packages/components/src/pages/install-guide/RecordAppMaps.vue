@@ -15,7 +15,7 @@
             </a>
             <div class="center fit">
               <v-code-snippet
-                clipboard-text="npx @appland/appmap record test"
+                :clipboard-text="command"
                 :message-success="clipboardSuccess"
               />
             </div>
@@ -39,13 +39,9 @@
               </template>
             </template>
           </p>
-          <p class="mb20" v-if="completed">
-            Success! Continue on to the next step to learn how to investigate
-            one of the 19 findings identified.
-          </p>
         </article>
       </main>
-      <v-navigation-buttons />
+      <v-navigation-buttons :first="first" :last="last" />
     </section>
   </QuickstartLayout>
 </template>
@@ -54,6 +50,7 @@
 import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VCodeSnippet from '@/components/CodeSnippet.vue';
+import Navigation from '@/components/mixins/navigation';
 
 const documentationUrls = {
   vscode: {
@@ -83,6 +80,8 @@ export default {
     VCodeSnippet,
   },
 
+  mixins: [Navigation],
+
   props: {
     clipboardSuccess: {
       type: String,
@@ -99,6 +98,14 @@ export default {
   },
 
   computed: {
+    command() {
+      return [
+        'npx @appland/appmap record test',
+        this.project && `-d ${this.project.path}`,
+      ]
+        .filter(Boolean)
+        .join(' ');
+    },
     completed() {
       return this.selectedProject && this.selectedProject.appMapsRecorded;
     },
