@@ -1,3 +1,10 @@
+# [@appland/components-v2.3.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.3.0...@appland/components-v2.3.1) (2022-06-02)
+
+
+### Bug Fixes
+
+* "Limit root events to HTTP" filter is now disabled when searching for a hidden root event ([#593](https://github.com/applandinc/appmap-js/issues/593)) ([8962b4a](https://github.com/applandinc/appmap-js/commit/8962b4ad34f7117b159540c69e90bfb90c75fd26))
+
 # [@appland/components-v2.3.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.2.0...@appland/components-v2.3.0) (2022-06-02)
 
 
