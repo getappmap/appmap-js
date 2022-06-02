@@ -832,6 +832,31 @@ context('VS Code Extension', () => {
       cy.get('.trace-filter__arrows-text').should('be.visible');
     });
 
+    it('disables "Limit root events to HTTP" filter when searching for root event which is hidden', () => {
+      cy.get('.tabs .tab-btn').last().click();
+
+      cy.get('.trace .trace-node').should('have.length', 4);
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox input[type="checkbox"]')
+        .first()
+        .should('be.checked');
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.trace-node[data-event-id="7"]').should('not.exist');
+
+      cy.get('.trace-filter__input').type('id:7').type('{enter}');
+
+      cy.get('.trace .trace-node').should('have.length', 12);
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__checkbox input[type="checkbox"]')
+        .first()
+        .should('not.be.checked');
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.trace-node[data-event-id="7"]')
+        .should('exist')
+        .should('have.class', 'highlight');
+    });
+
     it('moves the active event filter selection as expected', () => {
       cy.get('.tabs .tab-btn').last().click();
       cy.get('.trace-filter__input').type('label:json').type('{enter}');
