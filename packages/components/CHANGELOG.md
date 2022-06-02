@@ -1,3 +1,16 @@
+# [@appland/components-v2.3.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.2.0...@appland/components-v2.3.0) (2022-06-02)
+
+
+### Bug Fixes
+
+* Add a hover state to links in the install guide ([4742780](https://github.com/applandinc/appmap-js/commit/47427804c044620bec8a32501ea8a93345a8a3e0))
+* Specify CLI directory with -d argument ([e145035](https://github.com/applandinc/appmap-js/commit/e145035b6bad2ec8e045a499973122cd02e4b17b))
+
+
+### Features
+
+* Pages can be disabled ([d77b2ee](https://github.com/applandinc/appmap-js/commit/d77b2ee51325f1def5baf61055e42918b4c07113))
+
 # [@appland/components-v2.2.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.1.1...@appland/components-v2.2.0) (2022-05-26)
 
 
