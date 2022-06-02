@@ -21,7 +21,7 @@ const TestCommands: TestCommandGuess[] = [
     paths: ['Gemfile', 'test'],
     command: {
       env: RubyEnv,
-      command: 'bundle exec rake test',
+      command: 'bundle exec rails test',
     },
   },
   {
