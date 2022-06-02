@@ -44,4 +44,4 @@ jobs:
       if: branch = main
       script: |
         yarn run chromatic --auto-accept-changes \
-        && yarn run semantic-release -e semantic-release-monorepo
+        && yarn run semantic-release

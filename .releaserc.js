@@ -48,4 +48,5 @@ module.exports = {
     join(__dirname, 'ci/yarnPublish.js'),
     '@semantic-release/github',
   ],
+  extends: 'semantic-release-monorepo'
 };
