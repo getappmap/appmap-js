@@ -1,7 +1,7 @@
 language: node_js
 os: linux
-dist: xenial
-node_js: [14]
+dist: focal
+node_js: [14, 18]
 
 cache: false
 
@@ -19,14 +19,12 @@ if: tag IS present OR commit_message !~ /^chore(release)/
 
 install:
   - yarn && yarn run build
+script: yarn run ci
 
 if: tag !~ @appland/.+-v\d\.\d\.\d
 
 jobs:
   include:
-    - stage: test
-      script: yarn run ci
-
     - stage: test
       os: windows
       env:
