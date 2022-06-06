@@ -53,11 +53,16 @@ class AppMapBuilder extends EventSource {
       );
     }
 
-    (this.data.events || [])
-      .map((e) => new Event(e))
-      .forEach((e) => this.sorter.add(e));
+    (this.data.events || []).forEach((e) => {
+      if (this.data.eventUpdates && this.data.eventUpdates[e.id]) {
+        // eslint-disable-next-line no-param-reassign
+        e = this.data.eventUpdates[e.id];
+      }
+      this.sorter.add(new Event(e));
+    });
 
     delete this.data.events;
+    delete this.data.eventUpdates;
 
     return this;
   }

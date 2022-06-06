@@ -1,0 +1,89 @@
+{
+  "events": [
+    {
+      "extra_attribute": "extra",
+      "event": "call",
+      "http_server_request": {
+        "headers": {
+          "host": "localhost:8080",
+          "user-agent": "curl/7.79.1",
+          "accept": "application/json"
+        },
+        "path_info": "/owners/1/pets/1/edit",
+        "protocol": "HTTP/1.1",
+        "request_method": "GET"
+      },
+      "id": 172,
+      "thread_id": 183
+    },
+    {
+      "elapsed": 0.0227362,
+      "event": "return",
+      "http_server_response": {
+        "headers": {
+          "Transfer-Encoding": "chunked",
+          "Content-Language": "en-US",
+          "Date": "Mon, 06 Jun 2022 13:39:36 GMT",
+          "Content-Type": "text/html;charset=UTF-8"
+        },
+        "status": 200
+      },
+      "id": 265,
+      "parent_id": 172,
+      "thread_id": 183
+    }
+  ],
+  "classMap": [],
+  "version": "1.2",
+  "metadata": {
+    "app": "Spring Pet Clinic",
+    "language": {
+      "name": "java",
+      "version": "11.0.15+10",
+      "engine": "OpenJDK 64-Bit Server VM"
+    },
+    "client": {
+      "name": "appmap-java",
+      "url": "https://github.com/appland/appmap-java"
+    },
+    "recorder": {
+      "name": "remote_recording"
+    },
+    "recording": {},
+    "framework": {}
+  },
+  "eventUpdates": {
+    "172": {
+      "event": "call",
+      "http_server_request": {
+        "headers": {
+          "host": "localhost:8080",
+          "user-agent": "curl/7.79.1",
+          "accept": "application/json"
+        },
+        "normalized_path_info": "/owners/:ownerId/pets/:petId/edit",
+        "path_info": "/owners/1/pets/1/edit",
+        "protocol": "HTTP/1.1",
+        "request_method": "GET"
+      },
+      "id": 172,
+      "message": [
+        {
+          "class": "java.lang.String",
+          "kind": "req",
+          "name": "petId",
+          "object_id": 266360068,
+          "value": "1"
+        },
+        {
+          "class": "java.lang.String",
+          "kind": "req",
+          "name": "ownerId",
+          "object_id": 377227594,
+          "value": "1"
+        }
+      ],
+      "thread_id": 183
+    }
+  }
+}
