@@ -7,32 +7,54 @@ import { formatReport } from './formatReport';
 import { default as buildScanner } from './scanner';
 import { exists } from 'fs';
 import { promisify } from 'util';
+import { parseConfigFile } from '../../configuration/configurationProvider';
+import assert from 'assert';
 
 type WatchScanOptions = {
   appmapDir: string;
-  configData: Configuration;
+  configFile: string;
 };
 
 export class Watcher {
-  watcher?: chokidar.FSWatcher;
+  config?: Configuration;
+  appmapWatcher?: chokidar.FSWatcher;
+  configWatcher?: chokidar.FSWatcher;
 
   constructor(private options: WatchScanOptions) {}
 
   async watch(): Promise<void> {
-    this.watcher = chokidar.watch(`${this.options.appmapDir}/**/mtime`, {
+    await this.reloadConfig();
+
+    this.configWatcher = chokidar.watch(this.options.configFile, {
       ignoreInitial: true,
     });
-    this.watcher.on('add', this.scan.bind(this)).on('change', this.scan.bind(this));
+    this.configWatcher
+      .on('add', this.reloadConfig.bind(this))
+      .on('change', this.reloadConfig.bind(this));
+
+    this.appmapWatcher = chokidar.watch(`${this.options.appmapDir}/**/mtime`, {
+      ignoreInitial: true,
+    });
+    this.appmapWatcher.on('add', this.scan.bind(this)).on('change', this.scan.bind(this));
   }
 
-  abort(): void {
-    if (!this.watcher) return;
+  close(): void {
+    if (!this.appmapWatcher) return;
 
-    this.watcher.close();
-    this.watcher = undefined;
+    assert(
+      this.configWatcher,
+      `configWatcher should always be defined if appmapWatcher is defined`
+    );
+
+    this.appmapWatcher.close();
+    this.configWatcher.close();
+    this.appmapWatcher = undefined;
+    this.configWatcher = undefined;
   }
 
-  async scan(fileName: string): Promise<void> {
+  protected async scan(fileName: string): Promise<void> {
+    assert(this.config, `config should always be loaded before appmapWatcher triggers a scan`);
+
     const pathTokens = fileName.split('/');
     const appmapDir = pathTokens.slice(0, pathTokens.length - 1).join('/');
     const appmapFile = [appmapDir, 'appmap.json'].join('.');
@@ -40,12 +62,16 @@ export class Watcher {
 
     if (!(await promisify(exists)(appmapFile))) return;
 
-    const scanner = await buildScanner(true, this.options.configData, [appmapFile]);
+    const scanner = await buildScanner(true, this.config, [appmapFile]);
 
     const rawScanResults = await scanner.scan();
 
     // Always report the raw data
     await writeFile(reportFile, formatReport(rawScanResults));
+  }
+
+  protected async reloadConfig(): Promise<void> {
+    this.config = await parseConfigFile(this.options.configFile);
   }
 }
 

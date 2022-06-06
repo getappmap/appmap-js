@@ -7,20 +7,20 @@ import Command from '../../src/cli/scan/command';
 import { fixtureAppMapFileName } from '../util';
 import { readFileSync, unlinkSync } from 'fs';
 import { ScanResults } from '../../src/report/scanResults';
-import { readFile, stat, writeFile } from 'fs/promises';
+import { readFile, rm, stat, writeFile } from 'fs/promises';
 import { Watcher } from '../../src/cli/scan/watchScan';
-import { parseConfigFile } from '../../src/configuration/configurationProvider';
 import { tmpdir } from 'os';
+import { dump } from 'js-yaml';
 
 process.env['APPMAP_TELEMETRY_DISABLED'] = 'true';
 const ReportFile = 'appmap-findings.json';
 const AppId = test.AppId;
-const ConfigFilePath = join(__dirname, '..', '..', 'src', 'sampleConfig', 'default.yml');
-const StandardOptions = {
+const DefaultScanConfigFilePath = join(__dirname, '..', '..', 'src', 'sampleConfig', 'default.yml');
+const StandardOneShotScanOptions = {
   appmapFile: fixtureAppMapFileName(
     'org_springframework_samples_petclinic_owner_OwnerControllerTests_testInitCreationForm.appmap.json'
   ),
-  config: ConfigFilePath, // need to pass it explicitly
+  config: DefaultScanConfigFilePath, // need to pass it explicitly
   reportFile: ReportFile,
   app: AppId,
 };
@@ -39,7 +39,7 @@ describe('scan', () => {
   it('errors with default options and without AppMap server API key', async () => {
     delete process.env.APPLAND_API_KEY;
     try {
-      await Command.handler(StandardOptions as any);
+      await Command.handler(StandardOneShotScanOptions as any);
       throw new Error(`Expected this command to fail`);
     } catch (err) {
       expect((err as any).toString()).toMatch(/No API key available for AppMap server/);
@@ -50,7 +50,7 @@ describe('scan', () => {
     delete process.env.APPLAND_API_KEY;
     delete process.env.APPLAND_URL;
     await Command.handler(
-      Object.assign({}, StandardOptions, {
+      Object.assign({}, StandardOneShotScanOptions, {
         all: true,
       } as any)
     );
@@ -76,7 +76,7 @@ describe('scan', () => {
     nock('http://localhost:3000').head(`/api/${AppId}`).reply(404);
 
     try {
-      await Command.handler(StandardOptions as any);
+      await Command.handler(StandardOneShotScanOptions as any);
       throw new Error(`Expected this command to fail`);
     } catch (e) {
       expect((e as any).message).toMatch(
@@ -90,13 +90,43 @@ describe('scan', () => {
     localhost.head(`/api/${AppId}`).reply(204).persist();
     localhost.get(`/api/${AppId}/finding_status`).reply(200, JSON.stringify([]));
 
-    await Command.handler(StandardOptions as any);
+    await Command.handler(StandardOneShotScanOptions as any);
   });
 
   describe('watch mode', () => {
+    let watcher: Watcher | undefined;
+    let findingsFile: string;
+    let scanConfigFilePath: string;
     let tmpDir: string;
     let secretInLogDir: string;
     const maxDelay = 10000;
+
+    async function expectScan(): Promise<ScanResults> {
+      async function updateMtime() {
+        return writeFile(join(secretInLogDir, 'mtime'), Date.now().toString());
+      }
+
+      return new Promise<ScanResults>((resolve, reject) => {
+        const startTime = Date.now();
+
+        async function assertFindings(): Promise<void | NodeJS.Timeout> {
+          const elapsed = Date.now() - startTime;
+
+          try {
+            await stat(findingsFile);
+          } catch (err) {
+            if (elapsed < maxDelay) return setTimeout(assertFindings, 100);
+
+            return reject(`Expected appmap-findings.json in ${secretInLogDir} after ${elapsed}ms`);
+          }
+
+          resolve(JSON.parse((await readFile(findingsFile)).toString()) as ScanResults);
+        }
+
+        setTimeout(updateMtime, 250);
+        setTimeout(assertFindings, 500);
+      });
+    }
 
     beforeEach(async () => {
       tmpDir = await fsextra.mkdtemp(tmpdir() + '/');
@@ -104,7 +134,10 @@ describe('scan', () => {
         tmpDir,
         'Confirmation_already_confirmed_user_should_not_be_able_to_confirm_the_account_again'
       );
+      scanConfigFilePath = join(tmpDir, 'appmap-scanner.yml');
+      findingsFile = join(secretInLogDir, 'appmap-findings.json');
 
+      await fsextra.copy(DefaultScanConfigFilePath, scanConfigFilePath);
       await fsextra.copy(join(__dirname, '..', 'fixtures', 'appmaps', 'secretInLog'), tmpDir, {
         recursive: true,
       });
@@ -114,45 +147,34 @@ describe('scan', () => {
           'Confirmation_already_confirmed_user_should_not_be_able_to_confirm_the_account_again'
         )
       );
+
+      watcher = new Watcher({ appmapDir: tmpDir, configFile: scanConfigFilePath });
+      await watcher.watch();
+    });
+
+    afterEach(async () => {
+      if (watcher) watcher.close();
+
+      fsextra.rmdir(tmpDir, { recursive: true });
     });
 
     it('scans AppMaps when the mtime file is created or changed', async () => {
-      const configData = await parseConfigFile(ConfigFilePath);
-      const watcher = new Watcher({ appmapDir: tmpDir, configData });
+      const findings = await expectScan();
 
-      async function updateMtime() {
-        return writeFile(join(secretInLogDir, 'mtime'), Date.now().toString());
-      }
+      expect(findings.findings.length).toEqual(1);
+      expect(findings.findings[0].ruleId).toEqual('secret-in-log');
+    });
 
-      watcher.watch();
-      return new Promise<void>((resolve, reject) => {
-        const startTime = Date.now();
+    it('reloads the scanner configuration automatically', async () => {
+      await expectScan();
 
-        async function assertFindings(): Promise<void | NodeJS.Timeout> {
-          const elapsed = Date.now() - startTime;
+      await rm(findingsFile);
+      await writeFile(scanConfigFilePath, dump({ checks: [{ rule: 'http-500' }] }));
 
-          try {
-            await stat(join(secretInLogDir, 'appmap-findings.json'));
-          } catch (err) {
-            if (elapsed < maxDelay) return setTimeout(assertFindings, 100);
+      const findings = await expectScan();
 
-            watcher.abort();
-            return reject(`Expected appmap-findings.json in ${secretInLogDir} after ${elapsed}ms`);
-          }
-
-          const findings = JSON.parse(
-            (await readFile(join(secretInLogDir, 'appmap-findings.json'))).toString()
-          ) as ScanResults;
-          expect(findings.findings.length).toEqual(1);
-          expect(findings.findings[0].ruleId).toEqual('secret-in-log');
-          watcher.abort();
-          fsextra.rmdir(tmpDir, { recursive: true });
-          resolve();
-        }
-
-        setTimeout(updateMtime, 250);
-        setTimeout(assertFindings, 500);
-      });
+      expect(findings.checks.length).toEqual(1);
+      expect(findings.checks[0].rule.id).toEqual('http-500');
     });
   });
 });
