@@ -18,7 +18,7 @@ describe('record.test.areTestCommandsConfigured', () => {
         .withArgs('test_recording.test_commands', [])
         .resolves([
           {
-            command: 'bundle exec rake test',
+            command: 'bundle exec rails test',
           } as configuration.TestCommand,
         ]);
     });
