@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.27.5](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.4...@appland/appmap-v3.27.5) (2022-06-06)
+
+
+### Bug Fixes
+
+* Update test command used for minitest ([2ac70fc](https://github.com/applandinc/appmap-js/commit/2ac70fc480df377c696f4cb60057f34fa171ba1a))
+
 # [@appland/appmap-v3.27.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.3...@appland/appmap-v3.27.4) (2022-06-01)
 
 
