@@ -14,7 +14,7 @@
     "lint": "eslint 'src/**/*.js' 'tests/**/*.js'",
     "lint:fix": "eslint 'src/**/*.js' 'tests/**/*.js' --fix",
     "pre-commit": "lint-staged",
-    "test": "jest",
+    "test": "jest && ./smoketest.sh",
     "build": "tsc && webpack --mode=production",
     "start": "ts-node src/cli.ts"
   },
