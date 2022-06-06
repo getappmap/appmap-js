@@ -2,6 +2,9 @@ import UI from '../../userInteraction';
 import configureHostAndPort from '../action/configureHostAndPort';
 import configureRemainingRequestOptions from '../action/configureRemainingRequestOptions';
 import detectProcessCharacteristics from '../action/detectProcessCharacteristics';
+import continueWithRequestOptionConfiguration, {
+  ConfigurationAction,
+} from '../prompt/continueWithRequestOptionConfiguration';
 import RecordContext from '../recordContext';
 import isAgentAvailable from '../test/isAgentAvailable';
 import { State } from '../types/state';
@@ -17,11 +20,11 @@ export default async function agentNotAvailable(
   recordContext: RecordContext
 ): Promise<State> {
   if (!(await detectProcessCharacteristics())) {
-    return agentProcessNotRunning;
-  }
-
-  if (await isAgentAvailable()) {
-    return initial;
+    if (
+      (await continueWithRequestOptionConfiguration()) ===
+      ConfigurationAction.HostAndPort
+    )
+      return agentProcessNotRunning;
   }
 
   UI.progress(

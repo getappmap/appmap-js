@@ -61,9 +61,18 @@ export async function readConfig(): Promise<AppMapConfig | undefined> {
   try {
     fileContents = await readFile(AppMapConfigFilePath);
   } catch {
-    return;
+    return {} as AppMapConfig;
   }
-  return load(fileContents.toString()) as AppMapConfig;
+  let config: AppMapConfig;
+  try {
+    config = load(fileContents.toString()) as AppMapConfig;
+  } catch (err) {
+    console.warn(
+      `Error parsing AppMap config file ${AppMapConfigFilePath}: ${err}`
+    );
+    config = {} as AppMapConfig;
+  }
+  return config;
 }
 
 function settingsKey(): string {
