@@ -16,7 +16,7 @@ export default async function continueWithRequestOptionConfiguration(): Promise<
   UI.progress(
     `If you're sure it's running on that port, we can continue with extra configuration ` +
       `options that may enable me to connect to the agent. ` +
-      `Otherwise you start over by reconfiguring the host and port.`
+      `Otherwise you can start over by reconfiguring the host and port.`
   );
   UI.progress('');
 
