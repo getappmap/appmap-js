@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.58.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.57.0...@appland/scanner-v1.58.0) (2022-06-07)
+
+
+### Features
+
+* Watch the scan config file ([1fde76e](https://github.com/applandinc/appmap-js/commit/1fde76ec626eecb5a9ba300bcc3c636ac6e056f6))
+
 # [@appland/scanner-v1.57.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.56.1...@appland/scanner-v1.57.0) (2022-05-23)
 
 
