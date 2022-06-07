@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.27.6](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.5...@appland/appmap-v3.27.6) (2022-06-07)
+
+
+### Bug Fixes
+
+* User can configure extended RR URL ([7429fa1](https://github.com/applandinc/appmap-js/commit/7429fa1d4455efaff0dfe6320323012e8e4775ad))
+
 # [@appland/appmap-v3.27.5](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.4...@appland/appmap-v3.27.5) (2022-06-06)
 
 
