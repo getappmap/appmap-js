@@ -26,6 +26,8 @@ class FingerprintQueue {
               'Tip: consider recording a shorter interaction or removing some classes from appmap.yml.',
             ].join('\n')
           );
+        } else if (error.code === 'ENOENT') {
+          console.warn(`Skipped: ${error.path}\nThe file does not exist.`);
         } else reject(error);
       });
       this.queue.resume();

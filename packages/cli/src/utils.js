@@ -23,12 +23,13 @@ function baseName(/** @type string */ fileName) {
   return fileName.substring(0, fileName.length - '.appmap.json'.length);
 }
 
-async function ctime(filePath) {
+async function ctime(filePath, suppressExceptions = true) {
   let fileStat;
   try {
     fileStat = await fsp.stat(filePath);
   } catch (e) {
-    return null;
+    if (suppressExceptions) return null;
+    throw e;
   }
   if (!fileStat.isFile()) {
     return null;
