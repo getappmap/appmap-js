@@ -1,6 +1,5 @@
 import { Arguments, Argv } from 'yargs';
 
-import { parseConfigFile } from '../../configuration/configurationProvider';
 import { ValidationError } from '../../errors';
 import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
 
@@ -10,6 +9,7 @@ import scanArgs from '../scanArgs';
 import resolveAppId from '../resolveAppId';
 import singleScan from './singleScan';
 import watchScan from './watchScan';
+import { parseConfigFile } from '../../configuration/configurationProvider';
 
 export default {
   command: 'scan',
@@ -78,16 +78,15 @@ export default {
     }
     if (appmapDir) await validateFile('directory', appmapDir);
 
-    const configData = await parseConfigFile(config);
-
     if (watch) {
       const watchAppMapDir = appmapDir!;
-      return watchScan({ appmapDir: watchAppMapDir, configData });
+      return watchScan({ appmapDir: watchAppMapDir, configFile: config });
     } else {
       let appId = appIdArg;
       if (!reportAllFindings) {
         appId = await resolveAppId(appIdArg, appmapDir);
       }
+      const configData = await parseConfigFile(config);
 
       return singleScan({
         appmapFile,
