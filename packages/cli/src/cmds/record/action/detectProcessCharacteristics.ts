@@ -56,7 +56,7 @@ export default async function detectProcessCharacteristics(): Promise<boolean> {
     const { looksGood } = await UI.prompt({
       type: 'confirm',
       name: 'looksGood',
-      message: `Does this look like your application?`,
+      message: `Does this look like your application server process?`,
       default: 'y',
     });
     return looksGood;

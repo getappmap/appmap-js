@@ -14,6 +14,8 @@ import * as agentProcessNotRunning from '../../../src/cmds/record/state/agentPro
 import * as configureHostAndPort from '../../../src/cmds/record/action/configureHostAndPort';
 import RecordContext from '../../../src/cmds/record/recordContext';
 import { inspect } from 'util';
+import * as continueWithRequestOptionConfiguration from '../../../src/cmds/record/prompt/continueWithRequestOptionConfiguration';
+import * as configureRemainingRequestOptions from '../../../src/cmds/record/action/configureRemainingRequestOptions';
 
 describe('record remote', () => {
   let prompt: sinon.SinonStub,
@@ -37,7 +39,7 @@ describe('record remote', () => {
   describe('agent is not avaliable', () => {
     beforeEach(() => sinon.stub(isAgentAvailable, 'default').resolves(false));
 
-    it('tries to get the agent ready', async () => {
+    it('begins the configuration process', async () => {
       recordContext.recordMethod = 'remote';
 
       const next = await remote.default(recordContext);
@@ -56,22 +58,58 @@ describe('record remote', () => {
         sinon.stub(detectProcessCharacteristics, 'default').resolves(false)
       );
 
-      it('tries to get the agent running', async () => {
-        let next: State | string | undefined = await remote.default(
-          recordContext
+      describe('user is sure that the host/port is correct', () => {
+        beforeEach(() =>
+          sinon
+            .stub(continueWithRequestOptionConfiguration, 'default')
+            .resolves(
+              continueWithRequestOptionConfiguration.ConfigurationAction
+                .RequestOptions
+            )
         );
-        next = await next(recordContext);
-        expect(inspect(recordContext)).toEqual(
-          `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
-        );
-        expect(next).toEqual(agentProcessNotRunning.default);
+        it('prompts for extended options', async () => {
+          let next: State | string | undefined = await remote.default(
+            recordContext
+          );
+          expect(next).toEqual(agentNotAvailable.default);
 
-        sinon.stub(configureHostAndPort, 'default').resolves();
+          sinon.stub(configureRemainingRequestOptions, 'default').resolves();
 
-        expect(await (next as State)(recordContext)).toEqual(remote.default);
-        expect(inspect(recordContext)).toEqual(
-          `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
+          next = await next(recordContext);
+          expect(next).toEqual(remote.default);
+          expect(inspect(recordContext)).toEqual(
+            `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
+          );
+        });
+      });
+
+      describe('user is not sure that the host/port is correct', () => {
+        beforeEach(() =>
+          sinon
+            .stub(continueWithRequestOptionConfiguration, 'default')
+            .resolves(
+              continueWithRequestOptionConfiguration.ConfigurationAction
+                .HostAndPort
+            )
         );
+        it('re-prompts for host and port', async () => {
+          let next: State | string | undefined = await remote.default(
+            recordContext
+          );
+          expect(next).toEqual(agentNotAvailable.default);
+          next = await next(recordContext);
+          expect(next).toEqual(agentProcessNotRunning.default);
+          expect(inspect(recordContext)).toEqual(
+            `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
+          );
+
+          sinon.stub(configureHostAndPort, 'default').resolves();
+
+          expect(await (next as State)(recordContext)).toEqual(remote.default);
+          expect(inspect(recordContext)).toEqual(
+            `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
+          );
+        });
       });
     });
   });

@@ -17,7 +17,11 @@ export default async function configureRemainingRequestOptions() {
   });
 
   if (path !== defaultPath) {
-    await writeConfigOption('remote_recording.path', path);
+    let basePath = path;
+    if (!basePath.endsWith('/')) basePath = [basePath, '/'].join('');
+    if (!basePath.startsWith('/')) basePath = ['/', basePath].join('');
+
+    await writeConfigOption('remote_recording.path', basePath);
   }
 
   const defaultProtocol = await readConfigOption(
