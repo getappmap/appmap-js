@@ -51,6 +51,15 @@ export default {
     },
   },
 
+  watch: {
+    projects(newVal) {
+      if (!this.selectedProject || !this.selectedProject.name) return;
+      this.selectedProject = newVal.find(
+        (p) => p.name === this.selectedProject.name
+      );
+    },
+  },
+
   data() {
     return {
       selectedProject: null,
