@@ -2,8 +2,8 @@
 const { constants: fsConstants, promises: fsp } = require('fs');
 const { queue } = require('async');
 const glob = require('glob');
-const { join: joinPath } = require('path');
 const { buildAppMap } = require('@appland/models');
+const { promisify } = require('util');
 
 const StartTime = Date.now();
 
@@ -88,24 +88,8 @@ async function listAppMapFiles(directory, fn) {
   if (verbose()) {
     console.warn(`Scanning ${directory} for AppMaps`);
   }
-  const files = await fsp.readdir(directory);
   await Promise.all(
-    files
-      .filter((file) => file !== '.' && file !== '..')
-      // eslint-disable-next-line prefer-arrow-callback
-      .map(async function (file) {
-        const path = joinPath(directory, file);
-        const stat = await fsp.stat(path);
-        if (stat.isDirectory()) {
-          await listAppMapFiles(path, fn);
-        }
-
-        if (file.endsWith('.appmap.json')) {
-          await fn(path);
-        }
-
-        return null;
-      })
+    (await promisify(glob)(`${directory}/**/*.appmap.json`)).map(fn)
   );
 }
 

@@ -2,7 +2,6 @@ import { endTime, verbose } from '../../utils';
 import runCommand from '../runCommand';
 import showAppMap from '../open/showAppMap';
 import yargs from 'yargs';
-import { setAppMapConfigFilePath } from './configuration';
 import { State } from './types/state';
 import { FileName } from './types/fileName';
 import { chdir } from 'process';
@@ -10,6 +9,7 @@ import { chdir } from 'process';
 import initial from './state/initial';
 import Telemetry from '../../telemetry';
 import RecordContext from './recordContext';
+import { readConfigOption, setAppMapConfigFilePath } from './configuration';
 
 export const command = 'record [mode]';
 export const describe =
@@ -48,7 +48,9 @@ export async function handler(argv: any) {
 
     if (appmapConfig) setAppMapConfigFilePath(appmapConfig);
 
-    const recordContext = new RecordContext(directory || '.');
+    const appmapDir = (await readConfigOption('appmap_dir', '.')) as string;
+
+    const recordContext = new RecordContext(appmapDir);
     await recordContext.initialize();
 
     const { mode } = argv;
