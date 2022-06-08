@@ -1,14 +1,25 @@
 import buildAppMap from '../../src/appMapBuilder';
 import scenario from './fixtures/large_scenario.json';
+import updatesScenario from './fixtures/event_updates.json';
 
-test('build', () => {
-  const appMap = buildAppMap().source(scenario).build();
+describe('build', () => {
+  it('creates an AppMap', () => {
+    const appMap = buildAppMap().source(scenario).build();
 
-  const numCodeObjects = appMap.classMap.codeObjects.length;
+    const numCodeObjects = appMap.classMap.codeObjects.length;
 
-  expect(numCodeObjects).toEqual(50);
-  expect(appMap.events.length).toEqual(815);
-  expect(Object.keys(appMap.metadata).length).toEqual(10);
+    expect(numCodeObjects).toEqual(50);
+    expect(appMap.events.length).toEqual(815);
+    expect(Object.keys(appMap.metadata).length).toEqual(10);
+  });
+  it('overrwrites event with update', () => {
+    const appMap = buildAppMap().source(updatesScenario).build();
+    expect(appMap.events[0].extra_attribute).toBeUndefined();
+    expect(appMap.events[0].http_server_request).not.toBeNull();
+    expect(appMap.events[0].http_server_request.normalized_path_info).toEqual(
+      '/owners/:ownerId/pets/:petId/edit'
+    );
+  });
 });
 
 test('build with data source in constructor', () => {

@@ -22,7 +22,7 @@ import { RetryOptions } from '../integration/appland/retryOptions';
 import { branch as branchFromEnv, sha as commitFromEnv } from '../integration/vars';
 import { stat } from 'fs/promises';
 import { join } from 'path';
-import { maxAppMapSize, pruneAppMap } from './upload/pruneAppMap';
+import { buildAppMap, maxAppMapSize, pruneAppMap } from './upload/pruneAppMap';
 
 async function fileExists(file: string): Promise<boolean> {
   try {
@@ -70,13 +70,16 @@ export default async function create(
       .then((buffer: Buffer) => {
         const maxSize = maxAppMapSize();
         const appMapJson = JSON.parse(buffer.toString());
+        const builder = buildAppMap(appMapJson);
         let metadata: Metadata = (appMapJson as AppMapStruct).metadata;
         if (buffer.byteLength > maxSize) {
           console.warn(`${fullPath} is larger than ${maxSize / 1024}K, pruning it`);
-          const prunedAppMap = pruneAppMap(appMapJson, maxSize);
-          metadata = prunedAppMap.metadata;
-          buffer = Buffer.from(JSON.stringify(prunedAppMap));
+          pruneAppMap(builder, maxSize);
         }
+        const prunedAppMap = builder.normalize().build();
+        metadata = prunedAppMap.metadata;
+        buffer = Buffer.from(JSON.stringify(prunedAppMap));
+
         return { metadata, buffer };
       })
       .then(({ metadata, buffer }) => {

@@ -119,12 +119,15 @@ describe('upload', () => {
     const appId = MapsetData.app_id.toString();
 
     // There are two fixture AppMaps. One is smaller than 500K, the other is larger. So, setting the
-    // max size to 500K will exercise both the pruning and non-pruning paths.
+    // max size to 500K will exercise both the pruning and non-pruning paths. buildAppMap will be
+    // called on both paths, pruneAppMap only on the pruning path.
     sinon.stub(appMapPruning, 'maxAppMapSize').returns(500 * 1024);
+    const buildAppMap = sinon.stub(appMapPruning, 'buildAppMap').callThrough();
     const pruneAppMap = sinon.stub(appMapPruning, 'pruneAppMap').callThrough();
 
     await upload(ScanResults, appId, FixtureDir);
 
+    expect(buildAppMap.callCount).toBe(2);
     expect(pruneAppMap.callCount).toBe(1);
 
     sinon.restore();
