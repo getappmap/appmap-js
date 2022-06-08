@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.28.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.28.0...@appland/appmap-v3.28.1) (2022-06-08)
+
+
+### Bug Fixes
+
+* Index no longer panics on missing files ([b56bde3](https://github.com/applandinc/appmap-js/commit/b56bde37c5d4adeac3df39b50ef4c7f43d95b3c9))
+
 # [@appland/appmap-v3.28.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.6...@appland/appmap-v3.28.0) (2022-06-08)
 
 
