@@ -1,3 +1,17 @@
+# [@appland/appmap-v3.28.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.6...@appland/appmap-v3.28.0) (2022-06-08)
+
+
+### Bug Fixes
+
+* Ensure that maxTime is a number ([0e42152](https://github.com/applandinc/appmap-js/commit/0e42152fc6e56d8f2670347ed74428ec1f5720d8))
+* listAppMapFiles expects transient files ([fd45854](https://github.com/applandinc/appmap-js/commit/fd458549a615fef39f5e335322523670b99b1fce))
+
+
+### Features
+
+* Respect appmap_dir ([11357d3](https://github.com/applandinc/appmap-js/commit/11357d3398af1754cf6fb9199383f44d9e5c1222))
+* Suggest next step after CLI command ([61dca63](https://github.com/applandinc/appmap-js/commit/61dca63df62509dfaa13586e7adafcf4cc511371))
+
 # [@appland/appmap-v3.27.6](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.27.5...@appland/appmap-v3.27.6) (2022-06-07)
 
 
