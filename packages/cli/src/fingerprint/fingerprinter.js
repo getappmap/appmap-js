@@ -46,7 +46,7 @@ class Fingerprinter {
 
   // eslint-disable-next-line class-methods-use-this
   async fingerprint(appMapFileName) {
-    const appMapCreatedAt = await ctime(appMapFileName);
+    const appMapCreatedAt = await ctime(appMapFileName, false);
     if (!appMapCreatedAt) {
       return;
     }
