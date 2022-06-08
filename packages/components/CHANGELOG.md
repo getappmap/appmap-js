@@ -1,3 +1,10 @@
+# [@appland/components-v2.3.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.3.1...@appland/components-v2.3.2) (2022-06-08)
+
+
+### Bug Fixes
+
+* Project state is reactive ([186775f](https://github.com/applandinc/appmap-js/commit/186775fa0c52274c2f0039956c08bbe983ae8b0d))
+
 # [@appland/components-v2.3.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.3.0...@appland/components-v2.3.1) (2022-06-02)
 
 
