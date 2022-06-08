@@ -1,3 +1,10 @@
+# [@appland/models-v1.16.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.15.0...@appland/models-v1.16.0) (2022-06-08)
+
+
+### Features
+
+* Apply eventUpdates when building an AppMap ([9cf9989](https://github.com/applandinc/appmap-js/commit/9cf99891e1cdd46c8a58d3030c039ac75e2bce4f))
+
 # [@appland/models-v1.15.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.14.5...@appland/models-v1.15.0) (2022-04-05)
 
 
