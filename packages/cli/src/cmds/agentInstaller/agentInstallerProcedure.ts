@@ -77,21 +77,13 @@ export default class AgentInstallerProcedure extends AgentProcedure {
 
     const successMessage = [
       chalk.green('Success! The AppMap agent has been installed.'),
+      '',
+      chalk.blue('NEXT STEP: Record AppMaps'),
+      '',
+      'You can consult the AppMap documentation, or continue with the ',
+      'instructions provided in the AppMap code editor extension.',
     ];
 
-    successMessage.push(
-      'For more information on recording AppMaps, visit:',
-      chalk.blue(this.installer.documentation)
-    );
-
     UI.success(successMessage.join('\n'));
-
-    UI.success(
-      `The next step is to generate AppMaps. You can consult the AppMap documentation, or dive right in with:
-
-    npx @appland/appmap record
-`,
-      'left'
-    );
   }
 }
