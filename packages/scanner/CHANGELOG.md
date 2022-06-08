@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.59.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.58.0...@appland/scanner-v1.59.0) (2022-06-08)
+
+
+### Features
+
+* Always rewrite an AppMap before upload ([61617a9](https://github.com/applandinc/appmap-js/commit/61617a985fc3a4f6ce6dc805f7cc86e3c576264e))
+
 # [@appland/scanner-v1.58.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.57.0...@appland/scanner-v1.58.0) (2022-06-07)
 
 
