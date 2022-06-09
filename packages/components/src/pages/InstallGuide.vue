@@ -19,6 +19,11 @@
       :num-findings="numFindings"
       :project-path="path"
     />
+    <v-open-api
+      id="openapi"
+      :num-http-requests="numHttpRequests"
+      :num-app-maps="numAppMaps"
+    />
   </v-multi-page>
 </template>
 
@@ -27,6 +32,7 @@ import VMultiPage from '@/pages/MultiPage.vue';
 import VProjectPicker from '@/pages/install-guide/ProjectPicker.vue';
 import VRecordAppMaps from '@/pages/install-guide/RecordAppMaps.vue';
 import VOpenAppMaps from '@/pages/install-guide/OpenAppMaps.vue';
+import VOpenApi from '@/pages/install-guide/OpenApi.vue';
 import VInvestigateFindings from '@/pages/install-guide/InvestigateFindings.vue';
 
 export default {
@@ -84,6 +90,12 @@ export default {
     numFindings() {
       return this.selectedProject && this.selectedProject.numFindings;
     },
+    numAppMaps() {
+      return this.selectedProject && this.selectedProject.numAppMaps;
+    },
+    numHttpRequests() {
+      return this.selectedProject && this.selectedProject.numHttpRequests;
+    },
     path() {
       return this.selectedProject && this.selectedProject.path;
     },
@@ -95,6 +107,7 @@ export default {
     VRecordAppMaps,
     VInvestigateFindings,
     VOpenAppMaps,
+    VOpenApi,
   },
 
   methods: {

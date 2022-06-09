@@ -45,6 +45,8 @@ export default {
         name: 'MyOtherProject',
         score: 3,
         path: '/home/user/my_other_project',
+        numHttpRequests: 283,
+        numAppMaps: 109,
         language: {
           name: 'Ruby',
           score: 3,
