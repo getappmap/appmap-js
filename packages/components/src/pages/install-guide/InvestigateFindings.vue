@@ -15,7 +15,10 @@
               <v-button label="View problems" @click.native="viewProblems" />
             </div>
           </template>
-          <p v-else></p>
+          <p v-else>
+            You're good to go! AppMap scanned your application and found no
+            flaws. We'll continue scanning for flaws automatically.
+          </p>
         </article>
         <article v-else>Waiting on your first analysis results.</article>
       </main>
