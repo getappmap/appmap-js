@@ -1,8 +1,4 @@
-import { promisify } from 'util';
 import { writeFile } from 'fs/promises';
-import { glob as globCallback } from 'glob';
-
-import validateFile from '../validateFile';
 import { default as buildScanner } from './scanner';
 
 import { ValidationError } from '../../errors';
@@ -13,11 +9,13 @@ import summaryReport from '../../report/summaryReport';
 import { formatReport } from './formatReport';
 import Telemetry from '../../telemetry';
 import { ScanResults } from '../../report/scanResults';
+import { collectAppMapFiles } from '../../rules/lib/util';
+import validateFile from '../validateFile';
 
 type SingleScanOptions = {
   appmapFile?: string | string[];
   appmapDir?: string;
-  configData: Configuration;
+  configuration: Configuration;
   reportAllFindings: boolean;
   reportFile: string;
   appId?: string;
@@ -25,21 +23,17 @@ type SingleScanOptions = {
 };
 
 export default async function singleScan(options: SingleScanOptions): Promise<void> {
-  const { appmapFile, appmapDir, configData, reportAllFindings, appId, ide, reportFile } = options;
+  const { appmapFile, appmapDir, configuration, reportAllFindings, appId, ide, reportFile } =
+    options;
 
-  let files: string[] = [];
-  if (appmapDir) {
-    const glob = promisify(globCallback);
-    files = await glob(`${appmapDir}/**/*.appmap.json`);
-  }
-  if (appmapFile) {
-    files = typeof appmapFile === 'string' ? [appmapFile] : appmapFile;
-    await Promise.all(files.map(async (file) => validateFile('file', file)));
-  }
+  const files = await collectAppMapFiles(appmapFile, appmapDir);
+  await Promise.all(files.map(async (file) => validateFile('file', file)));
 
-  const scanner = await buildScanner(reportAllFindings, configData, files).catch((error: Error) => {
-    throw new ValidationError(error.message + '\nUse --all to perform an offline scan.');
-  });
+  const scanner = await buildScanner(reportAllFindings, configuration, files).catch(
+    (error: Error) => {
+      throw new ValidationError(error.message + '\nUse --all to perform an offline scan.');
+    }
+  );
 
   const startTime = Date.now();
 

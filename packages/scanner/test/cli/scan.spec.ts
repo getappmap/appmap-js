@@ -1,4 +1,4 @@
-import { join, relative } from 'path';
+import { join } from 'path';
 import nock from 'nock';
 import sinon from 'sinon';
 import fsextra from 'fs-extra';
@@ -153,7 +153,8 @@ describe('scan', () => {
       createIndexDirectory();
 
       watcher = new Watcher({
-        appmapDir: relative(process.cwd(), tmpDir),
+        appId: 'no-such-app',
+        appmapDir: tmpDir,
         configFile: scanConfigFilePath,
       });
       await watcher.watch();
