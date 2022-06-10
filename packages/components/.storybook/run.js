@@ -47,8 +47,15 @@ async function runStorybook() {
 }
 
 (async () => {
-  const shouldRunStorybook =
-    (await isBranch('main')) || isTag() || (await hasDependencyChanged());
+  try {
+    const shouldRunStorybook =
+      (await isBranch('main')) || isTag() || (await hasDependencyChanged());
 
-  shouldRunStorybook && (await runStorybook());
+    shouldRunStorybook && (await runStorybook());
+  } catch (error) {
+    // FIXME
+    // This doesn't work correctly in CI.
+    // Errors here were implicitly silently skipped in Node 14.
+    console.warn(error);
+  }
 })();
