@@ -1,5 +1,23 @@
 import { Event, ReturnValueObject } from '@appland/models';
 import { isAbsolute } from 'path';
+import { promisify } from 'util';
+import { glob as globCallback } from 'glob';
+import assert from 'assert';
+
+export async function collectAppMapFiles(
+  appmapFile?: string | string[],
+  appmapDir?: string
+): Promise<string[]> {
+  let files: string[] = [];
+  if (appmapDir) {
+    const glob = promisify(globCallback);
+    files = await glob(`${appmapDir}/**/*.appmap.json`);
+  } else {
+    assert(appmapFile, 'Either appmapDir or appmapFile is required');
+    files = typeof appmapFile === 'string' ? [appmapFile] : appmapFile;
+  }
+  return files;
+}
 
 let isVerbose = false;
 function verbose(v: boolean | null = null): boolean {
