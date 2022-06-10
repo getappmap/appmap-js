@@ -18,6 +18,7 @@ import CheckConfig from './types/checkConfig';
 import { URL } from 'url';
 import { promisify } from 'util';
 import { join } from 'path';
+import { App } from '@appland/client';
 
 const ajv = new Ajv();
 ajv.addSchema(match_pattern_config_schema);
@@ -194,10 +195,26 @@ export async function loadConfig(config: Configuration): Promise<Check[]> {
       validate(ajv.compile(propertiesSchema), check.properties || {}, `${ruleId} properties`);
     });
 
-  return Promise.all(config.checks.map(async (c: CheckConfig) => buildBuiltinCheck(c)));
+  return Promise.all(
+    config.checks.map(async (c: CheckConfig) => {
+      const rule = await loadRule(c.rule);
+      if (verbose()) console.log(`Loaded rule: ${rule.id}`);
+      return buildCheck(rule, c);
+    })
+  );
 }
 
-export async function parseConfigFile(configPath: string): Promise<Configuration> {
+export async function fetchConfig(configPath: string, appId?: string): Promise<Configuration> {
+  if (configPath === 'remote') {
+    if (!appId) throw new Error(`app id is required when using remote config`);
+
+    return fetchRemoteConfig(appId);
+  } else {
+    return fetchLocalConfig(configPath);
+  }
+}
+
+async function fetchLocalConfig(configPath: string): Promise<Configuration> {
   if (!(await promisify(exists)(configPath))) {
     configPath = join(__dirname, '../sampleConfig/default.yml');
   }
@@ -206,4 +223,9 @@ export async function parseConfigFile(configPath: string): Promise<Configuration
   return yaml.load(yamlConfig, {
     filename: configPath,
   }) as Configuration;
+}
+
+async function fetchRemoteConfig(appId: string): Promise<Configuration> {
+  console.log(`Loading scanner configuration from remote server`);
+  return (await new App(appId).scannerConfig()) as Configuration;
 }

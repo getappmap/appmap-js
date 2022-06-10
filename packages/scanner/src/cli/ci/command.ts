@@ -5,7 +5,7 @@ import { Arguments, Argv } from 'yargs';
 
 import { FindingStatusListItem } from '@appland/client/dist/src';
 
-import { parseConfigFile } from '../../configuration/configurationProvider';
+import { fetchConfig } from '../../configuration/configurationProvider';
 import { ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
 import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
@@ -56,7 +56,7 @@ export default {
   async handler(options: Arguments): Promise<void> {
     let { appmapDir } = options as unknown as CommandOptions;
     const {
-      config,
+      config: configFile,
       verbose: isVerbose,
       fail: failOption,
       app: appIdArg,
@@ -87,7 +87,7 @@ export default {
     const glob = promisify(globCallback);
     const files = await glob(`${appmapDir}/**/*.appmap.json`);
 
-    const configData = await parseConfigFile(config);
+    const configData = await fetchConfig(appId, configFile);
 
     const scanner = await buildScanner(false, configData, files);
 
