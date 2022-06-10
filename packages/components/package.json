@@ -52,6 +52,7 @@
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.8",
     "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/test-utils": "^1.0.3",
     "babel-cli": "^6.26.0",
@@ -60,6 +61,7 @@
     "chromatic": "^6.4.3",
     "core-js": "^3.11.2",
     "cross-env": "^7.0.2",
+    "css-loader": "5",
     "cypress": "^9.4.1",
     "eslint": "^6.7.2",
     "eslint-config-prettier": "^7.2.0",
@@ -83,8 +85,10 @@
     "start-server-and-test": "^1.14.0",
     "svg-to-vue": "^0.7.0",
     "vue-jest": "^3.0.7",
+    "vue-loader": "^15.7.0",
     "vue-svg-loader": "^0.16.0",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "4"
   },
   "repository": {
     "type": "git",
