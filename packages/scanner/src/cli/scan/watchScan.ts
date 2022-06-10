@@ -12,6 +12,7 @@ import assert from 'assert';
 import path from 'path';
 
 type WatchScanOptions = {
+  appId?: string;
   appmapDir: string;
   configFile: string;
 };
