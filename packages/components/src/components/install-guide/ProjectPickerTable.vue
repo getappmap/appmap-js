@@ -52,14 +52,15 @@ export default {
 
 <style lang="scss" scoped>
 .project-picker-table {
-  border: 2px solid $color-highlight;
+  border: 1px solid $gray3;
   width: 100%;
   text-align: right;
-  border-radius: 8px;
+  border-radius: $border-radius;
   border-spacing: 0;
+  overflow: hidden;
 
   th {
-    border-bottom: 2px solid $color-highlight;
+    border-bottom: 1px solid $gray3;
     padding: 1em 2ex;
 
     &:first-child {
