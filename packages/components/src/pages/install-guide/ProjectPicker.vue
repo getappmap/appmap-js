@@ -7,12 +7,12 @@
       <main>
         <article v-if="projects.length > 0">
           <h2>Select a suitable project</h2>
-          <p>
+          <!-- <p>
             To make sure that your projects are suitable for mapping, we make a
             couple of quick requirement checks on your workspace to help you
             find a project to start AppMapping. Select a suitable project from
             the table below.
-          </p>
+          </p> -->
           <v-project-picker-table
             :projects="projects"
             @select-project="selectProject($event)"
@@ -22,19 +22,19 @@
         <template v-if="quality == 'good' || quality == 'ok'">
           <article>
             <h2>Run AppMap installer</h2>
-            <p class="body-text">
+            <!-- <p class="body-text">
               AppMap agent records executing code. It creates JSON files as you
               execute test cases, run sample programs, or perform interactive
               sessions with your app. This script will guide you through the
               installation process. Run it in the project's environment so it
               can correctly detect runtimes and libraries.
-            </p>
-            <p class="note body-text" v-if="quality == 'ok'">
+            </p> -->
+            <!-- <p class="note body-text" v-if="quality == 'ok'">
               It appears this project might not be a good choice for your first
               AppMap. We recommend you pick another project; proceed at your own
               risk.
-            </p>
-            <p class="body-text">
+            </p> -->
+            <!-- <p class="body-text">
               If you do not have Node.js installed, or would prefer manual
               installion of the AppMap agent visit our
               <a
@@ -42,16 +42,16 @@
                 href="https://appland.com/docs/quickstart/vscode/step-2"
                 >installation documentation.</a
               >
-            </p>
+            </p> -->
             <v-code-snippet
               :clipboard-text="installCommand"
               :message-success="messageSuccess"
             />
           </article>
-          <article v-if="selectedProject.agentInstalled">
+          <!-- <article v-if="selectedProject.agentInstalled">
             It looks like the AppMap agent is installed. Continue on to the next
             step.
-          </article>
+          </article> -->
           <v-navigation-buttons :first="first" :last="last" />
         </template>
         <template v-if="quality == 'bad'">

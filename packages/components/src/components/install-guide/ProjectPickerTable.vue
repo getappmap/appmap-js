@@ -58,6 +58,7 @@ export default {
   border-radius: $border-radius;
   border-spacing: 0;
   overflow: hidden;
+  margin-top: 1rem;
 
   th {
     border-bottom: 1px solid $gray3;
