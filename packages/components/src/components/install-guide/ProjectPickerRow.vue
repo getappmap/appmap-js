@@ -68,7 +68,7 @@ tr {
       text-align: center;
       vertical-align: middle;
       line-height: 1em;
-      margin-right: 1em;
+      margin: 0 1rem 0 0.25rem;
     }
   }
 

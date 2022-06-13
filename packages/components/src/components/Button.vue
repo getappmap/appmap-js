@@ -59,6 +59,7 @@ export default {
 
   &--primary {
     background-color: $color-highlight;
+    color: $white;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.9);
@@ -73,9 +74,9 @@ export default {
   }
   &--ghost {
     background-color: inherit;
-    border: 1px solid $color-highlight;
+    border: 1px solid $gray3;
     border-style: solid;
-    color: $color-highlight;
+    color: $gray4;
 
     &:disabled {
       background-color: inherit;

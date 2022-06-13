@@ -59,7 +59,11 @@ export default {
   border-spacing: 0;
   overflow: hidden;
   margin-top: 1rem;
-
+  thead th {
+    &:first-of-type {
+      padding-left: 3.1rem;
+    }
+  }
   th {
     border-bottom: 1px solid $gray3;
     padding: 1em 2ex;

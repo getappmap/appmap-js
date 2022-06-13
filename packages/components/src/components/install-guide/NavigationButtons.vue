@@ -1,14 +1,14 @@
 <template>
   <div :class="classes">
-    <!-- <v-button
+    <v-button
       label="Back"
       kind="ghost"
       @click.native="$root.$emit('page-previous')"
       v-if="!first"
-    /> -->
+    />
     <v-button
       c
-      label="NEXT STEP"
+      label="Next step"
       @click.native="$root.$emit('page-next')"
       v-if="!last"
     />
@@ -49,7 +49,7 @@ export default {
 .buttons {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
 
   &--right {
     justify-content: right;
