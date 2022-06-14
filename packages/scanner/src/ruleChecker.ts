@@ -186,7 +186,7 @@ export default class RuleChecker {
       appMapIndex,
       checkInstance.filterEvent.bind(checkInstance)
     );
-    if (this.progress) await this.progress.matchResult(matchResult);
+    if (this.progress) await this.progress.matchResult(event, matchResult);
     const numFindings = findings.length;
     if (matchResult === true) {
       let finding;
