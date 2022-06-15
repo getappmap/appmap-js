@@ -6,6 +6,46 @@ import apiKeyScenario from './fixtures/revoke_api_key.appmap.json';
 const largeAppMap = buildAppMap().source(largeScenario).normalize().build();
 const apiKeyAppMap = buildAppMap().source(apiKeyScenario).normalize().build();
 
+/**
+ * Try to stuff events in the scenario so it goes to given depth.
+ * It does so by finding a pair of call/return events and then generating
+ * nested copies inside.
+ * @param {object} scenario
+ * @param {number} targetDepth
+ */
+function deepen(scenario, targetDepth) {
+  const events = [...scenario.events];
+
+  let baseIdx = events.findIndex((event, index) => {
+    if (event.event !== 'call' || !event.method_id) return false;
+    const next = events[index + 1];
+    if (!next) return false;
+    if (next.event !== 'return') return false;
+    return next.parent_id === event.id;
+  });
+  const [callTpl, retTpl] = events.slice(baseIdx, baseIdx + 2);
+  function splice(...elements) {
+    baseIdx += 1;
+    events.splice(baseIdx, 0, ...elements);
+  }
+
+  let lastId = Math.max(...events.map(({ id }) => id));
+  function nextId() {
+    lastId += 1;
+    return lastId;
+  }
+
+  function makePair() {
+    const newCall = { ...callTpl, id: nextId() };
+    const newRet = { ...retTpl, id: nextId(), parent_id: newCall.id };
+    return [newCall, newRet];
+  }
+
+  for (let i = 0; i < targetDepth; i += 1) splice(...makePair());
+
+  return { ...scenario, events };
+}
+
 describe('EventNavigator', () => {
   test('ancestors', () => {
     const event = largeAppMap.events.find(
@@ -66,6 +106,13 @@ describe('EventNavigator', () => {
 
     expect(descendants.next().value.event.methodId).toEqual('getTasks');
     expect(descendants.next().done).toEqual(true);
+  });
+
+  test('descendants works correctly on a deep structure', () => {
+    const scenario = deepen(apiKeyScenario, 8192);
+    const appMap = buildAppMap().source(scenario).normalize().build();
+    const navigator = new EventNavigator(appMap.rootEvent);
+    expect(() => [...navigator.descendants()].length).not.toThrow(RangeError);
   });
 
   test('chaining axis generators', () => {
