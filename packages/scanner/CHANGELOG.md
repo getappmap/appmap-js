@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.59.1](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.59.0...@appland/scanner-v1.59.1) (2022-06-15)
+
+
+### Bug Fixes
+
+* Upgrade @appland/models to v1.16.1 ([7eead86](https://github.com/applandinc/appmap-js/commit/7eead8607f30299150dd08032142a3aba5770f89))
+
 # [@appland/scanner-v1.59.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.58.0...@appland/scanner-v1.59.0) (2022-06-08)
 
 
