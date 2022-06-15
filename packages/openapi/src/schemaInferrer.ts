@@ -18,24 +18,29 @@ function mergeProperties(props1?: Properties, props2?: Properties): Properties {
   return result;
 }
 
-
 // Merge type, items and properties of schema objects.
 function mergeType(
   a?: OpenAPIV3.SchemaObject,
   b?: OpenAPIV3.SchemaObject
 ): OpenAPIV3.SchemaObject | undefined {
-  if (!b || !a) return a;
-  if (b.type !== a.type) return a;
+  if (!b) return a;
+  else if (!a) return b;
+  else if (b.type !== a.type) return a;
 
   if (a.type === 'array' && b.type === 'array') {
-    if ('type' in a.items && 'type' in b.items) {
+    if (!b.items) return a;
+    else if (!a.items && b.items) return b;
+    else if ('type' in a.items && 'type' in b.items) {
       const merged = mergeType(a.items, b.items);
       if (merged) return { ...a, items: merged };
     }
   }
 
   if ('properties' in a && 'properties' in b) {
-    return { ...a, properties: mergeProperties(a.properties as Properties, b.properties as Properties) };
+    return {
+      ...a,
+      properties: mergeProperties(a.properties as Properties, b.properties as Properties),
+    };
   }
 
   return a;
