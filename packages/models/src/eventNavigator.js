@@ -76,19 +76,14 @@ export default class EventNavigator {
   }
 
   *descendants(filterFn = () => true) {
-    function* traverseChildren(/** @type {Event[]} */ children) {
-      if (!children || children.length === 0) {
-        return;
-      }
-      for (let i = 0; i < children.length; i += 1) {
-        const event = children[i];
-        if (filterFn(event)) {
-          yield new EventNavigator(event);
-          yield* traverseChildren(event.children);
-        }
+    const queue = [...this.event.children];
+    while (queue.length) {
+      const event = queue.shift();
+      if (filterFn(event)) {
+        yield new EventNavigator(event);
+        if (event.children) queue.unshift(...event.children);
       }
     }
-    yield* traverseChildren(this.event.children);
   }
 
   hasLabel(label) {
