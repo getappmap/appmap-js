@@ -1,3 +1,10 @@
+# [@appland/models-v1.16.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.16.0...@appland/models-v1.16.1) (2022-06-15)
+
+
+### Bug Fixes
+
+* Handle deep structures in EventNavigator.descendants ([a66d768](https://github.com/applandinc/appmap-js/commit/a66d768c913f4a84e2f5362b82dc1db629de0c1e))
+
 # [@appland/models-v1.16.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.15.0...@appland/models-v1.16.0) (2022-06-08)
 
 
