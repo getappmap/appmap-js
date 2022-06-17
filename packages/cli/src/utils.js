@@ -46,6 +46,13 @@ async function mtime(filePath) {
   }
   return fileStat.mtimeMs;
 }
+
+async function writeFileAtomic(dirName, fileName, jobId, data) {
+  const tempFilePath = join(dirName, `${fileName}.${jobId}`);
+  await fsp.writeFile(tempFilePath, data);
+  await fsp.rename(tempFilePath, join(dirName, fileName));
+}
+
 /**
  * Call a function with each matching file. No guarantee is given that
  * files will be processed in any particular order.
@@ -155,6 +162,7 @@ module.exports = {
   endTime,
   formatValue,
   formatHttpServerRequest,
+  writeFileAtomic,
   listAppMapFiles,
   loadAppMap,
   mtime,

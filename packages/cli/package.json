@@ -101,7 +101,6 @@
     "semver": "^7.3.5",
     "supports-hyperlinks": "^2.2.0",
     "w3c-xmlserializer": "^2.0.0",
-    "write-file-atomic": "^4.0.1",
     "yargs": "^17.1.1"
   }
 }

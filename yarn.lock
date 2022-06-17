@@ -92,7 +92,6 @@ __metadata:
     "@types/sinon": ^10.0.2
     "@types/tmp": ^0.2.3
     "@types/w3c-xmlserializer": ^2.0.2
-    "@types/write-file-atomic": ^4.0.0
     JSONStream: ^1.3.5
     ajv: ^8.6.3
     applicationinsights: ^2.1.4
