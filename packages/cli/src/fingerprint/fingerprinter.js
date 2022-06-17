@@ -1,12 +1,13 @@
 const { createHash } = require('crypto');
-const { join: joinPath } = require('path');
+const { join: joinPath, basename } = require('path');
 const fsp = require('fs').promises;
 const semver = require('semver');
 const { buildAppMap } = require('@appland/models');
 const writeFileAtomic = require('write-file-atomic');
+const { move } = require('fs-extra');
 const { default: FileTooLargeError } = require('./fileTooLargeError');
 
-const { verbose, baseName, ctime } = require('../utils');
+const { verbose, baseName, mtime } = require('../utils');
 const { algorithms, canonicalize } = require('./canonicalize');
 
 /**
@@ -14,7 +15,7 @@ const { algorithms, canonicalize } = require('./canonicalize');
  *
  * # 1.1.2
  *
- * * Reject large appmaps instead of breaking randomly.
+ * * Reject large appmaps to avoid running out of system resources trying to process them.
  *
  * # 1.1.1
  *
@@ -46,7 +47,7 @@ class Fingerprinter {
 
   // eslint-disable-next-line class-methods-use-this
   async fingerprint(appMapFileName) {
-    const appMapCreatedAt = await ctime(appMapFileName, false);
+    const appMapCreatedAt = await mtime(appMapFileName, false);
     if (!appMapCreatedAt) {
       return;
     }
@@ -185,8 +186,15 @@ class Fingerprinter {
       a.canonicalization_algorithm.localeCompare(b.canonicalization_algorithm)
     );
 
-    await writeFileAtomic(appMapFileName, JSON.stringify(appmapData, null, 2));
-    const appMapIndexedAt = await ctime(appMapFileName);
+    const tempAppMapFileName = joinPath(
+      indexDir,
+      [basename(appMapFileName), 'tmp'].join('.')
+    );
+    await writeFileAtomic(
+      tempAppMapFileName,
+      JSON.stringify(appmapData, null, 2)
+    );
+    const appMapIndexedAt = await mtime(tempAppMapFileName);
     await writeFileAtomic(joinPath(indexDir, 'ctime'), `${appMapCreatedAt}`);
     await writeFileAtomic(joinPath(indexDir, 'version'), VERSION);
     await writeFileAtomic(
@@ -198,10 +206,13 @@ class Fingerprinter {
       JSON.stringify(appmap.metadata, null, 2)
     );
 
-    // NOTE: mtime needs to be written last.
-    // Downstream code will watch for this file and assume
-    // indexing is complete once it changes.
     await writeFileAtomic(joinPath(indexDir, 'mtime'), `${appMapIndexedAt}`);
+
+    // At this point, moving the AppMap file into place will trigger re-indexing.
+    // But the mtime will match the file modification time, so the algorithm will
+    // determine that the index is up-to-date.
+    await move(tempAppMapFileName, appMapFileName, { overwrite: true });
+
     this.counterFn();
   }
 }

@@ -23,20 +23,11 @@ function baseName(/** @type string */ fileName) {
   return fileName.substring(0, fileName.length - '.appmap.json'.length);
 }
 
-async function ctime(filePath, suppressExceptions = true) {
-  let fileStat;
-  try {
-    fileStat = await fsp.stat(filePath);
-  } catch (e) {
-    if (suppressExceptions) return null;
-    throw e;
-  }
-  if (!fileStat.isFile()) {
-    return null;
-  }
-  return fileStat.ctime.getTime();
-}
-
+// NB: 'ctime' is actually the time that the stats of the file were last changed.
+// And 'birthtime' is not guaranteed across platforms.
+// Therefore mtime is the most reliable indicator of when the file was created,
+// especially since we write files atomically (e.g. by moving them into place after writing them
+// as temp files).
 async function mtime(filePath) {
   let fileStat;
   try {
@@ -160,7 +151,6 @@ module.exports = {
   formatHttpServerRequest,
   listAppMapFiles,
   loadAppMap,
-  ctime,
   mtime,
   verbose,
   processFiles,
