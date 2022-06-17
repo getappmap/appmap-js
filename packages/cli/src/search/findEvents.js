@@ -46,7 +46,16 @@ class FindEvents {
     // * I/O (non-function) descendants
 
     const appmapFile = [this.appMapName, 'appmap.json'].join('.');
-    const appmapData = JSON.parse((await fsp.readFile(appmapFile)).toString());
+
+    let appmapData;
+    try {
+      appmapData = JSON.parse(await fsp.readFile(appmapFile, 'utf-8'));
+    } catch (e) {
+      console.log(e.code);
+      console.warn(`Error loading ${appmapFile}: ${e}`);
+      return [];
+    }
+
     const appmap = buildAppMap(appmapData).build();
     const stack = /** @type {Event[]} */ [];
     const matches = /** @type {EventMatch[]} */ [];

@@ -32,10 +32,10 @@
     "@types/jest-sinon": "^1.0.2",
     "@types/jsdom": "^16.2.13",
     "@types/node": "^16.6.2",
+    "@types/semver": "^7.3.10",
     "@types/sinon": "^10.0.2",
     "@types/tmp": "^0.2.3",
     "@types/w3c-xmlserializer": "^2.0.2",
-    "@types/write-file-atomic": "^4.0.0",
     "crypto": "^1.0.1",
     "css-loader": "^6.2.0",
     "eslint": "^7.25.0",
@@ -101,7 +101,6 @@
     "semver": "^7.3.5",
     "supports-hyperlinks": "^2.2.0",
     "w3c-xmlserializer": "^2.0.0",
-    "write-file-atomic": "^4.0.1",
     "yargs": "^17.1.1"
   }
 }

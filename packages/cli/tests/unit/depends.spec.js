@@ -6,19 +6,19 @@ const Depends = require('../../src/depends');
 const Fingerprinter = require('../../src/fingerprint/fingerprinter');
 const { listAppMapFiles, verbose } = require('../../src/utils');
 
-tmp.setGracefulCleanup();
+if (process.env.DEBUG !== 'true') tmp.setGracefulCleanup();
 
 const fixtureDir = join(__dirname, 'fixtures', 'ruby');
-const appMapDir = tmp.dirSync().name;
-
-const userModelFilePath = join(appMapDir, 'app/models/user.rb');
 const now = Date.now();
 
 describe('Depends', () => {
-  beforeAll(async () => {
-    if (process.env.DEBUG) {
-      verbose(true);
-    }
+  let appMapDir;
+  let userModelFilePath;
+
+  beforeAll(async () => verbose(process.env.DEBUG === 'true'));
+  beforeEach(async () => {
+    appMapDir = tmp.dirSync().name;
+    userModelFilePath = join(appMapDir, 'app/models/user.rb');
 
     fs.copySync(fixtureDir, appMapDir);
 

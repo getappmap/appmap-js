@@ -7,7 +7,15 @@ class FingerprintQueue {
     this.size = size;
     // eslint-disable-next-line no-use-before-define
     this.handler = new Fingerprinter(printCanonicalAppMaps);
-    this.queue = queue(this.handler.fingerprint.bind(this.handler), this.size);
+    this.queue = queue(async (appmapFileName) => {
+      try {
+        await this.handler.fingerprint(appmapFileName);
+      } catch (e) {
+        if (e.code !== 'ENAMETOOLONG') {
+          console.warn(`Error fingerprinting ${appmapFileName}: ${e}`);
+        }
+      }
+    }, this.size);
     this.queue.pause();
   }
 

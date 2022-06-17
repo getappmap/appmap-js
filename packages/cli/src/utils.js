@@ -4,6 +4,7 @@ const { queue } = require('async');
 const glob = require('glob');
 const { buildAppMap } = require('@appland/models');
 const { promisify } = require('util');
+const { join } = require('path');
 
 const StartTime = Date.now();
 
@@ -23,20 +24,17 @@ function baseName(/** @type string */ fileName) {
   return fileName.substring(0, fileName.length - '.appmap.json'.length);
 }
 
-async function ctime(filePath, suppressExceptions = true) {
-  let fileStat;
-  try {
-    fileStat = await fsp.stat(filePath);
-  } catch (e) {
-    if (suppressExceptions) return null;
-    throw e;
-  }
-  if (!fileStat.isFile()) {
-    return null;
-  }
-  return fileStat.ctime.getTime();
-}
-
+/**
+ * Gets the last modified time of a file.
+ *
+ * @returns {Promise<number|null>} file mtime, or null if the file does not exist or
+ * is not a file.
+ */
+// NB: 'ctime' is actually the time that the stats of the file were last changed.
+// And 'birthtime' is not guaranteed across platforms.
+// Therefore mtime is the most reliable indicator of when the file was created,
+// especially since we write files atomically (e.g. by moving them into place after writing them
+// as temp files).
 async function mtime(filePath) {
   let fileStat;
   try {
@@ -47,8 +45,15 @@ async function mtime(filePath) {
   if (!fileStat.isFile()) {
     return null;
   }
-  return fileStat.mtime.getTime();
+  return fileStat.mtimeMs;
 }
+
+async function writeFileAtomic(dirName, fileName, jobId, data) {
+  const tempFilePath = join(dirName, `${fileName}.${jobId}`);
+  await fsp.writeFile(tempFilePath, data);
+  await fsp.rename(tempFilePath, join(dirName, fileName));
+}
+
 /**
  * Call a function with each matching file. No guarantee is given that
  * files will be processed in any particular order.
@@ -60,20 +65,11 @@ async function mtime(filePath) {
 async function processFiles(pattern, fn, fileCountFn = () => {}) {
   const q = queue(fn, 5);
   q.pause();
-  await new Promise((resolve, reject) => {
-    // eslint-disable-next-line consistent-return
-    glob(pattern, (err, files) => {
-      if (err) {
-        console.warn(`An error occurred with glob pattern ${pattern}: ${err}`);
-        return reject(err);
-      }
-      if (fileCountFn) {
-        fileCountFn(files.length);
-      }
-      files.forEach((file) => q.push(file));
-      resolve();
-    });
-  });
+  const files = await promisify(glob)(pattern);
+  if (fileCountFn) {
+    fileCountFn(files.length);
+  }
+  files.forEach((file) => q.push(file));
   q.resume();
   await q.drain();
 }
@@ -158,9 +154,9 @@ module.exports = {
   endTime,
   formatValue,
   formatHttpServerRequest,
+  writeFileAtomic,
   listAppMapFiles,
   loadAppMap,
-  ctime,
   mtime,
   verbose,
   processFiles,
