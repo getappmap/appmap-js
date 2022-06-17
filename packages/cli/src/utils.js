@@ -4,6 +4,7 @@ const { queue } = require('async');
 const glob = require('glob');
 const { buildAppMap } = require('@appland/models');
 const { promisify } = require('util');
+const { join } = require('path');
 
 const StartTime = Date.now();
 
@@ -64,20 +65,11 @@ async function writeFileAtomic(dirName, fileName, jobId, data) {
 async function processFiles(pattern, fn, fileCountFn = () => {}) {
   const q = queue(fn, 5);
   q.pause();
-  await new Promise((resolve, reject) => {
-    // eslint-disable-next-line consistent-return
-    glob(pattern, (err, files) => {
-      if (err) {
-        console.warn(`An error occurred with glob pattern ${pattern}: ${err}`);
-        return reject(err);
-      }
-      if (fileCountFn) {
-        fileCountFn(files.length);
-      }
-      files.forEach((file) => q.push(file));
-      resolve();
-    });
-  });
+  const files = await promisify(glob)(pattern);
+  if (fileCountFn) {
+    fileCountFn(files.length);
+  }
+  files.forEach((file) => q.push(file));
   q.resume();
   await q.drain();
 }

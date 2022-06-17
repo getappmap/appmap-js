@@ -69,7 +69,7 @@ class Depends {
   async depends(callback) {
     const outOfDateNames = new Set();
 
-    async function checkClassMap(fileName) {
+    const checkClassMap = async (fileName) => {
       const indexDir = dirname(fileName);
       if (basename(indexDir) === 'Inventory') {
         return;
@@ -104,11 +104,10 @@ class Depends {
       };
       classMap.forEach(collectFilePaths);
 
-      async function isClientProvidedFile(filePath) {
-        return this.testLocations.has(filePath);
-      }
+      const isClientProvidedFile = (filePath) =>
+        this.testLocations.has(filePath);
 
-      async function isFileModifiedSince(filePath) {
+      const isFileModifiedSince = async (filePath) => {
         const dependencyFilePath = this.makeAbsolutePath(filePath);
         const dependencyModifiedAt = await mtime(dependencyFilePath);
 
@@ -133,7 +132,7 @@ class Depends {
         }
 
         return uptodate;
-      }
+      };
 
       if (this.testLocations && verbose()) {
         console.log(
@@ -146,8 +145,8 @@ class Depends {
       }
 
       const testFunction = this.testLocations
-        ? isClientProvidedFile.bind(this)
-        : isFileModifiedSince.bind(this);
+        ? isClientProvidedFile
+        : isFileModifiedSince;
 
       await Promise.all(
         [...codeLocations].map(async (filePath) => {
@@ -164,11 +163,18 @@ class Depends {
           }
         })
       );
-    }
+    };
 
     await processFiles(
       `${this.appMapDir}/**/classMap.json`,
-      checkClassMap.bind(this)
+      async (fileName) => {
+        try {
+          await checkClassMap(fileName);
+        } catch (e) {
+          console.log(e.code);
+          console.warn(`Error checking uptodate ${fileName}: ${e}`);
+        }
+      }
     );
 
     return [...outOfDateNames].sort();
