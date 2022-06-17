@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.29.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.28.1...@appland/appmap-v3.29.0) (2022-06-17)
+
+
+### Bug Fixes
+
+* Improve handling of file access errors ([8fdbe64](https://github.com/applandinc/appmap-js/commit/8fdbe6498482de0c3253bf8ab679fc4226a0f4ef))
+* Reliably determine that an AppMap index is up-to-date ([17e3eba](https://github.com/applandinc/appmap-js/commit/17e3ebab54ad230ab4db21043234bebccfc29291))
+
+
+### Features
+
+* Drop ctime file from index, use mtime ([c57397d](https://github.com/applandinc/appmap-js/commit/c57397d00a74015b133c51e5de9410f5afb860ea))
+
 # [@appland/appmap-v3.28.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.28.0...@appland/appmap-v3.28.1) (2022-06-08)
 
 
