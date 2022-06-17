@@ -1,19 +1,21 @@
 import FingerprintQueue from '../../../src/fingerprint/fingerprintQueue';
 import sinon from 'sinon';
+import { verbose } from '../../../src/utils';
 
 describe(FingerprintQueue, () => {
+  beforeEach(() => verbose(process.env.DEBUG === 'true'));
   afterEach(() => {
     sinon.restore();
   });
 
   it('gracefully handles files which cannot be read', async () => {
-    const logWarn = sinon.stub(console, 'warn');
+    const consoleLog = sinon.stub(console, 'log');
 
     const queue = new FingerprintQueue();
     queue.push('missing-file.appmap.json');
     await queue.process();
 
-    expect(logWarn.callCount).toBe(1);
-    expect(logWarn.getCall(0).args[0]).toMatch(/The file does not exist/);
+    expect(consoleLog.callCount).toBe(1);
+    expect(consoleLog.getCall(0).args[0]).toMatch(/does not exist/);
   });
 });

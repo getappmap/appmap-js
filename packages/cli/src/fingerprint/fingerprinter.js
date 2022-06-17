@@ -5,6 +5,7 @@ const semver = require('semver');
 const { buildAppMap } = require('@appland/models');
 const writeFileAtomic = require('write-file-atomic');
 const { move } = require('fs-extra');
+const assert = require('assert');
 const { default: FileTooLargeError } = require('./fileTooLargeError');
 
 const { verbose, baseName, mtime } = require('../utils');
@@ -12,6 +13,11 @@ const { algorithms, canonicalize } = require('./canonicalize');
 
 /**
  * CHANGELOG
+ *
+ * # 1.1.3
+ *
+ * * Removed ctime file. Use mtime to determine when the AppMap was last updated.
+ * * Use higher precision for mtime.
  *
  * # 1.1.2
  *
@@ -47,13 +53,14 @@ class Fingerprinter {
 
   // eslint-disable-next-line class-methods-use-this
   async fingerprint(appMapFileName) {
-    const appMapCreatedAt = await mtime(appMapFileName, false);
+    const appMapCreatedAt = await mtime(appMapFileName);
     if (!appMapCreatedAt) {
+      console.log(`File ${appMapFileName} does not exist or is not a file.`);
       return;
     }
 
     if (verbose()) {
-      console.warn(`Fingerprinting ${appMapFileName}`);
+      console.log(`Fingerprinting ${appMapFileName}`);
     }
 
     const indexDir = baseName(appMapFileName);
@@ -71,7 +78,7 @@ class Fingerprinter {
       }
       versionStr = versionStr.toString().trim();
       if (verbose()) {
-        console.warn(`${appMapFileName} index version is ${versionStr}`);
+        console.log(`${appMapFileName} index version is ${versionStr}`);
       }
       return semver.satisfies(versionStr, `>= ${VERSION}`);
     };
@@ -79,7 +86,7 @@ class Fingerprinter {
       let indexedAt = 0;
       try {
         const indexedAtStr = await fsp.readFile(mtimeFileName);
-        indexedAt = parseInt(indexedAtStr, 10);
+        indexedAt = parseFloat(indexedAtStr);
       } catch (err) {
         if (err.code !== 'ENOENT') {
           throw err;
@@ -87,7 +94,7 @@ class Fingerprinter {
       }
 
       if (verbose()) {
-        console.warn(
+        console.log(
           `${appMapFileName} created at ${appMapCreatedAt}, indexed at ${indexedAt}`
         );
       }
@@ -96,7 +103,7 @@ class Fingerprinter {
 
     if ((await versionUpToDate()) && (await indexUpToDate())) {
       if (verbose()) {
-        console.warn('Fingerprint is up to date. Skipping...');
+        console.log('Fingerprint is up to date. Skipping...');
       }
       return;
     }
@@ -112,14 +119,14 @@ class Fingerprinter {
       data = await fsp.readFile(appMapFileName);
     } catch (e) {
       if (e.code !== 'ENOENT') {
-        console.warn(`${appMapFileName} does not exist. Skipping...`);
+        console.log(`${appMapFileName} does not exist. Skipping...`);
         return;
       }
       throw e;
     }
 
     if (verbose()) {
-      console.warn(`Read ${data.length} bytes`);
+      console.log(`Read ${data.length} bytes`);
     }
 
     let appmapData;
@@ -170,9 +177,6 @@ class Fingerprinter {
         const fingerprintDigest = createHash('sha256')
           .update(canonicalJSON)
           .digest('hex');
-        if (verbose()) {
-          console.warn(`Computed digest for ${algorithmName}`);
-        }
         fingerprints.push({
           appmap_digest: appmapDigest,
           canonicalization_algorithm: algorithmName,
@@ -195,7 +199,10 @@ class Fingerprinter {
       JSON.stringify(appmapData, null, 2)
     );
     const appMapIndexedAt = await mtime(tempAppMapFileName);
-    await writeFileAtomic(joinPath(indexDir, 'ctime'), `${appMapCreatedAt}`);
+    assert(
+      appMapIndexedAt,
+      `${tempAppMapFileName} should always exist and be a readable file`
+    );
     await writeFileAtomic(joinPath(indexDir, 'version'), VERSION);
     await writeFileAtomic(
       joinPath(indexDir, 'classMap.json'),

@@ -23,6 +23,12 @@ function baseName(/** @type string */ fileName) {
   return fileName.substring(0, fileName.length - '.appmap.json'.length);
 }
 
+/**
+ * Gets the last modified time of a file.
+ *
+ * @returns {Promise<number|null>} file mtime, or null if the file does not exist or
+ * is not a file.
+ */
 // NB: 'ctime' is actually the time that the stats of the file were last changed.
 // And 'birthtime' is not guaranteed across platforms.
 // Therefore mtime is the most reliable indicator of when the file was created,
@@ -38,7 +44,7 @@ async function mtime(filePath) {
   if (!fileStat.isFile()) {
     return null;
   }
-  return fileStat.mtime.getTime();
+  return fileStat.mtimeMs;
 }
 /**
  * Call a function with each matching file. No guarantee is given that

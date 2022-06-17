@@ -50,7 +50,7 @@ class Depends {
    * @param {string} filePath
    * @returns string
    */
-  applyBaseDir(filePath) {
+  makeAbsolutePath(filePath) {
     if (isAbsolute(filePath)) {
       return filePath;
     }
@@ -75,18 +75,18 @@ class Depends {
         return;
       }
 
-      let appmapCreatedAtStr;
+      let appmapUpdatedAtStr;
       try {
-        appmapCreatedAtStr = await fsp.readFile(joinPath(indexDir, 'ctime'));
+        appmapUpdatedAtStr = await fsp.readFile(joinPath(indexDir, 'mtime'));
       } catch (err) {
         if (err.code !== 'ENOENT') console.warn(err);
         return;
       }
-      const appmapCreatedAt = parseInt(appmapCreatedAtStr, 10);
+      const appmapUpdatedAt = parseFloat(appmapUpdatedAtStr);
 
       if (verbose()) {
-        console.warn(
-          `Checking AppMap ${indexDir} with timestamp ${appmapCreatedAt}`
+        console.log(
+          `Checking AppMap ${indexDir} with timestamp ${appmapUpdatedAt}`
         );
       }
 
@@ -104,23 +104,39 @@ class Depends {
       };
       classMap.forEach(collectFilePaths);
 
-      async function checkFileList(filePath) {
+      async function isClientProvidedFile(filePath) {
         return this.testLocations.has(filePath);
       }
 
-      async function checkTimestamps(filePath) {
-        const dependencyFilePath = this.applyBaseDir(filePath);
+      async function isFileModifiedSince(filePath) {
+        const dependencyFilePath = this.makeAbsolutePath(filePath);
         const dependencyModifiedAt = await mtime(dependencyFilePath);
+
+        // TODO: Actually, if the dependency file does not exist, we should return true.
+        // However, at this time we can't tell the difference between a dependency file that has
+        // been deleted, and one that never existed in the first place. What does 'never existed in the first place'
+        // mean? Well, unfortunately the Ruby agent (and perhaps others?) will write file locations
+        // like 'JSON' for native functions that don't actually correspond to real files.
+        if (!dependencyModifiedAt) {
+          if (verbose())
+            console.log(`[depends] ${dependencyFilePath} does not exist`);
+          return false;
+        }
+
+        const uptodate = appmapUpdatedAt < dependencyModifiedAt;
         if (verbose()) {
-          console.warn(
-            `Timestamp of ${dependencyFilePath} is ${dependencyModifiedAt}`
+          console.log(
+            `[depends] ${dependencyFilePath} timestamp is ${dependencyModifiedAt}, ${
+              uptodate ? 'up to date' : 'NOT up to date'
+            } with ${indexDir} (${appmapUpdatedAt})`
           );
         }
-        return dependencyModifiedAt && appmapCreatedAt < dependencyModifiedAt;
+
+        return uptodate;
       }
 
       if (this.testLocations && verbose()) {
-        console.warn(
+        console.log(
           `Checking whether AppMap contains any client-provided file: [ ${[
             ...this.testLocations,
           ]
@@ -130,16 +146,14 @@ class Depends {
       }
 
       const testFunction = this.testLocations
-        ? checkFileList.bind(this)
-        : checkTimestamps.bind(this);
+        ? isClientProvidedFile.bind(this)
+        : isFileModifiedSince.bind(this);
 
       await Promise.all(
         [...codeLocations].map(async (filePath) => {
           if (await testFunction(filePath)) {
             if (verbose()) {
-              console.warn(
-                `${filePath} requires rebuild of AppMap ${indexDir}`
-              );
+              console.log(`${filePath} requires rebuild of AppMap ${indexDir}`);
             }
             if (!outOfDateNames.has(indexDir)) {
               if (callback) {
