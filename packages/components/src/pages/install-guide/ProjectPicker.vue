@@ -6,35 +6,73 @@
       </header>
       <main>
         <article v-if="projects.length > 0">
-          <h2>Select a suitable project</h2>
+          <h2 class="install subhead">Projects</h2>
           <p>
-            To make sure that your projects are suitable for mapping, we make a
-            couple of quick requirement checks on your workspace to help you
-            find a project to start AppMapping. Select a suitable project from
-            the table below.
+            You have multiple projects in this workspace. We’ve outlined the
+            projects that are ready to start making AppMaps. <br />Select a
+            project to continue.
           </p>
           <v-project-picker-table
             :projects="projects"
             @select-project="selectProject($event)"
             ref="projectTable"
           />
+          <!-- <div class="requirements">
+            <h2 class="install subhead">Requirements</h2>
+            <p>
+              <span class="good"
+                >This project meets all requirements necessary to create
+                AppMaps.</span
+              >
+              Run the AppMap installer command to continue.
+            </p>
+            <ul>
+              <li><strong>Language:</strong> Ruby 2.6</li>
+              <li><strong>Test framework: </strong>rspec</li>
+              <li><strong>Web framework:</strong> Rails 5.7</li>
+            </ul>
+          </div> -->
+        </article>
+        <article class="requirements">
+          <h2 class="install subhead">Requirements</h2>
+          <p>
+            <span class="good"
+              >This project meets all requirements necessary to create
+              AppMaps.</span
+            >
+            Run the AppMap installer command to continue.
+          </p>
+          <ul>
+            <li class="requirement-good">
+              <strong>Language:</strong> Ruby 2.6
+              <Checkmark />
+            </li>
+            <li class="requirement-good">
+              <strong>Test framework: </strong>rspec
+              <Checkmark />
+            </li>
+            <li class="requirement-good">
+              <strong>Web framework:</strong> Rails 5.7
+              <Checkmark />
+            </li>
+          </ul>
         </article>
         <template v-if="quality == 'good' || quality == 'ok'">
           <article>
             <h2>Run AppMap installer</h2>
-            <p class="body-text">
+            <!-- <p class="body-text">
               AppMap agent records executing code. It creates JSON files as you
               execute test cases, run sample programs, or perform interactive
               sessions with your app. This script will guide you through the
               installation process. Run it in the project's environment so it
               can correctly detect runtimes and libraries.
-            </p>
+            </p> -->
             <p class="note body-text" v-if="quality == 'ok'">
               It appears this project might not be a good choice for your first
               AppMap. We recommend you pick another project; proceed at your own
               risk.
             </p>
-            <p class="body-text">
+            <!-- <p class="body-text">
               If you do not have Node.js installed, or would prefer manual
               installion of the AppMap agent visit our
               <a
@@ -42,16 +80,24 @@
                 href="https://appland.com/docs/quickstart/vscode/step-2"
                 >installation documentation.</a
               >
-            </p>
+            </p> -->
             <v-code-snippet
               :clipboard-text="installCommand"
               :message-success="messageSuccess"
             />
+            <div v-if="selectedProject.agentInstalled">
+              <span class="good"
+                >It looks like the AppMap agent is installed.</span
+              >
+              Continue on to the next step.
+            </div>
           </article>
-          <article v-if="selectedProject.agentInstalled">
-            It looks like the AppMap agent is installed. Continue on to the next
-            step.
-          </article>
+          <!-- <article v-if="selectedProject.agentInstalled">
+            <span class="good"
+              >It looks like the AppMap agent is installed.</span
+            >
+            Continue on to the next step.
+          </article> -->
           <v-navigation-buttons :first="first" :last="last" />
         </template>
         <template v-if="quality == 'bad'">
@@ -79,6 +125,7 @@ import VCodeSnippet from '@/components/CodeSnippet.vue';
 import VProjectPickerTable from '@/components/install-guide/ProjectPickerTable.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import Navigation from '@/components/mixins/navigation';
+import Checkmark from '@/assets/check-circle-outline.svg';
 
 export default {
   name: 'ProjectPicker',
@@ -88,6 +135,7 @@ export default {
     QuickstartLayout,
     VProjectPickerTable,
     VNavigationButtons,
+    Checkmark,
   },
 
   mixins: [Navigation],
@@ -162,16 +210,23 @@ h1 {
 h2 {
   margin-block-end: 0;
   counter-increment: step;
+  color: $gray-secondary;
+  border-bottom: 1px solid $gray-secondary;
+  margin-bottom: 0.5rem;
 }
 
-h2::before {
-  content: counter(step) '. ';
-}
+// h2::before {
+//   content: counter(step) '. ';
+// }
 
 tr :first-child {
   text-align: left;
   padding-left: 6ex;
   position: relative;
+}
+
+p {
+  margin: 0.5rem 0;
 }
 
 p.note {
@@ -185,5 +240,25 @@ p.note {
     margin-right: 0.8ex;
     font-style: normal;
   }
+}
+
+.requirements {
+  ul {
+    list-style-type: none;
+    padding: 0;
+    li {
+      line-height: 1.5rem;
+      display: flex;
+      align-items: center;
+      &.requirement-good {
+        svg {
+          margin-left: 0.5rem;
+        }
+      }
+    }
+  }
+}
+.good {
+  color: $alert-success;
 }
 </style>

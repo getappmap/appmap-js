@@ -56,6 +56,7 @@ tr {
     text-align: left;
     display: flex;
     align-items: center;
+    color: $white;
 
     &:before {
       border-style: solid;
