@@ -17,7 +17,10 @@
             @select-project="selectProject($event)"
             ref="projectTable"
           />
-          <!-- <div class="requirements">
+        </article>
+        <!-- Good -->
+        <template v-if="quality == 'good'">
+          <article class="requirements">
             <h2 class="install subhead">Requirements</h2>
             <p>
               <span class="good"
@@ -27,60 +30,22 @@
               Run the AppMap installer command to continue.
             </p>
             <ul>
-              <li><strong>Language:</strong> Ruby 2.6</li>
-              <li><strong>Test framework: </strong>rspec</li>
-              <li><strong>Web framework:</strong> Rails 5.7</li>
+              <li class="requirement-good">
+                <strong>Language:</strong> Ruby 2.6
+                <GoodIcon />
+              </li>
+              <li class="requirement-good">
+                <strong>Test framework: </strong>rspec
+                <GoodIcon />
+              </li>
+              <li class="requirement-good">
+                <strong>Web framework:</strong> Rails 5.7
+                <GoodIcon />
+              </li>
             </ul>
-          </div> -->
-        </article>
-        <article class="requirements">
-          <h2 class="install subhead">Requirements</h2>
-          <p>
-            <span class="good"
-              >This project meets all requirements necessary to create
-              AppMaps.</span
-            >
-            Run the AppMap installer command to continue.
-          </p>
-          <ul>
-            <li class="requirement-good">
-              <strong>Language:</strong> Ruby 2.6
-              <Checkmark />
-            </li>
-            <li class="requirement-good">
-              <strong>Test framework: </strong>rspec
-              <Checkmark />
-            </li>
-            <li class="requirement-good">
-              <strong>Web framework:</strong> Rails 5.7
-              <Checkmark />
-            </li>
-          </ul>
-        </article>
-        <template v-if="quality == 'good' || quality == 'ok'">
+          </article>
           <article>
             <h2>Run AppMap installer</h2>
-            <!-- <p class="body-text">
-              AppMap agent records executing code. It creates JSON files as you
-              execute test cases, run sample programs, or perform interactive
-              sessions with your app. This script will guide you through the
-              installation process. Run it in the project's environment so it
-              can correctly detect runtimes and libraries.
-            </p> -->
-            <p class="note body-text" v-if="quality == 'ok'">
-              It appears this project might not be a good choice for your first
-              AppMap. We recommend you pick another project; proceed at your own
-              risk.
-            </p>
-            <!-- <p class="body-text">
-              If you do not have Node.js installed, or would prefer manual
-              installion of the AppMap agent visit our
-              <a
-                id="docref-step2"
-                href="https://appland.com/docs/quickstart/vscode/step-2"
-                >installation documentation.</a
-              >
-            </p> -->
             <v-code-snippet
               :clipboard-text="installCommand"
               :message-success="messageSuccess"
@@ -92,26 +57,80 @@
               Continue on to the next step.
             </div>
           </article>
-          <!-- <article v-if="selectedProject.agentInstalled">
+          <v-navigation-buttons :first="first" :last="last" />
+        </template>
+
+        <!-- OK -->
+        <template v-if="quality == 'ok'">
+          <article class="requirements">
+            <h2 class="install subhead">Requirements</h2>
+            <p>
+              <span class="ok">
+                It appears this project might not be a good choice for your
+                first AppMap.
+              </span>
+              We recommend you pick another project; proceed at your own risk.
+            </p>
+            <ul>
+              <li class="requirement-ok">
+                <strong>Language: </strong> Ruby
+                <OKIcon />
+                <span class="ok">Unable to determine Ruby version.</span>
+              </li>
+              <li class="requirement-good">
+                <strong>Test framework: </strong>rspec
+                <GoodIcon />
+              </li>
+              <li class="requirement-good">
+                <strong>Web framework:</strong> Rails 5.7
+                <GoodIcon />
+              </li>
+            </ul>
+          </article>
+          <article>
+            <h2>Run AppMap installer</h2>
+            <v-code-snippet
+              :clipboard-text="installCommand"
+              :message-success="messageSuccess"
+            />
+          </article>
+          <article v-if="selectedProject.agentInstalled">
             <span class="good"
               >It looks like the AppMap agent is installed.</span
             >
             Continue on to the next step.
-          </article> -->
+          </article>
           <v-navigation-buttons :first="first" :last="last" />
         </template>
+
+        <!-- Bad -->
         <template v-if="quality == 'bad'">
-          <article>
-            <h2>Run AppMap installer</h2>
+          <article class="requirements">
+            <h2 class="install subhead">Requirements</h2>
             <p>
-              The AppMap agent watches your code as it executes and generates
-              traces you can examine visually.
+              <span class="bad">
+                It appears this project might not be a good choice for your
+                first AppMap.
+              </span>
+              We recommend you pick another project; proceed at your own risk.
             </p>
-            <p class="note">
-              It appears this project might not be a good choice for your first
-              AppMap. We recommend you pick another project; proceed at your own
-              risk.
-            </p>
+            <ul>
+              <li class="requirement-bad">
+                <strong>Language: </strong> Ruby
+                <BadIcon />
+                <span>Unable to determine Ruby version.</span>
+              </li>
+              <li class="requirement-bad">
+                <strong>Test framework: </strong> –
+                <BadIcon />
+                <span>Unable to determine test framework.</span>
+              </li>
+              <li class="requirement-ok">
+                <strong>Web framework:</strong> Rails
+                <OKIcon />
+                <span>Unable to determine Rails version.</span>
+              </li>
+            </ul>
           </article>
         </template>
       </main>
@@ -125,7 +144,9 @@ import VCodeSnippet from '@/components/CodeSnippet.vue';
 import VProjectPickerTable from '@/components/install-guide/ProjectPickerTable.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import Navigation from '@/components/mixins/navigation';
-import Checkmark from '@/assets/check-circle-outline.svg';
+import GoodIcon from '@/assets/check-circle-outline.svg';
+import OKIcon from '@/assets/dash-circle.svg';
+import BadIcon from '@/assets/x-circle.svg';
 
 export default {
   name: 'ProjectPicker',
@@ -135,7 +156,9 @@ export default {
     QuickstartLayout,
     VProjectPickerTable,
     VNavigationButtons,
-    Checkmark,
+    GoodIcon,
+    OKIcon,
+    BadIcon,
   },
 
   mixins: [Navigation],
@@ -250,15 +273,32 @@ p.note {
       line-height: 1.5rem;
       display: flex;
       align-items: center;
+      gap: 0.5rem;
       &.requirement-good {
         svg {
-          margin-left: 0.5rem;
+          color: $alert-success;
         }
       }
+      // &.requirement-ok {
+      //   span {
+      //     color: $ok-status;
+      //   }
+      // }
+      // &.requirement-bad {
+      //   span {
+      //     color: $bad-status;
+      //   }
+      // }
     }
   }
 }
 .good {
   color: $alert-success;
+}
+.ok {
+  color: $ok-status;
+}
+.bad {
+  color: $bad-status;
 }
 </style>

@@ -73,21 +73,21 @@ tr {
     }
   }
 
-  &.good .project-name:before {
-    content: '✔';
-    color: $color-success;
-    border-color: $color-success;
-  }
-  &.ok .project-name:before {
-    content: '·';
-    color: $color-warning;
-    border-color: $color-warning;
-  }
-  &.bad .project-name:before {
-    content: '×';
-    color: $color-error;
-    border-color: $color-error;
-  }
+  // &.good .project-name:before {
+  //   content: '✔';
+  //   color: $color-success;
+  //   border-color: $color-success;
+  // }
+  // &.ok .project-name:before {
+  //   content: '·';
+  //   color: $color-warning;
+  //   border-color: $color-warning;
+  // }
+  // &.bad .project-name:before {
+  //   content: '×';
+  //   color: $color-error;
+  //   border-color: $color-error;
+  // }
 
   &:hover {
     background-color: $color-highlight;
