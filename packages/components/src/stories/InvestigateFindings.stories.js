@@ -6,6 +6,10 @@ export default {
   args: {
     scanned: true,
     numFindings: 16,
+    numSecurity: 5,
+    numPerformance: 5,
+    numStability: 5,
+    numMaintainability: 1,
     projectPath: '/home/dev/project',
   },
 };

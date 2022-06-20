@@ -9,6 +9,7 @@
     />
     <v-button
       c
+      kind="ghost"
       label="Next"
       data-cy="next-button"
       @click.native="$root.$emit('page-next')"
