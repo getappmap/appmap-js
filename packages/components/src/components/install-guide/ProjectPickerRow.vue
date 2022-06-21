@@ -48,7 +48,7 @@ export default {
 $color-highlight: rgba(255, 255, 255, 0.1);
 
 tr {
-  opacity: 0.6;
+  opacity: 0.8;
   cursor: pointer;
   vertical-align: middle;
 
@@ -73,22 +73,6 @@ tr {
     }
   }
 
-  &.good .project-name:before {
-    content: '✔';
-    color: $color-success;
-    border-color: $color-success;
-  }
-  &.ok .project-name:before {
-    content: '·';
-    color: $color-warning;
-    border-color: $color-warning;
-  }
-  &.bad .project-name:before {
-    content: '×';
-    color: $color-error;
-    border-color: $color-error;
-  }
-
   &:hover {
     background-color: $color-highlight;
   }
@@ -103,5 +87,9 @@ tr {
 td,
 th {
   padding: 0.5em 2ex;
+}
+
+.good {
+  color: $alert-success;
 }
 </style>

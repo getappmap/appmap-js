@@ -5,13 +5,8 @@
         <h1>Install AppMap agent</h1>
       </header>
       <main>
-        <article v-if="projects.length > 0">
-          <h2 class="install subhead">Projects</h2>
-          <p>
-            You have multiple projects in this workspace. We’ve outlined the
-            projects that are ready to start making AppMaps. <br />Select a
-            project to continue.
-          </p>
+        <article v-if="projects.length == 1">
+          <h2 class="install subhead">Project</h2>
           <v-project-picker-table
             :projects="projects"
             @select-project="selectProject($event)"
@@ -164,7 +159,7 @@ import BadIcon from '@/assets/x-circle.svg';
 import EmptyIcon from '@/assets/patch-question.svg';
 
 export default {
-  name: 'ProjectPicker',
+  name: 'SingleProject',
 
   components: {
     VCodeSnippet,
@@ -194,7 +189,6 @@ export default {
     quality() {
       const { selectedProject: project } = this;
       if (!project) return undefined;
-      if (!project.score || project.score < 1) return 'empty';
       if (!project.score || project.score < 2) return 'bad';
       if (project.score < 3) return 'ok';
       return 'good';
@@ -255,10 +249,6 @@ h2 {
   margin-bottom: 0.5rem;
 }
 
-// h2::before {
-//   content: counter(step) '. ';
-// }
-
 tr :first-child {
   text-align: left;
   padding-left: 6ex;
@@ -296,21 +286,6 @@ p.note {
           color: $alert-success;
         }
       }
-    }
-  }
-}
-
-.empty-state {
-  border-radius: $border-radius;
-  border: 1px dashed darken($gray4, 10);
-  padding: 3rem;
-  .card {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    .empty-icon {
-      padding: 0 2rem;
     }
   }
 }

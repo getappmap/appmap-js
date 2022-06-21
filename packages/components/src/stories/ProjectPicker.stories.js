@@ -6,10 +6,6 @@ export default {
   args: {
     projects: [
       {
-        name: 'MyProject',
-        path: '/home/user/my_project',
-      },
-      {
         name: 'TestApp',
         score: 1,
         path: '/home/user/test_app',
