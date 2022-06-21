@@ -6,7 +6,7 @@ export default {
   args: {
     projects: [
       {
-        name: 'TestApp',
+        name: 'MySingleProject',
         score: 3,
         path: '/home/user/test_app',
         language: {

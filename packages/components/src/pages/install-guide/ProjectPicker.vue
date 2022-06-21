@@ -5,7 +5,15 @@
         <h1>Install AppMap agent</h1>
       </header>
       <main>
-        <article v-if="projects.length > 0">
+        <article v-if="projects.length == 1">
+          <h2 class="install subhead">Project</h2>
+          <v-project-picker-table
+            :projects="projects"
+            @select-project="selectProject($event)"
+            ref="projectTable"
+          />
+        </article>
+        <article v-if="projects.length > 1">
           <h2 class="install subhead">Projects</h2>
           <p>
             You have multiple projects in this workspace. We’ve outlined the
@@ -31,6 +39,8 @@
               Run the AppMap installer command to continue.
             </p>
             <ul>
+              <li><strong>Name:</strong> MySingleProject</li>
+              <li></li>
               <li>
                 <strong>Language:</strong> Ruby
                 <GoodIcon />
@@ -73,9 +83,9 @@
               We recommend you pick another project; proceed at your own risk.
             </p>
             <ul>
+              <li><strong>Name:</strong> MySingleProject</li>
               <li>
                 <strong>Language: </strong> Python
-                <!-- <span class="version">1.0</span> -->
                 <OKIcon />
                 <span class="ok">Support for Python is in Beta</span>
               </li>
@@ -88,7 +98,6 @@
               </li>
               <li>
                 <strong>Web framework:</strong> Django
-                <!-- <span class="version">3.3</span> -->
                 <GoodIcon />
               </li>
             </ul>
@@ -99,13 +108,14 @@
               :clipboard-text="installCommand"
               :message-success="messageSuccess"
             />
+            <div v-if="selectedProject.agentInstalled">
+              <span class="good"
+                >It looks like the AppMap agent is installed.</span
+              >
+              Continue on to the next step.
+            </div>
           </article>
-          <article v-if="selectedProject.agentInstalled">
-            <span class="good"
-              >It looks like the AppMap agent is installed.</span
-            >
-            Continue on to the next step.
-          </article>
+
           <v-navigation-buttons :first="first" :last="last" />
         </template>
 
@@ -118,9 +128,10 @@
                 It appears this project might not be a good choice for your
                 first AppMap.
               </span>
-              We recommend you pick another project; proceed at your own risk.
+              We recommend you pick another project.
             </p>
             <ul>
+              <li><strong>Name:</strong> MySingleProject</li>
               <li>
                 <strong>Language: </strong> Go
                 <BadIcon />
