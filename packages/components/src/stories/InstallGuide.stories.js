@@ -10,17 +10,15 @@ export default {
         score: 1,
         path: '/home/user/test_app',
         language: {
-          name: 'Ruby 2.1',
-          version: '2.1',
+          name: 'Go',
           score: 1,
         },
         testFramework: {
-          name: 'MSTest 1.9',
+          name: 'MSTest',
           score: 1,
         },
         webFramework: {
-          name: 'ASP.NET 2.2',
-          version: '2.2',
+          name: 'ASP.NET',
           score: 1,
         },
       },
@@ -31,17 +29,15 @@ export default {
         agentInstalled: true,
         appMapsRecorded: true,
         language: {
-          name: 'Python 1.0',
-          version: '1.0',
-          score: 1,
+          name: 'Python',
+          score: 2,
         },
         testFramework: {
           name: 'None detected',
           score: 2,
         },
         webFramework: {
-          name: 'Django 3.3',
-          version: '3.3',
+          name: 'Django',
           score: 3,
         },
       },
@@ -50,8 +46,7 @@ export default {
         score: 3,
         path: '/home/user/my_other_project',
         language: {
-          name: 'Ruby 2.6',
-          version: '2.6',
+          name: 'Ruby',
           score: 3,
         },
         testFramework: {
@@ -59,8 +54,7 @@ export default {
           score: 3,
         },
         webFramework: {
-          name: 'Rails 5.9',
-          version: '5.9',
+          name: 'Rails',
           score: 3,
         },
       },
