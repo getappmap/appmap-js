@@ -18,6 +18,21 @@
             ref="projectTable"
           />
         </article>
+        <!-- Empty -->
+        <template v-if="quality == 'empty'">
+          <article class="empty-state">
+            <div class="card">
+              <div class="empty-icon">
+                <EmptyIcon />
+              </div>
+              <div class="content">
+                <p>No projects were found in this woprkspace.</p>
+                <p>Open a project to see if it's ready to create AppMaps.</p>
+              </div>
+            </div>
+          </article>
+        </template>
+
         <!-- Good -->
         <template v-if="quality == 'good'">
           <article class="requirements">
@@ -160,6 +175,7 @@ import Navigation from '@/components/mixins/navigation';
 import GoodIcon from '@/assets/check-circle-outline.svg';
 import OKIcon from '@/assets/dash-circle.svg';
 import BadIcon from '@/assets/x-circle.svg';
+import EmptyIcon from '@/assets/patch-question.svg';
 
 export default {
   name: 'ProjectPicker',
@@ -172,6 +188,7 @@ export default {
     GoodIcon,
     OKIcon,
     BadIcon,
+    EmptyIcon,
   },
 
   mixins: [Navigation],
@@ -191,6 +208,7 @@ export default {
     quality() {
       const { selectedProject: project } = this;
       if (!project) return undefined;
+      if (!project.score || project.score < 1) return 'empty';
       if (!project.score || project.score < 2) return 'bad';
       if (project.score < 3) return 'ok';
       return 'good';
@@ -292,6 +310,21 @@ p.note {
           color: $alert-success;
         }
       }
+    }
+  }
+}
+
+.empty-state {
+  border-radius: $border-radius;
+  border: 1px dashed darken($gray4, 10);
+  padding: 3rem;
+  .card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    .empty-icon {
+      padding: 0 2rem;
     }
   }
 }

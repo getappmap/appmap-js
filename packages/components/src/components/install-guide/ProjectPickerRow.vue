@@ -1,5 +1,5 @@
 <template>
-  <tr :data-score="quality" :data-path="path">
+  <tr :class="classes" :data-score="quality" :data-path="path">
     <th class="project-name">{{ name }}</th>
     <v-project-picker-column-value
       v-for="(row, index) in rows"

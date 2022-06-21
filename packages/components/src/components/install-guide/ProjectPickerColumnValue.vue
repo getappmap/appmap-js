@@ -13,6 +13,7 @@ export default {
   },
   computed: {
     classes() {
+      if (this.score < 1) return 'empty';
       if (this.score < 2) return 'bad';
       if (this.score < 3) return 'ok';
       return 'good';
