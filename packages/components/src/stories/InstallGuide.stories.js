@@ -6,23 +6,21 @@ export default {
   args: {
     projects: [
       {
-        name: 'MyProject',
-        path: '/home/user/my_project',
-      },
-      {
         name: 'TestApp',
         score: 1,
         path: '/home/user/test_app',
         language: {
-          name: 'C#',
+          name: 'Ruby 2.1',
+          version: '2.1',
           score: 1,
         },
         testFramework: {
-          name: 'MSTest',
+          name: 'MSTest 1.9',
           score: 1,
         },
         webFramework: {
-          name: 'ASP.NET',
+          name: 'ASP.NET 2.2',
+          version: '2.2',
           score: 1,
         },
       },
@@ -33,16 +31,18 @@ export default {
         agentInstalled: true,
         appMapsRecorded: true,
         language: {
-          name: 'Python',
-          score: 2,
+          name: 'Python 1.0',
+          version: '1.0',
+          score: 1,
         },
         testFramework: {
-          name: 'PyTest',
+          name: 'None detected',
           score: 2,
         },
         webFramework: {
-          name: 'Django',
-          score: 2,
+          name: 'Django 3.3',
+          version: '3.3',
+          score: 3,
         },
       },
       {
@@ -50,7 +50,8 @@ export default {
         score: 3,
         path: '/home/user/my_other_project',
         language: {
-          name: 'Ruby',
+          name: 'Ruby 2.6',
+          version: '2.6',
           score: 3,
         },
         testFramework: {
@@ -58,7 +59,8 @@ export default {
           score: 3,
         },
         webFramework: {
-          name: 'Rails',
+          name: 'Rails 5.9',
+          version: '5.9',
           score: 3,
         },
       },

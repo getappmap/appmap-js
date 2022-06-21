@@ -30,15 +30,15 @@
               Run the AppMap installer command to continue.
             </p>
             <ul>
-              <li class="requirement-good">
+              <li>
                 <strong>Language:</strong> Ruby 2.6
                 <GoodIcon />
               </li>
-              <li class="requirement-good">
-                <strong>Test framework: </strong>rspec
+              <li>
+                <strong>Test framework: </strong>RSpec
                 <GoodIcon />
               </li>
-              <li class="requirement-good">
+              <li>
                 <strong>Web framework:</strong> Rails 5.7
                 <GoodIcon />
               </li>
@@ -72,17 +72,22 @@
               We recommend you pick another project; proceed at your own risk.
             </p>
             <ul>
-              <li class="requirement-ok">
-                <strong>Language: </strong> Ruby
+              <li>
+                <strong>Language: </strong> Python
+                <span class="version">1.0</span>
+                <BadIcon />
+                <span class="bad">Supported versions: Python >=3.6</span>
+              </li>
+              <li>
+                <strong>Test framework: </strong>None detected
                 <OKIcon />
-                <span class="ok">Unable to determine Ruby version.</span>
+                <span class="ok"
+                  >Supported tests: pytest, unittest, and remote-recording</span
+                >
               </li>
-              <li class="requirement-good">
-                <strong>Test framework: </strong>rspec
-                <GoodIcon />
-              </li>
-              <li class="requirement-good">
-                <strong>Web framework:</strong> Rails 5.7
+              <li>
+                <strong>Web framework:</strong> Django
+                <span class="version">3.3</span>
                 <GoodIcon />
               </li>
             </ul>
@@ -115,20 +120,28 @@
               We recommend you pick another project; proceed at your own risk.
             </p>
             <ul>
-              <li class="requirement-bad">
+              <li>
                 <strong>Language: </strong> Ruby
+                <span class="version">2.1</span>
                 <BadIcon />
-                <span>Unable to determine Ruby version.</span>
+                <span class="bad"
+                  >Supported Ruby versions: 2.6, 2.7, 3.0, 3.1</span
+                >
               </li>
-              <li class="requirement-bad">
-                <strong>Test framework: </strong> –
+              <li>
+                <strong>Test framework: </strong> MSTest
+                <span class="version">1.9</span>
                 <BadIcon />
-                <span>Unable to determine test framework.</span>
+                <span class="bad"
+                  >Supported tests: rspec, minitest, cucumber, and
+                  remote-recording</span
+                >
               </li>
-              <li class="requirement-ok">
-                <strong>Web framework:</strong> Rails
-                <OKIcon />
-                <span>Unable to determine Rails version.</span>
+              <li>
+                <strong>Web framework:</strong> ASP.NET
+                <span class="version">2.2</span>
+                <BadIcon />
+                <span class="bad">Supported Rails versions: 5.x, 6.x, 7.x</span>
               </li>
             </ul>
           </article>
@@ -279,16 +292,6 @@ p.note {
           color: $alert-success;
         }
       }
-      // &.requirement-ok {
-      //   span {
-      //     color: $ok-status;
-      //   }
-      // }
-      // &.requirement-bad {
-      //   span {
-      //     color: $bad-status;
-      //   }
-      // }
     }
   }
 }

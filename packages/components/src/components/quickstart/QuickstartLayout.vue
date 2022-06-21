@@ -112,11 +112,6 @@ body {
 
   ul {
     padding-left: 10px;
-
-    // li::marker {
-    //   content: '> ';
-    //   color: $color-link;
-    // }
   }
 }
 

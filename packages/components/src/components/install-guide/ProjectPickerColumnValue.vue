@@ -23,9 +23,9 @@ export default {
 
 <style lang="scss" scoped>
 .ok {
-  color: $color-warning;
+  color: $ok-status;
 }
 .bad {
-  color: $color-error;
+  color: $bad-status;
 }
 </style>
