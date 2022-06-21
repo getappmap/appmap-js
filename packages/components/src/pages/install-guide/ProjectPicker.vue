@@ -198,7 +198,6 @@ import Navigation from '@/components/mixins/navigation';
 import GoodIcon from '@/assets/check-circle-outline.svg';
 import OKIcon from '@/assets/dash-circle.svg';
 import BadIcon from '@/assets/x-circle.svg';
-import EmptyIcon from '@/assets/patch-question.svg';
 
 export default {
   name: 'ProjectPicker',
@@ -211,7 +210,6 @@ export default {
     GoodIcon,
     OKIcon,
     BadIcon,
-    EmptyIcon,
   },
 
   mixins: [Navigation],

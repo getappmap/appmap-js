@@ -23,26 +23,14 @@
 
 <script>
 import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
-import VCodeSnippet from '@/components/CodeSnippet.vue';
-import VProjectPickerTable from '@/components/install-guide/ProjectPickerTable.vue';
-import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import Navigation from '@/components/mixins/navigation';
-import GoodIcon from '@/assets/check-circle-outline.svg';
-import OKIcon from '@/assets/dash-circle.svg';
-import BadIcon from '@/assets/x-circle.svg';
 import EmptyIcon from '@/assets/patch-question.svg';
 
 export default {
   name: 'EmptyState',
 
   components: {
-    VCodeSnippet,
     QuickstartLayout,
-    VProjectPickerTable,
-    VNavigationButtons,
-    GoodIcon,
-    OKIcon,
-    BadIcon,
     EmptyIcon,
   },
 
