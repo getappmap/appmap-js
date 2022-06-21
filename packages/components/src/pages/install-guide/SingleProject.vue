@@ -27,7 +27,7 @@
             </p>
             <ul>
               <li>
-                <strong>Language:</strong> Ruby 2.6
+                <strong>Language:</strong> Ruby
                 <GoodIcon />
               </li>
               <li>
@@ -35,7 +35,7 @@
                 <GoodIcon />
               </li>
               <li>
-                <strong>Web framework:</strong> Rails 5.7
+                <strong>Web framework:</strong> Rails
                 <GoodIcon />
               </li>
             </ul>
@@ -70,7 +70,6 @@
             <ul>
               <li>
                 <strong>Language: </strong> Python
-                <span class="version">1.0</span>
                 <BadIcon />
                 <span class="bad">Supported versions: Python >=3.6</span>
               </li>
@@ -83,7 +82,6 @@
               </li>
               <li>
                 <strong>Web framework:</strong> Django
-                <span class="version">3.3</span>
                 <GoodIcon />
               </li>
             </ul>
@@ -118,7 +116,6 @@
             <ul>
               <li>
                 <strong>Language: </strong> Ruby
-                <span class="version">2.1</span>
                 <BadIcon />
                 <span class="bad"
                   >Supported Ruby versions: 2.6, 2.7, 3.0, 3.1</span
@@ -126,7 +123,6 @@
               </li>
               <li>
                 <strong>Test framework: </strong> MSTest
-                <span class="version">1.9</span>
                 <BadIcon />
                 <span class="bad"
                   >Supported tests: rspec, minitest, cucumber, and
@@ -135,7 +131,6 @@
               </li>
               <li>
                 <strong>Web framework:</strong> ASP.NET
-                <span class="version">2.2</span>
                 <BadIcon />
                 <span class="bad">Supported Rails versions: 5.x, 6.x, 7.x</span>
               </li>
