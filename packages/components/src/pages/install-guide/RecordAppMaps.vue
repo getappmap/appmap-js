@@ -95,6 +95,10 @@ export default {
       default: 'vscode',
       validator: (value) => ['vscode', 'jetbrains'].indexOf(value) !== -1,
     },
+    disabledLanguages: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   computed: {
@@ -114,7 +118,13 @@ export default {
       return this.project.language.name;
     },
     editorSpecificUrls() {
-      return documentationUrls[this.editor];
+      const urls = { ...documentationUrls[this.editor] };
+      const disabledLanguages = Object.values(this.disabledLanguages);
+      disabledLanguages.forEach((l) => {
+        delete urls[l];
+      });
+
+      return urls;
     },
     documentationUrl() {
       if (
