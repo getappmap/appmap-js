@@ -6,25 +6,6 @@ export default {
   args: {
     projects: [
       {
-        name: 'EmptyState',
-        score: 0,
-        path: '/home/user/empty_state',
-        language: {
-          name: 'n/a',
-          version: 'n/a',
-          score: 0,
-        },
-        testFramework: {
-          name: 'n/a',
-          score: 0,
-        },
-        webFramework: {
-          name: 'ASP.NET 2.2',
-          version: '2.2',
-          score: 0,
-        },
-      },
-      {
         name: 'TestApp',
         score: 1,
         path: '/home/user/test_app',

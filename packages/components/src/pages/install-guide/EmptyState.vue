@@ -1,0 +1,195 @@
+<template>
+  <QuickstartLayout>
+    <section>
+      <header>
+        <h1>No projects found</h1>
+      </header>
+      <main>
+        <article class="empty-state" v-if="projects.length == 0">
+          <div class="card">
+            <div class="empty-icon">
+              <EmptyIcon />
+            </div>
+            <div class="content">
+              <p>No projects were found in this woprkspace.</p>
+              <p>Open a project to see if it's ready to create AppMaps.</p>
+            </div>
+          </div>
+        </article>
+      </main>
+    </section>
+  </QuickstartLayout>
+</template>
+
+<script>
+import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
+import VCodeSnippet from '@/components/CodeSnippet.vue';
+import VProjectPickerTable from '@/components/install-guide/ProjectPickerTable.vue';
+import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
+import Navigation from '@/components/mixins/navigation';
+import GoodIcon from '@/assets/check-circle-outline.svg';
+import OKIcon from '@/assets/dash-circle.svg';
+import BadIcon from '@/assets/x-circle.svg';
+import EmptyIcon from '@/assets/patch-question.svg';
+
+export default {
+  name: 'ProjectPicker',
+
+  components: {
+    VCodeSnippet,
+    QuickstartLayout,
+    VProjectPickerTable,
+    VNavigationButtons,
+    GoodIcon,
+    OKIcon,
+    BadIcon,
+    EmptyIcon,
+  },
+
+  mixins: [Navigation],
+
+  props: {
+    messageSuccess: {
+      type: String,
+      default: '<b>Copied!</b><br/>Paste this command<br/>into your terminal.',
+    },
+    projects: {
+      type: Array,
+      default: () => [],
+    },
+  },
+
+  computed: {
+    quality() {
+      const { selectedProject: project } = this;
+      if (!project) return undefined;
+      if (!project.score || project.score < 1) return 'empty';
+      if (!project.score || project.score < 2) return 'bad';
+      if (project.score < 3) return 'ok';
+      return 'good';
+    },
+    installCommand() {
+      return [
+        'npx @appland/appmap install',
+        this.selectedProject && `-d ${this.selectedProject.path}`,
+      ]
+        .filter(Boolean)
+        .join(' ');
+    },
+  },
+
+  data() {
+    return {
+      selectedProject: null,
+    };
+  },
+
+  mounted() {
+    if (this.projects.length === 1) {
+      this.$refs.projectTable.selectProject(this.projects[0]);
+    }
+  },
+
+  methods: {
+    goToRecordAppmaps(event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.$root.$emit('transition', 'RECORD_APPMAPS');
+    },
+    selectProject(project) {
+      this.$nextTick(() => {
+        this.selectedProject = project;
+        this.$root.$emit('select-project', project);
+      });
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+main {
+  counter-reset: step;
+}
+
+h1 {
+  margin-block-start: 0;
+  font-size: 2em;
+}
+
+h2 {
+  margin-block-end: 0;
+  counter-increment: step;
+  color: $gray-secondary;
+  border-bottom: 1px solid $gray-secondary;
+  margin-bottom: 0.5rem;
+}
+
+// h2::before {
+//   content: counter(step) '. ';
+// }
+
+tr :first-child {
+  text-align: left;
+  padding-left: 6ex;
+  position: relative;
+}
+
+p {
+  margin: 0.5rem 0;
+}
+
+p.note {
+  font-style: italic;
+
+  &:before {
+    content: 'Note: ';
+    font-size: large;
+    opacity: 0.8;
+    font-variant-caps: all-small-caps;
+    margin-right: 0.8ex;
+    font-style: normal;
+  }
+}
+
+.requirements {
+  ul {
+    list-style-type: none;
+    padding: 0;
+    li {
+      line-height: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      &.requirement-good {
+        svg {
+          color: $alert-success;
+        }
+      }
+    }
+  }
+}
+
+.empty-state {
+  border-radius: $border-radius;
+  border: 1px dashed darken($gray4, 10);
+  padding: 3rem;
+  .card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    .empty-icon {
+      padding: 0 2rem;
+    }
+  }
+}
+.good {
+  color: $alert-success;
+}
+.ok {
+  color: $ok-status;
+}
+.bad {
+  color: $bad-status;
+}
+</style>

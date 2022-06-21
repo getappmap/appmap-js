@@ -18,20 +18,6 @@
             ref="projectTable"
           />
         </article>
-        <!-- Empty -->
-        <template v-if="quality == 'empty'">
-          <article class="empty-state">
-            <div class="card">
-              <div class="empty-icon">
-                <EmptyIcon />
-              </div>
-              <div class="content">
-                <p>No projects were found in this woprkspace.</p>
-                <p>Open a project to see if it's ready to create AppMaps.</p>
-              </div>
-            </div>
-          </article>
-        </template>
 
         <!-- Good -->
         <template v-if="quality == 'good'">
