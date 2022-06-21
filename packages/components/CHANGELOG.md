@@ -1,3 +1,10 @@
+# [@appland/components-v2.4.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.3.2...@appland/components-v2.4.0) (2022-06-21)
+
+
+### Features
+
+* Hide disabled languages in RecordAppMaps ([0a300c3](https://github.com/applandinc/appmap-js/commit/0a300c3caacc06c61472f212d8147008682717f5))
+
 # [@appland/components-v2.3.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.3.1...@appland/components-v2.3.2) (2022-06-08)
 
 
