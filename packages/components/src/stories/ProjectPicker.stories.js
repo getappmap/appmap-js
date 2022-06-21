@@ -14,15 +14,15 @@ export default {
         score: 1,
         path: '/home/user/test_app',
         language: {
-          value: 'C#',
+          name: 'C#',
           score: 1,
         },
         testFramework: {
-          value: 'MSTest',
+          name: 'MSTest',
           score: 1,
         },
         webFramework: {
-          value: 'ASP.NET',
+          name: 'ASP.NET',
           score: 1,
         },
       },
@@ -31,15 +31,15 @@ export default {
         score: 2,
         path: '/home/user/django_test',
         language: {
-          value: 'Python',
+          name: 'Python',
           score: 2,
         },
         testFramework: {
-          value: 'PyTest',
+          name: 'PyTest',
           score: 2,
         },
         webFramework: {
-          value: 'Django',
+          name: 'Django',
           score: 2,
         },
       },
@@ -50,15 +50,15 @@ export default {
         agentInstalled: true,
         appMapsRecorded: true,
         language: {
-          value: 'Ruby',
+          name: 'Ruby',
           score: 3,
         },
         testFramework: {
-          value: 'RSpec',
+          name: 'RSpec',
           score: 3,
         },
         webFramework: {
-          value: 'Rails',
+          name: 'Rails',
           score: 3,
         },
       },
