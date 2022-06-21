@@ -42,15 +42,18 @@
               <li><strong>Name:</strong> MySingleProject</li>
               <li></li>
               <li>
-                <strong>Language:</strong> Ruby
+                <strong>Language: </strong>
+                {{ selectedProject.language.name || 'None Detected' }}
                 <GoodIcon />
               </li>
               <li>
-                <strong>Test framework: </strong>RSpec
+                <strong>Test framework: </strong>
+                {{ selectedProject.testFramework.name || 'None Detected' }}
                 <GoodIcon />
               </li>
               <li>
-                <strong>Web framework:</strong> Rails
+                <strong>Web framework: </strong>
+                {{ selectedProject.webFramework.name || 'None Detected' }}
                 <GoodIcon />
               </li>
             </ul>
@@ -85,19 +88,30 @@
             <ul>
               <li><strong>Name:</strong> MySingleProject</li>
               <li>
-                <strong>Language: </strong> Python
+                <strong>Language: </strong>
+                {{ selectedProject.language.name || 'None Detected' }}
                 <OKIcon />
                 <span class="ok">Support for Python is in Beta</span>
               </li>
               <li>
-                <strong>Test framework: </strong>None detected
+                <strong>Test framework: </strong>
+                {{
+                  (selectedProject.testFramework &&
+                    selectedProject.testFramework.name) ||
+                  'None Detected'
+                }}
                 <OKIcon />
                 <span class="ok"
                   >Supported tests: pytest, unittest, and remote-recording</span
                 >
               </li>
               <li>
-                <strong>Web framework:</strong> Django
+                <strong>Web framework: </strong>
+                {{
+                  (selectedProject.webFramework &&
+                    selectedProject.webFramework.name) ||
+                  'None Detected'
+                }}
                 <GoodIcon />
               </li>
             </ul>
@@ -133,7 +147,11 @@
             <ul>
               <li><strong>Name:</strong> MySingleProject</li>
               <li>
-                <strong>Language: </strong> Go
+                <strong>Language: </strong>
+                {{
+                  (selectedProject.language && selectedProject.language.name) ||
+                  'None Detected'
+                }}
                 <BadIcon />
                 <span class="bad"
                   >Supported languages: Ruby, Java, Javascript,
@@ -141,7 +159,12 @@
                 >
               </li>
               <li>
-                <strong>Test framework: </strong> MSTest
+                <strong>Test framework: </strong>
+                {{
+                  (selectedProject.testFramework &&
+                    selectedProject.testFramework.name) ||
+                  'None Detected'
+                }}
                 <BadIcon />
                 <span class="bad"
                   >Supported tests: rspec, minitest, cucumber, and
@@ -149,7 +172,12 @@
                 >
               </li>
               <li>
-                <strong>Web framework:</strong> ASP.NET
+                <strong>Web framework:</strong>
+                {{
+                  (selectedProject.webFramework &&
+                    selectedProject.webFramework.name) ||
+                  'None Detected'
+                }}
                 <BadIcon />
                 <span class="bad">Supported Rails versions: 5.x, 6.x, 7.x</span>
               </li>
