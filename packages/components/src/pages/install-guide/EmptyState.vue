@@ -33,7 +33,7 @@ import BadIcon from '@/assets/x-circle.svg';
 import EmptyIcon from '@/assets/patch-question.svg';
 
 export default {
-  name: 'ProjectPicker',
+  name: 'EmptyState',
 
   components: {
     VCodeSnippet,
