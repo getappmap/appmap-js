@@ -9,6 +9,7 @@ export default {
         name: 'TestApp',
         score: 1,
         path: '/home/user/test_app',
+        agentInstalled: true,
         language: {
           name: 'C#',
           score: 1,
@@ -26,6 +27,7 @@ export default {
         name: 'DjangoTest',
         score: 2,
         path: '/home/user/django_test',
+        agentInstalled: true,
         language: {
           name: 'Python',
           score: 2,
@@ -36,7 +38,7 @@ export default {
         },
         webFramework: {
           name: 'Django',
-          score: 2,
+          score: 3,
         },
       },
       {

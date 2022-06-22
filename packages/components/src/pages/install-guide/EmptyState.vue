@@ -11,7 +11,7 @@
               <EmptyIcon />
             </div>
             <div class="content">
-              <p>No projects were found in this woprkspace.</p>
+              <p>No projects were found in this workspace.</p>
               <p>Open a project to see if it's ready to create AppMaps.</p>
             </div>
           </div>
@@ -51,7 +51,6 @@ export default {
     quality() {
       const { selectedProject: project } = this;
       if (!project) return undefined;
-      if (!project.score || project.score < 1) return 'empty';
       if (!project.score || project.score < 2) return 'bad';
       if (project.score < 3) return 'ok';
       return 'good';
