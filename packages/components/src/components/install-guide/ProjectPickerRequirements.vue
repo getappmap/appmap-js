@@ -47,7 +47,11 @@
         Continue on to the next step.
       </div>
     </article>
-    <v-navigation-buttons :first="first" :last="last" />
+    <v-navigation-buttons
+      v-if="quality === 'good' || quality === 'ok'"
+      :first="first"
+      :last="last"
+    />
   </div>
 </template>
 
@@ -71,7 +75,7 @@ export default {
   props: {
     project: {
       type: Object,
-      default: {},
+      default: () => {},
     },
     messageSuccess: {
       type: String,
