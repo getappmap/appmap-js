@@ -48,8 +48,22 @@ async function mtime(filePath) {
   return fileStat.mtimeMs;
 }
 
+/**
+ * Atomically write a file by first writing to a temporary file in the same
+ * directory then renaming in place.
+ * @param {string} dirName target directory path
+ * @param {string} fileName target file name
+ * @param {unknown} jobId used to create the temporary file name
+ * @param {string} data
+ */
 async function writeFileAtomic(dirName, fileName, jobId, data) {
-  const tempFilePath = join(dirName, `${fileName}.${jobId}`);
+  const suffix = jobId.toString();
+
+  // first make sure the temp name isn't too long
+  const NAME_MAX = 255; // note: might not be true on some esoteric systems
+  const name = fileName.slice(0, NAME_MAX - suffix.length - 1);
+
+  const tempFilePath = join(dirName, `${name}.${suffix}`);
   await fsp.writeFile(tempFilePath, data);
   await fsp.rename(tempFilePath, join(dirName, fileName));
 }

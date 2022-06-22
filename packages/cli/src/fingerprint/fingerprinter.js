@@ -123,10 +123,7 @@ class Fingerprinter {
       a.canonicalization_algorithm.localeCompare(b.canonicalization_algorithm)
     );
 
-    const tempAppMapFileName = joinPath(
-      index.indexDir,
-      [basename(appMapFileName), 'tmp'].join('.')
-    );
+    const tempAppMapFileName = joinPath(index.indexDir, 'appmap.tmp');
     await index.writeFileAtomic(
       basename(tempAppMapFileName),
       JSON.stringify(appmap, null, 2)
