@@ -5,7 +5,7 @@
         <h1>No projects found</h1>
       </header>
       <main>
-        <article class="empty-state" v-if="projects.length == 0">
+        <article class="empty-state" v-if="projects.length === 0">
           <div class="card">
             <div class="empty-icon">
               <EmptyIcon />

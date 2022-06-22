@@ -13,14 +13,17 @@ export default {
         language: {
           name: 'C#',
           score: 1,
+          text: 'language text',
         },
         testFramework: {
           name: 'MSTest',
           score: 1,
+          text: 'test framework text',
         },
         webFramework: {
           name: 'ASP.NET',
           score: 1,
+          text: 'web framework text',
         },
       },
       {
@@ -31,14 +34,17 @@ export default {
         language: {
           name: 'Python',
           score: 2,
+          text: 'language text',
         },
         testFramework: {
           name: 'PyTest',
           score: 2,
+          text: 'test framework text',
         },
         webFramework: {
           name: 'Django',
           score: 3,
+          text: 'web framework text',
         },
       },
       {

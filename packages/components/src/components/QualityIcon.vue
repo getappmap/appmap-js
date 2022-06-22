@@ -1,6 +1,6 @@
 <template>
-  <GoodIcon v-if="quality === '3'" />
-  <OKIcon v-else-if="quality === '2'" />
+  <GoodIcon v-if="quality === 'good'" />
+  <OKIcon v-else-if="quality === 'ok'" />
   <BadIcon v-else />
 </template>
 
@@ -24,11 +24,5 @@ export default {
       default: '1',
     },
   },
-
-  data() {
-    return {};
-  },
-
-  mounted() {},
 };
 </script>

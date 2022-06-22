@@ -10,11 +10,9 @@
       </p>
       <p v-else>
         <span :class="quality">
-          It appears this project might not be a good choice for your first
-          AppMap.
+          This project does not meet all the requirements to create AppMaps.
         </span>
         We recommend you pick another project.
-        <span v-if="quality === 'ok'">Proceed at your own risk.</span>
       </p>
       <ul>
         <li><strong>Name: </strong>{{ project.name }}</li>
@@ -22,17 +20,20 @@
         <li>
           <strong>Language: </strong>
           {{ language }}
-          <v-quality-icon :quality="String(project.language.score)" />
+          <v-quality-icon :quality="languageQuality" />
+          <span :class="languageQuality">{{ languageMessage }}</span>
         </li>
         <li>
           <strong>Test framework: </strong>
           {{ testFramework }}
-          <v-quality-icon :quality="String(project.testFramework.score)" />
+          <v-quality-icon :quality="testFrameworkQuality" />
+          <span :class="testFrameworkQuality">{{ testFrameworkMessage }}</span>
         </li>
         <li>
           <strong>Web framework: </strong>
           {{ webFramework }}
-          <v-quality-icon :quality="String(project.webFramework.score)" />
+          <v-quality-icon :quality="webFrameworkQuality" />
+          <span :class="webFrameworkQuality">{{ webFrameworkMessage }}</span>
         </li>
       </ul>
     </article>
@@ -101,28 +102,84 @@ export default {
     },
     language() {
       return (
-        (this.project.language && this.project.language.name) || 'None Detected'
+        (this.project && this.project.language && this.project.language.name) ||
+        'None Detected'
       );
+    },
+    languageMessage() {
+      return (
+        (this.project && this.project.language && this.project.language.text) ||
+        ''
+      );
+    },
+    languageQuality() {
+      if (
+        !(this.project && this.project.language && this.project.language.score)
+      )
+        return 'bad';
+      if (this.project.language.score < 2) return 'bad';
+      if (this.project.language.score < 3) return 'ok';
+      return 'good';
     },
     webFramework() {
       return (
-        (this.project.webFramework && this.project.webFramework.name) ||
+        (this.project &&
+          this.project.webFramework &&
+          this.project.webFramework.name) ||
         'None Detected'
       );
+    },
+    webFrameworkMessage() {
+      return (
+        (this.project &&
+          this.project.webFramework &&
+          this.project.webFramework.text) ||
+        ''
+      );
+    },
+    webFrameworkQuality() {
+      if (
+        !(
+          this.project &&
+          this.project.webFramework &&
+          this.project.webFramework.score
+        )
+      )
+        return 'bad';
+      if (this.project.webFramework.score < 2) return 'bad';
+      if (this.project.webFramework.score < 3) return 'ok';
+      return 'good';
     },
     testFramework() {
       return (
-        (this.project.testFramework && this.project.testFramework.name) ||
+        (this.project &&
+          this.project.testFramework &&
+          this.project.testFramework.name) ||
         'None Detected'
       );
     },
+    testFrameworkMessage() {
+      return (
+        (this.project &&
+          this.project.testFramework &&
+          this.project.testFramework.text) ||
+        ''
+      );
+    },
+    testFrameworkQuality() {
+      if (
+        !(
+          this.project &&
+          this.project.testFramework &&
+          this.project.testFramework.score
+        )
+      )
+        return 'bad';
+      if (this.project.testFramework.score < 2) return 'bad';
+      if (this.project.testFramework.score < 3) return 'ok';
+      return 'good';
+    },
   },
-
-  data() {
-    return {};
-  },
-
-  mounted() {},
 };
 </script>
 
