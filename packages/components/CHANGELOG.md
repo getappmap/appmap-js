@@ -1,3 +1,10 @@
+# [@appland/components-v2.4.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.4.0...@appland/components-v2.4.1) (2022-06-22)
+
+
+### Bug Fixes
+
+* Pass disabledLanguages to RecordAppMaps ([e8393a2](https://github.com/applandinc/appmap-js/commit/e8393a27de0411c3844a3046aca638b323ebdc02))
+
 # [@appland/components-v2.4.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.3.2...@appland/components-v2.4.0) (2022-06-21)
 
 
