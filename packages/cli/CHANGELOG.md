@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.29.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.0...@appland/appmap-v3.29.1) (2022-06-22)
+
+
+### Bug Fixes
+
+* Indexing now works correctly even with long appmap filenames ([71e1a21](https://github.com/applandinc/appmap-js/commit/71e1a21f92cac0a8468fa10be14f939b72e4bbe3))
+
 # [@appland/appmap-v3.29.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.28.1...@appland/appmap-v3.29.0) (2022-06-17)
 
 
