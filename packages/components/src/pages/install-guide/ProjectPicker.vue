@@ -48,9 +48,7 @@
 
 <script>
 import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
-import VCodeSnippet from '@/components/CodeSnippet.vue';
 import VProjectPickerTable from '@/components/install-guide/ProjectPickerTable.vue';
-import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VProjectPickerRequirements from '@/components/install-guide/ProjectPickerRequirements.vue';
 import Navigation from '@/components/mixins/navigation';
 import EmptyIcon from '@/assets/patch-question.svg';
@@ -59,10 +57,8 @@ export default {
   name: 'ProjectPicker',
 
   components: {
-    VCodeSnippet,
     QuickstartLayout,
     VProjectPickerTable,
-    VNavigationButtons,
     VProjectPickerRequirements,
     EmptyIcon,
   },
