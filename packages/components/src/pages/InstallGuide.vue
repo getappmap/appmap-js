@@ -10,6 +10,7 @@
       :editor="editor"
       :project="selectedProject"
       :complete="hasRecorded"
+      :disabled-languages="disabledLanguages"
     />
     <v-open-app-maps id="open-appmaps" :app-maps="appMaps" />
     <v-investigate-findings
@@ -48,6 +49,10 @@ export default {
     editor: {
       default: 'vscode',
       type: String,
+    },
+    disabledLanguages: {
+      type: Array,
+      default: () => [],
     },
   },
 
