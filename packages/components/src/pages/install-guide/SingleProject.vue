@@ -27,15 +27,18 @@
             </p>
             <ul>
               <li>
-                <strong>Language:</strong> Ruby
+                <strong>Language:</strong>
+                {{ selectedProject.language.name || 'None Detected' }}
                 <GoodIcon />
               </li>
               <li>
-                <strong>Test framework: </strong>RSpec
+                <strong>Test framework: </strong>
+                {{ selectedProject.testFramework.name || 'None Detected' }}
                 <GoodIcon />
               </li>
               <li>
-                <strong>Web framework:</strong> Rails
+                <strong>Web framework:</strong>
+                {{ selectedProject.webFramework.name || 'None Detected' }}
                 <GoodIcon />
               </li>
             </ul>
@@ -61,7 +64,7 @@
           <article class="requirements">
             <h2 class="install subhead">Requirements</h2>
             <p>
-              <span class="ok">
+              <span class="quality">
                 It appears this project might not be a good choice for your
                 first AppMap.
               </span>
@@ -69,19 +72,33 @@
             </p>
             <ul>
               <li>
-                <strong>Language: </strong> Python
+                <strong>Language: </strong>
+                {{
+                  (selectedProject.language && selectedProject.language.name) ||
+                  'None Detected'
+                }}
                 <BadIcon />
                 <span class="bad">Supported versions: Python >=3.6</span>
               </li>
               <li>
-                <strong>Test framework: </strong>None detected
+                <strong>Test framework: </strong>
+                {{
+                  (selectedProject.testFramework &&
+                    selectedProject.testFramework.name) ||
+                  'None Detected'
+                }}
                 <OKIcon />
                 <span class="ok"
                   >Supported tests: pytest, unittest, and remote-recording</span
                 >
               </li>
               <li>
-                <strong>Web framework:</strong> Django
+                <strong>Web framework:</strong>
+                {{
+                  (selectedProject.webFramework &&
+                    selectedProject.webFramework.name) ||
+                  'None Detected'
+                }}
                 <GoodIcon />
               </li>
             </ul>
@@ -115,14 +132,23 @@
             </p>
             <ul>
               <li>
-                <strong>Language: </strong> Ruby
+                <strong>Language: </strong>
+                {{
+                  (selectedProject.language && selectedProject.language.name) ||
+                  'None Detected'
+                }}
                 <BadIcon />
                 <span class="bad"
                   >Supported Ruby versions: 2.6, 2.7, 3.0, 3.1</span
                 >
               </li>
               <li>
-                <strong>Test framework: </strong> MSTest
+                <strong>Test framework: </strong>
+                {{
+                  (selectedProject.testFramework &&
+                    selectedProject.testFramework.name) ||
+                  'None Detected'
+                }}
                 <BadIcon />
                 <span class="bad"
                   >Supported tests: rspec, minitest, cucumber, and
@@ -130,7 +156,12 @@
                 >
               </li>
               <li>
-                <strong>Web framework:</strong> ASP.NET
+                <strong>Web framework: </strong>
+                {{
+                  (selectedProject.webFramework &&
+                    selectedProject.webFramework.nam) ||
+                  'None Detected'
+                }}
                 <BadIcon />
                 <span class="bad">Supported Rails versions: 5.x, 6.x, 7.x</span>
               </li>

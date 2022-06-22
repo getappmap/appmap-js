@@ -7,18 +7,15 @@ export default {
     projects: [
       {
         name: 'MySingleProject',
-        score: 3,
+        score: 2,
         path: '/home/user/test_app',
         language: {
-          value: 'C#',
+          name: 'Ruby',
           score: 3,
         },
-        testFramework: {
-          value: 'MSTest',
-          score: 3,
-        },
+        testFramework: {},
         webFramework: {
-          value: 'ASP.NET',
+          name: 'Rails',
           score: 3,
         },
       },
