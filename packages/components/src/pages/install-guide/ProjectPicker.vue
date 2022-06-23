@@ -155,37 +155,6 @@ p {
   margin: 0.5rem 0;
 }
 
-p.note {
-  font-style: italic;
-
-  &:before {
-    content: 'Note: ';
-    font-size: large;
-    opacity: 0.8;
-    font-variant-caps: all-small-caps;
-    margin-right: 0.8ex;
-    font-style: normal;
-  }
-}
-
-.requirements {
-  ul {
-    list-style-type: none;
-    padding: 0;
-    li {
-      line-height: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      &.requirement-good {
-        svg {
-          color: $alert-success;
-        }
-      }
-    }
-  }
-}
-
 .empty-state {
   border-radius: $border-radius;
   border: 1px dashed darken($gray4, 10);
