@@ -1,5 +1,5 @@
 <template>
-  <div v-if="project">
+  <div v-if="projectSelected">
     <article class="requirements">
       <h2 class="install subhead">Requirements</h2>
       <p v-if="quality === 'good'">
@@ -85,6 +85,9 @@ export default {
   },
 
   computed: {
+    projectSelected() {
+      return this.project && Object.keys(this.project).length > 0;
+    },
     quality() {
       if (!this.project) return undefined;
       if (!this.project.score || this.project.score < 2) return 'bad';
