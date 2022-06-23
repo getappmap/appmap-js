@@ -12,7 +12,7 @@
         <span :class="quality">
           This project does not meet all the requirements to create AppMaps.
         </span>
-        We recommend you pick another project.
+        <a :href="link"> See the docs for more info. </a>
       </p>
       <ul>
         <li><strong>Name: </strong>{{ project.name }}</li>
@@ -87,7 +87,6 @@ export default {
   computed: {
     quality() {
       if (!this.project) return undefined;
-      if (!this.project.score || this.project.score < 1) return 'empty';
       if (!this.project.score || this.project.score < 2) return 'bad';
       if (this.project.score < 3) return 'ok';
       return 'good';
@@ -178,6 +177,19 @@ export default {
       if (this.project.testFramework.score < 2) return 'bad';
       if (this.project.testFramework.score < 3) return 'ok';
       return 'good';
+    },
+    link() {
+      if (this.language === 'Ruby') {
+        return 'https://appland.com/docs/reference/appmap-ruby.html';
+      } else if (this.language === 'Java') {
+        return 'https://appland.com/docs/reference/appmap-java.html';
+      } else if (this.language === 'JavaScript') {
+        return 'https://appland.com/docs/reference/appmap-js.html';
+      } else if (this.language === 'Python') {
+        return 'https://appland.com/docs/reference/appmap-python.html';
+      } else {
+        return 'https://appland.com/docs/install-appmap-agent';
+      }
     },
   },
 };
