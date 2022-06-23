@@ -179,16 +179,17 @@ export default {
       return 'good';
     },
     link() {
+      let url = 'https://appland.com/docs/install-appmap-agent';
       if (this.language === 'Ruby') {
-        return 'https://appland.com/docs/reference/appmap-ruby.html';
+        url = 'https://appland.com/docs/reference/appmap-ruby.html';
       } else if (this.language === 'Java') {
-        return 'https://appland.com/docs/reference/appmap-java.html';
+        url = 'https://appland.com/docs/reference/appmap-java.html';
       } else if (this.language === 'JavaScript') {
-        return 'https://appland.com/docs/reference/appmap-js.html';
+        url = 'https://appland.com/docs/reference/appmap-js.html';
       } else if (this.language === 'Python') {
-        return 'https://appland.com/docs/reference/appmap-python.html';
+        url = 'https://appland.com/docs/reference/appmap-python.html';
       }
-      return 'https://appland.com/docs/install-appmap-agent';
+      return url;
     },
   },
 };
