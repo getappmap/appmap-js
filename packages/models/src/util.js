@@ -425,3 +425,25 @@ export function resolveDifferences(arr1, arr2) {
 export function getRootEvents(eventArray) {
   return eventArray.filter((e) => e.isCall() && !e.parent);
 }
+
+export function transformToJSON(dataKeys, obj) {
+  const emptyLength = (value) => 'length' in value && value.length === 0;
+  const emptySize = (value) => 'size' in value && value.size === 0;
+  const empty = (value) =>
+    value === undefined ||
+    value === null ||
+    (typeof value === 'object' &&
+      [emptyLength, emptySize].find((fn) => fn(value)));
+
+  return dataKeys.reduce((memo, key) => {
+    const value = obj[key];
+    if (empty(value)) {
+      // nop
+    } else if (value.constructor === Set) {
+      memo[key] = [...value];
+    } else {
+      memo[key] = value;
+    }
+    return memo;
+  }, {});
+}
