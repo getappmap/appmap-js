@@ -21,7 +21,7 @@ export default {
   props: {
     quality: {
       type: String,
-      default: '1',
+      default: 'bad',
     },
   },
 };
