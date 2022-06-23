@@ -187,9 +187,8 @@ export default {
         return 'https://appland.com/docs/reference/appmap-js.html';
       } else if (this.language === 'Python') {
         return 'https://appland.com/docs/reference/appmap-python.html';
-      } else {
-        return 'https://appland.com/docs/install-appmap-agent';
       }
+      return 'https://appland.com/docs/install-appmap-agent';
     },
   },
 };
