@@ -1,3 +1,10 @@
+# [@appland/components-v2.5.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.4.2...@appland/components-v2.5.0) (2022-06-24)
+
+
+### Features
+
+* Improved project picker experience ([#633](https://github.com/applandinc/appmap-js/issues/633)) ([e609928](https://github.com/applandinc/appmap-js/commit/e60992839c2b03b7ed79615889553ac25b14d942))
+
 # [@appland/components-v2.4.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.4.1...@appland/components-v2.4.2) (2022-06-24)
 
 
