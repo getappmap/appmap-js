@@ -1,3 +1,10 @@
+# [@appland/components-v2.4.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.4.1...@appland/components-v2.4.2) (2022-06-24)
+
+
+### Bug Fixes
+
+* Only load SQL language for highlight.js ([#638](https://github.com/applandinc/appmap-js/issues/638)) ([85eda58](https://github.com/applandinc/appmap-js/commit/85eda585b7510de6659bca428d00c54e41a39b8a))
+
 # [@appland/components-v2.4.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.4.0...@appland/components-v2.4.1) (2022-06-22)
 
 
