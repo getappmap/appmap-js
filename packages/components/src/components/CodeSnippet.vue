@@ -78,7 +78,7 @@ export default {
 .code-snippet {
   margin: 1rem 0;
   border-radius: $border-radius;
-  border: 1px solid $color-highlight;
+  border: 1px solid $brightblue;
   display: flex;
   align-items: stretch;
   color: white;
@@ -88,11 +88,11 @@ export default {
   &__input {
     flex: 1;
     font-family: monospace;
-    color: $color-foreground;
+    color: $base07;
     padding: 0.75rem 1.25rem;
     margin: 0;
     border: none;
-    border-right: 1px solid $color-highlight;
+    border-right: 1px solid $brightblue;
     border-radius: 0;
     background: transparent;
     outline: none;
@@ -106,8 +106,8 @@ export default {
     margin: 0;
     border: none;
     border-radius: 0 6px 6px 0;
-    color: $color-foreground-light;
-    background-color: $color-highlight;
+    color: #fff;
+    background-color: $brightblue;
     opacity: 0.85;
     outline: none;
     appearance: none;

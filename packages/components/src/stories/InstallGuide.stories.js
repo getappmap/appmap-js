@@ -6,15 +6,11 @@ export default {
   args: {
     projects: [
       {
-        name: 'MyProject',
-        path: '/home/user/my_project',
-      },
-      {
         name: 'TestApp',
         score: 1,
         path: '/home/user/test_app',
         language: {
-          name: 'C#',
+          name: 'Go',
           score: 1,
         },
         testFramework: {
@@ -37,12 +33,12 @@ export default {
           score: 2,
         },
         testFramework: {
-          name: 'PyTest',
+          name: 'None detected',
           score: 2,
         },
         webFramework: {
           name: 'Django',
-          score: 2,
+          score: 3,
         },
       },
       {

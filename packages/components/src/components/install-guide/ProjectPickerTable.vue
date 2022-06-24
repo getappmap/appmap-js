@@ -2,7 +2,7 @@
   <table class="project-picker-table">
     <thead>
       <tr>
-        <th scope="col">Project name ({{ projects.length }})</th>
+        <th scope="col">Project name</th>
         <th scope="col">Language</th>
         <th scope="col">Test framework</th>
         <th scope="col">Web framework</th>
@@ -52,18 +52,29 @@ export default {
 
 <style lang="scss" scoped>
 .project-picker-table {
-  border: 2px solid $color-highlight;
+  border: 1px solid $gray-secondary;
   width: 100%;
   text-align: right;
   border-radius: 8px;
   border-spacing: 0;
+  color: $white;
 
   th {
-    border-bottom: 2px solid $color-highlight;
+    border-bottom: 1px solid $gray-secondary;
     padding: 1em 2ex;
 
     &:first-child {
       text-align: left;
+    }
+  }
+  tbody {
+    tr {
+      td {
+        border-left: 1px solid $gray-secondary;
+        &:first-of-type {
+          border-left: 0;
+        }
+      }
     }
   }
 }

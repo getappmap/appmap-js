@@ -45,10 +45,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$color-highlight: rgba(255, 255, 255, 0.1);
+$brightblue: rgba(255, 255, 255, 0.1);
 
 tr {
-  opacity: 0.6;
+  opacity: 0.8;
   cursor: pointer;
   vertical-align: middle;
 
@@ -56,6 +56,7 @@ tr {
     text-align: left;
     display: flex;
     align-items: center;
+    color: $white;
 
     &:before {
       border-style: solid;
@@ -72,29 +73,13 @@ tr {
     }
   }
 
-  &.good .project-name:before {
-    content: '✔';
-    color: $color-success;
-    border-color: $color-success;
-  }
-  &.ok .project-name:before {
-    content: '·';
-    color: $color-warning;
-    border-color: $color-warning;
-  }
-  &.bad .project-name:before {
-    content: '×';
-    color: $color-error;
-    border-color: $color-error;
-  }
-
   &:hover {
-    background-color: $color-highlight;
+    background-color: $brightblue;
   }
 
   &.selected {
-    background-color: $color-highlight;
-    color: $color-foreground;
+    background-color: $brightblue;
+    color: $base07;
     opacity: 1;
   }
 }
@@ -102,5 +87,9 @@ tr {
 td,
 th {
   padding: 0.5em 2ex;
+}
+
+.good {
+  color: $alert-success;
 }
 </style>
