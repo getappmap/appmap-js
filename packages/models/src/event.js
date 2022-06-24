@@ -1,4 +1,9 @@
-import { addHiddenProperty, hasProp, identityHashEvent } from './util';
+import {
+  addHiddenProperty,
+  hasProp,
+  identityHashEvent,
+  transformToJSON,
+} from './util';
 import hashEvent from './event/hash';
 
 // This class supercedes `CallTree` and `CallNode`. Events are stored in a flat
@@ -37,6 +42,8 @@ export default class Event {
         data.exceptions = [...obj.$hidden.exceptions];
       }
     }
+
+    this.dataKeys = Object.keys(data);
 
     // Cyclic references shall not be enumerable
     if (data.event === 'call') {
@@ -414,6 +421,10 @@ export default class Event {
     const { definedClass, isStatic, methodId } = this;
     if (!definedClass) return undefined;
     return `${definedClass}${isStatic ? '.' : '#'}${methodId}`;
+  }
+
+  toJSON() {
+    return transformToJSON(this.dataKeys, this);
   }
 
   toString() {

@@ -43,6 +43,7 @@ describe('Inspect', () => {
             codeObject: {
               name: 'issue',
               type: 'function',
+              labels: ['security'],
               static: true,
               location: 'app/models/api_key.rb:28',
             },
