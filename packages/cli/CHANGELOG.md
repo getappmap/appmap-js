@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.29.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.2...@appland/appmap-v3.29.3) (2022-06-24)
+
+
+### Bug Fixes
+
+* Emit missing data fields to JSON ([abf3de3](https://github.com/applandinc/appmap-js/commit/abf3de334f89432b2c7b36e02c7e4ce96e556128))
+
 # [@appland/appmap-v3.29.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.1...@appland/appmap-v3.29.2) (2022-06-24)
 
 
