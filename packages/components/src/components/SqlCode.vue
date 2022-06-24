@@ -6,7 +6,7 @@
 
 <script>
 import { format as sqlFormatter } from 'sql-formatter';
-import hljs from 'highlight.js';
+import hljs from 'highlight.js/lib/core';
 import sql from 'highlight.js/lib/languages/sql';
 
 hljs.registerLanguage('sql', sql);
