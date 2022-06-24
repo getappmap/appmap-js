@@ -1,3 +1,10 @@
+# [@appland/models-v1.16.2](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.16.1...@appland/models-v1.16.2) (2022-06-24)
+
+
+### Bug Fixes
+
+* Emit missing data fields to JSON ([abf3de3](https://github.com/applandinc/appmap-js/commit/abf3de334f89432b2c7b36e02c7e4ce96e556128))
+
 # [@appland/models-v1.16.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.16.0...@appland/models-v1.16.1) (2022-06-15)
 
 
