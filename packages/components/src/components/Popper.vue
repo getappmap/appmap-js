@@ -145,7 +145,7 @@ $border-color: $gray4;
     }
 
     &--success {
-      border-color: $color-highlight;
+      border-color: $brightblue;
 
       &::before {
         border-color: inherit;

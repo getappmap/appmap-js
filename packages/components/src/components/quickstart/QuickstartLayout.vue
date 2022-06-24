@@ -52,7 +52,7 @@ body {
 ::selection,
 ::-moz-selection,
 ::-webkit-selection {
-  background-color: $color-highlight;
+  background-color: $brightblue;
   color: $white;
 }
 
@@ -66,7 +66,7 @@ body {
   font-weight: $font-weight;
   line-height: 1.75;
   color: $white;
-  background-color: $color-background;
+  background-color: $vs-code-gray1;
 
   h1,
   h2,
@@ -91,12 +91,12 @@ body {
   }
 
   a {
-    color: $color-link;
+    color: $powderblue;
     text-decoration: none;
     transition: $transition;
 
     &:hover {
-      color: $color-foreground-light;
+      color: #fff;
     }
   }
 
@@ -289,7 +289,7 @@ a.qs-button {
     td {
       padding-top: 2px;
       padding-bottom: 2px;
-      color: $color-link;
+      color: $powderblue;
       white-space: normal;
     }
   }

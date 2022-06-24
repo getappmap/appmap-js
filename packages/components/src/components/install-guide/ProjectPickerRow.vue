@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$color-highlight: rgba(255, 255, 255, 0.1);
+$brightblue: rgba(255, 255, 255, 0.1);
 
 tr {
   opacity: 0.8;
@@ -74,12 +74,12 @@ tr {
   }
 
   &:hover {
-    background-color: $color-highlight;
+    background-color: $brightblue;
   }
 
   &.selected {
-    background-color: $color-highlight;
-    color: $color-foreground;
+    background-color: $brightblue;
+    color: $base07;
     opacity: 1;
   }
 }
