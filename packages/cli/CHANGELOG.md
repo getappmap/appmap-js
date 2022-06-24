@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.29.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.1...@appland/appmap-v3.29.2) (2022-06-24)
+
+
+### Bug Fixes
+
+* record subcommand now always opens the AppMap ([976e3bd](https://github.com/applandinc/appmap-js/commit/976e3bd2720168336134dfc160f35f8dcf6eb38a))
+
 # [@appland/appmap-v3.29.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.0...@appland/appmap-v3.29.1) (2022-06-22)
 
 
