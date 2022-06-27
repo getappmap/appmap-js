@@ -79,7 +79,7 @@ __metadata:
   dependencies:
     "@appland/components": "workspace:*"
     "@appland/diagrams": "workspace:*"
-    "@appland/models": "workspace:^1.14.1"
+    "@appland/models": "workspace:^1.16.2"
     "@appland/openapi": "workspace:packages/openapi"
     "@sidvind/better-ajv-errors": ^0.9.1
     "@types/fs-extra": ^9.0.12
@@ -280,7 +280,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@^1.16.1, @appland/models@workspace:^1.14.1, @appland/models@workspace:^1.8.1, @appland/models@workspace:^1.9.0, @appland/models@workspace:packages/models":
+"@appland/models@^1.16.1, @appland/models@workspace:^1.16.2, @appland/models@workspace:^1.8.1, @appland/models@workspace:^1.9.0, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
