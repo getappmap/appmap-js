@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.29.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.3...@appland/appmap-v3.29.4) (2022-06-27)
+
+
+### Bug Fixes
+
+* Upgrade @appland/models to v1.16.2 ([a7c3009](https://github.com/applandinc/appmap-js/commit/a7c3009b7db007f098ef8ce7a7b15e758c23d768))
+
 # [@appland/appmap-v3.29.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.2...@appland/appmap-v3.29.3) (2022-06-24)
 
 
