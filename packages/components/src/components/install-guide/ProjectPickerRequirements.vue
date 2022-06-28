@@ -1,7 +1,7 @@
 <template>
   <div v-if="projectSelected">
     <article class="requirements">
-      <h2 class="install subhead">Requirements</h2>
+      <h2 class="install subhead" data-cy="requirements-title">Requirements</h2>
       <p v-if="quality === 'good'">
         <span :class="quality">
           This project meets all requirements necessary to create AppMaps.</span
@@ -61,7 +61,7 @@
         :clipboard-text="installCommand"
         :message-success="messageSuccess"
       />
-      <div v-if="project.agentInstalled">
+      <div v-if="project.agentInstalled" data-cy="agent-installed-message">
         <span class="good">It looks like the AppMap agent is installed.</span>
         Continue on to the next step.
       </div>
