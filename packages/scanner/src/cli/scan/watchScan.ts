@@ -7,7 +7,7 @@ import { formatReport } from './formatReport';
 import { default as buildScanner } from './scanner';
 import { exists } from 'fs';
 import { promisify } from 'util';
-import { parseConfigFile } from '../../configuration/configurationProvider';
+import { fetchConfig } from '../../configuration/configurationProvider';
 import assert from 'assert';
 
 type WatchScanOptions = {
@@ -71,7 +71,7 @@ export class Watcher {
   }
 
   protected async reloadConfig(): Promise<void> {
-    this.config = await parseConfigFile(this.options.configFile);
+    this.config = await fetchConfig(this.options.configFile, this.options.appId);
   }
 }
 

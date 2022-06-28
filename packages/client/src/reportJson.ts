@@ -1,6 +1,6 @@
 import { IncomingMessage } from 'http';
 
-export default function <T>(response: IncomingMessage): Promise<T> {
+export default function reportJson<T>(response: IncomingMessage): Promise<T> {
   return new Promise((resolve, reject) => {
     let data = '';
     response.setEncoding('utf8');
