@@ -207,9 +207,9 @@ h2 {
   margin-bottom: 0.5rem;
 }
 
-// h2::before {
-//   content: counter(step) '. ';
-// }
+.qs h2 {
+  margin-bottom: 0.5rem;
+}
 
 tr :first-child {
   text-align: left;
