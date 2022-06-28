@@ -5,19 +5,23 @@ $gray3: #343742;
 $gray4: #808b98;
 $gray5: #e1e2e2;
 $gray6: #eaeaea;
+$gray-secondary: #716e85;
 $lightgray2: #716e85;
 $hotpink: #ff07aa;
 $dullpink: #7b4669;
 $royal: #9c2fba;
 $blue: #4362b1;
 $lightblue: #768ecb;
+$brightblue: #3794ff;
+$powderblue: #2a84ef;
 $teal: #6fddd6;
 $yellow: #ebdf90;
 $appland-text: $gray4;
 $deep-purple: rgba(17, 1, 38, 1);
 $light-purple: #7f6be6;
 $light-purple2: #5a43ca;
-$white: lighten($appland-text, 35); // aaaalmost pure white. softened a bit.
+$white: lighten($appland-text, 35); // aaaalmost white
+$red2: #fd3055;
 $appland-gradient-1: linear-gradient(
   90deg,
   rgba(0, 1, 104, 1) 0%,
@@ -69,6 +73,8 @@ $col-string: #a6e22e;
 $col-bool: #66d9ef;
 $col-float: #fd971f;
 $col-object: #ae81ff;
+$ok-status: #e5b219;
+$bad-status: #fd3055;
 
 $appland-code: $white;
 $appmap-labels: $white;

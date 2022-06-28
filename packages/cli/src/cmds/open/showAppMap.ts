@@ -18,30 +18,20 @@ const Openers: Opener[] = [
 
 export default async function showAppMap(appMapFile: string) {
   const termProgram = process.env.TERM_PROGRAM;
-  if (process.platform === 'darwin') {
-    if (termProgram === 'vscode') {
-      spawn('code', [abspath(appMapFile)]);
-      return;
-    }
+  if (process.platform === 'darwin' && termProgram === 'vscode') {
+    spawn('code', [abspath(appMapFile)]);
+  }
+  else {
+    await openInBrowser(appMapFile);
   }
 
-  UI.progress(
-    `There are multiple options for viewing the AppMap. Please choose one (you can do this as many times as you'd like).`
-  );
-  const { outputTool } = await UI.prompt({
+  const {action} = await UI.prompt({
     type: 'list',
-    name: 'outputTool',
-    message: 'How would you like to view your AppMap:',
-    choices: Openers.map((o) => o.name).concat(['Exit']),
+    name: 'action',
+    message: 'What would you like to do next:',
+    choices: [`Reopen ${appMapFile}`, 'Exit']
   });
-
-  const opener = Openers.find((o) => o.name === outputTool);
-  if (opener) {
-    console.log();
-    console.log(`Click this link to open the AppMap in ${outputTool}:`);
-    console.log();
-    await opener.fn(appMapFile, opener.toolId);
-    console.log();
+  if (action.startsWith('Reopen')) {
     await showAppMap(appMapFile);
   }
 }

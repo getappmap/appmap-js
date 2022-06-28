@@ -13,6 +13,7 @@ export default {
   },
   computed: {
     classes() {
+      if (this.score < 1) return 'empty';
       if (this.score < 2) return 'bad';
       if (this.score < 3) return 'ok';
       return 'good';
@@ -23,9 +24,9 @@ export default {
 
 <style lang="scss" scoped>
 .ok {
-  color: $color-warning;
+  color: $ok-status;
 }
 .bad {
-  color: $color-error;
+  color: $bad-status;
 }
 </style>

@@ -176,7 +176,6 @@ export default class ClassMap {
   }
 
   toJSON() {
-    // Don't write out code objects that were created during runtime
-    return this.roots.filter((obj) => !obj.dynamic);
+    return this.roots;
   }
 }

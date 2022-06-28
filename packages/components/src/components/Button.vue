@@ -44,7 +44,7 @@ export default {
 .btn {
   border-radius: 8px;
   border-style: none;
-  color: $color-background;
+  color: $vs-code-gray1;
   font-weight: bold;
   padding: 0.75em 1.5em;
   text-align: center;
@@ -58,10 +58,12 @@ export default {
   }
 
   &--primary {
-    background-color: $color-highlight;
+    border: 1px solid $brightblue;
+    color: $white;
+    background: none;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.9);
+      background-color: $brightblue;
     }
 
     &:active {
@@ -73,9 +75,9 @@ export default {
   }
   &--ghost {
     background-color: inherit;
-    border: 1px solid $color-highlight;
+    border: 1px solid $gray4;
     border-style: solid;
-    color: $color-highlight;
+    color: $gray4;
 
     &:disabled {
       background-color: inherit;

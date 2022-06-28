@@ -1,3 +1,31 @@
+# [@appland/components-v2.5.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.4.2...@appland/components-v2.5.0) (2022-06-24)
+
+
+### Features
+
+* Improved project picker experience ([#633](https://github.com/applandinc/appmap-js/issues/633)) ([e609928](https://github.com/applandinc/appmap-js/commit/e60992839c2b03b7ed79615889553ac25b14d942))
+
+# [@appland/components-v2.4.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.4.1...@appland/components-v2.4.2) (2022-06-24)
+
+
+### Bug Fixes
+
+* Only load SQL language for highlight.js ([#638](https://github.com/applandinc/appmap-js/issues/638)) ([85eda58](https://github.com/applandinc/appmap-js/commit/85eda585b7510de6659bca428d00c54e41a39b8a))
+
+# [@appland/components-v2.4.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.4.0...@appland/components-v2.4.1) (2022-06-22)
+
+
+### Bug Fixes
+
+* Pass disabledLanguages to RecordAppMaps ([e8393a2](https://github.com/applandinc/appmap-js/commit/e8393a27de0411c3844a3046aca638b323ebdc02))
+
+# [@appland/components-v2.4.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.3.2...@appland/components-v2.4.0) (2022-06-21)
+
+
+### Features
+
+* Hide disabled languages in RecordAppMaps ([0a300c3](https://github.com/applandinc/appmap-js/commit/0a300c3caacc06c61472f212d8147008682717f5))
+
 # [@appland/components-v2.3.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.3.1...@appland/components-v2.3.2) (2022-06-08)
 
 

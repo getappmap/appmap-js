@@ -1,6 +1,9 @@
 <template>
   <div class="qs">
     <div class="qs-container">
+      <div class="appmap-header">
+        <AppMapLogo width="120" />
+      </div>
       <div class="qs-content">
         <slot />
       </div>
@@ -9,10 +12,10 @@
         <div class="qs-help__text">
           Stuck?
           <a
-            href="https://appland.com/appmap/support"
+            href="mailto:support@app.land"
             target="_blank"
             rel="noopener noreferrer"
-            >Contact an AppLand developer directly.</a
+            >Submit a support ticket.</a
           >
         </div>
       </div>
@@ -22,12 +25,14 @@
 
 <script>
 import HelpIcon from '@/assets/quickstart/help.svg';
+import AppMapLogo from '@/assets/appmap-full-logo.svg';
 
 export default {
   name: 'QuickstartLayout',
 
   components: {
     HelpIcon,
+    AppMapLogo,
   },
 };
 </script>
@@ -47,21 +52,21 @@ body {
 ::selection,
 ::-moz-selection,
 ::-webkit-selection {
-  background-color: $color-highlight;
-  color: $color-foreground;
+  background-color: $brightblue;
+  color: $white;
 }
 
 .qs {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  padding: 10px 22px;
+  padding: 2rem;
   font-family: $font-family;
   font-size: $font-size;
   font-weight: $font-weight;
   line-height: 1.75;
-  color: $color-foreground;
-  background-color: $color-background;
+  color: $white;
+  background-color: $vs-code-gray1;
 
   h1,
   h2,
@@ -86,12 +91,12 @@ body {
   }
 
   a {
-    color: $color-link;
+    color: $powderblue;
     text-decoration: none;
     transition: $transition;
 
     &:hover {
-      color: $color-foreground-light;
+      color: #fff;
     }
   }
 
@@ -107,11 +112,6 @@ body {
 
   ul {
     padding-left: 10px;
-
-    li::marker {
-      content: '> ';
-      color: $color-link;
-    }
   }
 }
 
@@ -122,7 +122,7 @@ body {
 
 .qs-content {
   margin-bottom: 12px;
-  background: $color-tile-background;
+  background: $gray2;
   filter: $shadow-tile;
   max-width: 1280px;
   border-radius: 8px;
@@ -289,7 +289,7 @@ a.qs-button {
     td {
       padding-top: 2px;
       padding-bottom: 2px;
-      color: $color-link;
+      color: $powderblue;
       white-space: normal;
     }
   }

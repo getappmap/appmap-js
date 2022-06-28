@@ -1,3 +1,31 @@
+# [@appland/appmap-v3.29.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.3...@appland/appmap-v3.29.4) (2022-06-27)
+
+
+### Bug Fixes
+
+* Upgrade @appland/models to v1.16.2 ([a7c3009](https://github.com/applandinc/appmap-js/commit/a7c3009b7db007f098ef8ce7a7b15e758c23d768))
+
+# [@appland/appmap-v3.29.3](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.2...@appland/appmap-v3.29.3) (2022-06-24)
+
+
+### Bug Fixes
+
+* Emit missing data fields to JSON ([abf3de3](https://github.com/applandinc/appmap-js/commit/abf3de334f89432b2c7b36e02c7e4ce96e556128))
+
+# [@appland/appmap-v3.29.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.1...@appland/appmap-v3.29.2) (2022-06-24)
+
+
+### Bug Fixes
+
+* record subcommand now always opens the AppMap ([976e3bd](https://github.com/applandinc/appmap-js/commit/976e3bd2720168336134dfc160f35f8dcf6eb38a))
+
+# [@appland/appmap-v3.29.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.0...@appland/appmap-v3.29.1) (2022-06-22)
+
+
+### Bug Fixes
+
+* Indexing now works correctly even with long appmap filenames ([71e1a21](https://github.com/applandinc/appmap-js/commit/71e1a21f92cac0a8468fa10be14f939b72e4bbe3))
+
 # [@appland/appmap-v3.29.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.28.1...@appland/appmap-v3.29.0) (2022-06-17)
 
 

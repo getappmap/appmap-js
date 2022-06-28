@@ -11,9 +11,7 @@ class FingerprintQueue {
       try {
         await this.handler.fingerprint(appmapFileName);
       } catch (e) {
-        if (e.code !== 'ENAMETOOLONG') {
-          console.warn(`Error fingerprinting ${appmapFileName}: ${e}`);
-        }
+        console.warn(`Error fingerprinting ${appmapFileName}: ${e}`);
       }
     }, this.size);
     this.queue.pause();

@@ -152,19 +152,98 @@ describe('ClassMap', () => {
       expect(http.allEvents).toHaveLength(totalHttpRoutes);
     });
 
-    it('dynamically created code objects', () => {
-      const dynamicObjects = classMap.codeObjects
-        .filter((obj) => obj.dynamic)
-        .filter((obj) => obj.type === 'class' || obj.type === 'package');
+    describe('JSON serialization', () => {
+      const verifyJSON = (obj, expected) => {
+        const json = JSON.stringify(obj, null, 2);
+        expect(JSON.parse(json)).toEqual(expected);
+      };
 
-      expect(dynamicObjects).toHaveLength(0);
+      describe('function', () => {
+        const { codeObject } = events.find(
+          (e) => e.isCall() && e.method_id && e.codeObject.labels.size > 0
+        );
+
+        it('preserves attributes', () => {
+          verifyJSON(codeObject, {
+            labels: ['security', 'crypto'],
+            location: 'OpenSSL::Cipher#encrypt',
+            name: 'encrypt',
+            static: false,
+            type: 'function',
+          });
+        });
+      });
+
+      describe('class', () => {
+        const codeObject = events.find(
+          (e) => e.isCall() && e.codeObject.type === 'function'
+        ).codeObject.parent;
+
+        it('preserves attributes', () => {
+          verifyJSON(codeObject, {
+            name: 'RootController',
+            type: 'class',
+            children: [
+              {
+                location: 'app/controllers/spree/admin/root_controller.rb:8',
+                name: 'index',
+                static: false,
+                type: 'function',
+              },
+            ],
+          });
+        });
+      });
+
+      describe('SQL query', () => {
+        const { codeObject } = events.find((e) => e.isCall() && e.sql);
+
+        it('preserves attributes', () => {
+          verifyJSON(codeObject, {
+            type: 'query',
+            name: 'SELECT COUNT(*) FROM "spree_stores"',
+          });
+        });
+      });
+
+      describe('HTTP server request', () => {
+        const { codeObject } = events.find(
+          (e) => e.isCall() && e.httpServerRequest
+        );
+
+        it('preserves attributes', () => {
+          verifyJSON(codeObject, { name: 'GET /admin', type: 'route' });
+        });
+      });
+    });
+
+    describe('dynamically created code objects', () => {
+      const dynamicObjects = () => {
+        const result = [];
+        classMap.visit((co) => {
+          if (co.data.dynamic) result.push(co);
+        });
+        return result;
+      };
+
+      it('exist', () => {
+        expect(dynamicObjects().length).toBeGreaterThan(0);
+      });
+
+      it('are not created for class or package types', () => {
+        expect(
+          dynamicObjects().filter(
+            (obj) => obj.type === 'class' || obj.type === 'package'
+          )
+        ).toHaveLength(0);
+      });
     });
   });
 
   describe('leafs', () => {
     const { classMap } = buildAppMap(petClinicScenario).build();
 
-    it('resolves correct root level objects', () => {
+    it('resolves most specialized descendants of the same type', () => {
       const roots = classMap.roots.map((root) => root.leafs()).flat();
 
       expect(roots[0].id).toEqual(

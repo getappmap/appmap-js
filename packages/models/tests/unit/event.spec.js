@@ -3,15 +3,40 @@ import Event from '../../src/event';
 import scenario from './fixtures/large_scenario.json';
 import httpScenario from './fixtures/many_requests_scenario.json';
 
+const verifyJSON = (obj, expected) => {
+  const json = JSON.stringify(obj, null, 2);
+  expect(JSON.parse(json)).toEqual(expected);
+};
+
 describe('Event', () => {
   describe('with large scenario', () => {
     const appMap = buildAppMap(scenario).normalize().build();
+    const getTasksEvent = appMap.events.find(
+      (e) => e.isCall() && e.methodId === 'getTasks'
+    );
+
+    it('toJSON', () => {
+      verifyJSON(getTasksEvent, {
+        defined_class:
+          'org.apache.zookeeper.book.recovery.RecoveredAssignments',
+        event: 'call',
+        id: 567,
+        lineno: 97,
+        method_id: 'getTasks',
+        path: 'src/main/java/org/apache/zookeeper/book/recovery/RecoveredAssignments.java',
+        receiver: {
+          class: 'org.apache.zookeeper.book.recovery.RecoveredAssignments',
+          object_id: 1060809318,
+          value:
+            'org.apache.zookeeper.book.recovery.RecoveredAssignments@3f3aaa66',
+        },
+        static: false,
+        thread_id: 115,
+      });
+    });
 
     test('callStack', () => {
-      const event = appMap.events.find(
-        (e) => e.isCall() && e.methodId === 'getTasks'
-      );
-      const callStack = event.callStack();
+      const callStack = getTasksEvent.callStack();
 
       expect(callStack.length).toEqual(3);
       expect(callStack[0]).toBeInstanceOf(Event);
@@ -21,10 +46,10 @@ describe('Event', () => {
     });
 
     test('ancestors', () => {
-      const event = appMap.events.find(
+      const recoverEvent = appMap.events.find(
         (e) => e.isCall() && e.methodId === 'recover'
       );
-      const ancestors = event.ancestors();
+      const ancestors = recoverEvent.ancestors();
 
       expect(ancestors.length).toEqual(1);
       expect(ancestors[0]).toBeInstanceOf(Event);
@@ -32,10 +57,10 @@ describe('Event', () => {
     });
 
     test('descendants', () => {
-      const event = appMap.events.find(
+      const recoverEvent = appMap.events.find(
         (e) => e.isCall() && e.methodId === 'recover'
       );
-      const descendants = event.descendants();
+      const descendants = recoverEvent.descendants();
 
       expect(descendants.length).toEqual(1);
       expect(descendants[0]).toBeInstanceOf(Event);
@@ -46,22 +71,65 @@ describe('Event', () => {
   describe('with web service scenario', () => {
     const appMap = buildAppMap(httpScenario).normalize().build();
 
-    test('get sqlQuery', () => {
+    describe('SQL query', () => {
       const query = 'SELECT COUNT(*) FROM "spree_stores"';
       const event = appMap.events.find(
         (e) => e.sql_query && e.sql_query.sql === query
       );
-
-      expect(query).toEqual(event.sqlQuery);
+      it('sqlQuery', () => {
+        expect(event.sqlQuery).toEqual(query);
+      });
+      it('toJSON', () => {
+        verifyJSON(event, {
+          event: 'call',
+          id: 62,
+          sql_query: {
+            database_type: 'sqlite',
+            normalized: true,
+            normalized_sql: 'SELECT COUNT(*) FROM "spree_stores"',
+            server_version: '3.22.0',
+            sql: 'SELECT COUNT(*) FROM "spree_stores"',
+          },
+          thread_id: 47346401950060,
+        });
+      });
     });
 
-    test('get route', () => {
+    describe('HTTP server request', () => {
       const event = appMap.events.find(
         (e) =>
           e.http_server_request && e.http_server_request.path_info === '/admin'
       );
 
-      expect(event.route).toEqual('GET /admin');
+      it('route', () => {
+        expect(event.route).toEqual('GET /admin');
+      });
+      it('toJSON', () => {
+        verifyJSON(event, {
+          event: 'call',
+          http_server_request: {
+            normalized_path_info: '/admin',
+            path_info: '/admin',
+            request_method: 'GET',
+          },
+          id: 1,
+          message: [
+            {
+              class: 'String',
+              name: 'controller',
+              object_id: 70021264966880,
+              value: 'spree/admin/root',
+            },
+            {
+              class: 'String',
+              name: 'action',
+              object_id: 70021264966940,
+              value: 'index',
+            },
+          ],
+          thread_id: 47346401950060,
+        });
+      });
     });
 
     test('all events have CodeObjects', () => {

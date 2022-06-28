@@ -1,4 +1,8 @@
-import { addHiddenProperty, getSqlLabelFromString } from './util';
+import {
+  addHiddenProperty,
+  getSqlLabelFromString,
+  transformToJSON,
+} from './util';
 
 export const CodeObjectType = {
   DATABASE: 'database',
@@ -14,6 +18,22 @@ export const CodeObjectType = {
 export default class CodeObject {
   constructor(data, parent) {
     this.data = { ...data };
+
+    // Include all raw data by default, and selectively remove some fields
+    // that aren't appropriate to all types. This way, any mistakes in JSON stringification
+    // will be extra data rather than missing data.
+    this.dataKeys = Object.keys(data).filter(
+      (item) =>
+        !['dynamic', 'static', 'location', 'database_type'].includes(item)
+    );
+    this.dataKeys.push('children');
+    if (data.type === CodeObjectType.FUNCTION) {
+      this.dataKeys.push('static');
+      this.dataKeys.push('location');
+    }
+    if (data.type === CodeObjectType.QUERY) {
+      this.dataKeys.push('database_type');
+    }
 
     if (!(this.data.labels instanceof Set)) {
       this.data.labels = new Set(this.data.labels);
@@ -161,15 +181,19 @@ export default class CodeObject {
     return parents;
   }
 
-  // Leafs retrieves the leaf objects for the current type that contain children of another type. It
-  // is useful for retrieving children without worrying about types or deeply nested objects.
-  //
-  // For example, the leafs of the package "com" may be:
-  // - com.myorg.myapp
-  // - com.myorg.myapp.api
-  //
-  // Whereas its children would only contain "myorg", and its descendants would include functions
-  // and classes from any other nested package.
+  /**
+   * Finds the most specific descendants of a code object that have the same type.
+   * The traversal stops when encountering a child of any other type.
+   * This method is useful for retrieving children without worrying about types or deeply nested objects.
+   *
+   * For example, the 'leafs' of the package `com` may be:
+   * - com.myorg.myapp
+   * - com.myorg.myapp.api
+   *
+   * Whereas its children would only contain "myorg", and its descendants would include functions
+   * and classes from any other nested package.
+   *
+   */
   leafs() {
     const { type } = this;
     const queue = [this];
@@ -181,7 +205,7 @@ export default class CodeObject {
         (child) => child.type === type
       );
 
-      // If this object has children of another type, consider it a leaf.
+      // If this object has children of another type, consider it the most specific of the type.
       // For example, a package containing a class.
       if (childrenOfType.length) {
         queue.push(...childrenOfType);
@@ -199,8 +223,12 @@ export default class CodeObject {
     return leafArray;
   }
 
-  // Returns leafs of all children. Similar to the `classes` accessor, but returns children of any
-  // type.
+  /**
+   * Returns leafs of all children. Similar to the `classes` accessor, but returns children of any
+   * type.
+   *
+   * @see leafs
+   */
   childLeafs() {
     return this.children.map((child) => child.leafs()).flat();
   }
@@ -244,24 +272,7 @@ export default class CodeObject {
   }
 
   toJSON() {
-    const obj = {
-      name: this.data.name,
-      type: this.data.type,
-    };
-
-    if (this.data.type === CodeObjectType.FUNCTION) {
-      obj.static = this.data.static;
-      obj.location = this.data.location;
-    }
-    if (this.data.type === CodeObjectType.QUERY) {
-      obj.database_type = this.data.database_type;
-    }
-
-    if (this.children.length > 0) {
-      obj.children = this.children;
-    }
-
-    return obj;
+    return transformToJSON(this.dataKeys, this);
   }
 
   static constructDataChainFromEvent(event) {
