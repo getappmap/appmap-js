@@ -5,48 +5,48 @@ export default {
   component: ProjectPicker,
   args: {
     projects: [
-      // {
-      //   name: 'TestApp',
-      //   score: 1,
-      //   path: '/home/user/test_app',
-      //   agentInstalled: true,
-      //   language: {
-      //     name: 'C#',
-      //     score: 1,
-      //     text: 'language text',
-      //   },
-      //   webFramework: {
-      //     name: 'ASP.NET',
-      //     score: 1,
-      //     text: 'web framework text',
-      //   },
-      // },
-      // {
-      //   name: 'PythonTest',
-      //   score: 1,
-      //   path: '/home/user/python_test',
-      //   agentInstalled: true,
-      //   language: {
-      //     name: 'Python',
-      //     score: 1,
-      //     text: 'Python is not currently supported by AppMap.',
-      //   },
-      // },
-      // {
-      //   name: 'RubyTest',
-      //   score: 2,
-      //   path: '/home/user/rails_test',
-      //   language: {
-      //     name: 'Ruby',
-      //     score: 2,
-      //     text: "This project looks like Ruby, but we couldn't find a Gemfile.",
-      //   },
-      //   webFramework: {
-      //     name: 'Rails',
-      //     score: 3,
-      //     text: 'This project uses Rails. AppMap enables recording web requests and remote recording.',
-      //   },
-      // },
+      {
+        name: 'TestApp',
+        score: 1,
+        path: '/home/user/test_app',
+        agentInstalled: true,
+        language: {
+          name: 'C#',
+          score: 1,
+          text: 'language text',
+        },
+        webFramework: {
+          name: 'ASP.NET',
+          score: 1,
+          text: 'web framework text',
+        },
+      },
+      {
+        name: 'PythonTest',
+        score: 1,
+        path: '/home/user/python_test',
+        agentInstalled: true,
+        language: {
+          name: 'Python',
+          score: 1,
+          text: 'Python is not currently supported by AppMap.',
+        },
+      },
+      {
+        name: 'RubyTest',
+        score: 2,
+        path: '/home/user/rails_test',
+        language: {
+          name: 'Ruby',
+          score: 2,
+          text: "This project looks like Ruby, but we couldn't find a Gemfile.",
+        },
+        webFramework: {
+          name: 'Rails',
+          score: 3,
+          text: 'This project uses Rails. AppMap enables recording web requests and remote recording.',
+        },
+      },
       {
         name: 'RailsTest',
         score: 3,
