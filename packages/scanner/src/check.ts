@@ -1,9 +1,10 @@
 import { Event } from '@appland/models';
 import { verbose } from './rules/lib/util';
-import { AppMapIndex, EventFilter, Rule, ScopeName } from './types';
+import { AppMapIndex, EventFilter, ImpactDomain, Rule, ScopeName } from './types';
 
 export default class Check {
   public id: string;
+  public impactDomain?: ImpactDomain;
   public options: Record<string, unknown>;
   public scope: ScopeName;
   public includeScope: EventFilter[];
@@ -23,6 +24,8 @@ export default class Check {
     this.excludeScope = [];
     this.includeEvent = [];
     this.excludeEvent = [];
+    //TODO: Create Default value for impact domain
+    this.impactDomain = rule.impactDomain;
   }
 
   filterScope(event: Event, appMapIndex: AppMapIndex): boolean {

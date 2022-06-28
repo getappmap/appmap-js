@@ -177,6 +177,7 @@ export default class RuleChecker {
         groupMessage,
         occurranceCount,
         relatedEvents: relatedEvents.sort((event) => event.id),
+        impactDomain: checkInstance.checkImpactDomain,
       } as Finding;
     };
 

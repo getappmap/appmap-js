@@ -1,7 +1,7 @@
 import { Event } from '@appland/models';
 import Check from './check';
 import { verbose } from './rules/lib/util';
-import { AppMapIndex, RuleLogic, ScopeName } from './types';
+import { AppMapIndex, ImpactDomain, RuleLogic, ScopeName } from './types';
 
 export default class CheckInstance {
   check: Check;
@@ -10,6 +10,10 @@ export default class CheckInstance {
   constructor(check: Check) {
     this.check = check;
     this.ruleLogic = check.rule.build(check.options || {});
+  }
+
+  get checkImpactDomain(): ImpactDomain | undefined {
+    return this.check.impactDomain;
   }
 
   get checkId(): string {
