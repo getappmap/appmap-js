@@ -44,7 +44,7 @@ export default {
         webFramework: {
           name: 'Rails',
           score: 3,
-          text: 'This project uses Rails. AppMap enables recording web requests and remote recording.',
+          text: 'This project uses Rails. AppMap will automatically recognize web requests, SQL queries, and key framework functions during recording.',
         },
       },
       {
@@ -54,7 +54,7 @@ export default {
         language: {
           name: 'Ruby',
           score: 3,
-          text: "This project looks like Ruby. It's one of languages supported by AppMap!",
+          text: "This project looks like Ruby. It's one of the languages supported by AppMap.",
         },
         testFramework: {
           name: 'minitest',
@@ -64,7 +64,7 @@ export default {
         webFramework: {
           name: 'Rails',
           score: 3,
-          text: 'This project uses Rails. AppMap enables recording web requests and remote recording.',
+          text: 'This project uses Rails. AppMap will automatically recognize web requests, SQL queries, and key framework functions during recording.',
         },
       },
     ],
