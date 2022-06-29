@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.59.2](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.59.1...@appland/scanner-v1.59.2) (2022-06-29)
+
+
+### Bug Fixes
+
+* Use absolute paths when creating watchers ([afc81e0](https://github.com/applandinc/appmap-js/commit/afc81e03f1e5004288acda75c89bb61a1857c462))
+
 # [@appland/scanner-v1.59.1](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.59.0...@appland/scanner-v1.59.1) (2022-06-15)
 
 
