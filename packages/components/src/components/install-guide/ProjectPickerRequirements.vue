@@ -15,25 +15,43 @@
         <a :href="link"> See the docs for more info. </a>
       </p>
       <ul>
-        <li><strong>Name: </strong>{{ project.name }}</li>
-        <li></li>
         <li>
-          <strong>Language: </strong>
-          {{ language }}
-          <v-quality-icon :quality="languageQuality" />
-          <span :class="languageQuality">{{ languageMessage }}</span>
+          <div class="req-data">
+            <strong>Name: </strong>
+            {{ project.name }}
+          </div>
         </li>
         <li>
-          <strong>Test framework: </strong>
-          {{ testFramework }}
-          <v-quality-icon :quality="testFrameworkQuality" />
-          <span :class="testFrameworkQuality">{{ testFrameworkMessage }}</span>
+          <div class="req-data">
+            <strong>Language: </strong>
+            {{ language }}
+            <v-quality-icon :quality="languageQuality" />
+          </div>
+          <div class="req-message">
+            <span :class="languageQuality">{{ languageMessage }}</span>
+          </div>
         </li>
         <li>
-          <strong>Web framework: </strong>
-          {{ webFramework }}
-          <v-quality-icon :quality="webFrameworkQuality" />
-          <span :class="webFrameworkQuality">{{ webFrameworkMessage }}</span>
+          <div class="req-data">
+            <strong>Test framework: </strong>
+            {{ testFramework }}
+            <v-quality-icon :quality="testFrameworkQuality" />
+          </div>
+          <div class="req-message">
+            <span :class="testFrameworkQuality">{{
+              testFrameworkMessage
+            }}</span>
+          </div>
+        </li>
+        <li>
+          <div class="req-data">
+            <strong>Web framework: </strong>
+            {{ webFramework }}
+            <v-quality-icon :quality="webFrameworkQuality" />
+          </div>
+          <div class="req-message">
+            <span :class="webFrameworkQuality">{{ webFrameworkMessage }}</span>
+          </div>
         </li>
       </ul>
     </article>
@@ -236,12 +254,14 @@ p.note {
 
 .requirements {
   ul {
-    list-style-type: none;
-    padding: 0;
+    list-style-type: unset;
+    list-style-position: inside;
+    flex-wrap: wrap;
     li {
       line-height: 1.5rem;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
+      margin: 0.5rem 0;
       gap: 0.5rem;
       &.requirement-good {
         svg {
@@ -249,6 +269,29 @@ p.note {
         }
       }
     }
+  }
+}
+
+.req-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  svg {
+    min-width: 1rem !important;
+  }
+}
+
+.req-data {
+  white-space: nowrap;
+  display: flex;
+  align-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  strong {
+    margin-right: 0.5rem;
+  }
+  svg {
+    margin: 0 0.5rem;
   }
 }
 
@@ -274,5 +317,24 @@ p.note {
 }
 .bad {
   color: $bad-status;
+}
+
+@media (max-width: 800px) {
+  .requirements {
+    ul {
+      padding: 0;
+      li {
+        flex-direction: column;
+        gap: 0;
+        margin-bottom: 1.25rem;
+      }
+    }
+  }
+
+  .req-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
 }
 </style>
