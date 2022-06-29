@@ -9,6 +9,7 @@ import { exists } from 'fs';
 import { promisify } from 'util';
 import { parseConfigFile } from '../../configuration/configurationProvider';
 import assert from 'assert';
+import path from 'path';
 
 type WatchScanOptions = {
   appmapDir: string;
@@ -32,10 +33,14 @@ export class Watcher {
       .on('add', this.reloadConfig.bind(this))
       .on('change', this.reloadConfig.bind(this));
 
-    this.appmapWatcher = chokidar.watch(`${this.options.appmapDir}/**/mtime`, {
+    // Chokidar struggles with relative paths. Make sure the watch pattern is absolute.
+    const watchPattern = path.resolve(this.options.appmapDir, '**', 'mtime');
+    this.appmapWatcher = chokidar.watch(watchPattern, {
       ignoreInitial: true,
     });
-    this.appmapWatcher.on('add', this.scan.bind(this)).on('change', this.scan.bind(this));
+    this.appmapWatcher
+      .on('add', (filePath) => this.scan(filePath))
+      .on('change', (filePath) => this.scan(filePath));
   }
 
   close(): void {
