@@ -55,13 +55,35 @@
         </li>
       </ul>
     </article>
-    <article v-if="quality === 'good' || quality === 'ok'">
+    <article v-if="quality === 'good'">
       <h2>Run AppMap installer</h2>
       <v-code-snippet
         :clipboard-text="installCommand"
         :message-success="messageSuccess"
       />
       <div v-if="project.agentInstalled" data-cy="agent-installed-message">
+        <span class="good">It looks like the AppMap agent is installed.</span>
+        Continue on to the next step.
+      </div>
+    </article>
+    <article class="node-install-warning" v-if="quality === 'ok'">
+      <h2>Run AppMap installer</h2>
+      <p class="ok">
+        AppMap agent requires Node 14 (or newer), which was not detected.
+      </p>
+      <p>
+        For instructions, see our
+        <a
+          target="blank"
+          href="https://www.appland.com/docs/install-appmap-agent/node-requirements-for-install.html"
+          >Node installation guide</a
+        >
+      </p>
+      <v-code-snippet
+        :clipboard-text="installCommand"
+        :message-success="messageSuccess"
+      />
+      <div v-if="project.agentInstalled">
         <span class="good">It looks like the AppMap agent is installed.</span>
         Continue on to the next step.
       </div>
