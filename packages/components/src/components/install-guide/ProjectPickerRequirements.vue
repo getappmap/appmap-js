@@ -225,6 +225,10 @@ h2 {
   margin-bottom: 0.5rem;
 }
 
+.qs h2 {
+  margin-bottom: 0.5rem;
+}
+
 tr :first-child {
   text-align: left;
   padding-left: 6ex;

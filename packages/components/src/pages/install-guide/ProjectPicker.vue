@@ -164,6 +164,10 @@ h2 {
   ::-webkit-scrollbar-corner {
     background: transparent;
   }
+  
+.qs h2 {
+  margin-bottom: 0.5rem;
+
 }
 
 tr :first-child {
