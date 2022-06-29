@@ -55,30 +55,22 @@
         </li>
       </ul>
     </article>
-    <article v-if="quality === 'good'">
+    <article v-if="quality === 'good' || quality === 'ok'">
       <h2>Run AppMap installer</h2>
-      <v-code-snippet
-        :clipboard-text="installCommand"
-        :message-success="messageSuccess"
-      />
-      <div v-if="project.agentInstalled" data-cy="agent-installed-message">
-        <span class="good">It looks like the AppMap agent is installed.</span>
-        Continue on to the next step.
-      </div>
-    </article>
-    <article class="node-install-warning" v-if="quality === 'ok'">
-      <h2>Run AppMap installer</h2>
-      <p class="ok">
-        AppMap agent requires Node 14 (or newer), which was not detected.
-      </p>
-      <p>
-        For instructions, see our
-        <a
-          target="blank"
-          href="https://www.appland.com/docs/install-appmap-agent/node-requirements-for-install.html"
-          >Node installation guide</a
-        >
-      </p>
+      <article class="node-install-warning" v-if="hasNode === false">
+        <p class="ok">
+          Installing the AppMap agent requires Node 14, 16, or 17, which was not
+          detected.
+        </p>
+        <p>
+          For instructions, see our
+          <a
+            target="blank"
+            href="https://www.appland.com/docs/install-appmap-agent/node-requirements-for-install.html"
+            >Node installation guide</a
+          >
+        </p>
+      </article>
       <v-code-snippet
         :clipboard-text="installCommand"
         :message-success="messageSuccess"
@@ -237,6 +229,9 @@ export default {
           'https://appland.com/docs/install-appmap-agent/install-appmap-agent-for-javascript.html';
       }
       return url;
+    },
+    hasNode() {
+      return !!(this.project && this.project.hasNode);
     },
   },
 };
