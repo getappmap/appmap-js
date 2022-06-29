@@ -52,7 +52,6 @@ export default {
 
 <style lang="scss" scoped>
 .project-picker-table {
-  border: 1px solid $gray-secondary;
   width: 100%;
   text-align: right;
   border-radius: 8px;
@@ -67,13 +66,15 @@ export default {
       text-align: left;
     }
   }
+
+  td {
+    border-left: 1px solid $gray-secondary;
+  }
+
   tbody {
     tr {
       td {
         border-left: 1px solid $gray-secondary;
-        &:first-of-type {
-          border-left: 0;
-        }
       }
     }
   }

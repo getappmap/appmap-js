@@ -31,11 +31,13 @@
             projects that are ready to start making AppMaps. <br />Select a
             project to continue.
           </p>
-          <v-project-picker-table
-            :projects="projects"
-            @select-project="selectProject($event)"
-            ref="projectTable"
-          />
+          <div class="table-wrap">
+            <v-project-picker-table
+              :projects="projects"
+              @select-project="selectProject($event)"
+              ref="projectTable"
+            />
+          </div>
         </article>
         <v-project-picker-requirements
           :project="selectedProject"
@@ -141,9 +143,28 @@ h2 {
   margin-bottom: 0.5rem;
 }
 
-// h2::before {
-//   content: counter(step) '. ';
-// }
+.table-wrap {
+  border: 1px solid $gray-secondary;
+  overflow-x: auto;
+  border-radius: $border-radius;
+  &::-webkit-scrollbar-thumb {
+    background: $gray-secondary;
+    border: 0;
+    border-radius: 50px;
+  }
+  ::-webkit-scrollbar-thumb:hover,
+  ::-webkit-scrollbar-thumb:active {
+    background: $gray5;
+  }
+  ::-webkit-scrollbar-track {
+    background: $black;
+    border: 0;
+    border-radius: 50px;
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
 
 tr :first-child {
   text-align: left;
