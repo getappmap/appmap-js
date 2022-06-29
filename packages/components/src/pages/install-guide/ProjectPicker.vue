@@ -149,25 +149,11 @@ h2 {
   border-radius: $border-radius;
   &::-webkit-scrollbar-thumb {
     background: $gray-secondary;
-    border: 0;
-    border-radius: 50px;
   }
-  ::-webkit-scrollbar-thumb:hover,
-  ::-webkit-scrollbar-thumb:active {
-    background: $gray5;
-  }
-  ::-webkit-scrollbar-track {
-    background: $black;
-    border: 0;
-    border-radius: 50px;
-  }
-  ::-webkit-scrollbar-corner {
-    background: transparent;
-  }
-  
+}
+
 .qs h2 {
   margin-bottom: 0.5rem;
-
 }
 
 tr :first-child {
