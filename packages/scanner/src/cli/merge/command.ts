@@ -5,11 +5,17 @@ import { merge as mergeScannerJob } from '../../integration/appland/scannerJob/m
 import resolveAppId from '../resolveAppId';
 import updateCommitStatus from '../updateCommitStatus';
 import fail from '../fail';
+import { handleWorkingDirectory } from '../handleWorkingDirectory';
 
 export default {
   command: 'merge <merge-key>',
   describe: 'Merge scan results from parallel scans',
   builder(args: Argv): Argv {
+    args.option('directory', {
+      describe: 'program working directory',
+      type: 'string',
+      alias: 'd',
+    });
     args.option('app', {
       describe:
         'name of the app to publish the findings for. By default, this is determined by looking in appmap.yml',
@@ -35,6 +41,7 @@ export default {
   async handler(options: Arguments): Promise<void> {
     const {
       verbose: isVerbose,
+      directory,
       app: appIdArg,
       fail: failOption,
       updateCommitStatus: updateCommitStatusOption,
@@ -44,6 +51,7 @@ export default {
     if (isVerbose) {
       verbose(true);
     }
+    handleWorkingDirectory(directory);
 
     const appId = await resolveAppId(appIdArg, '.');
 

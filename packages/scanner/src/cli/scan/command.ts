@@ -1,7 +1,7 @@
 import { Arguments, Argv } from 'yargs';
 
 import { ValidationError } from '../../errors';
-import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
+import { verbose } from '../../rules/lib/util';
 
 import CommandOptions from './options';
 import scanArgs from '../scanArgs';
@@ -9,7 +9,8 @@ import resolveAppId from '../resolveAppId';
 import singleScan from './singleScan';
 import watchScan from './watchScan';
 import { parseConfigFile } from '../../configuration/configurationProvider';
-import assert from 'assert';
+import { handleWorkingDirectory } from '../handleWorkingDirectory';
+import { locateAppMapDir } from '../locateAppMapDir';
 
 export default {
   command: 'scan',
@@ -39,8 +40,9 @@ export default {
     return args.strict();
   },
   async handler(options: Arguments): Promise<void> {
-    let { appmapDir } = options as unknown as CommandOptions;
+    const { appmapDir: appmapDirOption } = options as unknown as CommandOptions;
     const {
+      directory,
       appmapFile,
       config,
       verbose: isVerbose,
@@ -55,6 +57,7 @@ export default {
     if (isVerbose) {
       verbose(true);
     }
+    handleWorkingDirectory(directory);
 
     if (apiKey) {
       process.env.APPLAND_API_KEY = apiKey;
@@ -73,18 +76,15 @@ export default {
         `Don't use --app with --watch, because in watch mode all findings are reported`
       );
     }
-    if (!appmapFile && !appmapDir) {
-      appmapDir = await appmapDirFromConfig();
-      assert(
-        appmapDir,
-        'appmapDir must be provided as a command option, or available in appmap.yml'
-      );
-    }
 
     if (watch) {
-      const watchAppMapDir = appmapDir!;
-      return watchScan({ appmapDir: watchAppMapDir, configFile: config });
+      const appmapDir = await locateAppMapDir();
+      return watchScan({ appmapDir, configFile: config });
     } else {
+      let appmapDir = appmapDirOption;
+      if (!appmapFile && !appmapDirOption) {
+        appmapDir = await locateAppMapDir();
+      }
       let appId = appIdArg;
       if (!reportAllFindings) {
         appId = await resolveAppId(appIdArg, appmapDir);

@@ -7,7 +7,7 @@ import { FindingStatusListItem } from '@appland/client/dist/src';
 
 import { parseConfigFile } from '../../configuration/configurationProvider';
 import { ScanResults } from '../../report/scanResults';
-import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
+import { verbose } from '../../rules/lib/util';
 import { newFindings } from '../../findings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
@@ -22,7 +22,8 @@ import updateCommitStatus from '../updateCommitStatus';
 import reportUploadURL from '../reportUploadURL';
 import fail from '../fail';
 import codeVersionArgs from '../codeVersionArgs';
-import assert from 'assert';
+import { locateAppMapDir } from '../locateAppMapDir';
+import { handleWorkingDirectory } from '../handleWorkingDirectory';
 
 export default {
   command: 'ci',
@@ -53,9 +54,10 @@ export default {
     return args.strict();
   },
   async handler(options: Arguments): Promise<void> {
-    let { appmapDir } = options as unknown as CommandOptions;
     const {
       config,
+      directory,
+      appmapDir: appmapDirOption,
       verbose: isVerbose,
       fail: failOption,
       app: appIdArg,
@@ -71,11 +73,8 @@ export default {
     if (isVerbose) {
       verbose(true);
     }
-
-    if (!appmapDir) {
-      appmapDir = await appmapDirFromConfig();
-    }
-    assert(appmapDir, 'appmapDir must be provided as a command option, or available in appmap.yml');
+    handleWorkingDirectory(directory);
+    const appmapDir = await locateAppMapDir(appmapDirOption);
 
     const appId = await resolveAppId(appIdArg, appmapDir);
 

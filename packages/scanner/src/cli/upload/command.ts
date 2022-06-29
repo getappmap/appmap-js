@@ -1,8 +1,7 @@
-import { Argv } from 'yargs';
+import { Arguments, Argv } from 'yargs';
 import { readFile } from 'fs/promises';
 
 import { ScanResults } from '../../report/scanResults';
-import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
 
 import resolveAppId from '../resolveAppId';
 import reportUploadURL from '../reportUploadURL';
@@ -10,7 +9,9 @@ import reportUploadURL from '../reportUploadURL';
 import CommandOptions from './options';
 import upload from '../upload';
 import codeVersionArgs from '../codeVersionArgs';
-import assert from 'assert';
+import { handleWorkingDirectory } from '../handleWorkingDirectory';
+import { locateAppMapDir } from '../locateAppMapDir';
+import { verbose } from '../../rules/lib/util';
 
 export default {
   command: 'upload',
@@ -18,6 +19,11 @@ export default {
   builder(args: Argv): Argv {
     codeVersionArgs(args);
 
+    args.option('directory', {
+      describe: 'program working directory',
+      type: 'string',
+      alias: 'd',
+    });
     args.option('appmap-dir', {
       describe: 'base directory of AppMaps',
       alias: 'd',
@@ -35,10 +41,11 @@ export default {
     });
     return args.strict();
   },
-  async handler(options: CommandOptions): Promise<void> {
-    let { appmapDir } = options;
+  async handler(options: Arguments): Promise<void> {
     const {
       verbose: isVerbose,
+      appmapDir: appmapDirOption,
+      directory,
       reportFile,
       app: appIdArg,
       mergeKey,
@@ -50,11 +57,8 @@ export default {
     if (isVerbose) {
       verbose(true);
     }
-
-    if (!appmapDir) {
-      appmapDir = await appmapDirFromConfig();
-    }
-    assert(appmapDir, 'appmapDir must be provided as a command option, or available in appmap.yml');
+    handleWorkingDirectory(directory);
+    const appmapDir = await locateAppMapDir(appmapDirOption);
 
     const appId = await resolveAppId(appIdArg, appmapDir);
 
