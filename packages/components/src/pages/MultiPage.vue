@@ -45,6 +45,15 @@ export default {
     );
   },
 
+  watch: {
+    currentPage: {
+      immediate: true,
+      handler(val) {
+        this.$root.$emit('open-page', val);
+      },
+    },
+  },
+
   methods: {
     slots() {
       return this.$slots.default.filter(
