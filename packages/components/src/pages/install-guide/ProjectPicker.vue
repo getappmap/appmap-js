@@ -2,15 +2,19 @@
   <QuickstartLayout>
     <section>
       <header>
-        <h1>Install AppMap agent</h1>
+        <h1 data-cy="title">Install AppMap agent</h1>
       </header>
       <main>
-        <article class="empty-state" v-if="projects.length === 0">
+        <article
+          class="empty-state"
+          data-cy="empty-state-article"
+          v-if="projects.length === 0"
+        >
           <div class="card">
             <div class="empty-icon">
               <EmptyIcon />
             </div>
-            <div class="content">
+            <div class="content" data-cy="empty-state-content">
               <p>No projects were found in this workspace.</p>
               <p>Open a project to see if it's ready to create AppMaps.</p>
             </div>
@@ -26,7 +30,7 @@
         </article>
         <article v-if="projects.length > 1">
           <h2 class="install subhead">Projects</h2>
-          <p>
+          <p data-cy="multiple-projects-text">
             You have multiple projects in this workspace. We’ve outlined the
             projects that are ready to start making AppMaps. <br />Select a
             project to continue.

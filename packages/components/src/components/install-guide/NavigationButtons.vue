@@ -3,12 +3,14 @@
     <v-button
       label="Back"
       kind="ghost"
+      data-cy="back-button"
       @click.native="$root.$emit('page-previous')"
       v-if="!first"
     />
     <v-button
       c
       label="Next"
+      data-cy="next-button"
       @click.native="$root.$emit('page-next')"
       v-if="!last"
     />

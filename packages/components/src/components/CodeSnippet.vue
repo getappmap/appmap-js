@@ -1,5 +1,5 @@
 <template>
-  <div class="code-snippet">
+  <div class="code-snippet" data-cy="code-snippet">
     <span
       type="text"
       class="input code-snippet__input"
@@ -14,6 +14,7 @@
       <button
         class="code-snippet__btn"
         type="button"
+        data-cy="code-snippet-button"
         @click="copyToClipboard"
         :disabled="!hasClipboardAPI"
       >
