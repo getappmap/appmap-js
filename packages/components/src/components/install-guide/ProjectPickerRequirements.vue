@@ -57,6 +57,20 @@
     </article>
     <article v-if="quality === 'good' || quality === 'ok'">
       <h2>Run AppMap installer</h2>
+      <article class="node-install-warning" v-if="hasNode === false">
+        <p class="ok">
+          Installing the AppMap agent requires Node 14, 16, or 18, which was not
+          detected.
+        </p>
+        <p>
+          For instructions, see our
+          <a
+            target="blank"
+            href="https://www.appland.com/docs/install-appmap-agent/node-requirements-for-install.html"
+            >Node installation guide</a
+          >
+        </p>
+      </article>
       <v-code-snippet
         :clipboard-text="installCommand"
         :message-success="messageSuccess"
@@ -215,6 +229,9 @@ export default {
           'https://appland.com/docs/install-appmap-agent/install-appmap-agent-for-javascript.html';
       }
       return url;
+    },
+    hasNode() {
+      return !!(this.project && this.project.hasNode);
     },
   },
 };
