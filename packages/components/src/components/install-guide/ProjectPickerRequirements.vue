@@ -59,7 +59,7 @@
       <h2>Run AppMap installer</h2>
       <article class="node-install-warning" v-if="hasNode === false">
         <p class="ok">
-          Installing the AppMap agent requires Node 14, 16, or 17, which was not
+          Installing the AppMap agent requires Node 14, 16, or 18, which was not
           detected.
         </p>
         <p>
