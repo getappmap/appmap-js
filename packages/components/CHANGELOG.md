@@ -1,3 +1,17 @@
+# [@appland/components-v2.6.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.5.1...@appland/components-v2.6.0) (2022-06-30)
+
+
+### Bug Fixes
+
+* re-added stable CSS attribute for tests ([ae87017](https://github.com/applandinc/appmap-js/commit/ae87017a6f196f0df975852796cbf7e86e55d111))
+* updated message about supported node versions ([18f0a53](https://github.com/applandinc/appmap-js/commit/18f0a533dad0768c79ef49cb896ed9e8720201c7))
+
+
+### Features
+
+* added check for supported node version ([037e1fd](https://github.com/applandinc/appmap-js/commit/037e1fd76283685fd51217163056cd0074e4d19e))
+* MultiPage now emits an event upon changing pages ([cf692c7](https://github.com/applandinc/appmap-js/commit/cf692c7f3f05d23fce4eef426c4915c7c1f7d880))
+
 # [@appland/components-v2.5.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.5.0...@appland/components-v2.5.1) (2022-06-30)
 
 
