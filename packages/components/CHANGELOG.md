@@ -1,3 +1,10 @@
+# [@appland/components-v2.5.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.5.0...@appland/components-v2.5.1) (2022-06-30)
+
+
+### Bug Fixes
+
+* switch links for python and js ([62dd1ef](https://github.com/applandinc/appmap-js/commit/62dd1ef40b6f538ec990f83e46012617c0741080))
+
 # [@appland/components-v2.5.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.4.2...@appland/components-v2.5.0) (2022-06-24)
 
 
