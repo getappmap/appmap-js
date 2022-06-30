@@ -75,7 +75,7 @@
         :clipboard-text="installCommand"
         :message-success="messageSuccess"
       />
-      <div v-if="project.agentInstalled">
+      <div v-if="project.agentInstalled" data-cy="agent-installed-message">
         <span class="good">It looks like the AppMap agent is installed.</span>
         Continue on to the next step.
       </div>
