@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.60.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.59.2...@appland/scanner-v1.60.0) (2022-06-30)
+
+
+### Features
+
+* pass down impactDomain from Rule to Finding ([8755041](https://github.com/applandinc/appmap-js/commit/875504183a8517fec316b5f188d269de053ceef8))
+
 # [@appland/scanner-v1.59.2](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.59.1...@appland/scanner-v1.59.2) (2022-06-29)
 
 
