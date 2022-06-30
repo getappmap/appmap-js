@@ -111,6 +111,7 @@ interface Finding {
   groupMessage?: string;
   occurranceCount?: number;
   relatedEvents?: Event[];
+  impactDomain?: ImpactDomain;
 }
 
 interface RuleLogic {
