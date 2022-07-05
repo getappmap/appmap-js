@@ -80,6 +80,7 @@ export default {
     },
 
     jumpTo(pageId) {
+      this.$root.$emit('page', pageId);
       this.currentPage = pageId;
     },
   },

@@ -12,7 +12,11 @@
       :complete="hasRecorded"
       :disabled-languages="disabledLanguages"
     />
-    <v-open-app-maps id="open-appmaps" :app-maps="appMaps" />
+    <v-open-app-maps
+      id="open-appmaps"
+      :app-maps="appMaps"
+      :sample-code-objects="sampleCodeObjects"
+    />
     <v-investigate-findings
       id="investigate-findings"
       :scanned="hasFindings"
@@ -102,6 +106,9 @@ export default {
     },
     findingsDomainCounts() {
       return this.selectedProject && this.selectedProject.findingsDomainCounts;
+    },
+    sampleCodeObjects() {
+      return this.selectedProject && this.selectedProject.sampleCodeObjects;
     },
   },
 
