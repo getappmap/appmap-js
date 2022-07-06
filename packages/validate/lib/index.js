@@ -85,7 +85,7 @@ const checkSchema = (data, options) => {
 
 const collectDesignator = (designators, entity, parent, path1) => {
   if (entity.type === 'function') {
-    assert(parent !== null, Error, 'top-level function should not have satsified the schema');
+    assert(parent !== null, Error, 'top-level function should not have satisfied the schema');
     if (hasOwnProperty(entity, 'location') && entity.location !== null) {
       let path2 = entity.location;
       let lineno = null;
