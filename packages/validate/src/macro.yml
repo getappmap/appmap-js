@@ -1,9 +1,15 @@
 
 type: object
-required: [version, metadata, classMap, events]
+required:
+  - version
+  - metadata
+  - classMap
+  - events
 properties:
   version:
     enum:
+      - "1.8.0" #! = 1.8.0
+      - "1.7.0" #! = 1.7.0
       - "1.6.0" #! = 1.6.0
       - "1.6"   #! = 1.6.0
       - "1.5.1" #! = 1.5.1
@@ -25,15 +31,13 @@ properties:
   events:
     type: array
     items:
-      anyOf:
-        - $ref: "#/definitions/function-call"
-        - $ref: "#/definitions/function-return"
-        - $ref: "#/definitions/http-client-request" #! >= 1.5.0
-        - $ref: "#/definitions/http-client-response" #! >= 1.5.0
-        - $ref: "#/definitions/http-server-request"
-        - $ref: "#/definitions/http-server-response"
-        - $ref: "#/definitions/sql-query"
-        - $ref: "#/definitions/sql-result"
+      $ref: "#/definitions/event"
+  eventUpdates:
+    type: object
+    additionalProperties: false
+    patternProperties:
+      "^[0-9]+$":
+        $ref: "#/definitions/event"
 
 definitions:
 
@@ -236,6 +240,17 @@ definitions:
   # Event #
   #########
 
+  event:
+    anyOf:
+      - $ref: "#/definitions/function-call"
+      - $ref: "#/definitions/function-return"
+      - $ref: "#/definitions/http-client-request" #! >= 1.5.0
+      - $ref: "#/definitions/http-client-response" #! >= 1.5.0
+      - $ref: "#/definitions/http-server-request"
+      - $ref: "#/definitions/http-server-response"
+      - $ref: "#/definitions/sql-query"
+      - $ref: "#/definitions/sql-result"
+
   # Common #
 
   call:
@@ -297,6 +312,11 @@ definitions:
       - TRACE
       - PATCH
 
+  status:
+    type: integer
+    minimum: 100
+    maximum: 599
+
   parameter:
     type: object
     required:
@@ -317,6 +337,21 @@ definitions:
       value:
         type: string
         maxLength: 100
+      size:           #! >= 1.7.0
+        type: integer #! >= 1.7.0
+        minimum: 0    #! >= 1.7.0
+      properties:          #! >= 1.7.0
+        type: array        #! >= 1.7.0
+        items:             #! >= 1.7.0
+          type: object     #! >= 1.7.0
+          required:        #! >= 1.7.0
+            - name         #! >= 1.7.0
+            - class        #! >= 1.7.0
+          properties:      #! >= 1.7.0
+            name:          #! >= 1.7.0
+              type: string #! >= 1.7.0
+            class:         #! >= 1.7.0
+              type: string #! >= 1.7.0
 
   exception:
     type: object
@@ -435,30 +470,30 @@ definitions:
           sql_query: false                    #! >= 1.5.0
           http_server_request: false          #! >= 1.5.0
 
-  http-client-response:                       #! >= 1.5.0
-    allOf:                                    #! >= 1.5.0
-      - $ref: "#/definitions/return"          #! >= 1.5.0
-      - type: object                          #! >= 1.5.0
-        required:                             #! >= 1.5.0
-          - http_client_response              #! >= 1.5.0
-        properties:                           #! >= 1.5.0
-          http_client_response:               #! >= 1.5.0
-            type: object                      #! >= 1.5.0
-            required:                         #! >= 1.5.0
-              - status_code                   #! >= 1.5.0
-            properties:                       #! >= 1.5.0
-              headers:                        #! >= 1.5.0
-                $ref: "#/definitions/headers" #! >= 1.5.0
-              status_code:                    #! >= 1.5.0
-                type: integer                 #! >= 1.5.0
-                minimum: 100                  #! >= 1.5.0
-                maximum: 599                  #! >= 1.5.0
-              mime_type:                      #! >= 1.5.0
-                type: string                  #! >= 1.5.0
-                nullable: true                #! >= 1.5.0
-          return_value: false                 #! >= 1.5.0
-          exceptions: false                   #! >= 1.5.0
-          http_server_response: false         #! >= 1.5.0
+  http-client-response:                         #! >= 1.5.0
+    allOf:                                      #! >= 1.5.0
+      - $ref: "#/definitions/return"            #! >= 1.5.0
+      - type: object                            #! >= 1.5.0
+        required:                               #! >= 1.5.0
+          - http_client_response                #! >= 1.5.0
+        properties:                             #! >= 1.5.0
+          http_client_response:                 #! >= 1.5.0
+            type: object                        #! >= 1.5.0
+            required:                           #! >= 1.5.0
+              - status_code                     #! >= 1.5.0
+            properties:                         #! >= 1.5.0
+              status_code:                      #! >= 1.5.0
+                $ref: "#/definitions/status"    #! >= 1.5.0
+              headers:                          #! >= 1.5.0
+                $ref: "#/definitions/headers"   #! >= 1.5.0
+              mime_type:                        #! >= 1.5.0 && < 1.6.0
+                type: string                    #! >= 1.5.0 && < 1.6.0
+                nullable: true                  #! >= 1.5.0 && < 1.6.0
+              return_value:                     #! >= 1.7.0
+                $ref: "#/definitions/parameter" #! >= 1.7.0
+          return_value: false                   #! >= 1.5.0
+          exceptions: false                     #! >= 1.5.0
+          http_server_response: false           #! >= 1.5.0
 
   # Http Server #
 
@@ -478,12 +513,12 @@ definitions:
             properties:
               headers:
                 $ref: "#/definitions/headers"
-              authorization:
-                type: string
-                nullable: true
-              mime_type:
-                type: string
-                nullable: true
+              authorization:   #! < 1.6.0
+                type: string   #! < 1.6.0
+                nullable: true #! < 1.6.0
+              mime_type:       #! < 1.6.0
+                type: string   #! < 1.6.0
+                nullable: true #! < 1.6.0
               request_method:
                 $ref: "#/definitions/verb"
               path_info:
@@ -521,12 +556,14 @@ definitions:
               - status_code
             properties:
               status_code:
-                type: integer
-                minimum: 100
-                maximum: 599
-              mime_type:
-                type: string
-                nullable: true
+                $ref: "#/definitions/status"
+              mime_type:       #! < 1.6.0
+                type: string   #! < 1.6.0
+                nullable: true #! < 1.6.0
+              headers:                        #! >= 1.6.0
+                $ref: "#/definitions/headers" #! >= 1.6.0
+              return_value:                     #! >= 1.7.0
+                $ref: "#/definitions/parameter" #! >= 1.7.0
           return_value: false
           exceptions: false
           http_client_response: false
