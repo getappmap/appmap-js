@@ -1,15 +1,15 @@
-const Ajv = require("ajv");
-const { asTree } = require("treeify");
-const { structureAJVErrorArray, summarizeAJVErrorTree } = require("ajv-error-tree");
-const { AppmapError, InputError, assert } = require("./assert.js");
-const { schema: schema_1_2_0 } = require("../schema/1-2-0.js");
-const { schema: schema_1_3_0 } = require("../schema/1-3-0.js");
-const { schema: schema_1_4_0 } = require("../schema/1-4-0.js");
-const { schema: schema_1_5_0 } = require("../schema/1-5-0.js");
-const { schema: schema_1_5_1 } = require("../schema/1-5-1.js");
-const { schema: schema_1_6_0 } = require("../schema/1-6-0.js");
-const { schema: schema_1_7_0 } = require("../schema/1-7-0.js");
-const { schema: schema_1_8_0 } = require("../schema/1-8-0.js");
+const Ajv = require('ajv');
+const { asTree } = require('treeify');
+const { structureAJVErrorArray, summarizeAJVErrorTree } = require('ajv-error-tree');
+const { AppmapError, InputError, assert } = require('./assert.js');
+const { schema: schema_1_2_0 } = require('../schema/1-2-0.js');
+const { schema: schema_1_3_0 } = require('../schema/1-3-0.js');
+const { schema: schema_1_4_0 } = require('../schema/1-4-0.js');
+const { schema: schema_1_5_0 } = require('../schema/1-5-0.js');
+const { schema: schema_1_5_1 } = require('../schema/1-5-1.js');
+const { schema: schema_1_6_0 } = require('../schema/1-6-0.js');
+const { schema: schema_1_7_0 } = require('../schema/1-7-0.js');
+const { schema: schema_1_8_0 } = require('../schema/1-8-0.js');
 
 const ajv = new Ajv({
   // jsPropertySyntax: true
@@ -17,14 +17,14 @@ const ajv = new Ajv({
 });
 
 const versions = new Map([
-  ["1.2.0", ajv.compile(schema_1_2_0)],
-  ["1.3.0", ajv.compile(schema_1_3_0)],
-  ["1.4.0", ajv.compile(schema_1_4_0)],
-  ["1.5.0", ajv.compile(schema_1_5_0)],
-  ["1.5.1", ajv.compile(schema_1_5_1)],
-  ["1.6.0", ajv.compile(schema_1_6_0)],
-  ["1.7.0", ajv.compile(schema_1_7_0)],
-  ["1.8.0", ajv.compile(schema_1_8_0)],
+  ['1.2.0', ajv.compile(schema_1_2_0)],
+  ['1.3.0', ajv.compile(schema_1_3_0)],
+  ['1.4.0', ajv.compile(schema_1_4_0)],
+  ['1.5.0', ajv.compile(schema_1_5_0)],
+  ['1.5.1', ajv.compile(schema_1_5_1)],
+  ['1.6.0', ajv.compile(schema_1_6_0)],
+  ['1.7.0', ajv.compile(schema_1_7_0)],
+  ['1.8.0', ajv.compile(schema_1_8_0)],
 ]);
 
 const keys = Array.from(versions.keys());
@@ -33,42 +33,42 @@ const makeDesignator = JSON.stringify;
 
 /* c8 ignore start */
 const hasOwnProperty =
-  Reflect.getOwnPropertyDescriptor(Object, "hasOwn") !== undefined
+  Reflect.getOwnPropertyDescriptor(Object, 'hasOwn') !== undefined
     ? Object.hasOwn
     : (object, key) => Reflect.getOwnPropertyDescriptor(object, key) !== undefined;
 /* c8 ignore stop */
 
 const getCallTag = (event) => {
-  assert(event.event === "call", Error, "expected a call event");
-  if (hasOwnProperty(event, "method_id")) {
-    return "function";
-  } else if (hasOwnProperty(event, "http_client_request")) {
-    return "http-client";
-  } else if (hasOwnProperty(event, "http_server_request")) {
-    return "http-server";
-  } else if (hasOwnProperty(event, "sql_query")) {
-    return "sql";
+  assert(event.event === 'call', Error, 'expected a call event');
+  if (hasOwnProperty(event, 'method_id')) {
+    return 'function';
+  } else if (hasOwnProperty(event, 'http_client_request')) {
+    return 'http-client';
+  } else if (hasOwnProperty(event, 'http_server_request')) {
+    return 'http-server';
+  } else if (hasOwnProperty(event, 'sql_query')) {
+    return 'sql';
   } /* c8 ignore start */ else {
-    throw new Error("invalid event should not have satisfied the schema");
+    throw new Error('invalid event should not have satisfied the schema');
   } /* c8 ignore stop */
 };
 
 const getReturnTag = (event) => {
-  assert(event.event === "return", Error, "expected a return event");
-  if (hasOwnProperty(event, "return_value") || hasOwnProperty(event, "exceptions")) {
-    return "function";
-  } else if (hasOwnProperty(event, "http_client_response")) {
-    return "http-client";
-  } else if (hasOwnProperty(event, "http_server_response")) {
-    return "http-server";
+  assert(event.event === 'return', Error, 'expected a return event');
+  if (hasOwnProperty(event, 'return_value') || hasOwnProperty(event, 'exceptions')) {
+    return 'function';
+  } else if (hasOwnProperty(event, 'http_client_response')) {
+    return 'http-client';
+  } else if (hasOwnProperty(event, 'http_server_response')) {
+    return 'http-server';
   } else {
-    return "sql|function";
+    return 'sql|function';
   }
 };
 
 const stringifyTree = (tree, options) => {
-  if (options["schema-depth"] === 0 && options["instance-depth"] === 0) {
-    return typeof tree === "string" ? tree : asTree(tree, true);
+  if (options['schema-depth'] === 0 && options['instance-depth'] === 0) {
+    return typeof tree === 'string' ? tree : asTree(tree, true);
   } else {
     return JSON.stringify(tree, null, 2);
   }
@@ -84,9 +84,9 @@ const checkSchema = (data, options) => {
 };
 
 const collectDesignator = (designators, entity, parent, path1) => {
-  if (entity.type === "function") {
-    assert(parent !== null, Error, "top-level function should not have satsified the schema");
-    if (hasOwnProperty(entity, "location") && entity.location !== null) {
+  if (entity.type === 'function') {
+    assert(parent !== null, Error, 'top-level function should not have satsified the schema');
+    if (hasOwnProperty(entity, 'location') && entity.location !== null) {
       let path2 = entity.location;
       let lineno = null;
       if (path2 !== null && /:[0-9]+$/u.test(path2)) {
@@ -109,7 +109,7 @@ const collectDesignator = (designators, entity, parent, path1) => {
       assert(
         !designators.has(designator),
         AppmapError,
-        "detected a function code object clash in the classMap: %o",
+        'detected a function code object clash in the classMap: %o',
         entity
       );
       designators.add(designator);
@@ -125,7 +125,7 @@ const collectDesignator = (designators, entity, parent, path1) => {
 const checkClassMapConflict = (classmap) => {
   const designators = new Set();
   for (let entity of classmap) {
-    collectDesignator(designators, entity, null, "");
+    collectDesignator(designators, entity, null, '');
   }
 };
 
@@ -137,7 +137,7 @@ const checkPerThreadFifoOrdering = (events) => {
     assert(
       event.id > max,
       AppmapError,
-      "non-monotonous event id between #%i and #%i",
+      'non-monotonous event id between #%i and #%i',
       event.id,
       max
     );
@@ -146,7 +146,7 @@ const checkPerThreadFifoOrdering = (events) => {
       threads.set(event.thread_id, []);
     }
     const thread = threads.get(event.thread_id);
-    if (event.event === "call") {
+    if (event.event === 'call') {
       // console.log(new Array(thread.length).join("."), event.id);
       thread.push(event);
     } else {
@@ -155,7 +155,7 @@ const checkPerThreadFifoOrdering = (events) => {
       assert(
         parent.id === event.parent_id,
         AppmapError,
-        "expected parent id of return event #%i to be %i but got %i",
+        'expected parent id of return event #%i to be %i but got %i',
         event.id,
         parent.id,
         event.parent_id
@@ -165,7 +165,7 @@ const checkPerThreadFifoOrdering = (events) => {
       assert(
         tag2.includes(tag1),
         AppmapError,
-        "incompatible event type between #%i and #%i, expected a %s but got a %s",
+        'incompatible event type between #%i and #%i, expected a %s but got a %s',
         event.id,
         event.parent_id,
         tag1,
@@ -181,7 +181,7 @@ const updateEventArray = (events, updates) => {
     assert(
       events.find((event) => event.id === id),
       AppmapError,
-      "event update #%i has no corresponding event",
+      'event update #%i has no corresponding event',
       id
     );
   }
@@ -197,30 +197,30 @@ exports.InputError = InputError;
 exports.validate = (data, options) => {
   // Normalize options //
   options = {
-    "schema-depth": 0,
-    "instance-depth": 0,
+    'schema-depth': 0,
+    'instance-depth': 0,
     version: null,
     ...options,
   };
   if (options.version === null) {
     assert(
-      typeof data === "object" && data !== null && hasOwnProperty(data, "version"),
+      typeof data === 'object' && data !== null && hasOwnProperty(data, 'version'),
       AppmapError,
-      "could not extract version from appmap"
+      'could not extract version from appmap'
     );
     options.version = data.version;
   }
   assert(
     versions.has(options.version),
     InputError,
-    "unsupported appmap version %o; expected one of %o",
+    'unsupported appmap version %o; expected one of %o',
     options.version,
     keys
   );
   checkSchema(data, options);
   checkClassMapConflict(data.classMap);
   checkPerThreadFifoOrdering(data.events);
-  if (hasOwnProperty(data, "eventUpdates")) {
+  if (hasOwnProperty(data, 'eventUpdates')) {
     checkPerThreadFifoOrdering(updateEventArray(data.events, data.eventUpdates));
   }
   return options.version;
