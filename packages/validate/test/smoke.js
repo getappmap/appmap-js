@@ -2,7 +2,7 @@ const { strict: Assert } = require("assert");
 const Semver = require("semver");
 const { validate, AppmapError } = require("../lib/index.js");
 
-for (const version of ["1.2", "1.3", "1.4", "1.5", "1.5.1", "1.6"]) {
+for (const version of ["1.2.0", "1.3.0", "1.4.0", "1.5.0", "1.5.1", "1.6.0", "1.7.0", "1.8.0"]) {
   const data = {
     version,
     metadata: {
@@ -135,8 +135,21 @@ for (const version of ["1.2", "1.3", "1.4", "1.5", "1.5.1", "1.6"]) {
           ]
         : []),
     ],
+    ...(Semver.satisfies(version, ">= 1.8.0")
+      ? {
+          eventUpdates: {
+            2: {
+              event: "return",
+              id: 2,
+              thread_id: 789,
+              parent_id: 1,
+              return_value: null,
+            },
+          },
+        }
+      : {}),
   };
-  Assert.ok(validate(data).startsWith(version));
+  Assert.equal(validate(data), version);
   data.events.push(123);
   Assert.throws(() => validate(data), AppmapError);
   data.events.pop();
