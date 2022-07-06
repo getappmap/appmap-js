@@ -1,3 +1,10 @@
+# [@appland/appmap-validate-v2.2.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-validate-v2.1.0...@appland/appmap-validate-v2.2.0) (2022-07-06)
+
+
+### Features
+
+* validate eventUpdates from 1.8.0 ([edf21fe](https://github.com/applandinc/appmap-js/commit/edf21fe8ea69429f3353e4fe9fc2b581639fa8ff))
+
 # [@appland/appmap-validate-v2.1.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-validate-v2.0.0...@appland/appmap-validate-v2.1.0) (2021-12-06)
 
 
