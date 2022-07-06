@@ -141,7 +141,7 @@ for (const version of ['1.2.0', '1.3.0', '1.4.0', '1.5.0', '1.5.1', '1.6.0', '1.
             2: {
               event: 'return',
               id: 2,
-              thread_id: 789,
+              thread_id: 456,
               parent_id: 1,
               return_value: null,
             },
