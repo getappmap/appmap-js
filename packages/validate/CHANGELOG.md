@@ -1,3 +1,10 @@
+# [@appland/appmap-validate-v2.3.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-validate-v2.2.0...@appland/appmap-validate-v2.3.0) (2022-07-07)
+
+
+### Features
+
+* make sure every optional field is nullable ([0a810d3](https://github.com/applandinc/appmap-js/commit/0a810d363417254288ac703b6faf3d21aa87b364))
+
 # [@appland/appmap-validate-v2.2.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-validate-v2.1.0...@appland/appmap-validate-v2.2.0) (2022-07-06)
 
 
