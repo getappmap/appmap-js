@@ -292,10 +292,10 @@ definitions:
         minimum: 0
       elapsed:
         type: number
+        nullable: true
         minimum: 0
 
   headers:
-    nullable: true
     type: object
     additionalProperties:
       type: string
@@ -337,11 +337,13 @@ definitions:
       value:
         type: string
         maxLength: 100
-      size:           #! >= 1.7.0
-        type: integer #! >= 1.7.0
-        minimum: 0    #! >= 1.7.0
+      size:            #! >= 1.7.0
+        nullable: true #! >= 1.7.0
+        type: integer  #! >= 1.7.0
+        minimum: 0     #! >= 1.7.0
       properties:          #! >= 1.7.0
         type: array        #! >= 1.7.0
+        nullable: true     #! >= 1.7.0
         items:             #! >= 1.7.0
           type: object     #! >= 1.7.0
           required:        #! >= 1.7.0
@@ -366,7 +368,6 @@ definitions:
         type: string
       object_id:
         type: integer
-        nullable: true
         minimum: 0
       path:
         type: string
@@ -441,34 +442,36 @@ definitions:
   # in other event types because it interferes with
   # subsequent verifications in lib/main.js.
 
-  http-client-request:                        #! >= 1.5.0
-    allOf:                                    #! >= 1.5.0
-      - $ref: "#/definitions/call"            #! >= 1.5.0
-      - type: object                          #! >= 1.5.0
-        required:                             #! >= 1.5.0
-          - http_client_request               #! >= 1.5.0
-          - message                           #! >= 1.5.0
-        properties:                           #! >= 1.5.0
-          http_client_request:                #! >= 1.5.0
-            type: object                      #! >= 1.5.0
-            required:                         #! >= 1.5.0
-              - request_method                #! >= 1.5.0
-              - url                           #! >= 1.5.0
-            properties:                       #! >= 1.5.0
-              request_method:                 #! >= 1.5.0
-                $ref: "#/definitions/verb"    #! >= 1.5.0
-              url:                            #! >= 1.5.0
-                type: string                  #! >= 1.5.0
-              headers:                        #! >= 1.5.0
-                $ref: "#/definitions/headers" #! >= 1.5.0
-          message:                            #! >= 1.5.0
-            type: array                       #! >= 1.5.0
-            items:                            #! >= 1.5.0
-              $ref: "#/definitions/parameter" #! >= 1.5.0
-          defined_class: false                #! >= 1.5.0
-          method_id: false                    #! >= 1.5.0
-          sql_query: false                    #! >= 1.5.0
-          http_server_request: false          #! >= 1.5.0
+  http-client-request:                            #! >= 1.5.0
+    allOf:                                        #! >= 1.5.0
+      - $ref: "#/definitions/call"                #! >= 1.5.0
+      - type: object                              #! >= 1.5.0
+        required:                                 #! >= 1.5.0
+          - http_client_request                   #! >= 1.5.0
+          - message                               #! >= 1.5.0
+        properties:                               #! >= 1.5.0
+          http_client_request:                    #! >= 1.5.0
+            type: object                          #! >= 1.5.0
+            required:                             #! >= 1.5.0
+              - request_method                    #! >= 1.5.0
+              - url                               #! >= 1.5.0
+            properties:                           #! >= 1.5.0
+              request_method:                     #! >= 1.5.0
+                $ref: "#/definitions/verb"        #! >= 1.5.0
+              url:                                #! >= 1.5.0
+                type: string                      #! >= 1.5.0
+              headers:                            #! >= 1.5.0
+                anyOf:                            #! >= 1.5.0
+                  - const: null                   #! >= 1.5.0
+                  - $ref: "#/definitions/headers" #! >= 1.5.0
+          message:                                #! >= 1.5.0
+            type: array                           #! >= 1.5.0
+            items:                                #! >= 1.5.0
+              $ref: "#/definitions/parameter"     #! >= 1.5.0
+          defined_class: false                    #! >= 1.5.0
+          method_id: false                        #! >= 1.5.0
+          sql_query: false                        #! >= 1.5.0
+          http_server_request: false              #! >= 1.5.0
 
   http-client-response:                         #! >= 1.5.0
     allOf:                                      #! >= 1.5.0
@@ -484,13 +487,17 @@ definitions:
             properties:                         #! >= 1.5.0
               status_code:                      #! >= 1.5.0
                 $ref: "#/definitions/status"    #! >= 1.5.0
-              headers:                          #! >= 1.5.0
-                $ref: "#/definitions/headers"   #! >= 1.5.0
-              mime_type:                        #! >= 1.5.0 && < 1.6.0
-                type: string                    #! >= 1.5.0 && < 1.6.0
-                nullable: true                  #! >= 1.5.0 && < 1.6.0
-              return_value:                     #! >= 1.7.0
-                $ref: "#/definitions/parameter" #! >= 1.7.0
+              headers:                            #! >= 1.5.0
+                anyOf:                            #! >= 1.5.0
+                  - const: null                   #! >= 1.5.0
+                  - $ref: "#/definitions/headers" #! >= 1.5.0
+              mime_type:       #! >= 1.5.0 && < 1.6.0
+                type: string   #! >= 1.5.0 && < 1.6.0
+                nullable: true #! >= 1.5.0 && < 1.6.0
+              return_value:                         #! >= 1.7.0
+                anyOf:                              #! >= 1.7.0
+                  - const: null                     #! >= 1.7.0
+                  - $ref: "#/definitions/parameter" #! >= 1.7.0
           return_value: false                   #! >= 1.5.0
           exceptions: false                     #! >= 1.5.0
           http_server_response: false           #! >= 1.5.0
@@ -512,7 +519,9 @@ definitions:
               - path_info
             properties:
               headers:
-                $ref: "#/definitions/headers"
+                anyOf:
+                  - const: null
+                  - $ref: "#/definitions/headers"
               authorization:   #! < 1.6.0
                 type: string   #! < 1.6.0
                 nullable: true #! < 1.6.0
@@ -560,10 +569,14 @@ definitions:
               mime_type:       #! < 1.6.0
                 type: string   #! < 1.6.0
                 nullable: true #! < 1.6.0
-              headers:                        #! >= 1.6.0
-                $ref: "#/definitions/headers" #! >= 1.6.0
-              return_value:                     #! >= 1.7.0
-                $ref: "#/definitions/parameter" #! >= 1.7.0
+              headers:                            #! >= 1.6.0
+                anyOf:                            #! >= 1.6.0
+                  - const: null                   #! >= 1.6.0
+                  - $ref: "#/definitions/headers" #! >= 1.6.0
+              return_value:                         #! >= 1.7.0
+                anyOf:                              #! >= 1.7.0
+                  - const: null                     #! >= 1.7.0
+                  - $ref: "#/definitions/parameter" #! >= 1.7.0
           return_value: false
           exceptions: false
           http_client_response: false
