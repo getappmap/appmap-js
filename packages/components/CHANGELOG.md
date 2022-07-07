@@ -1,3 +1,16 @@
+# [@appland/components-v2.7.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.6.0...@appland/components-v2.7.0) (2022-07-07)
+
+
+### Bug Fixes
+
+* Add a message for scanned but no findings ([c055a65](https://github.com/applandinc/appmap-js/commit/c055a6538fe979bfc450cd780e40bb8513801062))
+* Open AppMaps instructions gracefully handles no AppMaps ([b84822d](https://github.com/applandinc/appmap-js/commit/b84822deb95ddbe8f74df7aa410286f5f98f7846))
+
+
+### Features
+
+* Add instructions page for OpenAPI generation ([34f50ae](https://github.com/applandinc/appmap-js/commit/34f50ae53680af3070464bf44c8a0d34fa88234f))
+
 # [@appland/components-v2.6.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.5.1...@appland/components-v2.6.0) (2022-06-30)
 
 
