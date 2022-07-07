@@ -72,8 +72,10 @@ export default {
   mixins: [Navigation],
 
   props: {
-    appMaps: Array,
-    default: () => [],
+    appMaps: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   methods: {
