@@ -102,7 +102,7 @@ export default {
     },
     findingsDomainCounts() {
       return this.selectedProject && this.selectedProject.findingsDomainCounts;
-    }
+    },
   },
 
   components: {

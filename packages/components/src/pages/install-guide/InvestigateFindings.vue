@@ -2,7 +2,7 @@
   <v-quickstart-layout>
     <section>
       <header>
-        <h1>Investigate findings</h1>
+        <h1 data-cy="title">Investigate findings</h1>
       </header>
       <main>
         <article v-if="scanned">
@@ -28,6 +28,7 @@
             <p>
               For details
               <v-button
+                data-cy="investigate-findings-button"
                 label="Open the PROBLEMS tab"
                 @click.native="viewProblems"
               />
@@ -101,7 +102,7 @@ export default {
     numFindings: Number,
     projectPath: String,
     findingsDomainCounts: {
-      type: Array,
+      type: Object,
       default: () => {},
     },
   },
