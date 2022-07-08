@@ -2,15 +2,16 @@ import { Arguments, Argv } from 'yargs';
 import { readFile } from 'fs/promises';
 
 import { ScanResults } from '../../report/scanResults';
-import { verbose } from '../../rules/lib/util';
 
-import validateFile from '../validateFile';
 import resolveAppId from '../resolveAppId';
 import reportUploadURL from '../reportUploadURL';
 
 import CommandOptions from './options';
 import upload from '../upload';
 import codeVersionArgs from '../codeVersionArgs';
+import { handleWorkingDirectory } from '../handleWorkingDirectory';
+import { locateAppMapDir } from '../locateAppMapDir';
+import { verbose } from '../../rules/lib/util';
 
 export default {
   command: 'upload',
@@ -18,6 +19,11 @@ export default {
   builder(args: Argv): Argv {
     codeVersionArgs(args);
 
+    args.option('directory', {
+      describe: 'program working directory',
+      type: 'string',
+      alias: 'd',
+    });
     args.option('appmap-dir', {
       describe: 'base directory of AppMaps',
       alias: 'd',
@@ -38,8 +44,9 @@ export default {
   async handler(options: Arguments): Promise<void> {
     const {
       verbose: isVerbose,
+      appmapDir: appmapDirOption,
+      directory,
       reportFile,
-      appmapDir,
       app: appIdArg,
       mergeKey,
       branch,
@@ -50,8 +57,9 @@ export default {
     if (isVerbose) {
       verbose(true);
     }
+    handleWorkingDirectory(directory);
+    const appmapDir = await locateAppMapDir(appmapDirOption);
 
-    await validateFile('directory', appmapDir!);
     const appId = await resolveAppId(appIdArg, appmapDir);
 
     const scanResults = JSON.parse((await readFile(reportFile)).toString()) as ScanResults;

@@ -13,6 +13,14 @@ abstract class JavaScriptInstaller extends AgentInstaller {
     super(name, path);
   }
 
+  get language(): string {
+    return 'javascript';
+  }
+
+  get appmap_dir(): string {
+    return 'tmp/appmap';
+  }
+
   get documentation() {
     return 'https://appland.com/docs/reference/appmap-agent-js';
   }
@@ -44,9 +52,7 @@ abstract class JavaScriptInstaller extends AgentInstaller {
   }
 }
 
-export class NpmInstaller
-  extends JavaScriptInstaller
-{
+export class NpmInstaller extends JavaScriptInstaller {
   constructor(path: string) {
     super('npm', path);
   }
@@ -66,7 +72,11 @@ export class NpmInstaller
   async installAgent(): Promise<void> {
     const cmd = new CommandStruct(
       'npm',
-      ['install', '--saveDev', process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE],
+      [
+        'install',
+        '--saveDev',
+        process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE,
+      ],
       this.path
     );
 
@@ -78,9 +88,7 @@ export class NpmInstaller
   }
 }
 
-export class YarnInstaller
-  extends JavaScriptInstaller
-{
+export class YarnInstaller extends JavaScriptInstaller {
   constructor(path: string) {
     super('yarn', path);
   }
@@ -107,7 +115,7 @@ export class YarnInstaller
     await run(cmd);
   }
 
-  async verifyCommand() { 
+  async verifyCommand() {
     return undefined;
   }
 }

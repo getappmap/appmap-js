@@ -4,9 +4,17 @@ import { promises as fsp, statSync } from 'fs';
 import { queue } from 'async';
 import { glob } from 'glob';
 import yaml from 'js-yaml';
-import { Model, parseHTTPServerRequests, rpcRequestForEvent, SecuritySchemes, verbose } from '@appland/openapi';
+import {
+  Model,
+  parseHTTPServerRequests,
+  rpcRequestForEvent,
+  SecuritySchemes,
+  verbose,
+} from '@appland/openapi';
 import { Event } from '@appland/models';
 import { Arguments, Argv } from 'yargs';
+import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
+import { locateAppMapDir } from '../lib/locateAppMapDir';
 
 export class OpenAPICommand {
   directory: string;
@@ -70,8 +78,12 @@ module.exports = {
   aliases: ['swagger'],
   describe: 'Generate OpenAPI from AppMaps in a directory',
   builder(args: Argv) {
+    args.option('directory', {
+      describe: 'program working directory',
+      type: 'string',
+      alias: 'd',
+    });
     args.option('appmap-dir', {
-      alias: ['d'],
       describe: 'directory to recursively inspect for AppMaps',
       default: 'tmp/appmap',
       requiresArg: true,
@@ -95,6 +107,9 @@ module.exports = {
   },
   async handler(argv: Arguments | any) {
     verbose(argv.verbose);
+    handleWorkingDirectory(argv.directory);
+    const appmapDir = await locateAppMapDir(argv.appmapDir);
+
     const { openapiTitle, openapiVersion } = argv;
 
     function tryConfigure(path: string, fn: () => void) {
@@ -105,7 +120,7 @@ module.exports = {
       }
     }
 
-    const openapi = await new OpenAPICommand(argv.appmapDir).execute();
+    const openapi = await new OpenAPICommand(appmapDir).execute();
 
     const template = await loadTemplate(argv.openapiTemplate);
     template.paths = openapi.paths;

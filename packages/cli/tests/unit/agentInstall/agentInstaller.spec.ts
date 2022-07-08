@@ -1,6 +1,6 @@
-import path from "path";
-import AgentInstaller from "../../../src/cmds/agentInstaller/agentInstaller";
-import commandStruct from "../../../src/cmds/agentInstaller/commandStruct";
+import path from 'path';
+import AgentInstaller from '../../../src/cmds/agentInstaller/agentInstaller';
+import commandStruct from '../../../src/cmds/agentInstaller/commandStruct';
 
 class FakeInstaller extends AgentInstaller {
   public buildFile: string = 'bf';
@@ -9,23 +9,29 @@ class FakeInstaller extends AgentInstaller {
     super('Fake', path);
   }
 
+  get language(): string {
+    return 'Method not implemented';
+  }
+  get appmap_dir(): string {
+    return 'Method not implemented';
+  }
   installAgent(): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   validateAgentCommand(): Promise<commandStruct> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   initCommand(): Promise<commandStruct> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   verifyCommand(): Promise<commandStruct> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   environment(): Promise<Record<string, string>> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   available(): Promise<boolean> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 }
 

@@ -15,8 +15,16 @@ const REGEX_PKG_DEPENDENCY = /^\s*appmap\s*[=>~]+=.*$/m;
 const PKG_DEPENDENCY = 'appmap>=1.1.0.dev0';
 
 abstract class PythonInstaller extends AgentInstaller {
-  constructor(name:string, path: string) {
+  constructor(name: string, path: string) {
     super(name, path);
+  }
+
+  get language(): string {
+    return 'python';
+  }
+
+  get appmap_dir(): string {
+    return 'tmp/appmap';
   }
 
   get documentation() {
@@ -85,7 +93,7 @@ export class PoetryInstaller extends PythonInstaller {
 
   async validateAgentCommand() {
     return undefined;
-  }  
+  }
 }
 
 export class PipInstaller extends PythonInstaller {
