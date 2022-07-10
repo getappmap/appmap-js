@@ -65,7 +65,7 @@
     "applicationinsights": "^2.1.4",
     "async": "^3.2.3",
     "chalk": "^4.1.2",
-    "chokidar": "^3.5.3",
+    "chokidar": "applandinc/chokidar#fix/new-file-new-directory-race-on-linux",
     "cli-progress": "^3.11.0",
     "conf": "^10.0.2",
     "form-data": "^4.0.0",

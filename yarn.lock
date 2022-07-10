@@ -349,7 +349,7 @@ __metadata:
     applicationinsights: ^2.1.4
     async: ^3.2.3
     chalk: ^4.1.2
-    chokidar: ^3.5.3
+    chokidar: "applandinc/chokidar#fix/new-file-new-directory-race-on-linux"
     cli-progress: ^3.11.0
     conf: ^10.0.2
     eslint: ^7.32.0
@@ -9787,7 +9787,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.4.1, chokidar@npm:^3.4.2, chokidar@npm:^3.5.1, chokidar@npm:^3.5.3":
+"chokidar@applandinc/chokidar#fix/new-file-new-directory-race-on-linux":
+  version: 3.5.3
+  resolution: "chokidar@https://github.com/applandinc/chokidar.git#commit=a2ea88cc0d1b546eb003c024f342126cb1b03d16"
+  dependencies:
+    anymatch: ~3.1.2
+    braces: ~3.0.2
+    fsevents: ~2.3.2
+    glob-parent: ~5.1.2
+    is-binary-path: ~2.1.0
+    is-glob: ~4.0.1
+    normalize-path: ~3.0.0
+    readdirp: ~3.6.0
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  checksum: 4a01987dde683117d24f2deb7bf4cc73934e865f32183c5ff517905345e5b376cdeb7cb2850d3baf197fcfe36139aedd14783515c76b6ce8cf6500c30de29f5f
+  languageName: node
+  linkType: hard
+
+"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.4.1, chokidar@npm:^3.4.2, chokidar@npm:^3.5.1":
   version: 3.5.3
   resolution: "chokidar@npm:3.5.3"
   dependencies:
