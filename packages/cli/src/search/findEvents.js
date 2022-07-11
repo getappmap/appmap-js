@@ -129,7 +129,7 @@ class FindEvents {
     const codeObjectMatch = () => {
       const event = stack[stack.length - 1];
       const matchCodeObject = (/** @type {CodeObject} */ eventCodeObject) => {
-        if (this.codeObject.id === eventCodeObject.id) {
+        if (this.codeObject.fqid === eventCodeObject.fqid) {
           return true;
         }
         if (!eventCodeObject.parent) {
