@@ -1,8 +1,8 @@
-const reset = async (filters, buildStats, home) => {
-  while (filters.length > 0) {
-    filters.pop();
-  }
-  await buildStats();
+/**
+ * @param {Context} context
+ */
+const reset = async (context, home) => {
+  await context.clearFilters();
   console.log();
   home();
 };

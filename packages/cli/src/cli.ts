@@ -13,20 +13,16 @@ const { promises: fsp, readFileSync } = require('fs');
 const { queue } = require('async');
 const readline = require('readline');
 const { join } = require('path');
-const cliProgress = require('cli-progress');
 const { algorithms, canonicalize } = require('./fingerprint');
 const { verbose, loadAppMap } = require('./utils');
 const appMapCatalog = require('./appMapCatalog');
 const FingerprintDirectoryCommand = require('./fingerprint/fingerprintDirectoryCommand');
 const FingerprintWatchCommand = require('./fingerprint/fingerprintWatchCommand');
 const Depends = require('./depends');
-const FindCodeObjects = require('./search/findCodeObjects');
-const FindEvents = require('./search/findEvents');
-const FunctionStats = require('./functionStats');
-const Inspect = require('./inspect');
 import * as OpenAPICommand from './cmds/openapi';
 const InventoryCommand = require('./inventoryCommand');
 const OpenCommand = require('./cmds/open/open');
+const InspectCommand = require('./cmds/inspect/inspect');
 const RecordCommand = require('./cmds/record/record');
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
@@ -365,156 +361,6 @@ yargs(process.argv.slice(2))
     }
   )
   .command(
-    'inspect <code-object>',
-    'Search AppMaps for references to a code object (package, function, class, query, route, etc) and print available event info',
-    (args) => {
-      args.positional('code-object', {
-        describe: 'identifies the code-object to inspect',
-      });
-      args.option('appmap-dir', {
-        describe: 'directory to recursively inspect for AppMaps',
-        default: 'tmp/appmap',
-      });
-      args.option('interactive', {
-        describe: 'interact with the output via CLI',
-        alias: 'i',
-        boolean: true,
-      });
-      return args.strict();
-    },
-    async (argv) => {
-      verbose(argv.verbose);
-
-      const newProgress = () => {
-        if (argv.interactive) {
-          return new cliProgress.SingleBar(
-            {},
-            cliProgress.Presets.shades_classic
-          );
-        }
-
-        return {
-          increment: () => {},
-          start: () => {},
-          stop: () => {},
-        };
-      };
-
-      console.warn('Indexing the AppMap database');
-      await new FingerprintDirectoryCommand(argv.appmapDir).execute();
-
-      console.warn('Finding matching AppMaps');
-      let progress = newProgress();
-      const codeObjectId = argv.codeObject;
-      const finder = new FindCodeObjects(argv.appmapDir, codeObjectId);
-      const codeObjectMatches = await finder.find(
-        (count) => progress.start(count, 0),
-        progress.increment.bind(progress)
-      );
-      progress.stop();
-
-      if (!codeObjectMatches) {
-        return;
-      }
-
-      const filters = [];
-      let stats = null;
-
-      const buildStats = async () => {
-        const result: any[] = [];
-        console.warn('Finding matching Events');
-        progress = newProgress();
-        progress.start(codeObjectMatches.length, 0);
-        await Promise.all(
-          codeObjectMatches.map(async (codeObjectMatch) => {
-            const findEvents = new FindEvents(
-              codeObjectMatch.appmap,
-              codeObjectMatch.codeObject
-            );
-            findEvents.filter(filters);
-            const events = await findEvents.matches();
-            result.push(...events);
-            progress.increment();
-          })
-        );
-        progress.stop();
-        console.warn('Collating results...');
-        stats = new FunctionStats(result);
-      };
-
-      await buildStats();
-
-      const interactive = () => {
-        const rl = readline.createInterface({
-          input: process.stdin,
-          output: process.stdout,
-        });
-        rl.on('close', function () {
-          yargs.exit(0, new Error());
-        });
-
-        const home = () => {
-          Inspect.home(codeObjectId, filters, stats, getCommand);
-        };
-
-        const filter = () => {
-          Inspect.filter(rl, filters, stats, buildStats, home);
-        };
-
-        const undoFilter = async () => {
-          await Inspect.undoFilter(filters, buildStats, home);
-        };
-
-        const reset = async () => {
-          await Inspect.reset(filters, buildStats, home);
-        };
-
-        const print = () => {
-          Inspect.print(stats, rl, getCommand, home);
-        };
-
-        const getCommand = () => {
-          console.log();
-          rl.question(
-            'Command (h)ome, (p)rint, (f)ilter, (u)ndo filter, (r)eset filters, (q)uit: ',
-            function (command) {
-              // eslint-disable-next-line default-case
-              switch (command) {
-                case 'h':
-                  home();
-                  break;
-                case 'p':
-                  print();
-                  break;
-                case 'f':
-                  filter();
-                  break;
-                case 'u':
-                  undoFilter();
-                  break;
-                case 'r':
-                  reset();
-                  break;
-                case 'q':
-                  rl.close();
-                  break;
-                default:
-                  getCommand();
-              }
-            }
-          );
-        };
-
-        home();
-      };
-      if (argv.interactive) {
-        interactive();
-      } else {
-        console.log(JSON.stringify(stats, null, 2));
-      }
-    }
-  )
-  .command(
     'index',
     'Compute fingerprints and update index files for all appmaps in a directory',
     (args) => {
@@ -604,6 +450,7 @@ yargs(process.argv.slice(2))
   .command(OpenCommand)
   .command(RecordCommand)
   .command(StatusCommand)
+  .command(InspectCommand)
   .command(PruneCommand)
   .strict()
   .demandCommand()
