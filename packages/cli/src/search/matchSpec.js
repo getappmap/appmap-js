@@ -7,6 +7,9 @@ const { analyzeSQL, normalizeSQL } = require('@appland/models');
  * @typedef {import('./types').SQLInfo | string} SQLInfo
  */
 
+// A pattern to match regular expressions.
+const RegExpRegExp = /^%r{([^}]+)}(\w*)$/;
+
 /**
  * @param {string} expectedType
  * @returns {MatchFn}
@@ -187,6 +190,7 @@ class RouteMatchSpec {
 }
 
 module.exports = {
+  RegExpRegExp,
   DatabaseMatchSpec,
   FunctionMatchSpec,
   HTTPMatchSpec,
