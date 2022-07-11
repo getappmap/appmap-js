@@ -117,6 +117,43 @@ function parseDatabase(): CodeObjectMatchSpec[] {
 function parseQuery(query: string): CodeObjectMatchSpec[] {
   return [new QueryMatchSpec(query)];
 }
+
+function buildCodeObjectMatcher(codeObjectId: string): CodeObjectMatcher[] {
+  const tokens = codeObjectId.split(':');
+  const type = tokens.shift();
+  if (!type || tokens.length === 0) {
+    return [];
+  }
+
+  const id = tokens.join(':');
+  const isRegExpMatch = id.match(RegExpRegExp);
+  if (isRegExpMatch) {
+    const body = isRegExpMatch[1];
+    const flags = isRegExpMatch[2];
+    const pattern = new RegExp(body, flags);
+
+    return [new IterateCodeObjectMatcher(type, pattern)];
+  } else {
+    const parsers: Record<string, (...args: any[]) => CodeObjectMatchSpec[]> = {
+      package: parsePackage,
+      class: parseClass,
+      function: parseFunction,
+      http: parseHTTP,
+      route: parseRoute,
+      database: parseDatabase,
+      query: parseQuery,
+      table: parseTable,
+    };
+
+    const parser = parsers[type];
+    if (!parser) {
+      return [];
+    }
+
+    return parser(id).map((spec) => new DescentCodeObjectMatcher(spec));
+  }
+}
+
 /**
  * Find code objects and AppMaps in a directory that match search criteria.
  * Each search result consists of both the code object and the AppMap in which it was found.
