@@ -76,13 +76,19 @@ async function writeFileAtomic(dirName, fileName, jobId, data) {
  * @param {(filePath: string): void} fn
  * @param {(fileCount: number): void} fileCountFn
  */
-async function processFiles(pattern, fn, fileCountFn = () => {}) {
+async function processFiles(
+  pattern,
+  fn,
+  // eslint-disable-next-line no-unused-vars
+  fileCountFn = (/** @type {number} */ count) => {}
+) {
   const q = queue(fn, 5);
   q.pause();
   const files = await promisify(glob)(pattern);
   if (fileCountFn) {
     fileCountFn(files.length);
   }
+  if (files.length === 0) return;
   files.forEach((file) => q.push(file));
   q.resume();
   await q.drain();
