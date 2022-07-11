@@ -1,4 +1,5 @@
-import CodeObject, { CodeObjectType } from './codeObject';
+import CodeObject from './codeObject';
+import { CodeObjectType } from './codeObjectType';
 
 function indexCodeObject(co, codeObjects, codeObjectsById) {
   codeObjects.push(co);

@@ -335,6 +335,17 @@ declare module '@appland/models' {
 
   export type OnSQLParseError = (error: ParseError) => void;
 
+  type IdentifiableCodeObject = {
+    type: string;
+    name: string;
+    parent?: IdentifiableCodeObject;
+  };
+
+  export function codeObjectId(
+    codeObject: IdentifiableCodeObject,
+    tokens?: string[]
+  ): string[];
+
   export function analyzeSQL(
     sql: string,
     errorCallback: OnSQLParseError

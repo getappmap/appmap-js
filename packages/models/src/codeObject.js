@@ -1,19 +1,10 @@
+import codeObjectId from './codeObjectId';
+import { CodeObjectType } from './codeObjectType';
 import {
   addHiddenProperty,
   getSqlLabelFromString,
   transformToJSON,
 } from './util';
-
-export const CodeObjectType = {
-  DATABASE: 'database',
-  QUERY: 'query',
-  HTTP: 'http',
-  EXTERNAL_SERVICE: 'external-service',
-  ROUTE: 'route',
-  PACKAGE: 'package',
-  CLASS: 'class',
-  FUNCTION: 'function',
-};
 
 export default class CodeObject {
   constructor(data, parent) {
@@ -49,14 +40,7 @@ export default class CodeObject {
   }
 
   get id() {
-    const tokens = this.buildId();
-
-    if (this.parent && this.type === CodeObjectType.FUNCTION) {
-      const separator = this.static ? '.' : '#';
-      tokens[tokens.length - 2] = separator;
-    }
-
-    return tokens.join('');
+    return this.buildId().join('');
   }
 
   get name() {
@@ -241,24 +225,7 @@ export default class CodeObject {
   }
 
   buildId(tokens = []) {
-    if (this.parent) {
-      this.parent.buildId(tokens);
-
-      let separator;
-      switch (this.parent.type) {
-        case CodeObjectType.PACKAGE:
-          separator = '/';
-          break;
-        case CodeObjectType.CLASS:
-          separator = '::';
-          break;
-        default:
-          separator = '->';
-      }
-      tokens.push(separator);
-    }
-    tokens.push(this.name);
-    return tokens;
+    return codeObjectId(this, tokens);
   }
 
   classLocations(paths = new Set()) {

@@ -1,6 +1,6 @@
 import buildAppMap from '../../src/appMapBuilder';
 import ClassMap from '../../src/classMap';
-import { CodeObjectType } from '../../src/codeObject';
+import { CodeObjectType } from '../../src/codeObjectType';
 import scenario from './fixtures/user_page_scenario.appmap.json';
 import httpScenario from './fixtures/many_requests_scenario.json';
 import petClinicScenario from './fixtures/spring_petclinic.json';
