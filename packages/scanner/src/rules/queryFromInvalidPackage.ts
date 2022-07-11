@@ -21,14 +21,15 @@ function build(options: Options): RuleLogic {
   const allowedQueries = buildFilters(options.allowedQueries);
 
   function matcher(e: Event): MatchResult[] | undefined {
-    if (!allowedPackages.some((filter) => filter(e.parent!.codeObject.packageOf))) {
+    if (!e.parent) return;
+
+    const parent = e.parent;
+    if (!allowedPackages.some((filter) => filter(parent.codeObject.packageOf))) {
       return [
         {
           event: e,
-          message: `${e.codeObject.id} is invoked from illegal package ${
-            e.parent!.codeObject.packageOf
-          }`,
-          relatedEvents: [e.parent!],
+          message: `${e.codeObject.id} is invoked from illegal package ${parent.codeObject.packageOf}`,
+          participatingEvents: { parent: parent },
         },
       ];
     }

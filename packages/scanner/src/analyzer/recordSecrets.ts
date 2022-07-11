@@ -1,7 +1,12 @@
 import { Event } from '@appland/models';
 import { emptyValue, parseValue, verbose } from '../rules/lib/util';
 
-export default function (secrets: Set<string>, e: Event): void {
+export type Secret = {
+  generatorEvent: Event;
+  value: string;
+};
+
+export default function (secrets: Secret[], e: Event): void {
   if (!e.returnValue) {
     return;
   }
@@ -14,6 +19,6 @@ export default function (secrets: Set<string>, e: Event): void {
     if (verbose()) {
       console.warn(`Secret generated: ${secret}`);
     }
-    secrets.add(secret);
+    secrets.push({ generatorEvent: e, value: secret });
   }
 }

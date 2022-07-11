@@ -126,11 +126,13 @@ export default class RuleChecker {
     }
 
     const buildFinding = (
-      matchEvent?: Event,
+      matchEvent: Event,
+      participatingEvents: Record<string, Event>,
       message?: string,
       groupMessage?: string,
       occurranceCount?: number,
-      // matchEvent will be added to additionalEvents to create the relatedEvents array
+      // matchEvent will be added to additionalEvents and participatingEvents.values
+      // to create the relatedEvents array
       additionalEvents?: Event[]
     ): Finding => {
       const findingEvent = matchEvent || event;
@@ -156,12 +158,20 @@ export default class RuleChecker {
           return;
         }
         uniqueEvents.add(event.id);
-        relatedEvents.push(event);
+        relatedEvents.push(cloneEvent(event));
       });
 
       // Update event hash with unique hashes of related events
       new Set(relatedEvents.map((e) => e.hash)).forEach((eventHash) => {
         hash.update(eventHash);
+      });
+
+      Object.values(participatingEvents).forEach((event) => {
+        if (uniqueEvents.has(event.id)) {
+          return;
+        }
+        uniqueEvents.add(event.id);
+        relatedEvents.push(cloneEvent(event));
       });
 
       return {
@@ -178,6 +188,9 @@ export default class RuleChecker {
         occurranceCount,
         relatedEvents: relatedEvents.sort((event) => event.id),
         impactDomain: checkInstance.checkImpactDomain,
+        participatingEvents: Object.fromEntries(
+          Object.entries(participatingEvents).map(([k, v]) => [k, cloneEvent(v)])
+        ),
       } as Finding;
     };
 
@@ -191,19 +204,20 @@ export default class RuleChecker {
       let finding;
       if (checkInstance.ruleLogic.message) {
         const message = checkInstance.ruleLogic.message(scope, event);
-        finding = buildFinding(event, message);
+        finding = buildFinding(event, {}, message);
       } else {
-        finding = buildFinding(event);
+        finding = buildFinding(event, {});
       }
       findings.push(finding);
     } else if (typeof matchResult === 'string') {
-      const finding = buildFinding(event, matchResult as string);
+      const finding = buildFinding(event, {}, matchResult as string);
       finding.message = matchResult as string;
       findings.push(finding);
     } else if (matchResult) {
       matchResult.forEach((mr) => {
         const finding = buildFinding(
           mr.event,
+          mr.participatingEvents || {},
           mr.message,
           mr.groupMessage,
           mr.occurranceCount,
