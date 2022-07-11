@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.61.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.60.0...@appland/scanner-v1.61.0) (2022-07-11)
+
+
+### Features
+
+* Add participating events to each finding ([f3e8033](https://github.com/applandinc/appmap-js/commit/f3e80332833ec3305ef530d89b12763781a8c85b))
+
 # [@appland/scanner-v1.60.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.59.2...@appland/scanner-v1.60.0) (2022-06-30)
 
 
