@@ -2,7 +2,7 @@ import { Arguments, Argv } from 'yargs';
 import { readFile } from 'fs/promises';
 
 import { ScanResults } from '../../report/scanResults';
-import { verbose } from '../../rules/lib/util';
+import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
 
 import validateFile from '../validateFile';
 import resolveAppId from '../resolveAppId';
@@ -11,6 +11,7 @@ import reportUploadURL from '../reportUploadURL';
 import CommandOptions from './options';
 import upload from '../upload';
 import codeVersionArgs from '../codeVersionArgs';
+import { ValidationError } from '../../errors';
 
 export default {
   command: 'upload',
@@ -36,10 +37,10 @@ export default {
     return args.strict();
   },
   async handler(options: Arguments): Promise<void> {
+    let { appmapDir } = options as unknown as CommandOptions;
     const {
       verbose: isVerbose,
       reportFile,
-      appmapDir,
       app: appIdArg,
       mergeKey,
       branch,
@@ -50,6 +51,14 @@ export default {
     if (isVerbose) {
       verbose(true);
     }
+
+    if (!appmapDir) {
+      appmapDir = await appmapDirFromConfig();
+    }
+    if (!appmapDir)
+      throw new ValidationError(
+        'appmapDir must be provided as a command option, or available in appmap.yml'
+      );
 
     await validateFile('directory', appmapDir!);
     const appId = await resolveAppId(appIdArg, appmapDir);

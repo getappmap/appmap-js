@@ -76,10 +76,10 @@ export default {
     if (!appmapDir) {
       appmapDir = await appmapDirFromConfig();
     }
-    if (!appmapDir) {
-      appmapDir = await appmapDirFromConfig();
-      throw new ValidationError('--appmap-dir is required');
-    }
+    if (!appmapDir)
+      throw new ValidationError(
+        'appmapDir must be provided as a command option, or available in appmap.yml'
+      );
 
     await validateFile('directory', appmapDir!);
     const appId = await resolveAppId(appIdArg, appmapDir);
