@@ -20,15 +20,11 @@ function build(): RuleLogic {
     const missing = creationEvents.length - cancellationEvents.length;
     if (missing === 0) return;
 
-    const result: MatchResult = {
-      event: event,
-      message: `${missing} jobs created but not cancelled in this rolled back transaction`,
-      // if there's a mismatch and there are cancellations we can't tell
-      // for sure which creations they match, so return everything
-      relatedEvents: [...creationEvents, ...cancellationEvents],
-    };
-
-    return [result];
+    return creationEvents.map((jobCreationEvent) => ({
+      event: jobCreationEvent,
+      message: `Job created by ${jobCreationEvent.codeObject.prettyName} was not cancelled when the enclosing transaction rolled back`,
+      participatingEvents: { beginTransaction: event },
+    }));
   }
 
   return {

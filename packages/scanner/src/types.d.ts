@@ -62,6 +62,7 @@ export interface MatchResult {
   level?: Level;
   event: Event;
   message: string;
+  participatingEvents?: Record<string, Event>;
   groupMessage?: string;
   occurranceCount?: number;
   relatedEvents?: Event[];
@@ -112,6 +113,8 @@ interface Finding {
   occurranceCount?: number;
   relatedEvents?: Event[];
   impactDomain?: ImpactDomain;
+  // Map of events by functional role name; for example, logEvent, secret, scope, etc.
+  participatingEvents?: Record<string, Event>;
 }
 
 interface RuleLogic {

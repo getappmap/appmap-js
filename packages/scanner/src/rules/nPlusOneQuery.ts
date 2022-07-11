@@ -50,6 +50,7 @@ function build(options: Options): RuleLogic {
               groupMessage: sql,
               occurranceCount: occurranceCount,
               relatedEvents: events.map((e) => e.event),
+              participatingEvents: { commonAncestor: ancestor },
             };
           };
 

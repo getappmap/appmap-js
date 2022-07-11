@@ -208,13 +208,16 @@ function build(options: Options): RuleLogic {
       .map((cycle) => searchForCycle(cycle, ignoredPackages))
       .filter((path) => path)
       .map((path) => {
+        path = path!;
         return {
-          event: path![0],
+          event: path[0],
           message: [
             'Cycle in package dependency graph',
-            path!.map((event) => event.codeObject.packageOf).join(' -> '),
+            path.map((event) => event.codeObject.packageOf).join(' -> '),
           ].join(': '),
-          relatedEvents: path!,
+          participatingEvents: Object.fromEntries(
+            path.map((event, index) => [`path[${index}]`, event])
+          ),
         } as MatchResult;
       });
   }

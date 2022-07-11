@@ -14,11 +14,12 @@ it('n+1 query', async () => {
   const finding1 = findings[0];
   expect(finding1.ruleId).toEqual('n-plus-one-query');
   expect(finding1.event.id).toEqual(133);
-  expect(finding1.relatedEvents!).toHaveLength(30);
+  expect(finding1.relatedEvents!).toHaveLength(31);
   expect(finding1.hash).toEqual(EXPECTED_HASH);
   expect(finding1.message).toEqual(
     `app_views_microposts__micropost_html_erb.render[120] contains 30 occurrences of SQL: SELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?`
   );
+  expect(Object.keys(finding1.participatingEvents!)).toEqual(['commonAncestor']);
 });
 
 it('takes into account only unique hashes of related events when computing hash', async () => {
@@ -29,6 +30,6 @@ it('takes into account only unique hashes of related events when computing hash'
   );
 
   const finding1 = findings[0];
-  expect(finding1.relatedEvents!).toHaveLength(29);
+  expect(finding1.relatedEvents!).toHaveLength(30);
   expect(finding1.hash).toEqual(EXPECTED_HASH);
 });
