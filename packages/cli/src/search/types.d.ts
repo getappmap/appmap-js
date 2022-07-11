@@ -98,9 +98,9 @@ export interface FunctionStats {
   httpServerRequests: string[];
   sqlQueries: string[];
   sqlTables: string[];
-  callers: Event[];
-  ancestors: Event[];
-  descendants: Event[];
+  callers: string[];
+  ancestors: string[];
+  descendants: string[];
   packageTrigrams: Trigram[];
   classTrigrams: Trigram[];
   functionTrigrams: Trigram[];

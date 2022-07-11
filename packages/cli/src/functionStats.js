@@ -106,6 +106,9 @@ class FunctionStats {
     ].sort();
   }
 
+  /**
+   * @returns {string[]}
+   */
   get callers() {
     return [
       ...new Set(
@@ -118,6 +121,9 @@ class FunctionStats {
     ];
   }
 
+  /**
+   * @returns {string[]}
+   */
   get ancestors() {
     return [
       ...new Set(
@@ -133,6 +139,9 @@ class FunctionStats {
     ];
   }
 
+  /**
+   * @returns {string[]}
+   */
   get descendants() {
     return [
       ...new Set(
