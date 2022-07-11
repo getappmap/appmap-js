@@ -102,10 +102,15 @@ function matchTable(tableName) {
       return false;
     }
 
-    const queryInfo = /** @type {SQLInfo} */ analyzeSQL({
+    const queryInfo = /** @type {SQLInfo} */ analyzeSQL(codeObject.name);
+    /*
+    // TODO: analyzeSQL expects a string, we are passing it an object.
+    // database_type doesn't seem to be expected or needed.
+    {
       sql: codeObject.name,
       database_type: codeObject.database_type,
     });
+    */
     if (typeof queryInfo !== 'object') {
       return false;
     }
