@@ -8,7 +8,8 @@ import { FindingStatusListItem } from '@appland/client/dist/src';
 import { parseConfigFile } from '../../configuration/configurationProvider';
 import { ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
-import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
+import { verbose } from '../../rules/lib/util';
+import { appmapDirFromConfig } from '../appmapDirFromConfig';
 import { newFindings } from '../../findings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
@@ -24,6 +25,7 @@ import updateCommitStatus from '../updateCommitStatus';
 import reportUploadURL from '../reportUploadURL';
 import fail from '../fail';
 import codeVersionArgs from '../codeVersionArgs';
+import { handleWorkingDirectory } from '../handleWorkingDirectory';
 
 export default {
   command: 'ci',
@@ -60,6 +62,7 @@ export default {
       verbose: isVerbose,
       fail: failOption,
       app: appIdArg,
+      directory,
       reportFile,
       upload: doUpload,
       updateCommitStatus: updateCommitStatusOption,
@@ -72,6 +75,8 @@ export default {
     if (isVerbose) {
       verbose(true);
     }
+
+    handleWorkingDirectory(directory);
 
     if (!appmapDir) {
       appmapDir = await appmapDirFromConfig();

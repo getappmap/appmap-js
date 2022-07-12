@@ -2,7 +2,8 @@ import { Arguments, Argv } from 'yargs';
 import { readFile } from 'fs/promises';
 
 import { ScanResults } from '../../report/scanResults';
-import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
+import { verbose } from '../../rules/lib/util';
+import { appmapDirFromConfig } from '../appmapDirFromConfig';
 
 import validateFile from '../validateFile';
 import resolveAppId from '../resolveAppId';
@@ -12,6 +13,7 @@ import CommandOptions from './options';
 import upload from '../upload';
 import codeVersionArgs from '../codeVersionArgs';
 import { ValidationError } from '../../errors';
+import { handleWorkingDirectory } from '../handleWorkingDirectory';
 
 export default {
   command: 'upload',
@@ -19,9 +21,13 @@ export default {
   builder(args: Argv): Argv {
     codeVersionArgs(args);
 
+    args.option('directory', {
+      describe: 'program working directory',
+      type: 'string',
+      alias: 'd',
+    });
     args.option('appmap-dir', {
       describe: 'base directory of AppMaps',
-      alias: 'd',
     });
     args.option('report-file', {
       describe: 'file containing the findings report',
@@ -40,6 +46,7 @@ export default {
     let { appmapDir } = options as unknown as CommandOptions;
     const {
       verbose: isVerbose,
+      directory,
       reportFile,
       app: appIdArg,
       mergeKey,
@@ -51,6 +58,8 @@ export default {
     if (isVerbose) {
       verbose(true);
     }
+
+    handleWorkingDirectory(directory);
 
     if (!appmapDir) {
       appmapDir = await appmapDirFromConfig();
