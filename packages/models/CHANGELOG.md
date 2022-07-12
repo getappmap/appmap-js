@@ -1,3 +1,10 @@
+# [@appland/models-v1.17.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.16.2...@appland/models-v1.17.0) (2022-07-12)
+
+
+### Features
+
+* Externalized code object id and type ([d88b7cd](https://github.com/applandinc/appmap-js/commit/d88b7cd21635d42d437e296dd6338f093f392982))
+
 # [@appland/models-v1.16.2](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.16.1...@appland/models-v1.16.2) (2022-06-24)
 
 
