@@ -1,3 +1,11 @@
+# [@appland/scanner-v1.62.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.61.0...@appland/scanner-v1.62.0) (2022-07-12)
+
+
+### Features
+
+* Support working directory -d arg ([2bd280f](https://github.com/applandinc/appmap-js/commit/2bd280fa2e6bb2d13c6bc1c578b1b78c3a62492a))
+* upload command uses appmap_dir from config ([801b75b](https://github.com/applandinc/appmap-js/commit/801b75bf008b6188d4aacd143a1992149aafebd3))
+
 # [@appland/scanner-v1.61.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.60.0...@appland/scanner-v1.61.0) (2022-07-11)
 
 
