@@ -1,7 +1,8 @@
 import { Arguments, Argv } from 'yargs';
 
 import { ValidationError } from '../../errors';
-import { appmapDirFromConfig, verbose } from '../../rules/lib/util';
+import { verbose } from '../../rules/lib/util';
+import { appmapDirFromConfig } from '../appmapDirFromConfig';
 
 import validateFile from '../validateFile';
 import CommandOptions from './options';
@@ -10,6 +11,7 @@ import resolveAppId from '../resolveAppId';
 import singleScan from './singleScan';
 import watchScan from './watchScan';
 import { parseConfigFile } from '../../configuration/configurationProvider';
+import { handleWorkingDirectory } from '../handleWorkingDirectory';
 
 export default {
   command: 'scan',
@@ -43,6 +45,7 @@ export default {
     const {
       appmapFile,
       config,
+      directory,
       verbose: isVerbose,
       all: reportAllFindings,
       watch,
@@ -55,6 +58,8 @@ export default {
     if (isVerbose) {
       verbose(true);
     }
+
+    handleWorkingDirectory(directory);
 
     if (apiKey) {
       process.env.APPLAND_API_KEY = apiKey;

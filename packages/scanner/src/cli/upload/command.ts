@@ -3,6 +3,7 @@ import { readFile } from 'fs/promises';
 
 import { ScanResults } from '../../report/scanResults';
 import { verbose } from '../../rules/lib/util';
+import { appmapDirFromConfig } from '../appmapDirFromConfig';
 
 import validateFile from '../validateFile';
 import resolveAppId from '../resolveAppId';
@@ -11,6 +12,8 @@ import reportUploadURL from '../reportUploadURL';
 import CommandOptions from './options';
 import upload from '../upload';
 import codeVersionArgs from '../codeVersionArgs';
+import { ValidationError } from '../../errors';
+import { handleWorkingDirectory } from '../handleWorkingDirectory';
 
 export default {
   command: 'upload',
@@ -18,9 +21,13 @@ export default {
   builder(args: Argv): Argv {
     codeVersionArgs(args);
 
+    args.option('directory', {
+      describe: 'program working directory',
+      type: 'string',
+      alias: 'd',
+    });
     args.option('appmap-dir', {
       describe: 'base directory of AppMaps',
-      alias: 'd',
     });
     args.option('report-file', {
       describe: 'file containing the findings report',
@@ -36,10 +43,11 @@ export default {
     return args.strict();
   },
   async handler(options: Arguments): Promise<void> {
+    let { appmapDir } = options as unknown as CommandOptions;
     const {
       verbose: isVerbose,
+      directory,
       reportFile,
-      appmapDir,
       app: appIdArg,
       mergeKey,
       branch,
@@ -50,6 +58,16 @@ export default {
     if (isVerbose) {
       verbose(true);
     }
+
+    handleWorkingDirectory(directory);
+
+    if (!appmapDir) {
+      appmapDir = await appmapDirFromConfig();
+    }
+    if (!appmapDir)
+      throw new ValidationError(
+        'appmapDir must be provided as a command option, or available in appmap.yml'
+      );
 
     await validateFile('directory', appmapDir!);
     const appId = await resolveAppId(appIdArg, appmapDir);
