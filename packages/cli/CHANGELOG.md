@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.30.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.4...@appland/appmap-v3.30.0) (2022-07-12)
+
+
+### Features
+
+* Handle -d working directory arg ([f8a38bb](https://github.com/applandinc/appmap-js/commit/f8a38bbbb0e0471cef68b3f94e30fdd4952429f2))
+
 # [@appland/appmap-v3.29.4](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.3...@appland/appmap-v3.29.4) (2022-06-27)
 
 
