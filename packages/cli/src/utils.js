@@ -5,6 +5,7 @@ const glob = require('glob');
 const { buildAppMap } = require('@appland/models');
 const { promisify } = require('util');
 const { join } = require('path');
+const assert = require('assert');
 
 const StartTime = Date.now();
 
@@ -72,24 +73,32 @@ async function writeFileAtomic(dirName, fileName, jobId, data) {
  * Call a function with each matching file. No guarantee is given that
  * files will be processed in any particular order.
  *
- * @param {string} pattern
+ * @param {string | undefined} pattern
+ * @param {string[] | undefined} files
  * @param {(filePath: string): void} fn
  * @param {(fileCount: number): void} fileCountFn
  */
 async function processFiles(
   pattern,
+  files,
   fn,
   // eslint-disable-next-line no-unused-vars
   fileCountFn = (/** @type {number} */ count) => {}
 ) {
   const q = queue(fn, 5);
   q.pause();
-  const files = await promisify(glob)(pattern);
-  if (fileCountFn) {
-    fileCountFn(files.length);
+  let fileList;
+  if (files) {
+    fileList = files;
+  } else {
+    assert(pattern, `pattern or files argument is required`);
+    fileList = await promisify(glob)(pattern);
   }
-  if (files.length === 0) return;
-  files.forEach((file) => q.push(file));
+  if (fileCountFn) {
+    fileCountFn(fileList.length);
+  }
+  if (fileList.length === 0) return;
+  fileList.forEach((file) => q.push(file));
   q.resume();
   await q.drain();
 }

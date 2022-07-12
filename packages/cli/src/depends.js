@@ -167,6 +167,7 @@ class Depends {
 
     await processFiles(
       `${this.appMapDir}/**/classMap.json`,
+      undefined,
       async (fileName) => {
         try {
           await checkClassMap(fileName);

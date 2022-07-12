@@ -44,8 +44,8 @@ describe('Inspect', () => {
 
   test('finds a named function', async () => {
     const fn = new FindCodeObjects(
-      appMapDir,
-      'function:app/models/ApiKey.issue'
+      'function:app/models/ApiKey.issue',
+      appMapDir
     );
     const result = await fn.find();
     expect(JSON.stringify(stripCodeObjectParents(result), null, 2)).toEqual(
@@ -70,7 +70,7 @@ describe('Inspect', () => {
   });
 
   test('finds a named class', async () => {
-    const fn = new FindCodeObjects(appMapDir, 'class:app/models/ApiKey');
+    const fn = new FindCodeObjects('class:app/models/ApiKey', appMapDir);
     const result = await fn.find();
     expect(JSON.stringify(stripCodeObjectParents(result), null, 2)).toEqual(
       JSON.stringify(
@@ -91,7 +91,7 @@ describe('Inspect', () => {
   });
 
   test('finds a named package', async () => {
-    const fn = new FindCodeObjects(appMapDir, 'package:app/models');
+    const fn = new FindCodeObjects('package:app/models', appMapDir);
     const result = await fn.find();
     // FindCodeObjects.find may return appmaps in any order. Sort them so they'll match.
     result.sort((o1, o2) => o1.appmap.localeCompare(o2.appmap));
