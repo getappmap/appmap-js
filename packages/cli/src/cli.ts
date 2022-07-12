@@ -31,6 +31,8 @@ const RecordCommand = require('./cmds/record/record');
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
 import PruneCommand from './cmds/prune/prune';
+import { handleWorkingDirectory } from './lib/handleWorkingDirectory';
+import { locateAppMapDir } from './lib/locateAppMapDir';
 
 class DiffCommand {
   public appMapNames: any;
@@ -183,6 +185,11 @@ yargs(process.argv.slice(2))
     'diff',
     'Compute the difference between two mapsets',
     (args) => {
+      args.option('directory', {
+        describe: 'program working directory',
+        type: 'string',
+        alias: 'd',
+      });
       args.option('name', {
         describe: 'indicate a specific AppMap to of compare',
       });
@@ -200,6 +207,7 @@ yargs(process.argv.slice(2))
     },
     async function (argv) {
       verbose(argv.verbose);
+      handleWorkingDirectory(argv.directory);
 
       let baseDir;
       let workingDir;
@@ -550,6 +558,11 @@ yargs(process.argv.slice(2))
     'inventory',
     'Generate canonical lists of the application code object inventory',
     (args) => {
+      args.option('directory', {
+        describe: 'program working directory',
+        type: 'string',
+        alias: 'd',
+      });
       args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
         default: 'tmp/appmap',
@@ -558,6 +571,8 @@ yargs(process.argv.slice(2))
     },
     async (argv) => {
       verbose(argv.verbose);
+      handleWorkingDirectory(argv.directory);
+      const appmapDir = await locateAppMapDir(argv.appmapDir);
 
       await new FingerprintDirectoryCommand(argv.appmapDir).execute();
 
