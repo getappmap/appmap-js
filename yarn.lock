@@ -114,7 +114,7 @@ __metadata:
     eslint-plugin-import: ^2.22.1
     eslint-plugin-prettier: ^3.4.0
     fs-extra: ^9.1.0
-    glob: ^7.1.6
+    glob: ^7.2.3
     html-inline-script-webpack-plugin: ^3.0.0
     html-webpack-plugin: ^5.5.0
     inquirer: ^8.1.2
@@ -358,7 +358,7 @@ __metadata:
     eslint-plugin-prettier: ^3.4.1
     form-data: ^4.0.0
     fs-extra: ^10.1.0
-    glob: ^7.2.0
+    glob: 7.2.3
     jest: ^27.4.7
     js-yaml: ^4.1.0
     lru-cache: ^6.0.0
@@ -14867,6 +14867,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glob@npm:7.2.3, glob@npm:^7.2.3":
+  version: 7.2.3
+  resolution: "glob@npm:7.2.3"
+  dependencies:
+    fs.realpath: ^1.0.0
+    inflight: ^1.0.4
+    inherits: 2
+    minimatch: ^3.1.1
+    once: ^1.3.0
+    path-is-absolute: ^1.0.0
+  checksum: 29452e97b38fa704dabb1d1045350fb2467cf0277e155aa9ff7077e90ad81d1ea9d53d3ee63bd37c05b09a065e90f16aec4a65f5b8de401d1dac40bc5605d133
+  languageName: node
+  linkType: hard
+
 "glob@npm:^8.0.1":
   version: 8.0.1
   resolution: "glob@npm:8.0.1"
@@ -20421,6 +20435,15 @@ __metadata:
   dependencies:
     brace-expansion: ^1.1.7
   checksum: e9e3772e4ea06ea3a888d39bc7690d3c812ee7e5a70c2d2f568ccadac0249a027f865589d19ad03ed937e6ca3b4ad35f85411db9670f7877d8fc2ed452f1cd37
+  languageName: node
+  linkType: hard
+
+"minimatch@npm:^3.1.1":
+  version: 3.1.2
+  resolution: "minimatch@npm:3.1.2"
+  dependencies:
+    brace-expansion: ^1.1.7
+  checksum: c154e566406683e7bcb746e000b84d74465b3a832c45d59912b9b55cd50dee66e5c4b1e5566dba26154040e51672f9aa450a9aef0c97cfc7336b78b7afb9540a
   languageName: node
   linkType: hard
 
