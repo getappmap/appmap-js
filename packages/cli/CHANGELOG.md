@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.31.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.30.0...@appland/appmap-v3.31.0) (2022-07-12)
+
+
+### Features
+
+* Write a pid file on startup ([71b63a7](https://github.com/applandinc/appmap-js/commit/71b63a7a4de3ca3d5bdab741589ac0a24084fab6))
+
 # [@appland/appmap-v3.30.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.29.4...@appland/appmap-v3.30.0) (2022-07-12)
 
 
