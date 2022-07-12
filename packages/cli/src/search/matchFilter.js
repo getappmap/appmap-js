@@ -1,7 +1,16 @@
 const { formatValue, formatHttpServerRequest } = require('../utils');
 
 /** @typedef {import('./types').Event} Event */
+/** @typedef {import('./types').ParameterObject} ParameterObject */
 /** @typedef {function(string,Event[],string):boolean} Matcher */
+
+/** @type {Matcher} */
+const hasParameter = (expectedValue, stack) => {
+  const event = stack[stack.length - 1];
+  return event.parameters?.find(
+    (/** @type {ParameterObject} */ param) => param.name === expectedValue
+  );
+};
 
 /** @type {Matcher} */
 const returnValue = (expectedValue, stack) => {
@@ -35,6 +44,7 @@ function defaultMatcher(expectedValue, stack, fieldName) {
 }
 
 const MATCHERS = {
+  hasParameter,
   returnValue,
   httpServerRequest,
   ancestor,

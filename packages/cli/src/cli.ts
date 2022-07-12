@@ -27,6 +27,7 @@ const RecordCommand = require('./cmds/record/record');
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
 import PruneCommand from './cmds/prune/prune';
+import * as TraceDataCommand from './cmds/traceData/traceData';
 import { handleWorkingDirectory } from './lib/handleWorkingDirectory';
 import { locateAppMapDir } from './lib/locateAppMapDir';
 
@@ -451,6 +452,7 @@ yargs(process.argv.slice(2))
   .command(RecordCommand)
   .command(StatusCommand)
   .command(InspectCommand)
+  .command(TraceDataCommand)
   .command(PruneCommand)
   .strict()
   .demandCommand()
