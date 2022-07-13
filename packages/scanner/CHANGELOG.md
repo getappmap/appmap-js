@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.62.1](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.62.0...@appland/scanner-v1.62.1) (2022-07-13)
+
+
+### Bug Fixes
+
+* More reliable detection of appmap changes by scanner watch ([b0cc14d](https://github.com/applandinc/appmap-js/commit/b0cc14d61b7e27248975c35022a8cd4da070337b))
+
 # [@appland/scanner-v1.62.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.61.0...@appland/scanner-v1.62.0) (2022-07-12)
 
 
