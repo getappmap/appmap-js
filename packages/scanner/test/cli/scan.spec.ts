@@ -128,15 +128,7 @@ describe('scan', () => {
       });
     }
 
-    beforeEach(async () => {
-      tmpDir = await fsextra.mkdtemp(tmpdir() + '/');
-      secretInLogDir = join(
-        tmpDir,
-        'Confirmation_already_confirmed_user_should_not_be_able_to_confirm_the_account_again'
-      );
-      scanConfigFilePath = join(tmpDir, 'appmap-scanner.yml');
-      findingsFile = join(secretInLogDir, 'appmap-findings.json');
-
+    async function createIndexDirectory(): Promise<void> {
       await fsextra.copy(DefaultScanConfigFilePath, scanConfigFilePath);
       await fsextra.copy(join(__dirname, '..', 'fixtures', 'appmaps', 'secretInLog'), tmpDir, {
         recursive: true,
@@ -147,6 +139,18 @@ describe('scan', () => {
           'Confirmation_already_confirmed_user_should_not_be_able_to_confirm_the_account_again'
         )
       );
+    }
+
+    beforeEach(async () => {
+      tmpDir = await fsextra.mkdtemp(tmpdir() + '/');
+      secretInLogDir = join(
+        tmpDir,
+        'Confirmation_already_confirmed_user_should_not_be_able_to_confirm_the_account_again'
+      );
+      scanConfigFilePath = join(tmpDir, 'appmap-scanner.yml');
+      findingsFile = join(secretInLogDir, 'appmap-findings.json');
+
+      createIndexDirectory();
 
       watcher = new Watcher({
         appmapDir: relative(process.cwd(), tmpDir),
@@ -178,6 +182,23 @@ describe('scan', () => {
 
       expect(findings.checks.length).toEqual(1);
       expect(findings.checks[0].rule.id).toEqual('http-500');
+    });
+
+    it('picks up mtime changes after a relative directory is removed and recreated', async () => {
+      {
+        const findings = await expectScan();
+        expect(findings.findings.length).toEqual(1);
+        expect(findings.findings[0].ruleId).toEqual('secret-in-log');
+      }
+
+      await rm(secretInLogDir, { recursive: true });
+      await createIndexDirectory();
+
+      {
+        const findings = await expectScan();
+        expect(findings.findings.length).toEqual(1);
+        expect(findings.findings[0].ruleId).toEqual('secret-in-log');
+      }
     });
   });
 });
