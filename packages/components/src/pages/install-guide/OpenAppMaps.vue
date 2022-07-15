@@ -2,7 +2,7 @@
   <v-quickstart-layout>
     <section class="qs-step">
       <div class="qs-step__head">
-        <h1 class="qs-title">Explore AppMaps</h1>
+        <h1 class="qs-title" data-cy="title">Explore AppMaps</h1>
       </div>
       <div class="qs-step__block" v-if="appMaps.length">
         <p>
@@ -10,7 +10,7 @@
           We've identified some interesting AppMaps and Code Objects that you
           may want to check out.
         </p>
-        <div class="qs-explore-code-objects">
+        <div class="qs-explore-code-objects" data-cy="code-objects">
           <h2 class="subhead">Selected Code objects</h2>
           <ul class="code-object-list">
             <div class="collapse-expand">
@@ -22,6 +22,7 @@
               v-for="httpRequest in httpRequests"
               :key="httpRequest.path"
               @click="openAppmap(httpRequest.path)"
+              data-cy="httpRequest"
             >
               <a href="#">{{ httpRequest.name }}</a>
             </li>
@@ -36,13 +37,14 @@
               v-for="query in queries"
               :key="query.path"
               @click="openAppmap(query.path)"
+              data-cy="query"
             >
               <a href="#">{{ query.name }}</a>
             </li>
           </ul>
         </div>
         <div class="table-wrap">
-          <table class="qs-appmaps-table">
+          <table class="qs-appmaps-table" data-cy="appmaps">
             <colgroup>
               <col width="70%" />
               <col width="10%" />
@@ -62,6 +64,7 @@
                 v-for="appMap in appMaps"
                 :key="appMap.path"
                 @click="openAppmap(appMap.path)"
+                data-cy="appmap"
               >
                 <td>{{ appMap.name }}</td>
                 <td>{{ appMap.requests }}</td>
@@ -72,7 +75,7 @@
           </table>
         </div>
       </div>
-      <article v-else>
+      <article v-else data-cy="no-appmaps">
         No AppMaps have been found in your project. Try
         <a
           href="#"
