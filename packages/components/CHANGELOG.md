@@ -1,3 +1,10 @@
+# [@appland/components-v2.8.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.7.0...@appland/components-v2.8.0) (2022-07-18)
+
+
+### Features
+
+* show findings organized by impact domain in investigate findings instruction step ([82662c9](https://github.com/applandinc/appmap-js/commit/82662c9651ce0ca264d7d85d82588a9175078dd2))
+
 # [@appland/components-v2.7.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.6.0...@appland/components-v2.7.0) (2022-07-07)
 
 
