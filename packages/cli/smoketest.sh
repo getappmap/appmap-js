@@ -9,6 +9,8 @@ cp -r tests/unit/fixtures/ruby "$TESTDIR"
 
 cd "$TESTDIR"
 echo '{}' > package.json
+echo 'nodeLinker: node-modules' > .yarnrc.yml
+
 yarn add ./package.tgz
 
 
