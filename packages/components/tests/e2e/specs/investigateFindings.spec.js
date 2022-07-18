@@ -6,7 +6,10 @@ context('Investigate Findings (10 findings)', () => {
   });
 
   it('displays a title', () => {
-    cy.get('[data-cy="title"]').should('contain.text', 'Investigate findings');
+    cy.get('[data-cy="title"]').should(
+      'contain.text',
+      'AppMap Runtime Analysis'
+    );
   });
 
   it('shows the correct number of each type of finding', () => {
@@ -26,5 +29,13 @@ context('Investigate Findings (10 findings)', () => {
 
   it('shows back button', () => {
     cy.get('[data-cy="back-button"]').should('be.visible');
+  });
+
+  it('does not show Slack signup button', () => {
+    cy.get('[data-cy="slack-button"]').should('not.exist');
+  });
+
+  it('does not show runtime analysis info', () => {
+    cy.get('[data-cy="runtime-analysis-info"]').should('not.exist');
   });
 });

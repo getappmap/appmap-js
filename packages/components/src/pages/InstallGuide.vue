@@ -23,6 +23,7 @@
       :num-findings="numFindings"
       :project-path="path"
       :findingsDomainCounts="findingsDomainCounts"
+      :findings-enabled="findingsEnabled"
     />
     <v-open-api
       id="openapi"
@@ -64,6 +65,10 @@ export default {
     disabledLanguages: {
       type: Array,
       default: () => [],
+    },
+    findingsEnabled: {
+      type: Boolean,
+      default: false,
     },
   },
 
