@@ -18,6 +18,7 @@
       :scanned="hasFindings"
       :num-findings="numFindings"
       :project-path="path"
+      :findingsDomainCounts="findingsDomainCounts"
     />
     <v-open-api
       id="openapi"
@@ -98,6 +99,9 @@ export default {
     },
     path() {
       return this.selectedProject && this.selectedProject.path;
+    },
+    findingsDomainCounts() {
+      return this.selectedProject && this.selectedProject.findingsDomainCounts;
     },
   },
 
