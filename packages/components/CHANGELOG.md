@@ -1,3 +1,10 @@
+# [@appland/components-v2.9.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.8.0...@appland/components-v2.9.0) (2022-07-19)
+
+
+### Features
+
+* show Code Objects in Explore AppMaps webview ([53e869d](https://github.com/applandinc/appmap-js/commit/53e869d33f6a95d80fb2d78d33a461c0e85a2885))
+
 # [@appland/components-v2.8.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.7.0...@appland/components-v2.8.0) (2022-07-18)
 
 
