@@ -209,6 +209,7 @@ a.qs-button {
 
 .qs-title {
   display: inline-block;
+  font-size: 2rem;
 
   & + .qs-select {
     margin-left: 10px;
@@ -283,15 +284,26 @@ a.qs-button {
       padding-left: 0;
     }
   }
+  tr {
+    border-bottom: 1px solid lighten($gray2, 08);
+    a {
+      color: $white;
+    }
+    &:hover {
+      background-color: lighten($gray2, 08);
+    }
+  }
   tbody {
     tr {
       cursor: pointer;
     }
     td {
-      padding-top: 2px;
-      padding-bottom: 2px;
+      padding: 0.2rem 0.5rem;
       color: $powderblue;
       white-space: normal;
+      &:hover {
+        color: $white;
+      }
     }
   }
 }
