@@ -112,7 +112,7 @@ export default {
     },
     sampleCodeObjects: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
   },
 
