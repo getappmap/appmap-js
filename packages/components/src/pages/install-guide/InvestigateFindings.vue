@@ -103,7 +103,7 @@ export default {
     projectPath: String,
     findingsDomainCounts: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
   },
 
