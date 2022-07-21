@@ -1,3 +1,11 @@
+# [@appland/components-v2.9.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.9.0...@appland/components-v2.9.1) (2022-07-21)
+
+
+### Bug Fixes
+
+* Components which expect objects now have proper defaults ([aa72ebe](https://github.com/applandinc/appmap-js/commit/aa72ebe4d57218147d194dac3ae7f0d5212526d8))
+* Provide a usable default value when no sample code objects are ([c4b2c12](https://github.com/applandinc/appmap-js/commit/c4b2c128e082893d4ef3700ce9c47ee6e9403bca))
+
 # [@appland/components-v2.9.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.8.0...@appland/components-v2.9.0) (2022-07-19)
 
 
