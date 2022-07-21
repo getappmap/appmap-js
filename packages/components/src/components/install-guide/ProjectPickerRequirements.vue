@@ -108,7 +108,7 @@ export default {
   props: {
     project: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     messageSuccess: {
       type: String,
