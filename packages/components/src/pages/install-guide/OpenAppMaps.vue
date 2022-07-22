@@ -118,10 +118,10 @@ export default {
 
   computed: {
     httpRequests() {
-      return this.sampleCodeObjects.httpRequests;
+      return this.sampleCodeObjects && this.sampleCodeObjects.httpRequests;
     },
     queries() {
-      return this.sampleCodeObjects.queries;
+      return this.sampleCodeObjects && this.sampleCodeObjects.queries;
     },
   },
 
@@ -179,6 +179,9 @@ export default {
   }
   .subhead {
     border-bottom: 1px solid $gray-secondary;
+    font-size: 1.25rem;
+    padding-bottom: 0.25rem;
+    font-weight: 600;
   }
 }
 .qs-appmaps-table {

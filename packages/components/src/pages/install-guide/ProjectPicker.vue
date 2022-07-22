@@ -142,7 +142,6 @@ h1 {
 h2 {
   margin-block-end: 0;
   counter-increment: step;
-  color: $gray-secondary;
   border-bottom: 1px solid $gray-secondary;
   margin-bottom: 0.5rem;
 }

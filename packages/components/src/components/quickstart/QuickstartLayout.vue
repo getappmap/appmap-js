@@ -116,7 +116,7 @@ body {
 }
 
 .qs-container {
-  max-width: 1280px;
+  max-width: 1200px;
   margin: auto;
 }
 
@@ -193,7 +193,6 @@ a.qs-button {
 
 .qs-step {
   &__head {
-    margin-bottom: 30px;
   }
 
   p.qs-step__margin {

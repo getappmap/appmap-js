@@ -22,6 +22,7 @@ InvestigateFindings.args = {
     stability: 4,
     maintainability: 2,
   },
+  findingsEnabled: true,
 };
 
 export const InvestigateFindingsEmpty = Template.bind({});
@@ -35,4 +36,19 @@ InvestigateFindingsEmpty.args = {
     stability: 0,
     maintainability: 0,
   },
+  findingsEnabled: true,
+};
+
+export const InvestigateFindingsDisabled = Template.bind({});
+InvestigateFindingsDisabled.args = {
+  scanned: true,
+  projectPath: '/home/dev/project',
+  numFindings: 0,
+  findingsDomainCounts: {
+    security: 0,
+    performance: 0,
+    stability: 0,
+    maintainability: 0,
+  },
+  findingsEnabled: false,
 };

@@ -1,7 +1,7 @@
-context('Investigate Findings (Empty)', () => {
+context('Investigate Findings (Findings Disabled)', () => {
   beforeEach(() => {
     cy.visit(
-      'http://localhost:6006/iframe.html?id=pages-vs-code-install-guide-pages--investigate-findings-empty&viewMode=story'
+      'http://localhost:6006/iframe.html?id=pages-vs-code-install-guide-pages--investigate-findings-disabled&viewMode=story'
     );
   });
 
@@ -31,11 +31,11 @@ context('Investigate Findings (Empty)', () => {
     cy.get('[data-cy="back-button"]').should('be.visible');
   });
 
-  it('does not show Slack signup button', () => {
-    cy.get('[data-cy="slack-button"]').should('not.exist');
+  it('shows Slack signup button', () => {
+    cy.get('[data-cy="slack-button"]').should('be.visible');
   });
 
-  it('does not show runtime analysis info', () => {
-    cy.get('[data-cy="runtime-analysis-info"]').should('not.exist');
+  it('shows runtime analysis info', () => {
+    cy.get('[data-cy="runtime-analysis-info"]').should('be.visible');
   });
 });
