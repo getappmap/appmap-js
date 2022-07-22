@@ -1,3 +1,10 @@
+# [@appland/components-v2.10.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.9.1...@appland/components-v2.10.0) (2022-07-22)
+
+
+### Features
+
+* show info page when findings not enabled ([b7b6857](https://github.com/applandinc/appmap-js/commit/b7b685771e8bbb7e23d65dde5c1abf80464ae881))
+
 # [@appland/components-v2.9.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.9.0...@appland/components-v2.9.1) (2022-07-21)
 
 
