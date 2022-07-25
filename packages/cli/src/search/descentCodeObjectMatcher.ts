@@ -26,6 +26,7 @@ export default class DescentCodeObjectMatcher implements CodeObjectMatcher {
           return;
         case MATCH_COMPLETE:
           matches.push(item);
+          return;
         case MATCH_CONTINUE:
         default:
       }

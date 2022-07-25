@@ -181,6 +181,8 @@ export default class FindCodeObjects {
     // * Parent calling function, class, and package
     // * Descendent SQL and HTTP client requests
 
+    // Because matchers is an array, each one may return the same code object.
+    const uniqueMatchIds = new Set<string>();
     const matches: CodeObjectMatch[] = [];
 
     /**
@@ -233,6 +235,11 @@ export default class FindCodeObjects {
           return;
         }
         for (const co of codeObjects) {
+          const matchKey = [appmapName, co.fqid].join('@');
+          if (uniqueMatchIds.has(matchKey)) return;
+
+          uniqueMatchIds.add(matchKey);
+
           const match = {
             appmap: appmapName,
             codeObject: co,
