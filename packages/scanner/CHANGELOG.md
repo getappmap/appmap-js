@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.62.2](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.62.1...@appland/scanner-v1.62.2) (2022-07-25)
+
+
+### Bug Fixes
+
+* Return proper result for job-not-cancelled ([f7ee5da](https://github.com/applandinc/appmap-js/commit/f7ee5da073849881c3c553f08fc2dd82bb8c7965))
+
 # [@appland/scanner-v1.62.1](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.62.0...@appland/scanner-v1.62.1) (2022-07-13)
 
 
