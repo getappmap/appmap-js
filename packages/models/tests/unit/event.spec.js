@@ -37,9 +37,8 @@ describe('Event', () => {
     it('stableProperties', () => {
       verifyJSON(getTasksEvent.stableProperties, {
         event_type: 'function',
-        name: 'org/apache/zookeeper/book/recovery/RecoveredAssignments#getTasks',
-        parameterNames: '',
-        returnValueType: '',
+        raises_exception: false,
+        id: 'org/apache/zookeeper/book/recovery/RecoveredAssignments#getTasks',
       });
     });
 
@@ -168,7 +167,6 @@ describe('Event', () => {
       });
       it('stableProperties', () => {
         verifyJSON(event.stableProperties, {
-          content_type: '',
           event_type: 'http_server_request',
           route: 'GET /admin',
           status_code: 302,
@@ -183,7 +181,6 @@ describe('Event', () => {
         returnEventData.http_server_response.headers = headers;
         eventWithContentType.link(new Event(returnEventData));
         verifyJSON(eventWithContentType.stableProperties, {
-          content_type: 'text/plain',
           event_type: 'http_server_request',
           route: 'GET /admin',
           status_code: 302,

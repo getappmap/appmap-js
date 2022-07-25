@@ -470,8 +470,11 @@ export default class Event {
     ) =>
       Object.assign(baseProperties, {
         route: this.route,
-        status_code: this.httpServerResponse.status,
-        content_type: this.responseContentType,
+        status_code:
+          this.httpServerResponse?.status ||
+          this.httpServerResponse?.status_code ||
+          this.httpClientResponse?.status ||
+          this.httpServerResponse?.status_code,
       });
 
     let properties;
@@ -493,12 +496,9 @@ export default class Event {
     } else {
       properties = {
         event_type: 'function',
-        name: this.qualifiedMethodId,
-        parameterNames: (this.parameters || [])
-          .map((p) => p.name)
-          .filter(Boolean)
-          .join(','),
-        returnValueType: this.returnValue?.class,
+        id: this.qualifiedMethodId,
+        raises_exception:
+          this.returnEvent.exceptions && this.returnEvent.exceptions.length > 0,
       };
     }
     return normalizeProperties(properties);
