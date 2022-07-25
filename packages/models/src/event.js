@@ -4,7 +4,7 @@ import {
   identityHashEvent,
   transformToJSON,
 } from './util';
-import hashEvent from './event/hash';
+import hashEvent, { abstractSqlAstJSON } from './event/hash';
 
 // This class supercedes `CallTree` and `CallNode`. Events are stored in a flat
 // array and can also be traversed like a tree via `parent` and `children`.
@@ -348,6 +348,13 @@ export default class Event {
     return this.$hidden.hash;
   }
 
+  get stableProperties() {
+    if (!this.$hidden.stableProperties) {
+      this.$hidden.stableProperties = this.gatherStableProperties();
+    }
+    return this.$hidden.stableProperties;
+  }
+
   get identityHash() {
     if (!this.$hidden.identityHash) {
       this.$hidden.identityHash = identityHashEvent(this);
@@ -439,5 +446,61 @@ export default class Event {
     }
 
     return this.qualifiedMethodId;
+  }
+
+  // Collects properties of an event which are not dependent on the specifics
+  // of invocation.
+  gatherStableProperties() {
+    const { sqlQuery } = this;
+
+    // Convert null and undefined values to empty strings
+    const normalizeProperties = (
+      /** @type{Record<string,string>} */ properties
+    ) =>
+      Object.fromEntries(
+        Object.entries(properties).map(([key, value]) => [
+          key,
+          value === undefined || value === null ? '' : value,
+        ])
+      );
+
+    // Augment a set of base properties with HTTP client/server request properties.
+    const requestProperties = (
+      /** @type{Record<string,string>} */ baseProperties
+    ) =>
+      Object.assign(baseProperties, {
+        route: this.route,
+        status_code: this.httpServerResponse.status,
+        content_type: this.responseContentType,
+      });
+
+    let properties;
+    if (sqlQuery) {
+      const sqlNormalized = abstractSqlAstJSON(sqlQuery, this.sql.database_type)
+        // Collapse repeated variable literals and parameter tokens (e.g. '?, ?' in an IN clause)
+        .split(/{"type":"variable"}(?:,{"type":"variable"})*/g)
+        .join(`{"type":"variable"}`);
+      properties = {
+        event_type: 'sql',
+        sql_normalized: sqlNormalized,
+      };
+    } else if (this.httpServerRequest) {
+      properties = requestProperties({ event_type: 'http_server_request' });
+    } else if (this.httpClientRequest) {
+      properties = requestProperties({
+        event_type: 'http_client_request',
+      });
+    } else {
+      properties = {
+        event_type: 'function',
+        name: this.qualifiedMethodId,
+        parameterNames: (this.parameters || [])
+          .map((p) => p.name)
+          .filter(Boolean)
+          .join(','),
+        returnValueType: this.returnValue?.class,
+      };
+    }
+    return normalizeProperties(properties);
   }
 }

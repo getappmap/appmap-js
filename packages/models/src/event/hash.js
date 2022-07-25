@@ -5,7 +5,7 @@ import parse from '../sql/parse';
 // returns a JSON of SQL query AST
 // with all literals replaced by variables
 // and all variable names removed
-function abstractSqlAstJSON(query, databaseType) {
+export function abstractSqlAstJSON(query, databaseType) {
   const ast = parse(query);
   if (!ast) return normalize(query, databaseType);
 
@@ -25,6 +25,7 @@ function abstractSqlAstJSON(query, databaseType) {
 // For SQL queries, it's a JSON of abstract query AST.
 // For HTTP queries, it's the method plus normalized path info.
 // For function calls it's the qualified function id.
+// TODO: This can be removed/deprecated when the current hash algorithm is removed.
 function callEventToString(event) {
   const { sqlQuery, route } = event;
   if (sqlQuery) return abstractSqlAstJSON(sqlQuery, event.sql.database_type);

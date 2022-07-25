@@ -34,6 +34,14 @@ describe('Event', () => {
         thread_id: 115,
       });
     });
+    it('stableProperties', () => {
+      verifyJSON(getTasksEvent.stableProperties, {
+        event_type: 'function',
+        name: 'org/apache/zookeeper/book/recovery/RecoveredAssignments#getTasks',
+        parameterNames: '',
+        returnValueType: '',
+      });
+    });
 
     test('callStack', () => {
       const callStack = getTasksEvent.callStack();
@@ -93,6 +101,34 @@ describe('Event', () => {
           thread_id: 47346401950060,
         });
       });
+      it('stableProperties', () => {
+        verifyJSON(event.stableProperties, {
+          event_type: 'sql',
+          sql_normalized:
+            '{"type":"statement","variant":"list","statement":[{"type":"statement","variant":"select","result":[{"type":"function","name":{"type":"identifier","variant":"function","name":"count"},"args":{"type":"identifier","variant":"star","name":"*"}}],"from":{"type":"identifier","variant":"table","name":"spree_stores"}}]}',
+        });
+      });
+      it('stableProperties with query parameters', () => {
+        const sql = {
+          database_type: 'sqlite',
+          sql: 'SELECT 1 FROM "spree_stores" WHERE id IN ( ?, ?, ?, 12 )',
+        };
+        const eventWithQueryParameters = new Event({
+          ...event,
+          ...{ sql_query: sql },
+        });
+        eventWithQueryParameters.link(
+          new Event({
+            ...event.returnEvent,
+          })
+        );
+        verifyJSON(eventWithQueryParameters.stableProperties, {
+          event_type: 'sql',
+          // Verify that the query parameters and literal are normalized to one {"type":"variable"}
+          sql_normalized:
+            '{"type":"statement","variant":"list","statement":[{"type":"statement","variant":"select","result":[{"type":"variable"}],"from":{"type":"identifier","variant":"table","name":"spree_stores"},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"in","right":{"type":"expression","variant":"list","expression":[{"type":"variable"}]},"left":{"type":"identifier","variant":"column","name":"id"}}]}]}',
+        });
+      });
     });
 
     describe('HTTP server request', () => {
@@ -128,6 +164,29 @@ describe('Event', () => {
             },
           ],
           thread_id: 47346401950060,
+        });
+      });
+      it('stableProperties', () => {
+        verifyJSON(event.stableProperties, {
+          content_type: '',
+          event_type: 'http_server_request',
+          route: 'GET /admin',
+          status_code: 302,
+        });
+      });
+      it('stableProperties with content type', () => {
+        const headers = {
+          'Content-Type': 'text/plain',
+        };
+        const eventWithContentType = new Event({ ...event });
+        const returnEventData = { ...event.returnEvent };
+        returnEventData.http_server_response.headers = headers;
+        eventWithContentType.link(new Event(returnEventData));
+        verifyJSON(eventWithContentType.stableProperties, {
+          content_type: 'text/plain',
+          event_type: 'http_server_request',
+          route: 'GET /admin',
+          status_code: 302,
         });
       });
     });

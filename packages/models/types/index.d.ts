@@ -170,6 +170,7 @@ declare module '@appland/models' {
     readonly nextSibling?: Event | null;
     readonly callEvent: Event;
     readonly returnEvent: Event;
+    readonly stableProperties: Record<string, string | number>;
     readonly hash: string;
     readonly identityHash: string;
 
