@@ -1,3 +1,10 @@
+# [@appland/models-v1.18.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.17.0...@appland/models-v1.18.0) (2022-07-25)
+
+
+### Features
+
+* Add Event.stableProperties ([9db0ea4](https://github.com/applandinc/appmap-js/commit/9db0ea49cc60f438c576704d799ac9711625d254))
+
 # [@appland/models-v1.17.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.16.2...@appland/models-v1.17.0) (2022-07-12)
 
 
