@@ -4,7 +4,7 @@ import { scan } from '../util';
 
 test('job not cancelled', async () => {
   const check = new Check(rule);
-  const findings = await scan(
+  const { findings } = await scan(
     check,
     'Microposts_interface_micropost_interface_with_job.appmap.json'
   );

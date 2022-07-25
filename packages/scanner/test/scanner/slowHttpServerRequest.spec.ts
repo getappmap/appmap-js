@@ -5,7 +5,7 @@ import { scan } from '../util';
 it('slow HTTP server request', async () => {
   const options = new rule.Options();
   options.timeAllowed = 0.5;
-  const findings = await scan(
+  const { findings } = await scan(
     new Check(rule, options),
     'Password_resets_password_resets.appmap.json'
   );

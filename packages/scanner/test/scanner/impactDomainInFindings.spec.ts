@@ -9,7 +9,7 @@ import { loadRule } from '../../src/configuration/configurationProvider';
 
 it('Security Domain in Deserialization of untrusted data', async () => {
   const check = new Check(untrustedDeserializationRule);
-  const findings = await scan(
+  const { findings } = await scan(
     check,
     'appmaps/deserializationOfUntrustedData/Users_index_index_as_non-admin.appmap.json'
   );
@@ -19,14 +19,20 @@ it('Security Domain in Deserialization of untrusted data', async () => {
 
 it('Stability Domain in http500', async () => {
   const check = new Check(await loadRule('http-500'));
-  const findings = await scan(check, 'Password_resets_password_resets_with_http500.appmap.json');
+  const { findings } = await scan(
+    check,
+    'Password_resets_password_resets_with_http500.appmap.json'
+  );
   expect(findings).toHaveLength(1);
   expect(findings[0].impactDomain).toEqual('Stability');
 });
 
 it('Performance Domain in n+1 Query', async () => {
   const check = new Check(nPlusOneRule);
-  const findings = await scan(check, 'Users_profile_profile_display_while_anonyomus.appmap.json');
+  const { findings } = await scan(
+    check,
+    'Users_profile_profile_display_while_anonyomus.appmap.json'
+  );
   expect(findings).toHaveLength(1);
   expect(findings[0].impactDomain).toEqual('Performance');
 });
@@ -35,7 +41,7 @@ it('Maintainability Domain in Too Many Updates', async () => {
   const options = new rule.Options();
   options.warningLimit = 2;
   const check = new Check(tooManyUpdatesRule, options);
-  const findings = await scan(
+  const { findings } = await scan(
     check,
     'PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
   );

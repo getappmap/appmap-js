@@ -3,7 +3,7 @@ import rule from '../../src/rules/insecureCompare';
 import { scan } from '../util';
 
 it('insecure compare', async () => {
-  const findings = await scan(
+  const { findings } = await scan(
     new Check(rule),
     'Password_resets_password_resets_with_insecure_compare.appmap.json'
   );

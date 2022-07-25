@@ -10,8 +10,9 @@ import HTTPClientRequestScope from './scope/httpClientRequestScope';
 import CommandScope from './scope/commandScope';
 import SQLTransactionScope from './scope/sqlTransactionScope';
 import CheckInstance from './checkInstance';
-import { createHash } from 'crypto';
 import { cloneEvent } from './eventUtil';
+import HashV1 from './algorithms/hash/hashV1';
+import HashV2 from './algorithms/hash/hashV2';
 
 export default class RuleChecker {
   private scopes: Record<string, ScopeIterator> = {
@@ -147,32 +148,27 @@ export default class RuleChecker {
         ...findingEvent.ancestors().map((ancestor) => ancestor.codeObject.location),
       ].filter(Boolean);
 
-      const hash = createHash('sha256');
-      hash.update(findingEvent.hash);
-      hash.update(checkInstance.ruleId);
+      const hashV1 = new HashV1(
+        checkInstance.ruleId,
+        findingEvent,
+        // findingEvent gets passed here as a relatedEvent, and if you look at HashV1 it
+        // gets added to the hash again. That's how it worked in V1 so it's here for compatibility.
+        additionalEvents || []
+      );
+
+      const hashV2 = new HashV2(checkInstance.ruleId, findingEvent, participatingEvents);
 
       const uniqueEvents = new Set<number>();
       const relatedEvents: Array<Event> = [];
-      [findingEvent].concat((additionalEvents || []).map(cloneEvent)).forEach((event) => {
-        if (uniqueEvents.has(event.id)) {
-          return;
-        }
-        uniqueEvents.add(event.id);
-        relatedEvents.push(cloneEvent(event));
-      });
-
-      // Update event hash with unique hashes of related events
-      new Set(relatedEvents.map((e) => e.hash)).forEach((eventHash) => {
-        hash.update(eventHash);
-      });
-
-      Object.values(participatingEvents).forEach((event) => {
-        if (uniqueEvents.has(event.id)) {
-          return;
-        }
-        uniqueEvents.add(event.id);
-        relatedEvents.push(cloneEvent(event));
-      });
+      [findingEvent, ...(additionalEvents || []), ...Object.values(participatingEvents)]
+        .map(cloneEvent)
+        .forEach((event) => {
+          if (uniqueEvents.has(event.id)) {
+            return;
+          }
+          uniqueEvents.add(event.id);
+          relatedEvents.push(cloneEvent(event));
+        });
 
       return {
         appMapFile,
@@ -180,7 +176,8 @@ export default class RuleChecker {
         ruleId: checkInstance.ruleId,
         ruleTitle: checkInstance.title,
         event: cloneEvent(findingEvent),
-        hash: hash.digest('hex'),
+        hash: hashV1.digest(),
+        hash_v2: hashV2.digest(),
         stack,
         scope: cloneEvent(scope),
         message: message || checkInstance.title,

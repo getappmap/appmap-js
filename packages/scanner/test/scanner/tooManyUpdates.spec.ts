@@ -5,7 +5,7 @@ import { scan } from '../util';
 it('too many updates', async () => {
   const options = new rule.Options();
   options.warningLimit = 2;
-  const findings = await scan(
+  const { findings } = await scan(
     new Check(rule, options),
     'PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
   );

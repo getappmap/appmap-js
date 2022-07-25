@@ -10,7 +10,7 @@ it('incompatible http client requests', async () => {
   )}`;
   const check = new Check(rule);
   check.options.schemata = { 'api.stripe.com': railsSampleAppSchemaURL };
-  const findings = await scan(
+  const { findings } = await scan(
     check,
     'PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
   );
