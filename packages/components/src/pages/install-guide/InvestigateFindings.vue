@@ -101,7 +101,7 @@
                 cause serious production issues.
               </div>
             </header>
-            <div class="btn-slack" data-cy="slack-button">
+            <!-- <div class="btn-slack" data-cy="slack-button">
               <SlackLogo />
               <a href="https://appmap.io/slack">
                 <v-button
@@ -109,21 +109,18 @@
                   class="cta-button b-0"
                 />
               </a>
-            </div>
-            <!-- <div class="feature-wrap cta">
-              <div class="feature cta-slack">
-                <h2>Get early access</h2>
-                <div class="btn-slack" data-cy="slack-button">
-                  <SlackLogo />
-                  <a href="https://appmap.io/slack">
-                    <v-button
-                      label="Join our Slack for early access"
-                      class="cta-button b-0"
-                    />
-                  </a>
-                </div>
-              </div>
             </div> -->
+            <a
+              class="btn-slack"
+              data-cy="slack-button"
+              href="https://appmap.io/slack"
+            >
+              <SlackLogo />
+              <v-button
+                label="Join our Slack for early access"
+                class="cta-button b-0"
+              />
+            </a>
           </div>
 
           <div class="feature-wrap content">
@@ -167,7 +164,10 @@
             <div class="feature">
               <h2 class="subhead">Support</h2>
               <p>
-                Technical support in Slack now available for
+                Technical support in
+
+                <a href="https://appmap.io/slack"> Slack </a>
+                now available for
                 <strong>Ruby on Rails</strong> &
                 <strong>Java / Spring</strong>
               </p>
@@ -234,15 +234,15 @@ header {
 }
 
 h1 {
-  margin-block-start: 0;
   font-size: 2em;
+  line-height: 2.25rem;
+  margin-bottom: 0.25rem;
 }
 
 .columns {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   gap: 1rem;
   margin: -1.75rem;
   padding: 1.75rem 2rem 2rem 2rem;
@@ -333,7 +333,9 @@ h1 {
   justify-content: center;
   padding: 0.5rem 0.8rem;
   transition: $transition;
-  width: 100%;
+  width: 50%;
+  min-width: 300px;
+
   .cta-button {
     padding: 0.5rem 0.5rem 0.5rem 4rem;
   }
@@ -411,6 +413,23 @@ h1 {
           margin-top: 1rem;
         }
       }
+    }
+  }
+}
+
+@media (max-width: 625px) {
+  .btn-slack {
+    min-width: unset;
+    width: 100%;
+  }
+}
+@media (max-width: 420px) {
+  .btn-slack {
+    .cta-button {
+      text-align: left;
+    }
+    svg {
+      width: 2rem;
     }
   }
 }
