@@ -116,7 +116,7 @@ body {
 }
 
 .qs-container {
-  max-width: 1200px;
+  max-width: 930px;
   margin: auto;
 }
 
@@ -124,7 +124,7 @@ body {
   margin-bottom: 12px;
   background: $gray2;
   filter: $shadow-tile;
-  max-width: 1280px;
+  //max-width: 900px;
   border-radius: 8px;
   margin: 1em auto;
   padding: 2em;
