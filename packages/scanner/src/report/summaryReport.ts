@@ -11,8 +11,8 @@ function summarizeFindings(findings: Finding[]): FindingSummary[] {
     let findingSummary = memo[finding.ruleId];
     if (findingSummary) {
       findingSummary.findingTotal += 1;
-      if (!findingSummary.findingHashes.has(finding.hash)) {
-        findingSummary.findingHashes.add(finding.hash);
+      if (!findingSummary.findingHashes.has(finding.hash_v2)) {
+        findingSummary.findingHashes.add(finding.hash_v2);
         findingSummary.messages.push(finding.message);
       }
     } else {
@@ -20,7 +20,7 @@ function summarizeFindings(findings: Finding[]): FindingSummary[] {
         ruleId: finding.ruleId,
         ruleTitle: finding.ruleTitle,
         findingTotal: 1,
-        findingHashes: new Set([finding.hash]),
+        findingHashes: new Set([finding.hash_v2]),
         messages: [finding.message],
       } as FindingSummary;
       memo[finding.ruleId] = findingSummary;
@@ -37,7 +37,7 @@ export default function (summary: ScanResults, colorize: boolean): void {
   const matchedStr = `${summary.summary.numFindings} ${pluralize(
     'finding',
     summary.summary.numFindings
-  )} (${new Set(summary.findings.map((finding) => finding.hash)).size} unique)`;
+  )} (${new Set(summary.findings.map((finding) => finding.hash_v2)).size} unique)`;
   const colouredMatchedStr = colorize ? chalk.stderr.magenta(matchedStr) : matchedStr;
 
   console.log();
