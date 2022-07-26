@@ -27,7 +27,6 @@
               </p>
               <br />
               <p>
-                For details
                 <v-button
                   data-cy="investigate-findings-button"
                   label="Open the PROBLEMS tab"
@@ -139,6 +138,7 @@
                   HTTP requests incompatible with an OpenAPI spec, remote calls
                   made without circuit breaker, missing content types.
                 </li>
+                <li>And more!</li>
               </ul>
             </div>
 
