@@ -7,6 +7,9 @@ const { analyzeSQL, normalizeSQL } = require('@appland/models');
  * @typedef {import('./types').SQLInfo | string} SQLInfo
  */
 
+// A pattern to match regular expressions.
+const RegExpRegExp = /^%r{([^}]+)}(\w*)$/;
+
 /**
  * @param {string} expectedType
  * @returns {MatchFn}
@@ -99,10 +102,15 @@ function matchTable(tableName) {
       return false;
     }
 
-    const queryInfo = /** @type {SQLInfo} */ analyzeSQL({
+    const queryInfo = /** @type {SQLInfo} */ analyzeSQL(codeObject.name);
+    /*
+    // TODO: analyzeSQL expects a string, we are passing it an object.
+    // database_type doesn't seem to be expected or needed.
+    {
       sql: codeObject.name,
       database_type: codeObject.database_type,
     });
+    */
     if (typeof queryInfo !== 'object') {
       return false;
     }
@@ -187,6 +195,7 @@ class RouteMatchSpec {
 }
 
 module.exports = {
+  RegExpRegExp,
   DatabaseMatchSpec,
   FunctionMatchSpec,
   HTTPMatchSpec,

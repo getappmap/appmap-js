@@ -1,8 +1,8 @@
-const undoFilter = async (filters, buildStats, home) => {
-  if (filters.length > 0) {
-    filters.pop();
-  }
-  await buildStats();
+/**
+ * @param {import('./context').default} context
+ */
+const undoFilter = async (context, home) => {
+  await context.undoFilter();
   console.log();
   home();
 };

@@ -4,27 +4,33 @@ const Fields = require('./fields');
 
 /** @typedef {import('../search/types').FunctionStats} FunctionStats */
 /** @typedef {import('./types').Filter} Filter */
+/** @typedef {import('./context').default} Context */
 
 const MAX_VALUE_LENGTH = 60;
 
 /**
- *
- * @param {string} codeObjectId
- * @param {Filter[]} filters
- * @param {FunctionStats} stats
+ * @param {Context} context
  * @param {function(): void} getCommand
  */
-const home = (codeObjectId, filters, stats, getCommand) => {
-  if (filters.length > 0) {
+const home = (context, getCommand) => {
+  if (context.filters.length > 0) {
     console.log('Filters:');
     console.log(
-      filters.map((filter) => `${filter.name} = ${filter.value}`).join('\n')
+      context.filters
+        .map((filter) => `${filter.name} = ${filter.value}`)
+        .join('\n')
     );
     console.log();
   }
 
+  if (context.saves.length > 0) {
+    console.log('Saved ids:');
+    console.log(context.saves.join('\n'));
+    console.log();
+  }
+
   const table = new Table({
-    title: codeObjectId,
+    title: context.codeObjectId,
     columns: [
       { name: 'index', alignment: 'left', title: 'Index' },
       { name: 'name', alignment: 'left', title: 'Name' },
@@ -33,7 +39,7 @@ const home = (codeObjectId, filters, stats, getCommand) => {
   });
 
   Fields.fields.forEach((field, index) => {
-    const values = stats[field.name];
+    const values = context.stats[field.name];
     let printValue = null;
     if (values) {
       printValue = values.length;

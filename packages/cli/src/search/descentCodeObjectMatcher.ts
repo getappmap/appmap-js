@@ -1,25 +1,58 @@
-const { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } = require('./constants');
-const { verbose } = require('../utils');
+import { verbose } from '../utils';
+import { CodeObject, CodeObjectMatcher, CodeObjectMatchSpec } from './types';
 
-class CodeObjectMatcher {
+const { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } = require('./constants');
+
+export default class DescentCodeObjectMatcher implements CodeObjectMatcher {
+  matchSpec: CodeObjectMatchSpec;
+  depth: number;
+
   /**
    * Search code objects in the classMap, looking for matches to a spec.
-   *
-   * @param {import('./types').CodeObjectMatchSpec} matchSpec
    */
-  constructor(matchSpec) {
+  constructor(matchSpec: CodeObjectMatchSpec) {
     this.matchSpec = matchSpec;
     this.depth = 0;
+  }
+
+  matchClassMap(classMap: CodeObject[]): CodeObject[] {
+    const findMatchingCodeObject = (
+      item: CodeObject,
+      matches: CodeObject[]
+    ): void => {
+      const matchResult = this.matchCodeObject(item);
+      switch (matchResult) {
+        case MATCH_ABORT:
+          return;
+        case MATCH_COMPLETE:
+          matches.push(item);
+          return;
+        case MATCH_CONTINUE:
+        default:
+      }
+      if (item.children) {
+        item.children.forEach((child) => {
+          child.parent = item;
+          findMatchingCodeObject(child, matches);
+        });
+      }
+      this.popCodeObject();
+    };
+
+    let matches: CodeObject[] = [];
+    for (const item of classMap) {
+      findMatchingCodeObject(item, matches);
+    }
+    return matches;
   }
 
   /**
    * This method is called in a depth-first traversal of the class map. It
    * determines if the current code object in the traversal matches the spec.
    *
-   * @param {import('./types').CodeObject} codeObject
    * @returns {string} MATCH_COMPLETE, MATCH_ABORT, or MATCH_COMPLETE
    */
-  match(codeObject) {
+  matchCodeObject(codeObject: CodeObject): string {
     if (this.depth < 0) {
       console.warn(`Search depth ${this.depth} is less than zero; aborting`);
       return MATCH_ABORT;
@@ -65,9 +98,7 @@ class CodeObjectMatcher {
     return MATCH_CONTINUE;
   }
 
-  pop() {
+  popCodeObject() {
     this.depth -= 1;
   }
 }
-
-module.exports = CodeObjectMatcher;

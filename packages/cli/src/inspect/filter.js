@@ -3,7 +3,12 @@ const Fields = require('./fields');
 
 const filterFields = Fields.fields.filter((f) => f.filterName);
 
-const filter = (rl, filters, stats, buildStats, home) => {
+/** @typedef {import('./context').default} Context */
+
+/**
+ * @param {Context} context
+ */
+const filter = (rl, context, home) => {
   const filterFieldIndexes = Fields.selectIndexes(
     filterFields.map((f) => f.name)
   );
@@ -40,14 +45,14 @@ const filter = (rl, filters, stats, buildStats, home) => {
       const filterField = Fields.fieldFromIndex(parseInt(num, 10) - 1);
 
       function retry() {
-        filter(rl, filters, stats, buildStats, home);
+        filter(rl, context, home);
       }
 
       if (!filterField || !filterField.filterName) {
         return retry();
       }
 
-      const statsValues = stats[filterField.name];
+      const statsValues = context.stats[filterField.name];
       if (!statsValues) {
         return retry();
       }
@@ -89,8 +94,7 @@ const filter = (rl, filters, stats, buildStats, home) => {
           const value = statsValues[parseInt(index, 10) - 1];
           if (value) {
             const newFilter = { name: filterField.filterName, value };
-            filters.push(newFilter);
-            await buildStats();
+            await context.filter(newFilter);
             console.log();
             home();
           } else {

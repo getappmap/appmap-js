@@ -44,14 +44,13 @@ export interface SQLInfo {
 }
 
 export interface CodeObject {
-  id: string;
   name: string;
   type: string;
-  database_type: string;
-  children: CodeObject[];
-  parent: CodeObject;
-  location: string; // Functions only
-  static: boolean; // Functions only
+  fqid: string;
+  children?: CodeObject[];
+  parent?: CodeObject;
+  location?: string; // Functions only
+  static?: boolean; // Functions only
 }
 
 export interface Trigram {
@@ -63,8 +62,7 @@ export interface Trigram {
 }
 
 export interface CodeObjectMatcher {
-  match: (CodeObject) => string;
-  pop: () => void;
+  matchClassMap(classMap: CodeObject[]): CodeObject[];
 }
 
 export interface CodeObjectMatch {
@@ -98,9 +96,9 @@ export interface FunctionStats {
   httpServerRequests: string[];
   sqlQueries: string[];
   sqlTables: string[];
-  callers: Event[];
-  ancestors: Event[];
-  descendants: Event[];
+  callers: string[];
+  ancestors: string[];
+  descendants: string[];
   packageTrigrams: Trigram[];
   classTrigrams: Trigram[];
   functionTrigrams: Trigram[];
