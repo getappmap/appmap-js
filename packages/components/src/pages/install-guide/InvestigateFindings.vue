@@ -101,15 +101,6 @@
                 cause serious production issues.
               </div>
             </header>
-            <!-- <div class="btn-slack" data-cy="slack-button">
-              <SlackLogo />
-              <a href="https://appmap.io/slack">
-                <v-button
-                  label="Join our Slack for early access"
-                  class="cta-button b-0"
-                />
-              </a>
-            </div> -->
             <a
               class="btn-slack"
               data-cy="slack-button"
@@ -165,7 +156,6 @@
               <h2 class="subhead">Support</h2>
               <p>
                 Technical support in
-
                 <a href="https://appmap.io/slack"> Slack </a>
                 now available for
                 <strong>Ruby on Rails</strong> &

@@ -11,11 +11,8 @@
         <HelpIcon class="qs-help__icon" />
         <div class="qs-help__text">
           Stuck?
-          <a
-            href="mailto:support@app.land"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Submit a support ticket.</a
+          <a href="https://appmap.io/slack" target="_blank"
+            >Technical support available in Slack</a
           >
         </div>
       </div>
