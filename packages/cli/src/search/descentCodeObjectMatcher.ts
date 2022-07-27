@@ -3,19 +3,15 @@ import { CodeObject, CodeObjectMatcher, CodeObjectMatchSpec } from './types';
 
 const { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } = require('./constants');
 
-export default class DescentCodeObjectMatcher implements CodeObjectMatcher {
-  matchSpec: CodeObjectMatchSpec;
-  depth: number;
+class Matcher {
+  depth = 0;
 
-  /**
-   * Search code objects in the classMap, looking for matches to a spec.
-   */
-  constructor(matchSpec: CodeObjectMatchSpec) {
-    this.matchSpec = matchSpec;
-    this.depth = 0;
-  }
+  constructor(
+    public matchSpec: CodeObjectMatchSpec,
+    public classMap: CodeObject[]
+  ) {}
 
-  matchClassMap(classMap: CodeObject[]): CodeObject[] {
+  matchClassMap(): CodeObject[] {
     const findMatchingCodeObject = (
       item: CodeObject,
       matches: CodeObject[]
@@ -40,7 +36,7 @@ export default class DescentCodeObjectMatcher implements CodeObjectMatcher {
     };
 
     let matches: CodeObject[] = [];
-    for (const item of classMap) {
+    for (const item of this.classMap) {
       findMatchingCodeObject(item, matches);
     }
     return matches;
@@ -100,5 +96,20 @@ export default class DescentCodeObjectMatcher implements CodeObjectMatcher {
 
   popCodeObject() {
     this.depth -= 1;
+  }
+}
+
+export default class DescentCodeObjectMatcher implements CodeObjectMatcher {
+  matchSpec: CodeObjectMatchSpec;
+
+  /**
+   * Search code objects in the classMap, looking for matches to a spec.
+   */
+  constructor(matchSpec: CodeObjectMatchSpec) {
+    this.matchSpec = matchSpec;
+  }
+
+  matchClassMap(classMap: CodeObject[]): CodeObject[] {
+    return new Matcher(this.matchSpec, classMap).matchClassMap();
   }
 }
