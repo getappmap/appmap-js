@@ -1,3 +1,20 @@
+# [@appland/appmap-v3.32.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.31.0...@appland/appmap-v3.32.0) (2022-07-27)
+
+
+### Bug Fixes
+
+* analyzeSQL was being called incorrectly ([71ea8c4](https://github.com/applandinc/appmap-js/commit/71ea8c47d9d130c17f1db02275300de54406ae0b))
+* Correct FunctionStats types to match reality ([72885a7](https://github.com/applandinc/appmap-js/commit/72885a7f65d0e2be15699e7fc9a2d895111a9e2f))
+* De-duplicate matches ([e8e1019](https://github.com/applandinc/appmap-js/commit/e8e1019b9f3aa75e9ff1acc43ae9c083929875ae))
+* Find matches across all AppMaps ([f86603a](https://github.com/applandinc/appmap-js/commit/f86603abf5252796855b4e3e656f4d5c561e028d))
+* Shortcut processFiles when there are no files ([1254896](https://github.com/applandinc/appmap-js/commit/1254896d09f7e57d516bd1341d426740571ebcca))
+
+
+### Features
+
+* Define a RegExp to match RegExps ([58a28f4](https://github.com/applandinc/appmap-js/commit/58a28f420b549edca8b705b60fb8051939cac7d7))
+* Iterate and find code objects by RegExp ([7d0e60d](https://github.com/applandinc/appmap-js/commit/7d0e60dd7c78f026f7cca2d0ebe29669ce3436dd))
+
 # [@appland/appmap-v3.31.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.30.0...@appland/appmap-v3.31.0) (2022-07-12)
 
 
