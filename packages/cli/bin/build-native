@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "Building native binaries..."
+
+cp built/appmap.html appmap.html
+
+yarn pkg \
+  --config package.json \
+  --compress GZip \
+  -o dist/cli \
+  built/cli.js
+
+rm appmap.html
+
+echo "Success!"
