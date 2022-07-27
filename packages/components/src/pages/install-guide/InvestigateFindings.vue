@@ -27,7 +27,6 @@
               </p>
               <br />
               <p>
-                For details
                 <v-button
                   data-cy="investigate-findings-button"
                   label="Open the PROBLEMS tab"
@@ -101,25 +100,17 @@
                 cause serious production issues.
               </div>
             </header>
-            <div class="feature-wrap cta">
-              <div class="feature cta-slack">
-                <p>
-                  Technical support in Slack now available for
-                  <strong>Ruby on Rails</strong> &
-                  <strong>Java / Spring</strong>
-                </p>
-
-                <div class="btn-slack" data-cy="slack-button">
-                  <SlackLogo />
-                  <a href="https://appmap.io/slack">
-                    <v-button
-                      label="Join our Slack for early access"
-                      class="cta-button b-0"
-                    />
-                  </a>
-                </div>
-              </div>
-            </div>
+            <a
+              class="btn-slack"
+              data-cy="slack-button"
+              href="https://appmap.io/slack"
+            >
+              <SlackLogo />
+              <v-button
+                label="Join our Slack for early access"
+                class="cta-button b-0"
+              />
+            </a>
           </div>
 
           <div class="feature-wrap content">
@@ -147,6 +138,7 @@
                   HTTP requests incompatible with an OpenAPI spec, remote calls
                   made without circuit breaker, missing content types.
                 </li>
+                <li>And more!</li>
               </ul>
             </div>
 
@@ -157,6 +149,17 @@
                 early access users to help review the findings discovered in
                 your application, and provide you with strategies to address
                 them.
+              </p>
+            </div>
+
+            <div class="feature">
+              <h2 class="subhead">Support</h2>
+              <p>
+                Technical support in
+                <a href="https://appmap.io/slack"> Slack </a>
+                now available for
+                <strong>Ruby on Rails</strong> &
+                <strong>Java / Spring</strong>
               </p>
             </div>
           </div>
@@ -221,16 +224,16 @@ header {
 }
 
 h1 {
-  margin-block-start: 0;
   font-size: 2em;
+  line-height: 2.25rem;
+  margin-bottom: 0.25rem;
 }
 
 .columns {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  gap: 4rem;
+  gap: 1rem;
   margin: -1.75rem;
   padding: 1.75rem 2rem 2rem 2rem;
   border-bottom: 1px solid #939fb140;
@@ -246,14 +249,12 @@ h1 {
 
 .feature-wrap {
   &.content {
-    max-width: 52rem;
-    margin: 0 auto;
-    padding-top: 2rem;
+    padding-top: 1rem;
   }
 }
 
 .feature {
-  margin: 3rem 0;
+  margin: 2.5rem 0;
   ul {
     margin-left: 1rem;
     margin-top: 0;
@@ -263,14 +264,18 @@ h1 {
       }
     }
   }
+  strong {
+    color: #939fb1;
+  }
   &.cta-slack {
     border-radius: 1rem;
     background-color: $gray-tertiary;
-    padding: 1.5rem;
+    padding: 0.75rem 1rem;
     margin-bottom: 0rem;
     h2 {
       border-bottom: 1px solid $gray-secondary;
-      padding-bottom: 0.25rem;
+      padding: 0 1rem 0.35rem 1rem;
+      margin: 0 -1rem 0.25rem -1rem;
     }
 
     .support-list {
@@ -310,14 +315,17 @@ h1 {
 .btn-slack {
   align-items: center;
   background-color: $almost-black;
-  border: 2px solid $almost-black;
-  border-radius: 2rem;
+  border: 3px solid $gray-tertiary;
+  border-radius: 1rem;
+  box-shadow: $box-shadow-min;
   display: flex;
   flex-direction: row;
   justify-content: center;
   padding: 0.5rem 0.8rem;
   transition: $transition;
-  width: 100%;
+  width: 50%;
+  min-width: 300px;
+
   .cta-button {
     padding: 0.5rem 0.5rem 0.5rem 4rem;
   }
@@ -395,6 +403,23 @@ h1 {
           margin-top: 1rem;
         }
       }
+    }
+  }
+}
+
+@media (max-width: 625px) {
+  .btn-slack {
+    min-width: unset;
+    width: 100%;
+  }
+}
+@media (max-width: 420px) {
+  .btn-slack {
+    .cta-button {
+      text-align: left;
+    }
+    svg {
+      width: 2rem;
     }
   }
 }
