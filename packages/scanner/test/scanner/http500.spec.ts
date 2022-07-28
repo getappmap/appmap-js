@@ -4,7 +4,7 @@ import { scan } from '../util';
 
 it('http500', async () => {
   const rule = await loadRule('http500');
-  const findings = await scan(
+  const { findings } = await scan(
     new Check(rule),
     'Password_resets_password_resets_with_http500.appmap.json'
   );

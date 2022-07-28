@@ -28,6 +28,7 @@ function build(): RuleLogic {
             {
               event: event.event,
               message: `${event.event} provides authorization, but the request is not authenticated`,
+              participatingEvents: { request: rootEvent },
             },
           ];
         }

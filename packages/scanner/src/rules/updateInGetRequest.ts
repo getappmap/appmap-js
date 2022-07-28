@@ -2,6 +2,7 @@ import { Event } from '@appland/models';
 import { Rule, RuleLogic } from '../types';
 import { toRegExpArray } from './lib/util';
 import parseRuleDescription from './lib/parseRuleDescription';
+import assert from 'assert';
 
 class Options {
   private _queryInclude: RegExp[];
@@ -53,7 +54,14 @@ function build(options: Options = new Options()): RuleLogic {
         !e.ancestors().some((ancestor) => ancestor.codeObject.labels.has(Audit)) &&
         hasHttpServerRequest()
       ) {
-        return `Data update performed in ${httpServerRequest!.route}: ${e.sqlQuery}`;
+        assert(httpServerRequest, 'HTTP server request is undefined');
+        return [
+          {
+            event: e,
+            message: `Data update performed in HTTP request ${httpServerRequest.route}: ${e.sqlQuery}`,
+            participatingEvents: { request: httpServerRequest },
+          },
+        ];
       }
     },
     where: (e) => !!e.sqlQuery,

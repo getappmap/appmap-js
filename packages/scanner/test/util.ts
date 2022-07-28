@@ -24,7 +24,11 @@ const fixtureAppMap = async (file: string): Promise<AppMap> => {
   return buildAppMap(appMapBytes).normalize().build();
 };
 
-const scan = async (check: Check, appMapFile: string, appMap?: AppMap): Promise<Finding[]> => {
+const scan = async (
+  check: Check,
+  appMapFile: string,
+  appMap?: AppMap
+): Promise<{ appMap: AppMap; findings: Finding[] }> => {
   let appMapData: AppMap;
   if (appMap) {
     appMapData = appMap!;
@@ -40,7 +44,7 @@ const scan = async (check: Check, appMapFile: string, appMap?: AppMap): Promise<
     console.log(JSON.stringify(findings, null, 2));
   }
 
-  return findings;
+  return { appMap: appMapData, findings };
 };
 
 export { fixtureAppMap, fixtureAppMapFileName, scan };

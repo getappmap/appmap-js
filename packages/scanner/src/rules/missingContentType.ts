@@ -7,8 +7,10 @@ const isRedirect = (status: number) => [301, 302, 303, 307, 308].includes(status
 const hasContent = (status: number) => status !== 204;
 
 function build(): RuleLogic {
-  function matcher(e: Event) {
-    return rpcRequestForEvent(e)!.responseContentType === undefined;
+  function matcher(event: Event) {
+    if (rpcRequestForEvent(event)!.responseContentType === undefined) {
+      return `Missing HTTP content type in response to request: ${event.route}`;
+    }
   }
   function where(e: Event) {
     return (

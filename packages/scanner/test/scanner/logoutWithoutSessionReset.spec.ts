@@ -4,7 +4,7 @@ import { scan } from '../util';
 
 test('logout without session reset', async () => {
   const check = new Check(rule);
-  const findings = await scan(
+  const { findings } = await scan(
     check,
     'Users_login_login_with_valid_information_followed_by_logout.appmap.json'
   );

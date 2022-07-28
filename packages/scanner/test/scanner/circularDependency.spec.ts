@@ -11,7 +11,7 @@ describe('circular dependency', () => {
   it('finds a cycle', async () => {
     const check = new Check(rule);
     check.options.depth = 3;
-    const findings = await detectCycles(check);
+    const { findings } = await detectCycles(check);
     expect(findings).toHaveLength(1);
     const finding = findings[0];
 
@@ -26,7 +26,7 @@ describe('circular dependency', () => {
   it('ignores cycles below the threshold length', async () => {
     const check = new Check(rule);
     check.options.depth = 4;
-    const findings = await detectCycles(check);
+    const { findings } = await detectCycles(check);
     expect(findings).toHaveLength(0);
   });
 });

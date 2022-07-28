@@ -3,7 +3,7 @@ import rule from '../../src/rules/unbatchedMaterializedQuery';
 import { scan } from '../util';
 
 it('unbatched materialized query', async () => {
-  const findings = await scan(
+  const { findings } = await scan(
     new Check(rule),
     'Users_index_index_as_admin_including_pagination_and_delete_links.appmap.json'
   );

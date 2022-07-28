@@ -9,7 +9,7 @@ it('slow function call', async () => {
   const pattern = new RegExp(/Controller#create$/);
   check.includeEvent = [(event: Event) => pattern.test(event.codeObject.fqid)];
 
-  const findings = await scan(check, 'Microposts_interface_micropost_interface.appmap.json');
+  const { findings } = await scan(check, 'Microposts_interface_micropost_interface.appmap.json');
   expect(findings).toHaveLength(1);
   const finding = findings[0];
   expect(finding.ruleId).toEqual('slow-function-call');

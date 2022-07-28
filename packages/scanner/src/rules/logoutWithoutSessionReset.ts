@@ -25,6 +25,7 @@ function build(): RuleLogic {
             {
               event: event.event,
               message: `${event.event} logs out the user, but the HTTP session is not cleared`,
+              participatingEvents: { request: rootEvent },
             },
           ];
         }

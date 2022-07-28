@@ -40,6 +40,7 @@ function build(options: Options): RuleLogic {
         const ancestor = eventsById[parseInt(ancestorId)]!;
         const occurranceCount = events.length;
         if (occurranceCount > options.warningLimit) {
+          const participatingEvents = { commonAncestor: ancestor } as Record<string, Event>;
           const buildMatchResult = (level: Level): MatchResult => {
             return {
               level: level,
@@ -50,7 +51,7 @@ function build(options: Options): RuleLogic {
               groupMessage: sql,
               occurranceCount: occurranceCount,
               relatedEvents: events.map((e) => e.event),
-              participatingEvents: { commonAncestor: ancestor },
+              participatingEvents,
             };
           };
 

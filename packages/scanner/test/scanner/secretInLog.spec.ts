@@ -1,16 +1,28 @@
+import HashV2 from '../../src/algorithms/hash/hashV2';
 import Check from '../../src/check';
 import rule from '../../src/rules/secretInLog';
 import { scan } from '../util';
 
 it('secret in log file', async () => {
   const check = new Check(rule);
-  const findings = await scan(
+  const { appMap, findings } = await scan(
     check,
     'Users_signup_valid_signup_information_with_account_activation.appmap.json'
   );
   expect(findings).toHaveLength(2);
   {
     const finding = findings[0];
+    const findingEvent = appMap.events.find((e) => e.id === finding.event.id)!;
+    expect(
+      new HashV2(finding.ruleId, findingEvent, finding.participatingEvents || {}).canonicalString
+    ).toEqual(`algorithmVersion=2
+rule=secret-in-log
+findingEvent.event_type=function
+findingEvent.id=Logger::LogDevice#write
+findingEvent.raises_exception=false
+participatingEvent.generatorEvent.event_type=function
+participatingEvent.generatorEvent.id=User.new_token
+participatingEvent.generatorEvent.raises_exception=false`);
     expect(finding.ruleId).toEqual('secret-in-log');
     expect(finding.event.id).toEqual(695);
     expect(finding.message).toEqual(
@@ -26,7 +38,7 @@ it('secret in log file', async () => {
 
 it('parses out multiple secrets from function return value', async () => {
   const check = new Check(rule);
-  const findings = await scan(
+  const { findings } = await scan(
     check,
     'appmaps/secretInLog/Confirmation_already_confirmed_user_should_not_be_able_to_confirm_the_account_again.appmap.json'
   );

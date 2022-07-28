@@ -52,7 +52,7 @@ const findInLog = (event: Event): MatchResult[] | undefined => {
   if (matches.length > 0) {
     return matches.map((match) => {
       const { pattern, value } = match;
-      const participatingEvents: Record<string, Event> = { logEvent: event };
+      const participatingEvents: Record<string, Event> = {};
       if (match.generatorEvent) {
         participatingEvents.generatorEvent = match.generatorEvent;
       }

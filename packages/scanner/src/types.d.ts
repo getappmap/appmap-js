@@ -105,7 +105,8 @@ interface Finding {
   ruleId: string;
   ruleTitle: string;
   event: Event;
-  hash: string;
+  hash: string; // Deprecated for local use. Still used to integrate local results with the server.
+  hash_v2: string;
   scope: Event;
   message: string;
   stack: string[];
