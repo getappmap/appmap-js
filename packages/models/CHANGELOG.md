@@ -1,3 +1,10 @@
+# [@appland/models-v1.18.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.18.0...@appland/models-v1.18.1) (2022-07-28)
+
+
+### Bug Fixes
+
+* Tweak stableProperties ([54f6ef2](https://github.com/applandinc/appmap-js/commit/54f6ef27ba535a717a33c829e76167f50a04e50b))
+
 # [@appland/models-v1.18.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.17.0...@appland/models-v1.18.0) (2022-07-25)
 
 
