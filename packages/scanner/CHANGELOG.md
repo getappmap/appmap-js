@@ -1,3 +1,12 @@
+# [@appland/scanner-v1.63.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.62.2...@appland/scanner-v1.63.0) (2022-07-28)
+
+
+### Features
+
+* Include a partial stack in the finding hash ([7e82f8a](https://github.com/applandinc/appmap-js/commit/7e82f8a0b13a1d0927aad73be4ee126d2d4695dc))
+* Populate hash_v2 on each finding ([04470b7](https://github.com/applandinc/appmap-js/commit/04470b7f11e764d79a22eb297d0e6882f6f89a3f))
+* Summarize local report using hash_v2 ([ffbde39](https://github.com/applandinc/appmap-js/commit/ffbde393c17f1f1572eb7653bad796d90662b943))
+
 # [@appland/scanner-v1.62.2](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.62.1...@appland/scanner-v1.62.2) (2022-07-25)
 
 
