@@ -15,10 +15,8 @@ it('secret in log file', async () => {
     const findingEvent = appMap.events.find((e) => e.id === finding.event.id)!;
     expect(
       new HashV2(finding.ruleId, findingEvent, finding.participatingEvents || {}).canonicalString
-    ).toEqual(`rule=secret-in-log
-rootEvent.event_type=function
-rootEvent.id=Logger::LogDevice#write
-rootEvent.raises_exception=false
+    ).toEqual(`algorithmVersion=2
+rule=secret-in-log
 findingEvent.event_type=function
 findingEvent.id=Logger::LogDevice#write
 findingEvent.raises_exception=false

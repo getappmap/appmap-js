@@ -19,15 +19,22 @@ it('n+1 query', async () => {
   const findingEvent = appMap.events.find((e) => e.id === finding.event.id)!;
   expect(
     new HashV2(finding.ruleId, findingEvent, finding.participatingEvents || {}).canonicalString
-  ).toEqual(`rule=n-plus-one-query
-commandEvent.event_type=http_server_request
-commandEvent.route=GET /users/{id}
-commandEvent.status_code=200
+  ).toEqual(`algorithmVersion=2
+rule=n-plus-one-query
 findingEvent.event_type=sql
 findingEvent.sql_normalized={"type":"statement","variant":"list","statement":[{"type":"statement","variant":"select","result":[{"type":"identifier","variant":"star","name":"active_storage_attachments.*"}],"from":{"type":"identifier","variant":"table","name":"active_storage_attachments"},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"and","left":{"type":"expression","format":"binary","variant":"operation","operation":"and","left":{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"active_storage_attachments.record_id"},"right":{"type":"variable"}},"right":{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"active_storage_attachments.record_type"},"right":{"type":"variable"}}},"right":{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"active_storage_attachments.name"},"right":{"type":"variable"}}}],"limit":{"type":"expression","variant":"limit","start":{"type":"variable"}}}]}
 participatingEvent.commonAncestor.event_type=function
 participatingEvent.commonAncestor.id=app_views_microposts__micropost_html_erb.render
-participatingEvent.commonAncestor.raises_exception=false`);
+participatingEvent.commonAncestor.raises_exception=false
+stack[1].event_type=function
+stack[1].id=app_views_users_show_html_erb.render
+stack[1].raises_exception=false
+stack[2].event_type=function
+stack[2].id=ActionController::Instrumentation#process_action
+stack[2].raises_exception=false
+stack[3].event_type=http_server_request
+stack[3].route=GET /users/{id}
+stack[3].status_code=200`);
   expect(finding.ruleId).toEqual('n-plus-one-query');
   expect(finding.event.id).toEqual(133);
   expect(finding.relatedEvents!).toHaveLength(31);

@@ -20,16 +20,23 @@ it('illegal package dependency', async () => {
   const findingEvent = appMap.events.find((e) => e.id === finding.event.id)!;
   expect(
     new HashV2(finding.ruleId, findingEvent, finding.participatingEvents || {}).canonicalString
-  ).toEqual(`rule=illegal-package-dependency
-rootEvent.event_type=function
-rootEvent.id=Command.invoke
-rootEvent.raises_exception=false
+  ).toEqual(`algorithmVersion=2
+rule=illegal-package-dependency
 findingEvent.event_type=function
 findingEvent.id=PkgA::A#cycle
 findingEvent.raises_exception=false
 participatingEvent.parent.event_type=function
 participatingEvent.parent.id=PkgB::B#invoke
-participatingEvent.parent.raises_exception=false`);
+participatingEvent.parent.raises_exception=false
+stack[1].event_type=function
+stack[1].id=PkgB::B#invoke
+stack[1].raises_exception=false
+stack[2].event_type=function
+stack[2].id=PkgA::A#invoke
+stack[2].raises_exception=false
+stack[3].event_type=function
+stack[3].id=Command.invoke
+stack[3].raises_exception=false`);
   expect(finding.ruleId).toEqual('illegal-package-dependency');
   expect(finding.event.id).toEqual(4);
   expect(finding.message).toEqual(

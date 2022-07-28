@@ -36,16 +36,27 @@ it('authorization before (or without) authentication', async () => {
   );
   expect(findings).toHaveLength(1);
   const finding = findings[0];
+  console.log(finding.stack);
   const findingEvent = appMap.events.find((e) => e.id === finding.event.id)!;
   expect(
     new HashV2(finding.ruleId, findingEvent, finding.participatingEvents || {}).canonicalString
-  ).toEqual(`rule=authz-before-authn
-commandEvent.event_type=http_server_request
-commandEvent.route=DELETE /microposts/{id}
-commandEvent.status_code=302
+  ).toEqual(`algorithmVersion=2
+rule=authz-before-authn
 findingEvent.event_type=function
 findingEvent.id=MicropostsController#correct_user
-findingEvent.raises_exception=false`);
+findingEvent.raises_exception=false
+participatingEvent.request.event_type=http_server_request
+participatingEvent.request.route=DELETE /microposts/{id}
+participatingEvent.request.status_code=302
+stack[1].event_type=function
+stack[1].id=ActiveSupport::Callbacks::CallbackSequence#invoke_before
+stack[1].raises_exception=false
+stack[2].event_type=function
+stack[2].id=ActionController::Instrumentation#process_action
+stack[2].raises_exception=false
+stack[3].event_type=http_server_request
+stack[3].route=DELETE /microposts/{id}
+stack[3].status_code=302`);
   expect(finding.ruleId).toEqual('authz-before-authn');
   expect(finding.event.id).toEqual(16);
   expect(finding.message).toEqual(

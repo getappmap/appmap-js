@@ -14,13 +14,20 @@ test('unsafe deserialization', async () => {
   const findingEvent = appMap.events.find((e) => e.id === finding.event.id)!;
   expect(
     new HashV2(finding.ruleId, findingEvent, finding.participatingEvents || {}).canonicalString
-  ).toEqual(`rule=deserialization-of-untrusted-data
-commandEvent.event_type=http_server_request
-commandEvent.route=GET /users
-commandEvent.status_code=200
+  ).toEqual(`algorithmVersion=2
+rule=deserialization-of-untrusted-data
 findingEvent.event_type=function
 findingEvent.id=ActiveSupport::MarshalWithAutoloading.load
-findingEvent.raises_exception=false`);
+findingEvent.raises_exception=false
+stack[1].event_type=function
+stack[1].id=app_views_users_index_html_erb.render
+stack[1].raises_exception=false
+stack[2].event_type=function
+stack[2].id=ActionController::Instrumentation#process_action
+stack[2].raises_exception=false
+stack[3].event_type=http_server_request
+stack[3].route=GET /users
+stack[3].status_code=200`);
   expect(finding.event.codeObject.fqid).toEqual(
     'function:marshal/ActiveSupport::MarshalWithAutoloading.load'
   );
