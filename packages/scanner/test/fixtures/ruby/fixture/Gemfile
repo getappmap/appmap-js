@@ -1,0 +1,6 @@
+source "https://rubygems.org"
+
+gem 'byebug'
+gem 'rake'
+gem 'appmap', github: 'applandinc/appmap-ruby', branch: 'master'
+gem 'minitest'
