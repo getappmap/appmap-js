@@ -16,7 +16,8 @@
     "pre-commit": "lint-staged",
     "test": "jest && ./smoketest.sh",
     "build": "tsc && webpack --mode=production",
-    "start": "ts-node src/cli.ts"
+    "start": "ts-node src/cli.ts",
+    "build-native": "yarn build && ./bin/build-native"
   },
   "lint-staged": {
     "*.{js,md,json}": [
@@ -94,6 +95,7 @@
     "moo": "^0.5.1",
     "open": "^8.2.1",
     "ora": "^5.4.1",
+    "pkg": "^5.8.0",
     "port-pid": "^0.0.7",
     "pretty-bytes": "^5.6.0",
     "ps-node": "^0.1.6",
@@ -102,5 +104,16 @@
     "supports-hyperlinks": "^2.2.0",
     "w3c-xmlserializer": "^2.0.0",
     "yargs": "^17.1.1"
+  },
+  "pkg": {
+    "targets": [
+      "node16-linux-x64",
+      "node16-win-x64",
+      "node16-macos-x64",
+      "node16-macos-arm64"
+    ],
+    "scripts": ["built/cmds/record/state/record_*.js"],
+    "assets": ["package.json", "**/openapi-template.yaml", "appmap.html"],
+    "outputPath": "dist"
   }
 }

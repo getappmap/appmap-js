@@ -61,7 +61,6 @@
     "@appland/sql-parser": "^1.5.0",
     "@types/cli-progress": "^3.9.2",
     "ajv": "^8.8.2",
-    "ansi-escapes": "^5.0.0",
     "applicationinsights": "^2.1.4",
     "async": "^3.2.3",
     "chalk": "^4.1.2",
@@ -86,16 +85,20 @@
   },
   "pkg": {
     "targets": [
-      "node14-linux-x64",
-      "node14-win-x64",
-      "node14-macos-x64"
+      "node16-linux-x64",
+      "node16-win-x64",
+      "node16-macos-x64",
+      "node16-macos-arm64"
     ],
     "scripts": [
-      "built/scanner/*.js"
+      "built/scanner/*.js",
+      "built/rules/**/*.js"
     ],
     "assets": [
       "built/sampleConfig/*.yml",
-      "built/**/*.json"
+      "built/**/*.json",
+      "package.json",
+      "doc/**/*.md"
     ],
     "outputPath": "dist"
   }
