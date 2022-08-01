@@ -1,0 +1,3 @@
+name: scanner/ruby-fixture
+packages:
+  - path: lib
