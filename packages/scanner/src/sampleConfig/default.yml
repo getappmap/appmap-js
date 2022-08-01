@@ -1,26 +1,27 @@
 checks:
-  - rule: authzBeforeAuthn
-  # - rule: circularDependency
-  - rule: deserializationOfUntrustedData
-  - rule: execOfUntrustedCommand
-  - rule: http500
-  # - rule: illegalPackageDependency
-  # - rule: incompatibleHttpClientRequest
-  # - rule: insecureCompare
-  # - rule: jobNotCancelled
-  - rule: logoutWithoutSessionReset
-  # - rule: missingAuthentication
-  - rule: missingContentType
-  - rule: nPlusOneQuery
-  # - rule: queryFromInvalidPackage
-  # - rule: queryFromView
-  # - rule: rpcWithoutCircuitBreaker
-  # - rule: saveWithoutValidation
-  - rule: secretInLog
-  #  - rule: slowFunctionCall
-  #  - rule: slowHttpServerRequest
-  #  - rule: slowQuery
-  - rule: tooManyJoins
-  - rule: tooManyUpdates
-  # - rule: unbatchedMaterializedQuery
-  - rule: updateInGetRequest
+  - rule: authz-before-authn
+  # - rule: circular-dependency
+  - rule: deserialization-of-untrusted-data
+  - rule: exec-of-untrusted-command
+  - rule: http-500
+  # - rule: illegal-package-dependency
+  # - rule: incompatible-http-client-request
+  # - rule: insecure-compare
+  # - rule: job-not-cancelled
+  - rule: logout-without-session-reset
+  # - rule: missing-authentication
+  - rule: missing-content-type
+  - rule: n-plus-one-query
+  # - rule: query-from-invalid-package
+  # - rule: query-from-view
+  # - rule: rpc-without-circuit-breaker
+  # - rule: save-without-validation
+  - rule: secret-in-log
+  #  - rule: slow-function-call
+  #  - rule: slow-httpServer-request
+  #  - rule: slow-query
+  - rule: too-many-joins
+  - rule: too-many-updates
+  # - rule: unbatched-materialized-query
+  - rule: unauthenticated-encryption
+  - rule: update-in-get-request
