@@ -1,0 +1,401 @@
+{
+  "version": "1.7.0",
+  "metadata": {
+    "app": "scanner/ruby-fixture",
+    "language": { "name": "ruby", "engine": "ruby", "version": "3.0.1" },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/applandinc/appmap-ruby",
+      "version": "0.83.4"
+    },
+    "git": {
+      "repository": "git@github.com:applandinc/appmap-js.git",
+      "branch": "feat/rule-unauthenticated-encryption",
+      "commit": "9f81b2cf8ad2313ee5751a41719edc321c6e9227",
+      "status": ["?? ../../../../../cli/src/cmds/sequenceDiagram/"],
+      "git_last_annotated_tag": "@appland/appmap-v2.3.4",
+      "git_last_tag": "@appland/scanner-v1.63.0",
+      "git_commits_since_last_annotated_tag": 0,
+      "git_commits_since_last_tag": 0
+    },
+    "name": "Crypt crypt aes 256 gcm",
+    "source_location": "test/crypt_test.rb:11",
+    "frameworks": [{ "name": "minitest", "version": "5.16.2" }],
+    "recorder": { "name": "minitest" },
+    "test_status": "succeeded"
+  },
+  "classMap": [
+    {
+      "name": "lib/crypt",
+      "type": "package",
+      "children": [
+        {
+          "name": "Crypt",
+          "type": "class",
+          "children": [
+            {
+              "name": "Command",
+              "type": "class",
+              "children": [
+                {
+                  "name": "encrypt_aes_256_gcm",
+                  "type": "function",
+                  "location": "lib/crypt/command.rb:15",
+                  "static": true,
+                  "labels": ["command"],
+                  "comment": "# @label command\n"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "openssl",
+      "type": "package",
+      "children": [
+        {
+          "name": "OpenSSL",
+          "type": "class",
+          "children": [
+            {
+              "name": "Cipher",
+              "type": "class",
+              "children": [
+                {
+                  "name": "encrypt",
+                  "type": "function",
+                  "location": "OpenSSL::Cipher#encrypt",
+                  "static": false,
+                  "labels": ["crypto.encrypt"]
+                },
+                {
+                  "name": "random_key",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/3.0.0/openssl/cipher.rb:43",
+                  "static": false,
+                  "comment": "# call-seq:\n#   cipher.random_key -> key\n#\n# Generate a random key with OpenSSL::Random.random_bytes and sets it to\n# the cipher, and returns it.\n#\n# You must call #encrypt or #decrypt before calling this method.\n"
+                },
+                {
+                  "name": "key=",
+                  "type": "function",
+                  "location": "OpenSSL::Cipher#key=",
+                  "static": false,
+                  "labels": ["crypto.set_key"]
+                },
+                {
+                  "name": "random_iv",
+                  "type": "function",
+                  "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/3.0.0/openssl/cipher.rb:55",
+                  "static": false,
+                  "comment": "# call-seq:\n#   cipher.random_iv -> iv\n#\n# Generate a random IV with OpenSSL::Random.random_bytes and sets it to the\n# cipher, and returns it.\n#\n# You must call #encrypt or #decrypt before calling this method.\n"
+                },
+                {
+                  "name": "iv=",
+                  "type": "function",
+                  "location": "OpenSSL::Cipher#iv=",
+                  "static": false,
+                  "labels": ["crypto.set_iv"]
+                },
+                {
+                  "name": "auth_data=",
+                  "type": "function",
+                  "location": "OpenSSL::Cipher#auth_data=",
+                  "static": false,
+                  "labels": ["crypto.set_auth_data"]
+                },
+                {
+                  "name": "update",
+                  "type": "function",
+                  "location": "OpenSSL::Cipher#update",
+                  "static": false
+                },
+                {
+                  "name": "final",
+                  "type": "function",
+                  "location": "OpenSSL::Cipher#final",
+                  "static": false,
+                  "labels": ["crypto.final"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "event": "call",
+      "thread_id": 2320,
+      "defined_class": "Crypt::Command",
+      "method_id": "encrypt_aes_256_gcm",
+      "path": "lib/crypt/command.rb",
+      "lineno": 15,
+      "static": true,
+      "parameters": [
+        {
+          "name": "record_id",
+          "class": "Symbol",
+          "object_id": 1869148,
+          "value": ":record_id",
+          "kind": "req"
+        }
+      ],
+      "receiver": { "class": "Class", "object_id": 2300, "value": "Crypt::Command" }
+    },
+    {
+      "id": 2,
+      "event": "call",
+      "thread_id": 2320,
+      "defined_class": "OpenSSL::Cipher",
+      "method_id": "encrypt",
+      "path": "OpenSSL::Cipher#encrypt",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Array",
+          "object_id": 2340,
+          "value": "[]",
+          "kind": "rest",
+          "size": 0
+        }
+      ],
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "object_id": 2360,
+        "value": "#<OpenSSL::Cipher:0x00007f9ab706e740>",
+        "labels": ["crypto.algorithm.id-aes256-GCM"]
+      }
+    },
+    {
+      "id": 3,
+      "event": "return",
+      "thread_id": 2320,
+      "parent_id": 2,
+      "elapsed": 3.00002284348011e-6,
+      "return_value": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f9ab706e740>",
+        "object_id": 2360
+      }
+    },
+    {
+      "id": 4,
+      "event": "call",
+      "thread_id": 2320,
+      "defined_class": "OpenSSL::Cipher",
+      "method_id": "random_key",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/3.0.0/openssl/cipher.rb",
+      "lineno": 43,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "object_id": 2360,
+        "value": "#<OpenSSL::Cipher:0x00007f9ab706e740>"
+      }
+    },
+    {
+      "id": 5,
+      "event": "call",
+      "thread_id": 2320,
+      "defined_class": "OpenSSL::Cipher",
+      "method_id": "key=",
+      "path": "OpenSSL::Cipher#key=",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "String",
+          "object_id": 2380,
+          "value": "_E_H__IKu_b___n:_}___C_s_\u000b'_\"3 _",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "object_id": 2360,
+        "value": "#<OpenSSL::Cipher:0x00007f9ab706e740>"
+      }
+    },
+    {
+      "id": 6,
+      "event": "return",
+      "thread_id": 2320,
+      "parent_id": 5,
+      "elapsed": 1.00000761449337e-5,
+      "return_value": {
+        "class": "String",
+        "value": "_E_H__IKu_b___n:_}___C_s_\u000b'_\"3 _",
+        "object_id": 2380
+      }
+    },
+    {
+      "id": 7,
+      "event": "return",
+      "thread_id": 2320,
+      "parent_id": 4,
+      "elapsed": 0.0012940000742673874,
+      "return_value": {
+        "class": "String",
+        "value": "_E_H__IKu_b___n:_}___C_s_\u000b'_\"3 _",
+        "object_id": 2380
+      }
+    },
+    {
+      "id": 8,
+      "event": "call",
+      "thread_id": 2320,
+      "defined_class": "OpenSSL::Cipher",
+      "method_id": "random_iv",
+      "path": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/3.0.0/openssl/cipher.rb",
+      "lineno": 55,
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "object_id": 2360,
+        "value": "#<OpenSSL::Cipher:0x00007f9ab706e740>"
+      }
+    },
+    {
+      "id": 9,
+      "event": "call",
+      "thread_id": 2320,
+      "defined_class": "OpenSSL::Cipher",
+      "method_id": "iv=",
+      "path": "OpenSSL::Cipher#iv=",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "String",
+          "object_id": 2400,
+          "value": "______\tW'_\u0017,",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "object_id": 2360,
+        "value": "#<OpenSSL::Cipher:0x00007f9ab706e740>"
+      }
+    },
+    {
+      "id": 10,
+      "event": "return",
+      "thread_id": 2320,
+      "parent_id": 9,
+      "elapsed": 2.00001522898674e-6,
+      "return_value": { "class": "String", "value": "______\tW'_\u0017,", "object_id": 2400 }
+    },
+    {
+      "id": 11,
+      "event": "return",
+      "thread_id": 2320,
+      "parent_id": 8,
+      "elapsed": 9.100022725760937e-5,
+      "return_value": { "class": "String", "value": "______\tW'_\u0017,", "object_id": 2400 }
+    },
+    {
+      "id": 12,
+      "event": "call",
+      "thread_id": 2320,
+      "defined_class": "OpenSSL::Cipher",
+      "method_id": "auth_data=",
+      "path": "OpenSSL::Cipher#auth_data=",
+      "static": false,
+      "parameters": [
+        { "name": "arg", "class": "String", "object_id": 2420, "value": "record_id", "kind": "req" }
+      ],
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "object_id": 2360,
+        "value": "#<OpenSSL::Cipher:0x00007f9ab706e740>"
+      }
+    },
+    {
+      "id": 13,
+      "event": "return",
+      "thread_id": 2320,
+      "parent_id": 12,
+      "elapsed": 3.00002284348011e-6,
+      "return_value": { "class": "String", "value": "record_id", "object_id": 2420 }
+    },
+    {
+      "id": 14,
+      "event": "call",
+      "thread_id": 2320,
+      "defined_class": "OpenSSL::Cipher",
+      "method_id": "update",
+      "path": "OpenSSL::Cipher#update",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Array",
+          "object_id": 2440,
+          "value": "[Very, very confidential data]",
+          "kind": "rest",
+          "size": 1
+        }
+      ],
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "object_id": 2360,
+        "value": "#<OpenSSL::Cipher:0x00007f9ab706e740>"
+      }
+    },
+    {
+      "id": 15,
+      "event": "return",
+      "thread_id": 2320,
+      "parent_id": 14,
+      "elapsed": 8.00006091594696e-6,
+      "return_value": {
+        "class": "String",
+        "value": "}N=__\u0002_V__M__\u0013\f\u000f_Q__y_0____I",
+        "object_id": 2460
+      }
+    },
+    {
+      "id": 16,
+      "event": "call",
+      "thread_id": 2320,
+      "defined_class": "OpenSSL::Cipher",
+      "method_id": "final",
+      "path": "OpenSSL::Cipher#final",
+      "static": false,
+      "parameters": [],
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "object_id": 2360,
+        "value": "#<OpenSSL::Cipher:0x00007f9ab706e740>"
+      }
+    },
+    {
+      "id": 17,
+      "event": "return",
+      "thread_id": 2320,
+      "parent_id": 16,
+      "elapsed": 3.00002284348011e-6,
+      "return_value": { "class": "String", "value": "", "object_id": 2480 }
+    },
+    {
+      "id": 18,
+      "event": "return",
+      "thread_id": 2320,
+      "parent_id": 1,
+      "elapsed": 0.0017880001105368137,
+      "return_value": {
+        "class": "String",
+        "value": "}N=__\u0002_V__M__\u0013\f\u000f_Q__y_0____I",
+        "object_id": 2500
+      }
+    }
+  ]
+}
