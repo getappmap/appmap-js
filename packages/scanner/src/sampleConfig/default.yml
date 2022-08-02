@@ -3,6 +3,7 @@ checks:
   # - rule: circular-dependency
   - rule: deserialization-of-untrusted-data
   - rule: exec-of-untrusted-command
+  - rule: hard-coded-key
   - rule: http-500
   # - rule: illegal-package-dependency
   # - rule: incompatible-http-client-request
