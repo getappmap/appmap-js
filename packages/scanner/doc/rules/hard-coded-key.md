@@ -10,5 +10,8 @@ labels:
   - crypto.decrypt
   - crypto.set_key
   - string.unpack
-scope: root
 ---
+
+Finds occurrances in which a cryptographic key is used that is not provided by a function.
+
+`string.unpack` functions are an exception, because they are only modifying, not creating, the key.
