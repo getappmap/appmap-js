@@ -1,6 +1,7 @@
 ---
 name: crypto.encrypt
 rules:
+  - deprecated-crypto-algorithm
   - unauthenticated-encryption
 ---
 
