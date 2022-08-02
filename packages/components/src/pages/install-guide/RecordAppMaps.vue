@@ -6,20 +6,52 @@
       </header>
       <main>
         <article v-if="documentationUrl">
-          <div class="mb20">
-            Use our CLI to perform your first runtime analysis while exercising
-            your test cases. If you do not have Node.js installed or would
-            prefer to perform the recording manually, visit our
-            <a :href="documentationUrl">
-              documentation for recording AppMaps in {{ language }}.
-            </a>
-            <div class="center fit">
-              <v-code-snippet
-                :clipboard-text="command"
-                :message-success="clipboardSuccess"
-              />
-            </div>
-          </div>
+          <h2>There are two ways to generate AppMaps:</h2>
+          <ol>
+            <li>
+              <h3>Using your tests:</h3>
+              <div class="youtube-link">
+                <a
+                  class="btn-youtube"
+                  href="https://www.youtube.com/watch?v=-TWop5gpsFA"
+                >
+                  <YoutubeLogo />
+                  <v-button
+                    label="Watch our tutorial video"
+                    class="cta-button b-0"
+                  />
+                </a>
+              </div>
+              <p>Run this command in your terminal and follow the prompts:</p>
+              <div class="center fit">
+                <v-code-snippet
+                  :clipboard-text="command"
+                  :message-success="clipboardSuccess"
+                />
+              </div>
+            </li>
+            <li>
+              <h3>By manually interacting with your application:</h3>
+              <div class="youtube-link">
+                <a
+                  class="btn-youtube"
+                  href="https://www.youtube.com/watch?v=1QcGAuruj6Y"
+                >
+                  <YoutubeLogo />
+                  <v-button
+                    label="Watch our tutorial video"
+                    class="cta-button b-0"
+                  />
+                </a>
+              </div>
+              <div>
+                Or visit our
+                <a :href="documentationUrl">
+                  documentation for recording AppMaps in {{ language }}.
+                </a>
+              </div>
+            </li>
+          </ol>
           <p class="mb20" v-if="complete">
             Success! Continue to the next step.
           </p>
@@ -30,8 +62,11 @@
             documentation below.
           </p>
           <p class="mb20">
-            <template v-for="(url, lang, index) in editorSpecificUrls">
-              <a :href="url" :key="lang">{{ lang }}</a>
+            <template
+              v-for="(url, lang, index) in editorSpecificUrls"
+              :key="lang"
+            >
+              <a :href="url">{{ lang }}</a>
               <template
                 v-if="index !== Object.keys(editorSpecificUrls).length - 1"
               >
@@ -51,6 +86,8 @@ import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VCodeSnippet from '@/components/CodeSnippet.vue';
 import Navigation from '@/components/mixins/navigation';
+import VButton from '@/components/Button.vue';
+import YoutubeLogo from '@/assets/youtube_icon.svg';
 
 const documentationUrls = {
   vscode: {
@@ -78,6 +115,8 @@ export default {
     QuickstartLayout,
     VNavigationButtons,
     VCodeSnippet,
+    VButton,
+    YoutubeLogo,
   },
 
   mixins: [Navigation],
@@ -144,5 +183,53 @@ export default {
 h1 {
   margin-block-start: 0;
   font-size: 2em;
+}
+
+h2 {
+  font-size: 1.7em;
+}
+
+h3 {
+  font-size: 1.4em;
+}
+
+.youtube-link {
+  margin: 20px 0;
+}
+
+.pink {
+  color: #ff07aa;
+}
+
+.btn-youtube {
+  align-items: center;
+  background-color: $almost-black;
+  border: 3px solid $gray-tertiary;
+  border-radius: 1rem;
+  box-shadow: $box-shadow-min;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 0.5rem 0.8rem;
+  transition: $transition;
+  width: 50%;
+  min-width: 300px;
+
+  .cta-button {
+    padding: 0.5rem 0.5rem 0.5rem 4rem;
+  }
+
+  .b-0 {
+    border: none;
+  }
+
+  &:hover {
+    background-color: $black;
+    box-shadow: $box-shadow-min;
+    border-color: #5f729a;
+    .cta-button {
+      background: none;
+    }
+  }
 }
 </style>
