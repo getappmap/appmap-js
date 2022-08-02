@@ -12,11 +12,15 @@ module Crypt
     end
 
     # @label command
-    def self.encrypt_aes_256_gcm(record_id)
+    def self.encrypt_aes_256_gcm(record_id, key: nil)
       data = "Very, very confidential data"
       cipher = OpenSSL::Cipher.new('aes-256-gcm')
       cipher.encrypt
-      key = cipher.random_key
+      if key
+        cipher.key = key
+      else
+        key = cipher.random_key
+      end
       iv = cipher.random_iv
       cipher.auth_data = record_id.to_s
 

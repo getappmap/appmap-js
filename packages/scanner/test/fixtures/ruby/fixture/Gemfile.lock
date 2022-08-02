@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/applandinc/appmap-ruby.git
-  revision: cda70741cdd594f92863d2c32842c9627af38506
-  branch: master
+  revision: 216c45468bdf50251fd8fcfd45849acaf997bd73
+  branch: feat/crypto-algorithm
   specs:
     appmap (0.83.4)
       activesupport
