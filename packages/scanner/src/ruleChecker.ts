@@ -1,7 +1,7 @@
 import { Event } from '@appland/models';
 import Check from './check';
 import { AbortError } from './errors';
-import { AppMapIndex, Finding, ScopeName } from './types';
+import { AppMapIndex, Finding } from './types';
 import { verbose } from './rules/lib/util';
 import ScopeIterator from './scope/scopeIterator';
 import RootScope from './scope/rootScope';
@@ -29,25 +29,7 @@ export default class RuleChecker {
     check: Check,
     findings: Finding[]
   ): Promise<void> {
-    const numScopesChecked = await this.checkScope(
-      appMapFile,
-      appMapIndex,
-      check,
-      check.scope,
-      findings
-    );
-    if (numScopesChecked === 0 && check.scope === 'command') {
-      await this.checkScope(appMapFile, appMapIndex, check, 'root', findings);
-    }
-  }
-
-  async checkScope(
-    appMapFile: string,
-    appMapIndex: AppMapIndex,
-    check: Check,
-    scope: ScopeName,
-    findings: Finding[]
-  ): Promise<number> {
+    const scope = check.scope;
     if (verbose()) {
       console.warn(`Checking AppMap ${appMapIndex.appMap.name} with scope ${scope}`);
     }
@@ -63,9 +45,7 @@ export default class RuleChecker {
       }
     };
 
-    let numScopes = 0;
     for (const scope of scopeIterator.scopes(callEvents())) {
-      numScopes += 1;
       if (verbose()) {
         console.warn(`Scope ${scope.scope}`);
       }
@@ -95,7 +75,6 @@ export default class RuleChecker {
         );
       }
     }
-    return numScopes;
   }
 
   async checkEvent(
