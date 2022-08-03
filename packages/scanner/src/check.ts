@@ -19,7 +19,7 @@ export default class Check {
 
     this.id = rule.id;
     this.options = options || makeOptions();
-    this.scope = rule.scope || 'root';
+    this.scope = rule.scope || 'command';
     this.includeScope = [];
     this.excludeScope = [];
     this.includeEvent = [];

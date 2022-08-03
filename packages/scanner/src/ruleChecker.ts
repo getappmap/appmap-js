@@ -4,7 +4,6 @@ import { AbortError } from './errors';
 import { AppMapIndex, Finding, ScopeName } from './types';
 import { verbose } from './rules/lib/util';
 import ScopeIterator from './scope/scopeIterator';
-import RootScope from './scope/rootScope';
 import HTTPServerRequestScope from './scope/httpServerRequestScope';
 import HTTPClientRequestScope from './scope/httpClientRequestScope';
 import CommandScope from './scope/commandScope';
@@ -16,7 +15,6 @@ import HashV2 from './algorithms/hash/hashV2';
 
 export default class RuleChecker {
   private scopes: Record<string, ScopeIterator> = {
-    root: new RootScope(),
     command: new CommandScope(),
     http_server_request: new HTTPServerRequestScope(),
     http_client_request: new HTTPClientRequestScope(),
@@ -37,7 +35,7 @@ export default class RuleChecker {
       findings
     );
     if (numScopesChecked === 0 && check.scope === 'command') {
-      await this.checkScope(appMapFile, appMapIndex, check, 'root', findings);
+      await this.checkScope(appMapFile, appMapIndex, check, 'command', findings);
     }
   }
 
