@@ -36,7 +36,6 @@ it('authorization before (or without) authentication', async () => {
   );
   expect(findings).toHaveLength(1);
   const finding = findings[0];
-  console.log(finding.stack);
   const findingEvent = appMap.events.find((e) => e.id === finding.event.id)!;
   expect(
     new HashV2(finding.ruleId, findingEvent, finding.participatingEvents || {}).canonicalString
