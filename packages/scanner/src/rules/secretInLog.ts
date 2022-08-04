@@ -90,6 +90,7 @@ export default {
   id: 'secret-in-log',
   title: 'Secret in log',
   labels: [Secret, Log],
+  scope: 'root',
   impactDomain: 'Security',
   enumerateScope: true,
   references: {

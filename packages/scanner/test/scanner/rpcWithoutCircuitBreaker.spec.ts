@@ -7,10 +7,10 @@ it('rpc without circuit breaker', async () => {
     new Check(rule),
     'PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
   );
-  expect(findings).toHaveLength(4);
+  expect(findings).toHaveLength(3);
   const finding = findings[0];
   expect(finding.ruleId).toEqual('rpc-without-circuit-breaker');
-  expect(finding.event.id).toEqual(19);
+  expect(finding.event.id).toEqual(76);
 });
 
 it('all rpc have a circuit breaker ', async () => {
