@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.64.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.63.0...@appland/scanner-v1.64.0) (2022-08-04)
+
+
+### Features
+
+* Command scope falls back on root events ([3823a1f](https://github.com/applandinc/appmap-js/commit/3823a1f686212db49b87f2995baa2103a4e007d1))
+
 # [@appland/scanner-v1.63.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.62.2...@appland/scanner-v1.63.0) (2022-07-28)
 
 
