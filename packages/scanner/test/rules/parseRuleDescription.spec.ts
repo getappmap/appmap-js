@@ -1,5 +1,6 @@
 import parseRuleDescription from '../../src/rules/lib/parseRuleDescription';
 import fs from 'fs';
+import assert from 'assert';
 
 it('parses rules markdown docs', async () => {
   const description = parseRuleDescription('authzBeforeAuthn');
@@ -15,6 +16,6 @@ it('all rules are parseable', async () => {
   const files = fs.readdirSync('doc/rules');
   for (const file of files) {
     const description = parseRuleDescription(file.replace('.md', ''));
-    expect(description).toBeTruthy();
+    assert(description, `No description found in ${file}`);
   }
 });

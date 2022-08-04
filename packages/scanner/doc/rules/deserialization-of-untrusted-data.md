@@ -12,6 +12,9 @@ labels:
   - deserialize.sanitize
 ---
 
+Finds occurrances of deserialization in which the mechanism employed is known to be unsafe, and the
+data is not known to be trusted.
+
 ### Rule logic
 
 Finds all events labeled `deserialize.unsafe`, that are not a descendant of an event labeled
