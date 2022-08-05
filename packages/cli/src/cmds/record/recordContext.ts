@@ -35,10 +35,15 @@ export default class RecordContext {
   metrics(): Record<string, number> {
     const result = {} as Record<string, number>;
     if (this.maxTime) result.maxTime = this.maxTime;
-    if (this.initialAppMapCount)
+    if (this.initialAppMapCount !== undefined) {
       result.initialAppMapCount = this.initialAppMapCount;
-    if (this.appMapCount) result.appMapCount = this.appMapCount;
-    if (this.appMapEventCount) result.appMapEventCount = this.appMapEventCount;
+    }
+    if (this.appMapCount !== undefined) {
+      result.appMapCount = this.appMapCount;
+    }
+    if (this.appMapEventCount !== undefined) {
+      result.appMapEventCount = this.appMapEventCount;
+    }
     return result;
   }
 
