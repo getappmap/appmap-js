@@ -1,6 +1,6 @@
 {
   "name": "@appland/appmap",
-  "version": "3.32.0",
+  "version": "3.32.1",
   "description": "",
   "bin": "built/cli.js",
   "publishConfig": {
@@ -112,8 +112,14 @@
       "node16-macos-x64",
       "node16-macos-arm64"
     ],
-    "scripts": ["built/cmds/record/state/record_*.js"],
-    "assets": ["package.json", "**/openapi-template.yaml", "appmap.html"],
+    "scripts": [
+      "built/cmds/record/state/record_*.js"
+    ],
+    "assets": [
+      "package.json",
+      "**/openapi-template.yaml",
+      "appmap.html"
+    ],
     "outputPath": "dist"
   }
 }

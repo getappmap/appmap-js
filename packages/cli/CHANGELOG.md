@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.32.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.32.0...@appland/appmap-v3.32.1) (2022-08-05)
+
+
+### Bug Fixes
+
+* Recording metrics report 0 counts ([4753c9d](https://github.com/applandinc/appmap-js/commit/4753c9dd9d32e616523de722ea74f01303fa2775))
+
 # [@appland/appmap-v3.32.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.31.0...@appland/appmap-v3.32.0) (2022-07-27)
 
 
