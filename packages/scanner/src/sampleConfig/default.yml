@@ -2,6 +2,7 @@ checks:
   - rule: authz-before-authn
   # - rule: circular-dependency
   - rule: deserialization-of-untrusted-data
+  - rule: eval-of-untrusted-code
   - rule: exec-of-untrusted-command
   - rule: http-500
   # - rule: illegal-package-dependency
