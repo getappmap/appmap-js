@@ -1,6 +1,7 @@
 checks:
   - rule: authz-before-authn
   # - rule: circular-dependency
+  - rule: deprecated-crypto-algorithm
   - rule: deserialization-of-untrusted-data
   - rule: exec-of-untrusted-command
   - rule: http-500
