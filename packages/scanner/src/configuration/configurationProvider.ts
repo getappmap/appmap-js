@@ -47,9 +47,9 @@ function loadFromDir(ruleName: string): () => Promise<Rule | undefined> {
 
     try {
       rule = (await import(`../rules/${ruleName}/rule`)).default;
-    } catch {
+    } catch (err) {
       console.warn(
-        `Rule ${ruleName} has no rule.js or rule.ts file, or the file doesn't have a default export`
+        `[${err}] Rule ${ruleName} has no rule.js or rule.ts file, or the file doesn't have a default export`
       );
       return;
     }
