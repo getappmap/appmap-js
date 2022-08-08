@@ -1,5 +1,0 @@
-name: circular_dependency
-packages:
-- path: lib/command
-- path: lib/pkg_a
-- path: lib/pkg_b

@@ -60,7 +60,7 @@ describe('scan', () => {
     const appMapMetadata = scanResults.summary.appMapMetadata;
     expect(appMapMetadata.apps).toEqual(['spring-petclinic']);
     const checks = scanResults.configuration.checks;
-    ['http500', 'nPlusOneQuery'].forEach((rule) =>
+    ['http-500', 'n-plus-one-query'].forEach((rule) =>
       expect(checks.map((check) => check.rule)).toContain(rule)
     );
     expect(Object.keys(scanResults).sort()).toEqual([

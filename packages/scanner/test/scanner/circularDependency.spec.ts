@@ -2,7 +2,7 @@ import Check from '../../src/check';
 import rule from '../../src/rules/circularDependency';
 import { scan } from '../util';
 
-const appMapFileName = 'ruby/circular_dependency/tmp/appmap/minitest/Command_command.appmap.json';
+const appMapFileName = 'ruby/fixture/tmp/appmap/minitest/Circular_cycle.appmap.json';
 const detectCycles = async (check: Check) => {
   return scan(check, appMapFileName);
 };
@@ -18,7 +18,7 @@ describe('circular dependency', () => {
     expect(finding.ruleId).toEqual('circular-dependency');
     expect(finding.event.id).toEqual(2);
     expect(finding.message).toEqual(
-      `Cycle in package dependency graph: lib/pkg_a -> lib/pkg_b -> lib/pkg_a`
+      `Cycle in package dependency graph: lib/circular/pkg_a -> lib/circular/pkg_b -> lib/circular/pkg_a`
     );
     expect(finding.relatedEvents!.map((e) => e.id)).toEqual([2, 3, 4]);
   });
