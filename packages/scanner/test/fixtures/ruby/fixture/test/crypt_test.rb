@@ -1,5 +1,4 @@
 require 'minitest/autorun'
-require 'appmap/minitest'
 require_relative '../lib/crypt/command'
 
 class CryptTest < Minitest::Test

@@ -6,7 +6,7 @@ import { Event } from '@appland/models';
 import { OpenAPIV3 } from 'openapi-types';
 import { URL } from 'url';
 export { default as parseHTTPServerRequests } from './parseHTTPServerRequests';
-export { verbose } from './util';
+export { classNameToOpenAPIType, verbose } from './util';
 
 interface OpenAPIV3Fragment {
   paths: OpenAPIV3.PathItemObject;

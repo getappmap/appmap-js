@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/applandinc/appmap-ruby.git
-  revision: cda70741cdd594f92863d2c32842c9627af38506
+  revision: a4c4b32ed998bf69a59ba8822bf3a8117113a86a
   branch: master
   specs:
-    appmap (0.83.4)
+    appmap (0.83.6)
       activesupport
       method_source
       rack

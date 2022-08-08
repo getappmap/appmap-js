@@ -8,7 +8,6 @@ impactDomain: Security
 labels:
   - crypto.encrypt
   - crypto.set_auth_data
-scope: root
 ---
 
 Ensures that encryption operations use authenticated encryption.
