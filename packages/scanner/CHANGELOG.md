@@ -1,3 +1,16 @@
+# [@appland/scanner-v1.66.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.65.0...@appland/scanner-v1.66.0) (2022-08-08)
+
+
+### Bug Fixes
+
+* Fix rule doc ([b99b6ae](https://github.com/applandinc/appmap-js/commit/b99b6aec90186bef312d04fb4f4c95f9b1ee62d5))
+
+
+### Features
+
+* Add deprecated-crypto-algorithm to default rule set ([3034489](https://github.com/applandinc/appmap-js/commit/303448974a73637493a72bea7ab8cfb28ccc8b10))
+* Detect deprecated crypto algorithm ([a17a537](https://github.com/applandinc/appmap-js/commit/a17a537334771a9f2cd64fa73c2396e517ff82ea))
+
 # [@appland/scanner-v1.65.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.64.0...@appland/scanner-v1.65.0) (2022-08-08)
 
 
