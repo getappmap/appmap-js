@@ -34,7 +34,7 @@ function parseScheme(authorization: string): Scheme {
 type OptSchemaObjectType = OpenAPIV3.SchemaObject['type'];
 type OptObjectTypeOrUnknown = OptSchemaObjectType | 'unknown';
 
-function classNameToOpenAPIType(className?: string): OptSchemaObjectType {
+export function classNameToOpenAPIType(className?: string): OptSchemaObjectType {
   if (!className || className === '') return;
 
   const mapRubyType = (t: string): OptObjectTypeOrUnknown => {
@@ -108,25 +108,19 @@ function messageToOpenAPISchema(message: ValueBase): OpenAPIV3.SchemaObject | un
   if (type === undefined) return;
 
   if (message.properties) {
-    const properties = message.properties.reduce(
-      (memo, msgProperty: ParameterProperty) => {
-        const type = classNameToOpenAPIType(msgProperty.class);
-        if (type === 'array') {
-          // eslint-disable-next-line no-param-reassign
-          memo[msgProperty.name] = { type } as OpenAPIV3.ArraySchemaObject;
-        } else if (type) {
-          // eslint-disable-next-line no-param-reassign
-          memo[msgProperty.name] = {
-            type,
-          } as OpenAPIV3.NonArraySchemaObject;
-        }
-        return memo;
-      },
-      {} as Record<
-        string,
-        OpenAPIV3.NonArraySchemaObject | OpenAPIV3.ArraySchemaObject
-      >
-    );
+    const properties = message.properties.reduce((memo, msgProperty: ParameterProperty) => {
+      const type = classNameToOpenAPIType(msgProperty.class);
+      if (type === 'array') {
+        // eslint-disable-next-line no-param-reassign
+        memo[msgProperty.name] = { type } as OpenAPIV3.ArraySchemaObject;
+      } else if (type) {
+        // eslint-disable-next-line no-param-reassign
+        memo[msgProperty.name] = {
+          type,
+        } as OpenAPIV3.NonArraySchemaObject;
+      }
+      return memo;
+    }, {} as Record<string, OpenAPIV3.NonArraySchemaObject | OpenAPIV3.ArraySchemaObject>);
     if (type === 'array') {
       return { type: 'array', items: { type: 'object', properties } };
     } else {
