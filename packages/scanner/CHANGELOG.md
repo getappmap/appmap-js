@@ -1,3 +1,16 @@
+# [@appland/scanner-v1.65.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.64.0...@appland/scanner-v1.65.0) (2022-08-08)
+
+
+### Bug Fixes
+
+* Remove an inadvenant console log ([5c11fc7](https://github.com/applandinc/appmap-js/commit/5c11fc77650e105f169ca0bcc4045312578e8881))
+
+
+### Features
+
+* Add unauthenticated-encryption to default rule set ([2e3cf92](https://github.com/applandinc/appmap-js/commit/2e3cf9298b3cfe99b489ab8b2894e913a305fdd0))
+* Check for unauthenticated encryption ([d393951](https://github.com/applandinc/appmap-js/commit/d393951c73c4492f1e95b52a2580fde10b256ee4))
+
 # [@appland/scanner-v1.64.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.63.0...@appland/scanner-v1.64.0) (2022-08-04)
 
 
