@@ -1,33 +1,41 @@
 import { Event } from '@appland/models';
-import { AppMapIndex, EventFilter, MatchResult, Rule, RuleLogic } from '../types';
-import * as types from './types';
-import { countJoins, SQLCount, sqlStrings } from '../database';
-import { URL } from 'url';
-import parseRuleDescription from './lib/parseRuleDescription';
+import { SqliteParser } from '@appland/models/types/sqlite-parser';
+import assert from 'assert';
+import AppMapIndex from '../../appMapIndex';
+import { countJoins, SQLCount, sqlStrings } from '../../database';
+import { EventFilter, MatchResult, RuleLogic } from '../../types';
+import { buildFilters } from '../lib/matchPattern';
+import Options from './options';
 
 export interface JoinCount extends SQLCount {
   joins: number;
 }
 
-class Options implements types.TooManyJoins.Options {
-  public warningLimit = 5;
-}
+export default function rule(options: Options): RuleLogic {
+  const excludeTables = buildFilters(options.excludeTables);
 
-// TODO: clean up (https://github.com/applandinc/scanner/issues/43)
-function build(options: Options = new Options()): RuleLogic {
-  const joinCount: Record<string, JoinCount> = {};
+  function filterTable(table: SqliteParser.Node): boolean {
+    assert(table.type === 'identifier');
+    assert(table.variant === 'table');
+    return !excludeTables.find((filter) => filter(table.name));
+  }
+
+  // TODO: clean up (https://github.com/applandinc/scanner/issues/43)
   function matcher(
     command: Event,
     appMapIndex: AppMapIndex,
     eventFilter: EventFilter
   ): MatchResult[] | undefined {
+    const joinCount: Record<string, JoinCount> = {};
     for (const sqlEvent of sqlStrings(command, appMapIndex, eventFilter)) {
       let occurrence = joinCount[sqlEvent.sql];
 
       if (!occurrence) {
+        const sqlAST = appMapIndex.sqlAST(sqlEvent.event);
+
         occurrence = {
           count: 1,
-          joins: countJoins(appMapIndex.sqlAST(sqlEvent.event)),
+          joins: countJoins(sqlAST, filterTable),
           events: [sqlEvent.event],
         };
         joinCount[sqlEvent.sql] = occurrence;
@@ -55,17 +63,3 @@ function build(options: Options = new Options()): RuleLogic {
     matcher,
   };
 }
-
-export default {
-  id: 'too-many-joins',
-  title: 'Too many joins',
-  impactDomain: 'Performance',
-  enumerateScope: false,
-  references: {
-    'CWE-1049': new URL('https://cwe.mitre.org/data/definitions/1049.html'),
-  },
-  description: parseRuleDescription('tooManyJoins'),
-  url: 'https://appland.com/docs/analysis/rules-reference.html#too-many-joins',
-  Options,
-  build,
-} as Rule;

@@ -2,6 +2,7 @@ import { EventNavigator, Event } from '@appland/models';
 import { visit } from './visit';
 import { AppMapIndex, EventFilter, QueryAST } from '../types';
 import { URL } from 'url';
+import { SqliteParser } from '@appland/models/types/sqlite-parser';
 
 export interface SQLEvent {
   sql: string;
@@ -153,13 +154,27 @@ export function* sqlStrings(
   }
 }
 
-export function countJoins(ast: QueryAST | undefined): number {
+export function countJoins(
+  ast: QueryAST | undefined,
+  filterTable?: (table: SqliteParser.Node) => boolean
+): number {
   if (!ast) return 0;
 
   let joins = 0;
   visit(ast, {
     'map.join': (node) => {
-      joins += (node.map ?? []).length;
+      const map = node.map ?? [];
+      const tableCount = filterTable
+        ? map.filter((entry) => {
+            const source: SqliteParser.Node = (entry as any)?.source;
+            if (!source) return true;
+            if (source.type !== 'identifier') return true;
+            if (source.variant !== 'table') return true;
+
+            return filterTable(source);
+          }).length
+        : map.length;
+      joins += tableCount;
     },
   });
 
