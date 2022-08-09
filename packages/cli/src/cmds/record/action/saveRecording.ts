@@ -1,10 +1,9 @@
-import { mkdirp } from 'fs-extra';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
 import UI from '../../userInteraction';
-import { readConfigOption, requestOptions } from '../configuration';
+import { requestOptions } from '../configuration';
 import RecordContext from '../recordContext';
 import RemoteRecording from '../remoteRecording';
+import nameAppMap from './nameAppMap';
+import saveAppMap from './saveAppMap';
 
 export default async function saveRecording(
   recordContext: RecordContext
@@ -16,36 +15,17 @@ export default async function saveRecording(
     UI.success(`Recording has finished, with ${data.length} bytes of data.`);
   } else {
     UI.warn(`Recording was stopped, but no data was obtained.`);
+    recordContext.appMapCount = 0;
+    recordContext.appMapEventCount = 0;
     return;
   }
-
-  const { appMapName } = await UI.prompt({
-    type: 'input',
-    name: 'appMapName',
-    message: 'Choose a name for your AppMap:',
-    default: 'My recording',
-  });
-
   const jsonData = JSON.parse(data);
 
-  if (jsonData.events) recordContext.appMapEventCount = jsonData.events.length;
+  if (jsonData.events) {
+    recordContext.appMapCount = 1;
+    recordContext.appMapEventCount = jsonData.events.length;
+  }
 
-  jsonData['metadata'] = jsonData['metadata'] || {};
-  jsonData['metadata']['name'] = appMapName;
-  data = JSON.stringify(jsonData);
-
-  const fileName = `${appMapName}.appmap.json`;
-  const outputDir = join(
-    (await readConfigOption('appmap_dir', 'tmp/appmap')) as string,
-    'remote'
-  );
-  await mkdirp(outputDir);
-
-  UI.status = `Saving recording to ${fileName} in directory ${outputDir}`;
-
-  await writeFile(join(outputDir, fileName), data);
-
-  UI.success('AppMap saved');
-
-  return join(outputDir, fileName);
+  const appMapName = await nameAppMap(jsonData);
+  return saveAppMap(jsonData, appMapName);
 }
