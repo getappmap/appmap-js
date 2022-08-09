@@ -57,7 +57,7 @@ function loadFromDir(ruleName: string): () => Promise<Rule | undefined> {
     if (verbose()) console.log(`Loaded rule ${ruleName}: ${rule}`);
 
     try {
-      options = await import(`../rules/${ruleName}/options`);
+      options = (await import(`../rules/${ruleName}/options`)).default;
       if (verbose()) console.log(`Loaded rule ${ruleName} options: ${options}`);
     } catch {
       // This is OK
