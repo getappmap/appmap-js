@@ -59,6 +59,16 @@ describe('EventNavigator', () => {
     expect(ancestors.next().done).toEqual(true);
   });
 
+  test('preceding', () => {
+    const event = apiKeyAppMap.events.find(({ id }) => id === 32);
+    const precedingSiblings = new EventNavigator(event).preceding();
+
+    expect(
+      // eslint-disable-next-line no-shadow
+      Array.from(precedingSiblings).map(({ event }) => event.id)
+    ).toEqual([30, 29, 28, 25, 23, 21, 19, 17, 14, 13, 11, 9, 8, 7]);
+  });
+
   test('precedingSiblings', () => {
     const event = apiKeyAppMap.events.find(
       (e) => e.isCall() && e.methodId === 'touch'

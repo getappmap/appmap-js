@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 export default class EventNavigator {
   constructor(event) {
     this.event = event;
@@ -32,22 +33,13 @@ export default class EventNavigator {
    * Generates all events which precede this event in the scenario.
    */
   *preceding() {
-    const ancestors = this.ancestors();
-    let ancestor = ancestors.next();
-    while (!ancestor.done) {
-      yield new EventNavigator(ancestor.value);
-      let precedingSibling = this.precedingSiblings.next();
-      while (!precedingSibling.done) {
-        yield new EventNavigator(precedingSibling.value);
-        const descendants = precedingSibling.value.descendants();
-        let descendant = descendants.next();
-        while (!descendant.done) {
-          yield new EventNavigator(descendant.value);
-          descendant = descendants.next();
-        }
-        precedingSibling = this.precedingSiblings.next();
+    for (const node of [this, ...this.ancestors()]) {
+      if (node !== this) yield node;
+      for (const sibling of node.precedingSiblings()) {
+        for (const descendant of [...sibling.descendants()].reverse())
+          yield descendant;
+        yield sibling;
       }
-      ancestor = ancestors.next();
     }
   }
 
