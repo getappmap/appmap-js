@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.32.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.32.1...@appland/appmap-v3.32.2) (2022-08-09)
+
+
+### Bug Fixes
+
+* Improve telemetry for "appmap record remote" ([dbc8184](https://github.com/applandinc/appmap-js/commit/dbc8184970a9d35cf6ed52dbd6fb1676d0a6be1f))
+
 # [@appland/appmap-v3.32.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.32.0...@appland/appmap-v3.32.1) (2022-08-05)
 
 
