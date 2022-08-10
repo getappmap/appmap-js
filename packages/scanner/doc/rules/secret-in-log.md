@@ -8,6 +8,7 @@ impactDomain: Security
 labels:
   - secret
   - log
+scope: root
 ---
 
 Identifies when a known or assumed secret is written to a log. Logs are often transported into other

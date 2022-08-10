@@ -3,7 +3,6 @@ rule: slow-function-call
 name: Slow function call
 title: Slow function call
 impactDomain: Performance
-scope: root
 ---
 
 Ensures that function elapsed time does not exceed a threshold.
