@@ -1,3 +1,15 @@
+# [@appland/scanner-v1.67.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.66.0...@appland/scanner-v1.67.0) (2022-08-10)
+
+
+### Bug Fixes
+
+* Fix Options loading from dir-based rules ([f58ce49](https://github.com/applandinc/appmap-js/commit/f58ce49f22ba4d649e8886d76373cf23d6614b37))
+
+
+### Features
+
+* Ignore schema info tables in too-many-joins ([0cb387d](https://github.com/applandinc/appmap-js/commit/0cb387d74aa7e6edda5e24a88d07fa65b3900966))
+
 # [@appland/scanner-v1.66.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.65.0...@appland/scanner-v1.66.0) (2022-08-08)
 
 
