@@ -42,4 +42,5 @@ jobs:
       if: branch = main
       script: |
         yarn run chromatic --auto-accept-changes \
+        && yarn run build-native \
         && yarn run semantic-release

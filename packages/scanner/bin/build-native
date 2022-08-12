@@ -5,14 +5,14 @@ echo "Building native binaries..."
 yarn pkg \
   --config package.json \
   --compress GZip \
-  -o dist/scanner \
+  -o release/scanner \
   built/cli.js
 
 echo "Archiving..."
-pushd dist>/dev/null
-  rm -rf *.tgz
+pushd release>/dev/null
+  rm -rf *.tar.gz
   for i in scanner-*; do
-    archive_name="$(echo ${i} | sed 's/\..*//').tgz"
+    archive_name="$(echo ${i} | sed 's/\..*//').tar.gz"
     tar \
       --transform 's|-\w*||' \
       -czf "${archive_name}" \
