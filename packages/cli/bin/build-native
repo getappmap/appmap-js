@@ -1,15 +1,24 @@
 #!/bin/bash
+set -e
 
 echo "Building native binaries..."
-
-cp built/appmap.html appmap.html
-
 yarn pkg \
   --config package.json \
   --compress GZip \
-  -o dist/cli \
+  -o release/appmap \
   built/cli.js
 
-rm appmap.html
+echo "Archiving..."
+pushd release>/dev/null
+  rm -rf *.tar.gz
+  for i in appmap-*; do
+    archive_name="$(echo ${i} | sed 's/\..*//').tar.gz"
+    tar \
+      --transform 's|-\w*||' \
+      -czf "${archive_name}" \
+      "${i}"
+    echo "  + ${archive_name}"
+  done
+popd>/dev/null
 
 echo "Success!"

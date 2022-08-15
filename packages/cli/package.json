@@ -118,7 +118,7 @@
     "assets": [
       "package.json",
       "**/openapi-template.yaml",
-      "appmap.html"
+      "built/appmap.html"
     ],
     "outputPath": "dist"
   }
