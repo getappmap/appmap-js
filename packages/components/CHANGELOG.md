@@ -1,3 +1,10 @@
+# [@appland/components-v2.11.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.10.0...@appland/components-v2.11.0) (2022-08-15)
+
+
+### Features
+
+* add video link to runtime analysis instruction page ([15c3ad0](https://github.com/applandinc/appmap-js/commit/15c3ad073cb49d0e0d2bab6cbbf59fbf54da114d))
+
 # [@appland/components-v2.10.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.9.1...@appland/components-v2.10.0) (2022-07-22)
 
 
