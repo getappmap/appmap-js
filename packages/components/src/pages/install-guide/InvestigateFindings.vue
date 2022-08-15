@@ -90,30 +90,27 @@
           </article>
         </div>
         <div v-else data-cy="runtime-analysis-info">
-          <div class="hero columns">
-            <header class="secondary-header">
-              <h1 data-cy="title">AppMap Runtime Analysis</h1>
-              <div class="subheading">
-                Find software design flaws that impact security, performance,
-                stability, and maintainability. Our runtime code analysis can
-                find the problems that static code analyzers miss — and that
-                cause serious production issues.
-              </div>
-            </header>
-            <a
-              class="btn-slack"
-              data-cy="slack-button"
-              href="https://appmap.io/slack"
-            >
-              <SlackLogo />
-              <v-button
-                label="Join our Slack for early access"
-                class="cta-button b-0"
-              />
-            </a>
-          </div>
+          <header>
+            <h1 data-cy="title">AppMap Runtime Analysis Early Access</h1>
+            <div class="subheading">
+              Find software design flaws that impact security, performance,
+              stability, and maintainability. Our runtime code analysis can find
+              the problems that static code analyzers miss — and that cause
+              serious production issues.
+            </div>
+          </header>
 
           <div class="feature-wrap content">
+            <a
+              class="youtube-video"
+              href="https://appland.com/docs/analysis#demo"
+            >
+              <img
+                class="video-thumbnail"
+                alt="runtime analysis video thumbnail"
+                src="../../assets/runtime_analysis_video_thumbnail.png"
+              />
+            </a>
             <div class="feature">
               <h2 class="subhead">
                 Identify design flaws and anti-patterns before they’re merged
@@ -138,30 +135,20 @@
                   HTTP requests incompatible with an OpenAPI spec, remote calls
                   made without circuit breaker, missing content types.
                 </li>
-                <li>And more!</li>
+                <li><strong>And more!</strong></li>
               </ul>
             </div>
-
-            <div class="feature">
-              <h2 class="subhead">Review your findings with our team.</h2>
-              <p>
-                Our team of specialist software architects are available to
-                early access users to help review the findings discovered in
-                your application, and provide you with strategies to address
-                them.
-              </p>
-            </div>
-
-            <div class="feature">
-              <h2 class="subhead">Support</h2>
-              <p>
-                Technical support in
-                <a href="https://appmap.io/slack"> Slack </a>
-                now available for
-                <strong>Ruby on Rails</strong> &
-                <strong>Java / Spring</strong>
-              </p>
-            </div>
+            <a
+              class="btn-slack"
+              data-cy="slack-button"
+              href="https://appmap.io/slack"
+            >
+              <SlackLogo />
+              <v-button
+                label="Join our Slack for early access"
+                class="cta-button b-0"
+              />
+            </a>
           </div>
         </div>
       </main>
@@ -306,6 +293,27 @@ h1 {
   }
 }
 
+.youtube-video {
+  align-items: center;
+  border: 3px solid $gray-tertiary;
+  box-shadow: $box-shadow-min;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  transition: $transition;
+  width: 50%;
+  min-width: 400px;
+  margin: 30px 0 50px 0;
+  &:hover {
+    box-shadow: $box-shadow-min;
+    border-color: #5f729a;
+  }
+
+  .video-thumbnail {
+    width: 100%;
+  }
+}
+
 .cta-logo {
   width: 25px;
   height: 25px;
@@ -325,6 +333,7 @@ h1 {
   transition: $transition;
   width: 50%;
   min-width: 300px;
+  margin-bottom: 40px;
 
   .cta-button {
     padding: 0.5rem 0.5rem 0.5rem 4rem;
