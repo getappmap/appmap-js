@@ -24,7 +24,9 @@ import 'jest-sinon';
 import GradleInstaller from '../../../src/cmds/agentInstaller/gradleInstaller';
 import MavenInstaller from '../../../src/cmds/agentInstaller/mavenInstaller';
 
+import * as openTicket from '../../../src/lib/ticket/openTicket';
 import { withStubbedTelemetry } from '../../helper';
+
 const fixtureDir = path.join(__dirname, '..', 'fixtures');
 tmp.setGracefulCleanup();
 
@@ -63,7 +65,10 @@ describe('install sub-command', () => {
 
   let projectDir: string;
   beforeEach(() => {
+    // don't open any tickets
+    sinon.stub(openTicket, 'openTicket').resolves();
 
+    projectDir = tmp.dirSync({} as any).name;
   });
 
   describe('A Java project', () => {

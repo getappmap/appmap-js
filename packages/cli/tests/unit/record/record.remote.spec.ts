@@ -134,7 +134,7 @@ describe('record remote', () => {
         expect(next).toEqual(agentAvailableAndReady.default);
       });
     });
-    describe.only('agent is recording', () => {
+    describe('agent is recording', () => {
       beforeEach(() =>
         sinon.stub(isRecordingInProgress, 'default').resolves(true)
       );
