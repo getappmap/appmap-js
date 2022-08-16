@@ -24,6 +24,7 @@ import 'jest-sinon';
 import GradleInstaller from '../../../src/cmds/agentInstaller/gradleInstaller';
 import MavenInstaller from '../../../src/cmds/agentInstaller/mavenInstaller';
 
+import { withStubbedTelemetry } from '../../helper';
 const fixtureDir = path.join(__dirname, '..', 'fixtures');
 tmp.setGracefulCleanup();
 
@@ -58,26 +59,11 @@ const invokeCommand = (
 };
 
 describe('install sub-command', () => {
+  withStubbedTelemetry(sinon);
+
   let projectDir: string;
   beforeEach(() => {
-    // Stub all Telemetry methods. flush still needs to work, though.
-    sinon.stub(Telemetry);
-    const callCB = (cb) => {
-      return cb();
-    };
-    (Telemetry.flush as sinon.SinonStub).callsFake(callCB);
-    projectDir = tmp.dirSync({} as any).name;
-  });
 
-  afterEach(() => {
-    // This bug https://github.com/sinonjs/sinon/issues/2384 acknowledges that
-    // sinon.restore doesn't restore static methods. It suggests
-    // sinon.restoreObject as a workaround, but restoreObject is currently
-    // missing from @types/sinon.
-    //
-    // This hacks around both problems:
-    sinon['restoreObject'](Telemetry);
-    sinon.restore();
   });
 
   describe('A Java project', () => {
