@@ -1,3 +1,10 @@
+# [@appland/models-v1.18.2](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.18.1...@appland/models-v1.18.2) (2022-08-16)
+
+
+### Bug Fixes
+
+* Make EventNavigator.preceding() actually work ([64507b8](https://github.com/applandinc/appmap-js/commit/64507b802f3f939d1dd7d61a1aa0a1cc00b1b021))
+
 # [@appland/models-v1.18.1](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.18.0...@appland/models-v1.18.1) (2022-07-28)
 
 
