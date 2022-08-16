@@ -9,6 +9,20 @@ export class InvalidPathError extends Error {
 
 export class AbortError extends Error {}
 export class ValidationError extends Error {}
+
+export interface HttpErrorResponse {
+  status: number;
+  headers: Record<string, string>;
+  body: string;
+  toString(): string;
+}
+
+export class HttpError extends Error {
+  constructor(message: string, readonly response?: HttpErrorResponse) {
+    super(message);
+  }
+}
+
 export class ChildProcessError extends Error {
   constructor(
     readonly command: string,

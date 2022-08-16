@@ -16,6 +16,7 @@ import { getDirectoryProperty } from './telemetryUtil';
 import { getProjects, ProjectConfiguration } from './projectConfiguration';
 import AgentInstaller from './agentInstaller';
 import { ProcessLog } from './commandRunner';
+import { openTicket } from '../../lib/ticket/openTicket';
 interface InstallCommandOptions {
   verbose?: any;
   projectType?: string;
@@ -214,9 +215,10 @@ const _handler = async (
     errors.push(installerError);
   }
 
+  await openTicket(errors.map((e) => e.message));
+
   if (errors.length) {
     const reason = new Error(errors.map((e) => e.message).join('\n'));
-    console.log(reason.message);
     return { exitCode: 1, err: reason };
   }
 
