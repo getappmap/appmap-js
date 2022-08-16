@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.33.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.32.2...@appland/appmap-v3.33.0) (2022-08-16)
+
+
+### Features
+
+* Open a Zendesk ticket if install fails ([745f784](https://github.com/applandinc/appmap-js/commit/745f784472a300f65e5c270c0f8fb36241757d04))
+
 # [@appland/appmap-v3.32.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.32.1...@appland/appmap-v3.32.2) (2022-08-09)
 
 
