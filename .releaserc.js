@@ -45,13 +45,13 @@ module.exports = {
       },
     ],
     '@semantic-release/git',
-    join(__dirname, 'ci/yarnPublish.js'),
     [
       '@semantic-release/github',
       {
-        assets: 'release/*.tar.gz',
+        assets: 'release/*',
       },
     ],
+    join(__dirname, 'ci/yarnPublish.js'),
   ],
   extends: 'semantic-release-monorepo',
 };
