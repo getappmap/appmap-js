@@ -1,3 +1,10 @@
+# [@appland/components-v2.11.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.11.0...@appland/components-v2.11.1) (2022-08-17)
+
+
+### Bug Fixes
+
+* Move OpenAPI instructions before analysis ([bb12943](https://github.com/applandinc/appmap-js/commit/bb12943f8448f5c26a164ba4b57a0a2ff1115281))
+
 # [@appland/components-v2.11.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.10.0...@appland/components-v2.11.0) (2022-08-15)
 
 
