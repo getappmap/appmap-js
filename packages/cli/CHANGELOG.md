@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.33.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.33.0...@appland/appmap-v3.33.1) (2022-08-17)
+
+
+### Bug Fixes
+
+* Don't prompt to create ticket on success ([054d2e6](https://github.com/applandinc/appmap-js/commit/054d2e66984d5a52e35ee426cb0e57d69c94f806))
+
 # [@appland/appmap-v3.33.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.32.2...@appland/appmap-v3.33.0) (2022-08-16)
 
 
