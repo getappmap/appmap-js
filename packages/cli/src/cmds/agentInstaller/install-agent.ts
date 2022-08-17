@@ -215,9 +215,9 @@ const _handler = async (
     errors.push(installerError);
   }
 
-  await openTicket(errors.map((e) => e.message));
-
   if (errors.length) {
+    await openTicket(errors.map((e) => e.message));
+
     const reason = new Error(errors.map((e) => e.message).join('\n'));
     return { exitCode: 1, err: reason };
   }
