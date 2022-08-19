@@ -12,6 +12,7 @@ import singleScan from './singleScan';
 import watchScan from './watchScan';
 import { parseConfigFile } from '../../configuration/configurationProvider';
 import { handleWorkingDirectory } from '../handleWorkingDirectory';
+import interactiveScan from './interactiveScan';
 
 export default {
   command: 'scan',
@@ -19,6 +20,10 @@ export default {
   builder(args: Argv): Argv {
     scanArgs(args);
 
+    args.option('interactive', {
+      describe: 'scan in interactive mode',
+      alias: 'i',
+    });
     args.option('appmap-file', {
       describe: 'single file to scan, or repeat this option to scan multiple specific files',
       alias: 'f',
@@ -44,8 +49,9 @@ export default {
     let { appmapDir } = options as unknown as CommandOptions;
     const {
       appmapFile,
-      config,
       directory,
+      interactive,
+      config: configFile,
       verbose: isVerbose,
       all: reportAllFindings,
       watch,
@@ -73,35 +79,37 @@ export default {
         `Don't use --all with --watch, because in watch mode all findings are reported`
       );
     }
-    if (appIdArg && watch) {
-      throw new ValidationError(
-        `Don't use --app with --watch, because in watch mode all findings are reported`
-      );
-    }
+
     if (!appmapFile && !appmapDir) {
       appmapDir = (await appmapDirFromConfig()) || '.';
     }
     if (appmapDir) await validateFile('directory', appmapDir);
 
+    let appId = appIdArg;
+    if (!reportAllFindings) appId = await resolveAppId(appIdArg, appmapDir);
+
     if (watch) {
       const watchAppMapDir = appmapDir!;
-      return watchScan({ appmapDir: watchAppMapDir, configFile: config });
+      return watchScan({ appId, appmapDir: watchAppMapDir, configFile });
     } else {
-      let appId = appIdArg;
-      if (!reportAllFindings) {
-        appId = await resolveAppId(appIdArg, appmapDir);
+      const configuration = await parseConfigFile(configFile);
+      if (interactive) {
+        return interactiveScan({
+          appmapFile,
+          appmapDir,
+          configuration,
+        });
+      } else {
+        return singleScan({
+          appmapFile,
+          appmapDir,
+          configuration,
+          reportAllFindings,
+          appId,
+          ide,
+          reportFile,
+        });
       }
-      const configData = await parseConfigFile(config);
-
-      return singleScan({
-        appmapFile,
-        appmapDir,
-        configData,
-        reportAllFindings,
-        appId,
-        ide,
-        reportFile,
-      });
     }
   },
 };

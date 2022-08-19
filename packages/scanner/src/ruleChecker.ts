@@ -13,6 +13,7 @@ import CheckInstance from './checkInstance';
 import { cloneEvent } from './eventUtil';
 import HashV1 from './algorithms/hash/hashV1';
 import HashV2 from './algorithms/hash/hashV2';
+import ProgressReporter from './progressReporter';
 
 export default class RuleChecker {
   private scopes: Record<string, ScopeIterator> = {
@@ -23,19 +24,20 @@ export default class RuleChecker {
     transaction: new SQLTransactionScope(),
   };
 
+  constructor(private progress?: ProgressReporter) {}
+
   async check(
-    appMapFile: string,
+    appMapFileName: string,
     appMapIndex: AppMapIndex,
     check: Check,
     findings: Finding[]
   ): Promise<void> {
-    const scope = check.scope;
     if (verbose()) {
-      console.warn(`Checking AppMap ${appMapIndex.appMap.name} with scope ${scope}`);
+      console.warn(`Checking AppMap ${appMapIndex.appMap.name} with scope ${check.scope}`);
     }
-    const scopeIterator = this.scopes[scope];
+    const scopeIterator = this.scopes[check.scope];
     if (!scopeIterator) {
-      throw new AbortError(`Invalid scope name "${scope}"`);
+      throw new AbortError(`Invalid scope name "${check.scope}"`);
     }
 
     const callEvents = function* (): Generator<Event> {
@@ -49,16 +51,21 @@ export default class RuleChecker {
       if (verbose()) {
         console.warn(`Scope ${scope.scope}`);
       }
+
+      if (this.progress) await this.progress.filterScope(check.scope, scope.scope);
       const checkInstance = new CheckInstance(check);
       if (!check.filterScope(scope.scope, appMapIndex)) {
         continue;
       }
+
+      if (this.progress) await this.progress.enterScope(scope.scope);
+
       if (checkInstance.enumerateScope) {
         for (const event of scope.events()) {
           await this.checkEvent(
             event,
             scope.scope,
-            appMapFile,
+            appMapFileName,
             appMapIndex,
             checkInstance,
             findings
@@ -68,19 +75,21 @@ export default class RuleChecker {
         await this.checkEvent(
           scope.scope,
           scope.scope,
-          appMapFile,
+          appMapFileName,
           appMapIndex,
           checkInstance,
           findings
         );
       }
+
+      if (this.progress) await this.progress.leaveScope();
     }
   }
 
   async checkEvent(
     event: Event,
     scope: Event,
-    appMapFile: string,
+    appMapFileName: string,
     appMapIndex: AppMapIndex,
     checkInstance: CheckInstance,
     findings: Finding[]
@@ -101,6 +110,7 @@ export default class RuleChecker {
       return;
     }
 
+    if (this.progress) await this.progress.filterEvent(event);
     if (!checkInstance.filterEvent(event, appMapIndex)) {
       return;
     }
@@ -150,7 +160,7 @@ export default class RuleChecker {
         });
 
       return {
-        appMapFile,
+        appMapFile: appMapFileName,
         checkId: checkInstance.checkId,
         ruleId: checkInstance.ruleId,
         ruleTitle: checkInstance.title,
@@ -170,11 +180,13 @@ export default class RuleChecker {
       } as Finding;
     };
 
+    if (this.progress) await this.progress.matchEvent(event, appMapIndex);
     const matchResult = await checkInstance.ruleLogic.matcher(
       event,
       appMapIndex,
       checkInstance.filterEvent.bind(checkInstance)
     );
+    if (this.progress) await this.progress.matchResult(event, matchResult);
     const numFindings = findings.length;
     if (matchResult === true) {
       let finding;
