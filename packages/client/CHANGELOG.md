@@ -1,3 +1,10 @@
+# [@appland/client-v1.3.1](https://github.com/applandinc/appmap-js/compare/@appland/client-v1.3.0...@appland/client-v1.3.1) (2022-08-19)
+
+
+### Bug Fixes
+
+* Add name to exported function ([b560338](https://github.com/applandinc/appmap-js/commit/b5603388dcbf30dc8d465d6a296bdf9882fbd524))
+
 # [@appland/client-v1.3.0](https://github.com/applandinc/appmap-js/compare/@appland/client-v1.2.0...@appland/client-v1.3.0) (2022-02-15)
 
 
