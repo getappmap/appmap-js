@@ -1,3 +1,16 @@
+# [@appland/scanner-v1.68.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.67.0...@appland/scanner-v1.68.0) (2022-08-19)
+
+
+### Bug Fixes
+
+* Allow rule doc to be missing ([85a22fc](https://github.com/applandinc/appmap-js/commit/85a22fcaf777ab3794300d3ad52057be6ace4a87))
+
+
+### Features
+
+* Enhanced breakpoints ([b338bc9](https://github.com/applandinc/appmap-js/commit/b338bc9c1beebf3fbc78fb57bb72e4738c0ed5e6))
+* Interactive rule evaluator ([d0a0846](https://github.com/applandinc/appmap-js/commit/d0a08466ed0e92484a4c195c74cbb737a2cb40d6))
+
 # [@appland/scanner-v1.67.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.66.0...@appland/scanner-v1.67.0) (2022-08-10)
 
 
