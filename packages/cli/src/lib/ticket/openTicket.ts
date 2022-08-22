@@ -6,8 +6,7 @@ import { createRequest as createZendeskRequest } from './zendesk';
 
 export async function openTicket(errors: string[]): Promise<void> {
   const message = `
-Would you like to provide your name and email address to open a support ticket?
-The details of the error will be included automatically.
+Would you like to submit a support request to the AppMap team to get help with this problem?
 `;
   const { name, email, openTicket } = await UI.prompt({
     type: 'confirm',

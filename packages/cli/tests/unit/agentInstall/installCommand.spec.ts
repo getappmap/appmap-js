@@ -59,13 +59,15 @@ const invokeCommand = (
 
 describe('install sub-command', () => {
   withStubbedTelemetry(sinon);
+  let openTicketStub: sinon.SinonStub;
 
   let projectDir: string;
   beforeEach(() => {
-    // don't open any tickets
-    sinon.stub(openTicket, 'openTicket').resolves();
-
     projectDir = tmp.dirSync({} as any).name;
+
+    // don't open any tickets
+    openTicketStub = sinon.stub(openTicket, 'openTicket');
+    openTicketStub.resolves();
   });
 
   describe('A Java project', () => {
@@ -788,7 +790,6 @@ packages:
     it('requests the user to select a project type if more than one exist', async () => {
       expect.assertions(2);
       const projectFixture = path.join(fixtureDir, 'python', 'mixed');
-      const { name: projectDir } = tmp.dirSync({} as any);
       await fse.copy(projectFixture, projectDir);
 
       const promptStub = sinon
@@ -808,7 +809,6 @@ packages:
 
     it('fails if no supported project is found', async () => {
       expect.assertions(5);
-      const { name: projectDir } = tmp.dirSync({} as any);
       const installProcedureStub = sinon
         .stub(AgentInstallerProcedure.prototype, 'run')
         .callThrough();
@@ -825,6 +825,41 @@ packages:
       });
       expect(sendEventStub.getCall(1)).toBeCalledWithMatch({
         name: 'install-agent:soft_failure',
+      });
+    });
+
+    describe('ticket handling', () => {
+      let runStub: sinon.SinonStub;
+
+      beforeEach(async () => {
+        const projectFixture = path.join(fixtureDir, 'python', 'mixed');
+        await fse.copy(projectFixture, projectDir);
+
+        sinon
+          .stub(UI, 'prompt')
+          .resolves({ installer0: 'poetry', confirm: true });
+
+        runStub = sinon.stub(AgentInstallerProcedure.prototype, 'run');
+      });
+
+      it('opens a ticket on failure', async () => {
+        expect.assertions(2);
+
+        runStub.throws(new Error('install failed'));
+        await invokeCommand(projectDir, () => {});
+        expect(runStub).toBeCalledOnce();
+
+        expect(openTicketStub).toBeCalledOnce();
+      });
+
+      it("doesn't open a ticket on success", async () => {
+        expect.assertions(2);
+
+        runStub.resolves();
+        await invokeCommand(projectDir, () => {});
+        expect(runStub).toBeCalledOnce();
+
+        expect(openTicketStub).not.toBeCalled();
       });
     });
   });
@@ -918,7 +953,6 @@ packages:
         stdout: '{"configuration": { "contents": "" }, "errors": []}',
         stderr: '',
       });
-      projectDir = tmp.dirSync({} as any).name;
 
       expectedStubs = [
         GradleInstaller.prototype,
@@ -933,7 +967,7 @@ packages:
     });
 
     it('installs as expected', async () => {
-      expect.assertions(16);
+      expect.assertions(17);
       const projectFixture = path.join(fixtureDir, 'java', 'multi-project');
       fse.copySync(projectFixture, projectDir);
 
@@ -972,6 +1006,8 @@ packages:
         name: 'install-agent:success',
         properties: { installer: 'Gradle' },
       });
+
+      expect(openTicketStub).not.toBeCalled();
     });
 
     it('installs the root project by default', async () => {

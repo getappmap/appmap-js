@@ -5,6 +5,22 @@ import {
   readSetting,
   TestCommand,
 } from './configuration';
+export class RecordProcessResult {
+  constructor(
+    private _env: Record<string, string>,
+    public command: string,
+    public exitCode: number,
+    public output: string
+  ) {}
+
+  get env(): Record<string, string> {
+    return Object.fromEntries(
+      Object.entries(this._env).filter(([k, _]) => {
+        return k.startsWith('APPMAP') && !k.includes('KEY');
+      })
+    );
+  }
+}
 
 export default class RecordContext {
   public recordMethod?: string;
@@ -14,7 +30,7 @@ export default class RecordContext {
   public initialAppMapCount?: number;
   public appMapCount?: number;
   public appMapEventCount?: number;
-  public exitCodes?: number[];
+  private _results?: RecordProcessResult[];
 
   constructor(public appMapDir: string) {}
 
@@ -27,8 +43,14 @@ export default class RecordContext {
     if (this.recordMethod) result.recordMethod = this.recordMethod;
     if (this.url) result.url = this.url;
     if (this.testCommands) result.testCommands = this.testCommands.join('; ');
-    if (this.exitCodes)
+    if (this.results) {
       result.exitCodes = this.exitCodes.map(String).join(', ');
+      result.log = this.results
+        .map((r) =>
+          [r.command, JSON.stringify(r.env), r.output].join('\n===\n')
+        )
+        .join('\n=====\n');
+    }
     return result;
   }
 
@@ -67,5 +89,52 @@ export default class RecordContext {
   async populateAppMapCount() {
     const appMapCount = await countAppMaps(this.appMapDir);
     this.appMapCount = appMapCount;
+  }
+
+  // Return the number of AppMaps created during this recording
+  get appMapsCreated(): number {
+    if (
+      this.initialAppMapCount === undefined ||
+      this.appMapCount === undefined
+    ) {
+      throw new Error(
+        `Counts uninitialized, initialAppMapCount: ${this.initialAppMapCount} appMapCount: ${this.appMapCount}`
+      );
+    }
+
+    return this.appMapCount - this.initialAppMapCount;
+  }
+
+  get results(): RecordProcessResult[] | undefined {
+    return this._results;
+  }
+
+  addResult(result: RecordProcessResult) {
+    if (!this._results) {
+      this._results = [];
+    }
+    this._results.push(result);
+  }
+
+  // The following are only available once the test commands have finished. Check to see whether
+  // this.results is defined before calling any of them.
+
+  get exitCodes(): number[] {
+    if (!this.results) throw new Error('Internal Error, no results yet');
+
+    return this.results.map((r) => r.exitCode);
+  }
+
+  // Return the number of failures that occurred during this recording
+  get failures(): number {
+    if (!this.results) throw new Error('Internal Error, no results yet');
+
+    return this.exitCodes!.reduce((acc, c) => acc + (c !== 0 ? 1 : 0), 0);
+  }
+
+  get output(): string[] {
+    if (!this.results) throw new Error('Internal Error, no results yet');
+
+    return this.results.map((r) => r.output);
   }
 }

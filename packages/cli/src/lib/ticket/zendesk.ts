@@ -1,12 +1,34 @@
 // There is a Zendesk API client: https://github.com/blakmatrix/node-zendesk . It appears to have
 // some issues, notably incomplete typing (https://github.com/blakmatrix/node-zendesk/issues/251).
 // We're only making a single API call here, so just use Axios instead.
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+
 import stripAnsi from 'strip-ansi';
 import { HttpError } from '../../cmds/errors';
 
 export const APPMAP_SUPPORT_URL =
   process.env.APPMAP_SUPPORT_URL || 'https://appland.zendesk.com';
+
+// debugAdapter gets installed when process.env.APPMAP_ZENDESK_DEBUG is "true". It prints out the
+// details of the outbound request, but doesn't actually send it.
+const debugAdapter = async (config: AxiosRequestConfig): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    console.log(config.baseURL);
+    console.log(config.method);
+    console.log(config.url);
+    console.log(JSON.parse(config.data));
+
+    const response = {
+      data: '{"request": {"id": "<zendesk request id>"}}',
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config,
+      request: {},
+    };
+    resolve(response);
+  });
+};
 
 export async function createRequest(
   errors: string[],
@@ -19,7 +41,7 @@ export async function createRequest(
         body: `Messages:
 ${errors.map((e) => `===\n${stripAnsi(e)}\n===`).join('\n')}`,
       },
-      subject: `Agent install failure`,
+      subject: `CLI command failure`,
       requester: {
         email,
         name,
@@ -45,13 +67,10 @@ ${errors.map((e) => `===\n${stripAnsi(e)}\n===`).join('\n')}`,
       ).toString('base64')}`;
     }
 
-    const {
-      status,
-      request,
-      data: res,
-    } = await axios
+    const { data: res } = await axios
       .create({
         baseURL: APPMAP_SUPPORT_URL,
+        adapter: process.env.APPMAP_ZENDESK_DEBUG ? debugAdapter : undefined,
         headers,
       })
       .post('/api/v2/requests.json', body);

@@ -1,6 +1,7 @@
 import sinon from 'sinon';
 
 import * as configuration from '../../../src/cmds/record/configuration';
+import RecordContext from '../../../src/cmds/record/recordContext';
 import TestCaseRecording from '../../../src/cmds/record/testCaseRecording';
 import UI from '../../../src/cmds/userInteraction';
 
@@ -23,7 +24,7 @@ describe('record.testCaseRecording', () => {
       const stubUI = sinon.stub(UI, 'progress');
 
       await TestCaseRecording.start();
-      await TestCaseRecording.waitFor();
+      await TestCaseRecording.waitFor(new RecordContext('.'));
 
       expect(stubUI.getCalls().map((c) => c.firstArg)).toEqual([
         'Running test command: sleep 0.01',
@@ -53,7 +54,7 @@ describe('record.testCaseRecording', () => {
       const stubUI = sinon.stub(UI, 'progress');
 
       await TestCaseRecording.start();
-      await TestCaseRecording.waitFor();
+      await TestCaseRecording.waitFor(new RecordContext('.'));
 
       expect(stubUI.getCalls().map((c) => c.firstArg)).toEqual([
         'Running tests for up to 0.01 seconds',
@@ -79,7 +80,7 @@ describe('record.testCaseRecording', () => {
       const stubUI = sinon.stub(UI, 'progress');
 
       await TestCaseRecording.start();
-      await TestCaseRecording.waitFor();
+      await TestCaseRecording.waitFor(new RecordContext('.'));
 
       expect(stubUI.getCalls().map((c) => c.firstArg)).toEqual([
         'Running test command: foobar',
