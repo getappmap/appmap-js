@@ -15,9 +15,6 @@ const invokeCommand = (
   projectDir: string,
   evalResults: (err: Error | undefined, argv: any, output: string) => void
 ) => {
-  sinon.stub(console, 'log');
-  sinon.stub(console, 'warn');
-  sinon.stub(console, 'error');
   return yargs
     .command(require('../../../src/cmds/agentInstaller/status').default)
     .parse(`status ${projectDir}`, {}, (err, argv, output) => {
@@ -38,7 +35,9 @@ describe('status sub-command', () => {
       .stub(AgentStatusProcedure.prototype, 'getEnvironmentForDisplay')
       .resolves(['env']);
 
-    const installer = stubInterface<AgentInstaller>({verifyCommand: undefined});
+    const installer = stubInterface<AgentInstaller>({
+      verifyCommand: undefined,
+    });
 
     getInstallersForProject = sinon
       .stub(ProjectConfiguration, 'getProjects')

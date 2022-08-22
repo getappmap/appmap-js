@@ -38,9 +38,6 @@ const invokeCommand = (
 
   if (debugSwitch !== '-v') {
     // Don't scribble on the console unless we're debugging.
-    sinon.stub(console, 'log');
-    sinon.stub(console, 'warn');
-    sinon.stub(console, 'error');
     sinon.stub(UI, 'status').set(() => {});
   }
 

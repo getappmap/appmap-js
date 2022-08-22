@@ -1,5 +1,5 @@
 import FingerprintQueue from '../../../src/fingerprint/fingerprintQueue';
-import sinon from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 import { verbose } from '../../../src/utils';
 
 describe(FingerprintQueue, () => {
@@ -9,13 +9,13 @@ describe(FingerprintQueue, () => {
   });
 
   it('gracefully handles files which cannot be read', async () => {
-    const consoleLog = sinon.stub(console, 'log');
-
     const queue = new FingerprintQueue();
     queue.push('missing-file.appmap.json');
     await queue.process();
 
-    expect(consoleLog.callCount).toBe(1);
-    expect(consoleLog.getCall(0).args[0]).toMatch(/does not exist/);
+    expect((console.log as SinonStub).callCount).toBe(1);
+    expect((console.log as SinonStub).getCall(0).args[0]).toMatch(
+      /does not exist/
+    );
   });
 });
