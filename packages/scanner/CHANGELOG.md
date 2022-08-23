@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.69.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.68.0...@appland/scanner-v1.69.0) (2022-08-23)
+
+
+### Features
+
+* Track specific untrusted data in unsafe deserialization rule ([d14fd4f](https://github.com/applandinc/appmap-js/commit/d14fd4f65fcbabfebdaf0d10dcae71dc563bc1fa))
+
 # [@appland/scanner-v1.68.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.67.0...@appland/scanner-v1.68.0) (2022-08-19)
 
 
