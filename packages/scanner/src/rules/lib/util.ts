@@ -51,7 +51,7 @@ function appMapDir(appMapFileName: string): string {
 }
 
 // eslint-disable-next-line
-function isFalsey(valueObj: ReturnValueObject): boolean {
+function isFalsey(valueObj?: ReturnValueObject): boolean {
   if (!valueObj) {
     return true;
   }
@@ -86,10 +86,10 @@ function parseValue(valueObj: ReturnValueObject): string[] {
   return [valueObj.value];
 }
 
-const isTruthy = (valueObj: ReturnValueObject): boolean => !isFalsey(valueObj);
+const isTruthy = (valueObj?: ReturnValueObject): boolean => !isFalsey(valueObj);
 
 function providesAuthentication(event: Event, label: string): boolean {
-  return event.returnValue && event.labels.has(label) && isTruthy(event.returnValue);
+  return !!event.returnValue && event.labels.has(label) && isTruthy(event.returnValue);
 }
 
 function ideLink(filePath: string, ide: string, eventId: number): string {

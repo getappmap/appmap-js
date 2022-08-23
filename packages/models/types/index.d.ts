@@ -145,13 +145,13 @@ declare module '@appland/models' {
     readonly id: number;
     readonly path?: string;
     readonly lineno?: number;
-    readonly receiver?: ParameterObject;
+    readonly receiver?: ValueBase;
     readonly depth: number;
     readonly methodId?: string;
     readonly isFunction: boolean;
     readonly isStatic: boolean;
     readonly sql?: SqlQuery;
-    readonly returnValue: ReturnValueObject;
+    readonly returnValue?: ReturnValueObject;
     readonly children: readonly Event[];
     readonly httpServerRequest?: HttpServerRequest;
     readonly httpServerResponse?: HttpServerResponse;
@@ -195,7 +195,10 @@ declare module '@appland/models' {
     traverse(
       fn: (
         event: Event
-      ) => void | { onEnter(event: Event): void; onExit(event: Event): void }
+      ) => void
+    ): void;
+    traverse(
+      handlers: { onEnter(event: Event): void; onExit(event: Event): void }
     ): void;
     dataObjects(): Array<ParameterObject | ReturnValueObject>;
     toString(): string;

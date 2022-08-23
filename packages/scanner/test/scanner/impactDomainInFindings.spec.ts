@@ -11,7 +11,7 @@ it('Security Domain in Deserialization of untrusted data', async () => {
   const check = new Check(untrustedDeserializationRule);
   const { findings } = await scan(
     check,
-    'appmaps/deserializationOfUntrustedData/Users_index_index_as_non-admin.appmap.json'
+    'appmaps/deserializationOfUntrustedData/unsafe.appmap.json'
   );
   expect(findings).toHaveLength(1);
   expect(findings[0].impactDomain).toEqual('Security');

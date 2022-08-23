@@ -1,48 +1,74 @@
-import { Event, EventNavigator } from '@appland/models';
-import { MatchResult, Rule, RuleLogic } from '../types';
+import { Event } from '@appland/models';
+import { MatchResult, Rule } from '../types';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
-import precedingEvents from './lib/precedingEvents';
-import sanitizesData from './lib/sanitizesData';
+import analyzeDataFlow, { TrackedValue } from './lib/analyzeDataFlow';
 
-function allArgumentsSanitized(rootEvent: Event, event: Event): boolean {
-  return (event.parameters || [])
-    .filter((parameter) => parameter.object_id)
-    .every((parameter): boolean => {
-      for (const candidate of precedingEvents(rootEvent, event)) {
-        if (sanitizesData(candidate.event, parameter.object_id!, DeserializeSanitize)) {
-          return true;
-        }
-      }
-      return false;
-    });
-}
+function valueHistory(value: TrackedValue): Event[] {
+  const events: Event[] = [];
+  const queue = [value];
 
-function build(): RuleLogic {
-  function matcher(rootEvent: Event): MatchResult[] | undefined {
-    for (const event of new EventNavigator(rootEvent).descendants()) {
-      // events: //*[@authorization && truthy?(returnValue) && not(preceding::*[@authentication]) && not(descendant::*[@authentication])]
-      if (
-        event.event.labels.has(DeserializeUnsafe) &&
-        !event.event.ancestors().find((ancestor) => ancestor.labels.has(DeserializeSafe))
-      ) {
-        if (allArgumentsSanitized(rootEvent, event.event)) {
-          return;
-        } else {
-          return [
-            {
-              event: event.event,
-              message: `${event.event} deserializes untrusted data`,
-            },
-          ];
-        }
-      }
-    }
+  for (;;) {
+    const current = queue.shift();
+    if (!current) break;
+    const { origin, parents } = current;
+    if (!events.includes(origin)) events.push(origin);
+    queue.push(...parents);
   }
 
-  return {
-    matcher,
-  };
+  return events;
+}
+
+function wasSanitized(value: TrackedValue): boolean {
+  return valueHistory(value).some(({ labels }) => labels.has(DeserializeSanitize));
+}
+
+function formatHistories(values: ReadonlyArray<TrackedValue>): { [k: string]: Event } {
+  const histories = values.map(valueHistory);
+
+  return Object.fromEntries(
+    histories.flatMap((history, input) =>
+      history.map((event, idx) => [`origin[${input}][${idx}]`, event])
+    )
+  );
+}
+
+function label(name: string): ({ labels }: Event) => boolean {
+  return ({ labels }: Event) => labels.has(name);
+}
+
+function matcher(startEvent: Event): MatchResult[] {
+  const flow = analyzeDataFlow([...(startEvent.message || [])], startEvent);
+  const results: MatchResult[] = [];
+  const sanitizedValues = new Set<TrackedValue>();
+  for (const [event, values] of flow) {
+    if (event.labels.has(DeserializeSanitize)) {
+      for (const v of values) sanitizedValues.add(v);
+      continue;
+    }
+
+    if (!event.labels.has(DeserializeUnsafe)) continue;
+
+    const unsanitized = new Set(values.filter((v) => !(wasSanitized(v) || sanitizedValues.has(v))));
+
+    // remove any that have been passed into a safe deserialization function
+    for (const ancestor of event.ancestors().filter(label(DeserializeSafe))) {
+      for (const v of flow.get(ancestor) || []) {
+        unsanitized.delete(v);
+      }
+    }
+
+    const remaining = [...unsanitized];
+
+    if (remaining.length === 0) continue;
+
+    results.push({
+      event: event,
+      message: `deserializes untrusted data: ${remaining.map(({ value: { value } }) => value)}`,
+      participatingEvents: formatHistories(remaining),
+    });
+  }
+  return results;
 }
 
 const DeserializeUnsafe = 'deserialize.unsafe';
@@ -55,11 +81,12 @@ export default {
   labels: [DeserializeUnsafe, DeserializeSafe, DeserializeSanitize],
   impactDomain: 'Security',
   enumerateScope: false,
+  scope: 'http_server_request',
   references: {
     'CWE-502': new URL('https://cwe.mitre.org/data/definitions/502.html'),
     'Ruby Security': new URL('https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html'),
   },
   description: parseRuleDescription('deserializationOfUntrustedData'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#deserialization-of-untrusted-data',
-  build,
+  build: () => ({ matcher }),
 } as Rule;

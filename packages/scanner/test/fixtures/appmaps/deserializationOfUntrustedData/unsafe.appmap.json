@@ -1,0 +1,213 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "event": "call",
+      "thread_id": 5400,
+      "http_server_request": {
+        "request_method": "GET",
+        "path_info": "/password_resets/LS0tICFydWJ5L29iamVjdDpFUkIKdGVtcGxhdGU6CiAgc3JjOiAhYmluYXJ5IHwtCiAgICBQQ1VnY0hWMGN5QW5jSGR1WldRaEp5QWxQZz09Cgo=/edit",
+        "normalized_path_info": "/password_resets/{id}/edit"
+      },
+      "message": [
+        {
+          "name": "email",
+          "class": "String",
+          "value": "michael@example.com",
+          "object_id": 55580
+        },
+        {
+          "name": "controller",
+          "class": "String",
+          "value": "password_resets",
+          "object_id": 55380
+        },
+        {
+          "name": "action",
+          "class": "String",
+          "value": "edit",
+          "object_id": 55600
+        },
+        {
+          "name": "id",
+          "class": "String",
+          "value": "LS0tICFydWJ5L29iamVjdDpFUkIKdGVtcGxhdGU6CiAgc3JjOiAhYmluYXJ5IHwtCiAgICBQQ1VnY0hWMGN5QW5jSGR1WldRaEp5 (...12 more characters)",
+          "object_id": 54560
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "event": "call",
+      "thread_id": 5400,
+      "defined_class": "String",
+      "method_id": "unpack1",
+      "path": "<internal:pack>",
+      "lineno": 280,
+      "static": false,
+      "parameters": [
+        {
+          "name": "fmt",
+          "class": "String",
+          "object_id": 54240,
+          "value": "m0",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "String",
+        "object_id": 54600,
+        "value": "LS0tICFydWJ5L29iamVjdDpFUkIKdGVtcGxhdGU6CiAgc3JjOiAhYmluYXJ5IHwtCiAgICBQQ1VnY0hWMGN5QW5jSGR1WldRaEp5 (...12 more characters)"
+      }
+    },
+    {
+      "id": 3,
+      "event": "return",
+      "thread_id": 5400,
+      "parent_id": 2,
+      "elapsed": 0.0000082949991337955,
+      "return_value": {
+        "class": "String",
+        "value": "--- !ruby/object:ERB\ntemplate:\n  src: !binary |-\n    PCUgcHV0cyAncHduZWQhJyAlPg==\n\n",
+        "object_id": 54620
+      }
+    },
+    {
+      "id": 4,
+      "event": "call",
+      "thread_id": 5400,
+      "defined_class": "Psych",
+      "method_id": "load",
+      "path": "/home/user/.rbenv/versions/3.0.2/lib/ruby/3.0.0/psych.rb",
+      "lineno": 274,
+      "static": true,
+      "parameters": [
+        {
+          "name": "yaml",
+          "class": "String",
+          "object_id": 54620,
+          "value": "--- !ruby/object:ERB\ntemplate:\n  src: !binary |-\n    PCUgcHV0cyAncHduZWQhJyAlPg==\n\n",
+          "kind": "req"
+        },
+        {
+          "name": "legacy_filename",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        },
+        {
+          "name": "filename",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        },
+        {
+          "name": "fallback",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        },
+        {
+          "name": "symbolize_names",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        },
+        {
+          "name": "freeze",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 27300,
+        "value": "Psych"
+      }
+    },
+    {
+      "id": 5,
+      "event": "return",
+      "thread_id": 5400,
+      "parent_id": 4,
+      "elapsed": 0.0007571299793198705,
+      "return_value": {
+        "class": "ERB",
+        "value": "#<ERB:0x0000000007420700>",
+        "object_id": 54760
+      }
+    },
+    {
+      "id": 6,
+      "event": "return",
+      "thread_id": 5400,
+      "parent_id": 1,
+      "elapsed": 0.006527926016133279,
+      "http_server_response": {
+        "status": 302
+      }
+    }
+  ],
+  "version": "1.7.0",
+  "metadata": {},
+  "classMap": [
+    {
+      "name": "ruby",
+      "type": "package",
+      "children": [
+        {
+          "name": "String",
+          "type": "class",
+          "children": [
+            {
+              "name": "unpack1",
+              "type": "function",
+              "labels": [
+                "string.unpack"
+              ],
+              "static": false,
+              "location": "<internal:pack>:280"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "psych",
+      "type": "package",
+      "children": [
+        {
+          "name": "Psych",
+          "type": "class",
+          "children": [
+            {
+              "name": "load",
+              "type": "function",
+              "labels": [
+                "deserialize.unsafe"
+              ],
+              "static": true,
+              "location": "/home/user/.rbenv/versions/3.0.2/lib/ruby/3.0.0/psych.rb:274"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "http",
+      "name": "HTTP server requests",
+      "children": [
+        {
+          "type": "route",
+          "name": "GET /password_resets/{id}/edit"
+        }
+      ]
+    }
+  ]
+}
