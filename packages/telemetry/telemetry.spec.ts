@@ -4,19 +4,20 @@ import * as os from 'os';
 import Telemetry from './telemetry';
 import { name as appName, version } from './package.json';
 
-const sandbox = sinon.createSandbox();
 const invalidExpiration = () => Date.now() - 1000 * 60 * 60;
 
 describe('telemetry', () => {
-  beforeAll(() => {
+  const sandbox = sinon.createSandbox();
+  let trackEvent: sinon.SinonStub;
+  beforeEach(() => {
     // Don't accidentally send data
-    sinon.stub(Telemetry, 'client').value({
-      trackEvent: sinon.stub(),
-      flush: sinon.stub(),
+    sandbox.stub(Telemetry, 'client').value({
+      trackEvent: (trackEvent = sandbox.stub()),
+      flush: sandbox.stub(),
     });
 
     // Don't persist data locally
-    sinon.stub(Conf.prototype, 'set');
+    sandbox.stub(Conf.prototype, 'set');
   });
 
   afterEach(() => {
@@ -87,7 +88,6 @@ describe('telemetry', () => {
     });
 
     it('sends the expected telemetry data', () => {
-      const trackEvent = Telemetry.client.trackEvent as sinon.SinonStub;
       Telemetry.sendEvent({
         name: 'test',
         properties: { prop: 'value' },
@@ -118,7 +118,6 @@ describe('telemetry', () => {
     });
 
     it('does not send undefined properties', () => {
-      const trackEvent = Telemetry.client.trackEvent as sinon.SinonStub;
       Telemetry.sendEvent({
         name: 'test',
         properties: { prop: undefined },

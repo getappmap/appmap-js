@@ -5,11 +5,17 @@ import Telemetry from '../../telemetry';
 import { createRequest as createZendeskRequest } from './zendesk';
 
 export async function openTicket(errors: string[]): Promise<void> {
-  const message = `
-Would you like to provide your name and email address to open a support ticket?
-The details of the error will be included automatically.
-`;
-  const { name, email, openTicket } = await UI.prompt({
+  UI.progress(
+    [
+      `Help is available from the AppMap support team! If you want assistance, the test command,
+error message, exit code, and APPMAP environment variables can be uploaded securely to the
+AppMap ZenDesk support portal. The AppMap team will respond to you by email, so we'll need your
+email address to open the support request.
+`,
+    ].join('\n')
+  );
+  const message = `Would you like to open a support request?`;
+  const { email, openTicket } = await UI.prompt({
     type: 'confirm',
     name: 'openTicket',
     default: true,
@@ -17,6 +23,16 @@ The details of the error will be included automatically.
     prefix: chalk.red('!'),
   }).then(async (answers) => {
     if (!answers.openTicket) {
+      UI.progress(
+        [
+          `
+You've elected not to open a support request for this problem.
+
+If you change your mind, you can always reach us by email: support@appmap.io
+`,
+        ].join('\n')
+      );
+
       Telemetry.sendEvent({
         name: 'open-ticket:declined',
       });
@@ -24,23 +40,16 @@ The details of the error will be included automatically.
       return { openTicket: false };
     }
 
-    const { name, email } = await UI.prompt([
-      {
-        name: 'name',
-        message: 'Your name',
-        validate: (v) => {
-          return v.trim().length > 0 || 'Please enter your name';
-        },
-      },
+    const { email } = await UI.prompt([
       {
         name: 'email',
-        message: 'Your email address',
+        message:
+          'Please provide your email address, so that we can contact you with a response:',
         validate: (v) =>
           v.trim().length > 0 || 'Please enter your email address',
       },
     ]);
     return {
-      name,
       email,
       openTicket: true,
     };
@@ -51,32 +60,33 @@ The details of the error will be included automatically.
   }
 
   try {
-    const id = await createZendeskRequest(errors, email, name);
+    const id = await createZendeskRequest(errors, email);
     Telemetry.sendEvent({
       name: 'open-ticket:success',
     });
     UI.success(
-      `Ticket ${id} was successfully opened on your behalf.
+      `Thank you very much for reporting this problem.
 
-Thank you very much for reporting this error.
-Please check your email for next steps.`,
+Ticket ${id} has been successfully created on your behalf.
+
+Please monitor your email for updates. Thank you for using AppMap!`,
       'left'
     );
   } catch (e) {
     const he = e as HttpError;
     const response = he.response;
-    let name: string;
+    let eventName: string;
     let error: string | undefined = undefined;
     if (response) {
-      name = `open-ticket:${
+      eventName = `open-ticket:${
         he.response?.status === 429 ? 'rate-limit' : 'error'
       }`;
       error = response.toString();
     } else {
-      name = 'open-ticket:no-response';
+      eventName = 'open-ticket:no-response';
     }
     Telemetry.sendEvent({
-      name,
+      name: eventName,
       properties: {
         error,
       },
@@ -84,7 +94,7 @@ Please check your email for next steps.`,
     UI.error(
       `${chalk.red('!')} A failure occurred attempting to create a ticket.
 
-${chalk.red('!')} This failure has been reported to AppLand.`
+${chalk.red('!')} This problem has been reported to the AppMap team.`
     );
   }
 }

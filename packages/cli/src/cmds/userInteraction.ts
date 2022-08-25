@@ -42,10 +42,17 @@ export class UserInteraction {
     return confirm;
   }
 
+  /**
+   * Prints a message to STDOUT.
+   */
   progress(msg: string) {
     console.log(msg);
   }
 
+  /**
+   * Finishes an in-progress command, showing a success indicator at the beginning of the line.
+   * Prints an optional message inside of a box.
+   */
   success(msg?: string, align: 'center' | 'left' | 'right' = 'center') {
     if (this.spinner.isSpinning) {
       this.spinner.succeed();
@@ -63,6 +70,10 @@ export class UserInteraction {
     }
   }
 
+  /**
+   * Halts an in-progress command, showing a failure indicator at the beginning of the line.
+   * Prints an optional error message to
+   */
   error(msg?: any) {
     if (this.spinner.isSpinning) {
       this.spinner.fail();
@@ -74,6 +85,9 @@ export class UserInteraction {
     }
   }
 
+  /**
+   * Prints a message to STDERR.
+   */
   warn(msg?: string) {
     console.error(msg);
   }

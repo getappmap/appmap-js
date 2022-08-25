@@ -89,41 +89,76 @@ describe('record test', () => {
   });
 
   describe('is running tests', () => {
-    beforeEach(() => sinon.stub(countAppMaps, 'default').resolves(10));
+    beforeEach(async () => {
+      sinon
+        .stub(countAppMaps, 'default')
+        .onCall(0)
+        .resolves(0)
+        .onCall(1)
+        .resolves(10);
+      await recordContext.initialize();
+    });
 
     it('which all succeed', async () => {
-      const stubWait = sinon.stub(TestCaseRecording, 'waitFor').resolves([0]);
+      const stubWait = sinon.stub(TestCaseRecording, 'waitFor').resolves();
+      sinon.stub(recordContext, 'results').value([{ exitCode: 0 }]);
 
       const next = await testCasesRunning.default(recordContext);
-      expect(next).toEqual(testCasesComplete.default);
 
+      expect(next).toEqual(testCasesComplete.default);
       expect(stubWait.calledOnce).toBeTruthy();
 
       await next(recordContext);
+
       expect(inspect(recordContext)).toEqual(
-        `RecordContext { appMapDir: '.', exitCodes: [ 0 ], appMapCount: 10 }`
+        // eslint-disable-next-line prettier/prettier
+        `RecordContext {
+  appMapDir: '.',
+  initialAppMapCount: 0,
+  results: [ { exitCode: 0 } ],
+  appMapCount: 10
+}`
       );
       expect(recordContext.properties()).toEqual({
         exitCodes: '0',
+        // eslint-disable-next-line prettier/prettier
+        log: `
+===
+
+===
+`,
       });
     });
     it('and some fail', async () => {
-      const stubWait = sinon.stub(TestCaseRecording, 'waitFor').resolves([1]);
+      const stubWait = sinon.stub(TestCaseRecording, 'waitFor').resolves();
+      sinon.stub(recordContext, 'results').value([{ exitCode: 1 }]);
+      prompt.resolves({ openTicket: false });
 
       const next = await testCasesRunning.default(recordContext);
-      expect(next).toEqual(testCasesComplete.default);
 
+      expect(next).toEqual(testCasesComplete.default);
       expect(stubWait.calledOnce).toBeTruthy();
 
       await next(recordContext);
-
       cont.resolves();
 
       expect(inspect(recordContext)).toEqual(
-        `RecordContext { appMapDir: '.', exitCodes: [ 1 ], appMapCount: 10 }`
+        // eslint-disable-next-line prettier/prettier
+        `RecordContext {
+  appMapDir: '.',
+  initialAppMapCount: 0,
+  results: [ { exitCode: 1 } ],
+  appMapCount: 10
+}`
       );
       expect(recordContext.properties()).toEqual({
         exitCodes: '1',
+        // eslint-disable-next-line prettier/prettier
+        log: `
+===
+
+===
+`,
       });
     });
   });

@@ -8,6 +8,7 @@ import {
   readSetting,
   TestCommand,
 } from './configuration';
+import RecordContext, { RecordProcessResult } from './recordContext';
 
 let TestCommands: TestCommand[] = [];
 
@@ -60,7 +61,7 @@ export default class TestCaseRecording {
     TestCommands = testCommands;
   }
 
-  static async waitFor(): Promise<number[]> {
+  static async waitFor(ctx: RecordContext): Promise<void> {
     let maxTime: number | undefined = (await readSetting(
       'test_recording.max_time',
       -1
@@ -71,7 +72,9 @@ export default class TestCaseRecording {
     if (maxTime) UI.progress(`Running tests for up to ${maxTime} seconds`);
 
     let waitTime = maxTime;
-    async function waitForProcess(process: ChildProcess): Promise<number> {
+    async function waitForProcess(
+      process: ChildProcess
+    ): Promise<{ exitCode: number; output: string }> {
       const commandStr = process.spawnargs.join(' ');
       const startTime = Date.now();
       return new Promise((resolve) => {
@@ -87,6 +90,7 @@ export default class TestCaseRecording {
           }
         }
 
+        const output: string[] = [];
         function report(exitCode: number) {
           if (reported) return;
 
@@ -98,13 +102,20 @@ export default class TestCaseRecording {
           if (interruptTimeout) clearTimeout(interruptTimeout);
           if (exitCode && exitCode !== 0) {
             UI.progress(
-              `Test command failed with status code ${exitCode}: ${commandStr}`
+              `
+Test command failed with status code ${exitCode}: ${commandStr}`
             );
           }
-          resolve(exitCode);
+          resolve({ exitCode, output: output.join() });
         }
 
         if (process.exitCode) return report(process.exitCode);
+
+        const onData = (data) => {
+          output.push(data.toString());
+        };
+        process.stdout?.on('data', onData);
+        process.stderr?.on('data', onData);
 
         process.on('exit', report);
         if (waitTime) {
@@ -113,7 +124,6 @@ export default class TestCaseRecording {
       });
     }
 
-    const exitCodes: number[] = [];
     for (const cmd of TestCommands) {
       cmd.env ||= {};
       UI.progress(
@@ -122,15 +132,17 @@ export default class TestCaseRecording {
         }`
       );
       const args = cmd.command.split(' ');
+      const env = Object.assign(process.env, cmd.env);
       const proc = spawn(args[0], args.slice(1), {
-        env: Object.assign(process.env, cmd.env),
+        env,
         shell: true,
-        stdio: ['ignore', 'inherit', 'inherit'],
+        stdio: ['ignore'],
       });
-      const exitCode = await waitForProcess(proc);
-      exitCodes.push(exitCode);
+      const { exitCode, output } = await waitForProcess(proc);
+      ctx.addResult(
+        new RecordProcessResult(env, cmd.command, exitCode, output)
+      );
     }
-    return exitCodes;
   }
 
   static envString(env: Record<string, string>) {
