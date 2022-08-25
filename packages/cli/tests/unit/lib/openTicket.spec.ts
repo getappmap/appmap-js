@@ -57,7 +57,6 @@ describe('openTicket', () => {
       expect(prompt).toBeCalledTwice();
       expect(getNthCallArgs(prompt, 0)).toMatchObject({ name: 'openTicket' });
       expect(getNthCallArgs(prompt, 1)).toMatchObject([
-        { name: 'name' },
         { name: 'email' },
       ]);
     });
