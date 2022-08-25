@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.34.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.33.1...@appland/appmap-v3.34.0) (2022-08-25)
+
+
+### Bug Fixes
+
+* Add spacing before reporting command failure ([b60bf23](https://github.com/applandinc/appmap-js/commit/b60bf236c7ea941db06732cf316cf7917709e9d2))
+
+
+### Features
+
+* Create a ticket when "record test" fails. ([206db5e](https://github.com/applandinc/appmap-js/commit/206db5eebeeca118a400a511cdc60ada002acb5e))
+* Don't require user's name for a support ticket ([f308fd0](https://github.com/applandinc/appmap-js/commit/f308fd0aeb1d8aad3fc7ca7fb22a55c0ef0e8d95))
+
 # [@appland/appmap-v3.33.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.33.0...@appland/appmap-v3.33.1) (2022-08-17)
 
 
