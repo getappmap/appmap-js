@@ -102,7 +102,8 @@ export default class TestCaseRecording {
           if (interruptTimeout) clearTimeout(interruptTimeout);
           if (exitCode && exitCode !== 0) {
             UI.progress(
-              `Test command failed with status code ${exitCode}: ${commandStr}`
+              `
+Test command failed with status code ${exitCode}: ${commandStr}`
             );
           }
           resolve({ exitCode, output: output.join() });

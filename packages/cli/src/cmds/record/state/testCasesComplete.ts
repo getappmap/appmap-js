@@ -15,7 +15,8 @@ export default async function testCasesComplete(
     );
 
     const errors: string[] = recordContext.output || [
-      'Test command failed with no output',
+      `
+Test command failed with no output`,
     ];
     await openTicket(errors);
 

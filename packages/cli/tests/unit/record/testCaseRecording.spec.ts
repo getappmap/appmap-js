@@ -84,7 +84,8 @@ describe('record.testCaseRecording', () => {
 
       expect(stubUI.getCalls().map((c) => c.firstArg)).toEqual([
         'Running test command: foobar',
-        'Test command failed with status code 127: /bin/sh -c foobar',
+        `
+Test command failed with status code 127: /bin/sh -c foobar`,
       ]);
     });
   });
