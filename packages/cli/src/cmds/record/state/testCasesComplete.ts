@@ -19,7 +19,8 @@ export default async function testCasesComplete(
       `
 Test command failed with no output`,
     ];
-    await openTicket(errors);
+    const helpMsg = ` If you want assistance, the test command, error message, exit code, and APPMAP environment variables can be uploaded securely to the AppMap ZenDesk support portal.`;
+    await openTicket(errors, helpMsg);
 
     return;
   }

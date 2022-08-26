@@ -4,12 +4,13 @@ import UI from '../../cmds/userInteraction';
 import Telemetry from '../../telemetry';
 import { createRequest as createZendeskRequest } from './zendesk';
 
-export async function openTicket(errors: string[]): Promise<void> {
+export async function openTicket(
+  errors: string | string[],
+  helpMsg: string = ''
+): Promise<void> {
   UI.progress(
     [
-      `Help is available from the AppMap support team! If you want assistance, the test command,
-error message, exit code, and APPMAP environment variables can be uploaded securely to the
-AppMap ZenDesk support portal. The AppMap team will respond to you by email, so we'll need your
+      `Help is available from the AppMap support team!${helpMsg} The AppMap team will respond to you by email, so we'll need your
 email address to open the support request.
 `,
     ].join('\n')
