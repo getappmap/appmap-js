@@ -86,7 +86,7 @@ export default {
     if (appmapDir) await validateFile('directory', appmapDir);
 
     let appId = appIdArg;
-    if (!reportAllFindings) appId = await resolveAppId(appIdArg, appmapDir);
+    if (!watch && !reportAllFindings) appId = await resolveAppId(appIdArg, appmapDir);
 
     if (watch) {
       const watchAppMapDir = appmapDir!;
