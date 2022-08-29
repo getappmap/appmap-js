@@ -1,3 +1,11 @@
+# [@appland/scanner-v1.69.1](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.69.0...@appland/scanner-v1.69.1) (2022-08-29)
+
+
+### Bug Fixes
+
+* Add missing dependencies ([97a5d02](https://github.com/applandinc/appmap-js/commit/97a5d02ff161b52200430d2123d8d9ab62037220))
+* Don't attempt to resolve a remote app ID if running in watch mode ([8f21ff1](https://github.com/applandinc/appmap-js/commit/8f21ff1a3bc86292f70a2cd1446f682e525869aa))
+
 # [@appland/scanner-v1.69.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.68.0...@appland/scanner-v1.69.0) (2022-08-23)
 
 
