@@ -13,7 +13,7 @@ export default async function isAgentAvailable({
     UI.success(`AppMap agent is available at ${location}`);
     return true;
   } catch (e: any) {
-    UI.error(`AppMap agent is not avaliable at ${location}: ${e.toString()}`);
+    UI.error(`AppMap agent is not available at ${location}: ${e.toString()}`);
     return false;
   }
 }

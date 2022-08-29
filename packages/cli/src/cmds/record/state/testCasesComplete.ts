@@ -1,6 +1,6 @@
 import assert from 'assert';
 import chalk from 'chalk';
-import { openTicket } from '../../../lib/ticket/openTicket';
+import openTicket from '../../../lib/ticket/openTicket';
 import UI from '../../userInteraction';
 import printAppMapCount from '../action/printAppMapCount';
 import RecordContext from '../recordContext';

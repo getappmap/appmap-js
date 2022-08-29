@@ -2,9 +2,9 @@ import chalk from 'chalk';
 import { HttpError } from '../../cmds/errors';
 import UI from '../../cmds/userInteraction';
 import Telemetry from '../../telemetry';
-import { createRequest as createZendeskRequest } from './zendesk';
+import createZendeskRequest from './zendesk';
 
-export async function openTicket(
+export default async function openTicket(
   errors: string | string[],
   helpMsg: string = ''
 ): Promise<void> {

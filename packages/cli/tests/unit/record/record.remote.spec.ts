@@ -1,10 +1,11 @@
+import 'jest-sinon';
 import sinon from 'sinon';
 import * as configureHostAndPort from '../../../src/cmds/record/action/configureHostAndPort';
 import * as configureRemainingRequestOptions from '../../../src/cmds/record/action/configureRemainingRequestOptions';
 import * as detectProcessCharacteristics from '../../../src/cmds/record/action/detectProcessCharacteristics';
 import * as nameAppMap from '../../../src/cmds/record/action/nameAppMap';
 import * as saveAppMap from '../../../src/cmds/record/action/saveAppMap';
-import Configuration, * as configuration from '../../../src/cmds/record/configuration';
+import Configuration from '../../../src/cmds/record/configuration';
 import * as continueWithRequestOptionConfiguration from '../../../src/cmds/record/prompt/continueWithRequestOptionConfiguration';
 import * as recordingInProgress from '../../../src/cmds/record/prompt/recordingInProgress';
 import RecordContext from '../../../src/cmds/record/recordContext';
@@ -18,7 +19,6 @@ import * as isAgentAvailable from '../../../src/cmds/record/test/isAgentAvailabl
 import * as isRecordingInProgress from '../../../src/cmds/record/test/isRecordingInProgress';
 import { State } from '../../../src/cmds/record/types/state';
 import UI from '../../../src/cmds/userInteraction';
-
 
 function checkContext(
   context: RecordContext,

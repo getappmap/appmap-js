@@ -6,106 +6,145 @@ import { State } from './types/state';
 import { FileName } from './types/fileName';
 import { chdir } from 'process';
 
-import initial from './state/initial';
+import initial, { createState as createInitialState } from './state/initial';
 import Telemetry from '../../telemetry';
 import RecordContext from './recordContext';
 import Configuration from './configuration';
+import openTicket from '../../lib/ticket/openTicket';
+import UI from '../userInteraction';
+import { RemoteRecordingError } from './makeRequest';
+import chalk from 'chalk';
 
-export const command = 'record [mode]';
-export const describe =
-  'Create an AppMap via interactive recording, aka remote recording.';
+export default {
+  command: 'record [mode]',
+  describe: 'Create an AppMap via interactive recording, aka remote recording.',
 
-export const builder = (args: yargs.Argv) => {
-  args.positional('mode', {
-    type: 'string',
-    choices: ['test', 'remote'],
-  });
+  builder: (args: yargs.Argv) => {
+    args.positional('mode', {
+      type: 'string',
+      choices: ['test', 'remote'],
+    });
 
-  args.option('directory', {
-    describe: 'Working directory for the command.',
-    type: 'string',
-    alias: 'd',
-  });
+    args.option('directory', {
+      describe: 'Working directory for the command.',
+      type: 'string',
+      alias: 'd',
+    });
 
-  args.option('appmap-config', {
-    describe: 'AppMap config file to check for default options.',
-    type: 'string',
-    alias: 'c',
-  });
+    args.option('appmap-config', {
+      describe: 'AppMap config file to check for default options.',
+      type: 'string',
+      alias: 'c',
+    });
 
-  return args.strict();
+    return args.strict();
+  },
+
+  handler: async (argv: any) => {
+    verbose(argv.verbose);
+
+    const commandFn = async () => {
+      const { directory, appmapConfig } = argv;
+      if (directory) {
+        if (verbose()) console.log(`Using working directory ${directory}`);
+        chdir(directory);
+      }
+
+      const configuration = new Configuration(appmapConfig);
+      const recordContext = new RecordContext(configuration);
+      await recordContext.initialize();
+
+      const { mode } = argv;
+
+      async function initialState(): Promise<State> {
+        if (mode) {
+          recordContext.recordMethod = mode;
+          return createInitialState(mode);
+        } else {
+          return initial;
+        }
+      }
+
+      let state: State | string | undefined = await initialState();
+      while (state && typeof state === 'function') {
+        if (verbose()) console.warn(`Entering state: ${state.name}`);
+
+        let errorMessage: string | undefined;
+        let newState: State | string | undefined;
+        try {
+          newState = await state(recordContext);
+        } catch (err) {
+          errorMessage = (err as any).toString();
+          // TODO: consider making this more general, to open a ticket when any Error occurs.
+          if (err instanceof RemoteRecordingError) {
+            // If a request to the remote-recording endpoint fails, an AppMap won't be created, i.e.
+            // the final AppMap count will match the initial count.
+            recordContext.appMapCount = recordContext.initialAppMapCount;
+            await handleRemoteError(err);
+            break;
+          }
+          throw err;
+        } finally {
+          const properties = recordContext.properties();
+          if (errorMessage) {
+            properties.errorMessage = errorMessage;
+          }
+          Telemetry.sendEvent({
+            name: `record:${state.name}`,
+            properties,
+            metrics: Object.assign(
+              {
+                duration: endTime(),
+              },
+              recordContext.metrics()
+            ),
+          });
+        }
+
+        state = newState;
+      }
+
+      if (typeof state === 'string') {
+        Telemetry.sendEvent({
+          name: `record:showAppMap`,
+          properties: {
+            fileName: state as FileName,
+          },
+          metrics: {
+            duration: endTime(),
+          },
+        });
+
+        await showAppMap(state as FileName);
+      }
+    };
+
+    return runCommand('record', commandFn);
+  },
 };
 
-export async function handler(argv: any) {
-  verbose(argv.verbose);
+async function handleRemoteError(err: RemoteRecordingError) {
+  UI.error(`Something went wrong when ${err.description}:
+status: ${err.statusCode}
+request: ${err.method} ${err.path}
+`);
 
-  const commandFn = async () => {
-    const { directory, appmapConfig } = argv;
-    if (directory) {
-      if (verbose()) console.log(`Using working directory ${directory}`);
-      chdir(directory);
-    }
+  const message = `Would you like to see the server's response?`;
 
-    const configuration = new Configuration(appmapConfig);
-    const recordContext = new RecordContext(configuration);
-    await recordContext.initialize();
+  const result = await UI.prompt(
+    {
+      name: 'showResponse',
+      type: 'confirm',
+      message,
+      prefix: chalk.red('!'),
+    },
+    { supressSpinner: true }
+  );
+  const { showResponse } = result;
 
-    const { mode } = argv;
+  if (showResponse) {
+    UI.error(err.message);
+  }
 
-    async function initialState(): Promise<State> {
-      if (mode) {
-        recordContext.recordMethod = mode;
-        return (await import(`./state/record_${mode}`)).default as State;
-      } else {
-        return initial;
-      }
-    }
-
-    let state: State | string | undefined = await initialState();
-    while (state && typeof state === 'function') {
-      if (verbose()) console.warn(`Entering state: ${state.name}`);
-
-      let errorMessage: string | undefined;
-      let newState: State | string | undefined;
-      try {
-        newState = await state(recordContext);
-      } catch (err) {
-        errorMessage = (err as any).toString();
-        throw err;
-      } finally {
-        const properties = recordContext.properties();
-        if (errorMessage) {
-          properties.errorMessage = errorMessage;
-        }
-        Telemetry.sendEvent({
-          name: `record:${state.name}`,
-          properties,
-          metrics: Object.assign(
-            {
-              duration: endTime(),
-            },
-            recordContext.metrics()
-          ),
-        });
-      }
-
-      state = newState;
-    }
-
-    if (typeof state === 'string') {
-      Telemetry.sendEvent({
-        name: `record:showAppMap`,
-        properties: {
-          fileName: state as FileName,
-        },
-        metrics: {
-          duration: endTime(),
-        },
-      });
-
-      await showAppMap(state as FileName);
-    }
-  };
-
-  return runCommand('record', commandFn);
+  await openTicket(err.toString());
 }
