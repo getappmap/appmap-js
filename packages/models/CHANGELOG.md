@@ -1,3 +1,10 @@
+# [@appland/models-v1.18.3](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.18.2...@appland/models-v1.18.3) (2022-08-29)
+
+
+### Bug Fixes
+
+* Handle null value case ([7230051](https://github.com/applandinc/appmap-js/commit/7230051851ad8e30f1425175769cf298380ae7cc))
+
 # [@appland/models-v1.18.2](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.18.1...@appland/models-v1.18.2) (2022-08-16)
 
 
