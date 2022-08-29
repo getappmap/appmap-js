@@ -27,6 +27,7 @@ export default {
   Options,
   labels: [RPCCircuitBreaker],
   impactDomain: 'Stability',
+  impactSubdomains: ['Stability :: Improper error handling'],
   enumerateScope: true,
   description: parseRuleDescription('rpcWithoutCircuitBreaker'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#rpc-without-circuit-breaker',

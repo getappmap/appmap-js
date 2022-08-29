@@ -6,6 +6,8 @@ references:
   CWE-502: https://cwe.mitre.org/data/definitions/502.html
   Ruby Security: https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html
 impactDomain: Security
+impactSubdomains:
+  - 'Security :: Injection'
 labels:
   - deserialize.unsafe
   - deserialize.safe

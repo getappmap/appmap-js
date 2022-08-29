@@ -8,6 +8,8 @@ references:
   Ruby on Rails - Session fixation countermeasures: >-
     https://guides.rubyonrails.org/security.html#session-fixation-countermeasures
 impactDomain: Security
+impactSubdomains:
+  - 'Security :: Broken access control'
 labels:
   - http.session.clear
   - security.logout

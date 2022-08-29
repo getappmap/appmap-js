@@ -5,6 +5,8 @@ title: HTTP 500 status code
 references:
   CWE-392: https://cwe.mitre.org/data/definitions/392.html
 impactDomain: Stability
+impactSubdomains:
+  - 'Stability :: Improper REST behavior'
 scope: http_server_request
 ---
 

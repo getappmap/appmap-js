@@ -5,6 +5,8 @@ title: Deprecated cryptographic algorithm
 references:
   A02:2021: https://owasp.org/Top10/A02_2021-Cryptographic_Failures/
 impactDomain: Security
+impactSubdomains:
+  - 'Security :: Cryptographic failure'
 labels:
   - crypto.encrypt
   - crypto.decrypt

@@ -5,6 +5,8 @@ title: Insecure comparison of secrets
 references:
   CWE-208: https://cwe.mitre.org/data/definitions/208.html
 impactDomain: Security
+impactSubdomains:
+  - 'Security :: Cryptographic failure'
 labels:
   - secret
   - string.equals

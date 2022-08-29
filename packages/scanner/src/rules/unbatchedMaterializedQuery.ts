@@ -80,6 +80,10 @@ export default {
   labels: [DAOMaterialize],
   enumerateScope: true,
   impactDomain: 'Performance',
+  impactSubdomains: [
+    'Performance :: Inefficient data access',
+    'Performance :: Excessive memory consumption',
+  ],
   references: {
     'CWE-1049': new URL('https://cwe.mitre.org/data/definitions/1049.html'),
   },

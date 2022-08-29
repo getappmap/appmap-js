@@ -50,6 +50,7 @@ export default {
   title: 'Queries from invalid packages',
   Options,
   impactDomain: 'Maintainability',
+  impactSubdomains: ['Maintainability :: Modularity violation'],
   enumerateScope: true,
   references: {
     'CWE-1057': new URL('https://cwe.mitre.org/data/definitions/1057.html'),

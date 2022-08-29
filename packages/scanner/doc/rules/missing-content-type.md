@@ -3,6 +3,8 @@ rule: missing-content-type
 name: Missing content type
 title: HTTP server request without a Content-Type header
 impactDomain: Stability
+impactSubdomains:
+  - 'Stability :: Improper REST behavior'
 scope: http_server_request
 ---
 

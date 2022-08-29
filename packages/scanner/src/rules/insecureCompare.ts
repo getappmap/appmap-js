@@ -65,6 +65,7 @@ export default {
   labels: [Secret, StringEquals],
   enumerateScope: true,
   impactDomain: 'Security',
+  impactSubdomains: ['Security :: Cryptographic failure'],
   references: {
     'CWE-208': new URL('https://cwe.mitre.org/data/definitions/208.html'),
   },

@@ -47,6 +47,7 @@ export default {
   scope: 'http_server_request',
   labels: [HTTPSessionClear, SecurityLogout],
   impactDomain: 'Security',
+  impactSubdomains: ['Security :: Broken access control'],
   enumerateScope: false,
   references: {
     'CWE-488': new URL('https://cwe.mitre.org/data/definitions/488.html'),

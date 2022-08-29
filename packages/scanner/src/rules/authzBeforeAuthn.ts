@@ -48,6 +48,7 @@ export default {
   labels: [SecurityAuthorization, SecurityAuthentication],
   scope: 'http_server_request',
   impactDomain: 'Security',
+  impactSubdomains: ['Security :: Broken access control'],
   enumerateScope: false,
   references: {
     'CWE-863': new URL('https://cwe.mitre.org/data/definitions/863.html'),

@@ -5,6 +5,8 @@ title: Authorization performed before authentication
 references:
   CWE-863: https://cwe.mitre.org/data/definitions/863.html
 impactDomain: Security
+impactSubdomains:
+  - 'Security :: Broken access control'
 labels:
   - security.authorization
   - security.authentication

@@ -20,6 +20,7 @@ export default {
   scope: 'http_server_request',
   enumerateScope: false,
   impactDomain: 'Performance',
+  impactSubdomains: ['Performance :: Slow metric observed'],
   description: parseRuleDescription('slowHttpServerRequest'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#slow-http-server-request',
   Options,

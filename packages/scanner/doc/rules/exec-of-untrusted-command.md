@@ -5,6 +5,8 @@ title: Execution of untrusted system command
 references:
   CWE-78: https://cwe.mitre.org/data/definitions/78.html
 impactDomain: Security
+impactSubdomains:
+  - 'Security :: Injection'
 labels:
   - system.exec
   - system.exec.safe

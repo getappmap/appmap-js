@@ -91,6 +91,7 @@ export default {
   title: 'N plus 1 SQL query',
   scope: 'command',
   impactDomain: 'Performance',
+  impactSubdomains: ['Performance :: Inefficient data access'],
   enumerateScope: false,
   Options,
   references: {

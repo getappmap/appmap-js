@@ -22,7 +22,8 @@ type RuleFrontMatter = {
   rule: string;
   name: string;
   title: string;
-  impactDomain?: string;
+  impactDomain: string;
+  impactSubdomains: string[];
   scope?: string;
   labels?: string[];
   references?: any;
@@ -56,15 +57,14 @@ const labelRules: Record<string, Rule[]> = {};
           ruleWords.slice(1).map(toTitleWord).join(' '),
         ].join(' '),
         title: rule.title,
+        impactDomain: rule.impactDomain,
+        impactSubdomains: rule.impactSubdomains,
       };
       if (rule.references) {
         frontMatter.references = Object.keys(rule.references).reduce((memo, name) => {
           memo[name] = rule.references![name].toString();
           return memo;
         }, {} as Record<string, string>);
-      }
-      if (rule.impactDomain) {
-        frontMatter.impactDomain = rule.impactDomain;
       }
       if (rule.labels) {
         frontMatter.labels = rule.labels;

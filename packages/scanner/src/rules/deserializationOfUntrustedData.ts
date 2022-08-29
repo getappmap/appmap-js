@@ -80,6 +80,7 @@ export default {
   title: 'Deserialization of untrusted data',
   labels: [DeserializeUnsafe, DeserializeSafe, DeserializeSanitize],
   impactDomain: 'Security',
+  impactSubdomains: ['Security :: Injection'],
   enumerateScope: false,
   scope: 'http_server_request',
   references: {

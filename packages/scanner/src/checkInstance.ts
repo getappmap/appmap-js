@@ -1,7 +1,7 @@
 import { Event } from '@appland/models';
 import Check from './check';
 import { verbose } from './rules/lib/util';
-import { AppMapIndex, ImpactDomain, RuleLogic, ScopeName } from './types';
+import { AppMapIndex, ImpactDomain, ImpactSubdomain, RuleLogic, ScopeName } from './types';
 
 export default class CheckInstance {
   check: Check;
@@ -14,6 +14,10 @@ export default class CheckInstance {
 
   get checkImpactDomain(): ImpactDomain | undefined {
     return this.check.impactDomain;
+  }
+
+  get checkImpactSubdomains(): ImpactSubdomain[] | undefined {
+    return this.check.impactSubdomains;
   }
 
   get checkId(): string {

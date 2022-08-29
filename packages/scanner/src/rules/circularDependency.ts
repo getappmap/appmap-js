@@ -232,6 +232,7 @@ export default {
   title: 'Circular package dependency',
   Options,
   impactDomain: 'Maintainability',
+  impactSubdomains: ['Maintainability :: Modularity violation'],
   references: {
     'CWE-1047': new URL('https://cwe.mitre.org/data/definitions/1047.html'),
   },

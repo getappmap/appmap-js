@@ -78,6 +78,7 @@ function loadFromDir(ruleName: string): () => Promise<Rule | undefined> {
       scope: metadata.scope,
       enumerateScope: metadata.enumerateScope,
       impactDomain: metadata.impactDomain,
+      impactSubdomains: metadata.impactSubdomains,
       references,
       Options: options,
       build: rule,

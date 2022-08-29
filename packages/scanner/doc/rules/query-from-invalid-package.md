@@ -5,6 +5,8 @@ title: Queries from invalid packages
 references:
   CWE-1057: https://cwe.mitre.org/data/definitions/1057.html
 impactDomain: Maintainability
+impactSubdomains:
+  - 'Maintainability :: Modularity violation'
 ---
 
 Ensures that SQL queries are made only from an approved list of packages. This helps to make the

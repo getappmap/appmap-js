@@ -5,6 +5,9 @@ title: Unauthenticated HTTP server request
 references:
   CWE-306: https://cwe.mitre.org/data/definitions/306.html
 impactDomain: Security
+impactSubdomains:
+  - 'Security :: Broken access control'
+  - 'Security :: Security misconfiguration'
 labels:
   - access.public
   - security.authentication

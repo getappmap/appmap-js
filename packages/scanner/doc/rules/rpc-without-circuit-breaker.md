@@ -3,6 +3,8 @@ rule: rpc-without-circuit-breaker
 name: RPC without circuit breaker
 title: RPC without circuit breaker
 impactDomain: Stability
+impactSubdomains:
+  - 'Stability :: Improper error handling'
 labels:
   - rpc.circuit_breaker
 ---

@@ -53,6 +53,7 @@ export default {
   title: 'Execution of untrusted system command',
   labels: [Exec, ExecSafe, ExecSanitize],
   impactDomain: 'Security',
+  impactSubdomains: ['Security :: Injection'],
   enumerateScope: false,
   references: {
     'CWE-78': new URL('https://cwe.mitre.org/data/definitions/78.html'),

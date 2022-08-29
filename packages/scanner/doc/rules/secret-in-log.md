@@ -5,6 +5,8 @@ title: Secret in log
 references:
   CWE-532: https://cwe.mitre.org/data/definitions/532.html
 impactDomain: Security
+impactSubdomains:
+  - 'Security :: Logging failure'
 labels:
   - secret
   - log

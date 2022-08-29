@@ -34,6 +34,23 @@ export type ScopeName =
 export type ImpactDomain = 'Security' | 'Performance' | 'Maintainability' | 'Stability';
 
 /**
+ * A further refinement of Impact Domain.
+ */
+export type ImpactSubdomain =
+  | 'Security :: Broken access control'
+  | 'Security :: Cryptographic failure'
+  | 'Security :: Injection'
+  | 'Security :: Insecure design'
+  | 'Security :: Security misconfiguration'
+  | 'Security :: Logging failure'
+  | 'Performance :: Inefficient data access'
+  | 'Performance :: Excessive memory consumption'
+  | 'Performance :: Slow metric observed'
+  | 'Maintainability :: Modularity violation'
+  | 'Stability :: Improper REST behavior'
+  | 'Stability :: Improper error handling';
+
+/**
  * Scope provides an Event at the root of the scope, and a Generator to iterate over its descendants.
  */
 interface Scope {
@@ -114,6 +131,7 @@ interface Finding {
   occurranceCount?: number;
   relatedEvents?: Event[];
   impactDomain?: ImpactDomain;
+  impactSubdomain?: ImpactSubdomain;
   // Map of events by functional role name; for example, logEvent, secret, scope, etc.
   participatingEvents?: Record<string, Event>;
 }
@@ -145,7 +163,8 @@ interface Rule {
   // Whether to pass all the events in the scope to the matcher. If false, only the scope event
   // is passed to the matcher, and the rule should traverse the scope as needed.
   enumerateScope: boolean;
-  impactDomain?: ImpactDomain;
+  impactDomain: ImpactDomain;
+  impactSubdomains: ImpactSubdomain[];
   references?: Record<string, URL>;
   // User-defined options for the rule.
   Options?: Class;

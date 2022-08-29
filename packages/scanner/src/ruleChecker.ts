@@ -174,6 +174,7 @@ export default class RuleChecker {
         occurranceCount,
         relatedEvents: relatedEvents.sort((event) => event.id),
         impactDomain: checkInstance.checkImpactDomain,
+        impactSubdomains: checkInstance.checkImpactSubdomains,
         participatingEvents: Object.fromEntries(
           Object.entries(participatingEvents).map(([k, v]) => [k, cloneEvent(v)])
         ),

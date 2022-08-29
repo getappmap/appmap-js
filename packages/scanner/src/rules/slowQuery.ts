@@ -18,6 +18,10 @@ export default {
   title: 'Slow SQL query',
   Options,
   impactDomain: 'Performance',
+  impactSubdomains: [
+    'Performance :: Inefficient data access',
+    'Performance :: Slow metric observed',
+  ],
   enumerateScope: true,
   description: parseRuleDescription('slowQuery'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#slow-query',

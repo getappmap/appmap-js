@@ -5,6 +5,8 @@ title: Save without validation
 references:
   CWE-20: https://cwe.mitre.org/data/definitions/20.html
 impactDomain: Stability
+impactSubdomains:
+  - 'Security :: Broken access control'
 ---
 
 Ensures that data saved by data access object is validated first.

@@ -5,6 +5,8 @@ title: Queries from view
 references:
   CWE-1057: https://cwe.mitre.org/data/definitions/1057.html
 impactDomain: Maintainability
+impactSubdomains:
+  - 'Maintainability :: Modularity violation'
 ---
 
 Ensures that SQL queries are not performed directly from the view layer. This helps to make the code

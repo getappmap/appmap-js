@@ -2,7 +2,9 @@
 rule: update-in-get-request
 name: Update in get request
 title: Data update performed in GET or HEAD request
-impactDomain: Maintainability
+impactDomain: Stability
+impactSubdomains:
+  - 'Stability :: Improper REST behavior'
 labels:
   - audit
 scope: http_server_request

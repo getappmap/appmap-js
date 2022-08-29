@@ -32,6 +32,7 @@ export default {
   id: 'slow-function-call',
   title: 'Slow function call',
   impactDomain: 'Performance',
+  impactSubdomains: ['Performance :: Slow metric observed'],
   enumerateScope: true,
   description: parseRuleDescription('slowFunctionCall'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#slow-function-call',

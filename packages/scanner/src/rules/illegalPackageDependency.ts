@@ -55,6 +55,7 @@ export default {
   scope: 'command',
   enumerateScope: true,
   impactDomain: 'Maintainability',
+  impactSubdomains: ['Maintainability :: Modularity violation'],
   references: {
     'CWE-1120': new URL('https://cwe.mitre.org/data/definitions/1120.html'),
     'CWE-1154': new URL('https://cwe.mitre.org/data/definitions/1154.html'),

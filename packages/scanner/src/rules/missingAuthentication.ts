@@ -82,6 +82,7 @@ export default {
   scope: 'http_server_request',
   labels: [AccessPublic, SecurityAuthentication],
   impactDomain: 'Security',
+  impactSubdomains: ['Security :: Broken access control', 'Security :: Security misconfiguration'],
   enumerateScope: false,
   references: {
     'CWE-306': new URL('https://cwe.mitre.org/data/definitions/306.html'),

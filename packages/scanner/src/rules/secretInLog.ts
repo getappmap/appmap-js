@@ -92,6 +92,7 @@ export default {
   labels: [Secret, Log],
   scope: 'root',
   impactDomain: 'Security',
+  impactSubdomains: ['Security :: Logging failure'],
   enumerateScope: true,
   references: {
     'CWE-532': new URL('https://cwe.mitre.org/data/definitions/532.html'),

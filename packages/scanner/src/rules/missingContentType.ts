@@ -30,6 +30,7 @@ export default {
   title: 'HTTP server request without a Content-Type header',
   scope: 'http_server_request',
   impactDomain: 'Stability',
+  impactSubdomains: ['Stability :: Improper REST behavior'],
   enumerateScope: false,
   description: parseRuleDescription('missingContentType'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#missing-content-type',

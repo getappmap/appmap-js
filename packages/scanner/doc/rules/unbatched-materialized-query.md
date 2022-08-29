@@ -5,6 +5,9 @@ title: Unbatched materialized SQL query
 references:
   CWE-1049: https://cwe.mitre.org/data/definitions/1049.html
 impactDomain: Performance
+impactSubdomains:
+  - 'Performance :: Inefficient data access'
+  - 'Performance :: Excessive memory consumption'
 labels:
   - dao.materialize
 ---
