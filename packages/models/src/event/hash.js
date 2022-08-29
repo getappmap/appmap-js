@@ -10,6 +10,8 @@ export function abstractSqlAstJSON(query, databaseType) {
   if (!ast) return normalize(query, databaseType);
 
   return JSON.stringify(ast, (_, value) => {
+    if (value === null) return null;
+
     switch (value.type) {
       case 'variable':
       case 'literal':
