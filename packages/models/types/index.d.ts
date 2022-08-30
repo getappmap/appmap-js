@@ -209,6 +209,7 @@ declare module '@appland/models' {
     self(): Generator<EventNavigator>;
     ancestors(): Generator<EventNavigator>;
     preceding(): Generator<EventNavigator>;
+    following(): Generator<EventNavigator>;
     precedingSiblings(): Generator<EventNavigator>;
     followingSiblings(): Generator<EventNavigator>;
     descendants(): Generator<EventNavigator>;

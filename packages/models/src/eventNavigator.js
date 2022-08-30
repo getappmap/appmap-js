@@ -43,6 +43,16 @@ export default class EventNavigator {
     }
   }
 
+  *following() {
+    for (const descendant of this.descendants()) yield descendant;
+    for (const node of [this, ...this.ancestors()]) {
+      for (const sibling of node.followingSiblings()) {
+        yield sibling;
+        for (const descendant of sibling.descendants()) yield descendant;
+      }
+    }
+  }
+
   *precedingSiblings() {
     const { parent } = this.callEvent;
     if (!parent) {
