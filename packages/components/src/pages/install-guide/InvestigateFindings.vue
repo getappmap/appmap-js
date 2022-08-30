@@ -1,59 +1,21 @@
 <template>
   <v-quickstart-layout>
     <section>
+      <header>
+        <h1 data-cy="title">
+          AppMap Runtime Analysis
+          <span v-if="!findingsEnabled">Early Access</span>
+        </h1>
+      </header>
       <main>
+        <article v-if="!(findingsEnabled && scanned)" class="subheading">
+          Find software design flaws that impact security, performance,
+          stability, and maintainability. Our runtime code analysis can find the
+          problems that static code analyzers miss — and that cause serious
+          production issues.
+        </article>
         <div v-if="findingsEnabled">
-          <article v-if="scanned">
-            <template v-if="numFindings > 0">
-              <header class="main-header">
-                <h1 data-cy="title">AppMap Runtime Analysis</h1>
-              </header>
-              <p class="m-1">
-                AppMap has identified
-                <badge
-                  v-for="domain in [
-                    'security',
-                    'performance',
-                    'stability',
-                    'maintainability',
-                  ]"
-                  :key="domain"
-                  :data-cy="domain"
-                  :class="domain"
-                >
-                  {{ findingsDomainCounts[domain] }} {{ domain }}
-                </badge>
-                findings.
-              </p>
-              <br />
-              <p>
-                <v-button
-                  data-cy="investigate-findings-button"
-                  label="Open the PROBLEMS tab"
-                  @click.native="viewProblems"
-                />
-              </p>
-            </template>
-            <section v-else>
-              <header class="main-header">
-                <h1 data-cy="title">AppMap Runtime Analysis</h1>
-              </header>
-              <p class="m-1">
-                You're good to go! AppMap scanned your application and found no
-                flaws. We'll continue scanning for flaws automatically.
-              </p>
-            </section>
-          </article>
-          <article v-else>
-            <header class="main-header">
-              <h1 data-cy="title">AppMap Runtime Analysis</h1>
-              <div class="subheading">
-                Find software design flaws that impact security, performance,
-                stability, and maintainability. Our runtime code analysis can
-                find the problems that static code analyzers miss — and that
-                cause serious production issues.
-              </div>
-            </header>
+          <article v-if="!scanned">
             <p>
               <strong>This project has not been scanned yet.</strong>
             </p>
@@ -88,18 +50,41 @@
               support ticket.
             </p>
           </article>
+          <article v-else-if="numFindings > 0">
+            <p>
+              AppMap has identified
+              <badge
+                v-for="domain in [
+                  'security',
+                  'performance',
+                  'stability',
+                  'maintainability',
+                ]"
+                :key="domain"
+                :data-cy="domain"
+                :class="domain"
+              >
+                {{ findingsDomainCounts[domain] }} {{ domain }}
+              </badge>
+              findings.
+            </p>
+            <br />
+            <p>
+              <v-button
+                data-cy="investigate-findings-button"
+                label="Open the PROBLEMS tab"
+                @click.native="viewProblems"
+              />
+            </p>
+          </article>
+          <article v-else>
+            <p>
+              You're good to go! AppMap scanned your application and found no
+              flaws. We'll continue scanning for flaws automatically.
+            </p>
+          </article>
         </div>
-        <div v-else data-cy="runtime-analysis-info">
-          <header>
-            <h1 data-cy="title">AppMap Runtime Analysis Early Access</h1>
-            <div class="subheading">
-              Find software design flaws that impact security, performance,
-              stability, and maintainability. Our runtime code analysis can find
-              the problems that static code analyzers miss — and that cause
-              serious production issues.
-            </div>
-          </header>
-
+        <article v-if="!findingsEnabled">
           <div class="feature-wrap content">
             <a
               class="youtube-video"
@@ -150,7 +135,7 @@
               />
             </a>
           </div>
-        </div>
+        </article>
       </main>
       <v-navigation-buttons :first="first" :last="last" />
     </section>
@@ -200,20 +185,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-header {
-  margin-bottom: 0;
-  padding-bottom: 0.25rem;
-  .subheading {
-    font-size: 1.1rem;
-    color: #939fb1;
-    line-height: 1.6rem;
-  }
-}
-
-h1 {
-  font-size: 2em;
-  line-height: 2.25rem;
-  margin-bottom: 0.25rem;
+.subheading {
+  font-size: 1.1rem;
+  color: #939fb1;
+  line-height: 1.6rem;
 }
 
 .columns {
@@ -352,9 +327,6 @@ h1 {
   }
 }
 
-.m-1 {
-  margin: 1rem 0;
-}
 .b-0 {
   border: none;
 }

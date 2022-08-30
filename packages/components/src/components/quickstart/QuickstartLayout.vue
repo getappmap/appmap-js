@@ -145,48 +145,15 @@ body {
   }
 }
 
-.qs-appmaps-table {
-  margin: 1.5rem 0;
-  border-collapse: collapse;
-  width: 100%;
-  th,
-  td {
-    border: none;
-    padding: 0 1rem;
-    font-weight: normal;
-    color: $base07;
-    text-align: left;
-    white-space: nowrap;
-    &:first-child {
-      padding-left: 0;
-    }
-  }
-  tr {
-    border-bottom: 1px solid lighten($gray2, 08);
-    a {
-      color: $white;
-    }
-    &:hover {
-      background-color: lighten($gray2, 08);
-    }
-  }
-  tbody {
-    tr {
-      cursor: pointer;
-    }
-    td {
-      padding: 0.2rem 0.5rem;
-      color: $powderblue;
-      white-space: normal;
-      &:hover {
-        color: $white;
-      }
-    }
-  }
-}
-
 header {
   margin-block-end: 2em;
+}
+
+h1 {
+  margin-block-start: 0;
+  font-size: 2em;
+  line-height: 2.25rem;
+  margin-bottom: 0.25rem;
 }
 
 article {

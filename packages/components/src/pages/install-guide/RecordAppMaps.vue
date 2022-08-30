@@ -140,9 +140,3 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-h1 {
-  margin-block-start: 0;
-  font-size: 2em;
-}
-</style>
