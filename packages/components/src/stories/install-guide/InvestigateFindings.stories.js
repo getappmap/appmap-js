@@ -1,7 +1,7 @@
 import VInvestigateFindings from '@/pages/install-guide/InvestigateFindings.vue';
 
 export default {
-  title: 'Pages/VS Code/Install Guide Pages',
+  title: 'Pages/VS Code/Install Guide Pages/Investigate Findings',
   component: VInvestigateFindings,
 };
 
@@ -11,8 +11,8 @@ const Template = (args, { argTypes }) => ({
   template: '<v-investigate-findings v-bind="$props" />',
 });
 
-export const InvestigateFindings = Template.bind({});
-InvestigateFindings.args = {
+export const WithFindings = Template.bind({});
+WithFindings.args = {
   scanned: true,
   projectPath: '/home/dev/project',
   numFindings: 10,
@@ -25,8 +25,8 @@ InvestigateFindings.args = {
   findingsEnabled: true,
 };
 
-export const InvestigateFindingsEmpty = Template.bind({});
-InvestigateFindingsEmpty.args = {
+export const Empty = Template.bind({});
+Empty.args = {
   scanned: true,
   projectPath: '/home/dev/project',
   numFindings: 0,
@@ -39,8 +39,8 @@ InvestigateFindingsEmpty.args = {
   findingsEnabled: true,
 };
 
-export const InvestigateFindingsDisabled = Template.bind({});
-InvestigateFindingsDisabled.args = {
+export const Disabled = Template.bind({});
+Disabled.args = {
   scanned: true,
   projectPath: '/home/dev/project',
   numFindings: 0,
