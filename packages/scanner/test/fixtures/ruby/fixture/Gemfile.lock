@@ -21,9 +21,12 @@ GEM
     concurrent-ruby (1.1.10)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
+    jwt (2.5.0)
     method_source (1.0.0)
     minitest (5.16.2)
     nokogiri (1.13.8-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.8-x86_64-linux)
       racc (~> 1.4)
     racc (1.6.0)
     rack (2.2.4)
@@ -36,10 +39,12 @@ GEM
 PLATFORMS
   x86_64-darwin-17
   x86_64-darwin-20
+  x86_64-linux
 
 DEPENDENCIES
   appmap!
   byebug
+  jwt
   minitest
   rake
 
