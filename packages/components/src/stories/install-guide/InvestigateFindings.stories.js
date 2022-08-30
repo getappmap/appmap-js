@@ -52,3 +52,9 @@ Disabled.args = {
   },
   findingsEnabled: false,
 };
+
+export const NotScanned = Template.bind({});
+NotScanned.args = {
+  scanned: false,
+  findingsEnabled: true,
+};
