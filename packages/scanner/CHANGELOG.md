@@ -1,3 +1,16 @@
+# [@appland/scanner-v1.70.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.69.1...@appland/scanner-v1.70.0) (2022-08-31)
+
+
+### Bug Fixes
+
+* Don't attempt to destructure an undefined value ([b46e358](https://github.com/applandinc/appmap-js/commit/b46e358cf0fd0cc56a7f465268f87f219ab13c55))
+
+
+### Features
+
+* Add scan for presence of JWT signature verification ([a2b382b](https://github.com/applandinc/appmap-js/commit/a2b382bd571cfbc0fcdfa389ad382536f85eb671))
+* Add scanner for usage of JWT with the `none` algorithm ([025ac89](https://github.com/applandinc/appmap-js/commit/025ac89f0538d5b4bfed7f36e3d09788f2a38076))
+
 # [@appland/scanner-v1.69.1](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.69.0...@appland/scanner-v1.69.1) (2022-08-29)
 
 
