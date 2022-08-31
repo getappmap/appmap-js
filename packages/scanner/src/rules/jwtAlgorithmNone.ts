@@ -19,6 +19,8 @@ function getHeader(jwt: string): JwtHeader | undefined {
 
 class JwtAlgoritmNoneLogic implements RuleLogic {
   matcher(event: Event): MatchResult[] | undefined {
+    if (!event.returnValue) return;
+
     const matches = new Array<MatchResult>();
     const { value: jwt } = event.returnValue;
     const header = getHeader(jwt);
