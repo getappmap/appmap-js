@@ -1,3 +1,10 @@
+# [@appland/models-v1.19.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.18.3...@appland/models-v1.19.0) (2022-08-31)
+
+
+### Features
+
+* Add EventNavigator#following ([50858dd](https://github.com/applandinc/appmap-js/commit/50858ddc22239bccb6bb7b52be001efc35b4a06b))
+
 # [@appland/models-v1.18.3](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.18.2...@appland/models-v1.18.3) (2022-08-29)
 
 
