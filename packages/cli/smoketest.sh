@@ -17,7 +17,7 @@ yarn add ./package.tgz
 yarn run appmap index --appmap-dir ruby
 yarn run appmap depends --appmap-dir ruby
 yarn run appmap inventory --appmap-dir ruby
-yarn run appmap openapi -d ruby -o /dev/null
+yarn run appmap openapi --appmap-dir ruby -o /dev/null
 
 
 cd "$PKGDIR"

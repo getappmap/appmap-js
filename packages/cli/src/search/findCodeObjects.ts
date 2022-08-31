@@ -162,8 +162,12 @@ function buildCodeObjectMatcher(codeObjectId: string): CodeObjectMatcher[] {
 export default class FindCodeObjects {
   matchers: CodeObjectMatcher[];
 
-  constructor(public appMapDir: string, public codeObjectId: string) {
-    this.matchers = buildCodeObjectMatcher(codeObjectId);
+  constructor(
+    public codeObjectPattern: string,
+    public appmapDir?: string,
+    public appmapFiles?: string[]
+  ) {
+    this.matchers = buildCodeObjectMatcher(codeObjectPattern);
     if (verbose()) {
       console.warn(`Searching for: ${inspect(this.matchers)}`);
     }
@@ -255,7 +259,8 @@ export default class FindCodeObjects {
     };
 
     await processFiles(
-      `${this.appMapDir}/**/classMap.json`,
+      this.appmapDir ? `${this.appmapDir}/**/classMap.json` : undefined,
+      this.appmapFiles,
       checkClassMap.bind(this),
       fileCountFn
     );

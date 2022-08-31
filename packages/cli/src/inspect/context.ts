@@ -30,7 +30,7 @@ export default class Context extends EventEmitter {
   }
 
   async findCodeObjects() {
-    const finder = new FindCodeObjects(this.appmapDir, this.codeObjectId);
+    const finder = new FindCodeObjects(this.codeObjectId, this.appmapDir);
     this.codeObjectMatches = await finder.find(
       (count) => this.emit('start', count),
       () => this.emit('increment')
