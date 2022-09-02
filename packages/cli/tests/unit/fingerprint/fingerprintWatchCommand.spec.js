@@ -39,4 +39,33 @@ describe(FingerprintWatchCommand, () => {
       expect(fs.existsSync(path.join(appMapDir, 'index.pid'))).toBeFalsy();
     });
   });
+
+  describe('indexing', () => {
+    beforeEach(() => {
+      fs.copyFileSync(
+        path.join(__dirname, '../fixtures/ruby/revoke_api_key.appmap.json'),
+        path.join(appMapDir, 'revoke_api_key.appmap.json')
+      );
+    });
+
+    it('occurs on existing un-indexed appmaps', async () => {
+      cmd = new FingerprintWatchCommand(appMapDir);
+      await cmd.execute();
+
+      const maxRetries = 10;
+      function verifyFileExists(filePath, retryCount = 0) {
+        if (fs.existsSync(filePath)) return;
+
+        if (retryCount < maxRetries) {
+          setTimeout(() => verifyFileExists(filePath, retryCount + 1), 1000);
+        } else {
+          throw new Error(
+            `File ${filePath} does not exist after ${retryCount} retries`
+          );
+        }
+      }
+
+      verifyFileExists(path.join(appMapDir, 'revoke_api_key', 'mtime'));
+    }, 11000);
+  });
 });

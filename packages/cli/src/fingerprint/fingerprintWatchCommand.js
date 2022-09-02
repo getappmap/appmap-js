@@ -1,7 +1,7 @@
 const chokidar = require('chokidar');
 const fs = require('fs-extra');
 const path = require('path');
-const { verbose } = require('../utils');
+const { verbose, listAppMapFiles } = require('../utils');
 const FingerprintQueue = require('./fingerprintQueue');
 
 class FingerprintWatchCommand {
@@ -22,16 +22,21 @@ class FingerprintWatchCommand {
     }
   }
 
-  execute() {
+  async execute() {
+    this.fpQueue = new FingerprintQueue();
+    this.fpQueue.setCounterFn(() => {
+      this.numProcessed += 1;
+    });
+
+    // Index existing AppMap files
+    await listAppMapFiles(this.directory, (file) => this.fpQueue.push(file));
+    this.fpQueue.process();
+
+    this.watcher = chokidar.watch(`${this.directory}/**/*.appmap.json`, {
+      ignoreInitial: true,
+    });
+
     return new Promise((resolve) => {
-      this.fpQueue = new FingerprintQueue();
-      this.fpQueue.setCounterFn(() => {
-        this.numProcessed += 1;
-      });
-      this.fpQueue.process();
-      this.watcher = chokidar.watch(`${this.directory}/**/*.appmap.json`, {
-        ignoreInitial: true,
-      });
       this.watcher
         .on('add', this.added.bind(this))
         .on('change', this.changed.bind(this))
