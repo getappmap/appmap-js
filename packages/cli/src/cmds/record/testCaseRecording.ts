@@ -73,20 +73,20 @@ export default class TestCaseRecording {
 
     let waitTime = maxTime;
     async function waitForProcess(
-      process: ChildProcess
+      childProcess: ChildProcess
     ): Promise<{ exitCode: number; output: string }> {
-      const commandStr = process.spawnargs.join(' ');
+      const commandStr = childProcess.spawnargs.join(' ');
       const startTime = Date.now();
       return new Promise((resolve) => {
         let reported = false;
         let interruptTimeout: NodeJS.Timeout | undefined;
 
         function interrupt() {
-          if (process.pid) {
+          if (childProcess.pid) {
             UI.progress(
               `Stopping test command after ${maxTime} seconds: ${commandStr}`
             );
-            kill(process.pid, 'SIGTERM');
+            kill(childProcess.pid, 'SIGTERM');
           }
         }
 
@@ -109,15 +109,17 @@ Test command failed with status code ${exitCode}: ${commandStr}`
           resolve({ exitCode, output: output.join() });
         }
 
-        if (process.exitCode) return report(process.exitCode);
+        if (childProcess.exitCode) return report(childProcess.exitCode);
 
         const onData = (data) => {
           output.push(data.toString());
         };
-        process.stdout?.on('data', onData);
-        process.stderr?.on('data', onData);
+        childProcess.stdout?.pipe(process.stdout);
+        childProcess.stderr?.pipe(process.stderr);
+        childProcess.stdout?.on('data', onData);
+        childProcess.stderr?.on('data', onData);
 
-        process.on('exit', report);
+        childProcess.on('exit', report);
         if (waitTime) {
           interruptTimeout = setTimeout(interrupt, waitTime * 1000);
         }
