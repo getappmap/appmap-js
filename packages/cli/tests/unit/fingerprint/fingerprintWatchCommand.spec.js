@@ -7,30 +7,34 @@ const { verbose } = require('../../../src/utils');
 
 const appMapDir = tmp.dirSync().name;
 
-// Because if you use arrow functions, there's no this:
-/* eslint-disable prefer-arrow-callback */
-describe(FingerprintWatchCommand, function () {
-  beforeEach(function () {
+describe(FingerprintWatchCommand, () => {
+  let cmd;
+
+  beforeEach(() => {
     verbose(process.env.DEBUG === 'true');
   });
-  afterEach(async function () {
-    await this.cmd.close();
+
+  afterEach(async () => {
+    if (cmd) {
+      cmd.close();
+      cmd = null;
+    }
     sinon.restore();
   });
 
-  describe('a pid file', function () {
-    it('is created when env var is set', async function () {
+  describe('a pid file', () => {
+    it('is created when env var is set', async () => {
       sinon.stub(process, 'env').value({ APPMAP_WRITE_PIDFILE: 'true' });
-      this.cmd = new FingerprintWatchCommand(appMapDir);
+      cmd = new FingerprintWatchCommand(appMapDir);
 
-      await this.cmd.execute();
+      await cmd.execute();
 
       expect(fs.existsSync(path.join(appMapDir, 'index.pid'))).toBeTruthy();
     });
 
-    it('is not created when env var is unset', async function () {
-      this.cmd = new FingerprintWatchCommand(appMapDir);
-      await this.cmd.execute();
+    it('is not created when env var is unset', async () => {
+      cmd = new FingerprintWatchCommand(appMapDir);
+      await cmd.execute();
 
       expect(fs.existsSync(path.join(appMapDir, 'index.pid'))).toBeFalsy();
     });
