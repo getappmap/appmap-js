@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.35.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.34.0...@appland/appmap-v3.35.0) (2022-09-02)
+
+
+### Bug Fixes
+
+* Don't swallow output from test commands ([e0b3fe0](https://github.com/applandinc/appmap-js/commit/e0b3fe0bd94c68bc31c5a8418184207a5f84b500))
+
+
+### Features
+
+* Indexing in watch mode now indexes all existing AppMaps ([d7fb3c6](https://github.com/applandinc/appmap-js/commit/d7fb3c6f163a4150c1ae1f2c783e08214dfa0b53))
+
 # [@appland/appmap-v3.34.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.33.1...@appland/appmap-v3.34.0) (2022-08-25)
 
 
