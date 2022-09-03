@@ -10,6 +10,7 @@ import { ScanResults } from '../../report/scanResults';
 
 export interface Scanner {
   scan(): Promise<ScanResults>;
+  scan(skipErrors: boolean): Promise<ScanResults>;
 
   fetchFindingStatus(appId?: string, appMapDir?: string): Promise<FindingStatusListItem[]>;
 }
@@ -30,9 +31,9 @@ export default async function scanner(
 abstract class ScannerBase {
   constructor(public configuration: Configuration, public files: string[]) {}
 
-  async scan(): Promise<ScanResults> {
+  async scan(skipErrors = false): Promise<ScanResults> {
     const checks = await loadConfig(this.configuration);
-    const { appMapMetadata, findings } = await scan(this.files, checks);
+    const { appMapMetadata, findings } = await scan(this.files, checks, skipErrors);
     return new ScanResults(this.configuration, appMapMetadata, findings, checks);
   }
 }
