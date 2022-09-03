@@ -49,6 +49,7 @@
     "prettier": "^2.3.2",
     "semantic-release": "^19.0.2",
     "sinon": "^13.0.1",
+    "tmp-promise": "^3.0.3",
     "ts-jest": "^27.1.4",
     "ts-json-schema-generator": "^0.97.0",
     "ts-node": "^10.2.1",

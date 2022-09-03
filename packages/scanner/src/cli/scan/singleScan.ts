@@ -26,6 +26,8 @@ export default async function singleScan(options: SingleScanOptions): Promise<vo
   const { appmapFile, appmapDir, configuration, reportAllFindings, appId, ide, reportFile } =
     options;
 
+  const skipErrors = appmapDir !== undefined;
+
   const files = await collectAppMapFiles(appmapFile, appmapDir);
   await Promise.all(files.map(async (file) => validateFile('file', file)));
 
@@ -38,7 +40,7 @@ export default async function singleScan(options: SingleScanOptions): Promise<vo
   const startTime = Date.now();
 
   const [rawScanResults, findingStatuses] = await Promise.all([
-    scanner.scan(),
+    scanner.scan(skipErrors),
     scanner.fetchFindingStatus(appId, appmapDir),
   ]);
 

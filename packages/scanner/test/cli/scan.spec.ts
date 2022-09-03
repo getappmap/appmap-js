@@ -7,12 +7,17 @@ import Command from '../../src/cli/scan/command';
 import { fixtureAppMapFileName } from '../util';
 import { readFileSync, unlinkSync } from 'fs';
 import { ScanResults } from '../../src/report/scanResults';
-import { readFile, rm, stat, writeFile } from 'fs/promises';
+import { copyFile, mkdtemp, readFile, rm, stat, writeFile } from 'fs/promises';
 import { Watcher } from '../../src/cli/scan/watchScan';
 import { tmpdir } from 'os';
 import { dump } from 'js-yaml';
+import CommandOptions from '../../src/cli/scan/options';
+import tmp from 'tmp-promise';
 
 process.env['APPMAP_TELEMETRY_DISABLED'] = 'true';
+delete process.env.APPLAND_API_KEY;
+delete process.env.APPLAND_URL;
+
 const ReportFile = 'appmap-findings.json';
 const AppId = test.AppId;
 const DefaultScanConfigFilePath = join(__dirname, '..', '..', 'src', 'sampleConfig', 'default.yml');
@@ -23,37 +28,43 @@ const StandardOneShotScanOptions = {
   config: DefaultScanConfigFilePath, // need to pass it explicitly
   reportFile: ReportFile,
   app: AppId,
-};
+  all: false,
+  interactive: false,
+  watch: false,
+} as const;
+
+function isError(error: unknown, code: string): boolean {
+  const err = error as NodeJS.ErrnoException;
+  return err.code === code;
+}
 
 afterEach(() => {
   try {
     unlinkSync(ReportFile);
   } catch (err) {
-    expect((err as any).toString()).toMatch(/ENOENT/);
+    if (!isError(err, 'ENOENT')) throw err;
   }
 });
 afterEach(() => sinon.restore());
 afterEach(() => nock.cleanAll());
 
+function runCommand(options: CommandOptions): Promise<void> {
+  return Command.handler({ $0: 'test', _: [], ...options });
+}
+
 describe('scan', () => {
   it('errors with default options and without AppMap server API key', async () => {
     delete process.env.APPLAND_API_KEY;
     try {
-      await Command.handler(StandardOneShotScanOptions as any);
+      await runCommand(StandardOneShotScanOptions);
       throw new Error(`Expected this command to fail`);
     } catch (err) {
       expect((err as any).toString()).toMatch(/No API key available for AppMap server/);
     }
   });
 
-  it('runs with server access disabled', async () => {
-    delete process.env.APPLAND_API_KEY;
-    delete process.env.APPLAND_URL;
-    await Command.handler(
-      Object.assign({}, StandardOneShotScanOptions, {
-        all: true,
-      } as any)
-    );
+  async function checkScan(options: CommandOptions): Promise<void> {
+    await runCommand(options);
 
     const scanResults = JSON.parse(readFileSync(ReportFile).toString()) as ScanResults;
     expect(scanResults.summary).toBeTruthy();
@@ -70,13 +81,17 @@ describe('scan', () => {
       'findings',
       'summary',
     ]);
+  }
+
+  it('runs with server access disabled', async () => {
+    await checkScan({ ...StandardOneShotScanOptions, all: true });
   });
 
   it('errors when the provided appId is not valid', async () => {
     nock('http://localhost:3000').head(`/api/${AppId}`).reply(404);
 
     try {
-      await Command.handler(StandardOneShotScanOptions as any);
+      await runCommand(StandardOneShotScanOptions);
       throw new Error(`Expected this command to fail`);
     } catch (e) {
       expect((e as any).message).toMatch(
@@ -90,8 +105,60 @@ describe('scan', () => {
     localhost.head(`/api/${AppId}`).reply(204).persist();
     localhost.get(`/api/${AppId}/finding_status`).reply(200, JSON.stringify([]));
 
-    await Command.handler(StandardOneShotScanOptions as any);
+    await runCommand(StandardOneShotScanOptions);
   });
+
+  it('skips when encountering a bad file in a directory', async () =>
+    tmp.withDir(
+      async ({ path }) => {
+        await copyFile(StandardOneShotScanOptions.appmapFile, join(path, 'good.appmap.json'));
+        await writeFile(join(path, 'bad.appmap.json'), 'bad json');
+
+        const options: CommandOptions = {
+          ...StandardOneShotScanOptions,
+          all: true,
+          appmapDir: path,
+        };
+        delete options.appmapFile;
+
+        await checkScan(options);
+      },
+      { unsafeCleanup: true }
+    ));
+
+  it('errors when no good files were found', async () =>
+    tmp.withDir(
+      async ({ path }) => {
+        await writeFile(join(path, 'bad.appmap.json'), 'bad json');
+
+        const options: CommandOptions = {
+          ...StandardOneShotScanOptions,
+          all: true,
+          appmapDir: path,
+        };
+        delete options.appmapFile;
+
+        expect.assertions(1);
+        return runCommand(options).catch((e: Error) => {
+          expect(e.message).toMatch(/Error processing/);
+        });
+      },
+      { unsafeCleanup: true }
+    ));
+
+  it('errors when a bad file is explicitly provided', async () =>
+    tmp.withFile(async ({ path }) => {
+      await writeFile(path, 'bad json');
+      const options = {
+        ...StandardOneShotScanOptions,
+        all: true,
+        appmapFile: [path, StandardOneShotScanOptions.appmapFile],
+      };
+      expect.assertions(1);
+      return runCommand(options).catch((e: Error) => {
+        expect(e.message).toMatch(/Error processing/);
+      });
+    }));
 
   describe('watch mode', () => {
     let watcher: Watcher | undefined;

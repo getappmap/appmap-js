@@ -380,6 +380,7 @@ __metadata:
     sinon: ^13.0.1
     supports-hyperlinks: ^2.2.0
     tar-stream: ^2.2.0
+    tmp-promise: ^3.0.3
     ts-jest: ^27.1.4
     ts-json-schema-generator: ^0.97.0
     ts-node: ^10.2.1
@@ -27924,6 +27925,15 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
+"tmp-promise@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "tmp-promise@npm:3.0.3"
+  dependencies:
+    tmp: ^0.2.0
+  checksum: f854f5307dcee6455927ec3da9398f139897faf715c5c6dcee6d9471ae85136983ea06662eba2edf2533bdcb0fca66d16648e79e14381e30c7fb20be9c1aa62c
+  languageName: node
+  linkType: hard
+
 "tmp@npm:^0.0.33":
   version: 0.0.33
   resolution: "tmp@npm:0.0.33"
@@ -27933,7 +27943,7 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"tmp@npm:^0.2.1, tmp@npm:~0.2.1":
+"tmp@npm:^0.2.0, tmp@npm:^0.2.1, tmp@npm:~0.2.1":
   version: 0.2.1
   resolution: "tmp@npm:0.2.1"
   dependencies:
