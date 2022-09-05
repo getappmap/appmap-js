@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.70.1](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.70.0...@appland/scanner-v1.70.1) (2022-09-05)
+
+
+### Bug Fixes
+
+* Skip bad files when running scanner on a directory ([d6d1e4e](https://github.com/applandinc/appmap-js/commit/d6d1e4e4eeac40424802169414b170961dfccc25))
+
 # [@appland/scanner-v1.70.0](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.69.1...@appland/scanner-v1.70.0) (2022-08-31)
 
 
