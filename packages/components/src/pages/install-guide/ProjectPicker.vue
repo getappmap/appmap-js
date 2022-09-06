@@ -134,11 +134,6 @@ main {
   counter-reset: step;
 }
 
-h1 {
-  margin-block-start: 0;
-  font-size: 2em;
-}
-
 h2 {
   margin-block-end: 0;
   counter-increment: step;

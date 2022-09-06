@@ -1,7 +1,7 @@
 import OpenAppMaps from '@/pages/install-guide/OpenAppMaps.vue';
 
 export default {
-  title: 'Pages/VS Code/Install Guide Pages',
+  title: 'Pages/VS Code/Install Guide Pages/Explore Appmaps',
   component: OpenAppMaps,
 };
 
@@ -11,11 +11,11 @@ const Template = (args, { argTypes }) => ({
   template: '<OpenAppMaps v-bind="$props" />',
 });
 
-export const ExploreAppmapsEmptyPage = Template.bind({});
-ExploreAppmapsEmptyPage.args = {};
+export const EmptyPage = Template.bind({});
+EmptyPage.args = {};
 
-export const ExploreAppmapsFullPage = Template.bind({});
-ExploreAppmapsFullPage.args = {
+export const FullPage = Template.bind({});
+FullPage.args = {
   appMaps: [
     {
       path: '/home/ahtrotta/projects/land-of-apps/sample_app_6th_ed/tmp/appmap/minitest/Microposts_interface_micropost_interface.appmap.json',
@@ -136,8 +136,8 @@ ExploreAppmapsFullPage.args = {
   },
 };
 
-export const ExploreAppmapsPartialPage = Template.bind({});
-ExploreAppmapsPartialPage.args = {
+export const PartialPage = Template.bind({});
+PartialPage.args = {
   appMaps: [
     {
       path: '/home/ahtrotta/projects/land-of-apps/sample_app_6th_ed/tmp/appmap/minitest/Microposts_interface_micropost_interface.appmap.json',

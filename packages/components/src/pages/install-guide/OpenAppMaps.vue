@@ -1,92 +1,94 @@
 <template>
   <v-quickstart-layout>
-    <section class="qs-step">
-      <div class="qs-step__head">
-        <h1 class="qs-title" data-cy="title">Explore AppMaps</h1>
-      </div>
-      <div class="qs-step__block" v-if="appMaps.length">
-        <p>
-          AppMaps have been recorded for this project! <br />
-          We've identified some interesting AppMaps and Code Objects that you
-          may want to check out.
-        </p>
-        <div class="qs-explore-code-objects" data-cy="code-objects">
-          <h2 class="subhead">Selected Code objects</h2>
-          <ul class="code-object-list">
-            <div class="collapse-expand">
-              <div class="accordion-toggle">
-                <p>HTTP Server requests</p>
+    <section>
+      <header>
+        <h1 data-cy="title">Explore AppMaps</h1>
+      </header>
+      <main>
+        <article v-if="appMaps.length">
+          <p>
+            AppMaps have been recorded for this project! <br />
+            We've identified some interesting AppMaps and Code Objects that you
+            may want to check out.
+          </p>
+          <div class="qs-explore-code-objects" data-cy="code-objects">
+            <h2 class="subhead">Selected Code objects</h2>
+            <ul class="code-object-list">
+              <div class="collapse-expand">
+                <div class="accordion-toggle">
+                  <p>HTTP Server requests</p>
+                </div>
               </div>
-            </div>
-            <li
-              v-for="httpRequest in httpRequests"
-              :key="httpRequest.path"
-              @click="openAppmap(httpRequest.path)"
-              data-cy="httpRequest"
-            >
-              <a href="#">{{ httpRequest.name }}</a>
-            </li>
-          </ul>
-          <ul class="code-object-list">
-            <div class="collapse-expand">
-              <div class="accordion-toggle">
-                <p>Queries</p>
-              </div>
-            </div>
-            <li
-              v-for="query in queries"
-              :key="query.path"
-              @click="openAppmap(query.path)"
-              data-cy="query"
-            >
-              <a href="#">{{ query.name }}</a>
-            </li>
-          </ul>
-        </div>
-        <div class="table-wrap">
-          <table class="qs-appmaps-table" data-cy="appmaps">
-            <colgroup>
-              <col width="70%" />
-              <col width="10%" />
-              <col width="10%" />
-              <col width="10%" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th><h2 class="subhead">Selected AppMaps</h2></th>
-                <th>Requests</th>
-                <th>SQL</th>
-                <th>Functions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="appMap in appMaps"
-                :key="appMap.path"
-                @click="openAppmap(appMap.path)"
-                data-cy="appmap"
+              <li
+                v-for="httpRequest in httpRequests"
+                :key="httpRequest.path"
+                @click="openAppmap(httpRequest.path)"
+                data-cy="httpRequest"
               >
-                <td>{{ appMap.name }}</td>
-                <td>{{ appMap.requests }}</td>
-                <td>{{ appMap.sqlQueries }}</td>
-                <td>{{ appMap.functions }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <article v-else data-cy="no-appmaps">
-        No AppMaps have been found in your project. Try
-        <a
-          href="#"
-          @click.prevent="$root.$emit('open-instruction', 'record-appmaps')"
-        >
-          recording AppMaps
-        </a>
-        first.
-      </article>
+                <a href="#">{{ httpRequest.name }}</a>
+              </li>
+            </ul>
+            <ul class="code-object-list">
+              <div class="collapse-expand">
+                <div class="accordion-toggle">
+                  <p>Queries</p>
+                </div>
+              </div>
+              <li
+                v-for="query in queries"
+                :key="query.path"
+                @click="openAppmap(query.path)"
+                data-cy="query"
+              >
+                <a href="#">{{ query.name }}</a>
+              </li>
+            </ul>
+          </div>
+          <div class="table-wrap">
+            <table class="qs-appmaps-table" data-cy="appmaps">
+              <colgroup>
+                <col width="70%" />
+                <col width="10%" />
+                <col width="10%" />
+                <col width="10%" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th><h2 class="subhead">Selected AppMaps</h2></th>
+                  <th>Requests</th>
+                  <th>SQL</th>
+                  <th>Functions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="appMap in appMaps"
+                  :key="appMap.path"
+                  @click="openAppmap(appMap.path)"
+                  data-cy="appmap"
+                >
+                  <td>{{ appMap.name }}</td>
+                  <td>{{ appMap.requests }}</td>
+                  <td>{{ appMap.sqlQueries }}</td>
+                  <td>{{ appMap.functions }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+        <article v-else data-cy="no-appmaps">
+          No AppMaps have been found in your project. Try
+          <a
+            href="#"
+            @click.prevent="$root.$emit('open-instruction', 'record-appmaps')"
+          >
+            recording AppMaps
+          </a>
+          first.
+        </article>
+      </main>
+      <v-navigation-buttons :first="first" :last="last" />
     </section>
-    <v-navigation-buttons :first="first" :last="last" />
   </v-quickstart-layout>
 </template>
 
@@ -185,6 +187,43 @@ export default {
   }
 }
 .qs-appmaps-table {
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  width: 100%;
+  th,
+  td {
+    border: none;
+    padding: 0 1rem;
+    font-weight: normal;
+    color: $base07;
+    text-align: left;
+    white-space: nowrap;
+    &:first-child {
+      padding-left: 0;
+    }
+  }
+  tr {
+    border-bottom: 1px solid lighten($gray2, 08);
+    a {
+      color: $white;
+    }
+    &:hover {
+      background-color: lighten($gray2, 08);
+    }
+  }
+  tbody {
+    tr {
+      cursor: pointer;
+    }
+    td {
+      padding: 0.2rem 0.5rem;
+      color: $powderblue;
+      white-space: normal;
+      &:hover {
+        color: $white;
+      }
+    }
+  }
   th {
     border-bottom: 1px solid $gray-secondary;
   }

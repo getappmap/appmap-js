@@ -1,7 +1,7 @@
 import ProjectPicker from '@/pages/install-guide/ProjectPicker.vue';
 
 export default {
-  title: 'Pages/VS Code/Install Guide Pages',
+  title: 'Pages/VS Code/Install Guide Pages/Project Picker',
   component: ProjectPicker,
 };
 
@@ -11,13 +11,13 @@ const Template = (args, { argTypes }) => ({
   template: '<ProjectPicker v-bind="$props" ref="installAgent" />',
 });
 
-export const ProjectPickerEmpty = Template.bind({});
-ProjectPickerEmpty.args = {
+export const Empty = Template.bind({});
+Empty.args = {
   projects: [],
 };
 
-export const ProjectPickerGoodProject = Template.bind({});
-ProjectPickerGoodProject.args = {
+export const GoodProject = Template.bind({});
+GoodProject.args = {
   projects: [
     {
       name: 'OneProject',
@@ -43,8 +43,8 @@ ProjectPickerGoodProject.args = {
   ],
 };
 
-export const ProjectPickerBadProject = Template.bind({});
-ProjectPickerBadProject.args = {
+export const BadProject = Template.bind({});
+BadProject.args = {
   projects: [
     {
       name: 'TestApp',
@@ -64,8 +64,8 @@ ProjectPickerBadProject.args = {
   ],
 };
 
-export const ProjectPickerOkProject = Template.bind({});
-ProjectPickerOkProject.args = {
+export const OkProject = Template.bind({});
+OkProject.args = {
   projects: [
     {
       name: 'RubyTest',
@@ -85,8 +85,8 @@ ProjectPickerOkProject.args = {
   ],
 };
 
-export const ProjectPickerFourProjects = Template.bind({});
-ProjectPickerFourProjects.args = {
+export const FourProjects = Template.bind({});
+FourProjects.args = {
   projects: [
     {
       name: 'TestApp',
