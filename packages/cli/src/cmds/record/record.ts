@@ -118,13 +118,14 @@ export default {
 
         await showAppMap(state as FileName);
       }
+
+      await StatsCommand.handler(argv);
     };
 
     return runCommand('record', commandFn);
   },
 };
 
-<<<<<<< HEAD
 async function handleRemoteError(err: RemoteRecordingError) {
   UI.error(`Something went wrong when ${err.description}:
 HTTP status: ${err.statusCode}
@@ -149,27 +150,4 @@ HTTP request: ${err.method} ${err.path}
   }
 
   await openTicket(err.toString());
-=======
-      state = newState;
-    }
-
-    if (typeof state === 'string') {
-      Telemetry.sendEvent({
-        name: `record:showAppMap`,
-        properties: {
-          fileName: state as FileName,
-        },
-        metrics: {
-          duration: endTime(),
-        },
-      });
-
-      await showAppMap(state as FileName);
-    }
-
-    await StatsCommand.handler(argv);
-  };
-
-  return runCommand('record', commandFn);
->>>>>>> 86abbf6c... Show biggest AppMaps and functions with highest AppMap overhead.
 }
