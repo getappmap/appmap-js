@@ -1,3 +1,10 @@
+# [@appland/components-v2.11.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.11.1...@appland/components-v2.11.2) (2022-09-06)
+
+
+### Bug Fixes
+
+* Harmonize install guide header styles ([202fc4b](https://github.com/applandinc/appmap-js/commit/202fc4b6cd12c82ef6a3b3a964b7a0127e5c163d))
+
 # [@appland/components-v2.11.1](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.11.0...@appland/components-v2.11.1) (2022-08-17)
 
 
