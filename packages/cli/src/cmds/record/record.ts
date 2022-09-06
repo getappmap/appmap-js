@@ -10,6 +10,7 @@ import initial, { createState as createInitialState } from './state/initial';
 import Telemetry from '../../telemetry';
 import RecordContext from './recordContext';
 import Configuration from './configuration';
+const StatsCommand = require('../stats/stats');
 import openTicket from '../../lib/ticket/openTicket';
 import UI from '../userInteraction';
 import { RemoteRecordingError } from './makeRequest';
@@ -123,6 +124,7 @@ export default {
   },
 };
 
+<<<<<<< HEAD
 async function handleRemoteError(err: RemoteRecordingError) {
   UI.error(`Something went wrong when ${err.description}:
 HTTP status: ${err.statusCode}
@@ -147,4 +149,27 @@ HTTP request: ${err.method} ${err.path}
   }
 
   await openTicket(err.toString());
+=======
+      state = newState;
+    }
+
+    if (typeof state === 'string') {
+      Telemetry.sendEvent({
+        name: `record:showAppMap`,
+        properties: {
+          fileName: state as FileName,
+        },
+        metrics: {
+          duration: endTime(),
+        },
+      });
+
+      await showAppMap(state as FileName);
+    }
+
+    await StatsCommand.handler(argv);
+  };
+
+  return runCommand('record', commandFn);
+>>>>>>> 86abbf6c... Show biggest AppMaps and functions with highest AppMap overhead.
 }
