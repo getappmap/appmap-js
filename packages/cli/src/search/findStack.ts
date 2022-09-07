@@ -1,11 +1,14 @@
 import { buildAppMap, Event } from '@appland/models';
 import { readFile } from 'fs/promises';
+import { inspect } from 'util';
+import { verbose } from '../utils';
+import SearchResultHashV2 from './searchResultHashV2';
 
 export type FindStackMatch = {
   appmap: string;
-  codeObjectId: string;
-  eventId: number;
+  eventIds: number[];
   score: number;
+  hash_v2: string;
 };
 
 export default class FindStack {
@@ -25,27 +28,39 @@ export default class FindStack {
 
     const appmap = buildAppMap(appmapData).build();
     const locationStack = [...this.stackLines];
+    if (verbose())
+      console.log(`Searching for stack: ${inspect(locationStack)}`);
     const result: FindStackMatch[] = [];
     let score: number[] = [];
+    let stack: Event[] = [];
 
     const enter = (event: Event): boolean | undefined => {
-      const eventLocation = [event?.path, event?.lineno]
-        .filter(Boolean)
-        .join(':');
+      // TODO: Match by path and score by proximity to lineno
       let matchIndex: number | undefined;
-      if (eventLocation && eventLocation !== '') {
+      if (event.path && event.lineno) {
+        if (verbose())
+          console.log(
+            `${stack.map((_) => '  ').join('')} ${event.path}:${event.lineno}`
+          );
         for (
           let i = 0;
           matchIndex === undefined && i < locationStack.length;
           i++
         ) {
-          const stackLine = locationStack[i];
-          if (eventLocation === stackLine) {
+          const [stackLinePath, stackLineLineno] = locationStack[i].split(
+            ':',
+            2
+          );
+          if (
+            stackLinePath === event.path &&
+            Math.abs(event.lineno - parseFloat(stackLineLineno)) < 5
+          ) {
             matchIndex = i;
           }
         }
       }
 
+      stack.push(event);
       if (matchIndex !== undefined) {
         locationStack.splice(0, matchIndex + 1);
         score.push(1);
@@ -58,6 +73,7 @@ export default class FindStack {
     };
 
     const leave = () => {
+      stack.pop();
       score.pop();
     };
 
@@ -69,10 +85,13 @@ export default class FindStack {
         if (isFullMatch || isLeaf) {
           const total = score.reduce((sum, n) => (n ? sum + n : sum));
           if (total > 0) {
+            const hash = new SearchResultHashV2(stack);
             result.push({
               appmap: this.appMapName,
-              eventId: event.id,
-              codeObjectId: event.codeObject.fqid,
+              eventIds: stack
+                .filter((_, index) => score[index])
+                .map((e) => e.id),
+              hash_v2: hash.digest(),
               score: total,
             });
           }

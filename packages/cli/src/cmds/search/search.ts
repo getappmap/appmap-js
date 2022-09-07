@@ -6,6 +6,7 @@ import FindCodeObjects from '../../search/findCodeObjects';
 import FindEvents from '../../search/findEvents';
 import { verbose } from '../../utils';
 import FindStack, { FindStackMatch } from '../../search/findStack';
+import { sanitizeStack } from './sanitizeStack';
 
 export const command = 'search';
 export const describe =
@@ -62,10 +63,7 @@ export const handler = async (argv) => {
   }
 
   if (!stack) yargs.exit(1, new Error(`No stack was provided`));
-  const stackLines = stack
-    .split('\n')
-    .map((line) => line.trim())
-    .filter((line) => line !== '');
+  const stackLines = sanitizeStack(stack);
 
   const finder = new FindCodeObjects(appmapDir, routeParam);
   const codeObjectMatches = await finder.find(
@@ -86,13 +84,23 @@ export const handler = async (argv) => {
     })
   );
 
+  let duplicateCount = 0;
+  const hashes = new Set<string>();
   result
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)
     .forEach((match) => {
+      if (hashes.has(match.hash_v2)) {
+        duplicateCount += 1;
+        return;
+      }
+      hashes.add(match.hash_v2);
       console.log(
-        `Event: ${match.appmap}.appmap.json:${match.eventId}, Code Object: ${match.codeObjectId}, score: ${match.score}`
+        `${match.appmap}.appmap.json:${
+          match.eventIds[match.eventIds.length - 1]
+        } (score=${match.score})`
       );
-      console.log('\n');
     });
+  console.log();
+  console.log(`Suppressed printing of ${duplicateCount} duplicates`);
 };
