@@ -100,6 +100,7 @@ export default class FindStack {
       score.pop();
     };
 
+    const eventsEmitted = new Set<number>();
     for (let i = 0; i < appmap.events.length; ) {
       const event = appmap.events[i];
       if (event.isCall()) {
@@ -109,14 +110,17 @@ export default class FindStack {
           const total = score.reduce((sum, n) => (n ? sum + n : sum));
           if (total > 0) {
             const matchStack = stack.filter((_, index) => score[index]);
-            const hash = new SearchResultHashV2(matchStack);
-            if (verbose()) console.log(`Match hash: ${hash.canonicalString}`);
-            result.push({
-              appmap: this.appMapName,
-              eventIds: matchStack.map((e) => e.id),
-              hash_v2: hash.digest(),
-              score: total,
-            });
+            if (!eventsEmitted.has(matchStack[matchStack.length - 1].id)) {
+              eventsEmitted.add(matchStack[matchStack.length - 1].id);
+              const hash = new SearchResultHashV2(matchStack);
+              if (verbose()) console.log(`Match hash: ${hash.canonicalString}`);
+              result.push({
+                appmap: this.appMapName,
+                eventIds: matchStack.map((e) => e.id),
+                hash_v2: hash.digest(),
+                score: total,
+              });
+            }
           }
         }
         if (isFullMatch) {
