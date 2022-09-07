@@ -1,7 +1,8 @@
-import { buildAppMap, Event } from '@appland/models';
+import { buildAppMap, CodeObject, Event } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { inspect } from 'util';
 import { verbose } from '../utils';
+import LocationMap from './locationMap';
 import SearchResultHashV2 from './searchResultHashV2';
 
 export type FindStackMatch = {
@@ -27,6 +28,8 @@ export default class FindStack {
     }
 
     const appmap = buildAppMap(appmapData).build();
+    const locationMap = new LocationMap(appmap.classMap);
+
     const locationStack = [...this.stackLines];
     if (verbose())
       console.log(`Searching for stack: ${inspect(locationStack)}`);
@@ -35,12 +38,11 @@ export default class FindStack {
     let stack: Event[] = [];
 
     const enter = (event: Event): boolean | undefined => {
-      // TODO: Match by path and score by proximity to lineno
       let matchIndex: number | undefined;
       if (event.path && event.lineno) {
         if (verbose())
           console.log(
-            `${stack.map((_) => '  ').join('')} ${event.path}:${event.lineno}`
+            `${stack.map((_) => '  ').join('')}${event.path}:${event.lineno}`
           );
         for (
           let i = 0;
@@ -51,9 +53,21 @@ export default class FindStack {
             ':',
             2
           );
+
+          if (stackLinePath === event.path)
+            locationMap.functionContainsLine(
+              stackLinePath,
+              event.lineno,
+              parseFloat(stackLineLineno)
+            );
+
           if (
             stackLinePath === event.path &&
-            Math.abs(event.lineno - parseFloat(stackLineLineno)) < 5
+            locationMap.functionContainsLine(
+              stackLinePath,
+              event.lineno,
+              parseFloat(stackLineLineno)
+            )
           ) {
             matchIndex = i;
           }
@@ -62,7 +76,16 @@ export default class FindStack {
 
       stack.push(event);
       if (matchIndex !== undefined) {
+        if (verbose())
+          console.log(
+            `${stack.map((_) => '  ').join('')}Matched ${
+              locationStack[matchIndex]
+            } at event ${event.id} (${event.codeObject.fqid})`
+          );
         locationStack.splice(0, matchIndex + 1);
+        if (verbose())
+          console.log(`Now matching stack: ${inspect(locationStack)}`);
+
         score.push(1);
         if (locationStack.length === 0) {
           return true;
@@ -85,12 +108,12 @@ export default class FindStack {
         if (isFullMatch || isLeaf) {
           const total = score.reduce((sum, n) => (n ? sum + n : sum));
           if (total > 0) {
-            const hash = new SearchResultHashV2(stack);
+            const matchStack = stack.filter((_, index) => score[index]);
+            const hash = new SearchResultHashV2(matchStack);
+            if (verbose()) console.log(`Match hash: ${hash.canonicalString}`);
             result.push({
               appmap: this.appMapName,
-              eventIds: stack
-                .filter((_, index) => score[index])
-                .map((e) => e.id),
+              eventIds: matchStack.map((e) => e.id),
               hash_v2: hash.digest(),
               score: total,
             });
