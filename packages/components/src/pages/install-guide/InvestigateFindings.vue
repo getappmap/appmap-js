@@ -85,7 +85,7 @@
           </article>
         </div>
         <article v-if="!findingsEnabled">
-          <div class="feature-wrap content">
+          <div class="feature-wrap content" data-cy="runtime-analysis-info">
             <a
               class="youtube-video"
               href="https://appland.com/docs/analysis#demo"

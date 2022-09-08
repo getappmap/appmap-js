@@ -1,7 +1,7 @@
 context('Investigate Findings (Findings Disabled)', () => {
   beforeEach(() => {
     cy.visit(
-      'http://localhost:6006/iframe.html?id=pages-vs-code-install-guide-pages--investigate-findings-disabled&viewMode=story'
+      'http://localhost:6006/iframe.html?id=pages-vs-code-install-guide-pages-investigate-findings--disabled&args=&viewMode=story'
     );
   });
 

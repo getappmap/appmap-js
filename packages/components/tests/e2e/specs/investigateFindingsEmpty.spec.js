@@ -1,7 +1,7 @@
 context('Investigate Findings (Empty)', () => {
   beforeEach(() => {
     cy.visit(
-      'http://localhost:6006/iframe.html?id=pages-vs-code-install-guide-pages--investigate-findings-empty&viewMode=story'
+      'http://localhost:6006/iframe.html?id=pages-vs-code-install-guide-pages-investigate-findings--empty&args=&viewMode=story'
     );
   });
 

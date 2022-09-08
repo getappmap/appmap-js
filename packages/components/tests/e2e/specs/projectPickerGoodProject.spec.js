@@ -1,7 +1,7 @@
 context('Project Picker (Good Project)', () => {
   beforeEach(() => {
     cy.visit(
-      'http://localhost:6006/iframe.html?id=pages-vs-code-install-guide-pages--project-picker-good-project&viewMode=story'
+      'http://localhost:6006/iframe.html?id=pages-vs-code-install-guide-pages-project-picker--good-project&args=&viewMode=story'
     );
   });
 

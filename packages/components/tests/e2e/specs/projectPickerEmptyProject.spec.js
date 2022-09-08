@@ -1,7 +1,7 @@
 context('Project Picker (Empty Project)', () => {
   beforeEach(() => {
     cy.visit(
-      'http://localhost:6006/iframe.html?id=pages-vs-code-install-guide-pages--project-picker-empty&viewMode=story'
+      'http://localhost:6006/iframe.html?id=pages-vs-code-install-guide-pages-project-picker--empty&args=&viewMode=story'
     );
   });
 
