@@ -1,11 +1,14 @@
 import UI from '../../userInteraction';
 import configureHostAndPort from '../action/configureHostAndPort';
+import RecordContext from '../recordContext';
 import { State } from '../types/state';
 import initial from './record_remote';
 
 // No process could be contact on the configured host and port.
 // Prompt the user to start the agent process, and then start over.
-export default async function agentProcessNotRunning(): Promise<State> {
+export default async function agentProcessNotRunning(
+  context: RecordContext
+): Promise<State> {
   UI.progress(
     `It looks like you need to start your app (make sure you have the AppMap agent enabled).`
   );
@@ -28,7 +31,7 @@ export default async function agentProcessNotRunning(): Promise<State> {
   JavaScript: https://appland.com/docs/reference/appmap-agent-js.html#remote-recording
   `);
 
-  await configureHostAndPort();
+  await configureHostAndPort(context);
 
   return initial;
 }

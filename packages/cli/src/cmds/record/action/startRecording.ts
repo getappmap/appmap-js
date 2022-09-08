@@ -1,9 +1,9 @@
 import UI from '../../userInteraction';
-import { requestOptions } from '../configuration';
+import RecordContext from '../recordContext';
 import RemoteRecording from '../remoteRecording';
 
-export default async function startRecording() {
-  const ro = await requestOptions();
+export default async function startRecording({ configuration }: RecordContext) {
+  const ro = configuration.requestOptions();
 
   UI.progress('');
   await UI.continue('Press enter to start recording');

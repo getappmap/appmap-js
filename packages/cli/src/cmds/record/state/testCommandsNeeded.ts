@@ -6,9 +6,9 @@ import testCommandsAvailable from './testCommandsAvailable';
 export default async function testCommandsNeeded(
   recordContext: RecordContext
 ): Promise<State> {
-  await obtainTestCommands();
+  await obtainTestCommands(recordContext);
 
-  await recordContext.populateTestCommands();
+  recordContext.populateTestCommands();
 
   return testCommandsAvailable;
 }

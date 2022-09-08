@@ -1,15 +1,16 @@
 import UI from '../../userInteraction';
-import { requestOptions } from '../configuration';
-
+import RecordContext from '../recordContext';
 export enum ConfigurationAction {
   HostAndPort = 'Reconfigure host and port',
   RequestOptions = 'Keep the host and port, and configure additional connection options',
 }
 
-export default async function continueWithRequestOptionConfiguration(): Promise<ConfigurationAction> {
+export default async function continueWithRequestOptionConfiguration({
+  configuration,
+}: RecordContext): Promise<ConfigurationAction> {
   UI.progress(
     `I can't find your AppMap server process on port ${
-      (await requestOptions()).port
+      configuration.requestOptions().port
     }.`
   );
   UI.progress('');

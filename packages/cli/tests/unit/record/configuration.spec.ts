@@ -1,17 +1,13 @@
-import * as configuration from '../../../src/cmds/record/configuration';
 import TempConfig from './tempConfig';
 
 describe('configuration', () => {
-  let config: TempConfig;
+  let config = new TempConfig();
 
-  beforeEach(() => (config = new TempConfig()));
-  beforeEach(() => config.initialize());
-
-  afterEach(() => config.cleanup());
+  beforeEach(() => (config = new TempConfig()).initialize());
 
   describe('requestOptions', () => {
     it('returns default config', async () => {
-      const options = await configuration.requestOptions();
+      const options = config.requestOptions();
       expect(options).toEqual({
         hostname: 'localhost',
         path: '/',
@@ -21,11 +17,10 @@ describe('configuration', () => {
     });
     describe('with non-default config', () => {
       it('returns modified request options', async () => {
-        await configuration.writeConfigOption(
-          'remote_recording.path',
-          '/myapp'
-        );
-        const options = await configuration.requestOptions();
+        config.setConfigOption('remote_recording.path', '/myapp');
+        await config.write();
+        await config.read();
+        const options = config.requestOptions();
         expect(options).toEqual({
           hostname: 'localhost',
           path: '/myapp',
@@ -36,8 +31,10 @@ describe('configuration', () => {
     });
     describe('with non-default setting', () => {
       it('returns modified request options', async () => {
-        await configuration.writeSetting('remote_recording.host', 'myhost');
-        const options = await configuration.requestOptions();
+        config.setSetting('remote_recording.host', 'myhost');
+        await config.write();
+        await config.read();
+        const options = config.requestOptions();
         expect(options).toEqual({
           hostname: 'myhost',
           path: '/',

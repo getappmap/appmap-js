@@ -6,7 +6,7 @@ import * as configureRemainingRequestOptions from '../../../src/cmds/record/acti
 import * as detectProcessCharacteristics from '../../../src/cmds/record/action/detectProcessCharacteristics';
 import * as nameAppMap from '../../../src/cmds/record/action/nameAppMap';
 import * as saveAppMap from '../../../src/cmds/record/action/saveAppMap';
-import * as configuration from '../../../src/cmds/record/configuration';
+import Configuration, * as configuration from '../../../src/cmds/record/configuration';
 import * as continueWithRequestOptionConfiguration from '../../../src/cmds/record/prompt/continueWithRequestOptionConfiguration';
 import * as recordingInProgress from '../../../src/cmds/record/prompt/recordingInProgress';
 import RecordContext from '../../../src/cmds/record/recordContext';
@@ -15,25 +15,41 @@ import * as agentAvailableAndReady from '../../../src/cmds/record/state/agentAva
 import * as agentIsRecording from '../../../src/cmds/record/state/agentIsRecording';
 import * as agentNotAvailable from '../../../src/cmds/record/state/agentNotAvailable';
 import * as agentProcessNotRunning from '../../../src/cmds/record/state/agentProcessNotRunning';
-import * as remote from '../../../src/cmds/record/state/record_remote';
 import * as isAgentAvailable from '../../../src/cmds/record/test/isAgentAvailable';
 import * as isRecordingInProgress from '../../../src/cmds/record/test/isRecordingInProgress';
 import { State } from '../../../src/cmds/record/types/state';
 import UI from '../../../src/cmds/userInteraction';
+import proxyquire from 'proxyquire';
+
+import type * as RemoteModule from '../../../src/cmds/record/state/record_remote';
+const remote: typeof RemoteModule = proxyquire(
+  '../../../src/cmds/record/state/record_remote.ts',
+  {
+    requestOptions: 'foo',
+  }
+);
+
+function checkContext(
+  context: RecordContext,
+  props: Partial<RecordContext> = {}
+) {
+  expect(context).toMatchObject<Partial<RecordContext>>({
+    appMapDir: '.',
+    url: 'http://localhost:3000/',
+    ...props,
+  });
+}
 
 describe('record remote', () => {
-  let prompt: sinon.SinonStub,
-    options: RequestOptions = {},
-    recordContext: RecordContext,
-    appMapDir = '.';
-
-  beforeEach(() => (recordContext = new RecordContext(appMapDir)));
+  let prompt: sinon.SinonStub, recordContext: RecordContext;
 
   beforeEach(() => {
-    sinon.stub(configuration, 'requestOptions').resolves(options);
-    sinon.stub(configuration, 'readSetting');
-    sinon.stub(configuration, 'writeSetting');
     prompt = sinon.stub(UI, 'prompt');
+    const config = new Configuration();
+    sinon.stub(config, 'read');
+    sinon.stub(config, 'write');
+    recordContext = new RecordContext(config);
+    return recordContext.initialize();
   });
 
   afterEach(() => {
@@ -47,13 +63,7 @@ describe('record remote', () => {
       recordContext.recordMethod = 'remote';
 
       const next = await remote.default(recordContext);
-      expect(inspect(recordContext)).toEqual(
-        `RecordContext {
-  appMapDir: '.',
-  recordMethod: 'remote',
-  url: 'http://localhost:3000/'
-}`
-      );
+      checkContext(recordContext, { recordMethod: 'remote' });
       expect(next).toEqual(agentNotAvailable.default);
     });
 
@@ -81,9 +91,7 @@ describe('record remote', () => {
 
           next = await next(recordContext);
           expect(next).toEqual(remote.default);
-          expect(inspect(recordContext)).toEqual(
-            `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
-          );
+          checkContext(recordContext);
         });
       });
 
@@ -103,16 +111,12 @@ describe('record remote', () => {
           expect(next).toEqual(agentNotAvailable.default);
           next = await next(recordContext);
           expect(next).toEqual(agentProcessNotRunning.default);
-          expect(inspect(recordContext)).toEqual(
-            `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
-          );
+          checkContext(recordContext);
 
           sinon.stub(configureHostAndPort, 'default').resolves();
 
           expect(await (next as State)(recordContext)).toEqual(remote.default);
-          expect(inspect(recordContext)).toEqual(
-            `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
-          );
+          checkContext(recordContext);
         });
       });
     });
@@ -128,9 +132,7 @@ describe('record remote', () => {
 
       it('is ready to record', async () => {
         const next = await remote.default(recordContext);
-        expect(inspect(recordContext)).toEqual(
-          `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
-        );
+        checkContext(recordContext);
         expect(next).toEqual(agentAvailableAndReady.default);
       });
     });
@@ -141,9 +143,7 @@ describe('record remote', () => {
 
       it('tries to handle the existing recording', async () => {
         const next = await remote.default(recordContext);
-        expect(inspect(recordContext)).toEqual(
-          `RecordContext { appMapDir: '.', url: 'http://localhost:3000/' }`
-        );
+        checkContext(recordContext);
         expect(next).toEqual(agentIsRecording.default);
       });
 

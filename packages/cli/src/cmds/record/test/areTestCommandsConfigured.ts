@@ -1,16 +1,15 @@
 import UI from '../../userInteraction';
-import {
-  readConfigOption,
-  TestCommand,
-  writeConfigOption,
-} from '../configuration';
+import { TestCommand } from '../configuration';
+import RecordContext from '../recordContext';
 import TestCaseRecording from '../testCaseRecording';
 
-export default async function areTestCasesConfigured(): Promise<boolean> {
-  let testCommands: TestCommand[] | undefined = (await readConfigOption(
+export default async function areTestCasesConfigured({
+  configuration,
+}: RecordContext): Promise<boolean> {
+  let testCommands: TestCommand[] | undefined = configuration.configOption(
     'test_recording.test_commands',
     []
-  )) as TestCommand[];
+  ) as TestCommand[];
 
   if (testCommands && testCommands.length > 0) {
     UI.progress(
@@ -32,7 +31,8 @@ export default async function areTestCasesConfigured(): Promise<boolean> {
     });
 
     if (!useTestCommands) {
-      await writeConfigOption('test_recording.test_commands', []);
+      configuration.setConfigOption('test_recording.test_commands', []);
+      await configuration.write();
     }
 
     return useTestCommands;

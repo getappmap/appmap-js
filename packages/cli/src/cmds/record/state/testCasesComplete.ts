@@ -1,3 +1,4 @@
+import assert from 'assert';
 import chalk from 'chalk';
 import { openTicket } from '../../../lib/ticket/openTicket';
 import UI from '../../userInteraction';
@@ -23,6 +24,7 @@ Test command failed with no output`,
     return;
   }
 
+  assert(recordContext.appMapDir);
   await printAppMapCount(recordContext.appMapDir);
 
   return;

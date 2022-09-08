@@ -10,16 +10,23 @@ import * as testCasesComplete from '../../../src/cmds/record/state/testCasesComp
 import * as areTestCommandsConfigured from '../../../src/cmds/record/test/areTestCommandsConfigured';
 import * as obtainTestCommands from '../../../src/cmds/record/prompt/obtainTestCommands';
 import TestCaseRecording from '../../../src/cmds/record/testCaseRecording';
-import RecordContext from '../../../src/cmds/record/recordContext';
-import { inspect } from 'util';
+import RecordContext, {
+  RecordProcessResult,
+} from '../../../src/cmds/record/recordContext';
+import Configuration from '../../../src/cmds/record/configuration';
 
 describe('record test', () => {
   let prompt: sinon.SinonStub,
     cont: sinon.SinonStub,
-    recordContext: RecordContext,
-    appMapDir = '.';
+    recordContext: RecordContext;
 
-  beforeEach(() => (recordContext = new RecordContext(appMapDir)));
+  beforeEach(() => {
+    const config = new Configuration();
+    sinon.stub(config, 'read');
+    sinon.stub(config, 'write');
+    recordContext = new RecordContext(config);
+    return recordContext.initialize();
+  });
 
   beforeEach(() => {
     prompt = sinon.stub(UI, 'prompt');
@@ -39,9 +46,10 @@ describe('record test', () => {
       recordContext.recordMethod = 'test';
 
       const next = await test.default(recordContext);
-      expect(inspect(recordContext)).toEqual(
-        `RecordContext { appMapDir: '.', recordMethod: 'test' }`
-      );
+      expect(recordContext).toMatchObject<Partial<RecordContext>>({
+        appMapDir: '.',
+        recordMethod: 'test',
+      });
       expect(next).toEqual(testCommandsNeeded.default);
     });
   });
@@ -51,9 +59,10 @@ describe('record test', () => {
       const stubObtain = sinon.stub(obtainTestCommands, 'default').resolves();
 
       const next = await testCommandsNeeded.default(recordContext);
-      expect(inspect(recordContext)).toEqual(
-        `RecordContext { appMapDir: '.', testCommands: [] }`
-      );
+      expect(recordContext).toMatchObject<Partial<RecordContext>>({
+        appMapDir: '.',
+        testCommands: [],
+      });
       expect(next).toEqual(testCommandsAvailable.default);
 
       expect(stubObtain.calledOnce).toBeTruthy();
@@ -67,9 +76,10 @@ describe('record test', () => {
 
     it('is ready to run test cases', async () => {
       const next = await test.default(recordContext);
-      expect(inspect(recordContext)).toEqual(
-        `RecordContext { appMapDir: '.', testCommands: [] }`
-      );
+      expect(recordContext).toMatchObject<Partial<RecordContext>>({
+        appMapDir: '.',
+        testCommands: [],
+      });
       expect(next).toEqual(testCommandsAvailable.default);
     });
   });
@@ -79,9 +89,10 @@ describe('record test', () => {
       const stubStart = sinon.stub(startTestCases, 'default').resolves();
 
       const next = await testCommandsAvailable.default(recordContext);
-      expect(inspect(recordContext)).toEqual(
-        `RecordContext { appMapDir: '.', maxTime: 30 }`
-      );
+      expect(recordContext).toMatchObject<Partial<RecordContext>>({
+        appMapDir: '.',
+        maxTime: 30,
+      });
       expect(next).toEqual(testCasesRunning.default);
 
       expect(stubStart.calledOnce).toBeTruthy();
@@ -110,15 +121,12 @@ describe('record test', () => {
 
       await next(recordContext);
 
-      expect(inspect(recordContext)).toEqual(
-        // eslint-disable-next-line prettier/prettier
-        `RecordContext {
-  appMapDir: '.',
-  initialAppMapCount: 0,
-  results: [ { exitCode: 0 } ],
-  appMapCount: 10
-}`
-      );
+      expect(recordContext).toMatchObject<Partial<RecordContext>>({
+        appMapDir: '.',
+        initialAppMapCount: 0,
+        results: [{ exitCode: 0 } as RecordProcessResult],
+        appMapCount: 10,
+      });
       expect(recordContext.properties()).toEqual({
         exitCodes: '0',
         // eslint-disable-next-line prettier/prettier
@@ -142,15 +150,12 @@ describe('record test', () => {
       await next(recordContext);
       cont.resolves();
 
-      expect(inspect(recordContext)).toEqual(
-        // eslint-disable-next-line prettier/prettier
-        `RecordContext {
-  appMapDir: '.',
-  initialAppMapCount: 0,
-  results: [ { exitCode: 1 } ],
-  appMapCount: 10
-}`
-      );
+      expect(recordContext).toMatchObject<Partial<RecordContext>>({
+        appMapDir: '.',
+        initialAppMapCount: 0,
+        results: [{ exitCode: 1 } as RecordProcessResult],
+        appMapCount: 10,
+      });
       expect(recordContext.properties()).toEqual({
         exitCodes: '1',
         // eslint-disable-next-line prettier/prettier
