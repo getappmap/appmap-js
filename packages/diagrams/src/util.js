@@ -69,38 +69,6 @@ export function getParentRelativeOffset(element, parent) {
   return offset;
 }
 
-function getParentOffset(element, parent) {
-  const offset = {
-    left: 0,
-    top: 0,
-  };
-
-  let child = element;
-  while (child && child !== parent) {
-    offset.left += child.offsetLeft;
-    offset.top += child.offsetTop;
-    child = child.parentNode;
-  }
-
-  return offset;
-}
-
-// Pan the scenario view to given HTMLElement node.
-export function panToNode(viewport, node) {
-  // To minimize panning do not move the view if the node is already fully visible.
-  if (!node || nodeFullyVisible(viewport.element, node)) {
-    return;
-  }
-
-  const offset = getParentOffset(node, viewport.element);
-  const nodeRect = node.getBoundingClientRect();
-
-  viewport.translateTo(
-    offset.left + nodeRect.width / 2,
-    offset.top + nodeRect.height / 2
-  );
-}
-
 export function getElementCenter(node) {
   return {
     x: node.offsetLeft + node.clientWidth * 0.5,
