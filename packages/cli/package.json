@@ -20,7 +20,7 @@
     "build-native": "yarn build && ./bin/build-native"
   },
   "lint-staged": {
-    "*.{js,md,json}": [
+    "*.{js,md,json,ts}": [
       "prettier --write"
     ]
   },
