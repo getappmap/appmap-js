@@ -1,6 +1,4 @@
-import { RequestOptions } from 'http';
 import sinon from 'sinon';
-import { inspect } from 'util';
 import * as configureHostAndPort from '../../../src/cmds/record/action/configureHostAndPort';
 import * as configureRemainingRequestOptions from '../../../src/cmds/record/action/configureRemainingRequestOptions';
 import * as detectProcessCharacteristics from '../../../src/cmds/record/action/detectProcessCharacteristics';
@@ -15,19 +13,12 @@ import * as agentAvailableAndReady from '../../../src/cmds/record/state/agentAva
 import * as agentIsRecording from '../../../src/cmds/record/state/agentIsRecording';
 import * as agentNotAvailable from '../../../src/cmds/record/state/agentNotAvailable';
 import * as agentProcessNotRunning from '../../../src/cmds/record/state/agentProcessNotRunning';
+import * as remote from '../../../src/cmds/record/state/record_remote';
 import * as isAgentAvailable from '../../../src/cmds/record/test/isAgentAvailable';
 import * as isRecordingInProgress from '../../../src/cmds/record/test/isRecordingInProgress';
 import { State } from '../../../src/cmds/record/types/state';
 import UI from '../../../src/cmds/userInteraction';
-import proxyquire from 'proxyquire';
 
-import type * as RemoteModule from '../../../src/cmds/record/state/record_remote';
-const remote: typeof RemoteModule = proxyquire(
-  '../../../src/cmds/record/state/record_remote.ts',
-  {
-    requestOptions: 'foo',
-  }
-);
 
 function checkContext(
   context: RecordContext,
