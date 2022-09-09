@@ -11,9 +11,9 @@ import RecordContext from '../recordContext';
 export default async function remote(
   recordContext: RecordContext
 ): Promise<State> {
-  await recordContext.populateURL();
-  if (await isAgentAvailable()) {
-    if (!(await isRecordingInProgress())) {
+  recordContext.populateURL();
+  if (await isAgentAvailable(recordContext)) {
+    if (!(await isRecordingInProgress(recordContext))) {
       return agentAvailableAndReady;
     } else {
       return agentIsRecording;

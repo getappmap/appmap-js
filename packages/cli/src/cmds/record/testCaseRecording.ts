@@ -2,12 +2,7 @@ import { ChildProcess, exec, spawn } from 'child_process';
 import { exitCode, kill } from 'process';
 import { exists, verbose } from '../../utils';
 import UI from '../userInteraction';
-import {
-  readConfig,
-  readConfigOption,
-  readSetting,
-  TestCommand,
-} from './configuration';
+import { TestCommand } from './configuration';
 import RecordContext, { RecordProcessResult } from './recordContext';
 
 let TestCommands: TestCommand[] = [];
@@ -19,17 +14,17 @@ const DiagnosticCommands: Record<string, string[]> = {
 };
 
 export default class TestCaseRecording {
-  static async start() {
+  static async start({ configuration }: RecordContext) {
     TestCaseProcesses.forEach((process) => {
       if (process.pid) kill(process.pid);
     });
     TestCommands = [];
     TestCaseProcesses = [];
 
-    let testCommands = (await readConfigOption(
+    let testCommands = configuration.configOption(
       'test_recording.test_commands',
       []
-    )) as TestCommand[];
+    ) as TestCommand[];
 
     if (testCommands.length === 0)
       throw new Error(`No test commands are configured`);
@@ -62,10 +57,10 @@ export default class TestCaseRecording {
   }
 
   static async waitFor(ctx: RecordContext): Promise<void> {
-    let maxTime: number | undefined = (await readSetting(
+    let maxTime: number | undefined = ctx.configuration.setting(
       'test_recording.max_time',
       -1
-    )) as number;
+    ) as number;
 
     if (maxTime === -1) maxTime = undefined;
 

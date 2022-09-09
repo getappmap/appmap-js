@@ -1,8 +1,10 @@
 import UI from '../../userInteraction';
-import { readSetting, writeSetting } from '../configuration';
+import RecordContext from '../recordContext';
 
-export default async function configureHostAndPort() {
-  const defaultHostname = await readSetting(
+export default async function configureHostAndPort({
+  configuration,
+}: RecordContext) {
+  const defaultHostname = configuration.setting(
     'remote_recording.host',
     'localhost'
   );
@@ -14,11 +16,11 @@ export default async function configureHostAndPort() {
   });
 
   if (hostname !== defaultHostname) {
-    await writeSetting('remote_recording.host', hostname);
+    configuration.setSetting('remote_recording.host', hostname);
   }
 
   let port: number | undefined;
-  const defaultPort = await readSetting('remote_recording.port', 3000);
+  const defaultPort = configuration.setting('remote_recording.port', 3000);
   while (!port) {
     const { portNumber: answer } = await UI.prompt({
       type: 'input',
@@ -28,7 +30,9 @@ export default async function configureHostAndPort() {
     });
     port = parseInt(answer);
     if (port !== NaN && port !== defaultPort) {
-      await writeSetting('remote_recording.port', port);
+      configuration.setSetting('remote_recording.port', port);
     }
   }
+
+  await configuration.write();
 }

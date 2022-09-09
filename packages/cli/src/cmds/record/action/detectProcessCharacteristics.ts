@@ -1,10 +1,12 @@
 import UI from '../../userInteraction';
 import portPid from 'port-pid';
 import ps from 'ps-node';
-import { requestOptions } from '../configuration';
+import RecordContext from '../recordContext';
 
-export default async function detectProcessCharacteristics(): Promise<boolean> {
-  const ro = await requestOptions();
+export default async function detectProcessCharacteristics({
+  configuration,
+}: RecordContext): Promise<boolean> {
+  const ro = configuration.requestOptions();
   if (ro.hostname !== 'localhost') {
     return false;
   }

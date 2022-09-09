@@ -1,10 +1,6 @@
+import assert from 'assert';
 import countAppMaps from './action/countAppMaps';
-import {
-  locationString,
-  readConfigOption,
-  readSetting,
-  TestCommand,
-} from './configuration';
+import Configuration, { TestCommand } from './configuration';
 export class RecordProcessResult {
   constructor(
     private _env: Record<string, string>,
@@ -31,10 +27,16 @@ export default class RecordContext {
   public appMapCount?: number;
   public appMapEventCount?: number;
   private _results?: RecordProcessResult[];
+  public appMapDir?: string;
 
-  constructor(public appMapDir: string) {}
+  constructor(public configuration: Configuration) {}
 
   async initialize() {
+    await this.configuration.read();
+    this.appMapDir = this.configuration.configOption(
+      'appmap_dir',
+      '.'
+    ) as string;
     this.initialAppMapCount = await countAppMaps(this.appMapDir);
   }
 
@@ -69,24 +71,28 @@ export default class RecordContext {
     return result;
   }
 
-  async populateURL() {
-    this.url = await locationString();
+  populateURL() {
+    this.url = this.configuration.locationString();
   }
 
-  async populateTestCommands() {
+  populateTestCommands() {
     this.testCommands = (
-      (await readConfigOption(
+      this.configuration.configOption(
         'test_recording.test_commands',
         []
-      )) as TestCommand[]
+      ) as TestCommand[]
     ).map(TestCommand.toString);
   }
 
   async populateMaxTime() {
-    this.maxTime = (await readSetting('test_recording.max_time', 30)) as number;
+    this.maxTime = this.configuration.setting(
+      'test_recording.max_time',
+      30
+    ) as number;
   }
 
   async populateAppMapCount() {
+    assert(this.appMapDir);
     const appMapCount = await countAppMaps(this.appMapDir);
     this.appMapCount = appMapCount;
   }

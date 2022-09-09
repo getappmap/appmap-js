@@ -3,6 +3,7 @@ import 'jest-sinon';
 import RecordContext from '../../../src/cmds/record/recordContext';
 import testCasesComplete from '../../../src/cmds/record/state/testCasesComplete';
 import * as openTicket from '../../../src/lib/ticket/openTicket';
+import Configuration from '../../../src/cmds/record/configuration';
 
 describe('testCasesComplete', () => {
   afterEach(() => {
@@ -13,9 +14,10 @@ describe('testCasesComplete', () => {
     let rc: RecordContext, openTicketStub: sinon.SinonStub;
 
     beforeEach(() => {
-      rc = new RecordContext('.');
+      rc = new RecordContext(new Configuration());
       sinon.stub(rc, 'output').value(['']);
       openTicketStub = sinon.stub(openTicket, 'openTicket').resolves();
+      return rc.initialize();
     });
 
     it('opens a ticket when test commands fail', async () => {

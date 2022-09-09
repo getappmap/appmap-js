@@ -1,10 +1,11 @@
 import TestCaseRecording from '../testCaseRecording';
 import UI from '../../userInteraction';
-import { readSetting, writeSetting } from '../configuration';
+import RecordContext from '../recordContext';
 
-export default async function startTestCases() {
+export default async function startTestCases(context: RecordContext) {
+  const { configuration } = context;
   if (Boolean(process.stdout.isTTY)) {
-    const defaultMaxTime = await readSetting('test_recording.max_time', 30);
+    const defaultMaxTime = configuration.setting('test_recording.max_time', 30);
     let maxTime: number | undefined;
     do {
       maxTime = (
@@ -19,8 +20,9 @@ export default async function startTestCases() {
       maxTime = Number(maxTime);
     } while (Number.isNaN(maxTime));
     if (maxTime !== defaultMaxTime)
-      await writeSetting('test_recording.max_time', maxTime);
+      configuration.setSetting('test_recording.max_time', maxTime);
+    await configuration.write();
   }
 
-  await TestCaseRecording.start();
+  await TestCaseRecording.start(context);
 }

@@ -1,5 +1,4 @@
 import UI from '../../userInteraction';
-import configureHostAndPort from '../action/configureHostAndPort';
 import configureRemainingRequestOptions from '../action/configureRemainingRequestOptions';
 import detectProcessCharacteristics from '../action/detectProcessCharacteristics';
 import continueWithRequestOptionConfiguration, {
@@ -19,9 +18,9 @@ import initial from './record_remote';
 export default async function agentNotAvailable(
   recordContext: RecordContext
 ): Promise<State> {
-  if (!(await detectProcessCharacteristics())) {
+  if (!(await detectProcessCharacteristics(recordContext))) {
     if (
-      (await continueWithRequestOptionConfiguration()) ===
+      (await continueWithRequestOptionConfiguration(recordContext)) ===
       ConfigurationAction.HostAndPort
     )
       return agentProcessNotRunning;
@@ -43,9 +42,9 @@ For case (3), you can configure the application URL path and protocol.
 `
   );
 
-  await configureRemainingRequestOptions();
+  await configureRemainingRequestOptions(recordContext);
 
-  await recordContext.populateURL();
+  recordContext.populateURL();
 
   return initial;
 }

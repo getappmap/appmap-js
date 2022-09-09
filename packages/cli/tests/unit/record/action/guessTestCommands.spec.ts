@@ -8,13 +8,6 @@ describe('record.action.guessTestCommands', () => {
   afterEach(() => sinon.restore());
 
   describe('ruby', () => {
-    beforeEach(() => {
-      sinon
-        .stub(configuration, 'readConfigOption')
-        .withArgs('language', 'undefined')
-        .resolves('ruby');
-    });
-
     describe('when test path exists', () => {
       it('provides test command', async () => {
         const stubAccess = sinon.stub(fsp, 'access');

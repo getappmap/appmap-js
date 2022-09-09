@@ -2,14 +2,18 @@ import { mkdirp } from 'fs-extra';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import UI from '../../userInteraction';
-import { readConfigOption } from '../configuration';
+import RecordContext from '../recordContext';
 
-export default async function saveAppMap(jsonData: any, appMapName: string) {
+export default async function saveAppMap(
+  { configuration }: RecordContext,
+  jsonData: any,
+  appMapName: string
+) {
   const data = JSON.stringify(jsonData);
 
   const fileName = `${appMapName}.appmap.json`;
   const outputDir = join(
-    (await readConfigOption('appmap_dir', 'tmp/appmap')) as string,
+    configuration.configOption('appmap_dir', 'tmp/appmap') as string,
     'remote'
   );
   await mkdirp(outputDir);

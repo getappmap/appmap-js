@@ -1,8 +1,11 @@
-import { requestOptions } from '../configuration';
+import RecordContext from '../recordContext';
 import RemoteRecording from '../remoteRecording';
 
-export default async function isRecordingInProgress(
-): Promise<boolean> {
-  const status = await new RemoteRecording(await requestOptions()).status();
+export default async function isRecordingInProgress({
+  configuration,
+}: RecordContext): Promise<boolean> {
+  const status = await new RemoteRecording(
+    configuration.requestOptions()
+  ).status();
   return status.enabled === true;
 }

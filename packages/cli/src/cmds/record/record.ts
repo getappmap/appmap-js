@@ -9,7 +9,7 @@ import { chdir } from 'process';
 import initial from './state/initial';
 import Telemetry from '../../telemetry';
 import RecordContext from './recordContext';
-import { readConfigOption, setAppMapConfigFilePath } from './configuration';
+import Configuration from './configuration';
 
 export const command = 'record [mode]';
 export const describe =
@@ -46,11 +46,8 @@ export async function handler(argv: any) {
       chdir(directory);
     }
 
-    if (appmapConfig) setAppMapConfigFilePath(appmapConfig);
-
-    const appmapDir = (await readConfigOption('appmap_dir', '.')) as string;
-
-    const recordContext = new RecordContext(appmapDir);
+    const configuration = new Configuration(appmapConfig);
+    const recordContext = new RecordContext(configuration);
     await recordContext.initialize();
 
     const { mode } = argv;

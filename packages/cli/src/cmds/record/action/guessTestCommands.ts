@@ -1,6 +1,6 @@
 import { cwd } from 'process';
 import { exists, verbose } from '../../../utils';
-import { readConfigOption, TestCommand } from '../configuration';
+import { TestCommand } from '../configuration';
 
 const RubyEnv = { APPMAP: 'true', DISABLE_SPRING: 'true' };
 

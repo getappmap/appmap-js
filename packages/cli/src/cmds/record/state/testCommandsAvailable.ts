@@ -7,7 +7,7 @@ import RecordContext from '../recordContext';
 export default async function testCommandsAvailable(
   recordContext: RecordContext
 ): Promise<State> {
-  await startTestCases();
+  await startTestCases(recordContext);
 
   await recordContext.populateMaxTime();
 

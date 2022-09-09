@@ -14,7 +14,7 @@ export default async function agentIsRecording(
   const recordingAction = await promptRecordingInProgress();
 
   if (recordingAction === RecordingAction.Cancel) {
-    await cancelRecording();
+    await cancelRecording(recordContext);
     return serverAvailableAndReady;
   } else if (recordingAction === RecordingAction.Save) {
     await saveRecording(recordContext);

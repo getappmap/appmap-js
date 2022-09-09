@@ -1,14 +1,10 @@
 import UI from '../../userInteraction';
-import {
-  readConfigOption,
-  readSetting,
-  requestOptions,
-  writeConfigOption,
-  writeSetting,
-} from '../configuration';
+import RecordContext from '../recordContext';
 
-export default async function configureRemainingRequestOptions() {
-  const defaultPath = await readConfigOption('remote_recording.path', '/');
+export default async function configureRemainingRequestOptions({
+  configuration,
+}: RecordContext) {
+  const defaultPath = configuration.configOption('remote_recording.path', '/');
   const { baseURL: path } = await UI.prompt({
     type: 'input',
     name: 'baseURL',
@@ -21,10 +17,10 @@ export default async function configureRemainingRequestOptions() {
     if (!basePath.endsWith('/')) basePath = [basePath, '/'].join('');
     if (!basePath.startsWith('/')) basePath = ['/', basePath].join('');
 
-    await writeConfigOption('remote_recording.path', basePath);
+    configuration.setConfigOption('remote_recording.path', basePath);
   }
 
-  const defaultProtocol = await readConfigOption(
+  const defaultProtocol = configuration.configOption(
     'remote_recording.protocol',
     'http:'
   );
@@ -38,10 +34,11 @@ export default async function configureRemainingRequestOptions() {
 
   const protocol = useSSL ? 'https:' : 'http:';
   if (protocol !== defaultProtocol) {
-    await writeConfigOption('remote_recording.protocol', protocol);
+    configuration.setConfigOption('remote_recording.protocol', protocol);
   }
+  await configuration.write();
 
-  const ro = await requestOptions();
+  const ro = configuration.requestOptions();
   UI.progress(
     `Here's the URL I will use to try and connect to the AppMap agent:\n`
   );

@@ -1,5 +1,4 @@
 import UI from '../../userInteraction';
-import { requestOptions } from '../configuration';
 import RecordContext from '../recordContext';
 import RemoteRecording from '../remoteRecording';
 import nameAppMap from './nameAppMap';
@@ -8,7 +7,7 @@ import saveAppMap from './saveAppMap';
 export default async function saveRecording(
   recordContext: RecordContext
 ): Promise<string | undefined> {
-  const rr = new RemoteRecording(await requestOptions());
+  const rr = new RemoteRecording(recordContext.configuration.requestOptions());
   let data = await rr.stop();
 
   if (data) {
@@ -27,5 +26,5 @@ export default async function saveRecording(
   }
 
   const appMapName = await nameAppMap(jsonData);
-  return saveAppMap(jsonData, appMapName);
+  return saveAppMap(recordContext, jsonData, appMapName);
 }

@@ -9,8 +9,8 @@ import RecordContext from '../recordContext';
 export default async function test(
   recordContext: RecordContext
 ): Promise<State> {
-  if (await areTestCommandsConfigured()) {
-    await recordContext.populateTestCommands();
+  if (await areTestCommandsConfigured(recordContext)) {
+    recordContext.populateTestCommands();
 
     return testCommandsAvailable;
   } else {

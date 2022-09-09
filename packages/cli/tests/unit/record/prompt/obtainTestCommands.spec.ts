@@ -4,6 +4,8 @@ import * as configuration from '../../../../src/cmds/record/configuration';
 import UI from '../../../../src/cmds/userInteraction';
 import * as guessTestCommands from '../../../../src/cmds/record/action/guessTestCommands';
 import obtainTestCommands from '../../../../src/cmds/record/prompt/obtainTestCommands';
+import RecordContext from '../../../../src/cmds/record/recordContext';
+import TempConfig from '../tempConfig';
 
 describe('record.prompt.obtainTestCommands', () => {
   const testCommand = {
@@ -12,25 +14,30 @@ describe('record.prompt.obtainTestCommands', () => {
   } as configuration.TestCommand;
 
   let stubConfirm: sinon.SinonStub;
+  let config: TempConfig;
+  let context: RecordContext;
 
-  beforeEach(() => (stubConfirm = sinon.stub(UI, 'confirm')));
+  beforeEach(() => {
+    stubConfirm = sinon.stub(UI, 'confirm');
+    config = new TempConfig();
+    context = new RecordContext(config);
+    return context.initialize();
+  });
   afterEach(() => sinon.restore());
 
   async function promptForTestCommandAndEnv() {
     const stubPrompt = sinon.stub(UI, 'prompt');
-    const stubWrite = sinon.stub(configuration, 'writeConfigOption');
 
     stubPrompt.onFirstCall().resolves({ testCommand: testCommand.command });
     stubPrompt.onSecondCall().resolves({ envVars: '' });
 
     stubConfirm.withArgs(`Continue with this command?`).resolves(true);
 
-    await obtainTestCommands();
+    await obtainTestCommands(context);
 
-    expect(stubWrite.getCalls().map((c) => c.firstArg)).toEqual([
-      'test_recording.test_commands',
+    expect(config.configOption('test_recording.test_commands', '')).toEqual([
+      testCommand,
     ]);
-    expect(stubWrite.getCalls().map((c) => c.args[1])).toEqual([[testCommand]]);
   }
 
   describe('when commands are guessed', () => {
@@ -44,21 +51,16 @@ describe('record.prompt.obtainTestCommands', () => {
       );
 
       it('saves the selection and prompts to continue', async () => {
-        const stubWrite = sinon.stub(configuration, 'writeConfigOption');
-
         sinon
           .stub(UI, 'continue')
           .withArgs('Press enter to continue')
           .resolves();
 
-        await obtainTestCommands();
+        await obtainTestCommands(context);
 
-        expect(stubWrite.getCalls().map((c) => c.firstArg)).toEqual([
-          'test_recording.test_commands',
-        ]);
-        expect(stubWrite.getCalls().map((c) => c.args[1])).toEqual([
-          [testCommand],
-        ]);
+        expect(config.configOption('test_recording.test_commands', '')).toEqual(
+          [testCommand]
+        );
       });
     });
     describe('and not confirmed', () => {
@@ -76,7 +78,6 @@ describe('record.prompt.obtainTestCommands', () => {
 
     it('test command must not be blank', async () => {
       const stubPrompt = sinon.stub(UI, 'prompt');
-      const stubWrite = sinon.stub(configuration, 'writeConfigOption');
 
       stubPrompt.onFirstCall().resolves({ testCommand: null });
       stubPrompt.onSecondCall().resolves({ testCommand: '' });
@@ -85,13 +86,10 @@ describe('record.prompt.obtainTestCommands', () => {
 
       stubConfirm.withArgs(`Continue with this command?`).resolves(true);
 
-      await obtainTestCommands();
+      await obtainTestCommands(context);
 
-      expect(stubWrite.getCalls().map((c) => c.firstArg)).toEqual([
-        'test_recording.test_commands',
-      ]);
-      expect(stubWrite.getCalls().map((c) => c.args[1])).toEqual([
-        [testCommand],
+      expect(config.configOption('test_recording.test_commands', '')).toEqual([
+        testCommand,
       ]);
     });
   });

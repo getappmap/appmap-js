@@ -3,6 +3,7 @@ import RecordContext, {
 } from '../../../src/cmds/record/recordContext';
 import * as countAppMaps from '../../../src/cmds/record/action/countAppMaps';
 import sinon from 'sinon';
+import TempConfig from './tempConfig';
 
 describe('RecordContext', () => {
   let resultsStub: sinon.SinonStub;
@@ -59,7 +60,7 @@ describe('RecordContext', () => {
     ].forEach((e) => {
       const { codes, expectation } = e;
       (e['fn'] || it)(`has exit codes ${JSON.stringify(codes)}`, () => {
-        const ctx = new RecordContext('.');
+        const ctx = new RecordContext(new TempConfig());
         sinon.stub(ctx, 'exitCodes').value(codes);
         expect(ctx.failures).toEqual(expectation);
       });
