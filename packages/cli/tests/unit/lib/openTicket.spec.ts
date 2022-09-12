@@ -35,10 +35,12 @@ describe('openTicket', () => {
 
   let zdRequest: sinon.SinonStub,
     prompt: sinon.SinonStub,
+    confirm: sinon.SinonStub,
     uiError: sinon.SinonStub;
 
   beforeEach(() => {
     zdRequest = sandbox.stub(createRequest, 'default');
+    confirm = sandbox.stub(UI, 'confirm');
     prompt = sandbox.stub(UI, 'prompt');
     uiError = sandbox.stub(UI, 'error');
   });
@@ -52,6 +54,7 @@ describe('openTicket', () => {
     });
 
     it('proceeds when the user allows', async () => {
+      confirm.resolves(false);
       prompt.resolves({ openTicket: true });
       await openTicket('error');
       expect(prompt).toBeCalledTwice();

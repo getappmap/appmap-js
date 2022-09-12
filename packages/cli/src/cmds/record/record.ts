@@ -125,8 +125,8 @@ export default {
 
 async function handleRemoteError(err: RemoteRecordingError) {
   UI.error(`Something went wrong when ${err.description}:
-status: ${err.statusCode}
-request: ${err.method} ${err.path}
+HTTP status: ${err.statusCode}
+HTTP request: ${err.method} ${err.path}
 `);
 
   const message = `Would you like to see the server's response?`;

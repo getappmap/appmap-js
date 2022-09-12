@@ -15,10 +15,10 @@ export default async function testCasesComplete(
       `\n${chalk.yellow('!')} The test commands failed to create AppMaps\n`
     );
 
-    const errors: string[] = recordContext.output || [
-      `
-Test command failed with no output`,
-    ];
+    const errors: string | string[] =
+      recordContext.output?.join('\n').length > 0
+        ? recordContext.output
+        : `[Test command failed with no output]`;
     const helpMsg = ` If you want assistance, the test command, error message, exit code, and APPMAP environment variables can be uploaded securely to the AppMap ZenDesk support portal.`;
     await openTicket(errors, helpMsg);
 

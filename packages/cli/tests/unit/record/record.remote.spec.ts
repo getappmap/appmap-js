@@ -78,6 +78,9 @@ describe('record remote', () => {
           );
           expect(next).toEqual(agentNotAvailable.default);
 
+          prompt.resolves({
+            option: agentNotAvailable.NextStepChoices.CONFIGURE.value,
+          });
           sinon.stub(configureRemainingRequestOptions, 'default').resolves();
 
           next = await next(recordContext);

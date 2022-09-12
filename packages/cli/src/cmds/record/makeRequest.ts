@@ -15,7 +15,7 @@ export class RemoteRecordingError extends Error {
   toString(): string {
     return `description: ${this.description}
 status: ${this.statusCode}
-error: ${this.message}`;
+response text: ${this.message}`;
   }
 }
 
