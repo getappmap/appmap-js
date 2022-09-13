@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.5.3](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.5.2...@appland/diagrams-v1.5.3) (2022-09-13)
+
+
+### Bug Fixes
+
+* remove unused components ([a655992](https://github.com/applandinc/appmap-js/commit/a6559924316c198180dc298efa76453982159c62))
+
 # [@appland/diagrams-v1.5.2](https://github.com/applandinc/appmap-js/compare/@appland/diagrams-v1.5.1...@appland/diagrams-v1.5.2) (2022-04-08)
 
 
