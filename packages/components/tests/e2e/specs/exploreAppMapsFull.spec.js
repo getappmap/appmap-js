@@ -1,7 +1,7 @@
 context('Explore AppMaps (Full)', () => {
   beforeEach(() => {
     cy.visit(
-      'http://localhost:6006/iframe.html?id=pages-vs-code-install-guide-pages--explore-appmaps-full-page&viewMode=story'
+      'http://localhost:6006/iframe.html?id=pages-vs-code-install-guide-pages-explore-appmaps--full-page&args=&viewMode=story'
     );
   });
 
