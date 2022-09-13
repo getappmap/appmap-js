@@ -211,6 +211,7 @@ __metadata:
     "@vue/eslint-config-airbnb": ^5.0.2
     "@vue/test-utils": ^1.0.3
     babel-cli: ^6.26.0
+    babel-core: ^6.26.3
     babel-eslint: ^10.1.0
     babel-loader: ^8.2.2
     chromatic: ^6.4.3
@@ -8469,7 +8470,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-core@npm:^6.26.0":
+"babel-core@npm:^6.26.0, babel-core@npm:^6.26.3":
   version: 6.26.3
   resolution: "babel-core@npm:6.26.3"
   dependencies:
