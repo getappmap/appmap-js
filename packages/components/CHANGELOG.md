@@ -1,3 +1,11 @@
+# [@appland/components-v2.11.3](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.11.2...@appland/components-v2.11.3) (2022-09-13)
+
+
+### Bug Fixes
+
+* remove unused components ([a655992](https://github.com/applandinc/appmap-js/commit/a6559924316c198180dc298efa76453982159c62))
+* update cypress links in tests ([7858309](https://github.com/applandinc/appmap-js/commit/7858309a7153baa9444be04788de95edef4b320e))
+
 # [@appland/components-v2.11.2](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.11.1...@appland/components-v2.11.2) (2022-09-06)
 
 
