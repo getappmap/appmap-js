@@ -308,6 +308,14 @@ packages:
       sinon.stub(inquirer, 'prompt').resolves({ confirm: true });
     });
 
+    const checkCurrentConfig = (cmdStruct: CommandStruct) => {
+      expect(cmdStruct.program).toEqual('bundle');
+      const args = cmdStruct.args;
+      expect(args).toEqual(['check', '--dry-run']);
+      const ret = { stdout: '', stderr: '' };
+      return Promise.resolve(ret);
+    };
+
     const installAgent = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('bundle');
       const args = cmdStruct.args;
@@ -363,7 +371,8 @@ packages:
       installAgent: (command: CommandStruct) => Promise<CommandReturn>,
       initAgent: (command: CommandStruct) => Promise<CommandReturn>,
       validateAgent: (command: CommandStruct) => Promise<CommandReturn>,
-      evalResults: (err: Error | undefined, argv: any, output: string) => void
+      evalResults: (err: Error | undefined, argv: any, output: string) => void,
+      checkCurrentConfig: (command: CommandStruct) => Promise<CommandReturn>
     ) => {
       let callIdx = 0;
       sinon
@@ -372,6 +381,8 @@ packages:
         .callsFake(rubyVersion)
         .onCall(callIdx++)
         .callsFake(gemHome)
+        .onCall(callIdx++)
+        .callsFake(checkCurrentConfig)
         .onCall(callIdx++)
         .callsFake(installAgent)
         .onCall(callIdx++)
@@ -383,7 +394,7 @@ packages:
     };
 
     it('installs as expected', async () => {
-      expect.assertions(11);
+      expect.assertions(13);
       const evalResults = (err, argv, output) => {
         expect(err).toBeNull();
 
@@ -399,12 +410,13 @@ packages:
         installAgent,
         initAgent,
         validateAgent,
-        evalResults
+        evalResults,
+        checkCurrentConfig
       );
     });
 
     it('fails when validation fails', async () => {
-      expect.assertions(8);
+      expect.assertions(10);
       const msg = 'failValidate, validation failed';
       const failValidate = () => {
         return Promise.reject(new Error(msg));
@@ -419,7 +431,8 @@ packages:
         installAgent,
         initAgent,
         failValidate,
-        evalResults
+        evalResults,
+        checkCurrentConfig
       );
     });
 
@@ -439,18 +452,19 @@ packages:
           installAgent,
           initAgent,
           failValidate,
-          evalResults
+          evalResults,
+          checkCurrentConfig
         );
       };
 
       const errorArray = `[{"message": "${msg}"}]`;
       it('fails for old output format', async () => {
-        expect.assertions(8);
+        expect.assertions(10);
         await testValidation(errorArray);
       });
 
       it('fails for new output format', async () => {
-        expect.assertions(8);
+        expect.assertions(10);
         const errorObj = `{"errors": ${errorArray}}`;
         await testValidation(errorObj);
       });
@@ -463,7 +477,8 @@ packages:
       pythonPath: (command: CommandStruct) => Promise<CommandReturn>,
       installAgent: (command: CommandStruct) => Promise<CommandReturn>,
       initAgent: (command: CommandStruct) => Promise<CommandReturn>,
-      evalResults: (err: Error | undefined, argv: any, output: string) => void
+      evalResults: (err: Error | undefined, argv: any, output: string) => void,
+      checkCurrentConfig: (command: CommandStruct) => Promise<CommandReturn>
     ) => {
       let callIdx = 0;
       sinon
@@ -472,6 +487,8 @@ packages:
         .callsFake(pythonVersion)
         .onCall(callIdx++)
         .callsFake(pythonPath)
+        .onCall(callIdx++)
+        .callsFake(checkCurrentConfig)
         .onCall(callIdx++)
         .callsFake(installAgent)
         .onCall(callIdx++)
@@ -509,6 +526,19 @@ packages:
           .resolves({ result: 'pip', confirm: true });
       });
 
+      const checkCurrentConfig = (cmdStruct: CommandStruct) => {
+        expect(cmdStruct.program).toEqual('pip');
+        const args = cmdStruct.args;
+        expect(args).toEqual([
+          'install',
+          '-r',
+          'requirements.txt',
+          '--dry-run',
+        ]);
+        const ret = { stdout: '', stderr: '' };
+        return Promise.resolve(ret);
+      };
+
       const installAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('pip');
         expect(cmdStruct.args).toEqual(['install', '-r', 'requirements.txt']);
@@ -530,7 +560,7 @@ packages:
       };
 
       it('installs as expected', async () => {
-        expect.assertions(10);
+        expect.assertions(12);
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
@@ -545,7 +575,8 @@ packages:
           pythonPath,
           installAgent,
           initAgent,
-          evalResults
+          evalResults,
+          checkCurrentConfig
         );
       });
     });
@@ -559,6 +590,14 @@ packages:
           .stub(inquirer, 'prompt')
           .resolves({ result: 'poetry', confirm: true });
       });
+
+      const checkCurrentConfig = (cmdStruct: CommandStruct) => {
+        expect(cmdStruct.program).toEqual('poetry');
+        const args = cmdStruct.args;
+        expect(args).toEqual(['install', '--dry-run']);
+        const ret = { stdout: '', stderr: '' };
+        return Promise.resolve(ret);
+      };
 
       const installAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('poetry');
@@ -586,7 +625,7 @@ packages:
       };
 
       it('installs as expected', async () => {
-        expect.assertions(10);
+        expect.assertions(12);
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
@@ -601,7 +640,8 @@ packages:
           pythonPath,
           installAgent,
           initAgent,
-          evalResults
+          evalResults,
+          checkCurrentConfig
         );
       });
     });
@@ -613,13 +653,16 @@ packages:
       installAgent: (command: CommandStruct) => Promise<CommandReturn>,
       initAgent: (command: CommandStruct) => Promise<CommandReturn>,
       validateAgent: (command: CommandStruct) => Promise<CommandReturn>,
-      evalResults: (err: Error | undefined, argv: any, output: string) => void
+      evalResults: (err: Error | undefined, argv: any, output: string) => void,
+      checkCurrentConfig: (command: CommandStruct) => Promise<CommandReturn>
     ) => {
       let callIdx = 0;
       sinon
         .stub(commandRunner, 'run')
         .onCall(callIdx++)
         .callsFake(nodeVersion)
+        .onCall(callIdx++)
+        .callsFake(checkCurrentConfig)
         .onCall(callIdx++)
         .callsFake(installAgent)
         .onCall(callIdx++)
@@ -675,6 +718,14 @@ packages:
           .resolves({ result: 'npm', confirm: true });
       });
 
+      const checkCurrentConfig = (cmdStruct: CommandStruct) => {
+        expect(cmdStruct.program).toEqual('npm');
+        const args = cmdStruct.args;
+        expect(args).toEqual(['install', '--dry-run']);
+        const ret = { stdout: '', stderr: '' };
+        return Promise.resolve(ret);
+      };
+
       const installAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('npm');
         expect(cmdStruct.args).toEqual([
@@ -687,7 +738,7 @@ packages:
       };
 
       it('installs as expected', async () => {
-        expect.assertions(10);
+        expect.assertions(12);
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
@@ -703,12 +754,13 @@ packages:
           installAgent,
           initAgent,
           validateAgent,
-          evalResults
+          evalResults,
+          checkCurrentConfig
         );
       });
 
       it('fails when validation fails', async () => {
-        expect.assertions(7);
+        expect.assertions(9);
         const msg = 'failValidate, validation failed';
         const failValidate = () => Promise.reject(new Error(msg));
         const evalResults = (err, argv, output) => {
@@ -719,7 +771,8 @@ packages:
           installAgent,
           initAgent,
           failValidate,
-          evalResults
+          evalResults,
+          checkCurrentConfig
         );
       });
     });
@@ -733,6 +786,14 @@ packages:
           .resolves({ result: 'yarn', confirm: true });
       });
 
+      const checkCurrentConfig = (cmdStruct: CommandStruct) => {
+        expect(cmdStruct.program).toEqual('yarn');
+        const args = cmdStruct.args;
+        expect(args).toEqual(['install', '--immutable']);
+        const ret = { stdout: '', stderr: '' };
+        return Promise.resolve(ret);
+      };
+
       const installAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('yarn');
         expect(cmdStruct.args).toEqual([
@@ -745,7 +806,7 @@ packages:
       };
 
       it('installs as expected', async () => {
-        expect.assertions(10);
+        expect.assertions(12);
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
@@ -761,12 +822,13 @@ packages:
           installAgent,
           initAgent,
           validateAgent,
-          evalResults
+          evalResults,
+          checkCurrentConfig
         );
       });
 
       it('fails when validation fails', async () => {
-        expect.assertions(7);
+        expect.assertions(9);
         const msg = 'failValidate, validation failed';
         const failValidate = () => Promise.reject(new Error(msg));
         const evalResults = (err, argv, output) => {
@@ -777,7 +839,8 @@ packages:
           installAgent,
           initAgent,
           failValidate,
-          evalResults
+          evalResults,
+          checkCurrentConfig
         );
       });
     });
@@ -885,6 +948,7 @@ packages:
         overwriteAppMapYml: 'Use existing',
       });
 
+      sinon.stub(BundleInstaller.prototype, 'checkCurrentConfig').resolves();
       sinon.stub(BundleInstaller.prototype, 'installAgent').resolves();
 
       sinon.stub(AgentInstallerProcedure.prototype, 'configExists').value(true);

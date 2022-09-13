@@ -1,10 +1,8 @@
 import chalk from 'chalk';
 import fs from 'fs';
-import { resolve } from 'path';
 import Yargs from 'yargs';
 
-import AgentInstaller from './agentInstaller';
-import { AbortError, ValidationError } from '../errors';
+import { AbortError } from '../errors';
 import { run } from './commandRunner';
 import UI from '../userInteraction';
 import AgentProcedure from './agentProcedure';
@@ -60,6 +58,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
 
     UI.status = 'Installing the AppMap agent...';
 
+    await this.installer.checkCurrentConfig();
     await this.installer.installAgent();
 
     await this.verifyProject();

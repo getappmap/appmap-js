@@ -5,6 +5,7 @@ import { run } from './commandRunner';
 import AgentInstaller from './agentInstaller';
 import chalk from 'chalk';
 import CommandStruct from './commandStruct';
+import { UserConfigError } from '../errors';
 
 const AGENT_PACKAGE = '@appland/appmap-agent-js@latest';
 
@@ -44,9 +45,7 @@ abstract class JavaScriptInstaller extends AgentInstaller {
   }
 }
 
-export class NpmInstaller
-  extends JavaScriptInstaller
-{
+export class NpmInstaller extends JavaScriptInstaller {
   constructor(path: string) {
     super('npm', path);
   }
@@ -63,10 +62,24 @@ export class NpmInstaller
     return await exists(this.buildFilePath);
   }
 
+  async checkCurrentConfig(): Promise<void> {
+    const cmd = new CommandStruct('npm', ['install', '--dry-run'], this.path);
+
+    try {
+      await run(cmd);
+    } catch (err) {
+      throw new UserConfigError(err as string);
+    }
+  }
+
   async installAgent(): Promise<void> {
     const cmd = new CommandStruct(
       'npm',
-      ['install', '--saveDev', process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE],
+      [
+        'install',
+        '--saveDev',
+        process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE,
+      ],
       this.path
     );
 
@@ -78,9 +91,7 @@ export class NpmInstaller
   }
 }
 
-export class YarnInstaller
-  extends JavaScriptInstaller
-{
+export class YarnInstaller extends JavaScriptInstaller {
   constructor(path: string) {
     super('yarn', path);
   }
@@ -97,6 +108,20 @@ export class YarnInstaller
     return await exists(this.buildFilePath);
   }
 
+  async checkCurrentConfig(): Promise<void> {
+    const cmd = new CommandStruct(
+      'yarn',
+      ['install', '--immutable'],
+      this.path
+    );
+
+    try {
+      await run(cmd);
+    } catch (err) {
+      throw new UserConfigError(err as string);
+    }
+  }
+
   async installAgent(): Promise<void> {
     const cmd = new CommandStruct(
       'yarn',
@@ -107,7 +132,7 @@ export class YarnInstaller
     await run(cmd);
   }
 
-  async verifyCommand() { 
+  async verifyCommand() {
     return undefined;
   }
 }

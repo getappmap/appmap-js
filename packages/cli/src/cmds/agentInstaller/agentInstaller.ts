@@ -12,6 +12,7 @@ export default abstract class AgentInstaller {
   }
 
   abstract installAgent(): Promise<void>;
+  abstract checkCurrentConfig(): Promise<void>;
   abstract validateAgentCommand(): Promise<CommandStruct | undefined>;
   abstract initCommand(): Promise<CommandStruct>;
   abstract verifyCommand(): Promise<CommandStruct | undefined>;

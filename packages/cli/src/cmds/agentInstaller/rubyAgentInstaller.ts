@@ -10,6 +10,7 @@ import { run } from './commandRunner';
 import { getOutput } from './commandUtil';
 import CommandStruct from './commandStruct';
 import EncodedFile from '../../encodedFile';
+import { UserConfigError } from '../errors';
 
 const REGEX_GEM_DECLARATION = /^(?:gem|group|require)\s/m;
 
@@ -37,6 +38,16 @@ export class BundleInstaller extends AgentInstaller {
     return await exists(this.buildFilePath);
   }
 
+  async checkCurrentConfig(): Promise<void> {
+    const cmd = new CommandStruct('bundle', ['check', '--dry-run'], this.path);
+
+    try {
+      await run(cmd);
+    } catch (err) {
+      throw new UserConfigError(err as string);
+    }
+  }
+
   async installAgent(): Promise<void> {
     const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);
     let gemfile = encodedFile.toString();
@@ -47,7 +58,10 @@ export class BundleInstaller extends AgentInstaller {
 
       if (gemExists) {
         // Replace the existing gem declaration entirely
-        gemfile = gemfile.replace(REGEX_GEM_DEPENDENCY, `${os.EOL}${GEM_DEPENDENCY}`);
+        gemfile = gemfile.replace(
+          REGEX_GEM_DEPENDENCY,
+          `${os.EOL}${GEM_DEPENDENCY}`
+        );
       } else {
         // Insert a new gem declaration
         const chars = gemfile.split('');
@@ -57,9 +71,7 @@ export class BundleInstaller extends AgentInstaller {
 
       encodedFile.write(gemfile);
     } else {
-      encodedFile.write(
-        `${gemfile}${os.EOL}${GEM_DEPENDENCY}${os.EOL}`
-      );
+      encodedFile.write(`${gemfile}${os.EOL}${GEM_DEPENDENCY}${os.EOL}`);
     }
 
     await run(new CommandStruct('bundle', ['install'], this.path));
