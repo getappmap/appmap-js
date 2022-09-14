@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.36.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.35.0...@appland/appmap-v3.36.0) (2022-09-14)
+
+
+### Features
+
+* Open a ticket when remote recording fails ([607d040](https://github.com/applandinc/appmap-js/commit/607d04001e35be2a05687899fa07671efa0cfca1))
+
 # [@appland/appmap-v3.35.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.34.0...@appland/appmap-v3.35.0) (2022-09-02)
 
 
