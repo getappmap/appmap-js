@@ -5,6 +5,7 @@ module.exports = {
   singleQuote: true,
   arrowParens: 'always',
   endOfLine: 'lf',
+  vueIndentScriptAndStyle: false,
   printWidth: 100,
   proseWrap: 'always',
 };
