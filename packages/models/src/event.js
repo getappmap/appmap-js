@@ -98,6 +98,10 @@ export default class Event {
     return this.returnEvent.elapsed;
   }
 
+  get elapsedInstrumentationTime() {
+    return this.returnEvent.elapsed_instrumentation;
+  }
+
   get linkedEvent() {
     return this.$hidden.linkedEvent;
   }
@@ -298,6 +302,14 @@ export default class Event {
     this.$hidden.parent = value;
   }
 
+  set id(value) {
+    this.$hidden.id = value;
+  }
+
+  set path(value) {
+    this.callEvent.$hidden.path = value;
+  }
+
   link(event) {
     /* eslint-disable no-param-reassign */
     if (event.linkedEvent || this.linkedEvent) {
@@ -315,6 +327,22 @@ export default class Event {
 
   isReturn() {
     return this.event === 'return';
+  }
+
+  get id() {
+    return this.$hidden.id;
+  }
+
+  get threadId() {
+    return this.thread_id;
+  }
+
+  get parentId() {
+    return this.returnEvent.parent_id;
+  }
+
+  get path() {
+    return this.callEvent.$hidden.path;
   }
 
   get callEvent() {
