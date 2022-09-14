@@ -36,6 +36,10 @@ export interface Event {
   codeObject: CodeObject;
   isCall: () => boolean;
   isReturn: () => boolean;
+  threadId: number;
+  parentId: number;
+  path: string;
+  elapsedInstrumentationTime: number;
 }
 
 export interface SQLInfo {

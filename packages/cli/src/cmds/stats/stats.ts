@@ -6,6 +6,7 @@ import UI from '../userInteraction';
 import Telemetry from '../../telemetry';
 import { listAppMapFiles, verbose } from '../../utils';
 import { buildAppMap } from '@appland/models';
+import { Event } from '../../search/types.d';
 
 export const command = 'stats [directory]';
 export const describe =
@@ -101,7 +102,7 @@ export async function handler(argv: any) {
           functions: {},
         };
 
-        appmap.events.forEach((event) => {
+        appmap.events.forEach((event: Event) => {
           if (event.isCall()) {
             const functionKey = 'thread_' + event.threadId + '_id_' + event.id;
             if (!(functionKey in functionExecutionTimes[fileName].functions)) {
