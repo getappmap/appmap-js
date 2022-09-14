@@ -66,7 +66,7 @@ describe('install sub-command', () => {
     projectDir = tmp.dirSync({} as any).name;
 
     // don't open any tickets
-    openTicketStub = sinon.stub(openTicket, 'openTicket');
+    openTicketStub = sinon.stub(openTicket, 'default');
     openTicketStub.resolves();
   });
 

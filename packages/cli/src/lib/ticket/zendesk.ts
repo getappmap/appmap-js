@@ -30,10 +30,11 @@ const debugAdapter = async (config: AxiosRequestConfig): Promise<any> => {
   });
 };
 
-export async function createRequest(
-  errors: string[],
+export default async function createRequest(
+  errors: string | string[],
   email: any
 ): Promise<number> {
+  errors = !Array.isArray(errors) ? [errors] : errors;
   const body = JSON.stringify({
     request: {
       comment: {

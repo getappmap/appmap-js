@@ -16,7 +16,8 @@ import RecordContext, {
 import Configuration from '../../../src/cmds/record/configuration';
 
 describe('record test', () => {
-  let prompt: sinon.SinonStub,
+  let confirm: sinon.SinonStub,
+    prompt: sinon.SinonStub,
     cont: sinon.SinonStub,
     recordContext: RecordContext;
 
@@ -29,6 +30,7 @@ describe('record test', () => {
   });
 
   beforeEach(() => {
+    confirm = sinon.stub(UI, 'confirm');
     prompt = sinon.stub(UI, 'prompt');
     cont = sinon.stub(UI, 'continue');
   });
@@ -139,6 +141,7 @@ describe('record test', () => {
     });
     it('and some fail', async () => {
       const stubWait = sinon.stub(TestCaseRecording, 'waitFor').resolves();
+      confirm.resolves(false);
       sinon.stub(recordContext, 'results').value([{ exitCode: 1 }]);
       prompt.resolves({ openTicket: false });
 

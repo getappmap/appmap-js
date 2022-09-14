@@ -23,7 +23,7 @@ import * as OpenAPICommand from './cmds/openapi';
 const InventoryCommand = require('./inventoryCommand');
 const OpenCommand = require('./cmds/open/open');
 const InspectCommand = require('./cmds/inspect/inspect');
-const RecordCommand = require('./cmds/record/record');
+import RecordCommand from './cmds/record/record';
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
 import PruneCommand from './cmds/prune/prune';

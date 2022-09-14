@@ -2,6 +2,10 @@ import UI from '../../userInteraction';
 import RecordContext from '../recordContext';
 import { State } from '../types/state';
 
+export async function createState(method: string): Promise<State> {
+  return (await import(`./record_${method}`)).default;
+}
+
 export default async function initial(
   recordContext: RecordContext
 ): Promise<State> {
@@ -19,5 +23,5 @@ export default async function initial(
   const method = choices[methodName];
 
   recordContext.recordMethod = method;
-  return (await import(`./record_${method}`)).default;
+  return createState.bind(null, method);
 }

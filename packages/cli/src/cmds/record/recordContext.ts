@@ -1,6 +1,7 @@
 import assert from 'assert';
 import countAppMaps from './action/countAppMaps';
 import Configuration, { TestCommand } from './configuration';
+import { RemoteRecordingError } from './makeRequest';
 export class RecordProcessResult {
   constructor(
     private _env: Record<string, string>,
@@ -26,6 +27,7 @@ export default class RecordContext {
   public initialAppMapCount?: number;
   public appMapCount?: number;
   public appMapEventCount?: number;
+  public remoteError?: RemoteRecordingError;
   private _results?: RecordProcessResult[];
   public appMapDir?: string;
 

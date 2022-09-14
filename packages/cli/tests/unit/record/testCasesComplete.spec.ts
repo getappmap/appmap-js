@@ -16,7 +16,7 @@ describe('testCasesComplete', () => {
     beforeEach(() => {
       rc = new RecordContext(new Configuration());
       sinon.stub(rc, 'output').value(['']);
-      openTicketStub = sinon.stub(openTicket, 'openTicket').resolves();
+      openTicketStub = sinon.stub(openTicket, 'default').resolves();
       return rc.initialize();
     });
 

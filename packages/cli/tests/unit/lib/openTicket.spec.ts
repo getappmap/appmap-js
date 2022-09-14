@@ -3,8 +3,8 @@ import sinon from 'sinon';
 import { HttpError, HttpErrorResponse } from '../../../src/cmds/errors';
 
 import UI from '../../../src/cmds/userInteraction';
-import { openTicket } from '../../../src/lib/ticket/openTicket';
-import * as zendesk from '../../../src/lib/ticket/zendesk';
+import openTicket from '../../../src/lib/ticket/openTicket';
+import * as createRequest from '../../../src/lib/ticket/zendesk';
 
 import Telemetry from '../../../src/telemetry';
 import { withSandbox, withStubbedTelemetry } from '../../helper';
@@ -35,10 +35,12 @@ describe('openTicket', () => {
 
   let zdRequest: sinon.SinonStub,
     prompt: sinon.SinonStub,
+    confirm: sinon.SinonStub,
     uiError: sinon.SinonStub;
 
   beforeEach(() => {
-    zdRequest = sandbox.stub(zendesk, 'createRequest');
+    zdRequest = sandbox.stub(createRequest, 'default');
+    confirm = sandbox.stub(UI, 'confirm');
     prompt = sandbox.stub(UI, 'prompt');
     uiError = sandbox.stub(UI, 'error');
   });
@@ -52,18 +54,17 @@ describe('openTicket', () => {
     });
 
     it('proceeds when the user allows', async () => {
+      confirm.resolves(false);
       prompt.resolves({ openTicket: true });
-      await openTicket(['error']);
+      await openTicket('error');
       expect(prompt).toBeCalledTwice();
       expect(getNthCallArgs(prompt, 0)).toMatchObject({ name: 'openTicket' });
-      expect(getNthCallArgs(prompt, 1)).toMatchObject([
-        { name: 'email' },
-      ]);
+      expect(getNthCallArgs(prompt, 1)).toMatchObject([{ name: 'email' }]);
     });
 
     it("doesn't prompt when the user declines", async () => {
       prompt.resolves({ openTicket: false });
-      await openTicket(['error']);
+      await openTicket('error');
       expect(prompt).toBeCalledOnce();
     });
   });
@@ -83,7 +84,7 @@ describe('openTicket', () => {
 
     it('handles an error', async () => {
       zdRequest.throws('an error');
-      await openTicket(['error']);
+      await openTicket('error');
       expect(uiError).toBeCalledOnce();
       expect(getNthCallArgs(uiError, 0)).toMatch(
         'A failure occurred attempting to create a ticket'
@@ -108,7 +109,7 @@ describe('openTicket', () => {
 
       it(example, async () => {
         prompt.resolves(condition);
-        await openTicket(['error']);
+        await openTicket('error');
         expect(Telemetry.sendEvent).toBeCalledOnce();
         expect(getNthCallArgs(Telemetry.sendEvent, 0)).toMatchObject(
           expectation
@@ -148,7 +149,7 @@ describe('openTicket', () => {
         it(example, async () => {
           zdRequest.throws(error);
 
-          await openTicket(['error']);
+          await openTicket('error');
           expect(Telemetry.sendEvent).toBeCalledOnce();
           expect(getNthCallArgs(Telemetry.sendEvent, 0)).toMatchObject(
             expectation

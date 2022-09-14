@@ -71,7 +71,9 @@ export default async function runCommand(
       }
       flushTelemetry(ExitCode.Error, err);
     } else {
-      // idk why this wouldn't be an Error ^^
+      // You'll wind up here if the object thrown wasn't an instance of Error. An obvious way this
+      // can happen is `throw 'Fail'`. A less obvious way is rejecting a Promise with something
+      // other than an error, e.g. `reject('Fail')`.
       throw err;
     }
   }
