@@ -24,9 +24,15 @@ and run an initial build.
 
 ```sh
 $ npm install -g yarn
-$ yarn
-$ yarn run build
+$ yarn && yarn build
 ```
 
 To continuously build changes, `yarn run watch` will run a watch server for
 every project that specifies a `watch` script.
+
+### Testing
+Each package should have a script named `test`. Running the following command from the root directory will run tests in every package, and running the command from within a package directory will run the tests for that specific package.
+
+```sh
+$ yarn test
+```
