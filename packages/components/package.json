@@ -74,7 +74,7 @@
     "lint-staged": "^10.5.3",
     "mathjs": "^9.0.0",
     "minimist": "^1.2.5",
-    "prettier": "^2.2.1",
+    "prettier": "^2.7.1",
     "rollup": "^2.7.3",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-terser": "^5.3.1",
