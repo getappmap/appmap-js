@@ -6,7 +6,6 @@ import UI from '../userInteraction';
 import Telemetry from '../../telemetry';
 import { listAppMapFiles, verbose } from '../../utils';
 import { buildAppMap } from '@appland/models';
-const { default: AppMapIndex } = require('../../fingerprint/appmapIndex');
 
 export const command = 'stats [directory]';
 export const describe =
