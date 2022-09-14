@@ -43,7 +43,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "jest": "^27.4.7",
     "lint-staged": "^10.5.4",
-    "prettier": "^2.2.1",
+    "prettier": "^2.7.1",
     "rollup": "^2.48.0"
   },
   "dependencies": {

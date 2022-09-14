@@ -65,7 +65,7 @@ __metadata:
     c8: ^7.7.2
     eslint: ^7.28.0
     format-util: ^1.0.5
-    prettier: ^2.3.1
+    prettier: ^2.7.1
     treeify: ^1.1.0
     yaml: ^1.10.2
   bin:
@@ -129,7 +129,7 @@ __metadata:
     ora: ^5.4.1
     pkg: ^5.8.0
     port-pid: ^0.0.7
-    prettier: ^2.2.1
+    prettier: ^2.7.1
     pretty-bytes: ^5.6.0
     ps-node: ^0.1.6
     read-pkg-up: ^7.0.1
@@ -230,7 +230,7 @@ __metadata:
     lint-staged: ^10.5.3
     mathjs: ^9.0.0
     minimist: ^1.2.5
-    prettier: ^2.2.1
+    prettier: ^2.7.1
     rollup: ^2.7.3
     rollup-plugin-babel: ^4.4.0
     rollup-plugin-terser: ^5.3.1
@@ -276,7 +276,7 @@ __metadata:
     jest-environment-jsdom: ^27.5.1
     lint-staged: ^10.5.4
     mathjs: ^9.0.0
-    prettier: ^2.2.1
+    prettier: ^2.7.1
     rollup: ^2.48.0
     rollup-plugin-sass: ^1.2.2
     sass: ^1.34.1
@@ -302,7 +302,7 @@ __metadata:
     eslint-plugin-prettier: ^3.4.0
     jest: ^27.4.7
     lint-staged: ^10.5.4
-    prettier: ^2.2.1
+    prettier: ^2.7.1
     rollup: ^2.48.0
   languageName: unknown
   linkType: soft
@@ -373,7 +373,7 @@ __metadata:
     openapi-diff: ^0.23.5
     openapi-types: ^9.3.0
     pkg: ^5.5.2
-    prettier: ^2.3.2
+    prettier: ^2.7.1
     pretty-format: ^27.4.6
     read-pkg-up: ^7.0.1
     semantic-release: ^19.0.2
@@ -413,7 +413,7 @@ __metadata:
     eslint-config-prettier: ^8.3.0
     jest: ^27.4.7
     lint-staged: ^10.5.4
-    prettier: ^2.3.2
+    prettier: ^2.7.1
     read-pkg-up: ^7.0.1
     sinon: ^13.0.1
     ts-jest: ^27.1.4
@@ -23788,7 +23788,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^1.18.2 || ^2.0.0, prettier@npm:^2.2.1, prettier@npm:^2.3.1":
+"prettier@npm:^1.18.2 || ^2.0.0":
   version: 2.5.1
   resolution: "prettier@npm:2.5.1"
   bin:
@@ -23797,12 +23797,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.3.2":
-  version: 2.6.2
-  resolution: "prettier@npm:2.6.2"
+"prettier@npm:^2.7.1":
+  version: 2.7.1
+  resolution: "prettier@npm:2.7.1"
   bin:
     prettier: bin-prettier.js
-  checksum: 48d08dde8e9fb1f5bccdd205baa7f192e9fc8bc98f86e1b97d919de804e28c806b0e6cc685e4a88211aa7987fa9668f30baae19580d87ced3ed0f2ec6572106f
+  checksum: 55a4409182260866ab31284d929b3cb961e5fdb91fe0d2e099dac92eaecec890f36e524b4c19e6ceae839c99c6d7195817579cdffc8e2c80da0cb794463a748b
   languageName: node
   linkType: hard
 
@@ -25652,7 +25652,7 @@ resolve@1.1.7:
     eslint-plugin-prettier: ^3.4.0
     husky: ^4.3.8
     node-gyp: ^8.3.0
-    prettier: ^2.2.1
+    prettier: ^2.7.1
     semantic-release: ^17.4.2
     semantic-release-monorepo: ^7.0.5
     yarn-changed-workspaces: ^2.0.9

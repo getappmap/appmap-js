@@ -52,7 +52,7 @@
     "jest-environment-jsdom": "^27.5.1",
     "lint-staged": "^10.5.4",
     "mathjs": "^9.0.0",
-    "prettier": "^2.2.1",
+    "prettier": "^2.7.1",
     "rollup": "^2.48.0",
     "rollup-plugin-sass": "^1.2.2",
     "sass": "^1.34.1"
