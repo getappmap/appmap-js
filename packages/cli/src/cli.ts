@@ -24,6 +24,7 @@ const InventoryCommand = require('./inventoryCommand');
 const OpenCommand = require('./cmds/open/open');
 const InspectCommand = require('./cmds/inspect/inspect');
 const RecordCommand = require('./cmds/record/record');
+const SearchCommand = require('./cmds/search/search');
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
 import PruneCommand from './cmds/prune/prune';
@@ -451,6 +452,7 @@ yargs(process.argv.slice(2))
   .command(RecordCommand)
   .command(StatusCommand)
   .command(InspectCommand)
+  .command(SearchCommand)
   .command(PruneCommand)
   .strict()
   .demandCommand()
