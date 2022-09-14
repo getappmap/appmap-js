@@ -8,6 +8,16 @@ import { listAppMapFiles, verbose } from '../../utils';
 import { buildAppMap } from '@appland/models';
 import { Event } from '../../search/types.d';
 
+import {
+  AppMapSize,
+  AppMapSizeTable,
+  SortedAppMapSize,
+} from './types/appMapSize';
+import {
+  FunctionExecutionTime,
+  SlowestExecutionTime,
+} from './types/functionExecutionTime';
+
 export const command = 'stats [directory]';
 export const describe =
   'Show some statistics about events in scenarios read from AppMap files';
@@ -54,8 +64,10 @@ export async function handler(argv: any) {
     let directoryToUse = directory;
     if (!directoryToUse) directoryToUse = '.';
 
-    async function calculateAppMapSizes(appMapDir: string) {
-      const appMapSizes = {};
+    async function calculateAppMapSizes(
+      appMapDir: string
+    ): Promise<AppMapSizeTable> {
+      const appMapSizes: AppMapSizeTable = {};
 
       // This function is too verbose to be useful in this context.
       const v = verbose();
@@ -71,8 +83,8 @@ export async function handler(argv: any) {
       return appMapSizes;
     }
 
-    async function sortAppMapSizes(appMapSizes) {
-      let appMapSizesArray: { name: string; size: number }[] = [];
+    async function sortAppMapSizes(appMapSizes): Promise<SortedAppMapSize[]> {
+      let appMapSizesArray: SortedAppMapSize[] = [];
 
       for (const key in appMapSizes) {
         appMapSizesArray.push({
@@ -88,7 +100,7 @@ export async function handler(argv: any) {
       return Number((size / 1000 / 1000).toFixed(1));
     }
 
-    async function calculateExecutionTimes(appMapDir) {
+    async function calculateExecutionTimes(appMapDir: string) {
       let functionExecutionTimes = {};
 
       // This function is too verbose to be useful in this context.
@@ -187,12 +199,7 @@ export async function handler(argv: any) {
       }
 
       // convert hash to array
-      let flatFunctionExecutionTimes: {
-        name: string;
-        elapsedInstrumentationTimeTotal: number;
-        numberOfCalls: number;
-        path: string;
-      }[] = [];
+      let flatFunctionExecutionTimes: FunctionExecutionTime[] = [];
       for (const name in totalFunctionExecutionTimes) {
         flatFunctionExecutionTimes.push({
           name: name,
@@ -206,7 +213,9 @@ export async function handler(argv: any) {
       return flatFunctionExecutionTimes;
     }
 
-    async function sortExecutionTimes(functionExecutionTimes) {
+    async function sortExecutionTimes(
+      functionExecutionTimes: FunctionExecutionTime[]
+    ): Promise<FunctionExecutionTime[]> {
       // sort the array
       return functionExecutionTimes.sort(
         (a, b) =>
@@ -214,14 +223,16 @@ export async function handler(argv: any) {
       );
     }
 
-    async function showStats() {
+    async function showStats(): Promise<
+      [SortedAppMapSize[], SlowestExecutionTime[]]
+    > {
       UI.status = `Computing AppMap stats...`;
       const appMapDir = directoryToUse;
       const appMapSizes = await calculateAppMapSizes(appMapDir);
       const sortedAppMapSizes = await sortAppMapSizes(appMapSizes);
 
       UI.status = `Displaying biggest appmaps...\n`;
-      let biggestAppMapSizes: { size: number; name: string }[] = [];
+      let biggestAppMapSizes: SortedAppMapSize[] = [];
       sortedAppMapSizes
         .filter((appmap) => appmap.size > MINIMUM_APPMAP_SIZE)
         .slice(0, limitToUse)
@@ -245,12 +256,7 @@ export async function handler(argv: any) {
       UI.status = `Displaying functions with highest AppMap overhead...\n`;
 
       // column names in JSON files use snakecase
-      let slowestExecutionTimes: {
-        elapsed_instrumentation_time_total: number;
-        num_calls: number;
-        name: string;
-        path: string;
-      }[] = [];
+      let slowestExecutionTimes: SlowestExecutionTime[] = [];
 
       // if there are no instrumentation data don't show this report
       if (
