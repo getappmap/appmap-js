@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.37.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.36.0...@appland/appmap-v3.37.0) (2022-09-14)
+
+
+### Features
+
+* check project dependencies before adding appmap ([ee200e9](https://github.com/applandinc/appmap-js/commit/ee200e9e86e57781d0152fffc511cae6e734f4fa))
+
 # [@appland/appmap-v3.36.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.35.0...@appland/appmap-v3.36.0) (2022-09-14)
 
 
