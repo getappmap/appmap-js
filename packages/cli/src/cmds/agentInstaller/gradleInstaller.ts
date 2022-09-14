@@ -11,9 +11,7 @@ import JavaBuildToolInstaller from './javaBuildToolInstaller';
 import { GradleParser, GradleParseResult } from './gradleParser';
 import EncodedFile from '../../encodedFile';
 
-export default class GradleInstaller
-  extends JavaBuildToolInstaller
-{
+export default class GradleInstaller extends JavaBuildToolInstaller {
   constructor(path: string) {
     super('Gradle', path);
   }
@@ -40,8 +38,12 @@ export default class GradleInstaller
    * If not, the installer will pick the build.gradle.
    */
   get identifyGradleFile(): string {
-    const buildGradleKtsExists: boolean = fs.existsSync(join(this.path, this.buildGradleKtsFileName));
-    return buildGradleKtsExists ? this.buildGradleKtsFileName : this.buildGradleFileName;
+    const buildGradleKtsExists: boolean = fs.existsSync(
+      join(this.path, this.buildGradleKtsFileName)
+    );
+    return buildGradleKtsExists
+      ? this.buildGradleKtsFileName
+      : this.buildGradleFileName;
   }
 
   async printJarPathCommand(): Promise<CommandStruct> {
@@ -171,7 +173,7 @@ ${whitespace.padLine(pluginSpec)}
     const updatedSrc = [
       buildFileSource.substring(0, parseResult.plugins.lbrace + 1),
       lines.map((l) => whitespace.padLine(l)).join(os.EOL),
-      '}'
+      '}',
     ].join(os.EOL);
     const offset = parseResult.plugins.rbrace + 1;
 
@@ -181,7 +183,9 @@ ${whitespace.padLine(pluginSpec)}
   private selectPluginSpec() {
     const pluginSpecKotlinSyntax = `id("com.appland.appmap") version "1.1.0"`;
     const pluginSpecGroovySyntax = `id 'com.appland.appmap' version '1.1.0'`;
-    return this.identifyGradleFile.endsWith('.gradle.kts') ? pluginSpecKotlinSyntax : pluginSpecGroovySyntax;
+    return this.identifyGradleFile.endsWith('.gradle.kts')
+      ? pluginSpecKotlinSyntax
+      : pluginSpecGroovySyntax;
   }
 
   /**
@@ -235,6 +239,9 @@ ${whitespace.padLine(mavenCentral)}
     offset = parseResult.repositories.rbrace - 1;
     return { updatedSrc, offset };
   }
+
+  // TODO: validate the user's project before adding AppMap
+  async checkCurrentConfig(): Promise<void> {}
 
   async installAgent(): Promise<void> {
     const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);

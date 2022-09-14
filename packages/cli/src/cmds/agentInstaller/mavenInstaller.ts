@@ -60,6 +60,9 @@ export default class MavenInstaller extends JavaBuildToolInstaller {
     );
   }
 
+  // TODO: validate the user's project before adding AppMap
+  async checkCurrentConfig(): Promise<void> {}
+
   async installAgent(): Promise<void> {
     const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);
     const buildFileSource = encodedFile.toString();

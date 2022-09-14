@@ -9,6 +9,7 @@ export class InvalidPathError extends Error {
 
 export class AbortError extends Error {}
 export class ValidationError extends Error {}
+export class UserConfigError extends Error {}
 
 export interface HttpErrorResponse {
   status: number;

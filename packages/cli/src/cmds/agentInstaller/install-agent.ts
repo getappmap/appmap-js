@@ -5,6 +5,7 @@ import {
   ChildProcessError,
   InvalidPathError,
   ValidationError,
+  UserConfigError,
 } from '../errors';
 import { endTime, prefixLines, verbose } from '../../utils';
 import AgentInstallerProcedure from './agentInstallerProcedure';
@@ -84,6 +85,26 @@ class InstallerError {
       });
 
       UI.error(`${chalk.red('!')} ${this.error.message}`);
+      return true;
+    } else if (this.error instanceof UserConfigError) {
+      UI.error(
+        `${chalk.red('!')} Error in project configuration:\n\n${
+          this.error?.message
+        }`
+      );
+
+      Telemetry.sendEvent({
+        name: 'install-agent:user-config-error',
+        properties: {
+          installer: this.project?.selectedInstaller?.name,
+          installers_available: installersAvailable,
+          error: this.error?.message,
+          log: this.log,
+          directory: this.project?.path
+            ? await getDirectoryProperty(this.project.path)
+            : undefined,
+        },
+      });
       return true;
     } else {
       let exception: string | undefined;

@@ -9,13 +9,14 @@ import chalk from 'chalk';
 import { run } from './commandRunner';
 import { getOutput } from './commandUtil';
 import EncodedFile from '../../encodedFile';
+import { UserConfigError } from '../errors';
 
 const REGEX_PKG_DEPENDENCY = /^\s*appmap\s*[=>~]+=.*$/m;
 // include .dev0 so pip will allow prereleases
 const PKG_DEPENDENCY = 'appmap>=1.1.0.dev0';
 
 abstract class PythonInstaller extends AgentInstaller {
-  constructor(name:string, path: string) {
+  constructor(name: string, path: string) {
     super(name, path);
   }
 
@@ -65,6 +66,20 @@ export class PoetryInstaller extends PythonInstaller {
     return new CommandStruct('poetry', ['run', 'appmap-agent-init'], this.path);
   }
 
+  async checkCurrentConfig(): Promise<void> {
+    const cmd = new CommandStruct(
+      'poetry',
+      ['install', '--dry-run'],
+      this.path
+    );
+
+    try {
+      await run(cmd);
+    } catch (err) {
+      throw new UserConfigError(err as string);
+    }
+  }
+
   async installAgent(): Promise<void> {
     const cmd = new CommandStruct(
       'poetry',
@@ -85,7 +100,7 @@ export class PoetryInstaller extends PythonInstaller {
 
   async validateAgentCommand() {
     return undefined;
-  }  
+  }
 }
 
 export class PipInstaller extends PythonInstaller {
@@ -103,6 +118,20 @@ export class PipInstaller extends PythonInstaller {
 
   async available(): Promise<boolean> {
     return await exists(this.buildFilePath);
+  }
+
+  async checkCurrentConfig(): Promise<void> {
+    const cmd = new CommandStruct(
+      'pip',
+      ['install', '-r', this.buildFile, '--dry-run'],
+      this.path
+    );
+
+    try {
+      await run(cmd);
+    } catch (err) {
+      throw new UserConfigError(err as string);
+    }
   }
 
   async installAgent(): Promise<void> {
