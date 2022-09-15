@@ -173,6 +173,9 @@ declare module '@appland/models' {
     readonly stableProperties: Record<string, string | number>;
     readonly hash: string;
     readonly identityHash: string;
+    readonly threadId: number;
+    readonly parentId?: number;
+    readonly elapsedInstrumentationTime?: number;
 
     constructor(data?: any);
 

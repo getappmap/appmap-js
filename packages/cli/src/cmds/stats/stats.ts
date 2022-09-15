@@ -5,8 +5,7 @@ const fs = require('fs');
 import UI from '../userInteraction';
 import Telemetry from '../../telemetry';
 import { listAppMapFiles, verbose } from '../../utils';
-import { buildAppMap } from '@appland/models';
-import { Event } from '../../search/types.d';
+import { Event, buildAppMap } from '@appland/models';
 
 import {
   AppMapSize,
