@@ -327,3 +327,10 @@ export async function handler(argv: any) {
 
   return runCommand('stats', commandFn);
 }
+
+export default {
+  command: command,
+  describe: describe,
+  builder: builder,
+  handler: handler,
+};
