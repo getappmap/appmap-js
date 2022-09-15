@@ -96,7 +96,7 @@ export async function handler(argv: any) {
       return appMapSizesArray.sort((a, b) => b.size - a.size);
     }
 
-    function sizeInMB(size) {
+    function sizeInMB(size: number): number {
       return Number((size / 1000 / 1000).toFixed(1));
     }
 
