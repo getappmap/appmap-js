@@ -334,7 +334,7 @@ export default class Event {
   }
 
   get path() {
-    return this.callEvent.$hidden.path;
+    return this.callEvent.path;
   }
 
   get callEvent() {
