@@ -1,0 +1,15 @@
+# bundled yarn
+/.yarn
+
+# compiled files
+/packages/*/built
+/packages/*/dist
+
+# test fixture data files
+*.appmap.json
+/packages/*/tests/unit/fixtures/*.json
+/packages/openapi/test/data/*.yaml
+/packages/components/src/stories/data
+
+# a lot of manual lining things up here for clarity
+/packages/validate/src/macro.yml
