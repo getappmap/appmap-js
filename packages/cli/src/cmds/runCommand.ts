@@ -22,13 +22,14 @@ export default async function runCommand(
   fn: () => Promise<any>
 ): Promise<void> {
   try {
-    await fn();
+    const ret = await fn();
 
     Telemetry.sendEvent({
       name: `${commandPrefix}:exit-ok`,
     });
 
     flushTelemetry(0);
+    return ret;
   } catch (err) {
     if (err instanceof ValidationError) {
       console.warn(err.message);
