@@ -302,14 +302,6 @@ export default class Event {
     this.$hidden.parent = value;
   }
 
-  set id(value) {
-    this.$hidden.id = value;
-  }
-
-  set path(value) {
-    this.callEvent.$hidden.path = value;
-  }
-
   link(event) {
     /* eslint-disable no-param-reassign */
     if (event.linkedEvent || this.linkedEvent) {
