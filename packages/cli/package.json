@@ -27,6 +27,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/diff": "^5.0.2",
     "@types/fs-extra": "^9.0.12",
     "@types/inquirer": "^7.3.3",
     "@types/jest": "^27.0.1",
