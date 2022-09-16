@@ -67,8 +67,6 @@ class FindEvents {
     const beginMatch = () => {
       const event = stack[stack.length - 1];
       const ancestors = stack.slice(0, stack.length - 1).filter(significant);
-      const caller =
-        /** @type {Event} */ stack.length >= 2 ? stack[stack.length - 2] : null;
       const matchObj = /** @type {EventMatch} */ {
         appmap: this.appMapName,
         event,
@@ -78,12 +76,9 @@ class FindEvents {
         functionTrigrams: [],
         descendants: [],
       };
-      if (caller) {
-        matchObj.caller = caller;
-      }
 
-      if (event.children.length === 0 && caller) {
-        const trigrams = buildTrigrams(caller, event, null);
+      if (event.children.length === 0 && event.parent) {
+        const trigrams = buildTrigrams(event, null);
 
         matchObj.functionTrigrams.push(trigrams.functionTrigram);
         matchObj.classTrigrams.push(trigrams.classTrigram);
@@ -147,10 +142,9 @@ class FindEvents {
         matches[matches.length - 1].event === stack[stack.length - 1]
       ) {
         const match = matches[matches.length - 1];
-        const caller = stack.length >= 2 ? stack[stack.length - 2] : null;
         const matchEvent = stack[stack.length - 1];
         const callee = event;
-        const trigrams = buildTrigrams(caller, matchEvent, callee);
+        const trigrams = buildTrigrams(matchEvent, callee);
 
         match.functionTrigrams.push(trigrams.functionTrigram);
         match.classTrigrams.push(trigrams.classTrigram);
