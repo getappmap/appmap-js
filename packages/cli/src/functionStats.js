@@ -55,11 +55,9 @@ class FunctionStats {
   }
 
   toComparableState() {
-    const trigram = (/** @type {Trigram} */ t) =>
-      [t.callerId, t.codeObjectId, t.calleeId].join(' ->\n');
-
     const statusCodes = (eventMatches) =>
       eventMatches
+        .filter((e) => e.event.returnEvent)
         .map((e) => e.event.httpServerResponse)
         .filter((res) => res)
         .map((res) => res.status || res.status_code);
@@ -71,6 +69,20 @@ class FunctionStats {
         .filter((e) => e.exceptions)
         .map((e) => e.exceptions.map((exception) => exception.class))
         .flat();
+
+    const callers = (eventMatches) =>
+      eventMatches
+        .map((e) => e.event)
+        .map((e) => e.parent)
+        .filter((e) => e)
+        .map((e) => e.codeObject.id);
+
+    const callees = (eventMatches) =>
+      eventMatches
+        .map((e) => e.event)
+        .map((e) => e.children)
+        .flat()
+        .map((e) => e.codeObject.id);
 
     const functionParams = (eventMatches) =>
       eventMatches
@@ -95,9 +107,8 @@ class FunctionStats {
       parameters,
       exceptions: refs(exceptions),
       statusCodes: refs(statusCodes),
-      packageTrigrams: this.packageTrigrams.map(trigram),
-      classTrigrams: this.classTrigrams.map(trigram),
-      functionTrigrams: this.functionTrigrams.map(trigram),
+      callers: refs(callers),
+      callees: refs(callees),
     };
   }
 
