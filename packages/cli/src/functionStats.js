@@ -119,7 +119,10 @@ class FunctionStats {
   get returnValues() {
     return [
       ...new Set(
-        this.eventMatches.map((e) => e.event.returnValue).map(formatValue)
+        this.eventMatches
+          .filter((e) => e.event && e.event.returnEvent)
+          .map((e) => e.event.returnValue)
+          .map(formatValue)
       ),
     ].sort();
   }
