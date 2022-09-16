@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.37.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.37.0...@appland/appmap-v3.37.1) (2022-09-16)
+
+
+### Bug Fixes
+
+* Use better language when opening a ticket ([1f072a7](https://github.com/applandinc/appmap-js/commit/1f072a70d081f98fc94aa8f4e8baf82f830fef05))
+
 # [@appland/appmap-v3.37.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.36.0...@appland/appmap-v3.37.0) (2022-09-14)
 
 
