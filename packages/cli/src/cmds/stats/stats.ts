@@ -107,12 +107,11 @@ export async function handler(argv: any) {
       verbose(false);
       await listAppMapFiles(appMapDir, (fileName: string) => {
         const file = fs.readFileSync(fileName, 'utf-8');
-        let appmapData = JSON.parse(file.toString());
+        const appmapData = JSON.parse(file.toString());
         const appmap = buildAppMap(appmapData).build();
         functionExecutionTimes[fileName] = {
           functions: {},
         };
-
         appmap.events.forEach((event: Event) => {
           if (event.isCall()) {
             const functionKey = 'thread_' + event.threadId + '_id_' + event.id;
@@ -252,6 +251,7 @@ export async function handler(argv: any) {
       UI.status = `Computing functions with highest AppMap overhead...\n`;
       const executionTimes = await calculateExecutionTimes(appMapDir);
       const sortedExecutionTimes = await sortExecutionTimes(executionTimes);
+      UI.success();
       UI.status = `Displaying functions with highest AppMap overhead...\n`;
 
       // column names in JSON files use snakecase
@@ -319,13 +319,14 @@ export async function handler(argv: any) {
         metrics: telemetryMetrics,
       });
 
+      UI.success();
       return [biggestAppMapSizes, slowestExecutionTimes];
     }
 
     return await showStats();
   };
 
-  return runCommand('stats', commandFn);
+  return await commandFn();
 }
 
 export default {
