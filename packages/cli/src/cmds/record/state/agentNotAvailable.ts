@@ -1,4 +1,4 @@
-import openTicket from '../../../lib/ticket/openTicket';
+import openTicket, { DEFAULT_HELP_MSG } from '../../../lib/ticket/openTicket';
 import UI from '../../userInteraction';
 import configureRemainingRequestOptions from '../action/configureRemainingRequestOptions';
 import detectProcessCharacteristics from '../action/detectProcessCharacteristics';
@@ -67,7 +67,8 @@ For case (3), you should contact AppMap support for help with troubleshooting.
     case NextStepChoices.SUPPORT.value:
       const details = recordContext.remoteError?.toString() || '';
 
-      await openTicket(details);
+      await openTicket(details, DEFAULT_HELP_MSG, false);
+
       return abort; // We're done
       break;
   }

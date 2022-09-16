@@ -4,9 +4,11 @@ import UI from '../../cmds/userInteraction';
 import Telemetry from '../../telemetry';
 import createZendeskRequest from './zendesk';
 
+export const DEFAULT_HELP_MSG = ' ';
+
 export default async function openTicket(
   errors: string | string[],
-  helpMsg: string = ' ',
+  helpMsg: string = DEFAULT_HELP_MSG,
   prompt: boolean = true
 ): Promise<void> {
   errors = !Array.isArray(errors) ? [errors] : errors;
@@ -17,7 +19,8 @@ Help is available from the AppMap support team!${helpMsg}
 
   if (
     await UI.confirm(`Details of the error will be provided to the support team.
-  Would you like to see them?`)
+
+Would you like to review the details here before submitting the support ticket?`)
   ) {
     UI.error(errors.join('\n'));
   }
