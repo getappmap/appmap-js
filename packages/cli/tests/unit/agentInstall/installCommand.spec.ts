@@ -445,38 +445,6 @@ packages:
   });
 
   describe('A Python project', () => {
-    const testE2E = async (
-      pythonVersion: (command: CommandStruct) => Promise<CommandReturn>,
-      pythonPath: (command: CommandStruct) => Promise<CommandReturn>,
-      installAgent: (command: CommandStruct) => Promise<CommandReturn>,
-      initAgent: (command: CommandStruct) => Promise<CommandReturn>,
-      evalResults: (err: Error | undefined, argv: any, output: string) => void,
-      checkCurrentConfig: (command: CommandStruct) => Promise<CommandReturn>
-    ) => {
-      let callIdx = 0;
-      sinon
-        .stub(commandRunner, 'run')
-        .onCall(callIdx++)
-        .callsFake(pythonVersion)
-        .onCall(callIdx++)
-        .callsFake(pythonPath)
-        .onCall(callIdx++)
-        .callsFake(checkCurrentConfig)
-        .onCall(callIdx++)
-        .callsFake(installAgent)
-        .onCall(callIdx++)
-        .callsFake(initAgent);
-
-      return invokeCommand(projectDir, evalResults);
-    };
-
-    const expectedConfig = `
-# Fake appmap.yml
-name: fake-app
-packages:
-- path: fake_app
-    `;
-
     const pythonVersion = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('python');
       expect(cmdStruct.args).toEqual(['--version']);
@@ -489,21 +457,48 @@ packages:
       return Promise.resolve({ stdout: '/usr/local', stderr: '' });
     };
 
+    const expectedConfig = `
+# Fake appmap.yml
+name: fake-app
+packages:
+- path: fake_app
+    `;
+
     describe('managed with pip', () => {
       const projectFixture = path.join(fixtureDir, 'python', 'pip');
+
+      const testE2E = async (
+        pythonVersion: (command: CommandStruct) => Promise<CommandReturn>,
+        pythonPath: (command: CommandStruct) => Promise<CommandReturn>,
+        installAgent: (command: CommandStruct) => Promise<CommandReturn>,
+        initAgent: (command: CommandStruct) => Promise<CommandReturn>,
+        evalResults: (err: Error | undefined, argv: any, output: string) => void,
+        checkCurrentConfig: (command: CommandStruct) => Promise<CommandReturn>,
+        pipVersion: (command: CommandStruct) => Promise<CommandReturn>
+      ) => {
+        let callIdx = 0;
+        sinon
+          .stub(commandRunner, 'run')
+          .onCall(callIdx++)
+          .callsFake(pythonVersion)
+          .onCall(callIdx++)
+          .callsFake(pythonPath)
+          .onCall(callIdx++)
+          .callsFake(pipVersion)
+          .onCall(callIdx++)
+          .callsFake(checkCurrentConfig)
+          .onCall(callIdx++)
+          .callsFake(installAgent)
+          .onCall(callIdx++)
+          .callsFake(initAgent);
+
+        return invokeCommand(projectDir, evalResults);
+      };
 
       beforeEach(() => {
         fse.copySync(projectFixture, projectDir);
         sinon.stub(inquirer, 'prompt').resolves({ result: 'pip', confirm: true });
       });
-
-      const checkCurrentConfig = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('pip');
-        const args = cmdStruct.args;
-        expect(args).toEqual(['install', '-r', 'requirements.txt', '--dry-run']);
-        const ret = { stdout: '', stderr: '' };
-        return Promise.resolve(ret);
-      };
 
       const installAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('pip');
@@ -517,37 +512,136 @@ packages:
         expect(cmdStruct.args.length).toEqual(0);
         const fakeConfig = `
 {
-   "configuration": {
-     "contents": "${expectedConfig.replace(/[\n]/g, '\\n')}"
-   }
+  "configuration": {
+    "contents": "${expectedConfig.replace(/[\n]/g, '\\n')}"
+  }
 }`;
         const ret = { stdout: fakeConfig, stderr: '' };
         return Promise.resolve(ret);
       };
 
-      it('installs as expected', async () => {
-        expect.assertions(12);
-        const evalResults = (err, argv, output) => {
-          expect(err).toBeNull();
-
-          const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
-            encoding: 'utf-8',
+      describe('below version 22.2.0', () => {
+        const pipVersion = (cmdStruct: CommandStruct) => {
+          expect(cmdStruct.program).toEqual('pip');
+          expect(cmdStruct.args).toEqual(['--version']);
+          return Promise.resolve({
+            stdout:
+              'pip 22.0 from /home/user/.pyenv/versions/3.7.0/lib/python3.7/site-packages/pip (python 3.7)',
+            stderr: '',
           });
-          expect(actualConfig).toEqual(expectedConfig);
         };
-        await testE2E(
-          pythonVersion,
-          pythonPath,
-          installAgent,
-          initAgent,
-          evalResults,
-          checkCurrentConfig
-        );
+
+        const checkCurrentConfig = (cmdStruct: CommandStruct) => {
+          expect(cmdStruct.program).toEqual('pip');
+          const args = cmdStruct.args;
+          expect(args).toEqual(['install', '-r', 'requirements.txt']);
+          const ret = { stdout: '', stderr: '' };
+          return Promise.resolve(ret);
+        };
+
+        it('installs as expected', async () => {
+          expect.assertions(14);
+          const evalResults = (err, argv, output) => {
+            expect(err).toBeNull();
+
+            const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
+              encoding: 'utf-8',
+            });
+            expect(actualConfig).toEqual(expectedConfig);
+          };
+          await testE2E(
+            pythonVersion,
+            pythonPath,
+            installAgent,
+            initAgent,
+            evalResults,
+            checkCurrentConfig,
+            pipVersion
+          );
+        });
+      });
+
+      describe('above version 22.2.0', () => {
+        const pythonVersion = (cmdStruct: CommandStruct) => {
+          expect(cmdStruct.program).toEqual('python');
+          expect(cmdStruct.args).toEqual(['--version']);
+          return Promise.resolve({ stdout: 'Python 3.10.7', stderr: '' });
+        };
+
+        const pipVersion = (cmdStruct: CommandStruct) => {
+          expect(cmdStruct.program).toEqual('pip');
+          expect(cmdStruct.args).toEqual(['--version']);
+          return Promise.resolve({
+            stdout:
+              'pip 22.2.2 from /home/user/.pyenv/versions/3.10.7/lib/python3.7/site-packages/pip (python 3.10)',
+            stderr: '',
+          });
+        };
+
+        const checkCurrentConfig = (cmdStruct: CommandStruct) => {
+          expect(cmdStruct.program).toEqual('pip');
+          const args = cmdStruct.args;
+          expect(args).toEqual(['install', '-r', 'requirements.txt', '--dry-run']);
+          const ret = { stdout: '', stderr: '' };
+          return Promise.resolve(ret);
+        };
+
+        it('installs as expected', async () => {
+          expect.assertions(14);
+          const evalResults = (err, argv, output) => {
+            expect(err).toBeNull();
+
+            const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
+              encoding: 'utf-8',
+            });
+            expect(actualConfig).toEqual(expectedConfig);
+          };
+          await testE2E(
+            pythonVersion,
+            pythonPath,
+            installAgent,
+            initAgent,
+            evalResults,
+            checkCurrentConfig,
+            pipVersion
+          );
+        });
       });
     });
 
     describe('managed with poetry', () => {
       const projectFixture = path.join(fixtureDir, 'python', 'poetry');
+
+      const testE2E = async (
+        pythonVersion: (command: CommandStruct) => Promise<CommandReturn>,
+        pythonPath: (command: CommandStruct) => Promise<CommandReturn>,
+        installAgent: (command: CommandStruct) => Promise<CommandReturn>,
+        initAgent: (command: CommandStruct) => Promise<CommandReturn>,
+        evalResults: (err: Error | undefined, argv: any, output: string) => void,
+        checkCurrentConfig: (command: CommandStruct) => Promise<CommandReturn>
+      ) => {
+        let callIdx = 0;
+        sinon
+          .stub(commandRunner, 'run')
+          .onCall(callIdx++)
+          .callsFake(pythonVersion)
+          .onCall(callIdx++)
+          .callsFake(pythonPath)
+          .onCall(callIdx++)
+          .callsFake(checkCurrentConfig)
+          .onCall(callIdx++)
+          .callsFake(installAgent)
+          .onCall(callIdx++)
+          .callsFake(initAgent);
+
+        return invokeCommand(projectDir, evalResults);
+      };
+
+      const pythonVersion = (cmdStruct: CommandStruct) => {
+        expect(cmdStruct.program).toEqual('python');
+        expect(cmdStruct.args).toEqual(['--version']);
+        return Promise.resolve({ stdout: 'Python 3.7.0', stderr: '' });
+      };
 
       beforeEach(() => {
         fse.copySync(projectFixture, projectDir);

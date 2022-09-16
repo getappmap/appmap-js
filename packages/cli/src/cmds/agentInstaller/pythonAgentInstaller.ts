@@ -3,13 +3,14 @@
 import os from 'os';
 import { join } from 'path';
 import AgentInstaller from './agentInstaller';
-import CommandStruct from './commandStruct';
+import CommandStruct, { CommandOutput } from './commandStruct';
 import { exists } from '../../utils';
 import chalk from 'chalk';
 import { run } from './commandRunner';
 import { getOutput } from './commandUtil';
 import EncodedFile from '../../encodedFile';
 import { UserConfigError } from '../errors';
+import semver from 'semver';
 
 const REGEX_PKG_DEPENDENCY = /^\s*appmap\s*[=>~]+=.*$/m;
 // include .dev0 so pip will allow prereleases
@@ -113,7 +114,27 @@ export class PipInstaller extends PythonInstaller {
   }
 
   async checkCurrentConfig(): Promise<void> {
-    const cmd = new CommandStruct('pip', ['install', '-r', this.buildFile, '--dry-run'], this.path);
+    let commandArgs = ['install', '-r', this.buildFile];
+    let supportsDryRun: boolean;
+
+    try {
+      const pipVersionOutput = await getOutput('pip', ['--version'], this.path);
+      const pipVersion = semver.coerce(pipVersionOutput.output);
+
+      if (!pipVersion) {
+        throw new UserConfigError('Could not detect pip version');
+      }
+
+      supportsDryRun = semver.satisfies(pipVersion, '>= 22.2.0');
+    } catch (err) {
+      throw new UserConfigError(err as string);
+    }
+
+    if (supportsDryRun) {
+      commandArgs.push('--dry-run');
+    }
+
+    const cmd = new CommandStruct('pip', commandArgs, this.path);
 
     try {
       await run(cmd);
