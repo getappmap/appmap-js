@@ -54,6 +54,53 @@ class FunctionStats {
     };
   }
 
+  toComparableState() {
+    const trigram = (/** @type {Trigram} */ t) =>
+      [t.callerId, t.codeObjectId, t.calleeId].join(' ->\n');
+
+    const statusCodes = (eventMatches) =>
+      eventMatches
+        .map((e) => e.event.httpServerResponse)
+        .filter((res) => res)
+        .map((res) => res.status || res.status_code);
+
+    const exceptions = (eventMatches) =>
+      eventMatches
+        .map((e) => e.event)
+        .filter((e) => e.isFunction)
+        .filter((e) => e.exceptions)
+        .map((e) => e.exceptions.map((exception) => exception.class))
+        .flat();
+
+    const functionParams = (eventMatches) =>
+      eventMatches
+        .map((e) => e.event)
+        .filter((e) => e.isFunction)
+        .map((e) => e.parameters.map((param) => param.name))
+        .flat();
+
+    const messageParams = (eventMatches) =>
+      eventMatches
+        .map((e) => e.event)
+        .filter((e) => e.message)
+        .map((e) => e.message.map((param) => param.name))
+        .flat();
+
+    const refs = (fn) => [...new Set(fn(this.eventMatches))].sort();
+
+    const parameters = [functionParams, messageParams].map(refs).flat();
+
+    return {
+      returnValues: this.returnValues,
+      parameters,
+      exceptions: refs(exceptions),
+      statusCodes: refs(statusCodes),
+      packageTrigrams: this.packageTrigrams.map(trigram),
+      classTrigrams: this.classTrigrams.map(trigram),
+      functionTrigrams: this.functionTrigrams.map(trigram),
+    };
+  }
+
   get appMapNames() {
     return [...new Set(this.eventMatches.map((e) => e.appmap))].sort();
   }

@@ -103,4 +103,5 @@ export interface FunctionStats {
   packageTrigrams: Trigram[];
   classTrigrams: Trigram[];
   functionTrigrams: Trigram[];
+  toComparableState: () => object;
 }
