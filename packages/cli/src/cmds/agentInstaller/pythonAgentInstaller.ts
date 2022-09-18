@@ -1,16 +1,16 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
+import chalk from 'chalk';
 import os from 'os';
 import { join } from 'path';
-import AgentInstaller from './agentInstaller';
-import CommandStruct, { CommandOutput } from './commandStruct';
-import { exists } from '../../utils';
-import chalk from 'chalk';
-import { run } from './commandRunner';
-import { getOutput } from './commandUtil';
-import EncodedFile from '../../encodedFile';
-import { UserConfigError } from '../errors';
 import semver from 'semver';
+import EncodedFile from '../../encodedFile';
+import { exists } from '../../utils';
+import { UserConfigError } from '../errors';
+import AgentInstaller from './agentInstaller';
+import { run } from './commandRunner';
+import CommandStruct from './commandStruct';
+import { getOutput } from './commandUtil';
 
 const REGEX_PKG_DEPENDENCY = /^\s*appmap\s*[=>~]+=.*$/m;
 // include .dev0 so pip will allow prereleases
@@ -56,7 +56,7 @@ export class PoetryInstaller extends PythonInstaller {
   }
 
   async available(): Promise<boolean> {
-    return await exists(this.buildFilePath);
+    return exists(this.buildFilePath);
   }
 
   async initCommand(): Promise<CommandStruct> {
@@ -96,6 +96,56 @@ export class PoetryInstaller extends PythonInstaller {
   }
 }
 
+export class PipenvInstaller extends PythonInstaller {
+  constructor(path: string) {
+    super('pipenv', path);
+  }
+
+  get buildFile(): string {
+    return 'Pipfile.lock';
+  }
+
+  get buildFilePath(): string {
+    return join(this.path, this.buildFile);
+  }
+
+  async available(): Promise<boolean> {
+    const ret = await exists(this.buildFilePath);
+    return ret;
+  }
+
+  async initCommand(): Promise<CommandStruct> {
+    return new CommandStruct('pipenv', ['run', 'appmap-agent-init'], this.path);
+  }
+
+  async checkCurrentConfig(): Promise<void> {
+    const cmd = new CommandStruct('pipenv', ['install', '--dev'], this.path);
+
+    try {
+      await run(cmd);
+    } catch (err) {
+      throw new UserConfigError(err as string);
+    }
+  }
+
+  async installAgent(): Promise<void> {
+    const cmd = new CommandStruct('pipenv', ['install', '--dev', '--pre', 'appmap'], this.path);
+
+    await run(cmd);
+  }
+
+  async verifyCommand() {
+    return undefined;
+  }
+
+  async validateCommand() {
+    return undefined;
+  }
+
+  async validateAgentCommand() {
+    return undefined;
+  }
+}
 export class PipInstaller extends PythonInstaller {
   constructor(path: string) {
     super('pip', path);
@@ -110,7 +160,7 @@ export class PipInstaller extends PythonInstaller {
   }
 
   async available(): Promise<boolean> {
-    return await exists(this.buildFilePath);
+    return exists(this.buildFilePath);
   }
 
   async checkCurrentConfig(): Promise<void> {
