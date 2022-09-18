@@ -77,6 +77,7 @@
     "minimatch": "^3.0.4",
     "octokat": "^0.10.0",
     "openapi-diff": "^0.23.5",
+    "ora": "~5",
     "pretty-format": "^27.4.6",
     "read-pkg-up": "^7.0.1",
     "supports-hyperlinks": "^2.2.0",
