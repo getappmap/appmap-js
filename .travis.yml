@@ -1,7 +1,7 @@
 language: node_js
 os: linux
 dist: focal
-node_js: [14, 18]
+node_js: [14, 16, 18]
 
 cache: false
 
