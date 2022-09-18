@@ -78,9 +78,7 @@ Please monitor your email for updates. Thank you for using AppMap!`,
     let eventName: string;
     let error: string | undefined = undefined;
     if (response) {
-      eventName = `open-ticket:${
-        he.response?.status === 429 ? 'rate-limit' : 'error'
-      }`;
+      eventName = `open-ticket:${he.response?.status === 429 ? 'rate-limit' : 'error'}`;
       error = response.toString();
     } else {
       eventName = 'open-ticket:no-response';

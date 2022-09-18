@@ -1,13 +1,8 @@
 import UI from '../../userInteraction';
 import RecordContext from '../recordContext';
 
-export default async function configureHostAndPort({
-  configuration,
-}: RecordContext) {
-  const defaultHostname = configuration.setting(
-    'remote_recording.host',
-    'localhost'
-  );
+export default async function configureHostAndPort({ configuration }: RecordContext) {
+  const defaultHostname = configuration.setting('remote_recording.host', 'localhost');
   const { hostname } = await UI.prompt({
     type: 'input',
     name: 'hostname',

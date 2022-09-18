@@ -18,14 +18,8 @@ export class ProcessLog {
     });
   }
 
-  public static recordExit(
-    program: string,
-    code: number | null,
-    signal: NodeJS.Signals | null
-  ) {
-    this.buffer.concat(
-      `\n\n'${program}' exited with code ${code}, signal ${signal}\n\n`
-    );
+  public static recordExit(program: string, code: number | null, signal: NodeJS.Signals | null) {
+    this.buffer.concat(`\n\n'${program}' exited with code ${code}, signal ${signal}\n\n`);
   }
 
   // Return the current buffer and clear it for future use
@@ -82,9 +76,7 @@ export async function run(command: CommandStruct): Promise<CommandReturn> {
         [
           `Running command: \`${chalk.yellow(command.toString())}\``,
           `cwd: ${chalk.yellow(path.resolve(command.path as string))}`,
-          `environment: ${chalk.yellow(
-            JSON.stringify(command.environment, undefined, 2)
-          )}`,
+          `environment: ${chalk.yellow(JSON.stringify(command.environment, undefined, 2))}`,
         ].join('\n')
       );
 
@@ -129,9 +121,7 @@ export async function run(command: CommandStruct): Promise<CommandReturn> {
         });
       }
 
-      return reject(
-        new ChildProcessError(command.toString(), output.all, code)
-      );
+      return reject(new ChildProcessError(command.toString(), output.all, code));
     });
   });
 }
@@ -140,8 +130,8 @@ export function runSync(command: CommandStruct) {
   const ret = execSync(command.toString(), {
     env: command.environment,
     cwd: command.path as string,
-    stdio: 'pipe'
-  })
-  
+    stdio: 'pipe',
+  });
+
   return ret.toString();
 }

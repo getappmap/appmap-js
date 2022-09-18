@@ -1,25 +1,11 @@
 <template>
   <div class="details-panel-class">
-    <v-details-panel-header
-      object-type="Class"
-      :object="object"
-      :title="object.name"
-    >
+    <v-details-panel-header object-type="Class" :object="object" :title="object.name">
     </v-details-panel-header>
     <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
-    <v-details-panel-list
-      title="Functions"
-      :items="object.functions"
-      nameKey="name"
-    />
-    <v-details-panel-list
-      title="Inbound connections"
-      :items="object.inboundConnections"
-    />
-    <v-details-panel-list
-      title="Outbound connections"
-      :items="outboundConnections"
-    />
+    <v-details-panel-list title="Functions" :items="object.functions" nameKey="name" />
+    <v-details-panel-list title="Inbound connections" :items="object.inboundConnections" />
+    <v-details-panel-list title="Outbound connections" :items="outboundConnections" />
     <v-details-panel-list title="Queries" :items="queries" />
   </div>
 </template>
@@ -54,9 +40,7 @@ export default {
     outboundConnections() {
       // Queries will appear in outbound connections, but we have a separate section for queries so
       // filter them out of this list
-      return this.object.outboundConnections.filter(
-        (obj) => obj.type !== CodeObjectType.QUERY
-      );
+      return this.object.outboundConnections.filter((obj) => obj.type !== CodeObjectType.QUERY);
     },
 
     queries() {

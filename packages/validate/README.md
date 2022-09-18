@@ -34,25 +34,21 @@ validate(
 
 ## Design Decisions
 
-- *Every object is extensible*
-  Appmap producers are free to include additional properties.
-  This can be useful to experiment with novel extensions which are not yet part of the spec.
-  Also it can be useful to include additional data for debugging purpose.
-- *Every optional property is nullable*
-  When a property is is not required, appmap producers have two options.
-  Either they do not include the property in the object.
-  Or they set its value to `null` which is easier/faster to do when using literal object notation.
-  For instance, in js:
+- _Every object is extensible_ Appmap producers are free to include additional properties. This can
+  be useful to experiment with novel extensions which are not yet part of the spec. Also it can be
+  useful to include additional data for debugging purpose.
+- _Every optional property is nullable_ When a property is is not required, appmap producers have
+  two options. Either they do not include the property in the object. Or they set its value to
+  `null` which is easier/faster to do when using literal object notation. For instance, in js:
   ```js
   // Missing optional property:
-  ({
-    required: "foo",
-    ... test ? {optional: "bar"} : {}
-  })
+  {
+    required: 'foo',
+    ...(test ? { optional: 'bar' } : {}),
+  };
   // null optional property:
-  ({
-    required: "foo",
-    optional: test ? "bar" : null
-  })
+  {
+    required: 'foo',
+    optional: test ? 'bar' : null,
+  };
   ```
-

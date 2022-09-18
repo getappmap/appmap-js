@@ -1,21 +1,10 @@
 <template>
   <div>
-    <v-details-panel-header
-      object-type="Function"
-      :object="object"
-      :title="object.name"
-    >
+    <v-details-panel-header object-type="Function" :object="object" :title="object.name">
     </v-details-panel-header>
     <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
-    <v-details-panel-list
-      title="Events"
-      :items="object.events"
-      :event-quickview="true"
-    />
-    <v-details-panel-list
-      title="Inbound Calls"
-      :items="object.inboundConnections"
-    />
+    <v-details-panel-list title="Events" :items="object.events" :event-quickview="true" />
+    <v-details-panel-list title="Inbound Calls" :items="object.inboundConnections" />
     <v-details-panel-list title="Outbound Calls" :items="outboundCalls" />
     <v-details-panel-list title="Queries" :items="queryEvents" />
   </div>
@@ -61,9 +50,7 @@ export default {
     },
 
     outboundCalls() {
-      return this.object.outboundConnections.filter(
-        (obj) => obj.type !== CodeObjectType.QUERY
-      );
+      return this.object.outboundConnections.filter((obj) => obj.type !== CodeObjectType.QUERY);
     },
 
     queryEvents() {

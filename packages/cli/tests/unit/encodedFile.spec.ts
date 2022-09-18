@@ -1,21 +1,19 @@
 import fs from 'fs';
-import { join } from "path";
+import { join } from 'path';
 import tmp from 'tmp';
 
 import EncodedFile from '../../src/encodedFile';
-
 
 tmp.setGracefulCleanup();
 describe('EncodedFile', () => {
   let tmpDir;
   let fixtureDir;
   beforeEach(() => {
-    tmpDir = tmp.dirSync({} as any).name
+    tmpDir = tmp.dirSync({} as any).name;
     fixtureDir = join(__dirname, 'fixtures', 'encodedFile');
   });
 
   const verifyUpdate = (prefix, eol) => {
-
     const inputPath = join(fixtureDir, `${prefix}.txt`);
     const actualPath = join(tmpDir, `${prefix}.actual.txt`);
     const ef = new EncodedFile(inputPath);
@@ -26,7 +24,7 @@ describe('EncodedFile', () => {
     const expected = fs.readFileSync(expectedPath);
     const actual = fs.readFileSync(actualPath);
     expect(actual).toEqual(expected);
-  };  
+  };
 
   [
     ['windows', '\r\n'],
@@ -55,7 +53,7 @@ describe('EncodedFile', () => {
     const str = ef.toString();
     expect(str[0]).toEqual('#');
   });
-  
+
   it('writes a 7-bit ASCII file', () => {
     verifyUpdate('ascii', '\n');
   });
@@ -72,4 +70,3 @@ describe('EncodedFile', () => {
     expect(str).toEqual('');
   });
 });
-

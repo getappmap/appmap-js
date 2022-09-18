@@ -4,9 +4,7 @@ import guessTestCommands from '../action/guessTestCommands';
 import TestCaseRecording from '../testCaseRecording';
 import RecordContext from '../recordContext';
 
-export default async function obtainTestCommands({
-  configuration,
-}: RecordContext): Promise<void> {
+export default async function obtainTestCommands({ configuration }: RecordContext): Promise<void> {
   UI.progress(``);
   UI.progress(
     `In order to record test cases, you need to provide a command that I can use to run the tests. ` +
@@ -24,9 +22,7 @@ export default async function obtainTestCommands({
     UI.progress(TestCommand.toString(testCommand));
     UI.progress(``);
     if (await UI.confirm('Use this suggested test command?')) {
-      configuration.setConfigOption('test_recording.test_commands', [
-        testCommand,
-      ]);
+      configuration.setConfigOption('test_recording.test_commands', [testCommand]);
       await configuration.write();
 
       UI.progress(``);

@@ -11,14 +11,11 @@ const verifyJSON = (obj, expected) => {
 describe('Event', () => {
   describe('with large scenario', () => {
     const appMap = buildAppMap(scenario).normalize().build();
-    const getTasksEvent = appMap.events.find(
-      (e) => e.isCall() && e.methodId === 'getTasks'
-    );
+    const getTasksEvent = appMap.events.find((e) => e.isCall() && e.methodId === 'getTasks');
 
     it('toJSON', () => {
       verifyJSON(getTasksEvent, {
-        defined_class:
-          'org.apache.zookeeper.book.recovery.RecoveredAssignments',
+        defined_class: 'org.apache.zookeeper.book.recovery.RecoveredAssignments',
         event: 'call',
         id: 567,
         lineno: 97,
@@ -27,8 +24,7 @@ describe('Event', () => {
         receiver: {
           class: 'org.apache.zookeeper.book.recovery.RecoveredAssignments',
           object_id: 1060809318,
-          value:
-            'org.apache.zookeeper.book.recovery.RecoveredAssignments@3f3aaa66',
+          value: 'org.apache.zookeeper.book.recovery.RecoveredAssignments@3f3aaa66',
         },
         static: false,
         thread_id: 115,
@@ -53,9 +49,7 @@ describe('Event', () => {
     });
 
     test('ancestors', () => {
-      const recoverEvent = appMap.events.find(
-        (e) => e.isCall() && e.methodId === 'recover'
-      );
+      const recoverEvent = appMap.events.find((e) => e.isCall() && e.methodId === 'recover');
       const ancestors = recoverEvent.ancestors();
 
       expect(ancestors.length).toEqual(1);
@@ -64,9 +58,7 @@ describe('Event', () => {
     });
 
     test('descendants', () => {
-      const recoverEvent = appMap.events.find(
-        (e) => e.isCall() && e.methodId === 'recover'
-      );
+      const recoverEvent = appMap.events.find((e) => e.isCall() && e.methodId === 'recover');
       const descendants = recoverEvent.descendants();
 
       expect(descendants.length).toEqual(1);
@@ -80,9 +72,7 @@ describe('Event', () => {
 
     describe('SQL query', () => {
       const query = 'SELECT COUNT(*) FROM "spree_stores"';
-      const event = appMap.events.find(
-        (e) => e.sql_query && e.sql_query.sql === query
-      );
+      const event = appMap.events.find((e) => e.sql_query && e.sql_query.sql === query);
       it('sqlQuery', () => {
         expect(event.sqlQuery).toEqual(query);
       });
@@ -132,8 +122,7 @@ describe('Event', () => {
 
     describe('HTTP server request', () => {
       const event = appMap.events.find(
-        (e) =>
-          e.http_server_request && e.http_server_request.path_info === '/admin'
+        (e) => e.http_server_request && e.http_server_request.path_info === '/admin'
       );
 
       it('route', () => {

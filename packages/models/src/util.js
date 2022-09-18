@@ -1,8 +1,7 @@
 import sha256 from 'crypto-js/sha256';
 import analyze from './sql/analyze';
 
-export const hasProp = (obj, prop) =>
-  Object.prototype.hasOwnProperty.call(obj, prop);
+export const hasProp = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop);
 
 export function isFalsey(valueObj) {
   if (!valueObj) {
@@ -144,9 +143,7 @@ export function getSqlLabel(event) {
     return null;
   }
 
-  return getSqlLabelFromString(
-    event.sql_query.normalized_sql || event.sql_query.sql || ''
-  );
+  return getSqlLabelFromString(event.sql_query.normalized_sql || event.sql_query.sql || '');
 }
 
 export function getLabel(event) {
@@ -186,12 +183,7 @@ const REPOSITORY_RESOLVERS = {
   },
 };
 
-export function getRepositoryUrl(
-  url,
-  path,
-  commit = 'master',
-  lineNumber = null
-) {
+export function getRepositoryUrl(url, path, commit = 'master', lineNumber = null) {
   if (url && path) {
     const d = { url, path, lineNumber, commit };
     const resolvers = Object.values(REPOSITORY_RESOLVERS);
@@ -244,11 +236,7 @@ const splitCamelCase = (str) => {
         matched = true;
         break;
       }
-    } else if (
-      charCase === LOWER &&
-      firstCase === UPPER &&
-      secondCase === UPPER
-    ) {
+    } else if (charCase === LOWER && firstCase === UPPER && secondCase === UPPER) {
       const token = str.slice(0, i - 1);
       ret.push(token);
       ret.push(...splitCamelCase(str.slice(i - 1)));
@@ -363,9 +351,7 @@ export function identityHashEvent(e) {
   const { sqlQuery } = e;
   if (sqlQuery) {
     const queryOps = analyze(sqlQuery);
-    const content = ['sql', queryOps.action, ...queryOps.tables]
-      .filter(Boolean)
-      .join('');
+    const content = ['sql', queryOps.action, ...queryOps.tables].filter(Boolean).join('');
     return sha256(content).toString();
   }
 
@@ -432,8 +418,7 @@ export function transformToJSON(dataKeys, obj) {
   const empty = (value) =>
     value === undefined ||
     value === null ||
-    (typeof value === 'object' &&
-      [emptyLength, emptySize].find((fn) => fn(value)));
+    (typeof value === 'object' && [emptyLength, emptySize].find((fn) => fn(value)));
 
   return dataKeys.reduce((memo, key) => {
     const value = obj[key];

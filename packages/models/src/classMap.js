@@ -43,9 +43,7 @@ export default class ClassMap {
 
   search(query) {
     const queryLower = query.toLowerCase();
-    return this.codeObjects.filter(
-      (co) => co.id.toLowerCase().indexOf(queryLower) !== -1
-    );
+    return this.codeObjects.filter((co) => co.id.toLowerCase().indexOf(queryLower) !== -1);
   }
 
   codeObjectFromId(id) {
@@ -117,11 +115,7 @@ export default class ClassMap {
               if (!parent) {
                 this.roots.push(newCodeObject);
               }
-              indexCodeObject(
-                newCodeObject,
-                this.codeObjects,
-                this.codeObjectsById
-              );
+              indexCodeObject(newCodeObject, this.codeObjects, this.codeObjectsById);
             }
 
             return newCodeObject;
@@ -147,9 +141,7 @@ export default class ClassMap {
         ancestors.forEach((obj) => validCodeObjects.add(obj));
       });
 
-    this.codeObjects = this.codeObjects.filter((obj) =>
-      validCodeObjects.has(obj)
-    );
+    this.codeObjects = this.codeObjects.filter((obj) => validCodeObjects.has(obj));
 
     function filterCodeObjects(objectsList, allObjects) {
       return objectsList.filter((obj) => {

@@ -2,10 +2,7 @@ import Event from '../../../src/event';
 import hashEvent from '../../../src/event/hash';
 
 function checkSimplification(event, simplified) {
-  return () =>
-    expect(hashEvent(new Event(event))).toEqual(
-      hashEvent(new Event(simplified))
-    );
+  return () => expect(hashEvent(new Event(event))).toEqual(hashEvent(new Event(simplified)));
 }
 
 describe('event/hash', () => {

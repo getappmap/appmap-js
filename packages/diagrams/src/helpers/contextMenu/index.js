@@ -64,9 +64,7 @@ function show(contextMenu, clickEvent) {
 
   // Remove ancestors of the container element, we don't need to iterate any
   // further than that.
-  const activeAreaIndex = clickEvent
-    .composedPath()
-    .findIndex((e) => e === contextMenu.activeArea);
+  const activeAreaIndex = clickEvent.composedPath().findIndex((e) => e === contextMenu.activeArea);
 
   if (activeAreaIndex === -1) {
     return;
@@ -86,21 +84,19 @@ function show(contextMenu, clickEvent) {
       item.element.removeEventListener('click', item.element.listener);
     }
 
-    item.element.listener = () =>
-      item.emit('execute', transformElement(item, match));
+    item.element.listener = () => item.emit('execute', transformElement(item, match));
     item.element.addEventListener('click', item.element.listener);
     item.element.style.display = '';
     item.emit('show');
     itemsDisplayed += 1;
   });
 
-  contextMenu.elements.emptyMessage.style.display =
-    itemsDisplayed > 0 ? 'none' : '';
+  contextMenu.elements.emptyMessage.style.display = itemsDisplayed > 0 ? 'none' : '';
 
   const { x, y } = contextMenu.parent.getBoundingClientRect();
-  contextMenu.elements.menu.style.transform = `translate(${
-    clickEvent.x - x
-  }px, ${clickEvent.y - y}px)`;
+  contextMenu.elements.menu.style.transform = `translate(${clickEvent.x - x}px, ${
+    clickEvent.y - y
+  }px)`;
   contextMenu.elements.dropdown.style.display = 'block';
   /* eslint-enable no-param-reassign */
 }

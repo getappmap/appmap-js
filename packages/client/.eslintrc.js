@@ -3,13 +3,7 @@
 const path = require('path');
 
 module.exports = {
-  plugins: [
-    '@typescript-eslint',
-    'eslint-comments',
-    'jest',
-    'promise',
-    'unicorn',
-  ],
+  plugins: ['@typescript-eslint', 'eslint-comments', 'jest', 'promise', 'unicorn'],
   extends: [
     'airbnb-base',
     'airbnb-typescript/base',

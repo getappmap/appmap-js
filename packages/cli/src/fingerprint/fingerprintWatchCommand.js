@@ -9,9 +9,7 @@ class FingerprintWatchCommand {
     this.directory = directory;
     this.print = true;
     this.numProcessed = 0;
-    this.pidfilePath =
-      process.env.APPMAP_WRITE_PIDFILE &&
-      path.join(this.directory, 'index.pid');
+    this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && path.join(this.directory, 'index.pid');
   }
 
   removePidfile() {
@@ -76,9 +74,7 @@ class FingerprintWatchCommand {
       process.on('exit', this.removePidfile.bind(this));
     }
     if (verbose()) {
-      console.warn(
-        `Watching appmaps in ${path.resolve(process.cwd(), this.directory)}`
-      );
+      console.warn(`Watching appmaps in ${path.resolve(process.cwd(), this.directory)}`);
     }
     resolve();
   }

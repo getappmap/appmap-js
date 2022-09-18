@@ -6,10 +6,7 @@ context('Investigate Findings (Empty)', () => {
   });
 
   it('displays a title', () => {
-    cy.get('[data-cy="title"]').should(
-      'contain.text',
-      'AppMap Runtime Analysis'
-    );
+    cy.get('[data-cy="title"]').should('contain.text', 'AppMap Runtime Analysis');
   });
 
   it('does not show different types of findings', () => {

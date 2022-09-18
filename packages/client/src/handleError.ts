@@ -8,10 +8,7 @@ type ErrorResponse = {
   error: Error;
 };
 
-async function errorMessage(
-  statusCode: number,
-  response: IncomingMessage
-): Promise<string> {
+async function errorMessage(statusCode: number, response: IncomingMessage): Promise<string> {
   let responseData: ErrorResponse | undefined;
   const contentType = response.headers['content-type'] || '';
   if (contentType.startsWith('application/json')) {
@@ -34,9 +31,7 @@ async function errorMessage(
   return [`HTTP ${statusCode}`, message].filter(Boolean).join(': ');
 }
 
-export default function handleError(
-  response: IncomingMessage
-): Promise<IncomingMessage> {
+export default function handleError(response: IncomingMessage): Promise<IncomingMessage> {
   return new Promise((resolve, reject) => {
     if (!response.statusCode) {
       reject(new Error('No status code was provided by the server'));

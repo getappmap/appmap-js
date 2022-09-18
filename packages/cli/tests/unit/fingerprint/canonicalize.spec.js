@@ -1,10 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 const { buildAppMap } = require('@appland/models');
 const { readFileSync, writeFileSync } = require('fs-extra');
-const {
-  algorithms,
-  canonicalize,
-} = require('../../../src/fingerprint/canonicalize');
+const { algorithms, canonicalize } = require('../../../src/fingerprint/canonicalize');
 const apiKeyScenario = require('../fixtures/ruby/revoke_api_key.appmap.json');
 
 const apiKeyAppMap = buildAppMap().source(apiKeyScenario).normalize().build();
@@ -32,9 +29,7 @@ describe('Canonicalize', () => {
       }
       expect(
         JSON.parse(
-          readFileSync(
-            `tests/unit/fixtures/ruby/canonicalize/revoke_api_key.${algorithmName}.json`
-          )
+          readFileSync(`tests/unit/fixtures/ruby/canonicalize/revoke_api_key.${algorithmName}.json`)
         )
       ).toEqual(normalForm);
     });

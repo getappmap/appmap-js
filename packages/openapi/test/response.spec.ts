@@ -5,9 +5,7 @@ import { Event } from '@appland/models';
 import { rpcRequestForEvent } from '../src/rpcRequest';
 
 const fixtureData = load(
-  readFileSync(
-    'test/data/http_server_response_with_object_list.yaml'
-  ).toString()
+  readFileSync('test/data/http_server_response_with_object_list.yaml').toString()
 ) as any;
 
 describe('openapi.response', () => {

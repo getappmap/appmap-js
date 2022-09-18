@@ -6,16 +6,10 @@ const { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } = require('./constants');
 class Matcher {
   depth = 0;
 
-  constructor(
-    public matchSpec: CodeObjectMatchSpec,
-    public classMap: CodeObject[]
-  ) {}
+  constructor(public matchSpec: CodeObjectMatchSpec, public classMap: CodeObject[]) {}
 
   matchClassMap(): CodeObject[] {
-    const findMatchingCodeObject = (
-      item: CodeObject,
-      matches: CodeObject[]
-    ): void => {
+    const findMatchingCodeObject = (item: CodeObject, matches: CodeObject[]): void => {
       const matchResult = this.matchCodeObject(item);
       switch (matchResult) {
         case MATCH_ABORT:
@@ -65,9 +59,7 @@ class Matcher {
     if (!token(codeObject)) {
       if (verbose()) {
         console.warn(
-          `${JSON.stringify(token)} at depth ${this.depth} does not match '${
-            codeObject.name
-          }'`
+          `${JSON.stringify(token)} at depth ${this.depth} does not match '${codeObject.name}'`
         );
       }
       return MATCH_ABORT;

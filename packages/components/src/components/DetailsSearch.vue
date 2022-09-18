@@ -35,10 +35,7 @@
               ? item.object.prettyName
               : item.object.name || item.object
           }}
-          <span
-            v-if="item.childrenCount > 1"
-            class="details-search__block-item-count"
-          >
+          <span v-if="item.childrenCount > 1" class="details-search__block-item-count">
             {{ item.childrenCount }}
           </span>
         </li>
@@ -148,8 +145,7 @@ export default {
           items.labels.data.push({
             object: label,
             childrenCount:
-              labelData.function.length +
-              (labelData.event ? labelData.event.length : 0),
+              labelData.function.length + (labelData.event ? labelData.event.length : 0),
           });
         }
       });
@@ -160,14 +156,8 @@ export default {
           return;
         }
         item.data = item.data.sort((a, b) => {
-          const aStr =
-            a.object instanceof CodeObject
-              ? a.object.prettyName
-              : String(a.object);
-          const bStr =
-            b.object instanceof CodeObject
-              ? b.object.prettyName
-              : String(b.object);
+          const aStr = a.object instanceof CodeObject ? a.object.prettyName : String(a.object);
+          const bStr = b.object instanceof CodeObject ? b.object.prettyName : String(b.object);
           return aStr.localeCompare(bStr);
         });
       });
@@ -201,8 +191,7 @@ export default {
       }
 
       if (obj instanceof CodeObject) {
-        const filterString =
-          obj.type === CodeObjectType.QUERY ? obj.name : obj.prettyName;
+        const filterString = obj.type === CodeObjectType.QUERY ? obj.name : obj.prettyName;
         return this.filterRegex.test(filterString);
       }
       if (typeof obj === 'string') {

@@ -3,10 +3,7 @@ const { normalizeSQL } = require('@appland/models');
 /** @typedef {import('./types').CodeObject} CodeObject */
 /** @typedef {import('./types').Event} Event */
 
-const normalizeId = (
-  /** @type {CodeObject} */ co,
-  /** @type {Event} */ evt
-) => {
+const normalizeId = (/** @type {CodeObject} */ co, /** @type {Event} */ evt) => {
   if (co && co.type === 'query') {
     return normalizeSQL(evt.sqlQuery, evt.sql.database_type);
   }

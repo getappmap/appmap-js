@@ -42,11 +42,7 @@ const mappingExamples = (mappings: any) => {
 describe('openapi', () => {
   it('works as expected', async () => {
     const appmapData = JSON.parse(
-      (
-        await readFile(
-          'test/data/Users_signup_invalid_signup_information.appmap.json'
-        )
-      ).toString()
+      (await readFile('test/data/Users_signup_invalid_signup_information.appmap.json')).toString()
     );
 
     const model = new Model();

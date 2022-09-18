@@ -22,26 +22,16 @@ abstract class JavaScriptInstaller extends AgentInstaller {
     const version = await getOutput('node', ['--version'], this.path);
 
     return {
-      'Node version': version.ok
-        ? version.output.split(/\s/)[1]
-        : chalk.red(version.output),
+      'Node version': version.ok ? version.output.split(/\s/)[1] : chalk.red(version.output),
     };
   }
 
   async initCommand(): Promise<CommandStruct> {
-    return new CommandStruct(
-      'npx',
-      ['appmap-agent-js', 'init', this.path],
-      this.path
-    );
+    return new CommandStruct('npx', ['appmap-agent-js', 'init', this.path], this.path);
   }
 
   async validateAgentCommand(): Promise<CommandStruct> {
-    return new CommandStruct(
-      'npx',
-      ['appmap-agent-js', 'status', this.path],
-      this.path
-    );
+    return new CommandStruct('npx', ['appmap-agent-js', 'status', this.path], this.path);
   }
 }
 
@@ -75,11 +65,7 @@ export class NpmInstaller extends JavaScriptInstaller {
   async installAgent(): Promise<void> {
     const cmd = new CommandStruct(
       'npm',
-      [
-        'install',
-        '--saveDev',
-        process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE,
-      ],
+      ['install', '--saveDev', process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE],
       this.path
     );
 
@@ -109,11 +95,7 @@ export class YarnInstaller extends JavaScriptInstaller {
   }
 
   async checkCurrentConfig(): Promise<void> {
-    const cmd = new CommandStruct(
-      'yarn',
-      ['install', '--immutable'],
-      this.path
-    );
+    const cmd = new CommandStruct('yarn', ['install', '--immutable'], this.path);
 
     try {
       await run(cmd);

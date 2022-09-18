@@ -6,10 +6,7 @@ context('Investigate Findings (10 findings)', () => {
   });
 
   it('displays a title', () => {
-    cy.get('[data-cy="title"]').should(
-      'contain.text',
-      'AppMap Runtime Analysis'
-    );
+    cy.get('[data-cy="title"]').should('contain.text', 'AppMap Runtime Analysis');
   });
 
   it('shows the correct number of each type of finding', () => {

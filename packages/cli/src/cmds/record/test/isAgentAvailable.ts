@@ -3,9 +3,7 @@ import { RemoteRecordingError } from '../makeRequest';
 import RecordContext from '../recordContext';
 import RemoteRecording from '../remoteRecording';
 
-export default async function isAgentAvailable(
-  recordContext: RecordContext
-): Promise<boolean> {
+export default async function isAgentAvailable(recordContext: RecordContext): Promise<boolean> {
   const { configuration } = recordContext;
   const ro = configuration.requestOptions();
   const location = configuration.locationString();

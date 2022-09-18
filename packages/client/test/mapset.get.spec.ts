@@ -20,19 +20,11 @@ const AppMapListItems = [
   },
 ];
 
-function mockAppMaps(
-  appId = test.AppId,
-  mapset = test.MapsetId
-): nock.Interceptor {
-  return nock('http://localhost:3000').get(
-    `/api/mapsets?app=${appId}&mapset=${mapset}`
-  );
+function mockAppMaps(appId = test.AppId, mapset = test.MapsetId): nock.Interceptor {
+  return nock('http://localhost:3000').get(`/api/mapsets?app=${appId}&mapset=${mapset}`);
 }
 
-async function getAppMaps(
-  appId = test.AppId,
-  mapsetId = test.MapsetId
-): Promise<AppMapListItem[]> {
+async function getAppMaps(appId = test.AppId, mapsetId = test.MapsetId): Promise<AppMapListItem[]> {
   return new App(appId).mapset(mapsetId).listAppMaps();
 }
 

@@ -22,9 +22,7 @@ export const NextStepChoices = {
 // * The agent process is running, but the agent isn't reachable (e.g. security filter?).
 // * The host/port parameters are wrong.
 // * The host/port parameters are right, but the agent URL is different than the default.
-export default async function agentNotAvailable(
-  recordContext: RecordContext
-): Promise<State> {
+export default async function agentNotAvailable(recordContext: RecordContext): Promise<State> {
   if (!(await detectProcessCharacteristics(recordContext))) {
     if (
       (await continueWithRequestOptionConfiguration(recordContext)) ===

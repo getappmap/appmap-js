@@ -1,10 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import {
-  AppMap,
-  buildAppMap,
-  fullyQualifiedFunctionName,
-} from '@appland/models';
+import { AppMap, buildAppMap, fullyQualifiedFunctionName } from '@appland/models';
 
 Vue.use(Vuex);
 

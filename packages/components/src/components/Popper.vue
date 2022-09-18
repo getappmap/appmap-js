@@ -20,8 +20,7 @@ export default {
     placement: {
       type: String,
       required: true,
-      validator: (value) =>
-        ['left', 'right', 'top', 'bottom'].indexOf(value) !== -1,
+      validator: (value) => ['left', 'right', 'top', 'bottom'].indexOf(value) !== -1,
     },
     text: {
       type: String,
@@ -52,9 +51,7 @@ export default {
 
   computed: {
     isVisible() {
-      return (
-        (this.displayFlash && this.flashText) || (this.hover && this.textValue)
-      );
+      return (this.displayFlash && this.flashText) || (this.hover && this.textValue);
     },
     textValue() {
       return this.flashText || this.text;

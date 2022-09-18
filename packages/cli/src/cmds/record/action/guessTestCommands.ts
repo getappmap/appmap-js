@@ -33,9 +33,7 @@ const TestCommands: TestCommandGuess[] = [
   },
 ];
 
-export default async function guessTestCommands(): Promise<
-  TestCommand[] | undefined
-> {
+export default async function guessTestCommands(): Promise<TestCommand[] | undefined> {
   const pathExists = await Promise.all(
     TestCommands.map((guess) => guess.paths).map(async (paths) =>
       Promise.all(paths.map(async (path) => exists(path)))

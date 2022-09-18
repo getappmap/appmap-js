@@ -12,20 +12,7 @@ function hyperlink(filePath: string, link: string): string {
     return filePath;
   }
 
-  return [
-    OSC,
-    '8',
-    SEP,
-    SEP,
-    link,
-    BEL,
-    filePath,
-    OSC,
-    '8',
-    SEP,
-    SEP,
-    BEL,
-  ].join('');
+  return [OSC, '8', SEP, SEP, link, BEL, filePath, OSC, '8', SEP, SEP, BEL].join('');
 }
 
 export function abspath(file: string) {

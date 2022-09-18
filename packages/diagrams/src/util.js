@@ -47,10 +47,7 @@ export function lazyPanToElement(viewport, element, padding = 0) {
 
 export function nodeFullyVisible(container, node) {
   if (!node) return false;
-  return Geometry.inContainer(
-    container.getBoundingClientRect(),
-    node.getBoundingClientRect()
-  );
+  return Geometry.inContainer(container.getBoundingClientRect(), node.getBoundingClientRect());
 }
 
 export function getParentRelativeOffset(element, parent) {

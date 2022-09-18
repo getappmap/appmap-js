@@ -8,7 +8,7 @@ export default class EncodedFile {
   private bom1?: number;
 
   constructor(readonly path: fs.PathLike) {
-    const {buf, bom0, bom1, encoding} = EncodedFile.read(path);
+    const { buf, bom0, bom1, encoding } = EncodedFile.read(path);
     this.buf = buf;
     this.bom0 = bom0;
     this.bom1 = bom1;
@@ -41,10 +41,10 @@ export default class EncodedFile {
   }
 
   static read(path: fs.PathLike): {
-    buf: Buffer,
-    bom0: number | undefined,
-    bom1: number | undefined,
-    encoding: TranscodeEncoding | undefined
+    buf: Buffer;
+    bom0: number | undefined;
+    bom1: number | undefined;
+    encoding: TranscodeEncoding | undefined;
   } {
     let bom0, bom1: number | undefined;
     let encoding: TranscodeEncoding | undefined;
@@ -59,7 +59,7 @@ export default class EncodedFile {
     }
 
     bom0 = buf.readUInt8(0);
-    bom1= buf.readUInt8(1);
+    bom1 = buf.readUInt8(1);
     if (bom0 === 0xff && bom1 === 0xfe) {
       encoding = 'utf16le';
     } else if (bom0 < 0x80) {
@@ -67,17 +67,13 @@ export default class EncodedFile {
       // 7-bit ASCII character
       bom0 = bom1 = undefined;
     } else {
-      throw new Error(
-        `Unknown encoding for ${path}, ${bom0.toString(
-          16
-        )} ${bom1.toString(16)}`
-      );
+      throw new Error(`Unknown encoding for ${path}, ${bom0.toString(16)} ${bom1.toString(16)}`);
     }
     return {
       buf,
       bom0,
       bom1,
-      encoding
+      encoding,
     };
   }
 }

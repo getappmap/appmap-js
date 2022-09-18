@@ -26,8 +26,7 @@ export default class TestCaseRecording {
       []
     ) as TestCommand[];
 
-    if (testCommands.length === 0)
-      throw new Error(`No test commands are configured`);
+    if (testCommands.length === 0) throw new Error(`No test commands are configured`);
 
     if (verbose()) {
       const pathExists = await Promise.all(
@@ -78,9 +77,7 @@ export default class TestCaseRecording {
 
         function interrupt() {
           if (childProcess.pid) {
-            UI.progress(
-              `Stopping test command after ${maxTime} seconds: ${commandStr}`
-            );
+            UI.progress(`Stopping test command after ${maxTime} seconds: ${commandStr}`);
             kill(childProcess.pid, 'SIGTERM');
           }
         }
@@ -123,11 +120,7 @@ Test command failed with status code ${exitCode}: ${commandStr}`
 
     for (const cmd of TestCommands) {
       cmd.env ||= {};
-      UI.progress(
-        `Running test command: ${TestCaseRecording.envString(cmd.env)}${
-          cmd.command
-        }`
-      );
+      UI.progress(`Running test command: ${TestCaseRecording.envString(cmd.env)}${cmd.command}`);
       const args = cmd.command.split(' ');
       const env = Object.assign(process.env, cmd.env);
       const proc = spawn(args[0], args.slice(1), {
@@ -136,9 +129,7 @@ Test command failed with status code ${exitCode}: ${commandStr}`
         stdio: ['ignore'],
       });
       const { exitCode, output } = await waitForProcess(proc);
-      ctx.addResult(
-        new RecordProcessResult(env, cmd.command, exitCode, output)
-      );
+      ctx.addResult(new RecordProcessResult(env, cmd.command, exitCode, output));
     }
   }
 

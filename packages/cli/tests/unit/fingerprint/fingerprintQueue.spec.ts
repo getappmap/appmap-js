@@ -14,8 +14,6 @@ describe(FingerprintQueue, () => {
     await queue.process();
 
     expect((console.log as SinonStub).callCount).toBe(1);
-    expect((console.log as SinonStub).getCall(0).args[0]).toMatch(
-      /does not exist/
-    );
+    expect((console.log as SinonStub).getCall(0).args[0]).toMatch(/does not exist/);
   });
 });

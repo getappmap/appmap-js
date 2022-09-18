@@ -20,10 +20,7 @@ import * as isRecordingInProgress from '../../../src/cmds/record/test/isRecordin
 import { State } from '../../../src/cmds/record/types/state';
 import UI from '../../../src/cmds/userInteraction';
 
-function checkContext(
-  context: RecordContext,
-  props: Partial<RecordContext> = {}
-) {
+function checkContext(context: RecordContext, props: Partial<RecordContext> = {}) {
   expect(context).toMatchObject<Partial<RecordContext>>({
     appMapDir: '.',
     url: 'http://localhost:3000/',
@@ -59,23 +56,16 @@ describe('record remote', () => {
     });
 
     describe('agent process is not detected', () => {
-      beforeEach(() =>
-        sinon.stub(detectProcessCharacteristics, 'default').resolves(false)
-      );
+      beforeEach(() => sinon.stub(detectProcessCharacteristics, 'default').resolves(false));
 
       describe('user is sure that the host/port is correct', () => {
         beforeEach(() =>
           sinon
             .stub(continueWithRequestOptionConfiguration, 'default')
-            .resolves(
-              continueWithRequestOptionConfiguration.ConfigurationAction
-                .RequestOptions
-            )
+            .resolves(continueWithRequestOptionConfiguration.ConfigurationAction.RequestOptions)
         );
         it('prompts for extended options', async () => {
-          let next: State | string | undefined = await remote.default(
-            recordContext
-          );
+          let next: State | string | undefined = await remote.default(recordContext);
           expect(next).toEqual(agentNotAvailable.default);
 
           prompt.resolves({
@@ -93,15 +83,10 @@ describe('record remote', () => {
         beforeEach(() =>
           sinon
             .stub(continueWithRequestOptionConfiguration, 'default')
-            .resolves(
-              continueWithRequestOptionConfiguration.ConfigurationAction
-                .HostAndPort
-            )
+            .resolves(continueWithRequestOptionConfiguration.ConfigurationAction.HostAndPort)
         );
         it('re-prompts for host and port', async () => {
-          let next: State | string | undefined = await remote.default(
-            recordContext
-          );
+          let next: State | string | undefined = await remote.default(recordContext);
           expect(next).toEqual(agentNotAvailable.default);
           next = await next(recordContext);
           expect(next).toEqual(agentProcessNotRunning.default);
@@ -120,9 +105,7 @@ describe('record remote', () => {
     beforeEach(() => sinon.stub(isAgentAvailable, 'default').resolves(true));
 
     describe('agent is not recording', () => {
-      beforeEach(() =>
-        sinon.stub(isRecordingInProgress, 'default').resolves(false)
-      );
+      beforeEach(() => sinon.stub(isRecordingInProgress, 'default').resolves(false));
 
       it('is ready to record', async () => {
         const next = await remote.default(recordContext);
@@ -131,9 +114,7 @@ describe('record remote', () => {
       });
     });
     describe('agent is recording', () => {
-      beforeEach(() =>
-        sinon.stub(isRecordingInProgress, 'default').resolves(true)
-      );
+      beforeEach(() => sinon.stub(isRecordingInProgress, 'default').resolves(true));
 
       it('tries to handle the existing recording', async () => {
         const next = await remote.default(recordContext);
@@ -149,9 +130,7 @@ describe('record remote', () => {
 
           const appMapName = 'myAppMap';
           sinon.stub(nameAppMap, 'default').resolves(appMapName);
-          sinon
-            .stub(saveAppMap, 'default')
-            .resolves(`${nameAppMap}.appmap.json`);
+          sinon.stub(saveAppMap, 'default').resolves(`${nameAppMap}.appmap.json`);
         });
 
         const EXAMPLES = [
@@ -177,13 +156,9 @@ describe('record remote', () => {
 
         EXAMPLES.forEach((e) => {
           it(e.description, async () => {
-            sinon
-              .stub(RemoteRecording.prototype, 'stop')
-              .resolves(e.stopResult);
+            sinon.stub(RemoteRecording.prototype, 'stop').resolves(e.stopResult);
 
-            let next: State | string | undefined = await remote.default(
-              recordContext
-            );
+            let next: State | string | undefined = await remote.default(recordContext);
             next = await next(recordContext);
             expect(recordContext.appMapCount).toEqual(e.appMapCount);
             expect(recordContext.appMapEventCount).toEqual(e.appMapEventCount);

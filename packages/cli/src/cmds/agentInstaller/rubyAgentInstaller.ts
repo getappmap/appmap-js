@@ -58,10 +58,7 @@ export class BundleInstaller extends AgentInstaller {
 
       if (gemExists) {
         // Replace the existing gem declaration entirely
-        gemfile = gemfile.replace(
-          REGEX_GEM_DEPENDENCY,
-          `${os.EOL}${GEM_DEPENDENCY}`
-        );
+        gemfile = gemfile.replace(REGEX_GEM_DEPENDENCY, `${os.EOL}${GEM_DEPENDENCY}`);
       } else {
         // Insert a new gem declaration
         const chars = gemfile.split('');
@@ -78,19 +75,11 @@ export class BundleInstaller extends AgentInstaller {
   }
 
   async initCommand(): Promise<CommandStruct> {
-    return new CommandStruct(
-      'bundle',
-      ['exec', 'appmap-agent-init'],
-      this.path
-    );
+    return new CommandStruct('bundle', ['exec', 'appmap-agent-init'], this.path);
   }
 
   async validateAgentCommand(): Promise<CommandStruct> {
-    return new CommandStruct(
-      'bundle',
-      ['exec', 'appmap-agent-validate'],
-      this.path
-    );
+    return new CommandStruct('bundle', ['exec', 'appmap-agent-validate'], this.path);
   }
 
   async environment(): Promise<Record<string, string>> {
@@ -100,9 +89,7 @@ export class BundleInstaller extends AgentInstaller {
     const gemHome = await getOutput('gem', ['env', 'home'], this.path);
 
     return {
-      'Ruby version': version.ok
-        ? version.output.split(/\s/)[1]
-        : chalk.red(version.output),
+      'Ruby version': version.ok ? version.output.split(/\s/)[1] : chalk.red(version.output),
       'Gem home': gemHome.ok ? gemHome.output : chalk.red(gemHome.output),
     };
   }

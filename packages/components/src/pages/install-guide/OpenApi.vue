@@ -18,9 +18,9 @@
         </article>
         <article v-else-if="numHttpRequests > 0">
           <p>
-            AppMap has identified {{ numHttpRequests }} unique HTTP requests to
-            various routes in your web application. Using this data, we can
-            automatically generate OpenAPI definitions.
+            AppMap has identified {{ numHttpRequests }} unique HTTP requests to various routes in
+            your web application. Using this data, we can automatically generate OpenAPI
+            definitions.
           </p>
           <div class="center">
             <v-button
@@ -31,8 +31,7 @@
           </div>
         </article>
         <article v-else>
-          AppMap was unable to detect any HTTP request handlers in your
-          application.
+          AppMap was unable to detect any HTTP request handlers in your application.
         </article>
       </main>
       <v-navigation-buttons :first="first" :last="last" />

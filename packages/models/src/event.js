@@ -1,18 +1,11 @@
-import {
-  addHiddenProperty,
-  hasProp,
-  identityHashEvent,
-  transformToJSON,
-} from './util';
+import { addHiddenProperty, hasProp, identityHashEvent, transformToJSON } from './util';
 import hashEvent, { abstractSqlAstJSON } from './event/hash';
 
 // This class supercedes `CallTree` and `CallNode`. Events are stored in a flat
 // array and can also be traversed like a tree via `parent` and `children`.
 export default class Event {
   static contentType(...messages) {
-    const msg = messages.find(
-      (message) => (message?.headers || {})['Content-Type']
-    );
+    const msg = messages.find((message) => (message?.headers || {})['Content-Type']);
     if (!msg) {
       return null;
     }
@@ -168,10 +161,7 @@ export default class Event {
 
   get requestPath() {
     if (this.httpServerRequest) {
-      return (
-        this.httpServerRequest.normalized_path_info ||
-        this.httpServerRequest.path_info
-      );
+      return this.httpServerRequest.normalized_path_info || this.httpServerRequest.path_info;
     }
     if (this.httpClientRequest) {
       return this.httpClientRequest.url;
@@ -225,10 +215,7 @@ export default class Event {
     }
 
     const myIndex = parent.children.findIndex((e) => e === this);
-    console.assert(
-      myIndex !== -1,
-      'attempted to locate index of an orphaned event'
-    );
+    console.assert(myIndex !== -1, 'attempted to locate index of an orphaned event');
 
     if (myIndex === 0) {
       return null;
@@ -256,10 +243,7 @@ export default class Event {
     }
 
     const myIndex = this.parent.children.findIndex((e) => e === this);
-    console.assert(
-      myIndex !== -1,
-      'attempted to locate index of an orphaned event'
-    );
+    console.assert(myIndex !== -1, 'attempted to locate index of an orphaned event');
 
     if (myIndex === parent.children.length - 1) {
       return null;
@@ -419,9 +403,7 @@ export default class Event {
   }
 
   dataObjects() {
-    return [this.parameters, this.message, this.returnValue]
-      .flat()
-      .filter(Boolean);
+    return [this.parameters, this.message, this.returnValue].flat().filter(Boolean);
   }
 
   get qualifiedMethodId() {
@@ -454,9 +436,7 @@ export default class Event {
     const { sqlQuery } = this;
 
     // Convert null and undefined values to empty strings
-    const normalizeProperties = (
-      /** @type{Record<string,string>} */ properties
-    ) =>
+    const normalizeProperties = (/** @type{Record<string,string>} */ properties) =>
       Object.fromEntries(
         Object.entries(properties).map(([key, value]) => [
           key,
@@ -465,9 +445,7 @@ export default class Event {
       );
 
     // Augment a set of base properties with HTTP client/server request properties.
-    const requestProperties = (
-      /** @type{Record<string,string>} */ baseProperties
-    ) =>
+    const requestProperties = (/** @type{Record<string,string>} */ baseProperties) =>
       Object.assign(baseProperties, {
         route: this.route,
         status_code:
@@ -497,8 +475,7 @@ export default class Event {
       properties = {
         event_type: 'function',
         id: this.qualifiedMethodId,
-        raises_exception:
-          this.returnEvent.exceptions && this.returnEvent.exceptions.length > 0,
+        raises_exception: this.returnEvent.exceptions && this.returnEvent.exceptions.length > 0,
       };
     }
     return normalizeProperties(properties);

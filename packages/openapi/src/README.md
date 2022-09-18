@@ -1,34 +1,31 @@
 # appmap-openapi
 
 `@appland/appmap openapi` generates
-[OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md)
-YAML from [AppMap](https://github.com/applandinc/appmap) data.
+[OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md) YAML from
+[AppMap](https://github.com/applandinc/appmap) data.
 
-AppMaps contain rich information about HTTP server requests.
-`@appland/appmap openapi` collects and organizes this information into the
-OpenAPI format.
+AppMaps contain rich information about HTTP server requests. `@appland/appmap openapi` collects and
+organizes this information into the OpenAPI format.
 
-The more (and better) functional and integration tests you write, the more
-OpenAPI you get. And better yet, it's always accurate because it reflects the
-actual behavior of your code.
+The more (and better) functional and integration tests you write, the more OpenAPI you get. And
+better yet, it's always accurate because it reflects the actual behavior of your code.
 
-Once you've generated OpenAPI, you can configure your web app to serve the
-OpenAPI API and UI. Then you can interact directly with your API, in the context
-of your app, through the OpenAPI UI. It's a powerful way to browse, understand,
-and debug your API.
+Once you've generated OpenAPI, you can configure your web app to serve the OpenAPI API and UI. Then
+you can interact directly with your API, in the context of your app, through the OpenAPI UI. It's a
+powerful way to browse, understand, and debug your API.
 
 ## Supported languages
 
-`@appland/appmap` works with any language that has an AppMap client agent.
-Consult [appland.org](https://appland.org/) for a current list of client agents,
-plus usage instructions and examples.
+`@appland/appmap` works with any language that has an AppMap client agent. Consult
+[appland.org](https://appland.org/) for a current list of client agents, plus usage instructions and
+examples.
 
 ## How it works
 
 1. Install the AppMap client agent for your programming language.
 2. Record AppMaps by running test cases.
-3. Run `@appland/appmap openapi` to generate OpenAPI. You can customize the
-   OpenAPI document using command-line options.
+3. Run `@appland/appmap openapi` to generate OpenAPI. You can customize the OpenAPI document using
+   command-line options.
 4. Review your OpenAPI docs using your code editor or the Swagger UI.
 
 ## Example

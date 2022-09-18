@@ -48,9 +48,7 @@ function deepen(scenario, targetDepth) {
 
 describe('EventNavigator', () => {
   test('ancestors', () => {
-    const event = largeAppMap.events.find(
-      (e) => e.isCall() && e.methodId === 'recover'
-    );
+    const event = largeAppMap.events.find((e) => e.isCall() && e.methodId === 'recover');
     const ancestors = new EventNavigator(event).ancestors();
     const evt = ancestors.next();
 
@@ -80,9 +78,7 @@ describe('EventNavigator', () => {
   });
 
   test('precedingSiblings', () => {
-    const event = apiKeyAppMap.events.find(
-      (e) => e.isCall() && e.methodId === 'touch'
-    );
+    const event = apiKeyAppMap.events.find((e) => e.isCall() && e.methodId === 'touch');
     const precedingSiblings = new EventNavigator(event).precedingSiblings();
 
     let evt = precedingSiblings.next();
@@ -94,9 +90,7 @@ describe('EventNavigator', () => {
   });
 
   test('followingSiblings', () => {
-    const event = apiKeyAppMap.events.find(
-      (e) => e.isCall() && e.methodId === 'touch'
-    );
+    const event = apiKeyAppMap.events.find((e) => e.isCall() && e.methodId === 'touch');
     const followingSiblings = new EventNavigator(event).followingSiblings();
 
     expect(followingSiblings.next().value.event.id).toEqual(17);
@@ -108,9 +102,7 @@ describe('EventNavigator', () => {
   });
 
   test('inspecting labels on yielded events', () => {
-    const event = apiKeyAppMap.events.find(
-      (e) => e.isCall() && e.methodId === 'authenticate'
-    );
+    const event = apiKeyAppMap.events.find((e) => e.isCall() && e.methodId === 'authenticate');
     const self = new EventNavigator(event).self();
 
     const evt = self.next().value;
@@ -119,9 +111,7 @@ describe('EventNavigator', () => {
   });
 
   test('descendants', () => {
-    const event = largeAppMap.events.find(
-      (e) => e.isCall() && e.methodId === 'recover'
-    );
+    const event = largeAppMap.events.find((e) => e.isCall() && e.methodId === 'recover');
     const descendants = new EventNavigator(event).descendants();
 
     expect(descendants.next().value.event.methodId).toEqual('getTasks');
@@ -136,9 +126,7 @@ describe('EventNavigator', () => {
   });
 
   test('chaining axis generators', () => {
-    const event = apiKeyAppMap.events.find(
-      (e) => e.isCall() && e.methodId === 'authenticate'
-    );
+    const event = apiKeyAppMap.events.find((e) => e.isCall() && e.methodId === 'authenticate');
     const followingSiblings = new EventNavigator(event).followingSiblings();
 
     const eventIds = [];

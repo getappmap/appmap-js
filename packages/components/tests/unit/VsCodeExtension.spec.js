@@ -36,18 +36,14 @@ describe('VsCodeExtension.vue', () => {
 
     wrapper.vm.setState(appState);
 
-    expect(wrapper.vm.filters.declutter.rootObjects).toContain(
-      'package:app/controllers'
-    );
+    expect(wrapper.vm.filters.declutter.rootObjects).toContain('package:app/controllers');
     expect(wrapper.vm.filters.declutter.limitRootEvents.on).toBe(false);
     expect(wrapper.vm.filters.declutter.hideMediaRequests.on).toBe(false);
     expect(wrapper.vm.filters.declutter.hideUnlabeled.on).toBe(true);
     expect(wrapper.vm.filters.declutter.hideElapsedTimeUnder.on).toBe(true);
     expect(wrapper.vm.filters.declutter.hideElapsedTimeUnder.time).toBe(100);
     expect(wrapper.vm.filters.declutter.hideName.on).toBe(true);
-    expect(wrapper.vm.filters.declutter.hideName.names).toContain(
-      'package:json'
-    );
+    expect(wrapper.vm.filters.declutter.hideName.names).toContain('package:json');
 
     expect(wrapper.vm.getState()).toEqual(appState);
   });

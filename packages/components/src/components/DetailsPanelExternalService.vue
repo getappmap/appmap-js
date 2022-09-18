@@ -1,16 +1,8 @@
 <template>
   <div>
-    <v-details-panel-header
-      object-type="External service"
-      :object="object"
-      :title="object.name"
-    />
+    <v-details-panel-header object-type="External service" :object="object" :title="object.name" />
     <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
-    <v-details-panel-list
-      title="Events"
-      :items="object.events"
-      :event-quickview="true"
-    />
+    <v-details-panel-list title="Events" :items="object.events" :event-quickview="true" />
   </div>
 </template>
 

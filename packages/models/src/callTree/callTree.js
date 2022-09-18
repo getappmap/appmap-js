@@ -21,12 +21,7 @@ export default class CallTree extends EventSource {
       }
 
       const parent = stack[stack.length - 1];
-      const callNode = new CallNode(
-        e,
-        e.returnEvent,
-        parent,
-        functionLabels(e)
-      );
+      const callNode = new CallNode(e, e.returnEvent, parent, functionLabels(e));
       parent.addChild(callNode);
       stack.push(callNode);
     });

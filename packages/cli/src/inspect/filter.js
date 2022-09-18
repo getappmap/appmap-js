@@ -9,9 +9,7 @@ const filterFields = Fields.fields.filter((f) => f.filterName);
  * @param {Context} context
  */
 const filter = (rl, context, home) => {
-  const filterFieldIndexes = Fields.selectIndexes(
-    filterFields.map((f) => f.name)
-  );
+  const filterFieldIndexes = Fields.selectIndexes(filterFields.map((f) => f.name));
   const dsTable = new Table({
     title: 'Filter data set',
     columns: [

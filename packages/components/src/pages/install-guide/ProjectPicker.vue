@@ -5,11 +5,7 @@
         <h1 data-cy="title">Install AppMap agent</h1>
       </header>
       <main>
-        <article
-          class="empty-state"
-          data-cy="empty-state-article"
-          v-if="projects.length === 0"
-        >
+        <article class="empty-state" data-cy="empty-state-article" v-if="projects.length === 0">
           <div class="card">
             <div class="empty-icon">
               <EmptyIcon />
@@ -31,9 +27,8 @@
         <article v-if="projects.length > 1">
           <h2 class="install subhead">Projects</h2>
           <p data-cy="multiple-projects-text">
-            You have multiple projects in this workspace. We’ve outlined the
-            projects that are ready to start making AppMaps. <br />Select a
-            project to continue.
+            You have multiple projects in this workspace. We’ve outlined the projects that are ready
+            to start making AppMaps. <br />Select a project to continue.
           </p>
           <div class="table-wrap">
             <v-project-picker-table

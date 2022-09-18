@@ -10,9 +10,7 @@ import { PoetryInstaller } from '../../../src/cmds/agentInstaller/pythonAgentIns
 import { BundleInstaller } from '../../../src/cmds/agentInstaller/rubyAgentInstaller';
 import AgentInstallerProcedure from '../../../src/cmds/agentInstaller/agentInstallerProcedure';
 import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
-import CommandStruct, {
-  CommandReturn,
-} from '../../../src/cmds/agentInstaller/commandStruct';
+import CommandStruct, { CommandReturn } from '../../../src/cmds/agentInstaller/commandStruct';
 import * as ProjectConfiguration from '../../../src/cmds/agentInstaller/projectConfiguration';
 
 import UI from '../../../src/cmds/userInteraction';
@@ -48,13 +46,9 @@ const invokeCommand = (
       type: 'boolean',
       description: 'Run with verbose logging',
     })
-    .parse(
-      `install-agent ${debugSwitch} -d ${projectDir}`,
-      {},
-      (err, argv, output) => {
-        evalResults(err, argv, output);
-      }
-    );
+    .parse(`install-agent ${debugSwitch} -d ${projectDir}`, {}, (err, argv, output) => {
+      evalResults(err, argv, output);
+    });
 };
 
 describe('install sub-command', () => {
@@ -120,13 +114,7 @@ packages:
     const validateAgent = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('java');
       const args = cmdStruct.args;
-      expect(args).toEqual([
-        '-jar',
-        'appmap.jar',
-        '-d',
-        projectDir,
-        'validate',
-      ]);
+      expect(args).toEqual(['-jar', 'appmap.jar', '-d', projectDir, 'validate']);
       const ret = { stdout: '[]', stderr: '' };
       return Promise.resolve(ret);
     };
@@ -138,12 +126,7 @@ packages:
     };
 
     describe('managed with gradle', () => {
-      const projectFixture = path.join(
-        fixtureDir,
-        'java',
-        'gradle',
-        'example-project'
-      );
+      const projectFixture = path.join(fixtureDir, 'java', 'gradle', 'example-project');
 
       const verifyAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('./gradlew');
@@ -186,10 +169,9 @@ packages:
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = fse.readFileSync(
-            path.join(projectDir, 'appmap.yml'),
-            { encoding: 'utf-8' }
-          );
+          const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
+            encoding: 'utf-8',
+          });
           expect(actualConfig).toEqual(expectedConfig);
         };
         await testE2E(
@@ -222,12 +204,7 @@ packages:
     });
 
     describe('managed with maven', () => {
-      const projectFixture = path.join(
-        fixtureDir,
-        'java',
-        'maven',
-        'example-project'
-      );
+      const projectFixture = path.join(fixtureDir, 'java', 'maven', 'example-project');
 
       const verifyAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('./mvnw');
@@ -254,9 +231,7 @@ packages:
 
       beforeEach(() => {
         fse.copySync(projectFixture, projectDir);
-        sinon
-          .stub(inquirer, 'prompt')
-          .resolves({ result: 'Maven', confirm: true });
+        sinon.stub(inquirer, 'prompt').resolves({ result: 'Maven', confirm: true });
       });
 
       it('installs as expected', async () => {
@@ -264,10 +239,9 @@ packages:
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = fse.readFileSync(
-            path.join(projectDir, 'appmap.yml'),
-            { encoding: 'utf-8' }
-          );
+          const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
+            encoding: 'utf-8',
+          });
           expect(actualConfig).toEqual(expectedConfig);
         };
         await testE2E(
@@ -398,10 +372,9 @@ packages:
       const evalResults = (err, argv, output) => {
         expect(err).toBeNull();
 
-        const actualConfig = fse.readFileSync(
-          path.join(projectDir, 'appmap.yml'),
-          { encoding: 'utf-8' }
-        );
+        const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
+          encoding: 'utf-8',
+        });
         expect(actualConfig).toEqual(expectedConfig);
       };
       await rubyTestE2E(
@@ -521,20 +494,13 @@ packages:
 
       beforeEach(() => {
         fse.copySync(projectFixture, projectDir);
-        sinon
-          .stub(inquirer, 'prompt')
-          .resolves({ result: 'pip', confirm: true });
+        sinon.stub(inquirer, 'prompt').resolves({ result: 'pip', confirm: true });
       });
 
       const checkCurrentConfig = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('pip');
         const args = cmdStruct.args;
-        expect(args).toEqual([
-          'install',
-          '-r',
-          'requirements.txt',
-          '--dry-run',
-        ]);
+        expect(args).toEqual(['install', '-r', 'requirements.txt', '--dry-run']);
         const ret = { stdout: '', stderr: '' };
         return Promise.resolve(ret);
       };
@@ -564,10 +530,9 @@ packages:
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = fse.readFileSync(
-            path.join(projectDir, 'appmap.yml'),
-            { encoding: 'utf-8' }
-          );
+          const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
+            encoding: 'utf-8',
+          });
           expect(actualConfig).toEqual(expectedConfig);
         };
         await testE2E(
@@ -586,9 +551,7 @@ packages:
 
       beforeEach(() => {
         fse.copySync(projectFixture, projectDir);
-        sinon
-          .stub(inquirer, 'prompt')
-          .resolves({ result: 'poetry', confirm: true });
+        sinon.stub(inquirer, 'prompt').resolves({ result: 'poetry', confirm: true });
       });
 
       const checkCurrentConfig = (cmdStruct: CommandStruct) => {
@@ -601,12 +564,7 @@ packages:
 
       const installAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('poetry');
-        expect(cmdStruct.args).toEqual([
-          'add',
-          '--dev',
-          '--allow-prereleases',
-          'appmap',
-        ]);
+        expect(cmdStruct.args).toEqual(['add', '--dev', '--allow-prereleases', 'appmap']);
         const ret = { stdout: '', stderr: '' };
         return Promise.resolve(ret);
       };
@@ -629,10 +587,9 @@ packages:
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = fse.readFileSync(
-            path.join(projectDir, 'appmap.yml'),
-            { encoding: 'utf-8' }
-          );
+          const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
+            encoding: 'utf-8',
+          });
           expect(actualConfig).toEqual(expectedConfig);
         };
         await testE2E(
@@ -713,9 +670,7 @@ packages:
 
       beforeEach(() => {
         fse.copySync(projectFixture, projectDir);
-        sinon
-          .stub(inquirer, 'prompt')
-          .resolves({ result: 'npm', confirm: true });
+        sinon.stub(inquirer, 'prompt').resolves({ result: 'npm', confirm: true });
       });
 
       const checkCurrentConfig = (cmdStruct: CommandStruct) => {
@@ -728,11 +683,7 @@ packages:
 
       const installAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('npm');
-        expect(cmdStruct.args).toEqual([
-          'install',
-          '--saveDev',
-          '@appland/appmap-agent-js@latest',
-        ]);
+        expect(cmdStruct.args).toEqual(['install', '--saveDev', '@appland/appmap-agent-js@latest']);
         const ret = { stdout: '', stderr: '' };
         return Promise.resolve(ret);
       };
@@ -742,10 +693,9 @@ packages:
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = fse.readFileSync(
-            path.join(projectDir, 'appmap.yml'),
-            { encoding: 'utf-8' }
-          );
+          const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
+            encoding: 'utf-8',
+          });
           expect(actualConfig).toEqual(expectedConfig);
         };
 
@@ -781,9 +731,7 @@ packages:
 
       beforeEach(() => {
         fse.copySync(projectFixture, projectDir);
-        sinon
-          .stub(inquirer, 'prompt')
-          .resolves({ result: 'yarn', confirm: true });
+        sinon.stub(inquirer, 'prompt').resolves({ result: 'yarn', confirm: true });
       });
 
       const checkCurrentConfig = (cmdStruct: CommandStruct) => {
@@ -796,11 +744,7 @@ packages:
 
       const installAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('yarn');
-        expect(cmdStruct.args).toEqual([
-          'add',
-          '--dev',
-          '@appland/appmap-agent-js@latest',
-        ]);
+        expect(cmdStruct.args).toEqual(['add', '--dev', '@appland/appmap-agent-js@latest']);
         const ret = { stdout: '', stderr: '' };
         return Promise.resolve(ret);
       };
@@ -810,10 +754,9 @@ packages:
         const evalResults = (err, argv, output) => {
           expect(err).toBeNull();
 
-          const actualConfig = fse.readFileSync(
-            path.join(projectDir, 'appmap.yml'),
-            { encoding: 'utf-8' }
-          );
+          const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
+            encoding: 'utf-8',
+          });
           expect(actualConfig).toEqual(expectedConfig);
         };
 
@@ -855,13 +798,9 @@ packages:
       const projectFixture = path.join(fixtureDir, 'python', 'mixed');
       await fse.copy(projectFixture, projectDir);
 
-      const promptStub = sinon
-        .stub(UI, 'prompt')
-        .resolves({ installer0: 'poetry', confirm: true });
+      const promptStub = sinon.stub(UI, 'prompt').resolves({ installer0: 'poetry', confirm: true });
 
-      const installAgentStub = sinon
-        .stub(PoetryInstaller.prototype, 'installAgent')
-        .resolves();
+      const installAgentStub = sinon.stub(PoetryInstaller.prototype, 'installAgent').resolves();
 
       await invokeCommand(projectDir, () => {});
 
@@ -898,9 +837,7 @@ packages:
         const projectFixture = path.join(fixtureDir, 'python', 'mixed');
         await fse.copy(projectFixture, projectDir);
 
-        sinon
-          .stub(UI, 'prompt')
-          .resolves({ installer0: 'poetry', confirm: true });
+        sinon.stub(UI, 'prompt').resolves({ installer0: 'poetry', confirm: true });
 
         runStub = sinon.stub(AgentInstallerProcedure.prototype, 'run');
       });
@@ -961,9 +898,7 @@ packages:
 
     it('succeeds when the config syntax is valid', async () => {
       expect.assertions(1);
-      const validateConfig = sinon
-        .stub(validator, 'validateConfig')
-        .returns({ valid: true });
+      const validateConfig = sinon.stub(validator, 'validateConfig').returns({ valid: true });
       await invokeCommand(projectDir, () => {});
 
       expect(validateConfig).toBeCalled();
@@ -991,9 +926,7 @@ packages:
           js: jsError,
         },
       };
-      const validateConfig = sinon
-        .stub(validator, 'validateConfig')
-        .returns(validationResult);
+      const validateConfig = sinon.stub(validator, 'validateConfig').returns(validationResult);
 
       const installProcedureStub = sinon
         .stub(AgentInstallerProcedure.prototype, 'run')
@@ -1018,10 +951,7 @@ packages:
         stderr: '',
       });
 
-      expectedStubs = [
-        GradleInstaller.prototype,
-        MavenInstaller.prototype,
-      ].flatMap((prototype) => [
+      expectedStubs = [GradleInstaller.prototype, MavenInstaller.prototype].flatMap((prototype) => [
         sinon.stub(prototype, 'environment').resolves(),
         sinon.stub(prototype, 'installAgent').resolves(),
         sinon.stub(prototype, 'initCommand').resolves(),
@@ -1049,9 +979,7 @@ packages:
       expect(promptStub.getCall(0).args).toMatchObject([
         {
           type: 'confirm',
-          message: expect.stringMatching(
-            'This directory contains sub-projects'
-          ),
+          message: expect.stringMatching('This directory contains sub-projects'),
           default: true,
         },
       ]);
@@ -1076,11 +1004,7 @@ packages:
 
     it('installs the root project by default', async () => {
       expect.assertions(2);
-      const projectFixture = path.join(
-        fixtureDir,
-        'java',
-        'multi-project-root'
-      );
+      const projectFixture = path.join(fixtureDir, 'java', 'multi-project-root');
       fse.copySync(projectFixture, projectDir);
       const promptStub = sinon.stub(inquirer, 'prompt').resolves({
         addSubprojects: true,
@@ -1096,9 +1020,7 @@ packages:
       expect(promptStub.getCall(0).args).toMatchObject([
         {
           type: 'confirm',
-          message: expect.stringMatching(
-            'This directory contains sub-projects'
-          ),
+          message: expect.stringMatching('This directory contains sub-projects'),
           default: false,
         },
       ]);

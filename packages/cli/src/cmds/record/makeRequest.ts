@@ -44,15 +44,7 @@ export default async function makeRequest(
         if (statusCodes.includes(statusCode)) {
           resolve({ statusCode, data });
         } else {
-          reject(
-            new RemoteRecordingError(
-              description,
-              statusCode,
-              method,
-              path,
-              data
-            )
-          );
+          reject(new RemoteRecordingError(description, statusCode, method, path, data));
         }
       })
       .catch((e) => {

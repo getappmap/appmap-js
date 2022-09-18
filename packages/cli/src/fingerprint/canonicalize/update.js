@@ -17,26 +17,16 @@ class Canonicalize extends EventTree {
     const analyzedQuery = analyzeSQL(event.sqlQuery);
     if (typeof analyzedQuery === 'string') {
       const sqlLower = event.sqlQuery.toLowerCase();
-      if (
-        sqlLower.indexOf('insert') !== -1 ||
-        sqlLower.indexOf('update') !== -1
-      ) {
+      if (sqlLower.indexOf('insert') !== -1 || sqlLower.indexOf('update') !== -1) {
         return {
           kind: 'sql',
           sql: {
-            normalized_query: normalizeSQL(
-              event.sqlQuery,
-              event.sql.database_type
-            ),
+            normalized_query: normalizeSQL(event.sqlQuery, event.sql.database_type),
           },
         };
       }
     } else if (analyzedQuery && analyzedQuery.actions) {
-      if (
-        ['insert', 'update', 'delete'].find((x) =>
-          analyzedQuery.actions.includes(x)
-        )
-      ) {
+      if (['insert', 'update', 'delete'].find((x) => analyzedQuery.actions.includes(x))) {
         return {
           kind: 'sql',
           sql: {
@@ -53,9 +43,7 @@ class Canonicalize extends EventTree {
     return {
       kind: 'http_client_request',
       route: event.route,
-      status_code: event.httpClientResponse
-        ? event.httpClientResponse.status_code
-        : null,
+      status_code: event.httpClientResponse ? event.httpClientResponse.status_code : null,
     };
   }
 
@@ -63,9 +51,7 @@ class Canonicalize extends EventTree {
     return {
       kind: 'http_server_request',
       route: event.route,
-      status_code: event.httpServerResponse
-        ? event.httpServerResponse.status_code
-        : null,
+      status_code: event.httpServerResponse ? event.httpServerResponse.status_code : null,
     };
   }
 

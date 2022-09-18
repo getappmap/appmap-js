@@ -11,9 +11,7 @@
         <HelpIcon class="qs-help__icon" />
         <div class="qs-help__text">
           Stuck?
-          <a href="https://appmap.io/slack" target="_blank"
-            >Technical support available in Slack</a
-          >
+          <a href="https://appmap.io/slack" target="_blank">Technical support available in Slack</a>
         </div>
       </div>
     </div>

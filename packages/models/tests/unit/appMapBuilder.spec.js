@@ -83,13 +83,11 @@ describe('normalize', () => {
         classMap: [],
       };
 
-      return buildAppMap(appMapData).normalize().build().metadata.git
-        .repository;
+      return buildAppMap(appMapData).normalize().build().metadata.git.repository;
     }
 
     Object.entries({
-      'https://github.com/organization/repository':
-        'https://github.com/organization/repository',
+      'https://github.com/organization/repository': 'https://github.com/organization/repository',
 
       'https://username@github.com/organization/repository':
         'https://github.com/organization/repository',

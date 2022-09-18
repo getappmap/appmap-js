@@ -9,9 +9,7 @@ export default async function continueWithRequestOptionConfiguration({
   configuration,
 }: RecordContext): Promise<ConfigurationAction> {
   UI.progress(
-    `I can't find your AppMap server process on port ${
-      configuration.requestOptions().port
-    }.`
+    `I can't find your AppMap server process on port ${configuration.requestOptions().port}.`
   );
   UI.progress('');
   UI.progress(
@@ -23,10 +21,7 @@ export default async function continueWithRequestOptionConfiguration({
 
   const { configurationAction } = await UI.prompt({
     type: 'list',
-    choices: [
-      ConfigurationAction.HostAndPort,
-      ConfigurationAction.RequestOptions,
-    ],
+    choices: [ConfigurationAction.HostAndPort, ConfigurationAction.RequestOptions],
     name: 'configurationAction',
     message: 'What would you like to do?',
   });

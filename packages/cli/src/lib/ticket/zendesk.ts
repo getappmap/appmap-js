@@ -6,8 +6,7 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import stripAnsi from 'strip-ansi';
 import { HttpError } from '../../cmds/errors';
 
-export const APPMAP_SUPPORT_URL =
-  process.env.APPMAP_SUPPORT_URL || 'https://appland.zendesk.com';
+export const APPMAP_SUPPORT_URL = process.env.APPMAP_SUPPORT_URL || 'https://appland.zendesk.com';
 
 // debugAdapter gets installed when process.env.APPMAP_ZENDESK_DEBUG is "true". It prints out the
 // details of the outbound request, but doesn't actually send it.
@@ -61,9 +60,7 @@ ${errors.map((e) => `===\n${stripAnsi(e)}\n===`).join('\n')}`,
     // for ZENDESK_AUTHZ is {email_address}msg, {ken:{api_token}.
     const zendeskAuthz = process.env.ZENDESK_AUTHZ;
     if (zendeskAuthz) {
-      body: headers['Authorization'] = `Basic ${Buffer.from(
-        zendeskAuthz
-      ).toString('base64')}`;
+      body: headers['Authorization'] = `Basic ${Buffer.from(zendeskAuthz).toString('base64')}`;
     }
 
     const { data: res } = await axios
@@ -87,12 +84,7 @@ ${errors.map((e) => `===\n${stripAnsi(e)}\n===`).join('\n')}`,
       status: response.status,
       headers: response.headers,
       body: JSON.stringify(response.data),
-      toString: () =>
-        JSON.stringify(
-          response,
-          (k, v) => (k !== 'request' ? v : undefined),
-          2
-        ),
+      toString: () => JSON.stringify(response, (k, v) => (k !== 'request' ? v : undefined), 2),
     });
   }
 }

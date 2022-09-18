@@ -14,10 +14,7 @@ context('Project Picker (Four Projects)', () => {
   });
 
   it('displays a message indicating that there are multiple projects', () => {
-    cy.get('[data-cy="multiple-projects-text"]').should(
-      'contain.text',
-      'multiple projects'
-    );
+    cy.get('[data-cy="multiple-projects-text"]').should('contain.text', 'multiple projects');
   });
 
   it('has four rows', () => {
@@ -30,10 +27,7 @@ context('Project Picker (Four Projects)', () => {
 
   it('shows requirements after selecting a project', () => {
     cy.get('[data-cy="project-picker-row"]').first().click();
-    cy.get('[data-cy="requirements-title"]').should(
-      'contain.text',
-      'Requirements'
-    );
+    cy.get('[data-cy="requirements-title"]').should('contain.text', 'Requirements');
   });
 
   it('shows next button when selecting a good project', () => {

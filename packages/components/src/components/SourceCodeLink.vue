@@ -65,8 +65,7 @@ export default {
       }
 
       return (
-        (this.object.path &&
-          [this.object.path, this.object.lineno].filter(Boolean).join(':')) ||
+        (this.object.path && [this.object.path, this.object.lineno].filter(Boolean).join(':')) ||
         this.object.location ||
         (Array.isArray(this.object.locations) && this.object.locations[0])
       );
@@ -75,8 +74,7 @@ export default {
     classes() {
       return {
         'source-code-link': true,
-        'source-code-link--has-external-link':
-          this.$data.sourceLocation && this.$data.externalUrl,
+        'source-code-link--has-external-link': this.$data.sourceLocation && this.$data.externalUrl,
       };
     },
   },

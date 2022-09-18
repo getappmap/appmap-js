@@ -17,40 +17,26 @@ function bindEvents(componentDiagram, classMap) {
   const svg = componentDiagram.element.node();
 
   svg.addEventListener('click', (event) => {
-    const expandIcon = getEventTarget(
-      event.target,
-      svg,
-      'g.label .label__icon--expand'
-    );
+    const expandIcon = getEventTarget(event.target, svg, 'g.label .label__icon--expand');
     if (!expandIcon) {
       return;
     }
 
     event.stopImmediatePropagation();
 
-    const codeObject = codeObjectFromElement(
-      expandIcon.closest('.node'),
-      classMap
-    );
+    const codeObject = codeObjectFromElement(expandIcon.closest('.node'), classMap);
     componentDiagram.expand(codeObject);
   });
 
   svg.addEventListener('click', (event) => {
-    const collapseIcon = getEventTarget(
-      event.target,
-      svg,
-      'g.label .label__icon--collapse'
-    );
+    const collapseIcon = getEventTarget(event.target, svg, 'g.label .label__icon--collapse');
     if (!collapseIcon) {
       return;
     }
 
     event.stopImmediatePropagation();
 
-    const codeObject = codeObjectFromElement(
-      collapseIcon.closest('.cluster'),
-      classMap
-    );
+    const codeObject = codeObjectFromElement(collapseIcon.closest('.cluster'), classMap);
     componentDiagram.collapse(codeObject);
   });
 
@@ -89,10 +75,7 @@ function bindEvents(componentDiagram, classMap) {
     select(svg).selectAll('.edgePath.highlight').raise();
 
     const { to, from } = edge.parentElement.dataset;
-    const { codeObjectTo, codeObjectFrom } = componentDiagram.graph.edge(
-      from,
-      to
-    );
+    const { codeObjectTo, codeObjectFrom } = componentDiagram.graph.edge(from, to);
 
     componentDiagram.emit('edge', { to: codeObjectTo, from: codeObjectFrom });
   });
@@ -118,39 +101,29 @@ const COMPONENT_OPTIONS = {
         item
           .text('Set as root')
           .selector('.nodes .node')
-          .transform(
-            (e) => componentDiagram.graph.node(e.dataset.id).codeObject
-          )
+          .transform((e) => componentDiagram.graph.node(e.dataset.id).codeObject)
           .on('execute', (id) => componentDiagram.emit('makeRoot', id)),
       (item) =>
         item
           .text('Expand')
           .selector('g.node')
-          .transform(
-            (e) => componentDiagram.graph.node(e.dataset.id).codeObject
-          )
+          .transform((e) => componentDiagram.graph.node(e.dataset.id).codeObject)
           .condition((obj) => expandableTypes.includes(obj.type))
           .on('execute', (id) => componentDiagram.expand(id)),
       (item) =>
         item
           .text('Collapse')
           .selector('g.node')
-          .transform(
-            (e) => componentDiagram.graph.node(e.dataset.id).codeObject
-          )
+          .transform((e) => componentDiagram.graph.node(e.dataset.id).codeObject)
           .condition(
-            (obj) =>
-              !expandableTypes.includes(obj.type) &&
-              obj.type !== CodeObjectType.DATABASE
+            (obj) => !expandableTypes.includes(obj.type) && obj.type !== CodeObjectType.DATABASE
           )
           .on('execute', (id) => componentDiagram.collapse(id)),
       (item) =>
         item
           .text('Collapse')
           .selector('g.cluster')
-          .transform(
-            (e) => componentDiagram.graph.node(e.dataset.id).codeObject
-          )
+          .transform((e) => componentDiagram.graph.node(e.dataset.id).codeObject)
           .on('execute', (obj) => componentDiagram.collapse(obj)),
       (item) =>
         item.text('Reset view').on('execute', () => {
@@ -272,9 +245,7 @@ export default class ComponentDiagram extends EventSource {
       }, []);
     const edges = outboundEdges(...codeObjects);
 
-    codeObjects.forEach((codeObject) =>
-      this.graph.setNodeFromCodeObject(codeObject)
-    );
+    codeObjects.forEach((codeObject) => this.graph.setNodeFromCodeObject(codeObject));
     edges.forEach((edge) => this.graph.setEdge(edge.from, edge.to));
 
     this.graph.render();
@@ -304,9 +275,7 @@ export default class ComponentDiagram extends EventSource {
       this.scrollTo(highlightedCodeObjects);
     }
 
-    const hlBox = this.graph.getNodesBox(
-      highlightedCodeObjects.map((obj) => obj.id ?? obj.name)
-    );
+    const hlBox = this.graph.getNodesBox(highlightedCodeObjects.map((obj) => obj.id ?? obj.name));
     this.container.scaleTarget = {
       x: hlBox.width / 2 + hlBox.offsetLeft,
       y: hlBox.height / 2 + hlBox.offsetTop,
@@ -354,9 +323,7 @@ export default class ComponentDiagram extends EventSource {
     const children = codeObject.children.map((child) => child.leafs()).flat();
 
     this.graph.expand(codeObject, children);
-    allEdges(...children).forEach(({ from, to }) =>
-      this.graph.setEdge(from, to)
-    );
+    allEdges(...children).forEach(({ from, to }) => this.graph.setEdge(from, to));
 
     // HACK.
     // The child graph should really be doing this, but there's no way to add the edges before
@@ -375,22 +342,17 @@ export default class ComponentDiagram extends EventSource {
   }
 
   collapse(codeObject, scrollToPackage = true) {
-    const codeObjectPackage =
-      codeObject.packageObject || codeObject.parent || codeObject;
+    const codeObjectPackage = codeObject.packageObject || codeObject.parent || codeObject;
     const nodeWasHighlighted = this.isHighlighted(codeObjectPackage);
     const { id } = codeObjectPackage;
 
     this.graph.removeNode(id);
 
-    codeObjectPackage
-      .childLeafs()
-      .forEach((child) => this.graph.removeNode(child.id));
+    codeObjectPackage.childLeafs().forEach((child) => this.graph.removeNode(child.id));
 
     this.graph.setNodeFromCodeObject(codeObjectPackage);
 
-    allEdges(codeObjectPackage).forEach(({ to, from }) =>
-      this.graph.setEdge(from, to)
-    );
+    allEdges(codeObjectPackage).forEach(({ to, from }) => this.graph.setEdge(from, to));
 
     this.graph.collapse();
 

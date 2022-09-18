@@ -20,14 +20,10 @@ async function isBranch(branch) {
 }
 
 async function hasDependencyChanged() {
-  const { stdout: changedFiles } = await exec(
-    'git diff origin/main --name-only'
-  );
+  const { stdout: changedFiles } = await exec('git diff origin/main --name-only');
   return changedFiles
     .split('\n')
-    .some((file) =>
-      dependentPackages.some((pkg) => file.startsWith(join('packages', pkg)))
-    );
+    .some((file) => dependentPackages.some((pkg) => file.startsWith(join('packages', pkg))));
 }
 
 async function runStorybook() {

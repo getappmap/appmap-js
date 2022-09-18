@@ -1,8 +1,6 @@
 <script>
 function vNodeId(vnode) {
-  return vnode && vnode.data && vnode.data.attrs && vnode.data.attrs.id
-    ? vnode.data.attrs.id
-    : '';
+  return vnode && vnode.data && vnode.data.attrs && vnode.data.attrs.id ? vnode.data.attrs.id : '';
 }
 
 export default {

@@ -7,20 +7,13 @@
       :object-id="object.id.toString()"
     >
       <template v-slot:links>
-        <v-details-button
-          v-if="shouldDisplayViewEvent"
-          @click.native="viewEvent"
-        >
+        <v-details-button v-if="shouldDisplayViewEvent" @click.native="viewEvent">
           Show in Trace
         </v-details-button>
       </template>
     </v-details-panel-header>
 
-    <v-sql-code
-      v-if="hasSql"
-      :sql="object.sql.sql"
-      :database="object.sql.database_type"
-    />
+    <v-sql-code v-if="hasSql" :sql="object.sql.sql" :database="object.sql.database_type" />
 
     <div class="event-params" v-if="hasParameters">
       <h5>Parameters</h5>
@@ -144,12 +137,10 @@ export default {
         return [];
       }
 
-      return Object.entries(httpClientRequest.headers || {}).map(
-        ([name, value]) => ({
-          name,
-          value,
-        })
-      );
+      return Object.entries(httpClientRequest.headers || {}).map(([name, value]) => ({
+        name,
+        value,
+      }));
     },
 
     responseHeaders() {
@@ -158,19 +149,15 @@ export default {
         return [];
       }
 
-      return Object.entries(httpClientResponse.headers || {}).map(
-        ([name, value]) => ({
-          name,
-          value,
-        })
-      );
+      return Object.entries(httpClientResponse.headers || {}).map(([name, value]) => ({
+        name,
+        value,
+      }));
     },
 
     httpServerResponse() {
       const response = {
-        ...(this.object.httpServerResponse ||
-          this.object.httpClientResponse ||
-          {}),
+        ...(this.object.httpServerResponse || this.object.httpClientResponse || {}),
       };
 
       if (response.headers) {

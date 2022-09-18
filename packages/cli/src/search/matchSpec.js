@@ -15,8 +15,7 @@ const RegExpRegExp = /^%r{([^}]+)}(\w*)$/;
  * @returns {MatchFn}
  */
 function matchType(expectedType) {
-  const fn = (/** @type {CodeObject} */ codeObject) =>
-    codeObject.type === expectedType;
+  const fn = (/** @type {CodeObject} */ codeObject) => codeObject.type === expectedType;
   fn.toJSON = () => expectedType;
   return fn;
 }
@@ -57,9 +56,7 @@ function matchClass(name) {
  */
 function matchFunction(name, isStatic) {
   const fn = (/** @type import('./types').CodeObject */ codeObject) =>
-    codeObject.name === name &&
-    codeObject.type === 'function' &&
-    codeObject.static === isStatic;
+    codeObject.name === name && codeObject.type === 'function' && codeObject.static === isStatic;
   fn.toJSON = () => `${isStatic ? 'static ' : ''}function ${name}`;
   return fn;
 }

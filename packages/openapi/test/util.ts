@@ -13,9 +13,7 @@ const clientAppMap = buildAppMap()
   )
   .normalize()
   .build();
-const httpClientRequests = clientAppMap.events.filter(
-  (e: Event) => !!e.httpClientRequest
-);
+const httpClientRequests = clientAppMap.events.filter((e: Event) => !!e.httpClientRequest);
 
 // POST /api/mapsets
 const serverAppMap = buildAppMap()
@@ -26,8 +24,6 @@ const serverAppMap = buildAppMap()
   )
   .normalize()
   .build();
-const httpServerRequests = serverAppMap.events.filter(
-  (e: Event) => !!e.httpServerRequest
-);
+const httpServerRequests = serverAppMap.events.filter((e: Event) => !!e.httpServerRequest);
 
 export { clientAppMap, httpClientRequests, serverAppMap, httpServerRequests };

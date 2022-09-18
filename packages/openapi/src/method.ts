@@ -105,17 +105,17 @@ export default class Method {
       }))
       .filter((entry) => entry.schema);
     if (mediaTypes.length > 0) {
-      const content: Record<string, OpenAPIV3.MediaTypeObject> =
-        mediaTypes.reduce((memo, entry) => {
+      const content: Record<string, OpenAPIV3.MediaTypeObject> = mediaTypes.reduce(
+        (memo, entry) => {
           memo[entry.contentType] = { schema: entry.schema };
           return memo;
-        }, {} as Record<string, OpenAPIV3.MediaTypeObject>);
+        },
+        {} as Record<string, OpenAPIV3.MediaTypeObject>
+      );
       response.requestBody = { content };
     }
     if (parameters.length > 0) {
-      response.parameters = parameters.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
+      response.parameters = parameters.sort((a, b) => a.name.localeCompare(b.name));
     }
     return response;
   }

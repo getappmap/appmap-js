@@ -25,18 +25,12 @@ describe('Component Diagram', () => {
 
   it('can highlight multiple nodes', () => {
     const nodes = ['POST /applications', 'SQL'];
-    const highlightedNodes = appMap.classMap.codeObjects.filter((obj) =>
-      nodes.includes(obj.name)
-    );
+    const highlightedNodes = appMap.classMap.codeObjects.filter((obj) => nodes.includes(obj.name));
     componentDiagram.highlight(highlightedNodes);
 
     highlightedNodes.forEach((id) =>
-      expect(
-        document.querySelector(`.highlight[data-id="${id}"`)
-      ).not.toBeNull()
+      expect(document.querySelector(`.highlight[data-id="${id}"`)).not.toBeNull()
     );
-    expect(
-      document.querySelector('.highlight[data-id="app/controllers"')
-    ).toBeNull();
+    expect(document.querySelector('.highlight[data-id="app/controllers"')).toBeNull();
   });
 });

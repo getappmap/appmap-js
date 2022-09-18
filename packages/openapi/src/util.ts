@@ -108,25 +108,19 @@ function messageToOpenAPISchema(message: ValueBase): OpenAPIV3.SchemaObject | un
   if (type === undefined) return;
 
   if (message.properties) {
-    const properties = message.properties.reduce(
-      (memo, msgProperty: ParameterProperty) => {
-        const type = classNameToOpenAPIType(msgProperty.class);
-        if (type === 'array') {
-          // eslint-disable-next-line no-param-reassign
-          memo[msgProperty.name] = { type } as OpenAPIV3.ArraySchemaObject;
-        } else if (type) {
-          // eslint-disable-next-line no-param-reassign
-          memo[msgProperty.name] = {
-            type,
-          } as OpenAPIV3.NonArraySchemaObject;
-        }
-        return memo;
-      },
-      {} as Record<
-        string,
-        OpenAPIV3.NonArraySchemaObject | OpenAPIV3.ArraySchemaObject
-      >
-    );
+    const properties = message.properties.reduce((memo, msgProperty: ParameterProperty) => {
+      const type = classNameToOpenAPIType(msgProperty.class);
+      if (type === 'array') {
+        // eslint-disable-next-line no-param-reassign
+        memo[msgProperty.name] = { type } as OpenAPIV3.ArraySchemaObject;
+      } else if (type) {
+        // eslint-disable-next-line no-param-reassign
+        memo[msgProperty.name] = {
+          type,
+        } as OpenAPIV3.NonArraySchemaObject;
+      }
+      return memo;
+    }, {} as Record<string, OpenAPIV3.NonArraySchemaObject | OpenAPIV3.ArraySchemaObject>);
     if (type === 'array') {
       return { type: 'array', items: { type: 'object', properties } };
     } else {

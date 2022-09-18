@@ -10,9 +10,7 @@ import * as testCasesComplete from '../../../src/cmds/record/state/testCasesComp
 import * as areTestCommandsConfigured from '../../../src/cmds/record/test/areTestCommandsConfigured';
 import * as obtainTestCommands from '../../../src/cmds/record/prompt/obtainTestCommands';
 import TestCaseRecording from '../../../src/cmds/record/testCaseRecording';
-import RecordContext, {
-  RecordProcessResult,
-} from '../../../src/cmds/record/recordContext';
+import RecordContext, { RecordProcessResult } from '../../../src/cmds/record/recordContext';
 import Configuration from '../../../src/cmds/record/configuration';
 
 describe('record test', () => {
@@ -40,9 +38,7 @@ describe('record test', () => {
   });
 
   describe('test command is not configured', () => {
-    beforeEach(() =>
-      sinon.stub(areTestCommandsConfigured, 'default').resolves(false)
-    );
+    beforeEach(() => sinon.stub(areTestCommandsConfigured, 'default').resolves(false));
 
     it('prompts for commands', async () => {
       recordContext.recordMethod = 'test';
@@ -72,9 +68,7 @@ describe('record test', () => {
   });
 
   describe('test command is configured', () => {
-    beforeEach(() =>
-      sinon.stub(areTestCommandsConfigured, 'default').resolves(true)
-    );
+    beforeEach(() => sinon.stub(areTestCommandsConfigured, 'default').resolves(true));
 
     it('is ready to run test cases', async () => {
       const next = await test.default(recordContext);
@@ -103,12 +97,7 @@ describe('record test', () => {
 
   describe('is running tests', () => {
     beforeEach(async () => {
-      sinon
-        .stub(countAppMaps, 'default')
-        .onCall(0)
-        .resolves(0)
-        .onCall(1)
-        .resolves(10);
+      sinon.stub(countAppMaps, 'default').onCall(0).resolves(0).onCall(1).resolves(10);
       await recordContext.initialize();
     });
 

@@ -59,9 +59,7 @@ describe(FingerprintWatchCommand, () => {
         if (retryCount < maxRetries) {
           setTimeout(() => verifyFileExists(filePath, retryCount + 1), 1000);
         } else {
-          throw new Error(
-            `File ${filePath} does not exist after ${retryCount} retries`
-          );
+          throw new Error(`File ${filePath} does not exist after ${retryCount} retries`);
         }
       }
 

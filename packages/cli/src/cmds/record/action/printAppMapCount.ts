@@ -6,9 +6,7 @@ export default async function printAppMapCount(appMapDir: string) {
   const appMapCount = await countAppMaps(appMapDir);
 
   const successMessage = [
-    chalk.green(
-      `Success! There are now ${appMapCount} AppMap files in directory '${appMapDir}'.`
-    ),
+    chalk.green(`Success! There are now ${appMapCount} AppMap files in directory '${appMapDir}'.`),
     '',
     chalk.blue('NEXT STEP: Open AppMaps'),
     '',

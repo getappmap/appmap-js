@@ -19,8 +19,7 @@ export default async function startTestCases(context: RecordContext) {
       )['maxTime'];
       maxTime = Number(maxTime);
     } while (Number.isNaN(maxTime));
-    if (maxTime !== defaultMaxTime)
-      configuration.setSetting('test_recording.max_time', maxTime);
+    if (maxTime !== defaultMaxTime) configuration.setSetting('test_recording.max_time', maxTime);
     await configuration.write();
   }
 

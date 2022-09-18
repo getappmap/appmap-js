@@ -107,7 +107,7 @@ describe('upload', () => {
     expect(appMapPruning.maxAppMapSize()).toBeLessThan(48 * 1024 * 1024);
   });
 
-  it('prunes large AppMaps before uploading', async() => {
+  it('prunes large AppMaps before uploading', async () => {
     const localhost = nock('http://localhost:3000');
     localhost.post(`/api/appmaps`).reply(201, AppMapData1, ['Content-Type', 'application/json']);
     localhost.post(`/api/appmaps`).reply(201, AppMapData2, ['Content-Type', 'application/json']);

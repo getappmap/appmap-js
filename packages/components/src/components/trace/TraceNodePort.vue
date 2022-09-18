@@ -94,9 +94,7 @@ export default {
       }
     },
     portType() {
-      return this.parameterObject.value
-        ? 'port-connected'
-        : 'port-disconnected';
+      return this.parameterObject.value ? 'port-connected' : 'port-disconnected';
     },
     popperPlacement() {
       return this.type === 'input' ? 'left' : 'right';

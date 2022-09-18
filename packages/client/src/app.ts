@@ -12,8 +12,6 @@ export default class {
 
   async listFindingStatus(): Promise<FindingStatusListItem[]> {
     const requestPath = ['api', this.fqname, 'finding_status'].join('/');
-    return get(requestPath).then((response) =>
-      reportJson<FindingStatusListItem[]>(response)
-    );
+    return get(requestPath).then((response) => reportJson<FindingStatusListItem[]>(response));
   }
 }

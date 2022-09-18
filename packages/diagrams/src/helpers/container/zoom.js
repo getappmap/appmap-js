@@ -51,20 +51,14 @@ function createDOM(viewportZoom) {
   controls.buttonZoomIn.addEventListener('click', (event) => {
     event.stopPropagation();
 
-    viewportZoom.zoomScale = Math.min(
-      1.0,
-      viewportZoom.zoomScale + viewportZoom.step
-    );
+    viewportZoom.zoomScale = Math.min(1.0, viewportZoom.zoomScale + viewportZoom.step);
     viewportZoom.emit('zoom', viewportZoom.zoomScale);
   });
 
   controls.buttonZoomOut.addEventListener('click', (event) => {
     event.stopPropagation();
 
-    viewportZoom.zoomScale = Math.max(
-      0.0,
-      viewportZoom.zoomScale - viewportZoom.step
-    );
+    viewportZoom.zoomScale = Math.max(0.0, viewportZoom.zoomScale - viewportZoom.step);
     viewportZoom.emit('zoom', viewportZoom.zoomScale);
   });
 
@@ -76,8 +70,7 @@ function createDOM(viewportZoom) {
     }
 
     const maxOffset = controls.zoomBar.getBoundingClientRect().height;
-    const offset =
-      event.clientY - Math.round(controls.zoomBar.getBoundingClientRect().top);
+    const offset = event.clientY - Math.round(controls.zoomBar.getBoundingClientRect().top);
 
     viewportZoom.emit('zoom', 1.0 - offset / maxOffset);
 
@@ -95,9 +88,7 @@ function createDOM(viewportZoom) {
   document.body.addEventListener('mousemove', (event) => {
     if (viewportZoom.isDragging) {
       const maxOffset = controls.zoomBar.getBoundingClientRect().height;
-      const offset =
-        viewportZoom.zoomGrabPosition +
-        (event.clientY - viewportZoom.dragStart);
+      const offset = viewportZoom.zoomGrabPosition + (event.clientY - viewportZoom.dragStart);
       viewportZoom.emit('zoom', 1.0 - offset / maxOffset);
       event.preventDefault();
     }
@@ -126,10 +117,7 @@ export default class ContainerZoom extends EventSource {
     createDOM(this);
     updateZoom(this, container.transform.k);
     container.on('move', (transform) =>
-      updateZoom(
-        this,
-        (transform.k - options.minRatio) / (options.maxRatio - options.minRatio)
-      )
+      updateZoom(this, (transform.k - options.minRatio) / (options.maxRatio - options.minRatio))
     );
   }
 }

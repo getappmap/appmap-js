@@ -1,6 +1,4 @@
-import RecordContext, {
-  RecordProcessResult,
-} from '../../../src/cmds/record/recordContext';
+import RecordContext, { RecordProcessResult } from '../../../src/cmds/record/recordContext';
 import * as countAppMaps from '../../../src/cmds/record/action/countAppMaps';
 import sinon from 'sinon';
 import TempConfig from './tempConfig';

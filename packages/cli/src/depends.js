@@ -85,9 +85,7 @@ class Depends {
       const appmapUpdatedAt = parseFloat(appmapUpdatedAtStr);
 
       if (verbose()) {
-        console.log(
-          `Checking AppMap ${indexDir} with timestamp ${appmapUpdatedAt}`
-        );
+        console.log(`Checking AppMap ${indexDir} with timestamp ${appmapUpdatedAt}`);
       }
 
       const classMap = JSON.parse(await fsp.readFile(fileName));
@@ -104,8 +102,7 @@ class Depends {
       };
       classMap.forEach(collectFilePaths);
 
-      const isClientProvidedFile = (filePath) =>
-        this.testLocations.has(filePath);
+      const isClientProvidedFile = (filePath) => this.testLocations.has(filePath);
 
       const isFileModifiedSince = async (filePath) => {
         const dependencyFilePath = this.makeAbsolutePath(filePath);
@@ -117,8 +114,7 @@ class Depends {
         // mean? Well, unfortunately the Ruby agent (and perhaps others?) will write file locations
         // like 'JSON' for native functions that don't actually correspond to real files.
         if (!dependencyModifiedAt) {
-          if (verbose())
-            console.log(`[depends] ${dependencyFilePath} does not exist`);
+          if (verbose()) console.log(`[depends] ${dependencyFilePath} does not exist`);
           return false;
         }
 
@@ -136,17 +132,13 @@ class Depends {
 
       if (this.testLocations && verbose()) {
         console.log(
-          `Checking whether AppMap contains any client-provided file: [ ${[
-            ...this.testLocations,
-          ]
+          `Checking whether AppMap contains any client-provided file: [ ${[...this.testLocations]
             .sort()
             .join(', ')} ]`
         );
       }
 
-      const testFunction = this.testLocations
-        ? isClientProvidedFile
-        : isFileModifiedSince;
+      const testFunction = this.testLocations ? isClientProvidedFile : isFileModifiedSince;
 
       await Promise.all(
         [...codeLocations].map(async (filePath) => {
@@ -165,17 +157,14 @@ class Depends {
       );
     };
 
-    await processFiles(
-      `${this.appMapDir}/**/classMap.json`,
-      async (fileName) => {
-        try {
-          await checkClassMap(fileName);
-        } catch (e) {
-          console.log(e.code);
-          console.warn(`Error checking uptodate ${fileName}: ${e}`);
-        }
+    await processFiles(`${this.appMapDir}/**/classMap.json`, async (fileName) => {
+      try {
+        await checkClassMap(fileName);
+      } catch (e) {
+        console.log(e.code);
+        console.warn(`Error checking uptodate ${fileName}: ${e}`);
       }
-    );
+    });
 
     return [...outOfDateNames].sort();
   }

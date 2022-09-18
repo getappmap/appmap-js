@@ -36,9 +36,7 @@ export default class AppMapIndex {
   async initialize(): Promise<boolean> {
     const appmapCreatedAt = await mtime(this.appmapFileName);
     if (!appmapCreatedAt) {
-      console.log(
-        `File ${this.appmapFileName} does not exist or is not a file.`
-      );
+      console.log(`File ${this.appmapFileName} does not exist or is not a file.`);
       return false;
     }
 
@@ -92,9 +90,7 @@ export default class AppMapIndex {
     } catch (err) {
       if (err instanceof SyntaxError) {
         // File may be in the process of writing.
-        console.warn(
-          `Error parsing JSON file ${this.appmapFileName} : ${err.message}`
-        );
+        console.warn(`Error parsing JSON file ${this.appmapFileName} : ${err.message}`);
         return;
       }
 
@@ -162,9 +158,7 @@ export default class AppMapIndex {
     const indexedAt = parseFloat(indexedAtStr);
 
     if (verbose()) {
-      console.log(
-        `${this.indexDir} created at ${this.appmapCreatedAt}, indexed at ${indexedAt}`
-      );
+      console.log(`${this.indexDir} created at ${this.appmapCreatedAt}, indexed at ${indexedAt}`);
     }
     return indexedAt >= this.appmapCreatedAt;
   }

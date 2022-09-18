@@ -24,11 +24,9 @@ function buildCodeObject(data) {
 describe('codeObjectId', () => {
   describe('for', () => {
     it('package', () => {
-      expect(
-        codeObjectId(buildCodeObject([{ type: 'package', name: 'foo' }])).join(
-          ''
-        )
-      ).toEqual('foo');
+      expect(codeObjectId(buildCodeObject([{ type: 'package', name: 'foo' }])).join('')).toEqual(
+        'foo'
+      );
     });
     it('multi-token package', () => {
       expect(

@@ -32,19 +32,17 @@ export default class Response {
       }
     });
 
-    const content = [...new Set(contentTypes())]
-      .sort()
-      .reduce((memo, mimeType) => {
-        memo[mimeType] = {};
+    const content = [...new Set(contentTypes())].sort().reduce((memo, mimeType) => {
+      memo[mimeType] = {};
 
-        if (!schemata[mimeType]) return memo;
+      if (!schemata[mimeType]) return memo;
 
-        // eslint-disable-next-line no-param-reassign
-        const schema = schemata[mimeType].openapi();
-        if (schema) memo[mimeType].schema = schema;
+      // eslint-disable-next-line no-param-reassign
+      const schema = schemata[mimeType].openapi();
+      if (schema) memo[mimeType].schema = schema;
 
-        return memo;
-      }, {} as Record<string, OpenAPIV3.MediaTypeObject>);
+      return memo;
+    }, {} as Record<string, OpenAPIV3.MediaTypeObject>);
     return { content, description: StatusCodes[this.statusCode] };
   }
 

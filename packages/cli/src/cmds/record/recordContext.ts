@@ -35,10 +35,7 @@ export default class RecordContext {
 
   async initialize() {
     await this.configuration.read();
-    this.appMapDir = this.configuration.configOption(
-      'appmap_dir',
-      '.'
-    ) as string;
+    this.appMapDir = this.configuration.configOption('appmap_dir', '.') as string;
     this.initialAppMapCount = await countAppMaps(this.appMapDir);
   }
 
@@ -50,9 +47,7 @@ export default class RecordContext {
     if (this.results) {
       result.exitCodes = this.exitCodes.map(String).join(', ');
       result.log = this.results
-        .map((r) =>
-          [r.command, JSON.stringify(r.env), r.output].join('\n===\n')
-        )
+        .map((r) => [r.command, JSON.stringify(r.env), r.output].join('\n===\n'))
         .join('\n=====\n');
     }
     return result;
@@ -79,18 +74,12 @@ export default class RecordContext {
 
   populateTestCommands() {
     this.testCommands = (
-      this.configuration.configOption(
-        'test_recording.test_commands',
-        []
-      ) as TestCommand[]
+      this.configuration.configOption('test_recording.test_commands', []) as TestCommand[]
     ).map(TestCommand.toString);
   }
 
   async populateMaxTime() {
-    this.maxTime = this.configuration.setting(
-      'test_recording.max_time',
-      30
-    ) as number;
+    this.maxTime = this.configuration.setting('test_recording.max_time', 30) as number;
   }
 
   async populateAppMapCount() {
@@ -101,10 +90,7 @@ export default class RecordContext {
 
   // Return the number of AppMaps created during this recording
   get appMapsCreated(): number {
-    if (
-      this.initialAppMapCount === undefined ||
-      this.appMapCount === undefined
-    ) {
+    if (this.initialAppMapCount === undefined || this.appMapCount === undefined) {
       throw new Error(
         `Counts uninitialized, initialAppMapCount: ${this.initialAppMapCount} appMapCount: ${this.appMapCount}`
       );

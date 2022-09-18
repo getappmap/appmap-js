@@ -29,12 +29,7 @@ export default {
     const x = inner.x - outer.x;
     const y = inner.y - outer.y;
 
-    return (
-      x > 0 &&
-      y > 0 &&
-      x + inner.width < outer.width &&
-      y + inner.height < outer.height
-    );
+    return x > 0 && y > 0 && x + inner.width < outer.width && y + inner.height < outer.height;
   },
 
   // delta returns the shortest relative translation to place inner within

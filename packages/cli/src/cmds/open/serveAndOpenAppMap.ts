@@ -11,9 +11,7 @@ export default async function serveAndOpenAppMap(appMapFile: string) {
   UI.progress(`Opening ${appMapFile}`);
 
   const builtDir = join(__dirname, '../../../built');
-  const baseDir = (await exists(builtDir))
-    ? builtDir
-    : join(__dirname, '..', '..');
+  const baseDir = (await exists(builtDir)) ? builtDir : join(__dirname, '..', '..');
 
   const server = createServer(async (req, res) => {
     // Once a request is received, the server can be closed.
@@ -73,9 +71,7 @@ export default async function serveAndOpenAppMap(appMapFile: string) {
   })
     .listen(0, '127.0.0.1', () => {
       const port = (server!.address() as AddressInfo).port;
-      open(
-        `http://localhost:${port}/?appmap=${encodeURIComponent(appMapFile)}`
-      );
+      open(`http://localhost:${port}/?appmap=${encodeURIComponent(appMapFile)}`);
     })
     .on('connection', function (socket) {
       // Don't let the open socket keep the process alive.

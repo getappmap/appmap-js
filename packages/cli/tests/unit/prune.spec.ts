@@ -13,7 +13,6 @@ describe('prune subcommand', () => {
   beforeEach(() => {
     projectDir = tmp.dirSync({} as any).name;
     fse.copySync(fixtureDir, projectDir);
-
   });
 
   afterEach(() => {
@@ -24,7 +23,7 @@ describe('prune subcommand', () => {
     const cmd = require('../../src/cmds/prune/prune').default;
     const parser = yargs.command(cmd);
 
-    sinon.stub(PruneAppMap, 'pruneAppMap').returns({events:[]});
+    sinon.stub(PruneAppMap, 'pruneAppMap').returns({ events: [] });
 
     const appMapFile = path.join(projectDir, 'revoke_api_key.appmap.json');
     const cmdLine = `prune -o ${projectDir} ${appMapFile} 2MB`;
@@ -32,8 +31,7 @@ describe('prune subcommand', () => {
       parser.parse(cmdLine, {}, (err, argv, output) => {
         if (err) {
           reject(err);
-        }
-        else {
+        } else {
           resolve(output);
         }
       });
@@ -41,7 +39,7 @@ describe('prune subcommand', () => {
 
     // Check that we wrote the output file correctly. Validity of pruning is
     // tested in @appland/models.
-    const actual = fs.readFileSync(appMapFile)
+    const actual = fs.readFileSync(appMapFile);
     expect(actual.toString()).toEqual('{"events":[]}');
   });
 });
