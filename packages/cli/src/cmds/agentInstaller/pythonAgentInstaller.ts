@@ -35,12 +35,8 @@ abstract class PythonInstaller extends AgentInstaller {
     );
 
     return {
-      'Python version': version.ok
-        ? version.output.split(/\s/)[1]
-        : chalk.red(version.output),
-      'Python package directory': pythonPath.ok
-        ? pythonPath.output
-        : chalk.red(pythonPath.output),
+      'Python version': version.ok ? version.output.split(/\s/)[1] : chalk.red(version.output),
+      'Python package directory': pythonPath.ok ? pythonPath.output : chalk.red(pythonPath.output),
     };
   }
 }
@@ -67,11 +63,7 @@ export class PoetryInstaller extends PythonInstaller {
   }
 
   async checkCurrentConfig(): Promise<void> {
-    const cmd = new CommandStruct(
-      'poetry',
-      ['install', '--dry-run'],
-      this.path
-    );
+    const cmd = new CommandStruct('poetry', ['install', '--dry-run'], this.path);
 
     try {
       await run(cmd);
@@ -121,11 +113,7 @@ export class PipInstaller extends PythonInstaller {
   }
 
   async checkCurrentConfig(): Promise<void> {
-    const cmd = new CommandStruct(
-      'pip',
-      ['install', '-r', this.buildFile, '--dry-run'],
-      this.path
-    );
+    const cmd = new CommandStruct('pip', ['install', '-r', this.buildFile, '--dry-run'], this.path);
 
     try {
       await run(cmd);
@@ -151,11 +139,7 @@ export class PipInstaller extends PythonInstaller {
 
     encodedFile.write(requirements);
 
-    const cmd = new CommandStruct(
-      'pip',
-      ['install', '-r', this.buildFile],
-      this.path
-    );
+    const cmd = new CommandStruct('pip', ['install', '-r', this.buildFile], this.path);
     await run(cmd);
   }
 

@@ -46,10 +46,7 @@ export default class Context extends EventEmitter {
     const result: any[] = [];
     await Promise.all(
       this.codeObjectMatches.map(async (codeObjectMatch) => {
-        const findEvents = new FindEvents(
-          codeObjectMatch.appmap,
-          codeObjectMatch.codeObject
-        );
+        const findEvents = new FindEvents(codeObjectMatch.appmap, codeObjectMatch.codeObject);
         findEvents.filter(this.filters);
         const events = await findEvents.matches();
         result.push(...events);

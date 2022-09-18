@@ -38,9 +38,7 @@
             <v-quality-icon :quality="testFrameworkQuality" />
           </div>
           <div class="req-message">
-            <span :class="testFrameworkQuality">{{
-              testFrameworkMessage
-            }}</span>
+            <span :class="testFrameworkQuality">{{ testFrameworkMessage }}</span>
           </div>
         </li>
         <li>
@@ -59,8 +57,7 @@
       <h2>Run AppMap installer</h2>
       <article class="node-install-warning" v-if="hasNode === false">
         <p class="ok">
-          Installing the AppMap agent requires Node 14, 16, or 18, which was not
-          detected.
+          Installing the AppMap agent requires Node 14, 16, or 18, which was not detected.
         </p>
         <p>
           For instructions, see our
@@ -71,10 +68,7 @@
           >
         </p>
       </article>
-      <v-code-snippet
-        :clipboard-text="installCommand"
-        :message-success="messageSuccess"
-      />
+      <v-code-snippet :clipboard-text="installCommand" :message-success="messageSuccess" />
       <div v-if="project.agentInstalled" data-cy="agent-installed-message">
         <span class="good">It looks like the AppMap agent is installed.</span>
         Continue on to the next step.
@@ -127,58 +121,35 @@ export default {
       return 'good';
     },
     installCommand() {
-      return [
-        'npx @appland/appmap install',
-        this.project && `-d ${this.project.path}`,
-      ]
+      return ['npx @appland/appmap install', this.project && `-d ${this.project.path}`]
         .filter(Boolean)
         .join(' ');
     },
     language() {
       return (
-        (this.project && this.project.language && this.project.language.name) ||
-        'None Detected'
+        (this.project && this.project.language && this.project.language.name) || 'None Detected'
       );
     },
     languageMessage() {
-      return (
-        (this.project && this.project.language && this.project.language.text) ||
-        ''
-      );
+      return (this.project && this.project.language && this.project.language.text) || '';
     },
     languageQuality() {
-      if (
-        !(this.project && this.project.language && this.project.language.score)
-      )
-        return 'bad';
+      if (!(this.project && this.project.language && this.project.language.score)) return 'bad';
       if (this.project.language.score < 2) return 'bad';
       if (this.project.language.score < 3) return 'ok';
       return 'good';
     },
     webFramework() {
       return (
-        (this.project &&
-          this.project.webFramework &&
-          this.project.webFramework.name) ||
+        (this.project && this.project.webFramework && this.project.webFramework.name) ||
         'None Detected'
       );
     },
     webFrameworkMessage() {
-      return (
-        (this.project &&
-          this.project.webFramework &&
-          this.project.webFramework.text) ||
-        ''
-      );
+      return (this.project && this.project.webFramework && this.project.webFramework.text) || '';
     },
     webFrameworkQuality() {
-      if (
-        !(
-          this.project &&
-          this.project.webFramework &&
-          this.project.webFramework.score
-        )
-      )
+      if (!(this.project && this.project.webFramework && this.project.webFramework.score))
         return 'bad';
       if (this.project.webFramework.score < 2) return 'bad';
       if (this.project.webFramework.score < 3) return 'ok';
@@ -186,28 +157,15 @@ export default {
     },
     testFramework() {
       return (
-        (this.project &&
-          this.project.testFramework &&
-          this.project.testFramework.name) ||
+        (this.project && this.project.testFramework && this.project.testFramework.name) ||
         'None Detected'
       );
     },
     testFrameworkMessage() {
-      return (
-        (this.project &&
-          this.project.testFramework &&
-          this.project.testFramework.text) ||
-        ''
-      );
+      return (this.project && this.project.testFramework && this.project.testFramework.text) || '';
     },
     testFrameworkQuality() {
-      if (
-        !(
-          this.project &&
-          this.project.testFramework &&
-          this.project.testFramework.score
-        )
-      )
+      if (!(this.project && this.project.testFramework && this.project.testFramework.score))
         return 'bad';
       if (this.project.testFramework.score < 2) return 'bad';
       if (this.project.testFramework.score < 3) return 'ok';
@@ -216,14 +174,11 @@ export default {
     link() {
       let url = 'https://appland.com/docs/install-appmap-agent';
       if (this.language === 'Ruby') {
-        url =
-          'https://appland.com/docs/install-appmap-agent/install-appmap-agent-for-ruby.html';
+        url = 'https://appland.com/docs/install-appmap-agent/install-appmap-agent-for-ruby.html';
       } else if (this.language === 'Java') {
-        url =
-          'https://appland.com/docs/install-appmap-agent/install-appmap-agent-for-java.html';
+        url = 'https://appland.com/docs/install-appmap-agent/install-appmap-agent-for-java.html';
       } else if (this.language === 'Python') {
-        url =
-          'https://appland.com/docs/install-appmap-agent/install-appmap-agent-for-python.html';
+        url = 'https://appland.com/docs/install-appmap-agent/install-appmap-agent-for-python.html';
       } else if (this.language === 'JavaScript') {
         url =
           'https://appland.com/docs/install-appmap-agent/install-appmap-agent-for-javascript.html';

@@ -32,45 +32,21 @@ $appland-gradient-1: linear-gradient(
   rgba(197, 12, 228, 1) 48%,
   rgba(255, 7, 170, 1) 100%
 );
-$appland-gradient-2: linear-gradient(
-  90deg,
-  rgba(255, 7, 170, 1) 0%,
-  rgba(156, 47, 186, 1) 100%
-);
-$appland-gradient-3: linear-gradient(
-  0deg,
-  rgba(156, 47, 186, 1) 0%,
-  rgba(255, 7, 170, 1) 100%
-);
+$appland-gradient-2: linear-gradient(90deg, rgba(255, 7, 170, 1) 0%, rgba(156, 47, 186, 1) 100%);
+$appland-gradient-3: linear-gradient(0deg, rgba(156, 47, 186, 1) 0%, rgba(255, 7, 170, 1) 100%);
 $appland-gradient-4: linear-gradient(
   90deg,
   rgba(255, 7, 170, 1) 0%,
   rgba(156, 47, 186, 1) 50%,
   rgba(67, 98, 177, 1) 100%
 );
-$deep-purple-gradient: linear-gradient(
-  180deg,
-  rgba(17, 1, 38, 1) 37%,
-  rgba(110, 14, 114, 1) 110%
-);
+$deep-purple-gradient: linear-gradient(180deg, rgba(17, 1, 38, 1) 37%, rgba(110, 14, 114, 1) 110%);
 $alert-danger: #cd1414;
 
 // Alerts
-$success: linear-gradient(
-  90deg,
-  rgba(113, 149, 41, 1) 0%,
-  rgba(143, 196, 19, 1) 100%
-);
-$danger: linear-gradient(
-  90deg,
-  rgba(222, 25, 50, 1) 0%,
-  rgba(196, 19, 92, 1) 100%
-);
-$general: linear-gradient(
-  90deg,
-  rgba(67, 98, 177, 1) 0%,
-  rgba(84, 10, 159, 1) 100%
-);
+$success: linear-gradient(90deg, rgba(113, 149, 41, 1) 0%, rgba(143, 196, 19, 1) 100%);
+$danger: linear-gradient(90deg, rgba(222, 25, 50, 1) 0%, rgba(196, 19, 92, 1) 100%);
+$general: linear-gradient(90deg, rgba(67, 98, 177, 1) 0%, rgba(84, 10, 159, 1) 100%);
 
 $col-int: #f92672;
 $col-string: #a6e22e;
@@ -97,8 +73,7 @@ $max-width: 1440px;
 $transition: all 0.3s ease;
 $row-height: 3rem;
 
-$appland-text-font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial,
-  sans-serif;
+$appland-text-font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $fa-font-path: '/webfonts';
 
 $overlay: rgba($blue, 0.5);

@@ -4,51 +4,51 @@ info:
   title: Rails Sample App
   version: v6
 paths:
-  "/":
+  '/':
     get:
       responses:
         '200':
           content:
             text/html: {}
           description: OK
-  "/about":
+  '/about':
     get:
       responses:
         '200':
           content:
             text/html: {}
           description: OK
-  "/account_activations/{id}/edit":
+  '/account_activations/{id}/edit':
     get:
       responses:
         '302':
           content: {}
           description: Redirected
       parameters:
-      - name: email
-        in: query
-        schema:
-          type: string
-      - name: id
-        in: path
-        schema:
-          type: string
-        required: true
-  "/contact":
+        - name: email
+          in: query
+          schema:
+            type: string
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+  '/contact':
     get:
       responses:
         '200':
           content:
             text/html: {}
           description: OK
-  "/help":
+  '/help':
     get:
       responses:
         '200':
           content:
             text/html: {}
           description: OK
-  "/login":
+  '/login':
     get:
       responses:
         '200':
@@ -79,7 +79,7 @@ paths:
                       type: string
                     remember_me:
                       type: string
-  "/logout":
+  '/logout':
     delete:
       responses:
         '302':
@@ -87,7 +87,7 @@ paths:
           description: Redirected
       requestBody:
         content: {}
-  "/microposts":
+  '/microposts':
     get:
       responses:
         '200':
@@ -122,7 +122,7 @@ paths:
                   type: string
                 commit:
                   type: string
-  "/microposts/{id}":
+  '/microposts/{id}':
     delete:
       responses:
         '302':
@@ -134,12 +134,12 @@ paths:
       requestBody:
         content: {}
       parameters:
-      - name: id
-        in: path
-        schema:
-          type: string
-        required: true
-  "/password_resets":
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+  '/password_resets':
     post:
       responses:
         '200':
@@ -157,14 +157,14 @@ paths:
               properties:
                 password_reset:
                   type: string
-  "/password_resets/new":
+  '/password_resets/new':
     get:
       responses:
         '200':
           content:
             text/html: {}
           description: OK
-  "/password_resets/{id}":
+  '/password_resets/{id}':
     patch:
       responses:
         '200':
@@ -190,12 +190,12 @@ paths:
                     password_confirmation:
                       type: string
       parameters:
-      - name: id
-        in: path
-        schema:
-          type: string
-        required: true
-  "/password_resets/{id}/edit":
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+  '/password_resets/{id}/edit':
     get:
       responses:
         '200':
@@ -206,16 +206,16 @@ paths:
           content: {}
           description: Redirected
       parameters:
-      - name: email
-        in: query
-        schema:
-          type: string
-      - name: id
-        in: path
-        schema:
-          type: string
-        required: true
-  "/relationships":
+        - name: email
+          in: query
+          schema:
+            type: string
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+  '/relationships':
     post:
       responses:
         '200':
@@ -225,7 +225,7 @@ paths:
         '302':
           content:
             text/html: {}
-          description: Redirected             
+          description: Redirected
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -234,7 +234,7 @@ paths:
               properties:
                 followed_id:
                   type: string
-  "/relationships/{id}":
+  '/relationships/{id}':
     delete:
       responses:
         '200':
@@ -244,23 +244,23 @@ paths:
         '302':
           content:
             text/html: {}
-          description: Redirected             
+          description: Redirected
       requestBody:
         content: {}
       parameters:
-      - name: id
-        in: path
-        schema:
-          type: string
-        required: true
-  "/signup":
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+  '/signup':
     get:
       responses:
         '200':
           content:
             text/html: {}
           description: OK
-  "/users":
+  '/users':
     get:
       responses:
         '200':
@@ -296,7 +296,7 @@ paths:
                       type: string
                     password_confirmation:
                       type: string
-  "/users/{id}":
+  '/users/{id}':
     delete:
       responses:
         '302':
@@ -305,11 +305,11 @@ paths:
       requestBody:
         content: {}
       parameters:
-      - name: id
-        in: path
-        schema:
-          type: string
-        required: true
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
     get:
       responses:
         '200':
@@ -317,11 +317,11 @@ paths:
             text/html: {}
           description: OK
       parameters:
-      - name: id
-        in: path
-        schema:
-          type: string
-        required: true
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
     patch:
       responses:
         '200':
@@ -345,12 +345,12 @@ paths:
                     email:
                       type: string
       parameters:
-      - name: id
-        in: path
-        schema:
-          type: string
-        required: true
-  "/users/{id}/edit":
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+  '/users/{id}/edit':
     get:
       responses:
         '200':
@@ -361,12 +361,12 @@ paths:
           content: {}
           description: Redirected
       parameters:
-      - name: id
-        in: path
-        schema:
-          type: string
-        required: true
-  "/users/{id}/followers":
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+  '/users/{id}/followers':
     get:
       responses:
         '200':
@@ -377,12 +377,12 @@ paths:
           content: {}
           description: Redirected
       parameters:
-      - name: id
-        in: path
-        schema:
-          type: string
-        required: true
-  "/users/{id}/following":
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+  '/users/{id}/following':
     get:
       responses:
         '200':
@@ -393,15 +393,15 @@ paths:
           content: {}
           description: Redirected
       parameters:
-      - name: id
-        in: path
-        schema:
-          type: string
-        required: true
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
 components:
   securitySchemes: {}
 servers:
-- url: http://{defaultHost}
-  variables:
-    defaultHost:
-      default: localhost:3000
+  - url: http://{defaultHost}
+    variables:
+      defaultHost:
+        default: localhost:3000

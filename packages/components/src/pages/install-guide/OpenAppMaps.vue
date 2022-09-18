@@ -8,8 +8,8 @@
         <article v-if="appMaps.length">
           <p>
             AppMaps have been recorded for this project! <br />
-            We've identified some interesting AppMaps and Code Objects that you
-            may want to check out.
+            We've identified some interesting AppMaps and Code Objects that you may want to check
+            out.
           </p>
           <div class="qs-explore-code-objects" data-cy="code-objects">
             <h2 class="subhead">Selected Code objects</h2>
@@ -78,10 +78,7 @@
         </article>
         <article v-else data-cy="no-appmaps">
           No AppMaps have been found in your project. Try
-          <a
-            href="#"
-            @click.prevent="$root.$emit('open-instruction', 'record-appmaps')"
-          >
+          <a href="#" @click.prevent="$root.$emit('open-instruction', 'record-appmaps')">
             recording AppMaps
           </a>
           first.

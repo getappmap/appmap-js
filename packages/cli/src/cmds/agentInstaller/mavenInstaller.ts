@@ -35,9 +35,9 @@ export default class MavenInstaller extends JavaBuildToolInstaller {
       return `.${sep}mvnw${ext}`;
     } else if (verbose()) {
       console.warn(
-        `${chalk.yellow(
-          `mvnw${ext} wrapper`
-        )} not found, falling back to ${chalk.yellow(`mvn${ext}`)}`
+        `${chalk.yellow(`mvnw${ext} wrapper`)} not found, falling back to ${chalk.yellow(
+          `mvn${ext}`
+        )}`
       );
     }
 
@@ -53,11 +53,7 @@ export default class MavenInstaller extends JavaBuildToolInstaller {
   }
 
   async printJarPathCommand(): Promise<CommandStruct> {
-    return new CommandStruct(
-      this.runCommand(),
-      ['appmap:print-jar-path'],
-      this.path
-    );
+    return new CommandStruct(this.runCommand(), ['appmap:print-jar-path'], this.path);
   }
 
   // TODO: validate the user's project before adding AppMap
@@ -76,9 +72,7 @@ export default class MavenInstaller extends JavaBuildToolInstaller {
       const xmlString = `<${tag} xmlns="${ns}">
   </${tag}>
 `;
-      const xmlNode = domParser
-        .parseFromString(xmlString, 'application/xml')
-        .getRootNode();
+      const xmlNode = domParser.parseFromString(xmlString, 'application/xml').getRootNode();
       return xmlNode.childNodes[0];
     };
 
@@ -147,9 +141,7 @@ export default class MavenInstaller extends JavaBuildToolInstaller {
       }
       version.textContent = pluginVersion;
     } else {
-      const pluginNode = domParser
-        .parseFromString(pluginString, 'application/xml')
-        .getRootNode();
+      const pluginNode = domParser.parseFromString(pluginString, 'application/xml').getRootNode();
       while (pluginNode.childNodes.length > 0) {
         const node = pluginNode.childNodes[0];
         pluginsSection.appendChild(node);

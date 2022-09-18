@@ -12,15 +12,12 @@ function eventName(classMap, e) {
     return obj.id;
   }
 
-  return `${callEvent.defined_class}${callEvent.static ? '.' : '#'}${
-    callEvent.method_id
-  }`;
+  return `${callEvent.defined_class}${callEvent.static ? '.' : '#'}${callEvent.method_id}`;
 }
 
 // Performs an array of transform functions on an object. The transform function
 // is expected to return the transformed object.
-const transform = (transforms, obj, ...args) =>
-  transforms.reduce((x, fn) => fn(x, ...args), obj);
+const transform = (transforms, obj, ...args) => transforms.reduce((x, fn) => fn(x, ...args), obj);
 
 // AppMapBuilder is responsible for transforming appmap data before returning
 // an AppMap model.
@@ -48,9 +45,7 @@ class AppMapBuilder extends EventSource {
     } else if (dataType === 'string') {
       this.data = JSON.parse(data);
     } else {
-      throw new Error(
-        `got invalid type ${dataType}, expected object or string`
-      );
+      throw new Error(`got invalid type ${dataType}, expected object or string`);
     }
 
     (this.data.events || []).forEach((e) => {
@@ -125,8 +120,7 @@ class AppMapBuilder extends EventSource {
       // Normalize path info
       const { httpServerRequest } = event;
       if (httpServerRequest && httpServerRequest.normalized_path_info) {
-        httpServerRequest.normalized_path_info =
-          httpServerRequest.normalized_path_info.toString();
+        httpServerRequest.normalized_path_info = httpServerRequest.normalized_path_info.toString();
       }
       if (httpServerRequest && httpServerRequest.path_info) {
         httpServerRequest.path_info = httpServerRequest.path_info.toString();
@@ -177,12 +171,7 @@ class AppMapBuilder extends EventSource {
 
       // Iterate each event, regardless of the stack
       stacks.flat(2).forEach((e) => {
-        if (
-          e.event !== 'call' ||
-          e.sql_query ||
-          e.http_server_request ||
-          e.http_client_request
-        ) {
+        if (e.event !== 'call' || e.sql_query || e.http_server_request || e.http_client_request) {
           return;
         }
 
@@ -266,10 +255,7 @@ class AppMapBuilder extends EventSource {
           return false;
         }
 
-        return (
-          Boolean(stack[0].httpServerRequest) ||
-          Boolean(stack[0].httpClientRequest)
-        );
+        return Boolean(stack[0].httpServerRequest) || Boolean(stack[0].httpClientRequest);
       })
     );
   }
@@ -281,9 +267,7 @@ class AppMapBuilder extends EventSource {
         const transformedChunk = transform(this.transforms.chunk, chunk);
         return transformedChunk.map((stack) => {
           const transformedStack = transform(this.transforms.stack, stack);
-          return transformedStack.map((event) =>
-            transform(this.transforms.event, event)
-          );
+          return transformedStack.map((event) => transform(this.transforms.event, event));
         });
       })
       .flat(2);

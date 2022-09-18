@@ -24,9 +24,7 @@ async function appMapCatalog(directory) {
         metadata,
       };
       if (appMapsByName[metadata.name]) {
-        console.warn(
-          `AppMap name ${metadata.name} is not unique in the mapset`
-        );
+        console.warn(`AppMap name ${metadata.name} is not unique in the mapset`);
       } else {
         appMapsByName[metadata.name] = entry;
       }

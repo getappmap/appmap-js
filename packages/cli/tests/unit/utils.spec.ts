@@ -29,9 +29,11 @@ describe(writeFileAtomic, () => {
 
   it('works correctly even if jobId is a number', async () => {
     const filenames = [randFilename(32), randFilename(32)];
-    const promises = Promise.all(filenames.map(name => writeFileAtomic(tmpdir(), name, 31337, 'test')));
+    const promises = Promise.all(
+      filenames.map((name) => writeFileAtomic(tmpdir(), name, 31337, 'test'))
+    );
 
     await expect(promises).resolves.not.toThrow();
-    await Promise.all(filenames.map(name => rm(join(tmpdir(), name))));
+    await Promise.all(filenames.map((name) => rm(join(tmpdir(), name))));
   });
 });

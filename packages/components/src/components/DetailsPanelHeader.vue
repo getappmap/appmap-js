@@ -13,10 +13,7 @@
         {{ item.name }}
       </div>
     </div>
-    <h4
-      class="details-panel-header__details-type"
-      :data-type="objectType.toLowerCase()"
-    >
+    <h4 class="details-panel-header__details-type" :data-type="objectType.toLowerCase()">
       {{ objectType }}
       <span v-if="objectId">{{ objectId }}</span>
     </h4>
@@ -85,17 +82,10 @@ export default {
       const result = [];
       if (codeObject) {
         if (codeObject.type !== CodeObjectType.QUERY) {
-          result.push(
-            codeObject.packageObject,
-            codeObject.classObject,
-            codeObject
-          );
+          result.push(codeObject.packageObject, codeObject.classObject, codeObject);
         }
 
-        if (
-          codeObject.type === CodeObjectType.ROUTE ||
-          codeObject.type === CodeObjectType.QUERY
-        ) {
+        if (codeObject.type === CodeObjectType.ROUTE || codeObject.type === CodeObjectType.QUERY) {
           result.unshift(codeObject.parent);
         }
       }

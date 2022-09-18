@@ -49,9 +49,7 @@ export default {
   data() {
     return {
       hasClipboardAPI:
-        navigator &&
-        navigator.clipboard &&
-        typeof navigator.clipboard.writeText === 'function',
+        navigator && navigator.clipboard && typeof navigator.clipboard.writeText === 'function',
     };
   },
   methods: {

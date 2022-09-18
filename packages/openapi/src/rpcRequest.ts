@@ -19,7 +19,7 @@ type ServerRpcEvent = Event & Required<Pick<Event, 'httpServerRequest' | 'httpSe
 type ClientRpcEvent = Event & Required<Pick<Event, 'httpClientRequest' | 'httpClientResponse'>>;
 
 class ServerRPCRequest implements RPCRequest {
-  constructor(private event: ServerRpcEvent) { }
+  constructor(private event: ServerRpcEvent) {}
 
   get status() {
     return this.event.httpServerResponse.status;
@@ -55,8 +55,7 @@ class ServerRPCRequest implements RPCRequest {
 
   get requestPath() {
     return ensureString(
-      this.event.httpServerRequest.normalized_path_info ||
-        this.event.httpServerRequest.path_info
+      this.event.httpServerRequest.normalized_path_info || this.event.httpServerRequest.path_info
     );
   }
 }

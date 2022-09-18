@@ -6,9 +6,7 @@ class Canonicalize extends Unique {
     const status = event.httpServerResponse
       ? event.httpServerResponse.status || event.httpServerResponse.status_code
       : null;
-    const parameterNames = event.message
-      ? event.message.map((m) => m.name)
-      : [];
+    const parameterNames = event.message ? event.message.map((m) => m.name) : [];
     const parameters = `(${parameterNames.join(',')})`;
 
     return { route: event.route, parameters, status };

@@ -129,26 +129,11 @@
   --vscode-merge-incomingContentBackground: rgba(64, 166, 255, 0.2);
   --vscode-merge-commonHeaderBackground: rgba(96, 96, 96, 0.4);
   --vscode-merge-commonContentBackground: rgba(96, 96, 96, 0.16);
-  --vscode-editorOverviewRuler-currentContentForeground: rgba(
-    64,
-    200,
-    174,
-    0.5
-  );
-  --vscode-editorOverviewRuler-incomingContentForeground: rgba(
-    64,
-    166,
-    255,
-    0.5
-  );
+  --vscode-editorOverviewRuler-currentContentForeground: rgba(64, 200, 174, 0.5);
+  --vscode-editorOverviewRuler-incomingContentForeground: rgba(64, 166, 255, 0.5);
   --vscode-editorOverviewRuler-commonContentForeground: rgba(96, 96, 96, 0.4);
   --vscode-editorOverviewRuler-findMatchForeground: rgba(209, 134, 22, 0.49);
-  --vscode-editorOverviewRuler-selectionHighlightForeground: rgba(
-    160,
-    160,
-    160,
-    0.8
-  );
+  --vscode-editorOverviewRuler-selectionHighlightForeground: rgba(160, 160, 160, 0.8);
   --vscode-minimap-findMatchHighlight: #d18616;
   --vscode-minimap-selectionOccurrenceHighlight: #676767;
   --vscode-minimap-selectionHighlight: #264f78;
@@ -198,12 +183,7 @@
   --vscode-editorBracketHighlight-foreground4: rgba(0, 0, 0, 0);
   --vscode-editorBracketHighlight-foreground5: rgba(0, 0, 0, 0);
   --vscode-editorBracketHighlight-foreground6: rgba(0, 0, 0, 0);
-  --vscode-editorBracketHighlight-unexpectedBracket-foreground: rgba(
-    255,
-    18,
-    18,
-    0.8
-  );
+  --vscode-editorBracketHighlight-unexpectedBracket-foreground: rgba(255, 18, 18, 0.8);
   --vscode-editorBracketPairGuide-background1: rgba(0, 0, 0, 0);
   --vscode-editorBracketPairGuide-background2: rgba(0, 0, 0, 0);
   --vscode-editorBracketPairGuide-background3: rgba(0, 0, 0, 0);
@@ -266,18 +246,8 @@
   --vscode-editorSuggestWidgetStatus-foreground: rgba(239, 240, 235, 0.5);
   --vscode-editor-wordHighlightBackground: #54555e;
   --vscode-editor-wordHighlightStrongBackground: #54555e;
-  --vscode-editorOverviewRuler-wordHighlightForeground: rgba(
-    160,
-    160,
-    160,
-    0.8
-  );
-  --vscode-editorOverviewRuler-wordHighlightStrongForeground: rgba(
-    192,
-    160,
-    192,
-    0.8
-  );
+  --vscode-editorOverviewRuler-wordHighlightForeground: rgba(160, 160, 160, 0.8);
+  --vscode-editorOverviewRuler-wordHighlightStrongForeground: rgba(192, 160, 192, 0.8);
   --vscode-peekViewTitle-background: rgba(55, 148, 255, 0.1);
   --vscode-peekViewTitleLabel-foreground: #ffffff;
   --vscode-peekViewTitleDescription-foreground: rgba(204, 204, 204, 0.7);
@@ -294,12 +264,7 @@
   --vscode-editorMarkerNavigationError-background: #f14c4c;
   --vscode-editorMarkerNavigationError-headerBackground: rgba(241, 76, 76, 0.1);
   --vscode-editorMarkerNavigationWarning-background: #cca700;
-  --vscode-editorMarkerNavigationWarning-headerBackground: rgba(
-    204,
-    167,
-    0,
-    0.1
-  );
+  --vscode-editorMarkerNavigationWarning-headerBackground: rgba(204, 167, 0, 0.1);
   --vscode-editorMarkerNavigationInfo-background: #3794ff;
   --vscode-editorMarkerNavigationInfo-headerBackground: rgba(55, 148, 255, 0.1);
   --vscode-editorMarkerNavigation-background: #282a36;
@@ -392,12 +357,7 @@
   --vscode-debugToolBar-background: #333333;
   --vscode-debugIcon-startForeground: #89d185;
   --vscode-editor-stackFrameHighlightBackground: rgba(255, 255, 0, 0.2);
-  --vscode-editor-focusedStackFrameHighlightBackground: rgba(
-    122,
-    189,
-    122,
-    0.3
-  );
+  --vscode-editor-focusedStackFrameHighlightBackground: rgba(122, 189, 122, 0.3);
   --vscode-settings-headerForeground: #e7e7e7;
   --vscode-settings-modifiedItemIndicator: #0c7d9d;
   --vscode-settings-headerBorder: rgba(128, 128, 128, 0.35);
@@ -418,12 +378,7 @@
   --vscode-settings-focusedRowBorder: rgba(255, 255, 255, 0.12);
   --vscode-terminal-foreground: #cccccc;
   --vscode-terminal-selectionBackground: rgba(255, 255, 255, 0.25);
-  --vscode-terminalCommandDecoration-defaultBackground: rgba(
-    255,
-    255,
-    255,
-    0.25
-  );
+  --vscode-terminalCommandDecoration-defaultBackground: rgba(255, 255, 255, 0.25);
   --vscode-terminalCommandDecoration-successBackground: #1b81a8;
   --vscode-terminalCommandDecoration-errorBackground: #f14c4c;
   --vscode-terminalOverviewRuler-cursorForeground: rgba(160, 160, 160, 0.8);

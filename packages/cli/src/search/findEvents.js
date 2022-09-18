@@ -61,14 +61,12 @@ class FindEvents {
     const matches = /** @type {EventMatch[]} */ [];
     const matchesByEvent = {};
 
-    const significant = (/** @type {Event} */ event) =>
-      event.labels.size > 0 || !event.isFunction;
+    const significant = (/** @type {Event} */ event) => event.labels.size > 0 || !event.isFunction;
 
     const beginMatch = () => {
       const event = stack[stack.length - 1];
       const ancestors = stack.slice(0, stack.length - 1).filter(significant);
-      const caller =
-        /** @type {Event} */ stack.length >= 2 ? stack[stack.length - 2] : null;
+      const caller = /** @type {Event} */ stack.length >= 2 ? stack[stack.length - 2] : null;
       const matchObj = /** @type {EventMatch} */ {
         appmap: this.appMapName,
         event,
@@ -104,10 +102,7 @@ class FindEvents {
         return true;
       }
       const filters = this.filters.reduce(
-        (
-          /** @type {{string:string[]}} */ memo,
-          /** @type {Filter} */ filter
-        ) => {
+        (/** @type {{string:string[]}} */ memo, /** @type {Filter} */ filter) => {
           let existing = memo[filter.name];
           if (!existing) {
             // eslint-disable-next-line no-multi-assign

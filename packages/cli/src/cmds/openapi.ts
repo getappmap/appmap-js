@@ -4,7 +4,13 @@ import { promises as fsp, statSync } from 'fs';
 import { queue } from 'async';
 import { glob } from 'glob';
 import yaml from 'js-yaml';
-import { Model, parseHTTPServerRequests, rpcRequestForEvent, SecuritySchemes, verbose } from '@appland/openapi';
+import {
+  Model,
+  parseHTTPServerRequests,
+  rpcRequestForEvent,
+  SecuritySchemes,
+  verbose,
+} from '@appland/openapi';
 import { Event } from '@appland/models';
 import { Arguments, Argv } from 'yargs';
 
@@ -43,14 +49,11 @@ export class OpenAPICommand {
   async collectAppMap(file: string): Promise<void> {
     this.count += 1;
     try {
-      parseHTTPServerRequests(
-        JSON.parse((await fsp.readFile(file)).toString()),
-        (e: Event) => {
-          const request = rpcRequestForEvent(e)!;
-          this.model.addRpcRequest(request);
-          this.securitySchemes.addRpcRequest(request);
-        }
-      );
+      parseHTTPServerRequests(JSON.parse((await fsp.readFile(file)).toString()), (e: Event) => {
+        const request = rpcRequestForEvent(e)!;
+        this.model.addRpcRequest(request);
+        this.securitySchemes.addRpcRequest(request);
+      });
     } catch (e) {
       throw new Error(`Error parsing ${file}: ${e}`);
     }

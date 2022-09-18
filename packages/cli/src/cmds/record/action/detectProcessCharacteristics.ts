@@ -38,14 +38,12 @@ export default async function detectProcessCharacteristics({
   }
 
   const start = new Date().getTime();
-  const pids: Pids | undefined = await portPid(ro.port).then(
-    async (pids: Pids) => {
-      if (pids && pids.tcp.length > 0) {
-        await Promise.all(pids.tcp.map(printPid));
-        return pids;
-      }
+  const pids: Pids | undefined = await portPid(ro.port).then(async (pids: Pids) => {
+    if (pids && pids.tcp.length > 0) {
+      await Promise.all(pids.tcp.map(printPid));
+      return pids;
     }
-  );
+  });
 
   if (!pids) {
     UI.error();

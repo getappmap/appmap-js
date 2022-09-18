@@ -14,22 +14,16 @@
       <div class="instructions__content welcome">
         <div class="intro">
           <p>
-            These UML-inspired diagrams display your key application components,
-            and how they are inter-related during application execution.
+            These UML-inspired diagrams display your key application components, and how they are
+            inter-related during application execution.
           </p>
           <ul>
             <li>
-              When you first open an AppMap, we'll show you the maps we've
-              created, as well as lists of labels and events we've identified in
-              your code.
+              When you first open an AppMap, we'll show you the maps we've created, as well as lists
+              of labels and events we've identified in your code.
             </li>
-            <li>
-              When a node is selected, we'll show you its details in the
-              sidebar.
-            </li>
-            <li>
-              Use powerful filters bring focus to a narrow area of interest.
-            </li>
+            <li>When a node is selected, we'll show you its details in the sidebar.</li>
+            <li>Use powerful filters bring focus to a narrow area of interest.</li>
           </ul>
         </div>
       </div>
@@ -38,12 +32,9 @@
           <h4>Dependency map</h4>
           <ul class="feature-list">
             <li>
-              Right-click nodes to set as root, expand, collapse and reset the
-              diagram elements
+              Right-click nodes to set as root, expand, collapse and reset the diagram elements
             </li>
-            <li>
-              Clicking an edge between nodes will display associated events
-            </li>
+            <li>Clicking an edge between nodes will display associated events</li>
           </ul>
           <ul class="legend">
             <h5>Legend</h5>

@@ -12,8 +12,7 @@ import { withSandbox, withStubbedTelemetry } from '../../helper';
 // I'm sure there's a proper way to write a matcher that will check that a sinon stub was called
 // with a matching object, a la https://jestjs.io/docs/expect#tomatchobjectobject . This will do for
 // now.
-const getNthCallArgs = (stub, nth) =>
-  (stub as sinon.SinonStub).getCall(nth).args[0];
+const getNthCallArgs = (stub, nth) => (stub as sinon.SinonStub).getCall(nth).args[0];
 
 class TestErrorResponse implements HttpErrorResponse {
   headers: Record<string, string> = {};
@@ -111,9 +110,7 @@ describe('openTicket', () => {
         prompt.resolves(condition);
         await openTicket('error');
         expect(Telemetry.sendEvent).toBeCalledOnce();
-        expect(getNthCallArgs(Telemetry.sendEvent, 0)).toMatchObject(
-          expectation
-        );
+        expect(getNthCallArgs(Telemetry.sendEvent, 0)).toMatchObject(expectation);
       });
     });
 
@@ -151,9 +148,7 @@ describe('openTicket', () => {
 
           await openTicket('error');
           expect(Telemetry.sendEvent).toBeCalledOnce();
-          expect(getNthCallArgs(Telemetry.sendEvent, 0)).toMatchObject(
-            expectation
-          );
+          expect(getNthCallArgs(Telemetry.sendEvent, 0)).toMatchObject(expectation);
         });
       });
     });

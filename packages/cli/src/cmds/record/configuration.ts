@@ -12,10 +12,7 @@ export type RemoteRecordingConfig = {
 };
 
 export class TestCommand {
-  constructor(
-    public command: string,
-    public env: Record<string, string> = {}
-  ) {}
+  constructor(public command: string, public env: Record<string, string> = {}) {}
 
   static toString(cmd: TestCommand): string {
     return `${TestCaseRecording.envString(cmd.env)}${cmd.command}`;
@@ -46,14 +43,12 @@ export type AppMapSettings = {
 export default class Configuration {
   constructor(appMapFile?: string, settingsFile?: string) {
     this.appMapFile = appMapFile || 'appmap.yml';
-    this.settingsFile =
-      settingsFile || join(process.env.HOME || '', '.appmaprc');
+    this.settingsFile = settingsFile || join(process.env.HOME || '', '.appmaprc');
   }
 
   async read(): Promise<void> {
     this.config = (await readConfig(this.appMapFile)) || {};
-    this.settings =
-      (await readAllSettings(this.settingsFile))[this.settingsKey()] || {};
+    this.settings = (await readAllSettings(this.settingsFile))[this.settingsKey()] || {};
   }
 
   async write(): Promise<void> {
@@ -97,19 +92,10 @@ export default class Configuration {
   requestOptions(): RequestOptions {
     const requestOptions = {} as RequestOptions;
 
-    requestOptions.hostname = this.setting(
-      'remote_recording.host',
-      'localhost'
-    ).toString();
+    requestOptions.hostname = this.setting('remote_recording.host', 'localhost').toString();
     requestOptions.port = this.setting('remote_recording.port', 3000) as number;
-    requestOptions.path = this.configOption(
-      'remote_recording.path',
-      '/'
-    ).toString();
-    requestOptions.protocol = this.configOption(
-      'remote_recording.protocol',
-      'http:'
-    ).toString();
+    requestOptions.path = this.configOption('remote_recording.path', '/').toString();
+    requestOptions.protocol = this.configOption('remote_recording.protocol', 'http:').toString();
 
     return requestOptions;
   }
@@ -120,9 +106,7 @@ export default class Configuration {
   }
 
   private settingsKey() {
-    return isAbsolute(this.appMapFile)
-      ? this.appMapFile
-      : join(process.cwd(), this.appMapFile);
+    return isAbsolute(this.appMapFile) ? this.appMapFile : join(process.cwd(), this.appMapFile);
   }
 
   protected appMapFile: string;
@@ -180,11 +164,7 @@ function findOption(
   return entry || defaultValue;
 }
 
-function mergeConfigData(
-  data: any,
-  path: string,
-  value: string | number | TestCommand[]
-): void {
+function mergeConfigData(data: any, path: string, value: string | number | TestCommand[]): void {
   const tokens = path.split('.');
   const lastToken = tokens.pop()!;
   let entry = data;

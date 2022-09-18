@@ -15,9 +15,7 @@ const appMapDir = tmp.dirSync().name;
 
 const now = Date.now();
 
-function stripCodeObjectParents(
-  codeObjectMatches: CodeObjectMatch[]
-): CodeObjectMatch[] {
+function stripCodeObjectParents(codeObjectMatches: CodeObjectMatch[]): CodeObjectMatch[] {
   const strip = (codeObject: CodeObject): void => {
     codeObject.parent = undefined;
     codeObject.children = undefined;
@@ -43,10 +41,7 @@ describe('Inspect', () => {
   });
 
   test('finds a named function', async () => {
-    const fn = new FindCodeObjects(
-      appMapDir,
-      'function:app/models/ApiKey.issue'
-    );
+    const fn = new FindCodeObjects(appMapDir, 'function:app/models/ApiKey.issue');
     const result = await fn.find();
     expect(JSON.stringify(stripCodeObjectParents(result), null, 2)).toEqual(
       JSON.stringify(

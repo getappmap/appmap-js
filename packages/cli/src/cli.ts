@@ -65,9 +65,7 @@ class DiffCommand {
   async added() {
     await this._loadCatalogs();
 
-    return [...this.workingAppMapNames].filter(
-      (x) => !this.baseAppMapNames.has(x)
-    );
+    return [...this.workingAppMapNames].filter((x) => !this.baseAppMapNames.has(x));
   }
 
   /**
@@ -77,9 +75,7 @@ class DiffCommand {
   async removed() {
     await this._loadCatalogs();
 
-    return [...this.baseAppMapNames].filter(
-      (x) => !this.workingAppMapNames.has(x)
-    );
+    return [...this.baseAppMapNames].filter((x) => !this.workingAppMapNames.has(x));
   }
 
   /**
@@ -105,17 +101,13 @@ class DiffCommand {
         }
 
         const baseFingerprint = base.metadata.fingerprints.find(
-          (fingerprint) =>
-            fingerprint.canonicalization_algorithm === algorithmName
+          (fingerprint) => fingerprint.canonicalization_algorithm === algorithmName
         );
         const workingFingerprint = working.metadata.fingerprints.find(
-          (fingerprint) =>
-            fingerprint.canonicalization_algorithm === algorithmName
+          (fingerprint) => fingerprint.canonicalization_algorithm === algorithmName
         );
         if (!baseFingerprint || !workingFingerprint) {
-          console.warn(
-            `No ${algorithmName} fingerprint found on AppMap ${name}`
-          );
+          console.warn(`No ${algorithmName} fingerprint found on AppMap ${name}`);
           return;
         }
 
@@ -190,8 +182,7 @@ yargs(process.argv.slice(2))
         describe: 'indicate a specific AppMap to of compare',
       });
       args.option('show-diff', {
-        describe:
-          'compute the diff of the canonicalized forms of each changed AppMap',
+        describe: 'compute the diff of the canonicalized forms of each changed AppMap',
         boolean: true,
       });
       args.option('base-dir', {
@@ -221,9 +212,7 @@ yargs(process.argv.slice(2))
         throw new Error('Location of work-in-progress AppMaps is required');
       }
 
-      const diff = new DiffCommand()
-        .setBaseDir(baseDir)
-        .setWorkingDir(workingDir);
+      const diff = new DiffCommand().setBaseDir(baseDir).setWorkingDir(workingDir);
 
       if (argv.name) {
         diff.setAppMapNames([argv.name]);
@@ -241,12 +230,8 @@ yargs(process.argv.slice(2))
           .map(function (algorithm) {
             return async function () {
               const rawList = await diff.changed(algorithm);
-              const changedAppMaps = rawList.filter(
-                (name) => !cumulativeChangedAppMaps.has(name)
-              );
-              changedAppMaps.forEach((name) =>
-                cumulativeChangedAppMaps.add(name)
-              );
+              const changedAppMaps = rawList.filter((name) => !cumulativeChangedAppMaps.has(name));
+              changedAppMaps.forEach((name) => cumulativeChangedAppMaps.add(name));
               const changeResult = {
                 algorithm,
                 changed: <any[]>[],
@@ -304,8 +289,7 @@ yargs(process.argv.slice(2))
         describe: 'print a field from each matching AppMap',
       });
       args.option('stdin-files', {
-        describe:
-          'read the list of changed files from stdin, one file per line',
+        describe: 'read the list of changed files from stdin, one file per line',
         boolean: true,
       });
       return args.strict();
@@ -340,9 +324,7 @@ yargs(process.argv.slice(2))
       if (argv.field) {
         const { field } = argv;
         const q = queue(async (appMapBaseName: string) => {
-          const data = await fsp.readFile(
-            join(appMapBaseName, 'metadata.json')
-          );
+          const data = await fsp.readFile(join(appMapBaseName, 'metadata.json'));
           const metadata = JSON.parse(data);
           const value = metadata[field];
           if (value) {

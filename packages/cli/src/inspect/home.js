@@ -15,11 +15,7 @@ const MAX_VALUE_LENGTH = 60;
 const home = (context, getCommand) => {
   if (context.filters.length > 0) {
     console.log('Filters:');
-    console.log(
-      context.filters
-        .map((filter) => `${filter.name} = ${filter.value}`)
-        .join('\n')
-    );
+    console.log(context.filters.map((filter) => `${filter.name} = ${filter.value}`).join('\n'));
     console.log();
   }
 

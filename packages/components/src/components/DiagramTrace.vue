@@ -1,9 +1,5 @@
 <template v-slot:diagram>
-  <v-container
-    @click.native="clearSelection"
-    :zoomControls="zoomControls"
-    ref="container"
-  >
+  <v-container @click.native="clearSelection" :zoomControls="zoomControls" ref="container">
     <v-trace
       :events="events"
       :selected-events="selectedEvents"
@@ -178,8 +174,7 @@ export default {
                 }
 
                 const currentIndex = siblings.indexOf(selectedObject);
-                const nextIndex =
-                  event.key === 'ArrowUp' ? currentIndex - 1 : currentIndex + 1;
+                const nextIndex = event.key === 'ArrowUp' ? currentIndex - 1 : currentIndex + 1;
 
                 nextObject = siblings.slice(nextIndex % siblings.length)[0];
               }

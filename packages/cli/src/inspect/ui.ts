@@ -92,12 +92,7 @@ export default class UI {
 
   print() {
     assert(this.context.stats);
-    print(
-      this.context.stats,
-      this.rl,
-      this.getCommand.bind(this),
-      this.home.bind(this)
-    );
+    print(this.context.stats, this.rl, this.getCommand.bind(this), this.home.bind(this));
   }
 
   save() {
@@ -108,26 +103,16 @@ export default class UI {
 
   async navigate() {
     assert(this.rl);
-    return navigate(
-      this.rl,
-      this.context,
-      this.search.bind(this),
-      this.home.bind(this)
-    );
+    return navigate(this.rl, this.context, this.search.bind(this), this.home.bind(this));
   }
 
   async search() {
     const performSearch = async () => {
       console.warn('Finding matching AppMaps');
-      let progress = new cliProgress.SingleBar(
-        {},
-        cliProgress.Presets.shades_classic
-      );
+      let progress = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
       this.context.addListener('start', (count) => progress.start(count, 0));
       this.context.addListener('increment', progress.increment.bind(progress));
-      this.context.addListener('collate', () =>
-        console.warn('Collating results...')
-      );
+      this.context.addListener('collate', () => console.warn('Collating results...'));
       this.context.addListener('stop', (count) => progress.stop());
 
       await this.context.findCodeObjects();

@@ -44,9 +44,7 @@ describe('GraphVertex', () => {
 
     const edgeAB = new GraphEdge(vertexA, vertexB);
     const edgeAC = new GraphEdge(vertexA, vertexC);
-    vertexA
-      .addEdge(edgeAB)
-      .addEdge(edgeAC);
+    vertexA.addEdge(edgeAB).addEdge(edgeAC);
 
     expect(vertexA.hasEdge(edgeAB)).toBeTruthy();
     expect(vertexB.hasEdge(edgeAB)).toBeFalsy();
@@ -77,9 +75,7 @@ describe('GraphVertex', () => {
 
     const edgeAB = new GraphEdge(vertexA, vertexB);
     const edgeAC = new GraphEdge(vertexA, vertexC);
-    vertexA
-      .addEdge(edgeAB)
-      .addEdge(edgeAC);
+    vertexA.addEdge(edgeAB).addEdge(edgeAC);
 
     expect(vertexA.hasEdge(edgeAB)).toBeTruthy();
     expect(vertexB.hasEdge(edgeAB)).toBeFalsy();
@@ -107,9 +103,7 @@ describe('GraphVertex', () => {
 
     const edgeAB = new GraphEdge(vertexA, vertexB);
     const edgeAC = new GraphEdge(vertexA, vertexC);
-    vertexA
-      .addEdge(edgeAB)
-      .addEdge(edgeAC);
+    vertexA.addEdge(edgeAB).addEdge(edgeAC);
 
     expect(vertexB.getNeighbors()).toEqual([]);
 
@@ -127,9 +121,7 @@ describe('GraphVertex', () => {
 
     const edgeBA = new GraphEdge(vertexB, vertexA);
     const edgeCA = new GraphEdge(vertexC, vertexA);
-    vertexA
-      .addEdge(edgeBA)
-      .addEdge(edgeCA);
+    vertexA.addEdge(edgeBA).addEdge(edgeCA);
 
     expect(vertexB.getNeighbors()).toEqual([]);
 

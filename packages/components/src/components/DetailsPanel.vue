@@ -17,10 +17,7 @@
         <slot name="buttons" />
       </div>
       <keep-alive>
-        <v-details-search
-          v-if="!selectedObject && !selectedLabel"
-          :appMap="appMap"
-        />
+        <v-details-search v-if="!selectedObject && !selectedLabel" :appMap="appMap" />
       </keep-alive>
       <component
         v-if="selectedObject"
@@ -33,11 +30,7 @@
         v-if="selectedObject && selectedObject.labels"
         :items="Array.from(selectedObject.labels)"
       />
-      <v-details-label
-        v-if="selectedLabel"
-        :label="selectedLabel"
-        :appMap="appMap"
-      />
+      <v-details-label v-if="selectedLabel" :label="selectedLabel" :appMap="appMap" />
     </div>
   </div>
 </template>

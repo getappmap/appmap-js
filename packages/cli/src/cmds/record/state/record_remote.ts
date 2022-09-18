@@ -8,9 +8,7 @@ import RecordContext from '../recordContext';
 
 // This is the initial state of remote recording. From here, the connection to the AppMap
 // agent must be configured and verified, and then the recording will be run.
-export default async function remote(
-  recordContext: RecordContext
-): Promise<State> {
+export default async function remote(recordContext: RecordContext): Promise<State> {
   recordContext.populateURL();
   if (await isAgentAvailable(recordContext)) {
     if (!(await isRecordingInProgress(recordContext))) {

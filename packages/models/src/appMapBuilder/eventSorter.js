@@ -2,10 +2,7 @@ import EventStack from './eventStack';
 import { sizeof } from '../util';
 
 function getStackId(collection) {
-  return (
-    Object.keys(collection.activeStacks).length +
-    collection.finalizedStacks.length
-  );
+  return Object.keys(collection.activeStacks).length + collection.finalizedStacks.length;
 }
 
 // EventSorter is responsible for untangling an event array. It sorts events by
@@ -48,9 +45,7 @@ export default class EventSorter {
     // Join active and finalized stacks. We want to make sure we iterate over
     // every event.
     const stacks = [...this.finalizedStacks];
-    Object.values(this.activeStacks).forEach((s) =>
-      stacks.splice(s.id, 0, s.events)
-    );
+    Object.values(this.activeStacks).forEach((s) => stacks.splice(s.id, 0, s.events));
 
     return stacks.reduce((chunks, stack) => {
       if (stack.length === 0) {
@@ -79,10 +74,7 @@ export default class EventSorter {
       // does, push a new chunk. Otherwise, append to the last chunk.
       const prevChunk = chunks[chunks.length - 1];
       const prevStack = prevChunk[prevChunk.length - 1];
-      if (
-        prevStack[0].http_server_request ||
-        prevStack[0].http_client_request
-      ) {
+      if (prevStack[0].http_server_request || prevStack[0].http_client_request) {
         chunks.push([stack]);
       } else {
         prevChunk.push(stack);

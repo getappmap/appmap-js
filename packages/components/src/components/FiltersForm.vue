@@ -9,11 +9,7 @@
       @focus="onInputFocus"
     />
     <PlusIcon class="filters__form-plus" @click="onFormSubmit" />
-    <ul
-      ref="suggestionsList"
-      v-if="suggestionsList.length"
-      class="filters__form-suggestions"
-    >
+    <ul ref="suggestionsList" v-if="suggestionsList.length" class="filters__form-suggestions">
       <li
         :class="getSuggestionClasses(index)"
         v-for="(item, index) in suggestionsList"
@@ -69,18 +65,15 @@ export default {
   watch: {
     selectedSuggestion: {
       handler(selectedSuggestion) {
-        const selected =
-          this.$refs.suggestionsList.querySelectorAll('li')[selectedSuggestion];
+        const selected = this.$refs.suggestionsList.querySelectorAll('li')[selectedSuggestion];
 
         if (selected.offsetTop < this.$refs.suggestionsList.scrollTop) {
           this.$refs.suggestionsList.scrollTop = selected.offsetTop;
         } else if (
           selected.offsetTop >=
-          this.$refs.suggestionsList.scrollTop +
-            this.$refs.suggestionsList.offsetHeight
+          this.$refs.suggestionsList.scrollTop + this.$refs.suggestionsList.offsetHeight
         ) {
-          this.$refs.suggestionsList.scrollTop =
-            selected.offsetTop - selected.offsetHeight * 2;
+          this.$refs.suggestionsList.scrollTop = selected.offsetTop - selected.offsetHeight * 2;
         }
       },
     },

@@ -33,14 +33,10 @@ class InventoryCommand {
       await Promise.all(
         Object.keys(result).map(async (algorithmName) => {
           const items = JSON.parse(
-            await fsp.readFile(
-              joinPath(indexDir, `canonical.${algorithmName}.json`)
-            )
+            await fsp.readFile(joinPath(indexDir, `canonical.${algorithmName}.json`))
           );
 
-          items.forEach((item) =>
-            result[algorithmName].add(JSON.stringify(item))
-          );
+          items.forEach((item) => result[algorithmName].add(JSON.stringify(item)));
         })
       );
     });

@@ -35,38 +35,25 @@ describe('record.prompt.obtainTestCommands', () => {
 
     await obtainTestCommands(context);
 
-    expect(config.configOption('test_recording.test_commands', '')).toEqual([
-      testCommand,
-    ]);
+    expect(config.configOption('test_recording.test_commands', '')).toEqual([testCommand]);
   }
 
   describe('when commands are guessed', () => {
-    beforeEach(() =>
-      sinon.stub(guessTestCommands, 'default').resolves([testCommand])
-    );
+    beforeEach(() => sinon.stub(guessTestCommands, 'default').resolves([testCommand]));
 
     describe('and confirmed', () => {
-      beforeEach(() =>
-        stubConfirm.withArgs('Use this suggested test command?').resolves(true)
-      );
+      beforeEach(() => stubConfirm.withArgs('Use this suggested test command?').resolves(true));
 
       it('saves the selection and prompts to continue', async () => {
-        sinon
-          .stub(UI, 'continue')
-          .withArgs('Press enter to continue')
-          .resolves();
+        sinon.stub(UI, 'continue').withArgs('Press enter to continue').resolves();
 
         await obtainTestCommands(context);
 
-        expect(config.configOption('test_recording.test_commands', '')).toEqual(
-          [testCommand]
-        );
+        expect(config.configOption('test_recording.test_commands', '')).toEqual([testCommand]);
       });
     });
     describe('and not confirmed', () => {
-      beforeEach(() =>
-        stubConfirm.withArgs('Use this suggested test command?').resolves(false)
-      );
+      beforeEach(() => stubConfirm.withArgs('Use this suggested test command?').resolves(false));
 
       it('prompts for test command and env', promptForTestCommandAndEnv);
     });
@@ -88,9 +75,7 @@ describe('record.prompt.obtainTestCommands', () => {
 
       await obtainTestCommands(context);
 
-      expect(config.configOption('test_recording.test_commands', '')).toEqual([
-        testCommand,
-      ]);
+      expect(config.configOption('test_recording.test_commands', '')).toEqual([testCommand]);
     });
   });
 });

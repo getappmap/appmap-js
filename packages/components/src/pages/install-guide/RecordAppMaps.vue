@@ -7,34 +7,24 @@
       <main>
         <article v-if="documentationUrl">
           <div class="mb20">
-            Use our CLI to perform your first runtime analysis while exercising
-            your test cases. If you do not have Node.js installed or would
-            prefer to perform the recording manually, visit our
-            <a :href="documentationUrl">
-              documentation for recording AppMaps in {{ language }}.
-            </a>
+            Use our CLI to perform your first runtime analysis while exercising your test cases. If
+            you do not have Node.js installed or would prefer to perform the recording manually,
+            visit our
+            <a :href="documentationUrl"> documentation for recording AppMaps in {{ language }}. </a>
             <div class="center fit">
-              <v-code-snippet
-                :clipboard-text="command"
-                :message-success="clipboardSuccess"
-              />
+              <v-code-snippet :clipboard-text="command" :message-success="clipboardSuccess" />
             </div>
           </div>
-          <p class="mb20" v-if="complete">
-            Success! Continue to the next step.
-          </p>
+          <p class="mb20" v-if="complete">Success! Continue to the next step.</p>
         </article>
         <article v-else>
           <p class="mb20">
-            For instructions on recording your first AppMaps, refer to the
-            documentation below.
+            For instructions on recording your first AppMaps, refer to the documentation below.
           </p>
           <p class="mb20">
             <template v-for="(url, lang, index) in editorSpecificUrls">
               <a :href="url" :key="lang">{{ lang }}</a>
-              <template
-                v-if="index !== Object.keys(editorSpecificUrls).length - 1"
-              >
+              <template v-if="index !== Object.keys(editorSpecificUrls).length - 1">
                 &nbsp;&nbsp;|&nbsp;&nbsp;
               </template>
             </template>
@@ -57,16 +47,13 @@ const documentationUrls = {
     Java: 'https://appland.com/docs/appmap-diagrams/quickstart/vscode/java-step-3-tests',
     JavaScript:
       'https://appland.com/docs/appmap-diagrams/quickstart/vscode/javascript-step-3-tests',
-    Python:
-      'https://appland.com/docs/appmap-diagrams/quickstart/vscode/python-step-3-tests',
+    Python: 'https://appland.com/docs/appmap-diagrams/quickstart/vscode/python-step-3-tests',
     Ruby: 'https://appland.com/docs/appmap-diagrams/quickstart/vscode/ruby-step-3-tests',
   },
   jetbrains: {
     Java: 'https://appland.com/docs/appmap-diagrams/quickstart/intellij/step-3-tests',
-    JavaScript:
-      'https://appland.com/docs/appmap-diagrams/quickstart/webstorm/step-3-tests',
-    Python:
-      'https://appland.com/docs/appmap-diagrams/quickstart/pycharm/step-3-tests',
+    JavaScript: 'https://appland.com/docs/appmap-diagrams/quickstart/webstorm/step-3-tests',
+    Python: 'https://appland.com/docs/appmap-diagrams/quickstart/pycharm/step-3-tests',
     Ruby: 'https://appland.com/docs/appmap-diagrams/quickstart/rubymine/step-3-tests',
   },
 };
@@ -103,10 +90,7 @@ export default {
 
   computed: {
     command() {
-      return [
-        'npx @appland/appmap record test',
-        this.project && `-d ${this.project.path}`,
-      ]
+      return ['npx @appland/appmap record test', this.project && `-d ${this.project.path}`]
         .filter(Boolean)
         .join(' ');
     },
@@ -127,11 +111,7 @@ export default {
       return urls;
     },
     documentationUrl() {
-      if (
-        !this.project ||
-        !this.project.language ||
-        !this.project.language.name
-      ) {
+      if (!this.project || !this.project.language || !this.project.language.name) {
         return undefined;
       }
 

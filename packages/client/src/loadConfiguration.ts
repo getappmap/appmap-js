@@ -35,9 +35,7 @@ async function loadFromFile(): Promise<Settings> {
   } catch {
     return { baseURL: DefaultURL } as Settings;
   }
-  const applandConfig = yaml.load(
-    applandConfigData.toString()
-  ) as AppLandConfig;
+  const applandConfig = yaml.load(applandConfigData.toString()) as AppLandConfig;
   const currentContext = applandConfig.current_context || 'default';
   const contextConfig = applandConfig.contexts[currentContext];
   if (!contextConfig) {

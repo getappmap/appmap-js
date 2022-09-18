@@ -192,14 +192,8 @@ declare module '@appland/models' {
     callStack(): Event[];
     ancestors(): Event[];
     descendants(): Event[];
-    traverse(
-      fn: (
-        event: Event
-      ) => void
-    ): void;
-    traverse(
-      handlers: { onEnter(event: Event): void; onExit(event: Event): void }
-    ): void;
+    traverse(fn: (event: Event) => void): void;
+    traverse(handlers: { onEnter(event: Event): void; onExit(event: Event): void }): void;
     dataObjects(): Array<ParameterObject | ReturnValueObject>;
     toString(): string;
     toJSON(): any;
@@ -218,10 +212,7 @@ declare module '@appland/models' {
     descendants(): Generator<EventNavigator>;
   }
 
-  export type LabelMap = Record<
-    string,
-    Record<CodeObjectType | 'event', Event | CodeObject>
-  >;
+  export type LabelMap = Record<string, Record<CodeObjectType | 'event', Event | CodeObject>>;
 
   export class EventChangeSummary {
     added: Event[];
@@ -308,10 +299,7 @@ declare module '@appland/models' {
       workingAppMap: AppMap
     ): IterableIterator<[Event, Event]>;
 
-    static getDiff(
-      baseAppMap: AppMap,
-      workingAppMap: AppMap
-    ): EventChangeSummary;
+    static getDiff(baseAppMap: AppMap, workingAppMap: AppMap): EventChangeSummary;
 
     rootEvents(): Event[];
     toJSON(): any;
@@ -346,22 +334,14 @@ declare module '@appland/models' {
     parent?: IdentifiableCodeObject;
   };
 
-  export function codeObjectId(
-    codeObject: IdentifiableCodeObject,
-    tokens?: string[]
-  ): string[];
+  export function codeObjectId(codeObject: IdentifiableCodeObject, tokens?: string[]): string[];
 
-  export function analyzeSQL(
-    sql: string,
-    errorCallback: OnSQLParseError
-  ): SQLAnalysis;
+  export function analyzeSQL(sql: string, errorCallback: OnSQLParseError): SQLAnalysis;
   export function parseSQL(
     sql: string,
     errorCallback?: OnSQLParseError
   ): SqliteParser.ListStatement | null;
   export function normalizeSQL(sql: string, adapter: string): string;
 
-  export function buildAppMap(
-    data?: string | Record<string, unknown>
-  ): AppMapBuilder;
+  export function buildAppMap(data?: string | Record<string, unknown>): AppMapBuilder;
 }

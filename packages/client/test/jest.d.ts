@@ -3,6 +3,4 @@ export interface DoneCallback {
   fail(error?: string | { message: string }): any;
 }
 
-export type ProvidesCallback =
-  | ((cb: DoneCallback) => void | undefined)
-  | (() => Promise<unknown>);
+export type ProvidesCallback = ((cb: DoneCallback) => void | undefined) | (() => Promise<unknown>);

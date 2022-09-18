@@ -1,10 +1,6 @@
 import codeObjectId from './codeObjectId';
 import { CodeObjectType } from './codeObjectType';
-import {
-  addHiddenProperty,
-  getSqlLabelFromString,
-  transformToJSON,
-} from './util';
+import { addHiddenProperty, getSqlLabelFromString, transformToJSON } from './util';
 
 export default class CodeObject {
   constructor(data, parent) {
@@ -14,8 +10,7 @@ export default class CodeObject {
     // that aren't appropriate to all types. This way, any mistakes in JSON stringification
     // will be extra data rather than missing data.
     this.dataKeys = Object.keys(data).filter(
-      (item) =>
-        !['dynamic', 'static', 'location', 'database_type'].includes(item)
+      (item) => !['dynamic', 'static', 'location', 'database_type'].includes(item)
     );
     this.dataKeys.push('children');
     if (data.type === CodeObjectType.FUNCTION) {
@@ -106,28 +101,20 @@ export default class CodeObject {
   }
 
   get classObject() {
-    return [this, ...this.ancestors()].find(
-      (obj) => obj.type === CodeObjectType.CLASS
-    );
+    return [this, ...this.ancestors()].find((obj) => obj.type === CodeObjectType.CLASS);
   }
 
   get packageObject() {
-    return [this, ...this.ancestors()].find(
-      (obj) => obj.type === CodeObjectType.PACKAGE
-    );
+    return [this, ...this.ancestors()].find((obj) => obj.type === CodeObjectType.PACKAGE);
   }
 
   get functions() {
     if (this.type === CodeObjectType.CLASS) {
       // getting the functions of a class should not return functions of nested classes
-      return this.children.filter(
-        (obj) => obj.type === CodeObjectType.FUNCTION
-      );
+      return this.children.filter((obj) => obj.type === CodeObjectType.FUNCTION);
     }
 
-    return this.descendants().filter(
-      (obj) => obj.type === CodeObjectType.FUNCTION
-    );
+    return this.descendants().filter((obj) => obj.type === CodeObjectType.FUNCTION);
   }
 
   get classes() {
@@ -185,9 +172,7 @@ export default class CodeObject {
 
     while (queue.length) {
       const obj = queue.pop();
-      const childrenOfType = obj.children.filter(
-        (child) => child.type === type
-      );
+      const childrenOfType = obj.children.filter((child) => child.type === type);
 
       // If this object has children of another type, consider it the most specific of the type.
       // For example, a package containing a class.
@@ -312,9 +297,7 @@ export default class CodeObject {
   }
 
   get inboundConnections() {
-    return this.allEvents
-      .filter((e) => e.parent)
-      .map((e) => e.parent.codeObject);
+    return this.allEvents.filter((e) => e.parent).map((e) => e.parent.codeObject);
   }
 
   get outboundConnections() {

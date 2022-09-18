@@ -10,39 +10,39 @@ class SourceOffsets {
 
 // These are the names blocks that can contain "repositories" blocks:
 enum RepositoriesContainers {
-  buildscript = "buildscript", 
-  allprojects = "allprojects", 
-  subprojects = "subprojects"
-};
+  buildscript = 'buildscript',
+  allprojects = 'allprojects',
+  subprojects = 'subprojects',
+}
 const REPOSITORIES_CONTAINERS = Object.values(RepositoriesContainers);
 
 // These are the names of the other blocks we care about:
 enum OtherContainers {
-  repositories = 'repositories', 
-  plugins = 'plugins'
-};
+  repositories = 'repositories',
+  plugins = 'plugins',
+}
 
 const keywords = {
   ...RepositoriesContainers,
-  ...OtherContainers
+  ...OtherContainers,
 };
 type Keywords = typeof keywords;
 const KEYWORDS = Object.values(keywords);
 
 /**
- * The results of parsing a build.gradle file. 
+ * The results of parsing a build.gradle file.
  *
  * startOffset is the first non-comment, non-whitespace character. mavenPresent
  * will be true if `mavenCentral()` is included in the repositories.
- * 
+ *
  * The rest of the properties take their names from the keywords above. Each is
  * a SourceOffsets corresponding to block, or undefined if the block is not
  * present.
  **/
 export type GradleParseResult = {
-  startOffset: number,
-  mavenPresent: boolean,
-} & {[k in keyof Keywords]?: SourceOffsets};;
+  startOffset: number;
+  mavenPresent: boolean;
+} & { [k in keyof Keywords]?: SourceOffsets };
 
 export class GradleParser {
   public debug: number = 0;
@@ -82,9 +82,9 @@ export class GradleParser {
     let startBlock: string | null = null;
     const blockStack: SourceOffsets[] = [];
     lexer.reset(src);
-    let result:GradleParseResult = {
-      startOffset: -1, 
-      mavenPresent: false
+    let result: GradleParseResult = {
+      startOffset: -1,
+      mavenPresent: false,
     };
 
     // eslint-disable-next-line no-cond-assign
@@ -106,7 +106,7 @@ export class GradleParser {
       if (this.debug === 1) {
         writeDebug();
       }
-      
+
       if (t.type === 'keyword') {
         if (result.startOffset < 0) {
           result.startOffset = t.offset;
@@ -115,7 +115,8 @@ export class GradleParser {
         // We're only interested in the repositories block if it's not within
         // the buildscript block.
         const inBuildscript =
-          blockStack.length === 1 && REPOSITORIES_CONTAINERS.includes(blockStack[0].blockName as RepositoriesContainers);
+          blockStack.length === 1 &&
+          REPOSITORIES_CONTAINERS.includes(blockStack[0].blockName as RepositoriesContainers);
         if (t.value !== 'repositories' || !inBuildscript) {
           startBlock = t.value;
           continue;
@@ -147,10 +148,7 @@ export class GradleParser {
         blockStack[0].braceIdx++;
       } else if (t.type === 'rbrace') {
         blockStack[0].braceIdx--;
-      } else if (
-        t.type === 'mavenCentral' &&
-        blockStack[0].blockName === 'repositories'
-      ) {
+      } else if (t.type === 'mavenCentral' && blockStack[0].blockName === 'repositories') {
         // The current token is mavenCentral, and we're in the repositories
         // block. This is the one we care about.
         result.mavenPresent = true;
@@ -169,16 +167,12 @@ export class GradleParser {
     }
     return result;
   }
-  
+
   checkSyntax(parseResult: GradleParseResult) {
     KEYWORDS.forEach((k) => {
       if (parseResult[k]?.rbrace === -1) {
-        throw new Error(
-          `parse failed, ${JSON.stringify(parseResult, null, 2)}`
-        );
+        throw new Error(`parse failed, ${JSON.stringify(parseResult, null, 2)}`);
       }
     });
-  }  
+  }
 }
-
-

@@ -16,8 +16,5 @@ export async function appmapDirFromConfig(): Promise<string | undefined> {
 }
 
 export function assertAppMapDir(appmapDir: string) {
-  assert(
-    appmapDir,
-    'appmapDir must be provided as a command option, or available in appmap.yml'
-  );
+  assert(appmapDir, 'appmapDir must be provided as a command option, or available in appmap.yml');
 }

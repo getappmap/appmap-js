@@ -122,14 +122,10 @@ export default {
       });
     },
     async getOutput() {
-      return new Promise((resolve) =>
-        this.$nextTick(() => resolve(this.$refs.node.$refs.flowOut))
-      );
+      return new Promise((resolve) => this.$nextTick(() => resolve(this.$refs.node.$refs.flowOut)));
     },
     async getRef(ref) {
-      return new Promise((resolve) =>
-        this.$nextTick(() => resolve(this.$refs[ref]))
-      );
+      return new Promise((resolve) => this.$nextTick(() => resolve(this.$refs[ref])));
     },
     initialize() {
       if (
@@ -169,11 +165,7 @@ export default {
     },
     styles() {
       let result = {};
-      if (
-        this.highlightAll &&
-        this.highlightColor &&
-        this.selectedEvents.includes(this.event)
-      ) {
+      if (this.highlightAll && this.highlightColor && this.selectedEvents.includes(this.event)) {
         const color = Color.rgba(this.highlightColor, 0.4);
         result = {
           'background-color': color,

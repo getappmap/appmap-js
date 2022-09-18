@@ -52,8 +52,7 @@ export default {
 
   builder: (argv: Yargs.Argv) => {
     argv.option('output-dir', {
-      describe:
-        'Specifies the output directory. Pruned files will be written here.',
+      describe: 'Specifies the output directory. Pruned files will be written here.',
       type: 'string',
       default: '.',
       alias: 'o',

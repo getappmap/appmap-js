@@ -1,11 +1,7 @@
 <template>
   <v-trace-node-columns>
     <template v-slot:left>
-      <v-trace-node-port
-        v-for="input in inputs"
-        :key="input.name"
-        :parameterObject="input"
-      />
+      <v-trace-node-port v-for="input in inputs" :key="input.name" :parameterObject="input" />
     </template>
     <template v-slot:right>
       <v-trace-node-port

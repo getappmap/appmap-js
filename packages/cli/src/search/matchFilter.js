@@ -16,8 +16,7 @@ const httpServerRequest = (expectedValue, stack) =>
     .find((e) => formatHttpServerRequest(e) === expectedValue);
 
 /** @type {Matcher} */
-const ancestor = (expectedValue, stack) =>
-  !!stack.find((e) => e.codeObject.id === expectedValue);
+const ancestor = (expectedValue, stack) => !!stack.find((e) => e.codeObject.id === expectedValue);
 
 /** @type {Matcher} */
 const caller = (expectedValue, stack) => {

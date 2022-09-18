@@ -62,15 +62,11 @@ export default class EventSource {
 
       if (includesOnce) {
         // Only reassign this value if we've encountered a handler that's run once
-        this.listeners[eventType] = this.listeners[eventType].filter(
-          (h) => !h.once
-        );
+        this.listeners[eventType] = this.listeners[eventType].filter((h) => !h.once);
       }
     }
 
-    this.anyListeners.forEach((eventSource) =>
-      eventSource.emit(eventType, data)
-    );
+    this.anyListeners.forEach((eventSource) => eventSource.emit(eventType, data));
 
     return this;
   }
@@ -79,9 +75,7 @@ export default class EventSource {
   // provided, bind only those types. Otherwise, pipe any event.
   pipe(eventSource, ...eventTypes) {
     if (eventTypes.length) {
-      eventTypes.forEach((type) =>
-        eventSource.on(type, (data) => this.emit(data))
-      );
+      eventTypes.forEach((type) => eventSource.on(type, (data) => this.emit(data)));
       return this;
     }
 

@@ -6,15 +6,11 @@ import initial from './record_remote';
 
 // No process could be contact on the configured host and port.
 // Prompt the user to start the agent process, and then start over.
-export default async function agentProcessNotRunning(
-  context: RecordContext
-): Promise<State> {
+export default async function agentProcessNotRunning(context: RecordContext): Promise<State> {
   UI.progress(
     `It looks like you need to start your app (make sure you have the AppMap agent enabled).`
   );
-  UI.progress(
-    `Or maybe your app is running, but it's on a different host and/or port.`
-  );
+  UI.progress(`Or maybe your app is running, but it's on a different host and/or port.`);
   UI.progress(``);
 
   UI.progress(

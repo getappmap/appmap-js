@@ -81,10 +81,9 @@ export default {
         );
 
         if (visibleObjectParent) {
-          const parentCanExpand = [
-            CodeObjectType.PACKAGE,
-            CodeObjectType.HTTP,
-          ].includes(visibleObjectParent.type);
+          const parentCanExpand = [CodeObjectType.PACKAGE, CodeObjectType.HTTP].includes(
+            visibleObjectParent.type
+          );
 
           if (expandParent && parentCanExpand) {
             this.componentDiagram.expand(visibleObjectParent);

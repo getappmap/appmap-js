@@ -10,10 +10,7 @@ interface SpinnerOptions {
 export class UserInteraction {
   private spinner: Ora = ora();
 
-  async prompt(
-    questions: QuestionCollection,
-    opts?: SpinnerOptions
-  ): Promise<Answers> {
+  async prompt(questions: QuestionCollection, opts?: SpinnerOptions): Promise<Answers> {
     const wasSpinning = this.spinner.isSpinning;
     if (wasSpinning) {
       this.spinner.stop();

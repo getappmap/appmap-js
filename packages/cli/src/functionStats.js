@@ -59,20 +59,14 @@ class FunctionStats {
   }
 
   get returnValues() {
-    return [
-      ...new Set(
-        this.eventMatches.map((e) => e.event.returnValue).map(formatValue)
-      ),
-    ].sort();
+    return [...new Set(this.eventMatches.map((e) => e.event.returnValue).map(formatValue))].sort();
   }
 
   get httpServerRequests() {
     return [
       ...new Set(
         this.eventMatches
-          .map((e) =>
-            [e.event].concat(e.ancestors).filter((a) => a.httpServerRequest)
-          )
+          .map((e) => [e.event].concat(e.ancestors).filter((a) => a.httpServerRequest))
           .flat()
           .filter((e) => e)
           .map((e) => formatHttpServerRequest(e))
@@ -130,9 +124,7 @@ class FunctionStats {
         this.eventMatches
           .map((e) => e.ancestors)
           .filter((list) => list.length > 0)
-          .map((list) =>
-            list.map((e) => e.callEvent.isFunction && e.codeObject.id)
-          )
+          .map((list) => list.map((e) => e.callEvent.isFunction && e.codeObject.id))
           .flat()
           .filter((e) => e)
       ),
@@ -148,9 +140,7 @@ class FunctionStats {
         this.eventMatches
           .map((e) => e.descendants)
           .filter((list) => list.length > 0)
-          .map((list) =>
-            list.map((e) => e.callEvent.isFunction && e.codeObject.id)
-          )
+          .map((list) => list.map((e) => e.callEvent.isFunction && e.codeObject.id))
           .flat()
           .filter((e) => e)
       ),
@@ -158,9 +148,7 @@ class FunctionStats {
   }
 
   get packageTrigrams() {
-    return reduceTrigrams(
-      this.eventMatches.map((e) => e.packageTrigrams).flat()
-    );
+    return reduceTrigrams(this.eventMatches.map((e) => e.packageTrigrams).flat());
   }
 
   get classTrigrams() {
@@ -168,9 +156,7 @@ class FunctionStats {
   }
 
   get functionTrigrams() {
-    return reduceTrigrams(
-      this.eventMatches.map((e) => e.functionTrigrams).flat()
-    );
+    return reduceTrigrams(this.eventMatches.map((e) => e.functionTrigrams).flat());
   }
 }
 

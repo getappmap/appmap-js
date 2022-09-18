@@ -21,9 +21,7 @@ class Canonicalize extends EventTree {
       kind: 'http_client_request',
       route: event.route,
       parameter_names: event.message ? event.message.map((m) => m.name) : null,
-      status_code: event.httpClientResponse
-        ? event.httpClientResponse.status_code
-        : null,
+      status_code: event.httpClientResponse ? event.httpClientResponse.status_code : null,
     };
   }
 
@@ -33,8 +31,7 @@ class Canonicalize extends EventTree {
       route: event.route,
       parameter_names: event.message ? event.message.map((m) => m.name) : null,
       status_code: event.httpServerResponse
-        ? event.httpServerResponse.status ||
-          event.httpServerResponse.status_code
+        ? event.httpServerResponse.status || event.httpServerResponse.status_code
         : null,
     };
   }

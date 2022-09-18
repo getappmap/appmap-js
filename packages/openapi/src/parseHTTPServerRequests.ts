@@ -6,7 +6,5 @@ export default function parseHTTPServerRequests(
 ) {
   const appmap = buildAppMap().source(source).normalize().build();
 
-  appmap.events
-    .filter((e) => e.httpServerRequest && e.httpServerResponse)
-    .forEach(collector);
+  appmap.events.filter((e) => e.httpServerRequest && e.httpServerResponse).forEach(collector);
 }

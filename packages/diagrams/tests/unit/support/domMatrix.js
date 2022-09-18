@@ -6,12 +6,7 @@ import * as math from 'mathjs';
 
 function fromDOM(dm) {
   const dmm = [].slice.call(dm._matrix);
-  return new math.matrix([
-    dmm.slice(0, 4),
-    dmm.slice(4, 8),
-    dmm.slice(8, 12),
-    dmm.slice(12, 16),
-  ]);
+  return new math.matrix([dmm.slice(0, 4), dmm.slice(4, 8), dmm.slice(8, 12), dmm.slice(12, 16)]);
 }
 
 function toDOM(m) {

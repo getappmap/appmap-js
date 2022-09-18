@@ -25,11 +25,7 @@ export class HttpError extends Error {
 }
 
 export class ChildProcessError extends Error {
-  constructor(
-    readonly command: string,
-    readonly output: string,
-    readonly code?: number | null
-  ) {
+  constructor(readonly command: string, readonly output: string, readonly code?: number | null) {
     super(
       [
         `An error occurred while running the command: ${chalk.red(command)}\n`,

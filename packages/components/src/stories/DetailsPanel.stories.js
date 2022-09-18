@@ -49,9 +49,7 @@ Class.args = {
 
 export const Database = Template.bind({});
 Database.args = {
-  selectedObject: classMap.roots.find(
-    (obj) => obj.type === CodeObjectType.DATABASE
-  ),
+  selectedObject: classMap.roots.find((obj) => obj.type === CodeObjectType.DATABASE),
 };
 
 export const Edge = Template.bind({});

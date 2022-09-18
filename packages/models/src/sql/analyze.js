@@ -39,15 +39,10 @@ export default function analyze(sql, errorCallback = () => {}) {
           property.forEach(parseQuery);
         } else if (typeof property === 'object') {
           parseQuery(property);
-        } else if (
-          typeof property === 'string' ||
-          typeof property === 'boolean'
-        ) {
+        } else if (typeof property === 'string' || typeof property === 'boolean') {
           // pass
         } else {
-          console.warn(
-            `Unrecognized subexpression: ${typeof property} ${property}`
-          );
+          console.warn(`Unrecognized subexpression: ${typeof property} ${property}`);
         }
       });
   }

@@ -41,15 +41,8 @@
 
     <div class="main-column main-column--right">
       <v-tabs @activateTab="onChangeTab" ref="tabs">
-        <v-tab
-          name="Dependency Map"
-          :is-active="isViewingComponent"
-          :ref="VIEW_COMPONENT"
-        >
-          <v-diagram-component
-            ref="componentDiagram"
-            :class-map="filteredAppMap.classMap"
-          />
+        <v-tab name="Dependency Map" :is-active="isViewingComponent" :ref="VIEW_COMPONENT">
+          <v-diagram-component ref="componentDiagram" :class-map="filteredAppMap.classMap" />
         </v-tab>
 
         <v-tab name="Trace View" :is-active="isViewingFlow" :ref="VIEW_FLOW">
@@ -118,11 +111,7 @@
                     class="filters__block-body filters__block-body--flex"
                     v-if="filters.rootObjects.length"
                   >
-                    <div
-                      class="filters__root"
-                      v-for="(id, index) in filters.rootObjects"
-                      :key="id"
-                    >
+                    <div class="filters__root" v-for="(id, index) in filters.rootObjects" :key="id">
                       {{ id }}
                       <CloseThinIcon
                         class="filters__root-icon"
@@ -138,39 +127,24 @@
                   <div class="filters__block-body">
                     <div class="filters__block-row">
                       <label class="filters__checkbox">
-                        <input
-                          type="checkbox"
-                          v-model="filters.declutter.limitRootEvents.on"
-                        />
+                        <input type="checkbox" v-model="filters.declutter.limitRootEvents.on" />
                         <CheckIcon class="filters__checkbox-icon" />
                       </label>
-                      <div class="filters__block-row-content">
-                        Limit root events to HTTP
-                      </div>
+                      <div class="filters__block-row-content">Limit root events to HTTP</div>
                     </div>
                     <div class="filters__block-row">
                       <label class="filters__checkbox">
-                        <input
-                          type="checkbox"
-                          v-model="filters.declutter.hideMediaRequests.on"
-                        />
+                        <input type="checkbox" v-model="filters.declutter.hideMediaRequests.on" />
                         <CheckIcon class="filters__checkbox-icon" />
                       </label>
-                      <div class="filters__block-row-content">
-                        Hide media HTTP requests
-                      </div>
+                      <div class="filters__block-row-content">Hide media HTTP requests</div>
                     </div>
                     <div class="filters__block-row">
                       <label class="filters__checkbox">
-                        <input
-                          type="checkbox"
-                          v-model="filters.declutter.hideUnlabeled.on"
-                        />
+                        <input type="checkbox" v-model="filters.declutter.hideUnlabeled.on" />
                         <CheckIcon class="filters__checkbox-icon" />
                       </label>
-                      <div class="filters__block-row-content">
-                        Hide unlabeled
-                      </div>
+                      <div class="filters__block-row-content">Hide unlabeled</div>
                     </div>
                     <div class="filters__block-row">
                       <label class="filters__checkbox">
@@ -186,9 +160,7 @@
                           <input
                             type="text"
                             class="filters__elapsed-input"
-                            v-model="
-                              filters.declutter.hideElapsedTimeUnder.time
-                            "
+                            v-model="filters.declutter.hideElapsedTimeUnder.time"
                           />
                           <span class="filters__elapsed-ms">ms</span>
                         </div>
@@ -196,10 +168,7 @@
                     </div>
                     <div class="filters__block-row">
                       <label class="filters__checkbox">
-                        <input
-                          type="checkbox"
-                          v-model="filters.declutter.hideName.on"
-                        />
+                        <input type="checkbox" v-model="filters.declutter.hideName.on" />
                         <CheckIcon class="filters__checkbox-icon" />
                       </label>
                       <div class="filters__block-row-content">
@@ -210,14 +179,10 @@
                           :suggestions="hideNamesSuggestions"
                           suggestions-placement="top"
                         />
-                        <div
-                          class="filters__hide"
-                          v-if="filters.declutter.hideName.names.length"
-                        >
+                        <div class="filters__hide" v-if="filters.declutter.hideName.names.length">
                           <div
                             class="filters__hide-item"
-                            v-for="(name, index) in filters.declutter.hideName
-                              .names"
+                            v-for="(name, index) in filters.declutter.hideName.names"
                             :key="name"
                           >
                             {{ name }}
@@ -234,11 +199,7 @@
               </div>
             </template>
           </v-popper-menu>
-          <button
-            class="control-button diagram-reload"
-            @click="resetDiagram"
-            title="Clear"
-          >
+          <button class="control-button diagram-reload" @click="resetDiagram" title="Clear">
             <ReloadIcon class="control-button__icon" />
           </button>
           <button
@@ -258,39 +219,26 @@
 
     <div class="no-data-notice" v-if="isEmptyAppMap && !isLoading">
       <div class="notice">
-        <p class="no-data-notice__title">
-          Sorry, but there's no data to display :(
-        </p>
+        <p class="no-data-notice__title">Sorry, but there's no data to display :(</p>
         <ul class="why-me">
           <strong>Top 3 reasons why this appmap is empty:</strong>
+          <li>appmap.yml did not list packages/modules/folders of your application logic</li>
           <li>
-            appmap.yml did not list packages/modules/folders of your application
-            logic
+            If this AppMap was recorded from a test, the test did not provide sufficient coverage
+            for good data
           </li>
           <li>
-            If this AppMap was recorded from a test, the test did not provide
-            sufficient coverage for good data
-          </li>
-          <li>
-            If other manual method was used to record this AppMap, the
-            instrumented code objects were not executed during the recording.
+            If other manual method was used to record this AppMap, the instrumented code objects
+            were not executed during the recording.
           </li>
         </ul>
         <p class="no-data-notice__text">
           Check our
-          <a
-            href="https://github.com/applandinc/appmap"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="https://github.com/applandinc/appmap" target="_blank" rel="noopener noreferrer">
             documentation</a
           >,<br />
           or ask for help in
-          <a
-            href="https://discord.com/invite/N9VUap6"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="https://discord.com/invite/N9VUap6" target="_blank" rel="noopener noreferrer">
             Discord</a
           >.
         </p>
@@ -424,12 +372,9 @@ export default {
           }
 
           if (selectedObject instanceof Event) {
-            const highlightedIndex = this.highlightedNodes.findIndex(
-              (e) => e === selectedObject
-            );
+            const highlightedIndex = this.highlightedNodes.findIndex((e) => e === selectedObject);
 
-            this.currentTraceFilterIndex =
-              highlightedIndex >= 0 ? highlightedIndex : undefined;
+            this.currentTraceFilterIndex = highlightedIndex >= 0 ? highlightedIndex : undefined;
           }
         } else {
           this.currentTraceFilterIndex = undefined;
@@ -506,9 +451,7 @@ export default {
 
         if (eventBranches.length) {
           events = events.filter((e) =>
-            eventBranches.some(
-              (branch) => e.id >= branch[0] && e.id <= branch[1]
-            )
+            eventBranches.some((branch) => e.id >= branch[0] && e.id <= branch[1])
           );
         }
       }
@@ -519,8 +462,7 @@ export default {
 
       if (this.filters.declutter.hideUnlabeled.on) {
         events = events.filter(
-          (e) =>
-            e.labels.size > 0 || e.codeObject.type !== CodeObjectType.FUNCTION
+          (e) => e.labels.size > 0 || e.codeObject.type !== CodeObjectType.FUNCTION
         );
       }
 
@@ -532,15 +474,11 @@ export default {
           (e) =>
             e.returnEvent &&
             e.returnEvent.elapsedTime &&
-            e.returnEvent.elapsedTime >=
-              this.filters.declutter.hideElapsedTimeUnder.time / 1000
+            e.returnEvent.elapsedTime >= this.filters.declutter.hideElapsedTimeUnder.time / 1000
         );
       }
 
-      if (
-        this.filters.declutter.hideName.on &&
-        this.filters.declutter.hideName.names.length
-      ) {
+      if (this.filters.declutter.hideName.on && this.filters.declutter.hideName.names.length) {
         classMap.codeObjects.forEach((codeObject) => {
           this.filters.declutter.hideName.names.forEach((fqid) => {
             if (this.codeObjectIsMatched(codeObject, fqid)) {
@@ -550,14 +488,10 @@ export default {
         });
       }
 
-      const eventIds = new Set(
-        events.filter((e) => e.isCall()).map((e) => e.id)
-      );
+      const eventIds = new Set(events.filter((e) => e.isCall()).map((e) => e.id));
 
       return buildAppMap({
-        events: events.filter(
-          (e) => eventIds.has(e.id) || eventIds.has(e.parent_id)
-        ),
+        events: events.filter((e) => eventIds.has(e.id) || eventIds.has(e.parent_id)),
         classMap: classMap.roots.map((c) => ({ ...c.data })),
         metadata: appMap.metadata,
       }).build();
@@ -572,9 +506,7 @@ export default {
     hideNamesSuggestions() {
       return this.filteredAppMap.classMap.codeObjects
         .map((co) => co.fqid)
-        .filter(
-          (fqid) => !this.filters.declutter.hideName.names.includes(fqid)
-        );
+        .filter((fqid) => !this.filters.declutter.hideName.names.includes(fqid));
     },
 
     eventsSuggestions() {
@@ -610,9 +542,7 @@ export default {
       const nodes = new Set();
 
       if (this.traceFilterValue) {
-        const queryTerms = this.traceFilterValue.match(
-          /(?:[^\s"]+|"[^"]*"|"[^"]*)+/g
-        );
+        const queryTerms = this.traceFilterValue.match(/(?:[^\s"]+|"[^"]*"|"[^"]*)+/g);
 
         if (queryTerms) {
           if (!this.traceFilterValue.endsWith(' ')) {
@@ -675,10 +605,7 @@ export default {
                 this.filteredAppMap.events.forEach((e) => {
                   if (
                     e.isCall() &&
-                    e
-                      .toString()
-                      .toLowerCase()
-                      .includes(term.toString().toLowerCase())
+                    e.toString().toLowerCase().includes(term.toString().toLowerCase())
                   ) {
                     nodes.add(e);
                   }
@@ -736,14 +663,9 @@ export default {
       const appMap = this.filteredAppMap;
       const hasEvents = Array.isArray(appMap.events) && appMap.events.length;
       const hasClassMap =
-        Array.isArray(appMap.classMap.codeObjects) &&
-        appMap.classMap.codeObjects.length;
+        Array.isArray(appMap.classMap.codeObjects) && appMap.classMap.codeObjects.length;
 
-      return (
-        !this.filtersChanged &&
-        !this.traceFilterValue &&
-        (!hasEvents || !hasClassMap)
-      );
+      return !this.filtersChanged && !this.traceFilterValue && (!hasEvents || !hasClassMap);
     },
 
     filtersChanged() {
@@ -900,9 +822,7 @@ export default {
           // It's possible that we're trying to select an object that does not exist in the filtered
           // set. If we're unable to find an object, we'll look for it in the unfiltered set.
           if (!selectedObject) {
-            selectedObject = this.$store.state.appMap.events.find(
-              (e) => e.id === eventId
-            );
+            selectedObject = this.$store.state.appMap.events.find((e) => e.id === eventId);
 
             if (selectedObject) {
               Object.keys(this.filters.declutter).forEach((k) => {
@@ -911,9 +831,7 @@ export default {
             }
           }
         } else {
-          selectedObject = classMap.codeObjects.find(
-            (obj) => obj.fqid === fqid
-          );
+          selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
         }
 
         if (selectedObject) {
@@ -930,19 +848,14 @@ export default {
           this.filters.declutter.limitRootEvents.on = filters.limitRootEvents;
         }
         if ('hideMediaRequests' in filters) {
-          this.filters.declutter.hideMediaRequests.on =
-            filters.hideMediaRequests;
+          this.filters.declutter.hideMediaRequests.on = filters.hideMediaRequests;
         }
         if ('hideUnlabeled' in filters) {
           this.filters.declutter.hideUnlabeled.on = filters.hideUnlabeled;
         }
-        if (
-          'hideElapsedTimeUnder' in filters &&
-          filters.hideElapsedTimeUnder !== false
-        ) {
+        if ('hideElapsedTimeUnder' in filters && filters.hideElapsedTimeUnder !== false) {
           this.filters.declutter.hideElapsedTimeUnder.on = true;
-          this.filters.declutter.hideElapsedTimeUnder.time =
-            filters.hideElapsedTimeUnder;
+          this.filters.declutter.hideElapsedTimeUnder.time = filters.hideElapsedTimeUnder;
         }
         if ('hideName' in filters && filters.hideName !== false) {
           this.filters.declutter.hideName.on = true;
@@ -1004,8 +917,7 @@ export default {
         const MIN_PANEL_WIDTH = 280;
         const MAX_PANEL_WIDTH = window.innerWidth * 0.75;
 
-        let newWidth =
-          this.initialPanelWidth + (event.clientX - this.initialClientX);
+        let newWidth = this.initialPanelWidth + (event.clientX - this.initialClientX);
         newWidth = Math.max(MIN_PANEL_WIDTH, newWidth);
         newWidth = Math.min(MAX_PANEL_WIDTH, newWidth);
 
@@ -1029,10 +941,7 @@ export default {
     addHiddenName(name) {
       const objectName = name.trim();
 
-      if (
-        !objectName ||
-        this.filters.declutter.hideName.names.includes(objectName)
-      ) {
+      if (!objectName || this.filters.declutter.hideName.names.includes(objectName)) {
         return;
       }
 
@@ -1129,9 +1038,9 @@ export default {
           let mimeType;
 
           if (e.http_server_response.headers) {
-            const contentTypeKey = Object.keys(
-              e.http_server_response.headers
-            ).filter((k) => k.toLowerCase() === 'content-type')[0];
+            const contentTypeKey = Object.keys(e.http_server_response.headers).filter(
+              (k) => k.toLowerCase() === 'content-type'
+            )[0];
 
             mimeType = e.http_server_response.headers[contentTypeKey];
           } else if (e.http_server_response.mime_type) {
@@ -1149,13 +1058,8 @@ export default {
 
     codeObjectIsMatched(object, query) {
       if (query.startsWith('label:')) {
-        const labelRegExp = new RegExp(
-          `^${query.replace('label:', '').replace('*', '.*')}$`,
-          'ig'
-        );
-        return Array.from(object.labels).some((label) =>
-          labelRegExp.test(label)
-        );
+        const labelRegExp = new RegExp(`^${query.replace('label:', '').replace('*', '.*')}$`, 'ig');
+        return Array.from(object.labels).some((label) => labelRegExp.test(label));
       }
       if (query.includes('*')) {
         const filterRegExp = new RegExp(`^${query.replace('*', '.*')}$`, 'ig');
@@ -1178,9 +1082,7 @@ export default {
       } else {
         const [selectedEvent] = this.selectedEvent;
         if (selectedEvent) {
-          const previousEvent = this.highlightedNodes
-            .filter((e) => e.id < selectedEvent.id)
-            .pop();
+          const previousEvent = this.highlightedNodes.filter((e) => e.id < selectedEvent.id).pop();
           this.currentTraceFilterIndex = this.highlightedNodes.findIndex(
             (e) => e === previousEvent
           );

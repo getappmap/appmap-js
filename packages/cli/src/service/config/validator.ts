@@ -15,10 +15,7 @@ export class ConfigValidationError extends Error {
   }
 }
 
-export function validateConfig(
-  schema: object,
-  config: object
-): ValidationResult {
+export function validateConfig(schema: object, config: object): ValidationResult {
   const ajv = new Ajv();
   // If schema is an array, it's actually a collection of schemas, and the
   // 'config' schema will be found within it (i.e. will have '"$id"' set to

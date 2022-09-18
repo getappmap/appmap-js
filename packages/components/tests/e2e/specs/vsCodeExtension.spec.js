@@ -1,9 +1,7 @@
 context('VS Code Extension', () => {
   context('Ruby appmap', () => {
     beforeEach(() => {
-      cy.visit(
-        'http://localhost:6006/iframe.html?id=pages-vs-code--extension&viewMode=story'
-      );
+      cy.visit('http://localhost:6006/iframe.html?id=pages-vs-code--extension&viewMode=story');
     });
 
     it('displays source locations as expected', () => {
@@ -12,24 +10,18 @@ context('VS Code Extension', () => {
         'spec/system/application_spec.rb'
       );
 
-      cy.get(
-        '.node[data-id="active_support/ActiveSupport::SecurityUtils"]'
-      ).click();
-      cy.get(
-        '[data-cy="left-panel-header"] [data-cy="source-location"]'
-      ).contains(
+      cy.get('.node[data-id="active_support/ActiveSupport::SecurityUtils"]').click();
+      cy.get('[data-cy="left-panel-header"] [data-cy="source-location"]').contains(
         '/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb'
       );
 
       cy.get('.node[data-id="lib/Spree::BackendConfiguration"]').click('');
-      cy.get(
-        '[data-cy="left-panel-header"] [data-cy="source-location"]'
-      ).contains('lib/spree/backend_configuration.rb');
+      cy.get('[data-cy="left-panel-header"] [data-cy="source-location"]').contains(
+        'lib/spree/backend_configuration.rb'
+      );
 
       cy.get('.node[data-id="app/controllers"]').click();
-      cy.get(
-        '[data-cy="left-panel-header"] [data-cy="source-location"]'
-      ).should('not.exist');
+      cy.get('[data-cy="left-panel-header"] [data-cy="source-location"]').should('not.exist');
     });
 
     it('provides an external link to source when available', () => {
@@ -45,28 +37,20 @@ context('VS Code Extension', () => {
     });
 
     it('displays a warning below source code links when applicable', () => {
-      cy.get(
-        '.node[data-id="active_support/ActiveSupport::SecurityUtils"]'
-      ).click();
-      cy.get(
-        '[data-cy="left-panel-header"] [data-cy="source-location-error"]'
-      ).contains('External source not available');
+      cy.get('.node[data-id="active_support/ActiveSupport::SecurityUtils"]').click();
+      cy.get('[data-cy="left-panel-header"] [data-cy="source-location-error"]').contains(
+        'External source not available'
+      );
 
       cy.get('.node[data-id="app/controllers"]').click();
-      cy.get(
-        '[data-cy="left-panel-header"] [data-cy="source-location-error"]'
-      ).should('not.exist');
+      cy.get('[data-cy="left-panel-header"] [data-cy="source-location-error"]').should('not.exist');
 
       cy.get('.node[data-id="lib/Spree::BackendConfiguration"]').click();
-      cy.get(
-        '[data-cy="left-panel-header"] [data-cy="source-location-error"]'
-      ).should('not.exist');
+      cy.get('[data-cy="left-panel-header"] [data-cy="source-location-error"]').should('not.exist');
     });
 
     it('pans to the correct location when selecting "View in Trace"', () => {
-      cy.get(
-        '.node.class[data-id="active_support/ActiveSupport::SecurityUtils"]'
-      ).click();
+      cy.get('.node.class[data-id="active_support/ActiveSupport::SecurityUtils"]').click();
 
       cy.get('.v-details-panel-list')
         .contains('Outbound connections')
@@ -83,18 +67,16 @@ context('VS Code Extension', () => {
     it('applies filter from search input', () => {
       cy.get('.details-search__input-element').type('json');
 
-      cy.get(
-        '.details-search__block--labels .details-search__block-item'
-      ).should('have.length', 1);
-      cy.get(
-        '.details-search__block--package .details-search__block-item'
-      ).should('have.length', 1);
-      cy.get(
-        '.details-search__block--class .details-search__block-item'
-      ).should('have.length', 2);
-      cy.get(
-        '.details-search__block--function .details-search__block-item'
-      ).should('have.length', 2);
+      cy.get('.details-search__block--labels .details-search__block-item').should('have.length', 1);
+      cy.get('.details-search__block--package .details-search__block-item').should(
+        'have.length',
+        1
+      );
+      cy.get('.details-search__block--class .details-search__block-item').should('have.length', 2);
+      cy.get('.details-search__block--function .details-search__block-item').should(
+        'have.length',
+        2
+      );
     });
 
     it('filters out objects that do not originate from an HTTP server request', () => {
@@ -122,42 +104,25 @@ context('VS Code Extension', () => {
     it('clicking HTTP server requests displays the correct data', () => {
       cy.get('.details-search').should('be.visible');
 
-      cy.get(`.node[data-type="http"]`)
-        .click()
-        .should('have.class', 'highlight');
+      cy.get(`.node[data-type="http"]`).click().should('have.class', 'highlight');
 
-      cy.get('.details-panel-header').should(
-        'contain.text',
-        'HTTP server requests'
-      );
+      cy.get('.details-panel-header').should('contain.text', 'HTTP server requests');
 
       cy.get('.v-details-panel-list')
         .should('contain.text', 'Routes')
         .children()
-        .should(
-          'contain.text',
-          'GET /admin',
-          'GET /admin/orders',
-          'GET /admin/orders/:id/edit'
-        );
+        .should('contain.text', 'GET /admin', 'GET /admin/orders', 'GET /admin/orders/:id/edit');
     });
 
     it('clicking a package displays the correct data', () => {
       cy.get('.details-search').should('be.visible');
 
-      cy.get('.node[data-id="app/controllers"]')
-        .click()
-        .should('have.class', 'highlight');
+      cy.get('.node[data-id="app/controllers"]').click().should('have.class', 'highlight');
 
       cy.get('.details-panel-header').should('contain.text', 'app/controllers');
 
       cy.get('.v-details-panel-list')
-        .should(
-          'contain.text',
-          'Classes',
-          'Inbound connections',
-          'Outbound connections'
-        )
+        .should('contain.text', 'Classes', 'Inbound connections', 'Outbound connections')
         .children()
         .should(
           'contain.text',
@@ -198,9 +163,7 @@ context('VS Code Extension', () => {
     it('clicking the database displays the correct data', () => {
       cy.get('.details-search').should('be.visible');
 
-      cy.get(`.node[data-type="database"]`)
-        .click()
-        .should('have.class', 'highlight');
+      cy.get(`.node[data-type="database"]`).click().should('have.class', 'highlight');
 
       cy.get('.details-panel-header').should('contain.text', 'Database');
 
@@ -291,10 +254,7 @@ context('VS Code Extension', () => {
       cy.get('.details-search__block-item')
         .contains('GET /admin/orders')
         .within(() => {
-          cy.get('.details-search__block-item-count').should(
-            'contain.text',
-            '2'
-          );
+          cy.get('.details-search__block-item-count').should('contain.text', '2');
         });
     });
 
@@ -317,18 +277,11 @@ context('VS Code Extension', () => {
         .should('contain.text', 'Event')
         .should('contain.text', 'GET /admin');
 
-      cy.get('.trace-node[data-event-id="1"]').should(
-        'have.class',
-        'highlight'
-      );
+      cy.get('.trace-node[data-event-id="1"]').should('have.class', 'highlight');
     });
 
     it('http server requests can navigate to route', () => {
-      cy.get(`.node[data-type="http"]`)
-        .click()
-        .get('.list-item')
-        .first()
-        .click();
+      cy.get(`.node[data-type="http"]`).click().get('.list-item').first().click();
 
       cy.get('.details-panel-header')
         .should('contain.text', 'Route')
@@ -422,9 +375,7 @@ context('VS Code Extension', () => {
         .contains('Events')
         .parent()
         .within(() => {
-          cy.get('.list-pair__object')
-            .contains('BaseHelper#admin_layout')
-            .click();
+          cy.get('.list-pair__object').contains('BaseHelper#admin_layout').click();
         });
 
       cy.get('.details-panel-header')
@@ -446,22 +397,15 @@ context('VS Code Extension', () => {
 
       cy.get('.trace').should('be.visible');
       cy.get('.trace .trace-node').should('have.length', 38);
-      cy.get('.trace-node.highlight')
-        .should('be.visible')
-        .should('contain.text', 'SQL Select');
+      cy.get('.trace-node.highlight').should('be.visible').should('contain.text', 'SQL Select');
     });
 
     it('clears when "Clear selection" button was clicked', () => {
-      cy.get(`.nodes .node[data-type="http"]`)
-        .click()
-        .should('have.class', 'highlight');
+      cy.get(`.nodes .node[data-type="http"]`).click().should('have.class', 'highlight');
 
       cy.get('.details-panel__buttons').contains('Clear selection').click();
 
-      cy.get(`.nodes .node[data-type="http"]`).should(
-        'not.have.class',
-        'highlight'
-      );
+      cy.get(`.nodes .node[data-type="http"]`).should('not.have.class', 'highlight');
     });
 
     it('expands package when child was selected from panel', () => {
@@ -475,15 +419,11 @@ context('VS Code Extension', () => {
     });
 
     it('set new root object', () => {
-      cy.get(
-        '.node[data-id="active_support/ActiveSupport::SecurityUtils"]'
-      ).rightclick();
+      cy.get('.node[data-id="active_support/ActiveSupport::SecurityUtils"]').rightclick();
 
       cy.get('.dropdown-menu').contains('Set as root').click();
 
-      cy.get(
-        '.details-search__block--class .details-search__block-item'
-      ).should('have.length', 2);
+      cy.get('.details-search__block--class .details-search__block-item').should('have.length', 2);
     });
 
     it('highlights only the first ancestor available if the selected object is not visible', () => {
@@ -491,9 +431,7 @@ context('VS Code Extension', () => {
 
       cy.get('.dropdown-menu').contains('Expand').click();
 
-      cy.get(
-        '.node[data-id="app/helpers/Spree::Admin::NavigationHelper"]'
-      ).click();
+      cy.get('.node[data-id="app/helpers/Spree::Admin::NavigationHelper"]').click();
 
       cy.get('.v-details-panel-list')
         .contains('Functions')
@@ -506,10 +444,7 @@ context('VS Code Extension', () => {
     });
 
     it('highlight is retained when expanding and collapsing a package', () => {
-      cy.get('.node[data-id="app/helpers"]')
-        .click()
-        .should('have.class', 'highlight')
-        .rightclick();
+      cy.get('.node[data-id="app/helpers"]').click().should('have.class', 'highlight').rightclick();
 
       cy.get('.dropdown-menu').contains('Expand').click();
 
@@ -525,9 +460,7 @@ context('VS Code Extension', () => {
           position: 'bottomLeft',
         });
 
-      cy.get('.dropdown-item:not([style*="display"])')
-        .contains('Collapse')
-        .click();
+      cy.get('.dropdown-item:not([style*="display"])').contains('Collapse').click();
 
       cy.get('.node[data-id="app/helpers"]').should('have.class', 'highlight');
     });
@@ -545,9 +478,7 @@ context('VS Code Extension', () => {
         position: 'bottomLeft',
       });
 
-      cy.get('.dropdown-item:not([style*="display"])')
-        .contains('Collapse')
-        .click();
+      cy.get('.dropdown-item:not([style*="display"])').contains('Collapse').click();
 
       cy.get('.node[data-id="app/helpers"]').should('have.class', 'highlight');
     });
@@ -565,10 +496,7 @@ context('VS Code Extension', () => {
       cy.get('.tabs .tab-btn').last().click();
       cy.get('.tabs .tab-btn').first().click();
 
-      cy.get('.node[data-id="lib/Spree::BackendConfiguration"]').should(
-        'have.class',
-        'highlight'
-      );
+      cy.get('.node[data-id="lib/Spree::BackendConfiguration"]').should('have.class', 'highlight');
     });
 
     it('shows label details', () => {
@@ -601,9 +529,7 @@ context('VS Code Extension', () => {
     });
 
     it('list of node parents is shown', () => {
-      cy.get(
-        `.node[data-id="active_support/ActiveSupport::SecurityUtils"]`
-      ).click();
+      cy.get(`.node[data-id="active_support/ActiveSupport::SecurityUtils"]`).click();
 
       cy.get('.details-panel-header__parent').should('have.length', 1);
 
@@ -627,9 +553,7 @@ context('VS Code Extension', () => {
     });
 
     it('does not back link to a large query when clicking a query from the search panel', () => {
-      cy.get(
-        '.details-search__block--query > .details-search__block-list > :nth-child(1)'
-      ).click();
+      cy.get('.details-search__block--query > .details-search__block-list > :nth-child(1)').click();
 
       cy.get('.list-item:nth-child(1)').click();
 
@@ -639,9 +563,7 @@ context('VS Code Extension', () => {
     });
 
     it('pans to the correct location when previewing events in the trace view', () => {
-      cy.get(
-        '.node.class[data-id="active_support/ActiveSupport::SecurityUtils"]'
-      ).click();
+      cy.get('.node.class[data-id="active_support/ActiveSupport::SecurityUtils"]').click();
 
       cy.get('.v-details-panel-list')
         .contains('Outbound connections')
@@ -658,9 +580,7 @@ context('VS Code Extension', () => {
 
     it('pans to the correct location when using keyboard navigation', () => {
       cy.get('.tabs__header').contains('Trace').click();
-      cy.get(':nth-child(2) > .trace-node > .trace-node__body')
-        .click()
-        .type('{rightarrow}');
+      cy.get(':nth-child(2) > .trace-node > .trace-node__body').click().type('{rightarrow}');
 
       cy.get('body').trigger('keydown', { keycode: 38 }); // arrow up
       cy.get('.trace-node.highlight').should('be.visible');
@@ -698,10 +618,7 @@ context('VS Code Extension', () => {
             .contains('Content-Type')
             .parent()
             .contains('application/json; charset=UTF-8');
-          cy.get('li')
-            .contains('User-Agent')
-            .parent()
-            .contains('selenium/3.142.7 (ruby macosx)');
+          cy.get('li').contains('User-Agent').parent().contains('selenium/3.142.7 (ruby macosx)');
           cy.get('li').contains('Content-Length').parent().contains('5067');
           cy.get('li')
             .contains('Accept-Encoding')
@@ -807,27 +724,16 @@ context('VS Code Extension', () => {
         .should('be.visible')
         .should('have.class', 'highlight');
 
-      cy.get('.trace-node[data-event-id="13"]')
-        .click()
-        .should('have.class', 'highlight');
+      cy.get('.trace-node[data-event-id="13"]').click().should('have.class', 'highlight');
       cy.get('.trace-node[data-event-id="1"]').should('have.class', 'filtered');
       cy.get('.trace-node[data-event-id="3"]').should('have.class', 'filtered');
-      cy.get('.trace-node[data-event-id="15"]').should(
-        'not.have.class',
-        'highlight'
-      );
+      cy.get('.trace-node[data-event-id="15"]').should('not.have.class', 'highlight');
       cy.get('.trace-filter__arrows-text').should('contain.text', '32 results');
 
       cy.get('.details-panel__buttons').contains('Clear selection').click();
 
-      cy.get('.trace-node[data-event-id="13"]').should(
-        'not.have.class',
-        'highlight'
-      );
-      cy.get('.trace-node[data-event-id="1"]').should(
-        'not.have.class',
-        'highlight'
-      );
+      cy.get('.trace-node[data-event-id="13"]').should('not.have.class', 'highlight');
+      cy.get('.trace-node[data-event-id="1"]').should('not.have.class', 'highlight');
       cy.get('.trace-filter__input').should('have.value', eventQuery + ' ');
       cy.get('.trace-filter__arrows-text').should('be.visible');
     });
@@ -838,9 +744,7 @@ context('VS Code Extension', () => {
       cy.get('.trace .trace-node').should('have.length', 4);
 
       cy.get('.tabs__controls .popper__button').click();
-      cy.get('.filters__checkbox input[type="checkbox"]')
-        .first()
-        .should('be.checked');
+      cy.get('.filters__checkbox input[type="checkbox"]').first().should('be.checked');
       cy.get('.tabs__controls .popper__button').click();
       cy.get('.trace-node[data-event-id="7"]').should('not.exist');
 
@@ -848,13 +752,9 @@ context('VS Code Extension', () => {
 
       cy.get('.trace .trace-node').should('have.length', 12);
       cy.get('.tabs__controls .popper__button').click();
-      cy.get('.filters__checkbox input[type="checkbox"]')
-        .first()
-        .should('not.be.checked');
+      cy.get('.filters__checkbox input[type="checkbox"]').first().should('not.be.checked');
       cy.get('.tabs__controls .popper__button').click();
-      cy.get('.trace-node[data-event-id="7"]')
-        .should('exist')
-        .should('have.class', 'highlight');
+      cy.get('.trace-node[data-event-id="7"]').should('exist').should('have.class', 'highlight');
     });
 
     it('moves the active event filter selection as expected', () => {
@@ -914,20 +814,12 @@ context('VS Code Extension', () => {
       cy.get('.trace-filter__input').focus();
       cy.get('.trace-filter__suggestions').should('be.visible');
 
-      cy.get('.trace-filter__suggestions-item')
-        .contains('GET /admin/orders')
-        .click();
-      cy.get('.trace-filter__input').should(
-        'have.value',
-        '"GET /admin/orders" '
-      );
+      cy.get('.trace-filter__suggestions-item').contains('GET /admin/orders').click();
+      cy.get('.trace-filter__input').should('have.value', '"GET /admin/orders" ');
       cy.get('.trace-filter__arrows-text').contains('1 / 2 results');
 
       cy.get('.trace-filter__input').type('{downarrow}').type('{enter}');
-      cy.get('.trace-filter__input').should(
-        'have.value',
-        '"GET /admin/orders" "GET /admin" '
-      );
+      cy.get('.trace-filter__input').should('have.value', '"GET /admin/orders" "GET /admin" ');
       cy.get('.trace-filter__suggestions').should('not.be.visible');
       cy.get('.trace-filter__arrows-text').contains('1 / 3 results');
 
@@ -939,9 +831,7 @@ context('VS Code Extension', () => {
       cy.get('.trace-filter__input').type('select');
       cy.get('.trace-filter__suggestions').should('be.visible');
       cy.get('.trace-filter__suggestions-item').should('have.length', 34);
-      cy.get('.trace-filter__suggestions-item')
-        .first()
-        .should('contain.text', 'SELECT');
+      cy.get('.trace-filter__suggestions-item').first().should('contain.text', 'SELECT');
       cy.get('.trace-filter__input').type('{enter}');
       cy.get('.trace-filter__arrows-text').contains('1 / 41 results');
 
@@ -949,9 +839,7 @@ context('VS Code Extension', () => {
       cy.get('.trace-filter__input').type('SELECT');
       cy.get('.trace-filter__suggestions').should('be.visible');
       cy.get('.trace-filter__suggestions-item').should('have.length', 34);
-      cy.get('.trace-filter__suggestions-item')
-        .first()
-        .should('contain.text', 'SELECT');
+      cy.get('.trace-filter__suggestions-item').first().should('contain.text', 'SELECT');
       cy.get('.trace-filter__input').type('{enter}');
       cy.get('.trace-filter__arrows-text').contains('1 / 41 results');
 
@@ -962,12 +850,8 @@ context('VS Code Extension', () => {
     });
 
     it('filters: root objects', () => {
-      cy.get(
-        '.node[data-id="active_support/ActiveSupport::SecurityUtils"]'
-      ).click();
-      cy.get('.details-panel-filters .details-panel-filters__item')
-        .first()
-        .click();
+      cy.get('.node[data-id="active_support/ActiveSupport::SecurityUtils"]').click();
+      cy.get('.details-panel-filters .details-panel-filters__item').first().click();
       cy.get('.nodes .node').should('have.length', 2);
 
       cy.get('.tabs__controls .popper__button').click();
@@ -1003,11 +887,7 @@ context('VS Code Extension', () => {
       cy.get('.tabs .tab-btn').first().click();
       cy.get('.nodes .node').should('have.length', 9);
       cy.get('.tabs__controls .popper__button').click();
-      cy.get('.filters__form-input')
-        .first()
-        .type('package:*/controllers')
-        .parent()
-        .submit();
+      cy.get('.filters__form-input').first().type('package:*/controllers').parent().submit();
       cy.get('.nodes .node').should('have.length', 3);
     });
 
@@ -1075,22 +955,20 @@ context('VS Code Extension', () => {
     });
 
     it('filters: hide unlabeled', () => {
-      cy.get(
-        '.details-search__block--package .details-search__block-item'
-      ).should('have.length', 4);
-      cy.get(
-        '.details-search__block--class .details-search__block-item'
-      ).should('have.length', 11);
+      cy.get('.details-search__block--package .details-search__block-item').should(
+        'have.length',
+        4
+      );
+      cy.get('.details-search__block--class .details-search__block-item').should('have.length', 11);
 
       cy.get('.tabs__controls .popper__button').click();
       cy.get('.filters__checkbox').eq(2).click();
 
-      cy.get(
-        '.details-search__block--package .details-search__block-item'
-      ).should('have.length', 2);
-      cy.get(
-        '.details-search__block--class .details-search__block-item'
-      ).should('have.length', 5);
+      cy.get('.details-search__block--package .details-search__block-item').should(
+        'have.length',
+        2
+      );
+      cy.get('.details-search__block--class .details-search__block-item').should('have.length', 5);
     });
 
     it('filters: hide elapsed time under 100ms', () => {
@@ -1108,9 +986,7 @@ context('VS Code Extension', () => {
       cy.get('.nodes .node').should('have.length', 9);
 
       cy.get('.node[data-id="HTTP server requests"]').click();
-      cy.get('.details-panel-filters .details-panel-filters__item')
-        .eq(1)
-        .click();
+      cy.get('.details-panel-filters .details-panel-filters__item').eq(1).click();
 
       cy.get('.nodes .node').should('have.length', 8);
 
@@ -1147,23 +1023,19 @@ context('VS Code Extension', () => {
 
     it('disable "Limit root events to HTTP" filter', () => {
       cy.get('.popper__button').click();
-      cy.get('.filters__checkbox input[type="checkbox"]')
-        .first()
-        .should('not.be.checked');
+      cy.get('.filters__checkbox input[type="checkbox"]').first().should('not.be.checked');
     });
   });
 
   context('Java appmap', () => {
     beforeEach(() => {
-      cy.visit(
-        'http://localhost:6006/iframe.html?id=pages-vs-code--extension-java&viewMode=story'
-      );
+      cy.visit('http://localhost:6006/iframe.html?id=pages-vs-code--extension-java&viewMode=story');
     });
 
     it('does not show objects without any events', () => {
-      cy.get(
-        '.node[data-id="org/springframework/web/filter/OncePerRequestFilter"]'
-      ).should('not.exist');
+      cy.get('.node[data-id="org/springframework/web/filter/OncePerRequestFilter"]').should(
+        'not.exist'
+      );
     });
 
     it('HTTP events are properly named', () => {

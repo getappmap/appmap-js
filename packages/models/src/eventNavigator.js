@@ -36,8 +36,7 @@ export default class EventNavigator {
     for (const node of [this, ...this.ancestors()]) {
       if (node !== this) yield node;
       for (const sibling of node.precedingSiblings()) {
-        for (const descendant of [...sibling.descendants()].reverse())
-          yield descendant;
+        for (const descendant of [...sibling.descendants()].reverse()) yield descendant;
         yield sibling;
       }
     }
@@ -101,9 +100,6 @@ export default class EventNavigator {
       return this.labels.size > 0;
     }
 
-    return (
-      searchLabels.filter((l) => this.labels.has(l)).length ===
-      searchLabels.length
-    );
+    return searchLabels.filter((l) => this.labels.has(l)).length === searchLabels.length;
   }
 }

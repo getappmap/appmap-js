@@ -19,12 +19,7 @@ import {
   RouteMatchSpec,
   TableMatchSpec,
 } from './matchSpec';
-import {
-  CodeObject,
-  CodeObjectMatch,
-  CodeObjectMatcher,
-  CodeObjectMatchSpec,
-} from './types';
+import { CodeObject, CodeObjectMatch, CodeObjectMatcher, CodeObjectMatchSpec } from './types';
 
 function parsePackage(functionId: string): CodeObjectMatchSpec[] {
   const packageTokens = functionId.split('/');
@@ -64,34 +59,14 @@ function parseFunction(functionId: string): CodeObjectMatchSpec[] {
   if (classAndFunction.includes('.')) {
     const [className, functionName] = classAndFunction.split('.');
     return [
-      new FunctionMatchSpec(
-        [packageTokens.join('/')],
-        className.split('::'),
-        true,
-        functionName
-      ),
-      new FunctionMatchSpec(
-        packageTokens,
-        className.split('::'),
-        true,
-        functionName
-      ),
+      new FunctionMatchSpec([packageTokens.join('/')], className.split('::'), true, functionName),
+      new FunctionMatchSpec(packageTokens, className.split('::'), true, functionName),
     ];
   } else if (classAndFunction.includes('#')) {
     const [className, functionName] = classAndFunction.split('#');
     return [
-      new FunctionMatchSpec(
-        [packageTokens.join('/')],
-        className.split('::'),
-        false,
-        functionName
-      ),
-      new FunctionMatchSpec(
-        packageTokens,
-        className.split('::'),
-        false,
-        functionName
-      ),
+      new FunctionMatchSpec([packageTokens.join('/')], className.split('::'), false, functionName),
+      new FunctionMatchSpec(packageTokens, className.split('::'), false, functionName),
     ];
   }
 
@@ -207,23 +182,16 @@ export default class FindCodeObjects {
         console.warn(`Checking AppMap ${appmapName}`);
       }
 
-      const buildCodeObject = (
-        codeObject: CodeObject,
-        parent?: CodeObject
-      ): void => {
+      const buildCodeObject = (codeObject: CodeObject, parent?: CodeObject): void => {
         codeObject.parent = parent;
         const id = codeObjectId(codeObject).join('');
         codeObject.fqid = [codeObject.type, id].join(':');
         if (codeObject.children) {
-          codeObject.children.forEach((child) =>
-            buildCodeObject(child, codeObject)
-          );
+          codeObject.children.forEach((child) => buildCodeObject(child, codeObject));
         }
       };
 
-      const classMap = JSON.parse(
-        await readFile(fileName, 'utf-8')
-      ) as CodeObject[];
+      const classMap = JSON.parse(await readFile(fileName, 'utf-8')) as CodeObject[];
       classMap.forEach((co) => buildCodeObject(co));
 
       this.matchers.forEach((matcher) => {
@@ -254,11 +222,7 @@ export default class FindCodeObjects {
       progressFn();
     };
 
-    await processFiles(
-      `${this.appMapDir}/**/classMap.json`,
-      checkClassMap.bind(this),
-      fileCountFn
-    );
+    await processFiles(`${this.appMapDir}/**/classMap.json`, checkClassMap.bind(this), fileCountFn);
     return matches;
   }
 }

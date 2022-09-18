@@ -1,7 +1,4 @@
-import {
-  GradleParser,
-  GradleParseResult,
-} from '../../../src/cmds/agentInstaller/gradleParser';
+import { GradleParser, GradleParseResult } from '../../../src/cmds/agentInstaller/gradleParser';
 
 const sources = {
   buildscript: `

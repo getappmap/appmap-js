@@ -13,7 +13,7 @@ export const INSTALLERS: readonly AgentInstallerConstructor[] = [
   NpmInstaller,
   PipInstaller,
   PoetryInstaller,
-  YarnInstaller
+  YarnInstaller,
 ];
 
 /**
@@ -21,9 +21,7 @@ export const INSTALLERS: readonly AgentInstallerConstructor[] = [
  * @param path The path to check for available installers
  * @returns An array of installers available for the given path. May be empty.
  */
-export default async function getAvailableInstallers(
-  path: string
-): Promise<AgentInstaller[]> {
+export default async function getAvailableInstallers(path: string): Promise<AgentInstaller[]> {
   const allInstallers = INSTALLERS.map((constructor) => new constructor(path));
 
   // Results is an array lookup containing a boolean indicating whether the installer is available

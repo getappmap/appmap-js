@@ -60,10 +60,7 @@ class Fingerprinter {
       return;
     }
 
-    if (
-      (await index.versionUpToDate(VERSION)) &&
-      (await index.indexUpToDate())
-    ) {
+    if ((await index.versionUpToDate(VERSION)) && (await index.indexUpToDate())) {
       if (verbose()) {
         console.log('Fingerprint is up to date. Skipping...');
       }
@@ -71,11 +68,7 @@ class Fingerprinter {
     }
 
     if ((await index.appmapFileSize()) > MAX_APPMAP_SIZE)
-      throw new FileTooLargeError(
-        appMapFileName,
-        await index.appmapFileSize(),
-        MAX_APPMAP_SIZE
-      );
+      throw new FileTooLargeError(appMapFileName, await index.appmapFileSize(), MAX_APPMAP_SIZE);
 
     const appmapData = await index.loadAppMapData();
     if (!appmapData) return;
@@ -101,15 +94,10 @@ class Fingerprinter {
         const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
 
         if (this.printCanonicalAppMaps) {
-          await index.writeFileAtomic(
-            `canonical.${algorithmName}.json`,
-            canonicalJSON
-          );
+          await index.writeFileAtomic(`canonical.${algorithmName}.json`, canonicalJSON);
         }
 
-        const fingerprintDigest = createHash('sha256')
-          .update(canonicalJSON)
-          .digest('hex');
+        const fingerprintDigest = createHash('sha256').update(canonicalJSON).digest('hex');
         fingerprints.push({
           appmap_digest: appmapDigest,
           canonicalization_algorithm: algorithmName,
@@ -124,27 +112,15 @@ class Fingerprinter {
     );
 
     const tempAppMapFileName = joinPath(index.indexDir, 'appmap.tmp');
-    await index.writeFileAtomic(
-      basename(tempAppMapFileName),
-      JSON.stringify(appmap, null, 2)
-    );
+    await index.writeFileAtomic(basename(tempAppMapFileName), JSON.stringify(appmap, null, 2));
     const appMapIndexedAt = await mtime(tempAppMapFileName);
 
-    assert(
-      appMapIndexedAt,
-      `${tempAppMapFileName} should always exist and be a readable file`
-    );
+    assert(appMapIndexedAt, `${tempAppMapFileName} should always exist and be a readable file`);
 
     await Promise.all([
       index.writeFileAtomic('version', VERSION),
-      index.writeFileAtomic(
-        'classMap.json',
-        JSON.stringify(appmap.classMap, null, 2)
-      ),
-      index.writeFileAtomic(
-        'metadata.json',
-        JSON.stringify(appmap.metadata, null, 2)
-      ),
+      index.writeFileAtomic('classMap.json', JSON.stringify(appmap.classMap, null, 2)),
+      index.writeFileAtomic('metadata.json', JSON.stringify(appmap.metadata, null, 2)),
       index.writeFileAtomic('mtime', `${appMapIndexedAt}`),
     ]);
 

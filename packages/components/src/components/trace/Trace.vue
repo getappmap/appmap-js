@@ -78,8 +78,7 @@ export default {
 @font-face {
   font-family: 'IBM Plex Mono';
   src: local('IBM Plex Mono'),
-    url(../../assets/fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf)
-      format('truetype');
+    url(../../assets/fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf) format('truetype');
 }
 .trace {
   width: max-content;

@@ -22,10 +22,7 @@ export default {
       default: 'bottom left',
       validator: (value) => {
         const [v, h] = value.split(/\s+?/);
-        return (
-          ['top', 'bottom'].indexOf(v) !== -1 &&
-          ['left', 'right'].indexOf(h) !== -1
-        );
+        return ['top', 'bottom'].indexOf(v) !== -1 && ['left', 'right'].indexOf(h) !== -1;
       },
     },
     isHighlight: {
@@ -43,11 +40,7 @@ export default {
   },
   computed: {
     classes() {
-      const classNames = [
-        'popper',
-        `popper--v-${this.vAlign}`,
-        `popper--h-${this.hAlign}`,
-      ];
+      const classNames = ['popper', `popper--v-${this.vAlign}`, `popper--h-${this.hAlign}`];
 
       if (this.isHighlight) {
         classNames.push('popper--highlight');

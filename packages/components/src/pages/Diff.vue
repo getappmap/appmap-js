@@ -19,38 +19,22 @@
           <template v-slot:body>
             <h2>Filters</h2>
             <div>
-              <input
-                type="checkbox"
-                id="unlabeled-events"
-                v-model="filters.unlabeled.on"
-              />
+              <input type="checkbox" id="unlabeled-events" v-model="filters.unlabeled.on" />
               <label for="unlabeled-events">Unlabeled events</label>
             </div>
 
             <div>
-              <input
-                type="checkbox"
-                id="labeled-events"
-                v-model="filters.labeled.on"
-              />
+              <input type="checkbox" id="labeled-events" v-model="filters.labeled.on" />
               <label for="labeled-events">Labeled events</label>
             </div>
 
             <div>
-              <input
-                type="checkbox"
-                id="http-server-requests"
-                v-model="filters.http.on"
-              />
+              <input type="checkbox" id="http-server-requests" v-model="filters.http.on" />
               <label for="http-server-requests">HTTP server requests</label>
             </div>
 
             <div>
-              <input
-                type="checkbox"
-                id="sql-queries"
-                v-model="filters.sql.on"
-              />
+              <input type="checkbox" id="sql-queries" v-model="filters.sql.on" />
               <label for="sql-queries">SQL queries</label>
             </div>
           </template>
@@ -177,9 +161,7 @@ export default {
 
     filteredWorkingAppMap() {
       return buildAppMap({
-        events: this.workingAppMap.data.events.filter((e) =>
-          this.filterEvent(e)
-        ),
+        events: this.workingAppMap.data.events.filter((e) => this.filterEvent(e)),
         classMap: this.workingAppMap.classMap.codeObjects.map((c) => c.data),
         metadata: this.workingAppMap.metadata,
       }).build();
@@ -220,10 +202,7 @@ export default {
     },
 
     allChanges() {
-      const diff = AppMap.getDiff(
-        this.filteredBaseAppMap,
-        this.filteredWorkingAppMap
-      );
+      const diff = AppMap.getDiff(this.filteredBaseAppMap, this.filteredWorkingAppMap);
       const changes = [];
 
       // ( change type, event, 0..1 position in appmap )
@@ -234,11 +213,7 @@ export default {
         changes.push(['removed', e, e[0].id / this.baseAppMap.events.length])
       );
       diff.changed.forEach((events) =>
-        changes.push([
-          'changed',
-          events,
-          events[0].id / this.baseAppMap.events.length,
-        ])
+        changes.push(['changed', events, events[0].id / this.baseAppMap.events.length])
       );
 
       return changes.sort((a, b) => a[2] - b[2]);

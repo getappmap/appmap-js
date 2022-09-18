@@ -99,12 +99,10 @@ export default {
         return [];
       }
 
-      return Object.entries(httpClientResponse.headers).map(
-        ([name, value]) => ({
-          name,
-          value,
-        })
-      );
+      return Object.entries(httpClientResponse.headers).map(([name, value]) => ({
+        name,
+        value,
+      }));
     },
 
     outputs() {

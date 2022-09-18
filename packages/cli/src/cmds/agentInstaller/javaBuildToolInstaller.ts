@@ -20,9 +20,11 @@ export function addJetBrainsEnv() {
   // Make sure we don't override the user's settings: append to path, use the
   // existing JAVA_HOME if it's set.
   if (!process.env['JAVA_HOME']) {
-      process.env['JAVA_HOME'] = javaHome;
-  };
-  process.env['PATH'] = [process.env['PATH'], path.join(javaHome, 'bin'), mvnBin].join(path.delimiter);
+    process.env['JAVA_HOME'] = javaHome;
+  }
+  process.env['PATH'] = [process.env['PATH'], path.join(javaHome, 'bin'), mvnBin].join(
+    path.delimiter
+  );
 }
 addJetBrainsEnv();
 
@@ -74,9 +76,7 @@ export default abstract class JavaBuildToolInstaller extends AgentInstaller {
     const version = await getOutput('javac', ['-version'], this.path);
     return {
       JAVA_HOME: process.env['JAVA_HOME'] || chalk.yellow('Unspecified'),
-      'JDK Version': version.ok
-        ? version.output.split(/\s/)[1]
-        : chalk.red(version.output),
+      'JDK Version': version.ok ? version.output.split(/\s/)[1] : chalk.red(version.output),
     };
   }
 }

@@ -24,37 +24,26 @@ const invokeCommand = (
 
 describe('status sub-command', () => {
   let projectDir: string;
-  let getInstallersForProject,
-    chooseInstaller,
-    verifyProject,
-    validateProject,
-    success;
+  let getInstallersForProject, chooseInstaller, verifyProject, validateProject, success;
   beforeEach(() => {
     projectDir = tmp.dirSync({} as any).name;
-    sinon
-      .stub(AgentStatusProcedure.prototype, 'getEnvironmentForDisplay')
-      .resolves(['env']);
+    sinon.stub(AgentStatusProcedure.prototype, 'getEnvironmentForDisplay').resolves(['env']);
 
     const installer = stubInterface<AgentInstaller>({
       verifyCommand: undefined,
     });
 
-    getInstallersForProject = sinon
-      .stub(ProjectConfiguration, 'getProjects')
-      .resolves([
-        {
-          path: projectDir,
-          name: 'test',
-          availableInstallers: [installer],
-          selectedInstaller: installer,
-        },
-      ]);
+    getInstallersForProject = sinon.stub(ProjectConfiguration, 'getProjects').resolves([
+      {
+        path: projectDir,
+        name: 'test',
+        availableInstallers: [installer],
+        selectedInstaller: installer,
+      },
+    ]);
 
     verifyProject = sinon.stub(AgentStatusProcedure.prototype, 'verifyProject');
-    validateProject = sinon.stub(
-      AgentStatusProcedure.prototype,
-      'validateProject'
-    );
+    validateProject = sinon.stub(AgentStatusProcedure.prototype, 'validateProject');
     success = sinon.stub(UI, 'success');
   });
 
@@ -80,16 +69,14 @@ describe('status sub-command', () => {
     installers[1] = stubInterface<AgentInstaller>();
 
     getInstallersForProject.restore();
-    getInstallersForProject = sinon
-      .stub(ProjectConfiguration, 'getProjects')
-      .resolves([
-        {
-          path: projectDir,
-          name: 'test',
-          availableInstallers: installers,
-          selectedInstaller: installers[0],
-        },
-      ]);
+    getInstallersForProject = sinon.stub(ProjectConfiguration, 'getProjects').resolves([
+      {
+        path: projectDir,
+        name: 'test',
+        availableInstallers: installers,
+        selectedInstaller: installers[0],
+      },
+    ]);
 
     const evalResults = (err, argv, output) => {
       expect(err).toBeNull;

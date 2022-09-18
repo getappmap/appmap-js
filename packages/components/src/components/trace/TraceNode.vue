@@ -7,24 +7,15 @@
       {{ title }}
     </div>
     <div class="trace-node__body">
-      <node-connection
-        ref="flowIn"
-        class="connection-icon connection-icon--connected"
-      />
+      <node-connection ref="flowIn" class="connection-icon connection-icon--connected" />
       <node-connection
         ref="flowOut"
         :class="outboundConnectionClasses"
         @click.stop="$emit('expandChildren')"
       />
       <component :is="`v-trace-node-body-${eventType}`" :event="event" />
-      <v-trace-node-elapsed
-        v-if="event.returnEvent.elapsed"
-        :time="event.returnEvent.elapsed"
-      />
-      <v-trace-node-labels
-        v-if="event.labels.size"
-        :labels="Array.from(event.labels)"
-      />
+      <v-trace-node-elapsed v-if="event.returnEvent.elapsed" :time="event.returnEvent.elapsed" />
+      <v-trace-node-labels v-if="event.labels.size" :labels="Array.from(event.labels)" />
     </div>
   </div>
 </template>

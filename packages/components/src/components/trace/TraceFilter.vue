@@ -17,11 +17,7 @@
       <span v-if="filterValue" class="trace-filter__suffix" @click="clearValue">
         <CloseThinIcon />
       </span>
-      <ul
-        ref="suggestionsList"
-        v-if="suggestionsList.length"
-        class="trace-filter__suggestions"
-      >
+      <ul ref="suggestionsList" v-if="suggestionsList.length" class="trace-filter__suggestions">
         <li
           :class="getSuggestionClasses(index)"
           v-for="(item, index) in suggestionsList"
@@ -103,19 +99,15 @@ export default {
           return;
         }
 
-        const selected =
-          this.$refs.suggestionsList.querySelectorAll('li')[selectedSuggestion];
+        const selected = this.$refs.suggestionsList.querySelectorAll('li')[selectedSuggestion];
 
         if (selected.offsetTop < this.$refs.suggestionsList.scrollTop) {
           this.$refs.suggestionsList.scrollTop = selected.offsetTop;
         } else if (
           selected.offsetTop >=
-          this.$refs.suggestionsList.scrollTop +
-            this.$refs.suggestionsList.offsetHeight -
-            2
+          this.$refs.suggestionsList.scrollTop + this.$refs.suggestionsList.offsetHeight - 2
         ) {
-          this.$refs.suggestionsList.scrollTop =
-            selected.offsetTop - selected.offsetHeight * 4;
+          this.$refs.suggestionsList.scrollTop = selected.offsetTop - selected.offsetHeight * 4;
         }
       },
     },
@@ -133,9 +125,7 @@ export default {
     },
     suggestionsList() {
       let { suggestions } = this;
-      const lastTermRegex = this.filterValue.includes('"')
-        ? /([^"]*)$/
-        : /([^\s]*)$/;
+      const lastTermRegex = this.filterValue.includes('"') ? /([^"]*)$/ : /([^\s]*)$/;
       const lastTerm = this.filterValue.match(lastTermRegex).pop().trim();
 
       if (
@@ -144,9 +134,7 @@ export default {
         !/^id:.+$/g.test(lastTerm) &&
         !/^label:.+$/g.test(lastTerm)
       ) {
-        suggestions = suggestions.filter((item) =>
-          new RegExp(lastTerm, 'ig').test(item)
-        );
+        suggestions = suggestions.filter((item) => new RegExp(lastTerm, 'ig').test(item));
       }
 
       return suggestions;
@@ -189,9 +177,7 @@ export default {
         this.suggestionsList.length &&
         this.selectedSuggestion !== false
       ) {
-        this.makeSelection(
-          this.suggestionsList[this.selectedSuggestion].toString()
-        );
+        this.makeSelection(this.suggestionsList[this.selectedSuggestion].toString());
       }
 
       this.$refs.input.blur();
@@ -240,10 +226,7 @@ export default {
           }
           break;
         case 'ArrowUp':
-          if (
-            this.selectedSuggestion !== false &&
-            this.selectedSuggestion !== 0
-          ) {
+          if (this.selectedSuggestion !== false && this.selectedSuggestion !== 0) {
             this.selectedSuggestion -= 1;
           } else {
             this.selectedSuggestion = this.suggestionsList.length - 1;

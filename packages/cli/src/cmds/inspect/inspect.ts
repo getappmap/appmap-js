@@ -41,10 +41,7 @@ export const handler = async (argv) => {
     const context = new Context(appmapDir, codeObjectId);
     await context.findCodeObjects();
     if (context.codeObjectMatches?.length === 0) {
-      return yargs.exit(
-        1,
-        new Error(`Code object '${context.codeObjectId}' not found`)
-      );
+      return yargs.exit(1, new Error(`Code object '${context.codeObjectId}' not found`));
     }
     await context.buildStats();
     console.log(JSON.stringify(context.stats, null, 2));

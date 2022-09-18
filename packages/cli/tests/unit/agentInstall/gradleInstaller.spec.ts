@@ -31,7 +31,7 @@ describe('GradleInstaller', () => {
         // By default, we'll run all test. This is here to make it easy to skip
         // them by name: change true to false, and check for the test name of
         // interest.
-        const testFn = (true || test === 'extra-repo-block') ? it : xit;
+        const testFn = true || test === 'extra-repo-block' ? it : xit;
 
         const actualFile = `${test}${testExt}`;
 
@@ -42,16 +42,11 @@ describe('GradleInstaller', () => {
             .stub(inquirer, 'prompt')
             .resolves({ addMavenCentral: 'Yes', userWillContinue: 'Continue' });
 
-          sinon
-            .stub(gradle, 'identifyGradleFile')
-            .value(actualFile);
+          sinon.stub(gradle, 'identifyGradleFile').value(actualFile);
 
-          sinon
-            .stub(gradle, 'buildFilePath')
-            .value(path.join(dataDir, actualFile));
+          sinon.stub(gradle, 'buildFilePath').value(path.join(dataDir, actualFile));
 
           const efWrite = sinon.stub(EncodedFile.prototype, 'write');
-
 
           await gradle.installAgent();
 

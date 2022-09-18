@@ -2,10 +2,7 @@
   <div>
     <v-details-panel-header object-type="Database" />
     <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
-    <v-details-panel-list
-      title="Inbound connections"
-      :items="object.inboundConnections"
-    />
+    <v-details-panel-list title="Inbound connections" :items="object.inboundConnections" />
     <v-details-panel-list title="Queries" :items="queryEvents" />
   </div>
 </template>

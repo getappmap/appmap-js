@@ -10,10 +10,7 @@ export default class IterateCodeObjectMatcher implements CodeObjectMatcher {
   constructor(public type: string, public pattern: RegExp) {}
 
   matchClassMap(classMap: CodeObject[]): CodeObject[] {
-    const findMatchingCodeObject = (
-      item: CodeObject,
-      matches: CodeObject[]
-    ): void => {
+    const findMatchingCodeObject = (item: CodeObject, matches: CodeObject[]): void => {
       if (item.type === this.type) {
         const [_type, id] = item.fqid.split(':');
         if (this.pattern.test(id)) {

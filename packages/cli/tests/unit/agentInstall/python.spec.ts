@@ -62,10 +62,7 @@ describe('Python Agent Installation', () => {
       sinon.stub(commandRunner, 'run').resolves({ stderr: '', stdout: '' });
 
       await btInstaller.installAgent();
-      const requirementsTxt = fs.readFileSync(
-        join(projectDirectory, 'requirements.txt'),
-        'utf8'
-      );
+      const requirementsTxt = fs.readFileSync(join(projectDirectory, 'requirements.txt'), 'utf8');
       expect(requirementsTxt).toMatch(/^appmap>=/);
     });
 
@@ -76,10 +73,7 @@ describe('Python Agent Installation', () => {
       fs.writeFileSync(requirementsPath, ' appmap == 1.0.0');
 
       await btInstaller.installAgent();
-      const requirementsTxt = fs.readFileSync(
-        join(projectDirectory, 'requirements.txt'),
-        'utf8'
-      );
+      const requirementsTxt = fs.readFileSync(join(projectDirectory, 'requirements.txt'), 'utf8');
       expect(requirementsTxt).toMatch(/^appmap>=/);
     });
 
@@ -90,10 +84,7 @@ describe('Python Agent Installation', () => {
       fs.writeFileSync(requirementsPath, ' not-appmap == 1.0.0');
 
       await btInstaller.installAgent();
-      const requirementsTxt = fs.readFileSync(
-        join(projectDirectory, 'requirements.txt'),
-        'utf8'
-      );
+      const requirementsTxt = fs.readFileSync(join(projectDirectory, 'requirements.txt'), 'utf8');
       expect(requirementsTxt).toMatch(/^appmap>=/m);
       expect(requirementsTxt).toMatch(/^ not-appmap == 1.0.0/m);
     });

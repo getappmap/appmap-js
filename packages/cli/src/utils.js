@@ -105,9 +105,7 @@ async function listAppMapFiles(directory, fn) {
   if (verbose()) {
     console.warn(`Scanning ${directory} for AppMaps`);
   }
-  await Promise.all(
-    (await promisify(glob)(`${directory}/**/*.appmap.json`)).map(fn)
-  );
+  await Promise.all((await promisify(glob)(`${directory}/**/*.appmap.json`)).map(fn));
 }
 
 /**
@@ -147,13 +145,10 @@ function formatValue(value) {
 function formatHttpServerRequest(event) {
   const data = {
     method: event.httpServerRequest.request_method,
-    path:
-      event.httpServerRequest.normalized_path_info ||
-      event.httpServerRequest.path_info,
+    path: event.httpServerRequest.normalized_path_info || event.httpServerRequest.path_info,
     statusCode:
       event.returnEvent && event.httpServerResponse
-        ? event.httpServerResponse.status_code ||
-          event.httpServerResponse.status
+        ? event.httpServerResponse.status_code || event.httpServerResponse.status
         : '<none>',
   };
   return [data.method, data.path, `(${data.statusCode})`].join(' ');

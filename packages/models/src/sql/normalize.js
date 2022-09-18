@@ -4,8 +4,7 @@
 // License: https://github.com/newrelic/newrelic-ruby-agent/blob/main/LICENSE
 // Apache License 2.0
 
-const COMMENTS_REGEXP =
-  /(?:(?:#|--).*?(?=\r|\n|$))|(?:\/\*(?:[^/]|\/[^*])*?(?:\*\/|\/\*.*))/gi;
+const COMMENTS_REGEXP = /(?:(?:#|--).*?(?=\r|\n|$))|(?:\/\*(?:[^/]|\/[^*])*?(?:\*\/|\/\*.*))/gi;
 
 const COMPONENTS_REGEXP_MAP = {
   single_quotes: /'(?:[^']|'')*?(?:'(?!'))/g,
@@ -15,8 +14,7 @@ const COMPONENTS_REGEXP_MAP = {
   numeric_literals: /-?\b(?:[0-9]+\.)?[0-9]+([eE][+-]?[0-9]+)?\b/g,
   boolean_literals: /\b(?:true|false|null)\b/gi,
   hexadecimal_literals: /0x[0-9a-fA-F]+/g,
-  oracle_quoted_strings:
-    /q'\[.*?(?:\]'|$)|q'\{.*?(?:\}'|$)|q'<.*?(?:>'|$)|q'\(.*?(?:\)'|$)/g,
+  oracle_quoted_strings: /q'\[.*?(?:\]'|$)|q'\{.*?(?:\}'|$)|q'<.*?(?:>'|$)|q'\(.*?(?:\)'|$)/g,
 };
 
 // We use these to check whether the query contains any quote characters
@@ -47,19 +45,8 @@ const DIALECT_COMPONENTS = {
     'boolean_literals',
     'hexadecimal_literals',
   ],
-  postgres: [
-    'single_quotes',
-    'dollar_quotes',
-    'uuids',
-    'numeric_literals',
-    'boolean_literals',
-  ],
-  sqlite: [
-    'single_quotes',
-    'numeric_literals',
-    'boolean_literals',
-    'hexadecimal_literals',
-  ],
+  postgres: ['single_quotes', 'dollar_quotes', 'uuids', 'numeric_literals', 'boolean_literals'],
+  sqlite: ['single_quotes', 'numeric_literals', 'boolean_literals', 'hexadecimal_literals'],
   oracle: ['single_quotes', 'oracle_quoted_strings', 'numeric_literals'],
   cassandra: [
     'single_quotes',
@@ -78,9 +65,7 @@ const PLACEHOLDER = '?';
  */
 function generateRegexp(dialect) {
   const components = DIALECT_COMPONENTS[dialect];
-  const regexData = components.map(
-    (component) => COMPONENTS_REGEXP_MAP[component].source
-  );
+  const regexData = components.map((component) => COMPONENTS_REGEXP_MAP[component].source);
   const union = `(?:${regexData.flat().join(')|(?:')})`;
   return new RegExp(union, 'gi');
 }
@@ -130,9 +115,7 @@ export default function normalize(sql, adapter) {
       regexp = FALLBACK_REGEXP;
   }
 
-  let obfuscated = sql
-    .replace(regexp, PLACEHOLDER)
-    .replace(COMMENTS_REGEXP, '');
+  let obfuscated = sql.replace(regexp, PLACEHOLDER).replace(COMMENTS_REGEXP, '');
   if (detectUnmatchedPairs(obfuscated, adapter)) {
     obfuscated = sql;
   }

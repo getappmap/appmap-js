@@ -28,20 +28,13 @@ class InstallerError {
   readonly error: Error;
   readonly log: string;
 
-  constructor(
-    error: unknown,
-    readonly duration: number,
-    readonly project?: ProjectConfiguration
-  ) {
+  constructor(error: unknown, readonly duration: number, readonly project?: ProjectConfiguration) {
     this.error = error instanceof Error ? error : new Error(String(error));
     this.log = ProcessLog.consumeBuffer();
   }
 
   get message(): string {
-    if (
-      this.error instanceof ValidationError ||
-      this.error instanceof ChildProcessError
-    ) {
+    if (this.error instanceof ValidationError || this.error instanceof ChildProcessError) {
       return this.error.message;
     } else if (this.error instanceof Error) {
       return this.error.stack || String(this.error);
@@ -53,9 +46,7 @@ class InstallerError {
   async handle(): Promise<boolean> {
     UI.error();
 
-    const installersAvailable = this.project?.availableInstallers
-      .map((i) => i.name)
-      .join(', ');
+    const installersAvailable = this.project?.availableInstallers.map((i) => i.name).join(', ');
 
     if (this.error instanceof AbortError) {
       Telemetry.sendEvent({
@@ -78,20 +69,14 @@ class InstallerError {
         name: 'install-agent:soft_failure',
         properties: {
           error: this.error.message,
-          directory: this.project?.path
-            ? await getDirectoryProperty(this.project.path)
-            : undefined,
+          directory: this.project?.path ? await getDirectoryProperty(this.project.path) : undefined,
         },
       });
 
       UI.error(`${chalk.red('!')} ${this.error.message}`);
       return true;
     } else if (this.error instanceof UserConfigError) {
-      UI.error(
-        `${chalk.red('!')} Error in project configuration:\n\n${
-          this.error?.message
-        }`
-      );
+      UI.error(`${chalk.red('!')} Error in project configuration:\n\n${this.error?.message}`);
 
       Telemetry.sendEvent({
         name: 'install-agent:user-config-error',
@@ -100,9 +85,7 @@ class InstallerError {
           installers_available: installersAvailable,
           error: this.error?.message,
           log: this.log,
-          directory: this.project?.path
-            ? await getDirectoryProperty(this.project.path)
-            : undefined,
+          directory: this.project?.path ? await getDirectoryProperty(this.project.path) : undefined,
         },
       });
       return true;
@@ -152,19 +135,12 @@ const _handler = async (
 ): Promise<{ exitCode: number; err: Error | null }> => {
   const { projectType, directory, verbose: isVerbose } = args;
   const errors: InstallerError[] = [];
-  const installers = INSTALLERS.map(
-    (constructor) => new constructor(directory)
-  );
+  const installers = INSTALLERS.map((constructor) => new constructor(directory));
 
   verbose(isVerbose);
 
   try {
-    const projects = await getProjects(
-      installers,
-      directory,
-      true,
-      projectType
-    );
+    const projects = await getProjects(installers, directory, true, projectType);
 
     for (let i = 0; i < projects.length; i++) {
       const project = projects[i];
@@ -218,10 +194,7 @@ const _handler = async (
         errors.forEach((error) => {
           UI.error(
             projects.length > 1
-              ? prefixLines(
-                  error.message,
-                  `[${chalk.red(error.project?.name)}] `
-                )
+              ? prefixLines(error.message, `[${chalk.red(error.project?.name)}] `)
               : error.message
           );
         });
@@ -254,9 +227,9 @@ export default {
     // FIXME: This method takes advantage of the fact that each implementation returns a static string
     // as the installer name. In the future, this may not be the case. After all, `name` is a non-static
     // getter.
-    const installerNames = INSTALLERS.map((installer) =>
-      chalk.blue(installer.prototype.name)
-    ).join(', ');
+    const installerNames = INSTALLERS.map((installer) => chalk.blue(installer.prototype.name)).join(
+      ', '
+    );
 
     args.option('project-type', {
       describe: [

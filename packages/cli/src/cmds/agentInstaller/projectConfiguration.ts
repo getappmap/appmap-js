@@ -48,9 +48,7 @@ async function resolveSelectedInstallers(
           throw new AbortError(
             [
               `user attempted to install via \`${userSpecifiedInstaller}\` but aborted.`,
-              `installers available: ${availableInstallers
-                .map((i) => i.name)
-                .join(', ')}`,
+              `installers available: ${availableInstallers.map((i) => i.name).join(', ')}`,
             ].join('\n')
           );
         }
@@ -201,9 +199,7 @@ export async function getProjects(
         },
       ];
     } else {
-      const longestInstallerName = Math.max(
-        ...installers.map((i) => i.name.length)
-      );
+      const longestInstallerName = Math.max(...installers.map((i) => i.name.length));
 
       throw new InvalidPathError(
         [
@@ -213,9 +209,9 @@ export async function getProjects(
           installers
             .map(
               (i) =>
-                `${chalk.blue(
-                  i.name.padEnd(longestInstallerName + 2, ' ')
-                )} ${chalk.yellow(`${i.buildFile} not found`)}`
+                `${chalk.blue(i.name.padEnd(longestInstallerName + 2, ' '))} ${chalk.yellow(
+                  `${i.buildFile} not found`
+                )}`
             )
             .filter(Boolean)
             .join('\n'),

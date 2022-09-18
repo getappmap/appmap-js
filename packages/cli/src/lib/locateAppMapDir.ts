@@ -5,8 +5,6 @@ export async function locateAppMapDir(appmapDir?: string): Promise<string> {
 
   const result = await appmapDirFromConfig();
   if (!result)
-    throw new Error(
-      'appmapDir must be provided as a command option, or available in appmap.yml'
-    );
+    throw new Error('appmapDir must be provided as a command option, or available in appmap.yml');
   return result;
 }

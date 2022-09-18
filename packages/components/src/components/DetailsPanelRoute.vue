@@ -1,20 +1,9 @@
 <template>
   <div>
-    <v-details-panel-header
-      object-type="Route"
-      :object="object"
-      :title="object.name"
-    />
+    <v-details-panel-header object-type="Route" :object="object" :title="object.name" />
     <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
-    <v-details-panel-list
-      title="Events"
-      :items="object.events"
-      :event-quickview="true"
-    />
-    <v-details-panel-list
-      title="Outbound connections"
-      :items="outboundConnections"
-    />
+    <v-details-panel-list title="Events" :items="object.events" :event-quickview="true" />
+    <v-details-panel-list title="Outbound connections" :items="outboundConnections" />
     <v-details-panel-list title="Queries" :items="queryEvents" />
   </div>
 </template>
@@ -47,9 +36,7 @@ export default {
     outboundConnections() {
       // Queries will appear in outbound connections, but we have a separate section for queries so
       // filter them out of this list
-      return this.object.outboundConnections.filter(
-        (obj) => obj.type !== CodeObjectType.QUERY
-      );
+      return this.object.outboundConnections.filter((obj) => obj.type !== CodeObjectType.QUERY);
     },
     queryEvents() {
       return this.object.sqlQueries.map((obj) => obj.events).flat();

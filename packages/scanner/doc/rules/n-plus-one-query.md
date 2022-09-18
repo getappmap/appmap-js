@@ -8,7 +8,6 @@ impactDomain: Performance
 scope: command
 ---
 
-
 Finds occurrences of a query being repeated within a loop.
 
 ### Rule logic

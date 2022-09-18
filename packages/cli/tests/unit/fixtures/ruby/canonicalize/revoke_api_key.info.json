@@ -48,13 +48,7 @@
               "analyzed_query": {
                 "actions": ["select"],
                 "tables": ["pg_type"],
-                "columns": [
-                  "pg_type.oid",
-                  "typarray",
-                  "typname",
-                  "typrelid",
-                  "typtype"
-                ],
+                "columns": ["pg_type.oid", "typarray", "typname", "typrelid", "typtype"],
                 "joinCount": 0
               }
             }
@@ -85,13 +79,7 @@
               "analyzed_query": {
                 "actions": ["select"],
                 "tables": ["pg_type"],
-                "columns": [
-                  "pg_type.oid",
-                  "typarray",
-                  "typname",
-                  "typrelid",
-                  "typtype"
-                ],
+                "columns": ["pg_type.oid", "typarray", "typname", "typrelid", "typtype"],
                 "joinCount": 0
               }
             }

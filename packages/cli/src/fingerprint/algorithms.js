@@ -53,9 +53,7 @@ function buildTree(events) {
   });
 
   const commands = rootEvents.filter(
-    (e) =>
-      e.kind === 'http_server_request' ||
-      (e.labels && e.labels.includes('command'))
+    (e) => e.kind === 'http_server_request' || (e.labels && e.labels.includes('command'))
   );
   if (commands.length > 0) {
     return commands;

@@ -9,12 +9,7 @@ describe('RecordContext', function () {
 
   describe('when generating metrics', () => {
     it('correctly reports counts of 0 items', async () => {
-      sinon
-        .stub(countAppMaps, 'default')
-        .onCall(0)
-        .resolves(0)
-        .onCall(1)
-        .resolves(0);
+      sinon.stub(countAppMaps, 'default').onCall(0).resolves(0).onCall(1).resolves(0);
 
       const rc = new RecordContext(new TempConfig());
       await rc.initialize();

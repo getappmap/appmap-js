@@ -33,9 +33,7 @@ describe('MavenInstaller', () => {
 
       for (let i = 0; i < tests.length; ++i) {
         const test = tests[i];
-        sinon
-          .stub(maven, 'buildFilePath')
-          .value(path.join(dataDir, `${test}.actual.xml`));
+        sinon.stub(maven, 'buildFilePath').value(path.join(dataDir, `${test}.actual.xml`));
 
         const expected = (
           await fs.readFile(path.join(dataDir, `${test}${expectedExt}`))

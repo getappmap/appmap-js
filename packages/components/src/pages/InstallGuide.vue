@@ -17,11 +17,7 @@
       :app-maps="appMaps"
       :sample-code-objects="sampleCodeObjects"
     />
-    <v-open-api
-      id="openapi"
-      :num-http-requests="numHttpRequests"
-      :num-app-maps="numAppMaps"
-    />
+    <v-open-api id="openapi" :num-http-requests="numHttpRequests" :num-app-maps="numAppMaps" />
     <v-investigate-findings
       id="investigate-findings"
       :scanned="hasFindings"
@@ -75,9 +71,7 @@ export default {
   watch: {
     projects(newVal) {
       if (!this.selectedProject || !this.selectedProject.name) return;
-      this.selectedProject = newVal.find(
-        (p) => p.name === this.selectedProject.name
-      );
+      this.selectedProject = newVal.find((p) => p.name === this.selectedProject.name);
     },
   },
 

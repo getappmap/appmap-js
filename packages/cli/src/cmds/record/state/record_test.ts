@@ -6,9 +6,7 @@ import RecordContext from '../recordContext';
 
 // This is the initial state of test case recording. From here, the record command is
 // configured by the user and executed.
-export default async function test(
-  recordContext: RecordContext
-): Promise<State> {
+export default async function test(recordContext: RecordContext): Promise<State> {
   if (await areTestCommandsConfigured(recordContext)) {
     recordContext.populateTestCommands();
 

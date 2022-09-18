@@ -30,9 +30,7 @@ export default abstract class AgentProcedure {
 
     let gitRemote;
     try {
-      const stdout = runSync(
-        new CommandStruct('git', ['remote', '-v'], this.installer.path)
-      );
+      const stdout = runSync(new CommandStruct('git', ['remote', '-v'], this.installer.path));
       if (stdout.length > 0) {
         gitRemote = stdout.split('\n')[0];
       } else {
@@ -50,9 +48,7 @@ export default abstract class AgentProcedure {
     }
     return Object.entries(env)
       .filter(([_, value]) => Boolean(value))
-      .map(
-        ([key, value]) => `  ${chalk.blue(key)}: ${(value as string).trim()}`
-      );
+      .map(([key, value]) => `  ${chalk.blue(key)}: ${(value as string).trim()}`);
   }
 
   async verifyProject() {
@@ -83,9 +79,7 @@ export default abstract class AgentProcedure {
 
     const validationResult = JSON.parse(stdout);
 
-    const errors = Array.isArray(validationResult)
-      ? validationResult
-      : validationResult.errors;
+    const errors = Array.isArray(validationResult) ? validationResult : validationResult.errors;
     if (errors.length > 0) {
       throw new ValidationError(
         errors

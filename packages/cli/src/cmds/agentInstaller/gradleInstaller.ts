@@ -41,17 +41,11 @@ export default class GradleInstaller extends JavaBuildToolInstaller {
     const buildGradleKtsExists: boolean = fs.existsSync(
       join(this.path, this.buildGradleKtsFileName)
     );
-    return buildGradleKtsExists
-      ? this.buildGradleKtsFileName
-      : this.buildGradleFileName;
+    return buildGradleKtsExists ? this.buildGradleKtsFileName : this.buildGradleFileName;
   }
 
   async printJarPathCommand(): Promise<CommandStruct> {
-    return new CommandStruct(
-      await this.runCommand(),
-      ['appmap-print-jar-path'],
-      this.path
-    );
+    return new CommandStruct(await this.runCommand(), ['appmap-print-jar-path'], this.path);
   }
 
   async available(): Promise<boolean> {
@@ -66,9 +60,9 @@ export default class GradleInstaller extends JavaBuildToolInstaller {
       return `.${sep}gradlew${ext}`;
     } else if (verbose()) {
       console.warn(
-        `${chalk.yellow(
-          `gradlew${ext} wrapper`
-        )} not located, falling back to ${chalk.yellow(`gradle${ext}`)}`
+        `${chalk.yellow(`gradlew${ext} wrapper`)} not located, falling back to ${chalk.yellow(
+          `gradle${ext}`
+        )}`
       );
     }
 
@@ -120,9 +114,7 @@ export default class GradleInstaller extends JavaBuildToolInstaller {
           .filter((line) => line !== '')
       : [];
 
-    const javaPresent = lines.some((line) =>
-      line.match(/^\s*id\s+["']\s*java/)
-    );
+    const javaPresent = lines.some((line) => line.match(/^\s*id\s+["']\s*java/));
     if (!javaPresent) {
       const { userWillContinue } = await UI.prompt({
         type: 'list',
@@ -149,18 +141,13 @@ ${whitespace.padLine(pluginSpec)}
       const buildscriptEnd = parseResult.buildscript
         ? parseResult.buildscript.rbrace + 1
         : parseResult.startOffset;
-      const updatedSrc = [
-        buildFileSource.substring(0, buildscriptEnd),
-        pluginsBlock,
-      ].join(os.EOL);
+      const updatedSrc = [buildFileSource.substring(0, buildscriptEnd), pluginsBlock].join(os.EOL);
       const offset = buildscriptEnd;
       return { updatedSrc, offset };
     }
 
     // Found plugin block, update it with plugin spec
-    const existingIndex = lines.findIndex((line) =>
-      line.match(/com\.appland\.appmap/)
-    );
+    const existingIndex = lines.findIndex((line) => line.match(/com\.appland\.appmap/));
 
     if (existingIndex !== -1) {
       lines[existingIndex] = pluginSpec;

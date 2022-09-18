@@ -18,9 +18,7 @@ export default async function areTestCasesConfigured({
     UI.progress(``);
     for (const testCommand of testCommands) {
       testCommand.env ||= {};
-      UI.progress(
-        `${TestCaseRecording.envString(testCommand.env)}${testCommand.command}`
-      );
+      UI.progress(`${TestCaseRecording.envString(testCommand.env)}${testCommand.command}`);
     }
     UI.progress(``);
 

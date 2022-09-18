@@ -70,24 +70,17 @@ export default class Container extends EventSource {
 
     if (this.options.zoom) {
       if (this.options.zoom.controls) {
-        this.zoomController = new ContainerZoom(this, this.options.zoom).on(
-          'zoom',
-          (k) => {
-            const { minRatio, maxRatio } = this.options.zoom;
-            const scaleLevel = (maxRatio - minRatio) * k + minRatio;
+        this.zoomController = new ContainerZoom(this, this.options.zoom).on('zoom', (k) => {
+          const { minRatio, maxRatio } = this.options.zoom;
+          const scaleLevel = (maxRatio - minRatio) * k + minRatio;
 
-            if (this.scaleTarget && this.scaleTarget.x && this.scaleTarget.y) {
-              this.scaleToAndTranslate(
-                scaleLevel,
-                this.scaleTarget.x,
-                this.scaleTarget.y
-              );
-            } else {
-              this.scaleTo(scaleLevel);
-            }
-            this.active = true;
+          if (this.scaleTarget && this.scaleTarget.x && this.scaleTarget.y) {
+            this.scaleToAndTranslate(scaleLevel, this.scaleTarget.x, this.scaleTarget.y);
+          } else {
+            this.scaleTo(scaleLevel);
           }
-        );
+          this.active = true;
+        });
       }
 
       this.zoom = zoom()
@@ -113,17 +106,13 @@ export default class Container extends EventSource {
 
           transform.x = clamp(
             transform.x,
-            (this.options.pan.boundary.overlap -
-              this.contentElement.offsetWidth) *
-              transform.k,
+            (this.options.pan.boundary.overlap - this.contentElement.offsetWidth) * transform.k,
             offsetWidth - this.options.pan.boundary.overlap * transform.k
           );
 
           transform.y = clamp(
             transform.y,
-            (this.options.pan.boundary.overlap -
-              this.contentElement.offsetHeight) *
-              transform.k,
+            (this.options.pan.boundary.overlap - this.contentElement.offsetHeight) * transform.k,
             offsetHeight - this.options.pan.boundary.overlap * transform.k
           );
 
@@ -142,10 +131,7 @@ export default class Container extends EventSource {
   }
 
   setContextMenu(componentController) {
-    if (
-      this.options.contextMenu === false ||
-      typeof this.options.contextMenu !== 'function'
-    ) {
+    if (this.options.contextMenu === false || typeof this.options.contextMenu !== 'function') {
       return;
     }
 
@@ -161,14 +147,8 @@ export default class Container extends EventSource {
     const targetWidth = targetElement.offsetWidth;
     const { clientWidth, clientHeight } = this.element.parentNode;
     const { minRatio, maxRatio } = this.options.zoom;
-    const desiredRatio = Math.min(
-      clientHeight / targetHeight,
-      clientWidth / targetWidth
-    );
-    const initialScale = Math.max(
-      Math.min(Math.max(desiredRatio, minRatio), maxRatio),
-      0.8
-    );
+    const desiredRatio = Math.min(clientHeight / targetHeight, clientWidth / targetWidth);
+    const initialScale = Math.max(Math.min(Math.max(desiredRatio, minRatio), maxRatio), 0.8);
     const transformMatrix = zoomIdentity
       .translate(
         (clientWidth - targetWidth * initialScale) * 0.5,

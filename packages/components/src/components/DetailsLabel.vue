@@ -9,11 +9,7 @@
     <v-details-panel-list title="Classes" :items="labelInfo.class" />
     <v-details-panel-list title="Functions" :items="labelInfo.function" />
     <v-details-panel-list title="Database" :items="labelInfo.database" />
-    <v-details-panel-list
-      title="Events"
-      :items="labelInfo.event"
-      :event-quickview="true"
-    />
+    <v-details-panel-list title="Events" :items="labelInfo.event" :event-quickview="true" />
   </div>
 </template>
 

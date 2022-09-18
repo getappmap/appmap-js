@@ -9,57 +9,36 @@
       </header>
       <main>
         <article v-if="!(findingsEnabled && scanned)" class="subheading">
-          Find software design flaws that impact security, performance,
-          stability, and maintainability. Our runtime code analysis can find the
-          problems that static code analyzers miss — and that cause serious
-          production issues.
+          Find software design flaws that impact security, performance, stability, and
+          maintainability. Our runtime code analysis can find the problems that static code
+          analyzers miss — and that cause serious production issues.
         </article>
         <div v-if="findingsEnabled">
           <article v-if="!scanned">
             <p>
               <strong>This project has not been scanned yet.</strong>
             </p>
-            <p>
-              AppMap will scan your project and report findings automatically if
-              you have:
-            </p>
+            <p>AppMap will scan your project and report findings automatically if you have:</p>
 
             <ol>
               <li>
-                <a
-                  href="#"
-                  @click.prevent="
-                    $root.$emit('open-instruction', 'project-picker')
-                  "
+                <a href="#" @click.prevent="$root.$emit('open-instruction', 'project-picker')"
                   >The AppMap Agent installed</a
                 >
               </li>
               <li>
-                <a
-                  href="#"
-                  @click.prevent="
-                    $root.$emit('open-instruction', 'record-appmaps')
-                  "
-                >
+                <a href="#" @click.prevent="$root.$emit('open-instruction', 'record-appmaps')">
                   AppMaps in your project</a
                 >
               </li>
             </ol>
-            <p>
-              If you need help getting set up, we are happy to help open a
-              support ticket.
-            </p>
+            <p>If you need help getting set up, we are happy to help open a support ticket.</p>
           </article>
           <article v-else-if="numFindings > 0">
             <p>
               AppMap has identified
               <badge
-                v-for="domain in [
-                  'security',
-                  'performance',
-                  'stability',
-                  'maintainability',
-                ]"
+                v-for="domain in ['security', 'performance', 'stability', 'maintainability']"
                 :key="domain"
                 :data-cy="domain"
                 :class="domain"
@@ -79,17 +58,14 @@
           </article>
           <article v-else>
             <p>
-              You're good to go! AppMap scanned your application and found no
-              flaws. We'll continue scanning for flaws automatically.
+              You're good to go! AppMap scanned your application and found no flaws. We'll continue
+              scanning for flaws automatically.
             </p>
           </article>
         </div>
         <article v-if="!findingsEnabled">
           <div class="feature-wrap content" data-cy="runtime-analysis-info">
-            <a
-              class="youtube-video"
-              href="https://appland.com/docs/analysis#demo"
-            >
+            <a class="youtube-video" href="https://appland.com/docs/analysis#demo">
               <img
                 class="video-thumbnail"
                 alt="runtime analysis video thumbnail"
@@ -97,14 +73,12 @@
               />
             </a>
             <div class="feature">
-              <h2 class="subhead">
-                Identify design flaws and anti-patterns before they’re merged
-              </h2>
+              <h2 class="subhead">Identify design flaws and anti-patterns before they’re merged</h2>
               <ul>
                 <li>
                   <strong>Security: </strong>
-                  authorization without authentication, secrets accidentally
-                  logged, server requests missing authentication.
+                  authorization without authentication, secrets accidentally logged, server requests
+                  missing authentication.
                 </li>
                 <li>
                   <strong>Performance: </strong>
@@ -112,27 +86,19 @@
                 </li>
                 <li>
                   <strong>Maintainability: </strong>
-                  GETs that make updates, circular package dependencies, queries
-                  made from views.
+                  GETs that make updates, circular package dependencies, queries made from views.
                 </li>
                 <li>
                   <strong>Stability: </strong>
-                  HTTP requests incompatible with an OpenAPI spec, remote calls
-                  made without circuit breaker, missing content types.
+                  HTTP requests incompatible with an OpenAPI spec, remote calls made without circuit
+                  breaker, missing content types.
                 </li>
                 <li><strong>And more!</strong></li>
               </ul>
             </div>
-            <a
-              class="btn-slack"
-              data-cy="slack-button"
-              href="https://appmap.io/slack"
-            >
+            <a class="btn-slack" data-cy="slack-button" href="https://appmap.io/slack">
               <SlackLogo />
-              <v-button
-                label="Join our Slack for early access"
-                class="cta-button b-0"
-              />
+              <v-button label="Join our Slack for early access" class="cta-button b-0" />
             </a>
           </div>
         </article>

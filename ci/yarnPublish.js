@@ -3,9 +3,7 @@ const exec = promisify(require('child_process').exec);
 
 async function verifyConditions(pluginConfig, context) {
   if (!context.env['YARN_NPM_AUTH_TOKEN']) {
-    throw new Error(
-      'YARN_NPM_AUTH_TOKEN environment variable must be specified.'
-    );
+    throw new Error('YARN_NPM_AUTH_TOKEN environment variable must be specified.');
   }
 }
 

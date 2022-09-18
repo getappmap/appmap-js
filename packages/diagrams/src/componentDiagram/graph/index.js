@@ -44,10 +44,7 @@ export default class Graph {
   setNodeFromCodeObject(codeObject, parentId = null) {
     let label = codeObject.prettyName;
 
-    if (
-      codeObject.type === CodeObjectType.PACKAGE ||
-      codeObject.type === CodeObjectType.HTTP
-    ) {
+    if (codeObject.type === CodeObjectType.PACKAGE || codeObject.type === CodeObjectType.HTTP) {
       const numChildren = codeObject.childLeafs().length;
 
       label += ` (${numChildren})`;
@@ -198,12 +195,10 @@ export default class Graph {
   }
 
   clearHighlights() {
-    this.outputGroup
-      .querySelectorAll('.highlight,.highlight--inbound')
-      .forEach((el) => {
-        el.classList.remove('highlight');
-        el.classList.remove('highlight--inbound');
-      });
+    this.outputGroup.querySelectorAll('.highlight,.highlight--inbound').forEach((el) => {
+      el.classList.remove('highlight');
+      el.classList.remove('highlight--inbound');
+    });
   }
 
   highlightNode(id) {
@@ -249,10 +244,7 @@ export default class Graph {
   }
 
   focus(id) {
-    const [visitedNodes, visitedEdges] = findTraversableNodesAndEdges(
-      this.graph,
-      id
-    );
+    const [visitedNodes, visitedEdges] = findTraversableNodesAndEdges(this.graph, id);
 
     this.graph.nodes().forEach((nodeId) => {
       if (visitedNodes.has(nodeId)) {
@@ -327,8 +319,7 @@ export default class Graph {
         return;
       }
 
-      const nodeBox =
-        node.element.getBoundingClientRect() || node.element.getBBox();
+      const nodeBox = node.element.getBoundingClientRect() || node.element.getBBox();
       nodesBox.top.push(nodeBox.top);
       nodesBox.left.push(nodeBox.left);
       nodesBox.right.push(nodeBox.right);
@@ -360,8 +351,7 @@ export default class Graph {
 
     const xRatio = containerBox.width / nodesBox.width;
     const yRatio = containerBox.height / nodesBox.height;
-    const scale =
-      xRatio > 1 && yRatio > 1 ? 1 : Math.min(xRatio, yRatio) - 0.01;
+    const scale = xRatio > 1 && yRatio > 1 ? 1 : Math.min(xRatio, yRatio) - 0.01;
 
     return {
       scale,

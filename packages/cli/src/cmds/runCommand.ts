@@ -64,9 +64,7 @@ export default async function runCommand(
       } else {
         UI.error(`An error occurred: ${err.toString().split('\n')[0]}`);
         UI.error(
-          `Try re-running the command with the ${chalk.red(
-            'verbose'
-          )} flag (${chalk.red('-v')}).`
+          `Try re-running the command with the ${chalk.red('verbose')} flag (${chalk.red('-v')}).`
         );
       }
       flushTelemetry(ExitCode.Error, err);
