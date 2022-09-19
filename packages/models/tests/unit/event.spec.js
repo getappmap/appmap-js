@@ -30,6 +30,7 @@ describe('Event', () => {
         thread_id: 115,
       });
     });
+
     it('stableProperties', () => {
       verifyJSON(getTasksEvent.stableProperties, {
         event_type: 'function',
@@ -72,12 +73,12 @@ describe('Event', () => {
 
     describe('SQL query', () => {
       const query = 'SELECT COUNT(*) FROM "spree_stores"';
-      const event = appMap.events.find((e) => e.sql_query && e.sql_query.sql === query);
+      const sqlEvent = appMap.events.find((e) => e.sql_query && e.sql_query.sql === query);
       it('sqlQuery', () => {
-        expect(event.sqlQuery).toEqual(query);
+        expect(sqlEvent.sqlQuery).toEqual(query);
       });
       it('toJSON', () => {
-        verifyJSON(event, {
+        verifyJSON(sqlEvent, {
           event: 'call',
           id: 62,
           sql_query: {
@@ -90,32 +91,43 @@ describe('Event', () => {
           thread_id: 47346401950060,
         });
       });
-      it('stableProperties', () => {
-        verifyJSON(event.stableProperties, {
-          event_type: 'sql',
-          sql_normalized:
-            '{"type":"statement","variant":"list","statement":[{"type":"statement","variant":"select","result":[{"type":"function","name":{"type":"identifier","variant":"function","name":"count"},"args":{"type":"identifier","variant":"star","name":"*"}}],"from":{"type":"identifier","variant":"table","name":"spree_stores"}}]}',
+      describe('identityProperties', () => {
+        it('actions and tables', () => {
+          verifyJSON(sqlEvent.gatherIdentityProperties(), {
+            event_type: 'sql',
+            actions: ['select'],
+            tables: ['spree_stores'],
+          });
         });
       });
-      it('stableProperties with query parameters', () => {
-        const sql = {
-          database_type: 'sqlite',
-          sql: 'SELECT 1 FROM "spree_stores" WHERE id IN ( ?, ?, ?, 12 )',
-        };
-        const eventWithQueryParameters = new Event({
-          ...event,
-          ...{ sql_query: sql },
+      describe('stableProperties', () => {
+        it('sql_normalized', () => {
+          verifyJSON(sqlEvent.gatherStableProperties(), {
+            event_type: 'sql',
+            sql_normalized:
+              '{"type":"statement","variant":"list","statement":[{"type":"statement","variant":"select","result":[{"type":"function","name":{"type":"identifier","variant":"function","name":"count"},"args":{"type":"identifier","variant":"star","name":"*"}}],"from":{"type":"identifier","variant":"table","name":"spree_stores"}}]}',
+          });
         });
-        eventWithQueryParameters.link(
-          new Event({
-            ...event.returnEvent,
-          })
-        );
-        verifyJSON(eventWithQueryParameters.stableProperties, {
-          event_type: 'sql',
-          // Verify that the query parameters and literal are normalized to one {"type":"variable"}
-          sql_normalized:
-            '{"type":"statement","variant":"list","statement":[{"type":"statement","variant":"select","result":[{"type":"variable"}],"from":{"type":"identifier","variant":"table","name":"spree_stores"},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"in","right":{"type":"expression","variant":"list","expression":[{"type":"variable"}]},"left":{"type":"identifier","variant":"column","name":"id"}}]}]}',
+        it('sql_normalized with query parameters', () => {
+          const sql = {
+            database_type: 'sqlite',
+            sql: 'SELECT 1 FROM "spree_stores" WHERE id IN ( ?, ?, ?, 12 )',
+          };
+          const eventWithQueryParameters = new Event({
+            ...sqlEvent,
+            ...{ sql_query: sql },
+          });
+          eventWithQueryParameters.link(
+            new Event({
+              ...sqlEvent.returnEvent,
+            })
+          );
+          verifyJSON(eventWithQueryParameters.stableProperties, {
+            event_type: 'sql',
+            // Verify that the query parameters and literal are normalized to one {"type":"variable"}
+            sql_normalized:
+              '{"type":"statement","variant":"list","statement":[{"type":"statement","variant":"select","result":[{"type":"variable"}],"from":{"type":"identifier","variant":"table","name":"spree_stores"},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"in","right":{"type":"expression","variant":"list","expression":[{"type":"variable"}]},"left":{"type":"identifier","variant":"column","name":"id"}}]}]}',
+          });
         });
       });
     });
@@ -154,30 +166,62 @@ describe('Event', () => {
           thread_id: 47346401950060,
         });
       });
-      it('stableProperties', () => {
-        verifyJSON(event.stableProperties, {
-          event_type: 'http_server_request',
-          route: 'GET /admin',
-          status_code: 302,
+      describe('identityProperties', () => {
+        it('sql', () => {
+          verifyJSON(event.gatherIdentityProperties(), {
+            event_type: 'http_server_request',
+            route: 'GET /admin',
+          });
         });
       });
-      it('stableProperties with content type', () => {
-        const headers = {
-          'Content-Type': 'text/plain',
-        };
-        const eventWithContentType = new Event({ ...event });
-        const returnEventData = { ...event.returnEvent };
-        returnEventData.http_server_response.headers = headers;
-        eventWithContentType.link(new Event(returnEventData));
-        verifyJSON(eventWithContentType.stableProperties, {
-          event_type: 'http_server_request',
-          route: 'GET /admin',
-          status_code: 302,
+      describe('stable properties', () => {
+        it('route and status code', () => {
+          verifyJSON(event.gatherStableProperties(), {
+            event_type: 'http_server_request',
+            route: 'GET /admin',
+            status_code: 302,
+          });
+        });
+        it('with content type', () => {
+          const headers = {
+            'Content-Type': 'text/plain',
+          };
+          const eventWithContentType = new Event({ ...event });
+          const returnEventData = { ...event.returnEvent };
+          returnEventData.http_server_response.headers = headers;
+          eventWithContentType.link(new Event(returnEventData));
+          verifyJSON(eventWithContentType.stableProperties, {
+            event_type: 'http_server_request',
+            route: 'GET /admin',
+            status_code: 302,
+          });
         });
       });
     });
 
-    test('all events have CodeObjects', () => {
+    describe('function', () => {
+      const event = appMap.events.find((e) => e.method_id);
+
+      describe('identityProperties', () => {
+        it('id', () => {
+          verifyJSON(event.gatherIdentityProperties(), {
+            event_type: 'function',
+            id: 'app/controllers/Spree::Admin::RootController#index',
+          });
+        });
+      });
+      describe('stable properties', () => {
+        it('id', () => {
+          verifyJSON(event.gatherStableProperties(), {
+            event_type: 'function',
+            id: 'app/controllers/Spree::Admin::RootController#index',
+            raises_exception: false,
+          });
+        });
+      });
+    });
+
+    it('all events have CodeObjects', () => {
       const callEvents = appMap.events.filter((e) => e.isCall());
       const events = callEvents.filter((e) => e.codeObject.events.includes(e));
 

@@ -1,4 +1,5 @@
 /* eslint-disable no-inner-declarations */
+import normalize from './normalize';
 import parseAST from './parse';
 
 export default function analyze(sql, errorCallback = () => {}) {
@@ -105,4 +106,23 @@ export default function analyze(sql, errorCallback = () => {}) {
     columns: unique(columns).sort(),
     joinCount: joins,
   };
+}
+
+// returns a JSON of SQL query AST with all literals replaced by variables and all variable names
+// removed. If the query cannot be parsed, returns a best-effort normalized SQL string.
+export function abstractSqlAstJSON(query, databaseType) {
+  const ast = parseAST(query);
+  if (!ast) return normalize(query, databaseType);
+
+  return JSON.stringify(ast, (_, value) => {
+    if (value === null) return null;
+
+    switch (value.type) {
+      case 'variable':
+      case 'literal':
+        return { type: 'variable' };
+      default:
+        return value;
+    }
+  });
 }
