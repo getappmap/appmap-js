@@ -303,7 +303,9 @@ export default class Event {
   }
 
   set path(value) {
-    this.callEvent.$hidden.path = value;
+    if (this.callEvent) {
+      this.callEvent.$hidden.path = value;
+    }
   }
 
   link(event) {
@@ -334,7 +336,7 @@ export default class Event {
   }
 
   get path() {
-    return this.callEvent.$hidden.path;
+    return this.callEvent ? this.callEvent.$hidden.path : undefined;
   }
 
   get callEvent() {
