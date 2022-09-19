@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.37.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.37.1...@appland/appmap-v3.37.2) (2022-09-19)
+
+
+### Bug Fixes
+
+* users with older versions of pip can install ([9464223](https://github.com/applandinc/appmap-js/commit/946422324c14c906a8a57d1840076d1d682f68fe))
+
 # [@appland/appmap-v3.37.1](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.37.0...@appland/appmap-v3.37.1) (2022-09-16)
 
 
