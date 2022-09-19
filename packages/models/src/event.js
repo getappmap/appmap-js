@@ -302,10 +302,6 @@ export default class Event {
     this.$hidden.parent = value;
   }
 
-  set id(value) {
-    this.$hidden.id = value;
-  }
-
   set path(value) {
     this.callEvent.$hidden.path = value;
   }
@@ -327,10 +323,6 @@ export default class Event {
 
   isReturn() {
     return this.event === 'return';
-  }
-
-  get id() {
-    return this.$hidden.id;
   }
 
   get threadId() {
