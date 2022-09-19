@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.38.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.37.2...@appland/appmap-v3.38.0) (2022-09-19)
+
+
+### Features
+
+* Add pipenv support ([cea19da](https://github.com/applandinc/appmap-js/commit/cea19da00ec1fbda1a6015bab4fbdf199cd13e15))
+
 # [@appland/appmap-v3.37.2](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.37.1...@appland/appmap-v3.37.2) (2022-09-19)
 
 
