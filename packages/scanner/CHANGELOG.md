@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.70.2](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.70.1...@appland/scanner-v1.70.2) (2022-09-19)
+
+
+### Bug Fixes
+
+* Add ora to packages/scanner dependencies ([ae3ad20](https://github.com/applandinc/appmap-js/commit/ae3ad201d53be1b76107673c75f55d6ad25efa5e))
+
 # [@appland/scanner-v1.70.1](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.70.0...@appland/scanner-v1.70.1) (2022-09-05)
 
 ### Bug Fixes
