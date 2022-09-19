@@ -63,14 +63,8 @@ export class PoetryInstaller extends PythonInstaller {
     return new CommandStruct('poetry', ['run', 'appmap-agent-init'], this.path);
   }
 
-  async checkCurrentConfig(): Promise<void> {
-    const cmd = new CommandStruct('poetry', ['install', '--dry-run'], this.path);
-
-    try {
-      await run(cmd);
-    } catch (err) {
-      throw new UserConfigError(err as string);
-    }
+  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+    return new CommandStruct('poetry', ['install', '--dry-run'], this.path);
   }
 
   async installAgent(): Promise<void> {
@@ -118,14 +112,8 @@ export class PipenvInstaller extends PythonInstaller {
     return new CommandStruct('pipenv', ['run', 'appmap-agent-init'], this.path);
   }
 
-  async checkCurrentConfig(): Promise<void> {
-    const cmd = new CommandStruct('pipenv', ['install', '--dev'], this.path);
-
-    try {
-      await run(cmd);
-    } catch (err) {
-      throw new UserConfigError(err as string);
-    }
+  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+    return new CommandStruct('pipenv', ['install', '--dev'], this.path);
   }
 
   async installAgent(): Promise<void> {
@@ -163,7 +151,7 @@ export class PipInstaller extends PythonInstaller {
     return exists(this.buildFilePath);
   }
 
-  async checkCurrentConfig(): Promise<void> {
+  async checkConfigCommand(): Promise<CommandStruct | undefined> {
     let commandArgs = ['install', '-r', this.buildFile];
     let supportsDryRun: boolean;
 
@@ -184,13 +172,7 @@ export class PipInstaller extends PythonInstaller {
       commandArgs.push('--dry-run');
     }
 
-    const cmd = new CommandStruct('pip', commandArgs, this.path);
-
-    try {
-      await run(cmd);
-    } catch (err) {
-      throw new UserConfigError(err as string);
-    }
+    return new CommandStruct('pip', commandArgs, this.path);
   }
 
   async installAgent(): Promise<void> {

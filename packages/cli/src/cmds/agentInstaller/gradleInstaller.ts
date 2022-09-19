@@ -228,7 +228,9 @@ ${whitespace.padLine(mavenCentral)}
   }
 
   // TODO: validate the user's project before adding AppMap
-  async checkCurrentConfig(): Promise<void> {}
+  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+    return undefined;
+  }
 
   async installAgent(): Promise<void> {
     const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);

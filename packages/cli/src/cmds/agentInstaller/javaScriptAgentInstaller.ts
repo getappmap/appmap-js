@@ -52,14 +52,8 @@ export class NpmInstaller extends JavaScriptInstaller {
     return await exists(this.buildFilePath);
   }
 
-  async checkCurrentConfig(): Promise<void> {
-    const cmd = new CommandStruct('npm', ['install', '--dry-run'], this.path);
-
-    try {
-      await run(cmd);
-    } catch (err) {
-      throw new UserConfigError(err as string);
-    }
+  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+    return new CommandStruct('npm', ['install', '--dry-run'], this.path);
   }
 
   async installAgent(): Promise<void> {
@@ -94,14 +88,8 @@ export class YarnInstaller extends JavaScriptInstaller {
     return await exists(this.buildFilePath);
   }
 
-  async checkCurrentConfig(): Promise<void> {
-    const cmd = new CommandStruct('yarn', ['install', '--immutable'], this.path);
-
-    try {
-      await run(cmd);
-    } catch (err) {
-      throw new UserConfigError(err as string);
-    }
+  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+    return new CommandStruct('yarn', ['install', '--immutable'], this.path);
   }
 
   async installAgent(): Promise<void> {

@@ -1,4 +1,6 @@
 import { resolve } from 'path';
+import { UserConfigError } from '../errors';
+import { run } from './commandRunner';
 import CommandStruct from './commandStruct';
 
 export default abstract class AgentInstaller {
@@ -12,7 +14,21 @@ export default abstract class AgentInstaller {
   }
 
   abstract installAgent(): Promise<void>;
-  abstract checkCurrentConfig(): Promise<void>;
+
+  abstract checkConfigCommand(): Promise<CommandStruct | undefined>;
+  async checkCurrentConfig(): Promise<void> {
+    const cmd = await this.checkConfigCommand();
+    if (!cmd) {
+      return;
+    }
+
+    try {
+      await run(cmd);
+    } catch (err) {
+      throw new UserConfigError(err as string);
+    }
+  }
+
   abstract validateAgentCommand(): Promise<CommandStruct | undefined>;
   abstract initCommand(): Promise<CommandStruct>;
   abstract verifyCommand(): Promise<CommandStruct | undefined>;
