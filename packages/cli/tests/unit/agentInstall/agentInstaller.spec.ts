@@ -12,6 +12,9 @@ class FakeInstaller extends AgentInstaller {
   installAgent(): Promise<void> {
     throw new Error('Method not implemented.');
   }
+  checkConfigCommand(): Promise<commandStruct | undefined> {
+    throw new Error('Method not implemented.');
+  }
   checkCurrentConfig(): Promise<void> {
     throw new Error('Method not implemented.');
   }

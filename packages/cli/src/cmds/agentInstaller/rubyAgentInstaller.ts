@@ -38,14 +38,8 @@ export class BundleInstaller extends AgentInstaller {
     return await exists(this.buildFilePath);
   }
 
-  async checkCurrentConfig(): Promise<void> {
-    const cmd = new CommandStruct('bundle', ['check', '--dry-run'], this.path);
-
-    try {
-      await run(cmd);
-    } catch (err) {
-      throw new UserConfigError(err as string);
-    }
+  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+    return new CommandStruct('bundle', ['check', '--dry-run'], this.path);
   }
 
   async installAgent(): Promise<void> {

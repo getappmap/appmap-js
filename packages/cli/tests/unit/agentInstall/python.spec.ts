@@ -1,12 +1,13 @@
 /* eslint-disable no-restricted-syntax */
-import { join } from 'path';
-import tmp from 'tmp';
 import fs from 'fs-extra';
-import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
+import { join } from 'path';
 import sinon from 'sinon';
+import tmp from 'tmp';
+import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
 import {
-  PoetryInstaller,
+  PipenvInstaller,
   PipInstaller,
+  PoetryInstaller,
 } from '../../../src/cmds/agentInstaller/pythonAgentInstaller';
 
 tmp.setGracefulCleanup();
@@ -31,7 +32,7 @@ describe('Python Agent Installation', () => {
     });
 
     it('detects poetry project', async () => {
-      expect(btInstaller.available()).resolves.toBe(true);
+      await expect(btInstaller.available()).resolves.toBe(true);
     });
 
     it('provides the correct init command', async () => {
@@ -55,7 +56,7 @@ describe('Python Agent Installation', () => {
     });
 
     it('detects pip project', async () => {
-      expect(btInstaller.available()).resolves.toBe(true);
+      await expect(btInstaller.available()).resolves.toBe(true);
     });
 
     it('adds appmap to requirements.txt when missing', async () => {
@@ -93,6 +94,24 @@ describe('Python Agent Installation', () => {
       const cmdStruct = await btInstaller.initCommand();
       expect(cmdStruct.program).toBe('appmap-agent-init');
       expect(cmdStruct.args).toEqual([]);
+    });
+  });
+
+  describe('pipenv support', () => {
+    let btInstaller: PipenvInstaller;
+
+    beforeAll(() => {
+      btInstaller = new PipenvInstaller(getProjectDirectory('pipenv'));
+    });
+
+    it('detects pipenv project', async () => {
+      await expect(btInstaller.available()).resolves.toBe(true);
+    });
+
+    it('provides the correct init command', async () => {
+      const cmdStruct = await btInstaller.initCommand();
+      expect(cmdStruct.program).toBe('pipenv');
+      expect(cmdStruct.args).toEqual(['run', 'appmap-agent-init']);
     });
   });
 });
