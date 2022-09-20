@@ -244,6 +244,15 @@ describe('scan', () => {
       fsextra.rm(tmpDir, { recursive: true });
     });
 
+    it('scans already indexed AppMaps on start', async () => {
+      await createIndex(secretInLogMap);
+      await createWatcher();
+      const findings = await expectScan(secretInLogMap);
+
+      expect(findings.findings.length).toEqual(1);
+      expect(findings.findings[0].ruleId).toEqual('secret-in-log');
+    });
+
     it('scans AppMaps when the mtime file is created or changed', async () => {
       await createWatcher();
 

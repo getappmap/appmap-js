@@ -37,7 +37,7 @@ export class Watcher {
     // Chokidar struggles with relative paths. Make sure the watch pattern is absolute.
     const watchPattern = path.resolve(this.options.appmapDir, '**', 'mtime');
     this.appmapWatcher = chokidar.watch(watchPattern, {
-      ignoreInitial: true,
+      ignoreInitial: false,
     });
     this.appmapWatcher
       .on('add', (filePath) => this.scan(filePath))
