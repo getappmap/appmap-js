@@ -2,7 +2,7 @@
   <div class="popper" @mouseover="hover = true" @mouseleave="hover = false">
     <transition name="fade">
       <span
-        :class="`popper__text popper__text--${placement} popper__text--${flashStyle}`"
+        :class="`popper__text popper__text--${placement} popper__text--${flashStyle} popper__text--align-${textAlign}`"
         v-if="isVisible"
         v-html="textValue"
       ></span>
@@ -28,6 +28,11 @@ export default {
     flashTime: {
       type: Number,
       default: 1500,
+    },
+    textAlign: {
+      type: String,
+      default: 'center',
+      validator: (value) => ['left', 'right', 'center'].indexOf(value) !== -1,
     },
   },
 
@@ -79,8 +84,8 @@ export default {
 
 <style scoped lang="scss">
 $margin: 1em;
-$bg: $black;
-$border-color: $gray4;
+$bg: $almost-black;
+$border-color: $gray1;
 
 .popper {
   position: relative;
@@ -102,17 +107,64 @@ $border-color: $gray4;
     font-size: 0.75rem;
     word-wrap: break-word;
     word-break: normal;
-    text-align: center;
     width: max-content;
+
+    &--align-left {
+      text-align: left;
+    }
+
+    &--align-right {
+      text-align: right;
+    }
+
+    &--align-center {
+      text-align: center;
+    }
 
     &--left {
       right: 100%;
       margin-right: 1em;
+      top: 50%;
+      transform: translateY(-50%);
+
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        right: -1px;
+        top: 50%;
+        width: 1em;
+        height: 1em;
+        transform: translate(50%, -50%) rotateZ(45deg);
+        background: $bg;
+        z-index: -1;
+        border: 1px solid $border-color;
+        border-left: none;
+        border-bottom: none;
+      }
     }
 
     &--right {
       left: 100%;
       margin-left: 1em;
+      top: 50%;
+      transform: translateY(-50%);
+
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: -1px;
+        top: 50%;
+        width: 1em;
+        height: 1em;
+        transform: translate(-50%, -50%) rotateZ(45deg);
+        background: $bg;
+        z-index: -1;
+        border: 1px solid $border-color;
+        border-right: none;
+        border-top: none;
+      }
     }
 
     &--top {
@@ -170,6 +222,6 @@ $border-color: $gray4;
 .fade-leave-active {
   transition: opacity 0 ease;
   transition-delay: 0.25s;
-  pointer-events: auto;
+  pointer-events: none;
 }
 </style>

@@ -18,14 +18,10 @@ context('Project Picker (Good Project)', () => {
   });
 
   it('selects project and shows back button', () => {
-    cy.get('[data-cy="back-button"]').should('be.visible');
+    cy.get('[data-cy="back-button"]').should('not.exist');
   });
 
   it('selects project and shows code snippet', () => {
     cy.get('[data-cy="code-snippet"]').should('be.visible');
-  });
-
-  it('selects project and shows agent installed message', () => {
-    cy.get('[data-cy="agent-installed-message"]').should('be.visible');
   });
 });

@@ -1,28 +1,18 @@
 <template>
-  <table class="project-picker-table">
-    <thead>
-      <tr>
-        <th scope="col">Project name</th>
-        <th scope="col">Language</th>
-        <th scope="col">Test framework</th>
-        <th scope="col">Web framework</th>
-      </tr>
-    </thead>
-    <tbody>
-      <v-project-picker-row
-        v-for="project in projects"
-        :key="project.name"
-        :name="project.name"
-        :selected="project === selectedProject"
-        :score="project.score"
-        :path="project.path"
-        :language="project.language"
-        :test-framework="project.testFramework"
-        :web-framework="project.webFramework"
-        @click.native="selectProject(project)"
-      />
-    </tbody>
-  </table>
+  <div class="project-picker-table">
+    <v-project-picker-row
+      v-for="project in sortedProjects"
+      :key="project.name"
+      :name="project.name"
+      :selected="project === selectedProject"
+      :score="project.score"
+      :path="project.path"
+      :language="project.language"
+      :test-framework="project.testFramework"
+      :web-framework="project.webFramework"
+      @click.native="selectProject(project)"
+    />
+  </div>
 </template>
 
 <script>
@@ -41,6 +31,19 @@ export default {
     };
   },
 
+  computed: {
+    sortedProjects() {
+      return [...this.projects].sort((a, b) => {
+        if (a.score === b.score) {
+          return a.name.localeCompare(b.name);
+        }
+        if (a.score > b.score) return -1;
+        if (a.score < b.score) return 1;
+        return 0;
+      });
+    },
+  },
+
   methods: {
     selectProject(project) {
       this.selectedProject = project;
@@ -53,30 +56,8 @@ export default {
 <style lang="scss" scoped>
 .project-picker-table {
   width: 100%;
-  text-align: right;
   border-radius: 8px;
   border-spacing: 0;
   color: $white;
-
-  th {
-    border-bottom: 1px solid $gray-secondary;
-    padding: 1em 2ex;
-
-    &:first-child {
-      text-align: left;
-    }
-  }
-
-  td {
-    border-left: 1px solid $gray-secondary;
-  }
-
-  tbody {
-    tr {
-      td {
-        border-left: 1px solid $gray-secondary;
-      }
-    }
-  }
 }
 </style>

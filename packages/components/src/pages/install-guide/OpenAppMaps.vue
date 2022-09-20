@@ -135,7 +135,6 @@ export default {
 <style lang="scss" scoped>
 .table-wrap {
   margin-bottom: 1.5rem;
-  overflow-x: auto;
   border-radius: $border-radius;
   &::-webkit-scrollbar-thumb {
     background: $gray-secondary;

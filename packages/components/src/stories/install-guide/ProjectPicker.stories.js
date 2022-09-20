@@ -48,16 +48,16 @@ BadProject.args = {
   projects: [
     {
       name: 'TestApp',
-      score: 1,
+      score: 0,
       path: '/home/user/test_app',
       language: {
         name: 'C#',
-        score: 1,
+        score: 0,
         text: 'language text',
       },
       webFramework: {
         name: 'ASP.NET',
-        score: 1,
+        score: 0,
         text: 'web framework text',
       },
     },
@@ -90,17 +90,17 @@ FourProjects.args = {
   projects: [
     {
       name: 'TestApp',
-      score: 1,
+      score: 0,
       path: '/home/user/test_app',
       agentInstalled: true,
       language: {
         name: 'C#',
-        score: 1,
+        score: 0,
         text: 'language text',
       },
       webFramework: {
         name: 'ASP.NET',
-        score: 1,
+        score: 0,
         text: 'web framework text',
       },
     },
@@ -118,16 +118,11 @@ FourProjects.args = {
     {
       name: 'RubyTest',
       score: 2,
-      path: '/home/user/rails_test',
+      path: '/home/user/ruby_test',
       language: {
         name: 'Ruby',
         score: 2,
         text: "This project looks like Ruby, but we couldn't find a Gemfile.",
-      },
-      webFramework: {
-        name: 'Rails',
-        score: 3,
-        text: 'This project uses Rails. AppMap will automatically recognize web requests, SQL queries, and key framework functions during recording.',
       },
     },
     {
