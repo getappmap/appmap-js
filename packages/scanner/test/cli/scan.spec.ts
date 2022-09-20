@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { basename, join } from 'path';
 import nock from 'nock';
 import sinon from 'sinon';
 import fsextra from 'fs-extra';
@@ -7,7 +7,7 @@ import Command from '../../src/cli/scan/command';
 import { fixtureAppMapFileName } from '../util';
 import { readFileSync, unlinkSync } from 'fs';
 import { ScanResults } from '../../src/report/scanResults';
-import { copyFile, mkdtemp, readFile, rm, stat, writeFile } from 'fs/promises';
+import { copyFile, readFile, rm, writeFile } from 'fs/promises';
 import { Watcher } from '../../src/cli/scan/watchScan';
 import { tmpdir } from 'os';
 import { dump } from 'js-yaml';
@@ -162,108 +162,129 @@ describe('scan', () => {
 
   describe('watch mode', () => {
     let watcher: Watcher | undefined;
-    let findingsFile: string;
     let scanConfigFilePath: string;
     let tmpDir: string;
-    let secretInLogDir: string;
-    const maxDelay = 10000;
 
-    async function expectScan(): Promise<ScanResults> {
-      async function updateMtime() {
-        return writeFile(join(secretInLogDir, 'mtime'), Date.now().toString());
-      }
+    const secretInLogMap = join(
+      __dirname,
+      '..',
+      'fixtures',
+      'appmaps',
+      'secretInLog',
+      'Confirmation_already_confirmed_user_should_not_be_able_to_confirm_the_account_again.appmap.json'
+    );
 
-      return new Promise<ScanResults>((resolve, reject) => {
-        const startTime = Date.now();
+    function findingsPath(mapPath: string): string {
+      return join(indexPath(mapPath), 'appmap-findings.json');
+    }
 
-        async function assertFindings(): Promise<void | NodeJS.Timeout> {
-          const elapsed = Date.now() - startTime;
+    function eventually<T>(fn: () => Promise<T>, intervalMs = 100, maxMs = 4000): Promise<T> {
+      return new Promise((resolve, reject) => {
+        let keepTrying = true;
+        setTimeout(() => (keepTrying = false), maxMs).unref();
 
+        const doTry = async function () {
           try {
-            await stat(findingsFile);
+            resolve(await fn());
           } catch (err) {
-            if (elapsed < maxDelay) return setTimeout(assertFindings, 100);
-
-            return reject(`Expected appmap-findings.json in ${secretInLogDir} after ${elapsed}ms`);
+            if (keepTrying) setTimeout(doTry, intervalMs);
+            else reject(err);
           }
+        };
 
-          resolve(JSON.parse((await readFile(findingsFile)).toString()) as ScanResults);
-        }
-
-        setTimeout(updateMtime, 250);
-        setTimeout(assertFindings, 500);
+        doTry();
       });
     }
 
-    async function createIndexDirectory(): Promise<void> {
-      await fsextra.copy(DefaultScanConfigFilePath, scanConfigFilePath);
-      await fsextra.copy(join(__dirname, '..', 'fixtures', 'appmaps', 'secretInLog'), tmpDir, {
-        recursive: true,
-      });
-      await fsextra.mkdir(
-        join(
-          tmpDir,
-          'Confirmation_already_confirmed_user_should_not_be_able_to_confirm_the_account_again'
-        )
+    function expectScan(mapPath: string): Promise<ScanResults> {
+      const findingsFile = findingsPath(mapPath);
+      return eventually(
+        async () => JSON.parse((await readFile(findingsFile)).toString()) as ScanResults
       );
+    }
+
+    function copyAppMap(source: string): Promise<void> {
+      return fsextra.copy(source, join(tmpDir, basename(source)));
+    }
+
+    function indexPath(mapPath: string): string {
+      return join(tmpDir, basename(mapPath, '.appmap.json'));
+    }
+
+    async function createIndex(mapPath: string): Promise<void> {
+      const index = indexPath(mapPath);
+      await fsextra.mkdir(index, { recursive: true });
+      await writeFile(join(index, 'mtime'), Date.now().toString());
     }
 
     beforeEach(async () => {
       tmpDir = await fsextra.mkdtemp(tmpdir() + '/');
-      secretInLogDir = join(
-        tmpDir,
-        'Confirmation_already_confirmed_user_should_not_be_able_to_confirm_the_account_again'
-      );
       scanConfigFilePath = join(tmpDir, 'appmap-scanner.yml');
-      findingsFile = join(secretInLogDir, 'appmap-findings.json');
+      await fsextra.copy(DefaultScanConfigFilePath, scanConfigFilePath);
 
-      createIndexDirectory();
+      await copyAppMap(secretInLogMap);
+    });
 
+    async function createWatcher(): Promise<void> {
       watcher = new Watcher({
         appId: 'no-such-app',
         appmapDir: tmpDir,
         configFile: scanConfigFilePath,
       });
       await watcher.watch();
-    });
+
+      // takes a moment to kick in for some reason
+      return new Promise((resolve) => setTimeout(resolve, 100));
+    }
 
     afterEach(async () => {
       if (watcher) watcher.close();
+      watcher = undefined;
 
-      fsextra.rmdir(tmpDir, { recursive: true });
+      fsextra.rm(tmpDir, { recursive: true });
     });
 
     it('scans AppMaps when the mtime file is created or changed', async () => {
-      const findings = await expectScan();
+      await createWatcher();
+
+      await createIndex(secretInLogMap);
+      const findings = await expectScan(secretInLogMap);
 
       expect(findings.findings.length).toEqual(1);
       expect(findings.findings[0].ruleId).toEqual('secret-in-log');
     });
 
     it('reloads the scanner configuration automatically', async () => {
-      await expectScan();
+      await createWatcher();
+      await createIndex(secretInLogMap);
 
-      await rm(findingsFile);
+      await expectScan(secretInLogMap);
+
+      await rm(findingsPath(secretInLogMap));
       await writeFile(scanConfigFilePath, dump({ checks: [{ rule: 'http-500' }] }));
 
-      const findings = await expectScan();
+      await createIndex(secretInLogMap);
+      const findings = await expectScan(secretInLogMap);
 
       expect(findings.checks.length).toEqual(1);
       expect(findings.checks[0].rule.id).toEqual('http-500');
     });
 
     it('picks up mtime changes after a relative directory is removed and recreated', async () => {
+      await createWatcher();
       {
-        const findings = await expectScan();
+        await createIndex(secretInLogMap);
+
+        const findings = await expectScan(secretInLogMap);
         expect(findings.findings.length).toEqual(1);
         expect(findings.findings[0].ruleId).toEqual('secret-in-log');
       }
 
-      await rm(secretInLogDir, { recursive: true });
-      await createIndexDirectory();
+      await rm(indexPath(secretInLogMap), { recursive: true });
+      await createIndex(secretInLogMap);
 
       {
-        const findings = await expectScan();
+        const findings = await expectScan(secretInLogMap);
         expect(findings.findings.length).toEqual(1);
         expect(findings.findings[0].ruleId).toEqual('secret-in-log');
       }
