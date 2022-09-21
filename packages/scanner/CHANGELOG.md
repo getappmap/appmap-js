@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.70.3](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.70.2...@appland/scanner-v1.70.3) (2022-09-21)
+
+
+### Bug Fixes
+
+* Scan existing files in scan --watch ([3a3138d](https://github.com/applandinc/appmap-js/commit/3a3138d2018e0ff96eed68e1125eb99fc2cb98f1)), closes [#727](https://github.com/applandinc/appmap-js/issues/727)
+
 # [@appland/scanner-v1.70.2](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.70.1...@appland/scanner-v1.70.2) (2022-09-19)
 
 
