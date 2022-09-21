@@ -1,6 +1,6 @@
 ## Scanner architecture
 
-See [@appland/models source code](https://github.com/applandinc/appmap-js/tree/main/packages/models)
+See [@appland/models source code](https://github.com/getappmap/appmap-js/tree/main/packages/models)
 for the JS API to AppMap data.
 
 ## Assertions

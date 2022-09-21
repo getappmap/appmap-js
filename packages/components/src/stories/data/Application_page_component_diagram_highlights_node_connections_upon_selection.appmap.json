@@ -9,7 +9,7 @@
     },
     "client": {
       "name": "appmap",
-      "url": "https://github.com/applandinc/appmap-ruby",
+      "url": "https://github.com/getappmap/appmap-ruby",
       "version": "0.47.1"
     },
     "frameworks": [
@@ -23,7 +23,7 @@
       }
     ],
     "git": {
-      "repository": "git@github.com:applandinc/appmap-server.git",
+      "repository": "git@github.com:getappmap/appmap-server.git",
       "branch": "feature/appmap_deletion",
       "commit": "472cf0f6ef91b05d737dadf81712c7e2179d8a99",
       "status": [],

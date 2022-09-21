@@ -9,7 +9,7 @@
     },
     "client": {
       "name": "appmap",
-      "url": "https://github.com/applandinc/appmap-ruby",
+      "url": "https://github.com/getappmap/appmap-ruby",
       "version": "0.41.1"
     },
     "frameworks": [
@@ -23,7 +23,7 @@
       }
     ],
     "git": {
-      "repository": "git@github.com:applandinc/appland.git",
+      "repository": "git@github.com:getappmap/appland.git",
       "branch": "feat/api-mapsets",
       "commit": "63519fe9a3970a26a79c513c1f52ecd1c31aac21",
       "status": [],

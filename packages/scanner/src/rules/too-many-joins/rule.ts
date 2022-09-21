@@ -20,7 +20,7 @@ export default function rule(options: Options): RuleLogic {
     return !excludeTables.find((filter) => filter(table.name));
   }
 
-  // TODO: clean up (https://github.com/applandinc/scanner/issues/43)
+  // TODO: clean up (https://github.com/getappmap/scanner/issues/43)
   function matcher(
     command: Event,
     appMapIndex: AppMapIndex,

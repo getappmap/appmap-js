@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/applandinc/appmap-js.git",
+    "url": "git+https://github.com/getappmap/appmap-js.git",
     "directory": "packages/openapi"
   }
 }

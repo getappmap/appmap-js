@@ -8,7 +8,7 @@ for (const version of ['1.2.0', '1.3.0', '1.4.0', '1.5.0', '1.5.1', '1.6.0', '1.
     metadata: {
       client: {
         name: 'appmap-validate',
-        url: 'https://github.com/applandinc/appmap-validate',
+        url: 'https://github.com/getappmap/appmap-validate',
       },
       recorder: {
         name: 'appmap-validate',

@@ -5,7 +5,7 @@
     "language": { "name": "ruby", "engine": "ruby", "version": "3.0.2" },
     "client": {
       "name": "appmap",
-      "url": "https://github.com/applandinc/appmap-ruby",
+      "url": "https://github.com/getappmap/appmap-ruby",
       "version": "0.77.3"
     },
     "frameworks": [
@@ -13,7 +13,7 @@
       { "name": "rspec", "version": "3.10.1" }
     ],
     "git": {
-      "repository": "git@github.com:applandinc/appmap-server.git",
+      "repository": "git@github.com:getappmap/appmap-server.git",
       "branch": "fix/update-appmap-libs",
       "commit": "7b6848111b724bf6737adf84d783fcf897591659",
       "status": [
@@ -1645,7 +1645,7 @@
       "elapsed": 4.0e-6,
       "return_value": {
         "class": "Hash",
-        "value": "{name=>appmap, url=>https://github.com/applandinc/appmap-ruby, inferred=>true}",
+        "value": "{name=>appmap, url=>https://github.com/getappmap/appmap-ruby, inferred=>true}",
         "object_id": 112020,
         "size": 3
       }
@@ -1702,7 +1702,7 @@
       "elapsed": 0.00011,
       "return_value": {
         "class": "Hash",
-        "value": "{name=>Example scenario, language=>{name=>ruby}, recorder=>{name=>rspec}, client=>{name=>appmap, url=>https://github.com/applandinc/appmap-ruby, inferred=>true}}",
+        "value": "{name=>Example scenario, language=>{name=>ruby}, recorder=>{name=>rspec}, client=>{name=>appmap, url=>https://github.com/getappmap/appmap-ruby, inferred=>true}}",
         "object_id": 111980,
         "size": 4
       }
@@ -2173,7 +2173,7 @@
       "event": "call",
       "thread_id": 87240,
       "sql_query": {
-        "sql": "INSERT INTO \"scenarios\" (\"data\", \"org_id\", \"mapset_id\") VALUES ('{\"version\":\"1.2\",\"classMap\":[{\"name\":\"controllers\",\"location\":\"app/controllers\",\"type\":\"package\",\"children\":[{\"name\":\"SessionController\",\"location\":\"app/controllers/session_controller.rb:2\",\"type\":\"class\",\"children\":[{\"name\":\"create\",\"location\":\"app/controllers/session_controller.rb:4\",\"type\":\"function\",\"static\":false}]}]},{\"name\":\"models\",\"location\":\"app/models\",\"type\":\"package\",\"children\":[{\"name\":\"Session\",\"location\":\"app/models/session.rb:2\",\"type\":\"class\",\"children\":[{\"name\":\"initialize\",\"location\":\"app/models/session.rb:4\",\"type\":\"function\",\"static\":false},{\"name\":\"delete\",\"location\":\"app/models/session.rb:8\",\"type\":\"function\",\"static\":true}]}]}],\"metadata\":{\"name\":\"Example scenario\",\"language\":{\"name\":\"ruby\"},\"recorder\":{\"name\":\"rspec\"},\"client\":{\"name\":\"appmap\",\"url\":\"https://github.com/applandinc/appmap-ruby\",\"inferred\":true}},\"events\":[{\"id\":1,\"event\":\"call\",\"defined_class\":\"SessionController\",\"method_id\":\"create\",\"path\":\"app/controllers/session_controller.rb\",\"lineno\":4,\"receiver\":{\"class\":\"SessionController\",\"value\":\"#<SessionController:0x0000000000000000>\",\"object_id\":\"0\"},\"http_server_request\":{\"request_method\":\"POST\",\"normalized_path_info\":\"/sessions/new\",\"path_info\":\"/sessions/new\",\"client_normalized_path_info\":\"/sessions/new\"},\"message\":[{\"name\":\"login\",\"class\":\"String\",\"object_id\":70252828231460,\"value\":\"alice\"}]},{\"id\":2,\"event\":\"call\",\"defined_class\":\"Session\",\"method_id\":\"initialize\",\"path\":\"app/models/session.rb\",\"lineno\":4,\"receiver\":{\"class\":\"Session\",\"value\":\"#<Session:0x0000000000000000>\",\"object_id\":\"1\"},\"sql_query\":{\"sql\":\"SELECT * FROM users WHERE login = ''alice''\",\"normalized_sql\":\"SELECT * FROM users WHERE login = $1\",\"normalized\":true}},{\"id\":3,\"event\":\"return\",\"defined_class\":\"Session\",\"method_id\":\"initialize\",\"path\":\"app/models/session.rb\",\"lineno\":4,\"parent_id\":2},{\"id\":4,\"event\":\"return\",\"defined_class\":\"SessionController\",\"method_id\":\"create\",\"path\":\"app/controllers/session_controller.rb\",\"lineno\":4,\"parent_i...",
+        "sql": "INSERT INTO \"scenarios\" (\"data\", \"org_id\", \"mapset_id\") VALUES ('{\"version\":\"1.2\",\"classMap\":[{\"name\":\"controllers\",\"location\":\"app/controllers\",\"type\":\"package\",\"children\":[{\"name\":\"SessionController\",\"location\":\"app/controllers/session_controller.rb:2\",\"type\":\"class\",\"children\":[{\"name\":\"create\",\"location\":\"app/controllers/session_controller.rb:4\",\"type\":\"function\",\"static\":false}]}]},{\"name\":\"models\",\"location\":\"app/models\",\"type\":\"package\",\"children\":[{\"name\":\"Session\",\"location\":\"app/models/session.rb:2\",\"type\":\"class\",\"children\":[{\"name\":\"initialize\",\"location\":\"app/models/session.rb:4\",\"type\":\"function\",\"static\":false},{\"name\":\"delete\",\"location\":\"app/models/session.rb:8\",\"type\":\"function\",\"static\":true}]}]}],\"metadata\":{\"name\":\"Example scenario\",\"language\":{\"name\":\"ruby\"},\"recorder\":{\"name\":\"rspec\"},\"client\":{\"name\":\"appmap\",\"url\":\"https://github.com/getappmap/appmap-ruby\",\"inferred\":true}},\"events\":[{\"id\":1,\"event\":\"call\",\"defined_class\":\"SessionController\",\"method_id\":\"create\",\"path\":\"app/controllers/session_controller.rb\",\"lineno\":4,\"receiver\":{\"class\":\"SessionController\",\"value\":\"#<SessionController:0x0000000000000000>\",\"object_id\":\"0\"},\"http_server_request\":{\"request_method\":\"POST\",\"normalized_path_info\":\"/sessions/new\",\"path_info\":\"/sessions/new\",\"client_normalized_path_info\":\"/sessions/new\"},\"message\":[{\"name\":\"login\",\"class\":\"String\",\"object_id\":70252828231460,\"value\":\"alice\"}]},{\"id\":2,\"event\":\"call\",\"defined_class\":\"Session\",\"method_id\":\"initialize\",\"path\":\"app/models/session.rb\",\"lineno\":4,\"receiver\":{\"class\":\"Session\",\"value\":\"#<Session:0x0000000000000000>\",\"object_id\":\"1\"},\"sql_query\":{\"sql\":\"SELECT * FROM users WHERE login = ''alice''\",\"normalized_sql\":\"SELECT * FROM users WHERE login = $1\",\"normalized\":true}},{\"id\":3,\"event\":\"return\",\"defined_class\":\"Session\",\"method_id\":\"initialize\",\"path\":\"app/models/session.rb\",\"lineno\":4,\"parent_id\":2},{\"id\":4,\"event\":\"return\",\"defined_class\":\"SessionController\",\"method_id\":\"create\",\"path\":\"app/controllers/session_controller.rb\",\"lineno\":4,\"parent_i...",
         "database_type": "postgres",
         "server_version": 120008
       }
@@ -2202,7 +2202,7 @@
       "elapsed": 4.8e-5,
       "return_value": {
         "class": "Hash",
-        "value": "{events=>[{id=>1, path=>app/controllers/session_controller.rb, event=>call, lineno=>4, message=>[{name=>login, class=>String, value=>alice, object_id=>70252828231460}], receiver=>{class=>SessionController, value=>#<SessionController:0x0000000000000000>, object_id=>0}, method_id=>create, defined_class=>SessionController, http_server_request=>{path_info=>/sessions/new, request_method=>POST, normalized_path_info=>/sessions/new, client_normalized_path_info=>/sessions/new}}, {id=>2, path=>app/models/session.rb, event=>call, lineno=>4, receiver=>{class=>Session, value=>#<Session:0x0000000000000000>, object_id=>1}, method_id=>initialize, sql_query=>{sql=>SELECT * FROM users WHERE login = 'alice', normalized=>true, normalized_sql=>SELECT * FROM users WHERE login = $1}, defined_class=>Session}, {id=>3, path=>app/models/session.rb, event=>return, lineno=>4, method_id=>initialize, parent_id=>2, defined_class=>Session}, {id=>4, path=>app/controllers/session_controller.rb, event=>return, lineno=>4, method_id=>create, parent_id=>1, defined_class=>SessionController}], version=>1.2, classMap=>[{name=>controllers, type=>package, children=>[{name=>SessionController, type=>class, children=>[{name=>create, type=>function, static=>false, location=>app/controllers/session_controller.rb:4}], location=>app/controllers/session_controller.rb:2}], location=>app/controllers}, {name=>models, type=>package, children=>[{name=>Session, type=>class, children=>[{name=>initialize, type=>function, static=>false, location=>app/models/session.rb:4}, {name=>delete, type=>function, static=>true, location=>app/models/session.rb:8}], location=>app/models/session.rb:2}], location=>app/models}], metadata=>{name=>Example scenario, client=>{url=>https://github.com/applandinc/appmap-ruby, name=>appmap, inferred=>true}, language=>{name=>ruby}, recorder=>{name=>rspec}}}",
+        "value": "{events=>[{id=>1, path=>app/controllers/session_controller.rb, event=>call, lineno=>4, message=>[{name=>login, class=>String, value=>alice, object_id=>70252828231460}], receiver=>{class=>SessionController, value=>#<SessionController:0x0000000000000000>, object_id=>0}, method_id=>create, defined_class=>SessionController, http_server_request=>{path_info=>/sessions/new, request_method=>POST, normalized_path_info=>/sessions/new, client_normalized_path_info=>/sessions/new}}, {id=>2, path=>app/models/session.rb, event=>call, lineno=>4, receiver=>{class=>Session, value=>#<Session:0x0000000000000000>, object_id=>1}, method_id=>initialize, sql_query=>{sql=>SELECT * FROM users WHERE login = 'alice', normalized=>true, normalized_sql=>SELECT * FROM users WHERE login = $1}, defined_class=>Session}, {id=>3, path=>app/models/session.rb, event=>return, lineno=>4, method_id=>initialize, parent_id=>2, defined_class=>Session}, {id=>4, path=>app/controllers/session_controller.rb, event=>return, lineno=>4, method_id=>create, parent_id=>1, defined_class=>SessionController}], version=>1.2, classMap=>[{name=>controllers, type=>package, children=>[{name=>SessionController, type=>class, children=>[{name=>create, type=>function, static=>false, location=>app/controllers/session_controller.rb:4}], location=>app/controllers/session_controller.rb:2}], location=>app/controllers}, {name=>models, type=>package, children=>[{name=>Session, type=>class, children=>[{name=>initialize, type=>function, static=>false, location=>app/models/session.rb:4}, {name=>delete, type=>function, static=>true, location=>app/models/session.rb:8}], location=>app/models/session.rb:2}], location=>app/models}], metadata=>{name=>Example scenario, client=>{url=>https://github.com/getappmap/appmap-ruby, name=>appmap, inferred=>true}, language=>{name=>ruby}, recorder=>{name=>rspec}}}",
         "object_id": 112240,
         "size": 4
       }
@@ -2230,7 +2230,7 @@
       "elapsed": 4.0e-6,
       "return_value": {
         "class": "Hash",
-        "value": "{name=>Example scenario, client=>{url=>https://github.com/applandinc/appmap-ruby, name=>appmap, inferred=>true}, language=>{name=>ruby}, recorder=>{name=>rspec}}",
+        "value": "{name=>Example scenario, client=>{url=>https://github.com/getappmap/appmap-ruby, name=>appmap, inferred=>true}, language=>{name=>ruby}, recorder=>{name=>rspec}}",
         "object_id": 112280,
         "size": 4
       }
@@ -6711,7 +6711,7 @@
       "elapsed": 3.1e-5,
       "return_value": {
         "class": "Hash",
-        "value": "{events=>[{id=>1, path=>app/controllers/session_controller.rb, event=>call, lineno=>4, message=>[{name=>login, class=>String, value=>alice, object_id=>70252828231460}], receiver=>{class=>SessionController, value=>#<SessionController:0x0000000000000000>, object_id=>0}, method_id=>create, defined_class=>SessionController, http_server_request=>{path_info=>/sessions/new, request_method=>POST, normalized_path_info=>/sessions/new, client_normalized_path_info=>/sessions/new}}, {id=>2, path=>app/models/session.rb, event=>call, lineno=>4, receiver=>{class=>Session, value=>#<Session:0x0000000000000000>, object_id=>1}, method_id=>initialize, sql_query=>{sql=>SELECT * FROM users WHERE login = 'alice', normalized=>true, normalized_sql=>SELECT * FROM users WHERE login = $1}, defined_class=>Session}, {id=>3, path=>app/models/session.rb, event=>return, lineno=>4, method_id=>initialize, parent_id=>2, defined_class=>Session}, {id=>4, path=>app/controllers/session_controller.rb, event=>return, lineno=>4, method_id=>create, parent_id=>1, defined_class=>SessionController}], version=>1.2, classMap=>[{name=>controllers, type=>package, children=>[{name=>SessionController, type=>class, children=>[{name=>create, type=>function, static=>false, location=>app/controllers/session_controller.rb:4}], location=>app/controllers/session_controller.rb:2}], location=>app/controllers}, {name=>models, type=>package, children=>[{name=>Session, type=>class, children=>[{name=>initialize, type=>function, static=>false, location=>app/models/session.rb:4}, {name=>delete, type=>function, static=>true, location=>app/models/session.rb:8}], location=>app/models/session.rb:2}], location=>app/models}], metadata=>{name=>Example scenario, client=>{url=>https://github.com/applandinc/appmap-ruby, name=>appmap, inferred=>true}, language=>{name=>ruby}, recorder=>{name=>rspec}}}",
+        "value": "{events=>[{id=>1, path=>app/controllers/session_controller.rb, event=>call, lineno=>4, message=>[{name=>login, class=>String, value=>alice, object_id=>70252828231460}], receiver=>{class=>SessionController, value=>#<SessionController:0x0000000000000000>, object_id=>0}, method_id=>create, defined_class=>SessionController, http_server_request=>{path_info=>/sessions/new, request_method=>POST, normalized_path_info=>/sessions/new, client_normalized_path_info=>/sessions/new}}, {id=>2, path=>app/models/session.rb, event=>call, lineno=>4, receiver=>{class=>Session, value=>#<Session:0x0000000000000000>, object_id=>1}, method_id=>initialize, sql_query=>{sql=>SELECT * FROM users WHERE login = 'alice', normalized=>true, normalized_sql=>SELECT * FROM users WHERE login = $1}, defined_class=>Session}, {id=>3, path=>app/models/session.rb, event=>return, lineno=>4, method_id=>initialize, parent_id=>2, defined_class=>Session}, {id=>4, path=>app/controllers/session_controller.rb, event=>return, lineno=>4, method_id=>create, parent_id=>1, defined_class=>SessionController}], version=>1.2, classMap=>[{name=>controllers, type=>package, children=>[{name=>SessionController, type=>class, children=>[{name=>create, type=>function, static=>false, location=>app/controllers/session_controller.rb:4}], location=>app/controllers/session_controller.rb:2}], location=>app/controllers}, {name=>models, type=>package, children=>[{name=>Session, type=>class, children=>[{name=>initialize, type=>function, static=>false, location=>app/models/session.rb:4}, {name=>delete, type=>function, static=>true, location=>app/models/session.rb:8}], location=>app/models/session.rb:2}], location=>app/models}], metadata=>{name=>Example scenario, client=>{url=>https://github.com/getappmap/appmap-ruby, name=>appmap, inferred=>true}, language=>{name=>ruby}, recorder=>{name=>rspec}}}",
         "object_id": 114660,
         "size": 4
       }
@@ -6739,7 +6739,7 @@
       "elapsed": 5.0e-6,
       "return_value": {
         "class": "Hash",
-        "value": "{name=>Example scenario, client=>{url=>https://github.com/applandinc/appmap-ruby, name=>appmap, inferred=>true}, language=>{name=>ruby}, recorder=>{name=>rspec}}",
+        "value": "{name=>Example scenario, client=>{url=>https://github.com/getappmap/appmap-ruby, name=>appmap, inferred=>true}, language=>{name=>ruby}, recorder=>{name=>rspec}}",
         "object_id": 114700,
         "size": 4
       }

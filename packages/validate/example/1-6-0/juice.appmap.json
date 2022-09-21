@@ -13,7 +13,7 @@
     "client": {
       "name": "@appland/appmap-agent-js",
       "version": "4.3.0",
-      "url": "https://github.com/applandinc/appmap-agent-js.git/#readme"
+      "url": "https://github.com/getappmap/appmap-agent-js.git/#readme"
     },
     "recorder": {
       "name": "process"

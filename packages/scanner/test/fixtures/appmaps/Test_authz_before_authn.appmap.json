@@ -9,7 +9,7 @@
     },
     "client": {
       "name": "appmap",
-      "url": "https://github.com/applandinc/appmap-ruby",
+      "url": "https://github.com/getappmap/appmap-ruby",
       "version": "0.67.1"
     },
     "frameworks": [
@@ -39,7 +39,7 @@
       "git_commits_since_last_tag": null
     },
     "name": "Microposts_controller should redirect destroy for wrong micropost",
-    "source_location": "/home/db/dev/applandinc/sample_app_6th_ed/test/controllers/microposts_controller_test.rb:23",
+    "source_location": "/home/db/dev/getappmap/sample_app_6th_ed/test/controllers/microposts_controller_test.rb:23",
     "recorder": {
       "name": "minitest"
     },

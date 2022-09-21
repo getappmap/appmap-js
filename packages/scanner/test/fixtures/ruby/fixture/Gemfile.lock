@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/applandinc/appmap-ruby.git
+  remote: https://github.com/getappmap/appmap-ruby.git
   revision: cda70741cdd594f92863d2c32842c9627af38506
   branch: master
   specs:
