@@ -1,8 +1,7 @@
-import { loadConfiguration, FindingStatusListItem } from '@appland/client/dist/src';
+import { loadConfiguration, App, FindingStatusListItem } from '@appland/client/dist/src';
 
 import { loadConfig } from '../../configuration/configurationProvider';
 import Configuration from '../../configuration/types/configuration';
-import fetchStatus from '../../integration/appland/app/listFindingStatus';
 
 import resolveAppId from '../resolveAppId';
 import scan from '../scan';
@@ -44,7 +43,7 @@ class ServerIntegratedScanner extends ScannerBase implements Scanner {
     appMapDir?: string
   ): Promise<FindingStatusListItem[]> {
     const appId = await resolveAppId(appIdArg, appMapDir);
-    return await fetchStatus(appId);
+    return await new App(appId).listFindingStatus();
   }
 }
 

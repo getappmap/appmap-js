@@ -158,6 +158,7 @@ __metadata:
   resolution: "@appland/client@workspace:packages/client"
   dependencies:
     "@appland/models": "workspace:^1.8.1"
+    "@types/form-data": ^2.5.0
     "@types/jest": ^27.0.3
     "@types/js-yaml": ^4.0.5
     "@types/nock": ^11.1.0
@@ -174,6 +175,7 @@ __metadata:
     eslint-plugin-jest: ^25.3.0
     eslint-plugin-promise: ^6.0.1
     eslint-plugin-unicorn: ^39.0.0
+    form-data: ^4.0.0
     jest: ^27.4.7
     js-yaml: ^4.1.0
     nock: ^13.2.1
@@ -5568,6 +5570,15 @@ __metadata:
     "@types/qs": "*"
     "@types/serve-static": "*"
   checksum: 12a2a0e6c4b993fc0854bec665906788aea0d8ee4392389d7a98a5de1eefdd33c9e1e40a91f3afd274011119c506f7b4126acb97fae62ae20b654974d44cba12
+  languageName: node
+  linkType: hard
+
+"@types/form-data@npm:^2.5.0":
+  version: 2.5.0
+  resolution: "@types/form-data@npm:2.5.0"
+  dependencies:
+    form-data: "*"
+  checksum: c3f6c8932726970d49d67a23410d5eef0e1ad0be418163ccc3d73a4cbaa0dcd71e0e29acbe2779aab85ed8f47cb0e8f6b67028480da3b0f7d074c5a3416b2400
   languageName: node
   linkType: hard
 
@@ -14417,6 +14428,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"form-data@npm:*, form-data@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "form-data@npm:4.0.0"
+  dependencies:
+    asynckit: ^0.4.0
+    combined-stream: ^1.0.8
+    mime-types: ^2.1.12
+  checksum: 01135bf8675f9d5c61ff18e2e2932f719ca4de964e3be90ef4c36aacfc7b9cb2fceb5eca0b7e0190e3383fe51c5b37f4cb80b62ca06a99aaabfcfd6ac7c9328c
+  languageName: node
+  linkType: hard
+
 "form-data@npm:^3.0.0":
   version: 3.0.1
   resolution: "form-data@npm:3.0.1"
@@ -14425,17 +14447,6 @@ __metadata:
     combined-stream: ^1.0.8
     mime-types: ^2.1.12
   checksum: b019e8d35c8afc14a2bd8a7a92fa4f525a4726b6d5a9740e8d2623c30e308fbb58dc8469f90415a856698933c8479b01646a9dff33c87cc4e76d72aedbbf860d
-  languageName: node
-  linkType: hard
-
-"form-data@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "form-data@npm:4.0.0"
-  dependencies:
-    asynckit: ^0.4.0
-    combined-stream: ^1.0.8
-    mime-types: ^2.1.12
-  checksum: 01135bf8675f9d5c61ff18e2e2932f719ca4de964e3be90ef4c36aacfc7b9cb2fceb5eca0b7e0190e3383fe51c5b37f4cb80b62ca06a99aaabfcfd6ac7c9328c
   languageName: node
   linkType: hard
 

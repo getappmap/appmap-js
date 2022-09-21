@@ -2,18 +2,16 @@ import { queue } from 'async';
 import { readFile } from 'fs/promises';
 
 import { AppMap as AppMapStruct, Metadata } from '@appland/models';
+import {
+  AppMap,
+  CreateAppMapOptions,
+  CreateMapsetOptions,
+  Mapset,
+  UploadAppMapResponse,
+} from '@appland/client/dist/src';
 
 import { verbose } from '../rules/lib/util';
 import { ScanResults } from '../report/scanResults';
-import {
-  create as createAppMap,
-  CreateOptions as CreateAppMapOptions,
-  UploadAppMapResponse,
-} from '../integration/appland/appMap/create';
-import {
-  create as createMapset,
-  CreateOptions as CreateMapsetOptions,
-} from '../integration/appland/mapset/create';
 import {
   create as createScannerJob,
   UploadResponse,
@@ -94,7 +92,7 @@ export default async function create(
           commitCount[commit] += 1;
         }
 
-        return createAppMap(
+        return AppMap.create(
           buffer,
           Object.assign(retryOptions, { ...createAppMapOptions, metadata })
         );
@@ -123,7 +121,7 @@ export default async function create(
 
   mapsetOptions.branch ||= branchFromEnv() || mostFrequent(branchCount);
   mapsetOptions.commit ||= commitFromEnv() || mostFrequent(commitCount);
-  const mapset = await createMapset(
+  const mapset = await Mapset.create(
     appId,
     Object.values(appMapUUIDByFileName),
     mapsetOptions,

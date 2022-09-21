@@ -1,7 +1,7 @@
 import nock, { RequestBodyMatcher } from 'nock';
 
 import * as test from './setup';
-import { create } from '../../src/integration/appland/appMap/create';
+import AppMap from '../src/appMap';
 import { Metadata } from '@appland/models';
 import assert from 'assert';
 
@@ -32,7 +32,7 @@ async function createAppMap(options: TestOptions): Promise<void> {
     .matchHeader('Content-Type', /^multipart\/form-data; boundary/)
     .matchHeader('Accept', /^application\/json;?/)
     .reply(201, AppMapData, ['Content-Type', 'application/json']);
-  expect(await create(data, createOptions)).toEqual(AppMapData);
+  expect(await AppMap.create(data, createOptions)).toEqual(AppMapData);
 }
 
 describe('appMap', () => {
@@ -78,7 +78,7 @@ describe('appMap', () => {
         .reply(201, AppMapData, ['Content-Type', 'application/json']);
 
       expect(
-        await create(Buffer.from(JSON.stringify({})), {}, { retryDelay: 0, maxRetries: 1 })
+        await AppMap.create(Buffer.from(JSON.stringify({})), {}, { retryDelay: 0, maxRetries: 1 })
       ).toEqual(AppMapData);
     });
   });
@@ -94,7 +94,7 @@ describe('appMap', () => {
         )
         .reply(503);
 
-      create(Buffer.from(JSON.stringify({})), {}, { retryDelay: 0, maxRetries: 1 })
+      AppMap.create(Buffer.from(JSON.stringify({})), {}, { retryDelay: 0, maxRetries: 1 })
         .then(() => {
           assert('AppMap creation should have failed');
         })

@@ -4,13 +4,13 @@ import nock from 'nock';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as vars from '../../src/integration/vars';
-import * as mapsets from '../../src/integration/appland/mapset/create';
 import * as scannerJobs from '../../src/integration/appland/scannerJob/create';
 import upload from '../../src/cli/upload';
 import * as appMapPruning from '../../src/cli/upload/pruneAppMap';
 import sinon from 'sinon';
 
 import CommandOptions from '../../src/cli/upload/options';
+import { CreateMapsetResponse, Mapset } from '@appland/client';
 
 process.env['APPMAP_TELEMETRY_DISABLED'] = 'true';
 const FixtureDir = 'test/fixtures/scanResults';
@@ -88,9 +88,7 @@ describe('upload', () => {
     sinon.stub(vars, 'sha').returns(expectedCommit);
     sinon.stub(scannerJobs, 'create');
     const appId = MapsetData.app_id.toString();
-    const mapsetsCreate = sinon
-      .stub(mapsets, 'create')
-      .resolves({ id: 1 } as mapsets.CreateResponse);
+    const mapsetsCreate = sinon.stub(Mapset, 'create').resolves({ id: 1 } as CreateMapsetResponse);
 
     await upload(ScanResults, appId, FixtureDir);
 
