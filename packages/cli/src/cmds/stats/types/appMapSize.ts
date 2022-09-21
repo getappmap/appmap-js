@@ -1,5 +1,5 @@
 export type AppMapSize = {
-  size: string;
+  size: number;
 };
 
 export type AppMapSizeTable = {

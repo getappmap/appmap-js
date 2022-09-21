@@ -1,4 +1,3 @@
-import runCommand from '../runCommand';
 import yargs from 'yargs';
 import { chdir } from 'process';
 const fs = require('fs');
@@ -82,7 +81,9 @@ export async function handler(argv: any) {
       return appMapSizes;
     }
 
-    async function sortAppMapSizes(appMapSizes): Promise<SortedAppMapSize[]> {
+    async function sortAppMapSizes(
+      appMapSizes: AppMapSizeTable
+    ): Promise<SortedAppMapSize[]> {
       let appMapSizesArray: SortedAppMapSize[] = [];
 
       for (const key in appMapSizes) {
@@ -226,8 +227,12 @@ export async function handler(argv: any) {
     > {
       UI.status = `Computing AppMap stats...`;
       const appMapDir = directoryToUse;
-      const appMapSizes = await calculateAppMapSizes(appMapDir);
-      const sortedAppMapSizes = await sortAppMapSizes(appMapSizes);
+      const appMapSizes: AppMapSizeTable = await calculateAppMapSizes(
+        appMapDir
+      );
+      const sortedAppMapSizes: SortedAppMapSize[] = await sortAppMapSizes(
+        appMapSizes
+      );
 
       UI.status = `Displaying biggest appmaps...\n`;
       let biggestAppMapSizes: SortedAppMapSize[] = [];
