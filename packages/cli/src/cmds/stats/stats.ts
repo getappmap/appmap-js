@@ -225,106 +225,119 @@ export async function handler(argv: any) {
     async function showStats(): Promise<
       [SortedAppMapSize[], SlowestExecutionTime[]]
     > {
-      UI.status = `Computing AppMap stats...`;
-      const appMapDir = directoryToUse;
-      const appMapSizes: AppMapSizeTable = await calculateAppMapSizes(
-        appMapDir
-      );
-      const sortedAppMapSizes: SortedAppMapSize[] = await sortAppMapSizes(
-        appMapSizes
-      );
-
-      UI.status = `Displaying biggest appmaps...\n`;
       let biggestAppMapSizes: SortedAppMapSize[] = [];
-      sortedAppMapSizes
-        .filter((appmap) => appmap.size > MINIMUM_APPMAP_SIZE)
-        .slice(0, limitToUse)
-        .forEach((appmap) => {
-          biggestAppMapSizes.push({
-            size: appmap.size,
-            name: appmap.name,
-          });
-        });
-      if (json) {
-        console.log(JSON.stringify(biggestAppMapSizes));
-      } else {
-        biggestAppMapSizes.forEach((appmap) => {
-          console.log(sizeInMB(appmap.size) + 'MB ' + appmap.name);
-        });
-      }
-
-      UI.status = `Computing functions with highest AppMap overhead...\n`;
-      const executionTimes = await calculateExecutionTimes(appMapDir);
-      const sortedExecutionTimes = await sortExecutionTimes(executionTimes);
-      UI.success();
-      UI.status = `Displaying functions with highest AppMap overhead...\n`;
-
       // column names in JSON files use snakecase
       let slowestExecutionTimes: SlowestExecutionTime[] = [];
+      try {
+        UI.status = `Computing AppMap stats...`;
+        const appMapDir = directoryToUse;
+        const appMapSizes: AppMapSizeTable = await calculateAppMapSizes(
+          appMapDir
+        );
+        const sortedAppMapSizes: SortedAppMapSize[] = await sortAppMapSizes(
+          appMapSizes
+        );
 
-      // if there are no instrumentation data don't show this report
-      if (
-        sortedExecutionTimes.length > 0 &&
-        sortedExecutionTimes[0].elapsedInstrumentationTimeTotal == 0
-      ) {
-        console.log('No "elapsed_instrumentation" data in the AppMaps.');
-      } else {
-        sortedExecutionTimes.slice(0, limitToUse).forEach((executionTime) => {
-          slowestExecutionTimes.push({
-            elapsed_instrumentation_time_total: Number(
-              executionTime.elapsedInstrumentationTimeTotal.toFixed(6)
-            ),
-            num_calls: executionTime.numberOfCalls,
-            name: executionTime.name,
-            path: executionTime.path,
+        UI.status = `Displaying biggest appmaps...\n`;
+        sortedAppMapSizes
+          .filter((appmap) => appmap.size > MINIMUM_APPMAP_SIZE)
+          .slice(0, limitToUse)
+          .forEach((appmap) => {
+            biggestAppMapSizes.push({
+              size: appmap.size,
+              name: appmap.name,
+            });
           });
-        });
         if (json) {
-          console.log(JSON.stringify(slowestExecutionTimes));
+          console.log(JSON.stringify(biggestAppMapSizes));
         } else {
-          slowestExecutionTimes.forEach((executionTime) => {
-            console.log(
-              String(executionTime.elapsed_instrumentation_time_total).padEnd(
-                10,
-                '0'
-              ) +
-                's ' +
-                executionTime.name +
-                ' ' +
-                executionTime.num_calls +
-                ' calls'
-            );
+          biggestAppMapSizes.forEach((appmap) => {
+            console.log(sizeInMB(appmap.size) + 'MB ' + appmap.name);
+          });
+        }
+
+        UI.status = `Computing functions with highest AppMap overhead...\n`;
+        const executionTimes = await calculateExecutionTimes(appMapDir);
+        const sortedExecutionTimes = await sortExecutionTimes(executionTimes);
+        UI.success();
+        UI.status = `Displaying functions with highest AppMap overhead...\n`;
+
+        // if there are no instrumentation data don't show this report
+        if (
+          sortedExecutionTimes.length > 0 &&
+          sortedExecutionTimes[0].elapsedInstrumentationTimeTotal == 0
+        ) {
+          console.log('No "elapsed_instrumentation" data in the AppMaps.');
+        } else {
+          sortedExecutionTimes.slice(0, limitToUse).forEach((executionTime) => {
+            slowestExecutionTimes.push({
+              elapsed_instrumentation_time_total: Number(
+                executionTime.elapsedInstrumentationTimeTotal.toFixed(6)
+              ),
+              num_calls: executionTime.numberOfCalls,
+              name: executionTime.name,
+              path: executionTime.path,
+            });
+          });
+          if (json) {
+            console.log(JSON.stringify(slowestExecutionTimes));
+          } else {
+            slowestExecutionTimes.forEach((executionTime) => {
+              console.log(
+                String(executionTime.elapsed_instrumentation_time_total).padEnd(
+                  10,
+                  '0'
+                ) +
+                  's ' +
+                  executionTime.name +
+                  ' ' +
+                  executionTime.num_calls +
+                  ' calls'
+              );
+            });
+          }
+        }
+
+        let telemetryMetrics = {};
+        let telemetryMetricsCounter = 1;
+        biggestAppMapSizes.forEach((appmap) => {
+          telemetryMetrics[`biggestAppmaps_${telemetryMetricsCounter}`] =
+            appmap.size;
+          telemetryMetricsCounter += 1;
+        });
+        telemetryMetricsCounter = 1;
+        slowestExecutionTimes.forEach((executionTime) => {
+          telemetryMetrics[
+            `slowestInstrumentationTimesTotal_${telemetryMetricsCounter}`
+          ] = executionTime.elapsed_instrumentation_time_total;
+          telemetryMetrics[
+            `slowestInstrumentationTimesPath_${telemetryMetricsCounter}`
+          ] = executionTime.path;
+          telemetryMetricsCounter += 1;
+        });
+
+        Telemetry.sendEvent({
+          name: 'stats:success',
+          properties: {
+            path: appMapDir,
+          },
+          metrics: telemetryMetrics,
+        });
+
+        UI.success();
+      } catch (err) {
+        let errorMessage: string | undefined = (err as any).toString();
+        if (err instanceof Error) {
+          Telemetry.sendEvent({
+            name: 'stats:error',
+            properties: {
+              errorMessage: err.message,
+              errorStack: err.stack,
+            },
           });
         }
       }
 
-      let telemetryMetrics = {};
-      let telemetryMetricsCounter = 1;
-      biggestAppMapSizes.forEach((appmap) => {
-        telemetryMetrics[`biggestAppmaps_${telemetryMetricsCounter}`] =
-          appmap.size;
-        telemetryMetricsCounter += 1;
-      });
-      telemetryMetricsCounter = 1;
-      slowestExecutionTimes.forEach((executionTime) => {
-        telemetryMetrics[
-          `slowestInstrumentationTimesTotal_${telemetryMetricsCounter}`
-        ] = executionTime.elapsed_instrumentation_time_total;
-        telemetryMetrics[
-          `slowestInstrumentationTimesPath_${telemetryMetricsCounter}`
-        ] = executionTime.path;
-        telemetryMetricsCounter += 1;
-      });
-
-      Telemetry.sendEvent({
-        name: 'stats:success',
-        properties: {
-          path: appMapDir,
-        },
-        metrics: telemetryMetrics,
-      });
-
-      UI.success();
       return [biggestAppMapSizes, slowestExecutionTimes];
     }
 
