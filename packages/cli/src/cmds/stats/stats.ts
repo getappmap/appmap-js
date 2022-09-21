@@ -317,7 +317,7 @@ export async function handler(argv: any) {
       });
 
       Telemetry.sendEvent({
-        name: 'status',
+        name: 'stats:success',
         properties: {
           path: appMapDir,
         },
