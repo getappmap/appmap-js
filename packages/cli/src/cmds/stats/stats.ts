@@ -6,20 +6,13 @@ import Telemetry from '../../telemetry';
 import { listAppMapFiles, verbose } from '../../utils';
 import { Event, buildAppMap } from '@appland/models';
 
-import {
-  AppMapSize,
-  AppMapSizeTable,
-  SortedAppMapSize,
-} from './types/appMapSize';
-import {
-  FunctionExecutionTime,
-  SlowestExecutionTime,
-} from './types/functionExecutionTime';
+import { AppMapSize, AppMapSizeTable, SortedAppMapSize } from './types/appMapSize';
+import { FunctionExecutionTime, SlowestExecutionTime } from './types/functionExecutionTime';
+import chalk from 'chalk';
 import { relative } from 'path';
 
 export const command = 'stats [directory]';
-export const describe =
-  'Show some statistics about events in scenarios read from AppMap files';
+export const describe = 'Show some statistics about events in scenarios read from AppMap files';
 const LIMIT_DEFAULT = 10;
 const MINIMUM_APPMAP_SIZE = (1024 * 1024) / 1;
 
@@ -37,8 +30,7 @@ export const builder = (args: yargs.Argv) => {
   });
 
   args.option('limit', {
-    describe:
-      'limit the number of methods displayed (default ' + LIMIT_DEFAULT + ').',
+    describe: 'limit the number of methods displayed (default ' + LIMIT_DEFAULT + ').',
     type: 'number',
     alias: 'l',
     default: LIMIT_DEFAULT,
@@ -60,9 +52,7 @@ export async function handler(argv: any) {
     let directoryToUse = directory;
     if (!directoryToUse) directoryToUse = '.';
 
-    async function calculateAppMapSizes(
-      appMapDir: string
-    ): Promise<AppMapSizeTable> {
+    async function calculateAppMapSizes(appMapDir: string): Promise<AppMapSizeTable> {
       const appMapSizes: AppMapSizeTable = {};
 
       // This function is too verbose to be useful in this context.
@@ -80,9 +70,7 @@ export async function handler(argv: any) {
       return appMapSizes;
     }
 
-    async function sortAppMapSizes(
-      appMapSizes: AppMapSizeTable
-    ): Promise<SortedAppMapSize[]> {
+    async function sortAppMapSizes(appMapSizes: AppMapSizeTable): Promise<SortedAppMapSize[]> {
       let appMapSizesArray: SortedAppMapSize[] = [];
 
       for (const key in appMapSizes) {
@@ -129,8 +117,7 @@ export async function handler(argv: any) {
             if (!eventReturn) return;
 
             const name = event.codeObject.fqid;
-            let elapsedInstrumentationTime =
-              eventReturn.elapsedInstrumentationTime || 0;
+            let elapsedInstrumentationTime = eventReturn.elapsedInstrumentationTime || 0;
             let path = '';
 
             // some paths are library functions but don't start with /. i.e.:
@@ -165,8 +152,7 @@ export async function handler(argv: any) {
               };
             } else {
               existingRecord.numberOfCalls += 1;
-              existingRecord.elapsedInstrumentationTime +=
-                elapsedInstrumentationTime;
+              existingRecord.elapsedInstrumentationTime += elapsedInstrumentationTime;
               if (existingRecord.path === '') existingRecord.path = path;
             }
           }
@@ -179,8 +165,7 @@ export async function handler(argv: any) {
       for (const name in totalFunctionExecutionTimes) {
         flatFunctionExecutionTimes.push({
           name: name,
-          elapsedInstrumentationTime:
-            totalFunctionExecutionTimes[name].elapsedInstrumentationTime,
+          elapsedInstrumentationTime: totalFunctionExecutionTimes[name].elapsedInstrumentationTime,
           numberOfCalls: totalFunctionExecutionTimes[name].numberOfCalls,
           path: totalFunctionExecutionTimes[name].path,
         });
@@ -198,23 +183,20 @@ export async function handler(argv: any) {
       );
     }
 
-    async function showStats(): Promise<
-      [SortedAppMapSize[], SlowestExecutionTime[]]
-    > {
+    async function showStats(): Promise<[SortedAppMapSize[], SlowestExecutionTime[]]> {
       let biggestAppMapSizes: SortedAppMapSize[] = [];
       // column names in JSON files use snakecase
       let slowestExecutionTimes: SlowestExecutionTime[] = [];
       try {
         UI.status = `Computing AppMap stats...`;
         const appMapDir = directoryToUse;
-        const appMapSizes: AppMapSizeTable = await calculateAppMapSizes(
-          appMapDir
+        const appMapSizes: AppMapSizeTable = await calculateAppMapSizes(appMapDir);
+        const sortedAppMapSizes: SortedAppMapSize[] = await sortAppMapSizes(appMapSizes);
+        UI.success();
+        UI.progress('');
+        UI.progress(
+          chalk.underline(`Largest AppMaps (which are bigger than ${MINIMUM_APPMAP_SIZE / 1024}kb)`)
         );
-        const sortedAppMapSizes: SortedAppMapSize[] = await sortAppMapSizes(
-          appMapSizes
-        );
-
-        UI.status = `Displaying biggest appmaps...\n`;
         sortedAppMapSizes
           .filter((appmap) => appmap.size > MINIMUM_APPMAP_SIZE)
           .slice(0, limitToUse)
@@ -232,11 +214,17 @@ export async function handler(argv: any) {
           });
         }
 
-        UI.status = `Computing functions with highest AppMap overhead...\n`;
+        UI.progress('');
+        UI.status = `Computing functions with highest AppMap overhead...`;
         const executionTimes = await calculateExecutionTimes(appMapDir);
-        const sortedExecutionTimes = await sortExecutionTimes(executionTimes);
+        const sortedExecutionTimes = await sortExecutionTimes(executionTimes.functions);
+        let totalInstrumentationTime = 0;
+        sortedExecutionTimes.forEach(
+          (time) => (totalInstrumentationTime += time.elapsedInstrumentationTime)
+        );
+
         UI.success();
-        UI.status = `Displaying functions with highest AppMap overhead...\n`;
+        UI.progress('');
 
         // if there are no instrumentation data don't show this report
         if (
@@ -248,7 +236,7 @@ export async function handler(argv: any) {
           sortedExecutionTimes.slice(0, limitToUse).forEach((executionTime) => {
             slowestExecutionTimes.push({
               elapsed_instrumentation_time_total: Number(
-                executionTime.elapsedInstrumentationTimeTotal.toFixed(6)
+                executionTime.elapsedInstrumentationTime.toFixed(6)
               ),
               num_calls: executionTime.numberOfCalls,
               name: executionTime.name,
@@ -259,17 +247,40 @@ export async function handler(argv: any) {
           if (json) {
             console.log(JSON.stringify(slowestExecutionTimes));
           } else {
+            UI.progress(chalk.underline(`Total instrumentation time`));
+            console.log(`${Math.round(totalInstrumentationTime * 1000)}ms`);
+            UI.progress('');
+            UI.progress(chalk.underline(`Functions with highest AppMap overhead`));
+
+            console.log(
+              chalk.underline(
+                [
+                  'Time'.padStart(9),
+                  '%'.padStart(5),
+                  'Count'.padStart(7),
+                  'Function name'.padEnd(30),
+                ].join(' | ')
+              )
+            );
             slowestExecutionTimes.forEach((executionTime) => {
+              const displayMs = [
+                Math.round(executionTime.elapsed_instrumentation_time_total * 1000).toString(),
+                'ms',
+              ].join('');
+              const displayPercent = `${(
+                Math.round(
+                  (executionTime.elapsed_instrumentation_time_total / totalInstrumentationTime) *
+                    1000
+                ) / 10
+              ).toLocaleString('en-us', { maximumFractionDigits: 2, minimumFractionDigits: 0 })}%`;
+
               console.log(
-                String(executionTime.elapsed_instrumentation_time_total).padEnd(
-                  10,
-                  '0'
-                ) +
-                  's ' +
-                  executionTime.name +
-                  ' ' +
-                  executionTime.num_calls +
-                  ' calls'
+                [
+                  displayMs.padStart(9),
+                  displayPercent.padStart(5),
+                  executionTime.num_calls.toString().padStart(7),
+                  executionTime.name.split(':').slice(1).join(':'),
+                ].join(' | ')
               );
             });
           }
@@ -278,18 +289,15 @@ export async function handler(argv: any) {
         let telemetryMetrics = {};
         let telemetryMetricsCounter = 1;
         biggestAppMapSizes.forEach((appmap) => {
-          telemetryMetrics[`biggestAppmaps_${telemetryMetricsCounter}`] =
-            appmap.size;
+          telemetryMetrics[`biggestAppmaps_${telemetryMetricsCounter}`] = appmap.size;
           telemetryMetricsCounter += 1;
         });
         telemetryMetricsCounter = 1;
         slowestExecutionTimes.forEach((executionTime) => {
-          telemetryMetrics[
-            `slowestInstrumentationTimesTotal_${telemetryMetricsCounter}`
-          ] = executionTime.elapsed_instrumentation_time_total;
-          telemetryMetrics[
-            `slowestInstrumentationTimesPath_${telemetryMetricsCounter}`
-          ] = executionTime.path;
+          telemetryMetrics[`slowestInstrumentationTimesTotal_${telemetryMetricsCounter}`] =
+            executionTime.elapsed_instrumentation_time_total;
+          telemetryMetrics[`slowestInstrumentationTimesPath_${telemetryMetricsCounter}`] =
+            executionTime.path;
           telemetryMetricsCounter += 1;
         });
 
