@@ -47,15 +47,14 @@ export default class Mapset {
   ): Promise<CreateMapsetResponse> {
     if (verbose()) console.log(`Creating mapset in app ${appId} with ${appMapIds.length} AppMaps`);
 
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    const retrier = retry(`Create Mapset`, retryOptions, makeRequest);
+    const payload = JSON.stringify({
+      app: appId,
+      appmaps: appMapIds,
+      ...options,
+    });
 
     async function makeRequest(): Promise<IncomingMessage> {
-      const payload = JSON.stringify({
-        app: appId,
-        appmaps: appMapIds,
-        ...options,
-      });
+      const retrier = retry(`Create Mapset`, retryOptions, makeRequest);
       const request = await buildRequest('api/mapsets');
       return new Promise<IncomingMessage>((resolve, reject) => {
         const interaction = request.requestFunction(
@@ -78,19 +77,6 @@ export default class Mapset {
 
     return makeRequest()
       .then(handleError)
-      .then(
-        (response: IncomingMessage) =>
-          new Promise<CreateMapsetResponse>((resolve, reject) => {
-            const responseData: Buffer[] = [];
-            response
-              .on('data', (chunk: Buffer) => {
-                responseData.push(Buffer.from(chunk));
-              })
-              .on('end', () => {
-                resolve(JSON.parse(Buffer.concat(responseData).toString()) as CreateMapsetResponse);
-              })
-              .on('error', reject);
-          })
-      );
+      .then((response) => reportJson<CreateMapsetResponse>(response));
   }
 }
