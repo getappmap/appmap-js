@@ -21,6 +21,7 @@ import { branch as branchFromEnv, sha as commitFromEnv } from '../integration/va
 import { stat } from 'fs/promises';
 import { join } from 'path';
 import { buildAppMap, maxAppMapSize, pruneAppMap } from './upload/pruneAppMap';
+import assert from 'assert';
 
 async function fileExists(file: string): Promise<boolean> {
   try {
