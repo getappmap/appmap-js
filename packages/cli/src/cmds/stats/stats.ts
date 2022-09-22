@@ -15,6 +15,7 @@ import {
   FunctionExecutionTime,
   SlowestExecutionTime,
 } from './types/functionExecutionTime';
+import { relative } from 'path';
 
 export const command = 'stats [directory]';
 export const describe =
@@ -73,6 +74,7 @@ export async function handler(argv: any) {
       await listAppMapFiles(appMapDir, (fileName: string) => {
         const stats = fs.statSync(fileName);
         appMapSizes[fileName] = {
+          path: relative(appMapDir, fileName),
           size: stats.size,
         };
       });
@@ -88,7 +90,7 @@ export async function handler(argv: any) {
 
       for (const key in appMapSizes) {
         appMapSizesArray.push({
-          name: key,
+          path: appMapSizes[key].path,
           size: appMapSizes[key].size,
         });
       }
@@ -245,7 +247,7 @@ export async function handler(argv: any) {
           .forEach((appmap) => {
             biggestAppMapSizes.push({
               size: appmap.size,
-              name: appmap.name,
+              path: appmap.path,
             });
           });
         if (json) {

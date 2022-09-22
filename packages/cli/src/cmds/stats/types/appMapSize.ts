@@ -1,4 +1,5 @@
 export type AppMapSize = {
+  path: string;
   size: number;
 };
 
@@ -7,6 +8,6 @@ export type AppMapSizeTable = {
 };
 
 export type SortedAppMapSize = {
-  name: string;
+  path: string;
   size: number;
 };
