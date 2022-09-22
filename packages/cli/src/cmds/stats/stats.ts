@@ -99,116 +99,94 @@ export async function handler(argv: any) {
       return Number((size / 1000 / 1000).toFixed(1));
     }
 
-    async function calculateExecutionTimes(appMapDir: string) {
-      let functionExecutionTimes = {};
+    async function calculateExecutionTimes(
+      appMapDir: string
+    ): Promise<{ totalTime: number; functions: FunctionExecutionTime[] }> {
+      // now that all functions were collected, index them by function
+      // name, not by <thread_id,parent_id>
+      let totalFunctionExecutionTimes: Record<
+        string,
+        {
+          elapsedInstrumentationTime: number;
+          numberOfCalls: number;
+          path: string;
+        }
+      > = {};
 
       // This function is too verbose to be useful in this context.
       const v = verbose();
       verbose(false);
+      // Note that event#elapsed time does NOT include instrumentation overhead.
+      // So, instrumentation / elapsed can theoretically be greater than 1.
+      let totalTime = 0;
       await listAppMapFiles(appMapDir, (fileName: string) => {
         const file = fs.readFileSync(fileName, 'utf-8');
         const appmapData = JSON.parse(file.toString());
         const appmap = buildAppMap(appmapData).build();
-        functionExecutionTimes[fileName] = {
-          functions: {},
-        };
         appmap.events.forEach((event: Event) => {
           if (event.isCall()) {
-            const functionKey = 'thread_' + event.threadId + '_id_' + event.id;
-            if (!(functionKey in functionExecutionTimes[fileName].functions)) {
-              let newData = {
-                name: event.codeObject.fqid,
-                elapsedInstrumentationTimeTotal: 0,
-                callNoReturnFound: true,
-                numberOfCalls: 0,
-                path: '',
-              };
-              // some paths are library functions but don't start with /. i.e.:
-              // <internal:pack>
-              // OpenSSL::Cipher#decrypt
-              // Kernel#eval
-              if (
-                event.definedClass &&
-                event.path &&
-                (event.path[0] == '/' ||
-                  event.path[0] == '<' ||
-                  event.path.includes('::') ||
-                  event.path.startsWith('Kernel'))
-              ) {
-                // Absolute path names generally signify a library function.
-                // Send library function data to help optimize AppMap;
-                // don't send user function data.
-                newData.path = event.path;
-              }
-              functionExecutionTimes[fileName].functions[functionKey] = newData;
-            } else {
-              functionExecutionTimes[fileName].functions[
-                functionKey
-              ].callNoReturnFound = true;
-            }
-          } else {
-            // It's a return.  A return's parent_id matches the call's id
-            const functionKey =
-              'thread_' + event.threadId + '_id_' + event.parentId;
+            const eventReturn = event.returnEvent;
+            if (!eventReturn) return;
+
+            const name = event.codeObject.fqid;
+            let elapsedInstrumentationTime =
+              eventReturn.elapsedInstrumentationTime || 0;
+            let path = '';
+
+            // some paths are library functions but don't start with /. i.e.:
+            // <internal:pack>
+            // OpenSSL::Cipher#decrypt
+            // Kernel#eval
             if (
-              functionKey in functionExecutionTimes[fileName].functions &&
-              functionExecutionTimes[fileName].functions[functionKey]
-                .callNoReturnFound
+              event.definedClass &&
+              event.path &&
+              (event.path[0] == '/' ||
+                event.path[0] == '<' ||
+                event.path.includes('::') ||
+                event.path.startsWith('Kernel'))
             ) {
-              functionExecutionTimes[fileName].functions[
-                functionKey
-              ].callNoReturnFound = false;
-              if (event.elapsedInstrumentationTime) {
-                functionExecutionTimes[fileName].functions[
-                  functionKey
-                ].elapsedInstrumentationTimeTotal +=
-                  event.elapsedInstrumentationTime;
-              }
-              functionExecutionTimes[fileName].functions[
-                functionKey
-              ].numberOfCalls += 1;
-            } // else something went wrong: found return with no call
+              // Absolute path names generally signify a library function.
+              // Send library function data to help optimize AppMap;
+              // don't send user function data.
+              path = event.path;
+            }
+
+            // Total up the elapsed time of root events.
+            if (!event.parent && eventReturn.elapsedTime) {
+              totalTime += eventReturn.elapsedTime;
+            }
+
+            const existingRecord = totalFunctionExecutionTimes[name];
+            if (!existingRecord) {
+              totalFunctionExecutionTimes[name] = {
+                path,
+                numberOfCalls: 1,
+                elapsedInstrumentationTime,
+              };
+            } else {
+              existingRecord.numberOfCalls += 1;
+              existingRecord.elapsedInstrumentationTime +=
+                elapsedInstrumentationTime;
+              if (existingRecord.path === '') existingRecord.path = path;
+            }
           }
         });
       });
       verbose(v);
-
-      // now that all functions were collected, index them by function
-      // name, not by <thread_id,parent_id>
-      let totalFunctionExecutionTimes = {};
-      for (const fileName in functionExecutionTimes) {
-        for (const functionKey in functionExecutionTimes[fileName].functions) {
-          const name =
-            functionExecutionTimes[fileName].functions[functionKey].name;
-          if (!(name in totalFunctionExecutionTimes)) {
-            totalFunctionExecutionTimes[name] = {
-              elapsedInstrumentationTimeTotal: 0,
-              numberOfCalls: 0,
-              path: functionExecutionTimes[fileName].functions[functionKey]
-                .path,
-            };
-          }
-          totalFunctionExecutionTimes[name].elapsedInstrumentationTimeTotal +=
-            functionExecutionTimes[fileName].functions[
-              functionKey
-            ].elapsedInstrumentationTimeTotal;
-          totalFunctionExecutionTimes[name].numberOfCalls += 1;
-        }
-      }
 
       // convert hash to array
       let flatFunctionExecutionTimes: FunctionExecutionTime[] = [];
       for (const name in totalFunctionExecutionTimes) {
         flatFunctionExecutionTimes.push({
           name: name,
-          elapsedInstrumentationTimeTotal:
-            totalFunctionExecutionTimes[name].elapsedInstrumentationTimeTotal,
+          elapsedInstrumentationTime:
+            totalFunctionExecutionTimes[name].elapsedInstrumentationTime,
           numberOfCalls: totalFunctionExecutionTimes[name].numberOfCalls,
           path: totalFunctionExecutionTimes[name].path,
         });
       }
 
-      return flatFunctionExecutionTimes;
+      return { totalTime, functions: flatFunctionExecutionTimes };
     }
 
     async function sortExecutionTimes(
@@ -216,8 +194,7 @@ export async function handler(argv: any) {
     ): Promise<FunctionExecutionTime[]> {
       // sort the array
       return functionExecutionTimes.sort(
-        (a, b) =>
-          b.elapsedInstrumentationTimeTotal - a.elapsedInstrumentationTimeTotal
+        (a, b) => b.elapsedInstrumentationTime - a.elapsedInstrumentationTime
       );
     }
 
@@ -264,7 +241,7 @@ export async function handler(argv: any) {
         // if there are no instrumentation data don't show this report
         if (
           sortedExecutionTimes.length > 0 &&
-          sortedExecutionTimes[0].elapsedInstrumentationTimeTotal == 0
+          sortedExecutionTimes[0].elapsedInstrumentationTime === 0
         ) {
           console.log('No "elapsed_instrumentation" data in the AppMaps.');
         } else {
@@ -278,6 +255,7 @@ export async function handler(argv: any) {
               path: executionTime.path,
             });
           });
+
           if (json) {
             console.log(JSON.stringify(slowestExecutionTimes));
           } else {

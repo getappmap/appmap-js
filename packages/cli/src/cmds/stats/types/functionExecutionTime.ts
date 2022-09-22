@@ -1,6 +1,6 @@
 export type FunctionExecutionTime = {
   name: string;
-  elapsedInstrumentationTimeTotal: number;
+  elapsedInstrumentationTime: number;
   numberOfCalls: number;
   path: string;
 };
