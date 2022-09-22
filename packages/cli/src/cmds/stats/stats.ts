@@ -20,8 +20,8 @@ import { relative } from 'path';
 export const command = 'stats [directory]';
 export const describe =
   'Show some statistics about events in scenarios read from AppMap files';
-const LIMIT_DEFAULT = 5;
-const MINIMUM_APPMAP_SIZE = (1024 * 1024) / 2;
+const LIMIT_DEFAULT = 10;
+const MINIMUM_APPMAP_SIZE = (1024 * 1024) / 1;
 
 export const builder = (args: yargs.Argv) => {
   args.option('directory', {
@@ -41,6 +41,7 @@ export const builder = (args: yargs.Argv) => {
       'limit the number of methods displayed (default ' + LIMIT_DEFAULT + ').',
     type: 'number',
     alias: 'l',
+    default: LIMIT_DEFAULT,
   });
 
   return args.strict();
@@ -50,14 +51,10 @@ export async function handler(argv: any) {
   verbose(argv.verbose);
 
   const commandFn = async () => {
-    const { directory, json, limit } = argv;
+    const { directory, json, limit: limitToUse } = argv;
     if (directory) {
       if (verbose()) console.log(`Using working directory ${directory}`);
       chdir(directory);
-    }
-    let limitToUse = limit;
-    if (!limitToUse) {
-      limitToUse = LIMIT_DEFAULT;
     }
 
     let directoryToUse = directory;
@@ -254,7 +251,7 @@ export async function handler(argv: any) {
           console.log(JSON.stringify(biggestAppMapSizes));
         } else {
           biggestAppMapSizes.forEach((appmap) => {
-            console.log(sizeInMB(appmap.size) + 'MB ' + appmap.name);
+            console.log(sizeInMB(appmap.size) + 'MB ' + appmap.path);
           });
         }
 
@@ -325,15 +322,13 @@ export async function handler(argv: any) {
           },
           metrics: telemetryMetrics,
         });
-
-        UI.success();
       } catch (err) {
         let errorMessage: string | undefined = (err as any).toString();
         if (err instanceof Error) {
           Telemetry.sendEvent({
             name: 'stats:error',
             properties: {
-              errorMessage: err.message,
+              errorMessage,
               errorStack: err.stack,
             },
           });
