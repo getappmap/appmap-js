@@ -50,9 +50,9 @@ describe(FingerprintWatchCommand, () => {
       );
     }
 
-    async function verifyIndexSuccess() {
+    async function verifyIndexSuccess(interval = 100, times = 10) {
       const probe = join(appMapDir, 'revoke_api_key', 'mtime');
-      return retry({ interval: 100, times: 10 }, async () => stat(probe));
+      return retry({ interval, times }, async () => stat(probe));
     }
 
     it('occurs on existing un-indexed appmaps', async () => {
@@ -61,5 +61,13 @@ describe(FingerprintWatchCommand, () => {
       await cmd.execute();
       return verifyIndexSuccess();
     }, 11000);
+
+    it('works eventually even if watching files is flaky', async () => {
+      cmd = new FingerprintWatchCommand(appMapDir);
+      await cmd.execute();
+      cmd.watcher?.removeAllListeners();
+      placeMap();
+      return verifyIndexSuccess(200);
+    });
   });
 });

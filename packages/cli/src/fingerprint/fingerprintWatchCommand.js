@@ -30,23 +30,33 @@ class FingerprintWatchCommand {
     await listAppMapFiles(this.directory, (file) => this.fpQueue.push(file));
     this.fpQueue.process();
 
-    this.watcher = chokidar.watch(`${this.directory}/**/*.appmap.json`, {
+    const glob = `${this.directory}/**/*.appmap.json`;
+    this.watcher = chokidar.watch(glob, { ignoreInitial: true });
+    this.poller = chokidar.watch(glob, {
       ignoreInitial: true,
+      usePolling: true,
+      interval: 1000,
+      persistent: false,
     });
 
-    return new Promise((resolve) => {
-      this.watcher
-        .on('add', this.added.bind(this))
+    // eslint-disable-next-line no-restricted-syntax
+    for (const ch of [this.watcher, this.poller]) {
+      ch.on('add', this.added.bind(this))
         .on('change', this.changed.bind(this))
-        .on('unlink', this.removed.bind(this))
-        .on('ready', this.ready.bind(this, resolve));
-    });
+        .on('unlink', this.removed.bind(this));
+    }
+
+    await Promise.all(
+      [this.watcher, this.poller].map((ch) => new Promise((resolve) => ch.on('ready', resolve)))
+    );
+    this.ready();
   }
 
   async close() {
-    await this.watcher.close();
+    await Promise.all([this.watcher, this.poller].map((ch) => ch?.close()));
     this.removePidfile();
     this.watcher = null;
+    this.poller = null;
   }
 
   added(file) {
@@ -68,7 +78,7 @@ class FingerprintWatchCommand {
     console.warn(`TODO: AppMap removed: ${file}`);
   }
 
-  ready(resolve) {
+  ready() {
     if (this.pidfilePath) {
       fs.outputFileSync(this.pidfilePath, `${process.pid}`);
       process.on('exit', this.removePidfile.bind(this));
@@ -76,7 +86,6 @@ class FingerprintWatchCommand {
     if (verbose()) {
       console.warn(`Watching appmaps in ${path.resolve(process.cwd(), this.directory)}`);
     }
-    resolve();
   }
 
   enqueue(file) {
