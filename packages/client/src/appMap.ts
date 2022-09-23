@@ -10,7 +10,7 @@ import retry from './retry';
 import buildRequest from './buildRequest';
 import retryOnError from './retryOnError';
 import retryOn503 from './retryOn503';
-import { errorMessage } from './handleError';
+import handleError from './handleError';
 import reportJson from './reportJson';
 
 // Returned when the AppMap is uploaded.
@@ -111,35 +111,20 @@ export default class AppMap {
     };
 
     const handleUpload = async (response: IncomingMessage): Promise<UploadCreateAppMapResponse> => {
-      const appmap = await reportJson<UploadAppMapResponse>(response);
-      return { completed: appmap };
-    };
-
-    const handleRedirect = async (
-      response: IncomingMessage
-      // eslint-disable-next-line consistent-return
-    ): Promise<UploadCreateAppMapResponse | undefined> => {
-      if (!response.statusCode) {
-        throw new Error('No status code was provided by the server');
-      }
-
-      const { location } = response.headers;
-      const { statusCode } = response;
-      if (statusCode >= 400) {
-        const error = await errorMessage(statusCode, response);
-        throw new Error(error);
-      }
-
-      if (statusCode >= 300 && statusCode <= 399 && location) {
-        const uploadPending = await reportJson<UploadAppMapPendingResponse>(response);
+      const appmap = await reportJson<{ id?: string; token?: string; uuid?: string }>(response);
+      if (appmap.uuid) {
         return {
-          pending: uploadPending,
+          completed: { uuid: appmap.uuid },
         };
       }
+
+      assert(appmap.id, 'Expecting appmap.id');
+      assert(appmap.token, 'Expecting appmap.token');
+      return {
+        pending: { upload_id: appmap.id, token: appmap.token },
+      };
     };
 
-    return makeRequest().then(
-      async (response) => (await handleRedirect(response)) || (await handleUpload(response))
-    );
+    return makeRequest().then(handleError).then(handleUpload);
   }
 }
