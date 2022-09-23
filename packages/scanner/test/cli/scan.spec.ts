@@ -263,6 +263,17 @@ describe('scan', () => {
       expect(findings.findings[0].ruleId).toEqual('secret-in-log');
     });
 
+    it('eventually rescans even if file watching is flaky', async () => {
+      await createWatcher();
+      watcher?.appmapWatcher?.removeAllListeners();
+
+      await createIndex(secretInLogMap);
+      const findings = await expectScan(secretInLogMap);
+
+      expect(findings.findings.length).toEqual(1);
+      expect(findings.findings[0].ruleId).toEqual('secret-in-log');
+    });
+
     it('reloads the scanner configuration automatically', async () => {
       await createWatcher();
       await createIndex(secretInLogMap);
