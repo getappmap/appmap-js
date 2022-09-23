@@ -67,7 +67,7 @@
     "async": "^3.2.3",
     "boxen": "^5.0.1",
     "chalk": "^4.1.2",
-    "chokidar": "applandinc/chokidar#fix/new-file-new-directory-race-on-linux",
+    "chokidar": "^3.5.1",
     "cli-progress": "^3.11.0",
     "conf": "^10.0.2",
     "crypto-js": "^4.0.0",

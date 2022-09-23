@@ -79,10 +79,10 @@ __metadata:
   dependencies:
     "@appland/components": "workspace:*"
     "@appland/diagrams": "workspace:*"
-    "@appland/models": "workspace:^1.16.2"
-    "@appland/openapi": "workspace:packages/openapi"
+    "@appland/models": "workspace:*"
+    "@appland/openapi": "workspace:*"
     "@sidvind/better-ajv-errors": ^0.9.1
-    "@types/fs-extra": ^9.0.12
+    "@types/fs-extra": ^9.0.13
     "@types/inquirer": ^7.3.3
     "@types/jest": ^27.0.1
     "@types/jest-sinon": ^1.0.2
@@ -114,7 +114,7 @@ __metadata:
     eslint-config-prettier: ^8.3.0
     eslint-plugin-import: ^2.22.1
     eslint-plugin-prettier: ^3.4.0
-    fs-extra: ^9.1.0
+    fs-extra: ^10.1.0
     glob: ^7.2.3
     html-inline-script-webpack-plugin: ^3.0.0
     html-webpack-plugin: ^5.5.0
@@ -153,11 +153,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/client@^1.3.0, @appland/client@workspace:packages/client":
+"@appland/client@^1.3.0, @appland/client@workspace:*, @appland/client@workspace:packages/client":
   version: 0.0.0-use.local
   resolution: "@appland/client@workspace:packages/client"
   dependencies:
-    "@appland/models": "workspace:^1.8.1"
+    "@appland/client": "workspace:*"
+    "@appland/models": "workspace:*"
     "@types/form-data": ^2.5.0
     "@types/jest": ^27.0.3
     "@types/js-yaml": ^4.0.5
@@ -286,7 +287,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@workspace:^1.16.2, @appland/models@workspace:^1.18.1, @appland/models@workspace:^1.8.1, @appland/models@workspace:^1.9.0, @appland/models@workspace:packages/models":
+"@appland/models@workspace:*, @appland/models@workspace:^1.18.1, @appland/models@workspace:^1.9.0, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
@@ -310,7 +311,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/openapi@workspace:packages/openapi":
+"@appland/openapi@workspace:*, @appland/openapi@workspace:packages/openapi":
   version: 0.0.0-use.local
   resolution: "@appland/openapi@workspace:packages/openapi"
   dependencies:
@@ -357,7 +358,7 @@ __metadata:
     async: ^3.2.3
     boxen: ^5.0.1
     chalk: ^4.1.2
-    chokidar: "applandinc/chokidar#fix/new-file-new-directory-race-on-linux"
+    chokidar: ^3.5.1
     cli-progress: ^3.11.0
     conf: ^10.0.2
     crypto-js: ^4.0.0
@@ -365,7 +366,6 @@ __metadata:
     eslint-config-prettier: ^8.3.0
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^3.4.1
-    form-data: ^4.0.0
     fs-extra: ^10.1.0
     glob: 7.2.3
     inquirer: ^8.1.2
@@ -5582,7 +5582,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fs-extra@npm:^9.0.12, @types/fs-extra@npm:^9.0.13":
+"@types/fs-extra@npm:^9.0.13":
   version: 9.0.13
   resolution: "@types/fs-extra@npm:9.0.13"
   dependencies:
@@ -9906,25 +9906,6 @@ __metadata:
   version: 8.0.3
   resolution: "check-types@npm:8.0.3"
   checksum: 9cf92c909ca13bfbfb51beb7bd660f7583d3445f2e4c2d5eb8043f44daf20b5fa48377516988a430098a555d9c15450178878879d1219fca6e2ee61afaabee2e
-  languageName: node
-  linkType: hard
-
-"chokidar@applandinc/chokidar#fix/new-file-new-directory-race-on-linux":
-  version: 3.5.3
-  resolution: "chokidar@https://github.com/applandinc/chokidar.git#commit=a2ea88cc0d1b546eb003c024f342126cb1b03d16"
-  dependencies:
-    anymatch: ~3.1.2
-    braces: ~3.0.2
-    fsevents: ~2.3.2
-    glob-parent: ~5.1.2
-    is-binary-path: ~2.1.0
-    is-glob: ~4.0.1
-    normalize-path: ~3.0.0
-    readdirp: ~3.6.0
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  checksum: 4a01987dde683117d24f2deb7bf4cc73934e865f32183c5ff517905345e5b376cdeb7cb2850d3baf197fcfe36139aedd14783515c76b6ce8cf6500c30de29f5f
   languageName: node
   linkType: hard
 
