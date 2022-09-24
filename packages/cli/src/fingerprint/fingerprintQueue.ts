@@ -9,6 +9,7 @@ function isNodeError(error: unknown, code?: string): error is NodeJS.ErrnoExcept
 export default class FingerprintQueue {
   private handler: Fingerprinter;
   private queue: QueueObject<string>;
+  private pending = new Set<string>();
 
   constructor(private size = 5, printCanonicalAppMaps = true) {
     // eslint-disable-next-line no-use-before-define
@@ -19,6 +20,7 @@ export default class FingerprintQueue {
       } catch (e) {
         console.warn(`Error fingerprinting ${appmapFileName}: ${e}`);
       }
+      this.pending.delete(appmapFileName);
     }, this.size);
     this.queue.pause();
   }
@@ -47,6 +49,8 @@ export default class FingerprintQueue {
   }
 
   push(job: string) {
+    if (this.pending.has(job)) return;
+    this.pending.add(job);
     this.queue.push(job);
   }
 }
