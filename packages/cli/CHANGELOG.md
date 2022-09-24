@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.39.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.38.0...@appland/appmap-v3.39.0) (2022-09-24)
+
+
+### Features
+
+* add guess test command for the js agent ([8707acf](https://github.com/getappmap/appmap-js/commit/8707acfe8c66a8fd0ca2ab9b0605b2765715473d))
+
 # [@appland/appmap-v3.38.0](https://github.com/applandinc/appmap-js/compare/@appland/appmap-v3.37.2...@appland/appmap-v3.38.0) (2022-09-19)
 
 
