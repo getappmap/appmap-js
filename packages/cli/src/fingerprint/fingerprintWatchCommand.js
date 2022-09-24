@@ -2,7 +2,7 @@ const chokidar = require('chokidar');
 const fs = require('fs-extra');
 const path = require('path');
 const { verbose, listAppMapFiles } = require('../utils');
-const FingerprintQueue = require('./fingerprintQueue');
+const FingerprintQueue = require('./fingerprintQueue').default;
 
 class FingerprintWatchCommand {
   constructor(directory) {
