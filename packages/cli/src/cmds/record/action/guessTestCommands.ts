@@ -31,6 +31,20 @@ const TestCommands: TestCommandGuess[] = [
       env: {},
     },
   },
+  {
+    paths: ['package.json', 'node_modules/mocha'],
+    command: {
+      command: 'npx appmap-agent-js --recorder=mocha -- npx mocha',
+      env: {},
+    },
+  },
+  {
+    paths: ['package.json', 'node_modules'],
+    command: {
+      command: 'npx appmap-agent-js --recorder=process -- npm run test',
+      env: {},
+    },
+  },
 ];
 
 export default async function guessTestCommands(): Promise<TestCommand[] | undefined> {
