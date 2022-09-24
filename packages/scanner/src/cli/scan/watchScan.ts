@@ -40,10 +40,12 @@ export class Watcher {
 
     this.appmapWatcher = chokidar.watch(watchPattern, {
       ignoreInitial: true,
+      ignored: ['**/node_modules/**', '**/.git/**'],
     });
 
     this.appmapPoller = chokidar.watch(watchPattern, {
       ignoreInitial: false,
+      ignored: ['**/node_modules/**', '**/.git/**'],
       usePolling: true,
       interval: 1000,
       persistent: false,

@@ -31,9 +31,13 @@ class FingerprintWatchCommand {
     this.fpQueue.process();
 
     const glob = `${this.directory}/**/*.appmap.json`;
-    this.watcher = chokidar.watch(glob, { ignoreInitial: true });
+    this.watcher = chokidar.watch(glob, {
+      ignoreInitial: true,
+      ignored: ['**/node_modules/**', '**/.git/**'],
+    });
     this.poller = chokidar.watch(glob, {
       ignoreInitial: true,
+      ignored: ['**/node_modules/**', '**/.git/**'],
       usePolling: true,
       interval: 1000,
       persistent: false,
