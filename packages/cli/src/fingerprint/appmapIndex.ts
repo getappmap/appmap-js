@@ -59,7 +59,8 @@ export default class AppMapIndex {
    * @param data Raw data to store.
    */
   async writeFileAtomic(fileName: string, data: string): Promise<void> {
-    await writeFileAtomic(this.indexDir, fileName, this.appmapCreatedAt, data);
+    assert(this.appmapCreatedAt);
+    await writeFileAtomic(this.indexDir, fileName, this.appmapCreatedAt.toString(), data);
   }
 
   /**
