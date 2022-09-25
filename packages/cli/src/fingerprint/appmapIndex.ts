@@ -18,6 +18,7 @@ import { baseName, mtime, verbose, writeFileAtomic } from '../utils';
 export default class AppMapIndex {
   indexDir: string;
   appmapCreatedAt?: number;
+  size?: number;
 
   /**
    * Constructs a new AppMapIndex. After calling the constructor, call `initialize`.
@@ -34,13 +35,15 @@ export default class AppMapIndex {
    * abort.
    */
   async initialize(): Promise<boolean> {
-    const appmapCreatedAt = await mtime(this.appmapFileName);
-    if (!appmapCreatedAt) {
+    try {
+      const stats = await fStat(this.appmapFileName);
+      if (!stats.isFile()) return false;
+      this.appmapCreatedAt = stats.mtimeMs;
+      this.size = stats.size;
+    } catch (error) {
       console.log(`File ${this.appmapFileName} does not exist or is not a file.`);
       return false;
     }
-
-    this.appmapCreatedAt = appmapCreatedAt;
 
     return true;
   }
@@ -111,8 +114,9 @@ export default class AppMapIndex {
   /**
    * @returns number of bytes in the AppMap.
    */
-  async appmapFileSize(): Promise<number> {
-    return (await fStat(this.appmapFileName)).size;
+  public appmapFileSize(): number {
+    assert(this.size);
+    return this.size;
   }
 
   /**
@@ -146,17 +150,9 @@ export default class AppMapIndex {
     assert(this.appmapCreatedAt, `AppMap index is not initialized`);
 
     const mtimeFileName = join(this.indexDir, 'mtime');
-    let indexedAtStr: string | undefined;
-    try {
-      indexedAtStr = await readFile(mtimeFileName, 'utf-8');
-    } catch (err) {
-      if ((err as any).code !== 'ENOENT') {
-        throw err;
-      }
-    }
-    if (!indexedAtStr) return false;
 
-    const indexedAt = parseFloat(indexedAtStr);
+    const indexedAt = await mtime(mtimeFileName);
+    if (!indexedAt) return false;
 
     if (verbose()) {
       console.log(`${this.indexDir} created at ${this.appmapCreatedAt}, indexed at ${indexedAt}`);
