@@ -49,6 +49,13 @@ class Fingerprinter extends EventEmitter {
     super();
   }
 
+  /**
+   * Whether to check if the version of existing fingerprints is up to date.
+   * When watching files for changes, it can be set to false after the initial
+   * pass to avoid re-reading the same 'version' files over and over.
+   */
+  public checkVersion = true;
+
   async fingerprint(appMapFileName: string) {
     if (verbose()) {
       console.log(`Fingerprinting ${appMapFileName}`);
@@ -59,7 +66,7 @@ class Fingerprinter extends EventEmitter {
       return;
     }
 
-    if ((await index.versionUpToDate(VERSION)) && (await index.indexUpToDate())) {
+    if ((!this.checkVersion || await index.versionUpToDate(VERSION)) && (await index.indexUpToDate())) {
       if (verbose()) {
         console.log('Fingerprint is up to date. Skipping...');
       }

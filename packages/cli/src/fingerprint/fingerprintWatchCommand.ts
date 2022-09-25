@@ -37,7 +37,9 @@ export default class FingerprintWatchCommand {
   async execute() {
     // Index existing AppMap files
     await listAppMapFiles(this.directory, (file) => this.fpQueue.push(file));
-    this.fpQueue.process();
+    this.fpQueue.process().then(() => {
+      this.fpQueue.handler.checkVersion = false;
+    });
 
     const glob = `${this.directory}/**/*.appmap.json`;
     this.watcher = watch(glob, {
