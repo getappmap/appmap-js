@@ -173,7 +173,6 @@
     },
     "TooManyJoins.Options": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "warningLimit": {
           "type": "number"
@@ -184,7 +183,8 @@
             "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "TooManyUpdates.Options": {
       "type": "object",

@@ -1,9 +1,10 @@
 import MatchPatternConfig from '../../configuration/types/matchPatternConfig';
+import { TooManyJoins } from '../types';
 
-export default class Options {
+export default class Options implements TooManyJoins.Options {
   public warningLimit = 5;
   public excludeTables: MatchPatternConfig[] = [
     { match: /^pg_/, ignoreCase: false },
-    { match: /^information_schema$/, ignoreCase: true },
+    { equal: 'information_schema', ignoreCase: false },
   ];
 }
