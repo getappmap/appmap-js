@@ -337,6 +337,7 @@ __metadata:
     "@semantic-release/git": ^10.0.1
     "@types/async": ^3.2.12
     "@types/cli-progress": ^3.9.2
+    "@types/crypto-js": ^4.1.1
     "@types/fs-extra": ^9.0.13
     "@types/glob": ^7.2.0
     "@types/jest": ^27.4.1
@@ -356,6 +357,7 @@ __metadata:
     chokidar: "applandinc/chokidar#fix/new-file-new-directory-race-on-linux"
     cli-progress: ^3.11.0
     conf: ^10.0.2
+    crypto-js: ^4.0.0
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-node: ^11.1.0

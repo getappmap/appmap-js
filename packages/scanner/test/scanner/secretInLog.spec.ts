@@ -18,10 +18,10 @@ it('secret in log file', async () => {
     ).toEqual(`algorithmVersion=2
 rule=secret-in-log
 findingEvent.event_type=function
-findingEvent.id=Logger::LogDevice#write
+findingEvent.id=logger/Logger::LogDevice#write
 findingEvent.raises_exception=false
 participatingEvent.generatorEvent.event_type=function
-participatingEvent.generatorEvent.id=User.new_token
+participatingEvent.generatorEvent.id=app/models/User.new_token
 participatingEvent.generatorEvent.raises_exception=false`);
     expect(finding.ruleId).toEqual('secret-in-log');
     expect(finding.event.id).toEqual(695);
