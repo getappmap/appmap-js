@@ -13,7 +13,9 @@
           }
         }
       },
-      "required": ["checks"],
+      "required": [
+        "checks"
+      ],
       "additionalProperties": false,
       "description": "Configuration is the code representation of the scanner configuration file."
     },
@@ -64,7 +66,9 @@
           "additionalProperties": {}
         }
       },
-      "required": ["rule"],
+      "required": [
+        "rule"
+      ],
       "additionalProperties": false,
       "description": "CheckConfig represents the user's configuration of an Check, which is an instantiation of a Rule. Each CheckConfing is read from the scanners configuration file."
     },
@@ -73,13 +77,22 @@
       "properties": {
         "property": {
           "type": "string",
-          "enum": ["id", "type", "fqid", "query", "route"]
+          "enum": [
+            "id",
+            "type",
+            "fqid",
+            "query",
+            "route"
+          ]
         },
         "test": {
           "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
         }
       },
-      "required": ["property", "test"],
+      "required": [
+        "property",
+        "test"
+      ],
       "additionalProperties": false
     }
   }
