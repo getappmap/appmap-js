@@ -1,12 +1,10 @@
-import { writeFile } from 'fs/promises';
+import { stat, writeFile } from 'fs/promises';
 import * as chokidar from 'chokidar';
 
 import Configuration from '../../configuration/types/configuration';
 
 import { formatReport } from './formatReport';
 import { default as buildScanner } from './scanner';
-import { exists } from 'fs';
-import { promisify } from 'util';
 import { parseConfigFile } from '../../configuration/configurationProvider';
 import assert from 'assert';
 import path from 'path';
@@ -22,6 +20,7 @@ export class Watcher {
   appmapWatcher?: chokidar.FSWatcher;
   appmapPoller?: chokidar.FSWatcher;
   configWatcher?: chokidar.FSWatcher;
+  private configTime?: number;
 
   constructor(private options: WatchScanOptions) {}
 
@@ -52,8 +51,8 @@ export class Watcher {
     });
 
     for (const ch of [this.appmapWatcher, this.appmapPoller]) {
-      ch.on('add', (filePath) => this.scan(filePath));
-      ch.on('change', (filePath) => this.scan(filePath));
+      ch.on('add', (mtimePath) => this.scan(mtimePath));
+      ch.on('change', (mtimePath) => this.scan(mtimePath));
     }
   }
 
@@ -67,15 +66,25 @@ export class Watcher {
     );
   }
 
-  protected async scan(fileName: string): Promise<void> {
+  protected async scan(mtimePath: string): Promise<void> {
     assert(this.config, `config should always be loaded before appmapWatcher triggers a scan`);
+    assert(this.configTime);
 
-    const pathTokens = fileName.split('/');
-    const appmapDir = pathTokens.slice(0, pathTokens.length - 1).join('/');
-    const appmapFile = [appmapDir, 'appmap.json'].join('.');
-    const reportFile = [appmapDir, 'appmap-findings.json'].join('/');
+    const appmapFile = mtimePath.replace(/\/mtime$/, '.appmap.json');
+    const reportFile = mtimePath.replace(/mtime$/, 'appmap-findings.json');
 
-    if (!(await promisify(exists)(appmapFile))) return;
+    const [appmapStats, reportStats] = await Promise.all(
+      [appmapFile, reportFile].map((f) => stat(f).catch(() => null))
+    );
+
+    if (!appmapStats) return;
+
+    if (
+      reportStats &&
+      reportStats.mtimeMs > appmapStats.mtimeMs &&
+      reportStats.mtimeMs > this.configTime
+    )
+      return; // report is up to date
 
     const scanner = await buildScanner(true, this.config, [appmapFile]);
 
@@ -87,6 +96,7 @@ export class Watcher {
 
   protected async reloadConfig(): Promise<void> {
     this.config = await parseConfigFile(this.options.configFile);
+    this.configTime = (await stat(this.options.configFile)).mtimeMs;
   }
 }
 
