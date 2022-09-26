@@ -6,6 +6,8 @@ import { AbortError } from '../errors';
 import { run } from './commandRunner';
 import UI from '../userInteraction';
 import AgentProcedure from './agentProcedure';
+import Telemetry from '../../telemetry';
+import CommandStruct from './commandStruct';
 
 export default class AgentInstallerProcedure extends AgentProcedure {
   async run(): Promise<void> {
@@ -56,7 +58,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
       }
     }
 
-    UI.status = 'Installing the AppMap agent...';
+    UI.status = 'Installing AppMap...';
 
     await this.installer.checkCurrentConfig();
     await this.installer.installAgent();
@@ -64,25 +66,58 @@ export default class AgentInstallerProcedure extends AgentProcedure {
     await this.verifyProject();
 
     const appMapYml = this.configPath;
-    if (!useExistingAppMapYml) {
-      const initCommand = await this.installer.initCommand();
-      const { stdout } = await run(initCommand);
-      const json = JSON.parse(stdout);
+    try {
+      if (!useExistingAppMapYml) {
+        const initCommand = await this.installer.initCommand();
+        const { stdout } = await run(initCommand);
+        const json = JSON.parse(stdout);
 
-      fs.writeFileSync(appMapYml, json.configuration.contents);
+        fs.writeFileSync(appMapYml, json.configuration.contents);
+      }
+
+      await this.validateProject(useExistingAppMapYml);
+
+      const successMessage = [
+        chalk.green('Success! AppMap has finished installing.'),
+        '',
+        chalk.blue('NEXT STEP: Record AppMaps'),
+        '',
+        'You can consult the AppMap documentation, or continue with the ',
+        'instructions provided in the AppMap code editor extension.',
+      ];
+
+      UI.success(successMessage.join('\n'));
+    } catch (e) {
+      const error = e as Error;
+      if (
+        this.installer.name === 'Bundler' &&
+        error?.message.includes('but is an incompatible architecture')
+      ) {
+        await run(new CommandStruct('gem', ['uninstall', 'appmap', '-x', '--force'], this.path));
+
+        const incompatibleArchitectureMessage = [
+          '\n',
+          chalk.bold.red('AppMap Installation Error!'),
+          '',
+          'Please run the following command in your terminal, then re-run the installer:',
+          '',
+          chalk.blue('bundle'),
+          '\n',
+        ];
+
+        Telemetry.sendEvent({
+          name: 'install-agent:architecture-mismatch-error',
+          properties: {
+            error: error?.message,
+            directory: this.path,
+            installer: this.installer.name,
+          },
+        });
+
+        UI.error(incompatibleArchitectureMessage.join('\n'));
+      } else {
+        throw e;
+      }
     }
-
-    await this.validateProject(useExistingAppMapYml);
-
-    const successMessage = [
-      chalk.green('Success! The AppMap agent has been installed.'),
-      '',
-      chalk.blue('NEXT STEP: Record AppMaps'),
-      '',
-      'You can consult the AppMap documentation, or continue with the ',
-      'instructions provided in the AppMap code editor extension.',
-    ];
-
-    UI.success(successMessage.join('\n'));
   }
 }
