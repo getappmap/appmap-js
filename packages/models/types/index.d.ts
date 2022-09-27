@@ -336,12 +336,13 @@ declare module '@appland/models' {
 
   export function codeObjectId(codeObject: IdentifiableCodeObject, tokens?: string[]): string[];
 
+  export function abstractSqlAstJSON(sql: string, databaseType: string): string;
   export function analyzeSQL(sql: string, errorCallback: OnSQLParseError): SQLAnalysis;
   export function parseSQL(
     sql: string,
     errorCallback?: OnSQLParseError
   ): SqliteParser.ListStatement | null;
-  export function normalizeSQL(sql: string, adapter: string): string;
+  export function normalizeSQL(sql: string, databaseType: string): string;
 
   export function buildAppMap(data?: string | Record<string, unknown>): AppMapBuilder;
 }

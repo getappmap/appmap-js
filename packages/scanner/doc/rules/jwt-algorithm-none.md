@@ -1,6 +1,6 @@
 ---
 rule: jwt-algorithm-none
-name: JWT 'none' algorithm
+name: Jwt algorithm none
 title: JWT 'none' algorithm
 references:
   CWE-345: https://cwe.mitre.org/data/definitions/345.html

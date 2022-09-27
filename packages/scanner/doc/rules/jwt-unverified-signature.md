@@ -1,9 +1,9 @@
 ---
 rule: jwt-unverified-signature
-name: JWT unverified signature
-title: JWT unverified signature
+name: Jwt unverified signature
+title: Unverified signature
 references:
-  CWE-347: https://cwe.mitre.org/data/definitions/347.html
+  CWE-345: https://cwe.mitre.org/data/definitions/345.html
   A02:2021: https://owasp.org/Top10/A02_2021-Cryptographic_Failures
   RFC 7519: https://www.rfc-editor.org/rfc/rfc7519
 impactDomain: Security

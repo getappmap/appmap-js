@@ -33,7 +33,10 @@
           "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
         }
       },
-      "required": ["callerPackages", "calleePackage"],
+      "required": [
+        "callerPackages",
+        "calleePackage"
+      ],
       "additionalProperties": false
     },
     "CircularDependency.Options": {
@@ -61,7 +64,9 @@
           }
         }
       },
-      "required": ["schemata"],
+      "required": [
+        "schemata"
+      ],
       "additionalProperties": false
     },
     "MissingAuthentication.Options": {
@@ -110,7 +115,9 @@
           }
         }
       },
-      "required": ["allowedPackages"],
+      "required": [
+        "allowedPackages"
+      ],
       "additionalProperties": false
     },
     "QueryFromView.Options": {
@@ -166,7 +173,6 @@
     },
     "TooManyJoins.Options": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "warningLimit": {
           "type": "number"
@@ -177,7 +183,8 @@
             "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "TooManyUpdates.Options": {
       "type": "object",

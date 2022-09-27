@@ -9,7 +9,7 @@ export { default as ClassMap } from './classMap';
 export { default as CodeObject } from './codeObject';
 export { default as codeObjectId } from './codeObjectId';
 export { CodeObjectType } from './codeObjectType';
-export { default as analyzeSQL } from './sql/analyze';
+export { default as analyzeSQL, abstractSqlAstJSON } from './sql/analyze';
 export { default as normalizeSQL } from './sql/normalize';
 export { default as parseSQL } from './sql/parse';
 export * from './util';

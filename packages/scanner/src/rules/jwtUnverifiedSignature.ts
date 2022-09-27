@@ -86,6 +86,12 @@ class JwtUnverifiedSignature implements Rule {
   public readonly description = parseRuleDescription('jwtUnverifiedSignature');
   public readonly url =
     'https://appland.com/docs/analysis/rules-reference.html#jwt-unverified-signature';
+  public readonly labels = [Labels.JwtDecode, Labels.SignatureVerify];
+  public readonly references = {
+    'CWE-345': new URL('https://cwe.mitre.org/data/definitions/345.html'),
+    'A02:2021': new URL('https://owasp.org/Top10/A02_2021-Cryptographic_Failures'),
+    'RFC 7519': new URL('https://www.rfc-editor.org/rfc/rfc7519'),
+  };
 
   build(): RuleLogic {
     return new JwtUnverifiedSignatureLogic();

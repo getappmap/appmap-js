@@ -78,7 +78,9 @@ export namespace SlowQuery {
 
 export namespace TooManyJoins {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface Options extends WarningLimit {}
+  export interface Options extends WarningLimit {
+    excludeTables?: MatchPatternConfig[];
+  }
 }
 
 export namespace TooManyUpdates {

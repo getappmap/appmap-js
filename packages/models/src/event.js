@@ -1,5 +1,7 @@
-import { addHiddenProperty, hasProp, identityHashEvent, transformToJSON } from './util';
-import hashEvent, { abstractSqlAstJSON } from './event/hash';
+import { addHiddenProperty, hasProp, transformToJSON } from './util';
+import analyzeSQL, { abstractSqlAstJSON } from './sql/analyze';
+import normalizeSQL from './sql/normalize';
+import HashBuilder from './hashBuilder';
 
 // This class supercedes `CallTree` and `CallNode`. Events are stored in a flat
 // array and can also be traversed like a tree via `parent` and `children`.
@@ -325,9 +327,16 @@ export default class Event {
     return this.isReturn() ? this : this.$hidden.linkedEvent;
   }
 
+  get identityHash() {
+    if (!this.$hidden.identityHash) {
+      this.$hidden.identityHash = this.buildIdentityHash(this).digest();
+    }
+    return this.$hidden.identityHash;
+  }
+
   get hash() {
     if (!this.$hidden.hash) {
-      this.$hidden.hash = hashEvent(this);
+      this.$hidden.hash = this.buildStableHash(this).digest();
     }
     return this.$hidden.hash;
   }
@@ -337,13 +346,6 @@ export default class Event {
       this.$hidden.stableProperties = this.gatherStableProperties();
     }
     return this.$hidden.stableProperties;
-  }
-
-  get identityHash() {
-    if (!this.$hidden.identityHash) {
-      this.$hidden.identityHash = identityHashEvent(this);
-    }
-    return this.$hidden.identityHash;
   }
 
   callStack() {
@@ -430,6 +432,40 @@ export default class Event {
     return this.qualifiedMethodId;
   }
 
+  // Returns canonical properties tied to the event's core identity: SQL, HTTP, or a
+  // specific method on a specific class. Identity properties are used to identify events that are
+  // added/removed between two AppMaps, as opposed to changes. If two events share the same
+  // identity properties, they won't be reported as an add/remove, but may be reported as a change.
+  gatherIdentityProperties() {
+    if (this.httpServerRequest) {
+      return { event_type: 'http_server_request', route: this.route };
+    }
+    if (this.httpClientRequest) {
+      return { event_type: 'http_client_request', route: this.route };
+    }
+
+    const { sqlQuery } = this;
+    if (sqlQuery) {
+      const queryOps = analyzeSQL(sqlQuery);
+      if (!queryOps)
+        return {
+          event_type: 'sql',
+          sql_normalized: normalizeSQL(sqlQuery, this.sql.database_type),
+        }; // Best we can do
+
+      return {
+        event_type: 'sql',
+        actions: [...new Set(queryOps.actions)].sort(),
+        tables: [...new Set(queryOps.tables)].sort(),
+      };
+    }
+
+    return {
+      event_type: 'function',
+      id: this.codeObject.id,
+    };
+  }
+
   // Collects properties of an event which are not dependent on the specifics
   // of invocation.
   gatherStableProperties() {
@@ -474,10 +510,18 @@ export default class Event {
     } else {
       properties = {
         event_type: 'function',
-        id: this.qualifiedMethodId,
+        id: this.codeObject.id,
         raises_exception: this.returnEvent.exceptions && this.returnEvent.exceptions.length > 0,
       };
     }
     return normalizeProperties(properties);
+  }
+
+  buildIdentityHash() {
+    return HashBuilder.buildHash('event-identity-v2', this.gatherIdentityProperties());
+  }
+
+  buildStableHash() {
+    return HashBuilder.buildHash('event-stable-properties-v2', this.gatherStableProperties());
   }
 }
