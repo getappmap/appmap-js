@@ -13,6 +13,7 @@ import { tmpdir } from 'os';
 import { dump } from 'js-yaml';
 import CommandOptions from '../../src/cli/scan/options';
 import tmp from 'tmp-promise';
+import assert from 'assert';
 
 process.env['APPMAP_TELEMETRY_DISABLED'] = 'true';
 delete process.env.APPLAND_API_KEY;
@@ -283,9 +284,19 @@ describe('scan', () => {
       await rm(findingsPath(secretInLogMap));
       await writeFile(scanConfigFilePath, dump({ checks: [{ rule: 'http-500' }] }));
 
-      await createIndex(secretInLogMap);
-      const findings = await expectScan(secretInLogMap);
+      const delays = [0.001, 0.01, 0.1];
+      let findings: ScanResults | undefined;
+      for (let i = 0; i < delays.length; i++) {
+        const delay = delays[i];
+        await new Promise((resolve) => {
+          setTimeout(resolve, delay);
+        });
+        await createIndex(secretInLogMap);
+        findings = await expectScan(secretInLogMap);
+        if (findings.checks.length === 1) break;
+      }
 
+      assert(findings);
       expect(findings.checks.length).toEqual(1);
       expect(findings.checks[0].rule.id).toEqual('http-500');
     });
