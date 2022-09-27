@@ -1,3 +1,11 @@
+# [@appland/scanner-v1.70.5](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.70.4...@appland/scanner-v1.70.5) (2022-09-27)
+
+
+### Bug Fixes
+
+* Ignore node_modules and .git when watching files ([a53e2a8](https://github.com/getappmap/appmap-js/commit/a53e2a8c0de25e0e7ae7c0515763a9f46d3bc307))
+* More reliable AppMap change detection when scanning ([94a454b](https://github.com/getappmap/appmap-js/commit/94a454b14c3bea4c1c5e0cd81d75e7d919bc8e85))
+
 # [@appland/scanner-v1.70.4](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.70.3...@appland/scanner-v1.70.4) (2022-09-27)
 
 
