@@ -100,6 +100,10 @@ export default class Event {
     return this.returnEvent.elapsed;
   }
 
+  get elapsedInstrumentationTime() {
+    return this.returnEvent.elapsed_instrumentation;
+  }
+
   get linkedEvent() {
     return this.$hidden.linkedEvent;
   }
@@ -317,6 +321,14 @@ export default class Event {
 
   isReturn() {
     return this.event === 'return';
+  }
+
+  get threadId() {
+    return this.thread_id;
+  }
+
+  get parentId() {
+    return this.returnEvent.parent_id;
   }
 
   get callEvent() {

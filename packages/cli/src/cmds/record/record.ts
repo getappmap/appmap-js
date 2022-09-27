@@ -10,6 +10,7 @@ import initial, { createState as createInitialState } from './state/initial';
 import Telemetry from '../../telemetry';
 import RecordContext from './recordContext';
 import Configuration from './configuration';
+const StatsCommand = require('../stats/stats');
 import openTicket from '../../lib/ticket/openTicket';
 import UI from '../userInteraction';
 import { RemoteRecordingError } from './makeRequest';
@@ -117,6 +118,8 @@ export default {
 
         await showAppMap(state as FileName);
       }
+
+      await StatsCommand.handler(argv);
     };
 
     return runCommand('record', commandFn);
