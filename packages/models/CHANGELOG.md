@@ -1,3 +1,23 @@
+# [@appland/models-v1.20.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.19.0...@appland/models-v1.20.0) (2022-09-27)
+
+
+### Bug Fixes
+
+* Don't crash if this.callEvent is undefined ([07a62b1](https://github.com/getappmap/appmap-js/commit/07a62b16a421bf490c522046675c3f154f7d94f3))
+* for id and path, add a set property else we get the error: ([f48b75e](https://github.com/getappmap/appmap-js/commit/f48b75e9e6abcac38f706770693dcc3384325b21))
+* no set for id,path; no $hidden in get path ([7f65e81](https://github.com/getappmap/appmap-js/commit/7f65e8138b642846aad1e800e4d3cfa2bd087830))
+* no set for parent,id,path; no $hidden in get path ([d96584e](https://github.com/getappmap/appmap-js/commit/d96584ea219253abada273e7b58fec30b02c8d11))
+* Stats works without get/set path ([474fcd3](https://github.com/getappmap/appmap-js/commit/474fcd340bb906ec977598c5799da97b51b79a8a))
+* Stats works without set/get id. ([693d619](https://github.com/getappmap/appmap-js/commit/693d619252096104d0b396a6cc8a4da49e939570))
+* use Event from @appland/models, and with new fields added in index.d.ts ([95870d5](https://github.com/getappmap/appmap-js/commit/95870d5e57340d8f49138dd9bb01f965e8d4c96e))
+
+
+### Features
+
+* Add properties on Event used by StatsCommand. ([4046382](https://github.com/getappmap/appmap-js/commit/404638279244e98d9a79acc30e449aae662e6c58))
+* Export abstractSqlAstJSON ([917d847](https://github.com/getappmap/appmap-js/commit/917d8475ffadda93a36de85b0c1e9cd9bea96fea))
+* Standardize 'identity' and 'stable' hash ([e671edf](https://github.com/getappmap/appmap-js/commit/e671edfda4f4ba595f2e538363bd1b21acea5ae9))
+
 # [@appland/models-v1.19.0](https://github.com/applandinc/appmap-js/compare/@appland/models-v1.18.3...@appland/models-v1.19.0) (2022-08-31)
 
 ### Features
