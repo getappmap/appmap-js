@@ -157,7 +157,7 @@ export default {
   },
   methods: {
     performInstall() {
-      this.$root.$emit('perform-install', this.path);
+      this.$root.$emit('perform-install', this.path, this.language && this.language.name);
     },
     onToggle(isOpen) {
       if (isOpen) this.$emit('select-project', this.path);
