@@ -34,7 +34,7 @@ export default {
         },
         testFramework: {
           name: 'None detected',
-          score: 2,
+          score: 1,
         },
         webFramework: {
           name: 'Django',

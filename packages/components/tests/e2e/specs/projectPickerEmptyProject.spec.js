@@ -6,7 +6,7 @@ context('Project Picker (Empty Project)', () => {
   });
 
   it('displays a title', () => {
-    cy.get('[data-cy="title"]').should('contain.text', 'Install AppMap');
+    cy.get('[data-cy="title"]').should('contain.text', 'Add AppMap to your project');
   });
 
   it('shows empty state content', () => {
