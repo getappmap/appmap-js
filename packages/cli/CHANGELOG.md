@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.40.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.40.0...@appland/appmap-v3.40.1) (2022-09-27)
+
+
+### Bug Fixes
+
+* Ignore node_modules and .git when watching files ([a53e2a8](https://github.com/getappmap/appmap-js/commit/a53e2a8c0de25e0e7ae7c0515763a9f46d3bc307))
+* More reliable AppMap change detection when indexing ([ef5f184](https://github.com/getappmap/appmap-js/commit/ef5f184fce5e3cdf6f7a645ae1fabf78ec733f0f))
+
+
+### Performance Improvements
+
+* Don't try to index the same AppMaps more than once ([6e6e88c](https://github.com/getappmap/appmap-js/commit/6e6e88cd48dbba67cdc81a68c6c753609e04cdee))
+
 # [@appland/appmap-v3.40.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.39.0...@appland/appmap-v3.40.0) (2022-09-27)
 
 
