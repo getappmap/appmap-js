@@ -1,3 +1,26 @@
+# [@appland/appmap-v3.40.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.39.0...@appland/appmap-v3.40.0) (2022-09-27)
+
+
+### Bug Fixes
+
+* AppMapIndex isn't used. ([e29c56c](https://github.com/getappmap/appmap-js/commit/e29c56c9f05ceeac1805bfdb901eeb93436226ed))
+* don't use runCommand, and use UI.success to stop the spinner. ([dc5ce8e](https://github.com/getappmap/appmap-js/commit/dc5ce8e2015134c0716b1a164ff262752b545cc1))
+* rm unused import runCommand; add datatype AppMapSizeTable in sortAppMapSizes; change AppMapSize type ([046149f](https://github.com/getappmap/appmap-js/commit/046149f9e84604e5e497d0aae0e42be95f85d775))
+* StatsCommand sends stats:error if there's an error. ([7c37739](https://github.com/getappmap/appmap-js/commit/7c37739468ad96b914d7b7a54f68960a56e0a8a0))
+* use Event from @appland/models, and with new fields added in index.d.ts ([95870d5](https://github.com/getappmap/appmap-js/commit/95870d5e57340d8f49138dd9bb01f965e8d4c96e))
+* use more descriptive Telemetry event: stats:success ([636e561](https://github.com/getappmap/appmap-js/commit/636e5612a5af815c1e89f409ac480db9e7190686))
+
+
+### Features
+
+* Add datatypes and use them in sortAppMapSizes, sortExecutionTimes, showStats ([c82e9b1](https://github.com/getappmap/appmap-js/commit/c82e9b1f96ba973762d26d2687f654888973183e))
+* Add more fields in Events interface. ([35d6ee0](https://github.com/getappmap/appmap-js/commit/35d6ee07768b1b0f682b114767efeea64c154f57))
+* Adjust stats defaults ([dbef98c](https://github.com/getappmap/appmap-js/commit/dbef98cc9410988ad7a254e9e00f7c00a1745f8d))
+* Display stats output as a table ([337e7ee](https://github.com/getappmap/appmap-js/commit/337e7ee38214c30920607ba4af88eac033884e45))
+* Report file relative path, for compactness ([94351d9](https://github.com/getappmap/appmap-js/commit/94351d9562e62302ec6321752aa7fc22f4106503))
+* Show biggest AppMaps and functions with highest AppMap overhead. ([75100c8](https://github.com/getappmap/appmap-js/commit/75100c8f41c407c386c942a33c0766e012de7332))
+* Simplify stats output calculations ([6736803](https://github.com/getappmap/appmap-js/commit/67368035807deabe8622310382563fac1c54e5c9))
+
 # [@appland/appmap-v3.39.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.38.0...@appland/appmap-v3.39.0) (2022-09-24)
 
 
