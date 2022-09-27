@@ -140,6 +140,7 @@ export default {
 
     svg {
       fill: currentColor;
+      width: 16px;
     }
   }
 

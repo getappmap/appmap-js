@@ -103,6 +103,15 @@ body {
     max-width: 80%;
     padding: 12px 20px;
     color: #d7ba7d;
+
+    &.inline {
+      display: inline-block;
+      padding: 0 5px;
+      margin: 0 5px;
+      border: none;
+      color: $base07;
+      background-color: rgba(0, 0, 0, 0.25);
+    }
   }
 
   ul {

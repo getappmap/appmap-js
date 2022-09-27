@@ -1,16 +1,24 @@
 <template>
-  <button type="button" :class="classes" :disabled="disabled">
-    {{ label }}
+  <button type="button" :class="classes" :disabled="currentlyDisabled" @click="onClick">
+    <v-loader-icon v-if="isTimedOut" />
+    <div class="btn__content">
+      {{ label }}
+      <!-- This can be used instead of label -->
+      <slot />
+    </div>
   </button>
 </template>
 
 <script>
+import VLoaderIcon from '@/assets/eva_loader-outline.svg';
+
 export default {
   name: 'v-button',
+  components: { VLoaderIcon },
   props: {
     label: {
       type: String,
-      required: true,
+      required: false,
     },
     kind: {
       type: String,
@@ -30,17 +38,56 @@ export default {
       type: Boolean,
       default: false,
     },
+    timeout: {
+      type: Number,
+      default: 0,
+    },
+  },
+
+  data() {
+    return {
+      currentlyDisabled: this.disabled,
+    };
   },
 
   computed: {
+    isTimedOut() {
+      return !this.disabled && this.currentlyDisabled;
+    },
     classes() {
-      return ['btn', `btn--${this.size}`, `btn--${this.kind}`];
+      return {
+        btn: true,
+        [`btn--${this.size}`]: true,
+        [`btn--${this.kind}`]: true,
+        'btn--timeout': this.isTimedOut,
+      };
+    },
+  },
+
+  methods: {
+    onClick() {
+      if (this.disabled) return;
+      if (!this.timeout) return;
+
+      this.currentlyDisabled = true;
+      setTimeout(() => {
+        this.currentlyDisabled = false;
+      }, this.timeout);
     },
   },
 };
 </script>
 
 <style scoped lang="scss">
+@keyframes spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
 .btn {
   border-radius: 8px;
   border-style: none;
@@ -53,8 +100,29 @@ export default {
   user-select: none;
 
   &:disabled {
-    background-color: $gray6;
-    color: $gray4;
+    background-color: $gray2;
+    border-color: $gray2;
+
+    &:hover {
+      background-color: $gray2;
+      border-color: $gray2;
+    }
+  }
+  &--timeout {
+    position: relative;
+
+    svg {
+      width: 2em;
+      position: absolute;
+      fill: $almost-black;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      animation: spin 2s linear infinite;
+    }
+
+    .btn__content {
+      color: rgba(0, 0, 0, 0);
+    }
   }
 
   &--primary {

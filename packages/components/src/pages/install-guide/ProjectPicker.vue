@@ -17,7 +17,6 @@
           </div>
         </article>
         <article v-if="projects.length === 1">
-          <h2 class="install subhead">Project</h2>
           <v-project-picker-table
             :projects="projects"
             @select-project="selectProject($event)"
@@ -38,10 +37,6 @@
             />
           </div>
         </article>
-        <v-project-picker-requirements
-          :project="selectedProject"
-          :messageSuccess="messageSuccess"
-        />
       </main>
     </section>
   </QuickstartLayout>
@@ -50,7 +45,6 @@
 <script>
 import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VProjectPickerTable from '@/components/install-guide/ProjectPickerTable.vue';
-import VProjectPickerRequirements from '@/components/install-guide/ProjectPickerRequirements.vue';
 import Navigation from '@/components/mixins/navigation';
 import EmptyIcon from '@/assets/patch-question.svg';
 
@@ -60,7 +54,6 @@ export default {
   components: {
     QuickstartLayout,
     VProjectPickerTable,
-    VProjectPickerRequirements,
     EmptyIcon,
   },
 
@@ -93,6 +86,9 @@ export default {
       ]
         .filter(Boolean)
         .join(' ');
+    },
+    projectLanguage() {
+      return this.selectedProject && this.selectedProject.language;
     },
   },
 
@@ -138,7 +134,6 @@ h2 {
 
 .table-wrap {
   border: 1px solid $gray-secondary;
-  overflow-x: auto;
   border-radius: $border-radius;
   &::-webkit-scrollbar-thumb {
     background: $gray-secondary;

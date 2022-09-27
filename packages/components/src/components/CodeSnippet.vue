@@ -8,7 +8,9 @@
       @click="onInputFocus"
       @copy="onCopy"
     >
-      {{ clipboardText }}
+      <div v-for="(text, index) in textLines" :key="index" class="code-snippet__line">
+        {{ text }}
+      </div>
     </span>
     <v-popper placement="top" ref="popper">
       <button
@@ -52,21 +54,29 @@ export default {
         navigator && navigator.clipboard && typeof navigator.clipboard.writeText === 'function',
     };
   },
+  computed: {
+    transformedText() {
+      return this.clipboardText.replace(/\\n/g, '\n');
+    },
+    textLines() {
+      return this.transformedText.split(/\n/g);
+    },
+  },
   methods: {
     onInputFocus() {
       window.getSelection().selectAllChildren(this.$refs.input);
     },
     copyToClipboard() {
-      const text = this.clipboardText.trim();
+      const text = this.transformedText.trim();
 
       if (text && this.hasClipboardAPI) {
-        navigator.clipboard.writeText(text);
+        navigator.clipboard.writeText(text.replace(/\n/g, '\n'));
         this.$refs.popper.flash(this.messageSuccess, 'success');
         this.onCopy();
       }
     },
     onCopy() {
-      const text = this.clipboardText.trim();
+      const text = this.transformedText.trim();
       this.$root.$emit('clipboard', text);
     },
   },
@@ -83,6 +93,10 @@ export default {
   color: white;
   background-color: rgba(0, 0, 0, 0.25);
   max-width: 100%;
+
+  &__line {
+    min-height: 1rem;
+  }
 
   &__input {
     flex: 1;
@@ -128,7 +142,7 @@ export default {
     }
 
     &-icon {
-      width: 1rem;
+      width: 1em;
       fill: currentColor;
     }
   }
