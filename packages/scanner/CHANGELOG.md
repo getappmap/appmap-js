@@ -1,3 +1,11 @@
+# [@appland/scanner-v1.70.4](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.70.3...@appland/scanner-v1.70.4) (2022-09-27)
+
+
+### Bug Fixes
+
+* Add excludeTables option for too-many-joins ([ad8b97d](https://github.com/getappmap/appmap-js/commit/ad8b97d4ca47ea7a6a0c9fc31560a42351ba0b94))
+* Add missing JWT algorithm docs ([328f0a7](https://github.com/getappmap/appmap-js/commit/328f0a7e14e419a843c8deb4efd7b2cc56ddad8b))
+
 # [@appland/scanner-v1.70.3](https://github.com/applandinc/appmap-js/compare/@appland/scanner-v1.70.2...@appland/scanner-v1.70.3) (2022-09-21)
 
 
