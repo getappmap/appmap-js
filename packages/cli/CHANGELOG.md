@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.41.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.40.1...@appland/appmap-v3.41.0) (2022-09-27)
+
+
+### Features
+
+* detect architecture mismatch errors in Ruby ([ff775f7](https://github.com/getappmap/appmap-js/commit/ff775f73eb76326ebac57fc9a6de05327cf158d6))
+
 # [@appland/appmap-v3.40.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.40.0...@appland/appmap-v3.40.1) (2022-09-27)
 
 
