@@ -1,4 +1,4 @@
-import { exists, listAppMapFiles, verbose } from '../../utils';
+import { exists, verbose } from '../../utils';
 import chalk from 'chalk';
 import UI from '../userInteraction';
 import runCommand from '../runCommand';

@@ -6,7 +6,7 @@ export default async function countAppMaps(appMapDir: string): Promise<number> {
   // This function is too verbose to be useful in this context.
   const v = verbose();
   verbose(false);
-  await listAppMapFiles(appMapDir, (_fileName: string) => (fileCount += 1));
+  await listAppMapFiles(appMapDir, () => { fileCount += 1; });
   verbose(v);
 
   return fileCount;

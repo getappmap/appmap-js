@@ -1,13 +1,13 @@
-const { createHash } = require('crypto');
-const { join: joinPath, basename } = require('path');
-const fsp = require('fs').promises;
-const { buildAppMap } = require('@appland/models');
-const assert = require('assert');
-const { default: FileTooLargeError } = require('./fileTooLargeError');
+import { createHash } from 'crypto';
+import { join as joinPath, basename } from 'path';
+import { promises as fsp } from 'fs';
+import { buildAppMap } from '@appland/models';
+import assert from 'assert';
+import FileTooLargeError from './fileTooLargeError';
 
-const { verbose, mtime } = require('../utils');
-const { algorithms, canonicalize } = require('./canonicalize');
-const { default: AppMapIndex } = require('./appmapIndex');
+import { verbose, mtime } from '../utils';
+import { algorithms, canonicalize } from './canonicalize';
+import AppMapIndex from './appmapIndex';
 
 /**
  * CHANGELOG
@@ -36,21 +36,29 @@ const VERSION = '1.1.3';
 
 const MAX_APPMAP_SIZE = 50 * 1000 * 1000;
 
-class Fingerprinter {
+export type Fingerprint = {
+  appmap_digest: string;
+  canonicalization_algorithm: string;
+  digest: string;
+  fingerprint_algorithm: 'sha256';
+};
+
+export default class Fingerprinter {
   /**
    * @param {boolean} printCanonicalAppMaps
    */
-  constructor(printCanonicalAppMaps) {
-    this.printCanonicalAppMaps = printCanonicalAppMaps;
+  constructor(private printCanonicalAppMaps: boolean) {
     this.counterFn = () => {};
   }
 
-  setCounterFn(counterFn) {
+  private counterFn: () => void;
+
+  setCounterFn(counterFn: () => void) {
     this.counterFn = counterFn;
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async fingerprint(appMapFileName) {
+  async fingerprint(appMapFileName: string) {
     if (verbose()) {
       console.log(`Fingerprinting ${appMapFileName}`);
     }
@@ -81,7 +89,7 @@ class Fingerprinter {
       .update(JSON.stringify(appmapDataWithoutMetadata, null, 2))
       .digest('hex');
 
-    const fingerprints = [];
+    const fingerprints: Fingerprint[] = [];
     appmapData.metadata.fingerprints = fingerprints;
 
     const appmap = buildAppMap(appmapData).normalize().build();
@@ -127,10 +135,8 @@ class Fingerprinter {
     // At this point, moving the AppMap file into place will trigger re-indexing.
     // But the mtime will match the file modification time, so the algorithm will
     // determine that the index is up-to-date.
-    await fsp.rename(tempAppMapFileName, appMapFileName, { overwrite: true });
+    await fsp.rename(tempAppMapFileName, appMapFileName);
 
     this.counterFn();
   }
 }
-
-module.exports = Fingerprinter;

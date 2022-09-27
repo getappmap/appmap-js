@@ -1,5 +1,5 @@
 const { verbose, listAppMapFiles } = require('../utils');
-const FingerprintQueue = require('./fingerprintQueue');
+const FingerprintQueue = require('./fingerprintQueue').default;
 
 class FingerprintDirectoryCommand {
   constructor(directory) {

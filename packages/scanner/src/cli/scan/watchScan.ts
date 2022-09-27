@@ -20,6 +20,7 @@ type WatchScanOptions = {
 export class Watcher {
   config?: Configuration;
   appmapWatcher?: chokidar.FSWatcher;
+  appmapPoller?: chokidar.FSWatcher;
   configWatcher?: chokidar.FSWatcher;
 
   constructor(private options: WatchScanOptions) {}
@@ -36,26 +37,34 @@ export class Watcher {
 
     // Chokidar struggles with relative paths. Make sure the watch pattern is absolute.
     const watchPattern = path.resolve(this.options.appmapDir, '**', 'mtime');
+
     this.appmapWatcher = chokidar.watch(watchPattern, {
-      ignoreInitial: false,
+      ignoreInitial: true,
+      ignored: ['**/node_modules/**', '**/.git/**'],
     });
-    this.appmapWatcher
-      .on('add', (filePath) => this.scan(filePath))
-      .on('change', (filePath) => this.scan(filePath));
+
+    this.appmapPoller = chokidar.watch(watchPattern, {
+      ignoreInitial: false,
+      ignored: ['**/node_modules/**', '**/.git/**'],
+      usePolling: true,
+      interval: 1000,
+      persistent: false,
+    });
+
+    for (const ch of [this.appmapWatcher, this.appmapPoller]) {
+      ch.on('add', (filePath) => this.scan(filePath));
+      ch.on('change', (filePath) => this.scan(filePath));
+    }
   }
 
-  close(): void {
-    if (!this.appmapWatcher) return;
-
-    assert(
-      this.configWatcher,
-      `configWatcher should always be defined if appmapWatcher is defined`
+  async close(): Promise<void> {
+    await Promise.all(
+      (['appmapWatcher', 'appmapPoller', 'configWatcher'] as const).map((k) => {
+        const closer = this[k]?.close();
+        this[k] = undefined;
+        return closer;
+      })
     );
-
-    this.appmapWatcher.close();
-    this.configWatcher.close();
-    this.appmapWatcher = undefined;
-    this.configWatcher = undefined;
   }
 
   protected async scan(fileName: string): Promise<void> {
