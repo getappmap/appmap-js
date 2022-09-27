@@ -8,12 +8,20 @@ import { default as buildScanner } from './scanner';
 import { parseConfigFile } from '../../configuration/configurationProvider';
 import assert from 'assert';
 import path from 'path';
+import { queue } from 'async';
 
 type WatchScanOptions = {
   appId?: string;
   appmapDir: string;
   configFile: string;
 };
+
+declare module 'async' {
+  interface QueueObject<T> {
+    // queues are actually iterable
+    [Symbol.iterator](): Iterator<T>;
+  }
+}
 
 export class Watcher {
   config?: Configuration;
@@ -50,10 +58,9 @@ export class Watcher {
       persistent: false,
     });
 
-    for (const ch of [this.appmapWatcher, this.appmapPoller]) {
-      ch.on('add', (mtimePath) => this.scan(mtimePath));
-      ch.on('change', (mtimePath) => this.scan(mtimePath));
-    }
+    const enqueue = this.enqueue.bind(this);
+    for (const ch of [this.appmapWatcher, this.appmapPoller])
+      ch.on('add', enqueue).on('change', enqueue);
   }
 
   async close(): Promise<void> {
@@ -64,6 +71,13 @@ export class Watcher {
         return closer;
       })
     );
+  }
+
+  private queue = queue<string>(this.scan.bind(this), 2);
+
+  protected enqueue(mtimePath: string): void {
+    if ([...this.queue].includes(mtimePath)) return;
+    this.queue.push(mtimePath);
   }
 
   protected async scan(mtimePath: string): Promise<void> {
