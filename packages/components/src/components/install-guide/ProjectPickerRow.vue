@@ -2,11 +2,11 @@
   <v-accordion
     ref="accordion"
     data-cy="project-picker-row"
-    :disabled="!this.supported"
+    :disabled="!supported"
     class="project-picker-row"
     :open="selected"
     @toggle="onToggle"
-    :data-score="quality"
+    :data-supported="supported"
   >
     <template #header>
       <div class="header">
@@ -29,8 +29,12 @@
             </v-popper>
           </template>
         </div>
+        <div class="header__accordion-icons">
+          <v-icon-chevron v-if="!selected" />
+        </div>
       </div>
     </template>
+
     <div class="project-picker-row__body">
       <template v-if="supported">
         You're almost done! Install AppMap as a development dependency in your project. Click the
@@ -46,15 +50,28 @@
         </template>
         <div class="project-picker-row__nav">
           <p>Finished the installation? Proceed to the next step.</p>
-          <v-navigation-buttons :first="true" />
+          <v-navigation-buttons :first="true" :last="!supported" />
         </div>
       </template>
       <template v-else>
-        <p>
-          This project is not supported by AppMap. For a list of supported integrations, visit our
-          documentation:
-        </p>
-        <a href="https://appmap.io/docs/reference">https://appmap.io/docs/reference</a>
+        <template v-if="!languageSupported">
+          <p>AppMap currently supports the following languages:</p>
+          <ul class="support-list">
+            <li><strong>Ruby</strong></li>
+            <li><strong>Python</strong></li>
+            <li><strong>JavaScript</strong></li>
+            <li><strong>Java</strong></li>
+          </ul>
+        </template>
+        <template v-else>
+          <p class="mb20">
+            We weren't able to find a supported web or test framework within this project. Please
+            visit
+            <a :href="documentationUrl">our {{ language.name }} documentation</a> for more
+            information.
+          </p>
+        </template>
+        <p>This project does not meet all the requirements to create AppMaps.</p>
       </template>
     </div>
   </v-accordion>
@@ -71,6 +88,10 @@ import VPopper from '@/components/Popper.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VRuby from '@/components/install-guide/install-instructions/Ruby.vue';
 import VPython from '@/components/install-guide/install-instructions/Python.vue';
+import VIconChevron from '@/assets/fa-solid_chevron-down.svg';
+
+import { isFeatureSupported, isProjectSupported } from '@/lib/project';
+import { getAgentDocumentationUrl } from '@/lib/documentation';
 
 const manualInstructionComponents = { ruby: VRuby, python: VPython };
 
@@ -87,6 +108,7 @@ export default {
     VUnsupportedIcon,
     VPopper,
     VNavigationButtons,
+    VIconChevron,
   },
   props: {
     selected: Boolean,
@@ -124,7 +146,7 @@ export default {
           name: 'Unsupported',
           icon: VUnsupportedIcon,
           condition: () => !this.supported,
-          description: 'AppMap does not yet support this projects language.',
+          description: 'This project does not meet all the requirements to create AppMaps.',
         },
       ],
     };
@@ -134,25 +156,30 @@ export default {
       return [this.language, this.testFramework, this.webFramework];
     },
     supported() {
-      return this.score && this.score > 0;
+      return isProjectSupported({
+        name: this.name,
+        score: this.score,
+        webFramework: this.webFramework,
+        testFramework: this.testFramework,
+      });
+    },
+    languageSupported() {
+      return isFeatureSupported(this.language);
     },
     webFrameworkSupported() {
-      return this.webFramework && this.webFramework.score && this.webFramework.score >= 1;
-    },
-    quality() {
-      if (!this.score) return 'bad';
-      if (this.score < 3) return 'ok';
-      return 'good';
+      return isFeatureSupported(this.webFramework);
     },
     classes() {
       return {
-        [this.quality]: true,
         selected: this.selected,
       };
     },
     manualInstructions() {
       const languageKey = ((this.language && this.language.name) || '').toLowerCase();
       return manualInstructionComponents[languageKey];
+    },
+    documentationUrl() {
+      return getAgentDocumentationUrl(this.language && this.language.name);
     },
   },
   methods: {
@@ -170,9 +197,10 @@ export default {
     },
   },
   mounted() {
+    const { accordion } = this.$refs;
     this.$root.$on('select-project', (project) => {
       if (project.path === this.path) {
-        window.scrollTo(250, this.$refs.accordion.$el.offsetTop);
+        window.scrollTo(250, accordion.$el.offsetTop);
       }
     });
   },
@@ -183,6 +211,10 @@ export default {
 $brightblue: rgba(255, 255, 255, 0.1);
 
 .project-picker-row {
+  border-width: 0.5px 0;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.1);
+
   &.accordion--open {
     background-color: rgba(200, 200, 255, 0.075);
   }
@@ -202,21 +234,23 @@ $brightblue: rgba(255, 255, 255, 0.1);
 
 .header {
   display: flex;
+  overflow: hidden;
 
   &__title {
+    font-size: 1.2rem;
     justify-content: left;
+    flex-grow: 1;
   }
 
   &__support {
     display: flex;
     justify-content: right;
-    width: 100%;
   }
 
   &__feature-tag {
     display: flex;
     margin-left: 1rem;
-    background-color: rgba(200, 200, 255, 0.1);
+    background-color: rgba(200, 200, 255, 0.4);
     padding: 0.5em;
     border-radius: 8px;
     align-items: center;
@@ -241,6 +275,21 @@ $brightblue: rgba(255, 255, 255, 0.1);
     margin-left: 0.5em;
     margin-top: auto;
     margin-bottom: -3px;
+  }
+
+  &__accordion-icons {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    margin-left: 1rem;
+    align-self: center;
+
+    svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      fill: $white;
+    }
   }
 }
 
@@ -275,7 +324,19 @@ $brightblue: rgba(255, 255, 255, 0.1);
   margin: 1em;
 }
 
-.good {
-  color: $alert-success;
+.support-list {
+  margin: 1rem 0;
+  ul {
+    margin-left: 1rem;
+    margin-top: 0;
+    li {
+      strong {
+        color: #939fb1;
+      }
+    }
+  }
+  strong {
+    color: #939fb1;
+  }
 }
 </style>

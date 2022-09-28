@@ -124,6 +124,11 @@ FourProjects.args = {
         score: 2,
         text: "This project looks like Ruby, but we couldn't find a Gemfile.",
       },
+      webFramework: {
+        name: 'Rails',
+        score: 3,
+        text: 'This project uses Rails. AppMap will automatically recognize web requests, SQL queries, and key framework functions during recording.',
+      },
     },
     {
       name: 'RailsTest',
