@@ -2,12 +2,10 @@ import nock from 'nock';
 
 import * as test from './setup';
 import {
-  CreateOptions,
-  CreateResponse,
-  create as createMapset,
-} from '../../src/integration/appland/mapset/create';
-import { create as createAppMap } from '../../src/integration/appland/appMap/create';
-import { readFile } from 'fs/promises';
+  CreateMapsetOptions,
+  CreateMapsetResponse,
+  Mapset,
+} from '../src';
 
 const MapsetData = {
   id: 94,
@@ -15,24 +13,13 @@ const MapsetData = {
   updated_at: '2022-01-30T22:05:26.330Z',
   user_id: 35,
   app_id: 35,
-} as CreateResponse;
+} as CreateMapsetResponse;
 
 describe('mapset', () => {
   describe('create', () => {
     it('succeeds', async () => {
-      let appMapId;
-      if (process.env.RECORD == 'true') {
-        const data = await readFile(
-          'test/fixtures/appmaps/Microposts_interface_micropost_interface_with_job.appmap.json'
-        );
-        const appMap = await createAppMap(data, {
-          app: test.AppId,
-        });
-        appMapId = appMap.uuid;
-      } else {
-        appMapId = 'the-uuid';
-      }
-      const options = {} as CreateOptions;
+      const appMapId = 'the-uuid';
+      const options = {} as CreateMapsetOptions;
 
       const postData = {
         app: test.AppId,
@@ -48,7 +35,7 @@ describe('mapset', () => {
         .matchHeader('Content-Type', /^application\/json;?/)
         .matchHeader('Accept', /^application\/json;?/)
         .reply(201, MapsetData, ['Content-Type', 'application/json']);
-      expect(await createMapset(test.AppId, [appMapId], options)).toEqual(MapsetData);
+      expect(await Mapset.create(test.AppId, [appMapId], options)).toEqual(MapsetData);
     });
 
     it('succeeds on retry', async () => {
@@ -77,7 +64,7 @@ describe('mapset', () => {
         .matchHeader('Accept', /^application\/json;?/)
         .reply(201, MapsetData, ['Content-Type', 'application/json']);
 
-      expect(await createMapset(test.AppId, ['the-uuid'], {}, { maxRetries: 1 })).toEqual(
+      expect(await Mapset.create(test.AppId, ['the-uuid'], {}, { maxRetries: 1 })).toEqual(
         MapsetData
       );
     });

@@ -79,10 +79,10 @@ __metadata:
   dependencies:
     "@appland/components": "workspace:*"
     "@appland/diagrams": "workspace:*"
-    "@appland/models": "workspace:^1.16.2"
-    "@appland/openapi": "workspace:packages/openapi"
+    "@appland/models": "workspace:*"
+    "@appland/openapi": "workspace:*"
     "@sidvind/better-ajv-errors": ^0.9.1
-    "@types/fs-extra": ^9.0.12
+    "@types/fs-extra": ^9.0.13
     "@types/inquirer": ^7.3.3
     "@types/jest": ^27.0.1
     "@types/jest-sinon": ^1.0.2
@@ -114,7 +114,7 @@ __metadata:
     eslint-config-prettier: ^8.3.0
     eslint-plugin-import: ^2.22.1
     eslint-plugin-prettier: ^3.4.0
-    fs-extra: ^9.1.0
+    fs-extra: ^10.1.0
     glob: ^7.2.3
     html-inline-script-webpack-plugin: ^3.0.0
     html-webpack-plugin: ^5.5.0
@@ -157,7 +157,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/client@workspace:packages/client"
   dependencies:
-    "@appland/models": "workspace:^1.8.1"
+    "@appland/models": "workspace:*"
+    "@types/form-data": ^2.5.0
     "@types/jest": ^27.0.3
     "@types/js-yaml": ^4.0.5
     "@types/nock": ^11.1.0
@@ -174,6 +175,7 @@ __metadata:
     eslint-plugin-jest: ^25.3.0
     eslint-plugin-promise: ^6.0.1
     eslint-plugin-unicorn: ^39.0.0
+    form-data: ^4.0.0
     jest: ^27.4.7
     js-yaml: ^4.1.0
     nock: ^13.2.1
@@ -284,7 +286,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@workspace:^1.16.2, @appland/models@workspace:^1.18.1, @appland/models@workspace:^1.8.1, @appland/models@workspace:^1.9.0, @appland/models@workspace:packages/models":
+"@appland/models@workspace:*, @appland/models@workspace:^1.18.1, @appland/models@workspace:^1.9.0, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
@@ -308,7 +310,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/openapi@workspace:packages/openapi":
+"@appland/openapi@workspace:*, @appland/openapi@workspace:packages/openapi":
   version: 0.0.0-use.local
   resolution: "@appland/openapi@workspace:packages/openapi"
   dependencies:
@@ -355,7 +357,7 @@ __metadata:
     async: ^3.2.3
     boxen: ^5.0.1
     chalk: ^4.1.2
-    chokidar: "applandinc/chokidar#fix/new-file-new-directory-race-on-linux"
+    chokidar: ^3.5.1
     cli-progress: ^3.11.0
     conf: ^10.0.2
     crypto-js: ^4.0.0
@@ -363,7 +365,6 @@ __metadata:
     eslint-config-prettier: ^8.3.0
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^3.4.1
-    form-data: ^4.0.0
     fs-extra: ^10.1.0
     glob: 7.2.3
     inquirer: ^8.1.2
@@ -5571,7 +5572,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fs-extra@npm:^9.0.12, @types/fs-extra@npm:^9.0.13":
+"@types/form-data@npm:^2.5.0":
+  version: 2.5.0
+  resolution: "@types/form-data@npm:2.5.0"
+  dependencies:
+    form-data: "*"
+  checksum: c3f6c8932726970d49d67a23410d5eef0e1ad0be418163ccc3d73a4cbaa0dcd71e0e29acbe2779aab85ed8f47cb0e8f6b67028480da3b0f7d074c5a3416b2400
+  languageName: node
+  linkType: hard
+
+"@types/fs-extra@npm:^9.0.13":
   version: 9.0.13
   resolution: "@types/fs-extra@npm:9.0.13"
   dependencies:
@@ -9895,25 +9905,6 @@ __metadata:
   version: 8.0.3
   resolution: "check-types@npm:8.0.3"
   checksum: 9cf92c909ca13bfbfb51beb7bd660f7583d3445f2e4c2d5eb8043f44daf20b5fa48377516988a430098a555d9c15450178878879d1219fca6e2ee61afaabee2e
-  languageName: node
-  linkType: hard
-
-"chokidar@applandinc/chokidar#fix/new-file-new-directory-race-on-linux":
-  version: 3.5.3
-  resolution: "chokidar@https://github.com/applandinc/chokidar.git#commit=a2ea88cc0d1b546eb003c024f342126cb1b03d16"
-  dependencies:
-    anymatch: ~3.1.2
-    braces: ~3.0.2
-    fsevents: ~2.3.2
-    glob-parent: ~5.1.2
-    is-binary-path: ~2.1.0
-    is-glob: ~4.0.1
-    normalize-path: ~3.0.0
-    readdirp: ~3.6.0
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  checksum: 4a01987dde683117d24f2deb7bf4cc73934e865f32183c5ff517905345e5b376cdeb7cb2850d3baf197fcfe36139aedd14783515c76b6ce8cf6500c30de29f5f
   languageName: node
   linkType: hard
 
@@ -14417,6 +14408,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"form-data@npm:*, form-data@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "form-data@npm:4.0.0"
+  dependencies:
+    asynckit: ^0.4.0
+    combined-stream: ^1.0.8
+    mime-types: ^2.1.12
+  checksum: 01135bf8675f9d5c61ff18e2e2932f719ca4de964e3be90ef4c36aacfc7b9cb2fceb5eca0b7e0190e3383fe51c5b37f4cb80b62ca06a99aaabfcfd6ac7c9328c
+  languageName: node
+  linkType: hard
+
 "form-data@npm:^3.0.0":
   version: 3.0.1
   resolution: "form-data@npm:3.0.1"
@@ -14425,17 +14427,6 @@ __metadata:
     combined-stream: ^1.0.8
     mime-types: ^2.1.12
   checksum: b019e8d35c8afc14a2bd8a7a92fa4f525a4726b6d5a9740e8d2623c30e308fbb58dc8469f90415a856698933c8479b01646a9dff33c87cc4e76d72aedbbf860d
-  languageName: node
-  linkType: hard
-
-"form-data@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "form-data@npm:4.0.0"
-  dependencies:
-    asynckit: ^0.4.0
-    combined-stream: ^1.0.8
-    mime-types: ^2.1.12
-  checksum: 01135bf8675f9d5c61ff18e2e2932f719ca4de964e3be90ef4c36aacfc7b9cb2fceb5eca0b7e0190e3383fe51c5b37f4cb80b62ca06a99aaabfcfd6ac7c9328c
   languageName: node
   linkType: hard
 

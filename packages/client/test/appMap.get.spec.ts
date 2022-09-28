@@ -1,8 +1,8 @@
 import nock from 'nock';
-import { AppMap as AppMapResponse } from '@appland/models';
+import { AppMap as AppMapDataType } from '@appland/models';
 
 import * as test from './setup';
-import AppMap from '../src/appMap';
+import { default as AppMapClient } from '../src/appMap';
 
 const AppMapData = {
   events: [],
@@ -14,8 +14,8 @@ function mockAppMap(uuid = test.AppMapId): nock.Interceptor {
   return nock('http://localhost:3000').get(`/api/appmaps/${uuid}`);
 }
 
-async function getAppMap(appMapId = test.AppMapId): Promise<AppMapResponse> {
-  return new AppMap(appMapId).get();
+async function getAppMap(appMapId = test.AppMapId): Promise<AppMapDataType> {
+  return new AppMapClient(appMapId).get();
 }
 
 describe('appMap', () => {

@@ -8,7 +8,7 @@ type ErrorResponse = {
   error: Error;
 };
 
-async function errorMessage(statusCode: number, response: IncomingMessage): Promise<string> {
+export async function errorMessage(statusCode: number, response: IncomingMessage): Promise<string> {
   let responseData: ErrorResponse | undefined;
   const contentType = response.headers['content-type'] || '';
   if (contentType.startsWith('application/json')) {

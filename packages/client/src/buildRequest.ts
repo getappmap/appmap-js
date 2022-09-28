@@ -13,14 +13,20 @@ export type Request = {
   headers: Record<string, string>;
 };
 
-export default async function buildRequest(requestPath: string): Promise<Request> {
-  const configuration = await loadConfiguration();
+export default async function buildRequest(
+  requestPath: string,
+  requireApiKey = true
+): Promise<Request> {
+  const configuration = await loadConfiguration(requireApiKey);
   const url = new URL([configuration.baseURL, requestPath].join('/'));
   const requestFunction = url.protocol === 'https:' ? httpsRequest : httpRequest;
   const headers = {
-    Authorization: `Bearer ${configuration.apiKey}`,
     Accept: 'application/json',
   };
+  if (configuration.apiKey) {
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    headers['Authorization'] = `Bearer ${configuration.apiKey}`;
+  }
 
   return { requestFunction, url, headers } as Request;
 }

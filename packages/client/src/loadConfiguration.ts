@@ -69,14 +69,18 @@ function loadFromEnvironment(settings: Settings): void {
 
 let configuration: Configuration;
 
-export default async function loadConfiguration(): Promise<Configuration> {
+export function setConfiguration(value: Configuration): void {
+  configuration = value;
+}
+
+export default async function loadConfiguration(requireApiKey = true): Promise<Configuration> {
   if (configuration) {
     return configuration;
   }
 
   const settings = await loadFromFile();
   loadFromEnvironment(settings);
-  if (!settings.apiKey) {
+  if (!settings.apiKey && requireApiKey) {
     throw new Error(
       `No API key available for AppMap server. Export APPLAND_API_KEY or configure ~/.appland`
     );

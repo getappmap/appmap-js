@@ -1,8 +1,8 @@
+import { App } from '@appland/client/dist/src';
 import { constants as fsConstants } from 'fs';
 import { access, readFile } from 'fs/promises';
 import { load } from 'js-yaml';
 import { dirname, join, resolve } from 'path';
-import { exists } from '../integration/appland/app/exists';
 import { ValidationError } from '../errors';
 
 async function resolveAppId(
@@ -39,7 +39,7 @@ export default async function (
   const appId = await resolveAppId(appIdArg, appMapDir);
   if (!appId) throw new ValidationError('App was not provided and could not be resolved');
 
-  const appExists = await exists(appId);
+  const appExists = await new App(appId).exists();
   if (!appExists) {
     throw new ValidationError(
       `App "${appId}" is not valid or does not exist.\nPlease fix the app name in the appmap.yml file, or override it with the --app option.`
