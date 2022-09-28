@@ -2,11 +2,11 @@
   <v-accordion
     ref="accordion"
     data-cy="project-picker-row"
-    :disabled="!this.supported"
+    :disabled="!supported"
     class="project-picker-row"
     :open="selected"
     @toggle="onToggle"
-    :data-score="quality"
+    :data-supported="supported"
   >
     <template #header>
       <div class="header">
@@ -46,13 +46,13 @@
         </template>
         <div class="project-picker-row__nav">
           <p>Finished the installation? Proceed to the next step.</p>
-          <v-navigation-buttons :first="true" />
+          <v-navigation-buttons :first="true" :last="!supported" />
         </div>
       </template>
       <template v-else>
         <p>
-          This project is not supported by AppMap. For a list of supported integrations, visit our
-          documentation:
+          This project is not supported by AppMap. For a list of all supported integrations, visit
+          our documentation:
         </p>
         <a href="https://appmap.io/docs/reference">https://appmap.io/docs/reference</a>
       </template>
@@ -71,6 +71,8 @@ import VPopper from '@/components/Popper.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VRuby from '@/components/install-guide/install-instructions/Ruby.vue';
 import VPython from '@/components/install-guide/install-instructions/Python.vue';
+
+import { isFeatureSupported, isProjectSupported } from '@/lib/project';
 
 const manualInstructionComponents = { ruby: VRuby, python: VPython };
 
@@ -134,19 +136,18 @@ export default {
       return [this.language, this.testFramework, this.webFramework];
     },
     supported() {
-      return this.score && this.score > 0;
+      return isProjectSupported({
+        name: this.name,
+        score: this.score,
+        webFramework: this.webFramework,
+        testFramework: this.testFramework,
+      });
     },
     webFrameworkSupported() {
-      return this.webFramework && this.webFramework.score && this.webFramework.score >= 1;
-    },
-    quality() {
-      if (!this.score) return 'bad';
-      if (this.score < 3) return 'ok';
-      return 'good';
+      return isFeatureSupported(this.webFramework);
     },
     classes() {
       return {
-        [this.quality]: true,
         selected: this.selected,
       };
     },
@@ -273,9 +274,5 @@ $brightblue: rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: center;
   margin: 1em;
-}
-
-.good {
-  color: $alert-success;
 }
 </style>
