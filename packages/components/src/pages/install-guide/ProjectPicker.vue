@@ -2,7 +2,7 @@
   <QuickstartLayout>
     <section>
       <header>
-        <h1 data-cy="title">Install AppMap agent</h1>
+        <h1 data-cy="title">Add AppMap to your project</h1>
       </header>
       <main>
         <article class="empty-state" data-cy="empty-state-article" v-if="projects.length === 0">
