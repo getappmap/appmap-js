@@ -1,3 +1,15 @@
+# [@appland/scanner-v1.71.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.70.5...@appland/scanner-v1.71.0) (2022-09-28)
+
+
+### Bug Fixes
+
+* Change to scanner config is eventual ([c4e17a3](https://github.com/getappmap/appmap-js/commit/c4e17a30fbc5eaf17f5ab3f861cfc7eb158f0628))
+
+
+### Features
+
+* AppMap creation can redirect ([e43f1f2](https://github.com/getappmap/appmap-js/commit/e43f1f219309c2b5a55529254cdeaba3aff68637))
+
 # [@appland/scanner-v1.70.5](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.70.4...@appland/scanner-v1.70.5) (2022-09-27)
 
 
