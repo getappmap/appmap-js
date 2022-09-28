@@ -1,3 +1,10 @@
+# [@appland/client-v1.4.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.3.1...@appland/client-v1.4.0) (2022-09-28)
+
+
+### Features
+
+* AppMap creation can redirect ([e43f1f2](https://github.com/getappmap/appmap-js/commit/e43f1f219309c2b5a55529254cdeaba3aff68637))
+
 # [@appland/client-v1.3.1](https://github.com/applandinc/appmap-js/compare/@appland/client-v1.3.0...@appland/client-v1.3.1) (2022-08-19)
 
 ### Bug Fixes
