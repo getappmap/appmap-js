@@ -1,6 +1,6 @@
 # appmap-validate
 
-Check whether an appmap adheres to the [specification](https://github.com/applandinc/appmap).
+Check whether an appmap adheres to the [specification](https://github.com/getappmap/appmap).
 
 ## Install
 

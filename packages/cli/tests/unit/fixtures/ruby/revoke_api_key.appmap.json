@@ -9,7 +9,7 @@
     },
     "client": {
       "name": "appmap",
-      "url": "https://github.com/applandinc/appmap-ruby",
+      "url": "https://github.com/getappmap/appmap-ruby",
       "version": "0.38.1"
     },
     "frameworks": [
@@ -23,7 +23,7 @@
       }
     ],
     "git": {
-      "repository": "git@github.com:applandinc/appland.git",
+      "repository": "git@github.com:getappmap/appland.git",
       "branch": "feature/show-sql-in-source-code-tab",
       "commit": "d52bd55d5a08f0e9b27760780bf2737829f5f25f",
       "status_code": ["M Gemfile.lock"],

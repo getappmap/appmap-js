@@ -21,7 +21,7 @@
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/applandinc/appmap-js.git",
+    "url": "https://github.com/getappmap/appmap-js.git",
     "directory": "packages/validate"
   },
   "devDependencies": {

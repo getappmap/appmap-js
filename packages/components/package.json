@@ -93,16 +93,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/applandinc/appmap-js.git"
+    "url": "git+https://github.com/getappmap/appmap-js.git"
   },
   "publishConfig": {
     "access": "public"
   },
   "description": "This repository bundles together AppMap models and Vue components in a single dependency.",
   "bugs": {
-    "url": "https://github.com/applandinc/appmap-js/issues"
+    "url": "https://github.com/getappmap/appmap-js/issues"
   },
-  "homepage": "https://github.com/applandinc/appmap-js#readme",
+  "homepage": "https://github.com/getappmap/appmap-js#readme",
   "directories": {
     "test": "tests"
   },

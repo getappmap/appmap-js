@@ -25,7 +25,7 @@
       "name": "junit"
     },
     "git": {
-      "repository": "https://user-ci:token-ci@github.com/applandinc/appmap",
+      "repository": "https://user-ci:token-ci@github.com/getappmap/appmap",
       "branch": "master",
       "commit": "c3424f9"
     }

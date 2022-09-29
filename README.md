@@ -7,14 +7,14 @@ projects.
 
 ## Packages
 
-- [@appland/cli](https://github.com/applandinc/appmap-js/tree/main/packages/cli)
-- [@appland/components](https://github.com/applandinc/appmap-js/tree/main/packages/components)
-- [@appland/diagrams](https://github.com/applandinc/appmap-js/tree/main/packages/diagrams)
-- [@appland/models](https://github.com/applandinc/appmap-js/tree/main/packages/models)
-- [@appland/validate](https://github.com/applandinc/appmap-js/tree/main/packages/validate)
+- [@appland/cli](https://github.com/getappmap/appmap-js/tree/main/packages/cli)
+- [@appland/components](https://github.com/getappmap/appmap-js/tree/main/packages/components)
+- [@appland/diagrams](https://github.com/getappmap/appmap-js/tree/main/packages/diagrams)
+- [@appland/models](https://github.com/getappmap/appmap-js/tree/main/packages/models)
+- [@appland/validate](https://github.com/getappmap/appmap-js/tree/main/packages/validate)
 
 Looking for the AppMap client for JavaScript? Find it here:
-https://github.com/applandinc/appmap-agent-js
+https://github.com/getappmap/appmap-agent-js
 
 ## Development
 

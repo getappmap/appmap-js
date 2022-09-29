@@ -234,7 +234,7 @@
         </ul>
         <p class="no-data-notice__text">
           Check our
-          <a href="https://github.com/applandinc/appmap" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/getappmap/appmap" target="_blank" rel="noopener noreferrer">
             documentation</a
           >,<br />
           or ask for help in

@@ -2,7 +2,7 @@
 
 `@appland/appmap openapi` generates
 [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md) YAML from
-[AppMap](https://github.com/applandinc/appmap) data.
+[AppMap](https://github.com/getappmap/appmap) data.
 
 AppMaps contain rich information about HTTP server requests. `@appland/appmap openapi` collects and
 organizes this information into the OpenAPI format.
