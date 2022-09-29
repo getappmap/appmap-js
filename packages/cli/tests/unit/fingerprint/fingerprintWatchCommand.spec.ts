@@ -67,7 +67,7 @@ describe(FingerprintWatchCommand, () => {
       await cmd.execute();
       cmd.watcher?.removeAllListeners();
       placeMap();
-      return verifyIndexSuccess(200);
+      return verifyIndexSuccess(200, 20);
     });
   });
 });
