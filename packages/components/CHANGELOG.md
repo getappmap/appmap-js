@@ -1,9 +1,9 @@
-# [@appland/components-v2.12.0](https://github.com/applandinc/appmap-js/compare/@appland/components-v2.11.3...@appland/components-v2.12.0) (2022-09-27)
+# [@appland/components-v2.12.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.11.3...@appland/components-v2.12.0) (2022-09-27)
 
 
 ### Features
 
-* Add manual installation instructions for supported languages ([#739](https://github.com/applandinc/appmap-js/issues/739)) ([d67a413](https://github.com/applandinc/appmap-js/commit/d67a4134f571fc74477680b6dc060675c0bf6ec1))
+* Add manual installation instructions for supported languages ([#739](https://github.com/getappmap/appmap-js/issues/739)) ([d67a413](https://github.com/getappmap/appmap-js/commit/d67a4134f571fc74477680b6dc060675c0bf6ec1))
 
 # [@appland/components-v2.11.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.11.2...@appland/components-v2.11.3) (2022-09-13)
 
