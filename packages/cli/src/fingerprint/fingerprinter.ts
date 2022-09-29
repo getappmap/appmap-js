@@ -1,13 +1,14 @@
 import { createHash } from 'crypto';
 import { join as joinPath, basename } from 'path';
 import { promises as fsp } from 'fs';
-import { buildAppMap } from '@appland/models';
+import { buildAppMap, Metadata } from '@appland/models';
 import assert from 'assert';
 import FileTooLargeError from './fileTooLargeError';
 
 import { verbose, mtime } from '../utils';
 import { algorithms, canonicalize } from './canonicalize';
 import AppMapIndex from './appmapIndex';
+import EventEmitter from 'events';
 
 /**
  * CHANGELOG
@@ -43,21 +44,11 @@ export type Fingerprint = {
   fingerprint_algorithm: 'sha256';
 };
 
-export default class Fingerprinter {
-  /**
-   * @param {boolean} printCanonicalAppMaps
-   */
+class Fingerprinter extends EventEmitter {
   constructor(private printCanonicalAppMaps: boolean) {
-    this.counterFn = () => {};
+    super();
   }
 
-  private counterFn: () => void;
-
-  setCounterFn(counterFn: () => void) {
-    this.counterFn = counterFn;
-  }
-
-  // eslint-disable-next-line class-methods-use-this
   async fingerprint(appMapFileName: string) {
     if (verbose()) {
       console.log(`Fingerprinting ${appMapFileName}`);
@@ -137,6 +128,18 @@ export default class Fingerprinter {
     // determine that the index is up-to-date.
     await fsp.rename(tempAppMapFileName, appMapFileName);
 
-    this.counterFn();
+    this.emit('index', { path: appMapFileName, metadata: appmap.metadata });
   }
 }
+
+export type FingerprintEvent = {
+  path: string;
+  metadata: Metadata;
+};
+
+interface Fingerprinter {
+  on(event: 'index', listener: (data: FingerprintEvent) => void): this;
+  emit(event: 'index', data: FingerprintEvent): boolean;
+};
+
+export default Fingerprinter;

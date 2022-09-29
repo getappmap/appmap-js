@@ -8,8 +8,8 @@ class FingerprintWatchCommand {
   constructor(directory) {
     this.directory = directory;
     this.print = true;
-    this.numProcessed = 0;
     this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && path.join(this.directory, 'index.pid');
+    this.fpQueue = new FingerprintQueue();
   }
 
   removePidfile() {
@@ -21,11 +21,6 @@ class FingerprintWatchCommand {
   }
 
   async execute() {
-    this.fpQueue = new FingerprintQueue();
-    this.fpQueue.setCounterFn(() => {
-      this.numProcessed += 1;
-    });
-
     // Index existing AppMap files
     await listAppMapFiles(this.directory, (file) => this.fpQueue.push(file));
     this.fpQueue.process();
