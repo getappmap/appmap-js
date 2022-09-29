@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.42.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.41.0...@appland/appmap-v3.42.0) (2022-09-29)
+
+
+### Features
+
+* Save the Stat handler's caller in the name: from_stats from_record ([e15b577](https://github.com/getappmap/appmap-js/commit/e15b577ab44fd91b705f03ee9271a6a4450a4b7e))
+
 # [@appland/appmap-v3.41.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.40.1...@appland/appmap-v3.41.0) (2022-09-27)
 
 
