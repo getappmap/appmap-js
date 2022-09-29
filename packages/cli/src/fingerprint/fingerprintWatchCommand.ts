@@ -1,18 +1,29 @@
+import { Metadata } from '@appland/models';
 import { FSWatcher, watch } from 'chokidar';
 import { removeSync, outputFileSync } from 'fs-extra';
 import { join, resolve } from 'path';
+import EventAggregator from '../lib/eventAggregator';
+import flattenMetadata from '../lib/flattenMetadata';
+import { intersectMaps } from '../lib/intersectMaps';
+import Telemetry from '../telemetry';
 import { verbose, listAppMapFiles } from '../utils';
+import { FingerprintEvent } from './fingerprinter';
 import FingerprintQueue from './fingerprintQueue';
 
 export default class FingerprintWatchCommand {
   private pidfilePath: string | undefined;
-  private fpQueue: FingerprintQueue;
+  public fpQueue: FingerprintQueue;
   public watcher?: FSWatcher;
   private poller?: FSWatcher;
 
   constructor(private directory: string) {
     this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && join(this.directory, 'index.pid');
     this.fpQueue = new FingerprintQueue();
+
+    new EventAggregator((events) => {
+      const indexEvents = events.map(({ args: [event] }) => event) as FingerprintEvent[];
+      this.sendTelemetry(indexEvents.map(({ metadata }) => metadata));
+    }).attach(this.fpQueue.handler, 'index');
   }
 
   removePidfile() {
@@ -95,5 +106,18 @@ export default class FingerprintWatchCommand {
       return;
     }
     this.fpQueue.push(file);
+  }
+
+  private sendTelemetry(metadata: Metadata[]) {
+    const properties = Object.fromEntries(
+      intersectMaps(...metadata.map(flattenMetadata)).entries()
+    );
+    Telemetry.sendEvent({
+      name: 'appmap:index',
+      properties,
+      metrics: {
+        appmaps: metadata.length,
+      },
+    });
   }
 }
