@@ -7,7 +7,7 @@ function isNodeError(error: unknown, code?: string): error is NodeJS.ErrnoExcept
 }
 
 export default class FingerprintQueue {
-  private handler: Fingerprinter;
+  public handler: Fingerprinter;
   private queue: QueueObject<string>;
   private pending = new Set<string>();
 
@@ -23,10 +23,6 @@ export default class FingerprintQueue {
       this.pending.delete(appmapFileName);
     }, this.size);
     this.queue.pause();
-  }
-
-  setCounterFn(counterFn: () => void) {
-    this.handler.setCounterFn(counterFn);
   }
 
   async process() {
