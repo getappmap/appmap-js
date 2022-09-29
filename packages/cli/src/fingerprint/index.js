@@ -1,7 +1,7 @@
 const { verbose } = require('../utils');
 const { algorithms, canonicalize } = require('./canonicalize');
 const FingerprintDirectoryCommand = require('./fingerprintDirectoryCommand');
-const FingerprintWatchCommand = require('./fingerprintWatchCommand');
+const FingerprintWatchCommand = require('./fingerprintWatchCommand').default;
 
 async function fingerprintDirectory(dir, watch = false) {
   if (verbose) {
