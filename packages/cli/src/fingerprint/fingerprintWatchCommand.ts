@@ -1,22 +1,25 @@
-const chokidar = require('chokidar');
-const fs = require('fs-extra');
-const path = require('path');
-const { verbose, listAppMapFiles } = require('../utils');
-const FingerprintQueue = require('./fingerprintQueue').default;
+import { FSWatcher, watch } from 'chokidar';
+import { removeSync, outputFileSync } from 'fs-extra';
+import { join, resolve } from 'path';
+import { verbose, listAppMapFiles } from '../utils';
+import FingerprintQueue from './fingerprintQueue';
 
-class FingerprintWatchCommand {
-  constructor(directory) {
-    this.directory = directory;
-    this.print = true;
-    this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && path.join(this.directory, 'index.pid');
+export default class FingerprintWatchCommand {
+  private pidfilePath: string | undefined;
+  private fpQueue: FingerprintQueue;
+  public watcher?: FSWatcher;
+  private poller?: FSWatcher;
+
+  constructor(private directory: string) {
+    this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && join(this.directory, 'index.pid');
     this.fpQueue = new FingerprintQueue();
   }
 
   removePidfile() {
     if (this.pidfilePath) {
       console.log(`Removing ${this.pidfilePath}`);
-      fs.removeSync(this.pidfilePath);
-      this.pidfilePath = null;
+      removeSync(this.pidfilePath);
+      this.pidfilePath = undefined;
     }
   }
 
@@ -26,11 +29,11 @@ class FingerprintWatchCommand {
     this.fpQueue.process();
 
     const glob = `${this.directory}/**/*.appmap.json`;
-    this.watcher = chokidar.watch(glob, {
+    this.watcher = watch(glob, {
       ignoreInitial: true,
       ignored: ['**/node_modules/**', '**/.git/**'],
     });
-    this.poller = chokidar.watch(glob, {
+    this.poller = watch(glob, {
       ignoreInitial: true,
       ignored: ['**/node_modules/**', '**/.git/**'],
       usePolling: true,
@@ -54,40 +57,39 @@ class FingerprintWatchCommand {
   async close() {
     await Promise.all([this.watcher, this.poller].map((ch) => ch?.close()));
     this.removePidfile();
-    this.watcher = null;
-    this.poller = null;
+    this.watcher = undefined;
+    this.poller = undefined;
   }
 
-  added(file) {
+  added(file: string) {
     if (verbose()) {
       console.warn(`AppMap added: ${file}`);
     }
     this.enqueue(file);
   }
 
-  changed(file) {
+  changed(file: string) {
     if (verbose()) {
       console.warn(`AppMap changed: ${file}`);
     }
     this.enqueue(file);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  removed(file) {
+  removed(file: string) {
     console.warn(`TODO: AppMap removed: ${file}`);
   }
 
   ready() {
     if (this.pidfilePath) {
-      fs.outputFileSync(this.pidfilePath, `${process.pid}`);
+      outputFileSync(this.pidfilePath, `${process.pid}`);
       process.on('exit', this.removePidfile.bind(this));
     }
     if (verbose()) {
-      console.warn(`Watching appmaps in ${path.resolve(process.cwd(), this.directory)}`);
+      console.warn(`Watching appmaps in ${resolve(process.cwd(), this.directory)}`);
     }
   }
 
-  enqueue(file) {
+  enqueue(file: string) {
     // This shouldn't be necessary, but it's passing through the wrong file names.
     if (!file.includes('.appmap.json')) {
       return;
@@ -95,5 +97,3 @@ class FingerprintWatchCommand {
     this.fpQueue.push(file);
   }
 }
-
-module.exports = FingerprintWatchCommand;
