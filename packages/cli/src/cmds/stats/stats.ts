@@ -39,7 +39,7 @@ export const builder = (args: yargs.Argv) => {
   return args.strict();
 };
 
-export async function handler(argv: any) {
+export async function handler(argv: any, handlerCaller: string = 'from_stats') {
   verbose(argv.verbose);
 
   const commandFn = async () => {
@@ -302,7 +302,7 @@ export async function handler(argv: any) {
         });
 
         Telemetry.sendEvent({
-          name: 'stats:success',
+          name: `stats:${handlerCaller}:success`,
           properties: {
             path: appMapDir,
           },
@@ -312,7 +312,7 @@ export async function handler(argv: any) {
         let errorMessage: string | undefined = (err as any).toString();
         if (err instanceof Error) {
           Telemetry.sendEvent({
-            name: 'stats:error',
+            name: `stats:${handlerCaller}:error`,
             properties: {
               errorMessage,
               errorStack: err.stack,

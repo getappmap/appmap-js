@@ -119,7 +119,7 @@ export default {
         await showAppMap(state as FileName);
       }
 
-      await StatsCommand.handler(argv);
+      await StatsCommand.handler(argv, 'from_record');
     };
 
     return runCommand('record', commandFn);
