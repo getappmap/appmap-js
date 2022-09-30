@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.43.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.42.0...@appland/appmap-v3.43.0) (2022-09-30)
+
+
+### Features
+
+* Send telemetry events when indexing AppMaps ([53935b1](https://github.com/getappmap/appmap-js/commit/53935b19b597646fdc454f7fe2b146318e260717))
+
 # [@appland/appmap-v3.42.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.41.0...@appland/appmap-v3.42.0) (2022-09-29)
 
 
