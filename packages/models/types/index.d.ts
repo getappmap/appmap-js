@@ -271,6 +271,9 @@ declare module '@appland/models' {
 
     export class Recorder {
       name: string;
+
+      /** Optional in AppMaps versions < 1.9.0. */
+      type?: 'tests' | 'requests' | 'remote';
     }
   }
 
