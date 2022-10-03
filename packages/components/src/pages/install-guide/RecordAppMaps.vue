@@ -79,9 +79,6 @@ export default {
       if (!this.project || !this.project.language) return undefined;
       return this.project.language.name;
     },
-    documentationUrl() {
-      return getRecordingDocumentationUrl(this.language);
-    },
   },
 };
 </script>

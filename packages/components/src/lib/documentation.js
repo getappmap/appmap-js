@@ -6,11 +6,7 @@ const documentationUrls = {
 };
 
 export function getAgentDocumentationUrl(language) {
-  if (!language || typeof language !== 'string') return;
+  if (!language || typeof language !== 'string') return undefined;
 
   return documentationUrls[language.toLowerCase()];
-}
-
-export function getRecordingDocumentationUrl(_language) {
-  return 'https://appmap.io/docs/recording-methods.html';
 }
