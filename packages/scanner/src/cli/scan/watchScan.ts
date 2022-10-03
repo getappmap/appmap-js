@@ -24,6 +24,26 @@ declare module 'async' {
   }
 }
 
+async function isDir(targetPath: string): Promise<boolean> {
+  try {
+    return (await stat(targetPath)).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+async function existingParent(targetPath: string): Promise<string> {
+  while (targetPath.length > 1) {
+    if (await isDir(targetPath)) break;
+    targetPath = path.dirname(targetPath);
+  }
+  return targetPath;
+}
+
+function isAncestorPath(ancestor: string, descendant: string): boolean {
+  return !path.relative(ancestor, descendant).startsWith('..');
+}
+
 export class Watcher {
   config?: TimestampedConfiguration;
   appmapWatcher?: chokidar.FSWatcher;
@@ -42,23 +62,41 @@ export class Watcher {
       .on('add', this.reloadConfig.bind(this))
       .on('change', this.reloadConfig.bind(this));
 
-    // Chokidar struggles with relative paths. Make sure the watch pattern is absolute.
-    const watchPattern = path.resolve(this.options.appmapDir, '**', 'mtime');
+    const appmapDir = path.resolve(this.options.appmapDir);
 
-    this.appmapWatcher = chokidar.watch(watchPattern, {
+    // If the appmap directory is a descendant of cwd, watch cwd (presumably project directory).
+    // This ensures the watch will survive even if the appmap dir is removed and recreated.
+    // Otherwise, make sure to use an existing directory. Chokidar struggles with missing directories.
+    const watchDir = isAncestorPath(process.cwd(), appmapDir)
+      ? process.cwd()
+      : await existingParent(appmapDir);
+
+    // Custom ignore function needed to cut down the watch tree to just what we need.
+    const ignored = (targetPath: string) => {
+      // Ignore anything that isn't an ancestor or descendant of the appmap dir.
+      if (!(isAncestorPath(targetPath, appmapDir) || isAncestorPath(appmapDir, targetPath)))
+        return true;
+
+      // Also make sure to not try to recurse down node_modules or .git
+      const basename = path.basename(targetPath);
+      return basename === 'node_modules' || basename === '.git';
+    };
+
+    this.appmapWatcher = chokidar.watch(watchDir, {
       ignoreInitial: true,
-      ignored: ['**/node_modules/**', '**/.git/**'],
+      ignored,
     });
 
-    this.appmapPoller = chokidar.watch(watchPattern, {
+    this.appmapPoller = chokidar.watch(watchDir, {
       ignoreInitial: false,
-      ignored: ['**/node_modules/**', '**/.git/**'],
+      ignored,
       usePolling: true,
       interval: 1000,
       persistent: false,
     });
 
-    const enqueue = this.enqueue.bind(this);
+    const enqueue = (filePath: string) =>
+      path.basename(filePath) === 'mtime' && this.enqueue(filePath);
     for (const ch of [this.appmapWatcher, this.appmapPoller])
       ch.on('add', enqueue).on('change', enqueue);
   }
