@@ -80,10 +80,10 @@ export default {
       );
     }
 
+    if (appmapDir) await validateFile('directory', appmapDir);
     if (!appmapFile && !appmapDir) {
       appmapDir = (await appmapDirFromConfig()) || '.';
     }
-    if (appmapDir) await validateFile('directory', appmapDir);
 
     let appId = appIdArg;
     if (!watch && !reportAllFindings) appId = await resolveAppId(appIdArg, appmapDir);
