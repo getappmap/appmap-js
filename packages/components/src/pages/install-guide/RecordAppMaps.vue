@@ -19,15 +19,8 @@
         </article>
         <article v-else>
           <p class="mb20">
-            For instructions on recording your first AppMaps, refer to the documentation below.
-          </p>
-          <p class="mb20">
-            <template v-for="(url, lang, index) in editorSpecificUrls">
-              <a :href="url" :key="lang">{{ lang }}</a>
-              <template v-if="index !== Object.keys(editorSpecificUrls).length - 1">
-                &nbsp;&nbsp;|&nbsp;&nbsp;
-              </template>
-            </template>
+            For instructions on recording your first AppMaps, refer to our
+            <a href="https://appmap.io/docs/recording-methods.html">documentation</a>.
           </p>
         </article>
       </main>
@@ -41,22 +34,7 @@ import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VCodeSnippet from '@/components/CodeSnippet.vue';
 import Navigation from '@/components/mixins/navigation';
-
-const documentationUrls = {
-  vscode: {
-    Java: 'https://appland.com/docs/appmap-diagrams/quickstart/vscode/java-step-3-tests',
-    JavaScript:
-      'https://appland.com/docs/appmap-diagrams/quickstart/vscode/javascript-step-3-tests',
-    Python: 'https://appland.com/docs/appmap-diagrams/quickstart/vscode/python-step-3-tests',
-    Ruby: 'https://appland.com/docs/appmap-diagrams/quickstart/vscode/ruby-step-3-tests',
-  },
-  jetbrains: {
-    Java: 'https://appland.com/docs/appmap-diagrams/quickstart/intellij/step-3-tests',
-    JavaScript: 'https://appland.com/docs/appmap-diagrams/quickstart/webstorm/step-3-tests',
-    Python: 'https://appland.com/docs/appmap-diagrams/quickstart/pycharm/step-3-tests',
-    Ruby: 'https://appland.com/docs/appmap-diagrams/quickstart/rubymine/step-3-tests',
-  },
-};
+import { getRecordingDocumentationUrl } from '@/lib/documentation';
 
 export default {
   name: 'RecordAppMaps',
@@ -101,21 +79,8 @@ export default {
       if (!this.project || !this.project.language) return undefined;
       return this.project.language.name;
     },
-    editorSpecificUrls() {
-      const urls = { ...documentationUrls[this.editor] };
-      const disabledLanguages = Object.values(this.disabledLanguages);
-      disabledLanguages.forEach((l) => {
-        delete urls[l];
-      });
-
-      return urls;
-    },
     documentationUrl() {
-      if (!this.project || !this.project.language || !this.project.language.name) {
-        return undefined;
-      }
-
-      return this.editorSpecificUrls[this.project.language.name];
+      return getRecordingDocumentationUrl(this.language);
     },
   },
 };

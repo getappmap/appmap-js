@@ -29,8 +29,12 @@
             </v-popper>
           </template>
         </div>
+        <div class="header__accordion-icons">
+          <v-icon-chevron v-if="!selected" />
+        </div>
       </div>
     </template>
+
     <div class="project-picker-row__body">
       <template v-if="supported">
         You're almost done! Install AppMap as a development dependency in your project. Click the
@@ -50,11 +54,24 @@
         </div>
       </template>
       <template v-else>
-        <p>
-          This project is not supported by AppMap. For a list of all supported integrations, visit
-          our documentation:
-        </p>
-        <a href="https://appmap.io/docs/reference">https://appmap.io/docs/reference</a>
+        <template v-if="!languageSupported">
+          <p>AppMap currently supports the following languages:</p>
+          <ul class="support-list">
+            <li><strong>Ruby</strong></li>
+            <li><strong>Python</strong></li>
+            <li><strong>JavaScript</strong></li>
+            <li><strong>Java</strong></li>
+          </ul>
+        </template>
+        <template v-else>
+          <p class="mb20">
+            We weren't able to find a supported web or test framework within this project. Please
+            visit
+            <a :href="documentationUrl">our {{ language.name }} documentation</a> for more
+            information.
+          </p>
+        </template>
+        <p>This project does not meet all the requirements to create AppMaps.</p>
       </template>
     </div>
   </v-accordion>
@@ -71,8 +88,10 @@ import VPopper from '@/components/Popper.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VRuby from '@/components/install-guide/install-instructions/Ruby.vue';
 import VPython from '@/components/install-guide/install-instructions/Python.vue';
+import VIconChevron from '@/assets/fa-solid_chevron-down.svg';
 
 import { isFeatureSupported, isProjectSupported } from '@/lib/project';
+import { getAgentDocumentationUrl } from '@/lib/documentation';
 
 const manualInstructionComponents = { ruby: VRuby, python: VPython };
 
@@ -89,6 +108,7 @@ export default {
     VUnsupportedIcon,
     VPopper,
     VNavigationButtons,
+    VIconChevron,
   },
   props: {
     selected: Boolean,
@@ -126,7 +146,7 @@ export default {
           name: 'Unsupported',
           icon: VUnsupportedIcon,
           condition: () => !this.supported,
-          description: 'AppMap does not yet support this projects language.',
+          description: 'This project does not meet all the requirements to create AppMaps.',
         },
       ],
     };
@@ -143,6 +163,9 @@ export default {
         testFramework: this.testFramework,
       });
     },
+    languageSupported() {
+      return isFeatureSupported(this.language);
+    },
     webFrameworkSupported() {
       return isFeatureSupported(this.webFramework);
     },
@@ -154,6 +177,9 @@ export default {
     manualInstructions() {
       const languageKey = ((this.language && this.language.name) || '').toLowerCase();
       return manualInstructionComponents[languageKey];
+    },
+    documentationUrl() {
+      return getAgentDocumentationUrl(this.language && this.language.name);
     },
   },
   methods: {
@@ -184,6 +210,10 @@ export default {
 $brightblue: rgba(255, 255, 255, 0.1);
 
 .project-picker-row {
+  border-width: 0.5px 0;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.1);
+
   &.accordion--open {
     background-color: rgba(200, 200, 255, 0.075);
   }
@@ -205,6 +235,7 @@ $brightblue: rgba(255, 255, 255, 0.1);
   display: flex;
 
   &__title {
+    font-size: 1.2rem;
     justify-content: left;
   }
 
@@ -217,7 +248,7 @@ $brightblue: rgba(255, 255, 255, 0.1);
   &__feature-tag {
     display: flex;
     margin-left: 1rem;
-    background-color: rgba(200, 200, 255, 0.1);
+    background-color: rgba(200, 200, 255, 0.4);
     padding: 0.5em;
     border-radius: 8px;
     align-items: center;
@@ -242,6 +273,21 @@ $brightblue: rgba(255, 255, 255, 0.1);
     margin-left: 0.5em;
     margin-top: auto;
     margin-bottom: -3px;
+  }
+
+  &__accordion-icons {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    margin-left: 1rem;
+    align-self: center;
+
+    svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      fill: $white;
+    }
   }
 }
 
@@ -274,5 +320,21 @@ $brightblue: rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: center;
   margin: 1em;
+}
+
+.support-list {
+  margin: 1rem 0;
+  ul {
+    margin-left: 1rem;
+    margin-top: 0;
+    li {
+      strong {
+        color: #939fb1;
+      }
+    }
+  }
+  strong {
+    color: #939fb1;
+  }
 }
 </style>
