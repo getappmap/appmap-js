@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.71.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.1...@appland/scanner-v1.71.2) (2022-10-04)
+
+
+### Bug Fixes
+
+* Use default configuration timestamp in scan --watch if none provided ([3d246f2](https://github.com/getappmap/appmap-js/commit/3d246f2b350af2dd14a097519ea9af6fe410e543))
+
 # [@appland/scanner-v1.71.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.0...@appland/scanner-v1.71.1) (2022-10-04)
 
 
