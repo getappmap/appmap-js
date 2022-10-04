@@ -15,6 +15,15 @@ export default class FingerprintWatchCommand {
   public fpQueue: FingerprintQueue;
   public watcher?: FSWatcher;
   private poller?: FSWatcher;
+  private _numProcessed = 0;
+
+  public get numProcessed() {
+    return this._numProcessed;
+  }
+
+  private set numProcessed(value) {
+    this._numProcessed = value;
+  }
 
   constructor(private directory: string) {
     this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && join(this.directory, 'index.pid');
@@ -23,6 +32,7 @@ export default class FingerprintWatchCommand {
     new EventAggregator((events) => {
       const indexEvents = events.map(({ args: [event] }) => event) as FingerprintEvent[];
       this.sendTelemetry(indexEvents.map(({ metadata }) => metadata));
+      this.numProcessed += events.length;
     }).attach(this.fpQueue.handler, 'index');
   }
 
