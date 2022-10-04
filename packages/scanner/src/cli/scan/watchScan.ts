@@ -121,7 +121,7 @@ export class Watcher {
   protected async scan(mtimePath: string): Promise<void> {
     assert(this.config, `config should always be loaded before appmapWatcher triggers a scan`);
 
-    const appmapFile = mtimePath.replace(/\/mtime$/, '.appmap.json');
+    const appmapFile = [path.dirname(mtimePath), 'appmap.json'].join('.');
     const reportFile = mtimePath.replace(/mtime$/, 'appmap-findings.json');
 
     const [appmapStats, reportStats] = await Promise.all(
