@@ -32,7 +32,7 @@ automatedRecording.args = {
     },
   },
   editor: 'vscode',
-  complete: 'true',
+  complete: true,
 };
 
 export const noTestFramework = Template.bind({});
@@ -55,7 +55,7 @@ noTestFramework.args = {
     },
   },
   editor: 'vscode',
-  complete: 'true',
+  complete: true,
 };
 
 export const noWebFramework = Template.bind({});
@@ -78,7 +78,7 @@ noWebFramework.args = {
     },
   },
   editor: 'vscode',
-  complete: 'true',
+  complete: true,
 };
 
 export const javascriptOrJava = Template.bind({});
@@ -101,7 +101,7 @@ javascriptOrJava.args = {
     },
   },
   editor: 'vscode',
-  complete: 'true',
+  complete: true,
 };
 
 export const noWebOrTestFramework = Template.bind({});
@@ -124,7 +124,7 @@ noWebOrTestFramework.args = {
     },
   },
   editor: 'vscode',
-  complete: 'true',
+  complete: true,
 };
 
 export const unsupportedLanguage = Template.bind({});
@@ -147,5 +147,5 @@ unsupportedLanguage.args = {
     },
   },
   editor: 'vscode',
-  complete: 'true',
+  complete: true,
 };
