@@ -31,6 +31,13 @@ export default {
     };
   },
 
+  watch: {
+    projects(newVal) {
+      if (!this.selectedProject || !this.selectedProject.name) return;
+      this.selectedProject = newVal.find((p) => p.name === this.selectedProject.name);
+    },
+  },
+
   computed: {
     sortedProjects() {
       return [...this.projects].sort((a, b) => {
