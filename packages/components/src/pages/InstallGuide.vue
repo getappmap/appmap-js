@@ -10,7 +10,7 @@
       :editor="editor"
       :project="selectedProject"
       :complete="hasRecorded"
-      :disabled-languages="disabledLanguages"
+      :feature-flags="featureFlags"
     />
     <v-open-app-maps
       id="open-appmaps"
@@ -58,9 +58,9 @@ export default {
       default: 'vscode',
       type: String,
     },
-    disabledLanguages: {
-      type: Array,
-      default: () => [],
+    featureFlags: {
+      type: Set,
+      default: () => new Set(),
     },
     findingsEnabled: {
       type: Boolean,
