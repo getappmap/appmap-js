@@ -98,9 +98,9 @@ export default {
       default: 'vscode',
       validator: (value) => ['vscode', 'jetbrains'].indexOf(value) !== -1,
     },
-    disabledLanguages: {
-      type: Array,
-      default: () => [],
+    featureFlags: {
+      type: Set,
+      default: () => new Set(),
     },
   },
 
@@ -117,9 +117,14 @@ export default {
     supported() {
       return isProjectSupported(this.project);
     },
+    automaticRecordingLanguages() {
+      const languages = ['ruby'];
+      if (this.featureFlags.has('ar-python')) languages.push('python');
+      return languages;
+    },
     automaticRecording() {
       return (
-        ['ruby', 'python'].includes((this.language || '').toLowerCase()) &&
+        this.automaticRecordingLanguages.includes((this.language || '').toLowerCase()) &&
         (this.webFrameworkSupported || this.testFrameworkSupported)
       );
     },
