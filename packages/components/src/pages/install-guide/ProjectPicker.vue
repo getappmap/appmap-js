@@ -70,34 +70,6 @@ export default {
     },
   },
 
-  computed: {
-    quality() {
-      const { selectedProject: project } = this;
-      if (!project) return undefined;
-      if (!project.score || project.score < 1) return 'empty';
-      if (!project.score || project.score < 2) return 'bad';
-      if (project.score < 3) return 'ok';
-      return 'good';
-    },
-    installCommand() {
-      return [
-        'npx @appland/appmap install',
-        this.selectedProject && `-d ${this.selectedProject.path}`,
-      ]
-        .filter(Boolean)
-        .join(' ');
-    },
-    projectLanguage() {
-      return this.selectedProject && this.selectedProject.language;
-    },
-  },
-
-  data() {
-    return {
-      selectedProject: null,
-    };
-  },
-
   mounted() {
     if (this.projects.length === 1) {
       this.$refs.projectTable.selectProject(this.projects[0]);
@@ -112,7 +84,6 @@ export default {
     },
     selectProject(project) {
       this.$nextTick(() => {
-        this.selectedProject = project;
         this.$root.$emit('select-project', project);
       });
     },
