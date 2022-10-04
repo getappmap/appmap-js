@@ -1,3 +1,15 @@
+# [@appland/components-v2.13.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.12.0...@appland/components-v2.13.0) (2022-10-04)
+
+
+### Bug Fixes
+
+* Projects must have a supported test or web framework to be ([4d8277f](https://github.com/getappmap/appmap-js/commit/4d8277fcada9891c989d35269d6508f4873e36cb))
+
+
+### Features
+
+* Document automatic recording, remove dependency on NPX for Ruby, Python ([09d98e5](https://github.com/getappmap/appmap-js/commit/09d98e575fedfd2935837ff2bef8153742f850a3))
+
 # [@appland/components-v2.12.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.11.3...@appland/components-v2.12.0) (2022-09-27)
 
 
