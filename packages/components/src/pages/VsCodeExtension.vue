@@ -202,14 +202,18 @@
           <button class="control-button diagram-reload" @click="resetDiagram" title="Clear">
             <ReloadIcon class="control-button__icon" />
           </button>
-          <button
+          <v-popper
             v-if="appMapUploadable"
-            class="control-button appmap-upload"
-            @click="uploadAppmap"
-            title="Upload"
+            class="hover-text-popper"
+            text="Create a link to this AppMap."
+            placement="left"
+            text-align="right"
           >
-            <UploadIcon class="control-button__icon" />
-          </button>
+            <button class="control-button appmap-upload" @click="uploadAppmap" title="">
+              <UploadIcon class="control-button__icon" />
+              <span>Share</span>
+            </button>
+          </v-popper>
         </template>
       </v-tabs>
       <div class="diagram-instructions">
@@ -265,6 +269,7 @@ import VFiltersForm from '../components/FiltersForm.vue';
 import VInstructions from '../components/Instructions.vue';
 import VNotification from '../components/Notification.vue';
 import VPopperMenu from '../components/PopperMenu.vue';
+import VPopper from '../components/Popper.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import VTraceFilter from '../components/trace/TraceFilter.vue';
@@ -298,6 +303,7 @@ export default {
     VInstructions,
     VNotification,
     VPopperMenu,
+    VPopper,
     VTabs,
     VTab,
     VTraceFilter,
@@ -1235,7 +1241,6 @@ code {
         font-family: $appland-text-font-family;
         font-size: 0.75rem;
         outline: none;
-        line-height: 0;
         appearance: none;
         cursor: pointer;
         transition: color 0.3s ease-in;
@@ -1247,8 +1252,8 @@ code {
         }
 
         &__icon {
-          width: 0.75rem;
-          height: 0.75rem;
+          width: 0.95rem;
+          height: 0.95rem;
           fill: currentColor;
         }
       }
@@ -1257,6 +1262,22 @@ code {
         position: absolute;
         right: 1.3rem;
         bottom: 1.3rem;
+      }
+
+      .hover-text-popper {
+        display: inline-block;
+
+        .appmap-upload {
+          border: 1px solid;
+          border-radius: 8px;
+          padding: 0.4rem;
+
+          span {
+            padding-left: 0.4rem;
+            font-size: 0.9rem;
+            margin: auto;
+          }
+        }
       }
     }
 
