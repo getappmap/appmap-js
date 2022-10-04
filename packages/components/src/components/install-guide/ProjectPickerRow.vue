@@ -230,7 +230,6 @@ $brightblue: rgba(255, 255, 255, 0.1);
 
 .header {
   display: flex;
-  overflow: hidden;
 
   &__title {
     font-size: 1.2rem;
