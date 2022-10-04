@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.43.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.43.0...@appland/appmap-v3.43.1) (2022-10-04)
+
+
+### Performance Improvements
+
+* Check if index is up to date based on file mtime ([54ea658](https://github.com/getappmap/appmap-js/commit/54ea658464ced6ce59064216a8e0a5d665da6976))
+* Only check version of fingerprints on the initial pass ([5e2f91d](https://github.com/getappmap/appmap-js/commit/5e2f91d8fdd218f60a56b49ef82e7d65b042e37b))
+
 # [@appland/appmap-v3.43.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.42.0...@appland/appmap-v3.43.0) (2022-09-30)
 
 
