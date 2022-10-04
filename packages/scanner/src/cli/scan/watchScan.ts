@@ -1,11 +1,12 @@
 import { stat, writeFile } from 'fs/promises';
 import * as chokidar from 'chokidar';
 
-import Configuration from '../../configuration/types/configuration';
-
 import { formatReport } from './formatReport';
 import { default as buildScanner } from './scanner';
-import { parseConfigFile } from '../../configuration/configurationProvider';
+import {
+  parseConfigFile,
+  TimestampedConfiguration,
+} from '../../configuration/configurationProvider';
 import assert from 'assert';
 import path from 'path';
 import { queue } from 'async';
@@ -24,11 +25,10 @@ declare module 'async' {
 }
 
 export class Watcher {
-  config?: Configuration;
+  config?: TimestampedConfiguration;
   appmapWatcher?: chokidar.FSWatcher;
   appmapPoller?: chokidar.FSWatcher;
   configWatcher?: chokidar.FSWatcher;
-  private configTime?: number;
 
   constructor(private options: WatchScanOptions) {}
 
@@ -82,7 +82,6 @@ export class Watcher {
 
   protected async scan(mtimePath: string): Promise<void> {
     assert(this.config, `config should always be loaded before appmapWatcher triggers a scan`);
-    assert(this.configTime);
 
     const appmapFile = mtimePath.replace(/\/mtime$/, '.appmap.json');
     const reportFile = mtimePath.replace(/mtime$/, 'appmap-findings.json');
@@ -96,7 +95,7 @@ export class Watcher {
     if (
       reportStats &&
       reportStats.mtimeMs > appmapStats.mtimeMs &&
-      reportStats.mtimeMs > this.configTime
+      reportStats.mtimeMs > this.config.timestampMs
     )
       return; // report is up to date
 
@@ -110,7 +109,6 @@ export class Watcher {
 
   protected async reloadConfig(): Promise<void> {
     this.config = await parseConfigFile(this.options.configFile);
-    this.configTime = (await stat(this.options.configFile)).mtimeMs;
   }
 }
 

@@ -197,13 +197,19 @@ export async function loadConfig(config: Configuration): Promise<Check[]> {
   return Promise.all(config.checks.map(async (c: CheckConfig) => buildBuiltinCheck(c)));
 }
 
-export async function parseConfigFile(configPath: string): Promise<Configuration> {
+export type TimestampedConfiguration = Configuration & {
+  timestampMs: number;
+};
+
+export async function parseConfigFile(configPath: string): Promise<TimestampedConfiguration> {
   if (!(await promisify(exists)(configPath))) {
     configPath = join(__dirname, '../sampleConfig/default.yml');
   }
   console.log(`Using scanner configuration file ${configPath}`);
+  const timestampMs = (await fs.stat(configPath)).mtimeMs;
   const yamlConfig = await fs.readFile(configPath, 'utf-8');
-  return yaml.load(yamlConfig, {
+  const config = yaml.load(yamlConfig, {
     filename: configPath,
   }) as Configuration;
+  return { ...config, timestampMs };
 }
