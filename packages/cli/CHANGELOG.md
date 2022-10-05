@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.43.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.43.1...@appland/appmap-v3.43.2) (2022-10-05)
+
+
+### Bug Fixes
+
+* Fix a panic condition when indexing in watch mode ([2b91924](https://github.com/getappmap/appmap-js/commit/2b91924677820a0a778ecbaf19c10c729f3f9266))
+
 # [@appland/appmap-v3.43.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.43.0...@appland/appmap-v3.43.1) (2022-10-04)
 
 
