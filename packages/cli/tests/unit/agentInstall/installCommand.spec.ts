@@ -339,6 +339,16 @@ packages:
       return Promise.resolve({ stdout: '/usr/local/gems', stderr: '' });
     };
 
+    const checkBundlerConfig = (cmdStruct: CommandStruct) => {
+      expect(cmdStruct.program).toEqual('bundle');
+      expect(cmdStruct.args).toEqual(['config', 'get', 'without']);
+      return Promise.resolve({
+        stdout:
+          'Set for your local app (/home/ahtrotta/projects/land-of-apps/sample_app_6th_ed/.bundle/config): [:test]',
+        stderr: '',
+      });
+    };
+
     const rubyTestE2E = async (
       rubyVersion: (command: CommandStruct) => Promise<CommandReturn>,
       gemHome: (command: CommandStruct) => Promise<CommandReturn>,
@@ -346,7 +356,8 @@ packages:
       initAgent: (command: CommandStruct) => Promise<CommandReturn>,
       validateAgent: (command: CommandStruct) => Promise<CommandReturn>,
       evalResults: (err: Error | undefined, argv: any, output: string) => void,
-      checkCurrentConfig: (command: CommandStruct) => Promise<CommandReturn>
+      checkCurrentConfig: (command: CommandStruct) => Promise<CommandReturn>,
+      checkBundlerConfig: (command: CommandStruct) => Promise<CommandReturn>
     ) => {
       let callIdx = 0;
       sinon
@@ -358,6 +369,8 @@ packages:
         .onCall(callIdx++)
         .callsFake(checkCurrentConfig)
         .onCall(callIdx++)
+        .callsFake(checkBundlerConfig)
+        .onCall(callIdx++)
         .callsFake(installAgent)
         .onCall(callIdx++)
         .callsFake(initAgent)
@@ -368,7 +381,7 @@ packages:
     };
 
     it('installs as expected', async () => {
-      expect.assertions(13);
+      expect.assertions(15);
       const evalResults = (err, argv, output) => {
         expect(err).toBeNull();
 
@@ -384,12 +397,13 @@ packages:
         initAgent,
         validateAgent,
         evalResults,
-        checkCurrentConfig
+        checkCurrentConfig,
+        checkBundlerConfig
       );
     });
 
     it('fails when validation fails', async () => {
-      expect.assertions(10);
+      expect.assertions(12);
       const msg = 'failValidate, validation failed';
       const failValidate = () => {
         return Promise.reject(new Error(msg));
@@ -405,7 +419,8 @@ packages:
         initAgent,
         failValidate,
         evalResults,
-        checkCurrentConfig
+        checkCurrentConfig,
+        checkBundlerConfig
       );
     });
 
@@ -426,18 +441,19 @@ packages:
           initAgent,
           failValidate,
           evalResults,
-          checkCurrentConfig
+          checkCurrentConfig,
+          checkBundlerConfig
         );
       };
 
       const errorArray = `[{"message": "${msg}"}]`;
       it('fails for old output format', async () => {
-        expect.assertions(10);
+        expect.assertions(12);
         await testValidation(errorArray);
       });
 
       it('fails for new output format', async () => {
-        expect.assertions(10);
+        expect.assertions(12);
         const errorObj = `{"errors": ${errorArray}}`;
         await testValidation(errorObj);
       });

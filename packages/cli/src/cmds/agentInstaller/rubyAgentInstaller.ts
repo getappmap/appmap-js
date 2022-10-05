@@ -10,7 +10,7 @@ import { run } from './commandRunner';
 import { getOutput } from './commandUtil';
 import CommandStruct from './commandStruct';
 import EncodedFile from '../../encodedFile';
-import { UserConfigError } from '../errors';
+import { BundlerConfigError } from '../errors';
 
 const REGEX_GEM_DECLARATION = /^(?:gem|group|require)\s/m;
 
@@ -42,7 +42,21 @@ export class BundleInstaller extends AgentInstaller {
     return new CommandStruct('bundle', ['check', '--dry-run'], this.path);
   }
 
+  async checkBundlerConfig(): Promise<void> {
+    const bundleConfig = await run(
+      new CommandStruct('bundle', ['config', 'get', 'without'], this.path)
+    );
+
+    const activeConfig = bundleConfig.stdout.split('\n')[1];
+    if (activeConfig && activeConfig.includes(':development') && activeConfig.includes(':test')) {
+      throw new BundlerConfigError(
+        'Bundler is currently configured to install without the test and development groups\n'
+      );
+    }
+  }
+
   async installAgent(): Promise<void> {
+    await this.checkBundlerConfig();
     const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);
     let gemfile = encodedFile.toString();
     const index = gemfile.search(REGEX_GEM_DECLARATION);
