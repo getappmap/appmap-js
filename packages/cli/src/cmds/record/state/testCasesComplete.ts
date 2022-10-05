@@ -9,7 +9,8 @@ export default async function testCasesComplete(recordContext: RecordContext): P
   // Handle command failures here, rather than in a separate state, so we maintain compatibility
   // with the Azure Function that processes telemetry events.
   if (recordContext.failures > 0 || recordContext.appMapsCreated === 0) {
-    UI.warn(`\n${chalk.yellow('!')} The test commands failed to create AppMaps\n`);
+    if (recordContext.appMapsCreated === 0)
+      UI.warn(`\n${chalk.yellow('!')} The test commands failed to create AppMaps\n`);
 
     const errors: string | string[] =
       recordContext.output?.join('\n').length > 0

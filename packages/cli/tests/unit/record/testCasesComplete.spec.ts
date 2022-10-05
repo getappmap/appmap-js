@@ -4,6 +4,7 @@ import RecordContext from '../../../src/cmds/record/recordContext';
 import testCasesComplete from '../../../src/cmds/record/state/testCasesComplete';
 import * as openTicket from '../../../src/lib/ticket/openTicket';
 import Configuration from '../../../src/cmds/record/configuration';
+import UI from '../../../src/cmds/userInteraction';
 
 describe('testCasesComplete', () => {
   afterEach(() => {
@@ -22,10 +23,33 @@ describe('testCasesComplete', () => {
 
     it('opens a ticket when test commands fail', async () => {
       sinon.stub(rc, 'failures').value(1);
+      sinon.stub(rc, 'appMapsCreated').value(42);
 
       await testCasesComplete(rc);
 
       expect(openTicketStub).toBeCalledOnce();
+    });
+
+    it('warns when a failed run did not produce appmaps', async () => {
+      const warn = sinon.stub(UI, 'warn');
+
+      sinon.stub(rc, 'failures').value(1);
+      sinon.stub(rc, 'appMapsCreated').value(0);
+
+      await testCasesComplete(rc);
+
+      expect(warn).toBeCalledWithMatch(/AppMaps/);
+    });
+
+    it('does not show a misleading message when failed run produces appmaps', async () => {
+      const warn = sinon.stub(UI, 'warn');
+
+      sinon.stub(rc, 'failures').value(1);
+      sinon.stub(rc, 'appMapsCreated').value(42);
+
+      await testCasesComplete(rc);
+
+      expect(warn).not.toBeCalledWithMatch(/AppMaps/);
     });
 
     describe('when test commands succeed', () => {
