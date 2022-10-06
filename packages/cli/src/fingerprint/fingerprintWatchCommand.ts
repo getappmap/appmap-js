@@ -6,15 +6,16 @@ import EventAggregator from '../lib/eventAggregator';
 import flattenMetadata from '../lib/flattenMetadata';
 import { intersectMaps } from '../lib/intersectMaps';
 import Telemetry from '../telemetry';
-import { verbose, listAppMapFiles } from '../utils';
+import { verbose } from '../utils';
 import { FingerprintEvent } from './fingerprinter';
 import FingerprintQueue from './fingerprintQueue';
+import Globber from './globber';
 
 export default class FingerprintWatchCommand {
   private pidfilePath: string | undefined;
   public fpQueue: FingerprintQueue;
   public watcher?: FSWatcher;
-  private poller?: FSWatcher;
+  private poller?: Globber;
   private _numProcessed = 0;
 
   public get numProcessed() {
@@ -45,35 +46,33 @@ export default class FingerprintWatchCommand {
   }
 
   async execute() {
-    // Index existing AppMap files
-    await listAppMapFiles(this.directory, (file) => this.fpQueue.push(file));
     this.fpQueue.process().then(() => {
       this.fpQueue.handler.checkVersion = false;
     });
 
     const glob = `${this.directory}/**/*.appmap.json`;
+
+    this.poller = new Globber(glob)
+      .on('add', this.added.bind(this))
+      .on('change', this.changed.bind(this))
+      .on('unlink', this.removed.bind(this));
+
+    const pollReady = new Promise<void>((r) => this.poller?.once('end', r));
+    this.poller.start();
+    await pollReady;
+
     this.watcher = watch(glob, {
       ignoreInitial: true,
       ignored: ['**/node_modules/**', '**/.git/**'],
-    });
-    this.poller = watch(glob, {
-      ignoreInitial: true,
-      ignored: ['**/node_modules/**', '**/.git/**'],
-      usePolling: true,
-      interval: 1000,
-      persistent: false,
-    });
+    })
+      .on('add', this.added.bind(this))
+      .on('change', this.changed.bind(this))
+      .on('unlink', this.removed.bind(this));
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const ch of [this.watcher, this.poller]) {
-      ch.on('add', this.added.bind(this))
-        .on('change', this.changed.bind(this))
-        .on('unlink', this.removed.bind(this));
-    }
+    const watchReady = new Promise<void>((r) => this.watcher?.once('ready', r));
 
-    await Promise.all(
-      [this.watcher, this.poller].map((ch) => new Promise((resolve) => ch.on('ready', resolve)))
-    );
+    await Promise.all([pollReady, watchReady]);
+
     this.ready();
   }
 
