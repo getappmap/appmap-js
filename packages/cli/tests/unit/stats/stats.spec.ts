@@ -1,6 +1,6 @@
 import path from 'path';
 const fixtureDir = path.join(__dirname, '../', 'fixtures', 'stats');
-const StatsCommand = require('../../../src/cmds/stats/stats');
+import StatsCommand from '../../../src/cmds/stats/stats';
 import { SortedAppMapSize } from '../../../src/cmds/stats/types/appMapSize';
 import { SlowestExecutionTime } from '../../../src/cmds/stats/types/functionExecutionTime';
 

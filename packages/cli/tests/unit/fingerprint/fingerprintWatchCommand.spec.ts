@@ -120,8 +120,9 @@ describe(FingerprintWatchCommand, () => {
         jest.advanceTimersByTime(2048);
 
         expect(Telemetry.sendEvent).toHaveBeenCalledTimes(2);
-        for (const [data] of Telemetry.sendEvent.mock.calls)
+        for (const [data] of Telemetry.sendEvent.mock.calls) {
           expect(data).toMatchObject({ name: 'appmap:index', metrics: { appmaps: 1 } });
+        }
       });
     });
   });
