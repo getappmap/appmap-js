@@ -74,7 +74,8 @@ export class Watcher {
     // Custom ignore function needed to cut down the watch tree to just what we need.
     const ignored = (targetPath: string) => {
       // Ignore anything that isn't an ancestor or descendant of the appmap dir.
-      if (!(targetPath.startsWith(appmapDir) || appmapDir.startsWith(targetPath))) return true;
+      if (!(isAncestorPath(targetPath, appmapDir) || isAncestorPath(appmapDir, targetPath)))
+        return true;
 
       // Also make sure to not try to recurse down node_modules or .git
       const basename = path.basename(targetPath);
