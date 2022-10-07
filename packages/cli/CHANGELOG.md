@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.44.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.43.2...@appland/appmap-v3.44.0) (2022-10-07)
+
+
+### Features
+
+* handle when bundler ignores test and development ([fd3b174](https://github.com/getappmap/appmap-js/commit/fd3b17467f2735261ad39878ba9c36b8b6d22e77))
+
 # [@appland/appmap-v3.43.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.43.1...@appland/appmap-v3.43.2) (2022-10-05)
 
 
