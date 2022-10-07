@@ -23,7 +23,8 @@ import * as OpenAPICommand from './cmds/openapi';
 const InventoryCommand = require('./inventoryCommand');
 const OpenCommand = require('./cmds/open/open');
 const InspectCommand = require('./cmds/inspect/inspect');
-import RecordCommand from './cmds/record/record';
+const RecordCommand = require('./cmds/record/record');
+const SequenceDiagramCommand = require('./cmds/sequenceDiagram/sequenceDiagram');
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
 const StatsCommand = require('./cmds/stats/stats');
@@ -394,7 +395,6 @@ yargs(process.argv.slice(2))
       });
       args.option('appmap-dir', {
         describe: 'directory to recursively inspect for AppMaps',
-        default: 'tmp/appmap',
       });
       return args.strict();
     },
@@ -403,9 +403,9 @@ yargs(process.argv.slice(2))
       handleWorkingDirectory(argv.directory);
       const appmapDir = await locateAppMapDir(argv.appmapDir);
 
-      await new FingerprintDirectoryCommand(argv.appmapDir).execute();
+      await new FingerprintDirectoryCommand(appmapDir).execute();
 
-      const inventory = await new InventoryCommand(argv.appmapDir).execute();
+      const inventory = await new InventoryCommand(appmapDir).execute();
       console.log(yaml.dump(inventory));
     }
   )
@@ -435,6 +435,8 @@ yargs(process.argv.slice(2))
   .command(StatusCommand)
   .command(StatsCommand)
   .command(InspectCommand)
+  .command(InspectCommand)
+  .command(SequenceDiagramCommand)
   .command(PruneCommand)
   .strict()
   .demandCommand()
