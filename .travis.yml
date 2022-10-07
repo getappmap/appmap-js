@@ -28,7 +28,9 @@ jobs:
       script: |
         yarn workspace @appland/appmap jest --runTestsByPath \
           tests/unit/agentInstall/commandRunner.spec.ts \
-          tests/unit/agentInstall/gradleInstaller.spec.ts
+          tests/unit/agentInstall/gradleInstaller.spec.ts \
+        && yarn workspace @appland/scanner jest --runTestsByPath \
+          test/cli/scan.spec.ts
 
     - stage: deploy
       if: branch != main
