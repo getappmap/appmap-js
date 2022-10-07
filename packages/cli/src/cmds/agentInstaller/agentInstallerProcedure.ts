@@ -60,13 +60,14 @@ export default class AgentInstallerProcedure extends AgentProcedure {
 
     UI.status = 'Installing AppMap...';
 
-    await this.installer.checkCurrentConfig();
-    await this.installer.installAgent();
-
-    await this.verifyProject();
-
-    const appMapYml = this.configPath;
     try {
+      await this.installer.checkCurrentConfig();
+      await this.installer.installAgent();
+
+      await this.verifyProject();
+
+      const appMapYml = this.configPath;
+
       if (!useExistingAppMapYml) {
         const initCommand = await this.installer.initCommand();
         const { stdout } = await run(initCommand);
@@ -89,32 +90,60 @@ export default class AgentInstallerProcedure extends AgentProcedure {
       UI.success(successMessage.join('\n'));
     } catch (e) {
       const error = e as Error;
-      if (
-        this.installer.name === 'Bundler' &&
-        error?.message.includes('but is an incompatible architecture')
-      ) {
-        await run(new CommandStruct('gem', ['uninstall', 'appmap', '-x', '--force'], this.path));
+      console.log(error?.message);
+      if (this.installer.name === 'Bundler') {
+        if (error?.message.includes('but is an incompatible architecture')) {
+          await run(new CommandStruct('gem', ['uninstall', 'appmap', '-x', '--force'], this.path));
 
-        const incompatibleArchitectureMessage = [
-          '\n',
-          chalk.bold.red('AppMap Installation Error!'),
-          '',
-          'Please run the following command in your terminal, then re-run the installer:',
-          '',
-          chalk.blue('bundle'),
-          '\n',
-        ];
+          const incompatibleArchitectureMessage = [
+            '\n',
+            chalk.bold.red('AppMap Installation Error!'),
+            '',
+            'Please run the following command in your terminal, then re-run the installer:',
+            '',
+            chalk.blue('bundle'),
+            '\n',
+          ];
 
-        Telemetry.sendEvent({
-          name: 'install-agent:architecture-mismatch-error',
-          properties: {
-            error: error?.message,
-            directory: this.path,
-            installer: this.installer.name,
-          },
-        });
+          Telemetry.sendEvent({
+            name: 'install-agent:architecture-mismatch-error',
+            properties: {
+              error: error?.message,
+              directory: this.path,
+              installer: this.installer.name,
+            },
+          });
 
-        UI.error(incompatibleArchitectureMessage.join('\n'));
+          UI.error(incompatibleArchitectureMessage.join('\n'));
+        } else if (error?.message.includes('without the test and development groups')) {
+          const bundlerConfigErrorMessage = [
+            '\n',
+            chalk.bold.red('AppMap Installation Error!'),
+            '',
+            'Please ensure that bundler installs either the development group,',
+            'the test group, or both. We suggest running the following command',
+            'in your terminal and then re-running the installer:',
+            '',
+            chalk.blue('bundle install --with development'),
+            '\n',
+            'For more information, see the bundler docs: ' +
+              'https://bundler.io/man/bundle-install.1.html',
+            '',
+          ];
+
+          Telemetry.sendEvent({
+            name: 'install-agent:bundler-config-error',
+            properties: {
+              error: error?.message,
+              directory: this.path,
+              installer: this.installer.name,
+            },
+          });
+
+          UI.error(bundlerConfigErrorMessage.join('\n'));
+        } else {
+          throw e;
+        }
       } else {
         throw e;
       }
