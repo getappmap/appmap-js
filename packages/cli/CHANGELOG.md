@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.44.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.44.1...@appland/appmap-v3.44.2) (2022-10-10)
+
+
+### Bug Fixes
+
+* fix broken CLI tests ([92c6372](https://github.com/getappmap/appmap-js/commit/92c637206dc8edaa61c4542a217d66a932364455))
+
 # [@appland/appmap-v3.44.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.44.0...@appland/appmap-v3.44.1) (2022-10-10)
 
 
