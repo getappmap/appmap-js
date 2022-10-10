@@ -1052,6 +1052,51 @@ packages:
     });
   });
 
+  describe('when appmap-agent-validate returns an invalid schema', () => {
+    it('does not crash when the config syntax is invalid', async () => {
+      // all this is mostly the same as beforeEach of 'returns a schema'
+      const installer = new BundleInstaller('.');
+
+      sinon.stub(ProjectConfiguration, 'getProjects').resolves([
+        {
+          path: projectDir,
+          name: 'test',
+          availableInstallers: [installer],
+          selectedInstaller: installer,
+        },
+      ]);
+
+      sinon.stub(installer, 'environment').resolves({});
+
+      sinon.stub(inquirer, 'prompt').resolves({
+        installerName: 'ruby',
+        confirm: true,
+        overwriteAppMapYml: 'Use existing',
+      });
+
+      sinon.stub(BundleInstaller.prototype, 'checkCurrentConfig').resolves();
+      sinon.stub(BundleInstaller.prototype, 'installAgent').resolves();
+
+      sinon.stub(AgentInstallerProcedure.prototype, 'configExists').value(true);
+      sinon.stub(AgentInstallerProcedure.prototype, 'loadConfig').returns({});
+
+      // NOTE: stdout produced invalid JSON
+      sinon
+        .stub(AgentInstallerProcedure.prototype, 'validateAgent')
+        .resolves({ stdout: '[ }', stderr: '' });
+
+      const uiError = sinon
+        .stub(UI, 'error')
+        .withArgs('Failed to validate the installation.')
+        .resolves();
+
+      const validateConfig = sinon.stub(validator, 'validateConfig').returns({ valid: true });
+
+      await invokeCommand(projectDir, () => {});
+      expect(uiError).toBeCalled();
+    });
+  });
+
   describe('Multi-project install flow', () => {
     let expectedStubs;
 
