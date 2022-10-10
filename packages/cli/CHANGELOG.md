@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.44.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.44.0...@appland/appmap-v3.44.1) (2022-10-10)
+
+
+### Bug Fixes
+
+* More reliable polling in index --watch ([8b6d18d](https://github.com/getappmap/appmap-js/commit/8b6d18de00aa61c5f7308b00e902ec6a18e09a59))
+
 # [@appland/appmap-v3.44.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.43.2...@appland/appmap-v3.44.0) (2022-10-07)
 
 
