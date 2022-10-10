@@ -1,10 +1,11 @@
-const { utimesSync } = require('fs');
-const { join } = require('path');
-const tmp = require('tmp');
-const fs = require('fs-extra');
-const Depends = require('../../src/depends');
-const Fingerprinter = require('../../src/fingerprint/fingerprinter');
-const { listAppMapFiles, verbose } = require('../../src/utils');
+import { utimesSync } from 'fs';
+import { join } from 'path';
+import tmp from 'tmp';
+import fs from 'fs-extra';
+
+import Fingerprinter from '../../src/fingerprint/fingerprinter';
+import Depends from '../../src/depends';
+import { listAppMapFiles, verbose } from '../../src/utils';
 
 if (process.env.DEBUG !== 'true') tmp.setGracefulCleanup();
 
@@ -32,7 +33,7 @@ describe('Depends', () => {
   test('indicates when no dependency is modified', async () => {
     const fn = new Depends(appMapDir);
     fn.baseDir = join(appMapDir, 'app');
-    const depends = await fn.depends();
+    const depends = await fn.depends(() => {});
     expect(depends).toEqual([]);
   });
 
@@ -42,19 +43,19 @@ describe('Depends', () => {
 
     const fn = new Depends(appMapDir);
     fn.baseDir = appMapDir;
-    const depends = await fn.depends();
+    const depends = await fn.depends(() => {});
     expect(depends).toEqual([join(appMapDir, 'user_page_scenario')]);
   });
 
   test('indicates dependencies in an explicit list', async () => {
     const fn = new Depends(appMapDir);
     fn.files = ['app/models/user.rb'];
-    const depends = await fn.depends();
+    const depends = await fn.depends(() => {});
     expect(depends).toEqual([join(appMapDir, 'user_page_scenario')]);
   });
 
   test('AppMaps will be yielded to a callback function', async () => {
-    const result = [];
+    const result: any[] = [];
     const fn = new Depends(appMapDir);
     fn.files = ['app/models/user.rb'];
     await fn.depends((file) => result.push(file));

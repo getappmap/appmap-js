@@ -2,20 +2,8 @@ import { AbortError, ValidationError } from './errors';
 import { verbose } from '../utils';
 import UI from './userInteraction';
 import chalk from 'chalk';
-import Yargs, { command } from 'yargs';
 import { ExitCode } from './record/types/exitCode';
 import Telemetry from '../telemetry';
-
-async function invokeCommand() {}
-
-function flushTelemetry(exitCode: ExitCode, err?: Error) {
-  Telemetry.flush(() => {
-    // @types/yargs defines:
-    //   exit(code: number, err: Error): void;
-    // but in the implementation, err appears to be optional.
-    Yargs.exit(exitCode, err as any);
-  });
-}
 
 export default async function runCommand(
   commandPrefix: string,
@@ -28,7 +16,7 @@ export default async function runCommand(
       name: `${commandPrefix}:exit-ok`,
     });
 
-    flushTelemetry(0);
+    process.exitCode = 0;
     return ret;
   } catch (err) {
     if (err instanceof ValidationError) {
@@ -41,7 +29,7 @@ export default async function runCommand(
         },
       });
 
-      return flushTelemetry(ExitCode.Error, err);
+      process.exitCode = ExitCode.Error;
     } else if (err instanceof AbortError) {
       Telemetry.sendEvent({
         name: `${commandPrefix}:abort`,
@@ -50,7 +38,7 @@ export default async function runCommand(
         },
       });
 
-      return flushTelemetry(ExitCode.Quit, err);
+      process.exitCode = ExitCode.Quit;
     } else if (err instanceof Error) {
       Telemetry.sendEvent({
         name: `${commandPrefix}:error`,
@@ -68,7 +56,7 @@ export default async function runCommand(
           `Try re-running the command with the ${chalk.red('verbose')} flag (${chalk.red('-v')}).`
         );
       }
-      flushTelemetry(ExitCode.Error, err);
+      process.exitCode = ExitCode.Error;
     } else {
       // You'll wind up here if the object thrown wasn't an instance of Error. An obvious way this
       // can happen is `throw 'Fail'`. A less obvious way is rejecting a Promise with something
