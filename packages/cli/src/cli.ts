@@ -181,7 +181,7 @@ yargs(process.argv.slice(2))
         alias: 'd',
       });
       args.option('name', {
-        describe: 'indicate a specific AppMap to of compare',
+        describe: 'indicate a specific AppMap to compare',
       });
       args.option('show-diff', {
         describe: 'compute the diff of the canonicalized forms of each changed AppMap',
@@ -198,14 +198,8 @@ yargs(process.argv.slice(2))
       verbose(argv.verbose);
       handleWorkingDirectory(argv.directory);
 
-      let baseDir;
-      let workingDir;
+      let { baseDir, workingDir } = argv;
       const { showDiff } = argv;
-
-      // eslint-disable-next-line prefer-const
-      baseDir = argv.baseDir;
-      // eslint-disable-next-line prefer-const
-      workingDir = argv.workingDir;
 
       if (!baseDir) {
         throw new Error('Location of base version AppMaps is required');

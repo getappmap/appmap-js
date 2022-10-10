@@ -150,5 +150,5 @@ export function formatHttpServerRequest(event: Event): string {
         ? (event.httpServerResponse as any)['status_code'] || event.httpServerResponse.status
         : '<none>',
   };
-  return [ data.method, data.path, `(${data.statusCode})`].join(' '0)
+  return [ data.method, data.path, `(${data.statusCode})`].join(' ')
 }

@@ -1,14 +1,14 @@
+import { mkdir, writeFile } from 'fs/promises';
+import { basename, join } from 'path';
 import yargs from 'yargs';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
+import buildDiagrams from '../../sequenceDiagram/buildDiagrams';
+import mermaid from '../../sequenceDiagram/mermaid';
 import { verbose } from '../../utils';
-import SequenceDiagramGenerator from './generator';
-import printSequenceDiagram from './printMermaid';
-import printText from './printText';
 
 export const command = 'sequence-diagram [code-object...]';
-export const describe =
-  'Generate sequence diagrams for a specified list of code objects';
+export const describe = 'Generate sequence diagrams for a specified list of code objects';
 
 export const builder = (args: yargs.Argv) => {
   args.positional('code-object', {
@@ -45,30 +45,14 @@ export const handler = async (argv: any) => {
     return;
   }
 
-  const diagramSpec = new SequenceDiagramGenerator(
-    process.argv,
-    appmapDir,
-    codeObjectIds
+  const diagrams = (await buildDiagrams(appmapDir, codeObjectIds)).filter(
+    (d) => d.actors.length > 0
   );
-  await diagramSpec.initialize();
-  const graphs = await diagramSpec.generate();
-
-  for (const graph of graphs) {
-    await printSequenceDiagram(
-      argv.outputDir,
-      graph,
-      process.argv,
-      diagramSpec.matchingCodeObjectOfEvent.bind(diagramSpec),
-      diagramSpec.priority.priorityOf.bind(diagramSpec.priority)
-    );
-    await printText(
-      argv.outputDir,
-      graph,
-      process.argv,
-      diagramSpec.matchingCodeObjectOfEvent.bind(diagramSpec),
-      diagramSpec.priority.priorityOf.bind(diagramSpec.priority)
-    );
+  for (const diagram of diagrams) {
+    const template = mermaid(diagram);
+    await mkdir(argv.outputDir, { recursive: true });
+    await writeFile(join(argv.outputDir, [basename(diagram.appmapFile), 'md'].join('.')), template);
   }
 
-  console.log(`Printed ${graphs.length} diagrams`);
+  console.log(`Printed ${diagrams.length} diagrams`);
 };
