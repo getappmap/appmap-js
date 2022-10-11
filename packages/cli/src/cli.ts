@@ -24,7 +24,7 @@ const InventoryCommand = require('./inventoryCommand');
 const OpenCommand = require('./cmds/open/open');
 const InspectCommand = require('./cmds/inspect/inspect');
 const RecordCommand = require('./cmds/record/record');
-const SequenceDiagramCommand = require('./cmds/sequenceDiagram/sequenceDiagram');
+const SequenceDiagramCommand = require('./cmds/sequenceDiagram');
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
 const StatsCommand = require('./cmds/stats/stats');

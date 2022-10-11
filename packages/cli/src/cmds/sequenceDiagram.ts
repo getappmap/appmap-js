@@ -4,7 +4,6 @@ import yargs from 'yargs';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import buildDiagrams from '../sequenceDiagram/buildDiagrams';
-import mermaid from '../sequenceDiagram/mermaid';
 import { verbose } from '../utils';
 
 export const command = 'sequence-diagram [code-object...]';
@@ -29,6 +28,11 @@ export const builder = (args: yargs.Argv) => {
     describe: 'directory in which to save the sequence diagrams',
     default: '.',
   });
+  args.option('format', {
+    describe: 'output format',
+    choices: ['mermaid', 'plantuml'],
+    default: 'mermaid',
+  });
 
   return args.strict();
 };
@@ -45,13 +49,22 @@ export const handler = async (argv: any) => {
     return;
   }
 
+  const formatter = require(`../sequenceDiagram/formatter/${argv.format}`);
+
   const diagrams = (await buildDiagrams(appmapDir, codeObjectIds)).filter(
     (d) => d.actors.length > 0
   );
+
   for (const diagram of diagrams) {
-    const template = mermaid(diagram);
+    const template = formatter.format(diagram);
     await mkdir(argv.outputDir, { recursive: true });
-    await writeFile(join(argv.outputDir, [basename(diagram.appmapFile), 'md'].join('.')), template);
+    await writeFile(
+      join(
+        argv.outputDir,
+        [basename(diagram.appmapFile).split('.')[0], formatter.extension].join('')
+      ),
+      template
+    );
   }
 
   console.log(`Printed ${diagrams.length} diagrams`);

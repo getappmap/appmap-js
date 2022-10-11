@@ -1,22 +1,7 @@
-import { Action, Diagram, isLoop, isRequest, Request, Response } from './types';
+import { Action, Diagram, isLoop, isRequest, Request, Response } from '../types';
 
 const MarkdownDelimiter = '```';
 const DisplayCharLimit = 50;
-
-const DisplayNames = {
-  'http:HTTP server requests': 'Web server',
-};
-
-export function displayName(fqid: string): string {
-  if (DisplayNames[fqid]) return DisplayNames[fqid];
-
-  let tokens = fqid.split(':');
-  tokens.shift();
-  let name = tokens.join(':');
-  if (name.includes('/')) name = name.split('/').pop()!;
-
-  return name;
-}
 
 function encode(str: string): string {
   let printable = str;
@@ -34,7 +19,9 @@ function alias(id: string): string {
   return id.replace(/[^a-zA-Z0-9]/g, '_');
 }
 
-export default function mermaid(diagram: Diagram): string {
+export const extension = '.md';
+
+export function format(diagram: Diagram): string {
   const requestArrow = (message: Request): string => (message.response ? '->>+' : '->>');
   const responseArrow = (_message: Response): string => '-->>';
 
@@ -46,11 +33,11 @@ export default function mermaid(diagram: Diagram): string {
         Array(indent * 2).join(' ') +
           [
             [alias(action.caller.name), alias(action.callee.name)].join(requestArrow(action)),
-            encode(action.name),
+            encode(action.name.split('\n').join(' ')),
           ].join(': ')
       );
 
-      action.children.forEach((child) => renderAction(child, indent + 1));
+      action.children.forEach((child) => renderAction(child, indent));
 
       if (action.response) {
         eventLines.push(
@@ -59,7 +46,7 @@ export default function mermaid(diagram: Diagram): string {
               [alias(action.callee.name), alias(action.caller.name)].join(
                 responseArrow(action.response)
               ),
-              encode(action.response.returnValueType?.name || 'unknown type'),
+              encode(action.response.returnValueType?.name.split('\n').join(' ') || 'unknown type'),
             ].join(': ')
         );
       }

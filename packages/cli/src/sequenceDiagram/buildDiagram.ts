@@ -82,6 +82,8 @@ export default function buildDiagram(
       // indicate static-ness.
       displayName = ['@', pluralize(actorCodeObject.name)].join('');
     } else {
+      // This is an experiment to use separate swim lanes for distinct object instances.
+      /*
       objectId = actorCodeObject.type === 'class' ? event.receiver?.object_id : undefined;
       actorKey = [actorCodeObject.fqid, objectId].filter(Boolean).join('@');
       if (actorNums.get(actorCodeObject.fqid) !== undefined) {
@@ -91,6 +93,9 @@ export default function buildDiagram(
       }
       actorNum = actorNums.get(actorCodeObject.fqid);
       displayName = [actorCodeObject.name, actorNum].filter(Boolean).join(' ');
+      */
+      actorKey = actorCodeObject.fqid;
+      displayName = actorCodeObject.name;
     }
 
     let actor = actorsByCodeObjectId.get(actorKey);
