@@ -13,13 +13,14 @@ export const SET_VIEW = 'setView';
 export const SET_FOCUSED_EVENT = 'setFocusedEvent';
 export const VIEW_COMPONENT = 'viewComponent';
 export const VIEW_FLOW = 'viewFlow';
+export const DEFAULT_VIEW_COMPONENT = VIEW_COMPONENT;
 
 export function buildStore() {
   return new Vuex.Store({
     state: {
       appMap: new AppMap(),
       selectionStack: [],
-      currentView: VIEW_COMPONENT,
+      currentView: DEFAULT_VIEW_COMPONENT,
       selectedLabel: null,
       focusedEvent: null,
     },

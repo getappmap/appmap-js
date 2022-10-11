@@ -8,6 +8,10 @@ describe('VsCodeExtension.vue', () => {
   let wrapper;
   let rootWrapper;
 
+  function serialize(json) {
+    return Buffer.from(JSON.stringify(json), 'utf-8').toString('base64url');
+  }
+
   beforeEach(() => {
     wrapper = mount(VsCodeExtension, {
       stubs: {
@@ -45,7 +49,63 @@ describe('VsCodeExtension.vue', () => {
     expect(wrapper.vm.filters.declutter.hideName.on).toBe(true);
     expect(wrapper.vm.filters.declutter.hideName.names).toContain('package:json');
 
-    expect(wrapper.vm.getState()).toEqual(appState);
+    expect(wrapper.vm.getState()).toEqual(
+      'eyJmaWx0ZXJzIjp7InJvb3RPYmplY3RzIjpbInBhY2thZ2U6YXBwL2NvbnRyb2xsZXJzIl0sImxpbWl0Um9vdEV2ZW50cyI6ZmFsc2UsImhpZGVNZWRpYVJlcXVlc3RzIjpmYWxzZSwiaGlkZVVubGFiZWxlZCI6dHJ1ZSwiaGlkZUVsYXBzZWRUaW1lVW5kZXIiOjEwMCwiaGlkZU5hbWUiOlsicGFja2FnZTpqc29uIl19fQ'
+    );
+  });
+
+  it('default state results in an empty string', () => {
+    expect(wrapper.vm.getState()).toEqual('');
+  });
+
+  it('serializes selectedObject state', async () => {
+    const state = { selectedObject: 'event:44' };
+    await wrapper.vm.setState(JSON.stringify(state));
+    expect(wrapper.vm.selectedObject.toString()).toMatch('User.find_by_id!');
+    expect(wrapper.vm.getState()).toEqual(serialize(state));
+  });
+
+  it('serializes rootObjects state', async () => {
+    const state = { filters: { rootObjects: ['package:app/controllers'] } };
+    await wrapper.vm.setState(JSON.stringify(state));
+    expect(wrapper.vm.filters.declutter.rootObjects).toContain('package:app/controllers');
+    expect(wrapper.vm.getState()).toEqual(serialize(state));
+  });
+
+  it('serializes limitRootEvents state', async () => {
+    const state = { filters: { limitRootEvents: false } };
+    await wrapper.vm.setState(JSON.stringify(state));
+    expect(wrapper.vm.getState()).toEqual(serialize(state));
+  });
+
+  it('serializes hideMediaRequests state', async () => {
+    const state = { filters: { hideMediaRequests: false } };
+    await wrapper.vm.setState(JSON.stringify(state));
+    expect(wrapper.vm.getState()).toEqual(serialize(state));
+  });
+
+  it('serializes hideUnlabeled state', async () => {
+    const state = { filters: { hideUnlabeled: true } };
+    await wrapper.vm.setState(JSON.stringify(state));
+    expect(wrapper.vm.getState()).toEqual(serialize(state));
+  });
+
+  it('serializes hideElapsedTimeUnder state', async () => {
+    const state = { filters: { hideElapsedTimeUnder: 100 } };
+    await wrapper.vm.setState(JSON.stringify(state));
+    expect(wrapper.vm.getState()).toEqual(serialize(state));
+  });
+
+  it('serializes hideName state', async () => {
+    const state = { filters: { hideName: ['package:json', 'class:User'] } };
+    await wrapper.vm.setState(JSON.stringify(state));
+    expect(wrapper.vm.getState()).toEqual(serialize(state));
+  });
+
+  it('accepts a base64 encoded JSON object as state', async () => {
+    const state = serialize({ filters: { hideName: ['package:json', 'class:User'] } });
+    await wrapper.vm.setState(state);
+    expect(wrapper.vm.getState()).toEqual(state);
   });
 
   it('changes views and modifies the trace filter after setState', async () => {

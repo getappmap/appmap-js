@@ -253,6 +253,7 @@
 </template>
 
 <script>
+import { Buffer } from 'buffer';
 import { CodeObjectType, Event, buildAppMap } from '@appland/models';
 import CheckIcon from '@/assets/check.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
@@ -283,7 +284,18 @@ import {
   SELECT_LABEL,
   POP_OBJECT_STACK,
   CLEAR_OBJECT_STACK,
+  DEFAULT_VIEW_COMPONENT,
 } from '../store/vsCode';
+
+function base64UrlEncode(text) {
+  const buffer = Buffer.from(text, 'utf-8');
+  return buffer.toString('base64').replace(/=/g, '').replace(/_/g, '/').replace(/-/g, '+');
+}
+
+function base64UrlDecode(encodedText) {
+  const buffer = Buffer.from(encodedText, 'base64');
+  return buffer.toString('utf-8');
+}
 
 export default {
   name: 'VSCodeExtension',
@@ -738,9 +750,11 @@ export default {
     },
 
     getState() {
-      const state = {
-        currentView: this.currentView,
-      };
+      const state = {};
+
+      if (this.currentView !== DEFAULT_VIEW_COMPONENT) {
+        state.currentView = this.currentView;
+      }
 
       if (this.selectedObject && this.selectedObject.fqid) {
         state.selectedObject = this.selectedObject.fqid;
@@ -754,7 +768,7 @@ export default {
 
       const { declutter } = this.filters;
 
-      state.filters = {
+      state.filters = Object.entries({
         rootObjects: declutter.rootObjects,
         limitRootEvents: declutter.limitRootEvents.on,
         hideMediaRequests: declutter.hideMediaRequests.on,
@@ -763,9 +777,27 @@ export default {
           ? declutter.hideElapsedTimeUnder.time
           : false,
         hideName: declutter.hideName.on ? declutter.hideName.names : false,
-      };
+      }).reduce((memo, [k, v]) => {
+        // This could be cleaned up. The serialized data structure differs from
+        // what we use internally, which causes this to be a bit of a mess.
+        const filter = this.filters.declutter[k];
+        if (Array.isArray(v) && v.length !== 0) {
+          memo[k] = v;
+        } else if (filter && filter.default !== v) {
+          memo[k] = v;
+        }
+        return memo;
+      }, {});
 
-      return JSON.stringify(state);
+      if (Object.keys(state.filters).length === 0) {
+        delete state.filters;
+      }
+
+      if (Object.keys(state).length === 0) {
+        return '';
+      }
+
+      return base64UrlEncode(JSON.stringify(state));
     },
 
     setSelectedObject(fqid) {
@@ -799,90 +831,112 @@ export default {
     },
 
     setState(serializedState) {
-      const state = JSON.parse(serializedState);
-      if (state.selectedObject) {
-        const fqid = state.selectedObject;
-        const [match, type, object] = fqid.match(/^([a-z]+):(.+)/);
-
-        if (!match) {
+      return new Promise((resolve) => {
+        if (!serializedState) {
+          resolve();
           return;
         }
 
-        if (type === 'label') {
-          this.$store.commit(SELECT_LABEL, object);
-          return;
+        let json;
+        const isStringifiedJson = serializedState.trimLeft().startsWith('{');
+        if (isStringifiedJson) {
+          // The old style of deserialization expected a raw stringified JSON object.
+          // To avoid introducing a breaking change, we'll support both for now.
+          json = serializedState;
+        } else {
+          json = base64UrlDecode(serializedState);
         }
 
-        const { classMap, events } = this.filteredAppMap;
-        let selectedObject = null;
+        const state = JSON.parse(json);
+        if (state.selectedObject) {
+          do {
+            const fqid = state.selectedObject;
+            const [match, type, object] = fqid.match(/^([a-z]+):(.+)/);
 
-        if (type === 'event') {
-          const eventId = parseInt(object, 10);
+            if (!match) {
+              break;
+            }
 
-          if (Number.isNaN(eventId)) {
-            return;
-          }
+            if (type === 'label') {
+              this.$store.commit(SELECT_LABEL, object);
+              break;
+            }
 
-          selectedObject = events.find((e) => e.id === eventId);
+            const { classMap, events } = this.filteredAppMap;
+            let selectedObject = null;
 
-          // It's possible that we're trying to select an object that does not exist in the filtered
-          // set. If we're unable to find an object, we'll look for it in the unfiltered set.
-          if (!selectedObject) {
-            selectedObject = this.$store.state.appMap.events.find((e) => e.id === eventId);
+            if (type === 'event') {
+              const eventId = parseInt(object, 10);
+
+              if (Number.isNaN(eventId)) {
+                break;
+              }
+
+              selectedObject = events.find((e) => e.id === eventId);
+
+              // It's possible that we're trying to select an object that does not exist in the filtered
+              // set. If we're unable to find an object, we'll look for it in the unfiltered set.
+              if (!selectedObject) {
+                selectedObject = this.$store.state.appMap.events.find((e) => e.id === eventId);
+
+                if (selectedObject) {
+                  Object.keys(this.filters.declutter).forEach((k) => {
+                    this.filters.declutter[k].on = false;
+                  });
+                }
+              }
+            } else {
+              selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
+            }
 
             if (selectedObject) {
-              Object.keys(this.filters.declutter).forEach((k) => {
-                this.filters.declutter[k].on = false;
-              });
+              this.$store.commit(SELECT_OBJECT, selectedObject);
             }
+          } while (false);
+        }
+
+        const { filters } = state;
+        if (filters) {
+          if ('rootObjects' in filters) {
+            this.filters.declutter.rootObjects = filters.rootObjects;
           }
-        } else {
-          selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
+          if ('limitRootEvents' in filters) {
+            this.filters.declutter.limitRootEvents.on = filters.limitRootEvents;
+          }
+          if ('hideMediaRequests' in filters) {
+            this.filters.declutter.hideMediaRequests.on = filters.hideMediaRequests;
+          }
+          if ('hideUnlabeled' in filters) {
+            this.filters.declutter.hideUnlabeled.on = filters.hideUnlabeled;
+          }
+          if ('hideElapsedTimeUnder' in filters && filters.hideElapsedTimeUnder !== false) {
+            this.filters.declutter.hideElapsedTimeUnder.on = true;
+            this.filters.declutter.hideElapsedTimeUnder.time = filters.hideElapsedTimeUnder;
+          }
+          if ('hideName' in filters && filters.hideName !== false) {
+            this.filters.declutter.hideName.on = true;
+            this.filters.declutter.hideName.names = filters.hideName;
+          }
         }
 
-        if (selectedObject) {
-          this.$store.commit(SELECT_OBJECT, selectedObject);
-        }
-      }
+        this.$nextTick(() => {
+          if (state.currentView) {
+            this.setView(state.currentView);
+          }
 
-      const { filters } = state;
-      if (filters) {
-        if ('rootObjects' in filters) {
-          this.filters.declutter.rootObjects = filters.rootObjects;
-        }
-        if ('limitRootEvents' in filters) {
-          this.filters.declutter.limitRootEvents.on = filters.limitRootEvents;
-        }
-        if ('hideMediaRequests' in filters) {
-          this.filters.declutter.hideMediaRequests.on = filters.hideMediaRequests;
-        }
-        if ('hideUnlabeled' in filters) {
-          this.filters.declutter.hideUnlabeled.on = filters.hideUnlabeled;
-        }
-        if ('hideElapsedTimeUnder' in filters && filters.hideElapsedTimeUnder !== false) {
-          this.filters.declutter.hideElapsedTimeUnder.on = true;
-          this.filters.declutter.hideElapsedTimeUnder.time = filters.hideElapsedTimeUnder;
-        }
-        if ('hideName' in filters && filters.hideName !== false) {
-          this.filters.declutter.hideName.on = true;
-          this.filters.declutter.hideName.names = filters.hideName;
-        }
-      }
+          if (state.traceFilter) {
+            this.$nextTick(() => {
+              if (!state.traceFilter.endsWith(' ')) {
+                state.traceFilter += ' ';
+              }
 
-      this.$nextTick(() => {
-        if (state.currentView) {
-          this.setView(state.currentView);
-        }
-
-        if (state.traceFilter) {
-          this.$nextTick(() => {
-            if (!state.traceFilter.endsWith(' ')) {
-              state.traceFilter += ' ';
-            }
-
-            this.$refs.traceFilter.setValue(state.traceFilter);
-          });
-        }
+              this.$refs.traceFilter.setValue(state.traceFilter);
+              resolve();
+            });
+          } else {
+            resolve();
+          }
+        });
       });
     },
 
