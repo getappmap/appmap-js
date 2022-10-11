@@ -1,3 +1,11 @@
+# [@appland/scanner-v1.71.3](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.2...@appland/scanner-v1.71.3) (2022-10-11)
+
+
+### Bug Fixes
+
+* Handle appmap paths in an OS-agnostic manner in scan --watch ([cc473a8](https://github.com/getappmap/appmap-js/commit/cc473a89c60130b4b518a56b7e50f8617d88dd59))
+* scan --watch works even if the appmap dir doesn't initially exist ([938bb76](https://github.com/getappmap/appmap-js/commit/938bb76d8fd827874731f4cd3258c4b9e0988a35))
+
 # [@appland/scanner-v1.71.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.1...@appland/scanner-v1.71.2) (2022-10-04)
 
 
