@@ -1,3 +1,22 @@
+# [@appland/scanner-v1.71.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.1...@appland/scanner-v1.71.2) (2022-10-04)
+
+
+### Bug Fixes
+
+* Use default configuration timestamp in scan --watch if none provided ([3d246f2](https://github.com/getappmap/appmap-js/commit/3d246f2b350af2dd14a097519ea9af6fe410e543))
+
+# [@appland/scanner-v1.71.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.0...@appland/scanner-v1.71.1) (2022-10-04)
+
+
+### Bug Fixes
+
+* Limit scanning in watcher to two concurrent jobs ([3c3585b](https://github.com/getappmap/appmap-js/commit/3c3585bcca5072e1c48bb4eeafbd36ce9201b44a))
+
+
+### Performance Improvements
+
+* In scan --watch, only rescan if neccessary ([d4f0e5a](https://github.com/getappmap/appmap-js/commit/d4f0e5ae4972b30f260f7caa9e2458c4e99a73e6))
+
 # [@appland/scanner-v1.71.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.70.5...@appland/scanner-v1.71.0) (2022-09-28)
 
 

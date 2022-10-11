@@ -1,3 +1,12 @@
+# [@appland/components-v2.13.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.13.0...@appland/components-v2.13.1) (2022-10-04)
+
+
+### Bug Fixes
+
+* Add a `featureFlags` prop to toggle automatic recording docs in Python ([12c1058](https://github.com/getappmap/appmap-js/commit/12c1058ce0f136d61c51d465c95fd03187c29f03))
+* Hover tooltips will no longer be cut off in the project picker ([4bf770a](https://github.com/getappmap/appmap-js/commit/4bf770a06c106aca4fcac158c9e22c0fafc259f4))
+* Updating the projects prop will no longer deselect an active project ([0da03d6](https://github.com/getappmap/appmap-js/commit/0da03d643635c22491ee4a430d975ace4a4b1046))
+
 # [@appland/components-v2.13.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.12.0...@appland/components-v2.13.0) (2022-10-04)
 
 

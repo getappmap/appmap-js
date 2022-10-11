@@ -1,3 +1,25 @@
+# [@appland/appmap-v3.44.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.43.2...@appland/appmap-v3.44.0) (2022-10-07)
+
+
+### Features
+
+* handle when bundler ignores test and development ([fd3b174](https://github.com/getappmap/appmap-js/commit/fd3b17467f2735261ad39878ba9c36b8b6d22e77))
+
+# [@appland/appmap-v3.43.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.43.1...@appland/appmap-v3.43.2) (2022-10-05)
+
+
+### Bug Fixes
+
+* Fix a panic condition when indexing in watch mode ([2b91924](https://github.com/getappmap/appmap-js/commit/2b91924677820a0a778ecbaf19c10c729f3f9266))
+
+# [@appland/appmap-v3.43.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.43.0...@appland/appmap-v3.43.1) (2022-10-04)
+
+
+### Performance Improvements
+
+* Check if index is up to date based on file mtime ([54ea658](https://github.com/getappmap/appmap-js/commit/54ea658464ced6ce59064216a8e0a5d665da6976))
+* Only check version of fingerprints on the initial pass ([5e2f91d](https://github.com/getappmap/appmap-js/commit/5e2f91d8fdd218f60a56b49ef82e7d65b042e37b))
+
 # [@appland/appmap-v3.43.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.42.0...@appland/appmap-v3.43.0) (2022-09-30)
 
 

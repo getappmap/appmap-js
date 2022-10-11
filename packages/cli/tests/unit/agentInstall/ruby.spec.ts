@@ -51,9 +51,21 @@ describe('Ruby Agent Installation', () => {
         return Promise.resolve({ stdout: '', stderr: '' });
       };
 
+      const checkBundlerConfig = (cmdStruct: CommandStruct) => {
+        expect(cmdStruct.program).toEqual('bundle');
+        expect(cmdStruct.args).toEqual(['config', 'get', 'without']);
+        return Promise.resolve({
+          stdout:
+            'Set for your local app (/home/ahtrotta/projects/land-of-apps/sample_app_6th_ed/.bundle/config): [:test]',
+          stderr: '',
+        });
+      };
+
       let callIdx = 0;
       sinon
         .stub(commandRunner, 'run')
+        .onCall(callIdx++)
+        .callsFake(checkBundlerConfig)
         .onCall(callIdx++)
         .callsFake(bundleInstall);
 

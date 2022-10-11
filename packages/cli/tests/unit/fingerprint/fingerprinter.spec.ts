@@ -21,8 +21,8 @@ describe(Fingerprinter, () => {
     withTempDir(async (dir) => {
       const filePath = path.join(dir, 'too-large.appmap.json');
       const file = await open(filePath, 'w');
-      file.write('{}', 500 * 1000 * 1000);
-      file.close();
+      await file.write('{}', 500 * 1000 * 1000);
+      await file.close();
       const fingerprinter = new Fingerprinter(false);
       await expect(fingerprinter.fingerprint(filePath)).rejects.toThrow(FileTooLargeError);
     })

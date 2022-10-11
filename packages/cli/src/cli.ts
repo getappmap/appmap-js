@@ -17,7 +17,7 @@ const { algorithms, canonicalize } = require('./fingerprint');
 const { verbose, loadAppMap } = require('./utils');
 const appMapCatalog = require('./appMapCatalog');
 const FingerprintDirectoryCommand = require('./fingerprint/fingerprintDirectoryCommand');
-const FingerprintWatchCommand = require('./fingerprint/fingerprintWatchCommand');
+const FingerprintWatchCommand = require('./fingerprint/fingerprintWatchCommand').default;
 const Depends = require('./depends');
 import * as OpenAPICommand from './cmds/openapi';
 const InventoryCommand = require('./inventoryCommand');
@@ -371,7 +371,7 @@ yargs(process.argv.slice(2))
           setInterval(() => {
             readline.cursorTo(process.stdout, consoleLabel.length - 1);
             process.stdout.write(`${cmd.numProcessed}`);
-          }, 200);
+          }, 1000);
 
           process.on('beforeExit', (/* _code */) => {
             process.stdout.write(`\x1B[?25h`);

@@ -5,7 +5,6 @@
     :disabled="!supported"
     class="project-picker-row"
     :open="selected"
-    @toggle="onToggle"
     :data-supported="supported"
   >
     <template #header>
@@ -186,9 +185,6 @@ export default {
     performInstall() {
       this.$root.$emit('perform-install', this.path, this.language && this.language.name);
     },
-    onToggle(isOpen) {
-      if (isOpen) this.$emit('select-project', this.path);
-    },
     featureDescription(feature) {
       if (typeof feature.description === 'function') {
         return feature.description(this);
@@ -234,7 +230,6 @@ $brightblue: rgba(255, 255, 255, 0.1);
 
 .header {
   display: flex;
-  overflow: hidden;
 
   &__title {
     font-size: 1.2rem;
