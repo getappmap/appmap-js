@@ -25,6 +25,7 @@ const OpenCommand = require('./cmds/open/open');
 const InspectCommand = require('./cmds/inspect/inspect');
 const RecordCommand = require('./cmds/record/record');
 const SequenceDiagramCommand = require('./cmds/sequenceDiagram');
+const SequenceDiagramDiffCommand = require('./cmds/sequenceDiagramDiff');
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
 const StatsCommand = require('./cmds/stats/stats');
@@ -431,6 +432,7 @@ yargs(process.argv.slice(2))
   .command(InspectCommand)
   .command(InspectCommand)
   .command(SequenceDiagramCommand)
+  .command(SequenceDiagramDiffCommand)
   .command(PruneCommand)
   .strict()
   .demandCommand()

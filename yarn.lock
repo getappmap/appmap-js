@@ -81,6 +81,7 @@ __metadata:
     "@appland/diagrams": "workspace:*"
     "@appland/models": "workspace:*"
     "@appland/openapi": "workspace:*"
+    "@datastructures-js/priority-queue": ^6.1.3
     "@sidvind/better-ajv-errors": ^0.9.1
     "@types/fs-extra": ^9.0.13
     "@types/inquirer": ^7.3.3
@@ -2233,6 +2234,22 @@ __metadata:
     debug: ^3.1.0
     lodash.once: ^4.1.1
   checksum: 7bdcdaeb1bb692ec9d9bf8ec52538aa0bead6764753f4a067a171a511807a43fab016f7285a56bef6a606c2467ff3f1365e1ad2d2d583b81beed849ee1573fd1
+  languageName: node
+  linkType: hard
+
+"@datastructures-js/heap@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "@datastructures-js/heap@npm:4.1.2"
+  checksum: 7e3b860f2f96dfb6bdb7cb46f7477ea575649f2cff05988d9eacbe46ef3d31f7a58e9bbeaced4f64be01616af9cd5d734d0250a12a40610fe3dd6202ef85f79e
+  languageName: node
+  linkType: hard
+
+"@datastructures-js/priority-queue@npm:^6.1.3":
+  version: 6.1.3
+  resolution: "@datastructures-js/priority-queue@npm:6.1.3"
+  dependencies:
+    "@datastructures-js/heap": ^4.1.2
+  checksum: 518a3c588c5d34c00a053963803cf47b9af0531b6d965ba8bdaa9c25509420fc6b747ad3b63d30412c38c6446b4e07293b6274940fa9305db7a208389bbac51c
   languageName: node
   linkType: hard
 

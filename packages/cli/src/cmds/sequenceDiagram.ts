@@ -30,7 +30,7 @@ export const builder = (args: yargs.Argv) => {
   });
   args.option('format', {
     describe: 'output format',
-    choices: ['mermaid', 'plantuml'],
+    choices: ['mermaid', 'plantuml', 'json'],
     default: 'mermaid',
   });
 
