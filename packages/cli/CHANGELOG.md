@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.44.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.44.2...@appland/appmap-v3.44.3) (2022-10-11)
+
+
+### Bug Fixes
+
+* Don't show a misleading message when test fails with AppMaps ([229356b](https://github.com/getappmap/appmap-js/commit/229356be0210af46e3d4f1da221a77305e686183))
+
 # [@appland/appmap-v3.44.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.44.1...@appland/appmap-v3.44.2) (2022-10-10)
 
 
