@@ -4,21 +4,55 @@ import assert from 'assert';
 import { createHash } from 'crypto';
 import { selectEvents } from './selectEvents';
 import Specification from './specification';
-import {
-  Action,
-  Actor,
-  Diagram,
-  Loop,
-  NodeType,
-  Request,
-  Response,
-  Type,
-} from './types';
+import { Action, Actor, Diagram, Loop, NodeType, Request, Response, Type } from './types';
 
 function pluralize(word: string): string {
   if (word.endsWith('s')) return word;
 
   return [word, 's'].join('');
+}
+
+class MergeWindow {
+  previous: Action[] | undefined;
+  loop: Action[][] = [];
+  digest: string | undefined;
+
+  constructor(public size: number) {}
+
+  initialize(actions: Action[]): void {
+    this.previous = actions.slice(0, this.size);
+    this.loop = [this.previous];
+
+    const hash = createHash('sha256');
+    this.previous.forEach((action) => hash.update(action.detailDigest));
+    this.digest = hash.digest('hex');
+  }
+
+  match(actions: Action[]): boolean {
+    const hash = createHash('sha256');
+    actions.forEach((action) => hash.update(action.detailDigest));
+    const match = this.digest === hash.digest('hex');
+    if (match) {
+      this.loop.push(actions);
+    }
+    return match;
+  }
+
+  collect(newChildren: Action[]): void {
+    if (this.loop.length > 1) {
+      newChildren.push({
+        nodeType: NodeType.Loop,
+        count: this.loop.length,
+        detailDigest: this.digest,
+        children: this.loop[0],
+      } as Loop);
+      this.previous = undefined;
+      this.loop = [];
+      this.digest = undefined;
+    } else if (this.loop.length === 1) {
+      this.loop[0].forEach((action) => newChildren.push(action));
+    }
+  }
 }
 
 export default function buildDiagram(
@@ -169,54 +203,33 @@ export default function buildDiagram(
   rootActions.forEach((root) => rollupChildren(root));
 
   const mergeChildren = (node: Action): void => {
-    const { children } = node;
+    let children = [...node.children];
 
     children.forEach((child) => mergeChildren(child));
 
     if (children.length < 2) return;
 
-    let previous: Action | undefined;
-    let loop: Action[] = [];
-    const newChildren: Action[] = [];
+    let newChildren: Action[] = [];
+    let windowSize = 1;
+    while (windowSize < Math.min(5, children.length / 2)) {
+      const mergeWindow = new MergeWindow(windowSize);
+      mergeWindow.initialize(children);
 
-    const initializeLoop = (node: Action) => {
-      previous = node;
-      loop = [node];
-    };
-
-    const collectLoop = () => {
-      if (loop.length > 1) {
-        newChildren.push({
-          nodeType: NodeType.Loop,
-          count: loop.length,
-          detailDigest: loop[0].detailDigest,
-          children: [loop[0]],
-        } as Loop);
-        previous = undefined;
-        loop = [];
-      } else if (loop.length > 0) {
-        newChildren.push(loop[0]);
-      }
-    };
-
-    initializeLoop(children[0]);
-
-    children.slice(1).forEach((child) => {
-      if (!previous) {
-        previous = child;
-        loop = [child];
-      } else {
-        if (child.detailDigest === previous.detailDigest) {
-          loop.push(child);
-        } else {
-          collectLoop();
-          initializeLoop(child);
+      for (let index = windowSize; index < children.length; index += windowSize) {
+        const nextWindow = children.slice(index, Math.min(children.length, index + windowSize));
+        if (!mergeWindow.match(nextWindow)) {
+          mergeWindow.collect(newChildren);
+          mergeWindow.initialize(nextWindow);
         }
       }
-    });
-    collectLoop();
 
-    node.children = newChildren;
+      mergeWindow.collect(newChildren);
+
+      node.children = [...newChildren];
+      children = newChildren;
+      newChildren = [];
+      windowSize += 1;
+    }
   };
 
   rootActions.forEach((root) => mergeChildren(root));
