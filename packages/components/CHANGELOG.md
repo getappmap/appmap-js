@@ -1,3 +1,10 @@
+# [@appland/components-v2.14.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.13.1...@appland/components-v2.14.0) (2022-10-11)
+
+
+### Features
+
+* update appmap share button ([b2a3b91](https://github.com/getappmap/appmap-js/commit/b2a3b91da060e5b792edd792e543ca8805da6b1a))
+
 # [@appland/components-v2.13.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.13.0...@appland/components-v2.13.1) (2022-10-04)
 
 
