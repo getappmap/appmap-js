@@ -1,11 +1,11 @@
 import { mkdir, writeFile } from 'fs/promises';
 import { basename, join } from 'path';
 import yargs from 'yargs';
-import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
-import { locateAppMapDir } from '../../lib/locateAppMapDir';
-import buildDiagrams from '../../sequenceDiagram/buildDiagrams';
-import mermaid from '../../sequenceDiagram/mermaid';
-import { verbose } from '../../utils';
+import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
+import { locateAppMapDir } from '../lib/locateAppMapDir';
+import buildDiagrams from '../sequenceDiagram/buildDiagrams';
+import mermaid from '../sequenceDiagram/mermaid';
+import { verbose } from '../utils';
 
 export const command = 'sequence-diagram [code-object...]';
 export const describe = 'Generate sequence diagrams for a specified list of code objects';
