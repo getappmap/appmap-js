@@ -1,4 +1,4 @@
-import { Diagram, isRequest, isResponse, Request, Response, Type } from './types';
+import { Action, Diagram, isLoop, isRequest, Request, Response } from './types';
 
 const MarkdownDelimiter = '```';
 const DisplayCharLimit = 50;
@@ -39,23 +39,40 @@ export default function mermaid(diagram: Diagram): string {
   const responseArrow = (_message: Response): string => '-->>';
 
   const eventLines: string[] = [];
-  diagram.messages.forEach((message) => {
-    let line: string | undefined;
-    if (isRequest(message)) {
-      const arrow = requestArrow(message);
-      line = [
-        [alias(message.caller.name), alias(message.callee.name)].join(arrow),
-        encode(message.name),
-      ].join(': ');
-    } else if (isResponse(message)) {
-      const arrow = responseArrow(message);
-      line = [
-        [alias(message.request.callee.name), alias(message.request.caller.name)].join(arrow),
-        encode(message.returnValueType?.name || 'unknown type'),
-      ].join(': ');
+
+  const renderAction = (action: Action, indent = 1): void => {
+    if (isRequest(action)) {
+      eventLines.push(
+        Array(indent * 2).join(' ') +
+          [
+            [alias(action.caller.name), alias(action.callee.name)].join(requestArrow(action)),
+            encode(action.name),
+          ].join(': ')
+      );
+
+      action.children.forEach((child) => renderAction(child, indent + 1));
+
+      if (action.response) {
+        eventLines.push(
+          Array(indent * 2).join(' ') +
+            [
+              [alias(action.callee.name), alias(action.caller.name)].join(
+                responseArrow(action.response)
+              ),
+              encode(action.response.returnValueType?.name || 'unknown type'),
+            ].join(': ')
+        );
+      }
+    } else if (isLoop(action)) {
+      eventLines.push(Array(indent * 2).join(' ') + `Loop ${action.count} times`);
+
+      action.children.forEach((child) => renderAction(child, indent + 1));
+
+      eventLines.push(Array(indent * 2).join(' ') + `End`);
     }
-    if (line) eventLines.push(line);
-  });
+  };
+
+  diagram.rootActions.forEach((action) => renderAction(action));
 
   return `${MarkdownDelimiter}mermaid
 %% AppMap: ${diagram.appmapFile}

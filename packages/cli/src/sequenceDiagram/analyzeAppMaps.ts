@@ -2,26 +2,20 @@ import FindCodeObjects from '../search/findCodeObjects';
 import { CodeObject } from '../search/types';
 import { processFiles } from '../utils';
 import Priority from './priority';
+import Specification from './specification';
 
 type CodeObjectId = string;
-
-export type SequenceDiagramMetadata = {
-  appmaps: string[];
-  priority: Priority;
-  matchingCodeObjectIds: Set<CodeObjectId>;
-  requiredCodeObjectIds: Set<CodeObjectId>;
-};
 
 export default async function analyzeAppMaps(
   appmapDir: string,
   codeObjectPatterns: string[]
-): Promise<SequenceDiagramMetadata> {
+): Promise<Specification> {
   const requiredPatterns = new Set<string>();
   const uniquePatterns = new Set<string>();
 
   const priority = new Priority();
   const requiredCodeObjectIds = new Set<CodeObjectId>();
-  const matchingCodeObjectIds = new Set<CodeObjectId>();
+  const includedCodeObjectIds = new Set<CodeObjectId>();
 
   const interpretCodeObjectPattern = (pattern: string) => {
     if (pattern.charAt(0) === '+') {
@@ -33,16 +27,12 @@ export default async function analyzeAppMaps(
     priority.enrollPattern(pattern);
   };
 
-  const collectCodeObjects = (codeObjectIds: Set<CodeObjectId>, codeObject: CodeObject): void => {
-    if (codeObjectIds.has(codeObject.fqid)) return;
-
+  const collectCodeObject = (codeObjectIds: Set<CodeObjectId>, codeObject: CodeObject): void => {
     codeObjectIds.add(codeObject.fqid);
-    if (codeObject.children)
-      codeObject.children.forEach((child) => collectCodeObjects(codeObjectIds, child));
   };
 
   codeObjectPatterns.forEach(interpretCodeObjectPattern);
-  const appmaps = new Set();
+  const appmaps = new Set<string>();
 
   // Match non-required patterns
   await Promise.all(
@@ -52,8 +42,8 @@ export default async function analyzeAppMaps(
         const matches = await new FindCodeObjects(appmapDir, codeObjectPattern).find();
         const codeObjectIds = new Set<CodeObjectId>();
         matches.forEach((match) => {
-          collectCodeObjects(matchingCodeObjectIds, match.codeObject);
-          collectCodeObjects(codeObjectIds, match.codeObject);
+          collectCodeObject(includedCodeObjectIds, match.codeObject);
+          collectCodeObject(codeObjectIds, match.codeObject);
         });
         priority.expandPattern(codeObjectPattern, [...codeObjectIds]);
       })
@@ -69,9 +59,9 @@ export default async function analyzeAppMaps(
         const appmaps = new Set<string>();
         matches.forEach((match) => {
           appmaps.add(match.appmap);
-          collectCodeObjects(matchingCodeObjectIds, match.codeObject);
-          collectCodeObjects(requiredCodeObjectIds, match.codeObject);
-          collectCodeObjects(codeObjectIds, match.codeObject);
+          collectCodeObject(includedCodeObjectIds, match.codeObject);
+          collectCodeObject(requiredCodeObjectIds, match.codeObject);
+          collectCodeObject(codeObjectIds, match.codeObject);
         });
         priority.expandPattern(codeObjectPattern, Array.from(codeObjectIds));
         return appmaps;
@@ -94,10 +84,10 @@ export default async function analyzeAppMaps(
     });
   }
 
-  return {
-    appmaps: [...appmaps].sort(),
+  return new Specification(
+    [...appmaps].sort(),
     priority,
-    matchingCodeObjectIds,
-    requiredCodeObjectIds,
-  } as SequenceDiagramMetadata;
+    includedCodeObjectIds,
+    requiredCodeObjectIds
+  );
 }

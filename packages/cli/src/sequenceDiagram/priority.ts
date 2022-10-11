@@ -1,3 +1,5 @@
+import { CodeObject } from '../search/types';
+
 const MAX_PRIORITY = 1000;
 
 export default class Priority {
@@ -20,17 +22,19 @@ export default class Priority {
       return;
     }
 
-    codeObjectIds.forEach((id) =>
-      this.priorityByCodeObjectId.set(id, priority)
-    );
+    codeObjectIds.forEach((id) => this.priorityByCodeObjectId.set(id, priority));
   }
 
-  priorityOf(codeObjectId: string): number {
-    const priority = this.priorityByCodeObjectId.get(codeObjectId);
-    if (priority === undefined) {
-      console.log(`No priority for code object ${codeObjectId}`);
-      return MAX_PRIORITY;
+  priorityOf(codeObject: CodeObject): number {
+    let co: CodeObject | undefined = codeObject;
+    while (co) {
+      const priority = this.priorityByCodeObjectId.get(co.fqid);
+      if (priority !== undefined) return priority;
+
+      co = co.parent;
     }
-    return priority;
+
+    console.log(`No priority for code object ${codeObject.fqid}`);
+    return MAX_PRIORITY;
   }
 }

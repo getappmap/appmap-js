@@ -9,23 +9,15 @@ export default async function buildDiagrams(
   appmapDir: string,
   codeObjectPatterns: string[]
 ): Promise<Diagram[]> {
-  const metadata = await analyzeAppMaps(appmapDir, codeObjectPatterns);
+  const specification = await analyzeAppMaps(appmapDir, codeObjectPatterns);
   const diagrams: Diagram[] = [];
 
   const diagramQueue = queue(async (appmapFile: string) => {
     const appmapData = JSON.parse(await readFile([appmapFile, 'appmap.json'].join('.'), 'utf-8'));
     const appmap = buildAppMap().source(appmapData).build();
-    diagrams.push(
-      buildDiagram(
-        [appmapFile, 'appmap.json'].join('.'),
-        appmap,
-        metadata.priority,
-        metadata.matchingCodeObjectIds,
-        metadata.requiredCodeObjectIds
-      )
-    );
+    diagrams.push(buildDiagram([appmapFile, 'appmap.json'].join('.'), appmap, specification));
   }, 5);
-  for (const appmap of metadata.appmaps) diagramQueue.push(appmap);
+  for (const appmap of specification.appmaps) diagramQueue.push(appmap);
   diagramQueue.error((err) => console.warn(err));
   await diagramQueue.drain();
 

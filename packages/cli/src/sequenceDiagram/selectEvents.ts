@@ -1,25 +1,22 @@
 import assert from 'assert';
 import { AppMap, Event } from '@appland/models';
+import Specification from './specification';
 
 type EventFilter = (event: Event) => boolean;
 
-export function selectEvents(
-  appmap: AppMap,
-  includedCodeObjectIds: Set<string>,
-  requiredCodeObjectIds: Set<string>
-): Event[] {
+export function selectEvents(appmap: AppMap, specification: Specification): Event[] {
   const isIncludedCodeObject: EventFilter = (event: Event) =>
-    includedCodeObjectIds.has(event.codeObject.fqid);
+    !!specification.isIncludedCodeObject(event.codeObject);
 
   const hasRequiredCodeObjectAncestor = (): EventFilter => {
-    assert(requiredCodeObjectIds.size > 0, 'Expecting at least one required code object id');
+    assert(specification.hasRequiredCodeObjects, 'Expecting at least one required code object id');
 
     const stack: Event[] = [];
     let numberOfRequiredCodeObjectsInStack = 0;
     const includedStackEvents = new Set<Event>();
     appmap.events.forEach((event: Event) => {
       if (event.isCall()) {
-        if (requiredCodeObjectIds.has(event.codeObject.fqid)) {
+        if (specification.isRequiredCodeObject(event.codeObject)) {
           if (numberOfRequiredCodeObjectsInStack === 0) {
             // Mark ancestors as included
             stack.forEach((event) => includedStackEvents.add(event));
@@ -33,7 +30,7 @@ export function selectEvents(
         stack.push(event);
       } else {
         stack.pop();
-        if (requiredCodeObjectIds.has(event.codeObject.fqid)) {
+        if (specification.isRequiredCodeObject(event.codeObject)) {
           numberOfRequiredCodeObjectsInStack -= 1;
         }
       }
@@ -47,7 +44,7 @@ export function selectEvents(
 
   // Event stack must include at least one required code object id, unless
   // none are required.
-  if (requiredCodeObjectIds.size > 0) {
+  if (specification.hasRequiredCodeObjects) {
     includedEvents = includedEvents.filter(hasRequiredCodeObjectAncestor());
   }
 

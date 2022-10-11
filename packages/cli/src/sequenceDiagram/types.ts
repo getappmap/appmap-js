@@ -7,21 +7,20 @@ export type Actor = {
 
 export enum NodeType {
   Loop,
-  Group,
   Request,
-  Response,
 }
+
+export type Action = Loop | Request;
 
 export type Node = {
   nodeType: NodeType;
+  detailDigest: string;
+  children: Action[];
 };
 
 export type Loop = Node & {
+  nodeType: NodeType.Loop;
   count: number;
-};
-
-export type Group = Node & {
-  labels: string[];
 };
 
 export type Type = {
@@ -31,36 +30,28 @@ export type Type = {
 
 export type Message = Node & {};
 
-export type Request = Message & {
-  nodeType: NodeType.Request;
-  caller: Actor;
-  callee: Actor;
-  name: string;
-  stableProperties: Record<string, string | number>;
-  response?: Response;
-};
+export type Request = Message &
+  Node & {
+    nodeType: NodeType.Request;
+    caller: Actor;
+    callee: Actor;
+    name: string;
+    stableProperties: Record<string, string | number>;
+    response?: Response;
+  };
 
-export type Response = Message & {
-  nodeType: NodeType.Response;
-  request: Request;
+export type Response = {
   returnValueType?: Type;
   raisesException: boolean;
 };
 
-export const isLoop = (edge: Loop | Group | Request | Response): edge is Loop =>
-  edge.nodeType === NodeType.Loop;
+export const isLoop = (action: Action): action is Loop => action.nodeType === NodeType.Loop;
 
-export const isGroup = (edge: Loop | Group | Request | Response): edge is Group =>
-  edge.nodeType === NodeType.Group;
-
-export const isRequest = (edge: Loop | Group | Request | Response): edge is Request =>
-  edge.nodeType === NodeType.Request;
-
-export const isResponse = (edge: Loop | Group | Request | Response): edge is Response =>
-  edge.nodeType === NodeType.Response;
+export const isRequest = (action: Action): action is Request =>
+  action.nodeType === NodeType.Request;
 
 export type Diagram = {
   appmapFile: string;
   actors: Actor[];
-  messages: (Loop | Group | Request | Response)[];
+  rootActions: Action[];
 };
