@@ -31,8 +31,21 @@ const URLLoader = (protocol: Pick<typeof http, 'get'>) => {
   };
 };
 
+function startsWithDriveLetter(urlPathName: string): boolean {
+  return /^\/[a-zA-Z]\:/.test(urlPathName);
+}
+
 const FileLoader = (url: URL): Promise<Buffer> => {
-  return readFile(url.pathname);
+  let path = url.pathname;
+
+  // if a URL is generated from a file path starting with a drive letter
+  // then the pathname is generated incorrectly (e.g. '/C:/Users/...')
+  // so this strips the leading backslash (e.g. 'C:/Users/...')
+  if (startsWithDriveLetter(url.pathname)) {
+    path = url.pathname.slice(1);
+  }
+
+  return readFile(path);
 };
 
 const ProtocolLoader: Record<string, Loader> = {

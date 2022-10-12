@@ -7,7 +7,12 @@ export default function parseRuleDescription(id: string): string {
 
   if (!fs.existsSync(docPath)) return `No doc exists for rule ${id}`;
 
-  const content = fs.readFileSync(docPath, 'utf-8');
+  let content = fs.readFileSync(docPath, 'utf-8');
+
+  // replace carriage return with newline in windows
+  if (process.platform === 'win32') {
+    content = content.replace(/\r\n/g, '\n');
+  }
   const propertiesContent = content.match(/---\n((?:.*\n)+)---\n((?:.*\n)+?)##?#?/);
 
   if (!propertiesContent) {
