@@ -1,3 +1,10 @@
+# [@appland/components-v2.15.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.14.0...@appland/components-v2.15.0) (2022-10-12)
+
+
+### Features
+
+* State serialization now ignores defaults and is Base64URL encoded ([4326d05](https://github.com/getappmap/appmap-js/commit/4326d05f8ca1e6de0e5f2ffcd068bd159135b320))
+
 # [@appland/components-v2.14.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.13.1...@appland/components-v2.14.0) (2022-10-11)
 
 
