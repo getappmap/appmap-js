@@ -1,3 +1,10 @@
+# [@appland/client-v1.5.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.4.0...@appland/client-v1.5.0) (2022-10-12)
+
+
+### Features
+
+* Add `public` flag to create AppMap ([881d472](https://github.com/getappmap/appmap-js/commit/881d472d11f077f057745ef8ffaf9566370c1858))
+
 # [@appland/client-v1.4.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.3.1...@appland/client-v1.4.0) (2022-09-28)
 
 
