@@ -2,6 +2,7 @@ import assert from 'assert';
 import { MinPriorityQueue } from '@datastructures-js/priority-queue';
 import { Action, Diagram } from './types';
 import { inspect } from 'util';
+import { verbose } from '../utils';
 
 type ActionIndex = number;
 
@@ -138,22 +139,24 @@ export default function diff(l_diagram: Diagram, r_diagram: Diagram): string[] {
       const newState = move(state);
       const moveCost = stateCost(newState);
       const totalCost = distances.get(stateKey(state))! + moveCost;
-      console.log(`Trying ${inspect(newState)}, cost = ${totalCost}`);
+      if (verbose()) console.log(`Trying ${inspect(newState)}, cost = ${totalCost}`);
       if (
         distances.get(stateKey(newState)) === undefined ||
         totalCost < distances.get(stateKey(newState))!
       ) {
-        console.log(
-          moveType(newState.move) +
-            ` from ${(l_actions[state.l_node] as any)?.name}, ${
-              (r_actions[state.r_node] as any)?.name
-            } to ${(l_actions[newState.l_node] as any)?.name}, ${
-              (r_actions[newState.r_node] as any)?.name
-            }`
-        );
-        console.log(
-          `Min cost to ${stateKey(newState)} is ${totalCost} via ${moveType(newState.move)}`
-        );
+        if (verbose()) {
+          console.log(
+            moveType(newState.move) +
+              ` from ${(l_actions[state.l_node] as any)?.name}, ${
+                (r_actions[state.r_node] as any)?.name
+              } to ${(l_actions[newState.l_node] as any)?.name}, ${
+                (r_actions[newState.r_node] as any)?.name
+              }`
+          );
+          console.log(
+            `Min cost to ${stateKey(newState)} is ${totalCost} via ${moveType(newState.move)}`
+          );
+        }
         distances.set(stateKey(newState), totalCost);
         stateMoves.set(stateKey(newState), newState.move);
         statePreceding.set(stateKey(newState), stateKey(state));

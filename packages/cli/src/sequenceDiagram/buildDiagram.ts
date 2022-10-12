@@ -4,7 +4,17 @@ import assert from 'assert';
 import { createHash } from 'crypto';
 import { selectEvents } from './selectEvents';
 import Specification from './specification';
-import { Action, Actor, Diagram, Loop, NodeType, Request, Response, Type } from './types';
+import {
+  Action,
+  Actor,
+  Diagram,
+  Loop,
+  NodeType,
+  Request,
+  Response,
+  Type,
+  WebRequest,
+} from './types';
 
 function pluralize(word: string): string {
   if (word.endsWith('s')) return word;
@@ -71,8 +81,6 @@ export default function buildDiagram(
     const actorCodeObject = specification.isIncludedCodeObject(event.codeObject);
     assert(actorCodeObject, 'actor code object');
 
-    let actorNum: number | undefined;
-    let objectId: number | undefined;
     let actorKey: string;
     let displayName: string;
     const isStatic = event.codeObject.static;
@@ -112,16 +120,28 @@ export default function buildDiagram(
     return actor;
   };
 
-  function buildRequest(caller: Event, callee: Event): Request {
-    return {
-      nodeType: NodeType.Request,
-      caller: findOrCreateActor(caller),
-      callee: findOrCreateActor(callee),
-      name: callee.codeObject.name,
-      detailDigest: callee.hash,
-      stableProperties: { ...callee.stableProperties },
-      children: [],
-    };
+  function buildRequest(caller: Event | undefined, callee: Event): Action | undefined {
+    if (callee.httpServerRequest) {
+      return {
+        nodeType: NodeType.WebRequest,
+        callee: findOrCreateActor(callee),
+        route: callee.route,
+        status: callee.httpServerResponse?.status,
+        detailDigest: callee.hash,
+        children: [],
+      } as WebRequest;
+    } else if (caller && callee) {
+      return {
+        nodeType: NodeType.Request,
+        caller: findOrCreateActor(caller),
+        callee: findOrCreateActor(callee),
+        name: callee.codeObject.name,
+        detailDigest: callee.hash,
+        stableProperties: { ...callee.stableProperties },
+        response: buildResponse(callee),
+        children: [],
+      } as Request;
+    }
   }
 
   function buildResponse(callee: Event): Response | undefined {
@@ -156,8 +176,8 @@ export default function buildDiagram(
 
   const codeObjectIds = new Set<string>();
   const codeObjectSequence = new Map<string, number>();
-  const requestStack: Request[] = [];
-  const rootActions: Request[] = [];
+  const requestStack: (Action | undefined)[] = [];
+  const rootActions: Action[] = [];
   const eventStack: Event[] = [];
   const allMessages = new Array<Action>();
   events.forEach((event: Event) => {
@@ -167,25 +187,20 @@ export default function buildDiagram(
     }
     if (event.isCall()) {
       eventStack.push(event);
-      if (eventStack.length >= 2) {
-        const caller = eventStack[eventStack.length - 2];
-        const request = buildRequest(caller, event);
-        if (requestStack.length === 0) {
-          rootActions.push(request);
+      const caller = eventStack[eventStack.length - 2];
+      const request = buildRequest(caller, event);
+      if (request) {
+        const parent = requestStack[requestStack.length - 1];
+        if (parent) {
+          parent.children.push(request);
         } else {
-          requestStack[requestStack.length - 1].children.push(request);
+          rootActions.push(request);
         }
         allMessages.push(request);
-        requestStack.push(request);
       }
+      requestStack.push(request);
     } else {
-      if (eventStack.length >= 2) {
-        const request = requestStack[requestStack.length - 1];
-        assert(request, 'request');
-        const response = buildResponse(event);
-        if (response) request.response = response;
-        requestStack.pop();
-      }
+      requestStack.pop();
       eventStack.pop();
     }
   });
