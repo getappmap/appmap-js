@@ -13,6 +13,7 @@ interface TestOptions {
   data?: Buffer;
   app?: string;
   metadata?: Metadata;
+  public?: boolean;
   requestBodyHandler?: (body: RequestBodyMatcher) => boolean;
 }
 
@@ -21,6 +22,7 @@ async function createAppMap(options: TestOptions): Promise<void> {
   const createOptions = {
     app: options.app || test.AppId,
     metadata: options.metadata,
+    public: options.public,
   };
 
   nock('http://localhost:3000')
@@ -53,6 +55,18 @@ describe('appMap', () => {
         requestBodyHandler(body: RequestBodyMatcher) {
           expect(body).toMatch(/Content-Disposition: form-data; name="data"/);
           expect(body).not.toMatch(/Content-Disposition: form-data; name="metadata"/);
+          expect(body).not.toMatch(/Content-Disposition: form-data; name="link_sharing"/);
+          return true;
+        },
+      });
+    });
+
+    it('succeeds with the public flag on', async () => {
+      await createAppMap({
+        public: true,
+        requestBodyHandler(body: RequestBodyMatcher) {
+          expect(body).toMatch(/Content-Disposition: form-data; name="data"/);
+          expect(body).toMatch(/Content-Disposition: form-data; name="link_sharing"/);
           return true;
         },
       });
