@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.44.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.44.3...@appland/appmap-v3.44.4) (2022-10-12)
+
+
+### Bug Fixes
+
+* Don't fail if there were no testcases in Ruby. ([cdedf6e](https://github.com/getappmap/appmap-js/commit/cdedf6ed82f866f4f4b2a6518f6307abbbadaf46))
+
 # [@appland/appmap-v3.44.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.44.2...@appland/appmap-v3.44.3) (2022-10-11)
 
 
