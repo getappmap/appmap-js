@@ -33,6 +33,7 @@ export type UploadCreateAppMapResponse = {
 export type CreateAppMapOptions = {
   app?: string;
   metadata?: MetadataDataType;
+  public?: boolean;
 };
 
 type PerformUploadOptions = {
@@ -91,6 +92,9 @@ export default class AppMap {
       }
       if (options.app) {
         form.append('app', options.app);
+      }
+      if (options.public) {
+        form.append('link_sharing', 'true');
       }
       const request = await buildRequest(performOptions.path, performOptions.requireApiKey);
       return new Promise<IncomingMessage>((resolve, reject) => {
