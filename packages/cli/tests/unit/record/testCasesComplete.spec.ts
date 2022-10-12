@@ -41,6 +41,23 @@ describe('testCasesComplete', () => {
       expect(warn).toBeCalledWithMatch(/AppMaps/);
     });
 
+    it("is not a failure if 'No examples found.' from rspec", async () => {
+      sinon.stub(rc, 'output').value([
+        `No examples found.
+
+
+Finished in 0.00025 seconds (files took 0.03966 seconds to load)
+0 examples, 0 failures
+
+`,
+      ]);
+      sinon.stub(rc, 'failures').value(1);
+
+      await testCasesComplete(rc);
+
+      expect(openTicketStub).not.toBeCalled();
+    });
+
     it('does not show a misleading message when failed run produces appmaps', async () => {
       const warn = sinon.stub(UI, 'warn');
 
