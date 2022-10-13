@@ -28,8 +28,8 @@ context('Investigate Findings (10 findings)', () => {
     cy.get('[data-cy="back-button"]').should('be.visible');
   });
 
-  it('does not show Slack signup button', () => {
-    cy.get('[data-cy="slack-button"]').should('not.exist');
+  it('does not show AppMap signup button', () => {
+    cy.get('[data-cy="auth-button"]').should('not.exist');
   });
 
   it('does not show runtime analysis info', () => {
