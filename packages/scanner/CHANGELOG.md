@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.71.4](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.3...@appland/scanner-v1.71.4) (2022-10-13)
+
+
+### Bug Fixes
+
+* Export and package types for @appland/scanner ([f0b1583](https://github.com/getappmap/appmap-js/commit/f0b15838d463806322836259ed6866353e9454d8))
+
 # [@appland/scanner-v1.71.3](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.2...@appland/scanner-v1.71.3) (2022-10-11)
 
 
