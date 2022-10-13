@@ -2,10 +2,7 @@
   <v-quickstart-layout>
     <section>
       <header>
-        <h1 data-cy="title">
-          AppMap Runtime Analysis
-          <span v-if="!findingsEnabled">Early Access</span>
-        </h1>
+        <h1 data-cy="title">AppMap Runtime Analysis</h1>
       </header>
       <main>
         <article v-if="!(findingsEnabled && scanned)" class="subheading">
@@ -64,14 +61,7 @@
           </article>
         </div>
         <article v-if="!findingsEnabled">
-          <div class="feature-wrap content" data-cy="runtime-analysis-info">
-            <a class="youtube-video" href="https://appland.com/docs/analysis#demo">
-              <img
-                class="video-thumbnail"
-                alt="runtime analysis video thumbnail"
-                src="../../assets/runtime_analysis_video_thumbnail.png"
-              />
-            </a>
+          <div class="feature-wrap" data-cy="runtime-analysis-info">
             <div class="feature">
               <h2 class="subhead">Identify design flaws and anti-patterns before they’re merged</h2>
               <ul>
@@ -96,9 +86,21 @@
                 <li><strong>And more!</strong></li>
               </ul>
             </div>
-            <a class="btn-slack" data-cy="slack-button" href="https://appmap.io/slack">
-              <SlackLogo />
-              <v-button label="Join our Slack for early access" class="cta-button b-0" />
+            <a
+              class="btn-auth center"
+              data-cy="auth-button"
+              @click.native="$root.$emit('perform-auth')"
+            >
+              <v-appmap-logo />
+              <v-button label="Sign in to enable AppMap Runtime Analysis" class="cta-button b-0" />
+            </a>
+            <h2 class="subhead">Watch the demo</h2>
+            <a class="youtube-video" href="https://appland.com/docs/analysis#demo">
+              <img
+                class="video-thumbnail"
+                alt="runtime analysis video thumbnail"
+                src="../../assets/runtime_analysis_video_thumbnail.png"
+              />
             </a>
           </div>
         </article>
@@ -113,7 +115,7 @@ import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue
 import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VButton from '@/components/Button.vue';
 import Navigation from '@/components/mixins/navigation';
-import SlackLogo from '@/assets/Slack_Mark.svg';
+import VAppmapLogo from '@/assets/appmap-logomark.svg';
 
 export default {
   name: 'InvestigateFindings',
@@ -122,7 +124,7 @@ export default {
     VQuickstartLayout,
     VNavigationButtons,
     VButton,
-    SlackLogo,
+    VAppmapLogo,
   },
 
   mixins: [Navigation],
@@ -179,6 +181,10 @@ export default {
   &.content {
     padding-top: 1rem;
   }
+}
+
+.center {
+  margin: auto;
 }
 
 .feature {
@@ -244,7 +250,7 @@ export default {
   transition: $transition;
   width: 50%;
   min-width: 400px;
-  margin: 30px 0 50px 0;
+  margin-bottom: 50px;
   &:hover {
     box-shadow: $box-shadow-min;
     border-color: #5f729a;
@@ -261,7 +267,7 @@ export default {
   margin: 0 0.25rem;
 }
 
-.btn-slack {
+.btn-auth {
   align-items: center;
   background-color: $almost-black;
   border: 3px solid $gray-tertiary;
@@ -282,6 +288,7 @@ export default {
   svg {
     margin-right: -3rem;
     margin-left: 0.5rem;
+    width: 32px;
   }
   &:hover {
     background-color: $black;
@@ -324,7 +331,7 @@ export default {
       &.cta {
         .cta-slack {
           margin-top: 0;
-          .btn-slack {
+          .btn-auth {
             margin-top: 1rem;
           }
         }
@@ -346,7 +353,7 @@ export default {
     .feature {
       &.cta-slack {
         margin-top: 1rem;
-        .btn-slack {
+        .btn-auth {
           margin-top: 1rem;
         }
       }
@@ -355,13 +362,13 @@ export default {
 }
 
 @media (max-width: 625px) {
-  .btn-slack {
+  .btn-auth {
     min-width: unset;
     width: 100%;
   }
 }
 @media (max-width: 420px) {
-  .btn-slack {
+  .btn-auth {
     .cta-button {
       text-align: left;
     }
