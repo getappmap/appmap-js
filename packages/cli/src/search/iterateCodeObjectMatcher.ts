@@ -1,5 +1,3 @@
-import { codeObjectId } from '@appland/models';
-import { inspect } from 'util';
 import { verbose } from '../utils';
 import { CodeObject, CodeObjectMatcher } from './types';
 
@@ -11,8 +9,9 @@ export default class IterateCodeObjectMatcher implements CodeObjectMatcher {
 
   matchClassMap(classMap: CodeObject[]): CodeObject[] {
     const findMatchingCodeObject = (item: CodeObject, matches: CodeObject[]): void => {
+      if (verbose()) console.log(`${this.type} ${item.fqid}`);
       if (item.type === this.type) {
-        const [_type, id] = item.fqid.split(':');
+        const id = item.fqid.slice(item.fqid.indexOf(':') + 1);
         if (this.pattern.test(id)) {
           if (verbose()) console.log(`${this.pattern} matches ${item.fqid}`);
           matches.push(item);

@@ -121,7 +121,7 @@ function matchTable(tableName) {
 /**
  * @returns {MatchFn}
  */
-function matchHTTP() {
+function matchHTTPServer() {
   return matchType('http');
 }
 
@@ -129,8 +129,23 @@ function matchHTTP() {
  * @param {string} routeName
  * @returns {MatchFn}
  */
-function matchRoute(routeName) {
+ function matchServerRoute(routeName) {
   return matchTypeAndName('route', routeName);
+}
+
+/**
+ * @returns {MatchFn}
+ */
+function matchExternalService() {
+  return matchType('external-service');
+}
+
+/**
+ * @param {string} routeName
+ * @returns {MatchFn}
+ */
+function matchExternalRoute(routeName) {
+  return matchTypeAndName('external-route', routeName);
 }
 
 class FunctionMatchSpec {
@@ -152,9 +167,15 @@ class FunctionMatchSpec {
   }
 }
 
-class HTTPMatchSpec {
+class HTTPServerRequestMatchSpec {
   constructor() {
-    this.tokens = [matchHTTP()];
+    this.tokens = [matchHTTPServer()];
+  }
+}
+
+class ExternalServiceMatchSpec {
+  constructor() {
+    this.tokens = [matchExternalService()];
   }
 }
 
@@ -187,15 +208,26 @@ class RouteMatchSpec {
    * @param {string} routeName
    */
   constructor(routeName) {
-    this.tokens = [matchHTTP(), matchRoute(routeName)];
+    this.tokens = [matchHTTPServer(), matchServerRoute(routeName)];
+  }
+}
+
+class ClientRouteMatchSpec {
+  /**
+   * @param {string} routeName
+   */
+  constructor(routeName) {
+    this.tokens = [matchExternalService(), matchExternalRoute(routeName)];
   }
 }
 
 module.exports = {
   RegExpRegExp,
+  ClientRouteMatchSpec,
   DatabaseMatchSpec,
+  ExternalServiceMatchSpec,
   FunctionMatchSpec,
-  HTTPMatchSpec,
+  HTTPServerRequestMatchSpec,
   TableMatchSpec,
   QueryMatchSpec,
   RouteMatchSpec,

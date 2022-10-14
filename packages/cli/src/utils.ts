@@ -3,6 +3,8 @@ import { AsyncWorker, queue } from 'async';
 import glob from 'glob';
 import { promisify } from 'util';
 import { join } from 'path';
+import assert from 'assert';
+import { Event, ReturnValueObject } from '@appland/models';
 
 const StartTime = Date.now();
 
@@ -55,7 +57,12 @@ export async function mtime(filePath: PathLike): Promise<number | null> {
  * @param suffix used to create the temporary file name
  * @param data
  */
-export async function writeFileAtomic(dirName: string, fileName: string, suffix: string, data: string) {
+export async function writeFileAtomic(
+  dirName: string,
+  fileName: string,
+  suffix: string,
+  data: string
+) {
   // first make sure the temp name isn't too long
   const NAME_MAX = 255; // note: might not be true on some esoteric systems
   const name = fileName.slice(0, NAME_MAX - suffix.length - 1);
@@ -127,4 +134,27 @@ export function exists(path: PathLike): Promise<boolean> {
  */
 export function prefixLines(str: string, prefix: string): string {
   return str.replace(/^/gm, prefix);
+}
+
+export function formatValue(value: ReturnValueObject) {
+  if (value === null || value === undefined) {
+    return 'Null';
+  }
+
+  const valueStr = value.value.indexOf('#<') === 0 ? null : value.value;
+
+  return [value.class, valueStr].filter((e) => e).join(' ');
+}
+
+export function formatHttpServerRequest(event: Event): string {
+  assert(event.httpServerRequest);
+  const data = {
+    method: event.httpServerRequest.request_method,
+    path: event.httpServerRequest.normalized_path_info || event.httpServerRequest.path_info,
+    statusCode:
+      event.returnEvent && event.httpServerResponse
+        ? (event.httpServerResponse as any)['status_code'] || event.httpServerResponse.status
+        : '<none>',
+  };
+  return [data.method, data.path, `(${data.statusCode})`].join(' ');
 }
