@@ -21,7 +21,7 @@ function alias(id: string): string {
 
 export const extension = '.md';
 
-export function format(diagram: Diagram): string {
+export function format(diagram: Diagram, source: string): string {
   const requestArrow = (message: Request): string => (message.response ? '->>+' : '->>');
   const responseArrow = (_message: Response): string => '-->>';
 
@@ -62,7 +62,7 @@ export function format(diagram: Diagram): string {
   diagram.rootActions.forEach((action) => renderAction(action));
 
   return `${MarkdownDelimiter}mermaid
-%% AppMap: ${diagram.appmapFile}
+%% Source: ${source}
 sequenceDiagram
   ${diagram.actors
     .map((actor) => `participant ${alias(actor.name)} as ${encode(actor.name)}`)

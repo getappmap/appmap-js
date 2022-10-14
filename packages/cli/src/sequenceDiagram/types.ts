@@ -7,21 +7,29 @@ export type Actor = {
 
 export enum NodeType {
   Loop,
+  Conditional,
   Request,
   WebRequest,
 }
 
-export type Action = Loop | Request | WebRequest;
+export type Action = Loop | Conditional | Request | WebRequest;
 
 export type Node = {
   nodeType: NodeType;
   detailDigest: string;
+  parent?: Action;
   children: Action[];
 };
 
 export type Loop = Node & {
   nodeType: NodeType.Loop;
   count: number;
+};
+
+export type Conditional = Node & {
+  nodeType: NodeType.Conditional;
+  nodeName: string;
+  conditionName: string;
 };
 
 export type Type = {
@@ -62,8 +70,18 @@ export const isRequest = (action: Action): action is Request =>
 export const isWebRequest = (action: Action): action is WebRequest =>
   action.nodeType === NodeType.WebRequest;
 
+export const isConditional = (action: Action): action is Conditional =>
+  action.nodeType === NodeType.Conditional;
+
+export const actionActors = (action: Action): Actor[] => {
+  if (isRequest(action)) return [action.caller, action.callee];
+
+  if (isWebRequest(action)) return [action.callee];
+
+  return [];
+};
+
 export type Diagram = {
-  appmapFile: string;
   actors: Actor[];
   rootActions: Action[];
 };

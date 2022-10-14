@@ -2,6 +2,7 @@ import { AppMap, Event } from '@appland/models';
 import { classNameToOpenAPIType } from '@appland/openapi';
 import assert from 'assert';
 import { createHash } from 'crypto';
+import { request } from 'http';
 import { selectEvents } from './selectEvents';
 import Specification from './specification';
 import {
@@ -15,12 +16,6 @@ import {
   Type,
   WebRequest,
 } from './types';
-
-function pluralize(word: string): string {
-  if (word.endsWith('s')) return word;
-
-  return [word, 's'].join('');
-}
 
 class MergeWindow {
   previous: Action[] | undefined;
@@ -88,7 +83,7 @@ export default function buildDiagram(
       actorKey = actorCodeObject.fqid;
       // Bit of a hack for static methods. Some suggest underlining the actor name to
       // indicate static-ness.
-      displayName = ['@', pluralize(actorCodeObject.name)].join('');
+      displayName = ['@', actorCodeObject.name].join('');
     } else {
       // This is an experiment to use separate swim lanes for distinct object instances.
       /*
@@ -122,6 +117,8 @@ export default function buildDiagram(
 
   function buildRequest(caller: Event | undefined, callee: Event): Action | undefined {
     if (callee.httpServerRequest) {
+      assert(callee.route, 'callee.route');
+      assert(callee.httpServerResponse, 'callee.httpServerResponse');
       return {
         nodeType: NodeType.WebRequest,
         callee: findOrCreateActor(callee),
@@ -193,6 +190,7 @@ export default function buildDiagram(
         const parent = requestStack[requestStack.length - 1];
         if (parent) {
           parent.children.push(request);
+          request.parent = parent;
         } else {
           rootActions.push(request);
         }
@@ -255,7 +253,6 @@ export default function buildDiagram(
   rootActions.forEach((root) => mergeChildren(root));
 
   return {
-    appmapFile,
     actors: actors.sort((a, b) => a.order - b.order),
     rootActions,
   };

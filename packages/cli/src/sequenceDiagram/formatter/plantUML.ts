@@ -1,4 +1,18 @@
-import { Action, Diagram, isLoop, isRequest, isWebRequest, Request, Response } from '../types';
+import { forEach } from 'async';
+import {
+  Action,
+  Diagram,
+  isConditional,
+  isLoop,
+  isRequest,
+  isWebRequest,
+  Request,
+  Response,
+} from '../types';
+
+const DisplayCharLimit = 50;
+
+export const extension = '.uml';
 
 function encode(str: string): string {
   return str.replace(/\n/g, '\\n').replace(/\s{2,}/g, ' ');
@@ -8,72 +22,132 @@ function alias(id: string): string {
   return id.replace(/[^a-zA-Z0-9]/g, '_');
 }
 
-const DisplayCharLimit = 50;
+function fold(line: string, limit: number): string {
+  const output: string[] = [];
+  let buffer = '';
+  line
+    .split('\n')
+    .map((line) => line.split(/\s+/))
+    .flat()
+    .forEach((word) => {
+      if (buffer.length === 0) {
+        buffer += word;
+      } else if (buffer.length + word.length < limit) {
+        buffer += ' ';
+        buffer += word;
+      } else {
+        output.push(buffer);
+        buffer = word;
+      }
+    });
+  return output.join('\n');
+}
 
-export const extension = '.uml';
+class EventLines {
+  _indent = 1;
 
-export function format(diagram: Diagram): string {
-  const requestArrow = (message: Request): string => '->';
+  public lines: string[] = [];
+
+  constructor() {}
+
+  indent(): void {
+    this._indent += 1;
+  }
+  outdent(): void {
+    this._indent -= 1;
+  }
+
+  printLeftAligned(...lines: string[]): void {
+    lines.forEach((line) => this.lines.push(line));
+  }
+
+  print(...lines: string[]): void {
+    lines.forEach((line) => this.lines.push([Array(this._indent).join('  '), line].join('')));
+  }
+}
+
+export function format(diagram: Diagram, source: string): string {
+  const requestArrow = (_message: Request): string => '->';
   const responseArrow = (_message: Response): string => '-->';
 
-  const eventLines: string[] = [];
+  const events = new EventLines();
 
-  const renderAction = (action: Action, indent = 1): void => {
+  const renderChildren = (action: Action) =>
+    action.children.forEach((child) => renderAction(child));
+
+  const renderAction = (action: Action): void => {
+    events.indent();
+
     if (isRequest(action)) {
-      eventLines.push(
-        Array(indent * 2).join(' ') +
-          [
-            [alias(action.caller.name), alias(action.callee.name)].join(requestArrow(action)),
-            encode(action.name.slice(0, DisplayCharLimit)),
-          ].join(': ')
+      events.print(
+        [
+          [alias(action.caller.name), alias(action.callee.name)].join(requestArrow(action)),
+          encode(action.name.slice(0, DisplayCharLimit)),
+        ].join(': ')
       );
       if (action.name.length > DisplayCharLimit) {
-        eventLines.push(
-          Array(indent * 2).join(' ') + 'Note right',
-          Array((indent + 1) * 2).join(' ') + action.name,
-          Array(indent * 2).join(' ') + 'End note'
-        );
+        events.print('Note right');
+        events.indent();
+        events.printLeftAligned(fold(action.name, 80));
+        events.outdent();
+        events.print('End note');
       }
 
       if (action.children.length > 0) {
-        eventLines.push(Array(indent * 2).join(' ') + `activate ${alias(action.callee.name)}`);
-        action.children.forEach((child) => renderAction(child, indent + 1));
+        events.print(`activate ${alias(action.callee.name)}`);
+        renderChildren(action);
       }
 
       if (action.response) {
-        eventLines.push(
-          Array(indent * 2).join(' ') +
-            [
-              [alias(action.callee.name), alias(action.caller.name)].join(
-                responseArrow(action.response)
-              ),
-              encode(action.response.returnValueType?.name || 'unknown type'),
-            ].join(': ')
+        events.print(
+          [
+            [alias(action.callee.name), alias(action.caller.name)].join(
+              responseArrow(action.response)
+            ),
+            encode(action.response.returnValueType?.name || 'unknown type'),
+          ].join(': ')
         );
       }
 
       if (action.children.length > 0) {
-        eventLines.push(Array(indent * 2).join(' ') + `deactivate ${alias(action.callee.name)}`);
+        events.print(`deactivate ${alias(action.callee.name)}`);
       }
     } else if (isWebRequest(action)) {
-      eventLines.push(
-        Array(indent * 2).join(' ') + `[-> ${alias(action.callee.name)}: ${action.route}`,
-        Array(indent * 2).join(' ') + `activate ${alias(action.callee.name)}`
+      events.print(
+        `[-> ${alias(action.callee.name)}: ${action.route}`,
+        `activate ${alias(action.callee.name)}`
       );
 
-      action.children.forEach((child) => renderAction(child, indent + 1));
+      renderChildren(action);
 
-      eventLines.push(
-        Array(indent * 2).join(' ') + `[<- ${alias(action.callee.name)}: ${action.status}`,
-        Array(indent * 2).join(' ') + `deactivate ${alias(action.callee.name)}`
+      events.print(
+        `[<- ${alias(action.callee.name)}: ${action.status}`,
+        `deactivate ${alias(action.callee.name)}`
       );
     } else if (isLoop(action)) {
-      eventLines.push(Array(indent * 2).join(' ') + `Loop ${action.count} times`);
+      events.print(`Loop ${action.count} times`);
 
-      action.children.forEach((child) => renderAction(child, indent + 1));
+      renderChildren(action);
 
-      eventLines.push(Array(indent * 2).join(' ') + `End`);
+      events.print(`End`);
+    } else if (isConditional(action)) {
+      events.print(
+        `${action.nodeName} ${action.conditionName === 'delete' ? '#ffaaaa' : ''} ${
+          action.conditionName
+        }`
+      );
+
+      renderChildren(action);
+
+      if (action.parent) {
+        const childIndex = action.parent.children.indexOf(action);
+        if (childIndex === action.parent.children.length - 1) events.print('end');
+      } else {
+        events.print('end');
+      }
     }
+
+    events.outdent();
   };
 
   diagram.rootActions.forEach((action) => renderAction(action));
@@ -82,6 +156,6 @@ export function format(diagram: Diagram): string {
 ${diagram.actors
   .map((actor) => `participant ${alias(actor.name)} as "${encode(actor.name)}"`)
   .join('\n')}
-${eventLines.join('\n')}
+${events.lines.join('\n')}
 @enduml`;
 }

@@ -52,11 +52,11 @@ export const handler = async (argv: any) => {
   const formatter = require(`../sequenceDiagram/formatter/${argv.format}`);
 
   const diagrams = (await buildDiagrams(appmapDir, codeObjectIds)).filter(
-    (d) => d.actors.length > 0
+    (d) => d.diagram.actors.length > 0
   );
 
   for (const diagram of diagrams) {
-    const template = formatter.format(diagram);
+    const template = formatter.format(diagram.diagram, diagram.appmapFile);
     await mkdir(argv.outputDir, { recursive: true });
     await writeFile(
       join(

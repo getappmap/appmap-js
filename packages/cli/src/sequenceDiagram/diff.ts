@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { MinPriorityQueue } from '@datastructures-js/priority-queue';
-import { Action, Diagram } from './types';
+import { Action, Actor, Diagram, isRequest } from './types';
 import { inspect } from 'util';
 import { verbose } from '../utils';
 
@@ -8,16 +8,22 @@ type ActionIndex = number;
 
 type Move = (state: State) => State;
 
-enum MoveType {
+export enum MoveType {
   AdvanceBoth = 1,
   DeleteLeft = 2,
   InsertRight = 3,
 }
 
-type State = {
+export type State = {
   l_node: ActionIndex;
   r_node: ActionIndex;
   move: MoveType;
+};
+
+export type Diff = {
+  baseActions: Action[];
+  headActions: Action[];
+  states: State[];
 };
 
 type StateKey = string;
@@ -58,7 +64,7 @@ function stateCost(state: State): number {
  *      Store the minimum cost of that state in the queue
  *
  */
-export default function diff(l_diagram: Diagram, r_diagram: Diagram): string[] {
+export default function diff(l_diagram: Diagram, r_diagram: Diagram): Diff {
   const buildActions = (diagram: Diagram): Action[] => {
     const result: Action[] = [];
     const collectAction = (action: Action): void => {
@@ -166,18 +172,7 @@ export default function diff(l_diagram: Diagram, r_diagram: Diagram): string[] {
     });
   }
 
-  const describeMove = (state: State): string => {
-    switch (state.move) {
-      case MoveType.AdvanceBoth:
-        return (l_actions[state.l_node] as any)?.name;
-      case MoveType.DeleteLeft:
-        return `- ${(l_actions[state.l_node] as any)?.name}`;
-      case MoveType.InsertRight:
-        return `+ ${(r_actions[state.r_node] as any)?.name}`;
-    }
-  };
-
-  const path: string[] = [];
+  const states: State[] = [];
   {
     let nextState = [l_actions.length - 1, r_actions.length - 1].join(',');
     let precedingState = statePreceding.get(nextState);
@@ -185,10 +180,10 @@ export default function diff(l_diagram: Diagram, r_diagram: Diagram): string[] {
       const [l_node, r_node] = precedingState.split(',').map(Number);
       const move = stateMoves.get(nextState);
       const state = { l_node, r_node, move } as State;
-      path.push(describeMove(state));
+      states.push(state);
       nextState = precedingState;
       precedingState = statePreceding.get(nextState);
     }
   }
-  return path;
+  return { baseActions: l_actions, headActions: r_actions, states: states.reverse() };
 }
