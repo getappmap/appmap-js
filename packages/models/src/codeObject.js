@@ -255,6 +255,10 @@ export default class CodeObject {
           type: CodeObjectType.EXTERNAL_SERVICE,
           name: serviceName,
         },
+        {
+          type: CodeObjectType.EXTERNAL_ROUTE,
+          name: event.route,
+        },
       ];
     } else if (event.sqlQuery) {
       elements = [
