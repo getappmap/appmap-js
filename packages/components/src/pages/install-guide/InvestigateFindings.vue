@@ -5,12 +5,12 @@
         <h1 data-cy="title">AppMap Runtime Analysis</h1>
       </header>
       <main>
-        <article v-if="!(findingsEnabled && scanned)" class="subheading">
+        <article v-if="!(analysisEnabled && scanned)" class="subheading">
           Find software design flaws that impact security, performance, stability, and
           maintainability. Our runtime code analysis can find the problems that static code
           analyzers miss — and that cause serious production issues.
         </article>
-        <div v-if="findingsEnabled">
+        <div v-if="analysisEnabled">
           <article v-if="!scanned">
             <p>
               <strong>This project has not been scanned yet.</strong>
@@ -55,12 +55,12 @@
           </article>
           <article v-else>
             <p>
-              You're good to go! AppMap scanned your application and found no flaws. We'll continue
-              scanning for flaws automatically.
+              You're good to go! AppMap has scanned your application and found no flaws. We'll
+              continue scanning for flaws automatically.
             </p>
           </article>
         </div>
-        <article v-if="!findingsEnabled">
+        <article v-if="!analysisEnabled">
           <div class="feature-wrap" data-cy="runtime-analysis-info">
             <div class="feature">
               <h2 class="subhead">Identify design flaws and anti-patterns before they’re merged</h2>
@@ -89,10 +89,10 @@
             <a
               class="btn-auth center"
               data-cy="auth-button"
-              @click.native="$root.$emit('perform-auth')"
+              @click.prevent="$root.$emit('perform-auth')"
             >
               <v-appmap-logo />
-              <v-button label="Sign in to enable AppMap Runtime Analysis" class="cta-button b-0" />
+              <v-button :label="enableButtonLabel" class="cta-button b-0" />
             </a>
             <h2 class="subhead">Watch the demo</h2>
             <a class="youtube-video" href="https://appland.com/docs/analysis#demo">
@@ -143,11 +143,20 @@ export default {
       }),
     },
     findingsEnabled: Boolean,
+    analysisEnabled: Boolean,
+    userAuthenticated: Boolean,
   },
 
   methods: {
     viewProblems() {
       this.$root.$emit('view-problems', this.projectPath);
+    },
+  },
+
+  computed: {
+    enableButtonLabel() {
+      if (!this.userAuthenticated) return 'Sign in to enable AppMap Runtime Analysis';
+      return 'Enable AppMap Runtime Analysis';
     },
   },
 };
