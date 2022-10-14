@@ -25,6 +25,8 @@
       :project-path="path"
       :findingsDomainCounts="findingsDomainCounts"
       :findings-enabled="findingsEnabled"
+      :user-authenticated="userAuthenticated"
+      :analysis-enabled="analysisEnabled"
     />
   </v-multi-page>
 </template>
@@ -63,6 +65,14 @@ export default {
       default: () => new Set(),
     },
     findingsEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    analysisEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    userAuthenticated: {
       type: Boolean,
       default: false,
     },

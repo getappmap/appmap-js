@@ -22,6 +22,8 @@ WithFindings.args = {
     stability: 4,
     maintainability: 2,
   },
+  analysisEnabled: true,
+  userAuthenticated: true,
   findingsEnabled: true,
 };
 
@@ -36,6 +38,8 @@ Empty.args = {
     stability: 0,
     maintainability: 0,
   },
+  analysisEnabled: true,
+  userAuthenticated: true,
   findingsEnabled: true,
 };
 
@@ -50,11 +54,15 @@ Disabled.args = {
     stability: 0,
     maintainability: 0,
   },
+  analysisEnabled: false,
+  userAuthenticated: false,
   findingsEnabled: false,
 };
 
 export const NotScanned = Template.bind({});
 NotScanned.args = {
   scanned: false,
+  analysisEnabled: true,
+  userAuthenticated: true,
   findingsEnabled: true,
 };
