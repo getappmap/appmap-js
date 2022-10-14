@@ -12,8 +12,10 @@ import DescentCodeObjectMatcher from './descentCodeObjectMatcher';
 import IterateCodeObjectMatcher from './iterateCodeObjectMatcher';
 import {
   DatabaseMatchSpec,
+  ClientRouteMatchSpec,
+  ExternalServiceMatchSpec,
   FunctionMatchSpec,
-  HTTPMatchSpec,
+  HTTPServerRequestMatchSpec,
   QueryMatchSpec,
   RegExpRegExp,
   RouteMatchSpec,
@@ -81,8 +83,16 @@ function parseRoute(routeName: string): CodeObjectMatchSpec[] {
   return [new RouteMatchSpec(routeName)];
 }
 
-function parseHTTP(): CodeObjectMatchSpec[] {
-  return [new HTTPMatchSpec()];
+function parseHTTPServerRequest(): CodeObjectMatchSpec[] {
+  return [new HTTPServerRequestMatchSpec()];
+}
+
+function parseClientRoute(routeName: string): CodeObjectMatchSpec[] {
+  return [new ClientRouteMatchSpec(routeName)];
+}
+
+function parseExternalService(): CodeObjectMatchSpec[] {
+  return [new ExternalServiceMatchSpec()];
 }
 
 function parseDatabase(): CodeObjectMatchSpec[] {
@@ -113,7 +123,9 @@ function buildCodeObjectMatcher(codeObjectId: string): CodeObjectMatcher[] {
       package: parsePackage,
       class: parseClass,
       function: parseFunction,
-      http: parseHTTP,
+      http: parseHTTPServerRequest,
+      httpClient: parseClientRoute,
+      'external-service': parseExternalService,
       route: parseRoute,
       database: parseDatabase,
       query: parseQuery,
