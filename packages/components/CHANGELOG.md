@@ -1,3 +1,12 @@
+# [@appland/components-v2.16.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.15.0...@appland/components-v2.16.0) (2022-10-14)
+
+
+### Features
+
+* Investigate findings now considers three states: analysis enabled, user authenticated and findings enabled in settings ([1829a62](https://github.com/getappmap/appmap-js/commit/1829a62baa434a599623cc310624a42c2caf628b))
+* Replace slack signup button with AppMap signup ([c072976](https://github.com/getappmap/appmap-js/commit/c072976b907c69dba8bb17d28c090125187d9049))
+* Updated the support CTA ([1411a78](https://github.com/getappmap/appmap-js/commit/1411a781466e94a9c3f6ef063ac18186eed72b50))
+
 # [@appland/components-v2.15.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.14.0...@appland/components-v2.15.0) (2022-10-12)
 
 
