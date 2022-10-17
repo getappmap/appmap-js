@@ -1,5 +1,5 @@
 import { load } from 'js-yaml';
-import { URL } from 'url';
+import { fileURLToPath, URL } from 'url';
 import { OpenAPIV3 } from 'openapi-types';
 import http, { IncomingMessage } from 'http';
 import https from 'https';
@@ -32,7 +32,7 @@ const URLLoader = (protocol: Pick<typeof http, 'get'>) => {
 };
 
 const FileLoader = (url: URL): Promise<Buffer> => {
-  return readFile(url.pathname);
+  return readFile(fileURLToPath(url));
 };
 
 const ProtocolLoader: Record<string, Loader> = {
