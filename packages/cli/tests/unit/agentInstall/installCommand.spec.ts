@@ -756,7 +756,7 @@ packages:
     const initAgent = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('npx');
       const args = cmdStruct.args;
-      expect(args).toEqual(['appmap-agent-js', 'init', projectDir]);
+      expect(args).toEqual(['@appland/appmap-agent-js', 'init', projectDir]);
       const fakeConfig = `
     {
        "configuration": {
@@ -770,7 +770,7 @@ packages:
     const validateAgent = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('npx');
       const args = cmdStruct.args;
-      expect(args).toEqual(['appmap-agent-js', 'status', projectDir]);
+      expect(args).toEqual(['@appland/appmap-agent-js', 'status', projectDir]);
       const ret = { stdout: '[]', stderr: '' };
       return Promise.resolve(ret);
     };
