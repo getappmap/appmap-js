@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.71.5](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.4...@appland/scanner-v1.71.5) (2022-10-17)
+
+
+### Bug Fixes
+
+* Fix unresolved type in Rule.Options ([f4ed63c](https://github.com/getappmap/appmap-js/commit/f4ed63ca27e7c79b8e9bdb9faf63c9b3cd10145f))
+
 # [@appland/scanner-v1.71.4](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.3...@appland/scanner-v1.71.4) (2022-10-13)
 
 
