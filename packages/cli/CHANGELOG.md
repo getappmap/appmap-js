@@ -1,3 +1,18 @@
+# [@appland/appmap-v3.45.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.44.4...@appland/appmap-v3.45.0) (2022-10-17)
+
+
+### Bug Fixes
+
+* Don't crash if there were no errors. ([471b345](https://github.com/getappmap/appmap-js/commit/471b3458c3c1688af5f485fa1942f74000e3f2a5))
+* fix cli tests in windows ([6d2f7a1](https://github.com/getappmap/appmap-js/commit/6d2f7a1dc9497dcd52d610b41338f12d421ab9e6))
+* fix typescript warnings ([e743a68](https://github.com/getappmap/appmap-js/commit/e743a683496aca7a5ece7df96166ea74e1cbf289))
+* Install @appland/appmap-agent-js; not appmap-agent-js which doesn't exist in https://registry.npmjs.org/appmap-agent-js ([11931a9](https://github.com/getappmap/appmap-js/commit/11931a9c52a0cce52196e228f77ecd18d4b365d1))
+
+
+### Features
+
+* run more cli tests on windows in travis ([cf2baee](https://github.com/getappmap/appmap-js/commit/cf2baeedbd035d409b79628ecf8235061ec52add))
+
 # [@appland/appmap-v3.44.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.44.3...@appland/appmap-v3.44.4) (2022-10-12)
 
 
