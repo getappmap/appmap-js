@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.71.6](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.5...@appland/scanner-v1.71.6) (2022-10-17)
+
+
+### Bug Fixes
+
+* fix scanner tests in windows ([e565f30](https://github.com/getappmap/appmap-js/commit/e565f30b7c4f7b43e7eb5652fc9afc58b511da2d))
+
 # [@appland/scanner-v1.71.5](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.4...@appland/scanner-v1.71.5) (2022-10-17)
 
 
