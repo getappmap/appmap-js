@@ -25,8 +25,7 @@ jobs:
       os: windows
       env:
         - YARN_GPG=no
-      script: |
-        yarn workspace @appland/appmap test
+      script: yarn test
 
     - stage: deploy
       if: branch != main
