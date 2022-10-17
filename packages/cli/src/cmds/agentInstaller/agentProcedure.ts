@@ -80,7 +80,8 @@ export default abstract class AgentProcedure {
     const validationResult = JSON.parse(stdout);
 
     const errors = Array.isArray(validationResult) ? validationResult : validationResult.errors;
-    if (errors.length > 0) {
+    // if there were no errors then there's no "errors" key
+    if (errors && errors.length > 0) {
       throw new ValidationError(
         errors
           .map((e) => {
