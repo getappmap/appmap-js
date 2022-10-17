@@ -9,9 +9,9 @@ import TempConfig from './tempConfig';
 let config: TempConfig;
 let context: RecordContext;
 
-beforeEach(() => {
+beforeEach(async () => {
   config = new TempConfig();
-  config.initialize();
+  await config.initialize();
   context = new RecordContext(config);
   return context.initialize();
 });

@@ -3,7 +3,7 @@ import { addJetBrainsEnv } from '../../../src/cmds/agentInstaller/javaBuildToolI
 import sinon from 'sinon';
 
 describe('JavaBuildToolInstaller', () => {
-  let origPath, origJavaHome;
+  let origPath: string | undefined, origJavaHome: string | undefined;
   beforeEach(() => {
     origPath = process.env.PATH;
     origJavaHome = process.env.JAVA_HOME;

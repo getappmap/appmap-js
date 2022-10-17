@@ -13,8 +13,8 @@ const fixtureDir = join(__dirname, 'fixtures', 'ruby');
 const now = Date.now();
 
 describe('Depends', () => {
-  let appMapDir;
-  let userModelFilePath;
+  let appMapDir: string;
+  let userModelFilePath: string;
 
   beforeAll(async () => verbose(process.env.DEBUG === 'true'));
   beforeEach(async () => {

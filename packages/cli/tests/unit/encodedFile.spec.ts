@@ -6,14 +6,14 @@ import EncodedFile from '../../src/encodedFile';
 
 tmp.setGracefulCleanup();
 describe('EncodedFile', () => {
-  let tmpDir;
-  let fixtureDir;
+  let tmpDir: string;
+  let fixtureDir: string;
   beforeEach(() => {
     tmpDir = tmp.dirSync({} as any).name;
     fixtureDir = join(__dirname, 'fixtures', 'encodedFile');
   });
 
-  const verifyUpdate = (prefix, eol) => {
+  const verifyUpdate = (prefix: string, eol: string) => {
     const inputPath = join(fixtureDir, `${prefix}.txt`);
     const actualPath = join(tmpDir, `${prefix}.actual.txt`);
     const ef = new EncodedFile(inputPath);

@@ -1,5 +1,5 @@
 import { ChildProcess, exec, spawn } from 'child_process';
-import { exitCode, kill } from 'process';
+import { kill } from 'process';
 import { exists, verbose } from '../../utils';
 import UI from '../userInteraction';
 import { TestCommand } from './configuration';
