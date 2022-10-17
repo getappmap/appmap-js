@@ -2,3 +2,4 @@
 /.yarn/plugins/** binary
 /packages/components/src/stories/data/** binary
 *.appmap.json binary
+/packages/cli/tests/unit/fixtures/encodedFile/unix/**/* eol=lf
