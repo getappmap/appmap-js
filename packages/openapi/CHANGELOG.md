@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.0.3](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.0.2...@appland/openapi-v1.0.3) (2022-10-17)
+
+
+### Bug Fixes
+
+* fix scanner tests in windows ([e565f30](https://github.com/getappmap/appmap-js/commit/e565f30b7c4f7b43e7eb5652fc9afc58b511da2d))
+
 # [@appland/openapi-v1.0.2](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.0.1...@appland/openapi-v1.0.2) (2022-06-15)
 
 ### Bug Fixes
