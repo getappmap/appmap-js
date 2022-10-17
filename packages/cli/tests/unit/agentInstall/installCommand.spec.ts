@@ -129,7 +129,8 @@ packages:
       const projectFixture = path.join(fixtureDir, 'java', 'gradle', 'example-project');
 
       const verifyAgent = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('./gradlew');
+        const expectedProgram = process.platform === 'win32' ? '.\\gradlew.bat' : './gradlew';
+        expect(cmdStruct.program).toEqual(expectedProgram);
         expect(cmdStruct.args).toEqual([
           'dependencyInsight',
           '--dependency',
@@ -146,7 +147,8 @@ packages:
       };
 
       const printPath = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('./gradlew');
+        const expectedProgram = process.platform === 'win32' ? '.\\gradlew.bat' : './gradlew';
+        expect(cmdStruct.program).toEqual(expectedProgram);
         expect(cmdStruct.args).toEqual(['appmap-print-jar-path']);
         const ret = {
           stdout: 'com.appland:appmap-agent.jar.path=appmap.jar',
@@ -207,7 +209,8 @@ packages:
       const projectFixture = path.join(fixtureDir, 'java', 'maven', 'example-project');
 
       const verifyAgent = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('./mvnw');
+        const expectedProgram = process.platform === 'win32' ? '.\\mvnw.cmd' : './mvnw';
+        expect(cmdStruct.program).toEqual(expectedProgram);
         expect(cmdStruct.args).toEqual([
           '-Dplugin=com.appland:appmap-maven-plugin',
           'help:describe',
@@ -220,7 +223,8 @@ packages:
       };
 
       const printPath = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('./mvnw');
+        const expectedProgram = process.platform === 'win32' ? '.\\mvnw.cmd' : './mvnw';
+        expect(cmdStruct.program).toEqual(expectedProgram);
         expect(cmdStruct.args).toEqual(['appmap:print-jar-path']);
         const ret = {
           stdout: 'com.appland:appmap-agent.jar.path=appmap.jar',

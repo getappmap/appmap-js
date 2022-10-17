@@ -18,9 +18,12 @@ describe(writeFileAtomic, () => {
   it('works correctly even if target file is at maximum name length already', async () => {
     const MAXLEN = 255;
 
+    // on Windows, an ENOENT error is thrown
+    const errorType = process.platform === 'win32' ? /ENOENT/ : /ENAMETOOLONG/;
+
     // verify first if the max len is indeed what we think
     await expect(tryFilename(randFilename(MAXLEN))).resolves.not.toThrow();
-    await expect(tryFilename(randFilename(MAXLEN + 1))).rejects.toThrow(/ENAMETOOLONG/);
+    await expect(tryFilename(randFilename(MAXLEN + 1))).rejects.toThrow(errorType);
 
     const filename = randFilename(MAXLEN);
     await expect(writeFileAtomic(tmpdir(), filename, 'test', 'test')).resolves.not.toThrow();

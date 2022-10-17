@@ -1,6 +1,7 @@
 import * as jbs from '../../../src/cmds/agentInstaller/jetBrainsSupport';
 import { addJetBrainsEnv } from '../../../src/cmds/agentInstaller/javaBuildToolInstaller';
 import sinon from 'sinon';
+import path from 'path';
 
 describe('JavaBuildToolInstaller', () => {
   let origPath: string | undefined, origJavaHome: string | undefined;
@@ -16,20 +17,21 @@ describe('JavaBuildToolInstaller', () => {
   });
 
   describe('when IntelliJ is installed', () => {
-    const intellijHome = '/IntelliJ';
+    const intellijHome = path.join('/', 'IntelliJ');
     beforeEach(() => {
       sinon.stub(jbs, 'findIntelliJHome').returns(intellijHome);
     });
 
     it('appends JetBrains JDK to PATH', () => {
       addJetBrainsEnv();
-      expect(process.env.PATH).toMatch(/\/IntelliJ\/jbr\/bin/);
+      expect(process.env.PATH).toContain(path.join(intellijHome, 'jbr', 'bin'));
     });
 
     it('sets JAVA_HOME if unset', () => {
       delete process.env.JAVA_HOME;
       addJetBrainsEnv();
-      expect(process.env.JAVA_HOME).toBe(intellijHome + '/jbr');
+      const expectedIntellijHome = path.join(intellijHome, 'jbr');
+      expect(process.env.JAVA_HOME).toBe(expectedIntellijHome);
     });
 
     it('uses JAVA_HOME if set', () => {

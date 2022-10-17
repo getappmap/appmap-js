@@ -37,11 +37,11 @@ describe('MavenInstaller', () => {
 
         const expected = (
           await fs.readFile(path.join(dataDir, `${test}${expectedExt}`))
-        ).toString();
+        ).toString().replace(/\s+/g, ' ');
 
         await maven.installAgent();
 
-        const actual = efWrite.getCall(-1).args[0];
+        const actual = efWrite.getCall(-1).args[0].replace(/\s+/g, ' ');
         expect(actual).toBe(expected);
       }
     });
