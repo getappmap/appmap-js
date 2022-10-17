@@ -12,6 +12,11 @@ import {
 
 const DisplayCharLimit = 50;
 
+const ConditionColors = {
+  delete: 'ffeae8',
+  insert: 'e0ffec',
+};
+
 export const extension = '.uml';
 
 function encode(str: string): string {
@@ -20,6 +25,11 @@ function encode(str: string): string {
 
 function alias(id: string): string {
   return id.replace(/[^a-zA-Z0-9]/g, '_');
+}
+
+function conditionColor(conditionName: string): string | undefined {
+  const color = ConditionColors[conditionName];
+  return color ? `#${color}` : undefined;
 }
 
 function fold(line: string, limit: number): string {
@@ -85,11 +95,14 @@ export function format(diagram: Diagram, source: string): string {
           encode(action.name.slice(0, DisplayCharLimit)),
         ].join(': ')
       );
+      if (action.baseName) {
+        events.print('Note right');
+        events.printLeftAligned(`Formerly ${action.baseName}`);
+        events.print('End note');
+      }
       if (action.name.length > DisplayCharLimit) {
         events.print('Note right');
-        events.indent();
         events.printLeftAligned(fold(action.name, 80));
-        events.outdent();
         events.print('End note');
       }
 
@@ -118,7 +131,24 @@ export function format(diagram: Diagram, source: string): string {
         `activate ${alias(action.callee.name)}`
       );
 
+      if (action.baseMethod) {
+        events.print('Note right');
+        events.printLeftAligned(`Formerly ${action.baseMethod}`);
+        events.print('End note');
+      }
+      if (action.basePath) {
+        events.print('Note right');
+        events.printLeftAligned(`Formerly ${action.basePath}`);
+        events.print('End note');
+      }
+
       renderChildren(action);
+
+      if (action.baseStatus) {
+        events.print('Note right');
+        events.printLeftAligned(`Formerly ${action.baseStatus}`);
+        events.print('End note');
+      }
 
       events.print(
         `[<- ${alias(action.callee.name)}: ${action.status}`,
@@ -132,9 +162,7 @@ export function format(diagram: Diagram, source: string): string {
       events.print(`End`);
     } else if (isConditional(action)) {
       events.print(
-        `${action.nodeName} ${action.conditionName === 'delete' ? '#ffaaaa' : ''} ${
-          action.conditionName
-        }`
+        `${action.nodeName} ${conditionColor(action.conditionName) || ''} ${action.conditionName}`
       );
 
       renderChildren(action);

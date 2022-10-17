@@ -1,6 +1,7 @@
 import assert from 'assert';
 import { MinPriorityQueue } from '@datastructures-js/priority-queue';
-import { Action, Actor, Diagram, isRequest } from './types';
+import levenshtein from 'js-levenshtein';
+import { Action, Actor, Diagram, isRequest, isWebRequest, parseRoute, Request } from './types';
 import { inspect } from 'util';
 import { verbose } from '../utils';
 
@@ -12,6 +13,10 @@ export enum MoveType {
   AdvanceBoth = 1,
   DeleteLeft = 2,
   InsertRight = 3,
+  ChangeFunction = 4,
+  ChangeRequestMethod = 5,
+  ChangeRequestPath = 6,
+  ChangeRequestStatus = 7,
 }
 
 export type State = {
@@ -40,15 +45,14 @@ function moveType(moveType: MoveType): string {
       return 'delete left';
     case MoveType.InsertRight:
       return 'insert right';
-  }
-}
-
-function stateCost(state: State): number {
-  switch (state.move) {
-    case MoveType.AdvanceBoth:
-      return 0;
-    default:
-      return 1;
+    case MoveType.ChangeFunction:
+      return 'change name';
+    case MoveType.ChangeRequestMethod:
+      return 'change request method';
+    case MoveType.ChangeRequestPath:
+      return 'change request path';
+    case MoveType.ChangeRequestStatus:
+      return 'change request status';
   }
 }
 
@@ -91,8 +95,10 @@ export default function diff(l_diagram: Diagram, r_diagram: Diagram): Diff {
       move: MoveType.AdvanceBoth,
     } as State);
 
-  const deleteLeft = (state: State): State =>
-    ({
+  const deleteLeft = (state: State): State => {
+    const cost = l_actions[state.l_node].descendantCount;
+
+    return {
       l_node: advance(l_actions, state.l_node),
       r_node: state.r_node,
       move: MoveType.DeleteLeft,
@@ -105,7 +111,47 @@ export default function diff(l_diagram: Diagram, r_diagram: Diagram): Diff {
       move: MoveType.InsertRight,
     } as State);
 
-  const digestOf = (actions: Action[], action: ActionIndex): string => actions[action].detailDigest;
+  const changeFunction = (state: State): State => {
+    const baseName = (l_actions[state.l_node] as Request).name;
+    const headName = (r_actions[state.r_node] as Request).name;
+    const distance = levenshtein(baseName, headName) * 1.0;
+    const maxLength = Math.max(baseName.length, headName.length);
+    // Algorithm should prefer to add/remove function calls rather than
+    // change every call to make them finally align.
+    // TODO: Let's see how this works out on some more complex data.
+    const cost = (distance / maxLength / InsertCost) * 4;
+
+    return {
+      l_node: advance(l_actions, state.l_node),
+      r_node: advance(r_actions, state.r_node),
+      move: MoveType.ChangeFunction,
+      cost,
+    } as State;
+  };
+
+  const changeRequestMethod = (state: State): State =>
+    ({
+      l_node: advance(l_actions, state.l_node),
+      r_node: advance(r_actions, state.r_node),
+      move: MoveType.ChangeRequestMethod,
+      cost: 4,
+    } as State);
+
+  const changeRequestPath = (state: State): State =>
+    ({
+      l_node: advance(l_actions, state.l_node),
+      r_node: advance(r_actions, state.r_node),
+      move: MoveType.ChangeRequestPath,
+      cost: 2,
+    } as State);
+
+  const changeRequestStatus = (state: State): State =>
+    ({
+      l_node: advance(l_actions, state.l_node),
+      r_node: advance(r_actions, state.r_node),
+      move: MoveType.ChangeRequestStatus,
+      cost: 2,
+    } as State);
 
   /**
    * Possible moves are:
@@ -115,13 +161,31 @@ export default function diff(l_diagram: Diagram, r_diagram: Diagram): Diff {
    *    The right node is an insertion
    */
   const moves = (state: State): Move[] => {
-    const l_digest = digestOf(l_actions, state.l_node);
-    const r_digest = digestOf(r_actions, state.r_node);
+    const l_action = l_actions[state.l_node];
+    const r_action = r_actions[state.r_node];
 
-    if (l_digest === r_digest) {
+    if (l_action.detailDigest === r_action.detailDigest) {
       return [advanceBoth];
     } else {
-      return [deleteLeft, insertRight];
+      const moves: Move[] = [];
+      if (isRequest(l_action) && isRequest(r_action)) {
+        moves.push(changeFunction);
+      }
+      if (isWebRequest(l_action) && isWebRequest(r_action)) {
+        const l_route = parseRoute(l_action.route);
+        const r_route = parseRoute(r_action.route);
+        if (l_route.method !== r_route.method) {
+          moves.push(changeRequestMethod);
+        } else if (l_route.path !== r_route.path) {
+          moves.push(changeRequestPath);
+        }
+        if (l_action.route === r_action.route && l_action.status !== r_action.status) {
+          moves.push(changeRequestStatus);
+        }
+      }
+      moves.push(insertRight);
+      moves.push(deleteLeft);
+      return moves;
     }
   };
 
@@ -143,7 +207,7 @@ export default function diff(l_diagram: Diagram, r_diagram: Diagram): Diff {
 
     moves(state).forEach((move) => {
       const newState = move(state);
-      const moveCost = stateCost(newState);
+      const moveCost = newState.cost;
       const totalCost = distances.get(stateKey(state))! + moveCost;
       if (verbose()) console.log(`Trying ${inspect(newState)}, cost = ${totalCost}`);
       if (

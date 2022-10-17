@@ -1,11 +1,10 @@
-import { mkdir, readFile, writeFile } from 'fs/promises';
-import { basename, dirname, join } from 'path';
-import { inspect } from 'util';
+import { readFile, writeFile } from 'fs/promises';
+import { dirname, join } from 'path';
 import yargs from 'yargs';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import buildDiffDiagram from '../sequenceDiagram/buildDiffDiagram';
 import diff from '../sequenceDiagram/diff';
-import { Diagram } from '../sequenceDiagram/types';
+import { Action, Diagram } from '../sequenceDiagram/types';
 import { verbose } from '../utils';
 
 export const command = 'sequence-diagram-diff base-diagram head-diagram';

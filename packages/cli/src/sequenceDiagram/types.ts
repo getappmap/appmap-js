@@ -19,6 +19,7 @@ export type Node = {
   detailDigest: string;
   parent?: Action;
   children: Action[];
+  descendantCount: number;
 };
 
 export type Loop = Node & {
@@ -47,6 +48,7 @@ export type Request = Message &
     name: string;
     stableProperties: Record<string, string | number>;
     response?: Response;
+    baseName?: string;
   };
 
 export type WebRequest = Message &
@@ -55,6 +57,9 @@ export type WebRequest = Message &
     callee: Actor;
     route: string;
     status: number;
+    baseMethod?: string;
+    basePath?: string;
+    baseStatus?: number;
   };
 
 export type Response = {
@@ -80,6 +85,12 @@ export const actionActors = (action: Action): Actor[] => {
 
   return [];
 };
+
+export function countDescendants(node: Action): void {
+  node.children.forEach((child) => countDescendants(child));
+
+  node.descendantCount = node.children.reduce((count, node) => count + node.descendantCount + 1, 0);
+}
 
 export type Diagram = {
   actors: Actor[];

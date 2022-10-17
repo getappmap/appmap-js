@@ -92,6 +92,7 @@
     "fs-extra": "^10.1.0",
     "glob": "^7.2.3",
     "inquirer": "^8.1.2",
+    "js-levenshtein": "^1.1.6",
     "js-yaml": "^4.0.3",
     "jsdom": "^16.6.0",
     "moo": "^0.5.1",

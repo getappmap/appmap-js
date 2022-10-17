@@ -8,6 +8,7 @@ import Specification from './specification';
 import {
   Action,
   Actor,
+  countDescendants,
   Diagram,
   Loop,
   NodeType,
@@ -125,6 +126,7 @@ export default function buildDiagram(
         route: callee.route,
         status: callee.httpServerResponse?.status,
         detailDigest: callee.hash,
+        descendantCount: 0,
         children: [],
       } as WebRequest;
     } else if (caller && callee) {
@@ -136,6 +138,7 @@ export default function buildDiagram(
         detailDigest: callee.hash,
         stableProperties: { ...callee.stableProperties },
         response: buildResponse(callee),
+        descendantCount: 0,
         children: [],
       } as Request;
     }
@@ -190,6 +193,7 @@ export default function buildDiagram(
         const parent = requestStack[requestStack.length - 1];
         if (parent) {
           parent.children.push(request);
+          parent.descendantCount += request.descendantCount + 1;
           request.parent = parent;
         } else {
           rootActions.push(request);
@@ -251,6 +255,8 @@ export default function buildDiagram(
   };
 
   rootActions.forEach((root) => mergeChildren(root));
+
+  rootActions.forEach((root) => countDescendants(root));
 
   return {
     actors: actors.sort((a, b) => a.order - b.order),
