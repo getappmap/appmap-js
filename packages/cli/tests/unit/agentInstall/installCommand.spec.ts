@@ -1,7 +1,7 @@
 import path from 'path';
 import fse from 'fs-extra';
 import tmp from 'tmp';
-import sinon from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 import inquirer from 'inquirer';
 import Telemetry from '../../../src/telemetry';
 import yargs from 'yargs';
@@ -129,7 +129,8 @@ packages:
       const projectFixture = path.join(fixtureDir, 'java', 'gradle', 'example-project');
 
       const verifyAgent = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('./gradlew');
+        const expectedProgram = process.platform === 'win32' ? '.\\gradlew.bat' : './gradlew';
+        expect(cmdStruct.program).toEqual(expectedProgram);
         expect(cmdStruct.args).toEqual([
           'dependencyInsight',
           '--dependency',
@@ -146,7 +147,8 @@ packages:
       };
 
       const printPath = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('./gradlew');
+        const expectedProgram = process.platform === 'win32' ? '.\\gradlew.bat' : './gradlew';
+        expect(cmdStruct.program).toEqual(expectedProgram);
         expect(cmdStruct.args).toEqual(['appmap-print-jar-path']);
         const ret = {
           stdout: 'com.appland:appmap-agent.jar.path=appmap.jar',
@@ -166,7 +168,7 @@ packages:
 
       it('installs as expected', async () => {
         expect.assertions(12);
-        const evalResults = (err, argv, output) => {
+        const evalResults = (err: Error | undefined, argv: any, output: string) => {
           expect(err).toBeNull();
 
           const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
@@ -188,8 +190,8 @@ packages:
         expect.assertions(9);
         const msg = 'failValidate, validation failed';
         const failValidate = () => Promise.reject(new Error(msg));
-        const evalResults = (err, argv, output) => {
-          expect(err.message).toMatch(msg);
+        const evalResults = (err: Error | undefined, argv: any, output: string) => {
+          expect(err?.message).toMatch(msg);
         };
 
         await testE2E(
@@ -207,7 +209,8 @@ packages:
       const projectFixture = path.join(fixtureDir, 'java', 'maven', 'example-project');
 
       const verifyAgent = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('./mvnw');
+        const expectedProgram = process.platform === 'win32' ? '.\\mvnw.cmd' : './mvnw';
+        expect(cmdStruct.program).toEqual(expectedProgram);
         expect(cmdStruct.args).toEqual([
           '-Dplugin=com.appland:appmap-maven-plugin',
           'help:describe',
@@ -220,7 +223,8 @@ packages:
       };
 
       const printPath = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('./mvnw');
+        const expectedProgram = process.platform === 'win32' ? '.\\mvnw.cmd' : './mvnw';
+        expect(cmdStruct.program).toEqual(expectedProgram);
         expect(cmdStruct.args).toEqual(['appmap:print-jar-path']);
         const ret = {
           stdout: 'com.appland:appmap-agent.jar.path=appmap.jar',
@@ -236,7 +240,7 @@ packages:
 
       it('installs as expected', async () => {
         expect.assertions(12);
-        const evalResults = (err, argv, output) => {
+        const evalResults = (err: Error | undefined, argv: any, output: string) => {
           expect(err).toBeNull();
 
           const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
@@ -258,8 +262,8 @@ packages:
         expect.assertions(9);
         const msg = 'failValidate, validation failed';
         const failValidate = () => Promise.reject(new Error(msg));
-        const evalResults = (err, argv, output) => {
-          expect(err.message).toMatch(msg);
+        const evalResults = (err: Error | undefined, argv: any, output: string) => {
+          expect(err?.message).toMatch(msg);
         };
 
         await testE2E(
@@ -382,7 +386,7 @@ packages:
 
     it('installs as expected', async () => {
       expect.assertions(15);
-      const evalResults = (err, argv, output) => {
+      const evalResults = (err: Error | undefined, argv: any, output: string) => {
         expect(err).toBeNull();
 
         const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
@@ -408,8 +412,8 @@ packages:
       const failValidate = () => {
         return Promise.reject(new Error(msg));
       };
-      const evalResults = (err, argv, output) => {
-        expect(err.message).toMatch(msg);
+      const evalResults = (err: Error | undefined, argv: any, output: string) => {
+        expect(err?.message).toMatch(msg);
       };
 
       await rubyTestE2E(
@@ -426,12 +430,12 @@ packages:
 
     describe('when validation returns errors', () => {
       const msg = 'failValidate, validation failed';
-      const testValidation = async (errorObj) => {
+      const testValidation = async (errorObj: any) => {
         const failValidate = () => {
           return Promise.resolve({ stdout: errorObj, stderr: '' });
         };
-        const evalResults = (err, argv, output) => {
-          expect(err.message).toMatch(msg);
+        const evalResults = (err: Error | undefined, argv: any, output: string) => {
+          expect(err?.message).toMatch(msg);
         };
 
         await rubyTestE2E(
@@ -557,7 +561,7 @@ packages:
 
         it('installs as expected', async () => {
           expect.assertions(14);
-          const evalResults = (err, argv, output) => {
+          const evalResults = (err: Error | undefined, argv: any, output: string) => {
             expect(err).toBeNull();
 
             const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
@@ -604,7 +608,7 @@ packages:
 
         it('installs as expected', async () => {
           expect.assertions(14);
-          const evalResults = (err, argv, output) => {
+          const evalResults = (err: Error | undefined, argv: any, output: string) => {
             expect(err).toBeNull();
 
             const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
@@ -694,7 +698,7 @@ packages:
 
       it('installs as expected', async () => {
         expect.assertions(12);
-        const evalResults = (err, argv, output) => {
+        const evalResults = (err: Error | undefined, argv: any, output: string) => {
           expect(err).toBeNull();
 
           const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
@@ -800,7 +804,7 @@ packages:
 
       it('installs as expected', async () => {
         expect.assertions(12);
-        const evalResults = (err, argv, output) => {
+        const evalResults = (err: Error | undefined, argv: any, output: string) => {
           expect(err).toBeNull();
 
           const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
@@ -823,8 +827,8 @@ packages:
         expect.assertions(9);
         const msg = 'failValidate, validation failed';
         const failValidate = () => Promise.reject(new Error(msg));
-        const evalResults = (err, argv, output) => {
-          expect(err.message).toMatch(msg);
+        const evalResults = (err: Error | undefined, argv: any, output: string) => {
+          expect(err?.message).toMatch(msg);
         };
         await jsTestE2E(
           nodeVersion,
@@ -861,7 +865,7 @@ packages:
 
       it('installs as expected', async () => {
         expect.assertions(12);
-        const evalResults = (err, argv, output) => {
+        const evalResults = (err: Error | undefined, argv: any, output: string) => {
           expect(err).toBeNull();
 
           const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
@@ -884,8 +888,8 @@ packages:
         expect.assertions(9);
         const msg = 'failValidate, validation failed';
         const failValidate = () => Promise.reject(new Error(msg));
-        const evalResults = (err, argv, output) => {
-          expect(err.message).toMatch(msg);
+        const evalResults = (err: Error | undefined, argv: any, output: string) => {
+          expect(err?.message).toMatch(msg);
         };
         await jsTestE2E(
           nodeVersion,
@@ -1053,7 +1057,7 @@ packages:
   });
 
   describe('Multi-project install flow', () => {
-    let expectedStubs;
+    let expectedStubs: SinonStub[];
 
     beforeEach(() => {
       sinon.stub(commandRunner, 'run').resolves({

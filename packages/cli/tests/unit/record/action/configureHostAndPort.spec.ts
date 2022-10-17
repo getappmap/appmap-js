@@ -11,9 +11,9 @@ describe('record.action.configureHostAndPort', () => {
   let prompt: sinon.SinonStub;
   let context: RecordContext;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     config = new TempConfig();
-    config.initialize();
+    await config.initialize();
     context = new RecordContext(config);
     return context.initialize();
   });

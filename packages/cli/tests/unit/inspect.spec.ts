@@ -11,9 +11,9 @@ import { CodeObject, CodeObjectMatch } from '../../src/search/types';
 tmp.setGracefulCleanup();
 
 const fixtureDir = join(__dirname, 'fixtures', 'ruby');
-const appMapDir = tmp.dirSync().name;
+const appMapDir = tmp.dirSync().name.replace(/\\/g, '/');
 
-const now = Date.now();
+const now = new Date();
 
 function stripCodeObjectParents(codeObjectMatches: CodeObjectMatch[]): CodeObjectMatch[] {
   const strip = (codeObject: CodeObject): void => {

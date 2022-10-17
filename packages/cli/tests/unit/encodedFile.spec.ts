@@ -6,14 +6,14 @@ import EncodedFile from '../../src/encodedFile';
 
 tmp.setGracefulCleanup();
 describe('EncodedFile', () => {
-  let tmpDir;
-  let fixtureDir;
+  let tmpDir: string;
+  let fixtureDir: string;
   beforeEach(() => {
     tmpDir = tmp.dirSync({} as any).name;
     fixtureDir = join(__dirname, 'fixtures', 'encodedFile');
   });
 
-  const verifyUpdate = (prefix, eol) => {
+  const verifyUpdate = (prefix: string, eol: string) => {
     const inputPath = join(fixtureDir, `${prefix}.txt`);
     const actualPath = join(tmpDir, `${prefix}.actual.txt`);
     const ef = new EncodedFile(inputPath);
@@ -45,28 +45,28 @@ describe('EncodedFile', () => {
       it('writes an updated UTF-16 file', () => {
         verifyUpdate('utf16le', lineEndings);
       });
+
+      it('reads a 7-bit ASCII file', () => {
+        const ef = new EncodedFile(join(fixtureDir, 'ascii.txt'));
+        const str = ef.toString();
+        expect(str[0]).toEqual('#');
+      });
+
+      it('writes a 7-bit ASCII file', () => {
+        verifyUpdate('ascii', lineEndings);
+      });
+
+      it('raises an error if the file is UTF-8', () => {
+        expect(() => {
+          new EncodedFile(join(fixtureDir, 'utf8.txt'));
+        }).toThrowError(/Unknown encoding/);
+      });
+
+      it('reads an empty file', () => {
+        const ef = new EncodedFile(join(fixtureDir, 'empty.txt'));
+        const str = ef.toString();
+        expect(str).toEqual('');
+      });
     });
-  });
-
-  it('reads a 7-bit ASCII file', () => {
-    const ef = new EncodedFile(join(fixtureDir, 'ascii.txt'));
-    const str = ef.toString();
-    expect(str[0]).toEqual('#');
-  });
-
-  it('writes a 7-bit ASCII file', () => {
-    verifyUpdate('ascii', '\n');
-  });
-
-  it('raises an error if the file is UTF-8', () => {
-    expect(() => {
-      new EncodedFile(join(fixtureDir, 'utf8.txt'));
-    }).toThrowError(/Unknown encoding/);
-  });
-
-  it('reads an empty file', () => {
-    const ef = new EncodedFile(join(fixtureDir, 'empty.txt'));
-    const str = ef.toString();
-    expect(str).toEqual('');
   });
 });
