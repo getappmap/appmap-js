@@ -26,17 +26,17 @@ GoodProject.args = {
       agentInstalled: true,
       language: {
         name: 'Ruby',
-        score: 3,
+        score: 2,
         text: 'language text',
       },
       testFramework: {
         name: 'minitest',
-        score: 3,
+        score: 2,
         text: 'test framework text',
       },
       webFramework: {
         name: 'Rails',
-        score: 3,
+        score: 2,
         text: 'web framework text',
       },
     },
@@ -73,12 +73,12 @@ OkProject.args = {
       path: '/home/user/rails_test',
       language: {
         name: 'Ruby',
-        score: 2,
+        score: 1,
         text: "This project looks like Ruby, but we couldn't find a Gemfile.",
       },
       webFramework: {
         name: 'Rails',
-        score: 3,
+        score: 1,
         text: 'This project uses Rails. AppMap will automatically recognize web requests, SQL queries, and key framework functions during recording.',
       },
     },
@@ -121,12 +121,12 @@ FourProjects.args = {
       path: '/home/user/ruby_test',
       language: {
         name: 'Ruby',
-        score: 2,
+        score: 1,
         text: "This project looks like Ruby, but we couldn't find a Gemfile.",
       },
       webFramework: {
         name: 'Rails',
-        score: 3,
+        score: 1,
         text: 'This project uses Rails. AppMap will automatically recognize web requests, SQL queries, and key framework functions during recording.',
       },
     },
