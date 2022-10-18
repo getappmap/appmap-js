@@ -1,3 +1,10 @@
+# [@appland/components-v2.17.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.16.0...@appland/components-v2.17.0) (2022-10-18)
+
+
+### Features
+
+* Add pipenv installation instructions ([0c8f7c6](https://github.com/getappmap/appmap-js/commit/0c8f7c64670620586589161c66e887f4c8021a4d))
+
 # [@appland/components-v2.16.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.15.0...@appland/components-v2.16.0) (2022-10-14)
 
 
