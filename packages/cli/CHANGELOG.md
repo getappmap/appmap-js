@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.46.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.45.0...@appland/appmap-v3.46.0) (2022-10-19)
+
+
+### Features
+
+* If validateProject fails to JSON.parse(stdout), print out the stdout that failed to be parsed and display an error message. ([0a7cc09](https://github.com/getappmap/appmap-js/commit/0a7cc098291b85f58e6825ad06dc3d4e1fe13f5f))
+
 # [@appland/appmap-v3.45.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.44.4...@appland/appmap-v3.45.0) (2022-10-17)
 
 
