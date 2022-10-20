@@ -104,6 +104,29 @@ javascriptOrJava.args = {
   complete: true,
 };
 
+export const intellijJava = Template.bind({});
+intellijJava.args = {
+  project: {
+    name: 'MyOtherProject',
+    score: 3,
+    path: '/home/user/my_other_project',
+    language: {
+      name: 'Java',
+      score: 2,
+    },
+    testFramework: {
+      name: 'JUnit',
+      score: 2,
+    },
+    webFramework: {
+      name: 'Spring',
+      score: 2,
+    },
+  },
+  editor: 'jetbrains',
+  complete: true,
+};
+
 export const noWebOrTestFramework = Template.bind({});
 noWebOrTestFramework.args = {
   project: {

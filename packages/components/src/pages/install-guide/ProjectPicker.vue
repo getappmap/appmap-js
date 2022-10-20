@@ -19,6 +19,7 @@
         <article v-if="projects.length === 1">
           <v-project-picker-table
             :projects="projects"
+            :editor="editor"
             @select-project="selectProject($event)"
             ref="projectTable"
           />
@@ -33,6 +34,7 @@
             <v-project-picker-table
               :projects="projects"
               @select-project="selectProject($event)"
+              :editor="editor"
               ref="projectTable"
             />
           </div>
@@ -67,6 +69,10 @@ export default {
     projects: {
       type: Array,
       default: () => [],
+    },
+    editor: {
+      type: String,
+      validator: (value) => ['vscode', 'jetbrains'].indexOf(value) !== -1,
     },
   },
 

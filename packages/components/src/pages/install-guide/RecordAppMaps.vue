@@ -6,7 +6,11 @@
       </header>
       <main>
         <article>
-          <template v-if="automaticRecording">
+          <template v-if="automaticRecording || (isJava && isJetBrains)">
+            <p class="mb20 bold" v-if="isJava && isJetBrains">
+              Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap"
+              button to start your run configurations with AppMap enabled.
+            </p>
             <template v-if="automaticRecordingPrompts.length === 1">
               <p class="mb20" data-cy="automatic-recording-single">
                 To perform your first runtime analysis {{ firstPrompt }}
@@ -70,6 +74,8 @@ import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue
 import VCodeSnippet from '@/components/CodeSnippet.vue';
 import Navigation from '@/components/mixins/navigation';
 import VPending from '@/components/Pending.vue';
+import VRunConfigDark from '@/assets/jetbrains_run_config_execute_dark.svg';
+import VRunConfigLight from '@/assets/jetbrains_run_config_execute.svg';
 
 import { isProjectSupported, isFeatureSupported } from '@/lib/project';
 
@@ -81,6 +87,8 @@ export default {
     VNavigationButtons,
     VCodeSnippet,
     VPending,
+    VRunConfigDark,
+    VRunConfigLight,
   },
 
   mixins: [Navigation],
@@ -102,6 +110,7 @@ export default {
       type: Set,
       default: () => new Set(),
     },
+    theme: String,
   },
 
   computed: {
@@ -113,6 +122,13 @@ export default {
     language() {
       if (!this.project || !this.project.language) return undefined;
       return this.project.language.name;
+    },
+    isJava() {
+      if (!this.language) return false;
+      return this.language.toLowerCase() === 'java';
+    },
+    isJetBrains() {
+      return this.editor === 'jetbrains';
     },
     supported() {
       return isProjectSupported(this.project);
@@ -186,6 +202,19 @@ export default {
       }
       return 'Waiting for AppMaps to be created.';
     },
+    runConfigIcon() {
+      return this.theme === 'dark' ? VRunConfigDark : VRunConfigLight;
+    },
   },
 };
 </script>
+
+<style>
+.bold {
+  font-weight: bold;
+}
+.run-config-icon {
+  width: 22px;
+  transform: translateY(25%);
+}
+</style>

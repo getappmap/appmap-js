@@ -152,3 +152,23 @@ FourProjects.args = {
     },
   ],
 };
+
+export const IntelliJ = Template.bind({});
+IntelliJ.args = {
+  projects: [
+    {
+      name: 'my_java_project',
+      score: 2,
+      path: '/home/user/my_java_project',
+      language: {
+        name: 'Java',
+        score: 2,
+      },
+      webFramework: {
+        name: 'Spring',
+        score: 2,
+      },
+    },
+  ],
+  editor: 'jetbrains',
+};

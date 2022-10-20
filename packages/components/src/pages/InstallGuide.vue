@@ -4,6 +4,7 @@
       id="project-picker"
       :projects="projects"
       :message-success="messageCopiedCommand"
+      :editor="editor"
     />
     <v-record-app-maps
       id="record-appmaps"
@@ -11,6 +12,7 @@
       :project="selectedProject"
       :complete="hasRecorded"
       :feature-flags="featureFlags"
+      :theme="theme"
     />
     <v-open-app-maps
       id="open-appmaps"
@@ -59,6 +61,7 @@ export default {
     editor: {
       default: 'vscode',
       type: String,
+      validator: (value) => ['vscode', 'jetbrains'].indexOf(value) !== -1,
     },
     featureFlags: {
       type: Set,
@@ -75,6 +78,11 @@ export default {
     userAuthenticated: {
       type: Boolean,
       default: false,
+    },
+    theme: {
+      type: String,
+      default: 'dark',
+      validator: (value) => ['dark', 'light'].indexOf(value) !== -1,
     },
   },
 
