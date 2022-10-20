@@ -10,6 +10,7 @@
       :language="project.language"
       :test-framework="project.testFramework"
       :web-framework="project.webFramework"
+      :editor="editor"
       @click.native="selectProject(project)"
     />
   </div>
@@ -23,6 +24,7 @@ export default {
   components: { VProjectPickerRow },
   props: {
     projects: Array,
+    editor: String,
   },
 
   data() {
