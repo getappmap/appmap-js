@@ -1,3 +1,11 @@
+# [@appland/components-v2.18.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.17.0...@appland/components-v2.18.0) (2022-10-21)
+
+
+### Features
+
+* Add a feature flag to disable rendering the AppMap record state ([34ab3a1](https://github.com/getappmap/appmap-js/commit/34ab3a141f7d865eb5b97580a321d02b613147fa))
+* Document Java + IntelliJ instructions ([16e1932](https://github.com/getappmap/appmap-js/commit/16e1932f689732306b325e308f9746b93dcc8ac7))
+
 # [@appland/components-v2.17.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.16.0...@appland/components-v2.17.0) (2022-10-18)
 
 
