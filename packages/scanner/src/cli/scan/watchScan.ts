@@ -118,7 +118,7 @@ export class Watcher {
     this.queue.push(mtimePath);
   }
 
-  protected async scan(mtimePath: string): Promise<void> {
+  protected async scan(mtimePath: string, callback?: () => void | ErrorCallback): Promise<void> {
     assert(this.config, `config should always be loaded before appmapWatcher triggers a scan`);
 
     const appmapFile = [path.dirname(mtimePath), 'appmap.json'].join('.');
@@ -143,6 +143,11 @@ export class Watcher {
 
     // Always report the raw data
     await writeFile(reportFile, formatReport(rawScanResults));
+
+    // tell the queue that the current task is complete
+    if (callback) {
+      await callback();
+    }
   }
 
   protected async reloadConfig(): Promise<void> {
