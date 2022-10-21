@@ -59,6 +59,7 @@
             class="mb20"
             :is-pending="!complete"
             :message="pendingMessage"
+            v-if="showPendingState"
             data-cy="status-message"
           />
         </article>
@@ -78,6 +79,7 @@ import VRunConfigDark from '@/assets/jetbrains_run_config_execute_dark.svg';
 import VRunConfigLight from '@/assets/jetbrains_run_config_execute.svg';
 
 import { isProjectSupported, isFeatureSupported } from '@/lib/project';
+import { DISABLE_PENDING_RECORD_STATE, PYTHON_RECORD_BY_DEFAULT } from '@/lib/featureFlags';
 
 export default {
   name: 'RecordAppMaps',
@@ -114,6 +116,9 @@ export default {
   },
 
   computed: {
+    showPendingState() {
+      return !this.featureFlags.has(DISABLE_PENDING_RECORD_STATE);
+    },
     command() {
       return ['npx @appland/appmap record test', this.project && `-d ${this.project.path}`]
         .filter(Boolean)
@@ -135,7 +140,7 @@ export default {
     },
     automaticRecordingLanguages() {
       const languages = ['ruby'];
-      if (this.featureFlags.has('ar-python')) languages.push('python');
+      if (this.featureFlags.has(PYTHON_RECORD_BY_DEFAULT)) languages.push('python');
       return languages;
     },
     automaticRecording() {
