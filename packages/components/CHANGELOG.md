@@ -1,3 +1,10 @@
+# [@appland/components-v2.18.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.18.0...@appland/components-v2.18.1) (2022-10-21)
+
+
+### Bug Fixes
+
+* Java for IntelliJ documents remote recording for recording web server activity ([edd928b](https://github.com/getappmap/appmap-js/commit/edd928ba328bf17f397458cacf27217730f0c7ba))
+
 # [@appland/components-v2.18.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.17.0...@appland/components-v2.18.0) (2022-10-21)
 
 
