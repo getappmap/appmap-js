@@ -6,7 +6,34 @@
       </header>
       <main>
         <article>
-          <template v-if="automaticRecording || (isJava && isJetBrains)">
+          <template v-if="isJava && isJetBrains">
+            <p class="mb20 bold">
+              Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap"
+              button to start your run configurations with AppMap enabled.
+            </p>
+            <template v-if="remoteRecordingPrompts.length === 1">
+              <p class="mb20" data-cy="automatic-recording-single">
+                To perform your first runtime analysis {{ firstPrompt }}
+              </p>
+            </template>
+
+            <template v-else>
+              There are {{ numberOfRecordingMethods }} methods of performing runtime analysis with
+              AppMap in this project:
+              <ol data-cy="automatic-recording-multi">
+                <li v-for="(text, index) in remoteRecordingPrompts" :key="index">
+                  {{ text }}
+                </li>
+              </ol>
+            </template>
+            <p class="mb20">
+              Looking for more information? Visit our
+              <a href="https://appmap.io/docs/recording-methods.html" data-cy="documentation-link">
+                documentation for recording AppMaps in {{ language }}.
+              </a>
+            </p>
+          </template>
+          <template v-else-if="automaticRecording">
             <p class="mb20 bold" v-if="isJava && isJetBrains">
               Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap"
               button to start your run configurations with AppMap enabled.
@@ -166,6 +193,18 @@ export default {
       if (this.webFrameworkSupported)
         prompts.push(
           `Start your ${this.webFramework.name} server. Inbound requests will be automatically be recorded.`
+        );
+      if (this.testFrameworkSupported)
+        prompts.push(
+          `Run your ${this.project.testFramework.name} tests. Each test case will emit an AppMap.`
+        );
+      return prompts;
+    },
+    remoteRecordingPrompts() {
+      const prompts = [];
+      if (this.webFrameworkSupported)
+        prompts.push(
+          `Start your ${this.webFramework.name} server. Inbound requests can be captured by starting a remote recording. Click the record button in the top right of the AppMap panel to begin.`
         );
       if (this.testFrameworkSupported)
         prompts.push(
