@@ -1,3 +1,10 @@
+# [@appland/components-v2.18.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.18.1...@appland/components-v2.18.2) (2022-10-22)
+
+
+### Bug Fixes
+
+* Single recording prompt can include remote recording ([3189bff](https://github.com/getappmap/appmap-js/commit/3189bffa08fb8882bd08296c92ce76b29d142538))
+
 # [@appland/components-v2.18.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.18.0...@appland/components-v2.18.1) (2022-10-21)
 
 
