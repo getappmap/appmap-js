@@ -13,7 +13,7 @@
             </p>
             <template v-if="remoteRecordingPrompts.length === 1">
               <p class="mb20" data-cy="automatic-recording-single">
-                To perform your first runtime analysis {{ firstPrompt }}
+                To perform your first runtime analysis {{ firstPrompt(remoteRecordingPrompts) }}
               </p>
             </template>
 
@@ -34,13 +34,9 @@
             </p>
           </template>
           <template v-else-if="automaticRecording">
-            <p class="mb20 bold" v-if="isJava && isJetBrains">
-              Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap"
-              button to start your run configurations with AppMap enabled.
-            </p>
             <template v-if="automaticRecordingPrompts.length === 1">
               <p class="mb20" data-cy="automatic-recording-single">
-                To perform your first runtime analysis {{ firstPrompt }}
+                To perform your first runtime analysis {{ firstPrompt(automaticRecordingPrompts) }}
               </p>
             </template>
 
@@ -212,12 +208,6 @@ export default {
         );
       return prompts;
     },
-    firstPrompt() {
-      const { automaticRecordingPrompts: prompts } = this;
-      // Make the first character lowercase, we're going to append some
-      // words to the beginning of this sentence.
-      return prompts[0].charAt(0).toLowerCase() + prompts[0].slice(1);
-    },
     numberOfRecordingMethods() {
       switch (this.automaticRecordingPrompts.length) {
         case 2:
@@ -248,6 +238,14 @@ export default {
     },
     runConfigIcon() {
       return this.theme === 'dark' ? VRunConfigDark : VRunConfigLight;
+    },
+  },
+
+  methods: {
+    firstPrompt(prompts) {
+      // Make the first character lowercase, we're going to append some
+      // words to the beginning of this sentence.
+      return prompts[0].charAt(0).toLowerCase() + prompts[0].slice(1);
     },
   },
 };
