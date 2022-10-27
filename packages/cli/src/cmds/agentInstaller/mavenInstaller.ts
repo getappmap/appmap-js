@@ -11,8 +11,10 @@ import JavaBuildToolInstaller from './javaBuildToolInstaller';
 import EncodedFile from '../../encodedFile';
 
 export default class MavenInstaller extends JavaBuildToolInstaller {
+  static identifier = 'Maven';
+
   constructor(path: string) {
-    super('Maven', path);
+    super(MavenInstaller.identifier, path);
   }
 
   get buildFile(): string {

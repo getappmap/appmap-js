@@ -12,8 +12,10 @@ import { GradleParser, GradleParseResult } from './gradleParser';
 import EncodedFile from '../../encodedFile';
 
 export default class GradleInstaller extends JavaBuildToolInstaller {
+  static identifier = 'Gradle';
+
   constructor(path: string) {
-    super('Gradle', path);
+    super(GradleInstaller.identifier, path);
   }
 
   private get buildGradleFileName(): string {

@@ -18,6 +18,8 @@ const REGEX_GEM_DEPENDENCY = /^\s*gem\s+['|"]appmap['|"].*$/m;
 const GEM_DEPENDENCY = "gem 'appmap', :groups => [:development, :test]";
 
 export class BundleInstaller extends AgentInstaller {
+  static identifier = 'Bundler';
+
   constructor(path: string) {
     super('Bundler', path);
   }
