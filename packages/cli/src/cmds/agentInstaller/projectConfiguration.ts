@@ -36,9 +36,7 @@ async function resolveSelectedInstallers(
             prefix: chalk.yellow('!'),
             message: `${chalk.red(
               userSpecifiedInstaller
-            )} is not a supported project type. However, installation for ${chalk.blue(
-              name
-            )} may continue with: ${availableInstallers
+            )} is not a supported project type. However, installation may continue with: ${availableInstallers
               .map((i) => chalk.blue(i.name))
               .join(', ')}. Continue?`,
           },
