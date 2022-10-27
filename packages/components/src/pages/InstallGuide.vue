@@ -100,9 +100,6 @@ export default {
   },
 
   computed: {
-    hasRecorded() {
-      return this.selectedProject && this.selectedProject.appMapsRecorded;
-    },
     hasFindings() {
       return this.selectedProject && this.selectedProject.analysisPerformed;
     },
@@ -117,6 +114,9 @@ export default {
     },
     numHttpRequests() {
       return this.selectedProject && this.selectedProject.numHttpRequests;
+    },
+    hasRecorded() {
+      return this.selectedProject && this.selectedProject.numAppMaps > 0;
     },
     path() {
       return this.selectedProject && this.selectedProject.path;
