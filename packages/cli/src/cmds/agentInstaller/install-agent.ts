@@ -12,7 +12,7 @@ import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
 import UI from '../userInteraction';
 import Telemetry from '../../telemetry';
-import { INSTALLERS } from './installers';
+import { INSTALLERS, INSTALLER_NAMES } from './installers';
 import { getDirectoryProperty } from './telemetryUtil';
 import { getProjects, ProjectConfiguration } from './projectConfiguration';
 import AgentInstaller from './agentInstaller';
@@ -224,17 +224,10 @@ export default {
   aliases: ['i', 'install-agent'],
   describe: 'Install and configure an AppMap language agent',
   builder(args: Yargs.Argv) {
-    // FIXME: This method takes advantage of the fact that each implementation returns a static string
-    // as the installer name. In the future, this may not be the case. After all, `name` is a non-static
-    // getter.
-    const installerNames = INSTALLERS.map((installer) => chalk.blue(installer.prototype.name)).join(
-      ', '
-    );
-
     args.option('project-type', {
       describe: [
-        'Specifies the installation target. This may be a language or project framework. Case-insensitive.',
-        `Supported project types: ${installerNames}`,
+        'Specifies the project dependency manager. Case-insensitive.',
+        `Supported project types: ${INSTALLER_NAMES.join(', ')}`,
       ].join('\n'),
       type: 'string',
       default: undefined,

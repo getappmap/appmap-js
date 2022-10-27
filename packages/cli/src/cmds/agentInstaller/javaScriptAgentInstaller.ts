@@ -36,8 +36,10 @@ abstract class JavaScriptInstaller extends AgentInstaller {
 }
 
 export class NpmInstaller extends JavaScriptInstaller {
+  static identifier = 'npm';
+
   constructor(path: string) {
-    super('npm', path);
+    super(NpmInstaller.identifier, path);
   }
 
   get buildFile(): string {
@@ -72,8 +74,10 @@ export class NpmInstaller extends JavaScriptInstaller {
 }
 
 export class YarnInstaller extends JavaScriptInstaller {
+  static identifier = 'yarn';
+
   constructor(path: string) {
-    super('yarn', path);
+    super(YarnInstaller.identifier, path);
   }
 
   get buildFile(): string {

@@ -43,8 +43,10 @@ abstract class PythonInstaller extends AgentInstaller {
 }
 
 export class PoetryInstaller extends PythonInstaller {
+  static identifier = 'poetry';
+
   constructor(path: string) {
-    super('poetry', path);
+    super(PoetryInstaller.identifier, path);
   }
 
   get buildFile(): string {
@@ -91,8 +93,10 @@ export class PoetryInstaller extends PythonInstaller {
 }
 
 export class PipenvInstaller extends PythonInstaller {
+  static identifier = 'pipenv';
+
   constructor(path: string) {
-    super('pipenv', path);
+    super(PipenvInstaller.identifier, path);
   }
 
   get buildFile(): string {
@@ -135,8 +139,10 @@ export class PipenvInstaller extends PythonInstaller {
   }
 }
 export class PipInstaller extends PythonInstaller {
+  static identifier = 'pip';
+
   constructor(path: string) {
-    super('pip', path);
+    super(PipInstaller.identifier, path);
   }
 
   get buildFile(): string {
