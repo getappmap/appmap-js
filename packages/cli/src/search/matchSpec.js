@@ -129,7 +129,7 @@ function matchHTTPServer() {
  * @param {string} routeName
  * @returns {MatchFn}
  */
- function matchServerRoute(routeName) {
+function matchServerRoute(routeName) {
   return matchTypeAndName('route', routeName);
 }
 

@@ -1,13 +1,15 @@
+import assert from 'assert';
 import buildAppMap from '../../src/appMapBuilder';
 import ClassMap from '../../src/classMap';
 import { CodeObjectType } from '../../src/codeObjectType';
-import scenario from './fixtures/user_page_scenario.appmap.json';
-import httpScenario from './fixtures/many_requests_scenario.json';
-import petClinicScenario from './fixtures/spring_petclinic.json';
+import userPageData from './fixtures/user_page_scenario.appmap.json';
+import manyRequestsData from './fixtures/many_requests_scenario.json';
+import petClinicData from './fixtures/spring_petclinic.json';
+import checkoutData from './fixtures/checkout_update_payment.appmap.json';
 
 describe('ClassMap', () => {
   describe('', () => {
-    const userPageClassMap = new ClassMap(scenario.classMap);
+    const userPageClassMap = new ClassMap(userPageData.classMap);
 
     it('should have root ids', () => {
       expect(userPageClassMap.roots.map((co) => co.id)).toEqual([
@@ -63,8 +65,8 @@ describe('ClassMap', () => {
     });
   });
   describe('bindEvents', () => {
-    const classMap = new ClassMap(httpScenario.classMap);
-    const events = buildAppMap().source(httpScenario).collectEvents();
+    const classMap = new ClassMap(manyRequestsData.classMap);
+    const events = buildAppMap().source(manyRequestsData).collectEvents();
     classMap.bindEvents(events);
 
     const uniqueRoutes = [
@@ -216,7 +218,7 @@ describe('ClassMap', () => {
   });
 
   describe('leafs', () => {
-    const { classMap } = buildAppMap(petClinicScenario).build();
+    const { classMap } = buildAppMap(petClinicData).build();
 
     it('resolves most specialized descendants of the same type', () => {
       const roots = classMap.roots.map((root) => root.leafs()).flat();
@@ -225,6 +227,22 @@ describe('ClassMap', () => {
       expect(roots[1].id).toEqual('org/springframework/samples/petclinic/owner');
       expect(roots[2].id).toEqual('HTTP server requests');
       expect(roots).toHaveLength(3);
+    });
+  });
+
+  describe('external service', () => {
+    const { classMap } = buildAppMap(checkoutData).build();
+
+    it('are represented', () => {
+      const externalService = classMap.root(CodeObjectType.EXTERNAL_SERVICE);
+
+      assert(externalService, `Type '${CodeObjectType.EXTERNAL_SERVICE}' not found`);
+      assert.strictEqual(externalService.name, 'api.stripe.com');
+
+      const externalRoute = externalService.children[0];
+      assert(externalRoute, `'${CodeObjectType.EXTERNAL_ROUTE}' not found`);
+      assert.strictEqual(externalRoute.type, CodeObjectType.EXTERNAL_ROUTE);
+      assert.strictEqual(externalRoute.name, 'POST https://api.stripe.com/v1/customers');
     });
   });
 });
