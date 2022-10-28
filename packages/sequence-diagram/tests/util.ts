@@ -4,11 +4,11 @@ import { readFileSync } from 'fs';
 import path, { join } from 'path';
 import buildDiagram from '../src/buildDiagram';
 import Specification from '../src/specification';
-import { Action, Diagram, isFunction } from '../src/types';
+import { Action, Actor, Diagram, isFunction } from '../src/types';
 import { SequenceDiagramOptions } from '../src/specification';
 
-const fixtureDir = path.join(__dirname, 'fixtures');
-export const APPMAP_DIR = path.join(fixtureDir, 'tmp', 'appmap');
+export const FIXTURE_DIR = path.join(__dirname, 'fixtures');
+export const APP_APPMAP_DIR = path.join(FIXTURE_DIR, 'app', 'tmp', 'appmap');
 
 export type AppMapDiagram = {
   appmap: AppMap;
@@ -17,22 +17,22 @@ export type AppMapDiagram = {
 
 export const SHOW_USER_APPMAP_FILE = 'show_user.appmap.json';
 export const SHOW_USER_APPMAP = buildAppMap()
-  .source(JSON.parse(readFileSync(join(APPMAP_DIR, SHOW_USER_APPMAP_FILE), 'utf-8')))
+  .source(JSON.parse(readFileSync(join(APP_APPMAP_DIR, SHOW_USER_APPMAP_FILE), 'utf-8')))
   .build();
 
 export const USER_NOT_FOUND_APPMAP_FILE = 'user_not_found.appmap.json';
 export const USER_NOT_FOUND_APPMAP = buildAppMap()
-  .source(JSON.parse(readFileSync(join(APPMAP_DIR, USER_NOT_FOUND_APPMAP_FILE), 'utf-8')))
+  .source(JSON.parse(readFileSync(join(APP_APPMAP_DIR, USER_NOT_FOUND_APPMAP_FILE), 'utf-8')))
   .build();
 
 export const LIST_USERS_APPMAP_FILE = 'list_users.appmap.json';
 export const LIST_USERS_APPMAP = buildAppMap()
-  .source(JSON.parse(readFileSync(join(APPMAP_DIR, LIST_USERS_APPMAP_FILE), 'utf-8')))
+  .source(JSON.parse(readFileSync(join(APP_APPMAP_DIR, LIST_USERS_APPMAP_FILE), 'utf-8')))
   .build();
 
 export const LIST_USERS_PREFETCH_APPMAP_FILE = 'list_users_prefetch.appmap.json';
 export const LIST_USERS_PREFETCH_APPMAP = buildAppMap()
-  .source(JSON.parse(readFileSync(join(APPMAP_DIR, LIST_USERS_PREFETCH_APPMAP_FILE), 'utf-8')))
+  .source(JSON.parse(readFileSync(join(APP_APPMAP_DIR, LIST_USERS_PREFETCH_APPMAP_FILE), 'utf-8')))
   .build();
 
 export const APPMAPS: Record<string, AppMap> = {};
@@ -46,13 +46,18 @@ export function loadDiagram(appmap: AppMap, options: SequenceDiagramOptions = {}
   return buildDiagram(SHOW_USER_APPMAP_FILE, appmap, specification);
 }
 
+export function findActor(diagram: Diagram, id: string): Actor {
+  const actor = diagram.actors.find((actor) => actor.id === id);
+  assert(actor, `Expecting actor ${id}`);
+  return actor;
+}
+
 export function findAction(
   diagram: AppMap | Diagram,
   test: (action: Action) => boolean
 ): Action | undefined {
-  if (diagram.constructor === AppMap) {
-    diagram = loadDiagram(diagram);
-  }
+  if (diagram.constructor === AppMap) diagram = loadDiagram(diagram);
+
   const matchAction = (action: Action): Action | undefined => {
     if (test(action)) return action;
 

@@ -1,0 +1,37 @@
+@startuml
+participant controllers as "controllers"
+participant models as "models"
+participant users as "users"
+participant posts as "posts"
+participant database as "database"
+  [->controllers: list
+  activate controllers
+    controllers->models: <u>list</u>
+    activate models
+      models->database: <u>query</u>
+    controllers<--models: array
+    deactivate models
+    controllers->users: list
+    activate users
+      Loop 5 times
+        users->models: posts
+        activate models
+          models->models: <u>find_for_user</u>
+          activate models
+            models->database: <u>query</u>
+          models<--models: array
+          deactivate models
+        users<--models: array
+        deactivate models
+        Loop ~2 times
+          users->posts: show
+          activate posts
+          users<--posts: string
+          deactivate posts
+        End
+      End
+    controllers<--users: array
+    deactivate users
+  [<--controllers: array
+  deactivate controllers
+@enduml

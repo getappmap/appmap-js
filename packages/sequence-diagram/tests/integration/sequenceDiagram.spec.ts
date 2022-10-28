@@ -1,12 +1,12 @@
 import assert from 'assert';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import { format } from '../../dist/formatter/plantUML';
-import { APPMAPS, APPMAP_DIR, loadDiagram } from '../util';
+import { format } from '../../src/formatter/plantUML';
+import { APPMAPS, APP_APPMAP_DIR, loadDiagram } from '../util';
 
 describe('Sequence diagram', () => {
   describe('PlantUML', () => {
-    it('matches fixture', async () => {
+    it('matches app fixture', async () => {
       for (const entry of Object.entries(APPMAPS)) {
         const [appmapFile, appmap] = entry;
         const diagram = loadDiagram(appmap, {
@@ -16,7 +16,7 @@ describe('Sequence diagram', () => {
         assert.strictEqual(
           plantUML,
           await readFile(
-            join(APPMAP_DIR, appmapFile.replace('.appmap.json', '.sequence.uml')),
+            join(APP_APPMAP_DIR, appmapFile.replace('.appmap.json', '.sequence.uml')),
             'utf-8'
           )
         );

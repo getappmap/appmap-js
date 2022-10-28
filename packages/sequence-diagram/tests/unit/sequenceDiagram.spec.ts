@@ -1,7 +1,13 @@
 import assert from 'assert';
 import { isLoop } from '../../dist/types';
-import { isRequest } from '../../src/types';
-import { findActionById, LIST_USERS_APPMAP, loadDiagram, SHOW_USER_APPMAP, USER_NOT_FOUND_APPMAP } from '../util';
+import { isFunction } from '../../src/types';
+import {
+  findActionById,
+  LIST_USERS_APPMAP,
+  loadDiagram,
+  SHOW_USER_APPMAP,
+  USER_NOT_FOUND_APPMAP,
+} from '../util';
 
 describe('Sequence diagram', () => {
   describe('actor ordering', () => {
@@ -10,11 +16,11 @@ describe('Sequence diagram', () => {
       assert.deepStrictEqual(
         diagram.actors.map((a) => ({ id: a.id, order: a.order })),
         [
-          { id: 'package:lib/controllers', order: 0 },
-          { id: 'package:lib/models', order: 1000 },
-          { id: 'package:lib/database', order: 2000 },
-          { id: 'package:lib/views/users', order: 3000 },
-          { id: 'package:lib/views/posts', order: 4000 },
+          { id: 'package:lib/controllers', order: 1000 },
+          { id: 'package:lib/models', order: 2000 },
+          { id: 'package:lib/database', order: 3000 },
+          { id: 'package:lib/views/users', order: 4000 },
+          { id: 'package:lib/views/posts', order: 5000 },
         ]
       );
     });
@@ -25,10 +31,10 @@ describe('Sequence diagram', () => {
       assert.deepStrictEqual(
         diagram.actors.map((a) => ({ id: a.id, order: a.order })),
         [
-          { id: 'package:lib/controllers', order: 0 },
-          { id: 'package:lib/models', order: 1000 },
-          { id: 'package:lib/views/users', order: 2000 },
-          { id: 'package:lib/views/posts', order: 3000 },
+          { id: 'package:lib/controllers', order: 1000 },
+          { id: 'package:lib/models', order: 2000 },
+          { id: 'package:lib/views/users', order: 3000 },
+          { id: 'package:lib/views/posts', order: 4000 },
           { id: 'package:lib/database', order: 10000 },
         ]
       );
@@ -39,14 +45,14 @@ describe('Sequence diagram', () => {
     describe('static', () => {
       it('is reported', () => {
         const action = findActionById(SHOW_USER_APPMAP, 'lib/database/Database.query');
-        assert(isRequest(action));
+        assert(isFunction(action));
         assert.strictEqual(action.static, true);
       });
     });
     describe('non-static', () => {
       it('is reported', () => {
         const action = findActionById(SHOW_USER_APPMAP, 'lib/views/users/Views::Users::Show#show');
-        assert(isRequest(action));
+        assert(isFunction(action));
         assert.strictEqual(action.static, false);
       });
     });
@@ -56,15 +62,15 @@ describe('Sequence diagram', () => {
     describe('null-ish', () => {
       it('is omitted', () => {
         const action = findActionById(SHOW_USER_APPMAP, 'lib/database/Database.query');
-        assert(isRequest(action));
-        assert.strictEqual(action.response, undefined);
+        assert(isFunction(action));
+        assert.strictEqual(action.returnValue, undefined);
       });
     });
     describe('object instance', () => {
       it('class name is reported', () => {
         const action = findActionById(SHOW_USER_APPMAP, 'lib/models/User.find');
-        assert(isRequest(action));
-        assert.deepStrictEqual(action.response?.returnValueType, {
+        assert(isFunction(action));
+        assert.deepStrictEqual(action.returnValue?.returnValueType, {
           name: 'User',
           properties: undefined,
         });
@@ -73,8 +79,8 @@ describe('Sequence diagram', () => {
     describe('array', () => {
       it(`is reported as 'array'`, () => {
         const action = findActionById(LIST_USERS_APPMAP, 'lib/models/User.list');
-        assert(isRequest(action));
-        assert.deepStrictEqual(action.response?.returnValueType, {
+        assert(isFunction(action));
+        assert.deepStrictEqual(action.returnValue?.returnValueType, {
           name: 'array',
           properties: undefined,
         });
@@ -83,9 +89,9 @@ describe('Sequence diagram', () => {
     describe('exception', () => {
       it('is reported', () => {
         const action = findActionById(USER_NOT_FOUND_APPMAP, 'lib/models/User.find');
-        assert(isRequest(action));
+        assert(isFunction(action));
         assert(
-          action.response && action.response.raisesException,
+          action.returnValue && action.returnValue.raisesException,
           'Expecting raisesException to be truthy'
         );
       });
@@ -95,7 +101,7 @@ describe('Sequence diagram', () => {
   describe('incoming message', () => {
     it('is reported', () => {
       const action = findActionById(SHOW_USER_APPMAP, 'lib/controllers/UsersController#show');
-      assert(isRequest(action));
+      assert(isFunction(action));
       assert(!action.caller);
     });
   });
