@@ -76,7 +76,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
         fs.writeFileSync(appMapYml, json.configuration.contents);
       }
 
-      await this.validateProject(useExistingAppMapYml);
+      const validationResult = await this.validateProject(useExistingAppMapYml);
 
       const successMessage = [
         chalk.green('Success! AppMap has finished installing.'),
@@ -86,6 +86,9 @@ export default class AgentInstallerProcedure extends AgentProcedure {
         'You can consult the AppMap documentation, or continue with the ',
         'instructions provided in the AppMap code editor extension.',
       ];
+
+      for (const note of validationResult?.notes || [])
+        successMessage.push('', `NOTE: ${note}`);
 
       UI.success(successMessage.join('\n'));
     } catch (e) {

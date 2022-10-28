@@ -8,8 +8,13 @@ export default class AgentStatusProcedure extends AgentProcedure {
     console.log(`${env.join('\n')}\n`);
 
     await this.verifyProject();
-    await this.validateProject(true);
+    const validationResult = await this.validateProject(true);
 
-    UI.success('Success!');
+    const message = ['Success!'];
+
+    for (const note of validationResult?.notes || [])
+      message.push('', `NOTE: ${note}`);
+
+    UI.success(message.join('\n'));
   }
 }

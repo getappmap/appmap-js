@@ -9,6 +9,31 @@ import { run, runSync } from './commandRunner';
 import { validateConfig } from '../../service/config/validator';
 import CommandStruct from './commandStruct';
 import Telemetry from '../../telemetry';
+import { AnySchema } from 'ajv';
+import assert from 'assert';
+
+type ValidationErrorDescription = {
+  message: string;
+  detailed_message?: string;
+};
+
+export type ValidationResult = {
+  errors?: ValidationErrorDescription[];
+  schema?: AnySchema | AnySchema[];
+  notes?: string[];
+};
+
+function parseValidationResult(json: string): ValidationResult {
+  try {
+    const result: ValidationResult | ValidationErrorDescription[] = JSON.parse(json);
+    if (Array.isArray(result)) return { errors: result };
+    return result;
+  } catch (e) {
+    UI.error('Output from validateAgent was: ' + json);
+    UI.error('Failed to validate the installation.');
+    throw e;
+  }
+}
 
 export default abstract class AgentProcedure {
   constructor(readonly installer: AgentInstaller, readonly path: string) {}
@@ -67,7 +92,7 @@ export default abstract class AgentProcedure {
     }
   }
 
-  async validateProject(checkSyntax: boolean) {
+  async validateProject(checkSyntax: boolean): Promise<ValidationResult | undefined> {
     const validateCmd = await this.installer.validateAgentCommand();
     if (!validateCmd) {
       return;
@@ -77,31 +102,23 @@ export default abstract class AgentProcedure {
 
     let { stdout } = await this.validateAgent(validateCmd);
 
-    try {
-      const validationResult = JSON.parse(stdout);
+    const validationResult = parseValidationResult(stdout);
+    const { errors, schema } = validationResult;
 
-      const errors = Array.isArray(validationResult) ? validationResult : validationResult.errors;
-      // if there were no errors then there's no "errors" key
-      if (errors && errors.length > 0) {
-        throw new ValidationError(
-          errors
-            .map((e) => {
-              let msg = e.message;
-              if (e.detailed_message) {
-                msg += `, ${e.detailed_message}`;
-              }
-              return msg;
-            })
-            .join('\n')
-        );
-      }
-    } catch (e) {
-      UI.error('Output from validateAgent was: ' + stdout);
-      UI.error('Failed to validate the installation.');
-      throw e;
+    if (errors && errors.length > 0) {
+      throw new ValidationError(
+        errors
+          .map((e) => {
+            let msg = e.message;
+            if (e.detailed_message) {
+              msg += `, ${e.detailed_message}`;
+            }
+            return msg;
+          })
+          .join('\n')
+      );
     }
 
-    const schema = JSON.parse(stdout)['schema'];
     // If appmap-agent-validate returned a schema, and we're using an
     // existing appmap.yml, verify that the config matches the schema.
     if (schema && checkSyntax) {
@@ -118,6 +135,8 @@ export default abstract class AgentProcedure {
         throw new ValidationError(`\n${this.configPath}:\n${lines.join('\n')}`);
       }
     }
+
+    return validationResult;
   }
 
   loadConfig(): Record<string, unknown> {
