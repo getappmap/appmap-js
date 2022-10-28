@@ -81,6 +81,8 @@ __metadata:
     "@appland/diagrams": "workspace:*"
     "@appland/models": "workspace:*"
     "@appland/openapi": "workspace:*"
+    "@appland/sequence-diagram": "workspace:*"
+    "@datastructures-js/priority-queue": ^6.1.3
     "@sidvind/better-ajv-errors": ^0.9.1
     "@types/fs-extra": ^9.0.13
     "@types/inquirer": ^7.3.3
@@ -394,6 +396,19 @@ __metadata:
     yargs: ^17.1.1
   bin:
     scanner: built/cli.js
+  languageName: unknown
+  linkType: soft
+
+"@appland/sequence-diagram@workspace:*, @appland/sequence-diagram@workspace:packages/sequence-diagram":
+  version: 0.0.0-use.local
+  resolution: "@appland/sequence-diagram@workspace:packages/sequence-diagram"
+  dependencies:
+    "@appland/models": "workspace:*"
+    "@types/jest": ^27.4.1
+    jest: ^27.4.7
+    typescript: ^4.8.4
+  bin:
+    sequence-diagram: built/cli.js
   languageName: unknown
   linkType: soft
 
@@ -2234,6 +2249,22 @@ __metadata:
     debug: ^3.1.0
     lodash.once: ^4.1.1
   checksum: 7bdcdaeb1bb692ec9d9bf8ec52538aa0bead6764753f4a067a171a511807a43fab016f7285a56bef6a606c2467ff3f1365e1ad2d2d583b81beed849ee1573fd1
+  languageName: node
+  linkType: hard
+
+"@datastructures-js/heap@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "@datastructures-js/heap@npm:4.1.2"
+  checksum: 7e3b860f2f96dfb6bdb7cb46f7477ea575649f2cff05988d9eacbe46ef3d31f7a58e9bbeaced4f64be01616af9cd5d734d0250a12a40610fe3dd6202ef85f79e
+  languageName: node
+  linkType: hard
+
+"@datastructures-js/priority-queue@npm:^6.1.3":
+  version: 6.1.3
+  resolution: "@datastructures-js/priority-queue@npm:6.1.3"
+  dependencies:
+    "@datastructures-js/heap": ^4.1.2
+  checksum: 518a3c588c5d34c00a053963803cf47b9af0531b6d965ba8bdaa9c25509420fc6b747ad3b63d30412c38c6446b4e07293b6274940fa9305db7a208389bbac51c
   languageName: node
   linkType: hard
 
@@ -28563,6 +28594,16 @@ typescript@^4.4.2:
   languageName: node
   linkType: hard
 
+"typescript@npm:^4.8.4":
+  version: 4.8.4
+  resolution: "typescript@npm:4.8.4"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 3e4f061658e0c8f36c820802fa809e0fd812b85687a9a2f5430bc3d0368e37d1c9605c3ce9b39df9a05af2ece67b1d844f9f6ea8ff42819f13bcb80f85629af0
+  languageName: node
+  linkType: hard
+
 "typescript@patch:typescript@^4.3.5#~builtin<compat/typescript>, typescript@patch:typescript@^4.5.4#~builtin<compat/typescript>":
   version: 4.5.5
   resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=7ad353"
@@ -28580,6 +28621,16 @@ typescript@^4.4.2:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 6bf45caf847062420592e711bc9c28bf5f9a9a7fa8245343b81493e4ededae33f1774009d1234d911422d1646a2c839f44e1a23ecb111b40a60ac2ea4c1482a8
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^4.8.4#~builtin<compat/typescript>":
+  version: 4.8.4
+  resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=7ad353"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 563a0ef47abae6df27a9a3ab38f75fc681f633ccf1a3502b1108e252e187787893de689220f4544aaf95a371a4eb3141e4a337deb9895de5ac3c1ca76430e5f0
   languageName: node
   linkType: hard
 

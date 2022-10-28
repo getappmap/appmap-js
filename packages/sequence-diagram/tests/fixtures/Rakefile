@@ -1,0 +1,19 @@
+def run_program(command)
+  puts command
+  system command or raise "Command failed: #{command}"
+end
+
+task :build do
+  Dir['bin/*.rb'].each do |test_program|
+    run_program %(bundle exec ruby #{test_program})
+  end
+  Dir.chdir '../../../cli' do
+    run_program %(node ./built/cli.js index --appmap-dir ../sequence-diagram/tests/fixtures/tmp/appmap)
+    %w{json plantuml}.each do |format|
+      run_program %(node ./built/cli.js sequence-diagram -d ../sequence-diagram/tests/fixtures --format #{format} 'package:%r{^lib/controllers}' 'package:%r{^lib/models}' 'package:%r{^lib/views}' 'package:%r{^lib/database}')
+    end
+  end
+  run_program %(java -jar plantuml-1.2022.8.jar -tsvg tmp/appmap/*.uml)
+end
+
+task default: :build

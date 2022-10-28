@@ -1,0 +1,20 @@
+node_modules
+built
+dist
+tmp
+
+# Yarn files
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+# Misc
+.tmp
+appmap-scanner-interactive.yml
+appmap-findings.json
+sql_warning.txt
+*.code-workspace

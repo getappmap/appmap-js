@@ -150,4 +150,4 @@ export function verbose(v?: boolean) {
   return isVerbose;
 }
 
-export { ensureString, messageToOpenAPISchema, parseScheme };
+export { classNameToOpenAPIType, ensureString, messageToOpenAPISchema, parseScheme };
