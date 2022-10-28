@@ -1,0 +1,14 @@
+@startuml
+participant controllers as "controllers"
+participant models as "models"
+participant database as "database"
+  [->controllers: show
+  activate controllers
+    controllers->models: <u>find</u>
+    activate models
+      models->database: <u>query</u>
+    controllers<--models: <i>exception!</i>
+    deactivate models
+  [<--controllers: array
+  deactivate controllers
+@enduml
