@@ -1,43 +1,19 @@
-import { utimesSync } from 'fs';
 import { join } from 'path';
 import tmp from 'tmp';
 import fs from 'fs-extra';
 
-import Fingerprinter from '../../src/fingerprint/fingerprinter';
 import FindCodeObjects from '../../src/search/findCodeObjects';
-import { listAppMapFiles, verbose } from '../../src/utils';
-import { CodeObject, CodeObjectMatch } from '../../src/search/types';
+import { indexDirectory, stripCodeObjectParents } from './util';
 
 tmp.setGracefulCleanup();
 
 const fixtureDir = join(__dirname, 'fixtures', 'ruby');
 const appMapDir = tmp.dirSync().name.replace(/\\/g, '/');
 
-const now = new Date();
-
-function stripCodeObjectParents(codeObjectMatches: CodeObjectMatch[]): CodeObjectMatch[] {
-  const strip = (codeObject: CodeObject): void => {
-    codeObject.parent = undefined;
-    codeObject.children = undefined;
-    (codeObject.children || []).forEach(strip);
-  };
-  codeObjectMatches.forEach((com) => strip(com.codeObject));
-  return codeObjectMatches;
-}
-
 describe('Inspect', () => {
   beforeAll(async () => {
-    if (process.env.DEBUG) {
-      verbose(true);
-    }
-
     fs.copySync(fixtureDir, appMapDir);
-
-    const fingerprinter = new Fingerprinter(true);
-    await listAppMapFiles(appMapDir, async (fileName) => {
-      utimesSync(fileName, now, now);
-      await fingerprinter.fingerprint(fileName);
-    });
+    await indexDirectory(appMapDir);
   });
 
   test('finds a named function', async () => {

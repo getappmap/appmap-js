@@ -11,9 +11,11 @@ import { processFiles, verbose } from '../utils';
 import DescentCodeObjectMatcher from './descentCodeObjectMatcher';
 import IterateCodeObjectMatcher from './iterateCodeObjectMatcher';
 import {
+  ClientRouteMatchSpec,
   DatabaseMatchSpec,
+  ExternalServiceMatchSpec,
   FunctionMatchSpec,
-  HTTPMatchSpec,
+  HTTPServerRequestMatchSpec,
   QueryMatchSpec,
   RegExpRegExp,
   RouteMatchSpec,
@@ -77,12 +79,20 @@ function parseTable(tableName: string): CodeObjectMatchSpec[] {
   return [new TableMatchSpec(tableName)];
 }
 
-function parseRoute(routeName: string): CodeObjectMatchSpec[] {
+function parseHTTPServerRequest(): CodeObjectMatchSpec[] {
+  return [new HTTPServerRequestMatchSpec()];
+}
+
+function parseServerRoute(routeName: string): CodeObjectMatchSpec[] {
   return [new RouteMatchSpec(routeName)];
 }
 
-function parseHTTP(): CodeObjectMatchSpec[] {
-  return [new HTTPMatchSpec()];
+function parseExternalService(): CodeObjectMatchSpec[] {
+  return [new ExternalServiceMatchSpec()];
+}
+
+function parseExternalRoute(routeName: string): CodeObjectMatchSpec[] {
+  return [new ClientRouteMatchSpec(routeName)];
 }
 
 function parseDatabase(): CodeObjectMatchSpec[] {
@@ -113,8 +123,10 @@ function buildCodeObjectMatcher(codeObjectId: string): CodeObjectMatcher[] {
       package: parsePackage,
       class: parseClass,
       function: parseFunction,
-      http: parseHTTP,
-      route: parseRoute,
+      http: parseHTTPServerRequest,
+      route: parseServerRoute,
+      'external-service': parseExternalService,
+      'external-route': parseExternalRoute,
       database: parseDatabase,
       query: parseQuery,
       table: parseTable,

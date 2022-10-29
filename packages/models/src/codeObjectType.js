@@ -3,6 +3,7 @@ export const CodeObjectType = {
   DATABASE: 'database',
   QUERY: 'query',
   HTTP: 'http',
+  EXTERNAL_ROUTE: 'external-route',
   EXTERNAL_SERVICE: 'external-service',
   ROUTE: 'route',
   PACKAGE: 'package',
