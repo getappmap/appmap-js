@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.47.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.46.0...@appland/appmap-v3.47.0) (2022-10-29)
+
+
+### Bug Fixes
+
+* Listing AppMap files will now ignore non-permissioned directories ([6ed2c9f](https://github.com/getappmap/appmap-js/commit/6ed2c9f29d604bbc9ae06b47561b55a5fa655743))
+
+
+### Features
+
+* Find external-route code objects ([471facb](https://github.com/getappmap/appmap-js/commit/471facbe40b7f4c2ead687c6eef8d6a0cb823fa6))
+
 # [@appland/appmap-v3.46.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.45.0...@appland/appmap-v3.46.0) (2022-10-19)
 
 
