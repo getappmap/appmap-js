@@ -1,3 +1,10 @@
+# [@appland/models-v1.21.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.20.0...@appland/models-v1.21.0) (2022-10-29)
+
+
+### Features
+
+* Add external-route code objects ([b0c574e](https://github.com/getappmap/appmap-js/commit/b0c574eb6af09ec18d5712da7381ab0935f9fdc2))
+
 # [@appland/models-v1.20.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.19.0...@appland/models-v1.20.0) (2022-09-27)
 
 
