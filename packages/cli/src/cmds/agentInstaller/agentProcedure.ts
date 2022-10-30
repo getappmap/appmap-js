@@ -9,7 +9,7 @@ import { run, runSync } from './commandRunner';
 import { validateConfig } from '../../service/config/validator';
 import CommandStruct from './commandStruct';
 import Telemetry from '../../telemetry';
-import { parseValidationResult, ValidationResult } from './ValidationResult';
+import { formatValidationError, parseValidationResult, ValidationResult } from './ValidationResult';
 
 export default abstract class AgentProcedure {
   constructor(readonly installer: AgentInstaller, readonly path: string) {}
@@ -83,15 +83,7 @@ export default abstract class AgentProcedure {
     const errors = (validationResult.errors || []).filter((e) => e.level === 'error');
     if (errors.length > 0) {
       throw new ValidationError(
-        errors
-          .map((e) => {
-            let msg = e.message;
-            if (e.detailed_message) {
-              msg += `, ${e.detailed_message}`;
-            }
-            return msg;
-          })
-          .join('\n')
+        errors.map(formatValidationError).join('\n')
       );
     }
 

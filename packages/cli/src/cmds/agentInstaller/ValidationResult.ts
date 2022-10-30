@@ -29,3 +29,13 @@ export function parseValidationResult(json: string): ValidationResult {
     throw new ValidationError(`Unable to parse validation output.\n${e}\nOutput:\n${json}`);
   }
 }
+
+export function formatValidationError(e: ValidationErrorDescription): string {
+  const m = [e.level.charAt(0).toUpperCase(), e.level.slice(1), ': ', e.message];
+  if (e.filename) m.push(' in ', e.filename);
+  if (e.setting) m.push(' at ', e.setting);
+  if (e.detailed_message) m.push('\n', e.detailed_message);
+  if (e.help_urls) m.push('\n', 'See: ', e.help_urls.join('\n\t'));
+
+  return m.join('');
+}

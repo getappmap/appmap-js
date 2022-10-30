@@ -9,7 +9,7 @@ export class TestAgentProcedure extends AgentProcedure {
   }
 }
 
-class TestAgentInstaller extends AgentInstaller {
+export class TestAgentInstaller extends AgentInstaller {
   constructor() {
     super('test agent', '/test/agent/installer/path');
   }
@@ -21,21 +21,24 @@ class TestAgentInstaller extends AgentInstaller {
     return new commandStruct('test validate agent command', [], '/test/validate/agent/command');
   }
 
-  installAgent(): Promise<void> {
-    throw new Error('Method not implemented.');
+  async installAgent(): Promise<void> { }
+
+  async checkConfigCommand(): Promise<commandStruct | undefined> {
+    return undefined;
   }
-  checkConfigCommand(): Promise<commandStruct | undefined> {
-    throw new Error('Method not implemented.');
+
+  async initCommand(): Promise<commandStruct> {
+    return new commandStruct('test init agent command', [], '/test/validate/init/command');
   }
-  initCommand(): Promise<commandStruct> {
-    throw new Error('Method not implemented.');
+
+  async verifyCommand(): Promise<commandStruct | undefined> {
+    return undefined;
   }
-  verifyCommand(): Promise<commandStruct | undefined> {
-    throw new Error('Method not implemented.');
+
+  async environment(): Promise<Record<string, string>> {
+    return { test: 'environment' };
   }
-  environment(): Promise<Record<string, string>> {
-    throw new Error('Method not implemented.');
-  }
+
   available(): Promise<boolean> {
     throw new Error('Method not implemented.');
   }

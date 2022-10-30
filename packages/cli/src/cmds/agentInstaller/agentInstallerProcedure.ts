@@ -8,6 +8,7 @@ import UI from '../userInteraction';
 import AgentProcedure from './agentProcedure';
 import Telemetry from '../../telemetry';
 import CommandStruct from './commandStruct';
+import { formatValidationError } from './ValidationResult';
 
 export default class AgentInstallerProcedure extends AgentProcedure {
   async run(): Promise<void> {
@@ -76,7 +77,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
         fs.writeFileSync(appMapYml, json.configuration.contents);
       }
 
-      await this.validateProject(useExistingAppMapYml);
+      const result = await this.validateProject(useExistingAppMapYml);
 
       const successMessage = [
         chalk.green('Success! AppMap has finished installing.'),
@@ -88,6 +89,9 @@ export default class AgentInstallerProcedure extends AgentProcedure {
       ];
 
       UI.success(successMessage.join('\n'));
+
+      if (result?.errors) for (const warning of result.errors.filter((e) => e.level === 'warning'))
+        UI.warn(formatValidationError(warning));
     } catch (e) {
       const error = e as Error;
       console.log(error?.message);
