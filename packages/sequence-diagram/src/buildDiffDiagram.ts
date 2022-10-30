@@ -23,23 +23,23 @@ export default function buildDiffDiagram(diff: Diff): Diagram {
   const diffActionsByAction = new Map<Action, Action>();
 
   const buildActions = (state: State): Action => {
-    const l_action = diff.baseActions[state.l_node];
-    const r_action = diff.headActions[state.r_node];
+    const lAction = diff.baseActions[state.l_node];
+    const rAction = diff.headActions[state.r_node];
 
     switch (state.move) {
       case MoveType.AdvanceBoth: {
-        const action = cloneAction(r_action);
-        if (r_action.parent) {
-          const parent = diffActionsByAction.get(r_action.parent);
+        const action = cloneAction(rAction);
+        if (rAction.parent) {
+          const parent = diffActionsByAction.get(rAction.parent);
           parent?.children.push(action);
           action.parent = parent;
         }
-        diffActionsByAction.set(r_action, action);
-        diffActionsByAction.set(l_action, action);
+        diffActionsByAction.set(rAction, action);
+        diffActionsByAction.set(lAction, action);
         return action;
       }
       case MoveType.DeleteLeft: {
-        const action = cloneAction(l_action);
+        const action = cloneAction(lAction);
         action.diffMode = DiffMode.Delete;
         action.digest = ['delete', action.digest].join(':');
 
@@ -52,16 +52,16 @@ export default function buildDiffDiagram(diff: Diff): Diagram {
 
         // Case a)
         const deletedActionsParent = (): Action | undefined => {
-          if (!l_action.parent) return undefined;
+          if (!lAction.parent) return undefined;
 
-          return diffActionsByAction.get(l_action.parent);
+          return diffActionsByAction.get(lAction.parent);
         };
 
         // Case b)
         const headEquivalentOfDeletedActionsParent = (): Action | undefined => {
-          if (!r_action.parent) return undefined;
+          if (!rAction.parent) return undefined;
 
-          return diffActionsByAction.get(r_action.parent);
+          return diffActionsByAction.get(rAction.parent);
         };
 
         const parent = headEquivalentOfDeletedActionsParent() || deletedActionsParent();
@@ -70,18 +70,18 @@ export default function buildDiffDiagram(diff: Diff): Diagram {
           action.parent = parent;
         }
 
-        diffActionsByAction.set(l_action, action);
+        diffActionsByAction.set(lAction, action);
         return action;
       }
       case MoveType.InsertRight: {
-        const action = cloneAction(r_action);
+        const action = cloneAction(rAction);
         action.diffMode = DiffMode.Insert;
-        if (r_action.parent) {
-          const parent = diffActionsByAction.get(r_action.parent);
+        if (rAction.parent) {
+          const parent = diffActionsByAction.get(rAction.parent);
           parent?.children.push(action);
           action.parent = parent;
         }
-        diffActionsByAction.set(r_action, action);
+        diffActionsByAction.set(rAction, action);
         return action;
       }
     }

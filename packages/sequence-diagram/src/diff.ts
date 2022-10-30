@@ -62,11 +62,7 @@ export type DiffOptions = {
  *      Store the minimum cost of that state in the queue
  *
  */
-export default function diff(
-  l_diagram: Diagram,
-  r_diagram: Diagram,
-  diffOptions: DiffOptions
-): Diff {
+export default function diff(lDiagram: Diagram, rDiagram: Diagram, diffOptions: DiffOptions): Diff {
   const buildActions = (diagram: Diagram): Action[] => {
     const result: Action[] = [];
     const collectAction = (action: Action): void => {
@@ -77,8 +73,8 @@ export default function diff(
     return result;
   };
 
-  const l_actions = buildActions(l_diagram);
-  const r_actions = buildActions(r_diagram);
+  const lActions = buildActions(lDiagram);
+  const rActions = buildActions(rDiagram);
 
   const advance = (diagram: Action[], action: ActionIndex): ActionIndex | undefined => {
     if (action < diagram.length - 1) return action + 1;
@@ -88,15 +84,15 @@ export default function diff(
 
   const advanceBoth = (state: State): State =>
     ({
-      l_node: advance(l_actions, state.l_node),
-      r_node: advance(r_actions, state.r_node),
+      l_node: advance(lActions, state.l_node),
+      r_node: advance(rActions, state.r_node),
       move: MoveType.AdvanceBoth,
       cost: 0,
     } as State);
 
   const deleteLeft = (state: State): State =>
     ({
-      l_node: advance(l_actions, state.l_node),
+      l_node: advance(lActions, state.l_node),
       r_node: state.r_node,
       move: MoveType.DeleteLeft,
       cost: DeleteCost,
@@ -105,7 +101,7 @@ export default function diff(
   const insertRight = (state: State): State =>
     ({
       l_node: state.l_node,
-      r_node: advance(r_actions, state.r_node),
+      r_node: advance(rActions, state.r_node),
       move: MoveType.InsertRight,
       cost: InsertCost,
     } as State);
@@ -120,10 +116,10 @@ export default function diff(
    *    The right node is an insertion
    */
   const moves = (state: State): Move[] => {
-    const l_digest = digestOf(l_actions, state.l_node);
-    const r_digest = digestOf(r_actions, state.r_node);
+    const lDigest = digestOf(lActions, state.l_node);
+    const rDigest = digestOf(rActions, state.r_node);
 
-    if (l_digest === r_digest) {
+    if (lDigest === rDigest) {
       return [advanceBoth];
     } else {
       return [deleteLeft, insertRight];
@@ -144,7 +140,7 @@ export default function diff(
   while (!pq.isEmpty()) {
     const { state } = pq.dequeue();
     assert(state, 'next state');
-    if (state.l_node === l_actions.length - 1 && state.r_node === r_actions.length - 1) break;
+    if (state.l_node === lActions.length - 1 && state.r_node === rActions.length - 1) break;
 
     const options = moves(state);
 
@@ -160,10 +156,10 @@ export default function diff(
         if (diffOptions.verbose) {
           console.log(
             moveType(newState.move) +
-              ` from ${nodeName(l_actions[state.l_node])}, ${
-                (r_actions[state.r_node] as any)?.name
-              } to ${nodeName(l_actions[newState.l_node])}, ${
-                (r_actions[newState.r_node] as any)?.name
+              ` from ${nodeName(lActions[state.l_node])}, ${
+                (rActions[state.r_node] as any)?.name
+              } to ${nodeName(lActions[newState.l_node])}, ${
+                (rActions[newState.r_node] as any)?.name
               }`
           );
           console.log(
@@ -183,16 +179,16 @@ export default function diff(
 
   const states: State[] = [];
   {
-    let nextState = [l_actions.length - 1, r_actions.length - 1].join(',');
+    let nextState = [lActions.length - 1, rActions.length - 1].join(',');
     let precedingState = statePreceding.get(nextState);
     while (precedingState) {
-      const [l_node, r_node] = precedingState.split(',').map(Number);
+      const [lNode, rNode] = precedingState.split(',').map(Number);
       const move = stateMoves.get(nextState);
-      const state = { l_node, r_node, move } as State;
+      const state = { l_node: lNode, r_node: rNode, move } as State;
       states.push(state);
       nextState = precedingState;
       precedingState = statePreceding.get(nextState);
     }
   }
-  return { baseActions: l_actions, headActions: r_actions, states: states.reverse() };
+  return { baseActions: lActions, headActions: rActions, states: states.reverse() };
 }
