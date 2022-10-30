@@ -1,6 +1,5 @@
 import assert from 'assert';
-import { isLoop } from '../../dist/types';
-import { isFunction } from '../../src/types';
+import { isFunction, isLoop } from '../../src/types';
 import {
   findActionById,
   LIST_USERS_APPMAP,

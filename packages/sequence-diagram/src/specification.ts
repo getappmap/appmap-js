@@ -1,7 +1,6 @@
 import { CodeObject } from './types';
 import Priority from './priority';
 import { AppMap, CodeObject as AppMapCodeObject } from '@appland/models';
-import assert from 'assert';
 
 export type CodeObjectId = string;
 
@@ -29,7 +28,7 @@ export default class Specification {
     return this.requiredCodeObjectIds.size > 0;
   }
 
-  priorityOf(codeObject: CodeObject) {
+  priorityOf(codeObject: CodeObject): number {
     return this.priority.priorityOf(codeObject);
   }
 

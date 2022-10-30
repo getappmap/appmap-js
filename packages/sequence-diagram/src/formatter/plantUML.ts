@@ -1,14 +1,13 @@
 import assert from 'assert';
 import {
   Action,
-  Actor,
   Diagram,
   DiffMode,
   hasAncestor,
   isLoop,
   isFunction,
   isServerRPC,
-  Function,
+  FunctionCall,
   ReturnValue,
   actionActors,
   ServerRPC,
@@ -25,7 +24,7 @@ function sanitize(str: string): string {
   return str.replace(/\n/g, '\\n').replace(/\s{2,}/g, ' ');
 }
 
-function messageName(action: Function | ServerRPC | ClientRPC | Query): string {
+function messageName(action: FunctionCall | ServerRPC | ClientRPC | Query): string {
   const name = isFunction(action)
     ? action.name
     : isServerRPC(action) || isClientRPC(action)
@@ -44,7 +43,9 @@ type Response = ReturnValue & {
   status?: number;
 };
 
-function actionResponse(action: Function | ServerRPC | ClientRPC | Query): Response | undefined {
+function actionResponse(
+  action: FunctionCall | ServerRPC | ClientRPC | Query
+): Response | undefined {
   return isFunction(action)
     ? action.returnValue
     : isServerRPC(action) || isClientRPC(action)
@@ -134,8 +135,6 @@ class EventLines {
 
   public lines: string[] = [];
 
-  constructor() {}
-
   indent(): void {
     this._indent += 1;
   }
@@ -152,7 +151,7 @@ class EventLines {
   }
 }
 
-export function format(diagram: Diagram, source: string): string {
+export function format(diagram: Diagram, _source: string): string {
   const events = new EventLines();
 
   const renderChildren = (action: Action) =>

@@ -28,7 +28,7 @@ export enum DiffMode {
   Delete,
 }
 
-export type Action = Loop | Function | ServerRPC | ClientRPC | Query;
+export type Action = Loop | FunctionCall | ServerRPC | ClientRPC | Query;
 
 export type ActionPredicate = (action: Action) => boolean;
 
@@ -53,7 +53,7 @@ export type Type = {
 
 export type Message = Node;
 
-export type Function = Message &
+export type FunctionCall = Message &
   Node & {
     nodeType: NodeType.Function;
     caller?: Actor;
@@ -94,7 +94,7 @@ export type ReturnValue = {
 
 export const isLoop = (action: Action): action is Loop => action.nodeType === NodeType.Loop;
 
-export const isFunction = (action: Action): action is Function =>
+export const isFunction = (action: Action): action is FunctionCall =>
   action.nodeType === NodeType.Function;
 
 export const isServerRPC = (action: Action): action is ServerRPC =>

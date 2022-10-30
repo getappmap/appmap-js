@@ -10,17 +10,19 @@ import {
   Actor,
   Diagram,
   NodeType,
-  Function,
+  FunctionCall,
   ReturnValue,
   setParent,
   Type,
   ServerRPC,
+  ClientRPC,
+  Query,
 } from './types';
 
 const MAX_WINDOW_SIZE = 5;
 
 export default function buildDiagram(
-  appmapFile: string,
+  _appmapFile: string,
   appmap: AppMap,
   specification: Specification
 ): Diagram {
@@ -52,7 +54,6 @@ export default function buildDiagram(
   function buildRequest(caller: Event | undefined, callee: Event): Action | undefined {
     if (callee.httpServerRequest) {
       assert(callee.route, 'callee.route');
-      assert(callee.httpServerResponse, 'callee.httpServerResponse');
       return {
         nodeType: NodeType.ServerRPC,
         callee: findOrCreateActor(callee),
@@ -62,6 +63,26 @@ export default function buildDiagram(
         subtreeDigest: 'undefined',
         children: [],
       } as ServerRPC;
+    } else if (caller?.httpClientRequest) {
+      assert(caller.route, 'callee.route');
+      return {
+        nodeType: NodeType.ClientRPC,
+        caller: findOrCreateActor(caller),
+        route: callee.route,
+        status: callee.httpServerResponse?.status,
+        digest: callee.hash,
+        subtreeDigest: 'undefined',
+        children: [],
+      } as ClientRPC;
+    } else if (caller?.sqlQuery) {
+      return {
+        nodeType: NodeType.Query,
+        caller: findOrCreateActor(caller),
+        query: caller.sqlQuery,
+        digest: callee.hash,
+        subtreeDigest: 'undefined',
+        children: [],
+      } as Query;
     } else if (callee) {
       return {
         nodeType: NodeType.Function,
@@ -74,7 +95,7 @@ export default function buildDiagram(
         stableProperties: { ...callee.stableProperties },
         returnValue: buildReturnValue(callee),
         children: [],
-      } as Function;
+      } as FunctionCall;
     }
   }
 

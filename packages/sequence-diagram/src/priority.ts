@@ -1,7 +1,5 @@
 import { CodeObject } from './types';
 
-const MAX_PRIORITY = 100000;
-
 export default class Priority {
   patterns: string[] = [];
   priorityByCodeObjectGroupId = new Map<string, number>();
@@ -9,15 +7,13 @@ export default class Priority {
   priorityByCodeObjectId = new Map<string, number>();
   basePriority = 0;
 
-  constructor() {}
-
-  enrollPattern(pattern: string) {
+  enrollPattern(pattern: string): void {
     this.patterns.push(pattern);
     this.priorityByCodeObjectGroupId.set(pattern, this.patterns.length * 1000);
     this.sequenceByCodeObjectGroupId.set(pattern, 0);
   }
 
-  expandPattern(pattern: string, codeObjectIds: string[]) {
+  expandPattern(pattern: string, codeObjectIds: string[]): void {
     const priority = this.priorityByCodeObjectGroupId.get(pattern);
     if (priority === undefined) {
       console.log(`No priority for pattern ${pattern}`);
@@ -27,7 +23,7 @@ export default class Priority {
     codeObjectIds.forEach((id) => this.priorityByCodeObjectGroupId.set(id, priority));
   }
 
-  setPriority(codeObjectId: string, priority: number) {
+  setPriority(codeObjectId: string, priority: number): void {
     this.priorityByCodeObjectGroupId.set(codeObjectId, priority);
   }
 
