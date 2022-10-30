@@ -1089,15 +1089,11 @@ packages:
         .stub(AgentInstallerProcedure.prototype, 'validateAgent')
         .resolves({ stdout: '[ }', stderr: '' });
 
-      const uiError = sinon
-        .stub(UI, 'error')
-        .withArgs('Failed to validate the installation.')
-        .resolves();
-
       const validateConfig = sinon.stub(validator, 'validateConfig').returns({ valid: true });
 
-      await invokeCommand(projectDir, () => {});
-      expect(uiError).toBeCalled();
+      await invokeCommand(projectDir, (err) => {
+        expect(err?.message).toMatch('Error');
+      });
     });
   });
 
