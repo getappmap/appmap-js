@@ -3,6 +3,7 @@
 PKGDIR="$PWD"
 TESTDIR="`mktemp -d`"
 
+yarn --version
 yarn pack --out "$TESTDIR"/package.tgz
 
 cp -r tests/unit/fixtures/ruby "$TESTDIR"
