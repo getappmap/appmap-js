@@ -12,6 +12,18 @@ import * as obtainTestCommands from '../../../src/cmds/record/prompt/obtainTestC
 import TestCaseRecording from '../../../src/cmds/record/testCaseRecording';
 import RecordContext, { RecordProcessResult } from '../../../src/cmds/record/recordContext';
 import Configuration from '../../../src/cmds/record/configuration';
+import RecordCommand from '../../../src/cmds/record/record';
+const { tmpdir } = require('os');
+const {
+  openSync,
+  closeSync,
+  symlinkSync,
+  existsSync,
+  unlink,
+  rmdir,
+  mkdir,
+  renameSync,
+} = require('fs');
 
 describe('record test', () => {
   let confirm: sinon.SinonStub,
@@ -64,6 +76,64 @@ describe('record test', () => {
       expect(next).toEqual(testCommandsAvailable.default);
 
       expect(stubObtain.calledOnce).toBeTruthy();
+    });
+  });
+
+  describe('record test with invalid directory parameter', () => {
+    it('shows error if directory parameter is file instead of directory', async () => {
+      const dirPrefix = tmpdir();
+      const directoryParam = `${dirPrefix}/file_not_dir`;
+      // ensuring the file doesn't exist breaks after trying it a few times
+      // await unlink(directoryParam, (err) => {});
+      closeSync(openSync(directoryParam, 'w'));
+      expect(existsSync(directoryParam)).toEqual(true);
+
+      let argv = {
+        _: ['record', 'test'],
+        $0: 'src/cli.ts',
+        directory: directoryParam,
+        d: dirPrefix,
+      };
+
+      const ret = await RecordCommand.handler(argv);
+      expect(ret).toEqual(null);
+
+      await unlink(directoryParam, (err) => {});
+    });
+
+    it('shows error if directory parameter is invalid symlink', async () => {
+      const dirPrefix = tmpdir();
+      const symlinkDst = `${dirPrefix}/symlink_dst`;
+      const symlinkSrc = `${dirPrefix}/symlink_src`;
+      const symlinkDstRenamed = `${dirPrefix}/symlink_dst_renamed`;
+
+      await unlink(symlinkSrc, (err) => {});
+      await rmdir(symlinkDst, (err) => {});
+      await rmdir(symlinkDstRenamed, (err) => {});
+
+      // create symlink
+      await mkdir(symlinkDst, (err) => {});
+      symlinkSync(symlinkDst, symlinkSrc);
+      expect(existsSync(symlinkDst)).toEqual(true);
+      expect(existsSync(symlinkSrc)).toEqual(true); // symlink is valid
+
+      // the symlink was created. now break its destination
+      renameSync(symlinkDst, symlinkDstRenamed);
+      expect(existsSync(symlinkDstRenamed)).toEqual(true);
+      expect(existsSync(symlinkDst)).toEqual(false);
+      expect(existsSync(symlinkSrc)).toEqual(false); // now it's invalid
+
+      let argv = {
+        _: ['record', 'test'],
+        $0: 'src/cli.ts',
+        directory: symlinkSrc,
+        d: dirPrefix,
+      };
+      const ret = await RecordCommand.handler(argv);
+      await unlink(symlinkSrc, (err) => {});
+      await rmdir(symlinkDst, (err) => {});
+      await rmdir(symlinkDstRenamed, (err) => {});
+      expect(ret).toEqual(null);
     });
   });
 

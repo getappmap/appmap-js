@@ -15,6 +15,7 @@ import openTicket from '../../lib/ticket/openTicket';
 import UI from '../userInteraction';
 import { RemoteRecordingError } from './makeRequest';
 import chalk from 'chalk';
+import { existsSync as fsExistsSync, constants as fsConstants, statSync as fsStatSync } from 'fs';
 
 export default {
   command: 'record [mode]',
@@ -48,6 +49,18 @@ export default {
       const { directory, appmapConfig } = argv;
       if (directory) {
         if (verbose()) console.log(`Using working directory ${directory}`);
+
+        if (fsExistsSync(directory)) {
+          // statSync follows symlinks
+          if (!fsStatSync(directory).isDirectory()) {
+            UI.error(`${directory} is not a directory.`);
+            return null;
+          }
+        } else {
+          UI.error(`Directory ${directory} does not exist.`);
+          return null;
+        }
+
         chdir(directory);
       }
 
