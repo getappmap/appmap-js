@@ -76,6 +76,7 @@ export type ClientRPC = Message &
   Node & {
     nodeType: NodeType.ClientRPC;
     caller: Actor;
+    callee: Actor;
     route: string;
     status: number;
   };
@@ -84,6 +85,7 @@ export type Query = Message &
   Node & {
     nodeType: NodeType.Query;
     caller: Actor;
+    callee: Actor;
     query: string;
   };
 
@@ -106,13 +108,10 @@ export const isClientRPC = (action: Action): action is ClientRPC =>
 export const isQuery = (action: Action): action is Query => action.nodeType === NodeType.Query;
 
 export const actionActors = (action: Action): (Actor | undefined)[] => {
-  if (isFunction(action)) return [action.caller, action.callee];
+  if (isFunction(action) || isClientRPC(action) || isQuery(action))
+    return [action.caller, action.callee];
 
   if (isServerRPC(action)) return [undefined, action.callee];
-
-  if (isClientRPC(action)) return [action.caller, undefined];
-
-  if (isQuery(action)) return [action.caller, undefined];
 
   return [];
 };

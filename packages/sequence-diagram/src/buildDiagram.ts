@@ -51,8 +51,8 @@ export default function buildDiagram(
     return actor;
   };
 
-  function buildRequest(caller: Event | undefined, callee: Event): Action | undefined {
-    if (callee.httpServerRequest) {
+  function buildRequest(caller?: Event | undefined, callee?: Event): Action | undefined {
+    if (callee?.httpServerRequest) {
       assert(callee.route, 'callee.route');
       return {
         nodeType: NodeType.ServerRPC,
@@ -63,22 +63,24 @@ export default function buildDiagram(
         subtreeDigest: 'undefined',
         children: [],
       } as ServerRPC;
-    } else if (caller?.httpClientRequest) {
-      assert(caller.route, 'callee.route');
+    } else if (callee?.httpClientRequest) {
+      assert(callee.route, 'callee.route');
       return {
         nodeType: NodeType.ClientRPC,
-        caller: findOrCreateActor(caller),
+        caller: caller ? findOrCreateActor(caller) : undefined,
+        callee: findOrCreateActor(callee),
         route: callee.route,
-        status: callee.httpServerResponse?.status,
+        status: callee.httpClientResponse?.status,
         digest: callee.hash,
         subtreeDigest: 'undefined',
         children: [],
       } as ClientRPC;
-    } else if (caller?.sqlQuery) {
+    } else if (callee?.sqlQuery) {
       return {
         nodeType: NodeType.Query,
-        caller: findOrCreateActor(caller),
-        query: caller.sqlQuery,
+        caller: caller ? findOrCreateActor(caller) : undefined,
+        callee: findOrCreateActor(callee),
+        query: callee.sqlQuery,
         digest: callee.hash,
         subtreeDigest: 'undefined',
         children: [],

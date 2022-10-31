@@ -25,12 +25,15 @@ function sanitize(str: string): string {
 }
 
 function messageName(action: FunctionCall | ServerRPC | ClientRPC | Query): string {
-  const name = isFunction(action)
+  return isFunction(action)
     ? action.name
     : isServerRPC(action) || isClientRPC(action)
     ? action.route
     : action.query;
+}
 
+function messageDisplayName(action: FunctionCall | ServerRPC | ClientRPC | Query): string {
+  const name = messageName(action);
   const tokens = [name.slice(0, DisplayCharLimit)];
   if (isFunction(action) && action.static) {
     tokens.unshift('<u>');
@@ -49,7 +52,7 @@ function actionResponse(
   return isFunction(action)
     ? action.returnValue
     : isServerRPC(action) || isClientRPC(action)
-    ? { status: action.status, raisesException: action.status < 400 }
+    ? { status: action.status, raisesException: action.status >= 400 }
     : undefined;
 }
 
@@ -171,14 +174,16 @@ export function format(diagram: Diagram, _source: string): string {
 
       events.print(`End`);
     } else {
-      const name = messageName(action);
       const actors = actionActors(action);
       {
         const incomingTokens = actors.map((actor) => (actor ? alias(actor.name) : ''));
         const arrow = requestArrow(action);
-        events.print([incomingTokens.join(arrow), encode(action, name)].join(': '));
+        events.print(
+          [incomingTokens.join(arrow), encode(action, messageDisplayName(action))].join(': ')
+        );
       }
       {
+        const name = messageName(action);
         if (name.length > DisplayCharLimit) {
           events.print('Note right');
           events.indent();
@@ -209,13 +214,16 @@ export function format(diagram: Diagram, _source: string): string {
         const arrow = responseArrow(action);
 
         let returnValueStr: string | undefined;
-        if (response.raisesException) {
-          returnValueStr = '<i>exception!</i>';
-        } else if (response.returnValueType?.name) {
+        if (response.returnValueType?.name) {
           returnValueStr = response.returnValueType?.name;
         } else if (response.status !== undefined) {
           returnValueStr = response.status.toString();
         }
+
+        if (response.raisesException) {
+          returnValueStr = ['<i>', returnValueStr || 'exception!', '</i>'].join('');
+        }
+
         if (returnValueStr) returnValueStr = encode(action, returnValueStr);
 
         events.print([outgoingTokens.join(arrow), returnValueStr].join(': '));

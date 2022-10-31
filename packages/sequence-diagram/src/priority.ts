@@ -5,7 +5,7 @@ export default class Priority {
   priorityByCodeObjectGroupId = new Map<string, number>();
   sequenceByCodeObjectGroupId = new Map<string, number>();
   priorityByCodeObjectId = new Map<string, number>();
-  basePriority = 0;
+  basePriority = 1;
 
   enrollPattern(pattern: string): void {
     this.patterns.push(pattern);

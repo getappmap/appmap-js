@@ -71,15 +71,31 @@ export default class Specification {
       includeCodeObjects(root, [])
     );
 
-    const priority = new Priority();
-    Object.entries(options.priority || {}).forEach((entry) =>
-      priority.setPriority(entry[0], entry[1])
-    );
-
     const requiredCodeObjectIds = new Set<string>(options.require || []);
     for (const coid of requiredCodeObjectIds) {
       includedCodeObjectIds.add(coid);
     }
+
+    const priorityArg = options.priority || {};
+    const priority = new Priority();
+
+    if (!Object.keys(priorityArg).includes('http:HTTP server requests'))
+      priorityArg['http:HTTP server requests'] = 0;
+
+    {
+      const externalServices = [...includedCodeObjectIds]
+        .filter((coid) => coid.split(':')[0] === 'external-service')
+        .sort();
+      externalServices.push('database:Database');
+
+      for (let index = 0; index < externalServices.length; index++) {
+        const service = externalServices[index];
+        if (!Object.keys(priorityArg).includes(service))
+          priorityArg[service] = (includedCodeObjectIds.size + index + 1) * 1000;
+      }
+    }
+
+    Object.entries(priorityArg || {}).forEach((entry) => priority.setPriority(entry[0], entry[1]));
 
     return new Specification(priority, includedCodeObjectIds, requiredCodeObjectIds);
   }
