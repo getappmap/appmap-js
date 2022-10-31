@@ -1,0 +1,951 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "UsersController",
+      "method_id": "list",
+      "path": "lib/controllers/users_controller.rb",
+      "lineno": 23,
+      "static": false,
+      "receiver": {
+        "class": "UsersController",
+        "object_id": 2360,
+        "value": "#<UsersController:0x00007fb0a69502a0>"
+      }
+    },
+    {
+      "id": 2,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "User",
+      "method_id": "list",
+      "path": "lib/models/user.rb",
+      "lineno": 32,
+      "static": true,
+      "parameters": [
+        {
+          "name": "ids",
+          "class": "Array",
+          "object_id": 2400,
+          "value": "[1, 2, 3, 4, 5]",
+          "kind": "req",
+          "size": 5
+        },
+        {
+          "name": "prefetch_posts",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "key"
+        },
+        {
+          "name": "must",
+          "class": "TrueClass",
+          "object_id": 20,
+          "value": "true",
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 2260,
+        "value": "User"
+      }
+    },
+    {
+      "id": 3,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Database",
+      "method_id": "query",
+      "path": "lib/database/db.rb",
+      "lineno": 4,
+      "static": true,
+      "parameters": [
+        {
+          "name": "query_string",
+          "class": "String",
+          "object_id": 2420,
+          "value": "Users {id IN 1, 2, 3, 4, 5}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 2440,
+        "value": "Database"
+      }
+    },
+    {
+      "id": 4,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 3,
+      "elapsed": 9.997747838497162e-7,
+      "elapsed_instrumentation": 0.00006599957123398781
+    },
+    {
+      "id": 5,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Post",
+      "method_id": "find_for_users",
+      "path": "lib/models/post.rb",
+      "lineno": 24,
+      "static": true,
+      "parameters": [
+        {
+          "name": "user_ids",
+          "class": "Array",
+          "object_id": 2460,
+          "value": "[1, 2, 3, 4, 5]",
+          "kind": "req",
+          "size": 5
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 2220,
+        "value": "Post"
+      }
+    },
+    {
+      "id": 6,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Database",
+      "method_id": "query",
+      "path": "lib/database/db.rb",
+      "lineno": 4,
+      "static": true,
+      "parameters": [
+        {
+          "name": "query_string",
+          "class": "String",
+          "object_id": 2480,
+          "value": "Posts {user IN 1, 2, 3, 4, 5}",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 2440,
+        "value": "Database"
+      }
+    },
+    {
+      "id": 7,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 6,
+      "elapsed": 0.000001000240445137024,
+      "elapsed_instrumentation": 0.000022999942302703857
+    },
+    {
+      "id": 8,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 5,
+      "elapsed": 0.00003400025889277458,
+      "elapsed_instrumentation": 0.00014299992471933365,
+      "return_value": {
+        "class": "Hash",
+        "value": "{1=>[#<Post:0x00007fb0a6910308>, #<Post:0x00007fb0a6910218>], 2=>[#<Post:0x00007fb0a6910128>, #<Post:0x00007fb0a6910060>], 3=>[#<Post:0x00007fb0a691bf50>, #<Post:0x00007fb0a691be88>, #<Post:0x00007fb0a691bdc0>], 4=>[#<Post:0x00007fb0a691bcd0>, #<Post:0x00007fb0a691bc08>], 5=>[#<Post:0x00007fb0a691bb18>, #<Post:0x00007fb0a691ba50>]}",
+        "object_id": 2500,
+        "size": 5
+      }
+    },
+    {
+      "id": 9,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 2,
+      "elapsed": 0.00030299974605441093,
+      "elapsed_instrumentation": 0.00011900020763278008,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<User:0x00007fb0a6928778>, #<User:0x00007fb0a69286b0>, #<User:0x00007fb0a6928610>, #<User:0x00007fb0a6928570>, #<User:0x00007fb0a69284d0>]",
+        "object_id": 2520,
+        "size": 5
+      }
+    },
+    {
+      "id": 10,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Views::Users::List",
+      "method_id": "list",
+      "path": "lib/views/users/list.rb",
+      "lineno": 10,
+      "static": false,
+      "receiver": {
+        "class": "Views::Users::List",
+        "object_id": 2540,
+        "value": "#<Views::Users::List:0x00007fb0a6969a70>"
+      }
+    },
+    {
+      "id": 11,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "User",
+      "method_id": "posts",
+      "path": "lib/models/user.rb",
+      "lineno": 17,
+      "static": false,
+      "receiver": {
+        "class": "User",
+        "object_id": 2560,
+        "value": "#<User:0x00007fb0a6928778>"
+      }
+    },
+    {
+      "id": 12,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 11,
+      "elapsed": 0.000008999835699796677,
+      "elapsed_instrumentation": 0.000053999945521354675,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Post:0x00007fb0a6910308>, #<Post:0x00007fb0a6910218>]",
+        "object_id": 2580,
+        "size": 2
+      }
+    },
+    {
+      "id": 13,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Views::Posts::Show",
+      "method_id": "show",
+      "path": "lib/views/posts/show.rb",
+      "lineno": 10,
+      "static": false,
+      "receiver": {
+        "class": "Views::Posts::Show",
+        "object_id": 2600,
+        "value": "#<Views::Posts::Show:0x00007fb0a69739a8>"
+      }
+    },
+    {
+      "id": 14,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 13,
+      "elapsed": 0.000001000240445137024,
+      "elapsed_instrumentation": 0.000053999945521354675,
+      "return_value": {
+        "class": "String",
+        "value": "first post",
+        "object_id": 2620
+      }
+    },
+    {
+      "id": 15,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Views::Posts::Show",
+      "method_id": "show",
+      "path": "lib/views/posts/show.rb",
+      "lineno": 10,
+      "static": false,
+      "receiver": {
+        "class": "Views::Posts::Show",
+        "object_id": 2640,
+        "value": "#<Views::Posts::Show:0x00007fb0a6972a58>"
+      }
+    },
+    {
+      "id": 16,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 15,
+      "elapsed": 9.997747838497162e-7,
+      "elapsed_instrumentation": 0.000022999942302703857,
+      "return_value": {
+        "class": "String",
+        "value": "second post",
+        "object_id": 2660
+      }
+    },
+    {
+      "id": 17,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "User",
+      "method_id": "posts",
+      "path": "lib/models/user.rb",
+      "lineno": 17,
+      "static": false,
+      "receiver": {
+        "class": "User",
+        "object_id": 2680,
+        "value": "#<User:0x00007fb0a69286b0>"
+      }
+    },
+    {
+      "id": 18,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 17,
+      "elapsed": 0.000001000240445137024,
+      "elapsed_instrumentation": 0.000023999717086553574,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Post:0x00007fb0a6910128>, #<Post:0x00007fb0a6910060>]",
+        "object_id": 2700,
+        "size": 2
+      }
+    },
+    {
+      "id": 19,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Views::Posts::Show",
+      "method_id": "show",
+      "path": "lib/views/posts/show.rb",
+      "lineno": 10,
+      "static": false,
+      "receiver": {
+        "class": "Views::Posts::Show",
+        "object_id": 2720,
+        "value": "#<Views::Posts::Show:0x00007fb0a6970f00>"
+      }
+    },
+    {
+      "id": 20,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 19,
+      "elapsed": 9.997747838497162e-7,
+      "elapsed_instrumentation": 0.000017000362277030945,
+      "return_value": {
+        "class": "String",
+        "value": "first post",
+        "object_id": 2740
+      }
+    },
+    {
+      "id": 21,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Views::Posts::Show",
+      "method_id": "show",
+      "path": "lib/views/posts/show.rb",
+      "lineno": 10,
+      "static": false,
+      "receiver": {
+        "class": "Views::Posts::Show",
+        "object_id": 2760,
+        "value": "#<Views::Posts::Show:0x00007fb0a6970348>"
+      }
+    },
+    {
+      "id": 22,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 21,
+      "elapsed": 9.997747838497162e-7,
+      "elapsed_instrumentation": 0.00002200016751885414,
+      "return_value": {
+        "class": "String",
+        "value": "second post",
+        "object_id": 2780
+      }
+    },
+    {
+      "id": 23,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "User",
+      "method_id": "posts",
+      "path": "lib/models/user.rb",
+      "lineno": 17,
+      "static": false,
+      "receiver": {
+        "class": "User",
+        "object_id": 2800,
+        "value": "#<User:0x00007fb0a6928610>"
+      }
+    },
+    {
+      "id": 24,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 23,
+      "elapsed": 0.000001000240445137024,
+      "elapsed_instrumentation": 0.000024999957531690598,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Post:0x00007fb0a691bf50>, #<Post:0x00007fb0a691be88>, #<Post:0x00007fb0a691bdc0>]",
+        "object_id": 2820,
+        "size": 3
+      }
+    },
+    {
+      "id": 25,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Views::Posts::Show",
+      "method_id": "show",
+      "path": "lib/views/posts/show.rb",
+      "lineno": 10,
+      "static": false,
+      "receiver": {
+        "class": "Views::Posts::Show",
+        "object_id": 2840,
+        "value": "#<Views::Posts::Show:0x00007fb0a697a5c8>"
+      }
+    },
+    {
+      "id": 26,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 25,
+      "elapsed": 9.997747838497162e-7,
+      "elapsed_instrumentation": 0.000016999896615743637,
+      "return_value": {
+        "class": "String",
+        "value": "first post",
+        "object_id": 2860
+      }
+    },
+    {
+      "id": 27,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Views::Posts::Show",
+      "method_id": "show",
+      "path": "lib/views/posts/show.rb",
+      "lineno": 10,
+      "static": false,
+      "receiver": {
+        "class": "Views::Posts::Show",
+        "object_id": 2880,
+        "value": "#<Views::Posts::Show:0x00007fb0a6979a10>"
+      }
+    },
+    {
+      "id": 28,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 27,
+      "elapsed": 9.997747838497162e-7,
+      "elapsed_instrumentation": 0.00001600012183189392,
+      "return_value": {
+        "class": "String",
+        "value": "second post",
+        "object_id": 2900
+      }
+    },
+    {
+      "id": 29,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Views::Posts::Show",
+      "method_id": "show",
+      "path": "lib/views/posts/show.rb",
+      "lineno": 10,
+      "static": false,
+      "receiver": {
+        "class": "Views::Posts::Show",
+        "object_id": 2920,
+        "value": "#<Views::Posts::Show:0x00007fb0a6978e58>"
+      }
+    },
+    {
+      "id": 30,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 29,
+      "elapsed": 0.000001000240445137024,
+      "elapsed_instrumentation": 0.000015999656170606613,
+      "return_value": {
+        "class": "String",
+        "value": "third post",
+        "object_id": 2940
+      }
+    },
+    {
+      "id": 31,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "User",
+      "method_id": "posts",
+      "path": "lib/models/user.rb",
+      "lineno": 17,
+      "static": false,
+      "receiver": {
+        "class": "User",
+        "object_id": 2960,
+        "value": "#<User:0x00007fb0a6928570>"
+      }
+    },
+    {
+      "id": 32,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 31,
+      "elapsed": 0.00000200001522898674,
+      "elapsed_instrumentation": 0.00002899952232837677,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Post:0x00007fb0a691bcd0>, #<Post:0x00007fb0a691bc08>]",
+        "object_id": 2980,
+        "size": 2
+      }
+    },
+    {
+      "id": 33,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Views::Posts::Show",
+      "method_id": "show",
+      "path": "lib/views/posts/show.rb",
+      "lineno": 10,
+      "static": false,
+      "receiver": {
+        "class": "Views::Posts::Show",
+        "object_id": 3000,
+        "value": "#<Views::Posts::Show:0x00007fb0a69832e0>"
+      }
+    },
+    {
+      "id": 34,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 33,
+      "elapsed": 0,
+      "elapsed_instrumentation": 0.000015999656170606613,
+      "return_value": {
+        "class": "String",
+        "value": "first post",
+        "object_id": 3020
+      }
+    },
+    {
+      "id": 35,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Views::Posts::Show",
+      "method_id": "show",
+      "path": "lib/views/posts/show.rb",
+      "lineno": 10,
+      "static": false,
+      "receiver": {
+        "class": "Views::Posts::Show",
+        "object_id": 3040,
+        "value": "#<Views::Posts::Show:0x00007fb0a6982728>"
+      }
+    },
+    {
+      "id": 36,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 35,
+      "elapsed": 0,
+      "elapsed_instrumentation": 0.00001499941572546959,
+      "return_value": {
+        "class": "String",
+        "value": "second post",
+        "object_id": 3060
+      }
+    },
+    {
+      "id": 37,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "User",
+      "method_id": "posts",
+      "path": "lib/models/user.rb",
+      "lineno": 17,
+      "static": false,
+      "receiver": {
+        "class": "User",
+        "object_id": 3080,
+        "value": "#<User:0x00007fb0a69284d0>"
+      }
+    },
+    {
+      "id": 38,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 37,
+      "elapsed": 9.997747838497162e-7,
+      "elapsed_instrumentation": 0.00002600019797682762,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Post:0x00007fb0a691bb18>, #<Post:0x00007fb0a691ba50>]",
+        "object_id": 3100,
+        "size": 2
+      }
+    },
+    {
+      "id": 39,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Views::Posts::Show",
+      "method_id": "show",
+      "path": "lib/views/posts/show.rb",
+      "lineno": 10,
+      "static": false,
+      "receiver": {
+        "class": "Views::Posts::Show",
+        "object_id": 3120,
+        "value": "#<Views::Posts::Show:0x00007fb0a6980bd0>"
+      }
+    },
+    {
+      "id": 40,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 39,
+      "elapsed": 0,
+      "elapsed_instrumentation": 0.00001600058749318123,
+      "return_value": {
+        "class": "String",
+        "value": "first post",
+        "object_id": 3140
+      }
+    },
+    {
+      "id": 41,
+      "event": "call",
+      "thread_id": 2380,
+      "defined_class": "Views::Posts::Show",
+      "method_id": "show",
+      "path": "lib/views/posts/show.rb",
+      "lineno": 10,
+      "static": false,
+      "receiver": {
+        "class": "Views::Posts::Show",
+        "object_id": 3160,
+        "value": "#<Views::Posts::Show:0x00007fb0a6980018>"
+      }
+    },
+    {
+      "id": 42,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 41,
+      "elapsed": 0,
+      "elapsed_instrumentation": 0.000017000362277030945,
+      "return_value": {
+        "class": "String",
+        "value": "second post",
+        "object_id": 3180
+      }
+    },
+    {
+      "id": 43,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 10,
+      "elapsed": 0.0004819999448955059,
+      "elapsed_instrumentation": 0.00014299992471933365,
+      "return_value": {
+        "class": "Array",
+        "value": "[{:id=>1, :login=>alice, :posts=>[first post, second post]}, {:id=>2, :login=>bob, :posts=>[first post, second post]}, {:id=>3, :login=>charles, :posts=>[first post, second post, third post]}, {:id=>4, :login=>dan, :posts=>[first post, second post]}, {:id=>5, :login=>ed, :posts=>[first post, second post]}]",
+        "object_id": 3200,
+        "size": 5
+      }
+    },
+    {
+      "id": 44,
+      "event": "return",
+      "thread_id": 2380,
+      "parent_id": 1,
+      "elapsed": 0.0011519999243319035,
+      "elapsed_instrumentation": 0.000205999705940485,
+      "return_value": {
+        "class": "Array",
+        "value": "[[{:id=>1, :login=>alice, :posts=>[first post, second post]}, {:id=>2, :login=>bob, :posts=>[first post, second post]}, {:id=>3, :login=>charles, :posts=>[first post, second post, third post]}, {:id=>4, :login=>dan, :posts=>[first post, second post]}, {:id=>5, :login=>ed, :posts=>[first post, second post]}], 200]",
+        "object_id": 3220,
+        "size": 2
+      }
+    }
+  ],
+  "metadata": {
+    "app": "seqeunce-diagram-fixtures",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "3.0.2"
+    },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/applandinc/appmap-ruby",
+      "version": "0.93.3"
+    },
+    "git": {
+      "repository": "git@github.com:getappmap/appmap-js.git",
+      "branch": "feat/sequence-diagram",
+      "commit": "3335ee4ead36501d10cb671e35591928b4876707",
+      "status": [
+        "D ../.gitignore",
+        "D ../Gemfile",
+        "D ../Guardfile",
+        "D ../Rakefile",
+        "D ../appmap.yml",
+        "D ../bin/lib/make_appmap.rb",
+        "D ../bin/list_users.rb",
+        "D ../bin/list_users_prefetch.rb",
+        "D ../bin/show_user.rb",
+        "D ../bin/user_not_found.rb",
+        "D ../lib/controllers/users_controller.rb",
+        "D ../lib/database/db.rb",
+        "D ../lib/models/post.rb",
+        "D ../lib/models/user.rb",
+        "D ../lib/views/posts/show.rb",
+        "D ../lib/views/users/list.rb",
+        "D ../lib/views/users/show.rb",
+        "D ../tmp/appmap/list_users.appmap.json",
+        "D ../tmp/appmap/list_users.sequence.uml",
+        "D ../tmp/appmap/list_users_prefetch.appmap.json",
+        "D ../tmp/appmap/list_users_prefetch.sequence.uml",
+        "D ../tmp/appmap/show_user.appmap.json",
+        "D ../tmp/appmap/show_user.sequence.uml",
+        "D ../tmp/appmap/user_not_found.appmap.json",
+        "D ../tmp/appmap/user_not_found.sequence.uml",
+        "?? ./"
+      ],
+      "git_last_annotated_tag": "@appland/scanner-latest",
+      "git_last_tag": "@appland/appmap-v3.47.0",
+      "git_commits_since_last_annotated_tag": 0,
+      "git_commits_since_last_tag": 0
+    },
+    "name": "list_users_prefetch",
+    "fingerprints": [
+      {
+        "appmap_digest": "f8ae99ec0a982ce077d644933efe99a4b34a37ed91e47ac0d30e8631c0a79da2",
+        "canonicalization_algorithm": "classDependencies",
+        "digest": "3b39770fcfc30536e1a3bdc79ecf5c31fa99f53301e4a2fab3291dbcd806e8f2",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "f8ae99ec0a982ce077d644933efe99a4b34a37ed91e47ac0d30e8631c0a79da2",
+        "canonicalization_algorithm": "classes",
+        "digest": "2ecf2b1c1e7f388a5dc03bb2ce1c3f01053acf9e11b1c7da5539e789da808906",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "f8ae99ec0a982ce077d644933efe99a4b34a37ed91e47ac0d30e8631c0a79da2",
+        "canonicalization_algorithm": "httpClientRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "f8ae99ec0a982ce077d644933efe99a4b34a37ed91e47ac0d30e8631c0a79da2",
+        "canonicalization_algorithm": "httpServerRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "f8ae99ec0a982ce077d644933efe99a4b34a37ed91e47ac0d30e8631c0a79da2",
+        "canonicalization_algorithm": "info",
+        "digest": "a00b2620d877e9ab17375dbc02716814dc865065eeb859072a9109b90e20ae52",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "f8ae99ec0a982ce077d644933efe99a4b34a37ed91e47ac0d30e8631c0a79da2",
+        "canonicalization_algorithm": "labels",
+        "digest": "0ca5b47511f3b855831e75006ed5b6711cd4d3498b422466a478dfc76b41b69c",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "f8ae99ec0a982ce077d644933efe99a4b34a37ed91e47ac0d30e8631c0a79da2",
+        "canonicalization_algorithm": "packageDependencies",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "f8ae99ec0a982ce077d644933efe99a4b34a37ed91e47ac0d30e8631c0a79da2",
+        "canonicalization_algorithm": "packages",
+        "digest": "534778405b9871993d79f5edbb7079ebefb71feaf9edc6743e5ec2f743ee656a",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "f8ae99ec0a982ce077d644933efe99a4b34a37ed91e47ac0d30e8631c0a79da2",
+        "canonicalization_algorithm": "sqlNormalized",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "f8ae99ec0a982ce077d644933efe99a4b34a37ed91e47ac0d30e8631c0a79da2",
+        "canonicalization_algorithm": "sqlTables",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "f8ae99ec0a982ce077d644933efe99a4b34a37ed91e47ac0d30e8631c0a79da2",
+        "canonicalization_algorithm": "trace",
+        "digest": "c553b184e1f4d40c57dacf5ca10bc0219eb257803d8c84fb6cf6b2ee08aef761",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "f8ae99ec0a982ce077d644933efe99a4b34a37ed91e47ac0d30e8631c0a79da2",
+        "canonicalization_algorithm": "update",
+        "digest": "a00b2620d877e9ab17375dbc02716814dc865065eeb859072a9109b90e20ae52",
+        "fingerprint_algorithm": "sha256"
+      }
+    ]
+  },
+  "classMap": [
+    {
+      "name": "lib",
+      "type": "package",
+      "children": [
+        {
+          "name": "controllers",
+          "type": "package",
+          "children": [
+            {
+              "name": "UsersController",
+              "type": "class",
+              "children": [
+                {
+                  "name": "list",
+                  "type": "function",
+                  "labels": [
+                    "mvc.controller"
+                  ],
+                  "static": false,
+                  "location": "lib/controllers/users_controller.rb:23"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "models",
+          "type": "package",
+          "children": [
+            {
+              "name": "User",
+              "type": "class",
+              "children": [
+                {
+                  "name": "list",
+                  "type": "function",
+                  "static": true,
+                  "location": "lib/models/user.rb:32"
+                },
+                {
+                  "name": "posts",
+                  "type": "function",
+                  "static": false,
+                  "location": "lib/models/user.rb:17"
+                }
+              ]
+            },
+            {
+              "name": "Post",
+              "type": "class",
+              "children": [
+                {
+                  "name": "find_for_users",
+                  "type": "function",
+                  "labels": [
+                    "mvc.model"
+                  ],
+                  "static": true,
+                  "location": "lib/models/post.rb:24"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "database",
+          "type": "package",
+          "children": [
+            {
+              "name": "Database",
+              "type": "class",
+              "children": [
+                {
+                  "name": "query",
+                  "type": "function",
+                  "labels": [
+                    "db"
+                  ],
+                  "static": true,
+                  "location": "lib/database/db.rb:4"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "views",
+          "type": "package",
+          "children": [
+            {
+              "name": "users",
+              "type": "package",
+              "children": [
+                {
+                  "name": "Views",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "Users",
+                      "type": "class",
+                      "children": [
+                        {
+                          "name": "List",
+                          "type": "class",
+                          "children": [
+                            {
+                              "name": "list",
+                              "type": "function",
+                              "static": false,
+                              "location": "lib/views/users/list.rb:10"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "posts",
+              "type": "package",
+              "children": [
+                {
+                  "name": "Views",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "Posts",
+                      "type": "class",
+                      "children": [
+                        {
+                          "name": "Show",
+                          "type": "class",
+                          "children": [
+                            {
+                              "name": "show",
+                              "type": "function",
+                              "static": false,
+                              "location": "lib/views/posts/show.rb:10"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
