@@ -1,8 +1,6 @@
-import assert from 'assert';
-import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { format } from '../../src/formatter/plantUML';
-import { APPMAPS, APP_APPMAP_DIR, loadDiagram } from '../util';
+import { APPMAPS, APP_APPMAP_DIR, checkFilesEqual, loadDiagram } from '../util';
 
 describe('Sequence diagram', () => {
   describe('PlantUML', () => {
@@ -13,12 +11,9 @@ describe('Sequence diagram', () => {
           priority: { 'package:lib/database': 10000 },
         });
         const plantUML = format(diagram, appmapFile);
-        assert.strictEqual(
+        await checkFilesEqual(
           plantUML,
-          await readFile(
-            join(APP_APPMAP_DIR, appmapFile.replace('.appmap.json', '.sequence.uml')),
-            'utf-8'
-          )
+          join(APP_APPMAP_DIR, appmapFile.replace('.appmap.json', '.sequence.uml'))
         );
       }
     });

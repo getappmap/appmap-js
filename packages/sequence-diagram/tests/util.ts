@@ -6,6 +6,9 @@ import buildDiagram from '../src/buildDiagram';
 import Specification from '../src/specification';
 import { Action, Actor, Diagram, isFunction } from '../src/types';
 import { SequenceDiagramOptions } from '../src/specification';
+import { readFile } from 'fs/promises';
+
+export const VERBOSE = process.env.DEBUG === 'true';
 
 export const FIXTURE_DIR = path.join(__dirname, 'fixtures');
 export const APP_APPMAP_DIR = path.join(FIXTURE_DIR, 'app', 'tmp', 'appmap');
@@ -40,6 +43,17 @@ APPMAPS[SHOW_USER_APPMAP_FILE] = SHOW_USER_APPMAP;
 APPMAPS[USER_NOT_FOUND_APPMAP_FILE] = USER_NOT_FOUND_APPMAP;
 APPMAPS[LIST_USERS_APPMAP_FILE] = LIST_USERS_APPMAP;
 APPMAPS[LIST_USERS_PREFETCH_APPMAP_FILE] = LIST_USERS_PREFETCH_APPMAP;
+
+function normalizeFile(data: string): string {
+  return data.split(/\r?\n/g).join('\n');
+}
+
+export async function checkFilesEqual(actualData: string, expectedFileName: string): Promise<void> {
+  assert.strictEqual(
+    normalizeFile(actualData),
+    normalizeFile(await readFile(expectedFileName, 'utf-8'))
+  );
+}
 
 export function loadDiagram(appmap: AppMap, options: SequenceDiagramOptions = {}): Diagram {
   const specification = Specification.build(appmap, options);

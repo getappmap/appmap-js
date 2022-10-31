@@ -116,7 +116,9 @@ export const actionActors = (action: Action): (Actor | undefined)[] => {
   return [];
 };
 
-export const nodeName = (action: Action): string => {
+export const nodeName = (action: Action | undefined): string => {
+  if (!action) return 'undefined';
+
   switch (action.nodeType) {
     case NodeType.Function:
       return action.name;
