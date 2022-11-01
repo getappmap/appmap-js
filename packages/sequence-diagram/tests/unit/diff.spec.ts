@@ -19,13 +19,15 @@ describe('Sequence diagram diff', () => {
         computedDiff.positions.map((state) => state.moveType),
         [
           MoveType.AdvanceBoth,
-          MoveType.InsertRight,
           MoveType.DeleteLeft,
-          MoveType.AdvanceBoth,
-          MoveType.InsertRight,
-          MoveType.InsertRight,
           MoveType.InsertRight,
           MoveType.AdvanceBoth,
+
+          MoveType.InsertRight,
+          MoveType.InsertRight,
+          MoveType.InsertRight,
+          MoveType.InsertRight,
+          MoveType.InsertRight,
           MoveType.InsertRight,
         ]
       );
@@ -53,6 +55,7 @@ describe('Sequence diagram diff', () => {
           MoveType.InsertRight,
           MoveType.InsertRight,
 
+          MoveType.AdvanceBoth,
           MoveType.AdvanceBoth,
         ]
       );

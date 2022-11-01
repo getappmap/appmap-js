@@ -21,19 +21,19 @@ participant database as "database"
       Loop 5 times
         users->models: posts
         activate models
+          models-[#red]>models: <b><color:red><u>find_for_user</u></color></b>
+          Note right
+deleted
+          End note
+          activate models
+            models-[#red]>database: <b><color:red><u>query</u></color></b>
+            Note right
+deleted
+            End note
+          models<[#red]--models: <b><color:red>array</color></b>
+          deactivate models
         users<--models: array
         deactivate models
-        models-[#red]>models: <b><color:red><u>find_for_user</u></color></b>
-        Note right
-deleted
-        End note
-        activate models
-        models<[#red]--models: <b><color:red>array</color></b>
-        deactivate models
-        models-[#red]>database: <b><color:red><u>query</u></color></b>
-        Note right
-deleted
-        End note
         Loop ~2 times
           users->posts: show
           activate posts

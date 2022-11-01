@@ -29,7 +29,7 @@ deleted
         deactivate models
       users<[#green]--models: <b><color:green>array</color></b>
       deactivate models
-      Loop #green 2 times
+      Loop#green 2 times
         users-[#green]>posts: <b><color:green>show</color></b>
         activate posts
         users<[#green]--posts: <b><color:green>string</color></b>

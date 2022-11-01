@@ -65,7 +65,7 @@ export default function buildDiffDiagram(diff: Diff): Diagram {
           return diffActionsByAction.get(rAction.parent);
         };
 
-        const parent = headEquivalentOfDeletedActionsParent() || deletedActionsParent();
+        const parent = deletedActionsParent() || headEquivalentOfDeletedActionsParent();
         if (parent) {
           parent.children.splice(parent.children.length, 0, action);
           action.parent = parent;
