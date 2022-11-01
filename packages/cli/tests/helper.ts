@@ -11,7 +11,7 @@ export function withSandbox() {
 
   return api;
 }
-export function withStubbedTelemetry(sandbox: sinon.SinonSandbox) {
+export function withStubbedTelemetry(sandbox: sinon.SinonSandbox = sinon) {
   beforeEach(() => {
     // Stub all Telemetry methods. flush still needs to work, though.
     sandbox.stub(Telemetry);

@@ -6,8 +6,11 @@ import * as initial from '../../../src/cmds/record/state/initial';
 import * as openTicket from '../../../src/lib/ticket/openTicket';
 import recordCmd from '../../../src/cmds/record/record';
 import UI from '../../../src/cmds/userInteraction';
+import { withStubbedTelemetry } from '../../helper';
 
 describe('record', () => {
+  withStubbedTelemetry();
+
   const parser = yargs.command(recordCmd);
   const runCommand = async () => {
     const cmdLine = `record remote`;
