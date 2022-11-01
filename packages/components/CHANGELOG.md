@@ -1,3 +1,11 @@
+# [@appland/components-v2.18.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.18.2...@appland/components-v2.18.3) (2022-11-01)
+
+
+### Bug Fixes
+
+* Alter the condition of AppMaps recorded to require AppMap files on disk ([c68cd15](https://github.com/getappmap/appmap-js/commit/c68cd15b5228195ee44c9108973aa272b00724b0))
+* escape paths in npx command ([d3227b2](https://github.com/getappmap/appmap-js/commit/d3227b25ebafdbfdbf658e085a5c1de3c01c04d0))
+
 # [@appland/components-v2.18.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.18.1...@appland/components-v2.18.2) (2022-10-22)
 
 
