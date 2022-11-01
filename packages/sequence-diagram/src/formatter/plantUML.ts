@@ -164,11 +164,11 @@ export function format(diagram: Diagram, _source: string): string {
     events.indent();
 
     if (isLoop(action)) {
-      const colorTag = color(action) ? `#${color(action)} ` : '';
+      const colorTag = color(action) ? `#${color(action)}` : '';
       let countStr = action.count.toString();
       if (hasAncestor(action, (action) => isLoop(action))) countStr = `~${countStr}`;
 
-      events.print(`Loop ${colorTag}${countStr} times`);
+      events.print(`Loop${colorTag} ${countStr} times`);
 
       renderChildren(action);
 
