@@ -1,19 +1,22 @@
-import { mkdir, writeFile } from 'fs/promises';
+import { mkdir, readFile, writeFile } from 'fs/promises';
 import { basename, dirname, join } from 'path';
 import yargs from 'yargs';
+import { default as sequenceDiagramFormatter } from '@appland/sequence-diagram/dist/formatter';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
-import { locateAppMapDir } from '../lib/locateAppMapDir';
-import buildDiagrams from '../sequenceDiagram/buildDiagrams';
 import { verbose } from '../utils';
+import { buildAppMap } from '@appland/models';
+import Specification, {
+  SequenceDiagramOptions,
+} from '@appland/sequence-diagram/dist/specification';
+import buildDiagram from '@appland/sequence-diagram/dist/buildDiagram';
 
-export const command = 'sequence-diagram [code-object...]';
-export const describe = 'Generate sequence diagrams for a specified list of code objects';
+export const command = 'sequence-diagram appmap';
+export const describe = 'Generate a sequence diagram for an AppMap';
 
 export const builder = (args: yargs.Argv) => {
-  args.positional('code-object', {
-    describe:
-      'identifies a code-object to display (at least two must be provided by repeating this positional argument)',
-    array: true,
+  args.positional('appmap', {
+    type: 'string',
+    demandOption: true,
   });
 
   args.option('directory', {
@@ -21,16 +24,17 @@ export const builder = (args: yargs.Argv) => {
     type: 'string',
     alias: 'd',
   });
-  args.option('appmap-dir', {
-    describe: 'directory to recursively inspect for AppMaps',
-  });
   args.option('output-dir', {
     describe: 'directory in which to save the sequence diagrams',
   });
   args.option('format', {
     describe: 'output format',
-    choices: ['mermaid', 'plantuml', 'json'],
-    default: 'mermaid',
+    choices: ['plantuml', 'json'],
+    default: 'plantuml',
+  });
+
+  args.option('exclude', {
+    describe: 'code objects to exclude from the diagram',
   });
 
   return args.strict();
@@ -39,38 +43,44 @@ export const builder = (args: yargs.Argv) => {
 export const handler = async (argv: any) => {
   verbose(argv.verbose);
   handleWorkingDirectory(argv.directory);
-  const appmapDir = await locateAppMapDir(argv.appmapDir);
 
-  let codeObjectIds = argv.codeObject as string[];
-  if (!codeObjectIds || codeObjectIds.length < 1) {
-    console.log(`At least one code object id argument is required`);
+  if (!argv.appmap) {
+    console.log(`appmap argument is required`);
     process.exitCode = 1;
     return;
   }
 
-  const formatter = require(`@appland/sequence-diagram/dist/formatter/${argv.format}`);
+  const formatter = sequenceDiagramFormatter[argv.format];
+  if (!formatter) {
+    console.log(`Invalid format: ${argv.format}`);
+    process.exitCode = 1;
+    return;
+  }
 
-  const diagrams = (await buildDiagrams(appmapDir, codeObjectIds)).filter(
-    (d) => d.diagram.actors.length > 0
-  );
+  const appmapData = JSON.parse(await readFile(argv.appmap, 'utf-8'));
+  const appmap = buildAppMap().source(appmapData).build();
+
+  const specOptions = {} as SequenceDiagramOptions;
+  if (argv.exclude && argv.exclude.length > 0) specOptions.exclude = argv.exclude;
+
+  const specification = Specification.build(appmap, specOptions);
+
+  const diagram = buildDiagram(argv.appmap, appmap, specification);
+  const template = formatter.format(diagram, argv.appmap);
 
   if (argv.outputDir) await mkdir(argv.outputDir, { recursive: true });
 
-  for (const diagram of diagrams) {
-    const template = formatter.format(diagram.diagram, diagram.appmapFile);
+  const outputFileName = [
+    basename(argv.appmap, '.appmap.json'),
+    '.sequence',
+    formatter.extension,
+  ].join('');
 
-    const outputFileName = [
-      basename(diagram.appmapFile).split('.')[0],
-      '.sequence',
-      formatter.extension,
-    ].join('');
+  let outputPath: string;
+  if (argv.outputDir) outputPath = join(argv.outputDir, outputFileName);
+  else outputPath = join(dirname(argv.appmap), outputFileName);
 
-    let outputPath: string;
-    if (argv.outputDir) outputPath = join(argv.outputDir, outputFileName);
-    else outputPath = join(dirname(diagram.appmapFile), outputFileName);
+  await writeFile(outputPath, template);
 
-    await writeFile(outputPath, template);
-  }
-
-  console.log(`Printed ${diagrams.length} diagrams`);
+  console.log(`Printed diagram ${outputPath}`);
 };

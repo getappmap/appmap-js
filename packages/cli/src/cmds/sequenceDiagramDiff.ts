@@ -5,6 +5,7 @@ import { glob } from 'glob';
 import { promisify } from 'util';
 import yargs from 'yargs';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
+import { default as sequenceDiagramFormatter } from '@appland/sequence-diagram/dist/formatter';
 import buildDiffDiagram from '@appland/sequence-diagram/dist/buildDiffDiagram';
 import diff, { DiffOptions, MoveType } from '@appland/sequence-diagram/dist/diff';
 import { Actor, Diagram, setParent } from '@appland/sequence-diagram/dist/types';
@@ -32,8 +33,8 @@ export const builder = (args: yargs.Argv) => {
   });
   args.option('format', {
     describe: 'output format',
-    choices: ['mermaid', 'plantuml', 'json'],
-    default: 'mermaid',
+    choices: ['plantuml', 'json'],
+    default: 'plantuml',
   });
 
   return args.strict();
@@ -106,7 +107,12 @@ export const handler = async (argv: any) => {
 
   const { baseDiagram: baseDiagramFile, headDiagram: headDiagramFile } = argv;
 
-  const formatter = require(`@appland/sequence-diagram/dist/formatter/${argv.format}`);
+  const formatter = sequenceDiagramFormatter[argv.format];
+  if (!formatter) {
+    console.log(`Invalid format: ${argv.format}`);
+    process.exitCode = 1;
+    return;
+  }
 
   [baseDiagramFile, headDiagramFile].forEach((fileName) => {
     if (!existsSync(fileName)) throw new Error(`${fileName} does not exist`);
