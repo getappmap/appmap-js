@@ -143,9 +143,12 @@ export default {
       return !this.featureFlags.has(DISABLE_PENDING_RECORD_STATE);
     },
     command() {
-      return ['npx @appland/appmap record test', this.project && `-d ${this.project.path}`]
-        .filter(Boolean)
-        .join(' ');
+      const baseCommand = 'npx @appland/appmap record test';
+
+      if (this.project && this.project.path) {
+        return `${baseCommand} -d ${this.escapePath(this.project.path)}`;
+      }
+      return baseCommand;
     },
     language() {
       if (!this.project || !this.project.language) return undefined;
@@ -246,6 +249,17 @@ export default {
       // Make the first character lowercase, we're going to append some
       // words to the beginning of this sentence.
       return prompts[0].charAt(0).toLowerCase() + prompts[0].slice(1);
+    },
+    isWindowsPath(path) {
+      // test if the path starts with a drive letter, then a colon, then a backslash
+      return /^[A-Z]:\\$/i.test(path.slice(0, 3));
+    },
+    escapePath(path) {
+      if (this.isWindowsPath(path)) {
+        const [driveLetter, restOfPath] = path.split(':');
+        return `${driveLetter}:"${restOfPath}"`;
+      }
+      return path.replace(/([^A-Za-z0-9_\-.,:/@\n])/g, '\\$1');
     },
   },
 };
