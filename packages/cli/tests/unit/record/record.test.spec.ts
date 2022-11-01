@@ -80,7 +80,7 @@ describe('record test', () => {
   });
 
   describe('record test with invalid directory parameter', () => {
-    it('shows error if directory parameter is file instead of directory', async () => {
+    it('stops if directory parameter is file instead of directory', async () => {
       const dirPrefix = tmpdir();
       const directoryParam = `${dirPrefix}/file_not_dir`;
       closeSync(openSync(directoryParam, 'w'));
@@ -99,7 +99,7 @@ describe('record test', () => {
       await unlink(directoryParam, (err) => {});
     });
 
-    it('shows error if directory parameter is invalid symlink', async () => {
+    it('stops if directory parameter is invalid symlink', async () => {
       const dirPrefix = tmpdir();
       const symlinkDst = `${dirPrefix}/symlink_dst`;
       const symlinkSrc = `${dirPrefix}/symlink_src`;
