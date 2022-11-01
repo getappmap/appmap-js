@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.72.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.7...@appland/scanner-v1.72.0) (2022-11-01)
+
+
+### Features
+
+* Generate sequence diagram ([870be30](https://github.com/getappmap/appmap-js/commit/870be30dbdc074672cc43495eebd396fd97c0184))
+
 # [@appland/scanner-v1.71.7](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.6...@appland/scanner-v1.71.7) (2022-10-21)
 
 
