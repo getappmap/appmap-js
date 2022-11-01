@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.1.0](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.0.3...@appland/openapi-v1.1.0) (2022-11-01)
+
+
+### Features
+
+* Generate sequence diagram ([870be30](https://github.com/getappmap/appmap-js/commit/870be30dbdc074672cc43495eebd396fd97c0184))
+
 # [@appland/openapi-v1.0.3](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.0.2...@appland/openapi-v1.0.3) (2022-10-17)
 
 
