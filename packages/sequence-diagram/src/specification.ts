@@ -6,15 +6,15 @@ export type CodeObjectId = string;
 
 export interface SequenceDiagramOptions {
   // default: []
-  readonly exclude?: CodeObjectId[];
+  exclude?: CodeObjectId[];
   // default: []
-  readonly expand?: CodeObjectId[];
+  expand?: CodeObjectId[];
 
   // default: {}
-  readonly priority?: Record<CodeObjectId, number>;
+  priority?: Record<CodeObjectId, number>;
 
   // default: []
-  readonly require?: CodeObjectId[];
+  require?: CodeObjectId[];
 }
 
 export default class Specification {
