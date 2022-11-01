@@ -1,0 +1,7 @@
+
+guard :rake, task: 'default' do
+  watch('appmap.yml')
+  watch('Rakefile')
+  watch(%r{lib/.*\.rb})
+  watch(%r{bin/.*\.rb})
+end

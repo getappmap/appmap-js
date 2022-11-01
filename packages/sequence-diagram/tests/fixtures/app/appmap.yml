@@ -1,0 +1,7 @@
+---
+name: seqeunce-diagram-fixtures
+language: ruby
+appmap_dir: tmp/appmap
+packages:
+  - path: lib
+exclude: []

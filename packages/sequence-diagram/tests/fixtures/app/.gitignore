@@ -1,0 +1,4 @@
+.byebug_history
+Gemfile.lock
+tmp/**/diff
+tmp/**/diff.svg

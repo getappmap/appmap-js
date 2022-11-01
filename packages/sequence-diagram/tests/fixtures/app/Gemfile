@@ -1,0 +1,10 @@
+source 'https://rubygems.org'
+
+ruby '3.0.2'
+
+gem 'appmap'
+gem 'activesupport'
+gem 'byebug'
+gem 'rake'
+gem 'guard'
+gem 'guard-rake'

@@ -1,11 +1,18 @@
 #!/bin/bash
-set -e
+set -ex
+
+# Optionally pass a desired OS as the first argument. E.g. ./build-native.sh macos
+# Otherwise every OS will be built.
+# Note that if a desired OS is provided, the output will simply be named 'appmap' or 'appmap.exe'.
+# OS and ARCH are only used to name the output when multiple targets are being built at once.
+DESIRED_TARGET="${1}"
 
 echo "Building native binaries..."
 yarn pkg \
   --config package.json \
   --compress GZip \
   -o release/appmap \
+  $([ -n "${DESIRED_TARGET}" ] && echo "-t node16-${DESIRED_TARGET}-x64") \
   built/cli.js
 
 echo "Generating hashes..."

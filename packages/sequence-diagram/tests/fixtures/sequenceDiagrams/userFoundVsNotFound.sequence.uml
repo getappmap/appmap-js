@@ -1,0 +1,42 @@
+@startuml
+participant controllers as "controllers"
+participant models as "models"
+participant users as "users"
+participant posts as "posts"
+participant database as "database"
+  [->controllers: show
+  activate controllers
+    controllers-[#red]>models: <b><color:red><u>find</u></color></b>
+    Note right
+deleted
+    End note
+    activate models
+    controllers<[#red]--models: <b><color:red><i>exception!</i></color></b>
+    deactivate models
+    controllers-[#green]>models: <b><color:green><u>find</u></color></b>
+    activate models
+      models->database: <u>query</u>
+    controllers<[#green]--models: <b><color:green>object</color></b>
+    deactivate models
+    controllers-[#green]>users: <b><color:green>show</color></b>
+    activate users
+      users-[#green]>models: <b><color:green>posts</color></b>
+      activate models
+        models-[#green]>models: <b><color:green><u>find_for_user</u></color></b>
+        activate models
+          models-[#green]>database: <b><color:green><u>query</u></color></b>
+        models<[#green]--models: <b><color:green>array</color></b>
+        deactivate models
+      users<[#green]--models: <b><color:green>array</color></b>
+      deactivate models
+      Loop#green 2 times
+        users-[#green]>posts: <b><color:green>show</color></b>
+        activate posts
+        users<[#green]--posts: <b><color:green>string</color></b>
+        deactivate posts
+      End
+    controllers<[#green]--users: <b><color:green>object</color></b>
+    deactivate users
+  [<--controllers: array
+  deactivate controllers
+@enduml

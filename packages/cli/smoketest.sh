@@ -3,22 +3,26 @@
 PKGDIR="$PWD"
 TESTDIR="`mktemp -d`"
 
-yarn pack --out "$TESTDIR"/package.tgz
+OS="`uname -s | tr '[:upper:]' '[:lower:]'`"
+[[ "${OS}" == "darwin" ]] && OS="macos"
+[[ "${OS}" =~ mingw ]] || [[ "${OS}" =~ cygwin ]] || [[ "${OS}" =~ msys ]] && OS="win"
 
-cp -r tests/unit/fixtures/ruby "$TESTDIR"
+ARCH="`uname -m | sed 's/86_//'`"
+BIN_NAME="appmap"
 
-cd "$TESTDIR"
-echo '{}' > package.json
-echo 'nodeLinker: node-modules' > .yarnrc.yml
+[[ "${OS}" == "win" ]] && BIN_NAME="${BIN_NAME}.exe"
 
-yarn add ./package.tgz
+yarn build-native "${OS}"
 
+cp "release/${BIN_NAME}" "${TESTDIR}"
+cp -r "tests/unit/fixtures/ruby" "${TESTDIR}"
 
-yarn run appmap index --appmap-dir ruby
-yarn run appmap depends --appmap-dir ruby
-yarn run appmap inventory --appmap-dir ruby
-yarn run appmap openapi -d ruby -o /dev/null
+cd "${TESTDIR}"
 
+"./${BIN_NAME}" index --appmap-dir ruby
+"./${BIN_NAME}" depends --appmap-dir ruby
+"./${BIN_NAME}" inventory --appmap-dir ruby
+"./${BIN_NAME}" openapi -d ruby -o /dev/null
 
 cd "$PKGDIR"
 rm -rf "$TESTDIR"
