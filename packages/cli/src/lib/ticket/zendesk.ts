@@ -31,7 +31,8 @@ const debugAdapter = async (config: AxiosRequestConfig): Promise<any> => {
 
 export default async function createRequest(
   errors: string | string[],
-  email: any
+  name: string,
+  email: string
 ): Promise<number> {
   errors = !Array.isArray(errors) ? [errors] : errors;
   const body = JSON.stringify({
@@ -42,6 +43,7 @@ ${errors.map((e) => `===\n${stripAnsi(e)}\n===`).join('\n')}`,
       },
       subject: `CLI command failure`,
       requester: {
+        name,
         email,
       },
     },

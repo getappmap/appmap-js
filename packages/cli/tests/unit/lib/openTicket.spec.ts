@@ -58,7 +58,7 @@ describe('openTicket', () => {
       await openTicket('error');
       expect(prompt).toBeCalledTwice();
       expect(getNthCallArgs(prompt, 0)).toMatchObject({ name: 'openTicket' });
-      expect(getNthCallArgs(prompt, 1)).toMatchObject([{ name: 'email' }]);
+      expect(getNthCallArgs(prompt, 1)).toMatchObject([{ name: 'name' }, { name: 'email' }]);
     });
 
     it("doesn't prompt when the user declines", async () => {

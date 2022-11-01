@@ -53,17 +53,23 @@ If you change your mind, you can always reach us by email: support@appmap.io
     }
   }
 
-  const { email } = await UI.prompt([
+  UI.progress(`The AppMap team will respond to you by email. Please provide your name and email address to open the support request:
+`);
+  const { name, email } = await UI.prompt([
+    {
+      name: 'name',
+      message: `Your name`,
+      validate: (v) => v.trim().length > 0 || 'Please enter your name',
+    },
     {
       name: 'email',
-      message: `The AppMap team will respond to you by email. 
-Please provide your email address to open the support request:`,
+      message: `Your email address`,
       validate: (v) => v.trim().length > 0 || 'Please enter your email address',
     },
   ]);
 
   try {
-    const id = await createZendeskRequest(errors, email);
+    const id = await createZendeskRequest(errors, name, email);
     Telemetry.sendEvent({
       name: 'open-ticket:success',
     });
