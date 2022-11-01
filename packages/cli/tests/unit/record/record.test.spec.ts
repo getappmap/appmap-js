@@ -83,8 +83,6 @@ describe('record test', () => {
     it('shows error if directory parameter is file instead of directory', async () => {
       const dirPrefix = tmpdir();
       const directoryParam = `${dirPrefix}/file_not_dir`;
-      // ensuring the file doesn't exist breaks after trying it a few times
-      // await unlink(directoryParam, (err) => {});
       closeSync(openSync(directoryParam, 'w'));
       expect(existsSync(directoryParam)).toEqual(true);
 
