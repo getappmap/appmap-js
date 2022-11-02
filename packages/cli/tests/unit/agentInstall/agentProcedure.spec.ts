@@ -26,6 +26,16 @@ describe(AgentProcedure, () => {
       }`});
       return expect(procedure.validateProject(false)).resolves.not.toThrow();
     });
+
+    it('fails if there are errors', () => {
+      jest.spyOn(procedure, 'validateAgent').mockResolvedValue({ stderr: '', stdout: `{
+        "errors": [{
+          "level": "error",
+          "message": "test error"
+        }]
+      }`});
+      return expect(procedure.validateProject(false)).rejects.toThrowError(/test error/);
+    });
   });
 
   beforeEach(jest.restoreAllMocks);
