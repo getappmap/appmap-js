@@ -1,6 +1,6 @@
 {
   "name": "@appland/sequence-diagram",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Generate sequence diagram from AppMap",
   "bin": "built/cli.js",
   "files": [
