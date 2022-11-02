@@ -3,8 +3,11 @@ const fixtureDir = path.join(__dirname, '../', 'fixtures', 'stats');
 import StatsCommand from '../../../src/cmds/stats/stats';
 import { SortedAppMapSize } from '../../../src/cmds/stats/types/appMapSize';
 import { SlowestExecutionTime } from '../../../src/cmds/stats/types/functionExecutionTime';
+import { withStubbedTelemetry } from '../../helper';
 
 describe('stats subcommand', () => {
+  withStubbedTelemetry();
+
   it('works', async () => {
     let argv = {
       _: ['stats'],

@@ -12,6 +12,7 @@ import * as obtainTestCommands from '../../../src/cmds/record/prompt/obtainTestC
 import TestCaseRecording from '../../../src/cmds/record/testCaseRecording';
 import RecordContext, { RecordProcessResult } from '../../../src/cmds/record/recordContext';
 import Configuration from '../../../src/cmds/record/configuration';
+import { withStubbedTelemetry } from '../../helper';
 import RecordCommand from '../../../src/cmds/record/record';
 const { tmpdir } = require('os');
 const {
@@ -26,6 +27,8 @@ const {
 } = require('fs');
 
 describe('record test', () => {
+  withStubbedTelemetry();
+
   let confirm: sinon.SinonStub,
     prompt: sinon.SinonStub,
     cont: sinon.SinonStub,
