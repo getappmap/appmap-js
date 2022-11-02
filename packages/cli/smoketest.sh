@@ -4,12 +4,15 @@ PKGDIR="$PWD"
 TESTDIR="`mktemp -d`"
 
 OS="`uname -s | tr '[:upper:]' '[:lower:]'`"
-[ "${OS}" == "darwin" ] && OS="macos"
+[[ "${OS}" == "darwin" ]] && OS="macos"
+[[ "${OS}" =~ mingw ]] || [[ "${OS}" =~ cygwin ]] || [[ "${OS}" =~ msys ]] && OS="win"
 
 ARCH="`uname -m | sed 's/86_//'`"
-BIN_NAME="appmap-${OS}-${ARCH}"
+BIN_NAME="appmap"
 
-yarn build-native
+[[ "${OS}" == "win" ]] && BIN_NAME="${BIN_NAME}.exe"
+
+yarn build-native "${OS}"
 
 cp "release/${BIN_NAME}" "${TESTDIR}"
 cp -r "tests/unit/fixtures/ruby" "${TESTDIR}"
