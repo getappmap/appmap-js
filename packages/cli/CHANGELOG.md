@@ -1,3 +1,20 @@
+# [@appland/appmap-v3.48.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.47.0...@appland/appmap-v3.48.0) (2022-11-02)
+
+
+### Bug Fixes
+
+* add static identifier property to installer classes ([af34ea3](https://github.com/getappmap/appmap-js/commit/af34ea383e09c44b83ac3c32776e537fab7e738f))
+* prompt user for name to open a ticket ([35e1a7d](https://github.com/getappmap/appmap-js/commit/35e1a7d1aee4d885163e723c73ff1cd0f5b0f2b5))
+* remove invalid reference to name ([4661227](https://github.com/getappmap/appmap-js/commit/466122725f5922dd31573c38e0167cb2194ddc80))
+
+
+### Features
+
+* Generate sequence diagram ([870be30](https://github.com/getappmap/appmap-js/commit/870be30dbdc074672cc43495eebd396fd97c0184))
+* seq diagram command prints one diagram ([ea85f38](https://github.com/getappmap/appmap-js/commit/ea85f38d91b4666e8086113f2f144d074c6b2815))
+* Sequence diagram diff ([4c22101](https://github.com/getappmap/appmap-js/commit/4c2210170d19c9aa6abee7eeb14d02db7fb94178))
+* When recording tests, if the directory path supplied as input ([ae33946](https://github.com/getappmap/appmap-js/commit/ae339469d907d0a49335bfce98b63b5a5e55e65c))
+
 # [@appland/appmap-v3.47.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.46.0...@appland/appmap-v3.47.0) (2022-10-29)
 
 
