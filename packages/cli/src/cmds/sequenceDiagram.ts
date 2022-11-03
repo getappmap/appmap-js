@@ -5,10 +5,13 @@ import { default as sequenceDiagramFormatter } from '@appland/sequence-diagram/d
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { verbose } from '../utils';
 import { buildAppMap } from '@appland/models';
-import Specification, {
+import {
+  buildDiagram,
   SequenceDiagramOptions,
-} from '@appland/sequence-diagram/dist/specification';
-import buildDiagram from '@appland/sequence-diagram/dist/buildDiagram';
+  Specification,
+  format as formatDiagram,
+  Formatters,
+} from '@appland/sequence-diagram';
 
 export const command = 'sequence-diagram appmap';
 export const describe = 'Generate a sequence diagram for an AppMap';
@@ -50,8 +53,7 @@ export const handler = async (argv: any) => {
     return;
   }
 
-  const formatter = sequenceDiagramFormatter[argv.format];
-  if (!formatter) {
+  if (!Formatters.includes(argv.format)) {
     console.log(`Invalid format: ${argv.format}`);
     process.exitCode = 1;
     return;
@@ -66,21 +68,21 @@ export const handler = async (argv: any) => {
   const specification = Specification.build(appmap, specOptions);
 
   const diagram = buildDiagram(argv.appmap, appmap, specification);
-  const template = formatter.format(diagram, argv.appmap);
+  const template = formatDiagram(argv.format, diagram, argv.appmap);
 
   if (argv.outputDir) await mkdir(argv.outputDir, { recursive: true });
 
   const outputFileName = [
     basename(argv.appmap, '.appmap.json'),
     '.sequence',
-    formatter.extension,
+    template.extension,
   ].join('');
 
   let outputPath: string;
   if (argv.outputDir) outputPath = join(argv.outputDir, outputFileName);
   else outputPath = join(dirname(argv.appmap), outputFileName);
 
-  await writeFile(outputPath, template);
+  await writeFile(outputPath, template.diagram);
 
   console.log(`Printed diagram ${outputPath}`);
 };

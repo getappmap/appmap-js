@@ -2,13 +2,11 @@
   "name": "@appland/sequence-diagram",
   "version": "1.0.0",
   "description": "Generate sequence diagram from AppMap",
-  "bin": "built/cli.js",
   "files": [
-    "built",
-    "doc",
-    "src/types.d.ts"
+    "dist"
   ],
-  "types": "src/types.d.ts",
+  "main": "dist/types.js",
+  "types": "dist/types.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "lint": "eslint src --ext .ts",
