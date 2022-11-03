@@ -241,6 +241,7 @@ export function format(diagram: Diagram, _source: string): string {
   diagram.rootActions.forEach((action) => renderAction(action));
 
   return `@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
 ${diagram.actors
   .map((actor) => `participant ${alias(actor.name)} as "${sanitize(actor.name)}"`)
   .join('\n')}

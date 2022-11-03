@@ -1,3 +1,6 @@
+import { AppMap } from '@appland/models';
+import { Diff, DiffOptions } from './diff';
+
 export interface CodeObject {
   name: string;
   type: string;
@@ -158,7 +161,28 @@ export function hasAncestor(action: Action, test: ActionPredicate): boolean {
   return findAncestor(action, test) !== undefined;
 }
 
-export type Diagram = {
+export interface Diagram {
   actors: Actor[];
   rootActions: Action[];
-};
+}
+
+import buildDiagram from './buildDiagram';
+import buildDiffDiagram from './buildDiffDiagram';
+import diff from './diff';
+
+export { buildDiagram, buildDiffDiagram, diff };
+
+export enum FormatType {
+  JSON = 'json',
+  PlantUML = 'plantuml',
+}
+
+export const Formatters = [FormatType.JSON, FormatType.PlantUML];
+
+import format from './formatter';
+export { format };
+
+import type { SequenceDiagramOptions } from './specification';
+import { default as Specification } from './specification';
+
+export { SequenceDiagramOptions, Specification };
