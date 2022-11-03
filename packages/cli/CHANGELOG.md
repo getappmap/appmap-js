@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.49.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.48.0...@appland/appmap-v3.49.0) (2022-11-03)
+
+
+### Bug Fixes
+
+* Don't fail the validation if the agent only sends warnings ([327ebeb](https://github.com/getappmap/appmap-js/commit/327ebeb8342d7a20510b7570e6dbad312f41803a))
+
+
+### Features
+
+* Show validation warnings from language agents ([e78169e](https://github.com/getappmap/appmap-js/commit/e78169e6e8c948b2f47bd50667e3273cfb9bbce3))
+
 # [@appland/appmap-v3.48.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.47.0...@appland/appmap-v3.48.0) (2022-11-02)
 
 
