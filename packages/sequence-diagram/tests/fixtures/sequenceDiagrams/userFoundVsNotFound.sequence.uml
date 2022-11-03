@@ -1,4 +1,5 @@
 @startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
 participant controllers as "controllers"
 participant models as "models"
 participant users as "users"
