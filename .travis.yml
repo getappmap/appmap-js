@@ -17,7 +17,7 @@ addons:
 
 install:
   - yarn && yarn run build
-script: yarn run ci
+script: yarn workspace @appland/appmap test
 
 jobs:
   include:

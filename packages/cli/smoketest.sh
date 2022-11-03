@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/usr/bin/env -S bash -ex
 
 PKGDIR="$PWD"
 TESTDIR="`mktemp -d`"
@@ -23,6 +23,7 @@ cd "${TESTDIR}"
 "./${BIN_NAME}" depends --appmap-dir ruby
 "./${BIN_NAME}" inventory --appmap-dir ruby
 "./${BIN_NAME}" openapi -d ruby -o /dev/null
+"./${BIN_NAME}" sequence-diagram -d ruby revoke_api_key.appmap.json
 
 cd "$PKGDIR"
 rm -rf "$TESTDIR"
