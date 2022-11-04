@@ -1,4 +1,3 @@
-import { CodeObjectType } from '@appland/models';
 import VDetailsPanel from '@/components/DetailsPanel.vue';
 import VDetailsButton from '@/components/DetailsButton.vue';
 import scenario from '@/stories/data/scenario.json';
