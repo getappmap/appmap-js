@@ -67,7 +67,7 @@ describe('record.prompt.obtainTestCommands', () => {
       const stubPrompt = sinon.stub(UI, 'prompt');
 
       stubPrompt.onFirstCall().resolves({ testCommand: null });
-      stubPrompt.onSecondCall().resolves({ testCommand: '' });
+      stubPrompt.onSecondCall().resolves({ testCommand: ' ' });
       stubPrompt.onThirdCall().resolves({ testCommand: testCommand.command });
       stubPrompt.onCall(3).resolves({ envVars: '' });
 
