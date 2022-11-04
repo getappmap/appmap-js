@@ -1,6 +1,6 @@
 import { utimesSync } from 'fs';
 import Fingerprinter from '../../src/fingerprint/fingerprinter';
-import { CodeObject, CodeObjectMatch } from '../../src/search/types';
+import { IndexCodeObject, CodeObjectMatch } from '../../src/search/types';
 import { listAppMapFiles, verbose } from '../../src/utils';
 
 if (process.env.DEBUG) {
@@ -8,7 +8,7 @@ if (process.env.DEBUG) {
 }
 
 export function stripCodeObjectParents(codeObjectMatches: CodeObjectMatch[]): CodeObjectMatch[] {
-  const strip = (codeObject: CodeObject): void => {
+  const strip = (codeObject: IndexCodeObject): void => {
     codeObject.parent = undefined;
     codeObject.children = undefined;
     (codeObject.children || []).forEach(strip);

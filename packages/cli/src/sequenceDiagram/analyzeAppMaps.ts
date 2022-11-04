@@ -1,5 +1,5 @@
 import FindCodeObjects from '../search/findCodeObjects';
-import { CodeObject } from '../search/types';
+import { IndexCodeObject } from '../search/types';
 import { processFiles } from '../utils';
 import Specification from '@appland/sequence-diagram/dist/specification';
 import Priority from '@appland/sequence-diagram/dist/priority';
@@ -27,7 +27,10 @@ export default async function analyzeAppMaps(
     priority.enrollPattern(pattern);
   };
 
-  const collectCodeObject = (codeObjectIds: Set<CodeObjectId>, codeObject: CodeObject): void => {
+  const collectCodeObject = (
+    codeObjectIds: Set<CodeObjectId>,
+    codeObject: IndexCodeObject
+  ): void => {
     codeObjectIds.add(codeObject.fqid);
   };
 

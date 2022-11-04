@@ -1,11 +1,11 @@
 const fsp = require('fs').promises;
 const { buildAppMap } = require('./utils');
 const matchFilter = require('./matchFilter');
-const buildTrigrams = require('./trigram');
+const buildTrigrams = require('./trigram').default;
 
 /** @typedef {import('./types').Filter} Filter */
 /** @typedef {import('./types').Event} Event */
-/** @typedef {import('./types').CodeObject} CodeObject */
+/** @typedef {import('./types').IndexCodeObject} CodeObject */
 /** @typedef {import('./types').EventMatch} EventMatch */
 
 /**

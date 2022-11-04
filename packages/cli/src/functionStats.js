@@ -38,8 +38,8 @@ class FunctionStats {
   }
 
   toJSON() {
-    const trigram = (/** @type {Trigram} */ t) =>
-      [t.callerId, t.codeObjectId, t.calleeId].join(' ->\n');
+    const trigram = (/** @type {Trigram} */ t) => [t.callerId, t.codeObjectId, t.calleeId];
+
     return {
       returnValues: this.returnValues,
       httpServerRequests: this.httpServerRequests,

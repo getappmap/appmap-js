@@ -33,7 +33,7 @@ export interface Event {
   returnValue: any;
   callEvent: Event;
   returnEvent: Event;
-  codeObject: CodeObject;
+  codeObject: IndexCodeObject;
   isCall: () => boolean;
   isReturn: () => boolean;
   threadId: number;
@@ -47,12 +47,14 @@ export interface SQLInfo {
   columns: string[];
 }
 
-export interface CodeObject {
+// CodeObject as represented in the AppMap index file classMap.json,
+// as opposed to the 'classMap' entry in the complete AppMap.
+export interface IndexCodeObject {
   name: string;
   type: string;
   fqid: string;
-  children?: CodeObject[];
-  parent?: CodeObject;
+  children?: IndexCodeObject[];
+  parent?: IndexCodeObject;
   location?: string; // Functions only
   static?: boolean; // Functions only
 }
@@ -66,12 +68,12 @@ export interface Trigram {
 }
 
 export interface CodeObjectMatcher {
-  matchClassMap(classMap: CodeObject[]): CodeObject[];
+  matchClassMap(classMap: IndexCodeObject[]): IndexCodeObject[];
 }
 
 export interface CodeObjectMatch {
   appmap: string;
-  codeObject: CodeObject;
+  codeObject: IndexCodeObject;
 }
 
 export interface EventMatch {
@@ -86,7 +88,7 @@ export interface EventMatch {
 }
 
 export interface CodeObjectMatchSpec {
-  tokens: Array<(codeObject: CodeObject) => boolean>;
+  tokens: Array<(codeObject: IndexCodeObject) => boolean>;
 }
 
 export interface Filter {

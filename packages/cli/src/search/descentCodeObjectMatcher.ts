@@ -1,23 +1,23 @@
 import { verbose } from '../utils';
-import { CodeObject, CodeObjectMatcher, CodeObjectMatchSpec } from './types';
+import { IndexCodeObject, CodeObjectMatcher, CodeObjectMatchSpec } from './types';
 
-const { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } = require('./constants');
+import { MatchStatus } from './matchStatus';
 
 class Matcher {
   depth = 0;
 
-  constructor(public matchSpec: CodeObjectMatchSpec, public classMap: CodeObject[]) {}
+  constructor(public matchSpec: CodeObjectMatchSpec, public classMap: IndexCodeObject[]) {}
 
-  matchClassMap(): CodeObject[] {
-    const findMatchingCodeObject = (item: CodeObject, matches: CodeObject[]): void => {
+  matchClassMap(): IndexCodeObject[] {
+    const findMatchingCodeObject = (item: IndexCodeObject, matches: IndexCodeObject[]): void => {
       const matchResult = this.matchCodeObject(item);
       switch (matchResult) {
-        case MATCH_ABORT:
+        case MatchStatus.Abort:
           return;
-        case MATCH_COMPLETE:
+        case MatchStatus.Complete:
           matches.push(item);
           return;
-        case MATCH_CONTINUE:
+        case MatchStatus.Continue:
         default:
       }
       if (item.children) {
@@ -29,7 +29,7 @@ class Matcher {
       this.popCodeObject();
     };
 
-    let matches: CodeObject[] = [];
+    let matches: IndexCodeObject[] = [];
     for (const item of this.classMap) {
       findMatchingCodeObject(item, matches);
     }
@@ -42,10 +42,10 @@ class Matcher {
    *
    * @returns {string} MATCH_COMPLETE, MATCH_ABORT, or MATCH_COMPLETE
    */
-  matchCodeObject(codeObject: CodeObject): string {
+  matchCodeObject(codeObject: IndexCodeObject): string {
     if (this.depth < 0) {
       console.warn(`Search depth ${this.depth} is less than zero; aborting`);
-      return MATCH_ABORT;
+      return MatchStatus.Abort;
     }
     if (this.depth >= this.matchSpec.tokens.length) {
       if (verbose()) {
@@ -53,7 +53,7 @@ class Matcher {
           `Aborting match ${codeObject.name} because the search depth ${this.depth} exceeds the spec length ${this.matchSpec.tokens.length}`
         );
       }
-      return MATCH_ABORT;
+      return MatchStatus.Abort;
     }
     const token = this.matchSpec.tokens[this.depth];
     if (!token(codeObject)) {
@@ -62,7 +62,7 @@ class Matcher {
           `${JSON.stringify(token)} at depth ${this.depth} does not match '${codeObject.name}'`
         );
       }
-      return MATCH_ABORT;
+      return MatchStatus.Abort;
     }
     if (this.depth === this.matchSpec.tokens.length - 1) {
       if (verbose()) {
@@ -73,7 +73,7 @@ class Matcher {
         );
       }
       this.depth += 1;
-      return MATCH_COMPLETE;
+      return MatchStatus.Complete;
     }
     if (verbose()) {
       console.warn(
@@ -83,7 +83,7 @@ class Matcher {
       );
     }
     this.depth += 1;
-    return MATCH_CONTINUE;
+    return MatchStatus.Continue;
   }
 
   popCodeObject() {
@@ -101,7 +101,7 @@ export default class DescentCodeObjectMatcher implements CodeObjectMatcher {
     this.matchSpec = matchSpec;
   }
 
-  matchClassMap(classMap: CodeObject[]): CodeObject[] {
+  matchClassMap(classMap: IndexCodeObject[]): IndexCodeObject[] {
     return new Matcher(this.matchSpec, classMap).matchClassMap();
   }
 }

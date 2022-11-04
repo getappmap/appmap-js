@@ -1,5 +1,5 @@
 import { verbose } from '../utils';
-import { CodeObject, CodeObjectMatcher } from './types';
+import { IndexCodeObject, CodeObjectMatcher } from './types';
 
 export default class IterateCodeObjectMatcher implements CodeObjectMatcher {
   /**
@@ -7,8 +7,8 @@ export default class IterateCodeObjectMatcher implements CodeObjectMatcher {
    */
   constructor(public type: string, public pattern: RegExp) {}
 
-  matchClassMap(classMap: CodeObject[]): CodeObject[] {
-    const findMatchingCodeObject = (item: CodeObject, matches: CodeObject[]): void => {
+  matchClassMap(classMap: IndexCodeObject[]): IndexCodeObject[] {
+    const findMatchingCodeObject = (item: IndexCodeObject, matches: IndexCodeObject[]): void => {
       if (verbose()) console.log(`${this.type} ${item.fqid}`);
       if (item.type === this.type) {
         const id = item.fqid.slice(item.fqid.indexOf(':') + 1);
@@ -26,7 +26,7 @@ export default class IterateCodeObjectMatcher implements CodeObjectMatcher {
       }
     };
 
-    let matches: CodeObject[] = [];
+    let matches: IndexCodeObject[] = [];
     for (const item of classMap) {
       findMatchingCodeObject(item, matches);
     }

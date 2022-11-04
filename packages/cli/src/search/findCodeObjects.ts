@@ -21,7 +21,7 @@ import {
   RouteMatchSpec,
   TableMatchSpec,
 } from './matchSpec';
-import { CodeObject, CodeObjectMatch, CodeObjectMatcher, CodeObjectMatchSpec } from './types';
+import { IndexCodeObject, CodeObjectMatch, CodeObjectMatcher, CodeObjectMatchSpec } from './types';
 
 function parsePackage(functionId: string): CodeObjectMatchSpec[] {
   const packageTokens = functionId.split('/');
@@ -194,7 +194,7 @@ export default class FindCodeObjects {
         console.warn(`Checking AppMap ${appmapName}`);
       }
 
-      const buildCodeObject = (codeObject: CodeObject, parent?: CodeObject): void => {
+      const buildCodeObject = (codeObject: IndexCodeObject, parent?: IndexCodeObject): void => {
         codeObject.parent = parent;
         const id = codeObjectId(codeObject).join('');
         codeObject.fqid = [codeObject.type, id].join(':');
@@ -203,11 +203,11 @@ export default class FindCodeObjects {
         }
       };
 
-      const classMap = JSON.parse(await readFile(fileName, 'utf-8')) as CodeObject[];
+      const classMap = JSON.parse(await readFile(fileName, 'utf-8')) as IndexCodeObject[];
       classMap.forEach((co) => buildCodeObject(co));
 
       this.matchers.forEach((matcher) => {
-        let codeObjects: CodeObject[];
+        let codeObjects: IndexCodeObject[];
         try {
           codeObjects = matcher.matchClassMap(classMap);
         } catch (e) {

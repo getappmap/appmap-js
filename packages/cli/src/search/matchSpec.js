@@ -2,7 +2,7 @@
 const { analyzeSQL, normalizeSQL } = require('@appland/models');
 
 /**
- * @typedef {import('./types').CodeObject} CodeObject
+ * @typedef {import('./types').IndexCodeObject} CodeObject
  * @typedef {(codeObject: CodeObject) => boolean} MatchFn
  * @typedef {import('./types').SQLInfo | string} SQLInfo
  */
@@ -55,7 +55,7 @@ function matchClass(name) {
  * @returns {MatchFn}
  */
 function matchFunction(name, isStatic) {
-  const fn = (/** @type import('./types').CodeObject */ codeObject) =>
+  const fn = (/** @type import('./types').IndexCodeObject */ codeObject) =>
     codeObject.name === name && codeObject.type === 'function' && codeObject.static === isStatic;
   fn.toJSON = () => `${isStatic ? 'static ' : ''}function ${name}`;
   return fn;
@@ -72,7 +72,7 @@ function matchDatabase() {
  * @returns {MatchFn}
  */
 function matchQuery(expectedQuery) {
-  const fn = (/** @type import('./types').CodeObject */ codeObject) => {
+  const fn = (/** @type import('./types').IndexCodeObject */ codeObject) => {
     if (codeObject.type !== 'query') {
       return false;
     }
@@ -94,7 +94,7 @@ function matchQuery(expectedQuery) {
  * @returns {MatchFn}
  */
 function matchTable(tableName) {
-  const fn = (/** @type import('./types').CodeObject */ codeObject) => {
+  const fn = (/** @type import('./types').IndexCodeObject */ codeObject) => {
     if (codeObject.type !== 'query') {
       return false;
     }
