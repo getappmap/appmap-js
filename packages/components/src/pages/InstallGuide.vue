@@ -30,6 +30,7 @@
       :user-authenticated="userAuthenticated"
       :analysis-enabled="analysisEnabled"
     />
+    <v-analysis-findings id="analysis-findings" />
   </v-multi-page>
 </template>
 
@@ -40,6 +41,7 @@ import VRecordAppMaps from '@/pages/install-guide/RecordAppMaps.vue';
 import VOpenAppMaps from '@/pages/install-guide/OpenAppMaps.vue';
 import VOpenApi from '@/pages/install-guide/OpenApi.vue';
 import VInvestigateFindings from '@/pages/install-guide/InvestigateFindings.vue';
+import VAnalysisFindings from '@/pages/install-guide/AnalysisFindings.vue';
 
 export default {
   name: 'install-guide',
@@ -136,6 +138,7 @@ export default {
     VInvestigateFindings,
     VOpenAppMaps,
     VOpenApi,
+    VAnalysisFindings,
   },
 
   methods: {
