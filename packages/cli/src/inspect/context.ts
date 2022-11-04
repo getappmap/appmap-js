@@ -1,9 +1,9 @@
 import assert from 'assert';
 import EventEmitter from 'events';
-import { default as FunctionStatsImpl } from '../functionStats';
+import FunctionStats, { default as FunctionStatsImpl } from '../functionStats';
 import FindCodeObjects from '../search/findCodeObjects';
 import FindEvents from '../search/findEvents';
-import { FunctionStats, Filter, CodeObjectMatch } from '../search/types';
+import { Filter, CodeObjectMatch } from '../search/types';
 
 export default class Context extends EventEmitter {
   public filters: Filter[] = [];

@@ -1,6 +1,6 @@
 const { formatValue, formatHttpServerRequest } = require('../utils');
 
-/** @typedef {import('./types').Event} Event */
+/** @typedef {import('./types').IndexEvent} Event */
 /** @typedef {function(string,Event[],string):boolean} Matcher */
 
 /** @type {Matcher} */

@@ -1,45 +1,30 @@
-export interface SQL {
-  sql: string;
-  database_type: string;
+import {
+  HttpClientRequest,
+  HttpClientResponse,
+  HttpServerRequest,
+  HttpServerResponse,
+  ReturnValueObject,
+  SqlQuery,
+} from '@appland/models';
+
+export class Fqid {
+  constructor(public type: string, public id: string) {}
+  toString(): string {
+    return [this.type, this.id].join(':');
+  }
 }
 
-export interface HTTPRoute {
-  method: string;
-  uri: string;
-}
-
-export interface HTTPRequest {
-  route: HTTPRoute;
-  parameterNames: string[];
-  statusCode: number;
-}
-
-export interface HTTPServerRequest {
-  path: string;
-  normalized_path: string;
-  headers: { string: string };
-}
-
-export interface Event {
-  id: number;
-  type: string;
-  definedClass: string;
-  methodId: string;
-  labels: Set<string>;
-  sql: SQL;
-  httpServerRequest: HTTPServerRequest;
-  sqlQuery: string;
+export interface IndexEvent {
+  fqid: Fqid;
+  codeObjectIds: Fqid[];
   isFunction: boolean;
-  returnValue: any;
-  callEvent: Event;
-  returnEvent: Event;
-  codeObject: IndexCodeObject;
-  isCall: () => boolean;
-  isReturn: () => boolean;
-  threadId: number;
-  parentId: number;
-  path: string;
-  elapsedInstrumentationTime: number;
+  labels: Set<string>;
+  sql: SqlQuery;
+  httpServerRequest: HttpServerRequest;
+  httpServerResponse: HttpServerResponse;
+  httpClientRequest: HttpClientRequest;
+  httpClientResponse: HttpClientResponse;
+  returnValue: ReturnValueObject;
 }
 
 export interface SQLInfo {
@@ -50,9 +35,10 @@ export interface SQLInfo {
 // CodeObject as represented in the AppMap index file classMap.json,
 // as opposed to the 'classMap' entry in the complete AppMap.
 export interface IndexCodeObject {
+  id: string;
+  fqid: string;
   name: string;
   type: string;
-  fqid: string;
   children?: IndexCodeObject[];
   parent?: IndexCodeObject;
   location?: string; // Functions only
@@ -78,10 +64,11 @@ export interface CodeObjectMatch {
 
 export interface EventMatch {
   appmap: string;
-  event: Event;
-  ancestors: Event[];
-  descendants: Event[];
-  caller: Event;
+  event: IndexEvent;
+  caller: IndexEvent;
+  ancestors: IndexEvent[];
+  sqlQueries: IndexEvent[];
+  httpClientRequests: IndexEvent[];
   packageTrigrams: Trigram[];
   classTrigrams: Trigram[];
   functionTrigrams: Trigram[];
@@ -94,18 +81,4 @@ export interface CodeObjectMatchSpec {
 export interface Filter {
   name: string;
   value: string;
-}
-
-export interface FunctionStats {
-  eventMatches: EventMatch[];
-  returnValues: string[];
-  httpServerRequests: string[];
-  sqlQueries: string[];
-  sqlTables: string[];
-  callers: string[];
-  ancestors: string[];
-  descendants: string[];
-  packageTrigrams: Trigram[];
-  classTrigrams: Trigram[];
-  functionTrigrams: Trigram[];
 }

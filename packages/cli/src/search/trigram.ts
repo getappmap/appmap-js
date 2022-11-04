@@ -1,20 +1,20 @@
 import { normalizeSQL } from '@appland/models';
-import { IndexCodeObject, Event } from './types';
+import { Fqid, IndexCodeObject, IndexEvent } from './types';
 
-const normalizeId = (co: IndexCodeObject, evt: Event): string => {
-  if (co && co.type === 'query') {
-    return ['query', normalizeSQL(evt.sqlQuery, evt.sql.database_type)].join(':');
+const normalizeId = (coid: Fqid, evt: IndexEvent): Fqid => {
+  if (coid?.type === 'query') {
+    return new Fqid('query', normalizeSQL(evt.sql.sql, evt.sql.database_type));
   }
 
-  return co.fqid;
+  return coid;
 };
 
 class Trigram {
   constructor(
-    public caller: Event | undefined,
-    public event: Event,
-    public callee: Event | undefined,
-    public codeObjectFn: (event: Event) => IndexCodeObject | undefined
+    public caller: IndexEvent | undefined,
+    public event: IndexEvent,
+    public callee: IndexEvent | undefined,
+    public codeObjectFn: (event: IndexEvent) => Fqid | undefined
   ) {}
 
   get id(): string {
@@ -24,14 +24,13 @@ class Trigram {
   get callerId(): string | undefined {
     if (!this.caller) return;
 
-    const co = this.codeObjectFn(this.caller);
-    if (co) return co.fqid;
+    return this.codeObjectFn(this.caller)?.toString();
   }
 
   get codeObjectId(): string | undefined {
-    const co = this.codeObjectFn(this.event);
-    if (co) {
-      return normalizeId(co, this.event);
+    const coid = this.codeObjectFn(this.event);
+    if (coid) {
+      return normalizeId(coid, this.event).toString();
     }
   }
 
@@ -40,31 +39,24 @@ class Trigram {
 
     const co = this.codeObjectFn(this.callee);
     if (co) {
-      return normalizeId(co, this.callee);
+      return normalizeId(co, this.callee).toString();
     }
   }
 }
 
 export default function buildTrigrams(
-  callerEvent: Event | undefined,
-  event: Event,
-  calleeEvent: Event | undefined
+  callerEvent: IndexEvent | undefined,
+  event: IndexEvent,
+  calleeEvent: IndexEvent | undefined
 ): { functionTrigram: Trigram; classTrigram: Trigram; packageTrigram: Trigram } {
-  const codeObjectFn = (evt: Event): IndexCodeObject | undefined => evt?.codeObject;
-  const classFn = (evt: Event): IndexCodeObject | undefined => evt?.codeObject.parent;
-  const packageFn = (evt: Event): IndexCodeObject | undefined => {
+  const codeObjectFn = (evt: IndexEvent): Fqid | undefined => evt?.codeObjectIds[0];
+  const classFn = (evt: IndexEvent): Fqid | undefined => evt?.codeObjectIds[1];
+  const packageFn = (evt: IndexEvent): Fqid | undefined => {
     if (!evt) {
       return;
     }
 
-    const findPackage = (codeObject: IndexCodeObject): IndexCodeObject => {
-      if (codeObject.type === 'package' || !codeObject.parent) {
-        return codeObject;
-      }
-
-      return findPackage(codeObject.parent);
-    };
-    return findPackage(evt.codeObject);
+    return evt.codeObjectIds.find((fqid) => fqid.type === 'package');
   };
 
   return {

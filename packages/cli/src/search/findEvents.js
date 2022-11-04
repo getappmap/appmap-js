@@ -4,7 +4,7 @@ const matchFilter = require('./matchFilter');
 const buildTrigrams = require('./trigram').default;
 
 /** @typedef {import('./types').Filter} Filter */
-/** @typedef {import('./types').Event} Event */
+/** @typedef {import('./types').IndexEvent as AppMapEvent} AppMapEvent */
 /** @typedef {import('./types').IndexCodeObject} CodeObject */
 /** @typedef {import('./types').EventMatch} EventMatch */
 
@@ -61,11 +61,9 @@ class FindEvents {
     const matches = /** @type {EventMatch[]} */ [];
     const matchesByEvent = {};
 
-    const significant = (/** @type {Event} */ event) => event.labels.size > 0 || !event.isFunction;
-
     const beginMatch = () => {
       const event = stack[stack.length - 1];
-      const ancestors = stack.slice(0, stack.length - 1).filter(significant);
+      const ancestors = stack.slice(0, stack.length - 1);
       const caller = /** @type {Event} */ stack.length >= 2 ? stack[stack.length - 2] : null;
       const matchObj = /** @type {EventMatch} */ {
         appmap: this.appMapName,
@@ -74,7 +72,8 @@ class FindEvents {
         packageTrigrams: [],
         classTrigrams: [],
         functionTrigrams: [],
-        descendants: [],
+        sqlQueries: [],
+        httpClientRequests: [],
       };
       if (caller) {
         matchObj.caller = caller;
@@ -152,11 +151,10 @@ class FindEvents {
         match.packageTrigrams.push(trigrams.packageTrigram);
       }
 
-      if (significant(event)) {
-        Object.values(matchesByEvent).forEach((match) => {
-          match.descendants.push(event);
-        });
-      }
+      Object.values(matchesByEvent).forEach((match) => {
+        if (event.sql) match.sqlQueries.push(event);
+        if (event.httpClientRequest) match.httpClientRequests.push(event);
+      });
 
       stack.push(event);
       if (codeObjectMatch()) {

@@ -1,15 +1,8 @@
-// @ts-nocheck
-const { analyzeSQL, normalizeSQL } = require('@appland/models');
-const { formatValue, formatHttpServerRequest } = require('./utils');
+import { analyzeSQL, normalizeSQL } from '@appland/models';
+import { EventMatch, Trigram } from './search/types';
+import { formatValue, formatHttpServerRequest, formatHttpClientRequest } from './utils';
 
-/** @typedef {import('./search/types').Trigram} Trigram */
-
-/**
- *
- * @param {Trigram[]} trigrams
- * @returns {Trigram[]}
- */
-function reduceTrigrams(trigrams) {
+function reduceTrigrams(trigrams: Trigram[]): Trigram[] {
   const uniqueIds = new Set(trigrams.map((t) => t.id));
   const sortOrder = [...uniqueIds].sort().reduce((memo, id, index) => {
     memo[id] = index;
@@ -28,70 +21,70 @@ function reduceTrigrams(trigrams) {
     .sort((a, b) => sortOrder[a.id] - sortOrder[b.id]);
 }
 
-class FunctionStats {
-  /**
-   *
-   * @param {import('./search/types').EventMatch[]} eventMatches
-   */
-  constructor(eventMatches) {
+export default class FunctionStats {
+  constructor(public eventMatches: EventMatch[]) {
     this.eventMatches = eventMatches;
   }
 
   toJSON() {
-    const trigram = (/** @type {Trigram} */ t) => [t.callerId, t.codeObjectId, t.calleeId];
+    const trigram = (trigram: Trigram) => [
+      trigram.callerId,
+      trigram.codeObjectId,
+      trigram.calleeId,
+    ];
 
     return {
+      eventMatches: this.eventMatches,
       returnValues: this.returnValues,
       httpServerRequests: this.httpServerRequests,
       sqlQueries: this.sqlQueries,
       sqlTables: this.sqlTables,
       callers: this.callers,
       ancestors: this.ancestors,
-      descendants: this.descendants,
       packageTrigrams: this.packageTrigrams.map(trigram),
       classTrigrams: this.classTrigrams.map(trigram),
       functionTrigrams: this.functionTrigrams.map(trigram),
     };
   }
 
-  get appMapNames() {
+  get appMapNames(): string[] {
     return [...new Set(this.eventMatches.map((e) => e.appmap))].sort();
   }
 
-  get returnValues() {
+  get returnValues(): string[] {
     return [...new Set(this.eventMatches.map((e) => e.event.returnValue).map(formatValue))].sort();
   }
 
-  get httpServerRequests() {
+  get httpServerRequests(): string[] {
     return [
       ...new Set(
         this.eventMatches
           .map((e) => [e.event].concat(e.ancestors).filter((a) => a.httpServerRequest))
           .flat()
-          .filter((e) => e)
+          .filter(Boolean)
           .map((e) => formatHttpServerRequest(e))
       ),
     ].sort();
   }
 
-  get sqlQueries() {
+  get sqlQueries(): string[] {
     return [
       ...new Set(
         this.eventMatches
-          .map((e) => [e.event].concat(e.descendants).filter((d) => d.sql))
+          .map((e) => [e.event].concat(e.sqlQueries).filter((d) => d.sql))
           .flat()
-          .map((e) => normalizeSQL(e.sqlQuery, e.sql.database_type))
+          .map((e) => normalizeSQL(e.sql.sql, e.sql.database_type))
       ),
     ].sort();
   }
 
-  get sqlTables() {
+  get sqlTables(): string[] {
     return [
       ...new Set(
         this.eventMatches
-          .map((e) => [e.event].concat(e.descendants).filter((d) => d.sql))
+          .map((e) => [e.event].concat(e.sqlQueries).filter((d) => d.sql))
           .flat()
-          .map((e) => analyzeSQL(e.sqlQuery))
+          .map((e) => analyzeSQL(e.sql.sql, (_err) => {}))
           .filter(Boolean)
           .filter((e) => typeof e === 'object')
           .map((sql) => sql.tables)
@@ -100,49 +93,40 @@ class FunctionStats {
     ].sort();
   }
 
-  /**
-   * @returns {string[]}
-   */
-  get callers() {
+  get httpClientRequests(): string[] {
+    return [
+      ...new Set(
+        this.eventMatches
+          .map((e) => [e.event].concat(e.httpClientRequests).filter((d) => d.httpClientRequest))
+          .flat()
+          .filter(Boolean)
+          .map((e) => formatHttpClientRequest(e))
+      ),
+    ].sort();
+  }
+
+  get callers(): string[] {
     return [
       ...new Set(
         this.eventMatches
           .map((e) => e.caller)
-          .filter((e) => e)
-          .map((e) => e.callEvent.isFunction && e.codeObject.id)
-          .filter((e) => e)
+          .filter(Boolean)
+          .map((e) => e.fqid.toString())
       ),
     ];
   }
 
-  /**
-   * @returns {string[]}
-   */
-  get ancestors() {
+  get ancestors(): string[] {
     return [
       ...new Set(
         this.eventMatches
           .map((e) => e.ancestors)
           .filter((list) => list.length > 0)
-          .map((list) => list.map((e) => e.callEvent.isFunction && e.codeObject.id))
+          .map((list) =>
+            list.map((e) => (e.isFunction ? e.codeObjectIds[0]?.toString() : undefined))
+          )
           .flat()
-          .filter((e) => e)
-      ),
-    ];
-  }
-
-  /**
-   * @returns {string[]}
-   */
-  get descendants() {
-    return [
-      ...new Set(
-        this.eventMatches
-          .map((e) => e.descendants)
-          .filter((list) => list.length > 0)
-          .map((list) => list.map((e) => e.callEvent.isFunction && e.codeObject.id))
-          .flat()
-          .filter((e) => e)
+          .filter(Boolean) as string[]
       ),
     ];
   }
@@ -159,5 +143,3 @@ class FunctionStats {
     return reduceTrigrams(this.eventMatches.map((e) => e.functionTrigrams).flat());
   }
 }
-
-module.exports = FunctionStats;

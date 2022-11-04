@@ -4,7 +4,8 @@ import glob from 'glob';
 import { promisify } from 'util';
 import { join } from 'path';
 import assert from 'assert';
-import { Event, ReturnValueObject } from '@appland/models';
+import { ReturnValueObject } from '@appland/models';
+import { IndexEvent as IndexEvent } from './search/types';
 
 const StartTime = Date.now();
 
@@ -146,15 +147,22 @@ export function formatValue(value: ReturnValueObject) {
   return [value.class, valueStr].filter((e) => e).join(' ');
 }
 
-export function formatHttpServerRequest(event: Event): string {
+export function formatHttpServerRequest(event: IndexEvent): string {
   assert(event.httpServerRequest);
   const data = {
     method: event.httpServerRequest.request_method,
     path: event.httpServerRequest.normalized_path_info || event.httpServerRequest.path_info,
-    statusCode:
-      event.returnEvent && event.httpServerResponse
-        ? (event.httpServerResponse as any)['status_code'] || event.httpServerResponse.status
-        : '<none>',
+    statusCode: event.httpServerResponse?.status || '000',
+  };
+  return [data.method, data.path, `(${data.statusCode})`].join(' ');
+}
+
+export function formatHttpClientRequest(event: IndexEvent): string {
+  assert(event.httpClientRequest);
+  const data = {
+    method: event.httpClientRequest.request_method,
+    path: event.httpClientRequest.url,
+    statusCode: event.httpClientResponse?.status || '000',
   };
   return [data.method, data.path, `(${data.statusCode})`].join(' ');
 }
