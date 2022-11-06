@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.49.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.49.0...@appland/appmap-v3.49.1) (2022-11-06)
+
+
+### Bug Fixes
+
+* Export sequence diagram types ([5537840](https://github.com/getappmap/appmap-js/commit/55378405acf05f6e4f2091e764754e1a8b9cfbaa))
+
 # [@appland/appmap-v3.49.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.48.0...@appland/appmap-v3.49.0) (2022-11-03)
 
 
