@@ -51,7 +51,13 @@ module.exports = {
         assets: 'release/*',
       },
     ],
-    join(__dirname, 'ci/yarnPublish.js'),
+    [
+      '@semantic-release/exec',
+      {
+        verifyConditionsCmd: 'test -n "$YARN_NPM_AUTH_TOKEN"',
+        publishCmd: 'yarn npm publish'
+      }
+    ]
   ],
   extends: 'semantic-release-monorepo',
 };
