@@ -1,3 +1,15 @@
+# [@appland/sequence-diagram-v1.1.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.0.0...@appland/sequence-diagram-v1.1.0) (2022-11-06)
+
+
+### Bug Fixes
+
+* Export sequence diagram types ([5537840](https://github.com/getappmap/appmap-js/commit/55378405acf05f6e4f2091e764754e1a8b9cfbaa))
+
+
+### Features
+
+* Apply appmap styles to seq diagram ([268af2c](https://github.com/getappmap/appmap-js/commit/268af2c6ad932de240985cf3d35b8a9f22218268))
+
 # @appland/sequence-diagram-v1.0.0 (2022-11-02)
 
 
