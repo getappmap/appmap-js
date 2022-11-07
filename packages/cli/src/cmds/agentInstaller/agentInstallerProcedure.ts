@@ -62,6 +62,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
     UI.status = 'Installing AppMap...';
 
     try {
+      const filesBefore = await this.filesLocallyModified();
       await this.installer.checkCurrentConfig();
       await this.installer.installAgent();
 
@@ -79,6 +80,8 @@ export default class AgentInstallerProcedure extends AgentProcedure {
 
       const result = await this.validateProject(useExistingAppMapYml);
 
+      await this.commitConfiguration(filesBefore);
+
       const successMessage = [
         chalk.green('Success! AppMap has finished installing.'),
         '',
@@ -90,8 +93,9 @@ export default class AgentInstallerProcedure extends AgentProcedure {
 
       UI.success(successMessage.join('\n'));
 
-      if (result?.errors) for (const warning of result.errors.filter((e) => e.level === 'warning'))
-        UI.warn(formatValidationError(warning));
+      if (result?.errors)
+        for (const warning of result.errors.filter((e) => e.level === 'warning'))
+          UI.warn(formatValidationError(warning));
     } catch (e) {
       const error = e as Error;
       console.log(error?.message);
