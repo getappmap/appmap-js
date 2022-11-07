@@ -95,20 +95,14 @@
 </template>
 
 <script>
-import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
-import VButton from '@/components/Button.vue';
 import Navigation from '@/components/mixins/navigation';
-import VAppmapLogo from '@/assets/appmap-logomark.svg';
 
 export default {
   name: 'AnalysisFindings',
 
   components: {
     VQuickstartLayout,
-    VNavigationButtons,
-    VButton,
-    VAppmapLogo,
   },
 
   mixins: [Navigation],
@@ -295,7 +289,9 @@ export default {
           border-top: 0;
         }
         &.finding-name {
-          //width: 25%;
+        }
+        &:hover {
+          cursor: pointer;
         }
       }
       &.header {

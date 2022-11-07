@@ -73,34 +73,31 @@
             </li>
           </ul>
         </div>
-        <div class="finding-details-wrap col">
-          <h3>
-            <VAppmapPin />
-            Found in 3 AppMaps
-          </h3>
-          <ul class="card appmap-list">
-            <li>
-              <a href="/">Microposts_interface micropost interface <span>(30 occurrences)</span></a>
-            </li>
-            <li>
-              <a href="/">Feed_interface micropost delete <span>(5 occurrences)</span></a>
-            </li>
-            <li>
-              <a href="/">User_account new password_reset <span>(104 occurrences)</span></a>
-            </li>
-          </ul>
-        </div>
       </main>
     </section>
+    <div class="analysis-findings full-width">
+      <h3>
+        <VAppmapPin />
+        Found in 3 AppMaps
+      </h3>
+      <ul class="appmap-list">
+        <li>
+          <a href="/">Microposts_interface micropost interface <span>(30 occurrences)</span></a>
+        </li>
+        <li>
+          <a href="/">Feed_interface micropost delete <span>(5 occurrences)</span></a>
+        </li>
+        <li>
+          <a href="/">User_account new password_reset <span>(104 occurrences)</span></a>
+        </li>
+      </ul>
+    </div>
   </v-quickstart-layout>
 </template>
 
 <script>
-import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
-import VButton from '@/components/Button.vue';
 import Navigation from '@/components/mixins/navigation';
-import VAppmapLogo from '@/assets/appmap-logomark.svg';
 import VAppmapPin from '@/assets/appmap-pin.svg';
 
 export default {
@@ -108,9 +105,6 @@ export default {
 
   components: {
     VQuickstartLayout,
-    VNavigationButtons,
-    VButton,
-    VAppmapLogo,
     VAppmapPin,
   },
 
@@ -149,6 +143,26 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.analysis-findings.full-width {
+  margin: 0 -1.75rem;
+  h3 {
+    padding: 0 2rem;
+  }
+  .appmap-list {
+    padding: 0;
+    border-top: 1px solid lighten($gray2, 15);
+    li {
+      padding: 0.5rem 2rem;
+      border-bottom: 1px solid lighten($gray2, 15);
+      a {
+        color: $white;
+      }
+      &:hover {
+        background-color: darken($gray2, 05);
+      }
+    }
+  }
+}
 .finding-details {
   .header-wrap {
     display: flex;
@@ -208,10 +222,6 @@ export default {
     &.col {
       flex-direction: column;
       gap: 0;
-    }
-    &.full-width {
-      width: 100%;
-      margin: 0 -1.75rem;
     }
     h3 {
       color: $gray4;
@@ -274,27 +284,10 @@ export default {
       }
     }
   }
-
-  // &.finding-details {
-  //   .card {
-  //     border-radius: 0.5rem;
-  //     background-color: $gray1;
-  //     padding: 0.25rem 0;
-  //     gap: 0;
-  //     li {
-  //       border-bottom: 1px solid $gray4;
-  //       border-radius: 0;
-  //       width: 100%;
-  //       &:last-of-type {
-  //         border-bottom: 0;
-  //       }
-  //     }
-  //     &ul.stack {
-  //       display: flex;
-  //       flex-direction: column;
-  //     }
-  //   }
-  // }
+  &.full-width {
+    width: 100%;
+    margin: 0 -1.75rem;
+  }
 }
 
 .b-0 {
