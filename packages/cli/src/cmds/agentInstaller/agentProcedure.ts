@@ -10,6 +10,7 @@ import { validateConfig } from '../../service/config/validator';
 import CommandStruct from './commandStruct';
 import Telemetry from '../../telemetry';
 import { formatValidationError, parseValidationResult, ValidationResult } from './ValidationResult';
+import { fileWithInstaller } from './types/state';
 
 export default abstract class AgentProcedure {
   constructor(readonly installer: AgentInstaller, readonly path: string) {}
@@ -82,9 +83,7 @@ export default abstract class AgentProcedure {
 
     const errors = (validationResult.errors || []).filter((e) => e.level === 'error');
     if (errors.length > 0) {
-      throw new ValidationError(
-        errors.map(formatValidationError).join('\n')
-      );
+      throw new ValidationError(errors.map(formatValidationError).join('\n'));
     }
 
     const { schema } = validationResult;
@@ -106,6 +105,194 @@ export default abstract class AgentProcedure {
     }
 
     return validationResult;
+  }
+
+  async filesHaveDiffs(files: string[]): Promise<string[]> {
+    let filesThatMatched: string[] = [];
+
+    for (const file of files) {
+      let gitDiff;
+      let thereWasADiff: boolean = false;
+      try {
+        const stdout = runSync(new CommandStruct('git', ['diff', file], this.installer.path));
+        if (stdout.length > 0) {
+          gitDiff = stdout.split('\n')[0];
+          thereWasADiff = true;
+        } else {
+          gitDiff = '[no diff]';
+        }
+      } catch (e) {
+        const gitError = (e as Error).message.split('\n')[1];
+        gitDiff = `[git diff failed, ${gitError}]`;
+      }
+
+      if (thereWasADiff) {
+        filesThatMatched.push(file);
+      }
+    }
+
+    return filesThatMatched;
+  }
+
+  async filesArePartOfProject(files: string[]): Promise<string[]> {
+    let filesThatMatched: string[] = [];
+
+    for (const file of files) {
+      let gitStatus;
+      let isPartOfProject: boolean = false;
+      try {
+        const stdout = runSync(
+          new CommandStruct('git', ['status', '-s', file], this.installer.path)
+        );
+        if (stdout.length > 0) {
+          gitStatus = stdout.split('\n')[0];
+          if (gitStatus[0] !== '?') isPartOfProject = true;
+        } else {
+          gitStatus = '[no status]';
+        }
+      } catch (e) {
+        const gitError = (e as Error).message.split('\n')[1];
+        gitStatus = `[git status failed, ${gitError}]`;
+      }
+
+      if (isPartOfProject) {
+        filesThatMatched.push(file);
+      }
+    }
+
+    return filesThatMatched;
+  }
+
+  async gitCommit(files: string[], commitMessage: string): Promise<boolean> {
+    let gitCommit;
+    let isPartOfProject: boolean = false;
+    let itWorked: boolean = false;
+    try {
+      let params: string[] = ['commit', '-m', commitMessage];
+      for (const file of files) {
+        params.push(file);
+      }
+      const stdout = runSync(new CommandStruct('git', params, this.installer.path));
+      itWorked = true;
+    } catch (e) {
+      const gitError = (e as Error).message.split('\n')[1];
+      gitCommit = `[git commit failed, ${gitError}]`;
+    }
+
+    return itWorked;
+  }
+
+  async commitConfiguration() {
+    Telemetry.sendEvent({
+      name: `install-agent:commit_config:commit_start`,
+      properties: {},
+    });
+
+    const appmapFile: string = 'appmap.yml';
+    const buildFile: string = this.installer.buildFile;
+    let filesWithInstaller: fileWithInstaller[] = [
+      {
+        name: 'AppMap',
+        file: appmapFile,
+      },
+      { name: 'Bundler', file: buildFile },
+    ];
+    // this is specific to Ruby
+    if (this.installer.name === 'Bundler')
+      filesWithInstaller.push({
+        name: this.installer.name,
+        file: 'Gemfile.lock',
+      });
+
+    let files: string[] = [];
+    for (const entry of filesWithInstaller) files.push(entry.file);
+    let filesArePartOfProject = await this.filesArePartOfProject(files);
+    let filesArePartOfProjectText = filesArePartOfProject.flat().join('__');
+    let filesHaveDiffs = await this.filesHaveDiffs(files);
+    let filesHaveDiffsText = filesHaveDiffs.flat().join('__');
+    let shouldCommit = false;
+    // commit if any of the config files aren't part of the project or
+    // if their contents changed
+    if (
+      (filesArePartOfProject.length > 0 && filesArePartOfProject.length != files.length) ||
+      filesHaveDiffs.length > 0
+    )
+      shouldCommit = true;
+
+    if (!shouldCommit) {
+      Telemetry.sendEvent({
+        name: `install-agent:commit_config:should_not_commit`,
+        properties: {
+          filesArePartOfProjectText,
+          filesHaveDiffsText,
+        },
+      });
+
+      return;
+    }
+
+    let filesMessages: string[] = [];
+    for (const entry of filesWithInstaller) {
+      filesMessages.push(`  ${chalk.blue(entry.name)}: ${entry.file}`);
+    }
+    const { commit } = await UI.prompt({
+      type: 'confirm',
+      name: 'commit',
+      message: [
+        `AppMap recommends you have the installer commit in Git for you the following`,
+        `  files, to not have to install AppMap again in this repository:`,
+        filesMessages,
+        '  ',
+        '  Commit?',
+      ]
+        .flat()
+        .join('\n'),
+    });
+
+    if (commit) {
+      Telemetry.sendEvent({
+        name: `install-agent:commit_config:commit_yes`,
+        properties: {
+          filesArePartOfProjectText,
+          filesHaveDiffsText,
+        },
+      });
+
+      let filesToCommitSet = new Set<string>();
+      let filesNotPartOfProject: string[] = [];
+      for (const file of files)
+        if (!filesArePartOfProject.includes(file)) filesToCommitSet.add(file);
+      for (const file of filesHaveDiffs) filesToCommitSet.add(file);
+      const filesToCommitArray: string[] = Array.from(filesToCommitSet);
+
+      const commitSuccess = await this.gitCommit(filesToCommitArray, 'feat: Install AppMap.');
+
+      if (commitSuccess) {
+        Telemetry.sendEvent({
+          name: `install-agent:commit_config:commit_success`,
+          properties: {
+            filesArePartOfProjectText,
+            filesHaveDiffsText,
+          },
+        });
+      } else {
+        Telemetry.sendEvent({
+          name: `install-agent:commit_config:commit_failure`,
+          properties: {
+            filesArePartOfProjectText,
+            filesHaveDiffsText,
+          },
+        });
+      }
+    } else {
+      Telemetry.sendEvent({
+        name: `install-agent:commit_config:commit_no`,
+        properties: {
+          filesArePartOfProjectText,
+          filesHaveDiffsText,
+        },
+      });
+    }
   }
 
   loadConfig(): Record<string, unknown> {
