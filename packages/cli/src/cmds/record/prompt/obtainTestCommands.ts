@@ -49,6 +49,8 @@ export default async function obtainTestCommands({ configuration }: RecordContex
           message: 'Test command (without env vars):',
         })
       )['testCommand'];
+      if (testCommand)
+        testCommand = testCommand.trim();
     } while (!testCommand);
 
     const { envVars } = await UI.prompt({
