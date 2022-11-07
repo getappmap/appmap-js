@@ -74,7 +74,10 @@
           </ul>
         </div>
         <div class="finding-details-wrap col">
-          <h3>Found in 3 AppMaps</h3>
+          <h3>
+            <VAppmapPin />
+            Found in 3 AppMaps
+          </h3>
           <ul class="card appmap-list">
             <li>
               <a href="/">Microposts_interface micropost interface <span>(30 occurrences)</span></a>
@@ -98,6 +101,7 @@ import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VButton from '@/components/Button.vue';
 import Navigation from '@/components/mixins/navigation';
 import VAppmapLogo from '@/assets/appmap-logomark.svg';
+import VAppmapPin from '@/assets/appmap-pin.svg';
 
 export default {
   name: 'FindingDetails',
@@ -107,6 +111,7 @@ export default {
     VNavigationButtons,
     VButton,
     VAppmapLogo,
+    VAppmapPin,
   },
 
   mixins: [Navigation],
