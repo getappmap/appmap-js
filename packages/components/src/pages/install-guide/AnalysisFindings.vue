@@ -1,11 +1,18 @@
 <template>
   <v-quickstart-layout>
     <section class="analysis-findings">
-      <header>
-        <h4 class="subhead">Summary</h4>
-        <h1 data-cy="title">Runtime Analysis</h1>
-        <h4 class="branch">Branch: feature-update-22</h4>
-      </header>
+      <div class="header-wrap">
+        <header>
+          <h4 class="subhead">Summary</h4>
+          <h1 data-cy="title">Runtime Analysis</h1>
+          <h4 class="branch">Branch: feature-update-22</h4>
+        </header>
+        <div class="header-controls">
+          <div class="btn">Open the <strong>Problems tab</strong></div>
+          <div class="btn">Share</div>
+        </div>
+      </div>
+
       <main>
         <div class="findings-wrap">
           <div class="findings-overview">
@@ -18,6 +25,25 @@
               <li class="maintainability">Maintainability: 6</li>
             </ul>
           </div>
+
+          <div class="sort-wrap">
+            <div class="findings-sort">
+              <label for="findings-sort">Sort findings by:</label>
+              <select name="sort-type" id="select-sorting">
+                <option value="rule">Rule</option>
+                <option value="category">Category</option>
+              </select>
+            </div>
+            <div class="findings-action">
+              <label for="select-status">Action:</label>
+              <select name="action-type" id="finding-action">
+                <option value="new">New</option>
+                <option value="deferred">Deferred</option>
+                <option value="ignored">Ignored</option>
+              </select>
+            </div>
+          </div>
+
           <div class="findings-list">
             <ul class="list">
               <li>
@@ -121,6 +147,28 @@ export default {
 </script>
 <style lang="scss" scoped>
 .analysis-findings {
+  .header-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .header-controls {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      align-items: flex-start;
+      .btn {
+        border: 1px solid $purps3;
+        border-radius: 0.5rem;
+        padding: 0.2rem 0.5rem;
+        transition: $transition;
+        &:hover {
+          background-color: $purps3;
+          color: $white;
+          cursor: pointer;
+        }
+      }
+    }
+  }
   .subhead {
     font-size: 1.1rem;
     color: $gray4;
@@ -200,6 +248,22 @@ export default {
       }
     }
   }
+
+  .sort-wrap {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    margin-top: 2rem;
+    select {
+      border-radius: 6px;
+      border: 1px solid $purps3;
+      background-color: transparent;
+      color: $white;
+      padding: 0.2rem 0.4rem;
+      margin-left: 0.35rem;
+    }
+  }
+
   .findings-list {
     margin: 0 -1.75rem;
     ul {
