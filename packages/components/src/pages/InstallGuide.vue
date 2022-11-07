@@ -42,6 +42,7 @@ import VOpenAppMaps from '@/pages/install-guide/OpenAppMaps.vue';
 import VOpenApi from '@/pages/install-guide/OpenApi.vue';
 import VInvestigateFindings from '@/pages/install-guide/InvestigateFindings.vue';
 import VAnalysisFindings from '@/pages/install-guide/AnalysisFindings.vue';
+import VFindingDetails from '@/pages/install-guide/FindingDetails.vue';
 
 export default {
   name: 'install-guide',
@@ -139,6 +140,7 @@ export default {
     VOpenAppMaps,
     VOpenApi,
     VAnalysisFindings,
+    VFindingDetails,
   },
 
   methods: {
