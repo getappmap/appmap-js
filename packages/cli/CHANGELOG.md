@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.49.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.49.1...@appland/appmap-v3.49.2) (2022-11-07)
+
+
+### Bug Fixes
+
+* don't accept test commands that consist of only whitespace ([1723670](https://github.com/getappmap/appmap-js/commit/17236707c388a3412b154e67703bed0e2f9e39f0))
+
 # [@appland/appmap-v3.49.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.49.0...@appland/appmap-v3.49.1) (2022-11-06)
 
 
