@@ -365,6 +365,8 @@ export default {
           border-bottom: 0;
           padding: 0.2rem 0;
           min-height: unset;
+          justify-content: flex-start;
+          gap: 0.5rem;
           span {
             color: $gray4;
           }
