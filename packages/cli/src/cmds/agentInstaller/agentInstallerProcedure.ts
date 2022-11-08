@@ -9,6 +9,7 @@ import AgentProcedure from './agentProcedure';
 import Telemetry from '../../telemetry';
 import CommandStruct from './commandStruct';
 import { formatValidationError } from './ValidationResult';
+import { fileWithInstaller } from './types/state';
 
 export default class AgentInstallerProcedure extends AgentProcedure {
   async run(): Promise<void> {
@@ -62,6 +63,35 @@ export default class AgentInstallerProcedure extends AgentProcedure {
     UI.status = 'Installing AppMap...';
 
     try {
+      let filesWithInstaller: fileWithInstaller[] = [
+        {
+          name: 'AppMap',
+          file: 'appmap.yml',
+          wasAlreadyLocallyModified: false,
+        },
+        { name: this.installer.name,
+          file: this.installer.buildFile,
+          wasAlreadyLocallyModified: false,
+        },
+      ];
+      // this is specific to Ruby
+      if (this.installer.name === 'Bundler')
+        filesWithInstaller.push({
+          name: this.installer.name,
+          file: 'Gemfile.lock',
+          wasAlreadyLocallyModified: false,
+        });
+
+      let files: string[] = [];
+      for (const entry of filesWithInstaller) files.push(entry.file);
+      let filesHaveDiffs = await this.filesHaveDiffs(files);
+      for (const file of filesHaveDiffs) {
+        for (const entry of filesWithInstaller) {
+          if (entry.file === file)
+            entry.wasAlreadyLocallyModified = true;
+        }
+      }
+
       await this.installer.checkCurrentConfig();
       await this.installer.installAgent();
 
@@ -79,7 +109,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
 
       const result = await this.validateProject(useExistingAppMapYml);
 
-      await this.commitConfiguration();
+      await this.commitConfiguration(filesWithInstaller);
 
       const successMessage = [
         chalk.green('Success! AppMap has finished installing.'),

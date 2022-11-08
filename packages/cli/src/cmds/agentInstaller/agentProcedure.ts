@@ -182,33 +182,34 @@ export default abstract class AgentProcedure {
     return itWorked;
   }
 
-  async commitConfiguration() {
+  async commitConfiguration(filesWithInstaller: fileWithInstaller[]) {
     Telemetry.sendEvent({
       name: `install-agent:commit_config:commit_start`,
       properties: {},
     });
 
-    let filesWithInstaller: fileWithInstaller[] = [
-      {
-        name: 'AppMap',
-        file: 'appmap.yml',
-      },
-      { name: this.installer.name, file: this.installer.buildFile },
-    ];
-    // this is specific to Ruby
-    if (this.installer.name === 'Bundler')
-      filesWithInstaller.push({
-        name: this.installer.name,
-        file: 'Gemfile.lock',
-      });
-
     let files: string[] = [];
-    for (const entry of filesWithInstaller) files.push(entry.file);
+    for (const entry of filesWithInstaller) {
+      files.push(entry.file);
+    }
+
+    let filesAlreadyModified: string[] = [];
+    for (const entry of filesWithInstaller) {
+      if (entry.wasAlreadyLocallyModified)
+        filesAlreadyModified.push(entry.file);
+    }
+
     let filesArePartOfProject = await this.filesArePartOfProject(files);
     let filesArePartOfProjectText = filesArePartOfProject.flat().join('__');
     let filesHaveDiffs = await this.filesHaveDiffs(files);
     let filesHaveDiffsText = filesHaveDiffs.flat().join('__');
     let shouldCommit = false;
+    console.debug('filesWithInstaller');
+    console.debug(filesWithInstaller);
+    console.debug('filesArePartOfProject');
+    console.debug(filesArePartOfProject);
+    console.debug('filesHaveDiffs');
+    console.debug(filesHaveDiffs);
     // commit if any of the config files aren't part of the project or
     // if their contents changed
     if (
@@ -227,19 +228,34 @@ export default abstract class AgentProcedure {
       });
 
       return;
+    } else {
+      Telemetry.sendEvent({
+        name: `install-agent:commit_config:should_commit`,
+        properties: {
+          filesArePartOfProjectText,
+          filesHaveDiffsText,
+        },
+      });
     }
 
-    let filesMessages: string[] = [];
+    let filesCommitMessages: string[] = [];
+    let filesDontCommitMessages: string[] = [];
     for (const entry of filesWithInstaller) {
-      filesMessages.push(`  ${chalk.blue(entry.name)}: ${entry.file}`);
+      filesCommitMessages.push(`  ${chalk.blue(entry.name)}: ${entry.file}`);
+      if (entry.wasAlreadyLocallyModified)
+        filesDontCommitMessages.push(`  ${chalk.blue(entry.name)}: ${entry.file}`);
     }
+
     const { commit } = await UI.prompt({
       type: 'confirm',
       name: 'commit',
       message: [
         `AppMap recommends you have the installer commit in Git for you the following`,
         `  files, to not have to install AppMap again in this repository:`,
-        filesMessages,
+        filesCommitMessages,
+        '  ',
+        "  Won't commit the following files because they were already locally modified:",
+        filesDontCommitMessages,
         '  ',
         '  Commit?',
       ]
@@ -258,9 +274,15 @@ export default abstract class AgentProcedure {
 
       let filesToCommitSet = new Set<string>();
       let filesNotPartOfProject: string[] = [];
-      for (const file of files)
-        if (!filesArePartOfProject.includes(file)) filesToCommitSet.add(file);
-      for (const file of filesHaveDiffs) filesToCommitSet.add(file);
+      for (const file of files) {
+        if (!filesArePartOfProject.includes(file) &&
+            !filesAlreadyModified.includes(file))
+          filesToCommitSet.add(file);
+      }
+      for (const file of filesHaveDiffs) {
+        if (!filesAlreadyModified.includes(file))
+          filesToCommitSet.add(file);
+      }
       const filesToCommitArray: string[] = Array.from(filesToCommitSet);
 
       const commitSuccess = await this.gitCommit(filesToCommitArray, 'feat: Install AppMap.');
