@@ -188,14 +188,12 @@ export default abstract class AgentProcedure {
       properties: {},
     });
 
-    const appmapFile: string = 'appmap.yml';
-    const buildFile: string = this.installer.buildFile;
     let filesWithInstaller: fileWithInstaller[] = [
       {
         name: 'AppMap',
-        file: appmapFile,
+        file: 'appmap.yml',
       },
-      { name: 'Bundler', file: buildFile },
+      { name: this.installer.name, file: this.installer.buildFile },
     ];
     // this is specific to Ruby
     if (this.installer.name === 'Bundler')
