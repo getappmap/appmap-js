@@ -466,13 +466,13 @@ packages:
 
   describe('A Python project', () => {
     const pythonVersion = (cmdStruct: CommandStruct) => {
-      expect(cmdStruct.program).toEqual('python');
+      expect(cmdStruct.program).toEqual('python3');
       expect(cmdStruct.args).toEqual(['--version']);
       return Promise.resolve({ stdout: 'Python 3.7.0', stderr: '' });
     };
 
     const pythonPath = (cmdStruct: CommandStruct) => {
-      expect(cmdStruct.program).toEqual('python');
+      expect(cmdStruct.program).toEqual('python3');
       expect(cmdStruct.args).toEqual(['-c', "'import sys; print(sys.prefix)'"]);
       return Promise.resolve({ stdout: '/usr/local', stderr: '' });
     };
@@ -517,11 +517,11 @@ packages:
 
       beforeEach(() => {
         fse.copySync(projectFixture, projectDir);
-        sinon.stub(inquirer, 'prompt').resolves({ result: 'pip', confirm: true });
+        sinon.stub(inquirer, 'prompt').resolves({ result: 'pip3', confirm: true });
       });
 
       const installAgent = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('pip');
+        expect(cmdStruct.program).toEqual('pip3');
         expect(cmdStruct.args).toEqual(['install', '-r', 'requirements.txt']);
         const ret = { stdout: '', stderr: '' };
         return Promise.resolve(ret);
@@ -542,17 +542,17 @@ packages:
 
       describe('below version 22.2.0', () => {
         const pipVersion = (cmdStruct: CommandStruct) => {
-          expect(cmdStruct.program).toEqual('pip');
+          expect(cmdStruct.program).toEqual('pip3');
           expect(cmdStruct.args).toEqual(['--version']);
           return Promise.resolve({
             stdout:
-              'pip 22.0 from /home/user/.pyenv/versions/3.7.0/lib/python3.7/site-packages/pip (python 3.7)',
+              'pip3 22.0 from /home/user/.pyenv/versions/3.7.0/lib/python3.7/site-packages/pip (python 3.7)',
             stderr: '',
           });
         };
 
         const checkCurrentConfig = (cmdStruct: CommandStruct) => {
-          expect(cmdStruct.program).toEqual('pip');
+          expect(cmdStruct.program).toEqual('pip3');
           const args = cmdStruct.args;
           expect(args).toEqual(['install', '-r', 'requirements.txt']);
           const ret = { stdout: '', stderr: '' };
@@ -583,23 +583,23 @@ packages:
 
       describe('above version 22.2.0', () => {
         const pythonVersion = (cmdStruct: CommandStruct) => {
-          expect(cmdStruct.program).toEqual('python');
+          expect(cmdStruct.program).toEqual('python3');
           expect(cmdStruct.args).toEqual(['--version']);
           return Promise.resolve({ stdout: 'Python 3.10.7', stderr: '' });
         };
 
         const pipVersion = (cmdStruct: CommandStruct) => {
-          expect(cmdStruct.program).toEqual('pip');
+          expect(cmdStruct.program).toEqual('pip3');
           expect(cmdStruct.args).toEqual(['--version']);
           return Promise.resolve({
             stdout:
-              'pip 22.2.2 from /home/user/.pyenv/versions/3.10.7/lib/python3.7/site-packages/pip (python 3.10)',
+              'pip3 22.2.2 from /home/user/.pyenv/versions/3.10.7/lib/python3.7/site-packages/pip (python 3.10)',
             stderr: '',
           });
         };
 
         const checkCurrentConfig = (cmdStruct: CommandStruct) => {
-          expect(cmdStruct.program).toEqual('pip');
+          expect(cmdStruct.program).toEqual('pip3');
           const args = cmdStruct.args;
           expect(args).toEqual(['install', '-r', 'requirements.txt', '--dry-run']);
           const ret = { stdout: '', stderr: '' };
@@ -658,7 +658,7 @@ packages:
       };
 
       const pythonVersion = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('python');
+        expect(cmdStruct.program).toEqual('python3');
         expect(cmdStruct.args).toEqual(['--version']);
         return Promise.resolve({ stdout: 'Python 3.7.0', stderr: '' });
       };

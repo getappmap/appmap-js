@@ -28,9 +28,9 @@ abstract class PythonInstaller extends AgentInstaller {
   async environment(): Promise<Record<string, string>> {
     // Python version is returned as a string similar to:
     // Python 3.7.0
-    const version = await getOutput('python', ['--version'], this.path);
+    const version = await getOutput('python3', ['--version'], this.path);
     const pythonPath = await getOutput(
-      'python',
+      'python3',
       ['-c', 'import sys; print(sys.prefix)'],
       this.path
     );
@@ -139,7 +139,7 @@ export class PipenvInstaller extends PythonInstaller {
   }
 }
 export class PipInstaller extends PythonInstaller {
-  static identifier = 'pip';
+  static identifier = 'pip3';
 
   constructor(path: string) {
     super(PipInstaller.identifier, path);
@@ -162,11 +162,11 @@ export class PipInstaller extends PythonInstaller {
     let supportsDryRun: boolean;
 
     try {
-      const pipVersionOutput = await getOutput('pip', ['--version'], this.path);
+      const pipVersionOutput = await getOutput('pip3', ['--version'], this.path);
       const pipVersion = semver.coerce(pipVersionOutput.output);
 
       if (!pipVersion) {
-        throw new UserConfigError('Could not detect pip version');
+        throw new UserConfigError('Could not detect pip3 version');
       }
 
       supportsDryRun = semver.satisfies(pipVersion, '>= 22.2.0');
@@ -178,7 +178,7 @@ export class PipInstaller extends PythonInstaller {
       commandArgs.push('--dry-run');
     }
 
-    return new CommandStruct('pip', commandArgs, this.path);
+    return new CommandStruct('pip3', commandArgs, this.path);
   }
 
   async installAgent(): Promise<void> {
@@ -198,7 +198,7 @@ export class PipInstaller extends PythonInstaller {
 
     encodedFile.write(requirements);
 
-    const cmd = new CommandStruct('pip', ['install', '-r', this.buildFile], this.path);
+    const cmd = new CommandStruct('pip3', ['install', '-r', this.buildFile], this.path);
     await run(cmd);
   }
 
