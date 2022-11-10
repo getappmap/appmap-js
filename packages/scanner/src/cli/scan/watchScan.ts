@@ -3,6 +3,7 @@ import * as chokidar from 'chokidar';
 
 import { formatReport } from './formatReport';
 import { default as buildScanner } from './scanner';
+import { ScanResults, sendScanResultsTelemetry } from '../../report/scanResults';
 import {
   parseConfigFile,
   TimestampedConfiguration,
@@ -10,8 +11,9 @@ import {
 import assert from 'assert';
 import path from 'path';
 import { queue } from 'async';
+import Telemetry from '../../telemetry';
 
-type WatchScanOptions = {
+export type WatchScanOptions = {
   appId?: string;
   appmapDir: string;
   configFile: string;
@@ -44,16 +46,56 @@ function isAncestorPath(ancestor: string, descendant: string): boolean {
   return !path.relative(ancestor, descendant).startsWith('..');
 }
 
+export type BatchedTelemetry = {
+  telemetryName: string;
+  scanResults: ScanResults;
+  msElapsed: number;
+  msInserted: number;
+};
+
 export class Watcher {
   config?: TimestampedConfiguration;
   appmapWatcher?: chokidar.FSWatcher;
   appmapPoller?: chokidar.FSWatcher;
   configWatcher?: chokidar.FSWatcher;
+  batchedTelemetry: BatchedTelemetry[] = [];
+  sendPeriodMilliseconds = 5000;
+  interval: NodeJS.Timer;
 
-  constructor(private options: WatchScanOptions) {}
+  constructor(private options: WatchScanOptions) {
+    this.interval = setInterval(() => {
+      this.sendScanResultsTelemetryInABatch();
+    }, this.sendPeriodMilliseconds);
+    // must unref because there's no condition under which the timer
+    // will stop; else the process doesn't exit
+    this.interval.unref();
+  }
+
+  public sendScanResultsTelemetryInABatch() {
+    const dateNow = Date.now();
+    if (
+      this.batchedTelemetry &&
+      this.batchedTelemetry.length > 0 &&
+      dateNow - this.batchedTelemetry[this.batchedTelemetry.length - 1].msInserted >
+        this.sendPeriodMilliseconds
+    ) {
+      const aggregatedScanResults: ScanResults = new ScanResults();
+      let totalMsElapsed = 0;
+      this.batchedTelemetry.forEach((item) => {
+        aggregatedScanResults.aggregate(item.scanResults);
+        totalMsElapsed += item.msElapsed;
+      });
+
+      sendScanResultsTelemetry(aggregatedScanResults, totalMsElapsed);
+      this.batchedTelemetry = [];
+    }
+  }
 
   async watch(): Promise<void> {
     await this.reloadConfig();
+    Telemetry.sendEvent({
+      name: 'scan:started',
+    });
 
     this.configWatcher = chokidar.watch(this.options.configFile, {
       ignoreInitial: true,
@@ -139,10 +181,20 @@ export class Watcher {
 
     const scanner = await buildScanner(true, this.config, [appmapFile]);
 
+    const startTime = Date.now();
     const rawScanResults = await scanner.scan();
 
     // Always report the raw data
     await writeFile(reportFile, formatReport(rawScanResults));
+
+    const dateNow = Date.now();
+    const elapsed = dateNow - startTime;
+    this.batchedTelemetry.push({
+      telemetryName: 'scan:completed',
+      scanResults: rawScanResults,
+      msElapsed: elapsed,
+      msInserted: dateNow,
+    });
 
     // tell the queue that the current task is complete
     if (callback) {

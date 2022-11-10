@@ -3,6 +3,7 @@ import Check from '../check';
 import Configuration from '../configuration/types/configuration';
 import { Finding } from '../types';
 import { AppMapMetadata, ScanSummary } from './scanSummary';
+import Telemetry from '../telemetry';
 
 class DistinctItems<T> {
   private members: Record<string, T> = {};
@@ -61,10 +62,10 @@ export class ScanResults {
   public summary: ScanSummary;
 
   constructor(
-    public configuration: Configuration,
-    public appMapMetadata: Record<string, Metadata>,
-    public findings: Finding[],
-    public checks: Check[]
+    public configuration: Configuration = { checks: [] },
+    public appMapMetadata: Record<string, Metadata> = {},
+    public findings: Finding[] = [],
+    public checks: Check[] = []
   ) {
     this.summary = {
       numAppMaps: Object.keys(appMapMetadata).length,
@@ -79,4 +80,34 @@ export class ScanResults {
   withFindings(findings: Finding[]): ScanResults {
     return new ScanResults(this.configuration, this.appMapMetadata, findings, this.checks);
   }
+
+  aggregate(sourceScanResults: ScanResults) {
+    this.summary.numAppMaps += sourceScanResults.summary.numAppMaps;
+    this.summary.numChecks += sourceScanResults.summary.numChecks;
+    this.summary.rules = [...new Set(this.summary.rules.concat(sourceScanResults.summary.rules))];
+    this.summary.ruleLabels = [
+      ...new Set(this.summary.ruleLabels.concat(sourceScanResults.summary.ruleLabels)),
+    ];
+    this.summary.numFindings += sourceScanResults.summary.numFindings;
+
+    // we don't need sourceScanResults.summary.appMetadata
+    // appMapMetadata.Git may also contain secrets we don't want to transmit.
+  }
+}
+
+export function sendScanResultsTelemetry(scanResults: ScanResults, msElapsed: number) {
+  const rules = [...new Set(scanResults.checks.map(({ id }) => id))];
+
+  Telemetry.sendEvent({
+    name: 'scan:completed',
+    properties: {
+      rules: rules.join(', '),
+    },
+    metrics: {
+      duration: msElapsed / 1000,
+      numRules: rules.length,
+      numAppMaps: scanResults.summary.numAppMaps,
+      numFindings: scanResults.findings.length,
+    },
+  });
 }

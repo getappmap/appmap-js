@@ -14,6 +14,7 @@ import { dump } from 'js-yaml';
 import CommandOptions from '../../src/cli/scan/options';
 import tmp from 'tmp-promise';
 import assert from 'assert';
+import { withStubbedTelemetry } from '../helper';
 
 process.env['APPMAP_TELEMETRY_DISABLED'] = 'true';
 delete process.env.APPLAND_API_KEY;
@@ -54,6 +55,7 @@ function runCommand(options: CommandOptions): Promise<void> {
 }
 
 describe('scan', () => {
+  withStubbedTelemetry();
   it('errors with default options and without AppMap server API key', async () => {
     delete process.env.APPLAND_API_KEY;
     try {
