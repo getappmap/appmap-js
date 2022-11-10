@@ -1,6 +1,8 @@
 import AgentProcedure from '../../../src/cmds/agentInstaller/agentProcedure';
 import { TestAgentProcedure } from './TestAgentProcedure';
 import UI from '../../../src/cmds/userInteraction';
+import sinon, { SinonStub } from 'sinon';
+import { withStubbedTelemetry } from '../../helper';
 
 jest.mock('../../../src/cmds/userInteraction');
 
@@ -9,6 +11,7 @@ const procedure = new TestAgentProcedure();
 const { prompt } = jest.mocked(UI);
 
 describe(AgentProcedure, () => {
+  withStubbedTelemetry(sinon);
   describe('validateProject', () => {
     it('works correctly even if there are no errors', () => {
       jest.spyOn(procedure, 'validateAgent').mockResolvedValue({
@@ -54,6 +57,7 @@ describe(AgentProcedure, () => {
 });
 
 describe(AgentProcedure, () => {
+  withStubbedTelemetry(sinon);
   describe('commitConfiguration', () => {
     const filesAfter = ['Gemfile', 'Gemfile.lock', 'appmap.yml'];
 
