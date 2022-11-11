@@ -9,6 +9,7 @@ import AgentProcedure from './agentProcedure';
 import Telemetry from '../../telemetry';
 import CommandStruct from './commandStruct';
 import { formatValidationError } from './ValidationResult';
+import { GitStatus } from './types/state';
 
 export default class AgentInstallerProcedure extends AgentProcedure {
   async run(): Promise<void> {
@@ -62,7 +63,11 @@ export default class AgentInstallerProcedure extends AgentProcedure {
     UI.status = 'Installing AppMap...';
 
     try {
-      const filesBefore = await this.filesLocallyModified();
+      const filesBeforeGitStatus: GitStatus[] = await this.gitStatus();
+      const filesBefore: string[] = [];
+      for (const file of filesBeforeGitStatus) {
+        filesBefore.push(file.file);
+      }
       await this.installer.checkCurrentConfig();
       await this.installer.installAgent();
 

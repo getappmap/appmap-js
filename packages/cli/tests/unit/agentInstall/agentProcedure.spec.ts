@@ -59,19 +59,32 @@ describe(AgentProcedure, () => {
 describe(AgentProcedure, () => {
   withStubbedTelemetry(sinon);
   describe('commitConfiguration', () => {
-    const filesAfter = ['Gemfile', 'Gemfile.lock', 'appmap.yml'];
+    const filesAfter = [
+      {
+        file: 'Gemfile',
+        status: ' M',
+      },
+      {
+        file: 'Gemfile.lock',
+        status: ' M',
+      },
+      {
+        file: 'appmap.yml',
+        status: '??',
+      },
+    ];
 
     describe('does not commit', () => {
       it('there is no diff', () => {
         const filesBefore = [];
         const filesAfter = [];
-        jest.spyOn(procedure, 'filesLocallyModified').mockResolvedValue(filesAfter);
+        jest.spyOn(procedure, 'gitStatus').mockResolvedValue(filesAfter);
         return expect(procedure.commitConfiguration(filesBefore)).resolves.toBe(false);
       });
 
       it('there is a diff and user selected to not commit', () => {
         const filesBefore = [];
-        jest.spyOn(procedure, 'filesLocallyModified').mockResolvedValue(filesAfter);
+        jest.spyOn(procedure, 'gitStatus').mockResolvedValue(filesAfter);
         prompt.mockResolvedValue({ commit: false });
         return expect(procedure.commitConfiguration(filesBefore)).resolves.toBe(false);
       });
@@ -80,7 +93,7 @@ describe(AgentProcedure, () => {
     describe('commits', () => {
       it('there is a diff and user selected to commit', () => {
         const filesBefore = [];
-        jest.spyOn(procedure, 'filesLocallyModified').mockResolvedValue(filesAfter);
+        jest.spyOn(procedure, 'gitStatus').mockResolvedValue(filesAfter);
         prompt.mockResolvedValue({ commit: true });
         jest.spyOn(procedure, 'gitCommit').mockResolvedValue(true);
         return expect(procedure.commitConfiguration(filesBefore)).resolves.toBe(true);

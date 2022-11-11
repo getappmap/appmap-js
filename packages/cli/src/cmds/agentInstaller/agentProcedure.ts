@@ -107,17 +107,6 @@ export default abstract class AgentProcedure {
     return validationResult;
   }
 
-  async filesLocallyModified(): Promise<string[]> {
-    let files: GitStatus[] = await this.gitStatus();
-    let filesModified: string[] = [];
-    files.filter((file) => {
-      if (file.status[0] !== '?') {
-        filesModified.push(file.file);
-      }
-    });
-    return filesModified;
-  }
-
   async gitStatus(file?: string): Promise<GitStatus[]> {
     let files: GitStatus[] = [];
     let params: string[] = ['status', '-s'];
@@ -152,6 +141,23 @@ export default abstract class AgentProcedure {
     return files;
   }
 
+  async gitAdd(files: string[]): Promise<boolean> {
+    let params: string[] = ['add'];
+    for (const file of files) {
+      params.push(file);
+    }
+    try {
+      const stdout = runSync(new CommandStruct('git', params, this.installer.path));
+      return true;
+    } catch (e) {
+      const gitError = (e as Error).message.split('\n')[1];
+      const gitCommit = `[git commit failed, ${gitError}]`;
+      // may want to print the error
+    }
+
+    return false;
+  }
+
   async gitCommit(files: string[], commitMessage: string): Promise<boolean> {
     let params: string[] = ['commit', '-m', commitMessage];
     for (const file of files) {
@@ -175,8 +181,13 @@ export default abstract class AgentProcedure {
       properties: {},
     });
 
-    const filesAfter = await this.filesLocallyModified();
-    let filesDiff: string[] = filesAfter.filter((file) => !filesBefore.includes(file));
+    const filesAfterGitStatus: GitStatus[] = await this.gitStatus();
+    const filesAfter: string[] = [];
+    for (const file of filesAfterGitStatus) {
+      filesAfter.push(file.file);
+    }
+    let filesDiff: string[] = [];
+    filesDiff = filesAfter.filter((file) => !filesBefore.includes(file));
     filesDiff.sort();
     let filesDiffText = filesDiff.flat().join('__');
     if (filesDiff.length == 0) {
@@ -223,6 +234,10 @@ export default abstract class AgentProcedure {
         },
       });
 
+      // commitAdd is idempotent, and necessary to add to git
+      // appmap.yml, or even Gemfile.lock etc. when the installer runs
+      // for the first time
+      const commitAdd = await this.gitAdd(filesDiff);
       const commitSuccess = await this.gitCommit(filesDiff, 'feat: Install AppMap.');
 
       Telemetry.sendEvent({
