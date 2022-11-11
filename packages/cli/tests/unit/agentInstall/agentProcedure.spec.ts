@@ -95,7 +95,10 @@ describe(AgentProcedure, () => {
         const filesBefore = [];
         jest.spyOn(procedure, 'gitStatus').mockResolvedValue(filesAfter);
         prompt.mockResolvedValue({ commit: true });
-        jest.spyOn(procedure, 'gitCommit').mockResolvedValue(true);
+        jest.spyOn(procedure, 'gitCommit').mockResolvedValue({
+          success: true,
+          errorMessage: '',
+        });
         return expect(procedure.commitConfiguration(filesBefore)).resolves.toBe(true);
       });
     });

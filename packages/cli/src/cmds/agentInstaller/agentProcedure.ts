@@ -141,38 +141,48 @@ export default abstract class AgentProcedure {
     return files;
   }
 
-  async gitAdd(files: string[]): Promise<boolean> {
+  async gitAdd(files: string[]): Promise<any> {
     let params: string[] = ['add'];
     for (const file of files) {
       params.push(file);
     }
     try {
       const stdout = runSync(new CommandStruct('git', params, this.installer.path));
-      return true;
+      return {
+        success: true,
+        errorMessage: '',
+      };
     } catch (e) {
       const gitError = (e as Error).message.split('\n')[1];
-      const gitCommit = `[git commit failed, ${gitError}]`;
+      const gitAdd = `[git add failed, ${gitError}]`;
       // may want to print the error
+      return {
+        success: false,
+        errorMessage: gitAdd,
+      };
     }
-
-    return false;
   }
 
-  async gitCommit(files: string[], commitMessage: string): Promise<boolean> {
+  async gitCommit(files: string[], commitMessage: string): Promise<any> {
     let params: string[] = ['commit', '-m', commitMessage];
     for (const file of files) {
       params.push(file);
     }
     try {
       const stdout = runSync(new CommandStruct('git', params, this.installer.path));
-      return true;
+      return {
+        success: true,
+        errorMessage: '',
+      };
     } catch (e) {
       const gitError = (e as Error).message.split('\n')[1];
       const gitCommit = `[git commit failed, ${gitError}]`;
       // may want to print the error
+      return {
+        success: false,
+        errorMessage: gitCommit,
+      };
     }
-
-    return false;
   }
 
   async commitConfiguration(filesBefore: string[]) {
@@ -234,14 +244,20 @@ export default abstract class AgentProcedure {
         },
       });
 
-      // commitAdd is idempotent, and necessary to add to git
-      // appmap.yml, or even Gemfile.lock etc. when the installer runs
-      // for the first time
-      const commitAdd = await this.gitAdd(filesDiff);
-      const commitSuccess = await this.gitCommit(filesDiff, 'feat: Install AppMap.');
+      // gitAdd is idempotent, and necessary to add to git appmap.yml,
+      // Gemfile.lock etc. when the installer runs for the first time
+      const addGitReturn = await this.gitAdd(filesDiff);
+      if (!addGitReturn.success) {
+        UI.error(addGitReturn.errorMessage);
+      }
+
+      const commitGitReturn = await this.gitCommit(filesDiff, 'feat: Install AppMap.');
+      if (!commitGitReturn.success) {
+        UI.error(commitGitReturn.errorMessage);
+      }
 
       Telemetry.sendEvent({
-        name: commitSuccess
+        name: commitGitReturn.success
           ? `install-agent:commit_config:commit_success`
           : `install-agent:commit_config:commit_failure`,
         properties: {
@@ -249,7 +265,7 @@ export default abstract class AgentProcedure {
         },
       });
 
-      return commitSuccess;
+      return commitGitReturn.success;
     } else {
       Telemetry.sendEvent({
         name: `install-agent:commit_config:commit_no`,
