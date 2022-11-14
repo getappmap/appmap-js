@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.50.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.49.2...@appland/appmap-v3.50.0) (2022-11-14)
+
+
+### Bug Fixes
+
+* Diff strictly through 'git status -s'; don't look at status flags ([3260c1e](https://github.com/getappmap/appmap-js/commit/3260c1e0d1148133ab3aeaa54237f9e0b43de107))
+
+
+### Features
+
+* Encourage users to commit their AppMap config. ([cf841e2](https://github.com/getappmap/appmap-js/commit/cf841e224c8bb0e360b1cf58b6fff43e9be47a86))
+* Show error if git add or git commit fail. ([2d73442](https://github.com/getappmap/appmap-js/commit/2d73442de1a80ee4a4c92521164cc658eb8620ab))
+
 # [@appland/appmap-v3.49.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.49.1...@appland/appmap-v3.49.2) (2022-11-07)
 
 
