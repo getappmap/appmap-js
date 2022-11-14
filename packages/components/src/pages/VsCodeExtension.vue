@@ -238,13 +238,11 @@
         </ul>
         <p class="no-data-notice__text">
           Check our
-          <a href="https://github.com/getappmap/appmap" target="_blank" rel="noopener noreferrer">
+          <a href="https://appmap.io/docs" target="_blank" rel="noopener noreferrer">
             documentation</a
           >,<br />
           or ask for help in
-          <a href="https://discord.com/invite/N9VUap6" target="_blank" rel="noopener noreferrer">
-            Discord</a
-          >.
+          <a href="https://appmap.io/slack" target="_blank" rel="noopener noreferrer"> Slack</a>.
         </p>
       </div>
       <DiagramGray class="empty-state-diagram" />
