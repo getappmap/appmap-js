@@ -9,6 +9,7 @@ import AgentProcedure from './agentProcedure';
 import Telemetry from '../../telemetry';
 import CommandStruct from './commandStruct';
 import { formatValidationError } from './ValidationResult';
+import { GitStatus } from './types/state';
 
 export default class AgentInstallerProcedure extends AgentProcedure {
   async run(): Promise<void> {
@@ -62,6 +63,11 @@ export default class AgentInstallerProcedure extends AgentProcedure {
     UI.status = 'Installing AppMap...';
 
     try {
+      const filesBeforeGitStatus: GitStatus[] = await this.gitStatus();
+      const filesBefore: string[] = [];
+      for (const file of filesBeforeGitStatus) {
+        filesBefore.push(file.file);
+      }
       await this.installer.checkCurrentConfig();
       await this.installer.installAgent();
 
@@ -79,6 +85,8 @@ export default class AgentInstallerProcedure extends AgentProcedure {
 
       const result = await this.validateProject(useExistingAppMapYml);
 
+      await this.commitConfiguration(filesBefore);
+
       const successMessage = [
         chalk.green('Success! AppMap has finished installing.'),
         '',
@@ -90,8 +98,9 @@ export default class AgentInstallerProcedure extends AgentProcedure {
 
       UI.success(successMessage.join('\n'));
 
-      if (result?.errors) for (const warning of result.errors.filter((e) => e.level === 'warning'))
-        UI.warn(formatValidationError(warning));
+      if (result?.errors)
+        for (const warning of result.errors.filter((e) => e.level === 'warning'))
+          UI.warn(formatValidationError(warning));
     } catch (e) {
       const error = e as Error;
       console.log(error?.message);

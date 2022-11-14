@@ -1141,15 +1141,15 @@ packages:
 
       expectedStubs.forEach((stub) => expect(stub.called).toBe(true));
       const sendEventStub = Telemetry.sendEvent as sinon.SinonStub;
-      expect(sendEventStub).toBeCalledTimes(3);
+      expect(sendEventStub).toBeCalledTimes(7);
       expect(sendEventStub.getCall(0)).toBeCalledWithMatch({
         name: 'install-agent:start',
       });
-      expect(sendEventStub.getCall(1)).toBeCalledWithMatch({
+      expect(sendEventStub.getCall(3)).toBeCalledWithMatch({
         name: 'install-agent:success',
         properties: { installer: 'Maven' },
       });
-      expect(sendEventStub.getCall(2)).toBeCalledWithMatch({
+      expect(sendEventStub.getCall(6)).toBeCalledWithMatch({
         name: 'install-agent:success',
         properties: { installer: 'Gradle' },
       });

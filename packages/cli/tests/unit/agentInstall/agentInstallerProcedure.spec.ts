@@ -4,6 +4,8 @@ import * as CommandRunner from '../../../src/cmds/agentInstaller/commandRunner';
 import fs from 'fs';
 import { TestAgentInstaller } from './TestAgentProcedure';
 import UI from '../../../src/cmds/userInteraction';
+import sinon, { SinonStub } from 'sinon';
+import { withStubbedTelemetry } from '../../helper';
 
 jest.mock('../../../src/cmds/userInteraction');
 jest.mock('../../../src/cmds/agentInstaller/commandRunner');
@@ -14,6 +16,7 @@ const { run } = jest.mocked(CommandRunner);
 const procedure = new AgentInstallerProcedure(new TestAgentInstaller(), '/test/path');
 
 describe(AgentInstallerProcedure, () => {
+  withStubbedTelemetry(sinon);
   it('prints any warnings from the validator', async () => {
     prompt.mockResolvedValue({ confirm: true });
     jest.spyOn(procedure, 'validateProject').mockResolvedValue(
