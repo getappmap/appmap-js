@@ -1,9 +1,10 @@
 import { join } from 'path';
 
-import { promises as fsp, statSync } from 'fs';
+import { existsSync, promises as fsp, statSync } from 'fs';
 import { queue } from 'async';
 import { glob } from 'glob';
 import yaml from 'js-yaml';
+import { OpenAPIV3 } from 'openapi-types';
 import {
   Model,
   parseHTTPServerRequests,
@@ -13,12 +14,15 @@ import {
 } from '@appland/openapi';
 import { Event } from '@appland/models';
 import { Arguments, Argv } from 'yargs';
+import { inspect } from 'util';
 
-export class OpenAPICommand {
+class OpenAPICommand {
   directory: string;
   count: number;
   model: Model;
   securitySchemes: SecuritySchemes;
+
+  public errors: string[] = [];
 
   constructor(directory: string) {
     this.directory = directory;
@@ -27,11 +31,18 @@ export class OpenAPICommand {
     this.count = 0;
   }
 
-  async execute(): Promise<any> {
+  async execute(): Promise<{
+    paths: OpenAPIV3.PathsObject;
+    securitySchemes: Record<string, OpenAPIV3.SecuritySchemeObject>;
+  }> {
     const q = queue(this.collectAppMap.bind(this), 5);
     q.pause();
     // Make sure the directory exists -- if it doesn't, the glob below just returns nothing.
-    statSync(this.directory);
+
+    const appmapDir = join(process.cwd(), this.directory);
+    if (!existsSync(appmapDir)) {
+      throw new Error(`AppMap directory ${appmapDir} does not exist`);
+    }
     const files = glob.sync(`${this.directory}/**/*.appmap.json`);
     files.forEach((f) => q.push(f));
     await new Promise<void>((resolve, reject) => {
@@ -49,13 +60,25 @@ export class OpenAPICommand {
   async collectAppMap(file: string): Promise<void> {
     this.count += 1;
     try {
-      parseHTTPServerRequests(JSON.parse((await fsp.readFile(file)).toString()), (e: Event) => {
-        const request = rpcRequestForEvent(e)!;
-        this.model.addRpcRequest(request);
-        this.securitySchemes.addRpcRequest(request);
+      const data = await fsp.readFile(file, 'utf-8');
+      parseHTTPServerRequests(JSON.parse(data), (e: Event) => {
+        const request = rpcRequestForEvent(e);
+        if (request) {
+          this.model.addRpcRequest(request);
+          this.securitySchemes.addRpcRequest(request);
+        }
       });
     } catch (e) {
-      throw new Error(`Error parsing ${file}: ${e}`);
+      // Re-throwing this error crashes the whole process.
+      // So if these is a malformed AppMap, indicate it here but don't blow everything up.
+      // Do not write to stdout!
+      let errorString: string;
+      try {
+        errorString = inspect(e);
+      } catch (x) {
+        errorString = ((e as any) || '').toString();
+      }
+      this.errors.push(errorString);
     }
   }
 }
@@ -68,8 +91,9 @@ async function loadTemplate(fileName: string): Promise<any> {
   return yaml.load((await fsp.readFile(fileName)).toString());
 }
 
-module.exports = {
+export default {
   command: 'openapi',
+  OpenAPICommand,
   aliases: ['swagger'],
   describe: 'Generate OpenAPI from AppMaps in a directory',
   builder(args: Argv) {
@@ -108,11 +132,19 @@ module.exports = {
       }
     }
 
-    const openapi = await new OpenAPICommand(argv.appmapDir).execute();
+    const cmd = new OpenAPICommand(argv.appmapDir);
+    const openapi = await cmd.execute();
 
     const template = await loadTemplate(argv.openapiTemplate);
     template.paths = openapi.paths;
-    template.components = openapi.components;
+
+    // TODO: This should be made available, but isn't
+    template.components = (openapi as any).components;
+
+    for (const error of cmd.errors) {
+      console.warn(error);
+    }
+
     if (openapiTitle) {
       tryConfigure('info.title', () => {
         template.info.title = openapiTitle;

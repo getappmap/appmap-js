@@ -6,8 +6,13 @@ export type PendingEvent = {
   args: any[];
 };
 
+export const MaxMSBetween = 1000;
+
 export default class EventAggregator {
-  constructor(private callback: (events: PendingEvent[]) => void, private maxMsBetween = 1000) {}
+  constructor(
+    private callback: (events: PendingEvent[]) => void,
+    private maxMsBetween = MaxMSBetween
+  ) {}
 
   private pending: PendingEvent[] = [];
   private push(emitter: EventEmitter, event: string, args: any[]) {
