@@ -8,6 +8,12 @@ import { withStubbedTelemetry } from '../../helper';
 describe('stats subcommand', () => {
   withStubbedTelemetry();
 
+  const cwd = process.cwd();
+
+  afterEach(() => {
+    process.chdir(cwd);
+  });
+
   it('works', async () => {
     let argv = {
       _: ['stats'],

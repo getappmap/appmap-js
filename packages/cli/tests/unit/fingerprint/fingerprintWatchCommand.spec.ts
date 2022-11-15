@@ -9,6 +9,7 @@ import { verbose } from '../../../src/utils';
 import OriginalTelemetry from '../../../src/telemetry';
 import { once } from 'events';
 import Fingerprinter from '../../../src/fingerprint/fingerprinter';
+import { MaxMSBetween } from '../../../src/lib/eventAggregator';
 
 jest.mock('../../../src/telemetry');
 const Telemetry = jest.mocked(OriginalTelemetry);
@@ -93,10 +94,10 @@ describe(FingerprintWatchCommand, () => {
       it('aggregates indexes that occur less than one second apart', async () => {
         placeMap();
         await once(handler, 'index');
-        jest.advanceTimersByTime(512);
+        jest.advanceTimersByTime(MaxMSBetween / 2.0);
         placeMap('../fixtures/ruby/user_page_scenario.appmap.json');
         await once(handler, 'index');
-        jest.advanceTimersByTime(2048);
+        jest.advanceTimersByTime(MaxMSBetween * 2.0);
 
         expect(Telemetry.sendEvent).toHaveBeenCalledTimes(1);
         const data = Telemetry.sendEvent.mock.calls[0][0];
@@ -114,10 +115,10 @@ describe(FingerprintWatchCommand, () => {
       it('send separate events for indexes that occur more than one second apart', async () => {
         placeMap();
         await once(handler, 'index');
-        jest.advanceTimersByTime(1024);
+        jest.advanceTimersByTime(MaxMSBetween * 1.1);
         placeMap('../fixtures/ruby/user_page_scenario.appmap.json');
         await once(handler, 'index');
-        jest.advanceTimersByTime(2048);
+        jest.advanceTimersByTime(MaxMSBetween * 2);
 
         expect(Telemetry.sendEvent).toHaveBeenCalledTimes(2);
         for (const [data] of Telemetry.sendEvent.mock.calls) {

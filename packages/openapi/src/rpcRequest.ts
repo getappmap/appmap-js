@@ -102,11 +102,15 @@ class ClientRPCRequest implements RPCRequest {
 }
 
 function isServerEvent(event: Event): event is ServerRpcEvent {
-  return !!event.httpServerRequest && !!event.httpServerResponse;
+  return (
+    !!event.httpServerRequest &&
+    !!event.httpServerResponse &&
+    !!(event.httpServerRequest.normalized_path_info || event.httpServerRequest?.path_info)
+  );
 }
 
 function isClientEvent(event: Event): event is ClientRpcEvent {
-  return !!event.httpClientRequest && !!event.httpClientResponse;
+  return !!event.httpClientRequest && !!event.httpClientResponse && !!event.httpClientRequest.url;
 }
 
 export function rpcRequestForEvent(event: Event): RPCRequest | undefined {

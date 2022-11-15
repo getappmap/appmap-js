@@ -19,7 +19,7 @@ const appMapCatalog = require('./appMapCatalog');
 const FingerprintDirectoryCommand = require('./fingerprint/fingerprintDirectoryCommand');
 const FingerprintWatchCommand = require('./fingerprint/fingerprintWatchCommand').default;
 const Depends = require('./depends');
-import * as OpenAPICommand from './cmds/openapi';
+import { default as OpenAPICommand } from './cmds/openapi';
 const InventoryCommand = require('./inventoryCommand');
 const OpenCommand = require('./cmds/open/open');
 const InspectCommand = require('./cmds/inspect/inspect');
