@@ -2,6 +2,8 @@ import alias from '@rollup/plugin-alias';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
+import typescript from '@rollup/plugin-typescript';
+
 import pkg from './package.json';
 
 const configBase = {
@@ -15,7 +17,7 @@ const configCjs = {
     file: 'dist/index.cjs',
     format: 'cjs',
   },
-  plugins: [resolve(), commonjs()],
+  plugins: [resolve(), commonjs(), typescript()],
 };
 
 const configEsm = {
@@ -32,6 +34,7 @@ const configEsm = {
     }),
     resolve(),
     commonjs(),
+    typescript(),
     replace({
       'process.env.NODE_ENV': 'production',
       'process.env.ES_BUILD': true,
