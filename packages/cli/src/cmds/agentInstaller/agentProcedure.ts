@@ -199,7 +199,7 @@ export default abstract class AgentProcedure {
     let filesDiff: string[] = [];
     filesDiff = filesAfter.filter((file) => !filesBefore.includes(file));
     filesDiff.sort();
-    let filesDiffText = filesDiff.flat().join('__');
+    let filesDiffText = filesDiff.flat().join(',');
     if (filesDiff.length == 0) {
       Telemetry.sendEvent({
         name: `install-agent:commit_config:should_not_commit`,
