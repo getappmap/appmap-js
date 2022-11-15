@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.1.1](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.1.0...@appland/openapi-v1.1.1) (2022-11-15)
+
+
+### Bug Fixes
+
+* Ignore requests without path info ([939106f](https://github.com/getappmap/appmap-js/commit/939106f34180b9312cbe289a4244fea8d525bac1))
+
 # [@appland/openapi-v1.1.0](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.0.3...@appland/openapi-v1.1.0) (2022-11-01)
 
 
