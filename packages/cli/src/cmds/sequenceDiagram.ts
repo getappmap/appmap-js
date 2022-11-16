@@ -13,12 +13,12 @@ import {
   Formatters,
 } from '@appland/sequence-diagram';
 
-export const command = 'sequence-diagram appmap';
+export const command = 'sequence-diagram [appmaps...]';
 export const describe = 'Generate a sequence diagram for an AppMap';
 
 export const builder = (args: yargs.Argv) => {
-  args.positional('appmap', {
-    type: 'string',
+  args.positional('appmaps', {
+    array: true,
     demandOption: true,
   });
 
@@ -47,8 +47,8 @@ export const handler = async (argv: any) => {
   verbose(argv.verbose);
   handleWorkingDirectory(argv.directory);
 
-  if (!argv.appmap) {
-    console.log(`appmap argument is required`);
+  if (!argv.appmaps) {
+    console.log(`appmaps argument is required`);
     process.exitCode = 1;
     return;
   }
@@ -59,30 +59,33 @@ export const handler = async (argv: any) => {
     return;
   }
 
-  const appmapData = JSON.parse(await readFile(argv.appmap, 'utf-8'));
-  const appmap = buildAppMap().source(appmapData).build();
-
   const specOptions = {} as SequenceDiagramOptions;
   if (argv.exclude && argv.exclude.length > 0) specOptions.exclude = argv.exclude;
 
-  const specification = Specification.build(appmap, specOptions);
-
-  const diagram = buildDiagram(argv.appmap, appmap, specification);
-  const template = formatDiagram(argv.format, diagram, argv.appmap);
-
   if (argv.outputDir) await mkdir(argv.outputDir, { recursive: true });
 
-  const outputFileName = [
-    basename(argv.appmap, '.appmap.json'),
-    '.sequence',
-    template.extension,
-  ].join('');
+  for (const appmapFileName of argv.appmaps) {
+    const appmapData = JSON.parse(await readFile(appmapFileName, 'utf-8'));
 
-  let outputPath: string;
-  if (argv.outputDir) outputPath = join(argv.outputDir, outputFileName);
-  else outputPath = join(dirname(argv.appmap), outputFileName);
+    const appmap = buildAppMap().source(appmapData).build();
 
-  await writeFile(outputPath, template.diagram);
+    const specification = Specification.build(appmap, specOptions);
 
-  console.log(`Printed diagram ${outputPath}`);
+    const diagram = buildDiagram(appmapFileName, appmap, specification);
+    const template = formatDiagram(argv.format, diagram, appmapFileName);
+
+    const outputFileName = [
+      basename(appmapFileName, '.appmap.json'),
+      '.sequence',
+      template.extension,
+    ].join('');
+
+    let outputPath: string;
+    if (argv.outputDir) outputPath = join(argv.outputDir, outputFileName);
+    else outputPath = join(dirname(appmapFileName), outputFileName);
+
+    await writeFile(outputPath, template.diagram);
+
+    console.log(`Printed diagram ${outputPath}`);
+  }
 };
