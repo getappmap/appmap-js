@@ -440,6 +440,22 @@ export default {
     classes() {
       return this.isLoading ? 'app--loading' : '';
     },
+    /**
+     * TODO: Replace with code akin to this, once resolving type expectation error:
+      const declutter = new Declutter();
+      declutter.limitRootEventsToHTTP = !!this.filters.declutter.limitRootEvents.on;
+      declutter.hideMediaRequests = !!this.filters.declutter.hideMediaRequests.on;
+      declutter.hideUnlabeled = !!this.filters.declutter.hideUnlabeled.on;
+      if (this.filters.declutter.hideElapsedTimeUnder.on)
+        declutter.hideElapsedTimeUnder = this.filters.declutter.hideElapsedTimeUnder.time;
+
+      if (this.filters.declutter.hideName.on)
+        declutter.hideName = this.filters.declutter.hideName.names;
+
+      const filter = new Filter(declutter);
+      const appMap = filter.filterAppMap(this.$store.state.appMap);
+      return appMap;
+     */
     filteredAppMap() {
       const { appMap } = this.$store.state;
       const { classMap } = appMap;
@@ -1030,6 +1046,7 @@ export default {
       this.filters.rootObjects.splice(index, 1);
     },
 
+    // TODO: Remove
     filterMediaRequests(events) {
       const excludedEvents = [];
       const mediaRegex = [
@@ -1116,6 +1133,7 @@ export default {
       return events.filter((e) => !excludedEvents.includes(e.id));
     },
 
+    // TODO: Remove
     codeObjectIsMatched(object, query) {
       if (query.startsWith('label:')) {
         const labelRegExp = new RegExp(`^${query.replace('label:', '').replace('*', '.*')}$`, 'ig');
