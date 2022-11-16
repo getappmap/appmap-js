@@ -38,6 +38,7 @@ const configEsm = {
     replace({
       'process.env.NODE_ENV': 'production',
       'process.env.ES_BUILD': true,
+      preventAssignment: true,
     }),
   ],
 };
