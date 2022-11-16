@@ -27,7 +27,9 @@ properties:
   classMap:
     type: array
     items:
-      $ref: "#/definitions/package"
+      anyOf:
+        - $ref: "#/definitions/package"
+        - $ref: "#/definitions/class"
   events:
     type: array
     items:
