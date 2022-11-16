@@ -32,6 +32,7 @@ const StatsCommand = require('./cmds/stats/stats');
 import PruneCommand from './cmds/prune/prune';
 import { handleWorkingDirectory } from './lib/handleWorkingDirectory';
 import { locateAppMapDir } from './lib/locateAppMapDir';
+import { AppMap } from '@appland/models';
 
 class DiffCommand {
   public appMapNames: any;
@@ -149,18 +150,10 @@ class DiffCommand {
 }
 
 class DetailedDiff {
-  protected algorithm: string;
-  protected baseAppMap: any;
-  protected workingAppMap: any;
-
-  constructor(algorithm, baseAppMap, workingAppMap) {
-    this.algorithm = algorithm;
-    this.baseAppMap = baseAppMap;
-    this.workingAppMap = workingAppMap;
-  }
+  constructor(public algorithm: string, public baseAppMap: AppMap, public workingAppMap: AppMap) {}
 
   async diff() {
-    const canonicalizeAppMap = (appmap) => {
+    const canonicalizeAppMap = (appmap: AppMap) => {
       const canonicalForm = canonicalize(this.algorithm, appmap);
       return yaml.dump(canonicalForm);
     };
