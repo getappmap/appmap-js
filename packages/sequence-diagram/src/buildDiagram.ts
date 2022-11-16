@@ -1,4 +1,4 @@
-import { AppMap, Event } from '@appland/models';
+import { AppMap, Event, Filter } from '@appland/models';
 import { classNameToOpenAPIType } from '@appland/openapi';
 import assert from 'assert';
 import { createHash } from 'crypto';
@@ -23,9 +23,12 @@ const MAX_WINDOW_SIZE = 5;
 
 export default function buildDiagram(
   _appmapFile: string,
-  appmap: AppMap,
+  fullAppMap: AppMap,
   specification: Specification
 ): Diagram {
+  const filter = new Filter();
+  const appmap = filter.filterAppMap(fullAppMap);
+
   const events = selectEvents(appmap, specification);
 
   const actors: Actor[] = [];
