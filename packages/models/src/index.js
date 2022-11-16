@@ -12,4 +12,5 @@ export { CodeObjectType } from './codeObjectType';
 export { default as analyzeSQL, abstractSqlAstJSON } from './sql/analyze';
 export { default as normalizeSQL } from './sql/normalize';
 export { default as parseSQL } from './sql/parse';
+export { Declutter, default as Filter } from './filter.ts';
 export * from './util';

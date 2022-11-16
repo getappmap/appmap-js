@@ -130,6 +130,7 @@ declare module '@appland/models' {
     readonly codeObjects: CodeObject[];
     readonly httpObject?: CodeObject;
     readonly sqlObject?: CodeObject;
+    readonly roots: CodeObject[];
 
     visit(fn: (codeObject: CodeObject) => void): void;
     search(query: string): CodeObject[];
@@ -329,6 +330,21 @@ declare module '@appland/models' {
     columns: string[];
     joinCount: number;
   };
+
+  export class Declutter {
+    limitRootEventsToHTTP: boolean;
+    hideMediaRequest: boolean;
+    hideUnlabeled: boolean;
+    hideElapsedTimeUnder: number | undefined;
+    hideName: string[] | undefined;
+  }
+
+  export class Filter {
+    public declutter: Declutter;
+    public rootObjects: string[];
+
+    filterAppMap(appMap: AppMap): AppMap;
+  }
 
   export class ParseError extends Error {}
 
