@@ -17,19 +17,12 @@ import { Arguments, Argv } from 'yargs';
 import { inspect } from 'util';
 
 class OpenAPICommand {
-  directory: string;
-  count: number;
-  model: Model;
-  securitySchemes: SecuritySchemes;
+  private readonly model = new Model();
+  private readonly securitySchemes = new SecuritySchemes();
 
   public errors: string[] = [];
 
-  constructor(directory: string) {
-    this.directory = directory;
-    this.model = new Model();
-    this.securitySchemes = new SecuritySchemes();
-    this.count = 0;
-  }
+  constructor(private readonly appmapDir: string) {}
 
   async execute(): Promise<{
     paths: OpenAPIV3.PathsObject;
@@ -37,13 +30,13 @@ class OpenAPICommand {
   }> {
     const q = queue(this.collectAppMap.bind(this), 5);
     q.pause();
-    // Make sure the directory exists -- if it doesn't, the glob below just returns nothing.
 
-    const appmapDir = join(process.cwd(), this.directory);
-    if (!existsSync(appmapDir)) {
-      throw new Error(`AppMap directory ${appmapDir} does not exist`);
+    // Make sure the directory exists -- if it doesn't, the glob below just returns nothing.
+    if (!existsSync(this.appmapDir)) {
+      throw new Error(`AppMap directory ${this.appmapDir} does not exist`);
     }
-    const files = glob.sync(`${this.directory}/**/*.appmap.json`);
+
+    const files = glob.sync(join(this.appmapDir, '**', '*.appmap.json'));
     files.forEach((f) => q.push(f));
     await new Promise<void>((resolve, reject) => {
       q.drain(resolve);
@@ -58,7 +51,6 @@ class OpenAPICommand {
   }
 
   async collectAppMap(file: string): Promise<void> {
-    this.count += 1;
     try {
       const data = await fsp.readFile(file, 'utf-8');
       parseHTTPServerRequests(JSON.parse(data), (e: Event) => {
