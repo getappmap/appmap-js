@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.50.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.50.1...@appland/appmap-v3.50.2) (2022-11-17)
+
+
+### Bug Fixes
+
+* OpenAPI accepts either relative or absolute `--appmap-dir` paths ([9b1d8da](https://github.com/getappmap/appmap-js/commit/9b1d8daba53b941e8b9f4fcc2a8d7d2971126116))
+
 # [@appland/appmap-v3.50.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.50.0...@appland/appmap-v3.50.1) (2022-11-15)
 
 
