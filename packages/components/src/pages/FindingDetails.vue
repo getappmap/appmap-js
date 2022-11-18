@@ -1,0 +1,343 @@
+<template>
+  <v-quickstart-layout>
+    <section v-if="hasNoData" class="finding-details">
+      <h1>Oops, Something Went Wrong!</h1>
+      <p>We couldn't find any information about this finding</p>
+    </section>
+    <div v-else>
+      <section class="finding-details">
+        <div class="header-wrap">
+          <header>
+            <h4 class="subhead">Finding</h4>
+            <h1 data-cy="title">{{ title }}</h1>
+            <p v-if="description">{{ description }}</p>
+          </header>
+          <div class="header-controls">
+            <!-- TODO
+          <div class="btn">Status: <strong>New</strong></div>
+          <div class="btn">Share</div>
+          -->
+            <a :href="docsLink"><div class="btn">View the Docs</div></a>
+          </div>
+        </div>
+
+        <main>
+          <div class="finding-details-wrap row">
+            <div class="findings-overview">
+              <h3>Finding Overview</h3>
+              <ul class="card stack">
+                <!-- TODO
+              <li>Time: 2022-05-19 22:35:49 UTC</li>
+              <li>Status: New</li>
+              <li>Commit: <a href="/">1ea201b</a></li>
+              -->
+                <li>Category: {{ category }}</li>
+                <li v-for="(link, reference) in references" :key="reference">
+                  Reference: <a :href="link">{{ reference }}</a>
+                </li>
+              </ul>
+            </div>
+            <div class="event-summary">
+              <h3>Event Summary</h3>
+              <ul class="card stack">
+                <li>
+                  <span class="code"> {{ message }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="stack-trace finding-details-wrap col">
+            <h3>Stack Trace</h3>
+            <ul class="card">
+              <li v-for="location in stackLocations" :key="location.uri.path">
+                <v-popper
+                  class="hover-text-popper"
+                  :text="location.uri.path"
+                  placement="top"
+                  text-align="left"
+                >
+                  <a href="#" @click.prevent="openInSourceCode(location)">{{
+                    displayLocation(location)
+                  }}</a>
+                </v-popper>
+              </li>
+            </ul>
+          </div>
+        </main>
+      </section>
+      <div class="analysis-findings full-width">
+        <h3>
+          <VAppmapPin />
+          Found in {{ associatedMaps.length }} AppMap{{
+            associatedMaps.length === 1 ? undefined : 's'
+          }}
+        </h3>
+        <ul class="appmap-list">
+          <li v-for="map in associatedMaps" :key="map.fullPath">
+            <a href="#" @click.prevent="openMap(map.fullPath, map.uri)">{{ map.appMapName }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </v-quickstart-layout>
+</template>
+
+<script>
+import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
+import Navigation from '@/components/mixins/navigation';
+import VAppmapPin from '@/assets/appmap-pin.svg';
+import VPopper from '@/components/Popper.vue';
+
+export default {
+  name: 'FindingDetails',
+
+  components: {
+    VQuickstartLayout,
+    VAppmapPin,
+    VPopper,
+  },
+
+  mixins: [Navigation],
+
+  props: {
+    findings: {
+      default: () => [],
+      type: Array,
+    },
+  },
+
+  methods: {
+    displayLocation(location) {
+      const lineNumber = location.range[0] && location.range[0].line;
+      const { truncatedPath } = location;
+      if (lineNumber && lineNumber !== 0) {
+        return `${truncatedPath}:${lineNumber}`;
+      }
+      return `${truncatedPath}`;
+    },
+
+    openInSourceCode(location) {
+      this.$root.$emit('open-in-source-code', location);
+    },
+
+    openMap(mapFile, uri) {
+      this.$root.$emit('open-map', mapFile, uri);
+    },
+  },
+
+  computed: {
+    hasNoData() {
+      return this.findings.length === 0;
+    },
+
+    representativeFinding() {
+      return this.findings[0];
+    },
+
+    associatedMaps() {
+      return this.findings.map((finding) => {
+        const uri = finding.appMapUri;
+        const fullPath = finding.finding.appMapFile;
+        const { appMapName } = finding;
+
+        return {
+          fullPath,
+          appMapName,
+          uri,
+        };
+      });
+    },
+
+    stackLocations() {
+      return this.representativeFinding.stackLocations;
+    },
+
+    category() {
+      return this.representativeFinding.finding.impactDomain;
+    },
+
+    title() {
+      return this.representativeFinding.finding.ruleTitle;
+    },
+
+    message() {
+      return this.representativeFinding.finding.message;
+    },
+
+    description() {
+      return this.representativeFinding.ruleInfo && this.representativeFinding.ruleInfo.description;
+    },
+
+    references() {
+      return (
+        (this.representativeFinding.ruleInfo &&
+          this.representativeFinding.ruleInfo.frontMatter &&
+          this.representativeFinding.ruleInfo.frontMatter.references) ||
+        {}
+      );
+    },
+
+    docsLink() {
+      return `https://appmap.io/docs/analysis/rules-reference.html#${this.representativeFinding.finding.ruleId}`;
+    },
+  },
+};
+</script>
+<style lang="scss" scoped>
+.analysis-findings.full-width {
+  margin: 0 -1.75rem;
+  h3 {
+    padding: 0 2rem;
+  }
+  .appmap-list {
+    padding: 0;
+    border-top: 1px solid lighten($gray2, 15);
+    li {
+      padding: 0.5rem 2rem;
+      border-bottom: 1px solid lighten($gray2, 15);
+      a {
+        color: $white;
+      }
+      &:hover {
+        background-color: darken($gray2, 05);
+      }
+    }
+  }
+}
+.finding-details {
+  .header-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    header {
+      width: 70%;
+    }
+    .header-controls {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      align-items: flex-start;
+      justify-content: flex-end;
+      width: 100%;
+      .btn {
+        border: 1px solid $purps3;
+        border-radius: 0.5rem;
+        padding: 0.2rem 0.5rem;
+        transition: $transition;
+        &:hover {
+          background-color: $purps3;
+          color: $white;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .subhead {
+    font-size: 1.1rem;
+    color: $gray4;
+    line-height: 1.6rem;
+    text-transform: uppercase;
+  }
+
+  .findings-sort {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    select {
+      border-radius: 6px;
+      border: 1px solid $purps3;
+      background-color: transparent;
+      color: $white;
+      padding: 0.4rem 0.5rem;
+      margin-left: 0.35rem;
+    }
+  }
+
+  .finding-details-wrap {
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+    &.row {
+      flex-direction: row;
+    }
+    &.col {
+      flex-direction: column;
+      gap: 0;
+    }
+    h3 {
+      color: $gray4;
+    }
+    ul {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      justify-content: flex-start;
+      padding: 0;
+      width: 100%;
+      li {
+        border-radius: $border-radius;
+        background-color: $gray1;
+        padding: 0.25rem 1rem 0.25rem 1.5rem;
+        transition: $transition;
+      }
+    }
+    .code {
+      font-weight: 800;
+      color: $gray4;
+    }
+    .card {
+      border-radius: 0.5rem;
+      background-color: $gray1;
+      padding: 0.25rem 0;
+      gap: 0;
+      li {
+        border-bottom: 1px solid $gray2;
+        border-radius: 0;
+        width: 100%;
+        &:last-of-type {
+          border-bottom: 0;
+        }
+      }
+      &ul.stack {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    .findings-overview,
+    .event-summary {
+      width: 100%;
+    }
+  }
+
+  .findings-list {
+    margin: 0 -1.75rem;
+    ul {
+      padding: 0;
+      list-style-type: none;
+      li {
+        padding: 0.25rem 1rem;
+        width: 100%;
+        transition: $transition;
+        &:hover {
+          background-color: darken($gray2, 05);
+        }
+      }
+    }
+  }
+  &.full-width {
+    width: 100%;
+    margin: 0 -1.75rem;
+  }
+}
+
+.b-0 {
+  border: none;
+}
+
+@media (min-width: 1000px) {
+}
+
+@media (max-width: 1000px) {
+}
+</style>
