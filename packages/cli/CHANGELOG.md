@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.50.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.50.2...@appland/appmap-v3.50.3) (2022-11-18)
+
+
+### Bug Fixes
+
+* Show better error message if there's no elapsed_instrumentation data in the appmaps. ([90e112f](https://github.com/getappmap/appmap-js/commit/90e112f5acd3cb65dd9449a81b105fbe57ffde7b))
+
 # [@appland/appmap-v3.50.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.50.1...@appland/appmap-v3.50.2) (2022-11-17)
 
 
