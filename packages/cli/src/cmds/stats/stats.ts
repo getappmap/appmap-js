@@ -231,7 +231,9 @@ export async function handler(argv: any, handlerCaller: string = 'from_stats') {
           sortedExecutionTimes.length > 0 &&
           sortedExecutionTimes[0].elapsedInstrumentationTime === 0
         ) {
-          console.log('No "elapsed_instrumentation" data in the AppMaps.');
+          console.log(
+            "These AppMaps don't contain function overhead data. Please update your appmap package to the latest version."
+          );
         } else {
           sortedExecutionTimes.slice(0, limitToUse).forEach((executionTime) => {
             slowestExecutionTimes.push({
