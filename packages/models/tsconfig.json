@@ -3,8 +3,9 @@
   "include": ["src/**/*"],
   "compilerOptions": {
     "allowJs": true,
-    "checkJs": true,
+    "checkJs": false, // FIXME
     "noEmit": true,
+    "resolveJsonModule": true,
     "target": "es2021"
   }
 }
