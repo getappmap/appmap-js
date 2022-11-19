@@ -296,7 +296,6 @@ __metadata:
   dependencies:
     "@appland/sql-parser": ^1.5.0
     "@types/crypto-js": ^4.1.1
-    cross-env: ^7.0.3
     crypto-js: ^4.0.0
     eslint: ^7.25.0
     eslint-config-airbnb-base: ^14.2.1
@@ -306,7 +305,9 @@ __metadata:
     jest: ^27.4.7
     lint-staged: ^10.5.4
     prettier: ^2.7.1
+    ts-jest: ^27.1.4
     tsup: ^6.5.0
+    typescript: ^4.5.4
   languageName: unknown
   linkType: soft
 

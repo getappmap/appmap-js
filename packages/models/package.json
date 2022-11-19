@@ -13,7 +13,7 @@
     "lint": "eslint 'src/**/*.js' 'tests/**/*.js'",
     "lint:fix": "eslint 'src/**/*.js' 'tests/**/*.js' --fix",
     "pre-commit": "lint-staged",
-    "test": "cross-env NODE_OPTIONS='--experimental-vm-modules' jest",
+    "test": "jest",
     "watch": "tsup --watch"
   },
   "lint-staged": {
@@ -30,7 +30,6 @@
   "license": "MIT",
   "devDependencies": {
     "@types/crypto-js": "^4.1.1",
-    "cross-env": "^7.0.3",
     "eslint": "^7.25.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -39,7 +38,9 @@
     "jest": "^27.4.7",
     "lint-staged": "^10.5.4",
     "prettier": "^2.7.1",
-    "tsup": "^6.5.0"
+    "ts-jest": "^27.1.4",
+    "tsup": "^6.5.0",
+    "typescript": "^4.5.4"
   },
   "dependencies": {
     "@appland/sql-parser": "^1.5.0",
