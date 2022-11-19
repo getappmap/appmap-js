@@ -1,4 +1,5 @@
-import sha256 from 'crypto-js/sha256';
+// eslint-disable-next-line import/extensions
+import sha256 from 'crypto-js/sha256.js';
 import analyze from './sql/analyze';
 
 export const hasProp = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop);
