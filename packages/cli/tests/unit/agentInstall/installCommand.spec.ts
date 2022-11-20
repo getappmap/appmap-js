@@ -466,13 +466,13 @@ packages:
 
   describe('A Python project', () => {
     const pythonVersion = (cmdStruct: CommandStruct) => {
-      expect(cmdStruct.program).toEqual('python');
+      expect(cmdStruct.program).toEqual('python3');
       expect(cmdStruct.args).toEqual(['--version']);
       return Promise.resolve({ stdout: 'Python 3.7.0', stderr: '' });
     };
 
     const pythonPath = (cmdStruct: CommandStruct) => {
-      expect(cmdStruct.program).toEqual('python');
+      expect(cmdStruct.program).toEqual('python3');
       expect(cmdStruct.args).toEqual(['-c', "'import sys; print(sys.prefix)'"]);
       return Promise.resolve({ stdout: '/usr/local', stderr: '' });
     };
@@ -521,15 +521,15 @@ packages:
       });
 
       const installAgent = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('pip');
-        expect(cmdStruct.args).toEqual(['install', '-r', 'requirements.txt']);
+        expect(cmdStruct.program).toEqual('python3');
+        expect(cmdStruct.args).toEqual(['-m', 'pip', 'install', '-r', 'requirements.txt']);
         const ret = { stdout: '', stderr: '' };
         return Promise.resolve(ret);
       };
 
       const initAgent = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('appmap-agent-init');
-        expect(cmdStruct.args.length).toEqual(0);
+        expect(cmdStruct.program).toEqual('python3');
+        expect(cmdStruct.args).toEqual(['-m', 'appmap.command.appmap_agent_init']);
         const fakeConfig = `
 {
   "configuration": {
@@ -542,8 +542,8 @@ packages:
 
       describe('below version 22.2.0', () => {
         const pipVersion = (cmdStruct: CommandStruct) => {
-          expect(cmdStruct.program).toEqual('pip');
-          expect(cmdStruct.args).toEqual(['--version']);
+          expect(cmdStruct.program).toEqual('python3');
+          expect(cmdStruct.args).toEqual(['-m', 'pip', '--version']);
           return Promise.resolve({
             stdout:
               'pip 22.0 from /home/user/.pyenv/versions/3.7.0/lib/python3.7/site-packages/pip (python 3.7)',
@@ -552,9 +552,9 @@ packages:
         };
 
         const checkCurrentConfig = (cmdStruct: CommandStruct) => {
-          expect(cmdStruct.program).toEqual('pip');
+          expect(cmdStruct.program).toEqual('python3');
           const args = cmdStruct.args;
-          expect(args).toEqual(['install', '-r', 'requirements.txt']);
+          expect(args).toEqual(['-m', 'pip', 'install', '-r', 'requirements.txt']);
           const ret = { stdout: '', stderr: '' };
           return Promise.resolve(ret);
         };
@@ -583,14 +583,14 @@ packages:
 
       describe('above version 22.2.0', () => {
         const pythonVersion = (cmdStruct: CommandStruct) => {
-          expect(cmdStruct.program).toEqual('python');
+          expect(cmdStruct.program).toEqual('python3');
           expect(cmdStruct.args).toEqual(['--version']);
           return Promise.resolve({ stdout: 'Python 3.10.7', stderr: '' });
         };
 
         const pipVersion = (cmdStruct: CommandStruct) => {
-          expect(cmdStruct.program).toEqual('pip');
-          expect(cmdStruct.args).toEqual(['--version']);
+          expect(cmdStruct.program).toEqual('python3');
+          expect(cmdStruct.args).toEqual(['-m', 'pip', '--version']);
           return Promise.resolve({
             stdout:
               'pip 22.2.2 from /home/user/.pyenv/versions/3.10.7/lib/python3.7/site-packages/pip (python 3.10)',
@@ -599,9 +599,9 @@ packages:
         };
 
         const checkCurrentConfig = (cmdStruct: CommandStruct) => {
-          expect(cmdStruct.program).toEqual('pip');
+          expect(cmdStruct.program).toEqual('python3');
           const args = cmdStruct.args;
-          expect(args).toEqual(['install', '-r', 'requirements.txt', '--dry-run']);
+          expect(args).toEqual(['-m', 'pip', 'install', '-r', 'requirements.txt', '--dry-run']);
           const ret = { stdout: '', stderr: '' };
           return Promise.resolve(ret);
         };
@@ -658,7 +658,7 @@ packages:
       };
 
       const pythonVersion = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('python');
+        expect(cmdStruct.program).toEqual('python3');
         expect(cmdStruct.args).toEqual(['--version']);
         return Promise.resolve({ stdout: 'Python 3.7.0', stderr: '' });
       };

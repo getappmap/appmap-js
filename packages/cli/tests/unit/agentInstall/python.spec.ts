@@ -92,8 +92,8 @@ describe('Python Agent Installation', () => {
 
     it('provides the correct init command', async () => {
       const cmdStruct = await btInstaller.initCommand();
-      expect(cmdStruct.program).toBe('appmap-agent-init');
-      expect(cmdStruct.args).toEqual([]);
+      expect(cmdStruct.program).toBe('python3');
+      expect(cmdStruct.args).toEqual(['-m', 'appmap.command.appmap_agent_init']);
     });
   });
 
