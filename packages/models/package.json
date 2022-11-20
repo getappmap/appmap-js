@@ -10,14 +10,14 @@
   },
   "scripts": {
     "build": "tsup",
-    "lint": "eslint 'src/**/*.js' 'tests/**/*.js'",
-    "lint:fix": "eslint 'src/**/*.js' 'tests/**/*.js' --fix",
+    "lint": "eslint 'src/**/*.[jt]s' 'tests/**/*.[jt]s'",
+    "lint:fix": "eslint 'src/**/*.[jt]s' 'tests/**/*.[jt]s' --fix",
     "pre-commit": "lint-staged",
     "test": "jest",
     "watch": "tsup --watch"
   },
   "lint-staged": {
-    "*.{js,md,json}": [
+    "*.{js,ts,md,json}": [
       "prettier --write"
     ]
   },
@@ -30,11 +30,11 @@
   "license": "MIT",
   "devDependencies": {
     "@types/crypto-js": "^4.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "@typescript-eslint/parser": "^5.43.0",
     "eslint": "^7.25.0",
-    "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.4.0",
     "jest": "^27.4.7",
     "lint-staged": "^10.5.4",
     "prettier": "^2.7.1",
