@@ -1,21 +1,19 @@
 module.exports = {
-  root: true,
   env: {
-    es2020: true,
+    es2021: true,
+    'shared-node-browser': true
   },
-  extends: ['airbnb-base', 'prettier'],
-  plugins: ['prettier'],
+  extends: [
+    '../../eslintrc.js',
+    'plugin:import/recommended',
+    'plugin:import/typescript'
+  ],
   ignorePatterns: ['**/*.cjs'],
-  parserOptions: {
-    parser: 'babel-eslint',
-    ecmaVersion: 11,
-  },
   rules: {
     'no-param-reassign': ['error', { props: false }],
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'prettier/prettier': ['error'],
   },
   overrides: [
     {
@@ -23,6 +21,24 @@ module.exports = {
       env: {
         jest: true,
       },
+    },
+    {
+      files: ['**/*.js'],
+      rules: {
+        // TODO: fix these and remove this override
+        '@typescript-eslint/adjacent-overload-signatures': 'warn',
+        '@typescript-eslint/ban-ts-comment': 'warn',
+        '@typescript-eslint/explicit-module-boundary-types': 'warn',
+        '@typescript-eslint/no-empty-function': 'warn',
+        '@typescript-eslint/no-this-alias': 'warn',
+        '@typescript-eslint/no-unsafe-argument': 'warn',
+        '@typescript-eslint/no-unsafe-assignment': 'warn',
+        '@typescript-eslint/no-unsafe-call': 'warn',
+        '@typescript-eslint/no-unsafe-member-access': 'warn',
+        '@typescript-eslint/no-unsafe-return': 'warn',
+        '@typescript-eslint/restrict-plus-operands': 'warn',
+        '@typescript-eslint/restrict-template-expressions': 'warn',
+      }
     },
   ],
 };
