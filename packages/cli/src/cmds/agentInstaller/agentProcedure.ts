@@ -226,8 +226,9 @@ export default abstract class AgentProcedure {
       type: 'confirm',
       name: 'commit',
       message: [
-        `AppMap recommends you have the installer commit in Git for you the following`,
-        `  files, to not have to install AppMap again in this repository:`,
+        `Commit these files to your repo so that everyone on your team can use AppMap`,
+        `  without them having to repeat the setup process. Bring runtime code analysis`,
+        `  to your whole team!`,
         filesMessages,
         '  ',
         '  Commit?',
@@ -251,7 +252,14 @@ export default abstract class AgentProcedure {
         UI.error(addGitReturn.errorMessage);
       }
 
-      const commitGitReturn = await this.gitCommit(filesDiff, 'feat: Install AppMap.');
+      const commitGitReturn = await this.gitCommit(filesDiff, `Configure AppMap for this project
+
+AppMap is a free and open-source runtime code analysis tool.
+
+AppMap has been installed and configured using the installation instructions at:
+https://appmap.io/docs/install-appmap-agent.html using the automated
+installer tool:
+        npx @appland/appmap@latest install`);
       if (!commitGitReturn.success) {
         UI.error(commitGitReturn.errorMessage);
       }
