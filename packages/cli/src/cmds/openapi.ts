@@ -3,7 +3,7 @@ import { join } from 'path';
 import { existsSync, promises as fsp, statSync } from 'fs';
 import { queue } from 'async';
 import { glob } from 'glob';
-import yaml from 'js-yaml';
+import yaml, { load } from 'js-yaml';
 import { OpenAPIV3 } from 'openapi-types';
 import {
   Model,
@@ -15,6 +15,10 @@ import {
 import { Event } from '@appland/models';
 import { Arguments, Argv } from 'yargs';
 import { inspect } from 'util';
+import { locateAppMapDir } from '../lib/locateAppMapDir';
+import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
+import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
+import { readFile } from 'fs/promises';
 
 class OpenAPICommand {
   private readonly model = new Model();
@@ -128,6 +132,7 @@ export default {
       }
     }
     const appmapDir = await locateAppMapDir(argv.appmapDir);
+    const appmapConfigFile = await locateAppMapConfigFile(appmapDir);
 
     const cmd = new OpenAPICommand(appmapDir);
     const openapi = await cmd.execute();
@@ -137,6 +142,19 @@ export default {
 
     // TODO: This should be made available, but isn't
     template.components = (openapi as any).components;
+    template.components ||= {};
+
+    let appmapConfig: Record<string, any> | undefined;
+    if (appmapConfigFile) {
+      appmapConfig = (load(await readFile(appmapConfigFile, 'utf-8')) || {}) as any;
+    }
+
+    const overrides = appmapConfig?.openapi?.overrides;
+    const schemas = appmapConfig?.openapi?.schemas;
+    if (schemas) {
+      template.components.schemas = schemas;
+    }
+    applySchemaOverrides(template.paths, overrides);
     if (template.paths) sortProperties(template.paths);
 
     for (const error of cmd.errors) {
@@ -185,6 +203,21 @@ function sortProperties(values: Record<string, any>): void {
         }, {});
     } else if (typeof value === 'object' && value !== null) {
       sortProperties(value);
+    }
+  });
+}
+
+function applySchemaOverrides(paths: Record<string, any>, overrides: Record<string, any>) {
+  Object.keys(overrides).forEach((key) => {
+    const value = overrides[key];
+    if (value === undefined) return;
+
+    if (paths[key] == undefined) return;
+
+    if (key === 'schema') {
+      paths.schema = { ...overrides.schema };
+    } else if (typeof value === 'object') {
+      applySchemaOverrides(paths[key], value);
     }
   });
 }
