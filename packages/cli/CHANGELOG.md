@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.50.5](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.50.4...@appland/appmap-v3.50.5) (2022-11-21)
+
+
+### Bug Fixes
+
+* Change commit message used when configuring AppMap for a project. ([f1276bd](https://github.com/getappmap/appmap-js/commit/f1276bdd414275dcd225850f706355472dd849af))
+
 # [@appland/appmap-v3.50.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.50.3...@appland/appmap-v3.50.4) (2022-11-21)
 
 
