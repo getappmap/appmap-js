@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.50.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.50.3...@appland/appmap-v3.50.4) (2022-11-21)
+
+
+### Bug Fixes
+
+* replace python with python3, use -m ([9f09a94](https://github.com/getappmap/appmap-js/commit/9f09a9498da655d3ec64791efe906c44f607eef8))
+
 # [@appland/appmap-v3.50.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.50.2...@appland/appmap-v3.50.3) (2022-11-18)
 
 
