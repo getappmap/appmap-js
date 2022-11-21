@@ -137,7 +137,7 @@ export function prefixLines(str: string, prefix: string): string {
 }
 
 export function formatValue(value: ReturnValueObject) {
-  if (value === null || value === undefined) {
+  if (value === null || value === undefined || value.value === null || value.value === undefined) {
     return 'Null';
   }
 

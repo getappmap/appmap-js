@@ -49,4 +49,109 @@ describe(SchemaInferrer, () => {
       type: 'object',
     });
   });
+
+  it(`can merge schema examples with nested properties`, () => {
+    const inferrer = new SchemaInferrer();
+    inferrer.addExample({
+      class: 'hash',
+      value: '{page:...}',
+      properties: [
+        {
+          name: 'page',
+          class: 'hash',
+          properties: [
+            {
+              name: 'page_number',
+              class: 'numeric',
+            },
+            {
+              name: 'total',
+              class: 'numeric',
+            },
+          ],
+        },
+      ],
+    });
+    inferrer.addExample({
+      class: 'hash',
+      value: '{page:...}',
+      properties: [
+        {
+          name: 'page',
+          class: 'hash',
+          properties: [
+            {
+              name: 'page_size',
+              class: 'numeric',
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(inferrer.openapi()).toEqual({
+      properties: {
+        page: {
+          type: 'object',
+          properties: {
+            page_number: {
+              type: 'number',
+            },
+            page_size: {
+              type: 'number',
+            },
+            total: {
+              type: 'number',
+            },
+          },
+        },
+      },
+      type: 'object',
+    });
+  });
+
+  it(`can merge schema examples with triple nested properties`, () => {
+    const inferrer = new SchemaInferrer();
+    inferrer.addExample({
+      class: 'hash',
+      value: '{user:...}',
+      properties: [
+        {
+          name: 'user',
+          class: 'hash',
+          properties: [
+            {
+              name: 'org',
+              class: 'hash',
+              properties: [
+                {
+                  name: 'login',
+                  class: 'string',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(inferrer.openapi()).toEqual({
+      properties: {
+        user: {
+          type: 'object',
+          properties: {
+            org: {
+              type: 'object',
+              properties: {
+                login: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+      },
+      type: 'object',
+    });
+  });
 });
