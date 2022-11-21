@@ -89,11 +89,13 @@ export default {
   aliases: ['swagger'],
   describe: 'Generate OpenAPI from AppMaps in a directory',
   builder(args: Argv) {
+    args.option('directory', {
+      describe: 'program working directory',
+      type: 'string',
+      alias: 'd',
+    });
     args.option('appmap-dir', {
-      alias: ['d'],
       describe: 'directory to recursively inspect for AppMaps',
-      default: 'tmp/appmap',
-      requiresArg: true,
     });
     args.option('output-file', {
       alias: ['o'],
@@ -114,6 +116,8 @@ export default {
   },
   async handler(argv: Arguments | any) {
     verbose(argv.verbose);
+    handleWorkingDirectory(argv.directory);
+
     const { openapiTitle, openapiVersion } = argv;
 
     function tryConfigure(path: string, fn: () => void) {
@@ -123,8 +127,9 @@ export default {
         console.warn(`Warning: unable to configure OpenAPI field ${path}`);
       }
     }
+    const appmapDir = await locateAppMapDir(argv.appmapDir);
 
-    const cmd = new OpenAPICommand(argv.appmapDir);
+    const cmd = new OpenAPICommand(appmapDir);
     const openapi = await cmd.execute();
 
     const template = await loadTemplate(argv.openapiTemplate);
