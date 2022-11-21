@@ -137,6 +137,7 @@ export default {
 
     // TODO: This should be made available, but isn't
     template.components = (openapi as any).components;
+    if (template.paths) sortProperties(template.paths);
 
     for (const error of cmd.errors) {
       console.warn(error);
@@ -169,3 +170,21 @@ ${yaml.dump(template)}
     }
   },
 };
+
+function sortProperties(values: Record<string, any>): void {
+  Object.keys(values).forEach((key) => {
+    let value = values[key];
+    if (key === 'properties' && typeof value === 'object') {
+      values[key] = Object.keys(value)
+        .sort()
+        .reduce((memo, key) => {
+          const v = value[key];
+          if (typeof v === 'object' && v !== null && v.constructor !== Array) sortProperties(v);
+          memo[key] = v;
+          return memo;
+        }, {});
+    } else if (typeof value === 'object' && value !== null) {
+      sortProperties(value);
+    }
+  });
+}
