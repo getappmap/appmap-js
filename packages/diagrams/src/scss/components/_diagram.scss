@@ -108,7 +108,7 @@
         }
 
         &.database {
-          fill: $database;
+          fill: red; //$database;
 
           path {
             stroke: $labelDark;

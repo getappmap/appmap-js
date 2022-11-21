@@ -76,3 +76,17 @@ export const extensionWithoutHTTP = (args, { argTypes }) => ({
     this.$refs.vsCode.loadData(diffScenario);
   },
 });
+
+export const extensionWithFindingDetails = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VVsCodeExtension },
+  template: '<v-vs-code-extension v-bind="$props" ref="vsCode" />',
+  mounted() {
+    const scenario = scenarioData[args.scenario];
+    if (scenario) {
+      this.$refs.vsCode.loadData(scenario);
+    }
+
+    bindResolvePath(this);
+  },
+});

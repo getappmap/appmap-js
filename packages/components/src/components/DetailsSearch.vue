@@ -307,46 +307,45 @@ export default {
       margin: 0 0 0.25rem;
       border-radius: 4px;
       display: inline-block;
-      padding: 0.25rem 0.5rem;
+      padding: 0;
       color: $base01;
       font-size: 0.75rem;
       font-weight: bold;
       text-transform: uppercase;
 
       .details-search__block--http & {
-        background-color: #542168;
+        color: #8e45aa;
       }
 
       .details-search__block--external-service & {
-        background-color: $yellow;
-        color: $base19;
+        color: $yellow;
       }
 
       .details-search__block--labels & {
-        background-color: $base11;
+        color: $base11;
       }
 
       .details-search__block--package & {
-        background-color: $teal;
+        color: $teal;
       }
 
       .details-search__block--class &,
       .details-search__block--function & {
-        background-color: $blue;
+        color: $blue;
       }
 
       .details-search__block--query & {
-        background-color: $royal;
+        color: $royal;
       }
 
       .details-search__block--empty & {
-        background-color: $gray3;
+        color: $gray3;
       }
       .analysis {
-        background-color: $hotpink;
+        color: $hotpink;
       }
       &.analysis {
-        background-color: $hotpink;
+        color: $hotpink;
       }
     }
 
