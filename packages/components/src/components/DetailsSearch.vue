@@ -17,33 +17,39 @@
     </form>
     <section class="details-search__block details-search__block--analysis-finding analysis-finding">
       <h2 class="details-search__block-title analysis">Analysis Findings</h2>
-      <ul class="details-search__block-list analysis">
+      <ul class="findings-list">
         <li>
-          <h3>
-            <svg viewBox="0 0 10 10" height="10" width="10">
-              <circle cx="5" cy="5" r="5" fill="#D1245C" />
-            </svg>
-            Missing Authentication (3)
-          </h3>
+          <ul class="details-search__block-list analysis">
+            <li>
+              <h3>
+                <svg viewBox="0 0 10 10" height="10" width="10">
+                  <circle cx="5" cy="5" r="5" fill="#D1245C" />
+                </svg>
+                Missing Authentication (3)
+              </h3>
+            </li>
+            <li class="details-search__block-item"><span>Scan ID: </span> 1226</li>
+            <li class="details-search__block-item"><span>Created: </span> 01/03/2022 @3:49pm</li>
+            <li class="details-search__block-item"><span>Branch: </span>script-update-5684</li>
+            <li class="details-search__block-item"><span>Category: </span>Security</li>
+          </ul>
         </li>
-        <li class="details-search__block-item"><span>Scan ID: </span> 1226</li>
-        <li class="details-search__block-item"><span>Created: </span> 01/03/2022 @3:49pm</li>
-        <li class="details-search__block-item"><span>Branch: </span>script-update-5684</li>
-        <li class="details-search__block-item"><span>Category: </span>Security</li>
-      </ul>
-      <ul class="details-search__block-list analysis">
         <li>
-          <h3>
-            <svg viewBox="0 0 10 10" height="10" width="10">
-              <circle cx="5" cy="5" r="5" fill="#69AD34" />
-            </svg>
-            N Plus One Query (3)
-          </h3>
+          <ul class="details-search__block-list analysis">
+            <li>
+              <h3>
+                <svg viewBox="0 0 10 10" height="10" width="10">
+                  <circle cx="5" cy="5" r="5" fill="#69AD34" />
+                </svg>
+                N Plus One Query (3)
+              </h3>
+            </li>
+            <li class="details-search__block-item"><span>Scan ID: </span> 1226</li>
+            <li class="details-search__block-item"><span>Created: </span> 01/03/2022 @11:12am</li>
+            <li class="details-search__block-item"><span>Branch: </span>script-update-2346</li>
+            <li class="details-search__block-item"><span>Category: </span>Performance</li>
+          </ul>
         </li>
-        <li class="details-search__block-item"><span>Scan ID: </span> 1226</li>
-        <li class="details-search__block-item"><span>Created: </span> 01/03/2022 @11:12am</li>
-        <li class="details-search__block-item"><span>Branch: </span>script-update-2346</li>
-        <li class="details-search__block-item"><span>Category: </span>Performance</li>
       </ul>
     </section>
     <section
@@ -248,7 +254,7 @@ export default {
 
   &__form {
     margin-bottom: 1.5rem;
-    padding: 0;
+    padding: 0 1.5rem;
   }
 
   &__input-wrap {
@@ -259,6 +265,23 @@ export default {
     .details-search--empty & {
       border-radius: $gray3;
       pointer-events: none;
+    }
+  }
+
+  .analysis-finding {
+    .findings-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      li {
+        border-bottom: 1px solid $gray2;
+        &:last-of-type {
+          border-bottom: 0;
+        }
+        .analysis li {
+          border-bottom: 0;
+        }
+      }
     }
   }
 
@@ -301,7 +324,8 @@ export default {
   }
 
   &__block {
-    margin-bottom: 1rem;
+    padding: 1.5rem;
+    border-bottom: 2px solid $gray2;
 
     &-title {
       margin: 0 0 0.25rem;
@@ -309,7 +333,7 @@ export default {
       display: inline-block;
       padding: 0;
       color: $base01;
-      font-size: 0.75rem;
+      font-size: 0.9rem;
       font-weight: bold;
       text-transform: uppercase;
 
@@ -353,13 +377,17 @@ export default {
       margin: 0;
       padding: 0;
       list-style: none;
+      li {
+        &:last-of-type {
+          border-bottom: 0;
+        }
+      }
 
       .details-search__block--labels & {
         margin: 0 -0.25rem -0.25rem;
       }
       &.analysis {
-        border-bottom: 1px solid $gray2;
-        padding-bottom: 0.5rem;
+        padding: 1rem 0;
         li {
           border-bottom: 0;
           padding: 0.2rem 0;
