@@ -127,7 +127,7 @@ export default {
     flex-direction: row;
     font-family: monospace;
     border-radius: 8px;
-    background-color: #2c2b32;
+    background-color: $gray2;
     padding: 0.6em;
     display: flex;
     align-items: center;

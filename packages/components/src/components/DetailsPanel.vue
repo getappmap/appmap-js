@@ -29,7 +29,18 @@
       <section class="overview">
         <div class="section-header expando">
           <h3>Overview</h3>
-          <span class="control"><VExpandCollapse /></span>
+          <span class="control"><VChevronDown /></span>
+        </div>
+        <div class="section-content">
+          <ul class="overview">
+            <li>Time: 2022-05-19 22:35:49 UTC</li>
+            <li>Status: New</li>
+            <li>Impact Category: Maintenance</li>
+            <li>Reference: <a href="/">CWE-1073</a></li>
+            <li>Commit: <a href="/">1ea201b</a></li>
+            <li>Database type: sqlite</li>
+            <li>Server version: 3.11.0</li>
+          </ul>
         </div>
       </section>
       <section class="message">
@@ -56,8 +67,9 @@
         <ul>
           <li class="expando open">
             <span class="appmap-title">Microposts_interface micropost interface (3)</span>
-            <span class="control"><VExpandCollapse /></span>
+            <span class="control"><VChevronDown /></span>
           </li>
+
           <li class="sublist">
             <a href="/">RelatedEvent_Occurrence_01</a>
           </li>
@@ -69,11 +81,11 @@
           </li>
           <li class="expando">
             <span class="appmap-title">Feed_interface micropost delete (5)</span>
-            <span class="control"><VExpandCollapse /></span>
+            <span class="control closed"><VChevronDown /></span>
           </li>
           <li class="expando">
             <span class="appmap-title">User_account new password_reset (104)</span>
-            <span class="control"><VExpandCollapse /></span>
+            <span class="control closed"><VChevronDown /></span>
           </li>
         </ul>
       </section>
@@ -127,6 +139,7 @@ import VSourceCodeLink from '@/components/SourceCodeLink.vue';
 import VAppmapPin from '@/assets/appmap-pin.svg';
 import VExpandCollapse from '@/assets/expand_collapse_icon.svg';
 import VBreadcrumbBack from '@/assets/breadcrumb-back.svg';
+import VChevronDown from '@/assets/chevron-down.svg';
 
 export default {
   name: 'v-details-panel',
@@ -150,6 +163,7 @@ export default {
     VAppmapPin,
     VExpandCollapse,
     VBreadcrumbBack,
+    VChevronDown,
   },
   props: {
     subtitle: String,
@@ -205,7 +219,6 @@ export default {
   min-width: 280px;
   width: 100%;
   height: 100%;
-  //padding: 1rem;
   color: $gray6;
   word-break: break-word;
   border-right: 1px solid $base15;
@@ -275,10 +288,11 @@ export default {
     font-size: 0.9rem;
 
     section {
-      padding: 0 1rem;
+      padding: 0 1.5rem;
       .code {
         color: $white;
         margin-top: 0;
+        font-family: monospace;
       }
     }
     .finding-heading {
@@ -286,7 +300,7 @@ export default {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid $gray2;
+      border-bottom: 2px solid $gray2;
       h2 {
         margin: 1rem 0;
         text-transform: uppercase;
@@ -305,9 +319,9 @@ export default {
     }
     .heading,
     section {
-      border-bottom: 1px solid $gray2;
+      border-bottom: 2px solid $gray2;
       &.bt-1 {
-        border-top: 1px solid $gray2;
+        border-top: 2px solid $gray2;
       }
       p {
         color: $white;
@@ -317,7 +331,7 @@ export default {
         padding: 0;
         margin-top: 0;
         li {
-          border-bottom: 1px solid $gray2;
+          border-bottom: 1px solid #242c41a3;
           padding: 0.5rem 0;
           &:last-of-type {
             border: 0;
@@ -372,15 +386,33 @@ export default {
           }
           &.control {
             color: $white;
+            svg {
+              fill: $white;
+            }
+            &.rotated-90 {
+              rotate: 90deg;
+            }
+            &:hover {
+              svg {
+                fill: $blue;
+              }
+            }
           }
           &:hover {
             cursor: pointer;
             color: $blue;
           }
         }
+        .control {
+          &.closed {
+            rotate: -90deg;
+          }
+        }
         &.open {
           .control {
-            rotate: 90deg;
+            &.closed {
+              rotate: -90deg;
+            }
           }
         }
       }

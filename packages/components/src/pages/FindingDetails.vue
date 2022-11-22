@@ -244,6 +244,12 @@ export default {
       }
     }
   }
+  section {
+    .code {
+      font-family: monospace;
+      font-weight: 800;
+    }
+  }
   .subhead {
     font-size: 1.1rem;
     color: $gray4;
@@ -297,9 +303,12 @@ export default {
         margin-top: 0.25rem;
       }
     }
-    .code {
-      font-weight: 800;
-      color: $gray4;
+    section {
+      .code {
+        font-weight: 800;
+        color: $gray4;
+        font-family: monospace;
+      }
     }
     .card {
       border-radius: 0.5rem;
