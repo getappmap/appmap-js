@@ -1,3 +1,13 @@
+# [@appland/appmap-v3.51.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.50.5...@appland/appmap-v3.51.0) (2022-11-23)
+
+
+### Features
+
+* Accept and handle -d, --directory arg ([88121b3](https://github.com/getappmap/appmap-js/commit/88121b3446740687f1ad32da7fb22d701fb84f95))
+* Emit OpenAPI schema for nested properties ([0a753a4](https://github.com/getappmap/appmap-js/commit/0a753a48e63b10cdfaa9197ca97dadfecbefe934))
+* OpenAPI schema overrides ([2ed6fcd](https://github.com/getappmap/appmap-js/commit/2ed6fcda038c608270a61690905e67b05409abc1))
+* Sort schema properties in output ([29fc29c](https://github.com/getappmap/appmap-js/commit/29fc29c76a13fce035dadd3321ef62c899b1de3f))
+
 # [@appland/appmap-v3.50.5](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.50.4...@appland/appmap-v3.50.5) (2022-11-21)
 
 
