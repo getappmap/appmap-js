@@ -1,7 +1,12 @@
-import { ParameterProperty, ValueBase } from '@appland/models';
+import { ParameterProperty } from '@appland/models';
 import { OpenAPIV3 } from 'openapi-types';
 
 const unrecognizedTypes = new Set();
+
+type SchemaExample = {
+  class: string;
+  properties?: ParameterProperty[];
+};
 
 interface Scheme {
   schemeId: string;
@@ -103,21 +108,29 @@ function classNameToOpenAPIType(className?: string): OptSchemaObjectType {
   return mapped;
 }
 
-function messageToOpenAPISchema(message: ValueBase): OpenAPIV3.SchemaObject | undefined {
-  const type = classNameToOpenAPIType(message.class);
+function messageToOpenAPISchema(example: SchemaExample): OpenAPIV3.SchemaObject | undefined {
+  const type = classNameToOpenAPIType(example.class);
   if (type === undefined) return;
 
-  if (message.properties) {
-    const properties = message.properties.reduce((memo, msgProperty: ParameterProperty) => {
+  if (example.properties) {
+    const properties = example.properties.filter(Boolean).reduce((memo, msgProperty) => {
       const type = classNameToOpenAPIType(msgProperty.class);
       if (type === 'array') {
         // eslint-disable-next-line no-param-reassign
         memo[msgProperty.name] = { type } as OpenAPIV3.ArraySchemaObject;
+      } else if (type === 'object' && msgProperty.properties) {
+        // eslint-disable-next-line no-param-reassign
+        const schema = messageToOpenAPISchema(msgProperty);
+        if (schema) {
+          memo[msgProperty.name] = schema;
+        } else {
+          memo[msgProperty.name] = { type };
+        }
       } else if (type) {
         // eslint-disable-next-line no-param-reassign
         memo[msgProperty.name] = {
           type,
-        } as OpenAPIV3.NonArraySchemaObject;
+        };
       }
       return memo;
     }, {} as Record<string, OpenAPIV3.NonArraySchemaObject | OpenAPIV3.ArraySchemaObject>);

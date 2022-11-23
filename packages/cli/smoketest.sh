@@ -22,7 +22,7 @@ cd "${TESTDIR}"
 "./${BIN_NAME}" index --appmap-dir ruby
 "./${BIN_NAME}" depends --appmap-dir ruby
 "./${BIN_NAME}" inventory --appmap-dir ruby
-"./${BIN_NAME}" openapi -d ruby -o /dev/null
+"./${BIN_NAME}" openapi --appmap-dir ruby -o /dev/null
 
 cd "$PKGDIR"
 rm -rf "$TESTDIR"

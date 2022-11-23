@@ -25,6 +25,7 @@ declare module '@appland/models' {
   export interface ParameterProperty {
     readonly name: string;
     readonly class: string;
+    readonly properties?: ParameterProperty[];
   }
 
   export interface ParameterObject extends ValueBase {
