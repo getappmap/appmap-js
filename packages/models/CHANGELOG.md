@@ -1,3 +1,10 @@
+# [@appland/models-v1.22.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.21.0...@appland/models-v1.22.0) (2022-11-23)
+
+
+### Features
+
+* Emit OpenAPI schema for nested properties ([0a753a4](https://github.com/getappmap/appmap-js/commit/0a753a48e63b10cdfaa9197ca97dadfecbefe934))
+
 # [@appland/models-v1.21.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.20.0...@appland/models-v1.21.0) (2022-10-29)
 
 
