@@ -36,6 +36,7 @@
     "@types/semver": "^7.3.10",
     "@types/sinon": "^10.0.2",
     "@types/tmp": "^0.2.3",
+    "@types/validator": "^13.7.10",
     "@types/w3c-xmlserializer": "^2.0.2",
     "crypto": "^1.0.1",
     "css-loader": "^6.2.0",
@@ -107,6 +108,7 @@
     "semver": "^7.3.5",
     "strip-ansi": "^6.0.0",
     "supports-hyperlinks": "^2.2.0",
+    "validator": "^13.7.0",
     "w3c-xmlserializer": "^2.0.0",
     "yargs": "^17.1.1"
   },

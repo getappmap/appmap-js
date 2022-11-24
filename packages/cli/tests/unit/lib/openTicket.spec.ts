@@ -9,6 +9,8 @@ import * as createRequest from '../../../src/lib/ticket/zendesk';
 import Telemetry from '../../../src/telemetry';
 import { withSandbox, withStubbedTelemetry } from '../../helper';
 
+import { isValidEmail, isValidName } from '../../../src/lib/ticket/validation';
+
 // I'm sure there's a proper way to write a matcher that will check that a sinon stub was called
 // with a matching object, a la https://jestjs.io/docs/expect#tomatchobjectobject . This will do for
 // now.
@@ -66,89 +68,122 @@ describe('openTicket', () => {
       await openTicket('error');
       expect(prompt).toBeCalledOnce();
     });
-  });
 
-  describe('using Zendesk', () => {
-    beforeEach(() => {
-      prompt.resolves({ openTicket: true });
-    });
+    describe('input validation', () => {
+      describe('of name', () => {
+        it('accepts non-empty', () => {
+          expect(isValidName('Joe Smith')).toBeTruthy();
+        });
+        it('rejects an empty', () => {
+          expect(isValidName('')).toBeFalsy();
+        });
+        it('rejects a whitespace', () => {
+          expect(isValidName('  ')).toBeFalsy();
+        });
 
-    it('creates a request', async () => {
-      const expected = ['error'];
-      zdRequest.resolves();
-      await openTicket(expected);
-      expect(zdRequest).toBeCalledOnce();
-      expect(getNthCallArgs(zdRequest, 0)).toMatchObject(expected);
-    });
-
-    it('handles an error', async () => {
-      zdRequest.throws('an error');
-      await openTicket('error');
-      expect(uiError).toBeCalledOnce();
-      expect(getNthCallArgs(uiError, 0)).toMatch(
-        'A failure occurred attempting to create a ticket'
-      );
-    });
-  });
-
-  describe('telemetry event', () => {
-    [
-      {
-        example: 'gets sent the user opens a ticket',
-        condition: { openTicket: true },
-        expectation: { name: 'open-ticket:success' },
-      },
-      {
-        example: 'gets sent when the user declines to open a ticket',
-        condition: { openTicket: false },
-        expectation: { name: 'open-ticket:declined' },
-      },
-    ].forEach((e) => {
-      const { example, condition, expectation } = e;
-
-      it(example, async () => {
-        prompt.resolves(condition);
-        await openTicket('error');
-        expect(Telemetry.sendEvent).toBeCalledOnce();
-        expect(getNthCallArgs(Telemetry.sendEvent, 0)).toMatchObject(expectation);
+        it('rejects too short', () => {
+          expect(isValidName('n')).toBeFalsy();
+        });
+      });
+      describe('of email', () => {
+        it('accepts non-empty', () => {
+          expect(isValidEmail('user@example.com')).toBeTruthy();
+        });
+        it('rejects empty', () => {
+          expect(isValidEmail('')).toBeFalsy();
+        });
+        it('rejects whitespace', () => {
+          expect(isValidEmail('  ')).toBeFalsy();
+        });
+        it('rejects ill-formed', () => {
+          expect(isValidEmail('n')).toBeFalsy();
+        });
+        // Let's assume validator does a decent job of testing the rest of the possibilities....
       });
     });
 
-    describe('when Zendesk request fails', () => {
+    describe('using Zendesk', () => {
       beforeEach(() => {
         prompt.resolves({ openTicket: true });
       });
 
+      it('creates a request', async () => {
+        const expected = ['error'];
+        zdRequest.resolves();
+        await openTicket(expected);
+        expect(zdRequest).toBeCalledOnce();
+        expect(getNthCallArgs(zdRequest, 0)).toMatchObject(expected);
+      });
+
+      it('handles an error', async () => {
+        zdRequest.throws('an error');
+        await openTicket('error');
+        expect(uiError).toBeCalledOnce();
+        expect(getNthCallArgs(uiError, 0)).toMatch(
+          'A failure occurred attempting to create a ticket'
+        );
+      });
+    });
+
+    describe('telemetry event', () => {
       [
         {
-          example: 'gets sent showing an error when possible',
-          error: new HttpError('error', new TestErrorResponse(422)),
-          expectation: {
-            name: 'open-ticket:error',
-          },
+          example: 'gets sent when the user opens a ticket',
+          condition: { openTicket: true },
+          expectation: { name: 'open-ticket:success' },
         },
         {
-          example: 'gets sent indicating when rate-limited',
-          error: new HttpError('error', new TestErrorResponse(429)),
-          expectation: {
-            name: 'open-ticket:rate-limit',
-          },
-        },
-        {
-          example: "gets sent even when there's no response",
-          error: new HttpError('error'),
-          expectation: {
-            name: 'open-ticket:no-response',
-          },
+          example: 'gets sent when the user declines to open a ticket',
+          condition: { openTicket: false },
+          expectation: { name: 'open-ticket:declined' },
         },
       ].forEach((e) => {
-        const { example, error, expectation } = e;
-        it(example, async () => {
-          zdRequest.throws(error);
+        const { example, condition, expectation } = e;
 
+        it(example, async () => {
+          prompt.resolves(condition);
           await openTicket('error');
           expect(Telemetry.sendEvent).toBeCalledOnce();
           expect(getNthCallArgs(Telemetry.sendEvent, 0)).toMatchObject(expectation);
+        });
+      });
+
+      describe('when Zendesk request fails', () => {
+        beforeEach(() => {
+          prompt.resolves({ openTicket: true });
+        });
+
+        [
+          {
+            example: 'gets sent showing an error when possible',
+            error: new HttpError('error', new TestErrorResponse(422)),
+            expectation: {
+              name: 'open-ticket:error',
+            },
+          },
+          {
+            example: 'gets sent indicating when rate-limited',
+            error: new HttpError('error', new TestErrorResponse(429)),
+            expectation: {
+              name: 'open-ticket:rate-limit',
+            },
+          },
+          {
+            example: "gets sent even when there's no response",
+            error: new HttpError('error'),
+            expectation: {
+              name: 'open-ticket:no-response',
+            },
+          },
+        ].forEach((e) => {
+          const { example, error, expectation } = e;
+          it(example, async () => {
+            zdRequest.throws(error);
+
+            await openTicket('error');
+            expect(Telemetry.sendEvent).toBeCalledOnce();
+            expect(getNthCallArgs(Telemetry.sendEvent, 0)).toMatchObject(expectation);
+          });
         });
       });
     });
