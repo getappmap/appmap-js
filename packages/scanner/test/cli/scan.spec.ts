@@ -206,6 +206,13 @@ describe('scan', () => {
       );
     }
 
+    async function waitForSingleFinding(rule = 'secret-in-log'): Promise<ScanResults> {
+      const findings = await expectScan(secretInLogMap);
+      expect(findings.findings.length).toEqual(1);
+      expect(findings.findings[0].ruleId).toEqual(rule);
+      return findings;
+    }
+
     function copyAppMap(source: string): Promise<void> {
       return fsextra.copy(source, join(tmpDir, basename(source)));
     }
@@ -250,20 +257,14 @@ describe('scan', () => {
     it('scans already indexed AppMaps on start', async () => {
       await createIndex(secretInLogMap);
       await createWatcher();
-      const findings = await expectScan(secretInLogMap);
-
-      expect(findings.findings.length).toEqual(1);
-      expect(findings.findings[0].ruleId).toEqual('secret-in-log');
+      await waitForSingleFinding();
     });
 
     it('scans AppMaps when the mtime file is created or changed', async () => {
       await createWatcher();
 
       await createIndex(secretInLogMap);
-      const findings = await expectScan(secretInLogMap);
-
-      expect(findings.findings.length).toEqual(1);
-      expect(findings.findings[0].ruleId).toEqual('secret-in-log');
+      await waitForSingleFinding();
     });
 
     it('eventually rescans even if file watching is flaky', async () => {
@@ -271,10 +272,7 @@ describe('scan', () => {
       watcher?.appmapWatcher?.removeAllListeners();
 
       await createIndex(secretInLogMap);
-      const findings = await expectScan(secretInLogMap);
-
-      expect(findings.findings.length).toEqual(1);
-      expect(findings.findings[0].ruleId).toEqual('secret-in-log');
+      await waitForSingleFinding();
     });
 
     it('reloads the scanner configuration automatically', async () => {
@@ -305,22 +303,12 @@ describe('scan', () => {
 
     it('picks up mtime changes after a relative directory is removed and recreated', async () => {
       await createWatcher();
-      {
-        await createIndex(secretInLogMap);
-
-        const findings = await expectScan(secretInLogMap);
-        expect(findings.findings.length).toEqual(1);
-        expect(findings.findings[0].ruleId).toEqual('secret-in-log');
-      }
+      await createIndex(secretInLogMap);
+      await waitForSingleFinding();
 
       await rm(indexPath(secretInLogMap), { recursive: true });
       await createIndex(secretInLogMap);
-
-      {
-        const findings = await expectScan(secretInLogMap);
-        expect(findings.findings.length).toEqual(1);
-        expect(findings.findings[0].ruleId).toEqual('secret-in-log');
-      }
+      await waitForSingleFinding();
     });
   });
 });
