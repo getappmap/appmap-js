@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.51.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.51.0...@appland/appmap-v3.51.1) (2022-11-24)
+
+
+### Bug Fixes
+
+* improve name and email validation ([541c661](https://github.com/getappmap/appmap-js/commit/541c6615761faf5c7218d8730c22a85fbdb9370e))
+
 # [@appland/appmap-v3.51.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.50.5...@appland/appmap-v3.51.0) (2022-11-23)
 
 
