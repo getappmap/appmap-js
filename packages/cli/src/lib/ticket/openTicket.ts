@@ -3,8 +3,8 @@ import { HttpError } from '../../cmds/errors';
 import UI from '../../cmds/userInteraction';
 import Telemetry from '../../telemetry';
 import createZendeskRequest from './zendesk';
-
 export const DEFAULT_HELP_MSG = ' ';
+import { isValidEmail, isValidName } from './validation';
 
 export default async function openTicket(
   errors: string | string[],
@@ -59,12 +59,12 @@ If you change your mind, you can always reach us by email: support@appmap.io
     {
       name: 'name',
       message: `Your name`,
-      validate: (v) => v.trim().length > 0 || 'Please enter your name',
+      validate: (v) => isValidName(v) || 'Please enter your name',
     },
     {
       name: 'email',
       message: `Your email address`,
-      validate: (v) => v.trim().length > 0 || 'Please enter your email address',
+      validate: (v) => isValidEmail(v) || 'Please enter a valid email address',
     },
   ]);
 
