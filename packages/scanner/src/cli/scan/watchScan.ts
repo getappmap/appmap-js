@@ -3,6 +3,7 @@ import * as chokidar from 'chokidar';
 import assert from 'assert';
 import path from 'path';
 import { queue } from 'async';
+import { callbackify } from 'node:util';
 
 import { formatReport } from './formatReport';
 import { default as buildScanner } from './scanner';
@@ -119,14 +120,16 @@ export class Watcher {
     );
   }
 
-  private queue = queue<string>(this.scan.bind(this), 2);
+  // do not remove callbackify, apparently on windows
+  // passing plain async function doesn't work (?)
+  private queue = queue<string>(callbackify(this.scan.bind(this)), 2);
 
   protected enqueue(mtimePath: string): void {
     if ([...this.queue].includes(mtimePath)) return;
     this.queue.push(mtimePath);
   }
 
-  protected async scan(mtimePath: string, callback?: () => void | ErrorCallback): Promise<void> {
+  protected async scan(mtimePath: string): Promise<void> {
     assert(this.config, `config should always be loaded before appmapWatcher triggers a scan`);
 
     const appmapFile = [path.dirname(mtimePath), 'appmap.json'].join('.');
@@ -154,11 +157,6 @@ export class Watcher {
 
     // Always report the raw data
     await writeFile(reportFile, formatReport(rawScanResults));
-
-    // tell the queue that the current task is complete
-    if (callback) {
-      callback();
-    }
   }
 
   protected async reloadConfig(): Promise<void> {

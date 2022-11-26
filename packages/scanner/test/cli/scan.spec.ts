@@ -7,7 +7,7 @@ import Command from '../../src/cli/scan/command';
 import { fixtureAppMapFileName } from '../util';
 import { readFileSync, unlinkSync } from 'fs';
 import { ScanResults } from '../../src/report/scanResults';
-import { copyFile, readFile, rm, writeFile } from 'fs/promises';
+import { copyFile, readFile, rm, stat, writeFile } from 'fs/promises';
 import { Watcher } from '../../src/cli/scan/watchScan';
 import { tmpdir } from 'os';
 import { dump } from 'js-yaml';
@@ -213,8 +213,9 @@ describe('scan', () => {
       return findings;
     }
 
-    function copyAppMap(source: string): Promise<void> {
-      return fsextra.copy(source, join(tmpDir, basename(source)));
+    function copyAppMap(source: string, targetName?: string): Promise<void> {
+      targetName ||= basename(source);
+      return fsextra.copy(source, join(tmpDir, targetName));
     }
 
     function indexPath(mapPath: string): string {
@@ -309,6 +310,39 @@ describe('scan', () => {
       await rm(indexPath(secretInLogMap), { recursive: true });
       await createIndex(secretInLogMap);
       await waitForSingleFinding();
+    });
+
+    it('does not rescan when not needed, but scans every new file', async () => {
+      /* Note, this test also makes sure we continue scanning after
+       * we skip some files due to them being up to date. */
+      await createWatcher();
+      const src = secretInLogMap;
+
+      // first, scan two appmaps
+      await createIndex(secretInLogMap);
+      await expectScan(secretInLogMap);
+
+      const other = 'other.appmap.json';
+      await copyAppMap(src, other);
+      await createIndex(other);
+      await expectScan(other);
+
+      // store the finding file mtimes, we'll check later if they aren't rescanned
+      const getTimes = (...paths: string[]) =>
+        Promise.all(paths.map((f) => stat(findingsPath(f)).then((s) => s.mtimeMs)));
+      const times = await getTimes(src, other);
+
+      // touch both
+      await Promise.all([src, other].map(createIndex));
+
+      // now scan some unrelated maps
+      const names = [...Array(5).keys()].map((i) => `test-${i}.appmap.json`);
+      await Promise.all(names.map((f) => copyAppMap(src, f)));
+      await Promise.all(names.map(createIndex));
+      await Promise.all(names.map(expectScan));
+
+      // check the previous ones to make sure they haven't been rescanned
+      expect(await getTimes(src, other)).toStrictEqual(times);
     });
   });
 });
