@@ -6,7 +6,7 @@ export type PendingEvent = {
   args: any[];
 };
 
-export const MaxMSBetween = 1000;
+export const MaxMSBetween = 60 * 1000;
 
 export default class EventAggregator {
   constructor(

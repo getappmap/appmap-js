@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import EventAggregator from '../../../src/lib/eventAggregator';
+import EventAggregator, { MaxMSBetween } from '../../../src/lib/eventAggregator';
 jest.useFakeTimers();
 
 describe(EventAggregator, () => {
@@ -15,11 +15,11 @@ describe(EventAggregator, () => {
 
   it('aggregates events in the given timeframe', () => {
     emitter.emit('sing', 80, 'song');
-    jest.advanceTimersByTime(512);
+    jest.advanceTimersByTime(MaxMSBetween / 2);
     emitter.emit('dance', 'like there is no tomorrow');
-    jest.advanceTimersByTime(512);
+    jest.advanceTimersByTime(MaxMSBetween / 2);
     emitter.emit('sing', 'in the rain');
-    jest.advanceTimersByTime(1024);
+    jest.advanceTimersByTime(MaxMSBetween * 1.2);
 
     expect(fn.mock.calls).toEqual([
       [
@@ -34,11 +34,11 @@ describe(EventAggregator, () => {
 
   it('calls the callback separately between timeframes', () => {
     emitter.emit('sing', 80, 'song');
-    jest.advanceTimersByTime(512);
+    jest.advanceTimersByTime(MaxMSBetween / 2);
     emitter.emit('dance', 'like there is no tomorrow');
-    jest.advanceTimersByTime(1024);
+    jest.advanceTimersByTime(MaxMSBetween * 1.2);
     emitter.emit('sing', 'in the rain');
-    jest.advanceTimersByTime(1024);
+    jest.advanceTimersByTime(MaxMSBetween * 1.2);
 
     expect(fn.mock.calls).toEqual([
       [
