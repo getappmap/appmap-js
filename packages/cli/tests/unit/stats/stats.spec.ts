@@ -5,14 +5,12 @@ import { SortedAppMapSize } from '../../../src/cmds/stats/types/appMapSize';
 import { SlowestExecutionTime } from '../../../src/cmds/stats/types/functionExecutionTime';
 import { withStubbedTelemetry } from '../../helper';
 
+const Cwd = process.cwd();
+
 describe('stats subcommand', () => {
   withStubbedTelemetry();
 
-  const cwd = process.cwd();
-
-  afterEach(() => {
-    process.chdir(cwd);
-  });
+  afterEach(() => process.chdir(Cwd));
 
   it('works', async () => {
     let argv = {

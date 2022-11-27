@@ -81,7 +81,7 @@ export class ScanResults {
     return new ScanResults(this.configuration, this.appMapMetadata, findings, this.checks);
   }
 
-  aggregate(sourceScanResults: ScanResults) {
+  aggregate(sourceScanResults: ScanResults): void {
     this.summary.numAppMaps += sourceScanResults.summary.numAppMaps;
     this.summary.numChecks += sourceScanResults.summary.numChecks;
     this.summary.rules = [...new Set(this.summary.rules.concat(sourceScanResults.summary.rules))];
@@ -95,19 +95,24 @@ export class ScanResults {
   }
 }
 
-export function sendScanResultsTelemetry(scanResults: ScanResults, msElapsed: number) {
-  const rules = [...new Set(scanResults.checks.map(({ id }) => id))];
+export type ScanTelemetry = {
+  ruleIds: string[];
+  numAppMaps: number;
+  numFindings: number;
+  elapsedMs: number;
+};
 
+export function sendScanResultsTelemetry(telemetry: ScanTelemetry): void {
   Telemetry.sendEvent({
     name: 'scan:completed',
     properties: {
-      rules: rules.join(', '),
+      rules: telemetry.ruleIds.sort().join(', '),
     },
     metrics: {
-      duration: msElapsed / 1000,
-      numRules: rules.length,
-      numAppMaps: scanResults.summary.numAppMaps,
-      numFindings: scanResults.findings.length,
+      duration: telemetry.elapsedMs / 1000,
+      numRules: telemetry.ruleIds.length,
+      numAppMaps: telemetry.numAppMaps,
+      numFindings: telemetry.numFindings,
     },
   });
 }

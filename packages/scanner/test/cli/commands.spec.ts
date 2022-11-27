@@ -52,7 +52,6 @@ describe('commands', () => {
           let watcher: watchScan.Watcher | undefined;
           jest.spyOn(watchScan, 'default').mockImplementation((opts) => {
             watcher = new watchScan.Watcher(opts);
-            clearInterval(watcher.interval);
             return watcher.watch();
           });
 

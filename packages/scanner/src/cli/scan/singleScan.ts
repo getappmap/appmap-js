@@ -8,7 +8,7 @@ import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 import { formatReport } from './formatReport';
 import Telemetry from '../../telemetry';
-import { ScanResults, sendScanResultsTelemetry } from '../../report/scanResults';
+import { sendScanResultsTelemetry } from '../../report/scanResults';
 import { collectAppMapFiles } from '../../rules/lib/util';
 import validateFile from '../validateFile';
 
@@ -75,5 +75,10 @@ export default async function singleScan(options: SingleScanOptions): Promise<vo
     )} checks/sec)`
   );
 
-  sendScanResultsTelemetry(scanResults, elapsed);
+  sendScanResultsTelemetry({
+    ruleIds: scanResults.summary.rules,
+    numAppMaps: scanResults.summary.numAppMaps,
+    numFindings: scanResults.summary.numFindings,
+    elapsedMs: elapsed,
+  });
 }

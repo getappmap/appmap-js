@@ -233,6 +233,7 @@ describe('scan', () => {
         appId: 'no-such-app',
         appmapDir: tmpDir,
         configFile: scanConfigFilePath,
+        sendTelemetry: false,
       });
       await watcher.watch();
 

@@ -1,22 +1,24 @@
 import { stat, writeFile } from 'fs/promises';
 import * as chokidar from 'chokidar';
+import assert from 'assert';
+import path from 'path';
+import { queue } from 'async';
 
 import { formatReport } from './formatReport';
 import { default as buildScanner } from './scanner';
-import { ScanResults, sendScanResultsTelemetry } from '../../report/scanResults';
 import {
   parseConfigFile,
   TimestampedConfiguration,
 } from '../../configuration/configurationProvider';
-import assert from 'assert';
-import path from 'path';
-import { queue } from 'async';
 import Telemetry from '../../telemetry';
+import EventEmitter from 'events';
+import { WatchScanTelemetry } from './watchScanTelemetry';
 
 export type WatchScanOptions = {
   appId?: string;
   appmapDir: string;
   configFile: string;
+  sendTelemetry: boolean;
 };
 
 declare module 'async' {
@@ -46,49 +48,16 @@ function isAncestorPath(ancestor: string, descendant: string): boolean {
   return !path.relative(ancestor, descendant).startsWith('..');
 }
 
-export type BatchedTelemetry = {
-  telemetryName: string;
-  scanResults: ScanResults;
-  msElapsed: number;
-  msInserted: number;
-};
-
 export class Watcher {
   config?: TimestampedConfiguration;
   appmapWatcher?: chokidar.FSWatcher;
   appmapPoller?: chokidar.FSWatcher;
   configWatcher?: chokidar.FSWatcher;
-  batchedTelemetry: BatchedTelemetry[] = [];
-  sendPeriodMilliseconds = 5000;
-  interval: NodeJS.Timer;
+  telemetry: WatchScanTelemetry | undefined;
+  scanEventEmitter = new EventEmitter();
 
   constructor(private options: WatchScanOptions) {
-    this.interval = setInterval(() => {
-      this.sendScanResultsTelemetryInABatch();
-    }, this.sendPeriodMilliseconds);
-    // must unref because there's no condition under which the timer
-    // will stop; else the process doesn't exit
-    this.interval.unref();
-  }
-
-  public sendScanResultsTelemetryInABatch() {
-    const dateNow = Date.now();
-    if (
-      this.batchedTelemetry &&
-      this.batchedTelemetry.length > 0 &&
-      dateNow - this.batchedTelemetry[this.batchedTelemetry.length - 1].msInserted >
-        this.sendPeriodMilliseconds
-    ) {
-      const aggregatedScanResults: ScanResults = new ScanResults();
-      let totalMsElapsed = 0;
-      this.batchedTelemetry.forEach((item) => {
-        aggregatedScanResults.aggregate(item.scanResults);
-        totalMsElapsed += item.msElapsed;
-      });
-
-      sendScanResultsTelemetry(aggregatedScanResults, totalMsElapsed);
-      this.batchedTelemetry = [];
-    }
+    if (options.sendTelemetry) this.telemetry = new WatchScanTelemetry(this.scanEventEmitter);
   }
 
   async watch(): Promise<void> {
@@ -179,26 +148,19 @@ export class Watcher {
     )
       return; // report is up to date
 
+    const startTime = Date.now();
     const scanner = await buildScanner(true, this.config, [appmapFile]);
 
-    const startTime = Date.now();
     const rawScanResults = await scanner.scan();
+    const elapsed = Date.now() - startTime;
+    this.scanEventEmitter.emit('scan', { scanResults: rawScanResults, elapsed });
 
     // Always report the raw data
     await writeFile(reportFile, formatReport(rawScanResults));
 
-    const dateNow = Date.now();
-    const elapsed = dateNow - startTime;
-    this.batchedTelemetry.push({
-      telemetryName: 'scan:completed',
-      scanResults: rawScanResults,
-      msElapsed: elapsed,
-      msInserted: dateNow,
-    });
-
     // tell the queue that the current task is complete
     if (callback) {
-      await callback();
+      callback();
     }
   }
 
