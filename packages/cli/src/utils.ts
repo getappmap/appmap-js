@@ -1,4 +1,5 @@
 import { constants as fsConstants, PathLike, promises as fsp, Stats } from 'fs';
+import gracefulFs from 'graceful-fs';
 import { AsyncWorker, queue } from 'async';
 import glob from 'glob';
 import { promisify } from 'util';
@@ -7,6 +8,7 @@ import assert from 'assert';
 import { Event, ReturnValueObject } from '@appland/models';
 
 const StartTime = Date.now();
+const renameFile = promisify(gracefulFs.rename);
 
 export function endTime() {
   return (Date.now() - StartTime) / 1000;
@@ -69,7 +71,7 @@ export async function writeFileAtomic(
 
   const tempFilePath = join(dirName, `${name}.${suffix}`);
   await fsp.writeFile(tempFilePath, data);
-  await fsp.rename(tempFilePath, join(dirName, fileName));
+  await renameFile(tempFilePath, join(dirName, fileName));
 }
 
 /**
