@@ -18,7 +18,7 @@ export class WatchScanTelemetry {
   private sendTelemetry(scanEvents: ScanEvent[]) {
     const ruleIds = new Set<string>();
     let elapsed = 0;
-    let telemetryScanResults = new ScanResults();
+    const telemetryScanResults = new ScanResults();
     for (const scanEvent of scanEvents) {
       telemetryScanResults.aggregate(scanEvent.scanResults);
       elapsed += scanEvent.elapsed;
