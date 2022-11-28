@@ -15,37 +15,6 @@
         />
       </div>
     </form>
-    <section class="details-search__block details-search__block--analysis-finding analysis-finding">
-      <h2 class="details-search__block-title analysis">Analysis Findings</h2>
-      <ul class="details-search__block-list analysis">
-        <li>
-          <h3>
-            <svg viewBox="0 0 10 10" height="10" width="10">
-              <circle cx="5" cy="5" r="5" fill="#D1245C" />
-            </svg>
-            Missing Authentication (3)
-          </h3>
-        </li>
-        <li class="details-search__block-item"><span>Scan ID: </span> 1226</li>
-        <li class="details-search__block-item"><span>Created: </span> 01/03/2022 @3:49pm</li>
-        <li class="details-search__block-item"><span>Branch: </span>script-update-5684</li>
-        <li class="details-search__block-item"><span>Category: </span>Security</li>
-      </ul>
-      <ul class="details-search__block-list analysis">
-        <li>
-          <h3>
-            <svg viewBox="0 0 10 10" height="10" width="10">
-              <circle cx="5" cy="5" r="5" fill="#69AD34" />
-            </svg>
-            N Plus One Query (3)
-          </h3>
-        </li>
-        <li class="details-search__block-item"><span>Scan ID: </span> 1226</li>
-        <li class="details-search__block-item"><span>Created: </span> 01/03/2022 @11:12am</li>
-        <li class="details-search__block-item"><span>Branch: </span>script-update-2346</li>
-        <li class="details-search__block-item"><span>Category: </span>Performance</li>
-      </ul>
-    </section>
     <section
       :class="`details-search__block details-search__block--${type}`"
       v-for="type in Object.keys(listItems)"
