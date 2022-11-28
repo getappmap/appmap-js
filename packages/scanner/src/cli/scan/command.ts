@@ -90,7 +90,7 @@ export default {
 
     if (watch) {
       const watchAppMapDir = appmapDir!;
-      return watchScan({ appId, appmapDir: watchAppMapDir, configFile, sendTelemetry: true });
+      return watchScan({ appId, appmapDir: watchAppMapDir, configFile });
     } else {
       const configuration = await parseConfigFile(configFile);
       if (interactive) {

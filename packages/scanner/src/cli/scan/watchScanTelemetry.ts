@@ -10,7 +10,7 @@ export type ScanEvent = {
 export class WatchScanTelemetry {
   constructor(scanEvents: EventEmitter) {
     new EventAggregator<ScanEvent>((events) => {
-      const scanEvents = events.map(({ args: [event] }) => event) as ScanEvent[];
+      const scanEvents = events.map((e) => e.arg);
       this.sendTelemetry(scanEvents);
     }).attach(scanEvents, 'scan');
   }

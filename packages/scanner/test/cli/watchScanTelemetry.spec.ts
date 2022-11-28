@@ -47,6 +47,7 @@ describe(watchScanTelemetry.WatchScanTelemetry, () => {
   beforeEach(
     () => (sendScanResultsTelemetry = sinon.stub(scanResults, 'sendScanResultsTelemetry'))
   );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   beforeEach(() => (_telemetry = new watchScanTelemetry.WatchScanTelemetry(emitter)));
 
   afterEach(() => jest.useRealTimers());

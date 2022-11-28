@@ -1,3 +1,7 @@
+import { mkdir, mkdtemp, rm, unlink } from 'fs/promises';
+import tmp from 'tmp';
+import { openSync, closeSync, symlinkSync, existsSync, renameSync, mkdtempSync } from 'fs';
+
 import sinon from 'sinon';
 import UI from '../../../src/cmds/userInteraction';
 import * as test from '../../../src/cmds/record/state/record_test';
@@ -14,10 +18,6 @@ import RecordContext, { RecordProcessResult } from '../../../src/cmds/record/rec
 import Configuration from '../../../src/cmds/record/configuration';
 import { withStubbedTelemetry } from '../../helper';
 import RecordCommand from '../../../src/cmds/record/record';
-import { mkdir, mkdtemp, rm, unlink } from 'fs/promises';
-import { mkdtempSync } from 'fs';
-const { tmpdir } = require('os');
-const { openSync, closeSync, symlinkSync, existsSync, renameSync } = require('fs');
 
 describe('record test', () => {
   withStubbedTelemetry();
@@ -26,7 +26,7 @@ describe('record test', () => {
     prompt: sinon.SinonStub,
     cont: sinon.SinonStub,
     recordContext: RecordContext,
-    tempDir;
+    tempDir: string;
 
   beforeEach(() => {
     const config = new Configuration();
@@ -42,10 +42,9 @@ describe('record test', () => {
     cont = sinon.stub(UI, 'continue');
   });
 
-  beforeEach(() => (tempDir = mkdtempSync(tmpdir())));
+  beforeEach(() => (tempDir = tmp.dirSync({ unsafeCleanup: true }).name));
 
-  afterEach(() => sinon.restore());
-  afterEach(() => rm(tempDir, { recursive: true }));
+  afterEach(sinon.restore);
 
   describe('test command is not configured', () => {
     beforeEach(() => sinon.stub(areTestCommandsConfigured, 'default').resolves(false));

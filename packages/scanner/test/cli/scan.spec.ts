@@ -49,13 +49,13 @@ afterEach(() => {
 });
 afterEach(() => sinon.restore());
 afterEach(() => nock.cleanAll());
+withStubbedTelemetry();
 
 function runCommand(options: CommandOptions): Promise<void> {
   return Command.handler({ $0: 'test', _: [], ...options });
 }
 
 describe('scan', () => {
-  withStubbedTelemetry();
   it('errors with default options and without AppMap server API key', async () => {
     delete process.env.APPLAND_API_KEY;
     try {
@@ -233,7 +233,6 @@ describe('scan', () => {
         appId: 'no-such-app',
         appmapDir: tmpDir,
         configFile: scanConfigFilePath,
-        sendTelemetry: false,
       });
       await watcher.watch();
 

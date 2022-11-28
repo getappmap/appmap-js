@@ -18,7 +18,6 @@ export type WatchScanOptions = {
   appId?: string;
   appmapDir: string;
   configFile: string;
-  sendTelemetry: boolean;
 };
 
 declare module 'async' {
@@ -56,9 +55,7 @@ export class Watcher {
   telemetry: WatchScanTelemetry | undefined;
   scanEventEmitter = new EventEmitter();
 
-  constructor(private options: WatchScanOptions) {
-    if (options.sendTelemetry) this.telemetry = new WatchScanTelemetry(this.scanEventEmitter);
-  }
+  constructor(private options: WatchScanOptions) {}
 
   async watch(): Promise<void> {
     await this.reloadConfig();

@@ -2,7 +2,7 @@ import sinon from 'sinon';
 import extend from 'sinon/lib/sinon/util/core/extend';
 import Telemetry from '../src/telemetry';
 
-export function withSandbox() {
+export function withSandbox(): sinon.SinonSandbox {
   // The sinon doc says the default export is a sandbox, but it actually isn't (which is what this
   // issue is getting at https://github.com/sinonjs/sinon/issues/1795). It's really a sandbox with
   // some more methods added in:
@@ -11,7 +11,7 @@ export function withSandbox() {
 
   return api;
 }
-export function withStubbedTelemetry(sandbox: sinon.SinonSandbox = sinon) {
+export function withStubbedTelemetry(sandbox: sinon.SinonSandbox = sinon): void {
   beforeEach(() => {
     // Stub all Telemetry methods. flush still needs to work, though.
     sandbox.stub(Telemetry);

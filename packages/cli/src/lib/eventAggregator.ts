@@ -6,13 +6,20 @@ export type PendingEvent = {
   args: any[];
 };
 
-export const MaxMSBetween = 60 * 1000;
+export const MaxMSBetween = 10 * 1000;
 
 export default class EventAggregator {
   constructor(
     private callback: (events: PendingEvent[]) => void,
     private maxMsBetween = MaxMSBetween
-  ) {}
+  ) {
+    process.on('exit', () => {
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+        this.emitPending();
+      }
+    });
+  }
 
   private pending: PendingEvent[] = [];
   private push(emitter: EventEmitter, event: string, args: any[]) {
