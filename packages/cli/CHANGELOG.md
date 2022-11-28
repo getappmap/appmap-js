@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.52.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.51.1...@appland/appmap-v3.52.0) (2022-11-28)
+
+
+### Bug Fixes
+
+* Address PR comments ([788dab4](https://github.com/getappmap/appmap-js/commit/788dab46cea2933dc0c5965f6307f5c0ef4d2873))
+
+
+### Features
+
+* Increase aggregate telemetry timeout to 60s ([0f5e590](https://github.com/getappmap/appmap-js/commit/0f5e5909710d33562740d0d6fb77b286dcf54a59))
+
 # [@appland/appmap-v3.51.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.51.0...@appland/appmap-v3.51.1) (2022-11-24)
 
 
