@@ -1,3 +1,16 @@
+# [@appland/scanner-v1.73.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.72.0...@appland/scanner-v1.73.0) (2022-11-28)
+
+
+### Bug Fixes
+
+* Address PR comments ([788dab4](https://github.com/getappmap/appmap-js/commit/788dab46cea2933dc0c5965f6307f5c0ef4d2873))
+* sendTelemetry uses ScanResults.aggregate ([14e5bbb](https://github.com/getappmap/appmap-js/commit/14e5bbb074e4153878875a9376cbf10330baa1b4))
+
+
+### Features
+
+* Send scan:started at beginning of analysis and send data in ([76d2141](https://github.com/getappmap/appmap-js/commit/76d2141fdadabeb21f15af86f879e76ff0389237))
+
 # [@appland/scanner-v1.72.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.71.7...@appland/scanner-v1.72.0) (2022-11-01)
 
 
