@@ -1,6 +1,7 @@
 import { createHash } from 'crypto';
 import { join as joinPath, basename } from 'path';
-import { promises as fsp } from 'fs';
+import gracefulFs from 'graceful-fs';
+import { promisify } from 'util';
 import { buildAppMap, Metadata } from '@appland/models';
 import assert from 'assert';
 import FileTooLargeError from './fileTooLargeError';
@@ -9,6 +10,8 @@ import { verbose, mtime } from '../utils';
 import { algorithms, canonicalize } from './canonicalize';
 import AppMapIndex from './appmapIndex';
 import EventEmitter from 'events';
+
+const renameFile = promisify(gracefulFs.rename);
 
 /**
  * CHANGELOG
@@ -66,7 +69,10 @@ class Fingerprinter extends EventEmitter {
       return;
     }
 
-    if ((!this.checkVersion || await index.versionUpToDate(VERSION)) && (await index.indexUpToDate())) {
+    if (
+      (!this.checkVersion || (await index.versionUpToDate(VERSION))) &&
+      (await index.indexUpToDate())
+    ) {
       if (verbose()) {
         console.log('Fingerprint is up to date. Skipping...');
       }
@@ -133,7 +139,7 @@ class Fingerprinter extends EventEmitter {
     // At this point, moving the AppMap file into place will trigger re-indexing.
     // But the mtime will match the file modification time, so the algorithm will
     // determine that the index is up-to-date.
-    await fsp.rename(tempAppMapFileName, appMapFileName);
+    await renameFile(tempAppMapFileName, appMapFileName);
 
     this.emit('index', { path: appMapFileName, metadata: appmap.metadata });
   }
@@ -147,6 +153,6 @@ export type FingerprintEvent = {
 interface Fingerprinter {
   on(event: 'index', listener: (data: FingerprintEvent) => void): this;
   emit(event: 'index', data: FingerprintEvent): boolean;
-};
+}
 
 export default Fingerprinter;
