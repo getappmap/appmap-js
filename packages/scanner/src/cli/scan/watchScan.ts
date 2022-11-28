@@ -1,5 +1,8 @@
 import { stat, writeFile } from 'fs/promises';
 import * as chokidar from 'chokidar';
+import assert from 'assert';
+import path from 'path';
+import { queue } from 'async';
 
 import { formatReport } from './formatReport';
 import { default as buildScanner } from './scanner';
@@ -7,11 +10,11 @@ import {
   parseConfigFile,
   TimestampedConfiguration,
 } from '../../configuration/configurationProvider';
-import assert from 'assert';
-import path from 'path';
-import { queue } from 'async';
+import Telemetry from '../../telemetry';
+import EventEmitter from 'events';
+import { WatchScanTelemetry } from './watchScanTelemetry';
 
-type WatchScanOptions = {
+export type WatchScanOptions = {
   appId?: string;
   appmapDir: string;
   configFile: string;
@@ -49,11 +52,16 @@ export class Watcher {
   appmapWatcher?: chokidar.FSWatcher;
   appmapPoller?: chokidar.FSWatcher;
   configWatcher?: chokidar.FSWatcher;
+  telemetry: WatchScanTelemetry | undefined;
+  scanEventEmitter = new EventEmitter();
 
   constructor(private options: WatchScanOptions) {}
 
   async watch(): Promise<void> {
     await this.reloadConfig();
+    Telemetry.sendEvent({
+      name: 'scan:started',
+    });
 
     this.configWatcher = chokidar.watch(this.options.configFile, {
       ignoreInitial: true,
@@ -137,16 +145,19 @@ export class Watcher {
     )
       return; // report is up to date
 
+    const startTime = Date.now();
     const scanner = await buildScanner(true, this.config, [appmapFile]);
 
     const rawScanResults = await scanner.scan();
+    const elapsed = Date.now() - startTime;
+    this.scanEventEmitter.emit('scan', { scanResults: rawScanResults, elapsed });
 
     // Always report the raw data
     await writeFile(reportFile, formatReport(rawScanResults));
 
     // tell the queue that the current task is complete
     if (callback) {
-      await callback();
+      callback();
     }
   }
 

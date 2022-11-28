@@ -1,16 +1,17 @@
 import { EventEmitter } from 'events';
 
-export type PendingEvent = {
+export type PendingEvent<E> = {
   emitter: EventEmitter;
   event: string;
-  args: any[];
+  arg: E;
 };
 
 export const MaxMSBetween = 10 * 1000;
 
-export default class EventAggregator {
+// TODO: Unify with the code in packages/cli - find a way to make a common import.
+export default class EventAggregator<E> {
   constructor(
-    private callback: (events: PendingEvent[]) => void,
+    private callback: (events: PendingEvent<E>[]) => void,
     private maxMsBetween = MaxMSBetween
   ) {
     process.on('exit', () => {
@@ -21,9 +22,9 @@ export default class EventAggregator {
     });
   }
 
-  private pending: PendingEvent[] = [];
-  private push(emitter: EventEmitter, event: string, args: any[]) {
-    this.pending.push({ emitter, event, args });
+  private pending: PendingEvent<E>[] = [];
+  private push(emitter: EventEmitter, event: string, arg: E) {
+    this.pending.push({ emitter, event, arg });
     this.refresh();
   }
 
@@ -39,7 +40,7 @@ export default class EventAggregator {
     this.pending = [];
   }
 
-  attach(emitter: EventEmitter, event: string) {
-    emitter.on(event, (...args) => this.push(emitter, event, args));
+  attach(emitter: EventEmitter, event: string): void {
+    emitter.on(event, (...args) => this.push(emitter, event, args[0]));
   }
 }

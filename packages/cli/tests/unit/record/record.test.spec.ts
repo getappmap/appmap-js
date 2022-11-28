@@ -1,3 +1,7 @@
+import { mkdir, mkdtemp, rm, unlink } from 'fs/promises';
+import tmp from 'tmp';
+import { openSync, closeSync, symlinkSync, existsSync, renameSync, mkdtempSync } from 'fs';
+
 import sinon from 'sinon';
 import UI from '../../../src/cmds/userInteraction';
 import * as test from '../../../src/cmds/record/state/record_test';
@@ -14,17 +18,6 @@ import RecordContext, { RecordProcessResult } from '../../../src/cmds/record/rec
 import Configuration from '../../../src/cmds/record/configuration';
 import { withStubbedTelemetry } from '../../helper';
 import RecordCommand from '../../../src/cmds/record/record';
-const { tmpdir } = require('os');
-const {
-  openSync,
-  closeSync,
-  symlinkSync,
-  existsSync,
-  unlink,
-  rmdir,
-  mkdir,
-  renameSync,
-} = require('fs');
 
 describe('record test', () => {
   withStubbedTelemetry();
@@ -32,7 +25,8 @@ describe('record test', () => {
   let confirm: sinon.SinonStub,
     prompt: sinon.SinonStub,
     cont: sinon.SinonStub,
-    recordContext: RecordContext;
+    recordContext: RecordContext,
+    tempDir: string;
 
   beforeEach(() => {
     const config = new Configuration();
@@ -48,9 +42,9 @@ describe('record test', () => {
     cont = sinon.stub(UI, 'continue');
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  beforeEach(() => (tempDir = tmp.dirSync({ unsafeCleanup: true }).name));
+
+  afterEach(sinon.restore);
 
   describe('test command is not configured', () => {
     beforeEach(() => sinon.stub(areTestCommandsConfigured, 'default').resolves(false));
@@ -84,7 +78,7 @@ describe('record test', () => {
 
   describe('record test with invalid directory parameter', () => {
     it('stops if directory parameter is file instead of directory', async () => {
-      const dirPrefix = tmpdir();
+      const dirPrefix = tempDir;
       const directoryParam = `${dirPrefix}/file_not_dir`;
       closeSync(openSync(directoryParam, 'w'));
       expect(existsSync(directoryParam)).toEqual(true);
@@ -99,21 +93,17 @@ describe('record test', () => {
       const ret = await RecordCommand.handler(argv);
       expect(ret).toEqual(null);
 
-      await unlink(directoryParam, (err) => {});
+      await unlink(directoryParam);
     });
 
     it('stops if directory parameter is invalid symlink', async () => {
-      const dirPrefix = tmpdir();
+      const dirPrefix = tempDir;
       const symlinkDst = `${dirPrefix}/symlink_dst`;
       const symlinkSrc = `${dirPrefix}/symlink_src`;
       const symlinkDstRenamed = `${dirPrefix}/symlink_dst_renamed`;
 
-      await unlink(symlinkSrc, (err) => {});
-      await rmdir(symlinkDst, (err) => {});
-      await rmdir(symlinkDstRenamed, (err) => {});
-
       // create symlink
-      await mkdir(symlinkDst, (err) => {});
+      await mkdir(symlinkDst);
       symlinkSync(symlinkDst, symlinkSrc);
       expect(existsSync(symlinkDst)).toEqual(true);
       expect(existsSync(symlinkSrc)).toEqual(true); // symlink is valid
@@ -131,9 +121,6 @@ describe('record test', () => {
         d: dirPrefix,
       };
       const ret = await RecordCommand.handler(argv);
-      await unlink(symlinkSrc, (err) => {});
-      await rmdir(symlinkDst, (err) => {});
-      await rmdir(symlinkDstRenamed, (err) => {});
       expect(ret).toEqual(null);
     });
   });

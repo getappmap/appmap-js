@@ -7,6 +7,7 @@ import * as watchScan from '../../src/cli/scan/watchScan';
 import tmp from 'tmp-promise';
 import { copyFile, mkdir, writeFile } from 'node:fs/promises';
 import path, { basename } from 'node:path';
+import { withStubbedTelemetry } from '../helper';
 
 const defaultArguments: Arguments<CommandOptions> = {
   _: [],
@@ -25,6 +26,8 @@ describe('commands', () => {
     jest.restoreAllMocks();
     process.chdir(cwd);
   });
+
+  withStubbedTelemetry();
 
   describe('scan --watch', () => {
     it('does not attempt to resolve an app ID', async () => {
