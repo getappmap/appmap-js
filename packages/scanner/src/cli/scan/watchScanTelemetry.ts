@@ -17,20 +17,18 @@ export class WatchScanTelemetry {
 
   private sendTelemetry(scanEvents: ScanEvent[]) {
     const ruleIds = new Set<string>();
-    let numAppMaps = 0;
-    let numFindings = 0;
     let elapsed = 0;
+    let telemetryScanResults = new ScanResults();
     for (const scanEvent of scanEvents) {
-      scanEvent.scanResults.summary.rules.forEach((rule) => ruleIds.add(rule));
-      numAppMaps += scanEvent.scanResults.summary.numAppMaps;
-      numFindings += scanEvent.scanResults.summary.numFindings;
+      telemetryScanResults.aggregate(scanEvent.scanResults);
       elapsed += scanEvent.elapsed;
     }
+    telemetryScanResults.summary.rules.forEach((rule) => ruleIds.add(rule));
 
     sendScanResultsTelemetry({
       ruleIds: [...ruleIds],
-      numAppMaps,
-      numFindings,
+      numAppMaps: telemetryScanResults.summary.numAppMaps,
+      numFindings: telemetryScanResults.summary.numFindings,
       elapsedMs: elapsed,
     });
   }
