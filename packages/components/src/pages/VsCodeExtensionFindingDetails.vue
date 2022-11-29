@@ -15,26 +15,87 @@
         :selected-label="selectedLabel"
         :filters-root-objects="filters.rootObjects"
       >
-        <template v-slot:buttons>
-          <v-details-button
-            icon="clear"
-            v-if="selectedObject || selectedLabel"
-            @click.native="clearSelection"
-          >
-            Clear selection
-          </v-details-button>
-          <v-details-button icon="back" v-if="canGoBack" @click.native="goBack">
-            Back to
-            <b v-if="prevSelectedObject && prevSelectedObject.name">
-              {{
-                prevSelectedObject.type === 'query'
-                  ? prevSelectedObject.prettyName
-                  : prevSelectedObject.name
-              }}
-            </b>
-            <span v-else>previous</span>
-          </v-details-button>
-        </template>
+        <!-- Analysis finding detail -->
+        <div class="finding-details">
+          <section class="finding-heading">
+            <h2>Finding Details</h2>
+            <a class="btn btn-breadcrumb" href="/">
+              <span class="control back"><VBreadcrumbBack /></span>
+              Back</a
+            >
+          </section>
+          <section class="finding-name">
+            <h2>N Plus One Query</h2>
+            <p class="subhead-margin">
+              AppMap has found occurrences of a query being repeated within a loop. This SQL query
+              is executed 16 times total in this request.
+            </p>
+          </section>
+          <section class="overview">
+            <div class="section-header expando">
+              <h3>Overview</h3>
+              <span class="control"><VChevronDown /></span>
+            </div>
+            <div class="section-content">
+              <ul class="overview">
+                <li>Time: 2022-05-19 22:35:49 UTC</li>
+                <li>Status: New</li>
+                <li>Impact Category: Maintenance</li>
+                <li>Reference: <a href="/">CWE-1073</a></li>
+                <li>Commit: <a href="/">1ea201b</a></li>
+                <li>Database type: sqlite</li>
+                <li>Server version: 3.11.0</li>
+              </ul>
+            </div>
+          </section>
+          <section class="message">
+            <div class="section-header">
+              <h3>Message:</h3>
+            </div>
+            <p class="code">SELECT “users”. * FROM “users” WHERE “users” . “id” = ? LIMIT ?</p>
+          </section>
+          <section class="stack-trace">
+            <div class="section-header">
+              <h3>Stack Trace</h3>
+            </div>
+            <ul>
+              <li><a href="/">.../.rbenv/versions/3.0.2/lib/ruby/3.0.0/psych.rb:273</a></li>
+              <li><a href="/">.../land-of-apps/sample_app_6th_ed/app/models/user.rb</a></li>
+              <li><a href="/">.../lib/action_controller/metal/instrumentation.rb:18</a></li>
+            </ul>
+          </section>
+          <section class="found-appmaps">
+            <div class="section-header left">
+              <VAppmapPin />
+              <h3>Found in 3 AppMaps</h3>
+            </div>
+            <ul>
+              <li class="expando open">
+                <span class="appmap-title">Microposts_interface micropost interface (3)</span>
+                <span class="control"><VChevronDown /></span>
+              </li>
+
+              <li class="sublist">
+                <a href="/">RelatedEvent_Occurrence_01</a>
+              </li>
+              <li class="sublist">
+                <a href="/">RelatedEvent_Occurrence_02</a>
+              </li>
+              <li class="sublist">
+                <a href="/">RelatedEvent_Occurrence_03</a>
+              </li>
+              <li class="expando">
+                <span class="appmap-title">Feed_interface micropost delete (5)</span>
+                <span class="control closed"><VChevronDown /></span>
+              </li>
+              <li class="expando">
+                <span class="appmap-title">User_account new password_reset (104)</span>
+                <span class="control closed"><VChevronDown /></span>
+              </li>
+            </ul>
+          </section>
+        </div>
+        <!-- / Analysis finding detail -->
       </v-details-panel>
       <div class="main-column--drag" @mousedown="startResizing"></div>
     </div>

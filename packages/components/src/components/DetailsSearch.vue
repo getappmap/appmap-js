@@ -253,7 +253,6 @@ export default {
   padding: 0;
 
   &__form {
-    margin-bottom: 1.5rem;
     padding: 0 1.5rem;
   }
 
@@ -261,6 +260,10 @@ export default {
     position: relative;
     border-radius: $border-radius;
     border: 2px solid $light-purple;
+    display: flex;
+    align-content: center;
+    gap: 1rem;
+    padding: 0 0.5rem;
 
     .details-search--empty & {
       border-radius: $gray3;
@@ -286,22 +289,13 @@ export default {
   }
 
   &__input-prefix {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform: translateY(-50%);
-    text-align: center;
     color: $base06;
+    display: flex;
+    align-items: center;
 
     svg {
       position: relative;
       left: 3px;
-      width: 14px;
-      height: 14px;
       fill: $lightgray2;
     }
   }
@@ -309,9 +303,9 @@ export default {
   &__input-element {
     border: none;
     width: 100%;
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 0;
     font: inherit;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     color: $base03;
     background: transparent;
     outline: none;
@@ -387,7 +381,7 @@ export default {
         margin: 0 -0.25rem -0.25rem;
       }
       &.analysis {
-        padding: 1rem 0;
+        padding: 0 0 1rem 0;
         li {
           border-bottom: 0;
           padding: 0.2rem 0;

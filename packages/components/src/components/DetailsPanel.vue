@@ -20,7 +20,7 @@
         >
       </section>
       <section class="finding-name">
-        <h2>N Plus One Query (3)</h2>
+        <h2>N Plus One Query</h2>
         <p class="subhead-margin">
           AppMap has found occurrences of a query being repeated within a loop. This SQL query is
           executed 16 times total in this request.
@@ -140,6 +140,7 @@ import VAppmapPin from '@/assets/appmap-pin.svg';
 import VExpandCollapse from '@/assets/expand_collapse_icon.svg';
 import VBreadcrumbBack from '@/assets/breadcrumb-back.svg';
 import VChevronDown from '@/assets/chevron-down.svg';
+import VAccordion from '@/components/Accordion.vue';
 
 export default {
   name: 'v-details-panel',
@@ -164,6 +165,7 @@ export default {
     VExpandCollapse,
     VBreadcrumbBack,
     VChevronDown,
+    VAccordion,
   },
   props: {
     subtitle: String,
@@ -300,13 +302,13 @@ export default {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 2px solid $gray2;
+      border-bottom: 3px solid $gray2;
       h2 {
         margin: 1rem 0;
         text-transform: uppercase;
         color: $hotpink;
-        font-size: 1rem;
-        font-weight: bold;
+        font-size: 1.2rem;
+        font-weight: 800;
       }
       a {
         color: $blue;
@@ -319,9 +321,9 @@ export default {
     }
     .heading,
     section {
-      border-bottom: 2px solid $gray2;
+      border-bottom: 3px solid $gray2;
       &.bt-1 {
-        border-top: 2px solid $gray2;
+        border-top: 3px solid $gray2;
       }
       p {
         color: $white;
@@ -345,6 +347,7 @@ export default {
           text-decoration: none;
           line-height: 1.5rem;
           width: 100%;
+          word-break: break-all;
           &:hover {
             text-decoration: underline;
           }
@@ -429,11 +432,19 @@ export default {
 
     .finding-name {
       line-height: 1.5rem;
+      h2 {
+        // font-size: 1rem;
+        margin-bottom: 0rem;
+        font-size: 0.9rem;
+        color: $gray4;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
       h3 {
         margin-bottom: 0;
       }
       .subhead-margin {
-        margin-top: 0.5rem;
+        margin-top: 0.25rem;
       }
     }
   }

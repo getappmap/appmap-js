@@ -88,5 +88,7 @@ export const extensionWithFindingDetails = (args, { argTypes }) => ({
     }
 
     bindResolvePath(this);
+
+    this.$refs.vsCode.showVersionNotification('v1.0.0', patchNotes);
   },
 });
