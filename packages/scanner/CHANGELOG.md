@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.73.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.73.0...@appland/scanner-v1.73.1) (2022-11-29)
+
+
+### Bug Fixes
+
+* Continue watching correctly after skipping files ([b5d7c2d](https://github.com/getappmap/appmap-js/commit/b5d7c2df6da78ae20b6547e0ddd23f41f20cb428))
+
 # [@appland/scanner-v1.73.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.72.0...@appland/scanner-v1.73.0) (2022-11-28)
 
 
