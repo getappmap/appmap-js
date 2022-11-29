@@ -324,7 +324,6 @@ import UploadIcon from '@/assets/upload.svg';
 import FilterIcon from '@/assets/filter.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
-import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
 import VFiltersForm from '../components/FiltersForm.vue';
@@ -369,7 +368,6 @@ export default {
     UploadIcon,
     FilterIcon,
     VDetailsPanel,
-    VDetailsButton,
     VDiagramComponent,
     VDiagramTrace,
     VFiltersForm,
