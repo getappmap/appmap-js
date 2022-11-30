@@ -10,14 +10,15 @@
           <header>
             <h4 class="subhead">Finding</h4>
             <h1 data-cy="title">{{ title }}</h1>
-            <p v-if="description">{{ description }}</p>
+            <p v-if="description" data-cy="description">{{ description }}</p>
+            <a :href="docsLink" data-cy="docs-link">Learn More</a>
           </header>
           <div class="header-controls">
             <!-- TODO
           <div class="btn">Status: <strong>New</strong></div>
           <div class="btn">Share</div>
           -->
-            <a :href="docsLink"><div class="btn">View the Docs</div></a>
+            <div class="btn" @click="backToOverview()">Open Findings Overview</div>
           </div>
         </div>
 
@@ -123,6 +124,10 @@ export default {
     openMap(mapFile, uri) {
       this.$root.$emit('open-map', mapFile, uri);
     },
+
+    backToOverview() {
+      this.$root.$emit('open-findings-overview');
+    },
   },
 
   computed: {
@@ -170,9 +175,7 @@ export default {
 
     references() {
       return (
-        (this.representativeFinding.ruleInfo &&
-          this.representativeFinding.ruleInfo.frontMatter &&
-          this.representativeFinding.ruleInfo.frontMatter.references) ||
+        (this.representativeFinding.ruleInfo && this.representativeFinding.ruleInfo.references) ||
         {}
       );
     },
@@ -210,7 +213,9 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     header {
-      width: 70%;
+      p {
+        margin: 1rem 0;
+      }
     }
     .header-controls {
       display: flex;

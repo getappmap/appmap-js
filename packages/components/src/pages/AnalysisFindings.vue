@@ -358,8 +358,6 @@ export default {
         &:first-of-type {
           border-top: 0;
         }
-        &.finding-name {
-        }
         &:hover {
           cursor: pointer;
         }

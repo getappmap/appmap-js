@@ -75,8 +75,7 @@ WithTwoFindings.args = {
         },
       ],
       ruleInfo: {
-        frontMatter: {
-          rule: 'deserialization-of-untrusted-data',
+        id: 'deserialization-of-untrusted-data',
           name: 'Deserialization of untrusted data',
           title: 'Deserialization of untrusted data',
           references: {
@@ -84,7 +83,6 @@ WithTwoFindings.args = {
             'Ruby Security': 'https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html',
           },
           impactDomain: 'Security',
-        },
         description:
           "Finds occurrances of deserialization in which the mechanism employed is known to be unsafe, and the data comes from an untrusted source and hasn't passed through a sanitization mechanism.",
       },
@@ -148,8 +146,7 @@ WithTwoFindings.args = {
         },
       ],
       ruleInfo: {
-        frontMatter: {
-          rule: 'deserialization-of-untrusted-data',
+        id: 'deserialization-of-untrusted-data',
           name: 'Deserialization of untrusted data',
           title: 'Deserialization of untrusted data',
           references: {
@@ -157,7 +154,6 @@ WithTwoFindings.args = {
             'Ruby Security': 'https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html',
           },
           impactDomain: 'Security',
-        },
         description:
           "Finds occurrances of deserialization in which the mechanism employed is known to be unsafe, and the data comes from an untrusted source and hasn't passed through a sanitization mechanism.",
       },
@@ -227,8 +223,7 @@ WithOneFinding.args = {
         },
       ],
       ruleInfo: {
-        frontMatter: {
-          rule: 'deserialization-of-untrusted-data',
+        id: 'deserialization-of-untrusted-data',
           name: 'Deserialization of untrusted data',
           title: 'Deserialization of untrusted data',
           references: {
@@ -236,7 +231,6 @@ WithOneFinding.args = {
             'Ruby Security': 'https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html',
           },
           impactDomain: 'Security',
-        },
         description:
           "Finds occurrances of deserialization in which the mechanism employed is known to be unsafe, and the data comes from an untrusted source and hasn't passed through a sanitization mechanism.",
       },
