@@ -204,13 +204,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.analysis-finding {
-  h3 {
-    font-size: 0.9rem;
-    margin: 0.5rem 0 0 0;
-  }
-}
+<style scoped lang="scss">
 .details-search {
   margin-bottom: 2rem;
   padding: 0;
@@ -311,12 +305,6 @@ export default {
       .details-search__block--empty & {
         background-color: $gray3;
       }
-      .analysis {
-        background-color: $hotpink;
-      }
-      &.analysis {
-        background-color: $hotpink;
-      }
     }
 
     &-list {
@@ -326,23 +314,6 @@ export default {
 
       .details-search__block--labels & {
         margin: 0 -0.25rem -0.25rem;
-      }
-      &.analysis {
-        border-bottom: 1px solid $gray2;
-        padding-bottom: 0.5rem;
-        li {
-          border-bottom: 0;
-          padding: 0.2rem 0;
-          min-height: unset;
-          justify-content: flex-start;
-          gap: 0.5rem;
-          span {
-            color: $gray4;
-          }
-          svg {
-            margin-right: 0.25rem;
-          }
-        }
       }
     }
 
