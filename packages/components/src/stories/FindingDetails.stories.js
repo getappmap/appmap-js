@@ -19,6 +19,7 @@ WithTwoFindings.args = {
   findings: [
     {
       finding: {
+        ruleId: 'deserialization-of-untrusted-data',
         appMapFile:
           '/home/ahtrotta/projects/land-of-apps/sample_app_6th_ed/tmp/appmap/minitest/Password_resets_password_resets.appmap.json',
         hash_v2: '5029373729e1556d3596a2cd5696dfd928e5607f86cc2f1f81a937a1623e2f40',
@@ -75,16 +76,14 @@ WithTwoFindings.args = {
         },
       ],
       ruleInfo: {
-        frontMatter: {
-          rule: 'deserialization-of-untrusted-data',
-          name: 'Deserialization of untrusted data',
-          title: 'Deserialization of untrusted data',
-          references: {
-            'CWE-502': 'https://cwe.mitre.org/data/definitions/502.html',
-            'Ruby Security': 'https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html',
-          },
-          impactDomain: 'Security',
+        id: 'deserialization-of-untrusted-data',
+        name: 'Deserialization of untrusted data',
+        title: 'Deserialization of untrusted data',
+        references: {
+          'CWE-502': 'https://cwe.mitre.org/data/definitions/502.html',
+          'Ruby Security': 'https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html',
         },
+        impactDomain: 'Security',
         description:
           "Finds occurrances of deserialization in which the mechanism employed is known to be unsafe, and the data comes from an untrusted source and hasn't passed through a sanitization mechanism.",
       },
@@ -92,6 +91,7 @@ WithTwoFindings.args = {
     },
     {
       finding: {
+        ruleId: 'deserialization-of-untrusted-data',
         appMapFile:
           '/home/ahtrotta/projects/land-of-apps/sample_app_6th_ed/tmp/appmap/minitest/Password_resets_password_reset_attack.appmap.json',
         hash_v2: '5029373729e1556d3596a2cd5696dfd928e5607f86cc2f1f81a937a1623e2f40',
@@ -148,16 +148,14 @@ WithTwoFindings.args = {
         },
       ],
       ruleInfo: {
-        frontMatter: {
-          rule: 'deserialization-of-untrusted-data',
-          name: 'Deserialization of untrusted data',
-          title: 'Deserialization of untrusted data',
-          references: {
-            'CWE-502': 'https://cwe.mitre.org/data/definitions/502.html',
-            'Ruby Security': 'https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html',
-          },
-          impactDomain: 'Security',
+        id: 'deserialization-of-untrusted-data',
+        name: 'Deserialization of untrusted data',
+        title: 'Deserialization of untrusted data',
+        references: {
+          'CWE-502': 'https://cwe.mitre.org/data/definitions/502.html',
+          'Ruby Security': 'https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html',
         },
+        impactDomain: 'Security',
         description:
           "Finds occurrances of deserialization in which the mechanism employed is known to be unsafe, and the data comes from an untrusted source and hasn't passed through a sanitization mechanism.",
       },
@@ -171,6 +169,7 @@ WithOneFinding.args = {
   findings: [
     {
       finding: {
+        ruleId: 'deserialization-of-untrusted-data',
         appMapFile:
           '/home/ahtrotta/projects/land-of-apps/sample_app_6th_ed/tmp/appmap/minitest/Password_resets_password_resets.appmap.json',
         hash_v2: '5029373729e1556d3596a2cd5696dfd928e5607f86cc2f1f81a937a1623e2f40',
@@ -227,16 +226,14 @@ WithOneFinding.args = {
         },
       ],
       ruleInfo: {
-        frontMatter: {
-          rule: 'deserialization-of-untrusted-data',
-          name: 'Deserialization of untrusted data',
-          title: 'Deserialization of untrusted data',
-          references: {
-            'CWE-502': 'https://cwe.mitre.org/data/definitions/502.html',
-            'Ruby Security': 'https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html',
-          },
-          impactDomain: 'Security',
+        id: 'deserialization-of-untrusted-data',
+        name: 'Deserialization of untrusted data',
+        title: 'Deserialization of untrusted data',
+        references: {
+          'CWE-502': 'https://cwe.mitre.org/data/definitions/502.html',
+          'Ruby Security': 'https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html',
         },
+        impactDomain: 'Security',
         description:
           "Finds occurrances of deserialization in which the mechanism employed is known to be unsafe, and the data comes from an untrusted source and hasn't passed through a sanitization mechanism.",
       },

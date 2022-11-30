@@ -1,7 +1,7 @@
 <template>
   <v-quickstart-layout>
     <section v-if="hasNoData" class="finding-details">
-      <h1>Oops, Something Went Wrong!</h1>
+      <h1 data-cy="title">Oops, Something Went Wrong!</h1>
       <p>We couldn't find any information about this finding</p>
     </section>
     <div v-else>
@@ -10,14 +10,15 @@
           <header>
             <h4 class="subhead">Finding</h4>
             <h1 data-cy="title">{{ title }}</h1>
-            <p v-if="description">{{ description }}</p>
+            <p v-if="description" data-cy="description">{{ description }}</p>
+            <a :href="docsLink" data-cy="docs-link">Learn More</a>
           </header>
           <div class="header-controls">
             <!-- TODO
           <div class="btn">Status: <strong>New</strong></div>
           <div class="btn">Share</div>
           -->
-            <a :href="docsLink"><div class="btn">View the Docs</div></a>
+            <div class="btn" @click="backToOverview()">Open Findings Overview</div>
           </div>
         </div>
 
@@ -31,13 +32,13 @@
               <li>Status: New</li>
               <li>Commit: <a href="/">1ea201b</a></li>
               -->
-                <li>Category: {{ category }}</li>
-                <li v-for="(link, reference) in references" :key="reference">
+                <li data-cy="category">Category: {{ category }}</li>
+                <li data-cy="reference" v-for="(link, reference) in references" :key="reference">
                   Reference: <a :href="link">{{ reference }}</a>
                 </li>
               </ul>
             </div>
-            <div class="event-summary">
+            <div class="event-summary" data-cy="event-summary">
               <h3>Event Summary</h3>
               <ul class="card stack">
                 <li>
@@ -49,9 +50,10 @@
           <div class="stack-trace finding-details-wrap col">
             <h3>Stack Trace</h3>
             <ul class="card">
-              <li v-for="location in stackLocations" :key="location.uri.path">
+              <li v-for="location in stackLocations" :key="location.uri.path" data-cy="stack-trace">
                 <v-popper
                   class="hover-text-popper"
+                  data-cy="popper"
                   :text="location.uri.path"
                   placement="top"
                   text-align="left"
@@ -66,14 +68,14 @@
         </main>
       </section>
       <div class="analysis-findings full-width">
-        <h3>
+        <h3 data-cy="associated-maps-title">
           <VAppmapPin />
           Found in {{ associatedMaps.length }} AppMap{{
             associatedMaps.length === 1 ? undefined : 's'
           }}
         </h3>
         <ul class="appmap-list">
-          <li v-for="map in associatedMaps" :key="map.fullPath">
+          <li v-for="map in associatedMaps" :key="map.fullPath" data-cy="associated-map">
             <a href="#" @click.prevent="openMap(map.fullPath, map.uri)">{{ map.appMapName }}</a>
           </li>
         </ul>
@@ -123,6 +125,10 @@ export default {
     openMap(mapFile, uri) {
       this.$root.$emit('open-map', mapFile, uri);
     },
+
+    backToOverview() {
+      this.$root.$emit('open-findings-overview');
+    },
   },
 
   computed: {
@@ -170,9 +176,7 @@ export default {
 
     references() {
       return (
-        (this.representativeFinding.ruleInfo &&
-          this.representativeFinding.ruleInfo.frontMatter &&
-          this.representativeFinding.ruleInfo.frontMatter.references) ||
+        (this.representativeFinding.ruleInfo && this.representativeFinding.ruleInfo.references) ||
         {}
       );
     },
@@ -210,7 +214,9 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     header {
-      width: 70%;
+      p {
+        margin: 1rem 0;
+      }
     }
     .header-controls {
       display: flex;

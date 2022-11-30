@@ -152,3 +152,10 @@ interface Rule {
   // Function to instantiate the rule logic from configured options.
   build: (options: this['Options']) => RuleLogic;
 }
+
+export type Check = {
+  id: string;
+  scope: ScopeName;
+  impactDomain: ImpactDomain;
+  rule: Rule;
+};
