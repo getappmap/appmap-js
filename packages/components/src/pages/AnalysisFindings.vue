@@ -10,7 +10,9 @@
           -->
         </header>
         <div class="header-controls">
-          <div class="btn" @click="openProblemsTab()">Open the <strong>Problems tab</strong></div>
+          <div class="btn" data-cy="problems-tab-button" @click="openProblemsTab()">
+            Open the <strong>Problems tab</strong>
+          </div>
           <!-- TODO
           <div class="btn">Share</div>
           -->
@@ -22,19 +24,37 @@
           <div class="findings-overview">
             <h3>Finding Overview</h3>
             <ul>
-              <li class="total" @click="filter('all')">All: {{ uniqueFindings.length }}</li>
-              <li v-if="numSecurityFindings" class="security" @click="filter('Security')">
+              <li class="total" data-cy="category-all" @click="filter('all')">
+                All: {{ uniqueFindings.length }}
+              </li>
+              <li
+                v-if="numSecurityFindings"
+                class="security"
+                data-cy="category-security"
+                @click="filter('Security')"
+              >
                 Security: {{ numSecurityFindings }}
               </li>
-              <li v-if="numPerformanceFindings" class="performance" @click="filter('Performance')">
+              <li
+                v-if="numPerformanceFindings"
+                class="performance"
+                data-cy="category-performance"
+                @click="filter('Performance')"
+              >
                 Performance: {{ numPerformanceFindings }}
               </li>
-              <li v-if="numStabilityFindings" class="stability" @click="filter('Stability')">
+              <li
+                v-if="numStabilityFindings"
+                class="stability"
+                data-cy="category-stability"
+                @click="filter('Stability')"
+              >
                 Stability: {{ numStabilityFindings }}
               </li>
               <li
                 v-if="numMaintainabilityFindings"
                 class="maintainability"
+                data-cy="category-maintainability"
                 @click="filter('Maintainability')"
               >
                 Maintainability: {{ numMaintainabilityFindings }}
@@ -44,16 +64,28 @@
 
           <div class="findings-list">
             <ul class="list">
-              <li>
+              <li data-cy="finding-table">
                 <ul class="item header">
-                  <li class="finding-name" @click="sortFindings('name')"><h3>Finding Name</h3></li>
+                  <li
+                    class="finding-name"
+                    data-cy="column-header-name"
+                    @click="sortFindings('name')"
+                  >
+                    <h3>Finding Name</h3>
+                  </li>
                   <!-- TODO
                   <li><h3>Status</h3></li>
                   -->
-                  <li @click="sortFindings('category')"><h3>Category</h3></li>
+                  <li data-cy="column-header-category" @click="sortFindings('category')">
+                    <h3>Category</h3>
+                  </li>
                 </ul>
               </li>
-              <li v-for="[ruleTitle, impactDomain, hash] in sortedFindingsInfo" :key="hash">
+              <li
+                v-for="[ruleTitle, impactDomain, hash] in sortedFindingsInfo"
+                :key="hash"
+                data-cy="finding"
+              >
                 <ul class="item" @click="openFindingInfo(hash)">
                   <li class="finding-name">{{ ruleTitle }}</li>
                   <!-- TODO

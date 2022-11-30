@@ -1,7 +1,7 @@
 <template>
   <v-quickstart-layout>
     <section v-if="hasNoData" class="finding-details">
-      <h1>Oops, Something Went Wrong!</h1>
+      <h1 data-cy="title">Oops, Something Went Wrong!</h1>
       <p>We couldn't find any information about this finding</p>
     </section>
     <div v-else>
@@ -32,13 +32,13 @@
               <li>Status: New</li>
               <li>Commit: <a href="/">1ea201b</a></li>
               -->
-                <li>Category: {{ category }}</li>
-                <li v-for="(link, reference) in references" :key="reference">
+                <li data-cy="category">Category: {{ category }}</li>
+                <li data-cy="reference" v-for="(link, reference) in references" :key="reference">
                   Reference: <a :href="link">{{ reference }}</a>
                 </li>
               </ul>
             </div>
-            <div class="event-summary">
+            <div class="event-summary" data-cy="event-summary">
               <h3>Event Summary</h3>
               <ul class="card stack">
                 <li>
@@ -50,9 +50,10 @@
           <div class="stack-trace finding-details-wrap col">
             <h3>Stack Trace</h3>
             <ul class="card">
-              <li v-for="location in stackLocations" :key="location.uri.path">
+              <li v-for="location in stackLocations" :key="location.uri.path" data-cy="stack-trace">
                 <v-popper
                   class="hover-text-popper"
+                  data-cy="popper"
                   :text="location.uri.path"
                   placement="top"
                   text-align="left"
@@ -67,14 +68,14 @@
         </main>
       </section>
       <div class="analysis-findings full-width">
-        <h3>
+        <h3 data-cy="associated-maps-title">
           <VAppmapPin />
           Found in {{ associatedMaps.length }} AppMap{{
             associatedMaps.length === 1 ? undefined : 's'
           }}
         </h3>
         <ul class="appmap-list">
-          <li v-for="map in associatedMaps" :key="map.fullPath">
+          <li v-for="map in associatedMaps" :key="map.fullPath" data-cy="associated-map">
             <a href="#" @click.prevent="openMap(map.fullPath, map.uri)">{{ map.appMapName }}</a>
           </li>
         </ul>
