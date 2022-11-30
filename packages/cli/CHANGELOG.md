@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.52.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.52.0...@appland/appmap-v3.52.1) (2022-11-30)
+
+
+### Bug Fixes
+
+* Prevent atomic writes from failing due to race conditions with ([2113652](https://github.com/getappmap/appmap-js/commit/21136526f26f9dab53dff87779dc06ab3c955fe2))
+
 # [@appland/appmap-v3.52.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.51.1...@appland/appmap-v3.52.0) (2022-11-28)
 
 
