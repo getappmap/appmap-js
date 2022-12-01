@@ -107,7 +107,6 @@ __metadata:
     cli-progress: ^3.9.0
     conf: ^10.0.2
     console-table-printer: ^2.9.0
-    crypto: ^1.0.1
     crypto-js: ^4.0.0
     css-loader: ^6.2.0
     detect-indent: ^6.1.0
@@ -11336,13 +11335,6 @@ __metadata:
   version: 2.0.0
   resolution: "crypto-random-string@npm:2.0.0"
   checksum: 0283879f55e7c16fdceacc181f87a0a65c53bc16ffe1d58b9d19a6277adcd71900d02bb2c4843dd55e78c51e30e89b0fec618a7f170ebcc95b33182c28f05fd6
-  languageName: node
-  linkType: hard
-
-"crypto@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "crypto@npm:1.0.1"
-  checksum: 087fe3165bd94c333a49e6ed66a0193911f63eac38a24f379b3001a5fe260a59c413646e53a0f67875ba13902b2686d81dc703cb2c147a4ec727dcdc04e5645e
   languageName: node
   linkType: hard
 
