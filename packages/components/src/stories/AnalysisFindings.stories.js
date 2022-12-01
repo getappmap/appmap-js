@@ -42,3 +42,42 @@ WithFindings.args = {
     },
   ],
 };
+
+export const WithoutImpactDomains = Template.bind({});
+WithoutImpactDomains.args = {
+  findings: [
+    {
+      finding: {
+        ruleTitle: 'Secret in log',
+        hash_v2: 'abcdefghijklmnopqrstuvwxyz1234567890',
+      },
+    },
+    {
+      finding: {
+        ruleTitle: 'N plus 1 SQL query',
+        hash_v2: 'abcdefghijklmnopqrstuvwxyz0987654321',
+      },
+    },
+    {
+      finding: {
+        ruleTitle: 'Deserialization of untrusted data',
+        impactDomain: 'Security',
+        hash_v2: 'zyxwvutsrqponmlkjihgfedcba1234567890',
+      },
+    },
+    {
+      finding: {
+        ruleTitle: 'Circular Dependency',
+        impactDomain: 'Maintainability',
+        hash_v2: 'zyxwvutsrqponmlkjihgfedcba0987654321',
+      },
+    },
+    {
+      finding: {
+        ruleTitle: 'HTTP 500',
+        impactDomain: 'Stability',
+        hash_v2: '1234567890zyxwvutsrqponmlkjihgfedcba',
+      },
+    },
+  ],
+};

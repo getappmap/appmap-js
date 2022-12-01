@@ -31,7 +31,7 @@
                 v-if="numSecurityFindings"
                 class="security"
                 data-cy="category-security"
-                @click="updateFilter('Security')"
+                @click="updateFilter('security')"
               >
                 Security: {{ numSecurityFindings }}
               </li>
@@ -39,7 +39,7 @@
                 v-if="numPerformanceFindings"
                 class="performance"
                 data-cy="category-performance"
-                @click="updateFilter('Performance')"
+                @click="updateFilter('performance')"
               >
                 Performance: {{ numPerformanceFindings }}
               </li>
@@ -47,7 +47,7 @@
                 v-if="numStabilityFindings"
                 class="stability"
                 data-cy="category-stability"
-                @click="updateFilter('Stability')"
+                @click="updateFilter('stability')"
               >
                 Stability: {{ numStabilityFindings }}
               </li>
@@ -55,7 +55,7 @@
                 v-if="numMaintainabilityFindings"
                 class="maintainability"
                 data-cy="category-maintainability"
-                @click="updateFilter('Maintainability')"
+                @click="updateFilter('maintainability')"
               >
                 Maintainability: {{ numMaintainabilityFindings }}
               </li>
@@ -169,7 +169,10 @@ export default {
     filterFindings(findings) {
       if (this.filterBy === 'all') return findings;
 
-      return findings.filter((finding) => finding.impactDomain === this.filterBy);
+      return findings.filter((finding) => {
+        const impactDomain = finding.impactDomain && finding.impactDomain.toLowerCase();
+        return impactDomain === this.filterBy;
+      });
     },
 
     openFindingInfo(hash) {
@@ -201,27 +204,29 @@ export default {
     findingsByImpactDomain() {
       return this.uniqueFindings.reduce(
         (result, finding) => {
-          result[finding.impactDomain].push(finding);
+          const impactDomain =
+            (finding.impactDomain && finding.impactDomain.toLowerCase()) || 'unknown';
+          result[impactDomain].push(finding);
           return result;
         },
-        { Security: [], Performance: [], Stability: [], Maintainability: [] }
+        { security: [], performance: [], stability: [], maintainability: [], unknown: [] }
       );
     },
 
     numSecurityFindings() {
-      return this.findingsByImpactDomain.Security.length;
+      return this.findingsByImpactDomain.security.length;
     },
 
     numPerformanceFindings() {
-      return this.findingsByImpactDomain.Performance.length;
+      return this.findingsByImpactDomain.performance.length;
     },
 
     numStabilityFindings() {
-      return this.findingsByImpactDomain.Stability.length;
+      return this.findingsByImpactDomain.stability.length;
     },
 
     numMaintainabilityFindings() {
-      return this.findingsByImpactDomain.Maintainability.length;
+      return this.findingsByImpactDomain.maintainability.length;
     },
   },
 };
