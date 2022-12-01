@@ -1,4 +1,4 @@
-import { createHash } from 'crypto';
+import sha256 from 'crypto-js/sha256.js';
 
 export default class HashBuilder {
   constructor(algorithmVersion) {
@@ -14,9 +14,7 @@ export default class HashBuilder {
   }
 
   digest() {
-    const hash = createHash('sha256');
-    this.hashEntries.forEach((row) => hash.update(row.join('=')));
-    return hash.digest('hex');
+    return sha256(this.hashEntries.map((r) => r.join('=')).join('')).toString();
   }
 
   static buildHash(algorithmName, properties) {
