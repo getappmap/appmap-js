@@ -24,14 +24,14 @@
           <div class="findings-overview">
             <h3>Finding Overview</h3>
             <ul>
-              <li class="total" data-cy="category-all" @click="filter('all')">
+              <li class="total" data-cy="category-all" @click="updateFilter('all')">
                 All: {{ uniqueFindings.length }}
               </li>
               <li
                 v-if="numSecurityFindings"
                 class="security"
                 data-cy="category-security"
-                @click="filter('Security')"
+                @click="updateFilter('Security')"
               >
                 Security: {{ numSecurityFindings }}
               </li>
@@ -39,7 +39,7 @@
                 v-if="numPerformanceFindings"
                 class="performance"
                 data-cy="category-performance"
-                @click="filter('Performance')"
+                @click="updateFilter('Performance')"
               >
                 Performance: {{ numPerformanceFindings }}
               </li>
@@ -47,7 +47,7 @@
                 v-if="numStabilityFindings"
                 class="stability"
                 data-cy="category-stability"
-                @click="filter('Stability')"
+                @click="updateFilter('Stability')"
               >
                 Stability: {{ numStabilityFindings }}
               </li>
@@ -55,7 +55,7 @@
                 v-if="numMaintainabilityFindings"
                 class="maintainability"
                 data-cy="category-maintainability"
-                @click="filter('Maintainability')"
+                @click="updateFilter('Maintainability')"
               >
                 Maintainability: {{ numMaintainabilityFindings }}
               </li>
@@ -69,29 +69,29 @@
                   <li
                     class="finding-name"
                     data-cy="column-header-name"
-                    @click="sortFindings('name')"
+                    @click="updateSorting('name')"
                   >
                     <h3>Finding Name</h3>
                   </li>
                   <!-- TODO
                   <li><h3>Status</h3></li>
                   -->
-                  <li data-cy="column-header-category" @click="sortFindings('category')">
+                  <li data-cy="column-header-category" @click="updateSorting('category')">
                     <h3>Category</h3>
                   </li>
                 </ul>
               </li>
               <li
-                v-for="[ruleTitle, impactDomain, hash] in sortedFindingsInfo"
-                :key="hash"
+                v-for="finding in sortedAndFilteredUniqueFindings"
+                :key="finding.hash_v2"
                 data-cy="finding"
               >
-                <ul class="item" @click="openFindingInfo(hash)">
-                  <li class="finding-name">{{ ruleTitle }}</li>
+                <ul class="item" @click="openFindingInfo(finding.hash_v2)">
+                  <li class="finding-name">{{ finding.ruleTitle }}</li>
                   <!-- TODO
                   <li>New</li>
                   -->
-                  <li>{{ impactDomain }}</li>
+                  <li>{{ finding.impactDomain }}</li>
                 </ul>
               </li>
             </ul>
@@ -123,82 +123,53 @@ export default {
     return {
       sortBy: 'name',
       sortAscending: true,
-      sortedFindingsInfo: this.getUniqueFindings(),
+      filterBy: 'all',
     };
   },
 
-  watch: {
-    findings(newVal) {
-      this.findings = newVal;
-    },
-  },
-
   methods: {
-    sortFindings(sortBy) {
+    updateSorting(sortBy) {
       if (this.sortBy === sortBy) {
         this.sortAscending = !this.sortAscending;
       }
 
       this.sortBy = sortBy;
+    },
+
+    updateFilter(filterBy) {
+      this.filterBy = filterBy;
+    },
+
+    sortFindings(findings) {
       if (this.sortBy === 'category') {
-        this.sortFindingsByCategory();
+        this.sortFindingsByCategory(findings);
       } else if (this.sortBy === 'name') {
-        this.sortFindingsByName();
+        this.sortFindingsByName(findings);
       }
     },
 
-    sortFindingsByName() {
-      this.sortedFindingsInfo.sort((a, b) => {
+    sortFindingsByName(findings) {
+      findings.sort((a, b) => {
         if (this.sortAscending) {
-          return a[0] < b[0] ? -1 : 1;
+          return a.ruleTitle < b.ruleTitle ? -1 : 1;
         }
-        return a[0] < b[0] ? 1 : -1;
+        return a.ruleTitle < b.ruleTitle ? 1 : -1;
       });
     },
 
-    sortFindingsByCategory() {
-      this.sortedFindingsInfo.sort((a, b) => {
+    sortFindingsByCategory(findings) {
+      findings.sort((a, b) => {
         if (this.sortAscending) {
-          return a[1] < b[1] ? -1 : 1;
+          return a.impactDomain < b.impactDomain ? -1 : 1;
         }
-        return a[1] < b[1] ? 1 : -1;
+        return a.impactDomain < b.impactDomain ? 1 : -1;
       });
     },
 
-    getUniqueFindings() {
-      const uniqueFindings = this.groupFindingsByHash();
+    filterFindings(findings) {
+      if (this.filterBy === 'all') return findings;
 
-      return Object.keys(uniqueFindings).map((hash) => {
-        const firstFinding = uniqueFindings[hash][0];
-        const { ruleTitle, impactDomain } = firstFinding.finding;
-
-        return [ruleTitle, impactDomain, hash];
-      });
-    },
-
-    groupFindingsByHash() {
-      return this.findings.reduce((accumulator, finding) => {
-        const hash = finding.finding.hash_v2;
-
-        if (hash in accumulator) {
-          accumulator[hash].push(finding);
-        } else {
-          accumulator[hash] = [finding];
-        }
-
-        return accumulator;
-      }, {});
-    },
-
-    filter(impactDomain) {
-      this.sortedFindingsInfo = this.getUniqueFindings();
-      this.sortFindings(this.sortBy);
-
-      if (impactDomain !== 'all') {
-        this.sortedFindingsInfo = this.sortedFindingsInfo.filter(
-          (info) => info[1] === impactDomain
-        );
-      }
+      return findings.filter((finding) => finding.impactDomain === this.filterBy);
     },
 
     openFindingInfo(hash) {
@@ -211,22 +182,26 @@ export default {
   },
 
   computed: {
+    sortedAndFilteredUniqueFindings() {
+      const { uniqueFindings } = this;
+      const filteredFindings = this.filterFindings(uniqueFindings);
+      this.sortFindings(filteredFindings);
+      return filteredFindings;
+    },
+
     uniqueFindings() {
-      const seen = {};
-      return this.findings.filter((finding) => {
-        const hash = finding.finding.hash_v2;
-        if (!seen[hash]) {
-          seen[hash] = true;
-          return true;
-        }
-        return false;
-      });
+      return Object.values(
+        this.findings.reduce((result, { finding }) => {
+          result[finding.hash_v2] = finding;
+          return result;
+        }, {})
+      );
     },
 
     findingsByImpactDomain() {
       return this.uniqueFindings.reduce(
         (result, finding) => {
-          result[finding.finding.impactDomain].push(finding);
+          result[finding.impactDomain].push(finding);
           return result;
         },
         { Security: [], Performance: [], Stability: [], Maintainability: [] }
@@ -248,10 +223,6 @@ export default {
     numMaintainabilityFindings() {
       return this.findingsByImpactDomain.Maintainability.length;
     },
-  },
-
-  mounted() {
-    this.sortFindingsByName();
   },
 };
 </script>
