@@ -9,12 +9,6 @@ git:
   # required to enable symlinks on windows
   symlinks: true
 
-addons:
-  apt:
-    packages:
-      # Ubuntu 16+ does not install this dependency by default, so we need to install it ourselves
-      - libgconf-2-4
-
 install:
   - yarn && yarn run build
 script: yarn run ci
