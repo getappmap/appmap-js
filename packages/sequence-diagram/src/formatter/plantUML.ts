@@ -20,6 +20,18 @@ const DisplayCharLimit = 50;
 
 export const extension = '.uml';
 
+function formatElapsed(elapsed: number): string {
+  if (elapsed >= 1) {
+    return `${Math.round(elapsed * 100) / 100}s`;
+  } else if (elapsed >= 0.001) {
+    return `${Math.round(elapsed * 100000) / 100}ms`;
+  } else if (elapsed >= 0.000001) {
+    return `${Math.round(elapsed * 100000000) / 100}μs`;
+  } else {
+    return `${Math.round(elapsed * 100000000000) / 100}ns`;
+  }
+}
+
 function sanitize(str: string): string {
   return str.replace(/\n/g, '\\n').replace(/\s{2,}/g, ' ');
 }
@@ -35,6 +47,9 @@ function messageName(action: FunctionCall | ServerRPC | ClientRPC | Query): stri
 function messageDisplayName(action: FunctionCall | ServerRPC | ClientRPC | Query): string {
   const name = messageName(action);
   const tokens = [name.slice(0, DisplayCharLimit)];
+  if (action.elapsed) {
+    tokens.push(` (${formatElapsed(action.elapsed)})`);
+  }
   if (isFunction(action) && action.static) {
     tokens.unshift('<u>');
     tokens.push('</u>');
@@ -168,7 +183,11 @@ export function format(diagram: Diagram, _source: string): string {
       let countStr = action.count.toString();
       if (hasAncestor(action, (action) => isLoop(action))) countStr = `~${countStr}`;
 
-      events.print(`Loop${colorTag} ${countStr} times`);
+      const tokens = [`${countStr} times`];
+      if (action.elapsed) {
+        tokens.push(` (${formatElapsed(action.elapsed)})`);
+      }
+      events.print(`Loop${colorTag} ${tokens.join('')}`);
 
       renderChildren(action);
 

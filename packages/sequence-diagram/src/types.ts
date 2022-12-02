@@ -1,6 +1,3 @@
-import { AppMap } from '@appland/models';
-import { Diff, DiffOptions } from './diff';
-
 export interface CodeObject {
   name: string;
   type: string;
@@ -42,6 +39,7 @@ export type Node = {
   parent?: Action;
   children: Action[];
   diffMode?: DiffMode;
+  elapsed?: number;
 };
 
 export type Loop = Node & {

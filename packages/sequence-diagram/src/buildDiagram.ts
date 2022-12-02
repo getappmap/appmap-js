@@ -62,6 +62,7 @@ export default function buildDiagram(
         digest: callee.hash,
         subtreeDigest: 'undefined',
         children: [],
+        elapsed: callee.elapsedTime,
       } as ServerRPC;
     } else if (callee?.httpClientRequest) {
       assert(callee.route, 'callee.route');
@@ -74,6 +75,7 @@ export default function buildDiagram(
         digest: callee.hash,
         subtreeDigest: 'undefined',
         children: [],
+        elapsed: callee.elapsedTime,
       } as ClientRPC;
     } else if (callee?.sqlQuery) {
       return {
@@ -84,6 +86,7 @@ export default function buildDiagram(
         digest: callee.hash,
         subtreeDigest: 'undefined',
         children: [],
+        elapsed: callee.elapsedTime,
       } as Query;
     } else if (callee) {
       return {
@@ -97,6 +100,7 @@ export default function buildDiagram(
         stableProperties: { ...callee.stableProperties },
         returnValue: buildReturnValue(callee),
         children: [],
+        elapsed: callee.elapsedTime,
       } as FunctionCall;
     }
   }
