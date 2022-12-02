@@ -64,6 +64,7 @@ export default class FingerprintWatchCommand {
     this.watcher = watch(glob, {
       ignoreInitial: true,
       ignored: ['**/node_modules/**', '**/.git/**'],
+      ignorePermissionErrors: true,
     })
       .on('add', this.added.bind(this))
       .on('change', this.changed.bind(this))

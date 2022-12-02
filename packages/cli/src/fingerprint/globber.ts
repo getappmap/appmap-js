@@ -3,6 +3,7 @@ import { Glob, IGlob } from 'glob';
 import { assert } from 'console';
 import { stat } from 'fs/promises';
 import { Stats } from 'fs-extra';
+import { verbose } from '../utils';
 
 class Globber extends EventEmitter {
   constructor(private pattern: string, public interval = 1000) {
@@ -14,7 +15,11 @@ class Globber extends EventEmitter {
   public scanNow() {
     assert(!this.currentGlob);
     this.timeout = undefined;
-    this.currentGlob = new Glob(this.pattern, { ignore: ['**/node_modules/**', '**/.git/**'] })
+    this.currentGlob = new Glob(this.pattern, {
+      ignore: ['**/node_modules/**', '**/.git/**'],
+      strict: false,
+      silent: !verbose(),
+    })
       .on('end', this.scanEnd.bind(this))
       .on('match', this.matchFound.bind(this));
   }
