@@ -2,22 +2,27 @@ import { createReadStream } from 'fs';
 import { createServer, ServerResponse } from 'http';
 import { AddressInfo, Server } from 'net';
 import open from 'open';
-import { join } from 'path';
+import { extname, join } from 'path';
 import { parse } from 'url';
 import { exists, verbose } from '../../utils';
 import UI from '../userInteraction';
 
+function mimeTypeOfName(filename: string): string {
+  return (
+    {
+      js: 'application/javascript',
+      css: 'text/css',
+      map: 'application/json',
+    }[extname(filename)] || 'application/octet-stream'
+  );
+}
+
 export default async function serveAndOpenAppMap(appMapFile: string) {
   UI.progress(`Opening ${appMapFile}`);
 
-  const builtDir = join(__dirname, '../../../built');
-  const baseDir = (await exists(builtDir)) ? builtDir : join(__dirname, '..', '..');
+  const baseDir = join(__dirname, '..', '..', '..', 'built', 'html');
 
   const server = createServer(async (req, res) => {
-    // Once a request is received, the server can be closed.
-    // The socket will remain open for a while as it serves requests.
-    server!.close();
-
     const serveStaticFile = (fileName: string, contentType: string) => {
       res.writeHead(200, 'OK', { 'Content-Type': contentType });
 
@@ -48,14 +53,15 @@ export default async function serveAndOpenAppMap(appMapFile: string) {
 
       if (pathname === '/') {
         return serveStaticFile(join(baseDir, 'appmap.html'), 'text/html');
-      } else if (pathname === '/main.js.map') {
-        return serveStaticFile(join(baseDir, 'main.js.map'), 'text/javascript');
       } else if (pathname === '/appmap') {
         const urlParams = new URLSearchParams(requestUrl.query!);
         const appMapFile = urlParams.get('file');
         if (appMapFile) {
           return serveStaticFile(appMapFile!, 'application/json');
         }
+      } else if (pathname && !pathname.startsWith('.')) {
+        const path = join(baseDir, pathname);
+        return serveStaticFile(path, mimeTypeOfName(path));
       }
 
       if (verbose()) {
@@ -76,11 +82,13 @@ export default async function serveAndOpenAppMap(appMapFile: string) {
     .on('connection', function (socket) {
       // Don't let the open socket keep the process alive.
       socket.unref();
-    });
+    })
+    .unref();
 }
 
 async function tryOpen(url: string) {
-  const showMessage = () => UI.warn(`\nWe could not open the browser automatically.\nOpen ${url} to see the AppMap.\n`);
+  const showMessage = () =>
+    UI.warn(`\nWe could not open the browser automatically.\nOpen ${url} to see the AppMap.\n`);
   const cp = await open(url);
   cp.once('error', showMessage);
   cp.once('exit', (code, signal) => (code || signal) && showMessage());

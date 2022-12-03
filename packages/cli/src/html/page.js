@@ -1,8 +1,8 @@
-const { default: Vue } = require('vue');
-const { default: Vuex } = require('vuex');
-const { default: plugin, VVsCodeExtension } = require('@appland/components');
+import Vue from 'vue';
+import Vuex from 'vuex';
+import plugin, { VVsCodeExtension } from '@appland/components';
 
-require('@appland/diagrams/dist/style.css');
+import '@appland/diagrams/dist/style.css';
 
 Vue.use(Vuex);
 Vue.use(plugin);
