@@ -71,10 +71,17 @@ export default async function serveAndOpenAppMap(appMapFile: string) {
   })
     .listen(0, '127.0.0.1', () => {
       const port = (server!.address() as AddressInfo).port;
-      open(`http://localhost:${port}/?appmap=${encodeURIComponent(appMapFile)}`);
+      tryOpen(`http://localhost:${port}/?appmap=${encodeURIComponent(appMapFile)}`);
     })
     .on('connection', function (socket) {
       // Don't let the open socket keep the process alive.
       socket.unref();
     });
+}
+
+async function tryOpen(url: string) {
+  const showMessage = () => UI.warn(`\nWe could not open the browser automatically.\nOpen ${url} to see the AppMap.\n`);
+  const cp = await open(url);
+  cp.once('error', showMessage);
+  cp.once('exit', (code, signal) => (code || signal) && showMessage());
 }
