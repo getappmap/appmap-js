@@ -204,7 +204,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .details-search {
   margin-bottom: 2rem;
   padding: 0;
