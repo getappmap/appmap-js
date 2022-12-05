@@ -1,7 +1,7 @@
 language: node_js
 os: linux
 dist: focal
-node_js: [14, 16, 18]
+node_js: 16
 
 cache: false
 
@@ -15,8 +15,16 @@ script: yarn run ci
 
 jobs:
   include:
-    - stage: test
-      os: windows
+    - node_js: 18
+      script:  # also run lint on node 18
+      - yarn run lint
+      - yarn run ci
+
+    - node_js: 16
+    - node_js: 14
+
+    - os: windows
+      node_js: 18
       env:
         - YARN_GPG=no
       script: yarn test
