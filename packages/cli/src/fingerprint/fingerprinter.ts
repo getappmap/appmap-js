@@ -60,15 +60,19 @@ class Fingerprinter extends EventEmitter {
   public checkVersion = true;
 
   async fingerprint(appMapFileName: string) {
+    console.debug("fingerprint  - IN   " + appMapFileName);
     if (verbose()) {
       console.log(`Fingerprinting ${appMapFileName}`);
     }
 
+    console.debug("fingerprint  -  0   " + appMapFileName);
     const index = new AppMapIndex(appMapFileName);
+    console.debug("fingerprint  -  0.5   " + appMapFileName);
     if (!(await index.initialize())) {
       return;
     }
 
+    console.debug("fingerprint  -  1   " + appMapFileName);
     if (
       (!this.checkVersion || (await index.versionUpToDate(VERSION))) &&
       (await index.indexUpToDate())
@@ -82,9 +86,11 @@ class Fingerprinter extends EventEmitter {
     if ((await index.appmapFileSize()) > MAX_APPMAP_SIZE)
       throw new FileTooLargeError(appMapFileName, await index.appmapFileSize(), MAX_APPMAP_SIZE);
 
+    console.debug("fingerprint  -  2   " + appMapFileName);
     const appmapData = await index.loadAppMapData();
     if (!appmapData) return;
 
+    console.debug("fingerprint  -  3   " + appMapFileName);
     const appmapDataWithoutMetadata = await index.loadAppMapData();
     if (!appmapDataWithoutMetadata) return;
 
@@ -96,6 +102,7 @@ class Fingerprinter extends EventEmitter {
     const fingerprints: Fingerprint[] = [];
     appmapData.metadata.fingerprints = fingerprints;
 
+    console.debug("fingerprint  -  4   " + appMapFileName);
     const appmap = buildAppMap(appmapData).normalize().build();
 
     await index.mkdir_p();
@@ -119,6 +126,7 @@ class Fingerprinter extends EventEmitter {
       })
     );
 
+    console.debug("fingerprint  -  6   " + appMapFileName);
     appmapData.metadata.fingerprints.sort((a, b) =>
       a.canonicalization_algorithm.localeCompare(b.canonicalization_algorithm)
     );
@@ -127,6 +135,7 @@ class Fingerprinter extends EventEmitter {
     await index.writeFileAtomic(basename(tempAppMapFileName), JSON.stringify(appmap, null, 2));
     const appMapIndexedAt = await mtime(tempAppMapFileName);
 
+    console.debug("fingerprint  -  7   " + appMapFileName);
     assert(appMapIndexedAt, `${tempAppMapFileName} should always exist and be a readable file`);
 
     await Promise.all([
@@ -136,12 +145,14 @@ class Fingerprinter extends EventEmitter {
       index.writeFileAtomic('mtime', `${appMapIndexedAt}`),
     ]);
 
+    console.debug("fingerprint  -  8   " + appMapFileName);
     // At this point, moving the AppMap file into place will trigger re-indexing.
     // But the mtime will match the file modification time, so the algorithm will
     // determine that the index is up-to-date.
     await renameFile(tempAppMapFileName, appMapFileName);
 
     this.emit('index', { path: appMapFileName, metadata: appmap.metadata });
+    console.debug("fingerprint  -  9   " + appMapFileName);
   }
 }
 

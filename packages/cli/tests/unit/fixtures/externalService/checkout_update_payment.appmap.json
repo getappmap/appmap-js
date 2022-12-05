@@ -34609,73 +34609,73 @@
     },
     "fingerprints": [
       {
-        "appmap_digest": "a812ae313f3a3e21d2702ec137c10c825808d944e06efe208e16ffa3e91d48b0",
+        "appmap_digest": "93e1e7b1394995e0710fb89725f0ea0c349a4f574f23ea28a66c9d7c40f3ae21",
         "canonicalization_algorithm": "classDependencies",
-        "digest": "8add23001ea8d5f841306a104835b512e9e5f66648aecbd7095d558bb8763c32",
+        "digest": "02ba740ed320be802fd5deac730088875508e9b232d29a2510239ef53dec3d3c",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a812ae313f3a3e21d2702ec137c10c825808d944e06efe208e16ffa3e91d48b0",
+        "appmap_digest": "93e1e7b1394995e0710fb89725f0ea0c349a4f574f23ea28a66c9d7c40f3ae21",
         "canonicalization_algorithm": "classes",
         "digest": "605746031cc1b9105682d581e17beac48b219f58ea24ebd0a58cd0cd9234f3d3",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a812ae313f3a3e21d2702ec137c10c825808d944e06efe208e16ffa3e91d48b0",
+        "appmap_digest": "93e1e7b1394995e0710fb89725f0ea0c349a4f574f23ea28a66c9d7c40f3ae21",
         "canonicalization_algorithm": "httpClientRequests",
         "digest": "2ad243476cbf67ec741d003b500bdaed47463c8febf8815bca4953d6f4da3e1d",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a812ae313f3a3e21d2702ec137c10c825808d944e06efe208e16ffa3e91d48b0",
+        "appmap_digest": "93e1e7b1394995e0710fb89725f0ea0c349a4f574f23ea28a66c9d7c40f3ae21",
         "canonicalization_algorithm": "httpServerRequests",
         "digest": "5d78a8b4c27174efcbbba26edfccc03f9121f3df6a278d3f0dc39c8542ee21d1",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a812ae313f3a3e21d2702ec137c10c825808d944e06efe208e16ffa3e91d48b0",
+        "appmap_digest": "93e1e7b1394995e0710fb89725f0ea0c349a4f574f23ea28a66c9d7c40f3ae21",
         "canonicalization_algorithm": "info",
         "digest": "d1584c04417cb53acdb95d94d769d282dce6e011bbbfb7f8ff6f30acfb6b4d56",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a812ae313f3a3e21d2702ec137c10c825808d944e06efe208e16ffa3e91d48b0",
+        "appmap_digest": "93e1e7b1394995e0710fb89725f0ea0c349a4f574f23ea28a66c9d7c40f3ae21",
         "canonicalization_algorithm": "labels",
         "digest": "97039a912c9850dfe021ac041f567f10f5a6e5b9c99e5a7362be4be9d0dd8bc6",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a812ae313f3a3e21d2702ec137c10c825808d944e06efe208e16ffa3e91d48b0",
+        "appmap_digest": "93e1e7b1394995e0710fb89725f0ea0c349a4f574f23ea28a66c9d7c40f3ae21",
         "canonicalization_algorithm": "packageDependencies",
         "digest": "6abe6a18ad4ce88eeb5e9410a8c606109496ed4e2374f49374183c1ed6de1591",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a812ae313f3a3e21d2702ec137c10c825808d944e06efe208e16ffa3e91d48b0",
+        "appmap_digest": "93e1e7b1394995e0710fb89725f0ea0c349a4f574f23ea28a66c9d7c40f3ae21",
         "canonicalization_algorithm": "packages",
         "digest": "2784210dbd312bb2741b7f6bf07cba78bc793d8c8bae4d51553cedbc3027e248",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a812ae313f3a3e21d2702ec137c10c825808d944e06efe208e16ffa3e91d48b0",
+        "appmap_digest": "93e1e7b1394995e0710fb89725f0ea0c349a4f574f23ea28a66c9d7c40f3ae21",
         "canonicalization_algorithm": "sqlNormalized",
         "digest": "64372584970b5900deda5ca4eb696afcc977c65bc9f60efba68809a69065b539",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a812ae313f3a3e21d2702ec137c10c825808d944e06efe208e16ffa3e91d48b0",
+        "appmap_digest": "93e1e7b1394995e0710fb89725f0ea0c349a4f574f23ea28a66c9d7c40f3ae21",
         "canonicalization_algorithm": "sqlTables",
         "digest": "6d9c88ab4ca6fdc41547a9a1f51f73b5ac9be367dcc122f907ce58c85bace304",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a812ae313f3a3e21d2702ec137c10c825808d944e06efe208e16ffa3e91d48b0",
+        "appmap_digest": "93e1e7b1394995e0710fb89725f0ea0c349a4f574f23ea28a66c9d7c40f3ae21",
         "canonicalization_algorithm": "trace",
         "digest": "d8e1d3adb4691b6f11771863d78c37957827929d5db53dff23edc001a430a78e",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a812ae313f3a3e21d2702ec137c10c825808d944e06efe208e16ffa3e91d48b0",
+        "appmap_digest": "93e1e7b1394995e0710fb89725f0ea0c349a4f574f23ea28a66c9d7c40f3ae21",
         "canonicalization_algorithm": "update",
         "digest": "745e4e34feb1f4ff3bb56ea86063bae53e7c166702b36a01d64fe8511b3e5f22",
         "fingerprint_algorithm": "sha256"
@@ -36036,7 +36036,13 @@
     },
     {
       "type": "external-service",
-      "name": "api.stripe.com"
+      "name": "api.stripe.com",
+      "children": [
+        {
+          "type": "external-route",
+          "name": "POST https://api.stripe.com/v1/customers"
+        }
+      ]
     }
   ]
 }

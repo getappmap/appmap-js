@@ -4403,73 +4403,73 @@
     },
     "fingerprints": [
       {
-        "appmap_digest": "6b0a55f6517193b010cc8548ede61999407efc1132edd2c9f0bf87468e063d47",
+        "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
         "canonicalization_algorithm": "classDependencies",
         "digest": "75d257b5013c84d34b153a7571c8db17d30885ea16e9c561c069f60bef2fe5f3",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "6b0a55f6517193b010cc8548ede61999407efc1132edd2c9f0bf87468e063d47",
+        "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
         "canonicalization_algorithm": "classes",
         "digest": "cad2b6500182936c84bcff1f9552c80304b140558c37f7e0a9ba55173daee395",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "6b0a55f6517193b010cc8548ede61999407efc1132edd2c9f0bf87468e063d47",
+        "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
         "canonicalization_algorithm": "httpClientRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "6b0a55f6517193b010cc8548ede61999407efc1132edd2c9f0bf87468e063d47",
+        "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
         "canonicalization_algorithm": "httpServerRequests",
         "digest": "b074d1ae56f8a3fabf3b2cd8951811fcbd0cb99536436846c5bb0d5116e1fad6",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "6b0a55f6517193b010cc8548ede61999407efc1132edd2c9f0bf87468e063d47",
+        "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
         "canonicalization_algorithm": "info",
         "digest": "a2bdcc27959af82aa9dc453550bf53129763c5b3b3ddc7b5c218a31d69991dea",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "6b0a55f6517193b010cc8548ede61999407efc1132edd2c9f0bf87468e063d47",
+        "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
         "canonicalization_algorithm": "labels",
         "digest": "00d2566428f0831e48293a562162cfba4fb780f35492311316debc35e0991866",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "6b0a55f6517193b010cc8548ede61999407efc1132edd2c9f0bf87468e063d47",
+        "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
         "canonicalization_algorithm": "packageDependencies",
         "digest": "85ec7fbbf4606dd0d3405d00f5f3bf266cfb20b90fc6783c9ec061b3e118f0f9",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "6b0a55f6517193b010cc8548ede61999407efc1132edd2c9f0bf87468e063d47",
+        "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
         "canonicalization_algorithm": "packages",
         "digest": "8597947f23215e54dc8b619e417dd69ab0ca0269aead2a7c0ddc7d8053d481a9",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "6b0a55f6517193b010cc8548ede61999407efc1132edd2c9f0bf87468e063d47",
+        "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
         "canonicalization_algorithm": "sqlNormalized",
         "digest": "f62deac8d76569038c960cd593a18ae79c59de8343340e2523bd3d0aa69a28f7",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "6b0a55f6517193b010cc8548ede61999407efc1132edd2c9f0bf87468e063d47",
+        "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
         "canonicalization_algorithm": "sqlTables",
         "digest": "54beab09fa80b9b767ae4b263a7c8824fce3053920977f02426365eb49102bba",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "6b0a55f6517193b010cc8548ede61999407efc1132edd2c9f0bf87468e063d47",
+        "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
         "canonicalization_algorithm": "trace",
         "digest": "f0b8c17b4ec3209b0606a43cb4d2c18d0886955f20e18e57b61c8ae54b87b7c9",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "6b0a55f6517193b010cc8548ede61999407efc1132edd2c9f0bf87468e063d47",
+        "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
         "canonicalization_algorithm": "update",
         "digest": "3137d4106a3906ae50276e8cfb93c9939039ec8e86297d6a960268aae7f5c18f",
         "fingerprint_algorithm": "sha256"
@@ -4496,14 +4496,18 @@
                     {
                       "name": "update",
                       "type": "function",
-                      "labels": ["http.session.write"],
+                      "labels": [
+                        "http.session.write"
+                      ],
                       "static": false,
                       "location": "vendor/bundle/ruby/3.0.0/gems/actionpack-6.1.6/lib/action_dispatch/middleware/cookies.rb:345"
                     },
                     {
                       "name": "[]",
                       "type": "function",
-                      "labels": ["http.session.read"],
+                      "labels": [
+                        "http.session.read"
+                      ],
                       "static": false,
                       "location": "vendor/bundle/ruby/3.0.0/gems/actionpack-6.1.6/lib/action_dispatch/middleware/cookies.rb:329"
                     }
@@ -4524,7 +4528,9 @@
                 {
                   "name": "process_action",
                   "type": "function",
-                  "labels": ["mvc.controller"],
+                  "labels": [
+                    "mvc.controller"
+                  ],
                   "static": false,
                   "location": "vendor/bundle/ruby/3.0.0/gems/actionpack-6.1.6/lib/action_controller/metal/instrumentation.rb:19"
                 }
@@ -4537,7 +4543,9 @@
                 {
                   "name": "render_to_body",
                   "type": "function",
-                  "labels": ["mvc.render"],
+                  "labels": [
+                    "mvc.render"
+                  ],
                   "static": false,
                   "location": "vendor/bundle/ruby/3.0.0/gems/actionpack-6.1.6/lib/action_controller/metal/renderers.rb:141"
                 }
@@ -4562,7 +4570,9 @@
                 {
                   "name": "write",
                   "type": "function",
-                  "labels": ["log"],
+                  "labels": [
+                    "log"
+                  ],
                   "static": false,
                   "location": "/usr/local/lib/ruby/3.0.0/logger/log_device.rb:31"
                 }
@@ -4591,7 +4601,9 @@
                     {
                       "name": "invoke_before",
                       "type": "function",
-                      "labels": ["mvc.before_action"],
+                      "labels": [
+                        "mvc.before_action"
+                      ],
                       "static": false,
                       "location": "vendor/bundle/ruby/3.0.0/gems/activesupport-6.1.6/lib/active_support/callbacks.rb:511"
                     }
@@ -4654,7 +4666,9 @@
                 {
                   "name": "render",
                   "type": "function",
-                  "labels": ["mvc.template"],
+                  "labels": [
+                    "mvc.template"
+                  ],
                   "static": true,
                   "location": "vendor/bundle/ruby/3.0.0/gems/devise-4.8.1/app/views/devise/sessions/new.html.erb"
                 }
@@ -4667,7 +4681,9 @@
                 {
                   "name": "render",
                   "type": "function",
-                  "labels": ["mvc.template"],
+                  "labels": [
+                    "mvc.template"
+                  ],
                   "static": true,
                   "location": "vendor/bundle/ruby/3.0.0/gems/devise-4.8.1/app/views/devise/shared/_links.html.erb"
                 }
@@ -4770,7 +4786,9 @@
                 {
                   "name": "find_all",
                   "type": "function",
-                  "labels": ["mvc.template.resolver"],
+                  "labels": [
+                    "mvc.template.resolver"
+                  ],
                   "static": false,
                   "location": "vendor/bundle/ruby/3.0.0/gems/actionview-6.1.6/lib/action_view/template/resolver.rb:151"
                 }
@@ -4791,7 +4809,9 @@
             {
               "name": "eval",
               "type": "function",
-              "labels": ["lang.eval"],
+              "labels": [
+                "lang.eval"
+              ],
               "static": false,
               "location": "Kernel#eval"
             }
@@ -4814,7 +4834,9 @@
                 {
                   "name": "records",
                   "type": "function",
-                  "labels": ["dao.materialize"],
+                  "labels": [
+                    "dao.materialize"
+                  ],
                   "static": false,
                   "location": "vendor/bundle/ruby/3.0.0/gems/activerecord-6.1.6/lib/active_record/relation.rb:248"
                 }
@@ -4883,7 +4905,10 @@
                         {
                           "name": "generate",
                           "type": "function",
-                          "labels": ["format.json.generate", "serialize"],
+                          "labels": [
+                            "format.json.generate",
+                            "serialize"
+                          ],
                           "static": false,
                           "location": "JSON::Ext::Generator::State#generate"
                         }

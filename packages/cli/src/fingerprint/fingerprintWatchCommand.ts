@@ -98,6 +98,7 @@ export default class FingerprintWatchCommand {
   }
 
   removed(file: string) {
+    this.fpQueue.remove(file);
     console.warn(`TODO: AppMap removed: ${file}`);
   }
 
