@@ -411,6 +411,9 @@ __metadata:
     eslint-plugin-prettier: ^3.4.1
     jest: ^27.4.7
     typescript: ^4.4.2
+  peerDependencies:
+    "@appland/openapi": "workspace:^"
+    "@datastructures-js/priority-queue": "*"
   languageName: unknown
   linkType: soft
 
