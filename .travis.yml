@@ -3,7 +3,10 @@ os: linux
 dist: focal
 node_js: 16
 
-cache: false
+cache:
+  npm: false
+  directories:
+  - $HOME/.yarn/berry/cache
 
 git:
   # required to enable symlinks on windows
