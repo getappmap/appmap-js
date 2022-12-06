@@ -11,7 +11,7 @@ export default class FingerprintQueue {
   private queue: QueueObject<string>;
   private queueAsHash = {}; // have a way to check if a filename is in the queue
 
-  constructor(private size = 1, printCanonicalAppMaps = true) {
+  constructor(private size = 2, printCanonicalAppMaps = true) {
     // eslint-disable-next-line no-use-before-define
     this.handler = new Fingerprinter(printCanonicalAppMaps);
     this.queue = queue(async (appmapFileName) => {
