@@ -15,17 +15,16 @@ export default class FingerprintQueue {
     this.handler = new Fingerprinter(printCanonicalAppMaps);
     this.queue = queue(async (appmapFileName) => {
       try {
-        //console.debug("did  push to queue  " + job);
         console.debug("queue processing    " + appmapFileName);
+        const timeStart = Date.now();
         await this.handler.fingerprint(appmapFileName);
-        //this.handler.fingerprint(appmapFileName);
+        const timeEnd = Date.now();
+        const timeDiff = timeEnd - timeStart;
+        console.debug("queue processed     " + appmapFileName + " in " + timeDiff);
       } catch (e) {
         console.warn(`Error fingerprinting ${appmapFileName}: ${e}`);
       }
     }, this.size);
-    console.debug("will pause the queue");
-    this.queue.pause();
-    console.debug("did  pause the queue");
   }
 
   async process() {
@@ -45,25 +44,26 @@ export default class FingerprintQueue {
           console.warn(`Skipped: ${error.path}\nThe file does not exist.`);
         } else reject(error);
       });
-      console.debug("will resume the queue");
-      this.queue.resume();
-      console.debug("did  resume the queue");
     });
   }
 
-  push(job: string) {
+  push(appmapFileName: string) {
     console.debug("num in queue        " + this.queue.length());
-    console.debug("push IN for         " + job);
-    //console.debug("will push to queue  " + job);
-    this.queue.push(job);
-    //console.debug("did  push to queue  " + job);
-    console.debug("push OUT from end   " + job);
+    console.debug("push IN for         " + appmapFileName);
+
+    this.queue.push(appmapFileName, async (cb: any) => {
+      console.debug("queue finished processing    " + appmapFileName);
+      console.debug("num in queue        " + this.queue.length() + " after one file got processed");
+      this.remove(appmapFileName);
+      console.debug("num in queue        " + this.queue.length() + " after one file got processed and .removed");
+    });
+
+    console.debug("push OUT from end   " + appmapFileName);
   }
 
   remove(job: string) {
     console.debug("remove IN  for " + job);
     this.queue.remove((node) => node.data.includes(job));
-    console.debug("remove OUT rmd " + job);
     console.debug("remove OUT for " + job);
   }
 }
