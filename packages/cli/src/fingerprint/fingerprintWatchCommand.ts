@@ -98,7 +98,10 @@ export default class FingerprintWatchCommand {
   }
 
   removed(file: string) {
-    console.warn(`TODO: AppMap removed: ${file}`);
+    if (verbose()) {
+      console.warn(`AppMap removed: ${file}`);
+    }
+    this.dequeue(file);
   }
 
   ready() {
@@ -117,6 +120,15 @@ export default class FingerprintWatchCommand {
       return;
     }
     this.fpQueue.push(file);
+  }
+
+  dequeue(file: string) {
+    // This shouldn't be necessary, but if enqueue is passing through
+    // the wrong file names then dequeue is probably passing through the wrong file names.
+    if (!file.includes('.appmap.json')) {
+      return;
+    }
+    this.fpQueue.remove(file);
   }
 
   private sendTelemetry(metadata: Metadata[]) {

@@ -9,25 +9,31 @@ function isNodeError(error: unknown, code?: string): error is NodeJS.ErrnoExcept
 export default class FingerprintQueue {
   public handler: Fingerprinter;
   private queue: QueueObject<string>;
-  private pending = new Set<string>();
+  private queueAsHash = {}; // have a way to check if a filename is in the queue
 
   constructor(private size = 2, printCanonicalAppMaps = true) {
     // eslint-disable-next-line no-use-before-define
     this.handler = new Fingerprinter(printCanonicalAppMaps);
     this.queue = queue(async (appmapFileName) => {
       try {
+        console.debug("queue processing    " + appmapFileName);
+        const timeStart = Date.now();
         await this.handler.fingerprint(appmapFileName);
+        const timeEnd = Date.now();
+        const timeDiff = timeEnd - timeStart;
+        console.debug("queue processed     " + appmapFileName + " in " + timeDiff);
       } catch (e) {
         console.warn(`Error fingerprinting ${appmapFileName}: ${e}`);
       }
-      this.pending.delete(appmapFileName);
     }, this.size);
-    this.queue.pause();
   }
 
   async process() {
     return new Promise<void>((resolve, reject) => {
+      console.debug("will drain the queue");
       this.queue.drain(resolve);
+      this.queueAsHash = {};
+      console.debug("did  drain the queue");
       this.queue.error((error) => {
         if (error instanceof FileTooLargeError) {
           console.warn(
@@ -40,13 +46,31 @@ export default class FingerprintQueue {
           console.warn(`Skipped: ${error.path}\nThe file does not exist.`);
         } else reject(error);
       });
-      this.queue.resume();
     });
   }
 
-  push(job: string) {
-    if (this.pending.has(job)) return;
-    this.pending.add(job);
-    this.queue.push(job);
+  push(appmapFileName: string) {
+    console.debug("num in queue        " + this.queue.length());
+    console.debug("num in hash         " + Object.keys(this.queueAsHash).length);
+    console.debug("push IN for         " + appmapFileName);
+    if (!this.queueAsHash[appmapFileName]) {
+      this.queueAsHash[appmapFileName] = true;
+      this.queue.push(appmapFileName, async (cb: any) => {
+        console.debug("queue finished processing    " + appmapFileName);
+        delete this.queueAsHash[appmapFileName];
+        console.debug("num in queue        " + this.queue.length() + " after one file got processed");
+        console.debug("num in hash         " + Object.keys(this.queueAsHash).length + " after one file got processed");
+      });
+    } else {
+      console.debug("DIDN'T push twice   " + appmapFileName + " ******************** ");
+    }
+    console.debug("push OUT from end   " + appmapFileName);
+  }
+
+  remove(job: string) {
+    console.debug("remove IN  for " + job);
+    this.queue.remove((node) => node.data.includes(job));
+    delete this.queueAsHash[job];
+    console.debug("remove OUT for " + job);
   }
 }
