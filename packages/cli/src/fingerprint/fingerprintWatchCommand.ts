@@ -10,6 +10,7 @@ import { verbose } from '../utils';
 import { FingerprintEvent } from './fingerprinter';
 import FingerprintQueue from './fingerprintQueue';
 import Globber from './globber';
+import { setrlimit, getrlimit } from 'posix';
 
 export default class FingerprintWatchCommand {
   private pidfilePath: string | undefined;
@@ -27,6 +28,7 @@ export default class FingerprintWatchCommand {
   }
 
   constructor(private directory: string) {
+    this.increaseFileLimit();
     this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && join(this.directory, 'index.pid');
     this.fpQueue = new FingerprintQueue();
 
@@ -37,6 +39,15 @@ export default class FingerprintWatchCommand {
     }).attach(this.fpQueue.handler, 'index');
   }
 
+  increaseFileLimit() {
+    const new_limit = 1048576;
+    try{
+      const nofile = getrlimit('nofile');
+      setrlimit('nofile', { soft: new_limit, hard: new_limit });
+    } catch (e) {
+      console.warn(`Error increasing number of file descriptors to ${new_limit}.${new_limit}`);
+    }
+  }
   removePidfile() {
     if (this.pidfilePath) {
       console.log(`Removing ${this.pidfilePath}`);
