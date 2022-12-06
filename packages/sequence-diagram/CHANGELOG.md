@@ -1,3 +1,10 @@
+# [@appland/sequence-diagram-v1.1.1](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.1.0...@appland/sequence-diagram-v1.1.1) (2022-12-06)
+
+
+### Bug Fixes
+
+* Make sure appmap works correctly in a PnP environment ([bbefc46](https://github.com/getappmap/appmap-js/commit/bbefc465fa5b396ed528b1c0fa072a3463213552))
+
 # [@appland/sequence-diagram-v1.1.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.0.0...@appland/sequence-diagram-v1.1.0) (2022-11-06)
 
 
