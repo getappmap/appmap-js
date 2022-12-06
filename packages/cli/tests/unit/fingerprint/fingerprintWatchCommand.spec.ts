@@ -10,6 +10,7 @@ import OriginalTelemetry from '../../../src/telemetry';
 import { once } from 'events';
 import Fingerprinter from '../../../src/fingerprint/fingerprinter';
 import { MaxMSBetween } from '../../../src/lib/eventAggregator';
+import { mkdir } from 'fs/promises';
 
 jest.mock('../../../src/telemetry');
 const Telemetry = jest.mocked(OriginalTelemetry);
@@ -71,6 +72,14 @@ describe(FingerprintWatchCommand, () => {
       cmd = new FingerprintWatchCommand(appMapDir);
       await cmd.execute();
       cmd.watcher?.removeAllListeners();
+      placeMap();
+      return verifyIndexSuccess(200, 20);
+    });
+
+    it('does not raise if it encounters an unreadable directory', async () => {
+      await mkdir(join(appMapDir, 'eacces'), { mode: 0 });
+      cmd = new FingerprintWatchCommand(appMapDir);
+      await cmd.execute();
       placeMap();
       return verifyIndexSuccess(200, 20);
     });
