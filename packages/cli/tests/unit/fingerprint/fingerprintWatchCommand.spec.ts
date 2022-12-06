@@ -5,6 +5,7 @@ import { basename, join } from 'path';
 import { restore, stub } from 'sinon';
 import { dirSync } from 'tmp';
 import FingerprintWatchCommand from '../../../src/fingerprint/fingerprintWatchCommand';
+import { MaxNumberOfFiles } from '../../../src/fingerprint/fingerprintWatchCommand';
 import { verbose } from '../../../src/utils';
 import OriginalTelemetry from '../../../src/telemetry';
 import { once } from 'events';
@@ -77,12 +78,36 @@ describe(FingerprintWatchCommand, () => {
       return verifyIndexSuccess(200, 20);
     });
 
+
     it('does not raise if it encounters an unreadable directory', async () => {
       await mkdir(join(appMapDir, 'eacces'), { mode: 0 });
       cmd = new FingerprintWatchCommand(appMapDir);
       await cmd.execute();
       placeMap();
       return verifyIndexSuccess(200, 20);
+    });      
+
+    it(`increaseFileLimitTo works the first time`, async () => {
+      // It'd be great to verify the limit was set to what was expected
+      // but CI caps the limit to a lower value.  So mock instead.
+      // ➤ YN0000: [@appland/appmap]:     Expected: 1048576
+      // ➤ YN0000: [@appland/appmap]:     Received: 30000
+      jest.spyOn(FingerprintWatchCommand.prototype, 'increaseFileLimit');
+      jest.spyOn(FingerprintWatchCommand.prototype, 'increaseFileLimitTo').mockReturnValueOnce(true);
+      cmd = new FingerprintWatchCommand(appMapDir);
+      expect(cmd.increaseFileLimit).toBeCalledTimes(1);
+      expect(cmd.increaseFileLimitTo).toBeCalledTimes(1);
+      jest.clearAllMocks(); // without this the next testcase fails
+    });
+
+    it(`increaseFileLimit works with multiple calls to increaseFileLimitTo`, async () => {
+      jest.spyOn(FingerprintWatchCommand.prototype, 'increaseFileLimitTo')
+      .mockReturnValueOnce(false)
+      .mockReturnValueOnce(false)
+      .mockReturnValueOnce(true);
+      cmd = new FingerprintWatchCommand(appMapDir);
+      expect(cmd.increaseFileLimitTo).toBeCalledTimes(3);
+      jest.clearAllMocks();
     });
 
     it('does not raise if it hits the limit of the number of file watchers', async () => {
