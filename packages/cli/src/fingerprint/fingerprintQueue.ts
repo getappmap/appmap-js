@@ -22,6 +22,10 @@ export default class FingerprintQueue {
         const timeEnd = Date.now();
         const timeDiff = timeEnd - timeStart;
         console.debug("queue processed     " + appmapFileName + " in " + timeDiff);
+        console.debug("queue finished      " + appmapFileName);
+        delete this.queueAsHash[appmapFileName];
+        console.debug("num in queue        " + this.queue.length() + " after one file got processed");
+        console.debug("num in hash         " + Object.keys(this.queueAsHash).length + " after one file got processed");
       } catch (e) {
         console.warn(`Error fingerprinting ${appmapFileName}: ${e}`);
       }
@@ -55,12 +59,7 @@ export default class FingerprintQueue {
     console.debug("push IN for         " + appmapFileName);
     if (!this.queueAsHash[appmapFileName]) {
       this.queueAsHash[appmapFileName] = true;
-      this.queue.push(appmapFileName, async (cb: any) => {
-        console.debug("queue finished processing    " + appmapFileName);
-        delete this.queueAsHash[appmapFileName];
-        console.debug("num in queue        " + this.queue.length() + " after one file got processed");
-        console.debug("num in hash         " + Object.keys(this.queueAsHash).length + " after one file got processed");
-      });
+      this.queue.push(appmapFileName);
     } else {
       console.debug("DIDN'T push twice   " + appmapFileName + " ******************** ");
     }
