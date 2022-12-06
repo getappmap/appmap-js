@@ -16,11 +16,17 @@ export default class FingerprintQueue {
     this.handler = new Fingerprinter(printCanonicalAppMaps);
     this.queue = queue(async (appmapFileName) => {
       try {
+        const timeStart = Date.now();
         await this.handler.fingerprint(appmapFileName);
+        const timeEnd = Date.now();
+        const timeDiff = timeEnd - timeStart;
+        console.debug("queue processed     " + appmapFileName + " in " + timeDiff);
       } catch (e) {
         console.warn(`Error fingerprinting ${appmapFileName}: ${e}`);
       }
       this.pending.delete(appmapFileName);
+      console.debug("num in pending " + this.pending.size);
+      console.debug("num in queue   " + this.queue.length());
     }, this.size);
     this.queue.pause();
   }
