@@ -15,4 +15,5 @@ const plugin = {
 };
 
 export default plugin;
+export * as FeatureFlags from '@/lib/featureFlags';
 export * from '@/componentExports';
