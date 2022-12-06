@@ -1,3 +1,15 @@
+# [@appland/components-v2.19.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.18.3...@appland/components-v2.19.0) (2022-12-06)
+
+
+### Bug Fixes
+
+* Export FeatureFlags ([7d050c4](https://github.com/getappmap/appmap-js/commit/7d050c4f03b228de7492b9dacc6b0e37d935dd8d))
+
+
+### Features
+
+* Add an AppMap sign-in page ([00cacbe](https://github.com/getappmap/appmap-js/commit/00cacbeba0860af67b295d5a1bf185c1d9ed9b25))
+
 # [@appland/components-v2.18.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.18.2...@appland/components-v2.18.3) (2022-11-01)
 
 
