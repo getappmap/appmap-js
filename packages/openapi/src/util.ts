@@ -116,8 +116,16 @@ function messageToOpenAPISchema(example: SchemaExample): OpenAPIV3.SchemaObject 
     const properties = example.properties.filter(Boolean).reduce((memo, msgProperty) => {
       const type = classNameToOpenAPIType(msgProperty.class);
       if (type === 'array') {
-        // eslint-disable-next-line no-param-reassign
-        memo[msgProperty.name] = { type } as OpenAPIV3.ArraySchemaObject;
+        let schema;
+        if (msgProperty.properties) {
+          // eslint-disable-next-line no-param-reassign
+          schema = messageToOpenAPISchema(msgProperty);
+        }
+        if (schema) {
+          memo[msgProperty.name] = schema;
+        } else {
+          memo[msgProperty.name] = { type } as OpenAPIV3.ArraySchemaObject;
+        }
       } else if (type === 'object' && msgProperty.properties) {
         // eslint-disable-next-line no-param-reassign
         const schema = messageToOpenAPISchema(msgProperty);
