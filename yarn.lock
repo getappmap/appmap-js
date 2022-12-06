@@ -132,6 +132,7 @@ __metadata:
     ora: ^5.4.1
     pkg: ^5.8.0
     port-pid: ^0.0.7
+    posix: ^4.2.0
     prettier: ^2.7.1
     pretty-bytes: ^5.6.0
     ps-node: ^0.1.6
@@ -21341,6 +21342,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nan@npm:^2.14.x":
+  version: 2.17.0
+  resolution: "nan@npm:2.17.0"
+  dependencies:
+    node-gyp: latest
+  checksum: ec609aeaf7e68b76592a3ba96b372aa7f5df5b056c1e37410b0f1deefbab5a57a922061e2c5b369bae9c7c6b5e6eecf4ad2dac8833a1a7d3a751e0a7c7f849ed
+  languageName: node
+  linkType: hard
+
 "nanoid@npm:^3.1.23, nanoid@npm:^3.2.0":
   version: 3.2.0
   resolution: "nanoid@npm:3.2.0"
@@ -23602,6 +23612,16 @@ __metadata:
   version: 0.1.1
   resolution: "posix-character-classes@npm:0.1.1"
   checksum: dedb99913c60625a16050cfed2fb5c017648fc075be41ac18474e1c6c3549ef4ada201c8bd9bd006d36827e289c571b6092e1ef6e756cdbab2fd7046b25c6442
+  languageName: node
+  linkType: hard
+
+"posix@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "posix@npm:4.2.0"
+  dependencies:
+    nan: ^2.14.x
+    node-gyp: latest
+  checksum: b8c73ea1d9c1c87f28d5fff847e1a0a1108cab739ea7553a0a0213ccabea686f3de20292d59d843aa2367c4552123c96cbbe6f84e3b86199b076c4b6b7359576
   languageName: node
   linkType: hard
 
