@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { Diff, MoveType, Position } from './diff';
+import { Diff, MoveType, Move } from './diff';
 import { Action, actionActors, Actor, Diagram, DiffMode } from './types';
 
 function cloneAction(action: Action): Action {
@@ -23,7 +23,7 @@ function cloneAction(action: Action): Action {
 export default function buildDiffDiagram(diff: Diff): Diagram {
   const diffActionsByAction = new Map<Action, Action>();
 
-  const buildActions = (state: Position): Action => {
+  const buildActions = (state: Move): Action => {
     const lAction = diff.baseActions[state.lNode];
     const rAction = diff.headActions[state.rNode];
 
@@ -88,7 +88,7 @@ export default function buildDiffDiagram(diff: Diff): Diagram {
     }
   };
 
-  const actions = diff.positions.map((state) => buildActions(state));
+  const actions = diff.moves.map((state) => buildActions(state));
 
   const uniqueActorIds = new Set<string>();
   const actors: Actor[] = [];

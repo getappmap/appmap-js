@@ -16,7 +16,7 @@ describe('Sequence diagram diff', () => {
       const headDiagram = loadDiagram(USER_NOT_FOUND_APPMAP);
       const computedDiff = diff(headDiagram, baseDiagram, { verbose: VERBOSE });
       assert.deepStrictEqual(
-        computedDiff.positions.map((state) => state.moveType),
+        computedDiff.moves.map((state) => state.moveType),
         [
           MoveType.AdvanceBoth,
           MoveType.DeleteLeft,
@@ -39,7 +39,7 @@ describe('Sequence diagram diff', () => {
       const headDiagram = loadDiagram(LIST_USERS_PREFETCH_APPMAP);
       const computedDiff = diff(headDiagram, baseDiagram, { verbose: VERBOSE });
       assert.deepStrictEqual(
-        computedDiff.positions.map((state) => state.moveType),
+        computedDiff.moves.map((state) => state.moveType),
         [
           MoveType.AdvanceBoth,
           MoveType.AdvanceBoth,

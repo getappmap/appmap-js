@@ -14,20 +14,35 @@ export enum MoveType {
 export type Position = {
   lNode: ActionIndex;
   rNode: ActionIndex;
-  moveType: MoveType;
-  cost: number;
 };
+
+const Costs: Map<MoveType, number> = new Map();
+
+Costs.set(MoveType.InsertRight, 2.0);
+Costs.set(MoveType.DeleteLeft, 2.0);
+Costs.set(MoveType.AdvanceBoth, 0);
+
+export class Move {
+  public lNode: number;
+  public rNode: number;
+  public cost: number;
+
+  constructor(position: Position, public moveType: MoveType) {
+    this.lNode = position.lNode;
+    this.rNode = position.rNode;
+    const cost = Costs.get(moveType);
+    assert(cost !== undefined, `No cost for ${moveType}`);
+    this.cost = cost;
+  }
+}
 
 export type Diff = {
   baseActions: Action[];
   headActions: Action[];
-  positions: Position[];
+  moves: Move[];
 };
 
 type StateKey = string;
-
-const InsertCost = 2.0;
-const DeleteCost = 2.0;
 
 function positionKey(position: Position): string {
   return `${position.lNode},${position.rNode}`;
@@ -79,8 +94,8 @@ export default function diff(
     if (action < diagram.length) return action + 1;
   };
 
-  const advanceBoth = (state: Position): Position | undefined => {
-    const [lNode, rNode] = [advance(lActions, state.lNode), advance(rActions, state.rNode)];
+  const advanceBoth = (move: Move): Move | undefined => {
+    const [lNode, rNode] = [advance(lActions, move.lNode), advance(rActions, move.rNode)];
     if (lNode === undefined || rNode === undefined) return;
 
     const lDigest = digestOf(lActions, lNode);
@@ -89,36 +104,33 @@ export default function diff(
     // Advancing both is only a legal move if both resulting actions have the same digest.
     if (lDigest !== rDigest) return;
 
-    return {
-      lNode: lNode,
-      rNode: rNode,
-      moveType: MoveType.AdvanceBoth,
-      cost: 0,
-    };
+    return new Move(
+      {
+        lNode: lNode,
+        rNode: rNode,
+      },
+      MoveType.AdvanceBoth
+    );
   };
 
-  const deleteLeft = (state: Position): Position | undefined => {
-    const lNode = advance(lActions, state.lNode);
+  const deleteLeft = (move: Move): Move | undefined => {
+    const lNode = advance(lActions, move.lNode);
     if (lNode === undefined) return;
 
-    return {
-      lNode: lNode,
-      rNode: state.rNode,
-      moveType: MoveType.DeleteLeft,
-      cost: DeleteCost,
-    } as Position;
+    return new Move({ lNode: lNode, rNode: move.rNode }, MoveType.DeleteLeft);
   };
 
-  const insertRight = (state: Position): Position | undefined => {
-    const rNode = advance(rActions, state.rNode);
+  const insertRight = (move: Move): Move | undefined => {
+    const rNode = advance(rActions, move.rNode);
     if (rNode === undefined) return;
 
-    return {
-      lNode: state.lNode,
-      rNode: rNode,
-      moveType: MoveType.InsertRight,
-      cost: InsertCost,
-    } as Position;
+    return new Move(
+      {
+        lNode: move.lNode,
+        rNode: rNode,
+      },
+      MoveType.InsertRight
+    );
   };
 
   const digestOf = (actions: Action[], action: ActionIndex): string => {
@@ -134,15 +146,13 @@ export default function diff(
    *    The left node is a removal
    *    The right node is an insertion
    */
-  const moves = (state: Position): Position[] => {
-    return [advanceBoth(state), deleteLeft(state), insertRight(state)].filter(
-      Boolean
-    ) as Position[];
+  const possibleMoves = (move: Move): Move[] => {
+    return [advanceBoth(move), deleteLeft(move), insertRight(move)].filter(Boolean) as Move[];
   };
 
   const pq = new MinPriorityQueue<{
-    position: Position;
-    preceding: Position;
+    position: Move;
+    preceding: Move;
     cost: number;
   }>((entry) => entry.cost);
 
@@ -150,8 +160,8 @@ export default function diff(
   const stateMoves = new Map<StateKey, number>();
   const statePreceding = new Map<StateKey, StateKey>();
 
-  const initialState = { lNode: -1, rNode: -1, moveType: MoveType.AdvanceBoth } as Position;
-  moves(initialState).forEach((position) =>
+  const initialState = { lNode: -1, rNode: -1, moveType: MoveType.AdvanceBoth } as Move;
+  possibleMoves(initialState).forEach((position) =>
     pq.enqueue({ position, preceding: initialState, cost: position.cost })
   );
 
@@ -184,7 +194,7 @@ export default function diff(
       stateMoves.set(positionKey(position), position.moveType);
       if (preceding) statePreceding.set(positionKey(position), positionKey(preceding));
 
-      moves(position).forEach((newPosition) =>
+      possibleMoves(position).forEach((newPosition) =>
         pq.enqueue({
           position: newPosition,
           preceding: position,
@@ -194,17 +204,17 @@ export default function diff(
     }
   }
 
-  const states: Position[] = [];
+  const moves: Move[] = [];
   {
     let reachedState: string | undefined = [lActions.length - 1, rActions.length - 1].join(',');
     while (reachedState !== '-1,-1') {
       assert(reachedState);
       const [lNode, rNode] = reachedState.split(',').map(Number);
       const move = stateMoves.get(reachedState);
-      const state = { lNode: lNode, rNode: rNode, moveType: move } as Position;
-      states.push(state);
+      const state = { lNode: lNode, rNode: rNode, moveType: move } as Move;
+      moves.push(state);
       reachedState = statePreceding.get(reachedState);
     }
   }
-  return { baseActions: lActions, headActions: rActions, positions: states.reverse() };
+  return { baseActions: lActions, headActions: rActions, moves: moves.reverse() };
 }

@@ -1,5 +1,4 @@
 import assert from 'assert';
-import { Tracing } from 'trace_events';
 import {
   Action,
   Diagram,
