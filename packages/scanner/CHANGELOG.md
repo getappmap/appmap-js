@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.74.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.73.1...@appland/scanner-v1.74.0) (2022-12-07)
+
+
+### Features
+
+* update @appland/client ([3305854](https://github.com/getappmap/appmap-js/commit/3305854c70b92ff62df523cce37394535d099948))
+
 # [@appland/scanner-v1.73.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.73.0...@appland/scanner-v1.73.1) (2022-11-29)
 
 
