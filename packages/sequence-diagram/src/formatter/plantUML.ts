@@ -21,15 +21,18 @@ const DisplayCharLimit = 50;
 export const extension = '.uml';
 
 function formatElapsed(elapsed: number): string {
-  if (elapsed >= 1) {
-    return `${Math.round(elapsed * 100) / 100}s`;
-  } else if (elapsed >= 0.001) {
-    return `${Math.round(elapsed * 100000) / 100}ms`;
-  } else if (elapsed >= 0.000001) {
-    return `${Math.round(elapsed * 100000000) / 100}μs`;
-  } else {
-    return `${Math.round(elapsed * 100000000000) / 100}ns`;
-  }
+  const timeStr = (): string => {
+    if (elapsed >= 1) {
+      return `${+elapsed.toPrecision(3)}s`;
+    } else if (elapsed >= 0.001) {
+      return `${+(elapsed * 1000).toPrecision(3)}ms`;
+    } else if (elapsed >= 0.000001) {
+      return `${+(elapsed * 1000000).toPrecision(3)}μs`;
+    } else {
+      return `${+(elapsed * 1000000000).toPrecision(3)}ns`;
+    }
+  };
+  return `<size:8><:1F551:></size><color:gray> ${timeStr()}</color>`;
 }
 
 function sanitize(str: string): string {
@@ -44,17 +47,25 @@ function messageName(action: FunctionCall | ServerRPC | ClientRPC | Query): stri
     : action.query;
 }
 
-function messageDisplayName(action: FunctionCall | ServerRPC | ClientRPC | Query): string {
+type MessageDisplayName = {
+  label: string;
+  timing?: string;
+};
+
+function messageDisplayName(
+  action: FunctionCall | ServerRPC | ClientRPC | Query
+): MessageDisplayName {
   const name = messageName(action);
   const tokens = [name.slice(0, DisplayCharLimit)];
-  if (action.elapsed) {
-    tokens.push(` (${formatElapsed(action.elapsed)})`);
-  }
+  let timing: string | undefined;
   if (isFunction(action) && action.static) {
     tokens.unshift('<u>');
     tokens.push('</u>');
   }
-  return tokens.join('');
+  if (action.elapsed) {
+    timing = formatElapsed(action.elapsed);
+  }
+  return { label: tokens.join(''), timing };
 }
 
 type Response = ReturnValue & {
@@ -71,12 +82,16 @@ function actionResponse(
     : undefined;
 }
 
-function encode(action: Action, str: string): string {
-  let text = sanitize(str);
+function encode(action: Action, message: MessageDisplayName): string {
+  const text = sanitize(message.label);
+  let tokens = [text];
   if (action.diffMode !== undefined) {
-    text = ['<b>', `<color:${color(action)}>`, text, '</color>', '</b>'].join('');
+    tokens = ['<b>', `<color:${color(action)}>`, ...tokens, '</color>', '</b>'];
   }
-  return text;
+  if (message.timing) {
+    tokens.push(' ', message.timing);
+  }
+  return tokens.join('');
 }
 
 function alias(id: string): string {
@@ -185,7 +200,7 @@ export function format(diagram: Diagram, _source: string): string {
 
       const tokens = [`${countStr} times`];
       if (action.elapsed) {
-        tokens.push(` (${formatElapsed(action.elapsed)})`);
+        tokens.push(` ${formatElapsed(action.elapsed)}`);
       }
       events.print(`Loop${colorTag} ${tokens.join('')}`);
 
@@ -243,7 +258,7 @@ export function format(diagram: Diagram, _source: string): string {
           returnValueStr = ['<i>', returnValueStr || 'exception!', '</i>'].join('');
         }
 
-        if (returnValueStr) returnValueStr = encode(action, returnValueStr);
+        if (returnValueStr) returnValueStr = encode(action, { label: returnValueStr });
 
         events.print([outgoingTokens.join(arrow), returnValueStr].join(': '));
       }

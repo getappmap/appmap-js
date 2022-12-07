@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { format } from '../../src/formatter/plantUML';
-import { APPMAPS, APP_APPMAP_DIR, checkFilesEqual, loadDiagram } from '../util';
+import { APPMAPS, APP_APPMAP_DIR, checkPlantUMLEqual, loadDiagram } from '../util';
 
 describe('Sequence diagram', () => {
   describe('PlantUML', () => {
@@ -11,7 +11,7 @@ describe('Sequence diagram', () => {
           priority: { 'package:lib/database': 10000 },
         });
         const plantUML = format(diagram, appmapFile);
-        await checkFilesEqual(
+        await checkPlantUMLEqual(
           plantUML,
           join(APP_APPMAP_DIR, appmapFile.replace('.appmap.json', '.sequence.uml'))
         );

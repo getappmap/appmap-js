@@ -1,7 +1,6 @@
 import diff from '../../src/diff';
 import buildDiffDiagram from '../../src/buildDiffDiagram';
 import {
-  checkFilesEqual,
   FIXTURE_DIR,
   LIST_USERS_APPMAP,
   LIST_USERS_PREFETCH_APPMAP,
@@ -9,6 +8,7 @@ import {
   SHOW_USER_APPMAP,
   USER_NOT_FOUND_APPMAP,
   VERBOSE,
+  checkPlantUMLEqual,
 } from '../util';
 import { format } from '../../src/formatter/plantUML';
 import { join } from 'path';
@@ -26,7 +26,7 @@ describe('Sequence diagram diff', () => {
         const computedDiff = diff(baseDiagram, headDiagram, { verbose: VERBOSE });
         const diffDiagram = buildDiffDiagram(computedDiff);
         const plantUML = format(diffDiagram, 'diff.sequence.json');
-        await checkFilesEqual(
+        await checkPlantUMLEqual(
           plantUML,
           join(FIXTURE_DIR, 'sequenceDiagrams/userFoundVsNotFound.sequence.uml')
         );
@@ -43,7 +43,7 @@ describe('Sequence diagram diff', () => {
         const computedDiff = diff(baseDiagram, headDiagram, { verbose: VERBOSE });
         const diffDiagram = buildDiffDiagram(computedDiff);
         const plantUML = format(diffDiagram, 'diff.sequence.json');
-        await checkFilesEqual(
+        await checkPlantUMLEqual(
           plantUML,
           join(FIXTURE_DIR, 'sequenceDiagrams/listVsListWithPrefetch.sequence.uml')
         );
