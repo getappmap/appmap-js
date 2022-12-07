@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.2.1](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.2.0...@appland/openapi-v1.2.1) (2022-12-07)
+
+
+### Bug Fixes
+
+* Emit openapi array schema ([8d16c07](https://github.com/getappmap/appmap-js/commit/8d16c074c0b3aa3d7aebce55bb195f58cb550dc5))
+
 # [@appland/openapi-v1.2.0](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.1.1...@appland/openapi-v1.2.0) (2022-11-23)
 
 
