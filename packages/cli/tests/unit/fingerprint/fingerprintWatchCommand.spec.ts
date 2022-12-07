@@ -11,7 +11,6 @@ import OriginalTelemetry from '../../../src/telemetry';
 import { once } from 'events';
 import Fingerprinter from '../../../src/fingerprint/fingerprinter';
 import { MaxMSBetween } from '../../../src/lib/eventAggregator';
-import { getrlimit } from 'posix';
 
 
 jest.mock('../../../src/telemetry');
