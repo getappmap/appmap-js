@@ -16,9 +16,9 @@ install:
   - os: linux
     script:
     - yarn && yarn run build
-
-  # - os: windows
-  #   - powershell -Command "Write-Output """powershell started"""; Set-Alias -Name python3 -Value python; yarn -and yarn run build; Write-Output """powershell ended""" "
+  - os: windows
+    script:
+    - powershell -Command "Write-Output """powershell started"""; Set-Alias -Name python3 -Value python; yarn -and yarn run build; Write-Output """powershell ended""" "
 
 script: yarn run ci
 
