@@ -13,9 +13,10 @@ git:
   symlinks: true
 
 install:
-  - yarn && yarn run build  
-  # - os: linux
-  #   - yarn && yarn run build
+  - os: linux
+    - script:
+      yarn && yarn run build
+
   # - os: windows
   #   - powershell -Command "Write-Output """powershell started"""; Set-Alias -Name python3 -Value python; yarn -and yarn run build; Write-Output """powershell ended""" "
 
