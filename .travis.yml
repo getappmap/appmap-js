@@ -39,7 +39,8 @@ jobs:
       env:
         - YARN_GPG=no
       install:
-        - powershell -Command "Write-Output """powershell started"""; Set-Alias -Name python3 -Value python; yarn -and yarn run build; Write-Output """powershell ended""" "
+        - powershell -Command "Set-Alias -Name python3 -Value python"
+        - yarn && yarn run build
       script: yarn test
 
     - stage: deploy
