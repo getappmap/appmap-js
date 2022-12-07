@@ -26,6 +26,7 @@ export enum NodeType {
 export enum DiffMode {
   Insert,
   Delete,
+  Change,
 }
 
 export type Action = Loop | FunctionCall | ServerRPC | ClientRPC | Query;
@@ -40,6 +41,8 @@ export type Node = {
   children: Action[];
   diffMode?: DiffMode;
   elapsed?: number;
+  formerName?: string;
+  formerResult?: string;
 };
 
 export type Loop = Node & {
@@ -108,7 +111,9 @@ export const isClientRPC = (action: Action): action is ClientRPC =>
 
 export const isQuery = (action: Action): action is Query => action.nodeType === NodeType.Query;
 
-export const actionActors = (action: Action): (Actor | undefined)[] => {
+export const actionActors = (action: Action | undefined): (Actor | undefined)[] => {
+  if (!action) return [];
+
   if (isFunction(action) || isClientRPC(action) || isQuery(action))
     return [action.caller, action.callee];
 
@@ -130,6 +135,24 @@ export const nodeName = (action: Action | undefined): string => {
       return action.query;
     case NodeType.Loop:
       return 'loop';
+  }
+};
+
+export const nodeResult = (action: Action | undefined): string | undefined => {
+  if (!action) return undefined;
+
+  switch (action.nodeType) {
+    case NodeType.Function:
+      if (!action.returnValue) return;
+
+      if (action.returnValue.returnValueType) return action.returnValue.returnValueType.name;
+
+      if (action.returnValue.raisesException) return 'exception!';
+      break;
+    case NodeType.ServerRPC:
+      return action.status.toString();
+    case NodeType.ClientRPC:
+      return action.status.toString();
   }
 };
 
@@ -183,4 +206,6 @@ export { format };
 import type { SequenceDiagramOptions } from './specification';
 import { default as Specification } from './specification';
 
-export { SequenceDiagramOptions, Specification };
+import { DiffOptions, Diff, Move, MoveType, Position } from './diff';
+
+export { SequenceDiagramOptions, Specification, DiffOptions, Diff, Move, MoveType, Position };

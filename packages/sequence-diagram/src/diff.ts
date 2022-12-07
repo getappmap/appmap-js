@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { MinPriorityQueue } from '@datastructures-js/priority-queue';
-import { Action, Diagram, nodeName } from './types';
+import { Action, actionActors, Diagram, nodeName } from './types';
 import { inspect } from 'util';
 
 type ActionIndex = number;
@@ -9,6 +9,7 @@ export enum MoveType {
   AdvanceBoth = 1,
   DeleteLeft = 2,
   InsertRight = 3,
+  Change = 4,
 }
 
 export type Position = {
@@ -18,9 +19,10 @@ export type Position = {
 
 const Costs: Map<MoveType, number> = new Map();
 
+Costs.set(MoveType.AdvanceBoth, 0);
+Costs.set(MoveType.Change, 1.0);
 Costs.set(MoveType.InsertRight, 2.0);
 Costs.set(MoveType.DeleteLeft, 2.0);
-Costs.set(MoveType.AdvanceBoth, 0);
 
 export class Move {
   public lNode: number;
@@ -56,6 +58,8 @@ function moveTypeName(moveType: MoveType): string {
       return 'delete left';
     case MoveType.InsertRight:
       return 'insert right';
+    case MoveType.Change:
+      return 'change';
   }
 }
 
@@ -113,6 +117,22 @@ export default function diff(
     );
   };
 
+  const change = (move: Move): Move | undefined => {
+    const [lNode, rNode] = [advance(lActions, move.lNode), advance(rActions, move.rNode)];
+    if (lNode === undefined || rNode === undefined) return;
+
+    if (actionActors(lActions[move.lNode])[0]?.id !== actionActors(rActions[move.rNode])[0]?.id)
+      return;
+
+    return new Move(
+      {
+        lNode: lNode,
+        rNode: rNode,
+      },
+      MoveType.Change
+    );
+  };
+
   const deleteLeft = (move: Move): Move | undefined => {
     const lNode = advance(lActions, move.lNode);
     if (lNode === undefined) return;
@@ -147,7 +167,9 @@ export default function diff(
    *    The right node is an insertion
    */
   const possibleMoves = (move: Move): Move[] => {
-    return [advanceBoth(move), deleteLeft(move), insertRight(move)].filter(Boolean) as Move[];
+    return [advanceBoth(move), change(move), deleteLeft(move), insertRight(move)].filter(
+      Boolean
+    ) as Move[];
   };
 
   const pq = new MinPriorityQueue<{

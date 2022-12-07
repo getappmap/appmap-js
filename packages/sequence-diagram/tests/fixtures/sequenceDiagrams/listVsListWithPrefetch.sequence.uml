@@ -9,11 +9,11 @@ participant database as "database"
   activate controllers
     controllers->models: <u>list</u> <size:8><:1F551:></size><color:gray> 190μs</color>
     activate models
-      models->database: <u>query</u>
-      models-[#green]>models: <b><color:green><u>find_for_users</u></color></b> <size:8><:1F551:></size><color:gray> 24μs</color>
+      models-[#green]>database: <color:green><u>query</u></color> $timing
+      models-[#green]>models: <color:green><u>find_for_users</u></color> <size:8><:1F551:></size><color:gray> 24μs</color>
       activate models
-        models-[#green]>database: <b><color:green><u>query</u></color></b>
-      models<[#green]--models: <b><color:green>object</color></b>
+        models->database: <u>query</u>
+      models<[#green]--models: <color:green>object</color>
       deactivate models
     controllers<--models: array
     deactivate models
@@ -22,16 +22,10 @@ participant database as "database"
       Loop 5 times <size:8><:1F551:></size><color:gray> 8μs</color>
         users->models: posts <size:8><:1F551:></size><color:gray> 1μs</color>
         activate models
-          models-[#red]>models: <b><color:red><u>find_for_user</u></color></b> <size:8><:1F551:></size><color:gray> 30μs</color>
-          Note right
-deleted
-          End note
+          models-[#red]>models: <color:red><u>find_for_user</u></color> <size:8><:1F551:></size><color:gray> 30μs</color>
           activate models
-            models-[#red]>database: <b><color:red><u>query</u></color></b> <size:8><:1F551:></size><color:gray> 1μs</color>
-            Note right
-deleted
-            End note
-          models<[#red]--models: <b><color:red>array</color></b>
+            models-[#red]>database: <color:red><u>query</u></color> <size:8><:1F551:></size><color:gray> 1μs</color>
+          models<[#red]--models: <color:red>array</color>
           deactivate models
         users<--models: array
         deactivate models

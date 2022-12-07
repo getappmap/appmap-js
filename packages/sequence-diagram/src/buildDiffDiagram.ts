@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { Diff, MoveType, Move } from './diff';
-import { Action, actionActors, Actor, Diagram, DiffMode } from './types';
+import { Action, actionActors, Actor, Diagram, DiffMode, nodeName, nodeResult } from './types';
 
 function cloneAction(action: Action): Action {
   const parent = action.parent;
@@ -30,6 +30,20 @@ export default function buildDiffDiagram(diff: Diff): Diagram {
     switch (state.moveType) {
       case MoveType.AdvanceBoth: {
         const action = cloneAction(rAction);
+        if (rAction.parent) {
+          const parent = diffActionsByAction.get(rAction.parent);
+          parent?.children.push(action);
+          action.parent = parent;
+        }
+        diffActionsByAction.set(rAction, action);
+        diffActionsByAction.set(lAction, action);
+        return action;
+      }
+      case MoveType.Change: {
+        const action = cloneAction(rAction);
+        action.diffMode = DiffMode.Change;
+        action.formerName = nodeName(lAction);
+        action.formerResult = nodeResult(lAction);
         if (rAction.parent) {
           const parent = diffActionsByAction.get(rAction.parent);
           parent?.children.push(action);

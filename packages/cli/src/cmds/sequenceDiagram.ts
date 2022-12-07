@@ -1,7 +1,6 @@
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import { basename, dirname, join } from 'path';
 import yargs from 'yargs';
-import { default as sequenceDiagramFormatter } from '@appland/sequence-diagram/dist/formatter';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { verbose } from '../utils';
 import { buildAppMap } from '@appland/models';

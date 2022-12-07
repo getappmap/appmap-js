@@ -14,6 +14,8 @@ import {
   ClientRPC,
   Query,
   isClientRPC,
+  nodeResult,
+  nodeName,
 } from '../types';
 
 const DisplayCharLimit = 50;
@@ -57,11 +59,11 @@ function messageDisplayName(
 ): MessageDisplayName {
   const name = messageName(action);
   const tokens = [name.slice(0, DisplayCharLimit)];
-  let timing: string | undefined;
   if (isFunction(action) && action.static) {
     tokens.unshift('<u>');
     tokens.push('</u>');
   }
+  let timing: string | undefined;
   if (action.elapsed) {
     timing = formatElapsed(action.elapsed);
   }
@@ -82,11 +84,19 @@ function actionResponse(
     : undefined;
 }
 
-function encode(action: Action, message: MessageDisplayName): string {
+function encode(
+  action: Action,
+  message: MessageDisplayName,
+  currentValue?: string,
+  formerValue?: string
+): string {
   const text = sanitize(message.label);
   let tokens = [text];
   if (action.diffMode !== undefined) {
-    tokens = ['<b>', `<color:${color(action)}>`, ...tokens, '</color>', '</b>'];
+    tokens = [`<color:${color(action)}>`, ...tokens, '</color>'];
+    if (action.diffMode === DiffMode.Change && formerValue && currentValue !== formerValue) {
+      tokens = ['--', sanitize(formerValue.slice(0, DisplayCharLimit)), '--', ...tokens];
+    }
   }
   if (message.timing) {
     tokens.push(' ', message.timing);
@@ -104,6 +114,8 @@ function color(action: Action): string | undefined {
       return 'red';
     case DiffMode.Insert:
       return 'green';
+    case DiffMode.Change:
+      return 'yellow';
   }
 }
 
@@ -213,7 +225,10 @@ export function format(diagram: Diagram, _source: string): string {
         const incomingTokens = actors.map((actor) => (actor ? alias(actor.name) : ''));
         const arrow = requestArrow(action);
         events.print(
-          [incomingTokens.join(arrow), encode(action, messageDisplayName(action))].join(': ')
+          [
+            incomingTokens.join(arrow),
+            encode(action, messageDisplayName(action), nodeName(action), action.formerName),
+          ].join(': ')
         );
       }
       {
@@ -225,14 +240,6 @@ export function format(diagram: Diagram, _source: string): string {
           events.outdent();
           events.print('End note');
         }
-      }
-
-      if (action.diffMode) {
-        events.print('Note right');
-        events.indent();
-        events.printLeftAligned(action.diffMode === DiffMode.Delete ? 'deleted' : 'added');
-        events.outdent();
-        events.print('End note');
       }
 
       const response = actionResponse(action);
@@ -258,7 +265,13 @@ export function format(diagram: Diagram, _source: string): string {
           returnValueStr = ['<i>', returnValueStr || 'exception!', '</i>'].join('');
         }
 
-        if (returnValueStr) returnValueStr = encode(action, { label: returnValueStr });
+        if (returnValueStr)
+          returnValueStr = encode(
+            action,
+            { label: returnValueStr },
+            nodeResult(action),
+            action.formerResult
+          );
 
         events.print([outgoingTokens.join(arrow), returnValueStr].join(': '));
       }

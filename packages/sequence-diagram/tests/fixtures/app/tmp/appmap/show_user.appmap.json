@@ -12,7 +12,7 @@
       "receiver": {
         "class": "UsersController",
         "object_id": 2360,
-        "value": "#<UsersController:0x000000012e320940>"
+        "value": "#<UsersController:0x000000012e0cab50>"
       }
     },
     {
@@ -82,19 +82,19 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 3,
-      "elapsed": 0.00000100000761449337,
-      "elapsed_instrumentation": 0.00004499999340623617
+      "elapsed": 0,
+      "elapsed_instrumentation": 0.000061000013374723494
     },
     {
       "id": 5,
       "event": "return",
       "thread_id": 2380,
       "parent_id": 2,
-      "elapsed": 0.00005299999611452222,
-      "elapsed_instrumentation": 0.0000670000008540228,
+      "elapsed": 0.00006799999391660094,
+      "elapsed_instrumentation": 0.00007500000356230885,
       "return_value": {
         "class": "User",
-        "value": "#<User:0x000000012f99b210>",
+        "value": "#<User:0x000000013f1719f8>",
         "object_id": 2460
       }
     },
@@ -110,7 +110,7 @@
       "receiver": {
         "class": "Views::Users::Show",
         "object_id": 2480,
-        "value": "#<Views::Users::Show:0x000000012e2fc180>"
+        "value": "#<Views::Users::Show:0x000000013f1f4c18>"
       }
     },
     {
@@ -125,7 +125,7 @@
       "receiver": {
         "class": "User",
         "object_id": 2460,
-        "value": "#<User:0x000000012f99b210>"
+        "value": "#<User:0x000000013f1719f8>"
       }
     },
     {
@@ -181,8 +181,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 9,
-      "elapsed": 0,
-      "elapsed_instrumentation": 0.000014000004739500582
+      "elapsed": 0.00000100000761449337,
+      "elapsed_instrumentation": 0.000014999997802078724
     },
     {
       "id": 11,
@@ -190,10 +190,10 @@
       "thread_id": 2380,
       "parent_id": 8,
       "elapsed": 0.000018999999156221747,
-      "elapsed_instrumentation": 0.00004199999966658652,
+      "elapsed_instrumentation": 0.00005299999611452222,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000012e1e64f8>, #<Post:0x000000012e1e5fa8>]",
+        "value": "[#<Post:0x000000012e14fb70>, #<Post:0x000000012e14f878>]",
         "object_id": 2540,
         "size": 2
       }
@@ -203,11 +203,11 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 7,
-      "elapsed": 0.00006500000017695129,
-      "elapsed_instrumentation": 0.00003599999763537198,
+      "elapsed": 0.00007599999662488699,
+      "elapsed_instrumentation": 0.00005299999611452222,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000012e1e64f8>, #<Post:0x000000012e1e5fa8>]",
+        "value": "[#<Post:0x000000012e14fb70>, #<Post:0x000000012e14f878>]",
         "object_id": 2540,
         "size": 2
       }
@@ -224,7 +224,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2560,
-        "value": "#<Views::Posts::Show:0x000000012e2dd550>"
+        "value": "#<Views::Posts::Show:0x000000013f1d70f0>"
       }
     },
     {
@@ -232,8 +232,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 13,
-      "elapsed": 9.999930625781417e-7,
-      "elapsed_instrumentation": 0.00003100000321865082,
+      "elapsed": 0.00000100000761449337,
+      "elapsed_instrumentation": 0.0000340000115102157,
       "return_value": {
         "class": "String",
         "value": "first post",
@@ -252,7 +252,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2600,
-        "value": "#<Views::Posts::Show:0x000000012e2d6ca0>"
+        "value": "#<Views::Posts::Show:0x000000013f1d41c0>"
       }
     },
     {
@@ -260,8 +260,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 15,
-      "elapsed": 0,
-      "elapsed_instrumentation": 0.000016000005416572094,
+      "elapsed": 9.999930625781417e-7,
+      "elapsed_instrumentation": 0.000016999998479150236,
       "return_value": {
         "class": "String",
         "value": "second post",
@@ -273,8 +273,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 6,
-      "elapsed": 0.00015900000289548188,
-      "elapsed_instrumentation": 0.00005099999543745071,
+      "elapsed": 0.00019200000679120421,
+      "elapsed_instrumentation": 0.000058999998145736754,
       "return_value": {
         "class": "Hash",
         "value": "{:id=>1, :login=>alice, :posts=>[first post, second post]}",
@@ -287,8 +287,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 1,
-      "elapsed": 0.00034100000630132854,
-      "elapsed_instrumentation": 0.00009899998258333653,
+      "elapsed": 0.0004079999926034361,
+      "elapsed_instrumentation": 0.00010500001371838152,
       "return_value": {
         "class": "Array",
         "value": "[{:id=>1, :login=>alice, :posts=>[first post, second post]}, 200]",
@@ -311,21 +311,19 @@
     },
     "git": {
       "repository": "git@github.com:getappmap/appmap-js.git",
-      "branch": "feat/seq-diagram-timing-info",
-      "commit": "720b224319a6da0a26f8094999cc005602506607",
+      "branch": "feat/improve-diff",
+      "commit": "ef0bcfa1a7111b1c932e27db053ec4da46e57a25",
       "status": [
+        "M ../../../../cli/src/cmds/sequenceDiagram.ts",
+        "M ../../../../cli/src/cmds/sequenceDiagramDiff.ts",
+        "M ../../../src/buildDiffDiagram.ts",
+        "M ../../../src/diff.ts",
         "M ../../../src/formatter/plantUML.ts",
+        "M ../../../src/types.ts",
         "M tmp/appmap/list_users.appmap.json",
-        "M tmp/appmap/list_users.sequence.uml",
         "M tmp/appmap/list_users_prefetch.appmap.json",
-        "M tmp/appmap/list_users_prefetch.sequence.uml",
-        "M tmp/appmap/show_user.appmap.json",
-        "M tmp/appmap/show_user.sequence.uml",
-        "M tmp/appmap/user_not_found.appmap.json",
-        "M tmp/appmap/user_not_found.sequence.uml",
-        "M ../../integration/sequenceDiagram.spec.ts",
-        "M ../../integration/sequenceDiagramDiff.spec.ts",
-        "M ../../util.ts",
+        "M ../sequenceDiagrams/listVsListWithPrefetch.sequence.svg",
+        "M ../sequenceDiagrams/userFoundVsNotFound.sequence.svg",
         "?? ../../../../../appmap.yml",
         "?? ../../../../cli/tmp/"
       ],
@@ -337,73 +335,73 @@
     "name": "show_user",
     "fingerprints": [
       {
-        "appmap_digest": "f4f43175f244bc201f41c6f6d42878f7ea2c1adb70a287fba4afa346b6175e21",
+        "appmap_digest": "e2043afd6d8d573c36fb5d61a6dba0d73b814450ed2210a8e15acdb3b2027442",
         "canonicalization_algorithm": "classDependencies",
         "digest": "3b39770fcfc30536e1a3bdc79ecf5c31fa99f53301e4a2fab3291dbcd806e8f2",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "f4f43175f244bc201f41c6f6d42878f7ea2c1adb70a287fba4afa346b6175e21",
+        "appmap_digest": "e2043afd6d8d573c36fb5d61a6dba0d73b814450ed2210a8e15acdb3b2027442",
         "canonicalization_algorithm": "classes",
         "digest": "d784639eb59efd477792eb59b2ab2e74ec637c06d518fda21f53271266ff108e",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "f4f43175f244bc201f41c6f6d42878f7ea2c1adb70a287fba4afa346b6175e21",
+        "appmap_digest": "e2043afd6d8d573c36fb5d61a6dba0d73b814450ed2210a8e15acdb3b2027442",
         "canonicalization_algorithm": "httpClientRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "f4f43175f244bc201f41c6f6d42878f7ea2c1adb70a287fba4afa346b6175e21",
+        "appmap_digest": "e2043afd6d8d573c36fb5d61a6dba0d73b814450ed2210a8e15acdb3b2027442",
         "canonicalization_algorithm": "httpServerRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "f4f43175f244bc201f41c6f6d42878f7ea2c1adb70a287fba4afa346b6175e21",
+        "appmap_digest": "e2043afd6d8d573c36fb5d61a6dba0d73b814450ed2210a8e15acdb3b2027442",
         "canonicalization_algorithm": "info",
         "digest": "8ba64d4e00de9dc209745e8d35c5a90c47d26ea78192590cf258c0c8fbc4caad",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "f4f43175f244bc201f41c6f6d42878f7ea2c1adb70a287fba4afa346b6175e21",
+        "appmap_digest": "e2043afd6d8d573c36fb5d61a6dba0d73b814450ed2210a8e15acdb3b2027442",
         "canonicalization_algorithm": "labels",
         "digest": "0ca5b47511f3b855831e75006ed5b6711cd4d3498b422466a478dfc76b41b69c",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "f4f43175f244bc201f41c6f6d42878f7ea2c1adb70a287fba4afa346b6175e21",
+        "appmap_digest": "e2043afd6d8d573c36fb5d61a6dba0d73b814450ed2210a8e15acdb3b2027442",
         "canonicalization_algorithm": "packageDependencies",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "f4f43175f244bc201f41c6f6d42878f7ea2c1adb70a287fba4afa346b6175e21",
+        "appmap_digest": "e2043afd6d8d573c36fb5d61a6dba0d73b814450ed2210a8e15acdb3b2027442",
         "canonicalization_algorithm": "packages",
         "digest": "534778405b9871993d79f5edbb7079ebefb71feaf9edc6743e5ec2f743ee656a",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "f4f43175f244bc201f41c6f6d42878f7ea2c1adb70a287fba4afa346b6175e21",
+        "appmap_digest": "e2043afd6d8d573c36fb5d61a6dba0d73b814450ed2210a8e15acdb3b2027442",
         "canonicalization_algorithm": "sqlNormalized",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "f4f43175f244bc201f41c6f6d42878f7ea2c1adb70a287fba4afa346b6175e21",
+        "appmap_digest": "e2043afd6d8d573c36fb5d61a6dba0d73b814450ed2210a8e15acdb3b2027442",
         "canonicalization_algorithm": "sqlTables",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "f4f43175f244bc201f41c6f6d42878f7ea2c1adb70a287fba4afa346b6175e21",
+        "appmap_digest": "e2043afd6d8d573c36fb5d61a6dba0d73b814450ed2210a8e15acdb3b2027442",
         "canonicalization_algorithm": "trace",
         "digest": "dafa40538dc78ed6ad677b43d3ed2d5c31872bf92731b7f00917f3f125212614",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "f4f43175f244bc201f41c6f6d42878f7ea2c1adb70a287fba4afa346b6175e21",
+        "appmap_digest": "e2043afd6d8d573c36fb5d61a6dba0d73b814450ed2210a8e15acdb3b2027442",
         "canonicalization_algorithm": "update",
         "digest": "8ba64d4e00de9dc209745e8d35c5a90c47d26ea78192590cf258c0c8fbc4caad",
         "fingerprint_algorithm": "sha256"

@@ -5,27 +5,27 @@ participant models as "models"
 participant users as "users"
 participant posts as "posts"
 participant database as "database"
-  [->controllers: list <size:8><:1F551:></size><color:gray> 717μs</color>
+  [->controllers: list <size:8><:1F551:></size><color:gray> 795μs</color>
   activate controllers
-    controllers->models: <u>list</u> <size:8><:1F551:></size><color:gray> 198μs</color>
+    controllers->models: <u>list</u> <size:8><:1F551:></size><color:gray> 188μs</color>
     activate models
-      models->database: <u>query</u>
-      models->models: <u>find_for_users</u> <size:8><:1F551:></size><color:gray> 23μs</color>
+      models->database: <u>query</u> <size:8><:1F551:></size><color:gray> 1000ns</color>
+      models->models: <u>find_for_users</u> <size:8><:1F551:></size><color:gray> 22μs</color>
       activate models
         models->database: <u>query</u>
       models<--models: object
       deactivate models
     controllers<--models: array
     deactivate models
-    controllers->users: list <size:8><:1F551:></size><color:gray> 308μs</color>
+    controllers->users: list <size:8><:1F551:></size><color:gray> 413μs</color>
     activate users
-      Loop 5 times <size:8><:1F551:></size><color:gray> 10μs</color>
+      Loop 5 times <size:8><:1F551:></size><color:gray> 5μs</color>
         users->models: posts <size:8><:1F551:></size><color:gray> 1000ns</color>
         activate models
         users<--models: array
         deactivate models
-        Loop ~2 times <size:8><:1F551:></size><color:gray> 2μs</color>
-          users->posts: show <size:8><:1F551:></size><color:gray> 1000ns</color>
+        Loop ~2 times <size:8><:1F551:></size><color:gray> 1μs</color>
+          users->posts: show <size:8><:1F551:></size><color:gray> 1μs</color>
           activate posts
           users<--posts: string
           deactivate posts

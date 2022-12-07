@@ -7,36 +7,29 @@ participant posts as "posts"
 participant database as "database"
   [->controllers: show <size:8><:1F551:></size><color:gray> 354μs</color>
   activate controllers
-    controllers-[#red]>models: <b><color:red><u>find</u></color></b> <size:8><:1F551:></size><color:gray> 68μs</color>
-    Note right
-deleted
-    End note
+    controllers-[#yellow]>models: <color:yellow><u>find</u></color> $timing
     activate models
-    controllers<[#red]--models: <b><color:red><i>exception!</i></color></b>
+      models-[#green]>database: <color:green><u>query</u></color>
+    controllers<[#yellow]--models: --exception!--<color:yellow>object</color>
     deactivate models
-    controllers-[#green]>models: <b><color:green><u>find</u></color></b> <size:8><:1F551:></size><color:gray> 55μs</color>
-    activate models
-      models->database: <u>query</u> <size:8><:1F551:></size><color:gray> 1μs</color>
-    controllers<[#green]--models: <b><color:green>object</color></b>
-    deactivate models
-    controllers-[#green]>users: <b><color:green>show</color></b> <size:8><:1F551:></size><color:gray> 169μs</color>
+    controllers-[#green]>users: <color:green>show</color> <size:8><:1F551:></size><color:gray> 169μs</color>
     activate users
-      users-[#green]>models: <b><color:green>posts</color></b> <size:8><:1F551:></size><color:gray> 66μs</color>
+      users-[#green]>models: <color:green>posts</color> <size:8><:1F551:></size><color:gray> 66μs</color>
       activate models
-        models-[#green]>models: <b><color:green><u>find_for_user</u></color></b> <size:8><:1F551:></size><color:gray> 19μs</color>
+        models-[#green]>models: <color:green><u>find_for_user</u></color> <size:8><:1F551:></size><color:gray> 19μs</color>
         activate models
-          models-[#green]>database: <b><color:green><u>query</u></color></b>
-        models<[#green]--models: <b><color:green>array</color></b>
+          models->database: <u>query</u> $timing
+        models<[#green]--models: <color:green>array</color>
         deactivate models
-      users<[#green]--models: <b><color:green>array</color></b>
+      users<[#green]--models: <color:green>array</color>
       deactivate models
       Loop#green 2 times <size:8><:1F551:></size><color:gray> 1μs</color>
-        users-[#green]>posts: <b><color:green>show</color></b> <size:8><:1F551:></size><color:gray> 1μs</color>
+        users-[#green]>posts: <color:green>show</color> <size:8><:1F551:></size><color:gray> 1μs</color>
         activate posts
-        users<[#green]--posts: <b><color:green>string</color></b>
+        users<[#green]--posts: <color:green>string</color>
         deactivate posts
       End
-    controllers<[#green]--users: <b><color:green>object</color></b>
+    controllers<[#green]--users: <color:green>object</color>
     deactivate users
   [<--controllers: array
   deactivate controllers

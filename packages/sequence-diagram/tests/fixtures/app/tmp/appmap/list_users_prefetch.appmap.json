@@ -12,7 +12,7 @@
       "receiver": {
         "class": "UsersController",
         "object_id": 2360,
-        "value": "#<UsersController:0x000000010e04d3a0>"
+        "value": "#<UsersController:0x000000011d0de530>"
       }
     },
     {
@@ -83,8 +83,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 3,
-      "elapsed": 0,
-      "elapsed_instrumentation": 0.00005900001269765198
+      "elapsed": 9.999930625781417e-7,
+      "elapsed_instrumentation": 0.000048000001697801054
     },
     {
       "id": 5,
@@ -141,18 +141,18 @@
       "thread_id": 2380,
       "parent_id": 6,
       "elapsed": 0,
-      "elapsed_instrumentation": 0.000014999997802078724
+      "elapsed_instrumentation": 0.000015999990864656866
     },
     {
       "id": 8,
       "event": "return",
       "thread_id": 2380,
       "parent_id": 5,
-      "elapsed": 0.00002300000051036477,
+      "elapsed": 0.0000219999928958714,
       "elapsed_instrumentation": 0.00010000000474974513,
       "return_value": {
         "class": "Hash",
-        "value": "{1=>[#<Post:0x000000011dcd9178>, #<Post:0x000000011dcd9010>], 2=>[#<Post:0x000000011dcd8ed0>, #<Post:0x000000011dcd8d40>], 3=>[#<Post:0x000000011dcd8c00>, #<Post:0x000000011dcd8b38>, #<Post:0x000000011dcd8a70>], 4=>[#<Post:0x000000011dcd8908>, #<Post:0x000000011dcd8840>], 5=>[#<Post:0x000000011dcd86d8>, #<Post:0x000000011dcd8610>]}",
+        "value": "{1=>[#<Post:0x000000011d177758>, #<Post:0x000000011d16f6c0>], 2=>[#<Post:0x000000011d13fbc8>, #<Post:0x000000011d13df58>], 3=>[#<Post:0x000000011d115378>, #<Post:0x000000011d115198>, #<Post:0x000000011d114f68>], 4=>[#<Post:0x000000011d114e28>, #<Post:0x000000011d114c98>], 5=>[#<Post:0x000000011d114b80>, #<Post:0x000000011d114838>]}",
         "object_id": 2500,
         "size": 5
       }
@@ -162,11 +162,11 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 2,
-      "elapsed": 0.00019799999427050352,
-      "elapsed_instrumentation": 0.00009200000204145908,
+      "elapsed": 0.00018799999088514596,
+      "elapsed_instrumentation": 0.00008100000559352338,
       "return_value": {
         "class": "Array",
-        "value": "[#<User:0x000000011dcab520>, #<User:0x000000011dcab340>, #<User:0x000000011dcab278>, #<User:0x000000011dcaafd0>, #<User:0x000000011dcaad50>]",
+        "value": "[#<User:0x000000011d26d680>, #<User:0x000000011d26d4c8>, #<User:0x000000011d26d068>, #<User:0x000000011d26ca78>, #<User:0x000000011d26c690>]",
         "object_id": 2520,
         "size": 5
       }
@@ -183,7 +183,7 @@
       "receiver": {
         "class": "Views::Users::List",
         "object_id": 2540,
-        "value": "#<Views::Users::List:0x000000011dc48b50>"
+        "value": "#<Views::Users::List:0x000000011d2b7898>"
       }
     },
     {
@@ -198,7 +198,7 @@
       "receiver": {
         "class": "User",
         "object_id": 2560,
-        "value": "#<User:0x000000011dcab520>"
+        "value": "#<User:0x000000011d26d680>"
       }
     },
     {
@@ -207,10 +207,10 @@
       "thread_id": 2380,
       "parent_id": 11,
       "elapsed": 9.999930625781417e-7,
-      "elapsed_instrumentation": 0.00004200001421850175,
+      "elapsed_instrumentation": 0.000039000005926936865,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000011dcd9178>, #<Post:0x000000011dcd9010>]",
+        "value": "[#<Post:0x000000011d177758>, #<Post:0x000000011d16f6c0>]",
         "object_id": 2580,
         "size": 2
       }
@@ -227,7 +227,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2600,
-        "value": "#<Views::Posts::Show:0x000000011da79428>"
+        "value": "#<Views::Posts::Show:0x000000011d2acb50>"
       }
     },
     {
@@ -235,8 +235,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 13,
-      "elapsed": 9.999930625781417e-7,
-      "elapsed_instrumentation": 0.00003900002047885209,
+      "elapsed": 0.00000100000761449337,
+      "elapsed_instrumentation": 0.00004099999205209315,
       "return_value": {
         "class": "String",
         "value": "first post",
@@ -255,7 +255,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2640,
-        "value": "#<Views::Posts::Show:0x000000011da78140>"
+        "value": "#<Views::Posts::Show:0x000000011d2a5fa8>"
       }
     },
     {
@@ -263,8 +263,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 15,
-      "elapsed": 0.00000100000761449337,
-      "elapsed_instrumentation": 0.000014000004739500582,
+      "elapsed": 0,
+      "elapsed_instrumentation": 0.000012999997125007212,
       "return_value": {
         "class": "String",
         "value": "second post",
@@ -283,7 +283,7 @@
       "receiver": {
         "class": "User",
         "object_id": 2680,
-        "value": "#<User:0x000000011dcab340>"
+        "value": "#<User:0x000000011d26d4c8>"
       }
     },
     {
@@ -292,10 +292,10 @@
       "thread_id": 2380,
       "parent_id": 17,
       "elapsed": 0,
-      "elapsed_instrumentation": 0.000016999983927235007,
+      "elapsed_instrumentation": 0.000016999998479150236,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000011dcd8ed0>, #<Post:0x000000011dcd8d40>]",
+        "value": "[#<Post:0x000000011d13fbc8>, #<Post:0x000000011d13df58>]",
         "object_id": 2700,
         "size": 2
       }
@@ -312,7 +312,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2720,
-        "value": "#<Views::Posts::Show:0x000000010e02da00>"
+        "value": "#<Views::Posts::Show:0x000000011d29da38>"
       }
     },
     {
@@ -321,7 +321,7 @@
       "thread_id": 2380,
       "parent_id": 19,
       "elapsed": 9.999930625781417e-7,
-      "elapsed_instrumentation": 0.00001200000406242907,
+      "elapsed_instrumentation": 0.0000109999964479357,
       "return_value": {
         "class": "String",
         "value": "first post",
@@ -340,7 +340,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2760,
-        "value": "#<Views::Posts::Show:0x000000010e01fe78>"
+        "value": "#<Views::Posts::Show:0x000000011d297980>"
       }
     },
     {
@@ -348,8 +348,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 21,
-      "elapsed": 0.00000100000761449337,
-      "elapsed_instrumentation": 0.0000109999964479357,
+      "elapsed": 0,
+      "elapsed_instrumentation": 0.000011000010999850929,
       "return_value": {
         "class": "String",
         "value": "second post",
@@ -368,7 +368,7 @@
       "receiver": {
         "class": "User",
         "object_id": 2800,
-        "value": "#<User:0x000000011dcab278>"
+        "value": "#<User:0x000000011d26d068>"
       }
     },
     {
@@ -376,11 +376,11 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 23,
-      "elapsed": 0,
+      "elapsed": 0.00000100000761449337,
       "elapsed_instrumentation": 0.000017999991541728377,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000011dcd8c00>, #<Post:0x000000011dcd8b38>, #<Post:0x000000011dcd8a70>]",
+        "value": "[#<Post:0x000000011d115378>, #<Post:0x000000011d115198>, #<Post:0x000000011d114f68>]",
         "object_id": 2820,
         "size": 3
       }
@@ -397,7 +397,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2840,
-        "value": "#<Views::Posts::Show:0x000000010e01de98>"
+        "value": "#<Views::Posts::Show:0x000000011d34f490>"
       }
     },
     {
@@ -406,7 +406,7 @@
       "thread_id": 2380,
       "parent_id": 25,
       "elapsed": 0,
-      "elapsed_instrumentation": 0.0000109999964479357,
+      "elapsed_instrumentation": 0.000011999989510513842,
       "return_value": {
         "class": "String",
         "value": "first post",
@@ -425,7 +425,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2880,
-        "value": "#<Views::Posts::Show:0x000000010e01d240>"
+        "value": "#<Views::Posts::Show:0x000000011d34df00>"
       }
     },
     {
@@ -434,7 +434,7 @@
       "thread_id": 2380,
       "parent_id": 27,
       "elapsed": 0,
-      "elapsed_instrumentation": 0.00000999998883344233,
+      "elapsed_instrumentation": 0.000010000017937272787,
       "return_value": {
         "class": "String",
         "value": "second post",
@@ -453,7 +453,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2920,
-        "value": "#<Views::Posts::Show:0x000000010e01c3e0>"
+        "value": "#<Views::Posts::Show:0x000000011d34ce98>"
       }
     },
     {
@@ -462,7 +462,7 @@
       "thread_id": 2380,
       "parent_id": 29,
       "elapsed": 0,
-      "elapsed_instrumentation": 0.000010000017937272787,
+      "elapsed_instrumentation": 0.000015000012353993952,
       "return_value": {
         "class": "String",
         "value": "third post",
@@ -481,7 +481,7 @@
       "receiver": {
         "class": "User",
         "object_id": 2960,
-        "value": "#<User:0x000000011dcaafd0>"
+        "value": "#<User:0x000000011d26ca78>"
       }
     },
     {
@@ -489,11 +489,11 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 31,
-      "elapsed": 0.00000100000761449337,
+      "elapsed": 0,
       "elapsed_instrumentation": 0.000014999997802078724,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000011dcd8908>, #<Post:0x000000011dcd8840>]",
+        "value": "[#<Post:0x000000011d114e28>, #<Post:0x000000011d114c98>]",
         "object_id": 2980,
         "size": 2
       }
@@ -510,7 +510,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 3000,
-        "value": "#<Views::Posts::Show:0x00000001288adc38>"
+        "value": "#<Views::Posts::Show:0x000000011d345a58>"
       }
     },
     {
@@ -518,8 +518,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 33,
-      "elapsed": 9.999930625781417e-7,
-      "elapsed_instrumentation": 0.000010000003385357559,
+      "elapsed": 0,
+      "elapsed_instrumentation": 0.00001200000406242907,
       "return_value": {
         "class": "String",
         "value": "first post",
@@ -538,7 +538,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 3040,
-        "value": "#<Views::Posts::Show:0x000000012890fdc0>"
+        "value": "#<Views::Posts::Show:0x000000011d344810>"
       }
     },
     {
@@ -546,8 +546,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 35,
-      "elapsed": 0.00000100000761449337,
-      "elapsed_instrumentation": 0.00000999998883344233,
+      "elapsed": 0,
+      "elapsed_instrumentation": 0.000009000010322779417,
       "return_value": {
         "class": "String",
         "value": "second post",
@@ -566,7 +566,7 @@
       "receiver": {
         "class": "User",
         "object_id": 3080,
-        "value": "#<User:0x000000011dcaad50>"
+        "value": "#<User:0x000000011d26c690>"
       }
     },
     {
@@ -575,10 +575,10 @@
       "thread_id": 2380,
       "parent_id": 37,
       "elapsed": 0,
-      "elapsed_instrumentation": 0.000015999990864656866,
+      "elapsed_instrumentation": 0.000014999997802078724,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000011dcd86d8>, #<Post:0x000000011dcd8610>]",
+        "value": "[#<Post:0x000000011d114b80>, #<Post:0x000000011d114838>]",
         "object_id": 3100,
         "size": 2
       }
@@ -595,7 +595,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 3120,
-        "value": "#<Views::Posts::Show:0x000000012890b1f8>"
+        "value": "#<Views::Posts::Show:0x000000011d33e9d8>"
       }
     },
     {
@@ -603,8 +603,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 39,
-      "elapsed": 0.00000100000761449337,
-      "elapsed_instrumentation": 0.000010999981896020472,
+      "elapsed": 9.999930625781417e-7,
+      "elapsed_instrumentation": 0.000010000003385357559,
       "return_value": {
         "class": "String",
         "value": "first post",
@@ -623,7 +623,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 3160,
-        "value": "#<Views::Posts::Show:0x0000000128909df8>"
+        "value": "#<Views::Posts::Show:0x000000011d33d998>"
       }
     },
     {
@@ -631,8 +631,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 41,
-      "elapsed": 9.999930625781417e-7,
-      "elapsed_instrumentation": 0.000010000003385357559,
+      "elapsed": 0,
+      "elapsed_instrumentation": 0.0000109999964479357,
       "return_value": {
         "class": "String",
         "value": "second post",
@@ -644,8 +644,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 10,
-      "elapsed": 0.0003080000024056062,
-      "elapsed_instrumentation": 0.00010600000678095967,
+      "elapsed": 0.0004130000015720725,
+      "elapsed_instrumentation": 0.00009899999713525176,
       "return_value": {
         "class": "Array",
         "value": "[{:id=>1, :login=>alice, :posts=>[first post, second post]}, {:id=>2, :login=>bob, :posts=>[first post, second post]}, {:id=>3, :login=>charles, :posts=>[first post, second post, third post]}, {:id=>4, :login=>dan, :posts=>[first post, second post]}, {:id=>5, :login=>ed, :posts=>[first post, second post]}]",
@@ -658,8 +658,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 1,
-      "elapsed": 0.0007169999880716205,
-      "elapsed_instrumentation": 0.00015500000154133886,
+      "elapsed": 0.0007949999999254942,
+      "elapsed_instrumentation": 0.0001429999974789098,
       "return_value": {
         "class": "Array",
         "value": "[[{:id=>1, :login=>alice, :posts=>[first post, second post]}, {:id=>2, :login=>bob, :posts=>[first post, second post]}, {:id=>3, :login=>charles, :posts=>[first post, second post, third post]}, {:id=>4, :login=>dan, :posts=>[first post, second post]}, {:id=>5, :login=>ed, :posts=>[first post, second post]}], 200]",
@@ -682,21 +682,18 @@
     },
     "git": {
       "repository": "git@github.com:getappmap/appmap-js.git",
-      "branch": "feat/seq-diagram-timing-info",
-      "commit": "720b224319a6da0a26f8094999cc005602506607",
+      "branch": "feat/improve-diff",
+      "commit": "ef0bcfa1a7111b1c932e27db053ec4da46e57a25",
       "status": [
+        "M ../../../../cli/src/cmds/sequenceDiagram.ts",
+        "M ../../../../cli/src/cmds/sequenceDiagramDiff.ts",
+        "M ../../../src/buildDiffDiagram.ts",
+        "M ../../../src/diff.ts",
         "M ../../../src/formatter/plantUML.ts",
+        "M ../../../src/types.ts",
         "M tmp/appmap/list_users.appmap.json",
-        "M tmp/appmap/list_users.sequence.uml",
-        "M tmp/appmap/list_users_prefetch.appmap.json",
-        "M tmp/appmap/list_users_prefetch.sequence.uml",
-        "M tmp/appmap/show_user.appmap.json",
-        "M tmp/appmap/show_user.sequence.uml",
-        "M tmp/appmap/user_not_found.appmap.json",
-        "M tmp/appmap/user_not_found.sequence.uml",
-        "M ../../integration/sequenceDiagram.spec.ts",
-        "M ../../integration/sequenceDiagramDiff.spec.ts",
-        "M ../../util.ts",
+        "M ../sequenceDiagrams/listVsListWithPrefetch.sequence.svg",
+        "M ../sequenceDiagrams/userFoundVsNotFound.sequence.svg",
         "?? ../../../../../appmap.yml",
         "?? ../../../../cli/tmp/"
       ],
@@ -708,73 +705,73 @@
     "name": "list_users_prefetch",
     "fingerprints": [
       {
-        "appmap_digest": "806b1d82c21a717aae01a482d7d30ecd46a6dbef4e7ba2623c6b260530dcbd8b",
+        "appmap_digest": "f44bea041b5aca2f491c9d1842d20f33fe890eacb05993ccf3f51607424caea0",
         "canonicalization_algorithm": "classDependencies",
         "digest": "3b39770fcfc30536e1a3bdc79ecf5c31fa99f53301e4a2fab3291dbcd806e8f2",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "806b1d82c21a717aae01a482d7d30ecd46a6dbef4e7ba2623c6b260530dcbd8b",
+        "appmap_digest": "f44bea041b5aca2f491c9d1842d20f33fe890eacb05993ccf3f51607424caea0",
         "canonicalization_algorithm": "classes",
         "digest": "2ecf2b1c1e7f388a5dc03bb2ce1c3f01053acf9e11b1c7da5539e789da808906",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "806b1d82c21a717aae01a482d7d30ecd46a6dbef4e7ba2623c6b260530dcbd8b",
+        "appmap_digest": "f44bea041b5aca2f491c9d1842d20f33fe890eacb05993ccf3f51607424caea0",
         "canonicalization_algorithm": "httpClientRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "806b1d82c21a717aae01a482d7d30ecd46a6dbef4e7ba2623c6b260530dcbd8b",
+        "appmap_digest": "f44bea041b5aca2f491c9d1842d20f33fe890eacb05993ccf3f51607424caea0",
         "canonicalization_algorithm": "httpServerRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "806b1d82c21a717aae01a482d7d30ecd46a6dbef4e7ba2623c6b260530dcbd8b",
+        "appmap_digest": "f44bea041b5aca2f491c9d1842d20f33fe890eacb05993ccf3f51607424caea0",
         "canonicalization_algorithm": "info",
         "digest": "a00b2620d877e9ab17375dbc02716814dc865065eeb859072a9109b90e20ae52",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "806b1d82c21a717aae01a482d7d30ecd46a6dbef4e7ba2623c6b260530dcbd8b",
+        "appmap_digest": "f44bea041b5aca2f491c9d1842d20f33fe890eacb05993ccf3f51607424caea0",
         "canonicalization_algorithm": "labels",
         "digest": "0ca5b47511f3b855831e75006ed5b6711cd4d3498b422466a478dfc76b41b69c",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "806b1d82c21a717aae01a482d7d30ecd46a6dbef4e7ba2623c6b260530dcbd8b",
+        "appmap_digest": "f44bea041b5aca2f491c9d1842d20f33fe890eacb05993ccf3f51607424caea0",
         "canonicalization_algorithm": "packageDependencies",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "806b1d82c21a717aae01a482d7d30ecd46a6dbef4e7ba2623c6b260530dcbd8b",
+        "appmap_digest": "f44bea041b5aca2f491c9d1842d20f33fe890eacb05993ccf3f51607424caea0",
         "canonicalization_algorithm": "packages",
         "digest": "534778405b9871993d79f5edbb7079ebefb71feaf9edc6743e5ec2f743ee656a",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "806b1d82c21a717aae01a482d7d30ecd46a6dbef4e7ba2623c6b260530dcbd8b",
+        "appmap_digest": "f44bea041b5aca2f491c9d1842d20f33fe890eacb05993ccf3f51607424caea0",
         "canonicalization_algorithm": "sqlNormalized",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "806b1d82c21a717aae01a482d7d30ecd46a6dbef4e7ba2623c6b260530dcbd8b",
+        "appmap_digest": "f44bea041b5aca2f491c9d1842d20f33fe890eacb05993ccf3f51607424caea0",
         "canonicalization_algorithm": "sqlTables",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "806b1d82c21a717aae01a482d7d30ecd46a6dbef4e7ba2623c6b260530dcbd8b",
+        "appmap_digest": "f44bea041b5aca2f491c9d1842d20f33fe890eacb05993ccf3f51607424caea0",
         "canonicalization_algorithm": "trace",
         "digest": "c553b184e1f4d40c57dacf5ca10bc0219eb257803d8c84fb6cf6b2ee08aef761",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "806b1d82c21a717aae01a482d7d30ecd46a6dbef4e7ba2623c6b260530dcbd8b",
+        "appmap_digest": "f44bea041b5aca2f491c9d1842d20f33fe890eacb05993ccf3f51607424caea0",
         "canonicalization_algorithm": "update",
         "digest": "a00b2620d877e9ab17375dbc02716814dc865065eeb859072a9109b90e20ae52",
         "fingerprint_algorithm": "sha256"
