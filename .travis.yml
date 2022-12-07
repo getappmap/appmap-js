@@ -13,12 +13,7 @@ git:
   symlinks: true
 
 install:
-  - os: linux
-    script:
-    - yarn && yarn run build
-  - os: windows
-    script:
-    - powershell -Command "Write-Output """powershell started"""; Set-Alias -Name python3 -Value python; yarn -and yarn run build; Write-Output """powershell ended""" "
+  yarn && yarn run build
 
 script: yarn run ci
 
@@ -36,6 +31,9 @@ jobs:
       node_js: 18
       env:
         - YARN_GPG=no
+      before_install:
+        # - powershell -Command "Write-Output """powershell started"""; Set-Alias -Name python3 -Value python; yarn -and yarn run build; Write-Output """powershell ended""" "
+        - powershell -Command "Write-Output """powershell started"""; Set-Alias -Name python3 -Value python; Write-Output """powershell ended""" "
       script: yarn test
 
     - stage: deploy
