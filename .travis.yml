@@ -40,7 +40,7 @@ jobs:
         - YARN_GPG=no
       before_install:
         # else posix@npm:4.2.0 uses python 2.7.9 and errors out saying should be >=3.6.0                
-        - apt install python3
+        - choco install python3
       install:
         #- powershell -Command "Set-Alias -Name python3 -Value python"
         # - python --version        
