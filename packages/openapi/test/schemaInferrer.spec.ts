@@ -1,3 +1,4 @@
+import { Schema } from 'js-yaml';
 import SchemaInferrer from '../src/schemaInferrer';
 
 describe(SchemaInferrer, () => {
@@ -12,6 +13,114 @@ describe(SchemaInferrer, () => {
       value: 'nil',
     });
     expect(inferrer.openapi()).toBeUndefined();
+  });
+
+  it('understands an array with properties', () => {
+    const inferrer = new SchemaInferrer();
+    inferrer.addExample({
+      class: 'Hash',
+      value: '{result}',
+      properties: [
+        {
+          name: 'plans',
+          class: 'Array',
+          properties: [
+            {
+              name: 'id',
+              class: 'Integer',
+            },
+            {
+              name: 'category',
+              class: 'String',
+            },
+            {
+              name: 'country',
+              class: 'NilClass',
+            },
+            {
+              name: 'created_at',
+              class: 'String',
+            },
+            {
+              name: 'is_current',
+              class: 'TrueClass',
+            },
+          ],
+        },
+        {
+          name: 'default_plan_id',
+          class: 'Integer',
+        },
+        {
+          name: 'page',
+          class: 'Hash',
+          properties: [
+            {
+              name: 'page_index',
+              class: 'Integer',
+            },
+            {
+              name: 'page_size',
+              class: 'Integer',
+            },
+            {
+              name: 'page_offset',
+              class: 'Integer',
+            },
+            {
+              name: 'page_prev_offset',
+              class: 'Integer',
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(inferrer.openapi()).toEqual({
+      properties: {
+        default_plan_id: {
+          type: 'integer',
+        },
+        page: {
+          properties: {
+            page_index: {
+              type: 'integer',
+            },
+            page_offset: {
+              type: 'integer',
+            },
+            page_prev_offset: {
+              type: 'integer',
+            },
+            page_size: {
+              type: 'integer',
+            },
+          },
+          type: 'object',
+        },
+        plans: {
+          type: 'array',
+          items: {
+            properties: {
+              category: {
+                type: 'string',
+              },
+              created_at: {
+                type: 'string',
+              },
+              id: {
+                type: 'integer',
+              },
+              is_current: {
+                type: 'boolean',
+              },
+            },
+            type: 'object',
+          },
+        },
+      },
+      type: 'object',
+    });
   });
 
   it(`can merge arrays that don't have items`, () => {
