@@ -43,8 +43,8 @@ jobs:
         - "3.6"
       install:
         #- powershell -Command "Set-Alias -Name python3 -Value python"
+        - python --version        
         - python3 --version
-        - python --version
         - yarn && yarn run build
       script: yarn test
 
