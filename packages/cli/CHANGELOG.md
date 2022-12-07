@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.52.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.52.1...@appland/appmap-v3.52.2) (2022-12-07)
+
+
+### Bug Fixes
+
+* Prevent EPERM/EACCES errors while watching AppMaps if a directory ([b2bfa85](https://github.com/getappmap/appmap-js/commit/b2bfa850c74e264b692013019933f8a57c549cb1))
+
 # [@appland/appmap-v3.52.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.52.0...@appland/appmap-v3.52.1) (2022-11-30)
 
 
