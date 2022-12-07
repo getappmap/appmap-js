@@ -25,12 +25,19 @@ const isMerge = (item: Merge | Action): item is Merge => item.constructor === Ar
 
 const buildLoop = (merge: Merge): Loop => {
   const digest = buildDigest(merge[0]);
+  const elapsed = merge.reduce<number>(
+    (total, members) =>
+      total +
+      members.reduce<number>((sum, member) => sum + (member.elapsed ? member.elapsed : 0), 0),
+    0
+  );
   return {
     nodeType: NodeType.Loop,
     count: merge.length,
     digest: 'loop',
     subtreeDigest: ['loop', digest].join(':'),
     children: merge[0],
+    elapsed,
   } as Loop;
 };
 

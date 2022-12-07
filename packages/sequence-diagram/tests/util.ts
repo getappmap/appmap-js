@@ -48,10 +48,17 @@ function normalizeFile(data: string): string {
   return data.split(/\r?\n/g).join('\n');
 }
 
-export async function checkFilesEqual(actualData: string, expectedFileName: string): Promise<void> {
+function normalizeTiming(diagram: string): string {
+  return diagram.replace(/<size:8><:1F551:><\/size><color:gray> \d+[mμn]?s<\/color>/g, '$timing');
+}
+
+export async function checkPlantUMLEqual(
+  actualData: string,
+  expectedFileName: string
+): Promise<void> {
   assert.strictEqual(
-    normalizeFile(actualData),
-    normalizeFile(await readFile(expectedFileName, 'utf-8'))
+    normalizeTiming(normalizeFile(actualData)),
+    normalizeTiming(normalizeFile(await readFile(expectedFileName, 'utf-8')))
   );
 }
 

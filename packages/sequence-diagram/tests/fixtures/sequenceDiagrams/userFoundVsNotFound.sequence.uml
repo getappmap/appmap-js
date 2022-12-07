@@ -5,33 +5,33 @@ participant models as "models"
 participant users as "users"
 participant posts as "posts"
 participant database as "database"
-  [->controllers: show
+  [->controllers: show <size:8><:1F551:></size><color:gray> 354μs</color>
   activate controllers
-    controllers-[#red]>models: <b><color:red><u>find</u></color></b>
+    controllers-[#red]>models: <b><color:red><u>find</u></color></b> <size:8><:1F551:></size><color:gray> 68μs</color>
     Note right
 deleted
     End note
     activate models
     controllers<[#red]--models: <b><color:red><i>exception!</i></color></b>
     deactivate models
-    controllers-[#green]>models: <b><color:green><u>find</u></color></b>
+    controllers-[#green]>models: <b><color:green><u>find</u></color></b> <size:8><:1F551:></size><color:gray> 55μs</color>
     activate models
-      models->database: <u>query</u>
+      models->database: <u>query</u> <size:8><:1F551:></size><color:gray> 1μs</color>
     controllers<[#green]--models: <b><color:green>object</color></b>
     deactivate models
-    controllers-[#green]>users: <b><color:green>show</color></b>
+    controllers-[#green]>users: <b><color:green>show</color></b> <size:8><:1F551:></size><color:gray> 169μs</color>
     activate users
-      users-[#green]>models: <b><color:green>posts</color></b>
+      users-[#green]>models: <b><color:green>posts</color></b> <size:8><:1F551:></size><color:gray> 66μs</color>
       activate models
-        models-[#green]>models: <b><color:green><u>find_for_user</u></color></b>
+        models-[#green]>models: <b><color:green><u>find_for_user</u></color></b> <size:8><:1F551:></size><color:gray> 19μs</color>
         activate models
           models-[#green]>database: <b><color:green><u>query</u></color></b>
         models<[#green]--models: <b><color:green>array</color></b>
         deactivate models
       users<[#green]--models: <b><color:green>array</color></b>
       deactivate models
-      Loop#green 2 times
-        users-[#green]>posts: <b><color:green>show</color></b>
+      Loop#green 2 times <size:8><:1F551:></size><color:gray> 1μs</color>
+        users-[#green]>posts: <b><color:green>show</color></b> <size:8><:1F551:></size><color:gray> 1μs</color>
         activate posts
         users<[#green]--posts: <b><color:green>string</color></b>
         deactivate posts
