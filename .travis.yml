@@ -38,8 +38,11 @@ jobs:
       node_js: 18
       env:
         - YARN_GPG=no
+      python:
+        # else posix@npm:4.2.0 uses python 2.7.9 and errors out saying should be >=3.6.0        
+        - "3.6"
       install:
-        - powershell -Command "Set-Alias -Name python3 -Value python"
+        #- powershell -Command "Set-Alias -Name python3 -Value python"
         - yarn && yarn run build
       script: yarn test
 
