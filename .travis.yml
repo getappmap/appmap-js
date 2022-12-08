@@ -30,6 +30,13 @@ jobs:
       node_js: 18
       env:
         - YARN_GPG=no
+      before_install:
+        # else posix@npm:4.2.0 uses python 2.7.9 to install itself and
+        # errors out saying it needs python >=3.6.0
+        - choco install python3
+      install:
+        # refreshenv picks up the new PATH vars set by choco installing python3
+        - powershell -Command "(refreshenv) -and (yarn) -and (yarn run build)"
       script: yarn test
 
     - stage: deploy
