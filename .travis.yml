@@ -43,7 +43,7 @@ jobs:
         - choco install python3
         # - refreshenv
       install:
-        - powershell -Command "refreshenv; yarn; yarn run build"
+        - powershell -Command "refreshenv; yarn && yarn run build"
         #- powershell -Command "Set-Alias -Name python3 -Value python"
         # - python --version        
         # - python3 --version
