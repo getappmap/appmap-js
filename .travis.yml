@@ -12,42 +12,31 @@ git:
   # required to enable symlinks on windows
   symlinks: true
 
-# install:
-#   powershell -Command "Write-Output """powershell started"""; Set-Alias -Name python3 -Value python; yarn -and yarn run build; Write-Output """powershell ended""" "
-#   yarn && yarn run build
-
+install:
+  - yarn && yarn run build
 script: yarn run ci
 
 jobs:
   include:
     - node_js: 18
-      install:
-        - yarn && yarn run build      
       script:  # also run lint on node 18
       - yarn run lint
       - yarn run ci
 
     - node_js: 16
-      install:
-        - yarn && yarn run build      
     - node_js: 14
-      install:
-        - yarn && yarn run build
 
     - os: windows
       node_js: 18
       env:
         - YARN_GPG=no
       before_install:
-        # else posix@npm:4.2.0 uses python 2.7.9 and errors out saying should be >=3.6.0                
+        # else posix@npm:4.2.0 uses python 2.7.9 to install itself and
+        # errors out saying it needs python >=3.6.0
         - choco install python3
-        # - refreshenv
       install:
-        - powershell -Command "refreshenv; (yarn) -and (yarn run build)"
-        #- powershell -Command "Set-Alias -Name python3 -Value python"
-        # - python --version        
-        # - python3 --version
-        # - yarn && yarn run build
+        # refreshenv picks up the new PATH vars set by choco installing python3
+        - powershell -Command "refreshenv; yarn; yarn run build"
       script: yarn test
 
     - stage: deploy
