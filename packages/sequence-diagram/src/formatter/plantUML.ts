@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { diffChars } from 'diff';
 import {
   Action,
   Diagram,
@@ -24,50 +25,105 @@ export const extension = '.uml';
 
 function formatElapsed(elapsed: number): string {
   const timeStr = (): string => {
-    if (elapsed >= 1) {
-      return `${+elapsed.toPrecision(3)}s`;
-    } else if (elapsed >= 0.001) {
-      return `${+(elapsed * 1000).toPrecision(3)}ms`;
-    } else if (elapsed >= 0.000001) {
-      return `${+(elapsed * 1000000).toPrecision(3)}μs`;
-    } else {
-      return `${+(elapsed * 1000000000).toPrecision(3)}ns`;
-    }
+    return `${+(elapsed * 1000).toPrecision(3)} ms`;
   };
-  return `<size:8><:1F551:></size><color:gray> ${timeStr()}</color>`;
+  return `<color:gray> ${timeStr()}</color>`;
 }
 
-function sanitize(str: string): string {
+function singleLine(str: string): string {
   return str.replace(/\n/g, '\\n').replace(/\s{2,}/g, ' ');
 }
 
-function messageName(action: FunctionCall | ServerRPC | ClientRPC | Query): string {
-  return isFunction(action)
-    ? action.name
-    : isServerRPC(action) || isClientRPC(action)
-    ? action.route
-    : action.query;
-}
+class Label {
+  constructor(public action: FunctionCall | ServerRPC | ClientRPC | Query) {}
 
-type MessageDisplayName = {
-  label: string;
-  timing?: string;
-};
+  get actionNameIsTrimmed(): boolean {
+    return nodeName(this.action).length > DisplayCharLimit;
+  }
 
-function messageDisplayName(
-  action: FunctionCall | ServerRPC | ClientRPC | Query
-): MessageDisplayName {
-  const name = messageName(action);
-  const tokens = [name.slice(0, DisplayCharLimit)];
-  if (isFunction(action) && action.static) {
-    tokens.unshift('<u>');
-    tokens.push('</u>');
+  requestLabel(): string {
+    const { action } = this;
+
+    const label = singleLine(nodeName(this.action)).slice(0, DisplayCharLimit);
+    let formerLabel;
+    if (action.formerName) formerLabel = singleLine(action.formerName).slice(0, DisplayCharLimit);
+
+    const formattedLabel = this.formatDiffLabel(label, formerLabel);
+
+    const tokens: string[] = [];
+    if (isFunction(action) && action.static) tokens.push('<u>');
+    tokens.push(formattedLabel);
+    if (isFunction(action) && action.static) tokens.push('</u>');
+
+    if (action.elapsed) {
+      tokens.push(' ');
+      tokens.push(formatElapsed(action.elapsed));
+    }
+    return tokens.join('');
   }
-  let timing: string | undefined;
-  if (action.elapsed) {
-    timing = formatElapsed(action.elapsed);
+
+  responseLabel(): string | undefined {
+    const response = actionResponse(this.action);
+    if (!response) return;
+
+    let label = nodeResult(this.action);
+    if (!label) return;
+
+    label = singleLine(label).slice(0, DisplayCharLimit);
+
+    let formerLabel;
+    if (this.action.formerResult)
+      formerLabel = singleLine(this.action.formerResult).slice(0, DisplayCharLimit);
+
+    const formattedLabel = this.formatDiffLabel(label, formerLabel);
+
+    const tokens: string[] = [];
+
+    if (response.raisesException) tokens.push('<i>');
+    tokens.push(formattedLabel);
+    if (response.raisesException) tokens.push('</i>');
+
+    return tokens.join('');
   }
-  return { label: tokens.join(''), timing };
+
+  note(foldLimit = 80): string {
+    const { action } = this;
+
+    const label = fold(nodeName(this.action), foldLimit);
+    let formerLabel;
+    if (action.formerName) formerLabel = fold(action.formerName, foldLimit);
+
+    return this.formatDiffLabel(label, formerLabel, false);
+  }
+
+  private formatDiffLabel(label: string, formerLabel?: string, colorize = true): string {
+    let tokens: string[];
+    if (this.action.diffMode === DiffMode.Change && formerLabel && label !== formerLabel) {
+      tokens = [];
+      const diff = diffChars(formerLabel, label);
+      for (const change of diff) {
+        if (change.removed) {
+          tokens.push('<color:lightgray><i>--');
+          tokens.push(change.value);
+          tokens.push('--</i></color>');
+        } else if (change.added) {
+          tokens.push('<color:green><i>');
+          tokens.push(change.value);
+          tokens.push('</i></color>');
+        } else {
+          tokens.push(change.value);
+        }
+      }
+    } else if (this.action.diffMode) {
+      tokens = [];
+      if (colorize) tokens.push(`<color:${color(this.action)}>`);
+      tokens.push(label);
+      if (colorize) tokens.push(`</color>`);
+    } else {
+      tokens = [label];
+    }
+    return tokens.join('');
+  }
 }
 
 type Response = ReturnValue & {
@@ -82,26 +138,6 @@ function actionResponse(
     : isServerRPC(action) || isClientRPC(action)
     ? { status: action.status, raisesException: action.status >= 400 }
     : undefined;
-}
-
-function encode(
-  action: Action,
-  message: MessageDisplayName,
-  currentValue?: string,
-  formerValue?: string
-): string {
-  const text = sanitize(message.label);
-  let tokens = [text];
-  if (action.diffMode !== undefined) {
-    tokens = [`<color:${color(action)}>`, ...tokens, '</color>'];
-    if (action.diffMode === DiffMode.Change && formerValue && currentValue !== formerValue) {
-      tokens = ['--', sanitize(formerValue.slice(0, DisplayCharLimit)), '--', ...tokens];
-    }
-  }
-  if (message.timing) {
-    tokens.push(' ', message.timing);
-  }
-  return tokens.join('');
 }
 
 function alias(id: string): string {
@@ -220,23 +256,19 @@ export function format(diagram: Diagram, _source: string): string {
 
       events.print(`End`);
     } else {
+      const label = new Label(action);
+
       const actors = actionActors(action);
       {
         const incomingTokens = actors.map((actor) => (actor ? alias(actor.name) : ''));
         const arrow = requestArrow(action);
-        events.print(
-          [
-            incomingTokens.join(arrow),
-            encode(action, messageDisplayName(action), nodeName(action), action.formerName),
-          ].join(': ')
-        );
+        events.print([incomingTokens.join(arrow), label.requestLabel()].join(': '));
       }
       {
-        const name = messageName(action);
-        if (name.length > DisplayCharLimit) {
+        if (label.actionNameIsTrimmed) {
           events.print('Note right');
           events.indent();
-          events.printLeftAligned(fold(name, 80));
+          events.printLeftAligned(label.note(80));
           events.outdent();
           events.print('End note');
         }
@@ -253,27 +285,12 @@ export function format(diagram: Diagram, _source: string): string {
       if (response) {
         const outgoingTokens = actors.map((actor) => (actor ? alias(actor.name) : ''));
         const arrow = responseArrow(action);
+        const responseLabel = label.responseLabel();
 
-        let returnValueStr: string | undefined;
-        if (response.returnValueType?.name) {
-          returnValueStr = response.returnValueType?.name;
-        } else if (response.status !== undefined) {
-          returnValueStr = response.status.toString();
-        }
+        const tokens = [outgoingTokens.join(arrow)];
+        if (responseLabel) tokens.push(responseLabel);
 
-        if (response.raisesException) {
-          returnValueStr = ['<i>', returnValueStr || 'exception!', '</i>'].join('');
-        }
-
-        if (returnValueStr)
-          returnValueStr = encode(
-            action,
-            { label: returnValueStr },
-            nodeResult(action),
-            action.formerResult
-          );
-
-        events.print([outgoingTokens.join(arrow), returnValueStr].join(': '));
+        events.print(tokens.join(': '));
       }
 
       if (doActivate) {
@@ -290,7 +307,7 @@ export function format(diagram: Diagram, _source: string): string {
   return `@startuml
 !includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
 ${diagram.actors
-  .map((actor) => `participant ${alias(actor.name)} as "${sanitize(actor.name)}"`)
+  .map((actor) => `participant ${alias(actor.name)} as "${singleLine(actor.name)}"`)
   .join('\n')}
 ${events.lines.join('\n')}
 @enduml`;

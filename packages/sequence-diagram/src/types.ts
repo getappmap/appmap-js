@@ -15,7 +15,7 @@ export type Actor = {
 };
 
 export enum NodeType {
-  Loop,
+  Loop = 1,
   Conditional,
   Function,
   ServerRPC,
@@ -24,7 +24,7 @@ export enum NodeType {
 }
 
 export enum DiffMode {
-  Insert,
+  Insert = 1,
   Delete,
   Change,
 }

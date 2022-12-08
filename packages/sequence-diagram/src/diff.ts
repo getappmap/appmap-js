@@ -119,10 +119,15 @@ export default function diff(
 
   const change = (move: Move): Move | undefined => {
     const [lNode, rNode] = [advance(lActions, move.lNode), advance(rActions, move.rNode)];
+    // The change can't move beyond the bounds of the graph.
     if (lNode === undefined || rNode === undefined) return;
 
+    // The change needs to originate from the same actor.
     if (actionActors(lActions[move.lNode])[0]?.id !== actionActors(rActions[move.rNode])[0]?.id)
       return;
+
+    // The change cannot change the type of the node.
+    if (lActions[lNode]?.nodeType !== rActions[rNode]?.nodeType) return;
 
     return new Move(
       {
