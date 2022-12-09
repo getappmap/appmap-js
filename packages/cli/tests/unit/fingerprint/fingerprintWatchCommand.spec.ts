@@ -11,6 +11,7 @@ import { once } from 'events';
 import Fingerprinter from '../../../src/fingerprint/fingerprinter';
 import { MaxMSBetween } from '../../../src/lib/eventAggregator';
 import { mkdir } from 'fs/promises';
+import { FSWatcher } from 'chokidar';
 
 jest.mock('../../../src/telemetry');
 const Telemetry = jest.mocked(OriginalTelemetry);
@@ -83,6 +84,14 @@ describe(FingerprintWatchCommand, () => {
       placeMap();
       return verifyIndexSuccess(200, 20);
     });
+
+    it('does not raise if it hits the limit of the number of file watchers', async () => {
+      cmd = new FingerprintWatchCommand(appMapDir);
+      cmd.watcher = new FSWatcher();
+      expect(cmd.watcher).not.toBeUndefined();
+      await cmd.watcherErrorFunction(new Error("ENOSPC: System limit for number of file watchers reached"));
+      expect(cmd.watcher).toBeUndefined();
+     });
 
     describe('telemetry', () => {
       let handler: Fingerprinter;
