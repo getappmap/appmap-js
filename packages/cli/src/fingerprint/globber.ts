@@ -16,7 +16,7 @@ class Globber extends EventEmitter {
     assert(!this.currentGlob);
     this.timeout = undefined;
     this.currentGlob = new Glob(this.pattern, {
-      ignore: ['**/node_modules/**', '**/.git/**'],
+      ignore: ['**/node_modules/**', '**/.git/**', '**/__pycache__/**'],
       strict: false,
       silent: !verbose(),
     })
