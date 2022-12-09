@@ -49,7 +49,7 @@ function normalizeFile(data: string): string {
 }
 
 function normalizeTiming(diagram: string): string {
-  return diagram.replace(/<size:8><:1F551:><\/size><color:gray> \d+[mμn]?s<\/color>/g, '$timing');
+  return diagram.replace(/<color:[#\d\w]+> \d+ mw<\/color>/g, '$timing');
 }
 
 export async function checkPlantUMLEqual(

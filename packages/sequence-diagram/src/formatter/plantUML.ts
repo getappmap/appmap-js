@@ -35,6 +35,20 @@ function singleLine(str: string): string {
 }
 
 class Label {
+  static ChangedCharsThreshod = 0.25;
+
+  static GitHubDiffLightThemeRemovedColorBackground = '#FCECEA'; // [ 252, 236, 234 ];
+  static GitHubDiffLightThemeAddedColorBackground = '#EBFEEE'; // [ 235, 254, 238 ];
+
+  static GitHubDiffDarkThemeRemovedColorBackground = '#29201A'; // [ 41, 32, 26 ];
+  static GitHubDiffDarkThemeAddedColorBackground = '#172238'; // [ 23, 34, 56 ];
+
+  static RemovedColor = 'lightgray';
+  static AddedColor = 'lightgray';
+
+  static RemovedColorBackground = Label.GitHubDiffDarkThemeRemovedColorBackground;
+  static AddedColorBackground = Label.GitHubDiffDarkThemeAddedColorBackground;
+
   constructor(public action: FunctionCall | ServerRPC | ClientRPC | Query) {}
 
   get actionNameIsTrimmed(): boolean {
@@ -51,11 +65,15 @@ class Label {
     const formattedLabel = this.formatDiffLabel(label, formerLabel);
 
     const tokens: string[] = [];
-    if (isFunction(action) && action.static) tokens.push('<u>');
+    // PlantUML / Creole doesn't successfully combine strikethrough with underline.
+    // Only the underline ends up being rendered.
+    if (isFunction(action) && action.static && action.diffMode !== DiffMode.Delete)
+      tokens.push('<u>');
     tokens.push(formattedLabel);
-    if (isFunction(action) && action.static) tokens.push('</u>');
+    if (isFunction(action) && action.static && action.diffMode !== DiffMode.Delete)
+      tokens.push('</u>');
 
-    if (action.elapsed) {
+    if (action.elapsed && action.diffMode !== DiffMode.Delete) {
       tokens.push(' ');
       tokens.push(formatElapsed(action.elapsed));
     }
@@ -90,37 +108,69 @@ class Label {
     const { action } = this;
 
     const label = fold(nodeName(this.action), foldLimit);
-    let formerLabel;
+    let formerLabel: string[] = [];
     if (action.formerName) formerLabel = fold(action.formerName, foldLimit);
 
-    return this.formatDiffLabel(label, formerLabel, false);
+    const result = [];
+    for (let i = 0; i < Math.max(label.length, formerLabel.length); i += 1) {
+      const line = this.formatDiffLabel(label[i], formerLabel[i]);
+      result.push(line);
+    }
+    return result.join('\n');
   }
 
-  private formatDiffLabel(label: string, formerLabel?: string, colorize = true): string {
-    let tokens: string[];
-    if (this.action.diffMode === DiffMode.Change && formerLabel && label !== formerLabel) {
-      tokens = [];
+  private formatDiffLabel(label?: string, formerLabel?: string): string {
+    const tokens: string[] = [];
+
+    const addedSegment = (text: string): void => {
+      tokens.push(`<color:${Label.AddedColor}><back:${Label.AddedColorBackground}>`);
+      tokens.push(text);
+      tokens.push('</back></color>');
+    };
+    const removedSegment = (text: string): void => {
+      tokens.push(`<color:${Label.RemovedColor}><back:${Label.RemovedColorBackground}>--`);
+      tokens.push(text);
+      tokens.push('--</back></color>');
+    };
+
+    if (this.action.diffMode) {
+      console.log(this.action.diffMode);
+      console.log(label);
+      console.log(formerLabel);
+      console.log();
+    }
+    if (this.action.diffMode === DiffMode.Change && label && formerLabel && label !== formerLabel) {
       const diff = diffChars(formerLabel, label);
-      for (const change of diff) {
-        if (change.removed) {
-          tokens.push('<color:lightgray><i>--');
-          tokens.push(change.value);
-          tokens.push('--</i></color>');
-        } else if (change.added) {
-          tokens.push('<color:green><i>');
-          tokens.push(change.value);
-          tokens.push('</i></color>');
-        } else {
-          tokens.push(change.value);
+      const changeCharsCount = diff.reduce(
+        (memo, change) => (change.added || change.removed ? memo + (change.count || 0) : memo),
+        0
+      );
+      if (
+        changeCharsCount / Math.max(formerLabel.length, label.length) <
+        Label.ChangedCharsThreshod
+      ) {
+        for (const change of diff) {
+          if (change.removed) {
+            removedSegment(change.value);
+          } else if (change.added) {
+            addedSegment(change.value);
+          } else {
+            tokens.push(change.value);
+          }
         }
+      } else {
+        removedSegment(formerLabel);
+        tokens.push(' ');
+        addedSegment(label);
       }
-    } else if (this.action.diffMode) {
-      tokens = [];
-      if (colorize) tokens.push(`<color:${color(this.action)}>`);
+    } else if (this.action.diffMode && label && formerLabel && label === formerLabel) {
       tokens.push(label);
-      if (colorize) tokens.push(`</color>`);
-    } else {
-      tokens = [label];
+    } else if (label) {
+      if (this.action.diffMode) {
+        this.action.diffMode === DiffMode.Delete ? removedSegment(label) : addedSegment(label);
+      } else {
+        tokens.push(label);
+      }
     }
     return tokens.join('');
   }
@@ -151,7 +201,7 @@ function color(action: Action): string | undefined {
     case DiffMode.Insert:
       return 'green';
     case DiffMode.Change:
-      return 'yellow';
+      return 'CA9C3F';
   }
 }
 
@@ -163,7 +213,7 @@ function arrowColor(tail: string, head: string, action: Action): string {
   return [tail, c, head].filter(Boolean).join('');
 }
 
-function fold(line: string, limit: number): string {
+function fold(line: string, limit: number): string[] {
   const output: string[] = [];
   let buffer = '';
   line
@@ -182,7 +232,7 @@ function fold(line: string, limit: number): string {
       }
     });
   output.push(buffer);
-  return output.join('\n');
+  return output;
 }
 
 const requestArrow = (action: Action): string => {

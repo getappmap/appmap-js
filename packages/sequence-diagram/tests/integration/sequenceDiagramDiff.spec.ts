@@ -17,12 +17,8 @@ describe('Sequence diagram diff', () => {
   describe('PlantUML', () => {
     describe('user found vs not found', () => {
       it('matches expectation', async () => {
-        const baseDiagram = loadDiagram(USER_NOT_FOUND_APPMAP, {
-          priority: { 'package:lib/database': 10000 },
-        });
-        const headDiagram = loadDiagram(SHOW_USER_APPMAP, {
-          priority: { 'package:lib/database': 10000 },
-        });
+        const baseDiagram = loadDiagram(USER_NOT_FOUND_APPMAP);
+        const headDiagram = loadDiagram(SHOW_USER_APPMAP);
         const computedDiff = diff(baseDiagram, headDiagram, { verbose: VERBOSE });
         const diffDiagram = buildDiffDiagram(computedDiff);
         const plantUML = format(diffDiagram, 'diff.sequence.json');
@@ -34,12 +30,8 @@ describe('Sequence diagram diff', () => {
     });
     describe('list users vs list users with prefetch', () => {
       it('matches expectation', async () => {
-        const baseDiagram = loadDiagram(LIST_USERS_APPMAP, {
-          priority: { 'package:lib/database': 10000 },
-        });
-        const headDiagram = loadDiagram(LIST_USERS_PREFETCH_APPMAP, {
-          priority: { 'package:lib/database': 10000 },
-        });
+        const baseDiagram = loadDiagram(LIST_USERS_APPMAP);
+        const headDiagram = loadDiagram(LIST_USERS_PREFETCH_APPMAP);
         const computedDiff = diff(baseDiagram, headDiagram, { verbose: VERBOSE });
         const diffDiagram = buildDiffDiagram(computedDiff);
         const plantUML = format(diffDiagram, 'diff.sequence.json');

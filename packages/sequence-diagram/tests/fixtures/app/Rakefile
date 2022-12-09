@@ -6,19 +6,28 @@ def run_program(command)
 end
 
 task :build do
+  dirname = __dir__
   Dir['bin/*.rb'].each do |test_program|
     run_program %(bundle exec ruby #{test_program})
   end
   appmaps = Dir['tmp/appmap/*.appmap.json']
   Dir.chdir '../../../../cli' do
-    run_program %(node ./built/cli.js index --appmap-dir ../sequence-diagram/tests/fixtures/app/tmp/appmap)
+    run_program %(node ./built/cli.js index --appmap-dir #{dirname}/tmp/appmap)
     %w{json plantuml}.each do |format|
       appmaps.each do |appmap|
-        run_program %(node ./built/cli.js sequence-diagram -d ../sequence-diagram/tests/fixtures/app --format #{format} #{appmap})
+        run_program %(node ./built/cli.js sequence-diagram -d #{dirname} --format #{format} #{appmap})
       end
     end
+
+    run_program %(node ./built/cli.js sequence-diagram-diff -d #{dirname} --output-dir ../sequenceDiagrams tmp/appmap/list_users.sequence.json tmp/appmap/list_users_prefetch.sequence.json)
+    FileUtils.mv [ dirname, '../sequenceDiagrams/diff.uml' ].join('/'), [ dirname, '../sequenceDiagrams/listVsListWithPrefetch.sequence.uml' ].join('/')
+    run_program %(node ./built/cli.js sequence-diagram-diff -d #{dirname} --output-dir ../sequenceDiagrams tmp/appmap/user_not_found.sequence.json tmp/appmap/show_user.sequence.json)
+    FileUtils.mv [ dirname, '../sequenceDiagrams/diff.uml' ].join('/'), [ dirname, '../sequenceDiagrams/userFoundVsNotFound.sequence.uml' ].join('/')
   end
-  run_program %(java -jar ../plantuml-1.2022.8.jar -tsvg tmp/appmap/*.uml)
+  %w{png svg}.each do |format|
+    run_program %(java -jar ../plantuml-1.2022.8.jar -t#{format} tmp/appmap/*.uml)
+    run_program %(java -jar ../plantuml-1.2022.8.jar -t#{format} ../sequenceDiagrams/*.uml)
+  end
 end
 
 task default: :build
