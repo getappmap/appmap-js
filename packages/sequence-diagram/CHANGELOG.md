@@ -1,3 +1,11 @@
+# [@appland/sequence-diagram-v1.2.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.1.1...@appland/sequence-diagram-v1.2.0) (2022-12-12)
+
+
+### Features
+
+* Add clock icon to timing info ([3783428](https://github.com/getappmap/appmap-js/commit/378342823a2b2279b72d6e634a5f6f92ce5f852e))
+* Display timing info on sequence diagram ([61141f9](https://github.com/getappmap/appmap-js/commit/61141f926a75ec857628d89350b0865c28033250))
+
 # [@appland/sequence-diagram-v1.1.1](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.1.0...@appland/sequence-diagram-v1.1.1) (2022-12-06)
 
 
