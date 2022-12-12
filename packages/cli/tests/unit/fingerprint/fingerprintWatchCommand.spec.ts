@@ -93,6 +93,18 @@ describe(FingerprintWatchCommand, () => {
       expect(cmd.watcher).toBeUndefined();
      });
 
+     it('does not raise on unknown error lstat', async () => {
+      cmd = new FingerprintWatchCommand(appMapDir);
+      cmd.watcher = new FSWatcher();
+      expect(cmd.watcher).not.toBeUndefined();
+      console.warn = jest.fn();
+      const errorMessage = "UNKNOWN: unknown error, lstat";
+      await cmd.watcherErrorFunction(new Error(errorMessage));
+      expect(cmd.watcher).not.toBeUndefined();
+      expect(console.warn).toBeCalledTimes(1);
+      expect(console.warn).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
+    });
+
     describe('telemetry', () => {
       let handler: Fingerprinter;
 
