@@ -24,6 +24,14 @@ export class BundleInstaller extends AgentInstaller {
     super('Bundler', path);
   }
 
+  get language(): string {
+    return 'ruby';
+  }
+
+  get appmap_dir(): string {
+    return 'tmp/appmap';
+  }
+
   get buildFile(): string {
     return 'Gemfile';
   }

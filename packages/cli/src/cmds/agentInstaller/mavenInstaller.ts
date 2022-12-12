@@ -5,7 +5,6 @@ import { JSDOM } from 'jsdom';
 import xmlSerializer from 'w3c-xmlserializer';
 import chalk from 'chalk';
 import CommandStruct from './commandStruct';
-import AgentInstaller from './agentInstaller';
 import { verbose, exists } from '../../utils';
 import JavaBuildToolInstaller from './javaBuildToolInstaller';
 import EncodedFile from '../../encodedFile';
@@ -15,6 +14,14 @@ export default class MavenInstaller extends JavaBuildToolInstaller {
 
   constructor(path: string) {
     super(MavenInstaller.identifier, path);
+  }
+
+  get language(): string {
+    return 'java';
+  }
+
+  get appmap_dir(): string {
+    return 'target/appmap';
   }
 
   get buildFile(): string {

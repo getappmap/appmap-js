@@ -17,11 +17,18 @@ export class TestAgentInstaller extends AgentInstaller {
   public buildFile = 'test build file';
   public documentation = 'test documentation';
 
+  get language(): string {
+    return 'pig-latin';
+  }
+  get appmap_dir(): string {
+    return 'tmp/appmap';
+  }
+
   async validateAgentCommand(): Promise<commandStruct | undefined> {
     return new commandStruct('test validate agent command', [], '/test/validate/agent/command');
   }
 
-  async installAgent(): Promise<void> { }
+  async installAgent(): Promise<void> {}
 
   async checkConfigCommand(): Promise<commandStruct | undefined> {
     return undefined;

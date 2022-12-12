@@ -121,7 +121,7 @@ export default {
   async handler(argv: Arguments | any) {
     verbose(argv.verbose);
     handleWorkingDirectory(argv.directory);
-
+    const appmapDir = await locateAppMapDir(argv.appmapDir);
     const { openapiTitle, openapiVersion } = argv;
 
     function tryConfigure(path: string, fn: () => void) {
@@ -131,7 +131,7 @@ export default {
         console.warn(`Warning: unable to configure OpenAPI field ${path}`);
       }
     }
-    const appmapDir = await locateAppMapDir(argv.appmapDir);
+
     const appmapConfigFile = await locateAppMapConfigFile(appmapDir);
 
     const cmd = new OpenAPICommand(appmapDir);

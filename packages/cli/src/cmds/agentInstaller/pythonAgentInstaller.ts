@@ -21,6 +21,14 @@ abstract class PythonInstaller extends AgentInstaller {
     super(name, path);
   }
 
+  get language(): string {
+    return 'python';
+  }
+
+  get appmap_dir(): string {
+    return 'tmp/appmap';
+  }
+
   get documentation() {
     return 'https://appland.com/docs/reference/appmap-python';
   }
