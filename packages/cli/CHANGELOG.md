@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.53.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.52.2...@appland/appmap-v3.53.0) (2022-12-12)
+
+
+### Bug Fixes
+
+* Show a message if automatically opening the browser fails ([1401680](https://github.com/getappmap/appmap-js/commit/1401680f4e0c036d88302843afbe45ad85c3ad47))
+
+
+### Features
+
+* appmap_dir and language in appmap.yml ([00aa7be](https://github.com/getappmap/appmap-js/commit/00aa7be4aa76f7e2e30c330114513300b4ee6d1f))
+
 # [@appland/appmap-v3.52.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.52.1...@appland/appmap-v3.52.2) (2022-12-07)
 
 
