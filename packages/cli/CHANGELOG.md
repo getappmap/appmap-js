@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.53.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.53.0...@appland/appmap-v3.53.1) (2022-12-13)
+
+
+### Bug Fixes
+
+* Disable file watching when an "ENOSPC: System limit for number of ([87b0a34](https://github.com/getappmap/appmap-js/commit/87b0a34241811c4fcac47a478fda8d8eef0534ac))
+
 # [@appland/appmap-v3.53.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.52.2...@appland/appmap-v3.53.0) (2022-12-12)
 
 
