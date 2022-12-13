@@ -1,9 +1,8 @@
 <template>
-  <v-quickstart-layout>
+  <v-quickstart-layout :display-help="false">
     <section class="appmap-signin">
       <header>
         <h1 data-cy="title">Welcome to AppMap</h1>
-        <p>Sign in to enable all of AppMap's advanced features.</p>
       </header>
       <main>
         <div class="login">
@@ -17,7 +16,7 @@
               <v-button :label="enableButtonLabel" class="cta-button b-0" />
             </a>
             <a class="secondary-link" href="#" @click="$root.$emit('skip-sign-in')">
-              Continue without logging in
+              Continue without signing in.
             </a>
           </div>
         </div>
@@ -56,6 +55,19 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  h1 {
+    margin-bottom: 0;
+  }
+}
+
+main {
+  justify-content: center;
+}
+
 .qs .appmap-signin h1 {
   margin: 0 0 0.5rem 0;
 }
@@ -67,7 +79,7 @@ section.appmap-signin {
     justify-content: center;
     .login-sub {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: flex-start;
       align-items: center;
       .secondary-link {
@@ -76,7 +88,7 @@ section.appmap-signin {
     }
     .secondary-link {
       text-align: center;
-      color: $gray4;
+      color: #5c76a5;
       &:hover {
         color: $white;
         text-decoration: underline;
@@ -140,6 +152,7 @@ a.btn.signin {
   transition: $transition;
   margin: 0;
   width: max-content;
+  margin-bottom: 8px;
 
   .cta-button {
     padding: 0.5rem 0.5rem 0.5rem 4rem;
@@ -160,6 +173,6 @@ a.btn.signin {
 }
 
 .b-0 {
-  border: none;
+  border: none !important;
 }
 </style>

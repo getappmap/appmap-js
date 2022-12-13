@@ -7,7 +7,7 @@
       <div class="qs-content">
         <slot />
       </div>
-      <div class="qs-help">
+      <div class="qs-help" v-if="displayHelp">
         <HelpIcon class="qs-help__icon" />
         <div class="qs-help__text">
           Stuck?
@@ -30,6 +30,13 @@ export default {
   components: {
     HelpIcon,
     AppMapLogo,
+  },
+
+  props: {
+    displayHelp: {
+      type: Boolean,
+      default: true,
+    },
   },
 };
 </script>
