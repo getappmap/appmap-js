@@ -1,10 +1,6 @@
 import os from 'os';
 
-try {
-  import { setrlimit } from 'posix';
-} catch (err) {
-  // don't break on Windows
-}
+import { setrlimit } from 'posix';
 
 export const MaxNumberOfFiles = 1048576;
 
