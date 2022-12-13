@@ -1,6 +1,7 @@
 import os from 'os';
 
-import * as posix from 'posix';
+const posix = require('posix');
+//import * as posix from 'posix';
 
 export const MaxNumberOfFiles = 1048576;
 
