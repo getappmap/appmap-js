@@ -82,6 +82,10 @@ export default class FingerprintWatchCommand {
       const filename = this.getFilenameFromErrorMessage(error.message);
       this.unreadableFiles.add(filename);
       console.warn("Will not read this file again.");
+    } else if (error.message.includes("EMFILE: too many open files")) {
+      // Don't crash if too many files are open. When the files close
+      // the indexer will pick them up.
+      console.warn(error.stack);
     } else {
       // let it crash if it's some other error, to learn what the error is
       throw error;

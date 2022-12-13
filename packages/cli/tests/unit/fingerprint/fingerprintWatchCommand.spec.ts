@@ -116,6 +116,21 @@ describe(FingerprintWatchCommand, () => {
       expect(cmd.ignored('c:\\Users\\Test\\Programming\\MyProject\\some.appmap.json')).toBe(false);
     });
 
+    it('does not raise if it hits the limit of the number of open files', async () => {
+      cmd = new FingerprintWatchCommand(appMapDir);
+      await cmd.watcherErrorFunction(new Error("EMFILE: too many open files"));
+      expect(cmd.watcher).toBeUndefined();
+
+      cmd.watcher = new FSWatcher();
+      expect(cmd.watcher).not.toBeUndefined();
+      console.warn = jest.fn();
+      const errorMessage = "EMFILE: too many open files";
+      await cmd.watcherErrorFunction(new Error(errorMessage));
+      expect(cmd.watcher).not.toBeUndefined();
+      expect(console.warn).toBeCalledTimes(1);
+      expect(console.warn).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
+    });
+
     describe('telemetry', () => {
       let handler: Fingerprinter;
 
