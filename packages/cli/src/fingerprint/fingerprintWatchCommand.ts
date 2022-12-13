@@ -61,6 +61,13 @@ export default class FingerprintWatchCommand {
         });
     } else if (error.message.includes("UNKNOWN: unknown error, lstat")) {
       console.warn(error.stack);
+      Telemetry.sendEvent({
+          name: `index:watcher_error:unknown`,
+          properties: {
+            errorMessage: error.message,
+            errorStack: error.stack,
+          },
+        });
     } else {
       // let it crash if it's some other error, to learn what the error is
       throw error;
