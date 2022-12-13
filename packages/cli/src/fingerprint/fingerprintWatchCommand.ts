@@ -46,7 +46,7 @@ export default class FingerprintWatchCommand {
   }
 
   async watcherErrorFunction (error: Error) {
-    if (error.message.includes("ENOSPC: System limit for number of file watchers reached")) {
+    if (this.watcher && error.message.includes("ENOSPC: System limit for number of file watchers reached")) {
       console.warn(error.stack);
       console.warn("Will disable file watching. File polling will stay enabled.");
       await this.watcher?.close();
@@ -82,7 +82,7 @@ export default class FingerprintWatchCommand {
       .on('add', this.added.bind(this))
       .on('change', this.changed.bind(this))
       .on('unlink', this.removed.bind(this))
-      .on('error', error => this.watcherErrorFunction(error));
+      .on('error', this.watcherErrorFunction.bind(this));
 
     const watchReady = new Promise<void>((r) => this.watcher?.once('ready', r));
 
