@@ -86,6 +86,13 @@ export default class FingerprintWatchCommand {
       // Don't crash if too many files are open. When the files close
       // the indexer will pick them up.
       console.warn(error.stack);
+      Telemetry.sendEvent({
+          name: `index:watcher_error:emfile`,
+          properties: {
+            errorMessage: error.message,
+            errorStack: error.stack,
+          },
+        });
     } else {
       // let it crash if it's some other error, to learn what the error is
       throw error;
