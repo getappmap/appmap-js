@@ -1,3 +1,13 @@
+# [@appland/sequence-diagram-v1.3.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.2.0...@appland/sequence-diagram-v1.3.0) (2022-12-13)
+
+
+### Features
+
+* Add clock icon to timing info ([6f8dbee](https://github.com/getappmap/appmap-js/commit/6f8dbee3f10f477340ad03ea56f44bd4e6066d1d))
+* Diff 'change' option ([ee70ee8](https://github.com/getappmap/appmap-js/commit/ee70ee8fa282685cc5cf8892e81618df7b7f2204))
+* Print char diff of label changes ([0fca36f](https://github.com/getappmap/appmap-js/commit/0fca36f0e3465f6f7f950285cb952cacbaed127a))
+* Update diff theme colors ([8921623](https://github.com/getappmap/appmap-js/commit/89216237c0efb8aca0f267fc1888f5f5d9beeeb7))
+
 # [@appland/sequence-diagram-v1.2.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.1.1...@appland/sequence-diagram-v1.2.0) (2022-12-12)
 
 
