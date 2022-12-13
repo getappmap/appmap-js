@@ -7,9 +7,7 @@ describe('Sequence diagram', () => {
     it('matches app fixture', async () => {
       for (const entry of Object.entries(APPMAPS)) {
         const [appmapFile, appmap] = entry;
-        const diagram = loadDiagram(appmap, {
-          priority: { 'package:lib/database': 10000 },
-        });
+        const diagram = loadDiagram(appmap);
         const plantUML = format(diagram, appmapFile);
         await checkPlantUMLEqual(
           plantUML,

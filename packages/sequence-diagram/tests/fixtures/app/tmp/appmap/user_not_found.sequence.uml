@@ -3,9 +3,9 @@
 participant controllers as "controllers"
 participant models as "models"
 participant database as "database"
-  [->controllers: show <size:8><:1F551:></size><color:gray> 154μs</color>
+  [->controllers: show <color:gray> 0.124 ms</color>
   activate controllers
-    controllers->models: <u>find</u> <size:8><:1F551:></size><color:gray> 69μs</color>
+    controllers->models: <u>find</u> <color:gray> 0.056 ms</color>
     activate models
       models->database: <u>query</u>
     controllers<--models: <i>exception!</i>

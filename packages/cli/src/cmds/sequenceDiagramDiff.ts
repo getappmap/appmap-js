@@ -5,11 +5,20 @@ import { glob } from 'glob';
 import { promisify } from 'util';
 import yargs from 'yargs';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
-import { default as sequenceDiagramFormatter } from '@appland/sequence-diagram/dist/formatter';
-import buildDiffDiagram from '@appland/sequence-diagram/dist/buildDiffDiagram';
-import diff, { DiffOptions, MoveType } from '@appland/sequence-diagram/dist/diff';
-import { Actor, Diagram, setParent } from '@appland/sequence-diagram/dist/types';
+import {
+  Actor,
+  DiffOptions,
+  MoveType,
+  format as formatDiagram,
+  Formatters,
+  Diagram,
+  diff,
+  buildDiffDiagram,
+  setParent,
+  FormatType,
+} from '@appland/sequence-diagram';
 import { verbose } from '../utils';
+import { join } from 'path';
 
 export const command = 'sequence-diagram-diff base-diagram head-diagram';
 export const describe = 'Diff sequence diagrams that are represented as JSON';
@@ -67,7 +76,7 @@ async function readDiagramFile(fileName: string): Promise<Diagram> {
 }
 
 async function performDiff(
-  formatter: Formatter,
+  format: FormatType,
   outputFileName: string,
   baseFileName: string,
   base: Diagram,
@@ -76,7 +85,7 @@ async function performDiff(
 ): Promise<Diagram | undefined> {
   const result = diff(base, head, {} as DiffOptions);
 
-  const changes = result.positions.filter((state) => state.moveType !== MoveType.AdvanceBoth);
+  const changes = result.moves.filter((move) => move.moveType !== MoveType.AdvanceBoth);
   if (changes.length === 0) {
     if (headFileName) {
       console.log(`${baseFileName} and ${headFileName} are identical`);
@@ -94,25 +103,29 @@ async function performDiff(
     description = `Diff ${baseFileName}`;
   }
 
-  const template = formatter(diagram, description);
-  await writeFile(outputFileName, template);
+  const template = formatDiagram(format, diagram, description);
+
+  const outputPath = [outputFileName, template.extension].join('');
+  await writeFile(outputPath, template.diagram);
+
+  console.log(`Printed diagram ${outputPath}`);
 
   return diagram;
 }
 
 export const handler = async (argv: any) => {
   verbose(argv.verbose);
-  handleWorkingDirectory(argv.directory);
-  await mkdir(argv.outputDir, { recursive: true });
 
-  const { baseDiagram: baseDiagramFile, headDiagram: headDiagramFile } = argv;
-
-  const formatter = sequenceDiagramFormatter[argv.format];
-  if (!formatter) {
+  if (!Formatters.includes(argv.format)) {
     console.log(`Invalid format: ${argv.format}`);
     process.exitCode = 1;
     return;
   }
+
+  handleWorkingDirectory(argv.directory);
+  await mkdir(argv.outputDir, { recursive: true });
+
+  const { baseDiagram: baseDiagramFile, headDiagram: headDiagramFile } = argv;
 
   [baseDiagramFile, headDiagramFile].forEach((fileName) => {
     if (!existsSync(fileName)) throw new Error(`${fileName} does not exist`);
@@ -123,8 +136,8 @@ export const handler = async (argv: any) => {
     const headDiagram = await readDiagramFile(headDiagramFile);
 
     performDiff(
-      formatter.format,
-      'diff',
+      argv.format,
+      join(argv.outputDir, 'diff'),
       baseDiagramFile,
       baseDiagram,
       headDiagram,
@@ -173,8 +186,8 @@ export const handler = async (argv: any) => {
       }
 
       performDiff(
-        formatter.perform,
-        fileName,
+        argv.format,
+        [fileName, 'diff'].join('.'),
         fileName,
         diagramData.get(baseDiagramFile)!.diagrams.get(fileName)!,
         diagramData.get(headDiagramFile)!.diagrams.get(fileName)!

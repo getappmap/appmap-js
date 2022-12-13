@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { diffChars } from 'diff';
 import {
   Action,
   Diagram,
@@ -14,6 +15,8 @@ import {
   ClientRPC,
   Query,
   isClientRPC,
+  nodeResult,
+  nodeName,
 } from '../types';
 
 const DisplayCharLimit = 50;
@@ -22,50 +25,155 @@ export const extension = '.uml';
 
 function formatElapsed(elapsed: number): string {
   const timeStr = (): string => {
-    if (elapsed >= 1) {
-      return `${+elapsed.toPrecision(3)}s`;
-    } else if (elapsed >= 0.001) {
-      return `${+(elapsed * 1000).toPrecision(3)}ms`;
-    } else if (elapsed >= 0.000001) {
-      return `${+(elapsed * 1000000).toPrecision(3)}μs`;
-    } else {
-      return `${+(elapsed * 1000000000).toPrecision(3)}ns`;
-    }
+    return `${+(elapsed * 1000).toPrecision(3)} ms`;
   };
-  return `<size:8><:1F551:></size><color:gray> ${timeStr()}</color>`;
+  return `<color:gray> ${timeStr()}</color>`;
 }
 
-function sanitize(str: string): string {
+function singleLine(str: string): string {
   return str.replace(/\n/g, '\\n').replace(/\s{2,}/g, ' ');
 }
 
-function messageName(action: FunctionCall | ServerRPC | ClientRPC | Query): string {
-  return isFunction(action)
-    ? action.name
-    : isServerRPC(action) || isClientRPC(action)
-    ? action.route
-    : action.query;
-}
+class Label {
+  static ChangedCharsThreshod = 0.25;
 
-type MessageDisplayName = {
-  label: string;
-  timing?: string;
-};
+  static GitHubDiffLightThemeRemovedColorBackground = '#FCECEA'; // [ 252, 236, 234 ];
+  static GitHubDiffLightThemeAddedColorBackground = '#EBFEEE'; // [ 235, 254, 238 ];
 
-function messageDisplayName(
-  action: FunctionCall | ServerRPC | ClientRPC | Query
-): MessageDisplayName {
-  const name = messageName(action);
-  const tokens = [name.slice(0, DisplayCharLimit)];
-  let timing: string | undefined;
-  if (isFunction(action) && action.static) {
-    tokens.unshift('<u>');
-    tokens.push('</u>');
+  static GitHubDiffDarkThemeRemovedColorBackground = '#29201A'; // [ 41, 32, 26 ];
+  static GitHubDiffDarkThemeAddedColorBackground = '#172238'; // [ 23, 34, 56 ];
+
+  static RemovedColor = 'lightgray';
+  static AddedColor = 'lightgray';
+
+  static RemovedColorBackground = Label.GitHubDiffDarkThemeRemovedColorBackground;
+  static AddedColorBackground = Label.GitHubDiffDarkThemeAddedColorBackground;
+
+  constructor(public action: FunctionCall | ServerRPC | ClientRPC | Query) {}
+
+  get actionNameIsTrimmed(): boolean {
+    return nodeName(this.action).length > DisplayCharLimit;
   }
-  if (action.elapsed) {
-    timing = formatElapsed(action.elapsed);
+
+  requestLabel(): string {
+    const { action } = this;
+
+    const label = singleLine(nodeName(this.action)).slice(0, DisplayCharLimit);
+    let formerLabel;
+    if (action.formerName) formerLabel = singleLine(action.formerName).slice(0, DisplayCharLimit);
+
+    const formattedLabel = this.formatDiffLabel(label, formerLabel);
+
+    const tokens: string[] = [];
+    // PlantUML / Creole doesn't successfully combine strikethrough with underline.
+    // Only the underline ends up being rendered.
+    if (isFunction(action) && action.static && action.diffMode !== DiffMode.Delete)
+      tokens.push('<u>');
+    tokens.push(formattedLabel);
+    if (isFunction(action) && action.static && action.diffMode !== DiffMode.Delete)
+      tokens.push('</u>');
+
+    if (action.elapsed && action.diffMode !== DiffMode.Delete) {
+      tokens.push(' ');
+      tokens.push(formatElapsed(action.elapsed));
+    }
+    return tokens.join('');
   }
-  return { label: tokens.join(''), timing };
+
+  responseLabel(): string | undefined {
+    const response = actionResponse(this.action);
+    if (!response) return;
+
+    let label = nodeResult(this.action);
+    if (!label) return;
+
+    label = singleLine(label).slice(0, DisplayCharLimit);
+
+    let formerLabel;
+    if (this.action.formerResult)
+      formerLabel = singleLine(this.action.formerResult).slice(0, DisplayCharLimit);
+
+    const formattedLabel = this.formatDiffLabel(label, formerLabel);
+
+    const tokens: string[] = [];
+
+    if (response.raisesException) tokens.push('<i>');
+    tokens.push(formattedLabel);
+    if (response.raisesException) tokens.push('</i>');
+
+    return tokens.join('');
+  }
+
+  note(foldLimit = 80): string {
+    const { action } = this;
+
+    const label = fold(nodeName(this.action), foldLimit);
+    let formerLabel: string[] = [];
+    if (action.formerName) formerLabel = fold(action.formerName, foldLimit);
+
+    const result = [];
+    for (let i = 0; i < Math.max(label.length, formerLabel.length); i += 1) {
+      const line = this.formatDiffLabel(label[i], formerLabel[i]);
+      result.push(line);
+    }
+    return result.join('\n');
+  }
+
+  private formatDiffLabel(label?: string, formerLabel?: string): string {
+    const tokens: string[] = [];
+
+    const addedSegment = (text: string): void => {
+      tokens.push(`<color:${Label.AddedColor}><back:${Label.AddedColorBackground}>`);
+      tokens.push(text);
+      tokens.push('</back></color>');
+    };
+    const removedSegment = (text: string): void => {
+      tokens.push(`<color:${Label.RemovedColor}><back:${Label.RemovedColorBackground}>--`);
+      tokens.push(text);
+      tokens.push('--</back></color>');
+    };
+
+    if (this.action.diffMode) {
+      console.log(this.action.diffMode);
+      console.log(label);
+      console.log(formerLabel);
+      console.log();
+    }
+    if (this.action.diffMode === DiffMode.Change && label && formerLabel && label !== formerLabel) {
+      const diff = diffChars(formerLabel, label);
+      const changeCharsCount = diff.reduce(
+        (memo, change) => (change.added || change.removed ? memo + (change.count || 0) : memo),
+        0
+      );
+      if (
+        changeCharsCount / Math.max(formerLabel.length, label.length) <
+        Label.ChangedCharsThreshod
+      ) {
+        for (const change of diff) {
+          if (change.removed) {
+            removedSegment(change.value);
+          } else if (change.added) {
+            addedSegment(change.value);
+          } else {
+            tokens.push(change.value);
+          }
+        }
+      } else {
+        removedSegment(formerLabel);
+        tokens.push(' ');
+        addedSegment(label);
+      }
+    } else if (this.action.diffMode && label && formerLabel && label === formerLabel) {
+      tokens.push(label);
+    } else if (label) {
+      if (this.action.diffMode) {
+        this.action.diffMode === DiffMode.Delete ? removedSegment(label) : addedSegment(label);
+      } else {
+        tokens.push(label);
+      }
+    }
+    return tokens.join('');
+  }
 }
 
 type Response = ReturnValue & {
@@ -82,18 +190,6 @@ function actionResponse(
     : undefined;
 }
 
-function encode(action: Action, message: MessageDisplayName): string {
-  const text = sanitize(message.label);
-  let tokens = [text];
-  if (action.diffMode !== undefined) {
-    tokens = ['<b>', `<color:${color(action)}>`, ...tokens, '</color>', '</b>'];
-  }
-  if (message.timing) {
-    tokens.push(' ', message.timing);
-  }
-  return tokens.join('');
-}
-
 function alias(id: string): string {
   return id.replace(/[^a-zA-Z0-9]/g, '_');
 }
@@ -104,6 +200,8 @@ function color(action: Action): string | undefined {
       return 'red';
     case DiffMode.Insert:
       return 'green';
+    case DiffMode.Change:
+      return 'CA9C3F';
   }
 }
 
@@ -115,7 +213,7 @@ function arrowColor(tail: string, head: string, action: Action): string {
   return [tail, c, head].filter(Boolean).join('');
 }
 
-function fold(line: string, limit: number): string {
+function fold(line: string, limit: number): string[] {
   const output: string[] = [];
   let buffer = '';
   line
@@ -134,7 +232,7 @@ function fold(line: string, limit: number): string {
       }
     });
   output.push(buffer);
-  return output.join('\n');
+  return output;
 }
 
 const requestArrow = (action: Action): string => {
@@ -208,31 +306,22 @@ export function format(diagram: Diagram, _source: string): string {
 
       events.print(`End`);
     } else {
+      const label = new Label(action);
+
       const actors = actionActors(action);
       {
         const incomingTokens = actors.map((actor) => (actor ? alias(actor.name) : ''));
         const arrow = requestArrow(action);
-        events.print(
-          [incomingTokens.join(arrow), encode(action, messageDisplayName(action))].join(': ')
-        );
+        events.print([incomingTokens.join(arrow), label.requestLabel()].join(': '));
       }
       {
-        const name = messageName(action);
-        if (name.length > DisplayCharLimit) {
+        if (label.actionNameIsTrimmed) {
           events.print('Note right');
           events.indent();
-          events.printLeftAligned(fold(name, 80));
+          events.printLeftAligned(label.note(80));
           events.outdent();
           events.print('End note');
         }
-      }
-
-      if (action.diffMode) {
-        events.print('Note right');
-        events.indent();
-        events.printLeftAligned(action.diffMode === DiffMode.Delete ? 'deleted' : 'added');
-        events.outdent();
-        events.print('End note');
       }
 
       const response = actionResponse(action);
@@ -246,21 +335,12 @@ export function format(diagram: Diagram, _source: string): string {
       if (response) {
         const outgoingTokens = actors.map((actor) => (actor ? alias(actor.name) : ''));
         const arrow = responseArrow(action);
+        const responseLabel = label.responseLabel();
 
-        let returnValueStr: string | undefined;
-        if (response.returnValueType?.name) {
-          returnValueStr = response.returnValueType?.name;
-        } else if (response.status !== undefined) {
-          returnValueStr = response.status.toString();
-        }
+        const tokens = [outgoingTokens.join(arrow)];
+        if (responseLabel) tokens.push(responseLabel);
 
-        if (response.raisesException) {
-          returnValueStr = ['<i>', returnValueStr || 'exception!', '</i>'].join('');
-        }
-
-        if (returnValueStr) returnValueStr = encode(action, { label: returnValueStr });
-
-        events.print([outgoingTokens.join(arrow), returnValueStr].join(': '));
+        events.print(tokens.join(': '));
       }
 
       if (doActivate) {
@@ -277,7 +357,7 @@ export function format(diagram: Diagram, _source: string): string {
   return `@startuml
 !includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
 ${diagram.actors
-  .map((actor) => `participant ${alias(actor.name)} as "${sanitize(actor.name)}"`)
+  .map((actor) => `participant ${alias(actor.name)} as "${singleLine(actor.name)}"`)
   .join('\n')}
 ${events.lines.join('\n')}
 @enduml`;

@@ -1,6 +1,6 @@
 import assert from 'assert';
-import { Diff, MoveType, Position } from './diff';
-import { Action, actionActors, Actor, Diagram, DiffMode } from './types';
+import { Diff, MoveType, Move } from './diff';
+import { Action, actionActors, Actor, Diagram, DiffMode, nodeName, nodeResult } from './types';
 
 function cloneAction(action: Action): Action {
   const parent = action.parent;
@@ -23,13 +23,27 @@ function cloneAction(action: Action): Action {
 export default function buildDiffDiagram(diff: Diff): Diagram {
   const diffActionsByAction = new Map<Action, Action>();
 
-  const buildActions = (state: Position): Action => {
+  const buildActions = (state: Move): Action => {
     const lAction = diff.baseActions[state.lNode];
     const rAction = diff.headActions[state.rNode];
 
     switch (state.moveType) {
       case MoveType.AdvanceBoth: {
         const action = cloneAction(rAction);
+        if (rAction.parent) {
+          const parent = diffActionsByAction.get(rAction.parent);
+          parent?.children.push(action);
+          action.parent = parent;
+        }
+        diffActionsByAction.set(rAction, action);
+        diffActionsByAction.set(lAction, action);
+        return action;
+      }
+      case MoveType.Change: {
+        const action = cloneAction(rAction);
+        action.diffMode = DiffMode.Change;
+        action.formerName = nodeName(lAction);
+        action.formerResult = nodeResult(lAction);
         if (rAction.parent) {
           const parent = diffActionsByAction.get(rAction.parent);
           parent?.children.push(action);
@@ -88,7 +102,7 @@ export default function buildDiffDiagram(diff: Diff): Diagram {
     }
   };
 
-  const actions = diff.positions.map((state) => buildActions(state));
+  const actions = diff.moves.map((state) => buildActions(state));
 
   const uniqueActorIds = new Set<string>();
   const actors: Actor[] = [];

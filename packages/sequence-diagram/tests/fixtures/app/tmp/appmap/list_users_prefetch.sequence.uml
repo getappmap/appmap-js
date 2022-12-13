@@ -2,30 +2,30 @@
 !includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
 participant controllers as "controllers"
 participant models as "models"
+participant database as "database"
 participant users as "users"
 participant posts as "posts"
-participant database as "database"
-  [->controllers: list <size:8><:1F551:></size><color:gray> 717μs</color>
+  [->controllers: list <color:gray> 0.621 ms</color>
   activate controllers
-    controllers->models: <u>list</u> <size:8><:1F551:></size><color:gray> 198μs</color>
+    controllers->models: <u>list</u> <color:gray> 0.166 ms</color>
     activate models
-      models->database: <u>query</u>
-      models->models: <u>find_for_users</u> <size:8><:1F551:></size><color:gray> 23μs</color>
+      models->database: <u>query</u> <color:gray> 0.001 ms</color>
+      models->models: <u>find_for_users</u> <color:gray> 0.021 ms</color>
       activate models
-        models->database: <u>query</u>
+        models->database: <u>query</u> <color:gray> 0.001 ms</color>
       models<--models: object
       deactivate models
     controllers<--models: array
     deactivate models
-    controllers->users: list <size:8><:1F551:></size><color:gray> 308μs</color>
+    controllers->users: list <color:gray> 0.279 ms</color>
     activate users
-      Loop 5 times <size:8><:1F551:></size><color:gray> 10μs</color>
-        users->models: posts <size:8><:1F551:></size><color:gray> 1000ns</color>
+      Loop 5 times <color:gray> 0.009 ms</color>
+        users->models: posts
         activate models
         users<--models: array
         deactivate models
-        Loop ~2 times <size:8><:1F551:></size><color:gray> 2μs</color>
-          users->posts: show <size:8><:1F551:></size><color:gray> 1000ns</color>
+        Loop ~2 times <color:gray> 0.002 ms</color>
+          users->posts: show <color:gray> 0.001 ms</color>
           activate posts
           users<--posts: string
           deactivate posts
