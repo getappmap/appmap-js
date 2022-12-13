@@ -1,3 +1,4 @@
+import os from 'os';
 import { setrlimit } from 'posix';
 
 export const MaxNumberOfFiles = 1048576;
@@ -14,6 +15,9 @@ export function increaseFileLimitTo(limit: Number | null, limitName: string): bo
 }
 
 export function increaseFileLimit() {
+    // posix.setrlimit doesn't exist on Windows
+    if (os.platform() === 'win32') return;
+
     // The limit of file descriptors per user is
     // - On darwin:            256 soft limit, can be increased to unlimited hard limit
     // - On linux Ubuntu 20:  1024 soft limit, can be increased to   1048576 hard limit
