@@ -31,6 +31,7 @@ import StatusCommand from './cmds/agentInstaller/status';
 const StatsCommand = require('./cmds/stats/stats');
 import PruneCommand from './cmds/prune/prune';
 import { handleWorkingDirectory } from './lib/handleWorkingDirectory';
+import { increaseFileLimit } from './lib/increaseFileLimit';
 import { locateAppMapDir } from './lib/locateAppMapDir';
 
 class DiffCommand {
@@ -367,6 +368,7 @@ yargs(process.argv.slice(2))
       verbose(argv.verbose);
       handleWorkingDirectory(argv.directory);
       const appmapDir = await locateAppMapDir(argv.appmapDir);
+      increaseFileLimit();
 
       if (argv.watch) {
         const cmd = new FingerprintWatchCommand(appmapDir);
