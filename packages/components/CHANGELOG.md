@@ -1,3 +1,10 @@
+# [@appland/components-v2.19.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.19.0...@appland/components-v2.19.1) (2022-12-13)
+
+
+### Bug Fixes
+
+* Update sign in styling to match spec ([da561a4](https://github.com/getappmap/appmap-js/commit/da561a4467c13354473daa542600973459230076))
+
 # [@appland/components-v2.19.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.18.3...@appland/components-v2.19.0) (2022-12-06)
 
 
