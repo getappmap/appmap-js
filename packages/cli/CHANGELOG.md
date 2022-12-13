@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.54.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.53.1...@appland/appmap-v3.54.0) (2022-12-13)
+
+
+### Features
+
+* Diff 'change' option ([ee70ee8](https://github.com/getappmap/appmap-js/commit/ee70ee8fa282685cc5cf8892e81618df7b7f2204))
+
 # [@appland/appmap-v3.53.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.53.0...@appland/appmap-v3.53.1) (2022-12-13)
 
 
