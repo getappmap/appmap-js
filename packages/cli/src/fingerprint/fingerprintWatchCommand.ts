@@ -10,9 +10,6 @@ import { verbose } from '../utils';
 import { FingerprintEvent } from './fingerprinter';
 import FingerprintQueue from './fingerprintQueue';
 import Globber from './globber';
-import { setrlimit, getrlimit } from 'posix';
-
-export const MaxNumberOfFiles = 1048576;
 
 export default class FingerprintWatchCommand {
   private pidfilePath: string | undefined;
@@ -30,7 +27,6 @@ export default class FingerprintWatchCommand {
   }
 
   constructor(private directory: string) {
-    this.increaseFileLimit();
     this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && join(this.directory, 'index.pid');
     this.fpQueue = new FingerprintQueue();
 
@@ -39,33 +35,6 @@ export default class FingerprintWatchCommand {
       this.sendTelemetry(indexEvents.map(({ metadata }) => metadata));
       this.numProcessed += events.length;
     }).attach(this.fpQueue.handler, 'index');
-  }
-
-  increaseFileLimitTo(limit: Number | null, limitName: string): boolean {
-    try {
-      const nofile = getrlimit('nofile');
-      setrlimit('nofile', { soft: limit, hard: limit });
-      console.warn(`Success changing number of file descriptors to ${limitName}.${limitName}`);
-      return true;
-    } catch (err) {
-      console.warn(`Error   changing number of file descriptors to ${limitName}.${limitName}: ${err}`);
-      return false;
-    }
-  }
-
-  increaseFileLimit() {
-    // The limit of file descriptors per user is
-    // - On darwin:            256 soft limit, can be increased to unlimited hard limit
-    // - On linux Ubuntu 20:  1024 soft limit, can be increased to   1048576 hard limit
-    // Increase this limit to be high, with exponential backoff to try a lower limit
-    if (this.increaseFileLimitTo(null, "unlimited")) return;
-
-    let divisor = 1;
-    while (divisor <= 8) {
-      const limitToUse = MaxNumberOfFiles / divisor;
-      if (this.increaseFileLimitTo(limitToUse, limitToUse.toString())) return;
-      divisor *= 2;
-    }
   }
 
   removePidfile() {
