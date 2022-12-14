@@ -1,4 +1,4 @@
-import { load, YAMLException } from 'js-yaml';
+import { load } from 'js-yaml';
 import { readFileSync } from 'fs';
 import Response from '../src/response';
 import { Event } from '@appland/models';
