@@ -1,13 +1,14 @@
 import os from 'os';
-
-const posix = require('posix');
-//import * as posix from 'posix';
+import { setrlimit, getrlimit } from 'posix';
 
 export const MaxNumberOfFiles = 1048576;
 
 export function increaseFileLimitTo(limit: Number | null, limitName: string): boolean {
-    try {
-      posix.setrlimit('nofile', { soft: limit, hard: limit });
+  try {
+      // call getrlimit even though it's value isn't used, to get it
+      // to compile on Windows
+      const nofile = getrlimit('nofile');
+      setrlimit('nofile', { soft: limit, hard: limit });
       console.warn(`Success changing number of file descriptors to ${limitName}.${limitName}`);
       return true;
     } catch (err) {
