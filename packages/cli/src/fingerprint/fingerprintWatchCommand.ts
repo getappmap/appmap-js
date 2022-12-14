@@ -52,6 +52,13 @@ export default class FingerprintWatchCommand {
       await this.watcher?.close();
       this.watcher = undefined;
       console.warn("File watching disabled.");
+      Telemetry.sendEvent({
+          name: `index:watcher_error:enospc`,
+          properties: {
+            errorMessage: error.message,
+            errorStack: error.stack,
+          },
+        });
     } else {
       // let it crash if it's some other error, to learn what the error is
       throw error;

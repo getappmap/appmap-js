@@ -123,6 +123,13 @@ export class Watcher {
       await this.appmapWatcher?.close();
       this.appmapWatcher = undefined;
       console.warn('File watching disabled.');
+      Telemetry.sendEvent({
+        name: `scan:watcher_error:enospc`,
+        properties: {
+          errorMessage: error.message,
+          errorStack: error.stack,
+        },
+      });
     } else {
       // let it crash if it's some other error, to learn what the error is
       throw error;
