@@ -20,7 +20,8 @@
     "lint": "eslint src --ext .ts",
     "ci": "yarn lint && yarn build && yarn schema-up-to-date && yarn doc-up-to-date && yarn test",
     "test": "jest --filter=./test/testFilter.js",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "watch": "node bin/preBuild.js && tsc -p tsconfig.build.json --watch"
   },
   "author": "AppLand, Inc.",
   "license": "Commons Clause + MIT",
