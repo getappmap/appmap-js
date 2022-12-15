@@ -106,8 +106,34 @@ export class Watcher {
 
     const enqueue = (filePath: string) =>
       path.basename(filePath) === 'mtime' && this.enqueue(filePath);
-    for (const ch of [this.appmapWatcher, this.appmapPoller])
-      ch.on('add', enqueue).on('change', enqueue);
+    this.appmapPoller.on('add', enqueue).on('change', enqueue);
+    this.appmapWatcher
+      .on('add', enqueue)
+      .on('change', enqueue)
+      .on('error', this.watcherErrorFunction.bind(this));
+  }
+
+  async watcherErrorFunction(error: Error) {
+    if (
+      this.appmapWatcher &&
+      error.message.includes('ENOSPC: System limit for number of file watchers reached')
+    ) {
+      console.warn(error.stack);
+      console.warn('Will disable file watching. File polling will stay enabled.');
+      await this.appmapWatcher?.close();
+      this.appmapWatcher = undefined;
+      console.warn('File watching disabled.');
+      Telemetry.sendEvent({
+        name: `scan:watcher_error:enospc`,
+        properties: {
+          errorMessage: error.message,
+          errorStack: error.stack,
+        },
+      });
+    } else {
+      // let it crash if it's some other error, to learn what the error is
+      throw error;
+    }
   }
 
   async close(): Promise<void> {
