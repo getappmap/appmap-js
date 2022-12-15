@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.3.0](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.2.1...@appland/openapi-v1.3.0) (2022-12-15)
+
+
+### Features
+
+* Populate openapi path.summary from x-openapi-summary header ([ec5cd34](https://github.com/getappmap/appmap-js/commit/ec5cd34f1436cd89fdcd986524090bdf84a98b5a))
+
 # [@appland/openapi-v1.2.1](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.2.0...@appland/openapi-v1.2.1) (2022-12-07)
 
 
