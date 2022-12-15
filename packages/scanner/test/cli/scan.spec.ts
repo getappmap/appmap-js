@@ -282,7 +282,7 @@ describe('scan', () => {
       await createIndex(secretInLogMap);
       const permissionDeniedDir = join(tmpDir, 'permission_denied_dir');
       await mkdir(permissionDeniedDir);
-      await copyAppMap(secretInLogMap, permissionDeniedDir);
+      await fsextra.copy(secretInLogMap, join(permissionDeniedDir, basename(secretInLogMap)));
       chmod(permissionDeniedDir, 0o000);
       await createWatcher();
       await waitForSingleFinding();
