@@ -19,7 +19,9 @@
     "doc-up-to-date": "git diff --exit-code doc/",
     "lint": "eslint src --ext .ts",
     "ci": "yarn lint && yarn build && yarn schema-up-to-date && yarn doc-up-to-date && yarn test",
-    "test": "jest --filter=./test/testFilter.js",
+    "test2": "jest --filter=./test/testFilter.js",
+    "test3": "jest --silent=false test/cli/commands.spec.ts",
+    "test": "jest --silent=false test/cli/scan.spec.ts",
     "semantic-release": "semantic-release"
   },
   "author": "AppLand, Inc.",
