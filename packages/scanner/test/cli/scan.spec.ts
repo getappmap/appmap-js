@@ -15,6 +15,8 @@ import CommandOptions from '../../src/cli/scan/options';
 import tmp from 'tmp-promise';
 import assert from 'assert';
 import { withStubbedTelemetry } from '../helper';
+import { mkdir, chmod } from 'fs/promises';
+
 
 process.env['APPMAP_TELEMETRY_DISABLED'] = 'true';
 delete process.env.APPLAND_API_KEY;
@@ -273,6 +275,16 @@ describe('scan', () => {
       watcher?.appmapWatcher?.removeAllListeners();
 
       await createIndex(secretInLogMap);
+      await waitForSingleFinding();
+    });
+
+    it('does not raise on EACCES: permission denied', async () => {
+      await createIndex(secretInLogMap);
+      const permissionDeniedDir = join(tmpDir, 'permission_denied_dir');
+      await mkdir(permissionDeniedDir);
+      await copyAppMap(secretInLogMap, permissionDeniedDir);
+      chmod(permissionDeniedDir, 0o000);
+      await createWatcher();
       await waitForSingleFinding();
     });
 
