@@ -113,6 +113,12 @@ function isClientEvent(event: Event): event is ClientRpcEvent {
   return !!event.httpClientRequest && !!event.httpClientResponse && !!event.httpClientRequest.url;
 }
 
+export function headerValue(headers: Record<string, string>, name: string): string | undefined {
+  const nameLower = name.toLowerCase();
+  const key = Object.keys(headers).find((header) => header.toLowerCase() === nameLower);
+  if (key) return headers[key];
+}
+
 export function rpcRequestForEvent(event: Event): RPCRequest | undefined {
   if (isServerEvent(event)) return new ServerRPCRequest(event);
   if (isClientEvent(event)) return new ClientRPCRequest(event);

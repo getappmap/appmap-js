@@ -65,6 +65,7 @@ describe('openapi', () => {
               description: 'OK',
             },
           },
+          summary: 'Signup',
         },
       },
       '/users': {

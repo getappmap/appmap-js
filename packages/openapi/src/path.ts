@@ -5,15 +5,15 @@ import { RPCRequest } from './rpcRequest';
 export default class Path {
   methods: Record<string, Method> = {};
 
-  openapi(): Record<OpenAPIV3.HttpMethods, OpenAPIV3.OperationObject> {
+  openapi(): OpenAPIV3.PathItemObject {
     return Object.keys(this.methods)
       .sort()
-      .reduce((memo, method: string) => {
+      .reduce((memo, methodName: string) => {
+        const method = this.methods[methodName as OpenAPIV3.HttpMethods];
         // eslint-disable-next-line no-param-reassign
-        memo[method as OpenAPIV3.HttpMethods] =
-          this.methods[method as OpenAPIV3.HttpMethods].openapi();
+        memo[methodName as OpenAPIV3.HttpMethods] = method.openapi();
         return memo;
-      }, {} as Record<OpenAPIV3.HttpMethods, OpenAPIV3.OperationObject>);
+      }, {} as Record<OpenAPIV3.HttpMethods, OpenAPIV3.OperationObject>) as OpenAPIV3.PathItemObject;
   }
 
   addRpcRequest(rpcRequest: RPCRequest): void {

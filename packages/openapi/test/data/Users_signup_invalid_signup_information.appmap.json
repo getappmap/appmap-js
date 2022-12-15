@@ -2379,7 +2379,8 @@
           "X-Download-Options": "noopen",
           "X-Permitted-Cross-Domain-Policies": "none",
           "Referrer-Policy": "strict-origin-when-cross-origin",
-          "Content-Type": "text/html; charset=utf-8"
+          "Content-Type": "text/html; charset=utf-8",
+          "X-OpenAPI-Summary": "Signup"
         }
       }
     },

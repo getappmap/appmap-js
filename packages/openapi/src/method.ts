@@ -1,7 +1,7 @@
 import { ParameterObject } from '@appland/models';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 import Response from './response';
-import { RPCRequest } from './rpcRequest';
+import { headerValue, RPCRequest } from './rpcRequest';
 import ObjectSchema from './objectSchema';
 import { messageToOpenAPISchema, parseScheme } from './util';
 
@@ -21,6 +21,12 @@ function openapiIn(rpcRequest: RPCRequest, name: string) {
 export default class Method {
   rpcRequests: RPCRequest[] = [];
   responses: Record<string, Response> = {};
+
+  get summaries(): string[] {
+    return this.rpcRequests
+      .map((request) => headerValue(request.responseHeaders, 'x-openapi-summary'))
+      .filter(Boolean) as string[];
+  }
 
   openapi(): OpenAPIV3.OperationObject {
     const responseByStatus = Object.keys(this.responses)
@@ -117,6 +123,19 @@ export default class Method {
     if (parameters.length > 0) {
       response.parameters = parameters.sort((a, b) => a.name.localeCompare(b.name));
     }
+
+    const summaryFrequency = new Map<string, number>();
+    this.summaries.forEach((summary) =>
+      summaryFrequency.set(summary, (summaryFrequency.get(summary) || 0) + 1)
+    );
+
+    if (summaryFrequency.size > 0) {
+      response.summary = [...summaryFrequency.keys()].sort(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        (a, b) => summaryFrequency.get(b)! - summaryFrequency.get(a)!
+      )[0];
+    }
+
     return response;
   }
 
