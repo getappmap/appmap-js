@@ -38,7 +38,7 @@ const ScanEvents: watchScanTelemetry.ScanEvent[] = [
 describe(watchScanTelemetry.WatchScanTelemetry, () => {
   let emitter: EventEmitter;
   let sinon: Sinon.SinonSandbox;
-  let _telemetry: watchScanTelemetry.WatchScanTelemetry;
+  let telemetry: watchScanTelemetry.WatchScanTelemetry;
   let sendScanResultsTelemetry: Sinon.SinonStub;
 
   beforeEach(() => jest.useFakeTimers());
@@ -48,8 +48,9 @@ describe(watchScanTelemetry.WatchScanTelemetry, () => {
     () => (sendScanResultsTelemetry = sinon.stub(scanResults, 'sendScanResultsTelemetry'))
   );
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  beforeEach(() => (_telemetry = new watchScanTelemetry.WatchScanTelemetry(emitter)));
+  beforeEach(() => (telemetry = new watchScanTelemetry.WatchScanTelemetry(emitter)));
 
+  afterEach(() => telemetry.cancel());
   afterEach(() => jest.useRealTimers());
   afterEach(() => sinon.restore());
 
@@ -80,6 +81,25 @@ describe(watchScanTelemetry.WatchScanTelemetry, () => {
     assert.deepEqual(sendScanResultsTelemetry.firstCall.args, [
       { elapsedMs: 15, numAppMaps: 22, numFindings: 3, ruleIds: ['a', 'b', 'c'] },
     ]);
+  });
+
+  it('can be canceled', async () => {
+    emitter.emit('scan', ScanEvents[1]);
+
+    jest.advanceTimersByTime(MaxMSBetween * 1.5);
+
+    assert(
+      sendScanResultsTelemetry.calledOnce,
+      'Expected sendScanResultsTelemetry to have been called once'
+    );
+
+    telemetry.cancel();
+
+    emitter.emit('scan', ScanEvents[1]);
+
+    jest.advanceTimersByTime(MaxMSBetween * 1.5);
+
+    assert(sendScanResultsTelemetry.calledOnce, 'No additional telemetry should be sent');
   });
 
   it('batches telemetry events when there is a long delay', async () => {

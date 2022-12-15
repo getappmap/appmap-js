@@ -1,5 +1,5 @@
 import { EventEmitter } from 'stream';
-import EventAggregator from '../../lib/eventAggregator';
+import EventAggregator, { CancelFn } from '../../lib/eventAggregator';
 import { ScanResults, sendScanResultsTelemetry } from '../../report/scanResults';
 
 export type ScanEvent = {
@@ -8,11 +8,24 @@ export type ScanEvent = {
 };
 
 export class WatchScanTelemetry {
+  cancelFn: CancelFn | undefined;
+
   constructor(scanEvents: EventEmitter) {
-    new EventAggregator<ScanEvent>((events) => {
+    this.cancelFn = new EventAggregator<ScanEvent>((events) => {
       const scanEvents = events.map((e) => e.arg);
       this.sendTelemetry(scanEvents);
     }).attach(scanEvents, 'scan');
+  }
+
+  cancel(): void {
+    if (this.cancelFn) this.cancelFn();
+
+    this.cancelFn = undefined;
+  }
+
+  static watch(scanEvents: EventEmitter): CancelFn {
+    const telemetry = new WatchScanTelemetry(scanEvents);
+    return () => telemetry.cancel();
   }
 
   private sendTelemetry(scanEvents: ScanEvent[]) {

@@ -53,10 +53,11 @@ export class Watcher {
   appmapWatcher?: chokidar.FSWatcher;
   appmapPoller?: chokidar.FSWatcher;
   configWatcher?: chokidar.FSWatcher;
-  telemetry: WatchScanTelemetry | undefined;
   scanEventEmitter = new EventEmitter();
 
-  constructor(private options: WatchScanOptions) {}
+  constructor(private options: WatchScanOptions) {
+    WatchScanTelemetry.watch(this.scanEventEmitter);
+  }
 
   async watch(): Promise<void> {
     await this.reloadConfig();
