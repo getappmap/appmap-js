@@ -94,6 +94,7 @@ export class Watcher {
     this.appmapWatcher = chokidar.watch(watchDir, {
       ignoreInitial: true,
       ignored,
+      ignorePermissionErrors: true,
     });
 
     this.appmapPoller = chokidar.watch(watchDir, {
