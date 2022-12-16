@@ -77,11 +77,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/appmap@workspace:packages/cli"
   dependencies:
-    "@appland/components": "workspace:*"
-    "@appland/diagrams": "workspace:*"
-    "@appland/models": "workspace:*"
-    "@appland/openapi": "workspace:*"
-    "@appland/sequence-diagram": "workspace:*"
+    "@appland/components": "workspace:^2"
+    "@appland/diagrams": "workspace:^1"
+    "@appland/models": "workspace:^1"
+    "@appland/openapi": "workspace:^1"
+    "@appland/sequence-diagram": "workspace:^1"
     "@craftamap/esbuild-plugin-html": ^0.4.0
     "@sidvind/better-ajv-errors": ^0.9.1
     "@types/fs-extra": ^9.0.13
@@ -186,7 +186,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/components@workspace:*, @appland/components@workspace:packages/components":
+"@appland/components@workspace:^2, @appland/components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "@appland/components@workspace:packages/components"
   dependencies:
@@ -257,7 +257,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/diagrams@workspace:*, @appland/diagrams@workspace:^1.5.1, @appland/diagrams@workspace:packages/diagrams":
+"@appland/diagrams@workspace:^1, @appland/diagrams@workspace:^1.5.1, @appland/diagrams@workspace:packages/diagrams":
   version: 0.0.0-use.local
   resolution: "@appland/diagrams@workspace:packages/diagrams"
   dependencies:
@@ -289,7 +289,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@workspace:*, @appland/models@workspace:^1.18.1, @appland/models@workspace:^1.9.0, @appland/models@workspace:packages/models":
+"@appland/models@workspace:*, @appland/models@workspace:^1, @appland/models@workspace:^1.18.1, @appland/models@workspace:^1.9.0, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
@@ -310,7 +310,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/openapi@workspace:*, @appland/openapi@workspace:packages/openapi":
+"@appland/openapi@workspace:*, @appland/openapi@workspace:^1, @appland/openapi@workspace:packages/openapi":
   version: 0.0.0-use.local
   resolution: "@appland/openapi@workspace:packages/openapi"
   dependencies:
@@ -396,7 +396,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/sequence-diagram@workspace:*, @appland/sequence-diagram@workspace:packages/sequence-diagram":
+"@appland/sequence-diagram@workspace:^1, @appland/sequence-diagram@workspace:packages/sequence-diagram":
   version: 0.0.0-use.local
   resolution: "@appland/sequence-diagram@workspace:packages/sequence-diagram"
   dependencies:
