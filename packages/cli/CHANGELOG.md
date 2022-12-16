@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.55.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.54.1...@appland/appmap-v3.55.0) (2022-12-16)
+
+
+### Bug Fixes
+
+* Don't crash on an 'UNKNOWN: unknown error, lstat' error ([15dfedf](https://github.com/getappmap/appmap-js/commit/15dfedf4fca08c7def63cf168a82ba37739cce40))
+* When UNKNOWN errors are encountered, track the filenames and skip them when watching ([96104ae](https://github.com/getappmap/appmap-js/commit/96104ae42d99e6ff7c7ea46d1539070cfc489218))
+
+
+### Features
+
+* Add index:watcher_error:unknown telemetry event ([c9eaf83](https://github.com/getappmap/appmap-js/commit/c9eaf83c5d6132ad82fb5bf0b516bae6a410b915))
+
 # [@appland/appmap-v3.54.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.54.0...@appland/appmap-v3.54.1) (2022-12-16)
 
 
