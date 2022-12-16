@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.55.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.55.0...@appland/appmap-v3.55.1) (2022-12-16)
+
+
+### Bug Fixes
+
+* Unpin internal package versions, use major version ([9e099b8](https://github.com/getappmap/appmap-js/commit/9e099b864879838aeae20cf6a803f83fc89a0edb))
+
 # [@appland/appmap-v3.55.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.54.1...@appland/appmap-v3.55.0) (2022-12-16)
 
 
