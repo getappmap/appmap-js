@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.54.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.54.0...@appland/appmap-v3.54.1) (2022-12-16)
+
+
+### Bug Fixes
+
+* Send telemetry for scan:watcher_error:enospc and index:watcher_error:enospc ([989db4a](https://github.com/getappmap/appmap-js/commit/989db4a40db8338613afe182be25b0315df94316))
+
 # [@appland/appmap-v3.54.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.53.1...@appland/appmap-v3.54.0) (2022-12-13)
 
 
