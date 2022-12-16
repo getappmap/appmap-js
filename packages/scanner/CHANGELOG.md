@@ -1,3 +1,12 @@
+# [@appland/scanner-v1.74.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.74.0...@appland/scanner-v1.74.1) (2022-12-16)
+
+
+### Bug Fixes
+
+* Disable file watching on "ENOSPC: System limit for number of file watchers reached" ([e51b423](https://github.com/getappmap/appmap-js/commit/e51b4236384ae0ea2cde0bd79b739f7821ca30c1))
+* Enable scan:completed telemetry ([6e20d73](https://github.com/getappmap/appmap-js/commit/6e20d7305fd86bd077c88f674615edb31854a11a))
+* Send telemetry for scan:watcher_error:enospc and index:watcher_error:enospc ([989db4a](https://github.com/getappmap/appmap-js/commit/989db4a40db8338613afe182be25b0315df94316))
+
 # [@appland/scanner-v1.74.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.73.1...@appland/scanner-v1.74.0) (2022-12-07)
 
 
