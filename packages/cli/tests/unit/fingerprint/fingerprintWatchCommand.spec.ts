@@ -91,7 +91,30 @@ describe(FingerprintWatchCommand, () => {
       expect(cmd.watcher).not.toBeUndefined();
       await cmd.watcherErrorFunction(new Error("ENOSPC: System limit for number of file watchers reached"));
       expect(cmd.watcher).toBeUndefined();
-     });
+    });
+
+    it('gets filenames from error messages', async () => {
+      cmd = new FingerprintWatchCommand(appMapDir);
+      expect(cmd.getFilenameFromErrorMessage(`Error: UNKNOWN: unknown error, lstat 'c:\\Users\\Test\\Programming\\MyProject'`)).toBe('c:\\Users\\Test\\Programming\\MyProject');
+    });
+
+    it('does not raise on unknown error lstat', async () => {
+      cmd = new FingerprintWatchCommand(appMapDir);
+      cmd.watcher = new FSWatcher();
+      expect(cmd.watcher).not.toBeUndefined();
+      expect(cmd.unreadableFiles.size).toBe(0);
+      console.warn = jest.fn();
+      const errorMessage = `Error: UNKNOWN: unknown error, lstat 'c:\\Users\\Test\\Programming\\MyProject'`;
+      await cmd.watcherErrorFunction(new Error(errorMessage));
+      expect(cmd.watcher).not.toBeUndefined();
+      expect(console.warn).toBeCalledTimes(2);
+      expect(console.warn).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
+      expect(cmd.unreadableFiles.size).toBe(1);
+      expect(cmd.unreadableFiles.has('c:\\Users\\Test\\Programming\\MyProject')).toBe(true);
+      // ignoring this file or directory works correctly
+      expect(cmd.ignored('c:\\Users\\Test\\Programming\\MyProject')).toBe(true);
+      expect(cmd.ignored('c:\\Users\\Test\\Programming\\MyProject\\some.appmap.json')).toBe(false);
+    });
 
     describe('telemetry', () => {
       let handler: Fingerprinter;

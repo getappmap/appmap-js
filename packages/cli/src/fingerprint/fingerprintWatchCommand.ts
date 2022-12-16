@@ -10,6 +10,7 @@ import { verbose } from '../utils';
 import { FingerprintEvent } from './fingerprinter';
 import FingerprintQueue from './fingerprintQueue';
 import Globber from './globber';
+import path from 'path';
 
 export default class FingerprintWatchCommand {
   private pidfilePath: string | undefined;
@@ -17,6 +18,7 @@ export default class FingerprintWatchCommand {
   public watcher?: FSWatcher;
   private poller?: Globber;
   private _numProcessed = 0;
+  public unreadableFiles = new Set();
 
   public get numProcessed() {
     return this._numProcessed;
@@ -45,6 +47,15 @@ export default class FingerprintWatchCommand {
     }
   }
 
+  getFilenameFromErrorMessage(errorMessage: string): string {
+    // The errorMessage must contain the filename within single quotes
+    // and looks like this:
+    // Error: UNKNOWN: unknown error, lstat 'c:\Users\Test\Programming\MyProject'
+    let quoteStartIndex = errorMessage.indexOf(`'`);
+    let quoteEndIndex = errorMessage.indexOf(`'`, quoteStartIndex + 1);
+    return errorMessage.substring(quoteStartIndex + 1, quoteEndIndex);
+  }
+
   async watcherErrorFunction (error: Error) {
     if (this.watcher && error.message.includes("ENOSPC: System limit for number of file watchers reached")) {
       console.warn(error.stack);
@@ -59,11 +70,42 @@ export default class FingerprintWatchCommand {
             errorStack: error.stack,
           },
         });
+    } else if (error.message.includes("UNKNOWN: unknown error, lstat")) {
+      console.warn(error.stack);
+      Telemetry.sendEvent({
+          name: `index:watcher_error:unknown`,
+          properties: {
+            errorMessage: error.message,
+            errorStack: error.stack,
+          },
+      });
+      const filename = this.getFilenameFromErrorMessage(error.message);
+      this.unreadableFiles.add(filename);
+      console.warn("Will not read this file again.");
     } else {
       // let it crash if it's some other error, to learn what the error is
       throw error;
     }
   };
+
+  // Custom ignore function needed to skip unreadableFiles because
+  // attempting to read them can block reading all files. It also
+  // cuts down the watch tree to just what we need.
+  ignored (targetPath: string) {
+    ['/node_modules/', '/.git/'].forEach((pattern) => {
+      if (targetPath.includes(pattern)) {
+        return true;
+       }
+    });
+
+    if (this.unreadableFiles.has(targetPath)) {
+      return true;
+    }
+
+    // Also make sure to not try to recurse down node_modules or .git
+    const basename = path.basename(targetPath);
+    return basename === 'node_modules' || basename === '.git';
+  }
 
   async execute() {
     this.fpQueue.process().then(() => {
@@ -83,7 +125,7 @@ export default class FingerprintWatchCommand {
 
     this.watcher = watch(glob, {
       ignoreInitial: true,
-      ignored: ['**/node_modules/**', '**/.git/**'],
+      ignored: this.ignored.bind(this),
       ignorePermissionErrors: true,
     })
       .on('add', this.added.bind(this))
