@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.74.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.74.1...@appland/scanner-v1.74.2) (2022-12-16)
+
+
+### Bug Fixes
+
+* Don't let scanner crash on EACCES error ([e542d9b](https://github.com/getappmap/appmap-js/commit/e542d9b3270011ab1788ef95d8c8bc059c2d9d3b))
+
 # [@appland/scanner-v1.74.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.74.0...@appland/scanner-v1.74.1) (2022-12-16)
 
 
