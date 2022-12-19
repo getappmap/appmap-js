@@ -272,13 +272,15 @@ describe('scan', () => {
 
     it('does not raise if it hits the limit of the number of file watchers', async () => {
       await createWatcher();
-      if (watcher) { // without the if it doesn't compile; it could be undefined
+      if (watcher) {
+        // without the if it doesn't compile; it could be undefined
         watcher.appmapWatcher = new FSWatcher();
         expect(watcher.appmapWatcher).not.toBeUndefined();
-        await watcher.watcherErrorFunction(new Error("ENOSPC: System limit for number of file watchers reached"));
+        const err = new Error('ENOSPC: System limit for number of file watchers reached');
+        (err as NodeJS.ErrnoException).code = 'ENOSPC';
+        await watcher.watcherErrorFunction(err);
         expect(watcher.appmapWatcher).toBeUndefined();
-      } else
-        throw new Error("watcher should have been defined");
+      } else throw new Error('watcher should have been defined');
     });
 
     it('eventually rescans even if file watching is flaky', async () => {
