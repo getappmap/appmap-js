@@ -11,6 +11,9 @@ import { FingerprintEvent } from './fingerprinter';
 import FingerprintQueue from './fingerprintQueue';
 import Globber from './globber';
 import path from 'path';
+import { countReset } from 'console';
+//const fs = require('fs');
+import * as fs from 'node:fs';
 
 export default class FingerprintWatchCommand {
   private pidfilePath: string | undefined;
@@ -19,6 +22,7 @@ export default class FingerprintWatchCommand {
   private poller?: Globber;
   private _numProcessed = 0;
   public unreadableFiles = new Set();
+  private fileDescriptors: any[] = [];
 
   public get numProcessed() {
     return this._numProcessed;
@@ -31,12 +35,52 @@ export default class FingerprintWatchCommand {
   constructor(private directory: string) {
     this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && join(this.directory, 'index.pid');
     this.fpQueue = new FingerprintQueue();
+    this.testFileDescriptors();
 
     new EventAggregator((events) => {
       const indexEvents = events.map(({ args: [event] }) => event) as FingerprintEvent[];
       this.sendTelemetry(indexEvents.map(({ metadata }) => metadata));
       this.numProcessed += events.length;
     }).attach(this.fpQueue.handler, 'index');
+  }
+
+  testFileDescriptors() {
+    const filesMax = 1200;
+    let counter = 1;
+    while (counter < filesMax) {
+      const filename = "/home/test/tmp/blank_open_files/filename_" + counter.toString();
+      try {
+        console.debug("opening " + filename);
+        const fd = fs.openSync(filename, 'w+');
+        fs.writeFileSync(fd, "some data");
+        fs.closeSync(fd);
+        console.debug("writing in " + filename + " worked");
+      } catch (err) {
+        console.debug("*** unable to create file " + filename);
+      }
+      counter += 1;
+    }
+
+    // open file descriptors
+    counter = 1;
+    while (counter < filesMax) {
+      const filename = "/home/test/tmp/blank_open_files/filename_" + counter.toString();
+      const fd = fs.openSync(filename, 'w');
+      //console.debug("saved fd " + fd.toString());
+      this.fileDescriptors.push(fd);
+      counter += 1;
+    }
+
+    // close all file descriptors
+    /*
+    counter = 1;
+    while (counter < this.fileDescriptors.length) {
+      const fd = this.fileDescriptors[counter];
+      console.debug("closing file descriptor " + counter.toString());
+      fs.closeSync(fd);
+      counter += 1;
+    }
+    */
   }
 
   removePidfile() {
