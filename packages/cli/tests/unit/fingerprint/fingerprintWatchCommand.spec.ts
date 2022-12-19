@@ -140,6 +140,39 @@ describe(FingerprintWatchCommand, () => {
       mockWarn.mockRestore();
     });
 
+    it('does not raise if it finds symlinks pointing to directories up, leading to infinite loop', async () => {
+      cmd = new FingerprintWatchCommand(appMapDir);
+      cmd.watcher = new FSWatcher();
+      expect(cmd.watcher).not.toBeUndefined();
+      expect(cmd.symlinkLoopFiles.size).toBe(0);
+      const mockWarn = jest.spyOn(console, 'warn').mockImplementation();
+      const errorMessage = `Error: ELOOP: too many symbolic links encountered, stat '/Users/test/Documents/some_path/vendor/bundle/gems/autodoc-0.7.0/spec/dummy/spec'`;
+      const err = new Error(errorMessage);
+      (err as NodeJS.ErrnoException).code = 'ELOOP';
+      await cmd.watcherErrorFunction(err);
+      expect(cmd.watcher).not.toBeUndefined();
+      expect(mockWarn).toBeCalledTimes(2);
+      expect(mockWarn).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
+      expect(cmd.symlinkLoopFiles.size).toBe(1);
+      expect(
+        cmd.symlinkLoopFiles.has(
+          '/Users/test/Documents/some_path/vendor/bundle/gems/autodoc-0.7.0/spec/dummy/spec'
+        )
+      ).toBe(true);
+      // ignoring this file or directory works correctly
+      expect(
+        cmd.ignored(
+          '/Users/test/Documents/some_path/vendor/bundle/gems/autodoc-0.7.0/spec/dummy/spec'
+        )
+      ).toBe(true);
+      expect(
+        cmd.ignored(
+          '/Users/test/Documents/some_path/vendor/bundle/gems/autodoc-0.7.0/spec/dummy/spec/some_other_file'
+        )
+      ).toBe(false);
+      mockWarn.mockRestore();
+    });
+
     describe('telemetry', () => {
       let handler: Fingerprinter;
 

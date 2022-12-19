@@ -18,7 +18,8 @@ export default class FingerprintWatchCommand {
   public watcher?: FSWatcher;
   private poller?: Globber;
   private _numProcessed = 0;
-  public unreadableFiles = new Set();
+  public unreadableFiles = new Set<string>();
+  public symlinkLoopFiles = new Set<string>();
 
   public get numProcessed() {
     return this._numProcessed;
@@ -70,6 +71,20 @@ export default class FingerprintWatchCommand {
     return err.code === code;
   }
 
+  dontProcessFileAgain(error: Error, telemetryName: string, files: Set<string>) {
+    console.warn(error.stack);
+    Telemetry.sendEvent({
+      name: telemetryName,
+      properties: {
+        errorMessage: error.message,
+        errorStack: error.stack,
+      },
+    });
+    const filename = this.getFilenameFromErrorMessage(error.message);
+    files.add(filename);
+    console.warn('Will not read this file again.');
+  }
+
   async watcherErrorFunction(error: Error) {
     if (this.isError(error, 'ENOSPC')) {
       console.warn(error.stack);
@@ -94,17 +109,9 @@ export default class FingerprintWatchCommand {
         },
       });
     } else if (this.isError(error, 'UNKNOWN') && error.message.includes('lstat')) {
-      console.warn(error.stack);
-      Telemetry.sendEvent({
-        name: `index:watcher_error:unknown`,
-        properties: {
-          errorMessage: error.message,
-          errorStack: error.stack,
-        },
-      });
-      const filename = this.getFilenameFromErrorMessage(error.message);
-      this.unreadableFiles.add(filename);
-      console.warn('Will not read this file again.');
+      this.dontProcessFileAgain(error, `index:watcher_error:unknown`, this.unreadableFiles);
+    } else if (this.isError(error, 'ELOOP')) {
+      this.dontProcessFileAgain(error, `index:watcher_error:eloop`, this.symlinkLoopFiles);
     } else {
       // let it crash if it's some other error, to learn what the error is
       throw error;
@@ -121,7 +128,7 @@ export default class FingerprintWatchCommand {
       }
     });
 
-    if (this.unreadableFiles.has(targetPath)) {
+    if (this.unreadableFiles.has(targetPath) || this.symlinkLoopFiles.has(targetPath)) {
       return true;
     }
 
