@@ -275,7 +275,9 @@ describe('scan', () => {
       if (watcher) { // without the if it doesn't compile; it could be undefined
         watcher.appmapWatcher = new FSWatcher();
         expect(watcher.appmapWatcher).not.toBeUndefined();
-        await watcher.watcherErrorFunction(new Error("ENOSPC: System limit for number of file watchers reached"));
+        const err = new Error("ENOSPC: System limit for number of file watchers reached");
+        (err as NodeJS.ErrnoException).code = "ENOSPC";
+        await watcher.watcherErrorFunction(err);
         expect(watcher.appmapWatcher).toBeUndefined();
       } else
         throw new Error("watcher should have been defined");

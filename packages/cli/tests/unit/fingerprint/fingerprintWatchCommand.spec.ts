@@ -89,13 +89,19 @@ describe(FingerprintWatchCommand, () => {
       cmd = new FingerprintWatchCommand(appMapDir);
       cmd.watcher = new FSWatcher();
       expect(cmd.watcher).not.toBeUndefined();
-      await cmd.watcherErrorFunction(new Error("ENOSPC: System limit for number of file watchers reached"));
+      const err = new Error('ENOSPC: System limit for number of file watchers reached');
+      (err as NodeJS.ErrnoException).code = 'ENOSPC';
+      await cmd.watcherErrorFunction(err);
       expect(cmd.watcher).toBeUndefined();
     });
 
     it('gets filenames from error messages', async () => {
       cmd = new FingerprintWatchCommand(appMapDir);
-      expect(cmd.getFilenameFromErrorMessage(`Error: UNKNOWN: unknown error, lstat 'c:\\Users\\Test\\Programming\\MyProject'`)).toBe('c:\\Users\\Test\\Programming\\MyProject');
+      expect(
+        cmd.getFilenameFromErrorMessage(
+          `Error: UNKNOWN: unknown error, lstat 'c:\\Users\\Test\\Programming\\MyProject'`
+        )
+      ).toBe('c:\\Users\\Test\\Programming\\MyProject');
     });
 
     it('does not raise on unknown error lstat', async () => {
@@ -103,34 +109,39 @@ describe(FingerprintWatchCommand, () => {
       cmd.watcher = new FSWatcher();
       expect(cmd.watcher).not.toBeUndefined();
       expect(cmd.unreadableFiles.size).toBe(0);
-      console.warn = jest.fn();
+      const mockWarn = jest.spyOn(console, 'warn').mockImplementation();
       const errorMessage = `Error: UNKNOWN: unknown error, lstat 'c:\\Users\\Test\\Programming\\MyProject'`;
-      await cmd.watcherErrorFunction(new Error(errorMessage));
+      const err = new Error(errorMessage);
+      (err as NodeJS.ErrnoException).code = 'UNKNOWN';
+      await cmd.watcherErrorFunction(err);
       expect(cmd.watcher).not.toBeUndefined();
-      expect(console.warn).toBeCalledTimes(2);
-      expect(console.warn).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
+      expect(mockWarn).toBeCalledTimes(2);
+      expect(mockWarn).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
       expect(cmd.unreadableFiles.size).toBe(1);
       expect(cmd.unreadableFiles.has('c:\\Users\\Test\\Programming\\MyProject')).toBe(true);
       // ignoring this file or directory works correctly
       expect(cmd.ignored('c:\\Users\\Test\\Programming\\MyProject')).toBe(true);
       expect(cmd.ignored('c:\\Users\\Test\\Programming\\MyProject\\some.appmap.json')).toBe(false);
+      mockWarn.mockRestore();
     });
 
     it('does not raise if it hits the limit of the number of open files', async () => {
       cmd = new FingerprintWatchCommand(appMapDir);
-      await cmd.watcherErrorFunction(new Error("EMFILE: too many open files"));
+      const errorMessage = 'EMFILE: too many open files';
+      const err = new Error(errorMessage);
+      (err as NodeJS.ErrnoException).code = 'EMFILE';
+      await cmd.watcherErrorFunction(err);
       expect(cmd.watcher).toBeUndefined();
 
       cmd.watcher = new FSWatcher();
       expect(cmd.watcher).not.toBeUndefined();
-      console.warn = jest.fn();
-      const errorMessage = "EMFILE: too many open files";
-      await cmd.watcherErrorFunction(new Error(errorMessage));
+      const mockWarn = jest.spyOn(console, 'warn').mockImplementation();
+      await cmd.watcherErrorFunction(err);
       expect(cmd.watcher).not.toBeUndefined();
-      expect(console.warn).toBeCalledTimes(1);
-      expect(console.warn).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
+      expect(mockWarn).toBeCalledTimes(1);
+      expect(mockWarn).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
+      mockWarn.mockRestore();
     });
-
     describe('telemetry', () => {
       let handler: Fingerprinter;
 
