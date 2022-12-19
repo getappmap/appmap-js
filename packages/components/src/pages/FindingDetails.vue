@@ -214,8 +214,11 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
       p {
-        margin: 1rem 0;
+        margin: 0;
       }
     }
     .header-controls {
@@ -225,11 +228,15 @@ export default {
       align-items: flex-start;
       justify-content: flex-end;
       width: 100%;
+      position: absolute;
+      right: 2rem;
       .btn {
         border: 1px solid $purps3;
         border-radius: 0.5rem;
         padding: 0.2rem 0.5rem;
         transition: $transition;
+        min-width: 200px;
+        text-align: center;
         &:hover {
           background-color: $purps3;
           color: $white;
@@ -243,6 +250,7 @@ export default {
     color: $gray4;
     line-height: 1.6rem;
     text-transform: uppercase;
+    padding: 0.2rem 0;
   }
 
   .findings-sort {
@@ -360,7 +368,7 @@ export default {
         }
       }
       .header-controls {
-        justify-content: flex-start;
+        //justify-content: flex-start;
       }
     }
   }
@@ -372,6 +380,22 @@ export default {
       &.row {
         flex-direction: column;
         gap: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .finding-details {
+    .header-wrap .header-controls {
+      position: unset;
+      justify-content: flex-start;
+    }
+    .header-wrap {
+      header {
+        h1 {
+          margin-bottom: 0.25rem;
+        }
       }
     }
   }
