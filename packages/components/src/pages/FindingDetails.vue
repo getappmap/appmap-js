@@ -261,7 +261,7 @@ export default {
 
   .finding-details-wrap {
     display: flex;
-    gap: 2rem;
+    gap: 1.25rem;
     justify-content: space-between;
     &.row {
       flex-direction: row;
@@ -297,10 +297,12 @@ export default {
       background-color: $gray1;
       padding: 0.25rem 0;
       gap: 0;
+      margin-top: 0.15rem;
       li {
         border-bottom: 1px solid $gray2;
         border-radius: 0;
         width: 100%;
+        word-break: break-word;
         &:last-of-type {
           border-bottom: 0;
         }
@@ -313,6 +315,7 @@ export default {
     .findings-overview,
     .event-summary {
       width: 100%;
+      min-width: 48%;
     }
   }
 
@@ -341,9 +344,36 @@ export default {
   border: none;
 }
 
-@media (min-width: 1000px) {
+@media (maz-width: 1000px) {
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 900px) {
+  .finding-details {
+    .header-wrap {
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      header {
+        margin: 0;
+        p {
+          margin-bottom: 0;
+        }
+      }
+      .header-controls {
+        justify-content: flex-start;
+      }
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .finding-details {
+    .finding-details-wrap {
+      &.row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+  }
 }
 </style>

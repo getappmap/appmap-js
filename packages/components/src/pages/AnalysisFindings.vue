@@ -73,9 +73,6 @@
                   >
                     <h3>Finding Name</h3>
                   </li>
-                  <!-- TODO
-                  <li><h3>Status</h3></li>
-                  -->
                   <li data-cy="column-header-category" @click="updateSorting('category')">
                     <h3>Category</h3>
                   </li>
@@ -87,11 +84,14 @@
                 data-cy="finding"
               >
                 <ul class="item" @click="openFindingInfo(finding.hash_v2)">
-                  <li class="finding-name">{{ finding.ruleTitle }}</li>
-                  <!-- TODO
-                  <li>New</li>
-                  -->
-                  <li>{{ finding.impactDomain }}</li>
+                  <li class="finding-name">
+                    <h3 class="mobile-heading">Finding Name:</h3>
+                    {{ finding.ruleTitle }}
+                  </li>
+                  <li class="finding-category">
+                    <h3 class="mobile-heading">Category:</h3>
+                    {{ finding.impactDomain }}
+                  </li>
                 </ul>
               </li>
             </ul>
@@ -256,6 +256,9 @@ export default {
       }
     }
   }
+  .mobile-heading {
+    display: none;
+  }
   .subhead {
     font-size: 1.1rem;
     color: $gray4;
@@ -388,6 +391,47 @@ export default {
 @media (min-width: 1000px) {
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 800px) {
+  .analysis-findings {
+    .header-wrap {
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      header {
+        margin-bottom: 0;
+      }
+    }
+    .findings-list {
+      .item {
+        flex-direction: column;
+      }
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .analysis-findings {
+    .findings-overview {
+      ul {
+        flex-direction: column;
+        gap: 0.35rem;
+        width: 100%;
+      }
+    }
+    .findings-list .list {
+      li {
+        padding-top: 0.25rem;
+        padding-bottom: 0.2rem;
+      }
+    }
+    .item.header {
+      display: none;
+    }
+    .mobile-heading {
+      color: $gray4;
+      display: unset;
+      margin-right: 0.35rem;
+    }
+  }
 }
 </style>
