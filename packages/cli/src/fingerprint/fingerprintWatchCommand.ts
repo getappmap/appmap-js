@@ -46,14 +46,15 @@ export default class FingerprintWatchCommand {
 
   testFileDescriptors() {
     let filesMax = 1048576;
-    //filesMax = 1024;
+    filesMax = 2024;
     let counter = 1;
     while (counter < filesMax) {
       const filename = "/home/test/tmp/blank_open_files/filename_" + counter.toString();
       try {
         console.debug("opening " + filename);
         const fd = fs.openSync(filename, 'w+');
-        fs.writeFileSync(fd, "some data");
+        fs.writeSync(fd, "some data");
+        //fs.writeFileSync(fd, "some data");
         fs.closeSync(fd);
         console.debug("writing in " + filename + " worked");
       } catch (err) {
