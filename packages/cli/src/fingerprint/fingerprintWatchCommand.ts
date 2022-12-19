@@ -45,7 +45,8 @@ export default class FingerprintWatchCommand {
   }
 
   testFileDescriptors() {
-    const filesMax = 1200;
+    let filesMax = 1048576;
+    //filesMax = 1024;
     let counter = 1;
     while (counter < filesMax) {
       const filename = "/home/test/tmp/blank_open_files/filename_" + counter.toString();
