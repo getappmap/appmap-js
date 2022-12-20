@@ -39,6 +39,13 @@ const TestCommands: TestCommandGuess[] = [
     },
   },
   {
+    paths: ['package.json', 'node_modules/@jest'],
+    command: {
+      command: 'npx @appland/appmap-agent-js --recorder=jest -- npx jest',
+      env: {},
+    },
+  },
+  {
     paths: ['package.json', 'node_modules'],
     command: {
       command: 'npx @appland/appmap-agent-js --recorder=process -- npm run test',
