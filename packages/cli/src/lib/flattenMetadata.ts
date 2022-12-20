@@ -1,4 +1,5 @@
 import { Metadata } from '@appland/models';
+import sanitizeURL from './repositoryInfo';
 
 /** Flattens metadata into a string-string map suitable for use in telemetry.
  * Ignores git, exception and fingerprints.
@@ -23,6 +24,10 @@ export default function flattenMetadata(metadata: Metadata): Map<string, string>
     result.set('language.name', metadata.language.name);
     result.set('language.version', metadata.language.version);
     if (metadata.language.engine) result.set('language.engine', metadata.language.engine);
+  }
+
+  if (metadata.git?.repository) {
+    result.set('git.repository', sanitizeURL(metadata.git.repository));
   }
 
   if (metadata.name) result.set('name', metadata.name);
