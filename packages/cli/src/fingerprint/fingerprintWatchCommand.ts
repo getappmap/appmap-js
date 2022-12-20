@@ -47,6 +47,15 @@ export default class FingerprintWatchCommand {
     }
   }
 
+  async disableFileWatching() {
+    if (this.watcher) {
+      console.warn('Will disable file watching. File polling will stay enabled.');
+      await this.watcher?.close();
+      this.watcher = undefined;
+      console.warn('File watching disabled.');
+    }
+  }
+
   getFilenameFromErrorMessage(errorMessage: string): string {
     // The errorMessage must contain the filename within single quotes
     // and looks like this:
@@ -62,14 +71,23 @@ export default class FingerprintWatchCommand {
   }
 
   async watcherErrorFunction(error: Error) {
-    if (this.watcher && this.isError(error, 'ENOSPC')) {
+    if (this.isError(error, 'ENOSPC')) {
       console.warn(error.stack);
-      console.warn('Will disable file watching. File polling will stay enabled.');
-      await this.watcher?.close();
-      this.watcher = undefined;
-      console.warn('File watching disabled.');
+      await this.disableFileWatching();
       Telemetry.sendEvent({
         name: `index:watcher_error:enospc`,
+        properties: {
+          errorMessage: error.message,
+          errorStack: error.stack,
+        },
+      });
+    } else if (this.isError(error, 'EMFILE')) {
+      // Don't crash if too many files are open. When the files close
+      // the indexer will pick them up.
+      console.warn(error.stack);
+      await this.disableFileWatching();
+      Telemetry.sendEvent({
+        name: `index:watcher_error:emfile`,
         properties: {
           errorMessage: error.message,
           errorStack: error.stack,
@@ -87,17 +105,6 @@ export default class FingerprintWatchCommand {
       const filename = this.getFilenameFromErrorMessage(error.message);
       this.unreadableFiles.add(filename);
       console.warn('Will not read this file again.');
-    } else if (this.isError(error, 'EMFILE')) {
-      // Don't crash if too many files are open. When the files close
-      // the indexer will pick them up.
-      console.warn(error.stack);
-      Telemetry.sendEvent({
-        name: `index:watcher_error:emfile`,
-        properties: {
-          errorMessage: error.message,
-          errorStack: error.stack,
-        },
-      });
     } else {
       // let it crash if it's some other error, to learn what the error is
       throw error;

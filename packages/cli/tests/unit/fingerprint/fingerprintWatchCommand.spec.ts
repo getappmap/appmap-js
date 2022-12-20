@@ -85,14 +85,29 @@ describe(FingerprintWatchCommand, () => {
       return verifyIndexSuccess(200, 20);
     });
 
-    it('does not raise if it hits the limit of the number of file watchers', async () => {
+    async function testDisableFileWatching(errorMessage: string, code: string) {
       cmd = new FingerprintWatchCommand(appMapDir);
-      cmd.watcher = new FSWatcher();
-      expect(cmd.watcher).not.toBeUndefined();
-      const err = new Error('ENOSPC: System limit for number of file watchers reached');
-      (err as NodeJS.ErrnoException).code = 'ENOSPC';
+      const err = new Error(errorMessage);
+      (err as NodeJS.ErrnoException).code = code;
       await cmd.watcherErrorFunction(err);
       expect(cmd.watcher).toBeUndefined();
+
+      cmd.watcher = new FSWatcher();
+      expect(cmd.watcher).not.toBeUndefined();
+      const mockWarn = jest.spyOn(console, 'warn').mockImplementation();
+      await cmd.watcherErrorFunction(err);
+      expect(cmd.watcher).toBeUndefined(); // file watching was disabled
+      expect(mockWarn).toBeCalledTimes(3);
+      expect(mockWarn).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
+      mockWarn.mockRestore();
+    }
+
+    it('does not raise if it hits the limit of the number of file watchers', async () => {
+      testDisableFileWatching('ENOSPC: System limit for number of file watchers reached', 'ENOSPC');
+    });
+
+    it('does not raise if it hits the limit of the number of open files', async () => {
+      testDisableFileWatching('EMFILE: too many open files', 'EMFILE');
     });
 
     it('gets filenames from error messages', async () => {
@@ -125,23 +140,6 @@ describe(FingerprintWatchCommand, () => {
       mockWarn.mockRestore();
     });
 
-    it('does not raise if it hits the limit of the number of open files', async () => {
-      cmd = new FingerprintWatchCommand(appMapDir);
-      const errorMessage = 'EMFILE: too many open files';
-      const err = new Error(errorMessage);
-      (err as NodeJS.ErrnoException).code = 'EMFILE';
-      await cmd.watcherErrorFunction(err);
-      expect(cmd.watcher).toBeUndefined();
-
-      cmd.watcher = new FSWatcher();
-      expect(cmd.watcher).not.toBeUndefined();
-      const mockWarn = jest.spyOn(console, 'warn').mockImplementation();
-      await cmd.watcherErrorFunction(err);
-      expect(cmd.watcher).not.toBeUndefined();
-      expect(mockWarn).toBeCalledTimes(1);
-      expect(mockWarn).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
-      mockWarn.mockRestore();
-    });
     describe('telemetry', () => {
       let handler: Fingerprinter;
 
