@@ -71,7 +71,7 @@ export default class FingerprintWatchCommand {
     return err.code === code;
   }
 
-  dontProcessFileAgain(error: Error, telemetryName: string, files: Set<string>) {
+  dontProcessFileAgain(error: Error, filename: string, telemetryName: string, files: Set<string>) {
     console.warn(error.stack);
     Telemetry.sendEvent({
       name: telemetryName,
@@ -80,9 +80,28 @@ export default class FingerprintWatchCommand {
         errorStack: error.stack,
       },
     });
-    const filename = this.getFilenameFromErrorMessage(error.message);
     files.add(filename);
-    console.warn('Will not read this file again.');
+    console.warn('Will not read the file ' + filename + ' again.');
+  }
+
+  getToplevelSymbolicLink(filename: string): string {
+    // given a filename like '/tmp/topdir/dir1/point_up/dir1/point_up/dir1/point_up'
+    // lastToken is set to 'point_up' (the actual symlink)
+    // directoryPostfix is set to '/dir1/point_up'
+    // topLevelSymbolicLink is set to '/tmp/topdir/dir1/point_up'
+    const splitTokens = filename.split(path.sep);
+    const lastToken = splitTokens[splitTokens.length - 1];
+    const lastIndex = filename.lastIndexOf(lastToken);
+    const secondToLastIndex = filename.lastIndexOf(lastToken, lastIndex - 1);
+    const directoryPostfixLength = lastIndex - secondToLastIndex;
+    const directoryPostfix = filename.substring(
+      filename.length - directoryPostfixLength,
+      filename.length
+    );
+    const splitDirectoryPostfix = filename.split(directoryPostfix);
+    const toplevelSymbolicLink = splitDirectoryPostfix[0] + directoryPostfix;
+
+    return toplevelSymbolicLink;
   }
 
   async watcherErrorFunction(error: Error) {
@@ -109,9 +128,22 @@ export default class FingerprintWatchCommand {
         },
       });
     } else if (this.isError(error, 'UNKNOWN') && error.message.includes('lstat')) {
-      this.dontProcessFileAgain(error, `index:watcher_error:unknown`, this.unreadableFiles);
+      const filename = this.getFilenameFromErrorMessage(error.message);
+      this.dontProcessFileAgain(
+        error,
+        filename,
+        `index:watcher_error:unknown`,
+        this.unreadableFiles
+      );
     } else if (this.isError(error, 'ELOOP')) {
-      this.dontProcessFileAgain(error, `index:watcher_error:eloop`, this.symlinkLoopFiles);
+      const filename = this.getFilenameFromErrorMessage(error.message);
+      const filenameTopLevelSymbolicLink = this.getToplevelSymbolicLink(filename);
+      this.dontProcessFileAgain(
+        error,
+        filenameTopLevelSymbolicLink,
+        `index:watcher_error:eloop`,
+        this.symlinkLoopFiles
+      );
     } else {
       // let it crash if it's some other error, to learn what the error is
       throw error;
