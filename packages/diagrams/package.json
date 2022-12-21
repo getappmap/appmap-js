@@ -1,6 +1,6 @@
 {
   "name": "@appland/diagrams",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "",
   "main": "dist/index.cjs",
   "module": "dist/index.js",

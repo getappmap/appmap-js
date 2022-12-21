@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.5.4](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.5.3...@appland/diagrams-v1.5.4) (2022-12-21)
+
+
+### Bug Fixes
+
+* Don't attempt to render external service routes ([e9e6ae8](https://github.com/getappmap/appmap-js/commit/e9e6ae8803f73adc03326ca7a70624a595d1bcfd))
+
 # [@appland/diagrams-v1.5.3](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.5.2...@appland/diagrams-v1.5.3) (2022-09-13)
 
 ### Bug Fixes
