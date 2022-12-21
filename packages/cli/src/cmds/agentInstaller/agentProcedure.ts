@@ -252,14 +252,17 @@ export default abstract class AgentProcedure {
         UI.error(addGitReturn.errorMessage);
       }
 
-      const commitGitReturn = await this.gitCommit(filesDiff, `Configure AppMap for this project
+      const commitGitReturn = await this.gitCommit(
+        filesDiff,
+        `Configure AppMap for this project
 
 AppMap is a free and open-source runtime code analysis tool.
 
 AppMap has been installed and configured using the installation instructions at:
 https://appmap.io/docs/install-appmap-agent.html using the automated
 installer tool:
-        npx @appland/appmap@latest install`);
+        npx @appland/appmap@latest install`
+      );
       if (!commitGitReturn.success) {
         UI.error(commitGitReturn.errorMessage);
       }

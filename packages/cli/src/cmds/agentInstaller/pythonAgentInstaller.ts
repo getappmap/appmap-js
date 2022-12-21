@@ -1,12 +1,16 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
 import chalk from 'chalk';
+import { glob } from 'glob';
+import minimatch from 'minimatch';
 import os from 'os';
-import { join } from 'path';
+import { basename, join } from 'path';
 import semver from 'semver';
+import { promisify } from 'util';
 import EncodedFile from '../../encodedFile';
-import { exists } from '../../utils';
+import { exists, isFile } from '../../utils';
 import { UserConfigError } from '../errors';
+import UI from '../userInteraction';
 import AgentInstaller from './agentInstaller';
 import { run } from './commandRunner';
 import CommandStruct from './commandStruct';
@@ -146,15 +150,17 @@ export class PipenvInstaller extends PythonInstaller {
     return undefined;
   }
 }
+
 export class PipInstaller extends PythonInstaller {
   static identifier = 'pip';
+  private _buildFile: string = 'requirements.txt';
 
   constructor(path: string) {
     super(PipInstaller.identifier, path);
   }
 
   get buildFile(): string {
-    return 'requirements.txt';
+    return this._buildFile;
   }
 
   get buildFilePath(): string {
@@ -162,10 +168,50 @@ export class PipInstaller extends PythonInstaller {
   }
 
   async available(): Promise<boolean> {
-    return exists(this.buildFilePath);
+    return isFile(this.buildFilePath);
+  }
+
+  private async findBuildFiles(): Promise<string[]> {
+    const choices = await promisify(glob)('*requirements*.txt', {
+      matchBase: true,
+      cwd: this.path,
+      nodir: true,
+    });
+
+    return choices;
+  }
+
+  private async chooseBuildFile(choices): Promise<string> {
+    const defaultChoice = choices.filter((f) => minimatch(f, '*dev*', { matchBase: true }));
+
+    const { buildFile } = await UI.prompt([
+      {
+        type: 'list',
+        name: 'buildFile',
+        message: 'Please choose the requirements file used for development:',
+        choices,
+        default: defaultChoice[0],
+      },
+    ]);
+
+    return basename(buildFile);
   }
 
   async checkConfigCommand(): Promise<CommandStruct | undefined> {
+    const choices = await this.findBuildFiles();
+
+    if (choices.length === 1) {
+      choices[0];
+    } else {
+      UI.progress(`
+
+This project contains multiple Pip requirements files. AppMap should only be
+installed during development and testing, not when deploying in a production
+environment.
+`);
+      this._buildFile = await this.chooseBuildFile(choices);
+    }
+
     let commandArgs = ['-m', 'pip', 'install', '-r', this.buildFile];
     let supportsDryRun: boolean;
 
