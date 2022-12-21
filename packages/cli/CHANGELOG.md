@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.58.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.57.0...@appland/appmap-v3.58.0) (2022-12-21)
+
+
+### Features
+
+* git repo in appmap:index telemetry ([346d1a5](https://github.com/getappmap/appmap-js/commit/346d1a57c9e52fb8fec65450585e874969a1bbb3))
+
 # [@appland/appmap-v3.57.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.56.0...@appland/appmap-v3.57.0) (2022-12-21)
 
 
