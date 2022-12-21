@@ -1,3 +1,17 @@
+# [@appland/appmap-v3.56.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.55.1...@appland/appmap-v3.56.0) (2022-12-21)
+
+
+### Bug Fixes
+
+* Disable file watching on EMFILE ([6eff67c](https://github.com/getappmap/appmap-js/commit/6eff67c485f4d38c0cab703313ce5338d949c635))
+* Don't crash on 'EMFILE: too many open files' ([8153499](https://github.com/getappmap/appmap-js/commit/81534996b400196899deaa402ac0bba68b86b9a2))
+* Examine errors based on error code instead of error message ([f2c15e8](https://github.com/getappmap/appmap-js/commit/f2c15e8e0b2dfce270fc3d92c2bd64fa775947d7))
+
+
+### Features
+
+* Send index:watcher_error:emfile telemetry event ([f0a3f5d](https://github.com/getappmap/appmap-js/commit/f0a3f5d67a1bb3032a497575539310eb29b5a81e))
+
 # [@appland/appmap-v3.55.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.55.0...@appland/appmap-v3.55.1) (2022-12-16)
 
 
