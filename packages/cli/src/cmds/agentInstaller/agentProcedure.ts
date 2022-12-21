@@ -191,6 +191,18 @@ export default abstract class AgentProcedure {
       properties: {},
     });
 
+    // don't commit if Python with pip; it would enable AppMap in production
+    if (this.installer.name === 'pip') {
+      Telemetry.sendEvent({
+        name: `install-agent:commit_config:should_not_commit`,
+        properties: {
+          installerName: this.installer.name,
+        },
+      });
+
+      return false;
+    }
+
     const filesAfterGitStatus: GitStatus[] = await this.gitStatus();
     const filesAfter: string[] = [];
     for (const file of filesAfterGitStatus) {
@@ -252,14 +264,17 @@ export default abstract class AgentProcedure {
         UI.error(addGitReturn.errorMessage);
       }
 
-      const commitGitReturn = await this.gitCommit(filesDiff, `Configure AppMap for this project
+      const commitGitReturn = await this.gitCommit(
+        filesDiff,
+        `Configure AppMap for this project
 
 AppMap is a free and open-source runtime code analysis tool.
 
 AppMap has been installed and configured using the installation instructions at:
 https://appmap.io/docs/install-appmap-agent.html using the automated
 installer tool:
-        npx @appland/appmap@latest install`);
+        npx @appland/appmap@latest install`
+      );
       if (!commitGitReturn.success) {
         UI.error(commitGitReturn.errorMessage);
       }

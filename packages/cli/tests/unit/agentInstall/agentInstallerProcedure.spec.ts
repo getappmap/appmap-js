@@ -13,15 +13,23 @@ jest.mock('../../../src/cmds/agentInstaller/commandRunner');
 const { prompt, success, warn } = jest.mocked(UI);
 const { run } = jest.mocked(CommandRunner);
 
-const procedure = new AgentInstallerProcedure(new TestAgentInstaller(), '/test/path');
+const procedure = new AgentInstallerProcedure(new TestAgentInstaller('test agent'), '/test/path');
 
 describe(AgentInstallerProcedure, () => {
   withStubbedTelemetry(sinon);
   it('prints any warnings from the validator', async () => {
     prompt.mockResolvedValue({ confirm: true });
-    jest.spyOn(procedure, 'validateProject').mockResolvedValue(
-      { errors: [{ level: 'warning', message: 'Remember to foo the bar.', help_urls: ['test:///help/url'] }] }
-    );
+    jest
+      .spyOn(procedure, 'validateProject')
+      .mockResolvedValue({
+        errors: [
+          {
+            level: 'warning',
+            message: 'Remember to foo the bar.',
+            help_urls: ['test:///help/url'],
+          },
+        ],
+      });
     run.mockResolvedValue({ stdout: '{"configuration": {"contents": ""}}', stderr: '' });
     jest.spyOn(fs, 'writeFileSync').mockImplementation();
 

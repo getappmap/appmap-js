@@ -3,15 +3,15 @@ import AgentProcedure from '../../../src/cmds/agentInstaller/agentProcedure';
 import commandStruct from '../../../src/cmds/agentInstaller/commandStruct';
 
 export class TestAgentProcedure extends AgentProcedure {
-  constructor() {
-    const installer = new TestAgentInstaller();
+  constructor(name: string) {
+    const installer = new TestAgentInstaller(name);
     super(installer, '/test/agent/procedure/path');
   }
 }
 
 export class TestAgentInstaller extends AgentInstaller {
-  constructor() {
-    super('test agent', '/test/agent/installer/path');
+  constructor(name: string) {
+    super(name, '/test/agent/installer/path');
   }
 
   public buildFile = 'test build file';

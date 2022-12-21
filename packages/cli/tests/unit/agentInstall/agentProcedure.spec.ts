@@ -6,7 +6,7 @@ import { withStubbedTelemetry } from '../../helper';
 
 jest.mock('../../../src/cmds/userInteraction');
 
-const procedure = new TestAgentProcedure();
+const procedure = new TestAgentProcedure('test agent');
 
 const { prompt } = jest.mocked(UI);
 
@@ -87,6 +87,12 @@ describe(AgentProcedure, () => {
         jest.spyOn(procedure, 'gitStatus').mockResolvedValue(filesAfter);
         prompt.mockResolvedValue({ commit: false });
         return expect(procedure.commitConfiguration(filesBefore)).resolves.toBe(false);
+      });
+
+      it('there is a diff but it is pip; it would enable AppMap in production', () => {
+        const filesBefore = [];
+        const procedurePip = new TestAgentProcedure('pip');
+        return expect(procedurePip.commitConfiguration(filesBefore)).resolves.toBe(false);
       });
     });
 
