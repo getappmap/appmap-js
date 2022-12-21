@@ -110,9 +110,9 @@ export default {
 
   methods: {
     displayLocation(location) {
-      const lineNumber = location.range[0] && location.range[0].line;
+      const lineNumber = location.range[0] && location.range[0].line + 1;
       const { truncatedPath } = location;
-      if (lineNumber && lineNumber !== 0) {
+      if (lineNumber && lineNumber > 1) {
         return `${truncatedPath}:${lineNumber}`;
       }
       return `${truncatedPath}`;

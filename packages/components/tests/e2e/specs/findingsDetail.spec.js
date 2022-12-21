@@ -61,9 +61,9 @@ context('Findings Detail', () => {
 
     it('displays the stack trace', () => {
       const expectedStackTraceDisplay = [
-        '.../.rbenv/versions/3.0.2/lib/ruby/3.0.0/psych.rb:273',
+        '.../.rbenv/versions/3.0.2/lib/ruby/3.0.0/psych.rb:274',
         '.../land-of-apps/sample_app_6th_ed/app/models/user.rb',
-        '.../lib/action_controller/metal/instrumentation.rb:18',
+        '.../lib/action_controller/metal/instrumentation.rb:19',
       ];
 
       const expectedHoverText = [
