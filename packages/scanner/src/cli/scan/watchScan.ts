@@ -115,11 +115,13 @@ export class Watcher {
       .on('error', this.watcherErrorFunction.bind(this));
   }
 
+  isError(error: unknown, code: string): boolean {
+    const err = error as NodeJS.ErrnoException;
+    return err.code === code;
+  }
+
   async watcherErrorFunction(error: Error) {
-    if (
-      this.appmapWatcher &&
-      error.message.includes('ENOSPC: System limit for number of file watchers reached')
-    ) {
+    if (this.appmapWatcher && this.isError(error, 'ENOSPC')) {
       console.warn(error.stack);
       console.warn('Will disable file watching. File polling will stay enabled.');
       await this.appmapWatcher?.close();

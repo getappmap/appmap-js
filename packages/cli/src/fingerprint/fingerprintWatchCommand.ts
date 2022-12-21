@@ -47,6 +47,15 @@ export default class FingerprintWatchCommand {
     }
   }
 
+  async disableFileWatching() {
+    if (this.watcher) {
+      console.warn('Will disable file watching. File polling will stay enabled.');
+      await this.watcher?.close();
+      this.watcher = undefined;
+      console.warn('File watching disabled.');
+    }
+  }
+
   getFilenameFromErrorMessage(errorMessage: string): string {
     // The errorMessage must contain the filename within single quotes
     // and looks like this:
@@ -56,46 +65,60 @@ export default class FingerprintWatchCommand {
     return errorMessage.substring(quoteStartIndex + 1, quoteEndIndex);
   }
 
-  async watcherErrorFunction (error: Error) {
-    if (this.watcher && error.message.includes("ENOSPC: System limit for number of file watchers reached")) {
+  isError(error: unknown, code: string): boolean {
+    const err = error as NodeJS.ErrnoException;
+    return err.code === code;
+  }
+
+  async watcherErrorFunction(error: Error) {
+    if (this.isError(error, 'ENOSPC')) {
       console.warn(error.stack);
-      console.warn("Will disable file watching. File polling will stay enabled.");
-      await this.watcher?.close();
-      this.watcher = undefined;
-      console.warn("File watching disabled.");
+      await this.disableFileWatching();
       Telemetry.sendEvent({
-          name: `index:watcher_error:enospc`,
-          properties: {
-            errorMessage: error.message,
-            errorStack: error.stack,
-          },
-        });
-    } else if (error.message.includes("UNKNOWN: unknown error, lstat")) {
+        name: `index:watcher_error:enospc`,
+        properties: {
+          errorMessage: error.message,
+          errorStack: error.stack,
+        },
+      });
+    } else if (this.isError(error, 'EMFILE')) {
+      // Don't crash if too many files are open. When the files close
+      // the indexer will pick them up.
+      console.warn(error.stack);
+      await this.disableFileWatching();
+      Telemetry.sendEvent({
+        name: `index:watcher_error:emfile`,
+        properties: {
+          errorMessage: error.message,
+          errorStack: error.stack,
+        },
+      });
+    } else if (this.isError(error, 'UNKNOWN') && error.message.includes('lstat')) {
       console.warn(error.stack);
       Telemetry.sendEvent({
-          name: `index:watcher_error:unknown`,
-          properties: {
-            errorMessage: error.message,
-            errorStack: error.stack,
-          },
+        name: `index:watcher_error:unknown`,
+        properties: {
+          errorMessage: error.message,
+          errorStack: error.stack,
+        },
       });
       const filename = this.getFilenameFromErrorMessage(error.message);
       this.unreadableFiles.add(filename);
-      console.warn("Will not read this file again.");
+      console.warn('Will not read this file again.');
     } else {
       // let it crash if it's some other error, to learn what the error is
       throw error;
     }
-  };
+  }
 
   // Custom ignore function needed to skip unreadableFiles because
   // attempting to read them can block reading all files. It also
   // cuts down the watch tree to just what we need.
-  ignored (targetPath: string) {
+  ignored(targetPath: string) {
     ['/node_modules/', '/.git/'].forEach((pattern) => {
       if (targetPath.includes(pattern)) {
         return true;
-       }
+      }
     });
 
     if (this.unreadableFiles.has(targetPath)) {
