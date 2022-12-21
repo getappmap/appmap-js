@@ -121,4 +121,154 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.finding-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  border: 1px solid $gray2;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+
+  section {
+    padding: 0 1rem;
+    .code {
+      color: $white;
+      margin-top: 0;
+      font-family: monospace;
+    }
+  }
+  .heading,
+  section {
+    border-bottom: 3px solid $gray2;
+    &:last-of-type {
+      border-bottom: 0;
+    }
+    &.bt-1 {
+      border-top: 3px solid $gray2;
+    }
+    p {
+      color: $white;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 0;
+      li {
+        border-bottom: 1px solid #242c41a3;
+        padding: 0.5rem 0;
+        &:last-of-type {
+          border: 0;
+        }
+        &:first-of-type {
+          padding-top: 0;
+        }
+      }
+      a {
+        color: $blue;
+        text-decoration: none;
+        line-height: 1.5rem;
+        width: 100%;
+        word-break: break-all;
+        transition: $transition;
+        &:hover {
+          text-decoration: underline;
+          color: lighten($blue, 20);
+        }
+      }
+    }
+
+    .section-header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      h2 {
+        text-transform: uppercase;
+        color: $gray4;
+        font-size: 0.9rem;
+        font-weight: bold;
+      }
+      &.left {
+        justify-content: flex-start;
+        gap: 1rem;
+      }
+    }
+    h3 {
+      margin: 0.75rem 0;
+      font-size: 0.9rem;
+      color: $gray4;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .expando {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      span {
+        color: $gray2;
+        &.appmap-title {
+          color: $white;
+        }
+        &.control {
+          color: $white;
+          svg {
+            fill: $white;
+          }
+          &.rotated-90 {
+            rotate: 90deg;
+          }
+          &:hover {
+            svg {
+              fill: $blue;
+            }
+          }
+        }
+        &:hover {
+          cursor: pointer;
+          color: $blue;
+        }
+      }
+      .control {
+        &.closed {
+          rotate: -90deg;
+        }
+      }
+      &.open {
+        .control {
+          &.closed {
+            rotate: -90deg;
+          }
+        }
+      }
+    }
+    &.found-appmaps {
+      ul {
+        li {
+          &.sublist {
+            margin: 0 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  .finding-name {
+    line-height: 1.5rem;
+    h2 {
+      margin-bottom: 0rem;
+      font-size: 1.2rem;
+      color: $white;
+      font-weight: 800;
+    }
+    h3 {
+      margin-bottom: 0;
+    }
+    .subhead-margin {
+      margin-top: 0.25rem;
+    }
+  }
+}
 </style>

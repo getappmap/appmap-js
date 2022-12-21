@@ -243,6 +243,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.analysis-finding {
+  h3 {
+    font-size: 0.9rem;
+    margin: 0.5rem 0 0 0;
+  }
+}
 .details-search {
   margin-bottom: 2rem;
   padding: 0;
@@ -256,6 +262,10 @@ export default {
     position: relative;
     border-radius: $border-radius;
     border: 2px solid $light-purple;
+    display: flex;
+    align-content: center;
+    gap: 1rem;
+    padding: 0.3rem;
 
     .details-search--empty & {
       border-radius: $gray3;
@@ -263,23 +273,31 @@ export default {
     }
   }
 
+  .analysis-finding {
+    .findings-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      li {
+        border-bottom: 1px solid $gray2;
+        &:last-of-type {
+          border-bottom: 0;
+        }
+        .analysis li {
+          border-bottom: 0;
+        }
+      }
+    }
+  }
+
   &__input-prefix {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform: translateY(-50%);
-    text-align: center;
     color: $base06;
+    display: flex;
+    align-items: center;
 
     svg {
       position: relative;
       left: 3px;
-      width: 14px;
-      height: 14px;
       fill: $lightgray2;
     }
   }
@@ -287,9 +305,8 @@ export default {
   &__input-element {
     border: none;
     width: 100%;
-    padding: 0.5rem 2rem;
     font: inherit;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     color: $base03;
     background: transparent;
     outline: none;
@@ -302,56 +319,80 @@ export default {
   }
 
   &__block {
-    margin-bottom: 1rem;
+    padding: 1.5rem 0.5rem;
+    border-bottom: 2px solid $gray2;
 
     &-title {
       margin: 0 0 0.25rem;
       border-radius: 4px;
       display: inline-block;
-      padding: 0.25rem 0.5rem;
+      padding: 0.25rem 0;
       color: $base01;
-      font-size: 0.75rem;
+      font-size: 0.9rem;
       font-weight: bold;
       text-transform: uppercase;
 
       .details-search__block--http & {
-        background-color: #542168;
+        color: #8e45aa;
       }
 
       .details-search__block--external-service & {
-        background-color: $yellow;
-        color: $base19;
+        color: $yellow;
       }
 
       .details-search__block--labels & {
-        background-color: $base11;
+        color: $base11;
       }
 
       .details-search__block--package & {
-        background-color: $teal;
+        color: $teal;
       }
 
       .details-search__block--class &,
       .details-search__block--function & {
-        background-color: $blue;
+        color: $blue;
       }
 
       .details-search__block--query & {
-        background-color: $royal;
+        color: $royal;
       }
 
       .details-search__block--empty & {
-        background-color: $gray3;
+        color: $gray3;
+      }
+      .details-search__block--analysis-finding & {
+        color: $hotpink;
       }
     }
 
     &-list {
       margin: 0;
-      padding: 0;
+      padding: 0 0.5rem;
       list-style: none;
+      li {
+        &:last-of-type {
+          border-bottom: 0;
+        }
+      }
 
       .details-search__block--labels & {
         margin: 0 -0.25rem -0.25rem;
+      }
+      &.analysis {
+        padding: 0 0 1rem 0;
+        li {
+          border-bottom: 0;
+          padding: 0.2rem 0;
+          min-height: unset;
+          justify-content: flex-start;
+          gap: 0.5rem;
+          span {
+            color: $gray4;
+          }
+          svg {
+            margin-right: 0.25rem;
+          }
+        }
       }
     }
 

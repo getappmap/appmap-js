@@ -40,12 +40,13 @@ export default {
   margin-bottom: 1.5rem;
 
   h5 {
-    color: $base03;
-    font-size: 1.1rem;
-    font-weight: 500;
+    color: $gray4;
+    font-size: 0.9rem;
+    font-weight: 800;
     line-height: 1.2;
     padding: 0;
     margin: 0 0 1rem 0;
+    text-transform: uppercase;
   }
 
   .labels {

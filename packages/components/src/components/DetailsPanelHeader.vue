@@ -124,6 +124,7 @@ export default {
     align-items: center;
     background: $blue;
     cursor: pointer;
+    font-size: 0.85rem;
     &:hover,
     &:active {
       background: $lightblue;
@@ -156,7 +157,6 @@ export default {
   &__details-type {
     color: $gray4;
     text-transform: uppercase;
-    font-size: 0.75rem;
     line-height: 1;
     font-weight: 700;
     margin: 0 0 0.2rem;

@@ -37,7 +37,7 @@ export default {
   color: $base10;
   background-color: transparent;
   font: inherit;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   cursor: pointer;
   outline: none;
   text-align: left;

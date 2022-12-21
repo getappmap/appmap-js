@@ -214,6 +214,19 @@ export default {
   h3 {
     padding: 0;
   }
+  .finding-heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid $gray2;
+    h2 {
+      text-transform: uppercase;
+      color: $hotpink;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+  }
   .event-params {
     padding: 0;
     color: $base11;

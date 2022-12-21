@@ -182,9 +182,10 @@ export default {
 
   &__buttons {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
     align-items: flex-start;
+    gap: 0.5rem;
 
     button {
       margin-bottom: 1rem;
