@@ -18,7 +18,8 @@ export default class FingerprintWatchCommand {
   public watcher?: FSWatcher;
   private poller?: Globber;
   private _numProcessed = 0;
-  public unreadableFiles = new Set();
+  public unreadableFiles = new Set<string>();
+  public symlinkLoopFiles = new Set<string>();
 
   public get numProcessed() {
     return this._numProcessed;
@@ -70,6 +71,39 @@ export default class FingerprintWatchCommand {
     return err.code === code;
   }
 
+  dontProcessFileAgain(error: Error, filename: string, telemetryName: string, files: Set<string>) {
+    console.warn(error.stack);
+    Telemetry.sendEvent({
+      name: telemetryName,
+      properties: {
+        errorMessage: error.message,
+        errorStack: error.stack,
+      },
+    });
+    files.add(filename);
+    console.warn('Will not read the file ' + filename + ' again.');
+  }
+
+  getToplevelSymbolicLink(filename: string): string {
+    // given a filename like '/tmp/topdir/dir1/point_up/dir1/point_up/dir1/point_up'
+    // lastToken is set to 'point_up' (the actual symlink)
+    // directoryPostfix is set to '/dir1/point_up'
+    // topLevelSymbolicLink is set to '/tmp/topdir/dir1/point_up'
+    const splitTokens = filename.split(path.sep);
+    const lastToken = splitTokens[splitTokens.length - 1];
+    const lastIndex = filename.lastIndexOf(lastToken);
+    const secondToLastIndex = filename.lastIndexOf(lastToken, lastIndex - 1);
+    const directoryPostfixLength = lastIndex - secondToLastIndex;
+    const directoryPostfix = filename.substring(
+      filename.length - directoryPostfixLength,
+      filename.length
+    );
+    const splitDirectoryPostfix = filename.split(directoryPostfix);
+    const toplevelSymbolicLink = splitDirectoryPostfix[0] + directoryPostfix;
+
+    return toplevelSymbolicLink;
+  }
+
   async watcherErrorFunction(error: Error) {
     if (this.isError(error, 'ENOSPC')) {
       console.warn(error.stack);
@@ -94,17 +128,22 @@ export default class FingerprintWatchCommand {
         },
       });
     } else if (this.isError(error, 'UNKNOWN') && error.message.includes('lstat')) {
-      console.warn(error.stack);
-      Telemetry.sendEvent({
-        name: `index:watcher_error:unknown`,
-        properties: {
-          errorMessage: error.message,
-          errorStack: error.stack,
-        },
-      });
       const filename = this.getFilenameFromErrorMessage(error.message);
-      this.unreadableFiles.add(filename);
-      console.warn('Will not read this file again.');
+      this.dontProcessFileAgain(
+        error,
+        filename,
+        `index:watcher_error:unknown`,
+        this.unreadableFiles
+      );
+    } else if (this.isError(error, 'ELOOP')) {
+      const filename = this.getFilenameFromErrorMessage(error.message);
+      const filenameTopLevelSymbolicLink = this.getToplevelSymbolicLink(filename);
+      this.dontProcessFileAgain(
+        error,
+        filenameTopLevelSymbolicLink,
+        `index:watcher_error:eloop`,
+        this.symlinkLoopFiles
+      );
     } else {
       // let it crash if it's some other error, to learn what the error is
       throw error;
@@ -121,7 +160,7 @@ export default class FingerprintWatchCommand {
       }
     });
 
-    if (this.unreadableFiles.has(targetPath)) {
+    if (this.unreadableFiles.has(targetPath) || this.symlinkLoopFiles.has(targetPath)) {
       return true;
     }
 
