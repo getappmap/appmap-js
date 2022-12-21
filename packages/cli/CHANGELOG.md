@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.59.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.58.0...@appland/appmap-v3.59.0) (2022-12-21)
+
+
+### Features
+
+* add jest option to test commands ([b0cb6be](https://github.com/getappmap/appmap-js/commit/b0cb6be9c658b3a3c9154eb9ecf33a3c747bf8b7))
+
 # [@appland/appmap-v3.58.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.57.0...@appland/appmap-v3.58.0) (2022-12-21)
 
 
