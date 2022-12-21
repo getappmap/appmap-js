@@ -14,6 +14,12 @@
         :selected-object="selectedObject"
         :selected-label="selectedLabel"
         :filters-root-objects="filters.rootObjects"
+        :findings="findings"
+        @onChangeFilter="
+          (value) => {
+            this.traceFilterValue = value;
+          }
+        "
       >
         <template v-slot:buttons>
           <v-details-button
@@ -52,6 +58,7 @@
               :nodesLength="highlightedNodes.length"
               :currentIndex="currentTraceFilterIndex"
               :suggestions="eventsSuggestions"
+              :initialFilterValue="traceFilterValue"
               @onChange="
                 (value) => {
                   this.traceFilterValue = value;
@@ -438,6 +445,15 @@ export default {
     classes() {
       return this.isLoading ? 'app--loading' : '';
     },
+
+    findings() {
+      const { appMap } = this.$store.state;
+      const {
+        data: { findings },
+      } = appMap;
+      return this.uniqueFindings(findings);
+    },
+
     filteredAppMap() {
       const { appMap } = this.$store.state;
       const { classMap } = appMap;
@@ -505,6 +521,20 @@ export default {
       }
 
       const eventIds = new Set(events.filter((e) => e.isCall()).map((e) => e.id));
+
+      if (this.findings && this.findings.length > 0) {
+        this.findings.forEach((finding) => {
+          if (
+            finding.appMapUri &&
+            finding.appMapUri.fragment &&
+            typeof finding.appMapUri.fragment === 'string'
+          ) {
+            finding.appMapUri.fragment = JSON.parse(finding.appMapUri.fragment);
+          }
+        });
+
+        events = this.attachFindingsToEvents(events, this.findings);
+      }
 
       return buildAppMap({
         events: events.filter((e) => eventIds.has(e.id) || eventIds.has(e.parent_id)),
@@ -957,6 +987,56 @@ export default {
 
     uploadAppmap() {
       this.$root.$emit('uploadAppmap');
+    },
+
+    uniqueFindings(findings) {
+      if (!findings) return undefined;
+
+      return Object.values(
+        findings.reduce((unique, finding) => {
+          unique[finding.finding.hash_v2] = finding;
+          return unique;
+        }, {})
+      );
+    },
+
+    attachFindingsToEvents(events, findings) {
+      const eventsHash = events.reduce((map, e) => {
+        map[e.id] = e.callEvent;
+        return map;
+      }, {});
+
+      findings.forEach((finding) => {
+        const traceFilter =
+          finding.appMapUri && finding.appMapUri.fragment && finding.appMapUri.fragment.traceFilter;
+
+        if (traceFilter) {
+          const ids = traceFilter.split(' ').map((idStr) => Number(idStr.split(':')[1]));
+
+          ids.forEach((id) => {
+            const event = eventsHash[id];
+
+            if (event && !this.eventAlreadyHasFinding(event, finding)) {
+              if (event.findings) {
+                event.findings.push(finding);
+              } else {
+                event.findings = [finding];
+              }
+            }
+          });
+        }
+      });
+
+      return events;
+    },
+
+    eventAlreadyHasFinding(event, finding) {
+      return (
+        event.findings &&
+        !!event.findings.find(
+          (attachedFinding) => attachedFinding.finding.hash_v2 === finding.finding.hash_v2
+        )
+      );
     },
 
     onClickTraceEvent(e) {

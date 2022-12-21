@@ -77,11 +77,15 @@ export default {
       type: Array,
       default: () => [],
     },
+    initialFilterValue: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
     return {
-      filterValue: '',
+      filterValue: this.initialFilterValue,
       showSuggestions: false,
       selectedSuggestion: false,
     };

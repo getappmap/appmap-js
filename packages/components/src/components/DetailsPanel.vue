@@ -17,7 +17,12 @@
         <slot name="buttons" />
       </div>
       <keep-alive>
-        <v-details-search v-if="!selectedObject && !selectedLabel" :appMap="appMap" />
+        <v-details-search
+          v-if="!selectedObject && !selectedLabel"
+          :appMap="appMap"
+          :findings="findings"
+          @onChangeFilter="(value) => this.$emit('onChangeFilter', value)"
+        />
       </keep-alive>
       <component
         v-if="selectedObject"
@@ -84,6 +89,10 @@ export default {
       type: String,
     },
     filtersRootObjects: {
+      type: Array,
+      default: () => [],
+    },
+    findings: {
       type: Array,
       default: () => [],
     },

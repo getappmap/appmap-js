@@ -47,7 +47,7 @@
 <script>
 import { CodeObject, AppMap, CodeObjectType } from '@appland/models';
 import SearchIcon from '@/assets/search.svg';
-import { SELECT_OBJECT, SELECT_LABEL } from '../store/vsCode';
+import { SELECT_OBJECT, SELECT_LABEL, SET_VIEW, VIEW_FLOW } from '../store/vsCode';
 
 export default {
   name: 'v-details-search',
@@ -58,6 +58,10 @@ export default {
 
   props: {
     appMap: AppMap,
+    findings: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   data() {
@@ -69,6 +73,10 @@ export default {
   computed: {
     listItems() {
       const items = {
+        [CodeObjectType.ANALYSIS_FINDING]: {
+          title: 'Analysis Findings',
+          data: [],
+        },
         [CodeObjectType.HTTP]: {
           title: 'HTTP server requests',
           data: [],
@@ -150,6 +158,29 @@ export default {
         }
       });
 
+      const eventsById = this.appMap.data.events.reduce((map, e) => {
+        map[e.id] = e.callEvent;
+        return map;
+      }, {});
+
+      this.findings.forEach(({ finding, appMapUri: { fragment } }) => {
+        const { traceFilter } = fragment;
+
+        const events = fragment.traceFilter.split(' ').map((idStr) => {
+          const id = Number(idStr.split(':')[1]);
+          return eventsById[id];
+        });
+
+        items['analysis-finding'].data.push({
+          object: {
+            name: `${finding.impactDomain}:${finding.ruleTitle}`,
+            events,
+            traceFilter,
+          },
+          childrenCount: 1,
+        });
+      });
+
       Object.entries(items).forEach(([key, item]) => {
         if (!item.data.length) {
           delete items[key];
@@ -179,6 +210,13 @@ export default {
     selectObject(type, object) {
       if (type === 'labels') {
         this.$store.commit(SELECT_LABEL, object);
+      } else if (type === 'analysis-finding') {
+        const { events } = object;
+        if (events && events.length >= 1) {
+          this.$store.commit(SELECT_OBJECT, events);
+          this.$store.commit(SET_VIEW, VIEW_FLOW);
+          this.$emit('onChangeFilter', `${object.traceFilter} `);
+        }
       } else {
         this.$store.commit(SELECT_OBJECT, object);
       }

@@ -13,6 +13,17 @@
       </template>
     </v-details-panel-header>
 
+    <div v-if="hasFindings">
+      <section class="finding-heading">
+        <h2>Finding Details</h2>
+      </section>
+      <v-finding-details-panel
+        v-for="finding in object.findings"
+        :finding="finding"
+        :key="finding.finding.hash_v2"
+      />
+    </div>
+
     <v-sql-code v-if="hasSql" :sql="object.sql.sql" :database="object.sql.database_type" />
 
     <div class="event-params" v-if="hasParameters">
@@ -97,6 +108,7 @@ import { getSqlLabel } from '@appland/models';
 import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
+import VFindingDetailsPanel from '@/components/FindingDetailsPanel.vue';
 import VSqlCode from '@/components/SqlCode.vue';
 import { SET_VIEW, VIEW_FLOW } from '@/store/vsCode';
 
@@ -106,6 +118,7 @@ export default {
     VDetailsButton,
     VDetailsPanelList,
     VDetailsPanelHeader,
+    VFindingDetailsPanel,
     VSqlCode,
   },
   props: {
@@ -129,6 +142,10 @@ export default {
 
     hasMessage() {
       return this.object.message && this.object.message.length;
+    },
+
+    hasFindings() {
+      return this.object.findings;
     },
 
     requestHeaders() {
