@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.74.3](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.74.2...@appland/scanner-v1.74.3) (2022-12-21)
+
+
+### Bug Fixes
+
+* Examine errors based on error code instead of error message ([f2c15e8](https://github.com/getappmap/appmap-js/commit/f2c15e8e0b2dfce270fc3d92c2bd64fa775947d7))
+
 # [@appland/scanner-v1.74.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.74.1...@appland/scanner-v1.74.2) (2022-12-16)
 
 
