@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.57.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.56.0...@appland/appmap-v3.57.0) (2022-12-21)
+
+
+### Bug Fixes
+
+* Don't let indexer crash on ELOOP error ([252eccc](https://github.com/getappmap/appmap-js/commit/252eccca2f53d6caf8b61fa18eeeb35ff744c19c))
+
+
+### Features
+
+* Implement getToplevelSymbolicLink as an optimization ([3579d71](https://github.com/getappmap/appmap-js/commit/3579d71c153fe6b32a391c9984dadc757ef44278))
+
 # [@appland/appmap-v3.56.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.55.1...@appland/appmap-v3.56.0) (2022-12-21)
 
 
