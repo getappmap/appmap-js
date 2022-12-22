@@ -429,7 +429,7 @@ export default {
 
       .details-search__block--labels & {
         margin: 0.25rem;
-        border: 1px solid $base15;
+        border: 1px solid $base15 !important;
         border-radius: 4px;
         display: inline-flex;
         padding: 0.25rem 0.5rem;
