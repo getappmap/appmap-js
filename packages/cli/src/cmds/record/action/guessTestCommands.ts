@@ -45,13 +45,6 @@ const TestCommands: TestCommandGuess[] = [
       env: {},
     },
   },
-  {
-    paths: ['package.json', 'node_modules'],
-    command: {
-      command: 'npx @appland/appmap-agent-js --recorder=process -- npm run test',
-      env: {},
-    },
-  },
 ];
 
 export default async function guessTestCommands(): Promise<TestCommand[] | undefined> {
