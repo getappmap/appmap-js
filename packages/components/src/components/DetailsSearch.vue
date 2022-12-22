@@ -421,7 +421,6 @@ export default {
         display: inline-block;
         padding: 0.25rem 0.5rem;
         font-size: 0.8rem;
-        line-height: 1;
         color: currentColor;
         background-color: rgba(0, 0, 0, 0.2);
         white-space: nowrap;
