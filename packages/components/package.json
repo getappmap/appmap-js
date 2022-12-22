@@ -32,7 +32,7 @@
     "buffer": "^6.0.3",
     "highlight.js": "^10.7.2",
     "sql-formatter": "^4.0.2",
-    "vue": "^2.6.11",
+    "vue": "^2.7.14",
     "vuex": "^3.6.0"
   },
   "devDependencies": {
@@ -91,7 +91,7 @@
     "vue-jest": "^3.0.7",
     "vue-loader": "^15.7.0",
     "vue-svg-loader": "^0.16.0",
-    "vue-template-compiler": "^2.6.11",
+    "vue-template-compiler": "^2.7.14",
     "webpack": "^5.75.0"
   },
   "repository": {
