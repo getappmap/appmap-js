@@ -44,6 +44,7 @@
 import { Event, AppMap } from '@appland/models';
 import AppMapLogo from '@/assets/appmap-full-logo.svg';
 import VDetailsLabel from '@/components/DetailsLabel.vue';
+import VDetailsPanelAnalysisFinding from '@/components/DetailsPanelAnalysisFinding.vue';
 import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
 import VDetailsPanelDatabase from '@/components/DetailsPanelDatabase.vue';
 import VDetailsPanelEdge from '@/components/DetailsPanelEdge.vue';
@@ -64,6 +65,7 @@ export default {
   components: {
     AppMapLogo,
     VDetailsLabel,
+    VDetailsPanelAnalysisFinding,
     VDetailsPanelClass,
     VDetailsPanelDatabase,
     VDetailsPanelEdge,

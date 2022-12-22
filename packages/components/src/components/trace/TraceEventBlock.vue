@@ -12,7 +12,7 @@
       :highlight-color="highlightColor"
       :highlight-style="highlightStyle"
       :highlight-index="event === highlightedEvent ? highlightedEventIndex : 0"
-      :focused="focusedEvent === event"
+      :focused="focusedEvent && event && focusedEvent.id === event.id"
       @expandChildren="toggleVisibility()"
       @click.native.stop="$emit('clickEvent', event)"
       ref="node"

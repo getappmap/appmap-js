@@ -105,7 +105,7 @@ export default {
 
 <style scoped lang="scss">
 .details-panel-header {
-  margin: 0 0 1rem;
+  margin: 0 0 24px;
 
   &__parents {
     margin-bottom: 1rem;

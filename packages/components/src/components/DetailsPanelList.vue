@@ -1,6 +1,6 @@
 <template>
   <div class="v-details-panel-list" v-if="items && items.length > 0">
-    <h5>{{ title }}</h5>
+    <v-details-panel-list-header>{{ title }}</v-details-panel-list-header>
     <ul>
       <li
         class="list-item"
@@ -27,12 +27,14 @@
 
 <script>
 import EyeIcon from '@/assets/eye.svg';
+import VDetailsPanelListHeader from '@/components/DetailsPanelListHeader.vue';
 import { SELECT_OBJECT, SET_FOCUSED_EVENT } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel-list',
   components: {
     EyeIcon,
+    VDetailsPanelListHeader,
   },
   props: {
     title: String,
@@ -67,6 +69,7 @@ export default {
     },
     focusEvent(item) {
       if (this.$store) {
+        console.log('focusEvent', item.object);
         this.$store.commit(SET_FOCUSED_EVENT, item.object);
       }
     },
@@ -100,17 +103,6 @@ export default {
   padding: 0;
   margin: 0;
 
-  h5 {
-    border-bottom: 1px solid $gray2;
-    color: $gray4;
-    font-size: 0.9rem;
-    font-weight: 800;
-    line-height: 1.4;
-    margin: 0;
-    padding: 0.25rem 0;
-    text-transform: uppercase;
-  }
-
   ul {
     list-style-type: none;
     padding: 0;
@@ -118,13 +110,16 @@ export default {
     margin-top: 0;
 
     .list-item {
+      &:first-child {
+        padding-top: 0;
+      }
+
       position: relative;
       border-bottom: 1px solid $gray2;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.25rem 0.5rem;
-      min-height: 2rem;
+      padding: 8px 0.5rem;
       font-size: 0.9em;
       color: $blue;
       cursor: pointer;
@@ -176,6 +171,10 @@ export default {
       &:hover,
       &:active {
         color: $base06;
+      }
+
+      &:last-of-type {
+        border-bottom: 0;
       }
     }
   }

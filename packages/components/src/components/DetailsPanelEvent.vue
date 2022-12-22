@@ -13,18 +13,14 @@
       </template>
     </v-details-panel-header>
 
-    <div v-if="hasFindings">
-      <section class="finding-heading">
-        <h2>Finding Details</h2>
-      </section>
-      <v-finding-details-panel
-        v-for="finding in object.findings"
-        :finding="finding"
-        :key="finding.finding.hash_v2"
-      />
-    </div>
-
     <v-sql-code v-if="hasSql" :sql="object.sql.sql" :database="object.sql.database_type" />
+
+    <v-details-panel-list
+      class="findings"
+      title="Associated findings"
+      v-if="hasFindings"
+      :items="findings"
+    />
 
     <div class="event-params" v-if="hasParameters">
       <h5>Parameters</h5>
@@ -108,9 +104,9 @@ import { getSqlLabel } from '@appland/models';
 import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
-import VFindingDetailsPanel from '@/components/FindingDetailsPanel.vue';
 import VSqlCode from '@/components/SqlCode.vue';
 import { SET_VIEW, VIEW_FLOW } from '@/store/vsCode';
+import { toListItem } from '@/lib/finding';
 
 export default {
   name: 'v-details-panel-event',
@@ -118,7 +114,6 @@ export default {
     VDetailsButton,
     VDetailsPanelList,
     VDetailsPanelHeader,
-    VFindingDetailsPanel,
     VSqlCode,
   },
   props: {
@@ -145,7 +140,7 @@ export default {
     },
 
     hasFindings() {
-      return this.object.findings;
+      return Array.isArray(this.object.findings) && this.object.findings.length;
     },
 
     requestHeaders() {
@@ -199,6 +194,10 @@ export default {
     caller() {
       return this.object.parent ? [this.object.parent] : null;
     },
+
+    findings() {
+      return (this.object.findings || []).map(toListItem);
+    },
   },
 
   methods: {
@@ -214,19 +213,7 @@ export default {
   h3 {
     padding: 0;
   }
-  .finding-heading {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 3px solid $gray2;
-    h2 {
-      text-transform: uppercase;
-      color: $hotpink;
-      font-size: 1.2rem;
-      font-weight: 800;
-    }
-  }
+
   .event-params {
     padding: 0;
     color: $base11;
@@ -270,7 +257,7 @@ export default {
 </style>
 <style scoped>
 .details-panel-event >>> .sql-code {
-  margin-bottom: 1.5rem;
+  margin-bottom: 8px;
   padding: 0;
 }
 </style>

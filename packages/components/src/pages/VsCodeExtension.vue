@@ -31,11 +31,13 @@
           </v-details-button>
           <v-details-button icon="back" v-if="canGoBack" @click.native="goBack">
             Back to
-            <b v-if="prevSelectedObject && prevSelectedObject.name">
+            <b
+              v-if="prevSelectedObject && (prevSelectedObject.shortName || prevSelectedObject.name)"
+            >
               {{
                 prevSelectedObject.type === 'query'
                   ? prevSelectedObject.prettyName
-                  : prevSelectedObject.name
+                  : prevSelectedObject.shortName || prevSelectedObject.name
               }}
             </b>
             <span v-else>previous</span>

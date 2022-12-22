@@ -47,6 +47,7 @@
 <script>
 import { CodeObject, AppMap, CodeObjectType } from '@appland/models';
 import SearchIcon from '@/assets/search.svg';
+import { toListItem } from '@/lib/finding';
 import { SELECT_OBJECT, SELECT_LABEL, SET_VIEW, VIEW_FLOW } from '../store/vsCode';
 
 export default {
@@ -163,23 +164,9 @@ export default {
         return map;
       }, {});
 
-      this.findings.forEach(({ finding, appMapUri: { fragment } }) => {
-        const { traceFilter } = fragment;
-
-        const events = fragment.traceFilter.split(' ').map((idStr) => {
-          const id = Number(idStr.split(':')[1]);
-          return eventsById[id];
-        });
-
-        items['analysis-finding'].data.push({
-          object: {
-            name: `${finding.impactDomain}:${finding.ruleTitle}`,
-            events,
-            traceFilter,
-          },
-          childrenCount: 1,
-        });
-      });
+      items[CodeObjectType.ANALYSIS_FINDING].data = this.findings.map((f) => ({
+        object: toListItem(f),
+      }));
 
       Object.entries(items).forEach(([key, item]) => {
         if (!item.data.length) {
@@ -210,13 +197,6 @@ export default {
     selectObject(type, object) {
       if (type === 'labels') {
         this.$store.commit(SELECT_LABEL, object);
-      } else if (type === 'analysis-finding') {
-        const { events } = object;
-        if (events && events.length >= 1) {
-          this.$store.commit(SELECT_OBJECT, events);
-          this.$store.commit(SET_VIEW, VIEW_FLOW);
-          this.$emit('onChangeFilter', `${object.traceFilter} `);
-        }
       } else {
         this.$store.commit(SELECT_OBJECT, object);
       }
@@ -243,18 +223,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.analysis-finding {
-  h3 {
-    font-size: 0.9rem;
-    margin: 0.5rem 0 0 0;
-  }
-}
 .details-search {
   margin-bottom: 2rem;
   padding: 0;
 
   &__form {
-    margin-bottom: 1.5rem;
+    margin-bottom: 24px;
     padding: 0;
   }
 
@@ -270,23 +244,6 @@ export default {
     .details-search--empty & {
       border-radius: $gray3;
       pointer-events: none;
-    }
-  }
-
-  .analysis-finding {
-    .findings-list {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-      li {
-        border-bottom: 1px solid $gray2;
-        &:last-of-type {
-          border-bottom: 0;
-        }
-        .analysis li {
-          border-bottom: 0;
-        }
-      }
     }
   }
 
@@ -319,7 +276,8 @@ export default {
   }
 
   &__block {
-    padding: 1.5rem 0.5rem;
+    padding: 0 0.5rem;
+    margin-bottom: 16px;
     border-bottom: 2px solid $gray2;
 
     &:last-of-type {
@@ -371,7 +329,7 @@ export default {
 
     &-list {
       margin: 0;
-      padding: 0 0.5rem;
+      padding: 0.5rem;
       list-style: none;
       li {
         &:last-of-type {
