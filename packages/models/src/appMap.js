@@ -58,6 +58,11 @@ export default class AppMap {
       previousEvent = e;
     });
 
+    this.eventsById = this.events.reduce((acc, event) => {
+      acc[event.id] = event;
+      return acc;
+    }, {});
+
     // Keep these fields seperate for serialization
     delete this.data.classMap;
   }
@@ -80,6 +85,10 @@ export default class AppMap {
 
   get events() {
     return this.data.events;
+  }
+
+  getEvent(eventId) {
+    return this.eventsById[eventId];
   }
 
   shallowCopy() {
