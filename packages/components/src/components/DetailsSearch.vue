@@ -422,7 +422,6 @@ export default {
         padding: 0.25rem 0.5rem;
         font-size: 0.8rem;
         color: currentColor;
-        background-color: rgba(0, 0, 0, 0.2);
         white-space: nowrap;
       }
 
@@ -432,6 +431,14 @@ export default {
         border-radius: 4px;
         display: inline-flex;
         padding: 0.25rem 0.5rem;
+        transition: 0.25s ease-out all;
+
+        &:hover,
+        &:active {
+          background: $base03;
+          color: $base15;
+          border-color: $base03 !important;
+        }
 
         &-count {
           margin-left: 0.5rem;

@@ -53,6 +53,7 @@ export default {
     list-style-type: none;
     padding: 0;
     margin: 0 0 1rem;
+    font-size: 0.9em;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -60,14 +61,17 @@ export default {
     &__item {
       margin: 0 0.25rem 0.25rem 0;
       border-radius: 0.25rem;
-      padding: 0.1rem 0.3rem;
-      background: $base11;
-      color: $base01;
+      padding: 0.25rem;
+      color: $base03;
+      border: 1px solid $base15;
       cursor: pointer;
+      transition: 0.25s ease-out all;
 
       &:hover,
       &:active {
-        background: $base11;
+        background: $base03;
+        color: $base15;
+        border-color: $base03;
       }
     }
   }
