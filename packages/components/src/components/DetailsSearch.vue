@@ -322,6 +322,10 @@ export default {
     padding: 1.5rem 0.5rem;
     border-bottom: 2px solid $gray2;
 
+    &:last-of-type {
+      border-bottom: 0;
+    }
+
     &-title {
       margin: 0 0 0.25rem;
       border-radius: 4px;
