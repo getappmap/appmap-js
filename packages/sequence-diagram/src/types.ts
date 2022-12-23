@@ -150,9 +150,9 @@ export const nodeResult = (action: Action | undefined): string | undefined => {
       if (action.returnValue.raisesException) return 'exception!';
       break;
     case NodeType.ServerRPC:
-      return action.status.toString();
+      return action.status ? action.status.toString() : '<unknown-status>';
     case NodeType.ClientRPC:
-      return action.status.toString();
+      return action.status ? action.status.toString() : '<unknown-status>';
   }
 };
 

@@ -54,11 +54,12 @@ export default function buildDiagram(
   function buildRequest(caller?: Event | undefined, callee?: Event): Action | undefined {
     if (callee?.httpServerRequest && callee?.httpServerResponse) {
       assert(callee.route, 'callee.route');
+      const response = callee.httpServerResponse as any;
       return {
         nodeType: NodeType.ServerRPC,
         callee: findOrCreateActor(callee),
         route: callee.route,
-        status: callee.httpServerResponse?.status,
+        status: response.status || response.status_code,
         digest: callee.hash,
         subtreeDigest: 'undefined',
         children: [],
@@ -66,12 +67,13 @@ export default function buildDiagram(
       } as ServerRPC;
     } else if (callee?.httpClientRequest && callee?.httpClientResponse) {
       assert(callee.route, 'callee.route');
+      const response = callee.httpClientResponse as any;
       return {
         nodeType: NodeType.ClientRPC,
         caller: caller ? findOrCreateActor(caller) : undefined,
         callee: findOrCreateActor(callee),
         route: callee.route,
-        status: callee.httpClientResponse?.status,
+        status: response.status || response.status_code,
         digest: callee.hash,
         subtreeDigest: 'undefined',
         children: [],
