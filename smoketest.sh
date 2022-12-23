@@ -11,7 +11,7 @@ cd "${TESTDIR}"
 # make sure packages resolve to local versions
 ls @appland-*.tgz | sed -E -e '1i {"resolutions": {' -e 's/@appland-(.*).tgz/"@appland\/\1": ".\/&"/; $!a,' -e '$a}}' > package.json
 
-yarn set version ^3.2.2  # 3.2.1 has broken pnp support
+yarn set version 3.2.2  # 3.2.1 has broken pnp support
 yarn add ./@appland-appmap.tgz
 
 yarn run appmap index --appmap-dir ruby
