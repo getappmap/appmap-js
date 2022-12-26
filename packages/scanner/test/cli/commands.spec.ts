@@ -46,10 +46,19 @@ describe('commands', () => {
       expect(spy).not.toBeCalled();
     });
 
+    let watcher: watchScan.Watcher | undefined;
+
+    afterEach(() => {
+      if (watcher) {
+        const closer = watcher.close();
+        watcher = undefined;
+        return closer;
+      }
+    });
+
     it('work correctly even if the appmap directory does not initially exist', () =>
       tmp.withDir(
         async ({ path: tmpDir }) => {
-          let watcher: watchScan.Watcher | undefined;
           jest.spyOn(watchScan, 'default').mockImplementation((opts) => {
             watcher = new watchScan.Watcher(opts);
             return watcher.watch();
@@ -81,8 +90,6 @@ describe('commands', () => {
           await writeFile(path.join(indexDir, 'mtime'), Date.now().toString());
 
           await scanned;
-
-          await watcher?.close();
         },
         { unsafeCleanup: true }
       ));
