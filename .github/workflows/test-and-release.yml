@@ -92,6 +92,11 @@ jobs:
     needs: test
     if: ${{ github.ref_name == 'main' }}
 
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -114,7 +119,13 @@ jobs:
 
       - name: Upload and approve chromatic changes
         run: yarn run chromatic --auto-accept-changes
+        env:
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+
       - name: Build native packages
         run: yarn run build-native
+
       - name: Run semantic-release
         run: yarn run semantic-release
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.YARN_NPM_AUTH_TOKEN }}
