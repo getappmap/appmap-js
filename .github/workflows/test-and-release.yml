@@ -12,41 +12,82 @@ jobs:
         include:
           - node: 18
             os: ubuntu-latest
-            extras: true
+            build: true
           - node: 18
             os: windows-latest
 
     runs-on: ${{ matrix.os }}
 
-    env:
-      CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Check out
+        uses: actions/checkout@v3
+      - name: Setup node ${{ matrix.node }}
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
           cache: yarn
-      - name: Cache node_modules
+      - name: Setup node_modules cache
         uses: actions/cache@v3
         with:
           path: node_modules
           key: node_modules-${{ runner.os }}-${{ matrix.node }}-${{ hashFiles('yarn.lock') }}
 
-      - run: yarn install --immutable
-      - run: yarn run build
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Build
+        run: yarn run build
 
-      - run: yarn run test
-      - run: ./smoketest.sh
+      - name: Test
+        run: yarn run test
+      - name: Smoke test
+        run: ./smoketest.sh
         if: ${{ matrix.os != 'windows-latest' }}
 
-      - run: yarn run lint
-        if: ${{ matrix.extras }}
+      - name: Lint
+        run: yarn run lint
+        if: ${{ matrix.build }}
 
-      - run: yarn run chromatic
-        if: ${{ matrix.extras && env.CHROMATIC_PROJECT_TOKEN != '' }}
+      - name: Archive built code
+        if: ${{ matrix.build }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: |
+            packages/*/dist
+            packages/*/built
 
-  deploy:
+  chromatic:
+    runs-on: ubuntu-latest
+    needs: test
+
+    if: ${{ github.ref_name != 'main' }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+      - name: Restore node_modules
+        uses: actions/cache/restore@v3
+        with:
+          path: node_modules
+          key: node_modules-${{ runner.os }}-18-${{ hashFiles('yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Restore built code
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+
+      - name: Run chromatic
+        run: yarn run chromatic
+        env:
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+
+  release:
     runs-on: ubuntu-latest
     needs: test
     if: ${{ github.ref_name == 'main' }}
@@ -63,9 +104,17 @@ jobs:
           path: node_modules
           key: node_modules-${{ runner.os }}-18-${{ hashFiles('yarn.lock') }}
 
-      - run: yarn install --immutable
-      - run: yarn run build
+      - name: Install dependencies
+        run: yarn install --immutable
 
-      - run: yarn run chromatic --auto-accept-changes
-      - run: yarn run build-native
-      - run: yarn run semantic-release
+      - name: Restore built code
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+
+      - name: Upload and approve chromatic changes
+        run: yarn run chromatic --auto-accept-changes
+      - name: Build native packages
+        run: yarn run build-native
+      - name: Run semantic-release
+        run: yarn run semantic-release
