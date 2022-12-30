@@ -14,9 +14,10 @@ import { dump } from 'js-yaml';
 import CommandOptions from '../../src/cli/scan/options';
 import tmp from 'tmp-promise';
 import assert from 'assert';
-import { withStubbedTelemetry } from '../helper';
 import { FSWatcher } from 'chokidar';
 import { mkdir, chmod } from 'fs/promises';
+
+jest.mock('../../src/telemetry');
 
 process.env['APPMAP_TELEMETRY_DISABLED'] = 'true';
 delete process.env.APPLAND_API_KEY;
@@ -51,7 +52,6 @@ afterEach(() => {
 });
 afterEach(() => sinon.restore());
 afterEach(() => nock.cleanAll());
-withStubbedTelemetry();
 
 function runCommand(options: CommandOptions): Promise<void> {
   return Command.handler({ $0: 'test', _: [], ...options });
