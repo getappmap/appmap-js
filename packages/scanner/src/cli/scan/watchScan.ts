@@ -72,14 +72,14 @@ export class Watcher {
       .on('add', this.reloadConfig.bind(this))
       .on('change', this.reloadConfig.bind(this));
 
-    const appmapDir = path.resolve(this.options.appmapDir);
+    const cwd = process.cwd();
+    // note: sometimes path.resolve doesn't seem to use the correct cwd unless it's provided explicitly
+    const appmapDir = path.resolve(cwd, this.options.appmapDir);
 
     // If the appmap directory is a descendant of cwd, watch cwd (presumably project directory).
     // This ensures the watch will survive even if the appmap dir is removed and recreated.
     // Otherwise, make sure to use an existing directory. Chokidar struggles with missing directories.
-    const watchDir = isAncestorPath(process.cwd(), appmapDir)
-      ? process.cwd()
-      : await existingParent(appmapDir);
+    const watchDir = isAncestorPath(cwd, appmapDir) ? cwd : await existingParent(appmapDir);
 
     // Custom ignore function needed to cut down the watch tree to just what we need.
     const ignored = (targetPath: string) => {
