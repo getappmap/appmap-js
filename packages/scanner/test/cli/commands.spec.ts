@@ -89,6 +89,8 @@ describe('commands', () => {
           await writeFile(path.join(indexDir, 'mtime'), Date.now().toString());
 
           await scanned;
+
+          process.chdir(cwd); // NOTE: this needs to happen before cleanup to prevent an error on windows
         },
         { unsafeCleanup: true }
       ));
