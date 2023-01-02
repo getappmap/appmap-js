@@ -121,14 +121,13 @@ export default {
       align-items: center;
       padding: 8px 0.5rem;
       font-size: 0.9em;
-      color: $blue;
       cursor: pointer;
       overflow: hidden;
       z-index: 0;
 
       &:hover,
       &:active {
-        color: lighten($blue, 20);
+        color: $blue;
         text-decoration: underline;
       }
 
