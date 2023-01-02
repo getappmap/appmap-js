@@ -216,21 +216,21 @@ export default {
 
   .event-params {
     padding: 0;
-    color: $base11;
+    //color: $base11;
     h5 {
-      color: $base03;
-      font-size: 1.1rem;
-      font-weight: 500;
+      color: $gray4;
+      font-size: 0.9rem;
       line-height: 1.2;
       margin: 0 0 0.25rem 0;
       padding: 0;
+      text-transform: uppercase;
     }
     .table-01 {
       font-size: 14px;
       font-family: sans-serif;
       font-weight: 500;
       li {
-        padding: 0.5rem 0;
+        padding: 0.5rem;
       }
     }
   }
@@ -242,11 +242,12 @@ export default {
     li {
       width: 100%;
       border-bottom: 1px solid $gray3;
-      padding: 0.5rem 0;
+      padding: 0.5rem;
       transition: $transition;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 0.4rem;
       a {
         margin: 0;
         width: 100%;

@@ -267,7 +267,7 @@ export default {
     flex: 1;
     position: relative;
     border-radius: $border-radius;
-    border: 2px solid $light-purple;
+    border: 1px solid $gray4;
 
     &--show-suggestions {
       border-radius: $border-radius $border-radius 0 0;
@@ -299,8 +299,7 @@ export default {
     border: none;
     width: 100%;
     padding: 0.5rem 2rem;
-    font: inherit;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     color: $base03;
     background: transparent;
     outline: none;

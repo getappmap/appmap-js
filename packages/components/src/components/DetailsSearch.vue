@@ -235,7 +235,7 @@ export default {
   &__input-wrap {
     position: relative;
     border-radius: $border-radius;
-    border: 2px solid $light-purple;
+    border: 1px solid $gray4;
     display: flex;
     align-content: center;
     gap: 1rem;
@@ -398,7 +398,7 @@ export default {
         &:hover,
         &:active {
           background: $base03;
-          color: $base15;
+          color: $gray1;
           border-color: $base03 !important;
         }
 

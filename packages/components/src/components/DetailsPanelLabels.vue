@@ -51,7 +51,7 @@ export default {
 
   .labels {
     list-style-type: none;
-    padding: 0;
+    padding: 0 0.5rem;
     margin: 0 0 1rem;
     font-size: 0.9em;
     display: flex;
