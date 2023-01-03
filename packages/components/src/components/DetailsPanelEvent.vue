@@ -106,7 +106,7 @@ import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import VSqlCode from '@/components/SqlCode.vue';
 import { SET_VIEW, VIEW_FLOW } from '@/store/vsCode';
-import { toListItem } from '@/lib/finding';
+import toListItem from '@/lib/finding';
 
 export default {
   name: 'v-details-panel-event',
@@ -216,7 +216,6 @@ export default {
 
   .event-params {
     padding: 0;
-    //color: $base11;
     h5 {
       color: $gray4;
       font-size: 0.9rem;

@@ -47,8 +47,8 @@
 <script>
 import { CodeObject, AppMap, CodeObjectType } from '@appland/models';
 import SearchIcon from '@/assets/search.svg';
-import { toListItem } from '@/lib/finding';
-import { SELECT_OBJECT, SELECT_LABEL, SET_VIEW, VIEW_FLOW } from '../store/vsCode';
+import toListItem from '@/lib/finding';
+import { SELECT_OBJECT, SELECT_LABEL } from '../store/vsCode';
 
 export default {
   name: 'v-details-search',
@@ -158,11 +158,6 @@ export default {
           });
         }
       });
-
-      const eventsById = this.appMap.data.events.reduce((map, e) => {
-        map[e.id] = e.callEvent;
-        return map;
-      }, {});
 
       items[CodeObjectType.ANALYSIS_FINDING].data = this.findings.map((f) => ({
         object: toListItem(f),

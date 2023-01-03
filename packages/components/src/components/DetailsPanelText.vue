@@ -7,6 +7,7 @@
 
 <script>
 import VDetailsPanelListHeader from '@/components/DetailsPanelListHeader.vue';
+
 export default {
   name: 'v-details-panel-text',
   components: { VDetailsPanelListHeader },

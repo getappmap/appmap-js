@@ -69,7 +69,6 @@ export default {
     },
     focusEvent(item) {
       if (this.$store) {
-        console.log('focusEvent', item.object);
         this.$store.commit(SET_FOCUSED_EVENT, item.object);
       }
     },

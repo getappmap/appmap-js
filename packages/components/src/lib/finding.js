@@ -1,6 +1,6 @@
 import { CodeObjectType } from '@appland/models';
 
-export function toListItem(resolvedFinding) {
+export default function toListItem(resolvedFinding) {
   return {
     type: CodeObjectType.ANALYSIS_FINDING,
     resolvedFinding,

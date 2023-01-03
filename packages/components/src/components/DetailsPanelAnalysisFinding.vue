@@ -28,13 +28,11 @@
 </template>
 
 <script>
-import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import VDetailsPanelListHeader from '@/components/DetailsPanelListHeader.vue';
 import VDetailsPanelStackTrace from '@/components/DetailsPanelStackTrace.vue';
 import VDetailsPanelText from '@/components/DetailsPanelText.vue';
-import { Event } from '@appland/models';
 
 export default {
   name: 'v-details-panel-analysis-finding',
