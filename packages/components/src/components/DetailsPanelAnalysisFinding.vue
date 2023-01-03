@@ -57,7 +57,9 @@ export default {
       return this.object.resolvedFinding;
     },
     relatedEvents() {
-      return (this.finding.relatedEvents || []).map((e) => this.$store.state.appMap.getEvent(e.id));
+      return (this.finding.relatedEvents || []).map((e) =>
+        this.$store.state.filteredAppMap.getEvent(e.id)
+      );
     },
   },
 };

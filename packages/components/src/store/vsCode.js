@@ -14,6 +14,7 @@ export const SET_FOCUSED_EVENT = 'setFocusedEvent';
 export const VIEW_COMPONENT = 'viewComponent';
 export const VIEW_FLOW = 'viewFlow';
 export const DEFAULT_VIEW_COMPONENT = VIEW_COMPONENT;
+export const SET_FILTERED_MAP = 'setFilteredMap';
 
 export function buildStore() {
   return new Vuex.Store({
@@ -23,6 +24,7 @@ export function buildStore() {
       currentView: DEFAULT_VIEW_COMPONENT,
       selectedLabel: null,
       focusedEvent: null,
+      filteredAppMap: new AppMap(),
     },
 
     getters: {
@@ -87,6 +89,10 @@ export function buildStore() {
 
       [SET_FOCUSED_EVENT](state, event) {
         state.focusedEvent = event;
+      },
+
+      [SET_FILTERED_MAP](state, filteredAppMap) {
+        state.filteredAppMap = filteredAppMap;
       },
     },
   });
