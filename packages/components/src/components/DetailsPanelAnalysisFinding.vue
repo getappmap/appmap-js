@@ -7,7 +7,7 @@
     >
     </v-details-panel-header>
     <section>
-      <p>{{ resolvedFinding.rule.description }}</p>
+      <p data-cy="rule-description">{{ resolvedFinding.rule.description }}</p>
       <a :href="resolvedFinding.rule.url">Learn more</a>
     </section>
     <section>
