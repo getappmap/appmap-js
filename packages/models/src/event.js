@@ -93,15 +93,15 @@ export default class Event {
   }
 
   get returnValue() {
-    return this.returnEvent.return_value;
+    return this.returnEvent ? this.returnEvent.return_value : undefined;
   }
 
   get elapsedTime() {
-    return this.returnEvent.elapsed;
+    return this.returnEvent ? this.returnEvent.elapsed : undefined;
   }
 
   get elapsedInstrumentationTime() {
-    return this.returnEvent.elapsed_instrumentation;
+    return this.returnEvent ? this.returnEvent.elapsed_instrumentation : undefined;
   }
 
   get linkedEvent() {
@@ -138,7 +138,7 @@ export default class Event {
   }
 
   get exceptions() {
-    return this.returnEvent.$hidden.exceptions || [];
+    return this.returnEvent ? this.returnEvent.$hidden.exceptions || [] : [];
   }
 
   get message() {
@@ -150,7 +150,7 @@ export default class Event {
   }
 
   get httpServerResponse() {
-    return this.returnEvent.http_server_response;
+    return this.returnEvent ? this.returnEvent.http_server_response : undefined;
   }
 
   get httpClientRequest() {
@@ -158,7 +158,7 @@ export default class Event {
   }
 
   get httpClientResponse() {
-    return this.returnEvent.http_client_response;
+    return this.returnEvent ? this.returnEvent.http_client_response : undefined;
   }
 
   get definedClass() {
@@ -328,7 +328,7 @@ export default class Event {
   }
 
   get parentId() {
-    return this.returnEvent.parent_id;
+    return this.returnEvent ? this.returnEvent.parent_id : undefined;
   }
 
   get callEvent() {
@@ -523,7 +523,7 @@ export default class Event {
       properties = {
         event_type: 'function',
         id: this.codeObject.id,
-        raises_exception: this.returnEvent.exceptions && this.returnEvent.exceptions.length > 0,
+        raises_exception: this.exceptions.length > 0,
       };
     }
     return normalizeProperties(properties);

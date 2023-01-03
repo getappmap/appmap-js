@@ -130,6 +130,21 @@ describe('Event', () => {
           });
         });
       });
+
+      describe('without returnValue', () => {
+        const callOnlyEvent = new Event({ id: 1 });
+
+        it('has no returnValue', () => expect(callOnlyEvent.returnValue).toBeUndefined());
+        it('has no elapsedTime', () => expect(callOnlyEvent.elapsedTime).toBeUndefined());
+        it('has no elapsedInstrumentationTime', () =>
+          expect(callOnlyEvent.elapsedInstrumentationTime).toBeUndefined());
+        it('has no exceptions', () => expect(callOnlyEvent.exceptions).toEqual([]));
+        it('has no httpServerResponse', () =>
+          expect(callOnlyEvent.httpServerResponse).toBeUndefined());
+        it('has no httpClientResponse', () =>
+          expect(callOnlyEvent.httpClientResponse).toBeUndefined());
+        it('has no parentId', () => expect(callOnlyEvent.parentId).toBeUndefined());
+      });
     });
 
     describe('HTTP server request', () => {

@@ -52,7 +52,7 @@ export default function buildDiagram(
   };
 
   function buildRequest(caller?: Event | undefined, callee?: Event): Action | undefined {
-    if (callee?.httpServerRequest) {
+    if (callee?.httpServerRequest && callee?.httpServerResponse) {
       assert(callee.route, 'callee.route');
       return {
         nodeType: NodeType.ServerRPC,
@@ -64,7 +64,7 @@ export default function buildDiagram(
         children: [],
         elapsed: callee.elapsedTime,
       } as ServerRPC;
-    } else if (callee?.httpClientRequest) {
+    } else if (callee?.httpClientRequest && callee?.httpClientResponse) {
       assert(callee.route, 'callee.route');
       return {
         nodeType: NodeType.ClientRPC,
