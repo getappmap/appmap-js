@@ -32,10 +32,10 @@ const InspectCommand = require('./cmds/inspect/inspect');
 const SequenceDiagramCommand = require('./cmds/sequenceDiagram');
 const SequenceDiagramDiffCommand = require('./cmds/sequenceDiagramDiff');
 const StatsCommand = require('./cmds/stats/stats');
-import UploadCommand from './cmds/upload';
 const BuildArchive = require('./cmds/archive/archive');
 const RestoreArchive = require('./cmds/archive/restore');
 const UpdateAppMaps = require('./cmds/update');
+const DescribeChange = require('./cmds/describeChange');
 
 class DiffCommand {
   public appMapNames: any;
@@ -458,6 +458,7 @@ yargs(process.argv.slice(2))
   .command(SequenceDiagramDiffCommand)
   .command(PruneCommand)
   .command(UploadCommand)
+  .command(DescribeChange)
   .command(BuildArchive)
   .command(RestoreArchive)
   .command(UpdateAppMaps)
