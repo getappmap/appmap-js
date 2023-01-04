@@ -127,10 +127,12 @@ export default {
     flex-direction: row;
     font-family: monospace;
     border-radius: 8px;
-    background-color: #2c2b32;
+    background-color: $gray2;
     padding: 0.6em;
     display: flex;
     align-items: center;
+    font-size: 0.9rem;
+    line-height: 1.2rem;
   }
 
   &__extern-link {
@@ -148,15 +150,14 @@ export default {
   &__warning {
     display: flex;
     align-items: center;
-    font-size: 0.7em;
-    margin: 0.25em 0;
-    color: #6a6a6a;
+    font-size: 0.85em;
+    margin: 0.4rem 0;
 
     svg {
       display: inline-block;
       margin-right: 0.5em;
       path {
-        fill: #6a6a6a;
+        fill: $gray4;
       }
     }
   }

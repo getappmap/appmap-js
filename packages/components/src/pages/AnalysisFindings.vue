@@ -244,12 +244,13 @@ export default {
       gap: 1rem;
       align-items: flex-start;
       .btn {
-        border: 1px solid $purps3;
+        border: 1px solid $white;
         border-radius: 0.5rem;
-        padding: 0.2rem 0.5rem;
+        padding: 0.25rem 1rem;
         transition: $transition;
         &:hover {
-          background-color: $purps3;
+          background-color: $gray1;
+          border-color: $gray1;
           color: $white;
           cursor: pointer;
         }
@@ -282,12 +283,18 @@ export default {
       li {
         border-radius: $border-radius;
         background-color: $gray1;
-        padding: 0.25rem 1rem 0.25rem 1.5rem;
+        padding: 0.25rem 1.35rem 0.25rem 2rem;
         transition: $transition;
+        display: flex;
+        align-items: center;
         &:hover {
           background-color: $almost-white;
           color: $gray1;
           cursor: pointer;
+        }
+        &:before {
+          font-size: 20px;
+          line-height: 20px;
         }
         &.total {
           padding: 0.25rem 1rem;

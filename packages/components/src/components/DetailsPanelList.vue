@@ -1,6 +1,6 @@
 <template>
   <div class="v-details-panel-list" v-if="items && items.length > 0">
-    <h5>{{ title }}</h5>
+    <v-details-panel-list-header>{{ title }}</v-details-panel-list-header>
     <ul>
       <li
         class="list-item"
@@ -27,12 +27,14 @@
 
 <script>
 import EyeIcon from '@/assets/eye.svg';
+import VDetailsPanelListHeader from '@/components/DetailsPanelListHeader.vue';
 import { SELECT_OBJECT, SET_FOCUSED_EVENT } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel-list',
   components: {
     EyeIcon,
+    VDetailsPanelListHeader,
   },
   props: {
     title: String,
@@ -98,18 +100,7 @@ export default {
 .v-details-panel-list {
   list-style-type: none;
   padding: 0;
-  margin: 0 -1rem 1.5rem;
-
-  h5 {
-    border-bottom: 1px solid $gray2;
-    color: $base03;
-    font-size: 0.75rem;
-    font-weight: 700;
-    line-height: 1.4;
-    margin: 0;
-    padding: 0.25rem 1rem;
-    text-transform: uppercase;
-  }
+  margin: 0;
 
   ul {
     list-style-type: none;
@@ -118,22 +109,25 @@ export default {
     margin-top: 0;
 
     .list-item {
+      &:first-child {
+        padding-top: 0;
+      }
+
       position: relative;
       border-bottom: 1px solid $gray2;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.25rem 1rem;
-      min-height: 2rem;
+      padding: 8px 0.5rem;
       font-size: 0.9em;
-      color: $light-purple;
       cursor: pointer;
       overflow: hidden;
       z-index: 0;
 
       &:hover,
       &:active {
-        color: $light-purple2;
+        color: $blue;
+        text-decoration: underline;
       }
 
       &__count {
@@ -175,6 +169,10 @@ export default {
       &:hover,
       &:active {
         color: $base06;
+      }
+
+      &:last-of-type {
+        border-bottom: 0;
       }
     }
   }

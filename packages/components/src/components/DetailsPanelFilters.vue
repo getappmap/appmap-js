@@ -92,7 +92,8 @@ export default {
   border-radius: 0.25rem;
   font-size: 0.75rem;
   font-family: $appland-text-font-family;
-  margin: 0 -1rem 1rem -1rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
 
   &__head {
     border-bottom: 1px solid $gray2;
@@ -115,7 +116,9 @@ export default {
     &-text {
       color: $base06;
       text-transform: uppercase;
-      font-weight: bold;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: $gray4;
     }
 
     &-reset {
@@ -125,8 +128,7 @@ export default {
       align-items: center;
       padding: 0.25rem;
       background: transparent;
-      color: $lightgray2;
-      font: inherit;
+      color: $gray4;
       outline: none;
       line-height: 1;
       appearance: none;
@@ -149,8 +151,8 @@ export default {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 0.25rem 1rem;
-    font-size: 0.875rem;
+    padding: 0.25rem;
+    font-size: 0.9rem;
     line-height: 1.25rem;
     color: $gray4;
     cursor: pointer;
