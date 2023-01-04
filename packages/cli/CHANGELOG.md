@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.59.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.59.0...@appland/appmap-v3.59.1) (2023-01-04)
+
+
+### Bug Fixes
+
+* prompt user for requirements file ([6b2406c](https://github.com/getappmap/appmap-js/commit/6b2406c6df0e35b62aca256e909339e13c7f999d))
+
 # [@appland/appmap-v3.59.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.58.0...@appland/appmap-v3.59.0) (2022-12-21)
 
 
