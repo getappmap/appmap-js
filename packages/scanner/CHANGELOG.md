@@ -1,3 +1,11 @@
+# [@appland/scanner-v1.74.4](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.74.3...@appland/scanner-v1.74.4) (2023-01-04)
+
+
+### Bug Fixes
+
+* Make sure telemetry event aggregation doesn't prevent exit ([41b19ba](https://github.com/getappmap/appmap-js/commit/41b19ba27e64042b8e1b4757d41ee548c2710c9e))
+* Make sure to watch the correct directory in the scanner ([8f6f96a](https://github.com/getappmap/appmap-js/commit/8f6f96a5f79d0feaf0064a7ee363e82c1b7dfe22))
+
 # [@appland/scanner-v1.74.3](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.74.2...@appland/scanner-v1.74.3) (2022-12-21)
 
 
