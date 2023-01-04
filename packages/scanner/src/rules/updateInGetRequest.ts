@@ -74,6 +74,7 @@ export default {
   id: 'update-in-get-request',
   title: 'Data update performed in GET or HEAD request',
   scope: 'http_server_request',
+  enumerateScope: true,
   labels: [Audit],
   impactDomain: 'Maintainability',
   description: parseRuleDescription('updateInGetRequest'),
