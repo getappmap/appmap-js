@@ -367,9 +367,6 @@ export default {
           margin-bottom: 0;
         }
       }
-      .header-controls {
-        //justify-content: flex-start;
-      }
     }
   }
 }

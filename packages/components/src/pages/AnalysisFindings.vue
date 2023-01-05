@@ -406,11 +406,6 @@ export default {
         flex-direction: column;
       }
     }
-  }
-}
-
-@media (max-width: 700px) {
-  .analysis-findings {
     .findings-overview {
       ul {
         flex-direction: column;
