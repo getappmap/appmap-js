@@ -200,7 +200,7 @@ export default function buildDiagram(
   };
 
   rootActions.forEach((root) => buildSubtreeDigests(root));
-  rootActions.forEach((root) => detectLoops(root));
+  if (specification.loops) rootActions.forEach((root) => detectLoops(root));
   rootActions.forEach((root) => setParent(root));
 
   return {

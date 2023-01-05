@@ -15,9 +15,15 @@ export interface SequenceDiagramOptions {
 
   // default: []
   require?: CodeObjectId[];
+
+  // Whether to combine repeated code segments into loops.
+  // default: true
+  loops?: boolean;
 }
 
 export default class Specification {
+  public loops = true;
+
   constructor(
     private priority: Priority,
     private includedCodeObjectIds: Set<CodeObjectId>,
@@ -42,9 +48,7 @@ export default class Specification {
 
   static build(appmap: AppMap, options: SequenceDiagramOptions): Specification {
     const excludeSet = new Set<string>(options.exclude || []);
-
     const expandSet = new Set<string>(options.expand || []);
-
     const includedCodeObjectIds = new Set<string>();
 
     const hasNonPackageChildren = (co: AppMapCodeObject): boolean => {
@@ -97,7 +101,9 @@ export default class Specification {
 
     Object.entries(priorityArg || {}).forEach((entry) => priority.setPriority(entry[0], entry[1]));
 
-    return new Specification(priority, includedCodeObjectIds, requiredCodeObjectIds);
+    const spec = new Specification(priority, includedCodeObjectIds, requiredCodeObjectIds);
+    spec.loops = !!options.loops;
+    return spec;
   }
 
   protected static matchCodeObject(
