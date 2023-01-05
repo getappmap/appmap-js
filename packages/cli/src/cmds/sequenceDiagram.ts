@@ -30,13 +30,17 @@ export const builder = (args: yargs.Argv) => {
   args.option('output-dir', {
     describe: 'directory in which to save the sequence diagrams',
   });
+  args.option('loops', {
+    describe: 'identify loops and collect under a Loop object',
+    type: 'boolean',
+    default: true,
+  });
   args.option('format', {
     describe: 'output format',
     alias: 'f',
-    choices: ['plantuml', 'json', 'text'],
+    choices: ['plantuml', 'json'],
     default: 'plantuml',
   });
-
   args.option('exclude', {
     describe: 'code objects to exclude from the diagram',
   });
@@ -64,7 +68,9 @@ export const handler = async (argv: any) => {
     const appmapData = JSON.parse(await readFile(appmapFileName, 'utf-8'));
     const appmap = buildAppMap().source(appmapData).build();
 
-    const specOptions = {} as SequenceDiagramOptions;
+    const specOptions = {
+      loops: argv.loops,
+    } as SequenceDiagramOptions;
     if (argv.exclude)
       specOptions.exclude = Array.isArray(argv.exclude) ? argv.exclude : [argv.exclude];
 
