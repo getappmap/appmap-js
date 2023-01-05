@@ -1,4 +1,4 @@
-import { mkdir, readFile, rename, rm, writeFile } from 'fs/promises';
+import { copyFile, mkdir, readFile, rename, rm, writeFile } from 'fs/promises';
 import yargs from 'yargs';
 import readline from 'readline';
 
@@ -10,10 +10,11 @@ import { exists, verbose } from '../utils';
 import { exec } from 'child_process';
 import { cwd, nextTick, rawListeners } from 'process';
 import { queue } from 'async';
-import { basename, dirname, join } from 'path';
+import { basename, isAbsolute, join, relative } from 'path';
 import { existsSync } from 'fs';
 import { tmpdir } from 'os';
 import {
+  Action,
   buildDiagram,
   Diagram,
   format,
@@ -21,10 +22,11 @@ import {
   SequenceDiagramOptions,
   Specification,
 } from '@appland/sequence-diagram';
+import { AppMap, CodeObject, buildAppMap } from '@appland/models';
 import { glob } from 'glob';
 import { promisify } from 'util';
-import { buildAppMap } from '@appland/models';
 import { DiffDiagrams } from '../sequenceDiagramDiff/DiffDiagrams';
+import { readDiagramFile } from './sequenceDiagram/readDiagramFile';
 import assert from 'assert';
 import { touch } from '../touchFile';
 import chalk from 'chalk';
@@ -85,6 +87,74 @@ export const builder = (args: yargs.Argv) => {
   return args.strict();
 };
 
+enum RevisionName {
+  Base = 'base',
+  Head = 'head',
+  Diff = 'diff',
+}
+
+class AppMapReference {
+  public sourcePaths = new Set<string>();
+  public sourceLocation: string | undefined;
+  public appmapName: string | undefined;
+
+  constructor(public outputDir: string, public appmapFileName: string) {}
+
+  sequenceDiagramFileName(format: string): string {
+    return [basename(this.appmapFileName, '.appmap.json'), `sequence.${format}`].join('.');
+  }
+
+  sequenceDiagramFilePath(
+    revisionName: RevisionName,
+    format: FormatType | string,
+    includeOutputDir: boolean
+  ): string {
+    const tokens = [revisionName, this.sequenceDiagramFileName(format)];
+    if (includeOutputDir) tokens.unshift(this.outputDir);
+    return join(...tokens);
+  }
+
+  archivedAppMapFilePath(revisionName: RevisionName): string {
+    return join(this.outputDir, revisionName, basename(this.appmapFileName));
+  }
+
+  async loadSequenceDiagramJSON(revisionName: RevisionName): Promise<Diagram> {
+    return readDiagramFile(this.sequenceDiagramFilePath(revisionName, FormatType.JSON, true));
+  }
+
+  async loadSequenceDiagramText(revisionName: RevisionName): Promise<string> {
+    return await readFile(
+      this.sequenceDiagramFilePath(revisionName, FormatType.Text, true),
+      'utf-8'
+    );
+  }
+
+  async buildSequenceDiagram(): Promise<Diagram> {
+    const specOptions = { loops: false } as SequenceDiagramOptions;
+    const appmap = await this.buildAppMap();
+    const specification = Specification.build(appmap, specOptions);
+    return buildDiagram(this.appmapFileName, appmap, specification);
+  }
+
+  async buildAppMap(): Promise<AppMap> {
+    const appmapData = JSON.parse(await readFile(this.appmapFileName, 'utf-8'));
+    const appmap = buildAppMap().source(appmapData).build();
+    if (appmap.metadata) {
+      if (!this.sourceLocation) this.sourceLocation = (appmap.metadata as any).source_location;
+      if (!this.appmapName) this.appmapName = appmap.metadata.name;
+    }
+    const collectSourcePath = (codeObject: CodeObject) => {
+      const location = codeObject.location;
+      if (location) {
+        const path = location.split(':')[0];
+        if (!isAbsolute(path)) this.sourcePaths.add(path);
+      }
+    };
+    appmap.classMap.visit(collectSourcePath);
+    return appmap;
+  }
+}
+
 export const handler = async (argv: any) => {
   verbose(argv.verbose);
 
@@ -100,6 +170,7 @@ export const handler = async (argv: any) => {
   const appmapDir = await locateAppMapDir();
 
   const { touch: touchOutDateTestFiles, plantumlJar, baseCommand, headCommand } = argv;
+  let { outputDir } = argv;
 
   if (!(await exists(plantumlJar))) {
     yargs.exit(
@@ -108,19 +179,6 @@ export const handler = async (argv: any) => {
         `PlantUML JAR file ${plantumlJar} does not exist. Use --plantuml-jar option to provide the JAR file location.`
       )
     );
-  }
-
-  if (argv.outputDir) {
-    if (await exists(argv.outputDir)) {
-      if (
-        argv.clobberOutputDir ||
-        !(await confirm(`Remove existing output directory ${argv.outputDir}?`, rl))
-      ) {
-        yargs.exit(1, new Error(`Aborted`));
-      }
-      await rm(argv.outputDir, { recursive: true, force: true });
-    }
-    await mkdir(argv.outputDir, { recursive: true });
   }
 
   let currentBranch = (await executeCommand(`git branch --show-current`)).trim();
@@ -140,70 +198,76 @@ export const handler = async (argv: any) => {
   const baseRevision = argv.baseRevision || 'HEAD~1';
   const headRevision = argv.headRevision || (currentBranch || 'HEAD').trim();
 
-  let baseDiagrams: Map<string, Diagram>;
-  let headDiagrams: Map<string, Diagram>;
+  if (!outputDir) {
+    outputDir = `revision-report/${sanitizeRevision(baseRevision)}-${sanitizeRevision(
+      headRevision
+    )}`;
+  }
 
-  await stashAll();
+  if (await exists(outputDir)) {
+    if (
+      argv.clobberOutputDir ||
+      (await confirm(`Remove existing output directory ${outputDir}?`, rl))
+    ) {
+      await rm(outputDir, { recursive: true, force: true });
+      // Rapid rm and then mkdir will silently fail in practice.
+      await new Promise<void>((resolve) => setTimeout(resolve, 100));
+    }
+  }
+
+  // stashAll()
+
+  await mkdir(outputDir, { recursive: true });
+  await mkdir(join(outputDir, 'base'), { recursive: true });
+  await mkdir(join(outputDir, 'head'), { recursive: true });
+  await mkdir(join(outputDir, 'diff'), { recursive: true });
+
+  const appmapReferences = new Map<string, AppMapReference>();
+  let baseAppMapFileNames: Set<string>;
+  let headAppMapFileNames: Set<string>;
   {
     await checkout('base', baseRevision);
     await createBaselineAppMaps(rl, baseCommand);
     process.stdout.write(`Processing AppMaps...`);
-    baseDiagrams = await buildDiagrams(appmapDir);
-    process.stdout.write(`done (${baseDiagrams.size})\n`);
+    baseAppMapFileNames = new Set([
+      ...(await processAppMaps(appmapDir, outputDir, RevisionName.Base, appmapReferences)),
+    ]);
+    process.stdout.write(`done (${baseAppMapFileNames.size})\n`);
   }
 
   {
     await checkout('head', headRevision);
     await updateAppMaps(appmapDir, rl, touchOutDateTestFiles, headCommand);
     process.stdout.write(`Processing AppMaps...`);
-    headDiagrams = await buildDiagrams(appmapDir);
-    process.stdout.write(`done (${headDiagrams.size})\n`);
+    headAppMapFileNames = new Set([
+      ...(await processAppMaps(appmapDir, outputDir, RevisionName.Head, appmapReferences)),
+    ]);
+    process.stdout.write(`done (${headAppMapFileNames.size})\n`);
   }
-  await unstashAll();
 
-  const appmapNameSet = new Set<string>();
-  [...baseDiagrams.keys()].forEach((file) => appmapNameSet.add(file));
-  [...headDiagrams.keys()].forEach((file) => appmapNameSet.add(file));
-  const appmapNames = [...appmapNameSet].sort();
+  // unstashAll()
 
-  const changedAppMaps = new Map<string, { diffText: string; diffDiagram: Diagram }>();
+  const headAppMapFileNameArray = [...headAppMapFileNames].sort();
+  const changedAppMaps = new Array<AppMapReference>();
   const diffSnippets = new Set<string>();
   const reportLines = new Array<string>();
-  for (let i = 0; i < appmapNames.length; i++) {
-    const appmapName = appmapNames[i];
+  for (let i = 0; i < headAppMapFileNameArray.length; i++) {
+    const appmapFileName = headAppMapFileNameArray[i];
+    const appmapReference = appmapReferences.get(appmapFileName);
+    assert(appmapReference);
 
-    const baseDiagram = baseDiagrams.get(appmapName);
-    const headDiagram = headDiagrams.get(appmapName);
-
-    if (!baseDiagram) {
-      assert(headDiagram);
-
-      console.log(`${appmapName} is new in the head revision`);
-      let diagramFile = await showDiagram(rl, plantumlJar, headDiagram);
+    if (!baseAppMapFileNames.has(appmapFileName)) {
+      console.log(`${appmapFileName} is new in the head revision`);
       await reportDiagram(
-        appmapName,
+        RevisionName.Head,
+        outputDir,
+        baseRevision,
+        appmapReference,
         reportLines,
-        argv.outputDir,
         'is new in the head revision',
-        diagramFile,
         rl,
         plantumlJar,
-        headDiagram
-      );
-      continue;
-    }
-    if (!headDiagram) {
-      console.log(`${appmapName} is removed in the head revision`);
-      let diagramFile = await showDiagram(rl, plantumlJar, baseDiagram);
-      await reportDiagram(
-        appmapName,
-        reportLines,
-        argv.outputDir,
-        'is removed from the head revision',
-        diagramFile,
-        rl,
-        plantumlJar,
-        baseDiagram
+        undefined
       );
       continue;
     }
@@ -220,53 +284,91 @@ export const handler = async (argv: any) => {
       );
 
     let diffDiagram: Diagram | undefined;
+    const baseDiagram = await appmapReference.loadSequenceDiagramJSON(RevisionName.Base);
+    const headDiagram = await appmapReference.loadSequenceDiagramJSON(RevisionName.Head);
     try {
       diffDiagram = diffDiagrams.diff(baseDiagram, headDiagram);
       if (!diffDiagram) continue;
     } catch (e) {
-      console.warn(`Error comparing ${appmapName} ${baseRevision}..${headRevision}: ${e}`);
+      console.warn(`Error comparing ${appmapFileName} ${baseRevision}..${headRevision}: ${e}`);
       continue;
     }
 
-    const diffText = format(FormatType.Text, diffDiagram, `Compare ${appmapName}`).diagram.trim();
-    if (diffSnippets.has(diffText)) continue;
+    const diffActions = new Set<Action>();
+    const markDiffActions = (action: Action): void => {
+      if (action.diffMode) {
+        let ancestor: Action | undefined = action;
+        while (ancestor) {
+          diffActions.add(ancestor);
+          ancestor = ancestor.parent;
+        }
+      }
+      action.children.forEach(markDiffActions);
+    };
 
+    diffDiagram.rootActions.forEach(markDiffActions);
+
+    const filterDiffActions = (actions: Action[]): Action[] => {
+      const result = actions.filter((action) => diffActions.has(action));
+      result.forEach((action) => {
+        action.children = filterDiffActions(action.children);
+      });
+      return result;
+    };
+    diffDiagram.rootActions = filterDiffActions(diffDiagram.rootActions);
+
+    await writeFile(
+      appmapReference.sequenceDiagramFilePath(RevisionName.Diff, FormatType.JSON, true),
+      format(FormatType.JSON, diffDiagram, `Compare ${appmapFileName}`).diagram
+    );
+
+    const diffText = format(
+      FormatType.Text,
+      diffDiagram,
+      `Compare ${appmapFileName}`
+    ).diagram.trim();
+
+    await writeFile(
+      appmapReference.sequenceDiagramFilePath(RevisionName.Diff, FormatType.Text, true),
+      diffText
+    );
+
+    if (diffSnippets.has(diffText)) continue;
     diffSnippets.add(diffText);
-    changedAppMaps.set(appmapName, { diffText, diffDiagram });
+
+    changedAppMaps.push(appmapReference);
   }
 
-  const changedAppMapNames = [...changedAppMaps.keys()].sort();
   console.log(
-    prominentStyle(
-      `${changedAppMapNames.length} AppMaps have changed between these two code versions.`
-    )
+    prominentStyle(`${changedAppMaps.length} AppMaps have changed between these two code versions.`)
   );
   console.log();
 
-  for (let i = 0; i < changedAppMapNames.length; i++) {
-    const appmapName = changedAppMapNames[i];
-    const entry = changedAppMaps.get(appmapName);
-    assert(entry);
+  for (let i = 0; i < changedAppMaps.length; i++) {
+    const appmapReference = changedAppMaps[i];
+    const diagramText = await appmapReference.loadSequenceDiagramText(RevisionName.Diff);
+    const diffDiagram = await appmapReference.loadSequenceDiagramJSON(RevisionName.Diff);
 
-    console.log(prominentStyle(`${appmapName} changed:`));
-    console.log(entry.diffText);
+    console.log(prominentStyle(`${appmapReference.appmapFileName} changed:`));
+    console.log(diagramText);
     console.log();
-    let diagramFile = await showDiagram(rl, plantumlJar, entry.diffDiagram);
+    let diagramFile = await showDiagram(rl, plantumlJar, diffDiagram);
 
     await reportDiagram(
-      appmapName,
+      RevisionName.Diff,
+      outputDir,
+      baseRevision,
+      appmapReference,
       reportLines,
-      argv.outputDir,
       'has changed',
-      diagramFile,
       rl,
       plantumlJar,
-      entry.diffDiagram
+      diagramFile
     );
   }
 
-  if (argv.outputDir) {
-    await writeFile(join(argv.outputDir, 'report.md'), reportLines.join('\n'));
+  if (outputDir) {
+    await writeFile(join(outputDir, 'report.md'), reportLines.join('\n'));
   }
 
   rl.close();
@@ -371,19 +473,27 @@ function makeTempFile(fileName: string): string {
   return join(tmpdir(), fileName);
 }
 
-async function buildDiagrams(appmapDir: string): Promise<Map<string, Diagram>> {
-  const result = new Map<string, Diagram>();
-  const specOptions = {} as SequenceDiagramOptions;
+async function processAppMaps(
+  appmapDir: string,
+  outputDir: string,
+  revisionName: RevisionName,
+  appmapReferences: Map<string, AppMapReference>
+): Promise<string[]> {
   const appmapFileNames = await promisify(glob)(`${appmapDir}/**/*.appmap.json`);
   for (let i = 0; i < appmapFileNames.length; i++) {
     const appmapFileName = appmapFileNames[i];
-    const appmapData = JSON.parse(await readFile(appmapFileName, 'utf-8'));
-    const appmap = buildAppMap().source(appmapData).build();
-    const specification = Specification.build(appmap, specOptions);
-    const diagram = buildDiagram(appmapFileName, appmap, specification);
-    result.set(appmapFileName, diagram);
+    const appmapReference = new AppMapReference(outputDir, appmapFileName);
+    const diagram = await appmapReference.buildSequenceDiagram();
+    await copyFile(appmapFileName, appmapReference.archivedAppMapFilePath(revisionName));
+    await writeFile(
+      appmapReference.sequenceDiagramFilePath(revisionName, FormatType.JSON, true),
+      format(FormatType.JSON, diagram, appmapFileName).diagram
+    );
+    if (!appmapReferences.get(appmapFileName)) {
+      appmapReferences.set(appmapFileName, appmapReference);
+    }
   }
-  return result;
+  return appmapFileNames;
 }
 
 async function confirm(prompt: string, rl: readline.Interface): Promise<boolean> {
@@ -407,6 +517,7 @@ async function showDiagram(
   return fileNameSVG;
 }
 
+/*
 async function stashAll(): Promise<void> {
   console.log(`Stashing all modified and untracked files`);
   await executeCommand(`git stash --include-untracked`);
@@ -420,6 +531,7 @@ async function unstashAll(): Promise<void> {
     console.log(warningStyle(`Command failed. Continuing optimistically...`));
   }
 }
+*/
 
 function executeCommand(cmd: string, printStdout = true, printStderr = true): Promise<string> {
   console.log(commandStyle(cmd));
@@ -470,39 +582,73 @@ async function waitForEnter(rl: readline.Interface): Promise<void> {
 }
 
 async function renderDiagram(plantumlJar: string, diagram: Diagram): Promise<string> {
-  const diffPlantUML = format(FormatType.PlantUML, diagram, `Diagram`);
-  const fileNameUML = makeTempFile(`sequence${diffPlantUML.extension}`);
+  const plantUML = format(FormatType.PlantUML, diagram, `Diagram`);
+  const fileNameUML = makeTempFile(`sequence${plantUML.extension}`);
   const fileNameSVG = makeTempFile(`sequence.svg`);
-  await writeFile(fileNameUML, diffPlantUML.diagram);
+  await writeFile(fileNameUML, plantUML.diagram);
   await executeCommand(`java -jar ${plantumlJar} -tsvg ${fileNameUML}`);
   return fileNameSVG;
 }
 
 async function reportDiagram(
-  appmapName: string,
-  reportLines: string[],
+  revisionName: RevisionName,
   outputDir: string,
+  baseRevision: string,
+  appmapReference: AppMapReference,
+  reportLines: string[],
   message: string,
-  diagramFile: string | undefined,
   rl: readline.Interface,
   plantumlJar: any,
-  diagram: Diagram
+  diagramFile?: string
 ): Promise<void> {
-  if (outputDir && (await confirm(`Include in the change report?`, rl))) {
+  if (await confirm(`Include in the change report?`, rl)) {
+    const diagram = await appmapReference.loadSequenceDiagramJSON(revisionName);
+    const diagramText = await appmapReference.loadSequenceDiagramText(revisionName);
     if (!diagramFile) diagramFile = await renderDiagram(plantumlJar, diagram);
-    await mkdir(join(outputDir, 'sequence-diagrams'), { recursive: true });
-    const fileDirName = dirname(appmapName);
-    const fileBaseName = basename(appmapName, '.appmap.json');
-    const metadata = JSON.parse(
-      await readFile(join(fileDirName, fileBaseName, `metadata.json`), 'utf-8')
+
+    const appmapName = appmapReference.appmapName || appmapReference.appmapFileName;
+
+    await rename(diagramFile, appmapReference.sequenceDiagramFilePath(revisionName, 'svg', true));
+    reportLines.push(
+      `## [${appmapName}](${appmapReference.sequenceDiagramFilePath(
+        revisionName,
+        'svg',
+        false
+      )}) ${message}.`
     );
-    const sourceLocation = metadata.source_location;
-    await rename(diagramFile, join(outputDir, 'sequence-diagrams', `${fileBaseName}.svg`));
-    reportLines.push(`## [${fileBaseName}](./sequence-diagrams/${fileBaseName}.svg) ${message}.`);
+
+    if (appmapReference.sourceLocation) {
+      const sourcePath = appmapReference.sourceLocation.split(':')[0];
+      const fileURL = isAbsolute(sourcePath)
+        ? relative(outputDir, sourcePath)
+        : relative(outputDir, join(process.cwd(), sourcePath));
+      reportLines.push('');
+      reportLines.push(`[${relative(process.cwd(), appmapReference.sourceLocation)}](${fileURL})`);
+      reportLines.push('');
+    }
+
+    if (appmapReference.sourcePaths.size > 0) {
+      const existingSourcePaths = [...appmapReference.sourcePaths].filter(existsSync).sort();
+      const sourceDiff = await executeCommand(
+        `git diff ${baseRevision} -- ${existingSourcePaths.join(' ')}`
+      );
+      reportLines.push('```');
+      reportLines.push(sourceDiff);
+      reportLines.push('```');
+    }
+
     reportLines.push('');
-    reportLines.push(`[${sourceLocation}](../${sourceLocation})`);
     reportLines.push('');
-    reportLines.push(`![${fileBaseName}](./sequence-diagrams/${fileBaseName}.svg)`);
+    reportLines.push('```');
+    reportLines.push(diagramText);
+    reportLines.push('```');
+    reportLines.push('');
+    reportLines.push(
+      `![${appmapName}](${appmapReference.sequenceDiagramFilePath(revisionName, 'svg', false)})`
+    );
     reportLines.push('');
   }
+}
+function sanitizeRevision(revision: string): string {
+  return revision.replace(/[^a-zA-Z0-9_]/g, '_');
 }
