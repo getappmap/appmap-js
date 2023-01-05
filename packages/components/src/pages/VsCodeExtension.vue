@@ -93,6 +93,18 @@
           />
         </template>
         <template v-slot:controls>
+          <v-popper
+            v-if="appMapUploadable"
+            class="hover-text-popper"
+            text="Create a link to this AppMap."
+            placement="left"
+            text-align="right"
+          >
+            <button class="control-button appmap-upload" @click="uploadAppmap" title="">
+              <UploadIcon class="control-button__icon" />
+              <span>Share</span>
+            </button>
+          </v-popper>
           <v-popper-menu :isHighlight="filtersChanged">
             <template v-slot:icon>
               <FilterIcon class="control-button__icon" />
@@ -211,20 +223,31 @@
           <button class="control-button diagram-reload" @click="resetDiagram" title="Clear">
             <ReloadIcon class="control-button__icon" />
           </button>
-          <v-popper
-            v-if="appMapUploadable"
-            class="hover-text-popper"
-            text="Create a link to this AppMap."
-            placement="left"
-            text-align="right"
-          >
-            <button class="control-button appmap-upload" @click="uploadAppmap" title="">
-              <UploadIcon class="control-button__icon" />
-              <span>Share</span>
-            </button>
-          </v-popper>
         </template>
       </v-tabs>
+
+      <div v-if="showShareModal" class="share-appmap">
+        <div class="heading">
+          <h1>Share this AppMap</h1>
+          <span class="close-me" @click="closeShareModal">X</span>
+        </div>
+        <div class="content">
+          <p>
+            This link can be used to view this AppMap in a browser. You can share it with other
+            collaborators, or put it into a Pull Request.
+          </p>
+          <div class="share-url">
+            <div class="share-link">
+              <span class="url">{{ shareURLmessage }}</span>
+              <span class="icon copy" @click="copyToClipboard(shareURL)">
+                <CopyIcon />
+              </span>
+            </div>
+            <p>This link has been copied to your clipboard.</p>
+          </div>
+        </div>
+      </div>
+
       <div class="diagram-instructions">
         <v-instructions ref="instructions" />
       </div>
@@ -263,6 +286,7 @@
 import { Buffer } from 'buffer';
 import { CodeObjectType, Event, buildAppMap } from '@appland/models';
 import CheckIcon from '@/assets/check.svg';
+import CopyIcon from '@/assets/copy-icon.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
 import ReloadIcon from '@/assets/reload.svg';
 import ResetIcon from '@/assets/reset.svg';
@@ -311,6 +335,7 @@ export default {
   components: {
     CheckIcon,
     CloseThinIcon,
+    CopyIcon,
     ReloadIcon,
     ResetIcon,
     UploadIcon,
@@ -372,6 +397,8 @@ export default {
       },
       traceFilterValue: '',
       currentTraceFilterIndex: 0,
+      showShareModal: false,
+      shareURL: undefined,
     };
   },
 
@@ -727,6 +754,11 @@ export default {
         )
       );
     },
+
+    shareURLmessage() {
+      if (this.shareURL) return this.shareURL;
+      return 'Retrieving link...';
+    },
   },
 
   methods: {
@@ -990,6 +1022,7 @@ export default {
     },
 
     uploadAppmap() {
+      this.showShareModal = true;
       this.$root.$emit('uploadAppmap');
     },
 
@@ -1041,6 +1074,18 @@ export default {
           (attachedFinding) => attachedFinding.finding.hash_v2 === finding.finding.hash_v2
         )
       );
+    },
+
+    closeShareModal() {
+      this.showShareModal = false;
+    },
+
+    setShareURL(url) {
+      this.shareURL = url;
+    },
+
+    copyToClipboard(input) {
+      this.$root.$emit('copyToClipboard', input);
     },
 
     onClickTraceEvent(e) {
@@ -1308,6 +1353,77 @@ code {
   color: $teal;
 }
 
+.share-appmap {
+  box-shadow: $box-shadow-min;
+  font-family: $appland-text-font-family;
+  position: absolute;
+  top: 5rem;
+  right: 2rem;
+  background-color: $gray2;
+  border-radius: 0.5rem;
+  padding: 0 0 2rem 0;
+  width: calc(100% - 4rem);
+  word-break: break-word;
+  h1 {
+    color: $white;
+    font-weight: 800;
+  }
+  h3 {
+    margin-bottom: 0.5rem;
+  }
+  .heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #808b9869;
+  }
+  .content {
+    padding: 0 2rem;
+    color: $white;
+    line-height: 1.5rem;
+  }
+  .share-url {
+    p {
+      margin-top: 0.5rem;
+      margin-bottom: 0;
+    }
+  }
+  .share-link {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $white;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.5rem;
+    .url {
+      color: $blue;
+      font-weight: 800;
+      transition: $transition;
+      &:hover {
+        color: $royal;
+        cursor: pointer;
+      }
+    }
+    .icon {
+      &:hover {
+        cursor: pointer;
+      }
+      color: $blue;
+    }
+  }
+  .close-me {
+    transition: $transition;
+    font-weight: 800;
+    &:hover {
+      color: $blue;
+      cursor: pointer;
+    }
+  }
+}
+
 #app {
   position: relative;
   display: grid;
@@ -1404,13 +1520,15 @@ code {
         display: inline-block;
 
         .appmap-upload {
-          border: 1px solid;
-          border-radius: 8px;
-          padding: 0.4rem;
-
+          background-color: $dark-purple;
+          border-radius: 0.5rem;
+          color: $white;
+          padding: 0.35rem 0.8rem;
+          text-transform: uppercase;
+          flex-direction: row-reverse;
+          gap: 0.5rem;
           span {
-            padding-left: 0.4rem;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin: auto;
           }
         }
