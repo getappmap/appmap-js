@@ -1,3 +1,10 @@
+# [@appland/components-v2.20.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.19.1...@appland/components-v2.20.0) (2023-01-05)
+
+
+### Features
+
+* finding info in appmap ([ab75efb](https://github.com/getappmap/appmap-js/commit/ab75efb43710bf91ca98d0fe73bce12e859edcf5))
+
 # [@appland/components-v2.19.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.19.0...@appland/components-v2.19.1) (2022-12-13)
 
 
