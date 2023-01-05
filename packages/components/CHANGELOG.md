@@ -1,3 +1,10 @@
+# [@appland/components-v2.20.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.20.0...@appland/components-v2.20.1) (2023-01-05)
+
+
+### Bug Fixes
+
+* bump [@appland](https://github.com/appland) dependency versions ([ba6005b](https://github.com/getappmap/appmap-js/commit/ba6005bced797c987e5a8528958497e7e72deba3))
+
 # [@appland/components-v2.20.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.19.1...@appland/components-v2.20.0) (2023-01-05)
 
 
