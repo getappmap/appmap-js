@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import fs from 'fs-extra';
+import 'jest-sinon';
 import { join } from 'path';
 import sinon from 'sinon';
 import tmp from 'tmp';
@@ -9,6 +10,8 @@ import {
   PipInstaller,
   PoetryInstaller,
 } from '../../../src/cmds/agentInstaller/pythonAgentInstaller';
+import UI from '../../../src/cmds/userInteraction';
+const Cwd = process.cwd();
 
 tmp.setGracefulCleanup();
 
@@ -24,6 +27,8 @@ function getProjectDirectory(projectType) {
 }
 
 describe('Python Agent Installation', () => {
+  afterEach(() => process.chdir(Cwd));
+
   describe('poetry support', () => {
     let btInstaller: PoetryInstaller;
 
@@ -53,6 +58,7 @@ describe('Python Agent Installation', () => {
 
     afterEach(() => {
       sinon.restore();
+      jest.clearAllMocks();
     });
 
     it('detects pip project', async () => {
@@ -94,6 +100,40 @@ describe('Python Agent Installation', () => {
       const cmdStruct = await btInstaller.initCommand();
       expect(cmdStruct.program).toBe('python3');
       expect(cmdStruct.args).toEqual(['-m', 'appmap.command.appmap_agent_init']);
+    });
+
+    describe('build file selection', () => {
+      let installer: PipInstaller;
+      beforeEach(() => {
+        installer = new PipInstaller(projectDirectory);
+      });
+
+      it('uses a single requirements file', async () => {
+        sinon.stub(installer, <any>'findBuildFiles').resolves(['requirements.txt']);
+        const prompt = sinon.stub(UI, 'prompt').resolves({ buildFile: 'requirements.txt' });
+
+        await installer.checkConfigCommand();
+
+        expect(prompt).not.toBeCalled();
+      });
+
+      it('offers requirements files', async () => {
+        const chooseBuildFile = sinon.stub(installer, <any>'chooseBuildFile').callThrough();
+        const prompt = sinon.stub(UI, 'prompt').resolves({ buildFile: 'requirements.txt' });
+
+        await installer.checkConfigCommand();
+
+        expect(chooseBuildFile).toBeCalledOnce();
+        const promptCalls = prompt.getCalls();
+        expect(promptCalls.length).toStrictEqual(1);
+        const question = promptCalls[0].firstArg[0];
+        expect(question).toMatchObject({
+          name: 'buildFile',
+          type: 'list',
+          choices: ['more_requirements.txt', 'requirements-dev.txt', 'requirements.txt'],
+          default: 'requirements-dev.txt',
+        });
+      });
     });
   });
 

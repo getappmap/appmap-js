@@ -8,6 +8,16 @@ import Graph from './graph/index';
 
 export const DEFAULT_TARGET_COUNT = 1;
 
+// Types which have render support within the diagram
+const renderableTypes = [
+  CodeObjectType.DATABASE,
+  CodeObjectType.HTTP,
+  CodeObjectType.EXTERNAL_SERVICE,
+  CodeObjectType.ROUTE,
+  CodeObjectType.PACKAGE,
+  CodeObjectType.CLASS,
+];
+
 function codeObjectFromElement(element, classMap) {
   const { id, type } = element.dataset;
   return classMap.codeObjects.find((obj) => obj.id === id && obj.type === type);
@@ -227,11 +237,7 @@ export default class ComponentDiagram extends EventSource {
       .reduce((objects, obj) => {
         const children = obj.childLeafs();
 
-        if (
-          children.length === 1 &&
-          children[0].type !== CodeObjectType.QUERY &&
-          children[0].type !== CodeObjectType.FUNCTION
-        ) {
+        if (children.length === 1 && renderableTypes.includes(children[0].type)) {
           // Make sure this object isn't empty
           const eventCount = obj.allEvents.length;
           if (eventCount > 0) {

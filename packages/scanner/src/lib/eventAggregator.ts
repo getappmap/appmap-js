@@ -19,7 +19,7 @@ export default class EventAggregator<E> {
     private callback: (events: PendingEvent<E>[]) => void,
     private maxMsBetween = MaxMSBetween
   ) {
-    process.on('exit', () => {
+    process.on('beforeExit', () => {
       if (this.timeout) {
         clearTimeout(this.timeout);
         this.emitPending();
@@ -34,7 +34,7 @@ export default class EventAggregator<E> {
 
   private refresh() {
     if (this.timeout) clearTimeout(this.timeout);
-    this.timeout = setTimeout(this.emitPending.bind(this), this.maxMsBetween);
+    this.timeout = setTimeout(this.emitPending.bind(this), this.maxMsBetween).unref();
   }
 
   private emitPending() {

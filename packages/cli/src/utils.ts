@@ -26,6 +26,14 @@ export function baseName(fileName: string) {
   return fileName.substring(0, fileName.length - '.appmap.json'.length);
 }
 
+async function statFile(filePath: PathLike): Promise<Stats | null> {
+  try {
+    return await fsp.stat(filePath);
+  } catch (e) {
+    return null;
+  }
+}
+
 /**
  * Gets the last modified time of a file.
  *
@@ -39,16 +47,16 @@ export async function mtime(filePath: PathLike): Promise<number | null> {
   // especially since we write files atomically (e.g. by moving them into place after writing them
   // as temp files).
 
-  let fileStat: Stats;
-  try {
-    fileStat = await fsp.stat(filePath);
-  } catch (e) {
-    return null;
-  }
-  if (!fileStat.isFile()) {
+  const fileStat = await statFile(filePath);
+  if (!fileStat || !fileStat.isFile()) {
     return null;
   }
   return fileStat.mtimeMs;
+}
+
+export async function isFile(filePath: PathLike): Promise<boolean> {
+  const fileStat = await statFile(filePath);
+  return !!(fileStat && fileStat.isFile());
 }
 
 /**

@@ -85,13 +85,93 @@ describe(FingerprintWatchCommand, () => {
       return verifyIndexSuccess(200, 20);
     });
 
+    async function testDisableFileWatching(errorMessage: string, code: string) {
+      cmd = new FingerprintWatchCommand(appMapDir);
+      const err = new Error(errorMessage);
+      (err as NodeJS.ErrnoException).code = code;
+      await cmd.watcherErrorFunction(err);
+      expect(cmd.watcher).toBeUndefined();
+
+      cmd.watcher = new FSWatcher();
+      expect(cmd.watcher).not.toBeUndefined();
+      const mockWarn = jest.spyOn(console, 'warn').mockImplementation();
+      await cmd.watcherErrorFunction(err);
+      expect(cmd.watcher).toBeUndefined(); // file watching was disabled
+      expect(mockWarn).toBeCalledTimes(3);
+      expect(mockWarn).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
+      mockWarn.mockRestore();
+    }
+
     it('does not raise if it hits the limit of the number of file watchers', async () => {
+      testDisableFileWatching('ENOSPC: System limit for number of file watchers reached', 'ENOSPC');
+    });
+
+    it('does not raise if it hits the limit of the number of open files', async () => {
+      testDisableFileWatching('EMFILE: too many open files', 'EMFILE');
+    });
+
+    it('gets filenames from error messages', async () => {
+      cmd = new FingerprintWatchCommand(appMapDir);
+      expect(
+        cmd.getFilenameFromErrorMessage(
+          `Error: UNKNOWN: unknown error, lstat 'c:\\Users\\Test\\Programming\\MyProject'`
+        )
+      ).toBe('c:\\Users\\Test\\Programming\\MyProject');
+    });
+
+    it('does not raise on unknown error lstat', async () => {
       cmd = new FingerprintWatchCommand(appMapDir);
       cmd.watcher = new FSWatcher();
       expect(cmd.watcher).not.toBeUndefined();
-      await cmd.watcherErrorFunction(new Error("ENOSPC: System limit for number of file watchers reached"));
-      expect(cmd.watcher).toBeUndefined();
-     });
+      expect(cmd.unreadableFiles.size).toBe(0);
+      const mockWarn = jest.spyOn(console, 'warn').mockImplementation();
+      const errorMessage = `Error: UNKNOWN: unknown error, lstat 'c:\\Users\\Test\\Programming\\MyProject'`;
+      const err = new Error(errorMessage);
+      (err as NodeJS.ErrnoException).code = 'UNKNOWN';
+      await cmd.watcherErrorFunction(err);
+      expect(cmd.watcher).not.toBeUndefined();
+      expect(mockWarn).toBeCalledTimes(2);
+      expect(mockWarn).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
+      expect(cmd.unreadableFiles.size).toBe(1);
+      expect(cmd.unreadableFiles.has('c:\\Users\\Test\\Programming\\MyProject')).toBe(true);
+      // ignoring this file or directory works correctly
+      expect(cmd.ignored('c:\\Users\\Test\\Programming\\MyProject')).toBe(true);
+      expect(cmd.ignored('c:\\Users\\Test\\Programming\\MyProject\\some.appmap.json')).toBe(false);
+      mockWarn.mockRestore();
+    });
+
+    it('does not raise if it finds symlinks pointing to directories up, leading to infinite loop', async () => {
+      cmd = new FingerprintWatchCommand(appMapDir);
+      cmd.watcher = new FSWatcher();
+      expect(cmd.watcher).not.toBeUndefined();
+      expect(cmd.symlinkLoopFiles.size).toBe(0);
+      const mockWarn = jest.spyOn(console, 'warn').mockImplementation();
+      const errorMessage = `Error: ELOOP: too many symbolic links encountered, stat '/Users/test/Documents/some_path/vendor/bundle/gems/autodoc-0.7.0/spec/dummy/spec'`;
+      const err = new Error(errorMessage);
+      (err as NodeJS.ErrnoException).code = 'ELOOP';
+      await cmd.watcherErrorFunction(err);
+      expect(cmd.watcher).not.toBeUndefined();
+      expect(mockWarn).toBeCalledTimes(2);
+      expect(mockWarn).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
+      expect(cmd.symlinkLoopFiles.size).toBe(1);
+      expect(
+        cmd.symlinkLoopFiles.has(
+          '/Users/test/Documents/some_path/vendor/bundle/gems/autodoc-0.7.0/spec/dummy/spec'
+        )
+      ).toBe(true);
+      // ignoring this file or directory works correctly
+      expect(
+        cmd.ignored(
+          '/Users/test/Documents/some_path/vendor/bundle/gems/autodoc-0.7.0/spec/dummy/spec'
+        )
+      ).toBe(true);
+      expect(
+        cmd.ignored(
+          '/Users/test/Documents/some_path/vendor/bundle/gems/autodoc-0.7.0/spec/dummy/spec/some_other_file'
+        )
+      ).toBe(false);
+      mockWarn.mockRestore();
+    });
 
     describe('telemetry', () => {
       let handler: Fingerprinter;

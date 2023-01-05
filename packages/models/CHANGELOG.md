@@ -1,3 +1,10 @@
+# [@appland/models-v1.23.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.22.0...@appland/models-v1.23.0) (2023-01-04)
+
+
+### Features
+
+* finding info in appmap ([ab75efb](https://github.com/getappmap/appmap-js/commit/ab75efb43710bf91ca98d0fe73bce12e859edcf5))
+
 # [@appland/models-v1.22.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.21.0...@appland/models-v1.22.0) (2022-11-23)
 
 

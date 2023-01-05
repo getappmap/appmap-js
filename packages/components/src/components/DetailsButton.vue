@@ -30,22 +30,31 @@ export default {
 <style scoped lang="scss">
 .details-btn {
   display: flex;
-  border: 1px solid $base15;
+  border: 1px solid $gray4;
   border-radius: $border-radius;
   padding: 0.25rem 0.6rem 0.25rem 0.5rem;
   letter-spacing: 0.5px;
-  color: $base10;
+  color: $gray4;
   background-color: transparent;
-  font: inherit;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   cursor: pointer;
   outline: none;
   text-align: left;
   align-items: center;
+  transition: $transition;
 
   &:hover {
-    background-color: darken($vs-code-gray1, 03);
-    border-color: darken($vs-code-gray1, 03);
+    background-color: $gray4;
+    border-color: $gray4;
+    color: $gray1;
+    .icon {
+      &--clear:before {
+        color: $gray1;
+      }
+      &--back:before {
+        color: $gray1;
+      }
+    }
   }
 }
 
@@ -53,11 +62,17 @@ export default {
   margin-right: 0.5em;
 
   &--clear:before {
-    content: '✖ ';
+    content: 'x';
+    font-family: $appland-text-font-family;
+    font-style: initial;
+    color: $gray4;
   }
 
   &--back:before {
     content: '◄ ';
+    font-family: $appland-text-font-family;
+    font-style: initial;
+    color: $gray4;
   }
 }
 </style>

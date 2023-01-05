@@ -1,3 +1,10 @@
+# [@appland/sequence-diagram-v1.3.1](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.3.0...@appland/sequence-diagram-v1.3.1) (2022-12-16)
+
+
+### Bug Fixes
+
+* Move @datastructures-js/priority-queue to `dependencies` ([25055fb](https://github.com/getappmap/appmap-js/commit/25055fb227c4088abecaa2de87d5c13f6d5dd9b3))
+
 # [@appland/sequence-diagram-v1.3.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.2.0...@appland/sequence-diagram-v1.3.0) (2022-12-13)
 
 

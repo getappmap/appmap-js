@@ -4,6 +4,8 @@ import petClinicScenario from './data/java_scenario.json';
 import diffScenario from './data/diff_base.json';
 import appland1 from './data/Application_page_component_diagram_highlights_node_connections_upon_selection.appmap.json';
 import appland2 from './data/ApplicationsController_scenarios_list_when_the_user_is_anonymous_is_not_found.appmap.json';
+import mapWithFindings from './data/appmap_with_finding.json';
+import mapWithTwoFindings from './data/appmap_with_two_findings.json';
 import patchNotes from './data/patch_notes_html';
 import bindResolvePath from './support/resolvePath';
 import './scss/fullscreen.scss';
@@ -13,6 +15,8 @@ const scenarioData = {
   'pet-clinic': petClinicScenario,
   appland1,
   appland2,
+  mapWithFindings,
+  mapWithTwoFindings,
 };
 
 export default {

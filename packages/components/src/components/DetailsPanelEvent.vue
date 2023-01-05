@@ -15,6 +15,13 @@
 
     <v-sql-code v-if="hasSql" :sql="object.sql.sql" :database="object.sql.database_type" />
 
+    <v-details-panel-list
+      class="findings"
+      title="Associated findings"
+      v-if="hasFindings"
+      :items="findings"
+    />
+
     <div class="event-params" v-if="hasParameters">
       <h5>Parameters</h5>
       <ul class="table-01">
@@ -99,6 +106,7 @@ import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import VSqlCode from '@/components/SqlCode.vue';
 import { SET_VIEW, VIEW_FLOW } from '@/store/vsCode';
+import toListItem from '@/lib/finding';
 
 export default {
   name: 'v-details-panel-event',
@@ -129,6 +137,10 @@ export default {
 
     hasMessage() {
       return this.object.message && this.object.message.length;
+    },
+
+    hasFindings() {
+      return Array.isArray(this.object.findings) && this.object.findings.length;
     },
 
     requestHeaders() {
@@ -182,6 +194,10 @@ export default {
     caller() {
       return this.object.parent ? [this.object.parent] : null;
     },
+
+    findings() {
+      return (this.object.findings || []).map(toListItem);
+    },
   },
 
   methods: {
@@ -197,23 +213,23 @@ export default {
   h3 {
     padding: 0;
   }
+
   .event-params {
     padding: 0;
-    color: $base11;
     h5 {
-      color: $base03;
-      font-size: 1.1rem;
-      font-weight: 500;
+      color: $gray4;
+      font-size: 0.9rem;
       line-height: 1.2;
       margin: 0 0 0.25rem 0;
       padding: 0;
+      text-transform: uppercase;
     }
     .table-01 {
       font-size: 14px;
       font-family: sans-serif;
       font-weight: 500;
       li {
-        padding: 0.5rem 0;
+        padding: 0.5rem;
       }
     }
   }
@@ -225,11 +241,12 @@ export default {
     li {
       width: 100%;
       border-bottom: 1px solid $gray3;
-      padding: 0.5rem 0;
+      padding: 0.5rem;
       transition: $transition;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 0.4rem;
       a {
         margin: 0;
         width: 100%;
@@ -240,7 +257,7 @@ export default {
 </style>
 <style scoped>
 .details-panel-event >>> .sql-code {
-  margin-bottom: 1.5rem;
+  margin-bottom: 8px;
   padding: 0;
 }
 </style>

@@ -110,9 +110,9 @@ export default {
 
   methods: {
     displayLocation(location) {
-      const lineNumber = location.range[0] && location.range[0].line;
+      const lineNumber = location.range[0] && location.range[0].line + 1;
       const { truncatedPath } = location;
-      if (lineNumber && lineNumber !== 0) {
+      if (lineNumber && lineNumber > 1) {
         return `${truncatedPath}:${lineNumber}`;
       }
       return `${truncatedPath}`;
@@ -188,14 +188,24 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.qs .header-controls a {
+  color: $white;
+}
 .analysis-findings.full-width {
   margin: 0 -1.75rem;
   h3 {
+    display: flex;
+    align-items: center;
     padding: 0 2rem;
+    color: $gray4;
+    svg {
+      margin-right: 0.5rem;
+    }
   }
   .appmap-list {
     padding: 0;
     border-top: 1px solid lighten($gray2, 15);
+    margin-top: 0.25rem;
     li {
       padding: 0.5rem 2rem;
       border-bottom: 1px solid lighten($gray2, 15);
@@ -231,18 +241,25 @@ export default {
       position: absolute;
       right: 2rem;
       .btn {
-        border: 1px solid $purps3;
+        border: 1px solid $white;
         border-radius: 0.5rem;
         padding: 0.2rem 0.5rem;
         transition: $transition;
         min-width: 200px;
         text-align: center;
         &:hover {
-          background-color: $purps3;
+          background-color: $gray1;
+          border-color: $gray1;
           color: $white;
           cursor: pointer;
         }
       }
+    }
+  }
+  section {
+    .code {
+      font-family: monospace;
+      font-weight: 800;
     }
   }
   .subhead {
@@ -295,10 +312,16 @@ export default {
         padding: 0.25rem 1rem 0.25rem 1.5rem;
         transition: $transition;
       }
+      &.card {
+        margin-top: 0.25rem;
+      }
     }
-    .code {
-      font-weight: 800;
-      color: $gray4;
+    section {
+      .code {
+        font-weight: 800;
+        color: $gray4;
+        font-family: monospace;
+      }
     }
     .card {
       border-radius: 0.5rem;

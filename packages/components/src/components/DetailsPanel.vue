@@ -17,7 +17,12 @@
         <slot name="buttons" />
       </div>
       <keep-alive>
-        <v-details-search v-if="!selectedObject && !selectedLabel" :appMap="appMap" />
+        <v-details-search
+          v-if="!selectedObject && !selectedLabel"
+          :appMap="appMap"
+          :findings="findings"
+          @onChangeFilter="(value) => this.$emit('onChangeFilter', value)"
+        />
       </keep-alive>
       <component
         v-if="selectedObject"
@@ -39,6 +44,7 @@
 import { Event, AppMap } from '@appland/models';
 import AppMapLogo from '@/assets/appmap-full-logo.svg';
 import VDetailsLabel from '@/components/DetailsLabel.vue';
+import VDetailsPanelAnalysisFinding from '@/components/DetailsPanelAnalysisFinding.vue';
 import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
 import VDetailsPanelDatabase from '@/components/DetailsPanelDatabase.vue';
 import VDetailsPanelEdge from '@/components/DetailsPanelEdge.vue';
@@ -59,6 +65,7 @@ export default {
   components: {
     AppMapLogo,
     VDetailsLabel,
+    VDetailsPanelAnalysisFinding,
     VDetailsPanelClass,
     VDetailsPanelDatabase,
     VDetailsPanelEdge,
@@ -84,6 +91,10 @@ export default {
       type: String,
     },
     filtersRootObjects: {
+      type: Array,
+      default: () => [],
+    },
+    findings: {
       type: Array,
       default: () => [],
     },
@@ -173,9 +184,10 @@ export default {
 
   &__buttons {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
     align-items: flex-start;
+    gap: 0.5rem;
 
     button {
       margin-bottom: 1rem;

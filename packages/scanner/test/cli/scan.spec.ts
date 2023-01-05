@@ -14,9 +14,10 @@ import { dump } from 'js-yaml';
 import CommandOptions from '../../src/cli/scan/options';
 import tmp from 'tmp-promise';
 import assert from 'assert';
-import { withStubbedTelemetry } from '../helper';
 import { FSWatcher } from 'chokidar';
 import { mkdir, chmod } from 'fs/promises';
+
+jest.mock('../../src/telemetry');
 
 process.env['APPMAP_TELEMETRY_DISABLED'] = 'true';
 delete process.env.APPLAND_API_KEY;
@@ -51,7 +52,6 @@ afterEach(() => {
 });
 afterEach(() => sinon.restore());
 afterEach(() => nock.cleanAll());
-withStubbedTelemetry();
 
 function runCommand(options: CommandOptions): Promise<void> {
   return Command.handler({ $0: 'test', _: [], ...options });
@@ -272,13 +272,15 @@ describe('scan', () => {
 
     it('does not raise if it hits the limit of the number of file watchers', async () => {
       await createWatcher();
-      if (watcher) { // without the if it doesn't compile; it could be undefined
+      if (watcher) {
+        // without the if it doesn't compile; it could be undefined
         watcher.appmapWatcher = new FSWatcher();
         expect(watcher.appmapWatcher).not.toBeUndefined();
-        await watcher.watcherErrorFunction(new Error("ENOSPC: System limit for number of file watchers reached"));
+        const err = new Error('ENOSPC: System limit for number of file watchers reached');
+        (err as NodeJS.ErrnoException).code = 'ENOSPC';
+        await watcher.watcherErrorFunction(err);
         expect(watcher.appmapWatcher).toBeUndefined();
-      } else
-        throw new Error("watcher should have been defined");
+      } else throw new Error('watcher should have been defined');
     });
 
     it('eventually rescans even if file watching is flaky', async () => {

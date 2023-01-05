@@ -540,7 +540,13 @@ appmap_dir: tmp/appmap
 
       beforeEach(() => {
         fse.copySync(projectFixture, projectDir);
-        sinon.stub(inquirer, 'prompt').resolves({ result: 'pip', confirm: true });
+        sinon
+          .stub(inquirer, 'prompt')
+          .onCall(0)
+          .resolves({ result: 'pip', confirm: true })
+          // call 1 comes from checkConfigCommand
+          .onCall(1)
+          .resolves({ buildFile: 'requirements.txt' });
       });
 
       const installAgent = (cmdStruct: CommandStruct) => {

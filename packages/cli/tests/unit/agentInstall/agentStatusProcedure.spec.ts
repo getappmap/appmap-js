@@ -10,9 +10,15 @@ const procedure = new AgentStatusProcedure(new TestAgentInstaller(), '/test/proj
 
 describe(AgentStatusProcedure, () => {
   it('prints any warnings from the validator', async () => {
-    jest.spyOn(procedure, 'validateProject').mockResolvedValue(
-      { errors: [{ level: 'warning', message: 'Remember to foo the bar.', help_urls: ['test:///help/url'] }] }
-    );
+    jest.spyOn(procedure, 'validateProject').mockResolvedValue({
+      errors: [
+        {
+          level: 'warning',
+          message: 'Remember to foo the bar.',
+          help_urls: ['test:///help/url'],
+        },
+      ],
+    });
 
     await procedure.run();
 

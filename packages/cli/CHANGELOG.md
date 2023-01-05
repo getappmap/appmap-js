@@ -1,3 +1,70 @@
+# [@appland/appmap-v3.59.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.59.0...@appland/appmap-v3.59.1) (2023-01-04)
+
+
+### Bug Fixes
+
+* prompt user for requirements file ([6b2406c](https://github.com/getappmap/appmap-js/commit/6b2406c6df0e35b62aca256e909339e13c7f999d))
+
+# [@appland/appmap-v3.59.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.58.0...@appland/appmap-v3.59.0) (2022-12-21)
+
+
+### Features
+
+* add jest option to test commands ([b0cb6be](https://github.com/getappmap/appmap-js/commit/b0cb6be9c658b3a3c9154eb9ecf33a3c747bf8b7))
+
+# [@appland/appmap-v3.58.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.57.0...@appland/appmap-v3.58.0) (2022-12-21)
+
+
+### Features
+
+* git repo in appmap:index telemetry ([346d1a5](https://github.com/getappmap/appmap-js/commit/346d1a57c9e52fb8fec65450585e874969a1bbb3))
+
+# [@appland/appmap-v3.57.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.56.0...@appland/appmap-v3.57.0) (2022-12-21)
+
+
+### Bug Fixes
+
+* Don't let indexer crash on ELOOP error ([252eccc](https://github.com/getappmap/appmap-js/commit/252eccca2f53d6caf8b61fa18eeeb35ff744c19c))
+
+
+### Features
+
+* Implement getToplevelSymbolicLink as an optimization ([3579d71](https://github.com/getappmap/appmap-js/commit/3579d71c153fe6b32a391c9984dadc757ef44278))
+
+# [@appland/appmap-v3.56.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.55.1...@appland/appmap-v3.56.0) (2022-12-21)
+
+
+### Bug Fixes
+
+* Disable file watching on EMFILE ([6eff67c](https://github.com/getappmap/appmap-js/commit/6eff67c485f4d38c0cab703313ce5338d949c635))
+* Don't crash on 'EMFILE: too many open files' ([8153499](https://github.com/getappmap/appmap-js/commit/81534996b400196899deaa402ac0bba68b86b9a2))
+* Examine errors based on error code instead of error message ([f2c15e8](https://github.com/getappmap/appmap-js/commit/f2c15e8e0b2dfce270fc3d92c2bd64fa775947d7))
+
+
+### Features
+
+* Send index:watcher_error:emfile telemetry event ([f0a3f5d](https://github.com/getappmap/appmap-js/commit/f0a3f5d67a1bb3032a497575539310eb29b5a81e))
+
+# [@appland/appmap-v3.55.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.55.0...@appland/appmap-v3.55.1) (2022-12-16)
+
+
+### Bug Fixes
+
+* Unpin internal package versions, use major version ([9e099b8](https://github.com/getappmap/appmap-js/commit/9e099b864879838aeae20cf6a803f83fc89a0edb))
+
+# [@appland/appmap-v3.55.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.54.1...@appland/appmap-v3.55.0) (2022-12-16)
+
+
+### Bug Fixes
+
+* Don't crash on an 'UNKNOWN: unknown error, lstat' error ([15dfedf](https://github.com/getappmap/appmap-js/commit/15dfedf4fca08c7def63cf168a82ba37739cce40))
+* When UNKNOWN errors are encountered, track the filenames and skip them when watching ([96104ae](https://github.com/getappmap/appmap-js/commit/96104ae42d99e6ff7c7ea46d1539070cfc489218))
+
+
+### Features
+
+* Add index:watcher_error:unknown telemetry event ([c9eaf83](https://github.com/getappmap/appmap-js/commit/c9eaf83c5d6132ad82fb5bf0b516bae6a410b915))
+
 # [@appland/appmap-v3.54.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.54.0...@appland/appmap-v3.54.1) (2022-12-16)
 
 

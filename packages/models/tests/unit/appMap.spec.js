@@ -23,4 +23,10 @@ describe('AppMap', () => {
   test('serialization', () => {
     expect(() => JSON.stringify(appMap)).not.toThrow();
   });
+
+  test('getEvent', () => {
+    for (let i = 0; i < appMap.events.length; i += 1) {
+      expect(appMap.getEvent(i + 1)).toEqual(appMap.events[i]);
+    }
+  });
 });

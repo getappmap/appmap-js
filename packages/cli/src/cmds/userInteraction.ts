@@ -1,6 +1,6 @@
+import boxen from 'boxen';
 import inquirer, { Answers, QuestionCollection } from 'inquirer';
 import ora, { Ora } from 'ora';
-import boxen from 'boxen';
 import { verbose } from '../utils';
 
 interface SpinnerOptions {
