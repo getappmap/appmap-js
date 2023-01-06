@@ -229,7 +229,7 @@
       <div v-if="showShareModal" class="share-appmap">
         <div class="heading">
           <h1>Share this AppMap</h1>
-          <span class="close-me" @click="closeShareModal">X</span>
+          <CloseIcon class="close-me" @click.stop="closeShareModal" />
         </div>
         <div class="content">
           <p>
@@ -288,6 +288,7 @@ import { CodeObjectType, Event, buildAppMap } from '@appland/models';
 import CheckIcon from '@/assets/check.svg';
 import CopyIcon from '@/assets/copy-icon.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
+import CloseIcon from '@/assets/close.svg';
 import ReloadIcon from '@/assets/reload.svg';
 import ResetIcon from '@/assets/reset.svg';
 import UploadIcon from '@/assets/upload.svg';
@@ -335,6 +336,7 @@ export default {
   components: {
     CheckIcon,
     CloseThinIcon,
+    CloseIcon,
     CopyIcon,
     ReloadIcon,
     ResetIcon,
@@ -1417,8 +1419,11 @@ code {
   .close-me {
     transition: $transition;
     font-weight: 800;
+    width: 16px;
+    height: 16px;
+    fill: white;
     &:hover {
-      color: $blue;
+      fill: $blue;
       cursor: pointer;
     }
   }
