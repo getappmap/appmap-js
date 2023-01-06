@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.60.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.59.1...@appland/appmap-v3.60.0) (2023-01-06)
+
+
+### Features
+
+* remove fonky default test command ([2488967](https://github.com/getappmap/appmap-js/commit/24889677595fd9ec0f3aa4b06e93173d32c4e0f2))
+
 # [@appland/appmap-v3.59.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.59.0...@appland/appmap-v3.59.1) (2023-01-04)
 
 
