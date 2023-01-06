@@ -1,10 +1,11 @@
 import chalk from 'chalk';
 import { promises as fs, constants as fsConstants } from 'fs';
-import { basename, join, resolve } from 'path';
+import { basename, dirname, resolve, join } from 'path';
+import { glob } from 'glob';
 import { AbortError, InvalidPathError } from '../errors';
 import UI from '../userInteraction';
 import AgentInstaller from './agentInstaller';
-import getAvailableInstallers from './installers';
+import getAvailableInstallers, { INSTALLERS } from './installers';
 
 export interface ProjectConfiguration {
   name: string;
@@ -81,7 +82,7 @@ async function resolveSelectedInstallers(
     }
   }
 
-  // Sanity check. Verify everything resolved properly. This should branch should never occur.
+  // Sanity check. Verify everything resolved properly. This branch should never occur.
   if (projects.some(({ selectedInstaller }) => !selectedInstaller)) {
     throw new Error('Invalid selection');
   }
@@ -100,15 +101,24 @@ async function getSubprojects(
   dir: string,
   rootHasInstaller: boolean
 ): Promise<ProjectConfiguration[] | undefined> {
-  const ents = await fs.readdir(dir, { withFileTypes: true });
+  let choices: string[] = [];
+  const allInstallers = INSTALLERS.map((constructor) => new constructor(dir));
+  allInstallers.forEach((installer) => {
+    const choicesOneInstaller = glob.sync('*' + installer.buildFile, {
+      matchBase: true,
+      cwd: dir,
+      nodir: true,
+      ignore: ['**/node_modules/**', '**/.git/**', '**/__pycache__/**', '**/cache/ruby/**'],
+    });
+    choices = choices.concat(choicesOneInstaller);
+  });
+
+  const existingSubprojects = {};
   const subprojects = (
     await Promise.all(
-      ents.map(async (ent): Promise<ProjectConfiguration | null> => {
-        if (!ent.isDirectory()) {
-          return null;
-        }
-
-        const subProjectPath = join(dir, ent.name);
+      choices.map(async (choice): Promise<ProjectConfiguration | null> => {
+        const subProjectPath = join(dir, dirname(choice));
+        const subProjectName = basename(subProjectPath);
         try {
           await fs.access(subProjectPath, fsConstants.R_OK);
         } catch {
@@ -121,8 +131,15 @@ async function getSubprojects(
           return null;
         }
 
+        // Prevent adding a subproject twice, i.e. if it has two types of
+        // buildfiles like sample_app_6th_ed (Gemfile, yarn.lock)
+        const key = join(subProjectPath, subProjectName);
+        if (existingSubprojects[key]) {
+          return null;
+        } else existingSubprojects[key] = true;
+
         return {
-          name: ent.name,
+          name: subProjectName,
           path: subProjectPath,
           availableInstallers: installers,
         };
@@ -135,6 +152,14 @@ async function getSubprojects(
     return undefined;
   }
 
+  const subProjectConfigurations: ProjectConfiguration[] = [];
+  // If there's only one subproject use it directly without a prompt
+  // because it's probably the top-level directory
+  if (subprojects.length === 1) {
+    subProjectConfigurations.push(...subprojects);
+    return subProjectConfigurations;
+  }
+
   const { addSubprojects } = await UI.prompt({
     type: 'confirm',
     default: !rootHasInstaller,
@@ -143,11 +168,10 @@ async function getSubprojects(
       'This directory contains sub-projects. Would you like to choose sub-projects for installation?',
   });
   if (!addSubprojects) {
-    // The user has opted not to continue by selecting subprojects.
+    // The user has opted not to continue by not selecting subprojects.
     return undefined;
   }
 
-  const subProjectConfigurations: ProjectConfiguration[] = [];
   const { selectedSubprojects } = await UI.prompt({
     type: 'checkbox',
     name: 'selectedSubprojects',

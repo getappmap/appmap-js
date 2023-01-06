@@ -1199,11 +1199,11 @@ appmap_dir: tmp/appmap
       });
       expect(sendEventStub.getCall(3)).toBeCalledWithMatch({
         name: 'install-agent:success',
-        properties: { installer: 'Maven' },
+        properties: { installer: 'Gradle' },
       });
       expect(sendEventStub.getCall(6)).toBeCalledWithMatch({
         name: 'install-agent:success',
-        properties: { installer: 'Gradle' },
+        properties: { installer: 'Maven' },
       });
 
       expect(openTicketStub).not.toBeCalled();
