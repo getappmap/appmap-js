@@ -54,6 +54,7 @@ export class Watcher {
 
   constructor(private options: WatchScanOptions) {
     WatchScanTelemetry.watch(this.scanEventEmitter);
+    this.queue.error((error, task) => console.warn(`Problem processing ${task}:\n`, error));
   }
 
   async watch(): Promise<void> {
