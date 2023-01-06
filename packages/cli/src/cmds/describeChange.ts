@@ -15,6 +15,7 @@ import { existsSync } from 'fs';
 import { tmpdir } from 'os';
 import {
   Action,
+  actionActors,
   buildDiagram,
   Diagram,
   format,
@@ -308,14 +309,17 @@ export const handler = async (argv: any) => {
 
     diffDiagram.rootActions.forEach(markDiffActions);
 
+    const diffActors = new Set<string>();
     const filterDiffActions = (actions: Action[]): Action[] => {
       const result = actions.filter((action) => diffActions.has(action));
       result.forEach((action) => {
+        actionActors(action).forEach((actor) => (actor ? diffActors.add(actor.name) : undefined));
         action.children = filterDiffActions(action.children);
       });
       return result;
     };
     diffDiagram.rootActions = filterDiffActions(diffDiagram.rootActions);
+    diffDiagram.actors = diffDiagram.actors.filter((actor) => diffActors.has(actor.name));
 
     await writeFile(
       appmapReference.sequenceDiagramFilePath(RevisionName.Diff, FormatType.JSON, true),
