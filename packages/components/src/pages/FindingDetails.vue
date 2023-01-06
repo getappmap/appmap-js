@@ -224,22 +224,29 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
       p {
-        margin: 1rem 0;
+        margin: 0;
       }
     }
     .header-controls {
       display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      align-items: flex-end;
-      justify-content: flex-start;
-      padding-top: 0.2rem;
+      flex-direction: row;
+      gap: 1rem;
+      align-items: flex-start;
+      justify-content: flex-end;
+      width: 100%;
+      position: absolute;
+      right: 2rem;
       .btn {
         border: 1px solid $white;
         border-radius: 0.5rem;
         padding: 0.2rem 0.5rem;
         transition: $transition;
+        min-width: 200px;
+        text-align: center;
         &:hover {
           background-color: $gray1;
           border-color: $gray1;
@@ -260,6 +267,7 @@ export default {
     color: $gray4;
     line-height: 1.6rem;
     text-transform: uppercase;
+    padding: 0.2rem 0;
   }
 
   .findings-sort {
@@ -278,7 +286,7 @@ export default {
 
   .finding-details-wrap {
     display: flex;
-    gap: 2rem;
+    gap: 1.25rem;
     justify-content: space-between;
     &.row {
       flex-direction: row;
@@ -320,10 +328,12 @@ export default {
       background-color: $gray1;
       padding: 0.25rem 0;
       gap: 0;
+      margin-top: 0.15rem;
       li {
         border-bottom: 1px solid $gray2;
         border-radius: 0;
         width: 100%;
+        word-break: break-word;
         &:last-of-type {
           border-bottom: 0;
         }
@@ -336,9 +346,7 @@ export default {
     .findings-overview,
     .event-summary {
       width: 100%;
-      ul {
-        margin-top: 0.25rem;
-      }
+      min-width: 48%;
     }
   }
 
@@ -367,9 +375,49 @@ export default {
   border: none;
 }
 
-@media (min-width: 1000px) {
+@media (maz-width: 1000px) {
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 900px) {
+  .finding-details {
+    .header-wrap {
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      header {
+        margin: 0;
+        p {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .finding-details {
+    .finding-details-wrap {
+      &.row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .finding-details {
+    .header-wrap .header-controls {
+      position: unset;
+      justify-content: flex-start;
+    }
+    .header-wrap {
+      header {
+        h1 {
+          margin-bottom: 0.25rem;
+        }
+      }
+    }
+  }
 }
 </style>
