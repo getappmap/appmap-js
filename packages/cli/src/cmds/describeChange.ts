@@ -140,6 +140,11 @@ class AppMapReference {
   async buildAppMap(): Promise<AppMap> {
     const appmapData = JSON.parse(await readFile(this.appmapFileName, 'utf-8'));
     const appmap = buildAppMap().source(appmapData).build();
+    this.populateMetadata(appmap);
+    return appmap;
+  }
+
+  populateMetadata(appmap: AppMap): void {
     if (appmap.metadata) {
       if (!this.sourceLocation) this.sourceLocation = (appmap.metadata as any).source_location;
       if (!this.appmapName) this.appmapName = appmap.metadata.name;
@@ -152,7 +157,6 @@ class AppMapReference {
       }
     };
     appmap.classMap.visit(collectSourcePath);
-    return appmap;
   }
 }
 
@@ -199,6 +203,10 @@ export const handler = async (argv: any) => {
   const baseRevision = argv.baseRevision || 'HEAD~1';
   const headRevision = argv.headRevision || (currentBranch || 'HEAD').trim();
 
+  if (baseRevision === headRevision) {
+    yargs.exit(1, new Error(`Base and head revisions are the same: ${baseRevision}`));
+  }
+
   if (!outputDir) {
     outputDir = `revision-report/${sanitizeRevision(baseRevision)}-${sanitizeRevision(
       headRevision
@@ -219,32 +227,53 @@ export const handler = async (argv: any) => {
   // stashAll()
 
   await mkdir(outputDir, { recursive: true });
-  await mkdir(join(outputDir, 'base'), { recursive: true });
-  await mkdir(join(outputDir, 'head'), { recursive: true });
-  await mkdir(join(outputDir, 'diff'), { recursive: true });
+  await mkdir(join(outputDir, RevisionName.Diff), { recursive: true });
 
   const appmapReferences = new Map<string, AppMapReference>();
   let baseAppMapFileNames: Set<string>;
   let headAppMapFileNames: Set<string>;
-  {
-    await checkout('base', baseRevision);
-    await createBaselineAppMaps(rl, baseCommand);
-    process.stdout.write(`Processing AppMaps...`);
-    baseAppMapFileNames = new Set([
-      ...(await processAppMaps(appmapDir, outputDir, RevisionName.Base, appmapReferences)),
-    ]);
-    process.stdout.write(`done (${baseAppMapFileNames.size})\n`);
-  }
 
-  {
-    await checkout('head', headRevision);
-    await updateAppMaps(appmapDir, rl, touchOutDateTestFiles, headCommand);
-    process.stdout.write(`Processing AppMaps...`);
-    headAppMapFileNames = new Set([
-      ...(await processAppMaps(appmapDir, outputDir, RevisionName.Head, appmapReferences)),
+  const processAppMaps = async (
+    revisionName: RevisionName,
+    revision: string,
+    command?: string
+  ): Promise<Set<string>> => {
+    await mkdir(join(outputDir, revisionName), { recursive: true });
+    await checkout(revisionName, revision);
+    await createBaselineAppMaps(rl, command);
+    process.stdout.write(`Processing AppMaps in ${appmapDir}...`);
+    const result = new Set([
+      ...(await processAppMapDir(appmapDir, outputDir, revisionName, appmapReferences)),
     ]);
-    process.stdout.write(`done (${headAppMapFileNames.size})\n`);
-  }
+    process.stdout.write(`done (${result.size})\n`);
+    return result;
+  };
+
+  const restoreAppMaps = async (revisionName: RevisionName): Promise<Set<string>> => {
+    process.stdout.write(
+      `Loading existing AppMap and diagram data from ${join(outputDir, revisionName)}...`
+    );
+    const result = new Set([
+      ...(await restoreAppMapDir(outputDir, revisionName, appmapReferences)),
+    ]);
+    process.stdout.write(`done (${result.size})\n`);
+    return result;
+  };
+
+  const processOrRestoreAppMaps = async (
+    revisionName: RevisionName,
+    revision: string,
+    command?: string
+  ): Promise<Set<string>> => {
+    if (await exists(join(outputDir, revisionName))) {
+      return restoreAppMaps(revisionName);
+    } else {
+      return processAppMaps(revisionName, revision, command);
+    }
+  };
+
+  baseAppMapFileNames = await processOrRestoreAppMaps(RevisionName.Base, baseRevision, baseCommand);
+  headAppMapFileNames = await processOrRestoreAppMaps(RevisionName.Head, headRevision, headCommand);
 
   // unstashAll()
 
@@ -477,7 +506,7 @@ function makeTempFile(fileName: string): string {
   return join(tmpdir(), fileName);
 }
 
-async function processAppMaps(
+async function processAppMapDir(
   appmapDir: string,
   outputDir: string,
   revisionName: RevisionName,
@@ -493,11 +522,35 @@ async function processAppMaps(
       appmapReference.sequenceDiagramFilePath(revisionName, FormatType.JSON, true),
       format(FormatType.JSON, diagram, appmapFileName).diagram
     );
+    await writeFile(
+      appmapReference.sequenceDiagramFilePath(revisionName, FormatType.Text, true),
+      format(FormatType.Text, diagram, appmapFileName).diagram
+    );
     if (!appmapReferences.get(appmapFileName)) {
       appmapReferences.set(appmapFileName, appmapReference);
     }
   }
   return appmapFileNames;
+}
+
+async function restoreAppMapDir(
+  outputDir: string,
+  revisionName: RevisionName,
+  appmapReferences: Map<string, AppMapReference>
+): Promise<string[]> {
+  const baseDir = join(outputDir, revisionName);
+  const appmapFileNames = await promisify(glob)(`${baseDir}/*.appmap.json`);
+  for (let i = 0; i < appmapFileNames.length; i++) {
+    const appmapFileName = appmapFileNames[i];
+    const appmapReference = new AppMapReference(outputDir, relative(baseDir, appmapFileName));
+    const appmapData = JSON.parse(await readFile(appmapFileName, 'utf-8'));
+    const appmap = buildAppMap().source(appmapData).build();
+    appmapReference.populateMetadata(appmap);
+    if (!appmapReferences.get(appmapReference.appmapFileName)) {
+      appmapReferences.set(appmapReference.appmapFileName, appmapReference);
+    }
+  }
+  return appmapFileNames.map((fileName) => relative(baseDir, fileName));
 }
 
 async function confirm(prompt: string, rl: readline.Interface): Promise<boolean> {
