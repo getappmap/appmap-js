@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.74.6](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.74.5...@appland/scanner-v1.74.6) (2023-01-09)
+
+
+### Bug Fixes
+
+* Scan-watching directories on other than the current drive ([8cd131a](https://github.com/getappmap/appmap-js/commit/8cd131ae99ba649a710fff1ae41ef16aa3b2d4b0))
+
 # [@appland/scanner-v1.74.5](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.74.4...@appland/scanner-v1.74.5) (2023-01-09)
 
 
