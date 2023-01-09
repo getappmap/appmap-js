@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.74.5](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.74.4...@appland/scanner-v1.74.5) (2023-01-09)
+
+
+### Bug Fixes
+
+* Fix a bug preventing 'Update in GET request' rule from working ([efd7d60](https://github.com/getappmap/appmap-js/commit/efd7d609361e79ef51d14e07c82e99e942e0c998))
+
 # [@appland/scanner-v1.74.4](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.74.3...@appland/scanner-v1.74.4) (2023-01-04)
 
 
