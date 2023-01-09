@@ -2,7 +2,7 @@ import { Metadata } from '@appland/models';
 import sanitizeURL from './repositoryInfo';
 
 /** Flattens metadata into a string-string map suitable for use in telemetry.
- * Ignores git, exception and fingerprints.
+ * Ignores exception and fingerprints.
  */
 export default function flattenMetadata(metadata: Metadata): Map<string, string> {
   const result = new Map<string, string>();
@@ -26,8 +26,14 @@ export default function flattenMetadata(metadata: Metadata): Map<string, string>
     if (metadata.language.engine) result.set('language.engine', metadata.language.engine);
   }
 
-  if (metadata.git?.repository) {
-    result.set('git.repository', sanitizeURL(metadata.git.repository));
+  if (metadata.git) {
+    Object.keys(metadata.git as any).forEach((key) => {
+      const saveKey = key.replace(/^git_/, '');
+      const value = (metadata.git as any)[key];
+      if (value !== null && value !== undefined) {
+        result.set(`git.${saveKey}`, sanitizeURL(value));
+      }
+    });
   }
 
   if (metadata.name) result.set('name', metadata.name);

@@ -12,9 +12,20 @@ import Fingerprinter from '../../../src/fingerprint/fingerprinter';
 import { MaxMSBetween } from '../../../src/lib/eventAggregator';
 import { mkdir } from 'fs/promises';
 import { FSWatcher } from 'chokidar';
+import { waitFor } from '../util';
+import assert from 'assert';
 
 jest.mock('../../../src/telemetry');
 const Telemetry = jest.mocked(OriginalTelemetry);
+
+function useFakeTimers() {
+  jest.useFakeTimers();
+}
+
+function useRealTimers() {
+  jest.runAllTimers();
+  jest.useRealTimers();
+}
 
 describe(FingerprintWatchCommand, () => {
   let cmd: FingerprintWatchCommand | null;
@@ -31,13 +42,13 @@ describe(FingerprintWatchCommand, () => {
       cmd = null;
     }
     restore();
+    Telemetry.sendEvent.mockClear();
   });
 
   describe('a pid file', () => {
     it('is created when env var is set', async () => {
       stub(process, 'env').value({ APPMAP_WRITE_PIDFILE: 'true' });
       cmd = new FingerprintWatchCommand(appMapDir);
-
       await cmd.execute();
 
       expect(existsSync(join(appMapDir, 'index.pid'))).toBeTruthy();
@@ -180,13 +191,26 @@ describe(FingerprintWatchCommand, () => {
         cmd = new FingerprintWatchCommand(appMapDir);
         handler = cmd.fpQueue.handler;
         await cmd.execute();
-        jest.useFakeTimers();
-        Telemetry.sendEvent.mockClear();
+        useFakeTimers();
       });
 
-      afterEach(() => {
-        jest.runAllTimers();
-        jest.useRealTimers();
+      afterEach(useRealTimers);
+
+      it('injects git metadata', async () => {
+        placeMap('../fixtures/ruby/user_page_scenario.appmap.json');
+        await once(handler, 'index');
+        jest.advanceTimersByTime(MaxMSBetween * 2.0);
+        useRealTimers();
+
+        await waitFor(() => expect(Telemetry.sendEvent).toHaveBeenCalledTimes(1));
+
+        const data = Telemetry.sendEvent.mock.calls[0][0];
+        expect(data).toMatchObject({
+          name: 'appmap:index',
+          properties: {
+            'git.repository': /\bgetappmap\/appmap-js.git$/, // It may be a git or https URL
+          },
+        });
       });
 
       it('aggregates indexes that occur less than one second apart', async () => {
@@ -196,8 +220,10 @@ describe(FingerprintWatchCommand, () => {
         placeMap('../fixtures/ruby/user_page_scenario.appmap.json');
         await once(handler, 'index');
         jest.advanceTimersByTime(MaxMSBetween * 2.0);
+        useRealTimers();
 
-        expect(Telemetry.sendEvent).toHaveBeenCalledTimes(1);
+        await waitFor(() => expect(Telemetry.sendEvent).toHaveBeenCalledTimes(1));
+
         const data = Telemetry.sendEvent.mock.calls[0][0];
         expect(data).toMatchObject({
           name: 'appmap:index',
@@ -217,8 +243,9 @@ describe(FingerprintWatchCommand, () => {
         placeMap('../fixtures/ruby/user_page_scenario.appmap.json');
         await once(handler, 'index');
         jest.advanceTimersByTime(MaxMSBetween * 2);
+        useRealTimers();
 
-        expect(Telemetry.sendEvent).toHaveBeenCalledTimes(2);
+        await waitFor(() => expect(Telemetry.sendEvent).toHaveBeenCalledTimes(2));
         for (const [data] of Telemetry.sendEvent.mock.calls) {
           expect(data).toMatchObject({ name: 'appmap:index', metrics: { appmaps: 1 } });
         }

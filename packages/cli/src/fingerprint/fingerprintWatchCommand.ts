@@ -11,6 +11,7 @@ import { FingerprintEvent } from './fingerprinter';
 import FingerprintQueue from './fingerprintQueue';
 import Globber from './globber';
 import path from 'path';
+import collectGitMetadata from './collectGitMetadata';
 
 export default class FingerprintWatchCommand {
   private pidfilePath: string | undefined;
@@ -245,10 +246,11 @@ export default class FingerprintWatchCommand {
     this.fpQueue.push(file);
   }
 
-  private sendTelemetry(metadata: Metadata[]) {
+  private async sendTelemetry(metadata: Metadata[]) {
     const properties = Object.fromEntries(
       intersectMaps(...metadata.map(flattenMetadata)).entries()
     );
+    await collectGitMetadata(properties);
     Telemetry.sendEvent({
       name: 'appmap:index',
       properties,
