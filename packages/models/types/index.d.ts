@@ -260,10 +260,12 @@ declare module '@appland/models' {
       branch: string;
       commit: string;
       status: string[];
+      user_name?: string;
+      user_email?: string;
       tag?: string;
       annotated_tag?: string;
       commits_since_tag?: number;
-      commits_since_annotated_tag: number;
+      commits_since_annotated_tag?: number;
     }
 
     export class Language extends Framework {
