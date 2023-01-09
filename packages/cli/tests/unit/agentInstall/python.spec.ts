@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import fs from 'fs-extra';
+import { glob } from 'glob';
 import 'jest-sinon';
 import { join } from 'path';
 import sinon from 'sinon';
@@ -109,21 +110,19 @@ describe('Python Agent Installation', () => {
       });
 
       it('uses a single requirements file', async () => {
-        sinon.stub(installer, <any>'findBuildFiles').resolves(['requirements.txt']);
-        const prompt = sinon.stub(UI, 'prompt').resolves({ buildFile: 'requirements.txt' });
+        sinon.stub(glob, 'sync').returns(['test-requirements.txt']);
+        const prompt = sinon.stub(UI, 'prompt');
 
-        await installer.checkConfigCommand();
+        expect(await installer.resolveBuildFile()).toBe('test-requirements.txt');
 
         expect(prompt).not.toBeCalled();
       });
 
       it('offers requirements files', async () => {
-        const chooseBuildFile = sinon.stub(installer, <any>'chooseBuildFile').callThrough();
         const prompt = sinon.stub(UI, 'prompt').resolves({ buildFile: 'requirements.txt' });
 
-        await installer.checkConfigCommand();
+        expect(await installer.resolveBuildFile()).toBe('requirements.txt');
 
-        expect(chooseBuildFile).toBeCalledOnce();
         const promptCalls = prompt.getCalls();
         expect(promptCalls.length).toStrictEqual(1);
         const question = promptCalls[0].firstArg[0];
