@@ -1,10 +1,13 @@
 import chalk from 'chalk';
-import { promises as fs, constants as fsConstants } from 'fs';
+import { promises as fs, constants as fsConstants, readFileSync, existsSync } from 'fs';
 import { basename, join, resolve } from 'path';
+import { glob } from 'glob';
+import packages from '../../fingerprint/canonicalize/packages';
 import { AbortError, InvalidPathError } from '../errors';
 import UI from '../userInteraction';
 import AgentInstaller from './agentInstaller';
 import getAvailableInstallers from './installers';
+import { YarnInstaller } from './javaScriptAgentInstaller';
 
 export interface ProjectConfiguration {
   name: string;
@@ -81,10 +84,40 @@ async function resolveSelectedInstallers(
     }
   }
 
-  // Sanity check. Verify everything resolved properly. This should branch should never occur.
+  // Sanity check. Verify everything resolved properly. This branch should never occur.
   if (projects.some(({ selectedInstaller }) => !selectedInstaller)) {
     throw new Error('Invalid selection');
   }
+}
+
+export function getYarnPackages(availableInstallers: AgentInstaller[]): string[] {
+  let yarnPackages: string[] = [];
+  availableInstallers.forEach((installer) => {
+    if (installer.name === 'yarn') {
+      const packageJsonFilename = join(installer.path, 'package.json');
+      if (existsSync(packageJsonFilename)) {
+        const data = readFileSync(packageJsonFilename, 'utf-8');
+        const packageJson = JSON.parse(data);
+        if ('workspaces' in packageJson) {
+          const workspaces = packageJson['workspaces'];
+          // process as glob because it could be something like
+          // workspaces: [ 'packages/*' ]
+          workspaces.forEach((workspace) => {
+            const matches = glob.sync(workspace, {
+              matchBase: true,
+              cwd: installer.path,
+              ignore: ['**/node_modules/**', '**/.git/**'],
+            });
+            matches.forEach((yarnPackage) => {
+              yarnPackages.push(yarnPackage);
+            });
+          });
+        }
+      }
+    }
+  });
+
+  return yarnPackages;
 }
 
 /**
@@ -98,37 +131,56 @@ async function resolveSelectedInstallers(
  */
 async function getSubprojects(
   dir: string,
-  rootHasInstaller: boolean
+  rootHasInstaller: boolean,
+  availableInstallers: AgentInstaller[]
 ): Promise<ProjectConfiguration[] | undefined> {
-  const ents = await fs.readdir(dir, { withFileTypes: true });
-  const subprojects = (
-    await Promise.all(
-      ents.map(async (ent): Promise<ProjectConfiguration | null> => {
-        if (!ent.isDirectory()) {
-          return null;
-        }
+  const yarnPackages = getYarnPackages(availableInstallers);
 
-        const subProjectPath = join(dir, ent.name);
-        try {
-          await fs.access(subProjectPath, fsConstants.R_OK);
-        } catch {
-          // This directory is not readable. Ignore it.
-          return null;
-        }
+  let subprojects: ProjectConfiguration[] = [];
+  if (yarnPackages.length > 0) {
+    // detect yarn packages as sub-projects
+    yarnPackages.forEach((yarnPackage) => {
+      const subProjectPath = join(dir, yarnPackage);
+      const subProjectName = basename(yarnPackage);
+      subprojects.push({
+        name: subProjectName,
+        path: subProjectPath,
+        // must set the new path in the installer
+        availableInstallers: [new YarnInstaller(subProjectPath)],
+      } as ProjectConfiguration);
+    });
+  } else {
+    // read directory to detect sub-projects
+    const ents = await fs.readdir(dir, { withFileTypes: true });
+    subprojects = (
+      await Promise.all(
+        ents.map(async (ent): Promise<ProjectConfiguration | null> => {
+          if (!ent.isDirectory()) {
+            return null;
+          }
 
-        const installers = await getAvailableInstallers(subProjectPath);
-        if (!installers.length) {
-          return null;
-        }
+          const subProjectPath = join(dir, ent.name);
+          try {
+            await fs.access(subProjectPath, fsConstants.R_OK);
+          } catch {
+            // This directory is not readable. Ignore it.
+            return null;
+          }
 
-        return {
-          name: ent.name,
-          path: subProjectPath,
-          availableInstallers: installers,
-        };
-      })
-    )
-  ).filter(Boolean) as ProjectConfiguration[];
+          const installers = await getAvailableInstallers(subProjectPath);
+          if (!installers.length) {
+            return null;
+          }
+
+          return {
+            name: ent.name,
+            path: subProjectPath,
+            availableInstallers: installers,
+          };
+        })
+      )
+    ).filter(Boolean) as ProjectConfiguration[];
+  }
 
   if (!subprojects.length) {
     // There's nothing that we can do here.
@@ -143,7 +195,7 @@ async function getSubprojects(
       'This directory contains sub-projects. Would you like to choose sub-projects for installation?',
   });
   if (!addSubprojects) {
-    // The user has opted not to continue by selecting subprojects.
+    // The user has opted not to continue by not selecting subprojects.
     return undefined;
   }
 
@@ -175,7 +227,7 @@ export async function getProjects(
   const availableInstallers = await getAvailableInstallers(dir);
   const rootHasInstaller = !!availableInstallers.length;
   if (allowMulti) {
-    const subprojects = await getSubprojects(dir, rootHasInstaller);
+    const subprojects = await getSubprojects(dir, rootHasInstaller, availableInstallers);
     if (subprojects?.length) {
       projectConfigurations.push(...(subprojects as ProjectConfiguration[]));
     } else if (subprojects?.length === 0) {
