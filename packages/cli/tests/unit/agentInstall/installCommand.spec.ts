@@ -12,6 +12,7 @@ import AgentInstallerProcedure from '../../../src/cmds/agentInstaller/agentInsta
 import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
 import CommandStruct, { CommandReturn } from '../../../src/cmds/agentInstaller/commandStruct';
 import * as ProjectConfiguration from '../../../src/cmds/agentInstaller/projectConfiguration';
+import { getYarnPackages } from '../../../src/cmds/agentInstaller/projectConfiguration';
 
 import UI from '../../../src/cmds/userInteraction';
 import { ValidationError } from '../../../src/cmds/errors';
@@ -25,6 +26,7 @@ import { dump } from 'js-yaml';
 
 import * as openTicket from '../../../src/lib/ticket/openTicket';
 import { withStubbedTelemetry } from '../../helper';
+import { YarnInstaller } from '../../../src/cmds/agentInstaller/javaScriptAgentInstaller';
 
 const fixtureDir = path.join(__dirname, '..', 'fixtures');
 tmp.setGracefulCleanup();
@@ -875,6 +877,7 @@ appmap_dir: tmp/appmap
         );
       });
     });
+
     describe('managed with yarn', () => {
       const projectFixture = path.join(fixtureDir, 'javascript', 'yarn');
 
@@ -937,6 +940,7 @@ appmap_dir: tmp/appmap
       });
     });
   });
+
   describe('Varied project configurations', () => {
     beforeEach(() => {
       sinon.stub(commandRunner, 'run').resolves({ stdout: '', stderr: '' });
@@ -1232,5 +1236,31 @@ appmap_dir: tmp/appmap
         },
       ]);
     });
+
+    it('yarn detects sub-projects', async () => {
+      expect.assertions(3);
+      const projectFixture = path.join(fixtureDir, 'javascript', 'yarn_with_subprojects');
+      expect(getYarnPackages([new YarnInstaller(projectFixture)])).toStrictEqual([ 'subproject_one', 'subproject_two' ]);
+      fse.copySync(projectFixture, projectDir);
+      const promptStub = sinon.stub(inquirer, 'prompt').resolves({
+        addSubprojects: true,
+        confirm: true,
+        selectedSubprojects: ['subproject_one', 'subproject_two'],
+      });
+
+      await invokeCommand(projectDir, (err) => {
+        expect(err).toBeNull();
+      });
+
+      // Root project exists, should default to not choosing a sub-project.
+      expect(promptStub.getCall(0).args).toMatchObject([
+        {
+          type: 'confirm',
+          message: expect.stringMatching('This directory contains sub-projects'),
+          default: false,
+        },
+      ]);
+    });
   });
+
 });
