@@ -1,0 +1,6 @@
+{
+  "name": "yarn_with_subprojects",
+  "packageManager": "yarn@3.2.1",
+  "private": true,
+  "workspaces": [ "subproject_one", "subproject_two" ]
+}
