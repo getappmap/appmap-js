@@ -14,6 +14,7 @@ import {
 import Telemetry from '../../telemetry';
 import EventEmitter from 'events';
 import { WatchScanTelemetry } from './watchScanTelemetry';
+import isAncestorPath from '../../lib/isAncestorPath';
 
 export type WatchScanOptions = {
   appId?: string;
@@ -42,10 +43,6 @@ async function existingParent(targetPath: string): Promise<string> {
     targetPath = path.dirname(targetPath);
   }
   return targetPath;
-}
-
-function isAncestorPath(ancestor: string, descendant: string): boolean {
-  return !path.relative(ancestor, descendant).startsWith('..');
 }
 
 export class Watcher {
