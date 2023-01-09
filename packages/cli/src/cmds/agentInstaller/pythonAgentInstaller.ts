@@ -171,17 +171,15 @@ export class PipInstaller extends PythonInstaller {
     return isFile(this.buildFilePath);
   }
 
-  private async findBuildFiles(): Promise<string[]> {
-    const choices = await promisify(glob)('*requirements*.txt', {
+  private findBuildFiles(): string[] {
+    return glob.sync('*requirements*.txt', {
       matchBase: true,
       cwd: this.path,
       nodir: true,
     });
-
-    return choices;
   }
 
-  private async chooseBuildFile(choices): Promise<string> {
+  private async chooseBuildFile(choices: string[]): Promise<string> {
     const defaultChoice = choices.filter((f) => minimatch(f, '*dev*', { matchBase: true }));
 
     const { buildFile } = await UI.prompt([
@@ -197,11 +195,11 @@ export class PipInstaller extends PythonInstaller {
     return basename(buildFile);
   }
 
-  async checkConfigCommand(): Promise<CommandStruct | undefined> {
-    const choices = await this.findBuildFiles();
+  async resolveBuildFile(): Promise<string> {
+    const choices = this.findBuildFiles();
 
     if (choices.length === 1) {
-      choices[0];
+      return choices[0];
     } else {
       UI.progress(`
 
@@ -209,9 +207,12 @@ This project contains multiple Pip requirements files. AppMap should only be
 installed during development and testing, not when deploying in a production
 environment.
 `);
-      this._buildFile = await this.chooseBuildFile(choices);
+      return this.chooseBuildFile(choices);
     }
+  }
 
+  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+    this._buildFile = await this.resolveBuildFile();
     let commandArgs = ['-m', 'pip', 'install', '-r', this.buildFile];
     let supportsDryRun: boolean;
 
