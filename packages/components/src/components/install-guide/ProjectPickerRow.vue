@@ -232,7 +232,7 @@ $brightblue: rgba(255, 255, 255, 0.1);
   }
   &__body {
     padding: 1rem 0;
-    border-top: 1px solid $gray4;
+    border-top: 1px solid lighten($gray2, 15);
   }
   &__nav {
     display: flex;
@@ -257,6 +257,7 @@ $brightblue: rgba(255, 255, 255, 0.1);
     font-size: 0.9rem;
     justify-content: left;
     flex-grow: 1;
+    font-weight: 800;
   }
 
   &__support {
@@ -315,13 +316,13 @@ $brightblue: rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: center;
   margin: 2em auto;
-  color: $color;
+  color: lighten($gray2, 25);
 
   &::before {
     content: ' ';
     margin: auto 1em auto 0;
     width: 100%;
-    background-color: $color;
+    background-color: lighten($gray2, 15);
     height: 1px;
   }
 
@@ -329,7 +330,7 @@ $brightblue: rgba(255, 255, 255, 0.1);
     content: ' ';
     margin: auto 0 auto 1em;
     width: 100%;
-    background-color: $color;
+    background-color: lighten($gray2, 15);
     height: 1px;
   }
 }
