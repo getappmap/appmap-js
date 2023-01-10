@@ -62,7 +62,10 @@
       </template>
       <template v-else>
         <template v-if="!languageSupported">
-          <p>AppMap currently supports the following languages:</p>
+          <p>
+            This project does not meet all the requirements to create AppMaps. AppMap currently
+            supports the following languages:
+          </p>
           <ul class="support-list">
             <li><strong>Ruby</strong></li>
             <li><strong>Python</strong></li>
@@ -78,7 +81,6 @@
             information.
           </p>
         </template>
-        <p>This project does not meet all the requirements to create AppMaps.</p>
       </template>
     </div>
   </v-accordion>
