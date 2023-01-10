@@ -87,11 +87,10 @@ export default {
 .code-snippet {
   margin: 1rem 0;
   border-radius: $border-radius;
-  border: 1px solid $brightblue;
   display: flex;
   align-items: stretch;
   color: white;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: $black;
   max-width: 100%;
 
   &__line {
@@ -105,12 +104,11 @@ export default {
     padding: 0.75rem 1.25rem;
     margin: 0;
     border: none;
-    border-right: 1px solid $brightblue;
     border-radius: 0;
     background: transparent;
     outline: none;
     appearance: none;
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   &__btn {
@@ -120,12 +118,12 @@ export default {
     border: none;
     border-radius: 0 6px 6px 0;
     color: #fff;
-    background-color: $brightblue;
-    opacity: 0.85;
+    background-color: $white;
+    opacity: 1;
     outline: none;
     appearance: none;
     cursor: pointer;
-    transition: 0.25s ease opacity;
+    transition: $transition;
 
     &[disabled] {
       opacity: 0.5;
@@ -133,8 +131,7 @@ export default {
     }
 
     &:hover {
-      color: rgba(255, 255, 255, 0.9);
-      opacity: 1;
+      opacity: 0.5;
     }
 
     &:active {
@@ -142,8 +139,8 @@ export default {
     }
 
     &-icon {
-      width: 1em;
-      fill: currentColor;
+      width: 1.2rem;
+      fill: $black;
     }
   }
 }

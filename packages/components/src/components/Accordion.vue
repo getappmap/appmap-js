@@ -37,10 +37,8 @@ export default {
 <style lang="scss">
 .accordion {
   &--open {
-    border: 1px solid rgba(200, 200, 255, 0.1);
-
     .accordion__header {
-      background-color: rgba(200, 200, 255, 0.1);
+      border-bottom: 0;
     }
   }
 
@@ -48,10 +46,6 @@ export default {
     .accordion__header {
       cursor: default;
       color: $gray4;
-
-      &:hover {
-        background-color: rgba(200, 200, 255, 0.05);
-      }
     }
   }
 
@@ -60,16 +54,12 @@ export default {
     user-select: none;
     width: 100%;
     display: block;
-    padding: 1em;
+    padding: 0.2rem 2rem;
     text-align: left;
-
-    &:hover {
-      background-color: rgba(200, 200, 255, 0.1);
-    }
   }
 
   &__body {
-    margin-top: 1em;
+    padding: 0 2rem;
   }
 }
 </style>

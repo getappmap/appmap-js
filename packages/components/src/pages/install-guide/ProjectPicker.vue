@@ -1,6 +1,6 @@
 <template>
   <QuickstartLayout>
-    <section>
+    <section class="project-picker">
       <header>
         <h1 data-cy="title">Add AppMap to your project</h1>
       </header>
@@ -24,12 +24,12 @@
             ref="projectTable"
           />
         </article>
-        <article v-if="projects.length > 1">
-          <h2 class="install subhead">Projects</h2>
+        <article class="project-list" v-if="projects.length > 1">
           <p data-cy="multiple-projects-text">
             You have multiple projects in this workspace. We’ve outlined the projects that are ready
             to start making AppMaps. <br />Select a project to continue.
           </p>
+          <h3 class="">Projects</h3>
           <div class="table-wrap">
             <v-project-picker-table
               :projects="projects"
@@ -109,9 +109,19 @@ h2 {
   margin-bottom: 0.5rem;
 }
 
+.project-picker {
+  h3 {
+    text-transform: uppercase;
+    color: $gray4;
+  }
+  .project-list {
+    p {
+      margin-bottom: 1.75rem;
+    }
+  }
+}
+
 .table-wrap {
-  border: 1px solid $gray-secondary;
-  border-radius: $border-radius;
   &::-webkit-scrollbar-thumb {
     background: $gray-secondary;
   }

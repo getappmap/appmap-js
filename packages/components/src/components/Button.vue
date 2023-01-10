@@ -96,7 +96,7 @@ export default {
   padding: 0.75em 1.5em;
   text-align: center;
   cursor: pointer;
-  transition: 0.25s ease background-color;
+  transition: $transition;
   user-select: none;
 
   &:disabled {
@@ -145,7 +145,7 @@ export default {
     background-color: inherit;
     border: 1px solid $gray4;
     border-style: solid;
-    color: $gray4;
+    color: $white;
 
     &:disabled {
       background-color: inherit;
@@ -154,13 +154,13 @@ export default {
     }
 
     &:hover {
-      color: rgba(255, 255, 255, 0.9);
-      border-color: rgba(255, 255, 255, 0.9);
+      border-color: $white;
+      background-color: $black;
     }
 
     &:active {
-      color: rgba(255, 255, 255, 0.9);
-      border-color: rgba(255, 255, 255, 0.65);
+      color: $white;
+      border-color: $white;
     }
   }
 
