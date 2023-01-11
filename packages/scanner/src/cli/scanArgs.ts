@@ -1,19 +1,17 @@
 import { Argv } from 'yargs';
+import { directoryArg } from './directoryArg';
 
 export default function (args: Argv): void {
-  args.option('directory', {
-    describe: 'program working directory',
-    type: 'string',
-    alias: 'd',
-  });
-  args.option('appmap-dir', {
-    describe: 'directory to recursively inspect for AppMaps',
-  });
+  directoryArg(args);
+
   args.option('config', {
     describe:
       'path to assertions config file (TypeScript or YAML, check docs for configuration format)',
     default: 'appmap-scanner.yml',
     alias: 'c',
+  });
+  args.option('appmap-dir', {
+    describe: 'directory to recursively inspect for AppMaps',
   });
   args.option('report-file', {
     describe: 'file name for findings report',

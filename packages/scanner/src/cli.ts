@@ -5,6 +5,7 @@ import ScanCommand from './cli/scan/command';
 import UploadCommand from './cli/upload/command';
 import CICommand from './cli/ci/command';
 import MergeCommand from './cli/merge/command';
+import TriageCommand from './cli/triage/command';
 import { verbose } from './rules/lib/util';
 import { AbortError, ValidationError } from './errors';
 import { ExitCode } from './cli/exitCode';
@@ -41,6 +42,7 @@ yargs(process.argv.slice(2))
   .command(UploadCommand)
   .command(CICommand)
   .command(MergeCommand)
+  .command(TriageCommand)
   .fail((msg, err, yargs) => {
     if (msg) {
       console.warn(yargs.help());
