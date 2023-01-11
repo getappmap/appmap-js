@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.60.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.60.0...@appland/appmap-v3.60.1) (2023-01-11)
+
+
+### Bug Fixes
+
+* Allow non-standard requirements.txt names ([46b3d43](https://github.com/getappmap/appmap-js/commit/46b3d4365b060cf275c2a2892787ad413455d952))
+
 # [@appland/appmap-v3.60.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.59.1...@appland/appmap-v3.60.0) (2023-01-06)
 
 
