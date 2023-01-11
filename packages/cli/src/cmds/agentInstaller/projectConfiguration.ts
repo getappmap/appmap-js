@@ -1,6 +1,5 @@
 import chalk from 'chalk';
-import { promises as fs, constants as fsConstants } from 'fs';
-import { readFile } from 'fs/promises';
+import { promises as fs, constants as fsConstants, lstatSync } from 'fs';
 import { exists } from '../../utils';
 
 import { basename, join, resolve } from 'path';
@@ -99,23 +98,27 @@ export async function getYarnPackages(availableInstallers: AgentInstaller[]): Pr
     if (installer.name === 'yarn') {
       const packageJsonFilename = join(installer.path, 'package.json');
       if (await exists(packageJsonFilename)) {
-        const data = await readFile(packageJsonFilename, 'utf-8');
+        const data = await fs.readFile(packageJsonFilename, 'utf-8');
         const packageJson = JSON.parse(data);
         if ('workspaces' in packageJson) {
           const workspaces = packageJson['workspaces'];
           // process as glob because it could be something like
           // workspaces: [ 'packages/*' ]
-          workspaces.forEach((workspace) => {
+          for (const workspace of workspaces) {
             const matches = glob.sync(workspace, {
               matchBase: true,
               cwd: installer.path,
               ignore: ['**/node_modules/**', '**/.git/**'],
               strict: false,
             });
-            matches.forEach((yarnPackage) => {
-              yarnPackages.push(yarnPackage);
-            });
-          });
+            for (const yarnPackage of matches) {
+              // packages must be directories; don't break on leftover files
+              const isDir = lstatSync(join(installer.path, yarnPackage)).isDirectory();
+              if (isDir) {
+                yarnPackages.push(yarnPackage);
+              }
+            }
+          }
         }
       }
     }
