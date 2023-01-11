@@ -1012,6 +1012,16 @@ context('VS Code Extension', () => {
 
       cy.get('.trace-node[data-event-id="1"].highlight').should('exist');
     });
+
+    it('clicking the Share button opens a modal', () => {
+      cy.get('.appmap-upload').click();
+      cy.get('.share-appmap')
+        .should('exist')
+        .find('.url')
+        .should('have.text', 'Retrieving link...');
+      cy.get('.close-me').click();
+      cy.get('.share-appmap').should('not.exist');
+    });
   });
 
   context('No HTTP appmap', () => {
