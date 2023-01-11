@@ -40,6 +40,10 @@
           </div>
         </article>
       </main>
+      <p>
+        By downloading and using AppMap you agree to the
+        <a href="https://appmap.io/community/terms-and-conditions">Terms and Conditions</a>.
+      </p>
     </section>
   </QuickstartLayout>
 </template>
