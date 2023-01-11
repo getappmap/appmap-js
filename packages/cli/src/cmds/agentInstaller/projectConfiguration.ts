@@ -110,6 +110,7 @@ export async function getYarnPackages(availableInstallers: AgentInstaller[]): Pr
               matchBase: true,
               cwd: installer.path,
               ignore: ['**/node_modules/**', '**/.git/**'],
+              strict: false,
             });
             matches.forEach((yarnPackage) => {
               yarnPackages.push(yarnPackage);
