@@ -1,5 +1,8 @@
 import chalk from 'chalk';
-import { promises as fs, constants as fsConstants, readFileSync, existsSync } from 'fs';
+import { promises as fs, constants as fsConstants } from 'fs';
+import { readFile } from 'fs/promises';
+import { exists } from '../../utils';
+
 import { basename, join, resolve } from 'path';
 import { glob } from 'glob';
 import packages from '../../fingerprint/canonicalize/packages';
@@ -90,13 +93,13 @@ async function resolveSelectedInstallers(
   }
 }
 
-export function getYarnPackages(availableInstallers: AgentInstaller[]): string[] {
+export async function getYarnPackages(availableInstallers: AgentInstaller[]): Promise<string[]> {
   let yarnPackages: string[] = [];
-  availableInstallers.forEach((installer) => {
+  for (const installer of availableInstallers) {
     if (installer.name === 'yarn') {
       const packageJsonFilename = join(installer.path, 'package.json');
-      if (existsSync(packageJsonFilename)) {
-        const data = readFileSync(packageJsonFilename, 'utf-8');
+      if (await exists(packageJsonFilename)) {
+        const data = await readFile(packageJsonFilename, 'utf-8');
         const packageJson = JSON.parse(data);
         if ('workspaces' in packageJson) {
           const workspaces = packageJson['workspaces'];
@@ -115,7 +118,7 @@ export function getYarnPackages(availableInstallers: AgentInstaller[]): string[]
         }
       }
     }
-  });
+  }
 
   return yarnPackages;
 }
@@ -134,7 +137,7 @@ async function getSubprojects(
   rootHasInstaller: boolean,
   availableInstallers: AgentInstaller[]
 ): Promise<ProjectConfiguration[] | undefined> {
-  const yarnPackages = getYarnPackages(availableInstallers);
+  const yarnPackages = await getYarnPackages(availableInstallers);
 
   let subprojects: ProjectConfiguration[] = [];
   if (yarnPackages.length > 0) {
