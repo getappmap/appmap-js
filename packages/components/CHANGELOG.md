@@ -1,3 +1,10 @@
+# [@appland/components-v2.21.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.20.1...@appland/components-v2.21.0) (2023-01-11)
+
+
+### Features
+
+* improve share button in appmap ([fadd2a6](https://github.com/getappmap/appmap-js/commit/fadd2a6ac644907918357865fae6badc88a6db94))
+
 # [@appland/components-v2.20.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.20.0...@appland/components-v2.20.1) (2023-01-05)
 
 
