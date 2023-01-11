@@ -1240,7 +1240,7 @@ appmap_dir: tmp/appmap
     it('yarn detects sub-projects', async () => {
       expect.assertions(3);
       const projectFixture = path.join(fixtureDir, 'javascript', 'yarn_with_subprojects');
-      expect(await getYarnPackages([new YarnInstaller(projectFixture)])).toStrictEqual([ 'subproject_one', 'subproject_two' ]);
+      expect(await getYarnPackages([new YarnInstaller(projectFixture)])).toStrictEqual([ 'packages/subproject_one', 'packages/subproject_two' ]);
       fse.copySync(projectFixture, projectDir);
       const promptStub = sinon.stub(inquirer, 'prompt').resolves({
         addSubprojects: true,
