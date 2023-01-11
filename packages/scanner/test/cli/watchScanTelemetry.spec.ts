@@ -1,7 +1,7 @@
 import EventEmitter from 'events';
 import Sinon from 'sinon';
 import * as watchScanTelemetry from '../../src/cli/scan/watchScanTelemetry';
-import { MaxMSBetween } from '../../src/lib/eventAggregator';
+import { MaxMSBetween } from '../../src/util/eventAggregator';
 import * as scanSummary from '../../src/report/scanSummary';
 import * as scanResults from '../../src/report/scanResults';
 import assert from 'assert';
