@@ -47,7 +47,7 @@
         You're almost done! Install AppMap as a development dependency in your project. Click the
         button below to perform an automated installation.
         <div class="center-block" data-cy="automated-install">
-          <v-button kind="ghost" @click.native="performInstall" :timeout="2000">
+          <v-button kind="primary" @click.native="performInstall" :timeout="2000">
             Automated install via AppMap CLI
           </v-button>
         </div>

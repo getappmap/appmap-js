@@ -118,7 +118,7 @@ export default {
     border: none;
     border-radius: 0 6px 6px 0;
     color: #fff;
-    background-color: $white;
+    background-color: $powderblue;
     opacity: 1;
     outline: none;
     appearance: none;
@@ -139,8 +139,8 @@ export default {
     }
 
     &-icon {
-      width: 1.2rem;
-      fill: $black;
+      width: 1.1rem;
+      fill: $white;
     }
   }
 }
