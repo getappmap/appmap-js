@@ -10,18 +10,14 @@ import { dump, load } from 'js-yaml';
 import { directoryArg } from '../directoryArg';
 import { exists } from '../../../../cli/src/utils';
 import { FindingsState, FindingState, FindingStateItem, loadFindingsState } from '../findingsState';
+import { stateFileNameArg } from './stateFileNameArg';
 
 export default {
   command: 'triage <finding...>',
   describe: 'Triage findings by assigning them to a workflow state',
   builder(args: Argv): Argv {
     directoryArg(args);
-
-    args.option('state-file', {
-      describe: 'Name of the file containing the findings state',
-      type: 'string',
-      default: 'appmap-findings-state.yml',
-    });
+    stateFileNameArg(args);
 
     args.option('comment', {
       describe: 'Comment to associate with the triage action',

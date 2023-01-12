@@ -3,21 +3,24 @@ import { writeFile } from 'fs/promises';
 import { promisify } from 'util';
 import { Arguments, Argv } from 'yargs';
 
-import { FindingStatusListItem } from '@appland/client/dist/src';
+import {
+  FindingStatusListItem,
+  loadConfiguration as loadClientConfiguration,
+} from '@appland/client/dist/src';
 
 import { parseConfigFile } from '../../configuration/configurationProvider';
 import { ValidationError } from '../../errors';
 import { ScanResults } from '../../report/scanResults';
 import { verbose } from '../../rules/lib/util';
 import { appmapDirFromConfig } from '../appmapDirFromConfig';
-import { newFindings } from '../../findings';
+import selectFindings from '../../selectFindings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 
 import resolveAppId from '../resolveAppId';
 import validateFile from '../validateFile';
 import upload from '../upload';
-import { default as buildScanner } from '../scan/scanner';
+import Scanner, { default as buildScanner } from '../scan/scanner';
 
 import CommandOptions from './options';
 import scanArgs from '../scanArgs';
@@ -26,6 +29,7 @@ import reportUploadURL from '../reportUploadURL';
 import fail from '../fail';
 import codeVersionArgs from '../codeVersionArgs';
 import { handleWorkingDirectory } from '../handleWorkingDirectory';
+import { stateFileNameArg } from '../triage/stateFileNameArg';
 
 export default {
   command: 'ci',
@@ -33,6 +37,7 @@ export default {
   builder(args: Argv): Argv {
     scanArgs(args);
     codeVersionArgs(args);
+    stateFileNameArg(args);
 
     args.option('fail', {
       describe: 'exit with non-zero status if there are any new findings',
@@ -59,6 +64,7 @@ export default {
     let { appmapDir } = options as unknown as CommandOptions;
     const {
       config,
+      stateFile: stateFileName,
       verbose: isVerbose,
       fail: failOption,
       app: appIdArg,
@@ -75,6 +81,8 @@ export default {
     if (isVerbose) {
       verbose(true);
     }
+
+    loadClientConfiguration();
 
     handleWorkingDirectory(directory);
 
@@ -94,16 +102,19 @@ export default {
 
     const configData = await parseConfigFile(config);
 
-    const scanner = await buildScanner(false, configData, files);
+    const scanner = new Scanner(configData, files);
 
     const [rawScanResults, findingStatuses]: [ScanResults, FindingStatusListItem[]] =
-      await Promise.all([scanner.scan(), scanner.fetchFindingStatus(appIdArg, appmapDir)]);
+      await Promise.all([
+        scanner.scan(),
+        scanner.fetchFindingStatus(stateFileName, appIdArg, appmapDir),
+      ]);
 
     // Always report the raw data
     await writeFile(reportFile, JSON.stringify(rawScanResults, null, 2));
 
     const scanResults = rawScanResults.withFindings(
-      newFindings(rawScanResults.findings, findingStatuses)
+      selectFindings(rawScanResults.findings, findingStatuses, [])
     );
 
     findingsReport(scanResults.findings, scanResults.appMapMetadata);
