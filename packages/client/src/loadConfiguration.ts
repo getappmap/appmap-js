@@ -1,6 +1,10 @@
 import Configuration from './configuration';
 
+<<<<<<< HEAD
 export const DefaultURL = 'https://app.land';
+=======
+const DefaultURL = 'https://app.land';
+>>>>>>> 701fa4d5 (feat: Recognize APPMAP_* env vars)
 
 class Settings {
   baseURL = DefaultURL;
