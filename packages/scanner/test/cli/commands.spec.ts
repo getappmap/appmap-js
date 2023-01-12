@@ -2,7 +2,7 @@ import { Arguments } from 'yargs';
 import * as resolveAppId from '../../src/cli/resolveAppId';
 import ScanCommand from '../../src/cli/scan/command';
 import CommandOptions from '../../src/cli/scan/options';
-import * as scanner from '../../src/cli/scan/scanner';
+import * as Scanner from '../../src/cli/scan/scanner';
 import * as watchScan from '../../src/cli/scan/watchScan';
 import tmp from 'tmp-promise';
 import { copyFile, mkdir, writeFile } from 'node:fs/promises';
@@ -13,9 +13,9 @@ jest.mock('../../src/telemetry');
 const defaultArguments: Arguments<CommandOptions> = {
   _: [],
   $0: 'scan',
-  all: false,
-  interactive: false,
   watch: false,
+  stateFile: 'appmap-findings-state.yml',
+  findingState: [],
   config: 'appmap-scanner.yml',
   reportFile: 'appmap-findings.json',
 };
@@ -70,11 +70,11 @@ describe('commands', () => {
             directory: tmpDir,
           });
 
-          const originalScanner = scanner.default;
+          const OriginalScanner = Scanner.default;
           const scanned = new Promise<void>((resolve) =>
-            jest.spyOn(scanner, 'default').mockImplementation((...args) => {
+            jest.spyOn(Scanner, 'default').mockImplementation((...args) => {
               resolve();
-              return originalScanner(...args);
+              return new OriginalScanner(...args);
             })
           );
 

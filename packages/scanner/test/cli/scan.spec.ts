@@ -24,6 +24,7 @@ delete process.env.APPLAND_API_KEY;
 delete process.env.APPLAND_URL;
 
 const ReportFile = 'appmap-findings.json';
+const StateFile = 'appmap-findings-state.yml';
 const AppId = test.AppId;
 const DefaultScanConfigFilePath = join(__dirname, '..', '..', 'src', 'sampleConfig', 'default.yml');
 const StandardOneShotScanOptions = {
@@ -32,11 +33,11 @@ const StandardOneShotScanOptions = {
   ),
   config: DefaultScanConfigFilePath, // need to pass it explicitly
   reportFile: ReportFile,
+  stateFile: StateFile,
+  findingState: [],
   app: AppId,
-  all: false,
-  interactive: false,
   watch: false,
-} as const;
+};
 
 function isError(error: unknown, code: string): boolean {
   const err = error as NodeJS.ErrnoException;
@@ -88,10 +89,6 @@ describe('scan', () => {
     ]);
   }
 
-  it('runs with server access disabled', async () => {
-    await checkScan({ ...StandardOneShotScanOptions, all: true });
-  });
-
   it('errors when the provided appId is not valid', async () => {
     nock('http://localhost:3000').head(`/api/${AppId}`).reply(404);
 
@@ -105,13 +102,15 @@ describe('scan', () => {
     }
   });
 
-  it('integrates server finding status with local findings', async () => {
+  it('integrates server finding status', async () => {
     const localhost = nock('http://localhost:3000');
     localhost.head(`/api/${AppId}`).reply(204).persist();
     localhost.get(`/api/${AppId}/finding_status`).reply(200, JSON.stringify([]));
 
     await runCommand(StandardOneShotScanOptions);
   });
+
+  it('integrates local finding status', () => pending());
 
   it('skips when encountering a bad file in a directory', async () =>
     tmp.withDir(
@@ -121,7 +120,6 @@ describe('scan', () => {
 
         const options: CommandOptions = {
           ...StandardOneShotScanOptions,
-          all: true,
           appmapDir: path,
         };
         delete options.appmapFile;
@@ -138,7 +136,6 @@ describe('scan', () => {
 
         const options: CommandOptions = {
           ...StandardOneShotScanOptions,
-          all: true,
           appmapDir: path,
         };
         delete options.appmapFile;
@@ -241,6 +238,7 @@ describe('scan', () => {
     async function createWatcher(): Promise<void> {
       watcher = new Watcher({
         appId: 'no-such-app',
+        stateFileName: StateFile,
         appmapDir: tmpDir,
         configFile: scanConfigFilePath,
       });
