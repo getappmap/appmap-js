@@ -62,7 +62,10 @@
       </template>
       <template v-else>
         <template v-if="!languageSupported">
-          <p>AppMap currently supports the following languages:</p>
+          <p>
+            This project does not meet all the requirements to create AppMaps. AppMap currently
+            supports the following languages:
+          </p>
           <ul class="support-list">
             <li><strong>Ruby</strong></li>
             <li><strong>Python</strong></li>
@@ -78,7 +81,6 @@
             information.
           </p>
         </template>
-        <p>This project does not meet all the requirements to create AppMaps.</p>
       </template>
     </div>
   </v-accordion>
@@ -222,15 +224,17 @@ export default {
 $brightblue: rgba(255, 255, 255, 0.1);
 
 .project-picker-row {
-  border-width: 0.5px 0;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid lighten($gray2, 15);
+  padding: 0;
 
   &.accordion--open {
-    background-color: rgba(200, 200, 255, 0.075);
+    background-color: #171d2d;
+    border-radius: 0;
+    border-bottom: 1px solid lighten($gray2, 15);
   }
   &__body {
-    padding: 1rem;
+    padding: 1rem 0;
+    border-top: 1px solid lighten($gray2, 15);
   }
   &__nav {
     display: flex;
@@ -239,58 +243,63 @@ $brightblue: rgba(255, 255, 255, 0.1);
       flex-grow: 1;
       margin: auto 0;
     }
-    margin-top: 2rem;
+    margin-top: 1rem;
+  }
+
+  &:hover {
+    background-color: #171d2d;
   }
 }
 
 .header {
   display: flex;
+  align-items: center;
 
   &__title {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
     justify-content: left;
     flex-grow: 1;
+    font-weight: 800;
   }
 
   &__support {
     display: flex;
-    justify-content: right;
+    gap: 1.25rem;
   }
 
   &__feature-tag {
+    color: $gray4;
     display: flex;
-    margin-left: 1rem;
-    background-color: rgba(200, 200, 255, 0.4);
-    padding: 0.5em;
-    border-radius: 8px;
+    padding: 0.2rem 0;
     align-items: center;
     transition: $transition;
 
     svg {
       height: 16px;
       width: 16px;
-      fill: $almost-black;
+      fill: $gray4;
+      transition: $transition;
     }
 
     &:hover {
-      background-color: $gray5;
-      color: $almost-black;
+      color: lighten($gray4, 30);
+
+      svg {
+        fill: lighten($gray4, 30);
+      }
     }
   }
 
   &__icon-text {
     display: inline-block;
-    font-size: 0.8em;
-    color: $almost-black;
-    margin-left: 0.5em;
-    margin-top: auto;
-    margin-bottom: -3px;
+    margin-left: 0.25em;
+    font-size: 0.9rem;
   }
 
   &__accordion-icons {
     position: relative;
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     margin-left: 1rem;
     align-self: center;
 
@@ -309,13 +318,13 @@ $brightblue: rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: center;
   margin: 2em auto;
-  color: $color;
+  color: lighten($gray2, 25);
 
   &::before {
     content: ' ';
     margin: auto 1em auto 0;
     width: 100%;
-    background-color: $color;
+    background-color: lighten($gray2, 15);
     height: 1px;
   }
 
@@ -323,7 +332,7 @@ $brightblue: rgba(255, 255, 255, 0.1);
     content: ' ';
     margin: auto 0 auto 1em;
     width: 100%;
-    background-color: $color;
+    background-color: lighten($gray2, 15);
     height: 1px;
   }
 }
@@ -336,6 +345,7 @@ $brightblue: rgba(255, 255, 255, 0.1);
 
 .support-list {
   margin: 1rem 0;
+  list-style-position: inside;
   ul {
     margin-left: 1rem;
     margin-top: 0;

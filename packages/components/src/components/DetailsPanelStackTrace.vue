@@ -90,15 +90,14 @@ export default {
       }
     }
     a {
-      color: $blue;
+      color: $powderblue;
       text-decoration: none;
       line-height: 1.5rem;
       width: 100%;
       word-break: break-all;
       transition: $transition;
       &:hover {
-        text-decoration: underline;
-        color: lighten($blue, 20);
+        color: $white;
       }
     }
   }

@@ -64,9 +64,10 @@ export default {
 
 <style lang="scss" scoped>
 .project-picker-table {
-  width: 100%;
-  border-radius: 8px;
-  border-spacing: 0;
+  border-top: 1px solid lighten($gray2, 15);
   color: $white;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem -1.75rem 0 -1.75rem;
 }
 </style>
