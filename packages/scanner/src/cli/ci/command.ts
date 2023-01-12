@@ -30,6 +30,7 @@ import fail from '../fail';
 import codeVersionArgs from '../codeVersionArgs';
 import { handleWorkingDirectory } from '../handleWorkingDirectory';
 import { stateFileNameArg } from '../triage/stateFileNameArg';
+import assert from 'assert';
 
 export default {
   command: 'ci',
@@ -95,7 +96,8 @@ export default {
       );
 
     await validateFile('directory', appmapDir!);
-    const appId = await resolveAppId(appIdArg, appmapDir);
+    const appId = await resolveAppId(appIdArg, appmapDir, true);
+    assert(appId);
 
     const glob = promisify(globCallback);
     const files = await glob(`${appmapDir}/**/*.appmap.json`);

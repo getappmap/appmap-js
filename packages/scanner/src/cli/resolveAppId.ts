@@ -34,16 +34,23 @@ async function resolveAppId(
 
 export default async function (
   appIdArg: string | undefined,
-  appMapDir: string | undefined
-): Promise<string> {
+  appMapDir: string | undefined,
+  mustExist = false
+): Promise<string | undefined> {
   const appId = await resolveAppId(appIdArg, appMapDir);
   if (!appId) throw new ValidationError('App was not provided and could not be resolved');
 
   const appExists = await new App(appId).exists();
   if (!appExists) {
-    throw new ValidationError(
-      `App "${appId}" is not valid or does not exist.\nPlease fix the app name in the appmap.yml file, or override it with the --app option.`
+    if (mustExist) {
+      throw new ValidationError(
+        `App "${appId}" is not valid or does not exist. Please fix the app name in the appmap.yml file, or override it with the --app option.`
+      );
+    }
+    console.warn(
+      `App "${appId}" does not exist on the AppMap Server. If this is unexpected, provide the correct app name in the appmap.yml file, or override it with the --app option.`
     );
+    return;
   }
 
   return appId;

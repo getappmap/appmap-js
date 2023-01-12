@@ -29,22 +29,6 @@ describe('commands', () => {
   });
 
   describe('scan --watch', () => {
-    it('does not attempt to resolve an app ID', async () => {
-      // Prevent the watcher from running indefinitely
-      jest.spyOn(watchScan, 'default').mockResolvedValue();
-
-      const spy = jest.spyOn(resolveAppId, 'default');
-
-      try {
-        await ScanCommand.handler({ ...defaultArguments, watch: true });
-      } catch {
-        // Do nothing.
-        // We don't want exceptions, we just want to know if our stub was called.
-      }
-
-      expect(spy).not.toBeCalled();
-    });
-
     let watcher: watchScan.Watcher | undefined;
 
     afterEach(() => {
@@ -53,6 +37,21 @@ describe('commands', () => {
         watcher = undefined;
         return closer;
       }
+    });
+
+    it('resolves appId, but its absence is benign', async () => {
+      // Prevent the watcher from running indefinitely
+      jest.spyOn(watchScan, 'default').mockResolvedValue();
+
+      const spy = jest.spyOn(resolveAppId, 'default');
+
+      try {
+        await ScanCommand.handler({ ...defaultArguments, watch: true });
+      } catch (e) {
+        expect(e).not.toBeTruthy();
+      }
+
+      expect(spy).toBeCalled();
     });
 
     it('work correctly even if the appmap directory does not initially exist', () =>

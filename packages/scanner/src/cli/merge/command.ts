@@ -5,6 +5,7 @@ import { merge as mergeScannerJob } from '../../integration/appland/scannerJob/m
 import resolveAppId from '../resolveAppId';
 import updateCommitStatus from '../updateCommitStatus';
 import fail from '../fail';
+import assert from 'assert';
 
 export default {
   command: 'merge <merge-key>',
@@ -45,7 +46,8 @@ export default {
       verbose(true);
     }
 
-    const appId = await resolveAppId(appIdArg, '.');
+    const appId = await resolveAppId(appIdArg, '.', true);
+    assert(appId);
 
     const mergeResults = await mergeScannerJob(appId, mergeKey);
     console.warn(`Merged results to ${mergeResults.url}`);

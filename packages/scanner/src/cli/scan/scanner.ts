@@ -17,7 +17,7 @@ export default class Scanner {
   constructor(public configuration: Configuration, public files: string[]) {}
 
   async scan(skipErrors = false): Promise<ScanResults> {
-    await loadClientConfiguration();
+    loadClientConfiguration();
 
     const checks = await loadConfig(this.configuration);
     const { appMapMetadata, findings } = await scan(this.files, checks, skipErrors);
@@ -29,8 +29,11 @@ export default class Scanner {
     appIdArg?: string,
     appMapDir?: string
   ): Promise<FindingStatusListItem[]> {
+    let findingStatus: FindingStatusListItem[] = [];
+
     const appId = await resolveAppId(appIdArg, appMapDir);
-    const findingStatus = await new App(appId).listFindingStatus();
+    if (appId) findingStatus = await new App(appId).listFindingStatus();
+
     const clientFindingsState = await loadFindingsState(stateFileName);
     Object.keys(clientFindingsState).forEach((state): void => {
       const items = clientFindingsState[state as FindingState];

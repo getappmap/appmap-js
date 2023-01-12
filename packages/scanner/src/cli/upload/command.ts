@@ -14,6 +14,7 @@ import upload from '../upload';
 import codeVersionArgs from '../codeVersionArgs';
 import { ValidationError } from '../../errors';
 import { handleWorkingDirectory } from '../handleWorkingDirectory';
+import assert from 'assert';
 
 export default {
   command: 'upload',
@@ -71,6 +72,7 @@ export default {
 
     await validateFile('directory', appmapDir!);
     const appId = await resolveAppId(appIdArg, appmapDir);
+    assert(appId);
 
     const scanResults = JSON.parse((await readFile(reportFile)).toString()) as ScanResults;
     const uploadResponse = await upload(

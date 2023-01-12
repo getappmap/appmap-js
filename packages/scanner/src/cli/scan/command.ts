@@ -80,8 +80,7 @@ export default {
       appmapDir = (await appmapDirFromConfig()) || '.';
     }
 
-    let appId = appIdArg;
-    if (!watch) appId = await resolveAppId(appIdArg, appmapDir);
+    const appId = await resolveAppId(appIdArg, appmapDir);
 
     if (watch) {
       assert(appmapDir);
