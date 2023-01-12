@@ -1,3 +1,10 @@
+# [@appland/components-v2.22.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.21.0...@appland/components-v2.22.0) (2023-01-12)
+
+
+### Features
+
+* style updates for project picker ([0a25917](https://github.com/getappmap/appmap-js/commit/0a25917a6df8c00e6aa5a9de186d4e084aa0f111))
+
 # [@appland/components-v2.21.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.20.1...@appland/components-v2.21.0) (2023-01-11)
 
 
