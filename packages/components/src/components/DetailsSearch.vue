@@ -21,7 +21,7 @@
       :key="type"
     >
       <h2 class="details-search__block-title">
-        {{ listItems[type].title }}
+        <span class="legend">&#9679;</span> {{ listItems[type].title }}
       </h2>
       <ul class="details-search__block-list">
         <li
@@ -284,47 +284,63 @@ export default {
       border-radius: 4px;
       display: inline-block;
       padding: 0.25rem 0;
-      color: $base01;
+      color: $gray4;
       font-size: 0.9rem;
       font-weight: bold;
       text-transform: uppercase;
 
       .details-search__block--http & {
-        color: #8e45aa;
+        .legend {
+          color: #8e45aa;
+        }
       }
 
       .details-search__block--external-service & {
-        color: $yellow;
+        .legend {
+          color: $yellow;
+        }
       }
 
       .details-search__block--labels & {
-        color: $base11;
+        .legend {
+          color: $base11;
+        }
       }
 
       .details-search__block--package & {
-        color: $teal;
+        .legend {
+          color: $teal;
+        }
       }
 
       .details-search__block--class &,
       .details-search__block--function & {
-        color: $blue;
+        .legend {
+          color: $blue;
+        }
       }
 
       .details-search__block--query & {
-        color: $royal;
+        .legend {
+          color: $royal;
+        }
       }
 
       .details-search__block--empty & {
-        color: $gray3;
+        .legend P {
+          color: $gray3;
+        }
       }
       .details-search__block--analysis-finding & {
-        color: $hotpink;
+        .legend {
+          color: $hotpink;
+        }
       }
     }
 
     &-list {
       margin: 0;
-      padding: 0.5rem;
+      padding: 0;
       list-style: none;
       li {
         &:last-of-type {
