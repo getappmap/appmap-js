@@ -221,10 +221,12 @@ export default {
 .details-search {
   margin-bottom: 2rem;
   margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
   &__form {
-    margin-bottom: 24px;
-    padding: 0 0.5rem;
+    padding: 0;
   }
 
   &__input-wrap {
@@ -271,7 +273,6 @@ export default {
   }
 
   &__block {
-    padding: 0 0.5rem;
     margin-bottom: 16px;
     border-bottom: 1px solid $gray2;
 
@@ -280,7 +281,7 @@ export default {
     }
 
     &-title {
-      margin: 0 0 0.25rem;
+      margin: 0;
       border-radius: 4px;
       display: inline-block;
       padding: 0.25rem 0;
@@ -340,7 +341,7 @@ export default {
 
     &-list {
       margin: 0;
-      padding: 0;
+      padding: 0 0.75rem;
       list-style: none;
       li {
         &:last-of-type {
@@ -350,6 +351,8 @@ export default {
 
       .details-search__block--labels & {
         margin: 0 -0.25rem -0.25rem;
+        display: flex;
+        flex-direction: column;
       }
       &.analysis {
         padding: 0 0 1rem 0;
@@ -399,18 +402,14 @@ export default {
       }
 
       .details-search__block--labels & {
-        margin: 0.25rem;
-        border: 1px solid $base15 !important;
-        border-radius: 4px;
+        margin: 0;
+        padding: 0 0.5rem;
         display: inline-flex;
-        padding: 0.25rem 0.5rem;
         transition: 0.25s ease-out all;
 
         &:hover,
         &:active {
-          background: $base03;
-          color: $gray1;
-          border-color: $base03 !important;
+          color: $blue;
         }
 
         &-count {

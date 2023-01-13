@@ -120,7 +120,6 @@ export default {
   display: flex;
   flex-direction: column;
   margin-bottom: 1em;
-  padding: 0 1rem;
   color: $blue;
   transition: $transition;
 
