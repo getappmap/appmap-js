@@ -74,12 +74,16 @@ export default {
   computed: {
     listItems() {
       const items = {
+        [CodeObjectType.HTTP]: {
+          title: 'HTTP server requests',
+          data: [],
+        },
         [CodeObjectType.ANALYSIS_FINDING]: {
           title: 'Analysis Findings',
           data: [],
         },
-        [CodeObjectType.HTTP]: {
-          title: 'HTTP server requests',
+        [CodeObjectType.QUERY]: {
+          title: 'SQL queries',
           data: [],
         },
         [CodeObjectType.EXTERNAL_SERVICE]: {
@@ -94,16 +98,12 @@ export default {
           title: 'Packages',
           data: [],
         },
-        [CodeObjectType.CLASS]: {
-          title: 'Classes',
-          data: [],
-        },
         [CodeObjectType.FUNCTION]: {
           title: 'Functions',
           data: [],
         },
-        [CodeObjectType.QUERY]: {
-          title: 'SQL queries',
+        [CodeObjectType.CLASS]: {
+          title: 'Classes',
           data: [],
         },
       };
