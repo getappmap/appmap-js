@@ -344,6 +344,7 @@ export default {
       padding: 0 0.75rem;
       list-style: none;
       li {
+        transition: $transition;
         &:last-of-type {
           border-bottom: 0;
         }
