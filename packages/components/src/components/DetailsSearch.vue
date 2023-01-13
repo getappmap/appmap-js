@@ -220,11 +220,11 @@ export default {
 <style scoped lang="scss">
 .details-search {
   margin-bottom: 2rem;
-  padding: 0;
+  margin-top: 0.75rem;
 
   &__form {
     margin-bottom: 24px;
-    padding: 0;
+    padding: 0 0.5rem;
   }
 
   &__input-wrap {

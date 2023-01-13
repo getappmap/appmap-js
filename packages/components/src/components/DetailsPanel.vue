@@ -3,6 +3,7 @@
     <h3 class="details-panel__title">
       <AppMapLogo width="70" />
     </h3>
+    <h1 class="appmap-name">{{ appMap.data.metadata.name }}</h1>
     <div
       class="details-panel__source"
       v-if="!selectedObject && !selectedLabel && sourceLocationObject"
@@ -196,6 +197,14 @@ export default {
 
   &__notification:not(:empty) {
     padding: 0 0 1rem;
+  }
+
+  .appmap-name {
+    margin-block-start: 0;
+    font-size: 1.5rem;
+    margin: 1.5rem 0 0.5rem 0;
+    line-height: 1.8rem;
+    padding: 0 1rem;
   }
 }
 </style>

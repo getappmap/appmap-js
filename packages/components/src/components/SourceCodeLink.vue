@@ -120,30 +120,37 @@ export default {
   display: flex;
   flex-direction: column;
   margin-bottom: 1em;
-  color: $gray4;
+  padding: 0 1rem;
+  color: $blue;
   transition: $transition;
 
   &__path {
     flex-direction: row;
-    font-family: monospace;
-    border-radius: 8px;
-    background-color: $gray2;
-    padding: 0.6em;
     display: flex;
     align-items: center;
     font-size: 0.9rem;
-    line-height: 1.2rem;
+    line-height: 14px;
+    transition: $transition;
+    &:hover {
+      color: $blue;
+      text-decoration: underline;
+      svg {
+        path {
+          fill: $blue;
+        }
+      }
+    }
   }
 
   &__extern-link {
-    height: 16px;
-    min-width: 16px;
-    width: 16px;
+    height: 14px;
+    min-width: 14px;
+    width: 14px;
     vertical-align: middle;
-    margin-left: auto;
-
+    margin-left: 1rem;
+    transition: $transition;
     path {
-      fill: #716e85;
+      fill: $blue;
     }
   }
 
@@ -163,14 +170,12 @@ export default {
   }
 
   &--has-external-link {
+    transition: $transition;
     &:hover {
       cursor: pointer;
-      color: #fff;
-      background-color: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
 
       path {
-        fill: #fff !important;
+        fill: $blue !important;
       }
     }
   }
