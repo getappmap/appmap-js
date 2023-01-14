@@ -104,7 +104,7 @@ __metadata:
     boxen: ^5.0.1
     chalk: ^4.1.2
     chokidar: ^3.5.1
-    cli-progress: ^3.9.0
+    cli-progress: ^3.11.2
     conf: ^10.0.2
     console-table-printer: ^2.9.0
     crypto-js: ^4.0.0
@@ -340,7 +340,7 @@ __metadata:
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
     "@types/async": ^3.2.12
-    "@types/cli-progress": ^3.9.2
+    "@types/cli-progress": ^3.11.0
     "@types/crypto-js": ^4.1.1
     "@types/fs-extra": ^9.0.13
     "@types/glob": ^7.2.0
@@ -359,7 +359,7 @@ __metadata:
     boxen: ^5.0.1
     chalk: ^4.1.2
     chokidar: ^3.5.1
-    cli-progress: ^3.11.0
+    cli-progress: ^3.11.2
     conf: ^10.0.2
     crypto-js: ^4.0.0
     eslint: ^7.32.0
@@ -5638,12 +5638,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cli-progress@npm:^3.9.2":
-  version: 3.9.2
-  resolution: "@types/cli-progress@npm:3.9.2"
+"@types/cli-progress@npm:^3.11.0":
+  version: 3.11.0
+  resolution: "@types/cli-progress@npm:3.11.0"
   dependencies:
     "@types/node": "*"
-  checksum: 371ecb29c45dce7127b4a8626521d908ce7dfaea6a537fcd491b12aea3a8ff58452eb1b33e0d2e0724c81b56df3930195e521e12fe979518deb5329a7a884a02
+  checksum: d4401622333e888925b47c5d5bb0b89dddae17cc020f909a64ad7275b326bf3c6e9cd467f625a197fd958a1e49220d32f4a2b0bf2948fee330c719a9b985674e
   languageName: node
   linkType: hard
 
@@ -10470,21 +10470,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cli-progress@npm:^3.11.0":
-  version: 3.11.0
-  resolution: "cli-progress@npm:3.11.0"
+"cli-progress@npm:^3.11.2":
+  version: 3.11.2
+  resolution: "cli-progress@npm:3.11.2"
   dependencies:
     string-width: ^4.2.3
-  checksum: aed20534e440d7073b03b5225cc1a3ec06436b5f390b4d7a77d17d8edb2734cdb107cdeb5fc1ab031ef195e2d0cdc3653a3e8d91e4f56520448aa71289233e7b
-  languageName: node
-  linkType: hard
-
-"cli-progress@npm:^3.9.0":
-  version: 3.10.0
-  resolution: "cli-progress@npm:3.10.0"
-  dependencies:
-    string-width: ^4.2.0
-  checksum: 8e22c6265f95598002986c6508d05004bd9f5ee17c06f239d8d59e14f5a7e5605055f5d705a3a7d69f6072ea0752b1c094f28c48a704f9fd00378d7d16f0b46d
+  checksum: 147d26b80ceaa24d72f0354d1b58b7f3567b928bf5943be879de31cf16b0a4f1d059984e2e35a664d7d27ae3e7fafd69fd94b35f462c8879caf96d7f31eac442
   languageName: node
   linkType: hard
 
