@@ -21,6 +21,12 @@ export default class FingerprintWatchCommand {
   public unreadableFiles = new Set<string>();
   public symlinkLoopFiles = new Set<string>();
 
+  private aggregator = new EventAggregator((events) => {
+    const indexEvents = events.map(({ args: [event] }) => event) as FingerprintEvent[];
+    this.sendTelemetry(indexEvents.map(({ metadata }) => metadata));
+    this.numProcessed += events.length;
+  });
+
   public get numProcessed() {
     return this._numProcessed;
   }
@@ -33,11 +39,7 @@ export default class FingerprintWatchCommand {
     this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && join(this.directory, 'index.pid');
     this.fpQueue = new FingerprintQueue();
 
-    new EventAggregator((events) => {
-      const indexEvents = events.map(({ args: [event] }) => event) as FingerprintEvent[];
-      this.sendTelemetry(indexEvents.map(({ metadata }) => metadata));
-      this.numProcessed += events.length;
-    }).attach(this.fpQueue.handler, 'index');
+    this.aggregator.attach(this.fpQueue.handler, 'index');
   }
 
   removePidfile() {
@@ -207,6 +209,7 @@ export default class FingerprintWatchCommand {
     this.removePidfile();
     this.watcher = undefined;
     this.poller = undefined;
+    this.aggregator.finish();
   }
 
   added(file: string) {

@@ -13,12 +13,7 @@ export default class EventAggregator {
     private callback: (events: PendingEvent[]) => void,
     private maxMsBetween = MaxMSBetween
   ) {
-    process.on('exit', () => {
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-        this.emitPending();
-      }
-    });
+    process.on('beforeExit', this.finish);
   }
 
   private pending: PendingEvent[] = [];
@@ -30,7 +25,7 @@ export default class EventAggregator {
   private timeout?: NodeJS.Timeout;
   private refresh() {
     if (this.timeout) clearTimeout(this.timeout);
-    this.timeout = setTimeout(this.emitPending.bind(this), this.maxMsBetween);
+    this.timeout = setTimeout(this.emitPending.bind(this), this.maxMsBetween).unref();
   }
 
   private emitPending() {
@@ -42,4 +37,14 @@ export default class EventAggregator {
   attach(emitter: EventEmitter, event: string) {
     emitter.on(event, (...args) => this.push(emitter, event, args));
   }
+
+  // Note: do not be tempted to tranform this to a named function.
+  // This needs to be an arrow function bound to the instance.
+  public readonly finish = () => {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.emitPending();
+    }
+    process.removeListener('beforeExit', this.finish);
+  };
 }
