@@ -64,6 +64,7 @@ describe('install sub-command', () => {
     openTicketStub = sinon.stub(openTicket, 'default');
     openTicketStub.resolves();
   });
+  afterEach(sinon.restore);
 
   describe('A Java project', () => {
     const testE2E = async (
