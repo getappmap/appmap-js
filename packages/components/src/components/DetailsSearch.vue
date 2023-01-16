@@ -21,7 +21,7 @@
       :key="type"
     >
       <h2 class="details-search__block-title">
-        <span class="legend">&#9679;</span> {{ listItems[type].title }}
+        <CircleLegend class="legend" /> {{ listItems[type].title }}
       </h2>
       <ul class="details-search__block-list">
         <li
@@ -49,12 +49,14 @@ import { CodeObject, AppMap, CodeObjectType } from '@appland/models';
 import SearchIcon from '@/assets/search.svg';
 import toListItem from '@/lib/finding';
 import { SELECT_OBJECT, SELECT_LABEL } from '../store/vsCode';
+import CircleLegend from '@/assets/circle-legend.svg';
 
 export default {
   name: 'v-details-search',
 
   components: {
     SearchIcon,
+    CircleLegend,
   },
 
   props: {
@@ -282,59 +284,61 @@ export default {
 
     &-title {
       margin: 0;
-      border-radius: 4px;
-      display: inline-block;
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+      align-items: center;
       padding: 0.25rem 0;
-      color: $gray4;
+      color: darken($gray4, 20);
       font-size: 0.9rem;
       font-weight: bold;
       text-transform: uppercase;
 
       .details-search__block--http & {
-        .legend {
-          color: #8e45aa;
+        .legend circle {
+          fill: #542160;
         }
       }
 
       .details-search__block--external-service & {
-        .legend {
-          color: $yellow;
+        .legend circle {
+          fill: $yellow;
         }
       }
 
       .details-search__block--labels & {
-        .legend {
-          color: $base11;
+        .legend circle {
+          fill: $base11;
         }
       }
 
       .details-search__block--package & {
-        .legend {
-          color: $teal;
+        .legend circle {
+          fill: $teal;
         }
       }
 
       .details-search__block--class &,
       .details-search__block--function & {
-        .legend {
-          color: $blue;
+        .legend circle {
+          fill: $blue;
         }
       }
 
       .details-search__block--query & {
-        .legend {
-          color: $royal;
+        .legend circle {
+          fill: #9c2fba;
         }
       }
 
       .details-search__block--empty & {
-        .legend P {
-          color: $gray3;
+        .legend circle {
+          fill: $gray3;
         }
       }
       .details-search__block--analysis-finding & {
-        .legend {
-          color: $hotpink;
+        .legend circle {
+          fill: $hotpink;
         }
       }
     }
