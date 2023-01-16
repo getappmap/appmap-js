@@ -6,6 +6,7 @@ import AgentInstaller from './agentInstaller';
 import chalk from 'chalk';
 import CommandStruct from './commandStruct';
 import { UserConfigError } from '../errors';
+import semver from 'semver';
 
 const AGENT_PACKAGE = '@appland/appmap-agent-js@latest';
 
@@ -116,5 +117,23 @@ export class YarnInstaller extends JavaScriptInstaller {
 
   async verifyCommand() {
     return undefined;
+  }
+
+  async isYarnVersionOne(): Promise<boolean> {
+    let isVersionOne: boolean;
+    try {
+      const versionOutput = await getOutput('yarn', ['--version'], this.path);
+      const version = semver.coerce(versionOutput.output);
+
+      if (!version) {
+        throw new UserConfigError('Could not detect yarn version');
+      }
+
+      isVersionOne = !semver.satisfies(version, '>= 2.0.0');
+    } catch (err) {
+      throw new UserConfigError(err as string);
+    }
+
+    return new Promise(resolve => resolve(isVersionOne));
   }
 }
