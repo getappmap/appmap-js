@@ -10,6 +10,8 @@ import UI from '../userInteraction';
 import AgentInstaller from './agentInstaller';
 import getAvailableInstallers from './installers';
 import { YarnInstaller } from './javaScriptAgentInstaller';
+import CommandStruct from './commandStruct';
+import { run } from './commandRunner';
 
 export interface ProjectConfiguration {
   name: string;
@@ -92,34 +94,64 @@ async function resolveSelectedInstallers(
   }
 }
 
+// With yarn 1 we get the following error.  Try to get the packages manually.
+// $ yarn run workspaces list --json
+// yarn run v1.22.19
+// error Command "workspaces" not found.
+async function getYarnSubprojectsVersionOne(installer: YarnInstaller, yarnPackages: string[]) {
+  const packageJsonFilename = join(installer.path, 'package.json');
+  if (await exists(packageJsonFilename)) {
+    const data = await fs.readFile(packageJsonFilename, 'utf-8');
+    const packageJson = JSON.parse(data);
+    if ('workspaces' in packageJson) {
+      const workspaces = packageJson['workspaces'];
+      // process as glob because it could be something like
+      // workspaces: [ 'packages/*' ]
+      for (const workspace of workspaces) {
+        const matches = glob.sync(workspace, {
+          matchBase: true,
+          cwd: installer.path,
+          ignore: ['**/node_modules/**', '**/.git/**'],
+          strict: false,
+        });
+        for (const yarnPackage of matches) {
+          // packages must be directories; don't break on leftover files
+          const isDir = lstatSync(join(installer.path, yarnPackage)).isDirectory();
+          if (isDir) {
+            yarnPackages.push(yarnPackage);
+          }
+        }
+      }
+    }
+  }
+}
+
+async function getYarnSubprojectsVersionAboveOne(installer: YarnInstaller, yarnPackages: string[]) {
+  const cmd = new CommandStruct('yarn', ['workspaces', 'list', '--json'], installer.path);
+  const output = await run(cmd);
+  console.debug("output all is" + output.stdout);
+
+  output.stdout.split("\n")
+  for (const line of output.stdout.split('\n')) {
+    console.debug("output is: ", line);
+    const yarnPackage = JSON.parse(line);
+    yarnPackages.push();
+  }
+
+}
+
 export async function getYarnPackages(availableInstallers: AgentInstaller[]): Promise<string[]> {
   let yarnPackages: string[] = [];
   for (const installer of availableInstallers) {
     if (installer.name === 'yarn') {
-      const packageJsonFilename = join(installer.path, 'package.json');
-      if (await exists(packageJsonFilename)) {
-        const data = await fs.readFile(packageJsonFilename, 'utf-8');
-        const packageJson = JSON.parse(data);
-        if ('workspaces' in packageJson) {
-          const workspaces = packageJson['workspaces'];
-          // process as glob because it could be something like
-          // workspaces: [ 'packages/*' ]
-          for (const workspace of workspaces) {
-            const matches = glob.sync(workspace, {
-              matchBase: true,
-              cwd: installer.path,
-              ignore: ['**/node_modules/**', '**/.git/**'],
-              strict: false,
-            });
-            for (const yarnPackage of matches) {
-              // packages must be directories; don't break on leftover files
-              const isDir = lstatSync(join(installer.path, yarnPackage)).isDirectory();
-              if (isDir) {
-                yarnPackages.push(yarnPackage);
-              }
-            }
-          }
-        }
+      console.debug("installer is yarn, now let's check the version");
+      if (await (installer as YarnInstaller).isYarnVersionOne()) {
+        console.debug("it's versionOne");
+        await getYarnSubprojectsVersionOne(installer as YarnInstaller, yarnPackages);
+      } else {
+        console.debug("it's versionTwo");
+        await getYarnSubprojectsVersionAboveOne(installer as YarnInstaller, yarnPackages);
+        console.debug("finished processing versionTwo");
       }
     }
   }
