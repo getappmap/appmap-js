@@ -98,7 +98,11 @@ async function resolveSelectedInstallers(
 // $ yarn run workspaces list --json
 // yarn run v1.22.19
 // error Command "workspaces" not found.
-async function getYarnSubprojectsVersionOne(installer: YarnInstaller, yarnPackages: string[]) {
+async function getYarnSubprojectsVersionOne(
+  dir: string,
+  installer: YarnInstaller,
+  subprojects: ProjectConfiguration[]
+) {
   const packageJsonFilename = join(installer.path, 'package.json');
   if (await exists(packageJsonFilename)) {
     const data = await fs.readFile(packageJsonFilename, 'utf-8');
@@ -118,7 +122,14 @@ async function getYarnSubprojectsVersionOne(installer: YarnInstaller, yarnPackag
           // packages must be directories; don't break on leftover files
           const isDir = lstatSync(join(installer.path, yarnPackage)).isDirectory();
           if (isDir) {
-            yarnPackages.push(yarnPackage);
+            const subProjectPath = join(dir, yarnPackage);
+            const subProjectName = basename(yarnPackage);
+            subprojects.push({
+              name: subProjectName,
+              path: subProjectPath,
+              // must set the new path in the installer
+              availableInstallers: [new YarnInstaller(subProjectPath)],
+            } as ProjectConfiguration);
           }
         }
       }
@@ -126,37 +137,46 @@ async function getYarnSubprojectsVersionOne(installer: YarnInstaller, yarnPackag
   }
 }
 
-async function getYarnSubprojectsVersionAboveOne(installer: YarnInstaller, yarnPackages: string[]) {
+async function getYarnSubprojectsVersionAboveOne(
+  dir: string,
+  installer: YarnInstaller,
+  subprojects: ProjectConfiguration[]
+) {
   const cmd = new CommandStruct('yarn', ['workspaces', 'list', '--json'], installer.path);
   const output = await run(cmd);
-  console.debug("output all is" + output.stdout);
 
-  output.stdout.split("\n")
   for (const line of output.stdout.split('\n')) {
-    console.debug("output is: ", line);
-    const yarnPackage = JSON.parse(line);
-    yarnPackages.push();
+    if (line !== '') {
+      const yarnWorkspace = JSON.parse(line);
+      const subProjectPath = join(dir, yarnWorkspace['location']);
+      const subProjectName = basename(yarnWorkspace['name']);
+      subprojects.push({
+        name: subProjectName,
+        path: subProjectPath,
+        // must set the new path in the installer
+        availableInstallers: [new YarnInstaller(subProjectPath)],
+      } as ProjectConfiguration);
+    }
   }
-
 }
 
-export async function getYarnPackages(availableInstallers: AgentInstaller[]): Promise<string[]> {
-  let yarnPackages: string[] = [];
+export async function getYarnSubprojects(
+  dir: string,
+  availableInstallers: AgentInstaller[]
+): Promise<ProjectConfiguration[]> {
+  let subprojects: ProjectConfiguration[] = [];
+
   for (const installer of availableInstallers) {
     if (installer.name === 'yarn') {
-      console.debug("installer is yarn, now let's check the version");
       if (await (installer as YarnInstaller).isYarnVersionOne()) {
-        console.debug("it's versionOne");
-        await getYarnSubprojectsVersionOne(installer as YarnInstaller, yarnPackages);
+        await getYarnSubprojectsVersionOne(dir, installer as YarnInstaller, subprojects);
       } else {
-        console.debug("it's versionTwo");
-        await getYarnSubprojectsVersionAboveOne(installer as YarnInstaller, yarnPackages);
-        console.debug("finished processing versionTwo");
+        await getYarnSubprojectsVersionAboveOne(dir, installer as YarnInstaller, subprojects);
       }
     }
   }
 
-  return yarnPackages;
+  return subprojects;
 }
 
 /**
@@ -173,21 +193,15 @@ async function getSubprojects(
   rootHasInstaller: boolean,
   availableInstallers: AgentInstaller[]
 ): Promise<ProjectConfiguration[] | undefined> {
-  const yarnPackages = await getYarnPackages(availableInstallers);
-
   let subprojects: ProjectConfiguration[] = [];
-  if (yarnPackages.length > 0) {
+  const yarnSubprojects: ProjectConfiguration[] = await getYarnSubprojects(
+    dir,
+    availableInstallers
+  );
+
+  if (yarnSubprojects.length > 0) {
     // detect yarn packages as sub-projects
-    yarnPackages.forEach((yarnPackage) => {
-      const subProjectPath = join(dir, yarnPackage);
-      const subProjectName = basename(yarnPackage);
-      subprojects.push({
-        name: subProjectName,
-        path: subProjectPath,
-        // must set the new path in the installer
-        availableInstallers: [new YarnInstaller(subProjectPath)],
-      } as ProjectConfiguration);
-    });
+    subprojects = yarnSubprojects;
   } else {
     // read directory to detect sub-projects
     const ents = await fs.readdir(dir, { withFileTypes: true });

@@ -1,4 +1,4 @@
-import path from 'path';
+import path, { join } from 'path';
 import fse from 'fs-extra';
 import tmp from 'tmp';
 import sinon, { SinonStub } from 'sinon';
@@ -12,7 +12,7 @@ import AgentInstallerProcedure from '../../../src/cmds/agentInstaller/agentInsta
 import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
 import CommandStruct, { CommandReturn } from '../../../src/cmds/agentInstaller/commandStruct';
 import * as ProjectConfiguration from '../../../src/cmds/agentInstaller/projectConfiguration';
-import { getYarnPackages } from '../../../src/cmds/agentInstaller/projectConfiguration';
+import { getYarnSubprojects } from '../../../src/cmds/agentInstaller/projectConfiguration';
 
 import UI from '../../../src/cmds/userInteraction';
 import { ValidationError } from '../../../src/cmds/errors';
@@ -751,7 +751,9 @@ appmap_dir: tmp/appmap
 
   describe('A JavaScript project', () => {
     const jsTestE2E = async (
+      installerName: string,
       nodeVersion: (command: CommandStruct) => Promise<CommandReturn>,
+      getYarnWorkspaces: (command: CommandStruct) => Promise<CommandReturn>,
       installAgent: (command: CommandStruct) => Promise<CommandReturn>,
       initAgent: (command: CommandStruct) => Promise<CommandReturn>,
       validateAgent: (command: CommandStruct) => Promise<CommandReturn>,
@@ -759,19 +761,40 @@ appmap_dir: tmp/appmap
       checkCurrentConfig: (command: CommandStruct) => Promise<CommandReturn>
     ) => {
       let callIdx = 0;
-      sinon
-        .stub(commandRunner, 'run')
-        .onCall(callIdx++)
-        .callsFake(nodeVersion)
-        .onCall(callIdx++)
-        .callsFake(checkCurrentConfig)
-        .onCall(callIdx++)
-        .callsFake(installAgent)
-        .onCall(callIdx++)
-        .callsFake(initAgent)
-        .onCall(callIdx++)
-        .callsFake(validateAgent)
-        .onCall(callIdx++);
+      if (installerName === 'yarn') {
+        sinon
+          .stub(commandRunner, 'run')
+          .onCall(callIdx++)
+          .callsFake(nodeVersion)
+          .onCall(callIdx++)
+          .callsFake(getYarnWorkspaces)
+          .onCall(callIdx++)
+          // why must installAgent be here and twice for the yarn test to pass?
+          .callsFake(installAgent)
+          .onCall(callIdx++)
+          .callsFake(checkCurrentConfig)
+          .onCall(callIdx++)
+          .callsFake(installAgent)
+          .onCall(callIdx++)
+          .callsFake(initAgent)
+          .onCall(callIdx++)
+          .callsFake(validateAgent)
+          .onCall(callIdx++);
+      } else {
+        sinon
+          .stub(commandRunner, 'run')
+          .onCall(callIdx++)
+          .callsFake(nodeVersion)
+          .onCall(callIdx++)
+          .callsFake(checkCurrentConfig)
+          .onCall(callIdx++)
+          .callsFake(installAgent)
+          .onCall(callIdx++)
+          .callsFake(initAgent)
+          .onCall(callIdx++)
+          .callsFake(validateAgent)
+          .onCall(callIdx++);
+      }
 
       return invokeCommand(projectDir, evalResults);
     };
@@ -793,6 +816,17 @@ packages:
 language: javascript
 appmap_dir: tmp/appmap
 `;
+
+    const getYarnWorkspaces = (cmdStruct: CommandStruct) => {
+      expect(cmdStruct.program).toEqual('yarn');
+      const args = cmdStruct.args;
+      expect(args).toEqual(['workspaces', 'list', '--json']);
+      const ret = {
+        stdout: '',
+        stderr: '',
+      };
+      return Promise.resolve(ret);
+    };
 
     const initAgent = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('npx');
@@ -851,7 +885,9 @@ appmap_dir: tmp/appmap
         };
 
         await jsTestE2E(
+          'npm',
           nodeVersion,
+          getYarnWorkspaces,
           installAgent,
           initAgent,
           validateAgent,
@@ -868,7 +904,9 @@ appmap_dir: tmp/appmap
           expect(err?.message).toMatch(msg);
         };
         await jsTestE2E(
+          'npm',
           nodeVersion,
+          getYarnWorkspaces,
           installAgent,
           initAgent,
           failValidate,
@@ -902,7 +940,7 @@ appmap_dir: tmp/appmap
       };
 
       it('installs as expected', async () => {
-        expect.assertions(12);
+        expect.assertions(14);
         const evalResults = (err: Error | undefined, argv: any, output: string) => {
           expect(err).toBeNull();
 
@@ -913,7 +951,9 @@ appmap_dir: tmp/appmap
         };
 
         await jsTestE2E(
+          'yarn',
           nodeVersion,
+          getYarnWorkspaces,
           installAgent,
           initAgent,
           validateAgent,
@@ -923,14 +963,16 @@ appmap_dir: tmp/appmap
       });
 
       it('fails when validation fails', async () => {
-        expect.assertions(9);
+        expect.assertions(11);
         const msg = 'failValidate, validation failed';
         const failValidate = () => Promise.reject(new Error(msg));
         const evalResults = (err: Error | undefined, argv: any, output: string) => {
           expect(err?.message).toMatch(msg);
         };
         await jsTestE2E(
+          'yarn',
           nodeVersion,
+          getYarnWorkspaces,
           installAgent,
           initAgent,
           failValidate,
@@ -1237,11 +1279,137 @@ appmap_dir: tmp/appmap
       ]);
     });
 
-    it('yarn detects sub-projects', async () => {
-      expect.assertions(3);
+    it('yarn getYarnSubprojects for yarn 1', async () => {
+      expect.assertions(1);
       const projectFixture = path.join(fixtureDir, 'javascript', 'yarn_with_subprojects');
-      expect(await getYarnPackages([new YarnInstaller(projectFixture)])).toStrictEqual([ 'packages/subproject_one', 'packages/subproject_two' ]);
+      const installer = new YarnInstaller(projectFixture);
+      sinon.stub(installer, 'isYarnVersionOne').resolves(true);
+      expect(await getYarnSubprojects(projectFixture, [installer])).toStrictEqual([
+        // it doesn't detect the root workspace
+        {
+          name: 'subproject_one',
+          path: join(projectFixture, 'packages/subproject_one'),
+          availableInstallers: [new YarnInstaller(join(projectFixture, 'packages/subproject_one'))],
+        },
+        {
+          name: 'subproject_two',
+          path: join(projectFixture, 'packages/subproject_two'),
+          availableInstallers: [new YarnInstaller(join(projectFixture, 'packages/subproject_two'))],
+        },
+      ]);
+    });
+
+    it('yarn getYarnSubprojects for yarn 2', async () => {
+      expect.assertions(1);
+
+      sinon.restore(); // undo effects of beforeEach, to wrap run() differently
+      sinon
+        .stub(commandRunner, 'run')
+        // yarn workspaces list --json
+        .resolves({
+          stdout: `{"location":".","name":"yarn_with_subprojects"}
+{"location":"packages/subproject_one","name":"subproject_one"}
+{"location":"packages/subproject_two","name":"subproject_two"}`,
+          stderr: '',
+        });
+
+      const projectFixture = path.join(fixtureDir, 'javascript', 'yarn_with_subprojects');
+      const installer = new YarnInstaller(projectFixture);
+      sinon.stub(installer, 'isYarnVersionOne').resolves(false);
+      expect(await getYarnSubprojects(projectFixture, [installer])).toStrictEqual([
+        {
+          name: 'yarn_with_subprojects',
+          path: projectFixture,
+          availableInstallers: [new YarnInstaller(projectFixture)],
+        },
+        {
+          name: 'subproject_one',
+          path: join(projectFixture, 'packages/subproject_one'),
+          availableInstallers: [new YarnInstaller(join(projectFixture, 'packages/subproject_one'))],
+        },
+        {
+          name: 'subproject_two',
+          path: join(projectFixture, 'packages/subproject_two'),
+          availableInstallers: [new YarnInstaller(join(projectFixture, 'packages/subproject_two'))],
+        },
+      ]);
+    });
+
+    it('yarn detects sub-projects', async () => {
+      expect.assertions(2);
+      const projectFixture = path.join(fixtureDir, 'javascript', 'yarn_with_subprojects');
       fse.copySync(projectFixture, projectDir);
+
+      sinon.restore(); // undo effects of beforeEach, to wrap run() differently
+      sinon
+        .stub(commandRunner, 'run')
+        // yarn --version
+        .onCall(0)
+        .resolves({
+          stdout: '3.2.1',
+          stderr: '',
+        })
+        // yarn workspaces list --json
+        .onCall(1)
+        .resolves({
+          stdout: `{"location":"packages/subproject_one","name":"subproject_one"}
+{"location":"packages/subproject_two","name":"subproject_two"}`,
+          stderr: '',
+        })
+        // installing first subproject
+        .onCall(2)
+        .resolves({
+          stdout: '{"configuration": { "contents": "" }, "errors": []}',
+          stderr: '',
+        })
+        .onCall(3)
+        .resolves({
+          stdout: '', // why wasn't '{}' necessary here?
+          stderr: '',
+        })
+        .onCall(4)
+        .resolves({
+          stdout: '',
+          stderr: '',
+        })
+        // installing second subproject
+        .onCall(5)
+        .resolves({
+          stdout: '{"configuration": { "contents": "" }, "errors": []}',
+          stderr: '',
+        })
+        .onCall(6)
+        .resolves({
+          stdout: '{}',
+          stderr: '',
+        })
+        .onCall(7)
+        .resolves({
+          stdout: '',
+          stderr: '',
+        })
+        .onCall(8)
+        .resolves({
+          stdout: '',
+          stderr: '',
+        })
+        .onCall(9)
+        .resolves({
+          stdout: '',
+          stderr: '',
+        })
+        // third project?
+        .onCall(10)
+        .resolves({
+          stdout: '{"configuration": { "contents": "" }, "errors": []}',
+          stderr: '',
+        })
+        .onCall(11)
+        .resolves({
+          stdout: '{}',
+          stderr: '',
+        });
+
       const promptStub = sinon.stub(inquirer, 'prompt').resolves({
         addSubprojects: true,
         confirm: true,
@@ -1262,5 +1430,4 @@ appmap_dir: tmp/appmap
       ]);
     });
   });
-
 });
