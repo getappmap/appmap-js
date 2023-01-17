@@ -765,7 +765,6 @@ describe('install sub-command', () => {
       if (installerName === 'yarn') {
         sinon
           .stub(commandRunner, 'run')
-          .onCall(callIdx++)
           .callsFake(getYarnVersion)
           .onCall(callIdx++)
           .callsFake(nodeVersion)
@@ -786,7 +785,6 @@ describe('install sub-command', () => {
       } else {
         sinon
           .stub(commandRunner, 'run')
-          .onCall(callIdx++)
           .callsFake(nodeVersion)
           .onCall(callIdx++)
           .callsFake(checkCurrentConfig)
