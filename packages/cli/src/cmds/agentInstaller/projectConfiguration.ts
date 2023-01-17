@@ -1,6 +1,5 @@
 import chalk from 'chalk';
 import { promises as fs, constants as fsConstants, lstatSync } from 'fs';
-import { exists } from '../../utils';
 
 import { basename, join, resolve } from 'path';
 import { glob } from 'glob';
@@ -104,7 +103,7 @@ async function getYarnSubprojectsVersionOne(
   subprojects: ProjectConfiguration[]
 ) {
   const packageJsonFilename = join(installer.path, 'package.json');
-  if (await exists(packageJsonFilename)) {
+  try {
     const data = await fs.readFile(packageJsonFilename, 'utf-8');
     const packageJson = JSON.parse(data);
     if ('workspaces' in packageJson) {
@@ -133,6 +132,12 @@ async function getYarnSubprojectsVersionOne(
           }
         }
       }
+    }
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
+      // there's no package.json file. don't crash
+    } else {
+      throw err;
     }
   }
 }
