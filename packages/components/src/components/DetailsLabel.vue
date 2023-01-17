@@ -51,8 +51,6 @@ export default {
     &-type {
       margin: 0 0 0.4rem;
       text-transform: uppercase;
-      font-size: 0.75rem;
-      line-height: 1;
       font-weight: 700;
       color: $base11;
       flex-direction: row;
@@ -61,7 +59,6 @@ export default {
       align-items: center;
       padding: 0.25rem;
       color: $white;
-      font-size: 1rem;
       .legend circle {
         fill: $base11;
       }
