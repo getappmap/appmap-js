@@ -1,3 +1,10 @@
+# [@appland/components-v2.25.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.24.0...@appland/components-v2.25.0) (2023-01-17)
+
+
+### Features
+
+* update text on runtime analysis overview ([618fb66](https://github.com/getappmap/appmap-js/commit/618fb66c31071681ccf4f6141c1ce42209155f63))
+
 # [@appland/components-v2.24.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.23.0...@appland/components-v2.24.0) (2023-01-17)
 
 
