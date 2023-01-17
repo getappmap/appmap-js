@@ -191,6 +191,10 @@ export default {
     &[data-type='sql query'] svg circle {
       fill: #9c2fba;
     }
+
+    &[data-type='analysis finding'] svg circle {
+      fill: $hotpink;
+    }
   }
 
   &__details-name {
