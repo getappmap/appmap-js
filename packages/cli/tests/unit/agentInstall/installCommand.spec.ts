@@ -766,9 +766,9 @@ describe('install sub-command', () => {
         sinon
           .stub(commandRunner, 'run')
           .onCall(callIdx++)
-          .callsFake(nodeVersion)
-          .onCall(callIdx++)
           .callsFake(getYarnVersion)
+          .onCall(callIdx++)
+          .callsFake(nodeVersion)
           .onCall(callIdx++)
           .callsFake(getYarnWorkspaces)
           .onCall(callIdx++)
