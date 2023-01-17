@@ -1,3 +1,10 @@
+# [@appland/components-v2.23.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.22.0...@appland/components-v2.23.0) (2023-01-17)
+
+
+### Features
+
+* add terms of service to project picker ([968c0da](https://github.com/getappmap/appmap-js/commit/968c0da65124f601a6e19fb5a55b6514fb5fe4b4))
+
 # [@appland/components-v2.22.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.21.0...@appland/components-v2.22.0) (2023-01-12)
 
 
