@@ -1,7 +1,7 @@
 <template>
   <div class="details-label">
     <div class="details-label__header">
-      <span class="details-label__header-type">Label</span>
+      <span class="details-label__header-type"><CircleLegend class="legend" />Label</span>
       <h2 class="details-label__header-title">{{ label }}</h2>
     </div>
     <v-details-panel-list title="Routes" :items="labelInfo.route" />
@@ -16,11 +16,13 @@
 <script>
 import { AppMap } from '@appland/models';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
+import CircleLegend from '@/assets/circle-legend.svg';
 
 export default {
   name: 'v-details-label',
   components: {
     VDetailsPanelList,
+    CircleLegend,
   },
   props: {
     label: {
@@ -47,12 +49,19 @@ export default {
     flex-direction: column;
 
     &-type {
-      margin: 0 0 0.2rem;
+      margin: 0 0 0.4rem;
       text-transform: uppercase;
-      font-size: 0.75rem;
-      line-height: 1;
       font-weight: 700;
       color: $base11;
+      flex-direction: row;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      padding: 0.25rem;
+      color: $white;
+      .legend circle {
+        fill: $base11;
+      }
     }
 
     &-title {
