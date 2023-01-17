@@ -1,3 +1,10 @@
+# [@appland/components-v2.24.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.23.0...@appland/components-v2.24.0) (2023-01-17)
+
+
+### Features
+
+* appmap sidebar style update ([c119536](https://github.com/getappmap/appmap-js/commit/c1195363c6b905d8c5ba493753d4ce9b78c8a637))
+
 # [@appland/components-v2.23.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.22.0...@appland/components-v2.23.0) (2023-01-17)
 
 
