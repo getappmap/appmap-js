@@ -3,7 +3,7 @@
     <section class="analysis-findings">
       <div class="header-wrap">
         <header>
-          <h4 class="subhead">Summary</h4>
+          <h4 class="subhead">Overview</h4>
           <h1 data-cy="title">Runtime Analysis</h1>
           <!-- TODO
           <h4 class="branch">Branch: feature-update-22</h4>
@@ -22,7 +22,7 @@
       <main>
         <div class="findings-wrap">
           <div class="findings-overview">
-            <h3>Finding Overview</h3>
+            <h3>Finding Impact Categories</h3>
             <ul>
               <li class="total" data-cy="category-all" @click="updateFilter('all')">
                 All: {{ uniqueFindings.length }}
