@@ -289,7 +289,7 @@ export default {
       gap: 0.5rem;
       align-items: center;
       padding: 0.25rem 0;
-      color: darken($gray4, 20);
+      color: $white;
       font-size: 0.9rem;
       font-weight: bold;
       text-transform: uppercase;
@@ -383,7 +383,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.25rem 0;
+      padding: 0.25rem 0.55rem;
       min-height: 2rem;
       font-size: 0.9em;
       color: $base03;

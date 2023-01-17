@@ -189,10 +189,7 @@ export default {
     justify-content: flex-end;
     align-items: flex-start;
     gap: 0.5rem;
-
-    button {
-      margin-bottom: 1rem;
-    }
+    margin-bottom: 1.5rem;
   }
 
   &__notification:not(:empty) {
