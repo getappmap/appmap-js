@@ -126,6 +126,8 @@ export class YarnInstaller extends JavaScriptInstaller {
       const version = semver.coerce(versionOutput.output);
 
       if (!version) {
+        console.debug("versionOutput was ", versionOutput);
+        console.debug("version was       ", version);
         throw new UserConfigError('Could not detect yarn version');
       }
 
