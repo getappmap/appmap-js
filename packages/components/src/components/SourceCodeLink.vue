@@ -119,7 +119,6 @@ export default {
 .source-code-link {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1em;
   color: $blue;
   transition: $transition;
 
@@ -128,11 +127,12 @@ export default {
     display: flex;
     align-items: center;
     font-size: 0.9rem;
-    line-height: 14px;
+    line-height: 1rem;
     transition: $transition;
     &:hover {
       color: $blue;
       text-decoration: underline;
+      cursor: pointer;
       svg {
         path {
           fill: $blue;
@@ -157,7 +157,8 @@ export default {
     display: flex;
     align-items: center;
     font-size: 0.85em;
-    margin: 0.4rem 0;
+    margin: 0.75rem 0;
+    color: $gray4;
 
     svg {
       display: inline-block;

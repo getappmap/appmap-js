@@ -16,14 +16,19 @@
       </div>
     </form>
     <section
-      :class="`details-search__block details-search__block--${type}`"
+      :class="[`details-search__block details-search__block--${type}`, { empty: empty[type] }]"
       v-for="type in Object.keys(listItems)"
       :key="type"
     >
-      <h2 class="details-search__block-title">
-        <CircleLegend class="legend" /> {{ listItems[type].title }}
+      <h2 class="details-search__block-title" @click="collapse(type)">
+        <div class="details-search__block-title-group">
+          <CircleLegend class="legend" />
+          {{ listItems[type].title }}
+        </div>
+        <ChevronDown class="chevron" v-if="expanded[type]" />
+        <ChevronRight class="chevron" v-else />
       </h2>
-      <ul class="details-search__block-list">
+      <ul class="details-search__block-list" v-if="expanded[type]">
         <li
           class="details-search__block-item"
           v-for="(item, index) in listItems[type].data"
@@ -49,6 +54,8 @@ import { CodeObject, AppMap, CodeObjectType } from '@appland/models';
 import SearchIcon from '@/assets/search.svg';
 import toListItem from '@/lib/finding';
 import CircleLegend from '@/assets/circle-legend.svg';
+import ChevronDown from '@/assets/chevron-down.svg';
+import ChevronRight from '@/assets/chevron-right.svg';
 import { SELECT_OBJECT, SELECT_LABEL } from '../store/vsCode';
 
 export default {
@@ -57,6 +64,8 @@ export default {
   components: {
     SearchIcon,
     CircleLegend,
+    ChevronDown,
+    ChevronRight,
   },
 
   props: {
@@ -68,8 +77,16 @@ export default {
   },
 
   data() {
+    const expanded = { labels: false };
+    Object.keys(CodeObjectType).forEach((typeKey) => {
+      const type = CodeObjectType[typeKey];
+      expanded[type] = false;
+    });
+
     return {
       filter: '',
+      expanded,
+      empty: {},
     };
   },
 
@@ -167,9 +184,11 @@ export default {
 
       Object.entries(items).forEach(([key, item]) => {
         if (!item.data.length) {
-          delete items[key];
+          this.empty[key] = true;
           return;
         }
+        this.empty[key] = false;
+
         item.data = item.data.sort((a, b) => {
           const aStr = a.object instanceof CodeObject ? a.object.prettyName : String(a.object);
           const bStr = b.object instanceof CodeObject ? b.object.prettyName : String(b.object);
@@ -191,6 +210,10 @@ export default {
   },
 
   methods: {
+    collapse(type) {
+      if (!this.empty[type]) this.expanded[type] = !this.expanded[type];
+    },
+
     selectObject(type, object) {
       if (type === 'labels') {
         this.$store.commit(SELECT_LABEL, object);
@@ -225,7 +248,7 @@ export default {
   margin-top: 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 
   &__form {
     padding: 0;
@@ -239,6 +262,7 @@ export default {
     align-content: center;
     gap: 1rem;
     padding: 0.3rem;
+    margin-bottom: 1.5rem;
 
     .details-search--empty & {
       border-radius: $gray3;
@@ -275,9 +299,6 @@ export default {
   }
 
   &__block {
-    margin-bottom: 16px;
-    border-bottom: 1px solid $gray2;
-
     &:last-of-type {
       border-bottom: 0;
     }
@@ -285,6 +306,7 @@ export default {
     &-title {
       margin: 0;
       display: flex;
+      justify-content: space-between;
       flex-direction: row;
       gap: 0.5rem;
       align-items: center;
@@ -341,6 +363,36 @@ export default {
           fill: $hotpink;
         }
       }
+
+      &:hover {
+        color: $blue;
+        cursor: pointer;
+        transition: 0.25s ease-out all;
+      }
+
+      .empty & {
+        color: $gray3;
+        .legend circle {
+          fill: $gray3;
+        }
+      }
+
+      .empty & {
+        color: $gray3;
+        .chevron {
+          fill: none;
+        }
+      }
+
+      .chevron {
+        fill: $gray4;
+      }
+
+      &-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
     }
 
     &-list {
@@ -396,6 +448,10 @@ export default {
         color: $blue;
       }
 
+      &:first-child {
+        margin-top: 0.5rem;
+      }
+
       &-count {
         margin-left: 1rem;
         border-radius: 0.5rem;
@@ -407,7 +463,6 @@ export default {
       }
 
       .details-search__block--labels & {
-        margin: 0;
         padding: 0 0.5rem;
         display: inline-flex;
         transition: 0.25s ease-out all;
