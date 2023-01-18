@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.75.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.74.6...@appland/scanner-v1.75.0) (2023-01-18)
+
+
+### Features
+
+* Report env var names ([6264cb6](https://github.com/getappmap/appmap-js/commit/6264cb6c73927a90fc350bfb1531d3a8dd97df69))
+
 # [@appland/scanner-v1.74.6](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.74.5...@appland/scanner-v1.74.6) (2023-01-09)
 
 
