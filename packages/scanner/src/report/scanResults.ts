@@ -114,5 +114,6 @@ export function sendScanResultsTelemetry(telemetry: ScanTelemetry): void {
       numAppMaps: telemetry.numAppMaps,
       numFindings: telemetry.numFindings,
     },
-  });
+  }),
+    { includeEnvironmentVariables: true };
 }

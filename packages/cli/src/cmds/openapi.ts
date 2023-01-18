@@ -1,6 +1,7 @@
 import { join } from 'path';
 
-import { existsSync, promises as fsp, statSync } from 'fs';
+import { existsSync, promises as fsp } from 'fs';
+import { readFile } from 'fs/promises';
 import { queue } from 'async';
 import { glob } from 'glob';
 import yaml, { load } from 'js-yaml';
@@ -15,6 +16,7 @@ import {
 import { Event } from '@appland/models';
 import { Arguments, Argv } from 'yargs';
 import { inspect } from 'util';
+
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
@@ -31,6 +33,7 @@ class OpenAPICommand {
   async execute(): Promise<{
     paths: OpenAPIV3.PathsObject;
     securitySchemes: Record<string, OpenAPIV3.SecuritySchemeObject>;
+    numAppMaps: number;
   }> {
     const q = queue(this.collectAppMap.bind(this), 5);
     q.pause();
@@ -51,6 +54,7 @@ class OpenAPICommand {
     return {
       paths: this.model.openapi(),
       securitySchemes: this.securitySchemes.openapi(),
+      numAppMaps: files.length,
     };
   }
 
@@ -135,6 +139,7 @@ export default {
     const appmapConfigFile = await locateAppMapConfigFile(appmapDir);
 
     const cmd = new OpenAPICommand(appmapDir);
+    const schemaGenResult = await cmd.execute();
     const openapi = await cmd.execute();
 
     for (const error of cmd.errors) {
@@ -142,7 +147,7 @@ export default {
     }
 
     const template = await loadTemplate(argv.openapiTemplate);
-    template.paths = openapi.paths;
+    template.paths = schemaGenResult.paths;
 
     if (openapiTitle) {
       tryConfigure('info.title', () => {
@@ -156,7 +161,7 @@ export default {
     }
 
     // TODO: This should be made available, but isn't
-    template.components = (openapi as any).components;
+    template.components = (schemaGenResult as any).components;
     template.components ||= {};
 
     let appmapConfig: Record<string, any> | undefined;
