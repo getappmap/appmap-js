@@ -20,6 +20,10 @@ async function isBranch(branch) {
 }
 
 async function hasDependencyChanged() {
+  const fetchResult = await exec('git fetch origin main:refs/remotes/origin/main');
+  if (fetchResult.stderr || fetchResult.stdout)
+    console.warn("output from 'git fetch origin main:refs/remotes/origin/main': ", fetchResult);
+
   const { stdout: changedFiles } = await exec('git diff origin/main --name-only');
   return changedFiles
     .split('\n')
@@ -27,7 +31,7 @@ async function hasDependencyChanged() {
 }
 
 async function runStorybook() {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const args = [
       'npm run storybook -- --ci --quiet',
       'http://localhost:6006/iframe.html',
@@ -37,21 +41,15 @@ async function runStorybook() {
       shell: false,
       stdio: ['ignore', 'inherit', 'inherit'],
     });
-    process.on('error', resolve);
+    process.on('error', reject);
     process.on('exit', resolve);
   });
 }
 
 (async () => {
-  try {
-    const shouldRunStorybook =
-      (await isBranch('main')) || isTag() || (await hasDependencyChanged());
+  const shouldRunStorybook = (await isBranch('main')) || isTag() || (await hasDependencyChanged());
 
-    shouldRunStorybook && (await runStorybook());
-  } catch (error) {
-    // FIXME
-    // This doesn't work correctly in CI.
-    // Errors here were implicitly silently skipped in Node 14.
-    console.warn(error);
+  if (shouldRunStorybook) {
+    process.exitCode = await runStorybook();
   }
 })();
