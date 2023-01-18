@@ -67,12 +67,16 @@ context('VS Code Extension', () => {
     it('applies filter from search input', () => {
       cy.get('.details-search__input-element').type('json');
 
+      cy.get('.details-search__block--labels > h2').click();
       cy.get('.details-search__block--labels .details-search__block-item').should('have.length', 1);
+      cy.get('.details-search__block--package > h2').click();
       cy.get('.details-search__block--package .details-search__block-item').should(
         'have.length',
         1
       );
+      cy.get('.details-search__block--class > h2').click();
       cy.get('.details-search__block--class .details-search__block-item').should('have.length', 2);
+      cy.get('.details-search__block--function > h2').click();
       cy.get('.details-search__block--function .details-search__block-item').should(
         'have.length',
         2
@@ -80,6 +84,7 @@ context('VS Code Extension', () => {
     });
 
     it('filters out objects that do not originate from an HTTP server request', () => {
+      cy.get('.details-search__block--labels > h2').click();
       cy.get('.details-search__block-list').contains('crypto').click();
       cy.get('.v-details-panel-list')
         .contains('Events')
@@ -250,6 +255,7 @@ context('VS Code Extension', () => {
 
     it('show child route events count', () => {
       cy.get('.details-search').should('be.visible');
+      cy.get('.details-search__block--http > h2').click();
 
       cy.get('.details-search__block-item')
         .contains('GET /admin/orders')
@@ -423,6 +429,7 @@ context('VS Code Extension', () => {
 
       cy.get('.dropdown-menu').contains('Set as root').click();
 
+      cy.get('.details-search__block--class > h2').click();
       cy.get('.details-search__block--class .details-search__block-item').should('have.length', 2);
     });
 
@@ -553,6 +560,7 @@ context('VS Code Extension', () => {
     });
 
     it('does not back link to a large query when clicking a query from the search panel', () => {
+      cy.get('.details-search__block--query > h2').click();
       cy.get('.details-search__block--query > .details-search__block-list > :nth-child(1)').click();
 
       cy.get('.list-item:nth-child(1)').click();
@@ -594,6 +602,7 @@ context('VS Code Extension', () => {
     // FIXME
     // This test is broken.
     xit('renders HTTP client requests correctly', () => {
+      cy.get('.details-search__block--external-service > h2').click();
       cy.get('.details-search__block--external-service')
         .contains('External services')
         .get('.details-search__block-item')
@@ -957,10 +966,12 @@ context('VS Code Extension', () => {
     });
 
     it('filters: hide unlabeled', () => {
+      cy.get('.details-search__block--package > h2').click();
       cy.get('.details-search__block--package .details-search__block-item').should(
         'have.length',
         4
       );
+      cy.get('.details-search__block--class > h2').click();
       cy.get('.details-search__block--class .details-search__block-item').should('have.length', 11);
 
       cy.get('.tabs__controls .popper__button').click();
@@ -1080,12 +1091,14 @@ context('VS Code Extension', () => {
 
     it('shows one finding in details panel', () => {
       cy.get('.details-search__block--analysis-finding')
+        .click()
         .should('exist')
         .find('.details-search__block-item')
         .should('have.length', 1);
     });
 
     it('shows finding info when finding is clicked', () => {
+      cy.get('.details-search__block--analysis-finding > h2').click();
       cy.get('.details-search__block--analysis-finding >> li').click();
       cy.get('.details-panel-header__details-name').should(
         'have.text',
@@ -1109,6 +1122,7 @@ context('VS Code Extension', () => {
 
     it('shows related events', () => {
       // click to show finding details panel
+      cy.get('.details-search__block--analysis-finding > h2').click();
       cy.get('.details-search__block--analysis-finding >> li').click();
 
       // check number of related events, then click to show a related event
@@ -1125,6 +1139,7 @@ context('VS Code Extension', () => {
 
     it('shows related event in trace view', () => {
       // click to show finding details panel
+      cy.get('.details-search__block--analysis-finding > h2').click();
       cy.get('.details-search__block--analysis-finding >> li').click();
 
       // check number of related events, then click to show a related event
@@ -1133,6 +1148,68 @@ context('VS Code Extension', () => {
 
       cy.get('.details-panel-header__ghost-link').find('.details-btn').click();
       cy.get('.trace-node.highlight').should('exist');
+    });
+
+    it('expands and collapses categories in the search panel', () => {
+      cy.get('.details-search__block-item').should('not.exist');
+      cy.get('.details-search__block--http > h2').click();
+      cy.get('.details-search__block-item').should('have.length', 4);
+      cy.get('.details-search__block--http > h2').click();
+      cy.get('.details-search__block-item').should('not.exist');
+      cy.get('.details-search__block--package > h2').click();
+      cy.get('.details-search__block-item').should('have.length', 6);
+      cy.get('.details-search__block--query > h2').click();
+      cy.get('.details-search__block-item').should('have.length', 14);
+      cy.get('.details-search__block--query > h2').click();
+      cy.get('.details-search__block--package > h2').click();
+      cy.get('.details-search__block-item').should('not.exist');
+    });
+
+    it('correctly identifies categories with no children', () => {
+      cy.get('.details-search__block-item').should('not.exist');
+      cy.get('.details-search__block--http').should('be.visible').should('not.have.class', 'empty');
+      cy.get('.details-search__block--analysis-finding')
+        .should('be.visible')
+        .should('not.have.class', 'empty');
+      cy.get('.details-search__block--query')
+        .should('be.visible')
+        .should('not.have.class', 'empty');
+      cy.get('.details-search__block--external-service')
+        .should('be.visible')
+        .should('have.class', 'empty');
+      cy.get('.details-search__block--labels')
+        .should('be.visible')
+        .should('not.have.class', 'empty');
+      cy.get('.details-search__block--package')
+        .should('be.visible')
+        .should('not.have.class', 'empty');
+      cy.get('.details-search__block--function')
+        .should('be.visible')
+        .should('not.have.class', 'empty');
+      cy.get('.details-search__block--class')
+        .should('be.visible')
+        .should('not.have.class', 'empty');
+
+      cy.get('.details-search__input-element').type('json');
+
+      cy.get('.details-search__block--http').should('be.visible').should('have.class', 'empty');
+      cy.get('.details-search__block--analysis-finding')
+        .should('be.visible')
+        .should('not.have.class', 'empty');
+      cy.get('.details-search__block--query').should('be.visible').should('have.class', 'empty');
+      cy.get('.details-search__block--external-service')
+        .should('be.visible')
+        .should('have.class', 'empty');
+      cy.get('.details-search__block--labels')
+        .should('be.visible')
+        .should('not.have.class', 'empty');
+      cy.get('.details-search__block--package').should('be.visible').should('have.class', 'empty');
+      cy.get('.details-search__block--function')
+        .should('be.visible')
+        .should('not.have.class', 'empty');
+      cy.get('.details-search__block--class')
+        .should('be.visible')
+        .should('not.have.class', 'empty');
     });
   });
 
@@ -1144,13 +1221,14 @@ context('VS Code Extension', () => {
     });
 
     it('shows two findings in the details panel when opened', () => {
+      cy.get('.details-search__block--analysis-finding').should('exist').find('h2').click();
       cy.get('.details-search__block--analysis-finding')
-        .should('exist')
         .find('.details-search__block-item')
         .should('have.length', 2);
     });
 
     it('correctly renders the details panel of an event with multiple findings', () => {
+      cy.get('.details-search__block--analysis-finding > h2').click();
       cy.get('.details-search__block--analysis-finding')
         .find('.details-search__block-item')
         .first()
