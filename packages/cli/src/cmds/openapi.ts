@@ -20,7 +20,7 @@ import { inspect } from 'util';
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
-import { readFile } from 'fs/promises';
+import Telemetry from '../telemetry';
 
 class OpenAPICommand {
   private readonly model = new Model();
@@ -30,11 +30,15 @@ class OpenAPICommand {
 
   constructor(private readonly appmapDir: string) {}
 
-  async execute(): Promise<{
-    paths: OpenAPIV3.PathsObject;
-    securitySchemes: Record<string, OpenAPIV3.SecuritySchemeObject>;
-    numAppMaps: number;
-  }> {
+  async execute(): Promise<
+    [
+      {
+        paths: OpenAPIV3.PathsObject;
+        securitySchemes: Record<string, OpenAPIV3.SecuritySchemeObject>;
+      },
+      number
+    ]
+  > {
     const q = queue(this.collectAppMap.bind(this), 5);
     q.pause();
 
@@ -51,11 +55,13 @@ class OpenAPICommand {
       q.resume();
     });
 
-    return {
-      paths: this.model.openapi(),
-      securitySchemes: this.securitySchemes.openapi(),
-      numAppMaps: files.length,
-    };
+    return [
+      {
+        paths: this.model.openapi(),
+        securitySchemes: this.securitySchemes.openapi(),
+      },
+      files.length,
+    ];
   }
 
   async collectAppMap(file: string): Promise<void> {
@@ -139,15 +145,15 @@ export default {
     const appmapConfigFile = await locateAppMapConfigFile(appmapDir);
 
     const cmd = new OpenAPICommand(appmapDir);
-    const schemaGenResult = await cmd.execute();
-    const openapi = await cmd.execute();
+    const [openapi, numAppMaps] = await cmd.execute();
+    sendTelemetry(openapi.paths, numAppMaps);
 
     for (const error of cmd.errors) {
       console.warn(error);
     }
 
     const template = await loadTemplate(argv.openapiTemplate);
-    template.paths = schemaGenResult.paths;
+    template.paths = openapi.paths;
 
     if (openapiTitle) {
       tryConfigure('info.title', () => {
@@ -161,7 +167,7 @@ export default {
     }
 
     // TODO: This should be made available, but isn't
-    template.components = (schemaGenResult as any).components;
+    template.components = (openapi as any).components;
     template.components ||= {};
 
     let appmapConfig: Record<string, any> | undefined;
@@ -191,6 +197,19 @@ ${yaml.dump(template)}
     }
   },
 };
+
+function sendTelemetry(paths: OpenAPIV3.PathsObject, numAppMaps: number) {
+  Telemetry.sendEvent(
+    {
+      name: 'appmap:openapi',
+      metrics: {
+        paths: Object.keys(paths).length,
+        numAppMaps,
+      },
+    },
+    { includeEnvironment: true }
+  );
+}
 
 function sortProperties(values: Record<string, any>): void {
   Object.keys(values).forEach((key) => {
