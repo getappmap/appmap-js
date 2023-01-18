@@ -124,6 +124,10 @@ const transformProps = <T>(obj: Record<string, T | undefined>): Record<string, T
   return result;
 };
 
+export interface TelemetryOptions {
+  includeEnvironment: boolean;
+}
+
 export default class Telemetry {
   private static _session?: Session;
   private static _client?: TelemetryClient;
@@ -172,7 +176,10 @@ export default class Telemetry {
     return this._client;
   }
 
-  static sendEvent(data: TelemetryData): void {
+  static sendEvent(
+    data: TelemetryData,
+    options: TelemetryOptions = { includeEnvironment: false }
+  ): void {
     try {
       const transformedProperties = transformProps({
         version: version,
@@ -180,7 +187,7 @@ export default class Telemetry {
         ...data.properties,
       });
       const transformedMetrics = transformProps(data.metrics || {});
-      const properties = {
+      const properties: Record<string, string> = {
         'common.source': name,
         'common.os': os.platform(),
         'common.platformversion': os.release(),
@@ -189,6 +196,10 @@ export default class Telemetry {
         'appmap.cli.sessionId': Telemetry.session.id,
         ...transformedProperties,
       };
+
+      if (options.includeEnvironment) {
+        properties['common.environmentVariables'] = Object.keys(process.env).sort().join(',');
+      }
 
       const event = {
         name: `${name}/${data.name}`,

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import sinon, { SinonSpy } from 'sinon';
 import Conf from 'conf';
 import * as os from 'os';
@@ -109,11 +111,14 @@ describe('telemetry', () => {
       expect(properties['common.os']).not.toHaveLength(0);
       expect(properties['common.platformversion']).not.toHaveLength(0);
       expect(properties['common.arch']).not.toHaveLength(0);
+      expect(properties).not.toHaveProperty('common.environmentVariables');
+
       expect(properties['appland.telemetry.version']).toBe(version);
       expect(properties['appmap.cli.machineId']).toBe(Telemetry.machineId);
       expect(properties['appmap.cli.sessionId']).toBe(Telemetry.session.id);
       expect(typeof properties['appland.telemetry.args']).toBe('string');
       expect(properties['appland.telemetry.prop']).toBe('value');
+
       expect(measurements['appland.telemetry.metric']).toBe(1);
     });
 
@@ -135,6 +140,24 @@ describe('telemetry', () => {
 
       expect(properties).not.toHaveProperty('appmap.cli.prop');
       expect(properties).not.toHaveProperty('appmap.cli.metric');
+    });
+
+    it('sends env var names upon request', () => {
+      Telemetry.sendEvent(
+        {
+          name: 'test',
+        },
+        { includeEnvironment: true }
+      );
+
+      const [[{ properties }]] = trackEvent.args;
+
+      if (!properties) {
+        throw new Error('properties not found');
+      }
+      const envVars: string = properties['common.environmentVariables'];
+      expect(envVars.split(',')).toBeInstanceOf(Array);
+      expect(envVars).toMatch(/\bNODE_ENV\b/);
     });
   });
 });

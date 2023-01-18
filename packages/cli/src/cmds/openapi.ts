@@ -1,6 +1,7 @@
 import { join } from 'path';
 
-import { existsSync, promises as fsp, statSync } from 'fs';
+import { existsSync, promises as fsp } from 'fs';
+import { readFile } from 'fs/promises';
 import { queue } from 'async';
 import { glob } from 'glob';
 import yaml, { load } from 'js-yaml';
@@ -15,10 +16,11 @@ import {
 import { Event } from '@appland/models';
 import { Arguments, Argv } from 'yargs';
 import { inspect } from 'util';
+
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
-import { readFile } from 'fs/promises';
+import Telemetry from '../telemetry';
 
 class OpenAPICommand {
   private readonly model = new Model();
@@ -28,10 +30,15 @@ class OpenAPICommand {
 
   constructor(private readonly appmapDir: string) {}
 
-  async execute(): Promise<{
-    paths: OpenAPIV3.PathsObject;
-    securitySchemes: Record<string, OpenAPIV3.SecuritySchemeObject>;
-  }> {
+  async execute(): Promise<
+    [
+      {
+        paths: OpenAPIV3.PathsObject;
+        securitySchemes: Record<string, OpenAPIV3.SecuritySchemeObject>;
+      },
+      number
+    ]
+  > {
     const q = queue(this.collectAppMap.bind(this), 5);
     q.pause();
 
@@ -48,10 +55,13 @@ class OpenAPICommand {
       q.resume();
     });
 
-    return {
-      paths: this.model.openapi(),
-      securitySchemes: this.securitySchemes.openapi(),
-    };
+    return [
+      {
+        paths: this.model.openapi(),
+        securitySchemes: this.securitySchemes.openapi(),
+      },
+      files.length,
+    ];
   }
 
   async collectAppMap(file: string): Promise<void> {
@@ -135,7 +145,8 @@ export default {
     const appmapConfigFile = await locateAppMapConfigFile(appmapDir);
 
     const cmd = new OpenAPICommand(appmapDir);
-    const openapi = await cmd.execute();
+    const [openapi, numAppMaps] = await cmd.execute();
+    sendTelemetry(openapi.paths, numAppMaps);
 
     for (const error of cmd.errors) {
       console.warn(error);
@@ -186,6 +197,19 @@ ${yaml.dump(template)}
     }
   },
 };
+
+function sendTelemetry(paths: OpenAPIV3.PathsObject, numAppMaps: number) {
+  Telemetry.sendEvent(
+    {
+      name: 'appmap:openapi',
+      metrics: {
+        paths: Object.keys(paths).length,
+        numAppMaps,
+      },
+    },
+    { includeEnvironment: true }
+  );
+}
 
 function sortProperties(values: Record<string, any>): void {
   Object.keys(values).forEach((key) => {
