@@ -23,8 +23,9 @@ function matchMethod(exclusion: Exclusion, method: string): ExclusionMatch {
     return ExclusionMatch.Inherit;
   }
 
+  let isNegated = false;
   for (const excludedMethod of exclusion.methods) {
-    const isNegated = excludedMethod.startsWith('!');
+    isNegated = excludedMethod.startsWith('!');
     if (isNegated && excludedMethod.substring(1).toLowerCase() === method.toLowerCase()) {
       return ExclusionMatch.Include;
     }
@@ -33,7 +34,8 @@ function matchMethod(exclusion: Exclusion, method: string): ExclusionMatch {
       return ExclusionMatch.Exclude;
     }
   }
-  return ExclusionMatch.NoMatch;
+
+  return isNegated ? ExclusionMatch.Exclude : ExclusionMatch.NoMatch;
 }
 
 const escapeRegex = (str) => str.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
@@ -50,11 +52,43 @@ function matchRoute(exclude: Exclusion, route: string): ExclusionMatch {
   return matchesGlob(route, path) ? ExclusionMatch.Exclude : ExclusionMatch.NoMatch;
 }
 
+function validateExclusions(exclusions: ReadonlyArray<Exclusion>): void {
+  exclusions.forEach((exclusion) => {
+    if (typeof exclusion === 'string') {
+      return;
+    }
+
+    if (exclusion.methods && !Array.isArray(exclusion.methods)) {
+      throw new Error(
+        `Invalid methods. Expected array, got ${typeof exclusion}: ${JSON.stringify(exclusion)})}`
+      );
+    }
+
+    let includesMethods = false;
+    let excludesMethods = false;
+    for (const method of exclusion.methods) {
+      if (method.startsWith('!')) {
+        excludesMethods = true;
+      } else {
+        includesMethods = true;
+      }
+    }
+
+    if (includesMethods && excludesMethods) {
+      throw new Error(
+        `Invalid methods. Cannot mix include and exclude: ${JSON.stringify(exclusion)})}`
+      );
+    }
+  });
+}
+
 export function match(
   exclusions: ReadonlyArray<Exclusion>,
   route: string,
   method: string
 ): ExclusionMatch {
+  validateExclusions(exclusions);
+
   const results = exclusions
     .map((exclusion) => {
       const pathMatch = matchRoute(exclusion, route);
