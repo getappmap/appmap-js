@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.61.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.60.1...@appland/appmap-v3.61.0) (2023-01-18)
+
+
+### Features
+
+* Report env var names ([6264cb6](https://github.com/getappmap/appmap-js/commit/6264cb6c73927a90fc350bfb1531d3a8dd97df69))
+* Send telemetry for appmap:openapi ([a684a13](https://github.com/getappmap/appmap-js/commit/a684a13fda739e118b6f578ca169109a6d74e9e7))
+
 # [@appland/appmap-v3.60.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.60.0...@appland/appmap-v3.60.1) (2023-01-11)
 
 
