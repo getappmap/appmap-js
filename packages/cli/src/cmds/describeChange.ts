@@ -32,6 +32,8 @@ import assert from 'assert';
 import { touch } from '../touchFile';
 import chalk from 'chalk';
 
+export class ValidationError extends Error {}
+
 export const command = 'describe-change';
 export const describe = 'Compare base and head revisions';
 
@@ -95,11 +97,27 @@ enum RevisionName {
 }
 
 class AppMapReference {
+  // Set of all source files that were used by the app.
   public sourcePaths = new Set<string>();
+  // Name of the test case that produced these AppMaps.
   public sourceLocation: string | undefined;
   public appmapName: string | undefined;
 
   constructor(public outputDir: string, public appmapFileName: string) {}
+
+  async sourceDiff(baseRevision: string): Promise<string | undefined> {
+    if (this.sourcePaths.size === 0) return;
+
+    const existingSourcePaths = [...this.sourcePaths].filter(existsSync).sort();
+    return (
+      await executeCommand(
+        `git diff ${baseRevision} -- ${existingSourcePaths.join(' ')}`,
+        false,
+        false,
+        false
+      )
+    ).trim();
+  }
 
   sequenceDiagramFileName(format: string): string {
     return [basename(this.appmapFileName, '.appmap.json'), `sequence.${format}`].join('.');
@@ -178,11 +196,8 @@ export const handler = async (argv: any) => {
   let { outputDir } = argv;
 
   if (!(await exists(plantumlJar))) {
-    yargs.exit(
-      1,
-      new Error(
-        `PlantUML JAR file ${plantumlJar} does not exist. Use --plantuml-jar option to provide the JAR file location.`
-      )
+    throw new ValidationError(
+      `PlantUML JAR file ${plantumlJar} does not exist. Use --plantuml-jar option to provide the JAR file location.`
     );
   }
 
@@ -204,7 +219,7 @@ export const handler = async (argv: any) => {
   const headRevision = argv.headRevision || (currentBranch || 'HEAD').trim();
 
   if (baseRevision === headRevision) {
-    yargs.exit(1, new Error(`Base and head revisions are the same: ${baseRevision}`));
+    throw new ValidationError(`Base and head revisions are the same: ${baseRevision}`);
   }
 
   if (!outputDir) {
@@ -216,8 +231,16 @@ export const handler = async (argv: any) => {
   if (await exists(outputDir)) {
     if (
       argv.clobberOutputDir ||
-      (await confirm(`Remove existing output directory ${outputDir}?`, rl))
+      !(await confirm(`Use existing data directory ${outputDir}?`, rl))
     ) {
+      if (
+        !argv.clobberOutputDir &&
+        !(await confirm(`Delete existing data directory ${outputDir}?`, rl))
+      ) {
+        const msg = `The data directory ${outputDir} exists but you don't want to use it or delete it. Aborting...`;
+        console.warn(msg);
+        yargs.exit(1, new Error(msg));
+      }
       await rm(outputDir, { recursive: true, force: true });
       // Rapid rm and then mkdir will silently fail in practice.
       await new Promise<void>((resolve) => setTimeout(resolve, 100));
@@ -288,6 +311,7 @@ export const handler = async (argv: any) => {
 
     if (!baseAppMapFileNames.has(appmapFileName)) {
       console.log(`${appmapFileName} is new in the head revision`);
+      await printSourceDiff(baseRevision, appmapReference, rl);
       await reportDiagram(
         RevisionName.Head,
         outputDir,
@@ -380,13 +404,20 @@ export const handler = async (argv: any) => {
   for (let i = 0; i < changedAppMaps.length; i++) {
     const appmapReference = changedAppMaps[i];
     const diagramText = await appmapReference.loadSequenceDiagramText(RevisionName.Diff);
+
+    const diagramTextLines = diagramText
+      .split('\n')
+      .filter((line) => !/^\d+ times:$/.test(line.trim()));
+    if (diagramTextLines.length === 0) {
+      continue;
+    }
+
     const diffDiagram = await appmapReference.loadSequenceDiagramJSON(RevisionName.Diff);
 
     console.log(prominentStyle(`${appmapReference.appmapFileName} changed:`));
-    console.log(diagramText);
-    console.log();
+    printDiagramText(diagramTextLines);
+    await printSourceDiff(baseRevision, appmapReference, rl);
     let diagramFile = await showDiagram(rl, plantumlJar, diffDiagram);
-
     await reportDiagram(
       RevisionName.Diff,
       outputDir,
@@ -491,7 +522,7 @@ async function enumerateOutOfDateTestFiles(
 async function checkout(revisionName: string, revision: string): Promise<void> {
   console.log();
   console.log(actionStyle(`Switching to ${revisionName} revision: ${revision}`));
-  await executeCommand(`git checkout ${revision}`, false, false);
+  await executeCommand(`git checkout ${revision}`, true, false, false);
   console.log();
 }
 
@@ -554,7 +585,11 @@ async function restoreAppMapDir(
 }
 
 async function confirm(prompt: string, rl: readline.Interface): Promise<boolean> {
-  return (await ask(rl, `${prompt} (y/n) `)) === 'y';
+  let response = '';
+  while (!['y', 'n'].includes(response)) {
+    response = await ask(rl, `${prompt} (y/n) `);
+  }
+  return response === 'y';
 }
 
 async function showDiagram(
@@ -570,7 +605,6 @@ async function showDiagram(
 
   const fileNameSVG = await renderDiagram(plantumlJar, diagram);
   await executeCommand(`open ${fileNameSVG}`);
-  await waitForEnter(rl);
   return fileNameSVG;
 }
 
@@ -590,8 +624,13 @@ async function unstashAll(): Promise<void> {
 }
 */
 
-function executeCommand(cmd: string, printStdout = true, printStderr = true): Promise<string> {
-  console.log(commandStyle(cmd));
+function executeCommand(
+  cmd: string,
+  printCommand = true,
+  printStdout = true,
+  printStderr = true
+): Promise<string> {
+  if (printCommand) console.log(commandStyle(cmd));
   const command = exec(cmd);
   const result: string[] = [];
   if (command.stdout) {
@@ -684,11 +723,8 @@ async function reportDiagram(
       reportLines.push('');
     }
 
-    if (appmapReference.sourcePaths.size > 0) {
-      const existingSourcePaths = [...appmapReference.sourcePaths].filter(existsSync).sort();
-      const sourceDiff = await executeCommand(
-        `git diff ${baseRevision} -- ${existingSourcePaths.join(' ')}`
-      );
+    const sourceDiff = await appmapReference.sourceDiff(baseRevision);
+    if (sourceDiff) {
       reportLines.push('```');
       reportLines.push(sourceDiff);
       reportLines.push('```');
@@ -708,4 +744,26 @@ async function reportDiagram(
 }
 function sanitizeRevision(revision: string): string {
   return revision.replace(/[^a-zA-Z0-9_]/g, '_');
+}
+
+async function printSourceDiff(
+  baseRevision: any,
+  appmapReference: AppMapReference,
+  rl: readline.Interface
+): Promise<void> {
+  const sourceDiff = await appmapReference.sourceDiff(baseRevision);
+  if (sourceDiff) {
+    if (await confirm(`View ${sourceDiff.split('\n').length} line source diff?`, rl)) {
+      console.log();
+      console.log(sourceDiff);
+      console.log();
+    }
+  }
+}
+
+function printDiagramText(diagramTextLines: string[]): void {
+  console.log(`${diagramTextLines.length} line sequence diagram diff:`);
+  console.log();
+  diagramTextLines.forEach((line) => console.log(line));
+  console.log();
 }
