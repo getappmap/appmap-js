@@ -1,3 +1,11 @@
+# [@appland/components-v2.25.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.25.0...@appland/components-v2.25.1) (2023-01-19)
+
+
+### Bug Fixes
+
+* do not run components tests on windows ([ff3b0c2](https://github.com/getappmap/appmap-js/commit/ff3b0c24f2f5ac7999bdb20a5dfdfb243a03b0d3))
+* run components tests in ci ([1039d0a](https://github.com/getappmap/appmap-js/commit/1039d0a5020cf4a5b6f8f2fd298fad97e794ff22))
+
 # [@appland/components-v2.25.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.24.0...@appland/components-v2.25.0) (2023-01-17)
 
 
