@@ -20,7 +20,7 @@ import { inspect } from 'util';
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
-import Telemetry from '../telemetry';
+import Telemetry, { Git } from '../telemetry';
 
 type FilterFunction = (file: string) => Promise<{ enable: boolean; message?: string }>;
 
@@ -186,7 +186,7 @@ export default {
     const cmd = new OpenAPICommand(appmapDir);
     cmd.filter = fileSizeFilter(maxAppMapSizeInBytes);
     const [openapi, numAppMaps] = await cmd.execute();
-    sendTelemetry(openapi.paths, numAppMaps);
+    sendTelemetry(openapi.paths, numAppMaps, appmapDir);
 
     for (const error of cmd.errors) {
       console.warn(error);
@@ -246,12 +246,13 @@ ${yaml.dump(template)}
   },
 };
 
-function sendTelemetry(paths: OpenAPIV3.PathsObject, numAppMaps: number) {
+async function sendTelemetry(paths: OpenAPIV3.PathsObject, numAppMaps: number, appmapDir: string) {
   Telemetry.sendEvent(
     {
       name: 'appmap:openapi',
       metrics: {
         paths: Object.keys(paths).length,
+        contributors: (await Git.contributors(60, appmapDir)).length,
         numAppMaps,
       },
     },
