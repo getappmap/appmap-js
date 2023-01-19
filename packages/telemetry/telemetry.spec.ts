@@ -3,8 +3,9 @@
 import sinon, { SinonSpy } from 'sinon';
 import Conf from 'conf';
 import * as os from 'os';
-import Telemetry from './telemetry';
+import Telemetry, { Git } from './telemetry';
 import { name as appName, version } from './package.json';
+import * as childProcess from 'child_process';
 
 const invalidExpiration = () => Date.now() - 1000 * 60 * 60;
 
@@ -158,6 +159,13 @@ describe('telemetry', () => {
       const envVars: string = properties['common.environmentVariables'];
       expect(envVars.split(',')).toBeInstanceOf(Array);
       expect(envVars).toMatch(/\bNODE_ENV\b/);
+    });
+  });
+
+  describe('Git', () => {
+    it('returns a list of unique git contributors', async () => {
+      const contributors = await Git.contributors(365 * 10);
+      expect(contributors.length).toBeGreaterThan(0);
     });
   });
 });
