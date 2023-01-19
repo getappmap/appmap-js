@@ -4,6 +4,11 @@ import * as os from 'os';
 import { sync as readPackageUpSync } from 'read-pkg-up';
 import { TelemetryClient, setup as AppInsights } from 'applicationinsights';
 import Conf from 'conf';
+import { exec as execCallback } from 'child_process';
+import { promisify } from 'util';
+import { PathLike } from 'fs';
+
+const exec = promisify(execCallback);
 
 const { name, version } = (() => {
   const result = readPackageUpSync({ cwd: __dirname })?.packageJson;
@@ -246,3 +251,64 @@ export default class Telemetry {
     }
   }
 }
+
+class GitProperties {
+  static async contributors(sinceDaysAgo: number, cwd?: PathLike): Promise<Array<string>> {
+    const unixTimeNow = Math.floor(Number(new Date()) / 1000);
+    const unixTimeAgo = unixTimeNow - sinceDaysAgo * 24 * 60 * 60;
+    try {
+      const { stdout } = await exec(
+        [
+          'git',
+          cwd && `-C ${cwd.toString()}`,
+          '--no-pager',
+          'log',
+          `--since=${unixTimeAgo}`,
+          '--format="%ae"',
+        ].join(' ')
+      );
+      return [
+        ...stdout
+          .trim()
+          .split('\n')
+          .reduce((acc, email) => {
+            acc.add(email);
+            return acc;
+          }, new Set<string>()),
+      ];
+    } catch {
+      return [];
+    }
+  }
+}
+
+const gitCache = new Map<string | symbol, unknown>();
+
+// GitProperties is available externally as Git.
+// This export provides a simple caching layer around GitProperties to avoid
+// excessive shelling out to git.
+export const Git = new Proxy(GitProperties, {
+  get(target, prop) {
+    type TargetProp = keyof typeof target;
+    if (typeof target[prop as TargetProp] === 'function') {
+      return new Proxy(target[prop as TargetProp], {
+        apply(target, thisArg, argArray) {
+          const cacheKey = `${prop.toString()}(${JSON.stringify(argArray)})`;
+          if (gitCache.has(cacheKey)) {
+            return gitCache.get(cacheKey);
+          }
+          /* eslint-disable-next-line @typescript-eslint/ban-types */
+          const result: unknown = Reflect.apply(target as Function, thisArg, argArray);
+          if (result instanceof Promise) {
+            return result.then((r) => {
+              gitCache.set(cacheKey, r);
+              return r as unknown;
+            });
+          }
+          return result;
+        },
+      }) as unknown;
+    }
+    return Reflect.get(target, prop) as unknown;
+  },
+});
