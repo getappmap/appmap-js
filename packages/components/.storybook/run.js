@@ -46,8 +46,13 @@ async function runStorybook() {
   });
 }
 
+function isWindows() {
+  return !!process.platform.match(/^win/);
+}
+
 (async () => {
-  const shouldRunStorybook = (await isBranch('main')) || isTag() || (await hasDependencyChanged());
+  const shouldRunStorybook =
+    !isWindows() && ((await isBranch('main')) || isTag() || (await hasDependencyChanged()));
 
   if (shouldRunStorybook) {
     process.exitCode = await runStorybook();
