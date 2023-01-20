@@ -10,7 +10,7 @@ export type ScanEvent = {
 export class WatchScanTelemetry {
   cancelFn: CancelFn | undefined;
 
-  constructor(scanEvents: EventEmitter) {
+  constructor(scanEvents: EventEmitter, private readonly appmapDir?: string) {
     this.cancelFn = new EventAggregator<ScanEvent>((events) => {
       const scanEvents = events.map((e) => e.arg);
       this.sendTelemetry(scanEvents);
@@ -23,8 +23,8 @@ export class WatchScanTelemetry {
     this.cancelFn = undefined;
   }
 
-  static watch(scanEvents: EventEmitter): CancelFn {
-    const telemetry = new WatchScanTelemetry(scanEvents);
+  static watch(scanEvents: EventEmitter, appmapDir?: string): CancelFn {
+    const telemetry = new WatchScanTelemetry(scanEvents, appmapDir);
     return () => telemetry.cancel();
   }
 
@@ -43,6 +43,7 @@ export class WatchScanTelemetry {
       numAppMaps: telemetryScanResults.summary.numAppMaps,
       numFindings: telemetryScanResults.summary.numFindings,
       elapsedMs: elapsed,
+      appmapDir: this.appmapDir,
     });
   }
 }
