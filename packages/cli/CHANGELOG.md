@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.62.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.61.0...@appland/appmap-v3.62.0) (2023-01-20)
+
+
+### Features
+
+* update message in openapi doc ([f093af7](https://github.com/getappmap/appmap-js/commit/f093af75cdf0e69488b410032ecf6023de9ac219))
+
 # [@appland/appmap-v3.61.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.60.1...@appland/appmap-v3.61.0) (2023-01-18)
 
 
