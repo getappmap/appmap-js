@@ -1,7 +1,7 @@
 import { join } from 'path';
 
-import { existsSync, promises as fsp } from 'fs';
-import { readFile } from 'fs/promises';
+import { existsSync, promises as fsp, Stats } from 'fs';
+import { readFile, stat } from 'fs/promises';
 import { queue } from 'async';
 import { glob } from 'glob';
 import yaml, { load } from 'js-yaml';
@@ -14,7 +14,7 @@ import {
   verbose,
 } from '@appland/openapi';
 import { Event } from '@appland/models';
-import { Arguments, Argv } from 'yargs';
+import { Arguments, Argv, number } from 'yargs';
 import { inspect } from 'util';
 
 import { locateAppMapDir } from '../lib/locateAppMapDir';
@@ -22,11 +22,33 @@ import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
 import Telemetry from '../telemetry';
 
+type FilterFunction = (file: string) => Promise<{ enable: boolean; message?: string }>;
+
+// Skip files that are larger than a specified max size.
+export function fileSizeFilter(maxFileSize: number): FilterFunction {
+  return async (file: string): Promise<{ enable: boolean; message?: string }> => {
+    let fileStat: Stats;
+    try {
+      fileStat = await stat(file);
+    } catch {
+      return { enable: false, message: `File ${file} not found` };
+    }
+
+    if (fileStat.size <= maxFileSize) return { enable: true };
+    else
+      return {
+        enable: false,
+        message: `Skipping ${file} as its file size of ${fileStat.size} bytes is larger than the maximum configured file size of ${maxFileSize} bytes`,
+      };
+  };
+}
+
 class OpenAPICommand {
   private readonly model = new Model();
   private readonly securitySchemes = new SecuritySchemes();
 
   public errors: string[] = [];
+  public filter: FilterFunction = async (file: string) => ({ enable: true });
 
   constructor(private readonly appmapDir: string) {}
 
@@ -48,12 +70,24 @@ class OpenAPICommand {
     }
 
     const files = glob.sync(join(this.appmapDir, '**', '*.appmap.json'));
-    files.forEach((f) => q.push(f));
-    await new Promise<void>((resolve, reject) => {
-      q.drain(resolve);
-      q.error(reject);
-      q.resume();
-    });
+    for (let index = 0; index < files.length; index++) {
+      const file = files[index];
+      const filterResult = await this.filter(file);
+      if (!filterResult.enable) {
+        if (filterResult.message) console.warn(filterResult.message);
+        continue;
+      }
+
+      q.push(file);
+    }
+
+    if (q.length() > 0) {
+      await new Promise<void>((resolve, reject) => {
+        q.drain(resolve);
+        q.error(reject);
+        q.resume();
+      });
+    }
 
     return [
       {
@@ -111,6 +145,10 @@ export default {
     args.option('appmap-dir', {
       describe: 'directory to recursively inspect for AppMaps',
     });
+    args.option('max-size', {
+      describe: 'maximum AppMap size that will be processed, in filesystem-reported MB',
+      default: '50',
+    });
     args.option('output-file', {
       alias: ['o'],
       describe: 'output file name',
@@ -132,7 +170,8 @@ export default {
     verbose(argv.verbose);
     handleWorkingDirectory(argv.directory);
     const appmapDir = await locateAppMapDir(argv.appmapDir);
-    const { openapiTitle, openapiVersion } = argv;
+    const { openapiTitle, openapiVersion, maxSize } = argv;
+    const maxAppMapSizeInBytes = Math.round(parseFloat(maxSize) * 1024 * 1024);
 
     function tryConfigure(path: string, fn: () => void) {
       try {
@@ -145,6 +184,7 @@ export default {
     const appmapConfigFile = await locateAppMapConfigFile(appmapDir);
 
     const cmd = new OpenAPICommand(appmapDir);
+    cmd.filter = fileSizeFilter(maxAppMapSizeInBytes);
     const [openapi, numAppMaps] = await cmd.execute();
     sendTelemetry(openapi.paths, numAppMaps);
 
