@@ -16,6 +16,7 @@
     "pre-commit": "lint-staged",
     "test": "jest --filter=./tests/testFilter.js",
     "build": "tsc && yarn build:html",
+    "watch": "tsc --watch",
     "build:html": "ts-node esbuild.html.ts",
     "start": "ts-node src/cli.ts",
     "build-native": "yarn build && ./bin/build-native"
