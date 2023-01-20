@@ -8,7 +8,7 @@ import { buildAppMap, Event } from '@appland/models';
 const clientAppMap = buildAppMap()
   .source(
     readFileSync(
-      'test/data/PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
+      'test/data/appmaps/ruby/PaymentsController_create_no_user_email_on_file_makes_a_onetime_payment_with_no_user_but_associate_with_stripe.appmap.json'
     ).toString()
   )
   .normalize()
@@ -19,7 +19,7 @@ const httpClientRequests = clientAppMap.events.filter((e: Event) => !!e.httpClie
 const serverAppMap = buildAppMap()
   .source(
     readFileSync(
-      'test/data/POST_api_mapsets_logged_in_as_a_member_of_the_app_organization_with_one_scenario_with_bare_app_name_creates_a_mapset_with_a_scenario.appmap.json'
+      'test/data/appmaps/ruby/POST_api_mapsets_logged_in_as_a_member_of_the_app_organization_with_one_scenario_with_bare_app_name_creates_a_mapset_with_a_scenario.appmap.json'
     ).toString()
   )
   .normalize()

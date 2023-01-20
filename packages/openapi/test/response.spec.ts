@@ -18,8 +18,6 @@ describe('openapi.response', () => {
 
     response.addRpcRequest(rpcRequestForEvent(requestEvent)!);
 
-    //console.log(JSON.stringify(response.openapi(), null, 2));
-
     expect(response.openapi()).toEqual({
       content: {
         'application/json': {
