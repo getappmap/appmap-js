@@ -14,7 +14,6 @@
       </div>
     </div>
     <h4 class="details-panel-header__details-type" :data-type="objectType.toLowerCase()">
-      <CircleLegend class="legend" />
       {{ objectType }}
       <span v-if="objectId">{{ objectId }}</span>
     </h4>
@@ -38,7 +37,6 @@ import VNodeTypeQueryIcon from '@/assets/node-types/query.svg';
 import VNodeTypeExternalServiceIcon from '@/assets/node-types/external-service.svg';
 import VSourceCodeLink from '@/components/SourceCodeLink.vue';
 import { SELECT_OBJECT } from '@/store/vsCode';
-import CircleLegend from '@/assets/circle-legend.svg';
 
 export default {
   name: 'v-details-panel-header',
@@ -53,7 +51,6 @@ export default {
     VNodeTypeQueryIcon,
     VNodeTypeExternalServiceIcon,
     VSourceCodeLink,
-    CircleLegend,
   },
 
   props: {
@@ -158,42 +155,32 @@ export default {
   }
 
   &__details-type {
-    color: $white;
+    color: $gray4;
     text-transform: uppercase;
     line-height: 1;
     font-weight: 700;
-    margin: 0 0 0.4rem;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    &[data-type='http server requests'] svg circle,
-    &[data-type='http'] svg circle,
-    &[data-type='route'] svg circle {
-      fill: #542160;
+    margin: 0 0 0.2rem;
+
+    &[data-type='http'],
+    &[data-type='route'] {
+      color: #542168;
     }
 
-    &[data-type='external service'] svg circle {
-      fill: $yellow;
+    &[data-type='external service'] {
+      color: $yellow;
     }
 
-    &[data-type='package'] svg circle {
-      fill: $teal;
+    &[data-type='package'] {
+      color: $teal;
     }
 
-    &[data-type='event'] svg circle,
-    &[data-type='class'] svg circle,
-    &[data-type='function'] svg circle {
-      fill: $blue;
+    &[data-type='class'],
+    &[data-type='function'] {
+      color: $blue;
     }
 
-    &[data-type='database'] svg circle,
-    &[data-type='sql query'] svg circle {
-      fill: #9c2fba;
-    }
-
-    &[data-type='analysis finding'] svg circle {
-      fill: $hotpink;
+    &[data-type='sql query'] {
+      color: $royal;
     }
   }
 

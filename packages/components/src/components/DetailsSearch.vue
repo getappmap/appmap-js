@@ -21,7 +21,7 @@
       :key="type"
     >
       <h2 class="details-search__block-title">
-        <CircleLegend class="legend" /> {{ listItems[type].title }}
+        {{ listItems[type].title }}
       </h2>
       <ul class="details-search__block-list">
         <li
@@ -48,7 +48,6 @@
 import { CodeObject, AppMap, CodeObjectType } from '@appland/models';
 import SearchIcon from '@/assets/search.svg';
 import toListItem from '@/lib/finding';
-import CircleLegend from '@/assets/circle-legend.svg';
 import { SELECT_OBJECT, SELECT_LABEL } from '../store/vsCode';
 
 export default {
@@ -56,7 +55,6 @@ export default {
 
   components: {
     SearchIcon,
-    CircleLegend,
   },
 
   props: {
@@ -76,16 +74,12 @@ export default {
   computed: {
     listItems() {
       const items = {
-        [CodeObjectType.HTTP]: {
-          title: 'HTTP server requests',
-          data: [],
-        },
         [CodeObjectType.ANALYSIS_FINDING]: {
           title: 'Analysis Findings',
           data: [],
         },
-        [CodeObjectType.QUERY]: {
-          title: 'SQL queries',
+        [CodeObjectType.HTTP]: {
+          title: 'HTTP server requests',
           data: [],
         },
         [CodeObjectType.EXTERNAL_SERVICE]: {
@@ -100,12 +94,16 @@ export default {
           title: 'Packages',
           data: [],
         },
+        [CodeObjectType.CLASS]: {
+          title: 'Classes',
+          data: [],
+        },
         [CodeObjectType.FUNCTION]: {
           title: 'Functions',
           data: [],
         },
-        [CodeObjectType.CLASS]: {
-          title: 'Classes',
+        [CodeObjectType.QUERY]: {
+          title: 'SQL queries',
           data: [],
         },
       };
@@ -222,12 +220,10 @@ export default {
 <style scoped lang="scss">
 .details-search {
   margin-bottom: 2rem;
-  margin-top: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  padding: 0;
 
   &__form {
+    margin-bottom: 24px;
     padding: 0;
   }
 
@@ -275,6 +271,7 @@ export default {
   }
 
   &__block {
+    padding: 0 0.5rem;
     margin-bottom: 16px;
     border-bottom: 1px solid $gray2;
 
@@ -283,72 +280,53 @@ export default {
     }
 
     &-title {
-      margin: 0;
-      display: flex;
-      flex-direction: row;
-      gap: 0.5rem;
-      align-items: center;
+      margin: 0 0 0.25rem;
+      border-radius: 4px;
+      display: inline-block;
       padding: 0.25rem 0;
-      color: $white;
+      color: $base01;
       font-size: 0.9rem;
       font-weight: bold;
       text-transform: uppercase;
 
       .details-search__block--http & {
-        .legend circle {
-          fill: #542160;
-        }
+        color: #8e45aa;
       }
 
       .details-search__block--external-service & {
-        .legend circle {
-          fill: $yellow;
-        }
+        color: $yellow;
       }
 
       .details-search__block--labels & {
-        .legend circle {
-          fill: $base11;
-        }
+        color: $base11;
       }
 
       .details-search__block--package & {
-        .legend circle {
-          fill: $teal;
-        }
+        color: $teal;
       }
 
       .details-search__block--class &,
       .details-search__block--function & {
-        .legend circle {
-          fill: $blue;
-        }
+        color: $blue;
       }
 
       .details-search__block--query & {
-        .legend circle {
-          fill: #9c2fba;
-        }
+        color: $royal;
       }
 
       .details-search__block--empty & {
-        .legend circle {
-          fill: $gray3;
-        }
+        color: $gray3;
       }
       .details-search__block--analysis-finding & {
-        .legend circle {
-          fill: $hotpink;
-        }
+        color: $hotpink;
       }
     }
 
     &-list {
       margin: 0;
-      padding: 0 0.75rem;
+      padding: 0.5rem;
       list-style: none;
       li {
-        transition: $transition;
         &:last-of-type {
           border-bottom: 0;
         }
@@ -356,8 +334,6 @@ export default {
 
       .details-search__block--labels & {
         margin: 0 -0.25rem -0.25rem;
-        display: flex;
-        flex-direction: column;
       }
       &.analysis {
         padding: 0 0 1rem 0;
@@ -383,7 +359,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.25rem 0.55rem;
+      padding: 0.25rem 0;
       min-height: 2rem;
       font-size: 0.9em;
       color: $base03;
@@ -407,14 +383,18 @@ export default {
       }
 
       .details-search__block--labels & {
-        margin: 0;
-        padding: 0 0.5rem;
+        margin: 0.25rem;
+        border: 1px solid $base15 !important;
+        border-radius: 4px;
         display: inline-flex;
+        padding: 0.25rem 0.5rem;
         transition: 0.25s ease-out all;
 
         &:hover,
         &:active {
-          color: $blue;
+          background: $base03;
+          color: $gray1;
+          border-color: $base03 !important;
         }
 
         &-count {
