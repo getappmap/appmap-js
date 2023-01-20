@@ -66,12 +66,12 @@ function classNameToOpenAPIType(className?: string): OptSchemaObjectType {
     }
   };
 
-  const mapPythonType = (t: string): OptSchemaObjectType => {
+  const mapPythonType = (t: string): OptObjectTypeOrUnknown => {
     if (!t.startsWith('builtins.')) {
       return;
     }
 
-    switch (t.substr(9)) {
+    switch (t.substring(9)) {
       case 'bool':
         return 'boolean';
       case 'dict':
@@ -82,6 +82,8 @@ function classNameToOpenAPIType(className?: string): OptSchemaObjectType {
         return 'array';
       case 'str':
         return 'string';
+      case 'nonetype':
+        return 'unknown';
     }
   };
 

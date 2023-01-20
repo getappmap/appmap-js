@@ -6,6 +6,7 @@ import SecuritySchemes from '../src/securitySchemes';
 import { buildAppMap } from '@appland/models';
 import { rpcRequestForEvent } from '../src/rpcRequest';
 import { OpenAPIV3 } from 'openapi-types';
+import { pythonAppMap } from './util';
 
 type ClassName = string;
 type SchemaObjectType = OpenAPIV3.ArraySchemaObjectType | OpenAPIV3.NonArraySchemaObjectType;
@@ -116,6 +117,58 @@ describe('openapi', () => {
       });
     });
   });
+  describe('for a typical Python AppMap', () => {
+    it('works as expected', () => {
+      const model = new Model();
+      const securitySchemes = new SecuritySchemes();
+      pythonAppMap.events
+        .filter((e) => e.httpServerRequest)
+        .forEach((request) => model.addRpcRequest(rpcRequestForEvent(request)!));
+
+      expect(securitySchemes.openapi()).toEqual({});
+      expect(model.openapi()).toEqual({
+        '/admincp/users/': {
+          post: {
+            requestBody: {
+              content: {
+                'multipart/form-data': {
+                  schema: {
+                    properties: {
+                      direction: {
+                        type: 'string',
+                      },
+                      redirected: {
+                        type: 'string',
+                      },
+                      selected_items: {
+                        items: {
+                          type: 'string',
+                        },
+                        type: 'array',
+                      },
+                      sort: {
+                        type: 'string',
+                      },
+                    },
+                    type: 'object',
+                  },
+                },
+              },
+            },
+            responses: {
+              '302': {
+                content: {
+                  'text/html': {},
+                },
+                description: 'Found',
+              },
+            },
+          },
+        },
+      });
+    });
+  });
+});
 
 describe('messageToOpenAPISchema', () => {
   describe('for Ruby types', () => {
@@ -137,6 +190,7 @@ describe('messageToOpenAPISchema', () => {
       mapping('builtins.int', 'integer'),
       mapping('builtins.list', 'array', 'string'),
       mapping('builtins.str', 'string'),
+      mapping('builtins.NoneType', undefined),
       mapping('MyPythonClass', 'object'),
     ];
 

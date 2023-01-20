@@ -26,4 +26,22 @@ const serverAppMap = buildAppMap()
   .build();
 const httpServerRequests = serverAppMap.events.filter((e: Event) => !!e.httpServerRequest);
 
-export { clientAppMap, httpClientRequests, serverAppMap, httpServerRequests };
+// POST /admincp/users/
+const pythonAppMap = buildAppMap()
+  .source(
+    readFileSync(
+      'test/data/appmaps/python/test_activating_multiple_users_sends_email_notifications_to_them.appmap.json'
+    ).toString()
+  )
+  .normalize()
+  .build();
+const pythonHttpServerRequests = pythonAppMap.events.filter((e: Event) => !!e.httpServerRequest);
+
+export {
+  clientAppMap,
+  httpClientRequests,
+  serverAppMap,
+  httpServerRequests,
+  pythonAppMap,
+  pythonHttpServerRequests,
+};
