@@ -24,6 +24,7 @@ delete process.env.APPLAND_API_KEY;
 delete process.env.APPLAND_URL;
 
 const ReportFile = 'appmap-findings.json';
+const StateFile = 'appmap-findings-state.yml';
 const AppId = test.AppId;
 const DefaultScanConfigFilePath = join(__dirname, '..', '..', 'src', 'sampleConfig', 'default.yml');
 const StandardOneShotScanOptions = {
@@ -32,11 +33,11 @@ const StandardOneShotScanOptions = {
   ),
   config: DefaultScanConfigFilePath, // need to pass it explicitly
   reportFile: ReportFile,
+  stateFile: StateFile,
+  findingState: [],
   app: AppId,
-  all: false,
-  interactive: false,
   watch: false,
-} as const;
+};
 
 function isError(error: unknown, code: string): boolean {
   const err = error as NodeJS.ErrnoException;
@@ -58,54 +59,35 @@ function runCommand(options: CommandOptions): Promise<void> {
 }
 
 describe('scan', () => {
-  it('errors with default options and without AppMap server API key', async () => {
-    delete process.env.APPLAND_API_KEY;
-    try {
-      await runCommand(StandardOneShotScanOptions);
-      throw new Error(`Expected this command to fail`);
-    } catch (err) {
-      expect((err as any).toString()).toMatch(/No API key available for AppMap server/);
-    }
+  describe('without AppMap credentials', () => {
+    it('reports missing credentials error', async () => {
+      delete process.env.APPLAND_API_KEY;
+      delete process.env.APPMAP_API_KEY;
+      try {
+        await runCommand(StandardOneShotScanOptions);
+        throw new Error(`Expected this command to fail`);
+      } catch (err) {
+        expect((err as any).toString()).toMatch(/No API key available for AppMap server/);
+      }
+    });
   });
 
-  async function checkScan(options: CommandOptions): Promise<void> {
-    await runCommand(options);
+  describe('when the provided appId is not valid', () => {
+    it('reports missing or unknown app error ', async () => {
+      nock('http://localhost:3000').head(`/api/${AppId}`).reply(404);
 
-    const scanResults = JSON.parse(readFileSync(ReportFile).toString()) as ScanResults;
-    expect(scanResults.summary).toBeTruthy();
-    const appMapMetadata = scanResults.summary.appMapMetadata;
-    expect(appMapMetadata.apps).toEqual(['spring-petclinic']);
-    const checks = scanResults.configuration.checks;
-    ['http-500', 'n-plus-one-query'].forEach((rule) =>
-      expect(checks.map((check) => check.rule)).toContain(rule)
-    );
-    expect(Object.keys(scanResults).sort()).toEqual([
-      'appMapMetadata',
-      'checks',
-      'configuration',
-      'findings',
-      'summary',
-    ]);
-  }
-
-  it('runs with server access disabled', async () => {
-    await checkScan({ ...StandardOneShotScanOptions, all: true });
+      try {
+        await runCommand(StandardOneShotScanOptions);
+        throw new Error(`Expected this command to fail`);
+      } catch (e) {
+        expect((e as any).message).toMatch(
+          /App "myorg\/sample_app_6th_ed" is not valid or does not exist./
+        );
+      }
+    });
   });
 
-  it('errors when the provided appId is not valid', async () => {
-    nock('http://localhost:3000').head(`/api/${AppId}`).reply(404);
-
-    try {
-      await runCommand(StandardOneShotScanOptions);
-      throw new Error(`Expected this command to fail`);
-    } catch (e) {
-      expect((e as any).message).toMatch(
-        /App "myorg\/sample_app_6th_ed" is not valid or does not exist./
-      );
-    }
-  });
-
-  it('integrates server finding status with local findings', async () => {
+  it('integrates server finding status', async () => {
     const localhost = nock('http://localhost:3000');
     localhost.head(`/api/${AppId}`).reply(204).persist();
     localhost.get(`/api/${AppId}/finding_status`).reply(200, JSON.stringify([]));
@@ -113,15 +95,36 @@ describe('scan', () => {
     await runCommand(StandardOneShotScanOptions);
   });
 
+  it('integrates local finding status', () => pending());
+
   it('skips when encountering a bad file in a directory', async () =>
     tmp.withDir(
       async ({ path }) => {
+        async function checkScan(options: CommandOptions): Promise<void> {
+          await runCommand(options);
+
+          const scanResults = JSON.parse(readFileSync(ReportFile).toString()) as ScanResults;
+          expect(scanResults.summary).toBeTruthy();
+          const appMapMetadata = scanResults.summary.appMapMetadata;
+          expect(appMapMetadata.apps).toEqual(['spring-petclinic']);
+          const checks = scanResults.configuration.checks;
+          ['http-500', 'n-plus-one-query'].forEach((rule) =>
+            expect(checks.map((check) => check.rule)).toContain(rule)
+          );
+          expect(Object.keys(scanResults).sort()).toEqual([
+            'appMapMetadata',
+            'checks',
+            'configuration',
+            'findings',
+            'summary',
+          ]);
+        }
+
         await copyFile(StandardOneShotScanOptions.appmapFile, join(path, 'good.appmap.json'));
         await writeFile(join(path, 'bad.appmap.json'), 'bad json');
 
         const options: CommandOptions = {
           ...StandardOneShotScanOptions,
-          all: true,
           appmapDir: path,
         };
         delete options.appmapFile;
@@ -131,39 +134,42 @@ describe('scan', () => {
       { unsafeCleanup: true }
     ));
 
-  it('errors when no good files were found', async () =>
-    tmp.withDir(
-      async ({ path }) => {
-        await writeFile(join(path, 'bad.appmap.json'), 'bad json');
+  describe('when the only existing AppMap(s) in a directory is invalid', () => {
+    it('reports a processing error', async () =>
+      tmp.withDir(
+        async ({ path }) => {
+          await writeFile(join(path, 'bad.appmap.json'), 'bad json');
 
-        const options: CommandOptions = {
+          const options: CommandOptions = {
+            ...StandardOneShotScanOptions,
+            appmapDir: path,
+          };
+          delete options.appmapFile;
+
+          expect.assertions(1);
+          return runCommand(options).catch((e: Error) => {
+            expect(e.message).toMatch(/Error processing/);
+          });
+        },
+        { unsafeCleanup: true }
+      ));
+  });
+
+  describe('when an invalid AppMap file is explicitly provided', () => {
+    it('reports a processing error', async () =>
+      tmp.withFile(async ({ path }) => {
+        await writeFile(path, 'bad json');
+        const options = {
           ...StandardOneShotScanOptions,
           all: true,
-          appmapDir: path,
+          appmapFile: [path, StandardOneShotScanOptions.appmapFile],
         };
-        delete options.appmapFile;
-
         expect.assertions(1);
         return runCommand(options).catch((e: Error) => {
           expect(e.message).toMatch(/Error processing/);
         });
-      },
-      { unsafeCleanup: true }
-    ));
-
-  it('errors when a bad file is explicitly provided', async () =>
-    tmp.withFile(async ({ path }) => {
-      await writeFile(path, 'bad json');
-      const options = {
-        ...StandardOneShotScanOptions,
-        all: true,
-        appmapFile: [path, StandardOneShotScanOptions.appmapFile],
-      };
-      expect.assertions(1);
-      return runCommand(options).catch((e: Error) => {
-        expect(e.message).toMatch(/Error processing/);
-      });
-    }));
+      }));
+  });
 
   describe('watch mode', () => {
     let watcher: Watcher | undefined;
@@ -241,6 +247,7 @@ describe('scan', () => {
     async function createWatcher(): Promise<void> {
       watcher = new Watcher({
         appId: 'no-such-app',
+        stateFileName: StateFile,
         appmapDir: tmpDir,
         configFile: scanConfigFilePath,
       });

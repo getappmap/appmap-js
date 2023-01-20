@@ -4,6 +4,7 @@ export default interface ScanOptions {
   directory?: string;
   appmapDir?: string;
   config: string;
+  stateFile: string;
   reportFile: string;
   verbose?: boolean;
 }

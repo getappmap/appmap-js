@@ -1,9 +1,8 @@
 import { writeFile } from 'fs/promises';
-import { default as buildScanner } from './scanner';
+import Scanner, { default as buildScanner } from './scanner';
 
-import { ValidationError } from '../../errors';
 import Configuration from '../../configuration/types/configuration';
-import { newFindings } from '../../findings';
+import selectFindings from '../../selectFindings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 import { formatReport } from './formatReport';
@@ -11,20 +10,23 @@ import Telemetry from '../../telemetry';
 import { sendScanResultsTelemetry } from '../../report/scanResults';
 import { collectAppMapFiles } from '../../rules/lib/util';
 import validateFile from '../validateFile';
+import { FindingState } from '../findingsState';
 
 type SingleScanOptions = {
   appmapFile?: string | string[];
   appmapDir?: string;
+  stateFileName: string;
   configuration: Configuration;
-  reportAllFindings: boolean;
+  includeFindingStates?: [FindingState.AsDesigned | FindingState.Deferred][];
   reportFile: string;
   appId?: string;
   ide?: string;
 };
 
 export default async function singleScan(options: SingleScanOptions): Promise<void> {
-  const { appmapFile, appmapDir, configuration, reportAllFindings, appId, ide, reportFile } =
-    options;
+  let { includeFindingStates } = options;
+  const { appmapFile, appmapDir, configuration, appId, ide, reportFile } = options;
+  if (!includeFindingStates) includeFindingStates = [];
   Telemetry.sendEvent({
     name: 'scan:started',
     properties: {
@@ -37,30 +39,21 @@ export default async function singleScan(options: SingleScanOptions): Promise<vo
   const files = await collectAppMapFiles(appmapFile, appmapDir);
   await Promise.all(files.map(async (file) => validateFile('file', file)));
 
-  const scanner = await buildScanner(reportAllFindings, configuration, files).catch(
-    (error: Error) => {
-      throw new ValidationError(error.message + '\nUse --all to perform an offline scan.');
-    }
-  );
+  const scanner = new Scanner(configuration, files);
 
   const startTime = Date.now();
 
   const [rawScanResults, findingStatuses] = await Promise.all([
     scanner.scan(skipErrors),
-    scanner.fetchFindingStatus(appId, appmapDir),
+    scanner.fetchFindingStatus(options.stateFileName, appId, appmapDir),
   ]);
 
   // Always report the raw data
   await writeFile(reportFile, formatReport(rawScanResults));
 
-  let scanResults;
-  if (reportAllFindings) {
-    scanResults = rawScanResults;
-  } else {
-    scanResults = rawScanResults.withFindings(
-      newFindings(rawScanResults.findings, findingStatuses)
-    );
-  }
+  const scanResults = rawScanResults.withFindings(
+    selectFindings(rawScanResults.findings, findingStatuses, includeFindingStates)
+  );
 
   findingsReport(scanResults.findings, scanResults.appMapMetadata, ide);
   console.log();

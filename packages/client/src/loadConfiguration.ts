@@ -1,70 +1,29 @@
-import { readFile } from 'fs/promises';
-import { homedir } from 'os';
-import path from 'path';
-import yaml from 'js-yaml';
 import Configuration from './configuration';
 
-type AppLandContext = {
-  url: string;
-  api_key: string;
-};
-
-type AppLandConfig = {
-  contexts: Record<string, AppLandContext>;
-  current_context: string | undefined;
-};
-
+<<<<<<< HEAD
+export const DefaultURL = 'https://app.land';
+=======
 const DefaultURL = 'https://app.land';
+>>>>>>> 701fa4d5 (feat: Recognize APPMAP_* env vars)
 
 class Settings {
   baseURL = DefaultURL;
   apiKey?: string;
-  error?: string;
 }
 
-const failUsage = (message: string): Settings => {
-  console.warn(message);
-  return { error: message } as Settings;
-};
+function loadFromEnvironment(): Settings {
+  const settings = new Settings();
 
-async function loadFromFile(): Promise<Settings> {
-  const applandConfigFilePath = path.join(homedir(), '.appland');
-  let applandConfigData: Buffer | undefined;
-  try {
-    applandConfigData = await readFile(applandConfigFilePath);
-  } catch {
-    return { baseURL: DefaultURL } as Settings;
-  }
-  const applandConfig = yaml.load(applandConfigData.toString()) as AppLandConfig;
-  const currentContext = applandConfig.current_context || 'default';
-  const contextConfig = applandConfig.contexts[currentContext];
-  if (!contextConfig) {
-    return failUsage(
-      `No context configuration '${currentContext}' in AppMap Cloud config file ${applandConfigFilePath}`
-    );
-  }
-  const { url: configURL, api_key: configApiKey } = contextConfig;
-  if (!configURL) {
-    return failUsage(
-      `No 'url' in context configuration '${currentContext}' in AppMap Cloud config file ${applandConfigFilePath}`
-    );
-  }
-  if (!configApiKey) {
-    return failUsage(
-      `No 'api_key' in context configuration '${currentContext}' in AppMap Cloud config file ${applandConfigFilePath}`
-    );
-  }
+  ['APPLAND_URL', 'APPMAP_URL'].forEach((key) => {
+    const value = process.env[key];
+    if (value) settings.baseURL = value;
+  });
+  ['APPLAND_API_KEY', 'APPMAP_API_KEY'].forEach((key) => {
+    const value = process.env[key];
+    if (value) settings.apiKey = value;
+  });
 
-  return { baseURL: configURL, apiKey: configApiKey };
-}
-
-function loadFromEnvironment(settings: Settings): void {
-  if (process.env.APPLAND_URL) {
-    settings.baseURL = process.env.APPLAND_URL;
-  }
-  if (process.env.APPLAND_API_KEY) {
-    settings.apiKey = process.env.APPLAND_API_KEY;
-  }
+  return settings;
 }
 
 let configuration: Configuration;
@@ -73,21 +32,18 @@ export function setConfiguration(value: Configuration): void {
   configuration = value;
 }
 
-export default async function loadConfiguration(requireApiKey = true): Promise<Configuration> {
+export default function loadConfiguration(requireApiKey = true): Configuration {
   if (configuration) {
     return configuration;
   }
 
-  const settings = await loadFromFile();
-  loadFromEnvironment(settings);
+  const settings = loadFromEnvironment();
   if (!settings.apiKey && requireApiKey) {
     throw new Error(
-      `No API key available for AppMap server. Export APPLAND_API_KEY or configure ~/.appland`
+      `No API key available for AppMap server. Set environment variable APPMAP_API_KEY (preferred), or provide the API key as a command line argument`
     );
   }
-  if (settings.error) {
-    throw new Error(settings.error);
-  }
+
   configuration = { baseURL: settings.baseURL, apiKey: settings.apiKey };
   return configuration;
 }

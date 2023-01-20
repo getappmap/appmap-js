@@ -6,7 +6,7 @@ import { queue } from 'async';
 import { callbackify } from 'node:util';
 
 import { formatReport } from './formatReport';
-import { default as buildScanner } from './scanner';
+import Scanner, { default as buildScanner } from './scanner';
 import {
   parseConfigFile,
   TimestampedConfiguration,
@@ -14,12 +14,16 @@ import {
 import Telemetry from '../../telemetry';
 import EventEmitter from 'events';
 import { WatchScanTelemetry } from './watchScanTelemetry';
-import isAncestorPath from '../../lib/isAncestorPath';
+import isAncestorPath from '../../util/isAncestorPath';
+import { FindingState } from '../findingsState';
+import selectFindings from '../../selectFindings';
 
 export type WatchScanOptions = {
   appId?: string;
   appmapDir: string;
   configFile: string;
+  stateFileName: string;
+  includeFindingStates?: [FindingState.AsDesigned | FindingState.Deferred][];
 };
 
 declare module 'async' {
@@ -176,14 +180,28 @@ export class Watcher {
       return; // report is up to date
 
     const startTime = Date.now();
-    const scanner = await buildScanner(true, this.config, [appmapFile]);
+    const scanner = new Scanner(this.config, [appmapFile]);
 
-    const rawScanResults = await scanner.scan();
+    const [rawScanResults, findingStatuses] = await Promise.all([
+      scanner.scan(),
+      scanner.fetchFindingStatus(
+        this.options.stateFileName,
+        this.options.appId,
+        this.options.appmapDir
+      ),
+    ]);
+    const scanResults = rawScanResults.withFindings(
+      selectFindings(
+        rawScanResults.findings,
+        findingStatuses,
+        this.options.includeFindingStates || []
+      )
+    );
+
     const elapsed = Date.now() - startTime;
-    this.scanEventEmitter.emit('scan', { scanResults: rawScanResults, elapsed });
+    this.scanEventEmitter.emit('scan', { scanResults, elapsed });
 
-    // Always report the raw data
-    await writeFile(reportFile, formatReport(rawScanResults));
+    await writeFile(reportFile, formatReport(scanResults));
   }
 
   protected async reloadConfig(): Promise<void> {

@@ -2,7 +2,7 @@ import { win32, posix } from 'path';
 
 jest.setMock('path', win32);
 
-import isAncestorPath from '../../src/lib/isAncestorPath';
+import isAncestorPath from '../../src/util/isAncestorPath';
 
 describe(isAncestorPath, () => {
   it.each([

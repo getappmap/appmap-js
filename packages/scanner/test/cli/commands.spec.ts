@@ -2,7 +2,7 @@ import { Arguments } from 'yargs';
 import * as resolveAppId from '../../src/cli/resolveAppId';
 import ScanCommand from '../../src/cli/scan/command';
 import CommandOptions from '../../src/cli/scan/options';
-import * as scanner from '../../src/cli/scan/scanner';
+import * as Scanner from '../../src/cli/scan/scanner';
 import * as watchScan from '../../src/cli/scan/watchScan';
 import tmp from 'tmp-promise';
 import { copyFile, mkdir, writeFile } from 'node:fs/promises';
@@ -13,9 +13,9 @@ jest.mock('../../src/telemetry');
 const defaultArguments: Arguments<CommandOptions> = {
   _: [],
   $0: 'scan',
-  all: false,
-  interactive: false,
   watch: false,
+  stateFile: 'appmap-findings-state.yml',
+  findingState: [],
   config: 'appmap-scanner.yml',
   reportFile: 'appmap-findings.json',
 };
@@ -29,22 +29,6 @@ describe('commands', () => {
   });
 
   describe('scan --watch', () => {
-    it('does not attempt to resolve an app ID', async () => {
-      // Prevent the watcher from running indefinitely
-      jest.spyOn(watchScan, 'default').mockResolvedValue();
-
-      const spy = jest.spyOn(resolveAppId, 'default');
-
-      try {
-        await ScanCommand.handler({ ...defaultArguments, watch: true });
-      } catch {
-        // Do nothing.
-        // We don't want exceptions, we just want to know if our stub was called.
-      }
-
-      expect(spy).not.toBeCalled();
-    });
-
     let watcher: watchScan.Watcher | undefined;
 
     afterEach(() => {
@@ -53,6 +37,21 @@ describe('commands', () => {
         watcher = undefined;
         return closer;
       }
+    });
+
+    it('resolves appId, but its absence is benign', async () => {
+      // Prevent the watcher from running indefinitely
+      jest.spyOn(watchScan, 'default').mockResolvedValue();
+
+      const spy = jest.spyOn(resolveAppId, 'default');
+
+      try {
+        await ScanCommand.handler({ ...defaultArguments, watch: true });
+      } catch (e) {
+        expect(e).not.toBeTruthy();
+      }
+
+      expect(spy).toBeCalled();
     });
 
     it('work correctly even if the appmap directory does not initially exist', () =>
@@ -70,11 +69,11 @@ describe('commands', () => {
             directory: tmpDir,
           });
 
-          const originalScanner = scanner.default;
+          const OriginalScanner = Scanner.default;
           const scanned = new Promise<void>((resolve) =>
-            jest.spyOn(scanner, 'default').mockImplementation((...args) => {
+            jest.spyOn(Scanner, 'default').mockImplementation((...args) => {
               resolve();
-              return originalScanner(...args);
+              return new OriginalScanner(...args);
             })
           );
 
