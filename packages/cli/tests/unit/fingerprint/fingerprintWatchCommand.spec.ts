@@ -13,7 +13,18 @@ import { MaxMSBetween } from '../../../src/lib/eventAggregator';
 import { mkdir } from 'fs/promises';
 import { FSWatcher } from 'chokidar';
 
-jest.mock('../../../src/telemetry');
+jest.mock('../../../src/telemetry', () => {
+  const originalModule = jest.requireActual('../../../src/telemetry');
+
+  //Mock the default export and named export 'foo'
+  return {
+    __esModule: true,
+    ...originalModule,
+    default: {
+      sendEvent: jest.fn(),
+    },
+  };
+});
 const Telemetry = jest.mocked(OriginalTelemetry);
 
 describe(FingerprintWatchCommand, () => {
@@ -197,6 +208,8 @@ describe(FingerprintWatchCommand, () => {
         await once(handler, 'index');
         jest.advanceTimersByTime(MaxMSBetween * 2.0);
 
+        await cmd?.telemetrySent();
+
         expect(Telemetry.sendEvent).toHaveBeenCalledTimes(1);
         const data = Telemetry.sendEvent.mock.calls[0][0];
         expect(data).toMatchObject({
@@ -217,6 +230,8 @@ describe(FingerprintWatchCommand, () => {
         placeMap('../fixtures/ruby/user_page_scenario.appmap.json');
         await once(handler, 'index');
         jest.advanceTimersByTime(MaxMSBetween * 2);
+
+        await cmd?.telemetrySent();
 
         expect(Telemetry.sendEvent).toHaveBeenCalledTimes(2);
         for (const [data] of Telemetry.sendEvent.mock.calls) {
