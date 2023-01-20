@@ -53,7 +53,7 @@ export class Watcher {
   scanEventEmitter = new EventEmitter();
 
   constructor(private options: WatchScanOptions) {
-    WatchScanTelemetry.watch(this.scanEventEmitter);
+    WatchScanTelemetry.watch(this.scanEventEmitter, options.appmapDir);
   }
 
   async watch(): Promise<void> {

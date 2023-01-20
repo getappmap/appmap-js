@@ -8,8 +8,6 @@ import tmp from 'tmp-promise';
 import { copyFile, mkdir, writeFile } from 'node:fs/promises';
 import path, { basename } from 'node:path';
 
-jest.mock('../../src/telemetry');
-
 const defaultArguments: Arguments<CommandOptions> = {
   _: [],
   $0: 'scan',

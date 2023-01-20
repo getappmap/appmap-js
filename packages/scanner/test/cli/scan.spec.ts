@@ -17,8 +17,6 @@ import assert from 'assert';
 import { FSWatcher } from 'chokidar';
 import { mkdir, chmod } from 'fs/promises';
 
-jest.mock('../../src/telemetry');
-
 process.env['APPMAP_TELEMETRY_DISABLED'] = 'true';
 delete process.env.APPLAND_API_KEY;
 delete process.env.APPLAND_URL;
