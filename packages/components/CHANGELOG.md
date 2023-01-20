@@ -1,3 +1,10 @@
+# [@appland/components-v2.25.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.25.1...@appland/components-v2.25.2) (2023-01-20)
+
+
+### Bug Fixes
+
+* revert sidebar updates ([60cdda3](https://github.com/getappmap/appmap-js/commit/60cdda3a1ec44a29d2f65685df83ca2ac8b21949))
+
 # [@appland/components-v2.25.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.25.0...@appland/components-v2.25.1) (2023-01-19)
 
 
