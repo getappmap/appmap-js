@@ -5,7 +5,7 @@ import { join, resolve } from 'path';
 import EventAggregator from '../lib/eventAggregator';
 import flattenMetadata from '../lib/flattenMetadata';
 import { intersectMaps } from '../lib/intersectMaps';
-import Telemetry from '../telemetry';
+import Telemetry, { Git } from '../telemetry';
 import { verbose } from '../utils';
 import { FingerprintEvent } from './fingerprinter';
 import FingerprintQueue from './fingerprintQueue';
@@ -18,6 +18,7 @@ export default class FingerprintWatchCommand {
   public watcher?: FSWatcher;
   private poller?: Globber;
   private _numProcessed = 0;
+  private pendingTelemetry?: Promise<void>;
   public unreadableFiles = new Set<string>();
   public symlinkLoopFiles = new Set<string>();
 
@@ -35,7 +36,10 @@ export default class FingerprintWatchCommand {
 
     new EventAggregator((events) => {
       const indexEvents = events.map(({ args: [event] }) => event) as FingerprintEvent[];
-      this.sendTelemetry(indexEvents.map(({ metadata }) => metadata));
+      this.pendingTelemetry = this.sendTelemetry(
+        indexEvents.map(({ metadata }) => metadata),
+        directory
+      );
       this.numProcessed += events.length;
     }).attach(this.fpQueue.handler, 'index');
   }
@@ -245,7 +249,7 @@ export default class FingerprintWatchCommand {
     this.fpQueue.push(file);
   }
 
-  private sendTelemetry(metadata: Metadata[]) {
+  private async sendTelemetry(metadata: Metadata[], appmapDir: string) {
     const properties = Object.fromEntries(
       intersectMaps(...metadata.map(flattenMetadata)).entries()
     );
@@ -254,7 +258,15 @@ export default class FingerprintWatchCommand {
       properties,
       metrics: {
         appmaps: metadata.length,
+        contributors: (await Git.contributors(60, appmapDir)).length,
       },
     });
+  }
+
+  async telemetrySent(): Promise<void> {
+    if (this.pendingTelemetry) {
+      await this.pendingTelemetry;
+      this.pendingTelemetry = undefined;
+    }
   }
 }
