@@ -1,5 +1,5 @@
 import { EventEmitter } from 'stream';
-import EventAggregator, { CancelFn } from '../../lib/eventAggregator';
+import EventAggregator, { CancelFn } from '../../util/eventAggregator';
 import { ScanResults, sendScanResultsTelemetry } from '../../report/scanResults';
 
 export type ScanEvent = {

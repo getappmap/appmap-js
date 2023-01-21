@@ -14,7 +14,7 @@ import {
 import Telemetry from '../../telemetry';
 import EventEmitter from 'events';
 import { WatchScanTelemetry } from './watchScanTelemetry';
-import isAncestorPath from '../../lib/isAncestorPath';
+import isAncestorPath from '../../util/isAncestorPath';
 
 export type WatchScanOptions = {
   appId?: string;
