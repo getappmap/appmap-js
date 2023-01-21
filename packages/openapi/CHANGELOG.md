@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.3.1](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.3.0...@appland/openapi-v1.3.1) (2023-01-21)
+
+
+### Bug Fixes
+
+* Support Python builtins.NoneType ([e52f749](https://github.com/getappmap/appmap-js/commit/e52f7491c359cd05ba763ac9f36c5337d6656455))
+
 # [@appland/openapi-v1.3.0](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.2.1...@appland/openapi-v1.3.0) (2022-12-15)
 
 
