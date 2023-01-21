@@ -1,3 +1,10 @@
+# [@appland/client-v1.6.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.5.0...@appland/client-v1.6.0) (2023-01-21)
+
+
+### Features
+
+* Recognize APPMAP_* env vars ([925b654](https://github.com/getappmap/appmap-js/commit/925b654ab9e4d54422037ac2f353efb933bc8bc0))
+
 # [@appland/client-v1.5.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.4.0...@appland/client-v1.5.0) (2022-10-12)
 
 
