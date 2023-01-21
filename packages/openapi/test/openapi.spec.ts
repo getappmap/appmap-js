@@ -6,6 +6,7 @@ import SecuritySchemes from '../src/securitySchemes';
 import { buildAppMap } from '@appland/models';
 import { rpcRequestForEvent } from '../src/rpcRequest';
 import { OpenAPIV3 } from 'openapi-types';
+import { pythonAppMap } from './util';
 
 type ClassName = string;
 type SchemaObjectType = OpenAPIV3.ArraySchemaObjectType | OpenAPIV3.NonArraySchemaObjectType;
@@ -40,64 +41,70 @@ const mappingExamples = (mappings: any) => {
 };
 
 describe('openapi', () => {
-  it('works as expected', async () => {
-    const appmapData = JSON.parse(
-      (await readFile('test/data/Users_signup_invalid_signup_information.appmap.json')).toString()
-    );
+  describe('for a typical Ruby app', () => {
+    it('works as expected', async () => {
+      const appmapData = JSON.parse(
+        (
+          await readFile(
+            'test/data/appmaps/ruby/Users_signup_invalid_signup_information.appmap.json'
+          )
+        ).toString()
+      );
 
-    const model = new Model();
-    const securitySchemes = new SecuritySchemes();
-    const appmap = buildAppMap().source(appmapData).normalize().build();
-    appmap.events
-      .filter((e) => e.httpServerRequest)
-      .forEach((request) => model.addRpcRequest(rpcRequestForEvent(request)!));
+      const model = new Model();
+      const securitySchemes = new SecuritySchemes();
+      const appmap = buildAppMap().source(appmapData).normalize().build();
+      appmap.events
+        .filter((e) => e.httpServerRequest)
+        .forEach((request) => model.addRpcRequest(rpcRequestForEvent(request)!));
 
-    // TODO: This is weak, we need an example with auth
-    expect(securitySchemes.openapi()).toEqual({});
-    expect(model.openapi()).toEqual({
-      '/signup': {
-        get: {
-          responses: {
-            '200': {
-              content: {
-                'text/html': {},
+      // TODO: This is weak, we need an example with auth
+      expect(securitySchemes.openapi()).toEqual({});
+      expect(model.openapi()).toEqual({
+        '/signup': {
+          get: {
+            responses: {
+              '200': {
+                content: {
+                  'text/html': {},
+                },
+                description: 'OK',
               },
-              description: 'OK',
             },
+            summary: 'Signup',
           },
-          summary: 'Signup',
         },
-      },
-      '/users': {
-        post: {
-          responses: {
-            '200': {
-              content: {
-                'text/html': {},
+        '/users': {
+          post: {
+            responses: {
+              '200': {
+                content: {
+                  'text/html': {},
+                },
+                description: 'OK',
               },
-              description: 'OK',
             },
-          },
-          requestBody: {
-            content: {
-              'application/x-www-form-urlencoded': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    user: {
-                      type: 'object',
-                      properties: {
-                        name: {
-                          type: 'string',
-                        },
-                        email: {
-                          type: 'string',
-                        },
-                        password: {
-                          type: 'string',
-                        },
-                        password_confirmation: {
-                          type: 'string',
+            requestBody: {
+              content: {
+                'application/x-www-form-urlencoded': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      user: {
+                        type: 'object',
+                        properties: {
+                          name: {
+                            type: 'string',
+                          },
+                          email: {
+                            type: 'string',
+                          },
+                          password: {
+                            type: 'string',
+                          },
+                          password_confirmation: {
+                            type: 'string',
+                          },
                         },
                       },
                     },
@@ -107,7 +114,58 @@ describe('openapi', () => {
             },
           },
         },
-      },
+      });
+    });
+  });
+  describe('for a typical Python AppMap', () => {
+    it('works as expected', () => {
+      const model = new Model();
+      const securitySchemes = new SecuritySchemes();
+      pythonAppMap.events
+        .filter((e) => e.httpServerRequest)
+        .forEach((request) => model.addRpcRequest(rpcRequestForEvent(request)!));
+
+      expect(securitySchemes.openapi()).toEqual({});
+      expect(model.openapi()).toEqual({
+        '/admincp/users/': {
+          post: {
+            requestBody: {
+              content: {
+                'multipart/form-data': {
+                  schema: {
+                    properties: {
+                      direction: {
+                        type: 'string',
+                      },
+                      redirected: {
+                        type: 'string',
+                      },
+                      selected_items: {
+                        items: {
+                          type: 'string',
+                        },
+                        type: 'array',
+                      },
+                      sort: {
+                        type: 'string',
+                      },
+                    },
+                    type: 'object',
+                  },
+                },
+              },
+            },
+            responses: {
+              '302': {
+                content: {
+                  'text/html': {},
+                },
+                description: 'Found',
+              },
+            },
+          },
+        },
+      });
     });
   });
 });
@@ -132,6 +190,7 @@ describe('messageToOpenAPISchema', () => {
       mapping('builtins.int', 'integer'),
       mapping('builtins.list', 'array', 'string'),
       mapping('builtins.str', 'string'),
+      mapping('builtins.NoneType', undefined),
       mapping('MyPythonClass', 'object'),
     ];
 

@@ -1,4 +1,3 @@
-import { Schema } from 'js-yaml';
 import SchemaInferrer from '../src/schemaInferrer';
 
 describe(SchemaInferrer, () => {
