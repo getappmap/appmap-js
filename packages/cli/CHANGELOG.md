@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.63.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.62.0...@appland/appmap-v3.63.0) (2023-01-21)
+
+
+### Features
+
+* Filter openapi processing by AppMap size ([5b3e4b8](https://github.com/getappmap/appmap-js/commit/5b3e4b8250daceda80f3180f788ed747c488e71c))
+
 # [@appland/appmap-v3.62.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.61.0...@appland/appmap-v3.62.0) (2023-01-20)
 
 
