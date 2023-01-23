@@ -3,11 +3,11 @@
 participant controllers as "controllers"
 participant models as "models"
 participant database as "database"
-  [->controllers: show <color:gray> 0.124 ms</color>
+  [->controllers: show <color:gray> 0.299 ms</color>
   activate controllers
-    controllers->models: <u>find</u> <color:gray> 0.056 ms</color>
+    controllers->models: <u>find</u> <color:gray> 0.114 ms</color>
     activate models
-      models->database: <u>query</u>
+      models->database: <u>query</u> <color:gray> 0.002 ms</color>
     controllers<--models: <i>exception!</i>
     deactivate models
   [<--controllers: array
