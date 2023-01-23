@@ -1,0 +1,260 @@
+{
+  "actors": [
+    {
+      "id": "package:lib/controllers",
+      "name": "controllers",
+      "order": 1000
+    },
+    {
+      "id": "package:lib/models",
+      "name": "models",
+      "order": 2000
+    },
+    {
+      "id": "package:lib/database",
+      "name": "database",
+      "order": 3000
+    },
+    {
+      "id": "package:lib/views/users",
+      "name": "users",
+      "order": 4000
+    },
+    {
+      "id": "package:lib/views/posts",
+      "name": "posts",
+      "order": 5000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 3,
+      "callee": "package:lib/controllers",
+      "name": "list",
+      "static": false,
+      "digest": "b29f0c27feebf2a21f5af2e81e746a79d2d0caf24d017d364f205cb7a8af540e",
+      "subtreeDigest": "unknown",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "lib/controllers/UsersController#list",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "array"
+        },
+        "raisesException": false
+      },
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "package:lib/controllers",
+          "callee": "package:lib/models",
+          "name": "list",
+          "static": true,
+          "digest": "8eabb6fbdb259277ff89afbf755cbb0a349c94a39436532fb7c1d18c1478e842",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "lib/models/User.list",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "array"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:lib/models",
+              "callee": "package:lib/database",
+              "name": "query",
+              "static": true,
+              "digest": "f38424ccefa090e8f50bc23d085a4cc9fbda158b94efe53128a57f828c52b763",
+              "subtreeDigest": "unknown",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "lib/database/Database.query",
+                "raises_exception": false
+              },
+              "children": [],
+              "elapsed": 0.00000200001522898674,
+              "diffMode": 1
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:lib/models",
+              "callee": "package:lib/models",
+              "name": "find_for_users",
+              "static": true,
+              "digest": "9b97dd564165dd756c593ada3b840b66999934dca5acbbbeb32c8623a485b517",
+              "subtreeDigest": "unknown",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "lib/models/Post.find_for_users",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "object"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:lib/models",
+                  "callee": "package:lib/database",
+                  "name": "query",
+                  "static": true,
+                  "digest": "f38424ccefa090e8f50bc23d085a4cc9fbda158b94efe53128a57f828c52b763",
+                  "subtreeDigest": "unknown",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "lib/database/Database.query",
+                    "raises_exception": false
+                  },
+                  "children": [],
+                  "elapsed": 0.00000100000761449337
+                }
+              ],
+              "elapsed": 0.00005100015550851822,
+              "diffMode": 1
+            }
+          ],
+          "elapsed": 0.00036800000816583633
+        },
+        {
+          "nodeType": 3,
+          "caller": "package:lib/controllers",
+          "callee": "package:lib/views/users",
+          "name": "list",
+          "static": false,
+          "digest": "d2179770ca2e3be403731a09254a6e831587c4e825db8a3559de8a6a7660132e",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "lib/views/users/Views::Users::List#list",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "array"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 1,
+              "count": 5,
+              "digest": "loop",
+              "subtreeDigest": "unknown",
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:lib/views/users",
+                  "callee": "package:lib/models",
+                  "name": "posts",
+                  "static": false,
+                  "digest": "d5a2d2e7985d1e0fe85b9563c174d700d1a68567a29749ea471ac2582ff6326a",
+                  "subtreeDigest": "unknown",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "lib/models/User#posts",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "array"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:lib/models",
+                      "callee": "package:lib/models",
+                      "name": "find_for_user",
+                      "static": true,
+                      "digest": "delete:b49e3fc05bf13d51c05e4e88f56b275729b46e8739892d3610df5eb4f0229b5a",
+                      "subtreeDigest": "unknown",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "lib/models/Post.find_for_user",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "array"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [
+                        {
+                          "nodeType": 3,
+                          "caller": "package:lib/models",
+                          "callee": "package:lib/database",
+                          "name": "query",
+                          "static": true,
+                          "digest": "delete:f38424ccefa090e8f50bc23d085a4cc9fbda158b94efe53128a57f828c52b763",
+                          "subtreeDigest": "unknown",
+                          "stableProperties": {
+                            "event_type": "function",
+                            "id": "lib/database/Database.query",
+                            "raises_exception": false
+                          },
+                          "children": [],
+                          "elapsed": 0.00000100000761449337,
+                          "diffMode": 2
+                        }
+                      ],
+                      "elapsed": 0.00003900006413459778,
+                      "diffMode": 2
+                    }
+                  ],
+                  "elapsed": 0.00000100000761449337
+                },
+                {
+                  "nodeType": 1,
+                  "count": 2,
+                  "digest": "loop",
+                  "subtreeDigest": "unknown",
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:lib/views/users",
+                      "callee": "package:lib/views/posts",
+                      "name": "show",
+                      "static": false,
+                      "digest": "527c645f25eb9879f789e61d2b8b1b94c2a62a1c7a9747445c1e01e2abc00f23",
+                      "subtreeDigest": "unknown",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "lib/views/posts/Views::Posts::Show#show",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "string"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.0000019997823983430862
+                    }
+                  ],
+                  "elapsed": 0.0000029997900128364563
+                }
+              ],
+              "elapsed": 0.000022999942302703857
+            }
+          ],
+          "elapsed": 0.0005640001036226749
+        }
+      ],
+      "elapsed": 0.001401000190526247
+    }
+  ]
+}

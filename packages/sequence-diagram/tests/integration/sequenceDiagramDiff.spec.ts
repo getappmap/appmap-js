@@ -9,35 +9,54 @@ import {
   USER_NOT_FOUND_APPMAP,
   VERBOSE,
   checkPlantUMLEqual,
+  checkTextEqual,
 } from '../util';
-import { format } from '../../src/formatter/plantUML';
 import { join } from 'path';
+import format from '../../src/formatter';
+import { FormatType } from '../../src/types';
 
 describe('Sequence diagram diff', () => {
   describe('PlantUML', () => {
     describe('user found vs not found', () => {
-      it('matches expectation', async () => {
-        const baseDiagram = loadDiagram(USER_NOT_FOUND_APPMAP);
-        const headDiagram = loadDiagram(SHOW_USER_APPMAP);
-        const computedDiff = diff(baseDiagram, headDiagram, { verbose: VERBOSE });
-        const diffDiagram = buildDiffDiagram(computedDiff);
-        const plantUML = format(diffDiagram, 'diff.sequence.json');
+      const baseDiagram = loadDiagram(USER_NOT_FOUND_APPMAP);
+      const headDiagram = loadDiagram(SHOW_USER_APPMAP);
+      const computedDiff = diff(baseDiagram, headDiagram, { verbose: VERBOSE });
+      const diffDiagram = buildDiffDiagram(computedDiff);
+
+      it('UML matches expectation', async () => {
+        const { diagram } = format(FormatType.PlantUML, diffDiagram, 'computed diff');
         await checkPlantUMLEqual(
-          plantUML,
+          diagram,
           join(FIXTURE_DIR, 'sequenceDiagrams/userFoundVsNotFound.sequence.uml')
+        );
+      });
+
+      it('Text matches expectation', async () => {
+        const { diagram } = format(FormatType.Text, diffDiagram, 'computed diff');
+        await checkTextEqual(
+          diagram,
+          join(FIXTURE_DIR, 'sequenceDiagrams/userFoundVsNotFound.sequence.txt')
         );
       });
     });
     describe('list users vs list users with prefetch', () => {
-      it('matches expectation', async () => {
-        const baseDiagram = loadDiagram(LIST_USERS_APPMAP);
-        const headDiagram = loadDiagram(LIST_USERS_PREFETCH_APPMAP);
-        const computedDiff = diff(baseDiagram, headDiagram, { verbose: VERBOSE });
-        const diffDiagram = buildDiffDiagram(computedDiff);
-        const plantUML = format(diffDiagram, 'diff.sequence.json');
+      const baseDiagram = loadDiagram(LIST_USERS_APPMAP);
+      const headDiagram = loadDiagram(LIST_USERS_PREFETCH_APPMAP);
+      const computedDiff = diff(baseDiagram, headDiagram, { verbose: VERBOSE });
+      const diffDiagram = buildDiffDiagram(computedDiff);
+
+      it('UML matches expectation', async () => {
+        const { diagram } = format(FormatType.PlantUML, diffDiagram, 'computed diff');
         await checkPlantUMLEqual(
-          plantUML,
+          diagram,
           join(FIXTURE_DIR, 'sequenceDiagrams/listVsListWithPrefetch.sequence.uml')
+        );
+      });
+      it('Text matches expectation', async () => {
+        const { diagram } = format(FormatType.Text, diffDiagram, 'computed diff');
+        await checkTextEqual(
+          diagram,
+          join(FIXTURE_DIR, 'sequenceDiagrams/listVsListWithPrefetch.sequence.txt')
         );
       });
     });
