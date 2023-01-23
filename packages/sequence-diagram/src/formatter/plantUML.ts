@@ -133,12 +133,6 @@ class Label {
       tokens.push('--</back></color>');
     };
 
-    if (this.action.diffMode) {
-      console.log(this.action.diffMode);
-      console.log(label);
-      console.log(formerLabel);
-      console.log();
-    }
     if (this.action.diffMode === DiffMode.Change && label && formerLabel && label !== formerLabel) {
       const diff = diffChars(formerLabel, label);
       const changeCharsCount = diff.reduce(
