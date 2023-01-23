@@ -82,3 +82,23 @@ describe('openapi.method', () => {
     });
   });
 });
+
+// similar to https://github.com/getappmap/appmap-ruby/blob/master/spec/util_spec.rb#L21
+describe('basePath', () => {
+  it('simple path', async () => {
+    const path = Model.basePath('/api/users');
+    expect(path).toEqual('/api/users');
+  });
+  it('malformed parameter specs', async () => {
+    const path = Model.basePath('/org/o:rg_id');
+    expect(path).toEqual('/org/o:rg_id');
+  });
+  it('already swaggerized path', async () => {
+    const path = Model.basePath('/org/{org_id}');
+    expect(path).toEqual('/org/{org_id}');
+  });
+  it('ignores ( and ) to not create blank path', async () => {
+    const path = Model.basePath('(/locale/{locale})/api/users/{id}');
+    expect(path).toEqual('(/locale/{locale})/api/users/{id}');
+  });
+});

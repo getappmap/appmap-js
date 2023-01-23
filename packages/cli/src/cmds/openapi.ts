@@ -76,7 +76,7 @@ class OpenAPICommand {
       });
     } catch (e) {
       // Re-throwing this error crashes the whole process.
-      // So if these is a malformed AppMap, indicate it here but don't blow everything up.
+      // So if there is a malformed AppMap, indicate it here but don't blow everything up.
       // Do not write to stdout!
       let errorString: string;
       try {
