@@ -173,7 +173,7 @@ h1 {
 }
 
 article {
-  margin-bottom: 2.5em;
+  margin-bottom: 1.5em;
 }
 
 .center {

@@ -36,9 +36,9 @@
 
     <div class="project-picker-row__body">
       <template v-if="supported && isJetBrains && isJava">
-        <p class="mb20">
-          You're good to go! By using the AppMap plugin for IntelliJ, you don't need to install any
-          additional dependencies to your project.
+        <p class="mb20 success-message">
+          <strong>You're good to go!</strong> By using the AppMap plugin for IntelliJ, you don't
+          need to install any additional dependencies to your project.
         </p>
         <p>Continue on to the next step.</p>
         <v-navigation-buttons :first="true" :last="!supported" />
