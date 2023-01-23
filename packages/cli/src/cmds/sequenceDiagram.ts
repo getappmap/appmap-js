@@ -11,14 +11,15 @@ import {
   format as formatDiagram,
   Formatters,
 } from '@appland/sequence-diagram';
+import agentIsRecording from './record/state/agentIsRecording';
 
-export const command = 'sequence-diagram appmap';
+export const command = 'sequence-diagram <appmap...>';
 export const describe = 'Generate a sequence diagram for an AppMap';
 
 export const builder = (args: yargs.Argv) => {
   args.positional('appmap', {
     type: 'string',
-    demandOption: true,
+    array: true,
   });
 
   args.option('directory', {
@@ -31,7 +32,8 @@ export const builder = (args: yargs.Argv) => {
   });
   args.option('format', {
     describe: 'output format',
-    choices: ['plantuml', 'json'],
+    alias: 'f',
+    choices: ['plantuml', 'json', 'text'],
     default: 'plantuml',
   });
 
@@ -58,30 +60,38 @@ export const handler = async (argv: any) => {
     return;
   }
 
-  const appmapData = JSON.parse(await readFile(argv.appmap, 'utf-8'));
-  const appmap = buildAppMap().source(appmapData).build();
+  const generateDiagram = async (appmapFileName: string): Promise<void> => {
+    const appmapData = JSON.parse(await readFile(appmapFileName, 'utf-8'));
+    const appmap = buildAppMap().source(appmapData).build();
 
-  const specOptions = {} as SequenceDiagramOptions;
-  if (argv.exclude && argv.exclude.length > 0) specOptions.exclude = argv.exclude;
+    const specOptions = {} as SequenceDiagramOptions;
+    if (argv.exclude)
+      specOptions.exclude = Array.isArray(argv.exclude) ? argv.exclude : [argv.exclude];
 
-  const specification = Specification.build(appmap, specOptions);
+    const specification = Specification.build(appmap, specOptions);
 
-  const diagram = buildDiagram(argv.appmap, appmap, specification);
-  const template = formatDiagram(argv.format, diagram, argv.appmap);
+    const diagram = buildDiagram(appmapFileName, appmap, specification);
+    const template = formatDiagram(argv.format, diagram, appmapFileName);
 
-  if (argv.outputDir) await mkdir(argv.outputDir, { recursive: true });
+    if (argv.outputDir) await mkdir(argv.outputDir, { recursive: true });
 
-  const outputFileName = [
-    basename(argv.appmap, '.appmap.json'),
-    '.sequence',
-    template.extension,
-  ].join('');
+    const outputFileName = [
+      basename(appmapFileName, '.appmap.json'),
+      '.sequence',
+      template.extension,
+    ].join('');
 
-  let outputPath: string;
-  if (argv.outputDir) outputPath = join(argv.outputDir, outputFileName);
-  else outputPath = join(dirname(argv.appmap), outputFileName);
+    let outputPath: string;
+    if (argv.outputDir) outputPath = join(argv.outputDir, outputFileName);
+    else outputPath = join(dirname(appmapFileName), outputFileName);
 
-  await writeFile(outputPath, template.diagram);
+    await writeFile(outputPath, template.diagram);
 
-  console.log(`Printed diagram ${outputPath}`);
+    console.log(`Printed diagram ${outputPath}`);
+  };
+
+  for (let i = 0; i < argv.appmap.length; i++) {
+    const appmapFile = argv.appmap[i];
+    await generateDiagram(appmapFile);
+  }
 };
