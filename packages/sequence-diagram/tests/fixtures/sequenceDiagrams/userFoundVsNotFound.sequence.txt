@@ -1,0 +1,7 @@
+changed function call `models.find` to return object instead of exception!
+  added function call `database.query`
+added function call `users#show`
+  added function call `models#posts`
+    added function call `models.find_for_user`
+  added loop
+    added function call `posts#show`
