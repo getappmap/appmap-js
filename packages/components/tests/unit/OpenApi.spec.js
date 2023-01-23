@@ -8,7 +8,7 @@ describe('OpenApi.vue', () => {
   describe('with appmaps', () => {
     beforeEach(() => {
       wrapper = mount(OpenApi, {
-        propsData: { numHttpRequests: 10, numAppMaps: 10 },
+        propsData: { numHttpRequests: 10, numAppMaps: 10, userAuthenticated: true },
         stubs: {
           'v-navigation': true,
         },
@@ -26,7 +26,7 @@ describe('OpenApi.vue', () => {
   describe('without appmaps', () => {
     beforeEach(() => {
       wrapper = mount(OpenApi, {
-        propsData: { numHttpRequests: 0, numAppMaps: 0 },
+        propsData: { numHttpRequests: 0, numAppMaps: 0, userAuthenticated: true },
         stubs: {
           'v-navigation': true,
         },
@@ -40,6 +40,24 @@ describe('OpenApi.vue', () => {
       wrapper.get('[data-cy="record-appmaps"]').trigger('click');
       expect(rootWrapper.emitted()[event]).toBeArrayOfSize(1);
       expect(rootWrapper.emitted()[event][0]).toContain('record-appmaps');
+    });
+  });
+
+  describe('not logged in', () => {
+    beforeEach(() => {
+      wrapper = mount(OpenApi, {
+        propsData: { userAuthenticated: false },
+        stubs: {
+          'v-navigation': true,
+        },
+      });
+      rootWrapper = createWrapper(wrapper.vm.$root);
+    });
+
+    it('it emits an event when the sign in button is clicked', () => {
+      expect(rootWrapper.emitted()['perform-auth']).toBeUndefined();
+      wrapper.get('[data-cy="auth-button"]').trigger('click');
+      expect(rootWrapper.emitted()['perform-auth']).toBeArrayOfSize(1);
     });
   });
 });

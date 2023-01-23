@@ -15,6 +15,11 @@ function story(args) {
   return fun;
 }
 
-export const Active = story({ numAppMaps: 42, numHttpRequests: 31 });
-export const NoHttpRequests = story({ numAppMaps: 42, numHttpRequests: 0 });
-export const NoAppmaps = story({ numAppMaps: 0 });
+export const Active = story({ numAppMaps: 42, numHttpRequests: 31, userAuthenticated: true });
+export const NoHttpRequests = story({
+  numAppMaps: 42,
+  numHttpRequests: 0,
+  userAuthenticated: true,
+});
+export const NoAppmaps = story({ numAppMaps: 0, userAuthenticated: true });
+export const NotLoggedIn = story({ userAuthenticated: false });
