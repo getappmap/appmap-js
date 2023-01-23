@@ -6,7 +6,10 @@ import {
   buildDiffDiagram,
   Action,
 } from '@appland/sequence-diagram';
+import { verbose } from '../utils';
 import { buildActionName } from './buildActionName';
+
+const UniqueActionNames = new Set<string>();
 
 class IncludeFilter {
   expressions: RegExp[] = [];
@@ -21,8 +24,16 @@ class IncludeFilter {
     let ancestor: Action | undefined = action;
     while (ancestor) {
       const actionName = buildActionName(ancestor);
-      if (actionName && this.expressions.find((expr) => expr.test(actionName))) {
-        return true;
+      if (verbose()) {
+        if (actionName && !UniqueActionNames.has(actionName)) {
+          console.log(`Testing action: ${actionName}`);
+          UniqueActionNames.add(actionName);
+        }
+      }
+      if (actionName) {
+        if (this.expressions.find((expr) => expr.test(actionName))) {
+          return true;
+        }
       }
       ancestor = ancestor.parent;
     }
