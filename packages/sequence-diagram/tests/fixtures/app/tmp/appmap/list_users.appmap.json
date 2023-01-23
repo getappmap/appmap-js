@@ -12,7 +12,7 @@
       "receiver": {
         "class": "UsersController",
         "object_id": 2360,
-        "value": "#<UsersController:0x000000014e13e5a8>"
+        "value": "#<UsersController:0x00007f8d1bc56818>"
       }
     },
     {
@@ -84,18 +84,18 @@
       "thread_id": 2380,
       "parent_id": 3,
       "elapsed": 0.00000100000761449337,
-      "elapsed_instrumentation": 0.00003899994771927595
+      "elapsed_instrumentation": 0.00008299993351101875
     },
     {
       "id": 5,
       "event": "return",
       "thread_id": 2380,
       "parent_id": 2,
-      "elapsed": 0.00004900002386420965,
-      "elapsed_instrumentation": 0.00007999996887519956,
+      "elapsed": 0.00010200007818639278,
+      "elapsed_instrumentation": 0.0001880002673715353,
       "return_value": {
         "class": "Array",
-        "value": "[#<User:0x000000013b021818>, #<User:0x000000013b021700>, #<User:0x000000013b0214f8>, #<User:0x000000013b0213e0>, #<User:0x000000013b020968>]",
+        "value": "[#<User:0x00007f8cfd232d00>, #<User:0x00007f8cfd232c38>, #<User:0x00007f8cfd232b98>, #<User:0x00007f8cfd232af8>, #<User:0x00007f8cfd232a58>]",
         "object_id": 2460,
         "size": 5
       }
@@ -112,7 +112,7 @@
       "receiver": {
         "class": "Views::Users::List",
         "object_id": 2480,
-        "value": "#<Views::Users::List:0x000000013b08dcc0>"
+        "value": "#<Views::Users::List:0x00007f8d1bc5c9e8>"
       }
     },
     {
@@ -127,7 +127,7 @@
       "receiver": {
         "class": "User",
         "object_id": 2500,
-        "value": "#<User:0x000000013b021818>"
+        "value": "#<User:0x00007f8cfd232d00>"
       }
     },
     {
@@ -184,18 +184,18 @@
       "thread_id": 2380,
       "parent_id": 9,
       "elapsed": 0.00000100000761449337,
-      "elapsed_instrumentation": 0.000012999982573091984
+      "elapsed_instrumentation": 0.000027999980375170708
     },
     {
       "id": 11,
       "event": "return",
       "thread_id": 2380,
       "parent_id": 8,
-      "elapsed": 0.000017000013031065464,
-      "elapsed_instrumentation": 0.000036999990697950125,
+      "elapsed": 0.00003900006413459778,
+      "elapsed_instrumentation": 0.00006999983452260494,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000014b1f9518>, #<Post:0x000000014b1f3488>]",
+        "value": "[#<Post:0x00007f8cfd21a868>, #<Post:0x00007f8cfd21a778>]",
         "object_id": 2560,
         "size": 2
       }
@@ -205,11 +205,11 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 7,
-      "elapsed": 0.000057999975979328156,
-      "elapsed_instrumentation": 0.00003100000321865082,
+      "elapsed": 0.00011999998241662979,
+      "elapsed_instrumentation": 0.00006200000643730164,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000014b1f9518>, #<Post:0x000000014b1f3488>]",
+        "value": "[#<Post:0x00007f8cfd21a868>, #<Post:0x00007f8cfd21a778>]",
         "object_id": 2560,
         "size": 2
       }
@@ -226,7 +226,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2580,
-        "value": "#<Views::Posts::Show:0x000000013b06ce30>"
+        "value": "#<Views::Posts::Show:0x00007f8d1bc647b0>"
       }
     },
     {
@@ -234,8 +234,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 13,
-      "elapsed": 0.00000100000761449337,
-      "elapsed_instrumentation": 0.00003200001083314419,
+      "elapsed": 0.00000200001522898674,
+      "elapsed_instrumentation": 0.00006599980406463146,
       "return_value": {
         "class": "String",
         "value": "first post",
@@ -254,7 +254,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2620,
-        "value": "#<Views::Posts::Show:0x000000013b05a0c8>"
+        "value": "#<Views::Posts::Show:0x00007f8d1bc6f840>"
       }
     },
     {
@@ -262,8 +262,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 15,
-      "elapsed": 0,
-      "elapsed_instrumentation": 0.000013000040780752897,
+      "elapsed": 0.00000100000761449337,
+      "elapsed_instrumentation": 0.000027999980375170708,
       "return_value": {
         "class": "String",
         "value": "second post",
@@ -282,7 +282,7 @@
       "receiver": {
         "class": "User",
         "object_id": 2660,
-        "value": "#<User:0x000000013b021700>"
+        "value": "#<User:0x00007f8cfd232c38>"
       }
     },
     {
@@ -339,18 +339,18 @@
       "thread_id": 2380,
       "parent_id": 19,
       "elapsed": 0.00000100000761449337,
-      "elapsed_instrumentation": 0.000009999959729611874
+      "elapsed_instrumentation": 0.000017999904230237007
     },
     {
       "id": 21,
       "event": "return",
       "thread_id": 2380,
       "parent_id": 18,
-      "elapsed": 0.000013999990187585354,
-      "elapsed_instrumentation": 0.000018000020645558834,
+      "elapsed": 0.000025999965146183968,
+      "elapsed_instrumentation": 0.000037999823689460754,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000014b1eb378>, #<Post:0x000000014b1c0ad8>]",
+        "value": "[#<Post:0x00007f8cfd21a688>, #<Post:0x00007f8cfd21a5c0>]",
         "object_id": 2720,
         "size": 2
       }
@@ -360,11 +360,11 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 17,
-      "elapsed": 0.0000350000336766243,
-      "elapsed_instrumentation": 0.000013999990187585354,
+      "elapsed": 0.00006899982690811157,
+      "elapsed_instrumentation": 0.00002700020559132099,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000014b1eb378>, #<Post:0x000000014b1c0ad8>]",
+        "value": "[#<Post:0x00007f8cfd21a688>, #<Post:0x00007f8cfd21a5c0>]",
         "object_id": 2720,
         "size": 2
       }
@@ -381,7 +381,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2740,
-        "value": "#<Views::Posts::Show:0x000000013b054088>"
+        "value": "#<Views::Posts::Show:0x00007f8d1bc6c078>"
       }
     },
     {
@@ -389,8 +389,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 23,
-      "elapsed": 0,
-      "elapsed_instrumentation": 0.000009999959729611874,
+      "elapsed": 0.00000100000761449337,
+      "elapsed_instrumentation": 0.00002100015990436077,
       "return_value": {
         "class": "String",
         "value": "first post",
@@ -409,7 +409,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2780,
-        "value": "#<Views::Posts::Show:0x000000013b03dae0>"
+        "value": "#<Views::Posts::Show:0x00007f8d1bc77478>"
       }
     },
     {
@@ -417,8 +417,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 25,
-      "elapsed": 0,
-      "elapsed_instrumentation": 0.000010000017937272787,
+      "elapsed": 0.00000100000761449337,
+      "elapsed_instrumentation": 0.000019999919459223747,
       "return_value": {
         "class": "String",
         "value": "second post",
@@ -437,7 +437,7 @@
       "receiver": {
         "class": "User",
         "object_id": 2820,
-        "value": "#<User:0x000000013b0214f8>"
+        "value": "#<User:0x00007f8cfd232b98>"
       }
     },
     {
@@ -494,18 +494,18 @@
       "thread_id": 2380,
       "parent_id": 29,
       "elapsed": 0,
-      "elapsed_instrumentation": 0.000011000025551766157
+      "elapsed_instrumentation": 0.00002300017513334751
     },
     {
       "id": 31,
       "event": "return",
       "thread_id": 2380,
       "parent_id": 28,
-      "elapsed": 0.00010300002759322524,
-      "elapsed_instrumentation": 0.00001899997005239129,
+      "elapsed": 0.00002800021320581436,
+      "elapsed_instrumentation": 0.00003900006413459778,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000014b1b8360>, #<Post:0x000000014b189290>, #<Post:0x000000014b189038>]",
+        "value": "[#<Post:0x00007f8cfd21a4d0>, #<Post:0x00007f8cfd21a408>, #<Post:0x00007f8cfd21a340>]",
         "object_id": 2880,
         "size": 3
       }
@@ -515,11 +515,11 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 27,
-      "elapsed": 0.00012500002048909664,
-      "elapsed_instrumentation": 0.000016000005416572094,
+      "elapsed": 0.0000730000901967287,
+      "elapsed_instrumentation": 0.000041999854147434235,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000014b1b8360>, #<Post:0x000000014b189290>, #<Post:0x000000014b189038>]",
+        "value": "[#<Post:0x00007f8cfd21a4d0>, #<Post:0x00007f8cfd21a408>, #<Post:0x00007f8cfd21a340>]",
         "object_id": 2880,
         "size": 3
       }
@@ -536,7 +536,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2900,
-        "value": "#<Views::Posts::Show:0x000000013b0fd818>"
+        "value": "#<Views::Posts::Show:0x00007f8d1bc7f8d0>"
       }
     },
     {
@@ -544,8 +544,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 33,
-      "elapsed": 0,
-      "elapsed_instrumentation": 0.000011999974958598614,
+      "elapsed": 0.00000100000761449337,
+      "elapsed_instrumentation": 0.000018999911844730377,
       "return_value": {
         "class": "String",
         "value": "first post",
@@ -564,7 +564,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2940,
-        "value": "#<Views::Posts::Show:0x000000013b0fc260>"
+        "value": "#<Views::Posts::Show:0x00007f8d1bc7ed18>"
       }
     },
     {
@@ -573,7 +573,7 @@
       "thread_id": 2380,
       "parent_id": 35,
       "elapsed": 0.00000100000761449337,
-      "elapsed_instrumentation": 0.000008999952115118504,
+      "elapsed_instrumentation": 0.000019999919459223747,
       "return_value": {
         "class": "String",
         "value": "second post",
@@ -592,7 +592,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 2980,
-        "value": "#<Views::Posts::Show:0x000000013b0fa690>"
+        "value": "#<Views::Posts::Show:0x00007f8d1bc7e160>"
       }
     },
     {
@@ -601,7 +601,7 @@
       "thread_id": 2380,
       "parent_id": 37,
       "elapsed": 0.00000100000761449337,
-      "elapsed_instrumentation": 0.000009000010322779417,
+      "elapsed_instrumentation": 0.00001700012944638729,
       "return_value": {
         "class": "String",
         "value": "third post",
@@ -620,7 +620,7 @@
       "receiver": {
         "class": "User",
         "object_id": 3020,
-        "value": "#<User:0x000000013b0213e0>"
+        "value": "#<User:0x00007f8cfd232af8>"
       }
     },
     {
@@ -677,18 +677,18 @@
       "thread_id": 2380,
       "parent_id": 41,
       "elapsed": 0.00000100000761449337,
-      "elapsed_instrumentation": 0.000010000017937272787
+      "elapsed_instrumentation": 0.000019999919459223747
     },
     {
       "id": 43,
       "event": "return",
       "thread_id": 2380,
       "parent_id": 40,
-      "elapsed": 0.000013000040780752897,
-      "elapsed_instrumentation": 0.00001599994720891118,
+      "elapsed": 0.000045000109821558,
+      "elapsed_instrumentation": 0.000031999778002500534,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000014b188e80>, #<Post:0x000000014b188d18>]",
+        "value": "[#<Post:0x00007f8cfd21a250>, #<Post:0x00007f8cfd21a188>]",
         "object_id": 3080,
         "size": 2
       }
@@ -698,11 +698,11 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 39,
-      "elapsed": 0.00003100000321865082,
-      "elapsed_instrumentation": 0.000012999982573091984,
+      "elapsed": 0.00008099991828203201,
+      "elapsed_instrumentation": 0.00002500019036233425,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000014b188e80>, #<Post:0x000000014b188d18>]",
+        "value": "[#<Post:0x00007f8cfd21a250>, #<Post:0x00007f8cfd21a188>]",
         "object_id": 3080,
         "size": 2
       }
@@ -719,7 +719,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 3100,
-        "value": "#<Views::Posts::Show:0x000000013b0f60e0>"
+        "value": "#<Views::Posts::Show:0x00007f8d1bc86978>"
       }
     },
     {
@@ -727,8 +727,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 45,
-      "elapsed": 0,
-      "elapsed_instrumentation": 0.000010999967344105244,
+      "elapsed": 0.00000100000761449337,
+      "elapsed_instrumentation": 0.000018999911844730377,
       "return_value": {
         "class": "String",
         "value": "first post",
@@ -747,7 +747,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 3140,
-        "value": "#<Views::Posts::Show:0x000000013b0f5028>"
+        "value": "#<Views::Posts::Show:0x00007f8d1bc85dc0>"
       }
     },
     {
@@ -755,8 +755,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 47,
-      "elapsed": 0,
-      "elapsed_instrumentation": 0.000011000025551766157,
+      "elapsed": 0.00000100000761449337,
+      "elapsed_instrumentation": 0.000020999927073717117,
       "return_value": {
         "class": "String",
         "value": "second post",
@@ -775,7 +775,7 @@
       "receiver": {
         "class": "User",
         "object_id": 3180,
-        "value": "#<User:0x000000013b020968>"
+        "value": "#<User:0x00007f8cfd232a58>"
       }
     },
     {
@@ -832,18 +832,18 @@
       "thread_id": 2380,
       "parent_id": 51,
       "elapsed": 0.00000100000761449337,
-      "elapsed_instrumentation": 0.000009999959729611874
+      "elapsed_instrumentation": 0.000018999911844730377
     },
     {
       "id": 53,
       "event": "return",
       "thread_id": 2380,
       "parent_id": 50,
-      "elapsed": 0.000012999982573091984,
-      "elapsed_instrumentation": 0.000016000005416572094,
+      "elapsed": 0.000024999957531690598,
+      "elapsed_instrumentation": 0.000042999861761927605,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000014b188bd8>, #<Post:0x000000014b188a70>]",
+        "value": "[#<Post:0x00007f8cfd21a098>, #<Post:0x00007f8cfd219fd0>]",
         "object_id": 3240,
         "size": 2
       }
@@ -853,11 +853,11 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 49,
-      "elapsed": 0.00003100000321865082,
-      "elapsed_instrumentation": 0.000013999990187585354,
+      "elapsed": 0.00007199984975159168,
+      "elapsed_instrumentation": 0.00002700020559132099,
       "return_value": {
         "class": "Array",
-        "value": "[#<Post:0x000000014b188bd8>, #<Post:0x000000014b188a70>]",
+        "value": "[#<Post:0x00007f8cfd21a098>, #<Post:0x00007f8cfd219fd0>]",
         "object_id": 3240,
         "size": 2
       }
@@ -874,7 +874,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 3260,
-        "value": "#<Views::Posts::Show:0x000000013b0f0258>"
+        "value": "#<Views::Posts::Show:0x00007f8d1bc8e5d8>"
       }
     },
     {
@@ -883,7 +883,7 @@
       "thread_id": 2380,
       "parent_id": 55,
       "elapsed": 0,
-      "elapsed_instrumentation": 0.000011000025551766157,
+      "elapsed_instrumentation": 0.000021999934688210487,
       "return_value": {
         "class": "String",
         "value": "first post",
@@ -902,7 +902,7 @@
       "receiver": {
         "class": "Views::Posts::Show",
         "object_id": 3300,
-        "value": "#<Views::Posts::Show:0x000000013b0ef470>"
+        "value": "#<Views::Posts::Show:0x00007f8d1bc8da20>"
       }
     },
     {
@@ -910,8 +910,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 57,
-      "elapsed": 9.999494068324566e-7,
-      "elapsed_instrumentation": 0.000010000017937272787,
+      "elapsed": 0.00000100000761449337,
+      "elapsed_instrumentation": 0.00001800013706088066,
       "return_value": {
         "class": "String",
         "value": "second post",
@@ -923,8 +923,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 6,
-      "elapsed": 0.000547999981790781,
-      "elapsed_instrumentation": 0.00009300000965595245,
+      "elapsed": 0.0009800000116229057,
+      "elapsed_instrumentation": 0.0001960000954568386,
       "return_value": {
         "class": "Array",
         "value": "[{:id=>1, :login=>alice, :posts=>[first post, second post]}, {:id=>2, :login=>bob, :posts=>[first post, second post]}, {:id=>3, :login=>charles, :posts=>[first post, second post, third post]}, {:id=>4, :login=>dan, :posts=>[first post, second post]}, {:id=>5, :login=>ed, :posts=>[first post, second post]}]",
@@ -937,8 +937,8 @@
       "event": "return",
       "thread_id": 2380,
       "parent_id": 1,
-      "elapsed": 0.0007829999667592347,
-      "elapsed_instrumentation": 0.0001300000585615635,
+      "elapsed": 0.0014929999597370625,
+      "elapsed_instrumentation": 0.00030399998649954796,
       "return_value": {
         "class": "Array",
         "value": "[[{:id=>1, :login=>alice, :posts=>[first post, second post]}, {:id=>2, :login=>bob, :posts=>[first post, second post]}, {:id=>3, :login=>charles, :posts=>[first post, second post, third post]}, {:id=>4, :login=>dan, :posts=>[first post, second post]}, {:id=>5, :login=>ed, :posts=>[first post, second post]}], 200]",
@@ -957,14 +957,15 @@
     "client": {
       "name": "appmap",
       "url": "https://github.com/applandinc/appmap-ruby",
-      "version": "0.94.1"
+      "version": "0.93.3"
     },
     "git": {
       "repository": "git@github.com:getappmap/appmap-js.git",
-      "branch": "feat/improve-diff",
-      "commit": "9257655166378e1a2bc9820f4261390cf3efd839",
+      "branch": "feat/seq-diagram-diff-text",
+      "commit": "2a33cdbced07daf994f1d831d43d1953701f8806",
       "status": [
-        "M ../../../src/formatter/plantUML.ts",
+        "M ../../../../cli/src/cmds/sequenceDiagram.ts",
+        "M ../../../src/specification.ts",
         "M Rakefile",
         "M tmp/appmap/list_users.appmap.json",
         "M tmp/appmap/list_users.sequence.uml",
@@ -974,93 +975,93 @@
         "M tmp/appmap/show_user.sequence.uml",
         "M tmp/appmap/user_not_found.appmap.json",
         "M tmp/appmap/user_not_found.sequence.uml",
+        "M ../sequenceDiagrams/listVsListWithPrefetch.sequence.png",
         "M ../sequenceDiagrams/listVsListWithPrefetch.sequence.svg",
         "M ../sequenceDiagrams/listVsListWithPrefetch.sequence.uml",
+        "M ../sequenceDiagrams/userFoundVsNotFound.sequence.png",
         "M ../sequenceDiagrams/userFoundVsNotFound.sequence.svg",
         "M ../sequenceDiagrams/userFoundVsNotFound.sequence.uml",
-        "M ../../integration/sequenceDiagram.spec.ts",
-        "M ../../integration/sequenceDiagramDiff.spec.ts",
         "M ../../util.ts",
         "?? ../../../../../appmap.yml",
-        "?? ../../../../cli/tmp/",
-        "?? ../sequenceDiagrams/listVsListWithPrefetch.sequence.png",
-        "?? ../sequenceDiagrams/userFoundVsNotFound.sequence.png"
+        "?? ../../../../cli/patch",
+        "?? ../../../../cli/seq_diagram_diff_text.txt",
+        "?? ../../../appmap.yml"
       ],
       "git_last_annotated_tag": "@appland/scanner-latest",
-      "git_last_tag": "@appland/scanner-v1.74.0",
+      "git_last_tag": "@appland/openapi-v1.3.1",
       "git_commits_since_last_annotated_tag": 0,
       "git_commits_since_last_tag": 0
     },
     "name": "list_users",
     "fingerprints": [
       {
-        "appmap_digest": "bff27db1a9a50d8db92be3df473ebaffc494c98fb96f760446a3a460379a4aa0",
+        "appmap_digest": "37df8c1e28c4fc77cd15f23350a99e4e10b72f7103748880c9735d384ac292fd",
         "canonicalization_algorithm": "classDependencies",
         "digest": "3b39770fcfc30536e1a3bdc79ecf5c31fa99f53301e4a2fab3291dbcd806e8f2",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bff27db1a9a50d8db92be3df473ebaffc494c98fb96f760446a3a460379a4aa0",
+        "appmap_digest": "37df8c1e28c4fc77cd15f23350a99e4e10b72f7103748880c9735d384ac292fd",
         "canonicalization_algorithm": "classes",
         "digest": "2ecf2b1c1e7f388a5dc03bb2ce1c3f01053acf9e11b1c7da5539e789da808906",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bff27db1a9a50d8db92be3df473ebaffc494c98fb96f760446a3a460379a4aa0",
+        "appmap_digest": "37df8c1e28c4fc77cd15f23350a99e4e10b72f7103748880c9735d384ac292fd",
         "canonicalization_algorithm": "httpClientRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bff27db1a9a50d8db92be3df473ebaffc494c98fb96f760446a3a460379a4aa0",
+        "appmap_digest": "37df8c1e28c4fc77cd15f23350a99e4e10b72f7103748880c9735d384ac292fd",
         "canonicalization_algorithm": "httpServerRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bff27db1a9a50d8db92be3df473ebaffc494c98fb96f760446a3a460379a4aa0",
+        "appmap_digest": "37df8c1e28c4fc77cd15f23350a99e4e10b72f7103748880c9735d384ac292fd",
         "canonicalization_algorithm": "info",
         "digest": "315bee001fe183b68e8d85d6fb832631855af9bcc6c79e314feeef5bd4b21a5c",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bff27db1a9a50d8db92be3df473ebaffc494c98fb96f760446a3a460379a4aa0",
+        "appmap_digest": "37df8c1e28c4fc77cd15f23350a99e4e10b72f7103748880c9735d384ac292fd",
         "canonicalization_algorithm": "labels",
         "digest": "0ca5b47511f3b855831e75006ed5b6711cd4d3498b422466a478dfc76b41b69c",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bff27db1a9a50d8db92be3df473ebaffc494c98fb96f760446a3a460379a4aa0",
+        "appmap_digest": "37df8c1e28c4fc77cd15f23350a99e4e10b72f7103748880c9735d384ac292fd",
         "canonicalization_algorithm": "packageDependencies",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bff27db1a9a50d8db92be3df473ebaffc494c98fb96f760446a3a460379a4aa0",
+        "appmap_digest": "37df8c1e28c4fc77cd15f23350a99e4e10b72f7103748880c9735d384ac292fd",
         "canonicalization_algorithm": "packages",
         "digest": "534778405b9871993d79f5edbb7079ebefb71feaf9edc6743e5ec2f743ee656a",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bff27db1a9a50d8db92be3df473ebaffc494c98fb96f760446a3a460379a4aa0",
+        "appmap_digest": "37df8c1e28c4fc77cd15f23350a99e4e10b72f7103748880c9735d384ac292fd",
         "canonicalization_algorithm": "sqlNormalized",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bff27db1a9a50d8db92be3df473ebaffc494c98fb96f760446a3a460379a4aa0",
+        "appmap_digest": "37df8c1e28c4fc77cd15f23350a99e4e10b72f7103748880c9735d384ac292fd",
         "canonicalization_algorithm": "sqlTables",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bff27db1a9a50d8db92be3df473ebaffc494c98fb96f760446a3a460379a4aa0",
+        "appmap_digest": "37df8c1e28c4fc77cd15f23350a99e4e10b72f7103748880c9735d384ac292fd",
         "canonicalization_algorithm": "trace",
         "digest": "2281da0de3fa0257cfb313dcf6f424db57a0b9fd189b17d376978fd00cb7d3b9",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bff27db1a9a50d8db92be3df473ebaffc494c98fb96f760446a3a460379a4aa0",
+        "appmap_digest": "37df8c1e28c4fc77cd15f23350a99e4e10b72f7103748880c9735d384ac292fd",
         "canonicalization_algorithm": "update",
         "digest": "315bee001fe183b68e8d85d6fb832631855af9bcc6c79e314feeef5bd4b21a5c",
         "fingerprint_algorithm": "sha256"
