@@ -19,10 +19,17 @@ task :build do
       end
     end
 
-    run_program %(node ./built/cli.js sequence-diagram-diff -d #{dirname} --output-dir ../sequenceDiagrams tmp/appmap/list_users.sequence.json tmp/appmap/list_users_prefetch.sequence.json)
-    FileUtils.mv [ dirname, '../sequenceDiagrams/diff.uml' ].join('/'), [ dirname, '../sequenceDiagrams/listVsListWithPrefetch.sequence.uml' ].join('/')
-    run_program %(node ./built/cli.js sequence-diagram-diff -d #{dirname} --output-dir ../sequenceDiagrams tmp/appmap/user_not_found.sequence.json tmp/appmap/show_user.sequence.json)
-    FileUtils.mv [ dirname, '../sequenceDiagrams/diff.uml' ].join('/'), [ dirname, '../sequenceDiagrams/userFoundVsNotFound.sequence.uml' ].join('/')
+    %w{json plantuml text}.each do |format|
+      extension = {
+        "json" => "json",
+        "plantuml" => "uml",
+        "text" => "txt",
+      }[format]
+      run_program %(node ./built/cli.js sequence-diagram-diff -d #{dirname} -f #{format} --output-dir ../sequenceDiagrams tmp/appmap/list_users.sequence.json tmp/appmap/list_users_prefetch.sequence.json)
+      FileUtils.mv [dirname, "../sequenceDiagrams/diff.#{extension}"].join("/"), [dirname, "../sequenceDiagrams/listVsListWithPrefetch.sequence.#{extension}"].join("/")
+      run_program %(node ./built/cli.js sequence-diagram-diff -d #{dirname} -f #{format} --output-dir ../sequenceDiagrams tmp/appmap/user_not_found.sequence.json tmp/appmap/show_user.sequence.json)
+      FileUtils.mv [dirname, "../sequenceDiagrams/diff.#{extension}"].join("/"), [dirname, "../sequenceDiagrams/userFoundVsNotFound.sequence.#{extension}"].join("/")
+    end
   end
   %w{png svg}.each do |format|
     run_program %(java -jar ../plantuml-1.2022.8.jar -t#{format} tmp/appmap/*.uml)

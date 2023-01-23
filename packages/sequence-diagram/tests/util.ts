@@ -62,7 +62,16 @@ export async function checkPlantUMLEqual(
   );
 }
 
-export function loadDiagram(appmap: AppMap, options: SequenceDiagramOptions = {}): Diagram {
+export async function checkTextEqual(actualData: string, expectedFileName: string): Promise<void> {
+  assert.strictEqual(
+    normalizeFile(actualData),
+    normalizeFile(await readFile(expectedFileName, 'utf-8'))
+  );
+}
+export function loadDiagram(
+  appmap: AppMap,
+  options: SequenceDiagramOptions = { loops: true }
+): Diagram {
   const specification = Specification.build(appmap, options);
   return buildDiagram(SHOW_USER_APPMAP_FILE, appmap, specification);
 }
@@ -75,9 +84,10 @@ export function findActor(diagram: Diagram, id: string): Actor {
 
 export function findAction(
   diagram: AppMap | Diagram,
-  test: (action: Action) => boolean
+  test: (action: Action) => boolean,
+  options: SequenceDiagramOptions = { loops: true }
 ): Action | undefined {
-  if (diagram.constructor === AppMap) diagram = loadDiagram(diagram);
+  if (diagram.constructor === AppMap) diagram = loadDiagram(diagram, options);
 
   const matchAction = (action: Action): Action | undefined => {
     if (test(action)) return action;

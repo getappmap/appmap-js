@@ -196,9 +196,10 @@ export { buildDiagram, buildDiffDiagram, diff };
 export enum FormatType {
   JSON = 'json',
   PlantUML = 'plantuml',
+  Text = 'text',
 }
 
-export const Formatters = [FormatType.JSON, FormatType.PlantUML];
+export const Formatters = [FormatType.JSON, FormatType.PlantUML, FormatType.Text];
 
 import format from './formatter';
 export { format };

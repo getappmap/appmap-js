@@ -1,0 +1,4 @@
+added function call `database.query`
+added function call `models.find_for_users`
+removed function call `models.find_for_user`
+  removed function call `database.query`
