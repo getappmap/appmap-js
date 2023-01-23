@@ -36,12 +36,14 @@
 
     <div class="project-picker-row__body">
       <template v-if="supported && isJetBrains && isJava">
-        <p class="mb20 success-message">
-          <strong>You're good to go!</strong> By using the AppMap plugin for IntelliJ, you don't
-          need to install any additional dependencies to your project.
+        <p class="mb20 status-message">
+          <strong>Success!</strong> By using the AppMap plugin for IntelliJ, you don't need to
+          install any additional dependencies to your project.
         </p>
-        <p>Continue on to the next step.</p>
-        <v-navigation-buttons :first="true" :last="!supported" />
+        <div class="page-control-wrap">
+          <p>Continue on to the next step.</p>
+          <v-navigation-buttons :first="true" :last="!supported" />
+        </div>
       </template>
       <template v-else-if="supported">
         You're almost done! Install AppMap as a development dependency in your project. Click the
@@ -223,6 +225,12 @@ export default {
 <style lang="scss" scoped>
 $brightblue: rgba(255, 255, 255, 0.1);
 
+.page-control-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
 .project-picker-row {
   border-bottom: 1px solid lighten($gray2, 15);
   padding: 0;
@@ -235,6 +243,12 @@ $brightblue: rgba(255, 255, 255, 0.1);
   &__body {
     padding: 1rem 0;
     border-top: 1px solid lighten($gray2, 15);
+
+    .status-message {
+      border-radius: 0.5rem;
+      background-color: #69ad34;
+      padding: 0.5rem;
+    }
   }
   &__nav {
     display: flex;

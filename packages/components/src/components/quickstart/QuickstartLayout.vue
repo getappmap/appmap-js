@@ -137,7 +137,6 @@ body {
   margin-bottom: 12px;
   background: $gray2;
   filter: $shadow-tile;
-  //max-width: 900px;
   border-radius: 8px;
   margin: 1em auto;
   padding: 2em;
