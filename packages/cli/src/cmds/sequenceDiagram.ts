@@ -11,7 +11,6 @@ import {
   format as formatDiagram,
   Formatters,
 } from '@appland/sequence-diagram';
-import agentIsRecording from './record/state/agentIsRecording';
 
 export const command = 'sequence-diagram <appmap...>';
 export const describe = 'Generate a sequence diagram for an AppMap';
