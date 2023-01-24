@@ -15,8 +15,8 @@ export function endTime() {
 }
 
 let isVerbose = false;
-export function verbose(v: boolean | null = null) {
-  if (v !== null) {
+export function verbose(v?: boolean) {
+  if (v !== undefined) {
     isVerbose = v;
   }
   return isVerbose;

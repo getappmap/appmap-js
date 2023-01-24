@@ -20,8 +20,8 @@ export async function collectAppMapFiles(
 }
 
 let isVerbose = false;
-function verbose(v: boolean | null = null): boolean {
-  if (v === true || v === false) {
+function verbose(v?: boolean): boolean {
+  if (v !== undefined) {
     isVerbose = v;
   }
   return isVerbose;
