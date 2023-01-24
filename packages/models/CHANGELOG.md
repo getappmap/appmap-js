@@ -1,3 +1,10 @@
+# [@appland/models-v1.23.1](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.23.0...@appland/models-v1.23.1) (2023-01-24)
+
+
+### Bug Fixes
+
+* Handle missing returnEvent ([347365a](https://github.com/getappmap/appmap-js/commit/347365a0d45f704a933c5f222f9b39c820a72193))
+
 # [@appland/models-v1.23.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.22.0...@appland/models-v1.23.0) (2023-01-04)
 
 
