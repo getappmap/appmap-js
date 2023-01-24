@@ -413,19 +413,32 @@ export function getRootEvents(eventArray) {
   return eventArray.filter((e) => e.isCall() && !e.parent);
 }
 
-export function transformToJSON(dataKeys, obj) {
-  const emptyLength = (value) => 'length' in value && value.length === 0;
-  const emptySize = (value) => 'size' in value && value.size === 0;
-  const empty = (value) =>
-    value === undefined ||
-    value === null ||
-    (typeof value === 'object' && [emptyLength, emptySize].find((fn) => fn(value)));
+function isEmpty(value) {
+  if (value === undefined || value === null) {
+    return true;
+  }
 
+  if (Array.isArray(value) || typeof value === 'string') {
+    return value.length === 0;
+  }
+
+  if (value instanceof Set || value instanceof Map) {
+    return value.size === 0;
+  }
+
+  if (typeof value === 'object') {
+    return Object.values(value).every(isEmpty);
+  }
+
+  return false;
+}
+
+export function transformToJSON(dataKeys, obj) {
   return dataKeys.reduce((memo, key) => {
     const value = obj[key];
-    if (empty(value)) {
+    if (isEmpty(value)) {
       // nop
-    } else if (value.constructor === Set) {
+    } else if (value instanceof Set) {
       memo[key] = [...value];
     } else {
       memo[key] = value;
