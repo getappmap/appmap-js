@@ -1,3 +1,11 @@
+# [@appland/sequence-diagram-v1.3.2](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.3.1...@appland/sequence-diagram-v1.3.2) (2023-01-24)
+
+
+### Bug Fixes
+
+* Handle missing returnEvent ([347365a](https://github.com/getappmap/appmap-js/commit/347365a0d45f704a933c5f222f9b39c820a72193))
+* Handle status or status_code ([b235db6](https://github.com/getappmap/appmap-js/commit/b235db6b7c88b4df2a77d2e20270b74e03adee26))
+
 # [@appland/sequence-diagram-v1.3.1](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.3.0...@appland/sequence-diagram-v1.3.1) (2022-12-16)
 
 
