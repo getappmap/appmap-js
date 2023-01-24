@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.3.2](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.3.1...@appland/openapi-v1.3.2) (2023-01-24)
+
+
+### Bug Fixes
+
+* Fix basePath to not return '' when there's ( and ) ([807a238](https://github.com/getappmap/appmap-js/commit/807a238ebfc6860221cef6c51e26997a02211aa2))
+
 # [@appland/openapi-v1.3.1](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.3.0...@appland/openapi-v1.3.1) (2023-01-21)
 
 
