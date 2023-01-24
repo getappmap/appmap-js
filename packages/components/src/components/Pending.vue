@@ -51,7 +51,7 @@ export default {
     margin: auto 0;
     margin-right: 0.5em;
     width: 24px;
-    fill: #69ad34;
+    fill: $white;
   }
 
   &--animate svg {
