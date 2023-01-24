@@ -152,6 +152,10 @@ describe('Event', () => {
         (e) => e.http_server_request && e.http_server_request.path_info === '/admin'
       );
 
+      it('provides access to the response status', () => {
+        expect(event.httpServerResponse.status).toEqual(302);
+        expect(event.httpServerResponse.status_code).toEqual(302);
+      });
       it('route', () => {
         expect(event.route).toEqual('GET /admin');
       });
