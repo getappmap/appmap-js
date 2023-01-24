@@ -1,3 +1,10 @@
+# [@appland/components-v2.26.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.25.2...@appland/components-v2.26.0) (2023-01-24)
+
+
+### Features
+
+* update success message styling ([b32181b](https://github.com/getappmap/appmap-js/commit/b32181bcd01d31a4fce367479b162fcdcd769f5a))
+
 # [@appland/components-v2.25.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.25.1...@appland/components-v2.25.2) (2023-01-20)
 
 
