@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.63.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.63.0...@appland/appmap-v3.63.1) (2023-01-24)
+
+
+### Bug Fixes
+
+* Fix accidental call to verbose(b) ([83ab8bd](https://github.com/getappmap/appmap-js/commit/83ab8bdab586a2b0d89732f4fdd704956eb2655c))
+* Fix basePath to not return '' when there's ( and ) ([807a238](https://github.com/getappmap/appmap-js/commit/807a238ebfc6860221cef6c51e26997a02211aa2))
+
 # [@appland/appmap-v3.63.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.62.0...@appland/appmap-v3.63.0) (2023-01-21)
 
 
