@@ -27,7 +27,6 @@ export default class Model {
 
   static basePath(path: string): string {
     const pathTokens = path
-      .split('(')[0]
       .split('/')
       .map((entry) => {
         if (entry.match(/^:(.*)/)) {
