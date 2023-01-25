@@ -2,6 +2,7 @@
   {
     "kind": "http_server_request",
     "route": "DELETE /api/api_keys",
+    "status_code": 200,
     "children": [
       {
         "kind": "function",
@@ -42,6 +43,7 @@
   {
     "kind": "http_server_request",
     "route": "DELETE /api/api_keys",
+    "status_code": 401,
     "children": [
       {
         "kind": "function",
