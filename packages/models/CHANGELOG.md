@@ -1,3 +1,11 @@
+# [@appland/models-v1.23.2](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.23.1...@appland/models-v1.23.2) (2023-01-25)
+
+
+### Bug Fixes
+
+* `http_server_response` `status_code` is no longer modified ([89c5a50](https://github.com/getappmap/appmap-js/commit/89c5a503049660163b971d22eeb0e0817e2ed61f))
+* Allow writing of objects when serializing event properties ([b2b190a](https://github.com/getappmap/appmap-js/commit/b2b190ab30d7bffeb732085ceb93160639d7673b))
+
 # [@appland/models-v1.23.1](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.23.0...@appland/models-v1.23.1) (2023-01-24)
 
 
