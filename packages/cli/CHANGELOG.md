@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.64.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.63.1...@appland/appmap-v3.64.0) (2023-01-25)
+
+
+### Features
+
+* Update index version to 1.1.4 ([0fad538](https://github.com/getappmap/appmap-js/commit/0fad5381bb1411288005496c1b624588d0b51109))
+
 # [@appland/appmap-v3.63.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.63.0...@appland/appmap-v3.63.1) (2023-01-24)
 
 
