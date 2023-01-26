@@ -1,5 +1,5 @@
 <template>
-  <div class="label" style="display: contents">
+  <div class="label">
     <span class="name">{{ actionSpec.nodeResult }}</span>
   </div>
 </template>
@@ -23,7 +23,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+// See also: CallLabel .label
 .label {
+  display: inline-block;
   font-size: 9pt;
+  margin-left: 1em;
+  white-space: nowrap;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
