@@ -36,9 +36,10 @@ export default {
       },
       defaultValue: 'default',
     },
-  },
-  args: {
-    appMapUploadable: true,
+    shareEnabled: {
+      control: 'boolean',
+      defaultValue: 'true',
+    },
   },
 };
 
@@ -50,6 +51,7 @@ export const extension = (args, { argTypes }) => ({
     const scenario = scenarioData[args.scenario];
     if (scenario) {
       this.$refs.vsCode.loadData(scenario);
+      this.$refs.vsCode.setShareEnabled(args.shareEnabled === 'true');
     }
 
     bindResolvePath(this);
@@ -64,6 +66,7 @@ export const extensionWithNotification = (args, { argTypes }) => ({
     const scenario = scenarioData[args.scenario];
     if (scenario) {
       this.$refs.vsCode.loadData(scenario);
+      this.$refs.vsCode.setShareEnabled(args.shareEnabled === 'true');
     }
 
     bindResolvePath(this);
@@ -78,5 +81,6 @@ export const extensionWithoutHTTP = (args, { argTypes }) => ({
   template: '<v-vs-code-extension v-bind="$props" ref="vsCode" />',
   mounted() {
     this.$refs.vsCode.loadData(diffScenario);
+    this.$refs.vsCode.setShareEnabled(args.shareEnabled === 'true');
   },
 });

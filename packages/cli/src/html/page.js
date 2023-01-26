@@ -13,9 +13,6 @@ async function initializeApp() {
     render: (h) =>
       h(VVsCodeExtension, {
         ref: 'ui',
-        props: {
-          appMapUploadable: true,
-        },
       }),
     async mounted() {
       const params = new URL(document.location).searchParams;
@@ -24,6 +21,7 @@ async function initializeApp() {
       const { ui } = this.$refs;
 
       ui.loadData((await res.json()) || {});
+      ui.setShareEnabled(true);
     },
   });
 }

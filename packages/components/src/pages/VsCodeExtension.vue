@@ -94,7 +94,7 @@
         </template>
         <template v-slot:controls>
           <v-popper
-            v-if="appMapUploadable"
+            v-if="shareEnabled"
             class="hover-text-popper"
             text="Create a link to this AppMap."
             placement="left"
@@ -401,14 +401,8 @@ export default {
       currentTraceFilterIndex: 0,
       showShareModal: false,
       shareURL: undefined,
+      shareEnabled: false,
     };
-  },
-
-  props: {
-    appMapUploadable: {
-      type: Boolean,
-      default: false,
-    },
   },
 
   watch: {
@@ -774,6 +768,10 @@ export default {
 
       this.isLoading = false;
       this.$store.commit(SET_FILTERED_MAP, this.filteredAppMap);
+    },
+
+    setShareEnabled(shareEnabled) {
+      this.shareEnabled = shareEnabled;
     },
 
     showInstructions() {
