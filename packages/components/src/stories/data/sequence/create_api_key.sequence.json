@@ -1,0 +1,1117 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:app/models",
+      "name": "models",
+      "order": 1000
+    },
+    {
+      "id": "package:logger",
+      "name": "logger",
+      "order": 2000
+    },
+    {
+      "id": "package:ruby",
+      "name": "ruby",
+      "order": 3000
+    },
+    {
+      "id": "package:active_support",
+      "name": "active_support",
+      "order": 4000
+    },
+    {
+      "id": "package:actionpack",
+      "name": "actionpack",
+      "order": 5000
+    },
+    {
+      "id": "package:app/controllers/api",
+      "name": "controllers/api",
+      "order": 6000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 9000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "issue",
+      "static": true,
+      "digest": "bcfa28c53d87d7889e42e472fb8354ae800a5430b1e7bc3dadc4363e6d154d82",
+      "subtreeDigest": "99231f5d1b9e3b810df70f562ce7f27cb4ccfdf0e81e4617e5ae845d08df2c81",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/ApiKey.issue",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "string"
+        },
+        "raisesException": false
+      },
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "package:app/models",
+          "callee": "package:logger",
+          "name": "write",
+          "static": false,
+          "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+          "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "logger/Logger::LogDevice#write",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "integer"
+            },
+            "raisesException": false
+          },
+          "children": [],
+          "elapsed": 0.00003200001083314419
+        },
+        {
+          "nodeType": 6,
+          "caller": "package:app/models",
+          "callee": "database:Database",
+          "query": "SELECT * FROM \"api_keys\" WHERE ((\"login\" = 'admin') AND (\"description\" = 'example api key')) LIMIT 1",
+          "digest": "df7a1d3cee7f408a18e90bb80af25cf283ac88cbedf1b2252a6fd360ab144d9c",
+          "subtreeDigest": "2cc29ce1dfdc031536e7d161b2d88dde4b19b6aba526115bb9f840bbd30e6780",
+          "children": [],
+          "elapsed": 0.001297
+        },
+        {
+          "nodeType": 3,
+          "caller": "package:app/models",
+          "callee": "package:logger",
+          "name": "write",
+          "static": false,
+          "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+          "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "logger/Logger::LogDevice#write",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "integer"
+            },
+            "raisesException": false
+          },
+          "children": [],
+          "elapsed": 0.000023999949917197227
+        },
+        {
+          "nodeType": 6,
+          "caller": "package:app/models",
+          "callee": "database:Database",
+          "query": "SAVEPOINT autopoint_1",
+          "digest": "e2acca958778708cd318075230576c80baf753d686a606ba55fb223a746335ee",
+          "subtreeDigest": "f171f24683f0faf71758bd1430940774c78268d73adf164f7e222f04c1f14480",
+          "children": [],
+          "elapsed": 0.001211
+        },
+        {
+          "nodeType": 3,
+          "caller": "package:app/models",
+          "callee": "package:logger",
+          "name": "write",
+          "static": false,
+          "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+          "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "logger/Logger::LogDevice#write",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "integer"
+            },
+            "raisesException": false
+          },
+          "children": [],
+          "elapsed": 0.000028999987989664078
+        },
+        {
+          "nodeType": 6,
+          "caller": "package:app/models",
+          "callee": "database:Database",
+          "query": "INSERT INTO \"api_keys\" (\"login\", \"description\") VALUES ('admin', 'example api key') RETURNING *",
+          "digest": "68c11357d4de63349897cf97abd0b9d47acc7dc7419bf93d89e1e884f06bc995",
+          "subtreeDigest": "d1590890dcf838399ea58f3d3cda79f9b120368334ba035d2d514626053203a6",
+          "children": [],
+          "elapsed": 0.001401
+        },
+        {
+          "nodeType": 3,
+          "caller": "package:app/models",
+          "callee": "package:logger",
+          "name": "write",
+          "static": false,
+          "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+          "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "logger/Logger::LogDevice#write",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "integer"
+            },
+            "raisesException": false
+          },
+          "children": [],
+          "elapsed": 0.000022000051103532314
+        },
+        {
+          "nodeType": 6,
+          "caller": "package:app/models",
+          "callee": "database:Database",
+          "query": "RELEASE SAVEPOINT autopoint_1",
+          "digest": "682ac0a00b08652a98b568707671487755467437670b11481dd664a20840d2ed",
+          "subtreeDigest": "4d4255fe6d3ed5faa94d189cd35c1ba92e317287006dc20f9fa401477187e92d",
+          "children": [],
+          "elapsed": 0.001184
+        },
+        {
+          "nodeType": 3,
+          "caller": "package:app/models",
+          "callee": "package:app/models",
+          "name": "encode",
+          "static": true,
+          "digest": "ee653e717cb1e95828003a5133ddd042375c9b1e23e22a8c25b6b49a1d58fe96",
+          "subtreeDigest": "f9f95c03dcfdaeb0021d546b6f2404cb7cc9fe4d10744f98d2359a024afa6223",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/models/ApiKey.encode",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "string"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/models",
+              "callee": "package:ruby",
+              "name": "pack",
+              "static": false,
+              "digest": "9da58232059d13b2a8d514fccc1f86ade20ba6fcef199c0073dfb6d2147a381a",
+              "subtreeDigest": "9f47ef82d5d09095154ddb3107423b270f9073a66f689069f06a60b935356b4b",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "ruby/Array#pack",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "string"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.00000400003045797348
+            }
+          ],
+          "elapsed": 0.00008100003469735384
+        }
+      ],
+      "elapsed": 0.0062160000670701265
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:active_support",
+      "name": "invoke_before",
+      "static": false,
+      "digest": "e0ba44d4c5ee73f064f8fe67d7cbdf59662adae63c15543df2dc5b455ebed59a",
+      "subtreeDigest": "3081a97909ac5db5ad37efd74549778b42f1e6f05872dfed26d0a91fe4c19d1c",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "active_support/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "array"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.00004400010220706463
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:active_support",
+      "name": "invoke_after",
+      "static": false,
+      "digest": "31b0f6c2a4a5b21aa071bc32d3f0a0dd82d4113ef3a1cc3655b1944ab65bddf7",
+      "subtreeDigest": "0baa1e65fd405f9596d206e92f2040e60f4d802a623eae7fa1c979218ad506cd",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "active_support/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+        "raises_exception": false
+      },
+      "children": [],
+      "elapsed": 0.00000200001522898674
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:ruby",
+      "name": "unpack",
+      "static": false,
+      "digest": "3b55432f87cce080041a36b25b44bc96408120086c1edb851a4dfe9ffa4d8d1c",
+      "subtreeDigest": "44f73f8ba6f3357579f3a621ed3055f0c01eff1ef007680d639d782f7a4808c0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "ruby/String#unpack",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "array"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.00000500003807246685
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:logger",
+      "name": "write",
+      "static": false,
+      "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+      "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "logger/Logger::LogDevice#write",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "integer"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.000022999942302703857
+    },
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "POST /api/api_keys",
+      "status": 201,
+      "digest": "18ffcb090686746a215777695592eff9211644909e5170e554608e17de0a96ab",
+      "subtreeDigest": "5e2eefdfaf33cd4aab7b07795e6d6e8fa27b77a33f75f452ef5e2d88ad31390a",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:actionpack",
+          "name": "process_action",
+          "static": false,
+          "digest": "52bf4f8491768ab1b541fa802b73d40e8ec6ff30bc7a9bdbd65c9a80757f908b",
+          "subtreeDigest": "4ece7e30bff8a51784c97f2376642fe62ef59a1bc56e19889774797a22d999af",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "actionpack/ActionController::Instrumentation#process_action",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "string"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:actionpack",
+              "callee": "package:logger",
+              "name": "write",
+              "static": false,
+              "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+              "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "logger/Logger::LogDevice#write",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "integer"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.00003700004890561104
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:actionpack",
+              "callee": "package:logger",
+              "name": "write",
+              "static": false,
+              "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+              "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "logger/Logger::LogDevice#write",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "integer"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.000012999982573091984
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:actionpack",
+              "callee": "package:active_support",
+              "name": "invoke_before",
+              "static": false,
+              "digest": "e0ba44d4c5ee73f064f8fe67d7cbdf59662adae63c15543df2dc5b455ebed59a",
+              "subtreeDigest": "6e5515290fd9e257e56b04b22f1e223385363eef09b7e9f204d893cfd967ea7c",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "active_support/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "array"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:active_support",
+                  "callee": "package:actionpack",
+                  "name": "[]",
+                  "static": false,
+                  "digest": "2edc720ea8bfcd09073cb25143329d21c8a14ebcd6e9511fd2c6838aaa7d4fc8",
+                  "subtreeDigest": "6237c01f30cffc67797749deb7bf2e1452dd70e34b8b7185d1ebc7e23d4fea58",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "actionpack/ActionDispatch::Request::Session#[]",
+                    "raises_exception": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:actionpack",
+                      "callee": "package:actionpack",
+                      "name": "update",
+                      "static": false,
+                      "digest": "fe0dd30b5f90e8ebb62a206d6586ea69cccd469310eb878a5ca2835608d950a5",
+                      "subtreeDigest": "626bb3368027dba1edc37d4cd5e014230d7dad8da4c3d644e1c200c3c2214431",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "object"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.0000029999064281582832
+                    },
+                    {
+                      "nodeType": 3,
+                      "caller": "package:actionpack",
+                      "callee": "package:actionpack",
+                      "name": "[]",
+                      "static": false,
+                      "digest": "84c6a1f3c9437297b6413ff9313e1de78d2d500d2eebf6c9e4a0b8263610f718",
+                      "subtreeDigest": "ce8419b0afcc0492f3cc52d24df217009ca7fe944bb6ce28d968b9fafaf33b56",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                        "raises_exception": false
+                      },
+                      "children": [],
+                      "elapsed": 0.00000200001522898674
+                    }
+                  ],
+                  "elapsed": 0.00031400006264448166
+                },
+                {
+                  "nodeType": 3,
+                  "caller": "package:active_support",
+                  "callee": "package:app/controllers/api",
+                  "name": "authenticate_token",
+                  "static": false,
+                  "digest": "0a902ee2b76cfdb993943ef7f30f4815940a679b068e52b4f34bc04c95ea4a9a",
+                  "subtreeDigest": "ec048f901ae0837399ed790df94b1cb124f7b5119d11a8f17e3e200d8c356801",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/controllers/api/API::APIKeysController#authenticate_token",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "string"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/controllers/api",
+                      "callee": "package:app/models",
+                      "name": "authenticate",
+                      "static": true,
+                      "digest": "54259769fc7b554024c267444b7d33beb4d6c5c9acffaa5f02ad25e5c8b6e8bd",
+                      "subtreeDigest": "f1612a97322547348b1d8f4acfd91d80e6b4c86fb7e47fbac8c93c7f367d0f27",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/models/ApiKey.authenticate",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "object"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [
+                        {
+                          "nodeType": 3,
+                          "caller": "package:app/models",
+                          "callee": "package:app/models",
+                          "name": "decode",
+                          "static": true,
+                          "digest": "1f1e7564c92a3ac01d78ec472cdc200372959ac76f770f7f0decffc3d2ef0774",
+                          "subtreeDigest": "74b7539455033ac8ad50b91e00435f527d93c438838b14ecd6c8f185311633b2",
+                          "stableProperties": {
+                            "event_type": "function",
+                            "id": "app/models/ApiKey.decode",
+                            "raises_exception": false
+                          },
+                          "returnValue": {
+                            "returnValueType": {
+                              "name": "array"
+                            },
+                            "raisesException": false
+                          },
+                          "children": [
+                            {
+                              "nodeType": 3,
+                              "caller": "package:app/models",
+                              "callee": "package:ruby",
+                              "name": "unpack1",
+                              "static": false,
+                              "digest": "c5fc055f1a644439291a0e36f0663dc61bd929eeb4f6ceb1b8a2968861bf3e09",
+                              "subtreeDigest": "638808a0fff8679fb36a1d906edfc28ce7e55a7c7c8c23b4bdce7863c0054cb9",
+                              "stableProperties": {
+                                "event_type": "function",
+                                "id": "ruby/String#unpack1",
+                                "raises_exception": false
+                              },
+                              "returnValue": {
+                                "returnValueType": {
+                                  "name": "string"
+                                },
+                                "raisesException": false
+                              },
+                              "children": [],
+                              "elapsed": 0.00000400003045797348
+                            }
+                          ],
+                          "elapsed": 0.000056999968364834785
+                        },
+                        {
+                          "nodeType": 3,
+                          "caller": "package:app/models",
+                          "callee": "package:logger",
+                          "name": "write",
+                          "static": false,
+                          "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+                          "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+                          "stableProperties": {
+                            "event_type": "function",
+                            "id": "logger/Logger::LogDevice#write",
+                            "raises_exception": false
+                          },
+                          "returnValue": {
+                            "returnValueType": {
+                              "name": "integer"
+                            },
+                            "raisesException": false
+                          },
+                          "children": [],
+                          "elapsed": 0.00003300001844763756
+                        },
+                        {
+                          "nodeType": 6,
+                          "caller": "package:app/models",
+                          "callee": "database:Database",
+                          "query": "SELECT * FROM \"api_keys\" WHERE (\"login\" = 'admin')",
+                          "digest": "3ea3b24b1c6c0aa89cc5aa5f4e3dd87c345b0785f8989a375dd7e3d3c858fcfa",
+                          "subtreeDigest": "403ee8d04b8c2c6754e5b0e378ddd53ecc2acfb21641aa24fd6a3b6e41407879",
+                          "children": [],
+                          "elapsed": 0.0016
+                        },
+                        {
+                          "nodeType": 3,
+                          "caller": "package:app/models",
+                          "callee": "package:app/models",
+                          "name": "touch",
+                          "static": true,
+                          "digest": "f3cf666b52e1380befb4eb273897281f2ed4b07fb2db6b4667571adb98663f7a",
+                          "subtreeDigest": "489a300895fa38766649d1fd88b84e05ea6ec4d69c712634ad0b34548f3345af",
+                          "stableProperties": {
+                            "event_type": "function",
+                            "id": "app/models/ApiKey.touch",
+                            "raises_exception": false
+                          },
+                          "children": [
+                            {
+                              "nodeType": 3,
+                              "caller": "package:app/models",
+                              "callee": "package:logger",
+                              "name": "write",
+                              "static": false,
+                              "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+                              "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+                              "stableProperties": {
+                                "event_type": "function",
+                                "id": "logger/Logger::LogDevice#write",
+                                "raises_exception": false
+                              },
+                              "returnValue": {
+                                "returnValueType": {
+                                  "name": "integer"
+                                },
+                                "raisesException": false
+                              },
+                              "children": [],
+                              "elapsed": 0.000024000066332519054
+                            },
+                            {
+                              "nodeType": 6,
+                              "caller": "package:app/models",
+                              "callee": "database:Database",
+                              "query": "SELECT * FROM \"api_keys\" WHERE \"id\" = 3",
+                              "digest": "12bfc2bf5c30c2384d5c78ec8b7357359fecfa6db2a03263a3aafd7ba7c0927f",
+                              "subtreeDigest": "0f25ac9d79392cfb358e6a084c8b9705300d0f233886a5bfbbcfea03d4196a8c",
+                              "children": [],
+                              "elapsed": 0.001162
+                            },
+                            {
+                              "nodeType": 3,
+                              "caller": "package:app/models",
+                              "callee": "package:logger",
+                              "name": "write",
+                              "static": false,
+                              "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+                              "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+                              "stableProperties": {
+                                "event_type": "function",
+                                "id": "logger/Logger::LogDevice#write",
+                                "raises_exception": false
+                              },
+                              "returnValue": {
+                                "returnValueType": {
+                                  "name": "integer"
+                                },
+                                "raisesException": false
+                              },
+                              "children": [],
+                              "elapsed": 0.000028999987989664078
+                            },
+                            {
+                              "nodeType": 6,
+                              "caller": "package:app/models",
+                              "callee": "database:Database",
+                              "query": "SAVEPOINT autopoint_1",
+                              "digest": "e2acca958778708cd318075230576c80baf753d686a606ba55fb223a746335ee",
+                              "subtreeDigest": "f171f24683f0faf71758bd1430940774c78268d73adf164f7e222f04c1f14480",
+                              "children": [],
+                              "elapsed": 0.001409
+                            },
+                            {
+                              "nodeType": 3,
+                              "caller": "package:app/models",
+                              "callee": "package:logger",
+                              "name": "write",
+                              "static": false,
+                              "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+                              "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+                              "stableProperties": {
+                                "event_type": "function",
+                                "id": "logger/Logger::LogDevice#write",
+                                "raises_exception": false
+                              },
+                              "returnValue": {
+                                "returnValueType": {
+                                  "name": "integer"
+                                },
+                                "raisesException": false
+                              },
+                              "children": [],
+                              "elapsed": 0.000021999934688210487
+                            },
+                            {
+                              "nodeType": 6,
+                              "caller": "package:app/models",
+                              "callee": "database:Database",
+                              "query": "UPDATE \"api_keys\" SET \"last_used\" = '2023-01-19 14:39:16.863748+0000' WHERE (\"id\" = 3)",
+                              "digest": "7f898725862ba792fb976f1255613cdf56cf0484e5f01d73e06b17fc602051cc",
+                              "subtreeDigest": "1e44e99961b9b11b6e4e06d29573b7d39ed0ec89c098b47a8a1b17bf93f5449c",
+                              "children": [],
+                              "elapsed": 0.001428
+                            },
+                            {
+                              "nodeType": 3,
+                              "caller": "package:app/models",
+                              "callee": "package:logger",
+                              "name": "write",
+                              "static": false,
+                              "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+                              "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+                              "stableProperties": {
+                                "event_type": "function",
+                                "id": "logger/Logger::LogDevice#write",
+                                "raises_exception": false
+                              },
+                              "returnValue": {
+                                "returnValueType": {
+                                  "name": "integer"
+                                },
+                                "raisesException": false
+                              },
+                              "children": [],
+                              "elapsed": 0.000020000035874545574
+                            },
+                            {
+                              "nodeType": 6,
+                              "caller": "package:app/models",
+                              "callee": "database:Database",
+                              "query": "RELEASE SAVEPOINT autopoint_1",
+                              "digest": "682ac0a00b08652a98b568707671487755467437670b11481dd664a20840d2ed",
+                              "subtreeDigest": "4d4255fe6d3ed5faa94d189cd35c1ba92e317287006dc20f9fa401477187e92d",
+                              "children": [],
+                              "elapsed": 0.0015
+                            }
+                          ],
+                          "elapsed": 0.006136999931186438
+                        },
+                        {
+                          "nodeType": 3,
+                          "caller": "package:app/models",
+                          "callee": "package:logger",
+                          "name": "write",
+                          "static": false,
+                          "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+                          "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+                          "stableProperties": {
+                            "event_type": "function",
+                            "id": "logger/Logger::LogDevice#write",
+                            "raises_exception": false
+                          },
+                          "returnValue": {
+                            "returnValueType": {
+                              "name": "integer"
+                            },
+                            "raisesException": false
+                          },
+                          "children": [],
+                          "elapsed": 0.000021999934688210487
+                        },
+                        {
+                          "nodeType": 6,
+                          "caller": "package:app/models",
+                          "callee": "database:Database",
+                          "query": "SELECT * FROM \"users\" WHERE (\"users\".\"login\" = 'admin') LIMIT 1",
+                          "digest": "af9d5f27317d2034635b85f505fb424d4c226edb6f779de28510075e41938693",
+                          "subtreeDigest": "b7cade3f1e64df092dc72ff9cca8112460acf23e0d983856595732a14060d3ee",
+                          "children": [],
+                          "elapsed": 0.001241
+                        }
+                      ],
+                      "elapsed": 0.010008999961428344
+                    }
+                  ],
+                  "elapsed": 0.010144000058062375
+                },
+                {
+                  "nodeType": 3,
+                  "caller": "package:active_support",
+                  "callee": "package:app/controllers/api",
+                  "name": "fail_unauthenticated!",
+                  "static": false,
+                  "digest": "79a21f2db5619a784eee171bffe641b10d82f86ad2edd1f8fa507210cbea7ed2",
+                  "subtreeDigest": "b4a9e62348a23bb396ae885d166060643a09ef287bca092768d081b567791eba",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/controllers/api/API::APIKeysController#fail_unauthenticated!",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "boolean"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.00000200001522898674
+                }
+              ],
+              "elapsed": 0.010855999891646206
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:actionpack",
+              "callee": "package:app/controllers/api",
+              "name": "create",
+              "static": false,
+              "digest": "a826625f4ca01249acd7b14868e1b0fccbe831293e3a588eb0fd0dcc107bcccc",
+              "subtreeDigest": "106703b017d1ae2cd27f597a93e2467a87dcfcf2c293ebe3901d445c9141a4ad",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/controllers/api/API::APIKeysController#create",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "string"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/controllers/api",
+                  "callee": "package:app/models",
+                  "name": "issue",
+                  "static": true,
+                  "digest": "bcfa28c53d87d7889e42e472fb8354ae800a5430b1e7bc3dadc4363e6d154d82",
+                  "subtreeDigest": "99231f5d1b9e3b810df70f562ce7f27cb4ccfdf0e81e4617e5ae845d08df2c81",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/models/ApiKey.issue",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "string"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/models",
+                      "callee": "package:logger",
+                      "name": "write",
+                      "static": false,
+                      "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+                      "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "logger/Logger::LogDevice#write",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "integer"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.000023999949917197227
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "SELECT * FROM \"api_keys\" WHERE ((\"login\" = 'admin') AND (\"description\" = 'api test')) LIMIT 1",
+                      "digest": "df7a1d3cee7f408a18e90bb80af25cf283ac88cbedf1b2252a6fd360ab144d9c",
+                      "subtreeDigest": "2cc29ce1dfdc031536e7d161b2d88dde4b19b6aba526115bb9f840bbd30e6780",
+                      "children": [],
+                      "elapsed": 0.001136
+                    },
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/models",
+                      "callee": "package:logger",
+                      "name": "write",
+                      "static": false,
+                      "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+                      "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "logger/Logger::LogDevice#write",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "integer"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.000019000028260052204
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "SAVEPOINT autopoint_1",
+                      "digest": "e2acca958778708cd318075230576c80baf753d686a606ba55fb223a746335ee",
+                      "subtreeDigest": "f171f24683f0faf71758bd1430940774c78268d73adf164f7e222f04c1f14480",
+                      "children": [],
+                      "elapsed": 0.001476
+                    },
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/models",
+                      "callee": "package:logger",
+                      "name": "write",
+                      "static": false,
+                      "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+                      "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "logger/Logger::LogDevice#write",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "integer"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.000019999919459223747
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "INSERT INTO \"api_keys\" (\"login\", \"description\") VALUES ('admin', 'api test') RETURNING *",
+                      "digest": "68c11357d4de63349897cf97abd0b9d47acc7dc7419bf93d89e1e884f06bc995",
+                      "subtreeDigest": "d1590890dcf838399ea58f3d3cda79f9b120368334ba035d2d514626053203a6",
+                      "children": [],
+                      "elapsed": 0.001209
+                    },
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/models",
+                      "callee": "package:logger",
+                      "name": "write",
+                      "static": false,
+                      "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+                      "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "logger/Logger::LogDevice#write",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "integer"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.000020999927073717117
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "RELEASE SAVEPOINT autopoint_1",
+                      "digest": "682ac0a00b08652a98b568707671487755467437670b11481dd664a20840d2ed",
+                      "subtreeDigest": "4d4255fe6d3ed5faa94d189cd35c1ba92e317287006dc20f9fa401477187e92d",
+                      "children": [],
+                      "elapsed": 0.001402
+                    },
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/models",
+                      "callee": "package:app/models",
+                      "name": "encode",
+                      "static": true,
+                      "digest": "ee653e717cb1e95828003a5133ddd042375c9b1e23e22a8c25b6b49a1d58fe96",
+                      "subtreeDigest": "f9f95c03dcfdaeb0021d546b6f2404cb7cc9fe4d10744f98d2359a024afa6223",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/models/ApiKey.encode",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "string"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [
+                        {
+                          "nodeType": 3,
+                          "caller": "package:app/models",
+                          "callee": "package:ruby",
+                          "name": "pack",
+                          "static": false,
+                          "digest": "9da58232059d13b2a8d514fccc1f86ade20ba6fcef199c0073dfb6d2147a381a",
+                          "subtreeDigest": "9f47ef82d5d09095154ddb3107423b270f9073a66f689069f06a60b935356b4b",
+                          "stableProperties": {
+                            "event_type": "function",
+                            "id": "ruby/Array#pack",
+                            "raises_exception": false
+                          },
+                          "returnValue": {
+                            "returnValueType": {
+                              "name": "string"
+                            },
+                            "raisesException": false
+                          },
+                          "children": [],
+                          "elapsed": 0.00000400003045797348
+                        }
+                      ],
+                      "elapsed": 0.00008100003469735384
+                    }
+                  ],
+                  "elapsed": 0.006020999979227781
+                },
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/controllers/api",
+                  "callee": "package:actionpack",
+                  "name": "render_to_body",
+                  "static": false,
+                  "digest": "95ab32226eb3d0b1f67f05bb165e2f091f2b5aa80bc2f4324ba06759dfff2a5f",
+                  "subtreeDigest": "2c6c9bed022c9982286e3c8d780227f28bf83eed8f274aa3855dcfd533ae4eae",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "actionpack/ActionController::Renderers#render_to_body",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "string"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.00011599995195865631
+                }
+              ],
+              "elapsed": 0.006494999979622662
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:actionpack",
+              "callee": "package:active_support",
+              "name": "invoke_after",
+              "static": false,
+              "digest": "31b0f6c2a4a5b21aa071bc32d3f0a0dd82d4113ef3a1cc3655b1944ab65bddf7",
+              "subtreeDigest": "0baa1e65fd405f9596d206e92f2040e60f4d802a623eae7fa1c979218ad506cd",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "active_support/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "raises_exception": false
+              },
+              "children": [],
+              "elapsed": 0.00000200001522898674
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:actionpack",
+              "callee": "package:logger",
+              "name": "write",
+              "static": false,
+              "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+              "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "logger/Logger::LogDevice#write",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "integer"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.000018000020645558834
+            }
+          ],
+          "elapsed": 0.018234999966807663
+        }
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:active_support",
+      "name": "invoke_before",
+      "static": false,
+      "digest": "e0ba44d4c5ee73f064f8fe67d7cbdf59662adae63c15543df2dc5b455ebed59a",
+      "subtreeDigest": "3081a97909ac5db5ad37efd74549778b42f1e6f05872dfed26d0a91fe4c19d1c",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "active_support/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "array"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.000019000028260052204
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:active_support",
+      "name": "invoke_after",
+      "static": false,
+      "digest": "31b0f6c2a4a5b21aa071bc32d3f0a0dd82d4113ef3a1cc3655b1944ab65bddf7",
+      "subtreeDigest": "0baa1e65fd405f9596d206e92f2040e60f4d802a623eae7fa1c979218ad506cd",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "active_support/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "array"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.000020000035874545574
+    }
+  ]
+}
