@@ -2,7 +2,7 @@
   <div>
     <div class="sequence-diagram">
       <template v-for="(actor, index) in actors">
-        <VActor :actor="actor" :index="index" :height="actionCount" />
+        <VActor :actor="actor" :row="1" :index="index" :height="actionCount" />
       </template>
       <template v-for="action in actionSpecs">
         <template v-if="action.nodeType === 'call'">
