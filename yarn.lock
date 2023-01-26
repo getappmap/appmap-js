@@ -79,7 +79,7 @@ __metadata:
   dependencies:
     "@appland/components": "workspace:^2"
     "@appland/diagrams": "workspace:^1"
-    "@appland/models": "workspace:^1"
+    "@appland/models": "workspace:^1.23.2"
     "@appland/openapi": "workspace:^1"
     "@appland/sequence-diagram": "workspace:^1"
     "@craftamap/esbuild-plugin-html": ^0.4.0
@@ -290,7 +290,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@workspace:*, @appland/models@workspace:^1, @appland/models@workspace:^1.18.1, @appland/models@workspace:^1.23.0, @appland/models@workspace:packages/models":
+"@appland/models@workspace:*, @appland/models@workspace:^1.18.1, @appland/models@workspace:^1.23.0, @appland/models@workspace:^1.23.2, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
