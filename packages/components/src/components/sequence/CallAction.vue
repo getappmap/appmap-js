@@ -71,12 +71,37 @@
         :style="{ 'grid-column': actionSpec.callerActionIndex - 1, 'grid-row': gridRows }"
       ></div>
     </template>
+
+    <template v-if="showGutter">
+      <template v-if="actionSpec.callArrowDirection === 'right'">
+        <div
+          class="gutter-container gutter-container-right"
+          :style="{
+            'grid-column': Math.max(actionSpec.callerActionIndex, actionSpec.calleeActionIndex) - 1,
+            'grid-row': [actionSpec.index + 2, actionSpec.returnIndex + 2].join(' / '),
+          }"
+        >
+          <div class="gutter"></div>
+        </div>
+      </template>
+      <template v-else>
+        <div
+          class="gutter-container gutter-container-left"
+          :style="{
+            'grid-column': Math.min(actionSpec.callerActionIndex, actionSpec.calleeActionIndex) - 1,
+            'grid-row': [actionSpec.index + 2, actionSpec.returnIndex + 2].join(' / '),
+          }"
+        >
+          <div class="gutter"></div>
+        </div>
+      </template>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
 import ArrowRight from '@/assets/arrow-right.svg';
-import { ActionSpec } from './ActionSpec';
+import { ActionSpec, CallDirection } from './ActionSpec';
 import VCallLabel from './CallLabel.vue';
 
 export default {
@@ -104,6 +129,11 @@ export default {
         .sort()[1]
         .toLocaleString();
     },
+    showGutter(): boolean {
+      return (
+        this.actionSpec.callArrowDirection !== CallDirection.Self && !!this.actionSpec.returnIndex
+      );
+    },
   },
 };
 </script>
@@ -111,7 +141,7 @@ export default {
 <style scoped lang="scss">
 .call {
   position: relative;
-  padding: 3px 0;
+  padding-top: 4px;
   display: contents;
 
   > div {
@@ -155,5 +185,18 @@ export default {
     position: absolute;
     bottom: -7px;
   }
+}
+
+.gutter-container {
+  position: relative;
+}
+
+.gutter {
+  width: 8px;
+  border: 1px solid gray;
+  position: relative;
+  height: calc(100% + 17px);
+  top: 21px;
+  left: calc(100% - 4px);
 }
 </style>
