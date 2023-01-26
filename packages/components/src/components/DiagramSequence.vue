@@ -1,19 +1,17 @@
 <template>
-  <div>
-    <div class="sequence-diagram">
-      <template v-for="(actor, index) in actors">
-        <VActor :actor="actor" :row="1" :index="index" :height="actionCount" />
+  <div class="sequence-diagram">
+    <template v-for="(actor, index) in actors">
+      <VActor :actor="actor" :row="1" :index="index" :height="actionCount" />
+    </template>
+    <template v-for="action in actionSpecs">
+      <template v-if="action.nodeType === 'call'">
+        <VCallAction :actionSpec="action" />
       </template>
-      <template v-for="action in actionSpecs">
-        <template v-if="action.nodeType === 'call'">
-          <VCallAction :actionSpec="action" />
-        </template>
-        <template v-if="action.nodeType === 'return'">
-          <VReturnAction :actionSpec="action" />
-        </template>
-        <template v-if="action.nodeType === 'loop'"></template>
+      <template v-if="action.nodeType === 'return'">
+        <VReturnAction :actionSpec="action" />
       </template>
-    </div>
+      <template v-if="action.nodeType === 'loop'"></template>
+    </template>
   </div>
 </template>
 
@@ -75,14 +73,9 @@ export default {
 <style scoped lang="scss">
 .sequence-diagram {
   display: grid;
-  gap: 0;
   background-color: black;
+  gap: 0;
   padding: 1em;
-}
-</style>
-
-<style lang="scss">
-.sequence-diagram {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 10pt;
   color: white;

@@ -103,7 +103,7 @@ export default {
 <style scoped lang="scss">
 .return {
   position: relative;
-  padding: 3px 0;
+  padding-top: 4px;
   display: contents;
 
   > div {

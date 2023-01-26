@@ -61,7 +61,7 @@ export default {
   background-color: gray;
   text-align: center;
   padding: 3px;
-  min-width: 8rem;
+  min-width: 160px; // See: CallLabel .label wax-width
   min-height: 3rem;
   z-index: 1; // Overlay the swim lane dashed lines
   overflow: hidden;
