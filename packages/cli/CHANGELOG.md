@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.64.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.64.0...@appland/appmap-v3.64.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* Bump @appland/models to v1.23.2 ([0d269d7](https://github.com/getappmap/appmap-js/commit/0d269d750b23e95eb5f4349f10e5de248578156b))
+
 # [@appland/appmap-v3.64.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.63.1...@appland/appmap-v3.64.0) (2023-01-25)
 
 
