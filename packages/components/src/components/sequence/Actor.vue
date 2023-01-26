@@ -1,14 +1,14 @@
 <template>
   <div style="display: contents">
-    <div class="sequence-actor" :style="{ 'grid-column': gridColumn, 'grid-row': 1 }">
+    <div class="sequence-actor" :style="{ 'grid-column': gridColumn, 'grid-row': row }">
       <div class="label-container">
         <span class="label"> {{ actor.name }} </span>
       </div>
     </div>
-    <template v-if="index > 0">
+    <template v-if="row > 0 && index > 0">
       <div
         class="sequence-actor-lane"
-        :style="{ 'grid-column': gridColumn, 'grid-row-start': 1, 'grid-row-end': gridSpan }"
+        :style="{ 'grid-column': gridColumn, 'grid-row-start': row, 'grid-row-end': gridSpan }"
       >
         <div class="sequence-actor-lane-separator"></div>
       </div>
@@ -25,6 +25,11 @@ export default {
   props: {
     actor: {
       type: Object,
+      required: true,
+      readonly: true,
+    },
+    row: {
+      type: Number,
       required: true,
       readonly: true,
     },
