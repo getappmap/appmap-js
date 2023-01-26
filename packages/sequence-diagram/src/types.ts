@@ -16,17 +16,17 @@ export type Actor = {
 
 export enum NodeType {
   Loop = 1,
-  Conditional,
-  Function,
-  ServerRPC,
-  ClientRPC,
-  Query,
+  Conditional = 2,
+  Function = 3,
+  ServerRPC = 4,
+  ClientRPC = 5,
+  Query = 6,
 }
 
 export enum DiffMode {
   Insert = 1,
-  Delete,
-  Change,
+  Delete = 2,
+  Change = 3,
 }
 
 export type Action = Loop | FunctionCall | ServerRPC | ClientRPC | Query;
