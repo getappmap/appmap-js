@@ -1,0 +1,217 @@
+{
+  "actors": [
+    {
+      "id": "package:lib/controllers",
+      "name": "controllers",
+      "order": 1000
+    },
+    {
+      "id": "package:lib/models",
+      "name": "models",
+      "order": 2000
+    },
+    {
+      "id": "package:lib/database",
+      "name": "database",
+      "order": 3000
+    },
+    {
+      "id": "package:lib/views/users",
+      "name": "users",
+      "order": 4000
+    },
+    {
+      "id": "package:lib/views/posts",
+      "name": "posts",
+      "order": 5000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 3,
+      "callee": "package:lib/controllers",
+      "name": "list",
+      "static": false,
+      "digest": "b29f0c27feebf2a21f5af2e81e746a79d2d0caf24d017d364f205cb7a8af540e",
+      "subtreeDigest": "859b9085a3b2fe68a2298ac675ddcd6721445b28cf25ee3411b0ded6f816c5d1",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "lib/controllers/UsersController#list",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "array"
+        },
+        "raisesException": false
+      },
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "package:lib/controllers",
+          "callee": "package:lib/models",
+          "name": "list",
+          "static": true,
+          "digest": "8eabb6fbdb259277ff89afbf755cbb0a349c94a39436532fb7c1d18c1478e842",
+          "subtreeDigest": "6bdb9728b617f462e98d8a5b030ad008336217eebd421be6a32ebd1e7e335e49",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "lib/models/User.list",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "array"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:lib/models",
+              "callee": "package:lib/database",
+              "name": "query",
+              "static": true,
+              "digest": "f38424ccefa090e8f50bc23d085a4cc9fbda158b94efe53128a57f828c52b763",
+              "subtreeDigest": "50fd86f7bb40e4a688e186bcbc89540ae3599b96b96d581f7d83664196941781",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "lib/database/Database.query",
+                "raises_exception": false
+              },
+              "children": [],
+              "elapsed": 0.00000100000761449337
+            }
+          ],
+          "elapsed": 0.00010200007818639278
+        },
+        {
+          "nodeType": 3,
+          "caller": "package:lib/controllers",
+          "callee": "package:lib/views/users",
+          "name": "list",
+          "static": false,
+          "digest": "d2179770ca2e3be403731a09254a6e831587c4e825db8a3559de8a6a7660132e",
+          "subtreeDigest": "324a00b3657622a2354bf71e7f7e1300af1c79cd5a075ec359229277f3dfff4d",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "lib/views/users/Views::Users::List#list",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "array"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 1,
+              "count": 5,
+              "digest": "loop",
+              "subtreeDigest": "loop:124055b5fd55967a48b2a4f441d1d73059b8a7df596c26faef5f91ef582fbc41",
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:lib/views/users",
+                  "callee": "package:lib/models",
+                  "name": "posts",
+                  "static": false,
+                  "digest": "d5a2d2e7985d1e0fe85b9563c174d700d1a68567a29749ea471ac2582ff6326a",
+                  "subtreeDigest": "fc1d20753c67217378c6d220473eb6050fbdfaae03c3517732f0c5945c0d7fe6",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "lib/models/User#posts",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "array"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:lib/models",
+                      "callee": "package:lib/models",
+                      "name": "find_for_user",
+                      "static": true,
+                      "digest": "b49e3fc05bf13d51c05e4e88f56b275729b46e8739892d3610df5eb4f0229b5a",
+                      "subtreeDigest": "9abc4e6e1d1c5d02e35bcf5d1495a2ea618af007b4b1b95e6333a4aa70c2d5bb",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "lib/models/Post.find_for_user",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "array"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [
+                        {
+                          "nodeType": 3,
+                          "caller": "package:lib/models",
+                          "callee": "package:lib/database",
+                          "name": "query",
+                          "static": true,
+                          "digest": "f38424ccefa090e8f50bc23d085a4cc9fbda158b94efe53128a57f828c52b763",
+                          "subtreeDigest": "50fd86f7bb40e4a688e186bcbc89540ae3599b96b96d581f7d83664196941781",
+                          "stableProperties": {
+                            "event_type": "function",
+                            "id": "lib/database/Database.query",
+                            "raises_exception": false
+                          },
+                          "children": [],
+                          "elapsed": 0.00000100000761449337
+                        }
+                      ],
+                      "elapsed": 0.00003900006413459778
+                    }
+                  ],
+                  "elapsed": 0.00011999998241662979
+                },
+                {
+                  "nodeType": 1,
+                  "count": 2,
+                  "digest": "loop",
+                  "subtreeDigest": "loop:be6dd40b7b84ca3b6305ddf325f1fb2dbbb4f2b4dfdb0118c0bffb65d6436b28",
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:lib/views/users",
+                      "callee": "package:lib/views/posts",
+                      "name": "show",
+                      "static": false,
+                      "digest": "527c645f25eb9879f789e61d2b8b1b94c2a62a1c7a9747445c1e01e2abc00f23",
+                      "subtreeDigest": "464e8c040bd781e1b07fb0354e5d7a2fa3cd31649280df616de4b85007698871",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "lib/views/posts/Views::Posts::Show#show",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "string"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.00000200001522898674
+                    }
+                  ],
+                  "elapsed": 0.00000300002284348011
+                }
+              ],
+              "elapsed": 0.00042599975131452084
+            }
+          ],
+          "elapsed": 0.0009800000116229057
+        }
+      ],
+      "elapsed": 0.0014929999597370625
+    }
+  ]
+}
