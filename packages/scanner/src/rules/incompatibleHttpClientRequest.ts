@@ -1,10 +1,11 @@
 import { Event } from '@appland/models';
-import { forClientRequest, forURL, breakingChanges } from '../openapi';
+import { forClientRequest, breakingChanges } from '../openapi';
 import { MatchResult, Rule, RuleLogic } from '../types';
 import * as types from './types';
 import OpenApiDiff from 'openapi-diff';
 import { OpenAPIV3 } from 'openapi-types';
 import parseRuleDescription from './lib/parseRuleDescription';
+import openapiProvider from './lib/openapiProvider';
 
 class Options implements types.IncompatibleHttpClientRequest.Options {
   public schemata: Record<string, string> = {};
@@ -22,7 +23,7 @@ const changeMessage = (change: OpenApiDiff.DiffResult<'breaking'>): string => {
 function build(options: Options): RuleLogic {
   async function matcher(event: Event): Promise<MatchResult[]> {
     const clientFragment = forClientRequest(event);
-    const serverSchema = await forURL(event.httpClientRequest!.url!, options.schemata);
+    const serverSchema = await openapiProvider(event.httpClientRequest!.url!, options.schemata);
     const clientSchema = {
       openapi: '3.0.0',
       info: {
