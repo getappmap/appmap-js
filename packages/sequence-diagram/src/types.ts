@@ -190,8 +190,9 @@ export interface Diagram {
 import buildDiagram from './buildDiagram';
 import buildDiffDiagram from './buildDiffDiagram';
 import diff from './diff';
+import unparseDiagram from './unparseDiagram';
 
-export { buildDiagram, buildDiffDiagram, diff };
+export { buildDiagram, buildDiffDiagram, diff, unparseDiagram };
 
 export enum FormatType {
   JSON = 'json',
