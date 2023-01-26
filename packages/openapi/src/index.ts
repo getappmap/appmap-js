@@ -1,4 +1,3 @@
-import provider from './provider';
 import Model from './model';
 import SecuritySchemes from './securitySchemes';
 import { rpcRequestForEvent } from './rpcRequest';
@@ -27,17 +26,4 @@ const forClientRequest = (event: Event): OpenAPIV3Fragment | undefined => {
   return { paths: model.openapi(), securitySchemes: securitySchemes.openapi() };
 };
 
-const forURL = async (
-  url: string,
-  openapiSchemata: Record<string, string>
-): Promise<OpenAPIV3.Document> => {
-  return provider(new URL(url).host, openapiSchemata);
-};
-
-export {
-  Model,
-  forClientRequest,
-  forURL,
-  rpcRequestForEvent,
-  SecuritySchemes,
-};
+export { Model, forClientRequest, rpcRequestForEvent, SecuritySchemes };
