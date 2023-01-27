@@ -178,8 +178,9 @@ export default {
 
 .return-line-segment,
 .self-return {
-  padding-bottom: calc(var(--open-group-count) * 40px + 5px);
   padding-bottom: 5px;
+  margin-bottom: calc(var(--close-group-count) * 40px);
+  padding-top: 5px;
 }
 
 .single-span {
