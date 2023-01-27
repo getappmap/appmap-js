@@ -344,48 +344,35 @@
           },
           "children": [
             {
-              "nodeType": 3,
-              "caller": "package:actionpack",
-              "callee": "package:logger",
-              "name": "write",
-              "static": false,
-              "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
-              "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
-              "stableProperties": {
-                "event_type": "function",
-                "id": "logger/Logger::LogDevice#write",
-                "raises_exception": false
-              },
-              "returnValue": {
-                "returnValueType": {
-                  "name": "integer"
-                },
-                "raisesException": false
-              },
-              "children": [],
-              "elapsed": 0.00003700004890561104
-            },
-            {
-              "nodeType": 3,
-              "caller": "package:actionpack",
-              "callee": "package:logger",
-              "name": "write",
-              "static": false,
-              "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
-              "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
-              "stableProperties": {
-                "event_type": "function",
-                "id": "logger/Logger::LogDevice#write",
-                "raises_exception": false
-              },
-              "returnValue": {
-                "returnValueType": {
-                  "name": "integer"
-                },
-                "raisesException": false
-              },
-              "children": [],
-              "elapsed": 0.000012999982573091984
+              "nodeType": 1,
+              "count": 2,
+              "digest": "loop",
+              "subtreeDigest": "loop:416748775bef3922b42d792af9a4af570bd564ac98c2d156118c1a6695aea0fc",
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:actionpack",
+                  "callee": "package:logger",
+                  "name": "write",
+                  "static": false,
+                  "digest": "f0aa2f282cc9debcdb543d31c389edf86c3f1303baa3340129a79969b1cf0886",
+                  "subtreeDigest": "3ad08e01de68b4ed3b78af571917e6d2f7dbc96854fc3cd8bb6e616887cb4af0",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "logger/Logger::LogDevice#write",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "integer"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.00003700004890561104
+                }
+              ],
+              "elapsed": 0.00005000003147870302
             },
             {
               "nodeType": 3,
