@@ -20,7 +20,7 @@ import { inspect } from 'util';
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
-import Telemetry, { Git } from '../telemetry';
+import Telemetry, { Git, GitState } from '../telemetry';
 
 type FilterFunction = (file: string) => Promise<{ enable: boolean; message?: string }>;
 
@@ -247,12 +247,17 @@ ${yaml.dump(template)}
 };
 
 async function sendTelemetry(paths: OpenAPIV3.PathsObject, numAppMaps: number, appmapDir: string) {
+  const gitState = GitState[await Git.state(appmapDir)];
+  const contributors = (await Git.contributors(60, appmapDir)).length;
   Telemetry.sendEvent(
     {
       name: 'appmap:openapi',
+      properties: {
+        git_state: gitState,
+      },
       metrics: {
         paths: Object.keys(paths).length,
-        contributors: (await Git.contributors(60, appmapDir)).length,
+        contributors,
         numAppMaps,
       },
     },

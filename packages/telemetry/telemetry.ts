@@ -4,9 +4,10 @@ import * as os from 'os';
 import { sync as readPackageUpSync } from 'read-pkg-up';
 import { TelemetryClient, setup as AppInsights } from 'applicationinsights';
 import Conf from 'conf';
-import { exec as execCallback } from 'child_process';
+import { exec as execCallback, spawn } from 'child_process';
 import { promisify } from 'util';
-import { PathLike } from 'fs';
+import { PathLike, promises as fs, constants as fsConstants } from 'fs';
+import * as path from 'path';
 
 const exec = promisify(execCallback);
 
@@ -252,6 +253,12 @@ export default class Telemetry {
   }
 }
 
+export enum GitState {
+  NotInstalled, // The git cli was not found.
+  NoRepository, // Git is installed but no repository was found.
+  Ok, // Git is installed, a repository is present.
+}
+
 class GitProperties {
   static async contributors(sinceDaysAgo: number, cwd?: PathLike): Promise<Array<string>> {
     const unixTimeNow = Math.floor(Number(new Date()) / 1000);
@@ -279,6 +286,30 @@ class GitProperties {
     } catch {
       return [];
     }
+  }
+
+  static async state(cwd?: PathLike): Promise<GitState> {
+    return new Promise<GitState>((resolve) => {
+      try {
+        const commandProcess = spawn('git', ['status'], {
+          shell: true,
+          cwd: cwd?.toString(),
+        });
+        commandProcess.on('close', (code) => {
+          switch (code) {
+            case 127:
+              return resolve(GitState.NotInstalled);
+            case 128:
+              return resolve(GitState.NoRepository);
+            default:
+              return resolve(GitState.Ok);
+          }
+        });
+        commandProcess.on('error', () => GitState.NotInstalled);
+      } catch {
+        resolve(GitState.NotInstalled);
+      }
+    });
   }
 }
 

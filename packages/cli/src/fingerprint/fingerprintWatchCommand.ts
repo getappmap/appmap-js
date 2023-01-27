@@ -5,7 +5,7 @@ import path, { join, resolve } from 'path';
 import EventAggregator from '../lib/eventAggregator';
 import flattenMetadata from '../lib/flattenMetadata';
 import { intersectMaps } from '../lib/intersectMaps';
-import Telemetry, { Git } from '../telemetry';
+import Telemetry, { Git, GitState } from '../telemetry';
 import { verbose } from '../utils';
 import { FingerprintEvent } from './fingerprinter';
 import FingerprintQueue from './fingerprintQueue';
@@ -247,15 +247,17 @@ export default class FingerprintWatchCommand {
   }
 
   private async sendTelemetry(metadata: Metadata[], appmapDir: string) {
+    const gitState = GitState[await Git.state(appmapDir)];
+    const contributors = (await Git.contributors(60, appmapDir)).length;
     const properties = Object.fromEntries(
       intersectMaps(...metadata.map(flattenMetadata)).entries()
     );
     Telemetry.sendEvent({
       name: 'appmap:index',
-      properties,
+      properties: { ...properties, git_state: gitState },
       metrics: {
         appmaps: metadata.length,
-        contributors: (await Git.contributors(60, appmapDir)).length,
+        contributors: contributors,
       },
     });
   }
