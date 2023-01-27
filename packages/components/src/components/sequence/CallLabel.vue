@@ -1,6 +1,6 @@
 <template>
   <div class="label">
-    <span class="name">{{ actionSpec.nodeName }}</span>
+    <span :class="classes">{{ actionSpec.nodeName }}</span>
     <template v-if="actionSpec.hasElapsed">
       <span class="elapsed">{{ actionSpec.elapsedTimeMs }} ms</span>
     </template>
@@ -8,6 +8,7 @@
 </template>
 
 <script lang="ts">
+import { isFunction } from '@appland/sequence-diagram';
 import { ActionSpec } from './ActionSpec';
 
 export default {
@@ -20,6 +21,16 @@ export default {
       type: ActionSpec,
       required: true,
       readonly: true,
+    },
+  },
+
+  computed: {
+    classes(): string[] {
+      const result = ['name'];
+      if (isFunction(this.actionSpec.action) && this.actionSpec.action.static) {
+        result.push('static');
+      }
+      return result;
     },
   },
 };
@@ -35,6 +46,10 @@ export default {
   max-width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.name.static {
+  text-decoration: underline;
 }
 
 .elapsed {
