@@ -120,14 +120,15 @@ export class YarnInstaller extends JavaScriptInstaller {
   }
 
   async isYarnVersionOne(): Promise<boolean> {
+    console.debug("isYarnVersionOne - IN");
     let isVersionOne: boolean;
     try {
       const versionOutput = await getOutput('yarn', ['--version'], this.path);
       const version = semver.coerce(versionOutput.output);
+      console.debug("versionOutput was ", versionOutput);
+      console.debug("version was       ", version);
 
       if (!version) {
-        console.debug("versionOutput was ", versionOutput);
-        console.debug("version was       ", version);
         throw new UserConfigError('Could not detect yarn version');
       }
 
