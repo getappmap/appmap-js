@@ -148,6 +148,7 @@
         <div
           class="gutter-container gutter-container-right"
           :style="{
+            ...actionSpec.groupMemberAttributes,
             ...actionSpec.lifecycleAttributes,
             ...{
               'grid-column':
@@ -230,7 +231,8 @@ export default {
 
 .call-line-segment,
 .self-call {
-  padding-top: calc(var(--open-group-count) * 40px + 5px);
+  margin-top: calc(var(--open-group-count) * 40px);
+  padding-top: 5px;
   padding-bottom: 5px;
 }
 
@@ -291,8 +293,8 @@ export default {
   background-color: black;
   border: 1px solid gray;
   position: relative;
-  height: calc(100% + 17px);
-  top: 21px;
+  height: calc(100% + 17px - (var(--open-group-count) + var(--close-group-count)) * 40px);
+  top: calc(var(--open-group-count) * 40px + 21px);
   left: calc(100% - (var(--callee-lifecycle-depth) * 4px));
 }
 </style>
