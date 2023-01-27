@@ -37,6 +37,7 @@ jobs:
       script: yarn run chromatic
 
     - stage: deploy
+      os: osx
       if: branch = main
       script: |
         yarn run chromatic --auto-accept-changes \

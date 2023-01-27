@@ -1,0 +1,23 @@
+#!/bin/bash
+set -e
+
+# Only run on Mac OS
+[ "`uname`" = "Darwin" ] || exit 0
+
+# Codesign the binaries with an ad-hoc signature. This is necessary for notarization, but
+# we should probably use a proper certificate.
+codesign -s - release/appmap-macos-x64
+codesign -s - release/appmap-macos-arm64
+
+# Apple's notarization process requires that the binaries be zipped. It should be able to
+# handle multiple binaries at once as long as each archive is zipped into a single file.
+# See https://developer.apple.com/documentation/xcode/notarizing_macos_software_before_distribution/customizing_the_notarization_workflow
+zip -j release/appmap-macos-x64.zip release/appmap-macos-x64
+zip -j release/appmap-macos-arm64.zip release/appmap-macos-arm64
+zip -j release/appmap-macos.zip release/appmap-macos-x64.zip release/appmap-macos-arm64.zip
+
+# Notarize the binaries using notarytool
+notarytool submit \
+  --wait \
+  -k "${APPLE_CONNECT_PKEY_PATH}" \
+  release/appmap-macos.zip
