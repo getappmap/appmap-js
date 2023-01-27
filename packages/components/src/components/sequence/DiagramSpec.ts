@@ -20,7 +20,6 @@ export default class DiagramSpec {
     const lifecycleDepth: Map<ActionId, number> = new Map();
     const collectActions = (action: Action): void => {
       let spec: ActionSpec;
-      let callSpec: ActionSpec | undefined;
       const [caller, callee] = actionActors(action);
 
       const incrementLifecycleDepth = (actor: Actor | undefined): void => {
@@ -49,7 +48,7 @@ export default class DiagramSpec {
         if (nodeResult(action)) {
           incrementLifecycleDepth(callee);
         }
-        callSpec = spec = new ActionSpec(
+        spec = new ActionSpec(
           diagram,
           action,
           'call',
@@ -65,6 +64,7 @@ export default class DiagramSpec {
         openAction.openGroup = true;
         const closeAction = this.actions[this.actions.length - 1];
         closeAction.closeGroup = true;
+        spec.returnIndex = this.actions.length;
       } else {
         if (nodeResult(action)) {
           this.rowCount += 1;
@@ -76,10 +76,8 @@ export default class DiagramSpec {
             actorLifecycleDepth(caller),
             actorLifecycleDepth(callee)
           );
-          if (callSpec) {
-            returnSpec.callIndex = callSpec.index;
-            callSpec.returnIndex = this.actions.length;
-          }
+          returnSpec.callIndex = spec.index;
+          spec.returnIndex = this.actions.length;
           decrementLifecycleDepth(callee);
           this.actions.push(returnSpec);
         }

@@ -4,19 +4,20 @@
       <VActor :actor="actor" :row="1" :index="index" :height="diagramSpec.rowCount" />
     </template>
     <template v-for="action in diagramSpec.actions">
+      <template v-if="action.nodeType === 'loop'"><VLoopAction :actionSpec="action" /></template>
       <template v-if="action.nodeType === 'call'">
         <VCallAction :actionSpec="action" />
       </template>
       <template v-if="action.nodeType === 'return'">
         <VReturnAction :actionSpec="action" />
       </template>
-      <template v-if="action.nodeType === 'loop'"></template>
     </template>
   </div>
 </template>
 
 <script lang="ts">
-import { Action, Diagram, isLoop, nodeResult, unparseDiagram } from '@appland/sequence-diagram';
+import { Diagram, unparseDiagram } from '@appland/sequence-diagram';
+import VLoopAction from '@/components/sequence/LoopAction.vue';
 import VCallAction from '@/components/sequence/CallAction.vue';
 import VReturnAction from '@/components/sequence/ReturnAction.vue';
 import VActor from '@/components/sequence/Actor.vue';
@@ -25,7 +26,7 @@ import DiagramSpec from './sequence/DiagramSpec';
 export default {
   name: 'v-diagram-sequence',
 
-  components: { VCallAction, VReturnAction, VActor },
+  components: { VLoopAction, VCallAction, VReturnAction, VActor },
 
   props: {
     diagram: {

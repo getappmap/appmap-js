@@ -14,6 +14,8 @@ export enum CallDirection {
   Left = 'left',
 }
 
+type ActorId = string;
+
 export class ActionSpec {
   children?: ActionSpec[];
   callIndex?: number;
@@ -79,6 +81,25 @@ export class ActionSpec {
     if (this.action.elapsed === undefined) return;
 
     return +(this.action.elapsed * 1000).toPrecision(3);
+  }
+
+  // Gets the minimum and maximum action index that are spanned by any descendant.
+  get descendantsActorIndexSpan(): [number, number] {
+    let actorIds: Set<ActorId> = new Set();
+
+    const collectActors = (action: Action): void => {
+      actionActors(action)
+        .filter(Boolean)
+        .forEach((actor) => actorIds.add(actor.id));
+      action.children.forEach((child) => collectActors(child));
+    };
+    this.action.children.forEach((child) => collectActors(child));
+    const indexes = [...actorIds]
+      .map((actorId) => this.diagram.actors.findIndex((a) => a.id === actorId))
+      .filter((id) => id >= 0)
+      .sort();
+
+    return [indexes[0], indexes[indexes.length - 1]];
   }
 
   // Gets the display column index of the caller. Column 1 is used for the "world" -
