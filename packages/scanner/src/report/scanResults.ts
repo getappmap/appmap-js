@@ -3,7 +3,7 @@ import Check from '../check';
 import Configuration from '../configuration/types/configuration';
 import { Finding } from '../types';
 import { AppMapMetadata, ScanSummary } from './scanSummary';
-import Telemetry, { Git } from '../telemetry';
+import Telemetry, { Git, GitState } from '../telemetry';
 
 class DistinctItems<T> {
   private members: Record<string, T> = {};
@@ -108,6 +108,7 @@ export async function sendScanResultsTelemetry(telemetry: ScanTelemetry): Promis
     name: 'scan:completed',
     properties: {
       rules: telemetry.ruleIds.sort().join(', '),
+      git_state: GitState[await Git.state(telemetry.appmapDir)],
     },
     metrics: {
       duration: telemetry.elapsedMs / 1000,
