@@ -16,15 +16,44 @@ export enum CallDirection {
 
 export class ActionSpec {
   children?: ActionSpec[];
+  callIndex?: number;
   returnIndex?: number;
+  // Indicates whether this action is the the first, or last, action in a group. In these cases,
+  // the action rendering will leave extra space for the group enclosure box.
+  public openGroup?: boolean;
+  // See above.
+  public closeGroup?: boolean;
 
   constructor(
     public diagram: Diagram,
     public action: Action,
     public nodeType: 'call' | 'return' | 'loop',
-    public index: number
+    // Index of this action in the array of all ActionSpecs in the diagram. Because the diagram
+    // is rendered as a single grid, the index is the row index, and is not reset to zero
+    // for child actions.
+    public index: number,
+    // Number of open transactions on the caller actor. This factor affects the length of the
+    // action line and placement of the arrow.
+    public callerLifecycleDepth?: number,
+    // Number of open transactions on the callee actor. Effect is analogous to callerLifecycleDepth,
+    // but used for the return arrow to the callee.
+    public calleeLifecycleDepth?: number
   ) {
     this.children = [];
+  }
+
+  get groupMemberAttributes(): Record<string, string | number> {
+    return {
+      '--open-group-count': this.openGroup ? 1 : 0,
+      '--close-group-count': this.closeGroup ? 1 : 0,
+    };
+  }
+
+  get lifecycleAttributes(): Record<string, string | number> {
+    return {
+      '--caller-lifecycle-depth': this.callerLifecycleDepth || 0,
+      '--callee-lifecycle-depth': this.calleeLifecycleDepth || 0,
+    };
   }
 
   get callArrowDirection(): CallDirection {
@@ -38,7 +67,7 @@ export class ActionSpec {
     return nodeName(this.action);
   }
 
-  get nodeResult(): string {
+  get nodeResult(): string | undefined {
     return nodeResult(this.action);
   }
 
@@ -46,7 +75,9 @@ export class ActionSpec {
     return this.action.elapsed !== undefined;
   }
 
-  get elapsedTimeMs(): number {
+  get elapsedTimeMs(): number | undefined {
+    if (this.action.elapsed === undefined) return;
+
     return +(this.action.elapsed * 1000).toPrecision(3);
   }
 
@@ -61,6 +92,8 @@ export class ActionSpec {
     return actorIndex + 2;
   }
 
+  // Gets the display column index of the callee.
+  // TODO: For outbound RPC, is the callee column greater than the last actor?
   get calleeActionIndex(): number {
     const actors = actionActors(this.action);
     if (!actors[1]) return 1;

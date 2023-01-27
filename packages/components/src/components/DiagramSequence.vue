@@ -1,9 +1,9 @@
 <template>
   <div class="sequence-diagram">
     <template v-for="(actor, index) in actors">
-      <VActor :actor="actor" :row="1" :index="index" :height="actionCount" />
+      <VActor :actor="actor" :row="1" :index="index" :height="diagramSpec.rowCount" />
     </template>
-    <template v-for="action in actionSpecs">
+    <template v-for="action in diagramSpec.actions">
       <template v-if="action.nodeType === 'call'">
         <VCallAction :actionSpec="action" />
       </template>
@@ -20,7 +20,7 @@ import { Action, Diagram, isLoop, nodeResult, unparseDiagram } from '@appland/se
 import VCallAction from '@/components/sequence/CallAction.vue';
 import VReturnAction from '@/components/sequence/ReturnAction.vue';
 import VActor from '@/components/sequence/Actor.vue';
-import { ActionSpec } from './sequence/ActionSpec';
+import DiagramSpec from './sequence/DiagramSpec';
 
 export default {
   name: 'v-diagram-sequence',
@@ -36,35 +36,11 @@ export default {
   },
   data() {
     const diagramObject = unparseDiagram(this.diagram as Diagram);
-    const actionSpecs: ActionSpec[] = [];
-    let actionCount = 0;
-    const collectActions = (action: Action, specs: ActionSpec[]): void => {
-      let childSpecs = specs;
-      let spec: ActionSpec;
-      let callSpec: ActionSpec | undefined;
-      actionCount += 1;
-      if (isLoop(action)) {
-        const children: ActionSpec[] = [];
-        spec = new ActionSpec(diagramObject, action, 'loop', specs.length);
-        childSpecs = children;
-      } else {
-        callSpec = spec = new ActionSpec(diagramObject, action, 'call', specs.length);
-      }
-      specs.push(spec);
-      action.children.forEach((child) => collectActions(child, childSpecs));
-      if (!isLoop(action) && nodeResult(action)) {
-        actionCount += 1;
-        const returnSpec = new ActionSpec(diagramObject, action, 'return', specs.length);
-        if (callSpec) callSpec.returnIndex = specs.length;
-        specs.push(returnSpec);
-      }
-    };
-    diagramObject.rootActions.forEach((action) => collectActions(action, actionSpecs));
+    const diagramSpec = new DiagramSpec(diagramObject);
 
     return {
       actors: diagramObject.actors,
-      actionCount,
-      actionSpecs,
+      diagramSpec,
     };
   },
 };
