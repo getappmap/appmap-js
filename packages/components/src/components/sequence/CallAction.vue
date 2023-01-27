@@ -8,68 +8,139 @@
       <div
         class="self-call"
         :style="{
-          'grid-column': actionSpec.callerActionIndex,
-          'grid-row': gridRows,
+          ...actionSpec.groupMemberAttributes,
+          ...actionSpec.lifecycleAttributes,
+          ...{
+            'grid-column': actionSpec.callerActionIndex,
+            'grid-row': gridRows,
+          },
         }"
       >
         <VCallLabel :action-spec="actionSpec" />
       </div>
     </template>
     <template v-else-if="actionSpec.callArrowDirection === 'right'">
-      <div
-        class="call-line-segment label-span arrow-base"
-        :style="{
-          'grid-column': actionSpec.callerActionIndex,
-          'grid-row': gridRows,
-        }"
-      >
-        <VCallLabel :action-spec="actionSpec" />
-      </div>
-      <template v-if="actionSpec.calleeActionIndex - actionSpec.callerActionIndex > 2">
+      <template v-if="actionSpec.calleeActionIndex - actionSpec.callerActionIndex === 1">
         <div
-          class="call-line-segment connecting-span"
+          class="call-line-segment single-span"
           :style="{
-            'grid-column': [
-              actionSpec.callerActionIndex + 1,
-              actionSpec.calleeActionIndex - 1,
-            ].join(' / '),
-            'grid-row': gridRows,
+            ...actionSpec.groupMemberAttributes,
+            ...actionSpec.lifecycleAttributes,
+            ...{
+              'grid-column': actionSpec.callerActionIndex,
+              'grid-row': gridRows,
+            },
           }"
-        ></div>
+        >
+          <VCallLabel :action-spec="actionSpec" />
+          <ArrowRight class="arrow" />
+        </div>
       </template>
-      <div
-        class="call-line-segment arrow-head"
-        :style="{ 'grid-column': actionSpec.calleeActionIndex - 1, 'grid-row': gridRows }"
-      >
-        <ArrowRight class="arrow" />
-      </div>
+      <template v-else>
+        <div
+          class="call-line-segment label-span arrow-base"
+          :style="{
+            ...actionSpec.groupMemberAttributes,
+            ...actionSpec.lifecycleAttributes,
+            ...{
+              'grid-column': actionSpec.callerActionIndex,
+              'grid-row': gridRows,
+            },
+          }"
+        >
+          <VCallLabel :action-spec="actionSpec" />
+        </div>
+        <template v-if="actionSpec.calleeActionIndex - actionSpec.callerActionIndex > 2">
+          <div
+            class="call-line-segment connecting-span"
+            :style="{
+              ...actionSpec.groupMemberAttributes,
+              ...actionSpec.lifecycleAttributes,
+              ...{
+                'grid-column': [
+                  actionSpec.callerActionIndex + 1,
+                  actionSpec.calleeActionIndex - 1,
+                ].join(' / '),
+                'grid-row': gridRows,
+              },
+            }"
+          ></div>
+        </template>
+        <div
+          class="call-line-segment arrow-head"
+          :style="{
+            ...actionSpec.groupMemberAttributes,
+            ...actionSpec.lifecycleAttributes,
+            ...{
+              'grid-column': actionSpec.calleeActionIndex - 1,
+              'grid-row': gridRows,
+            },
+          }"
+        >
+          <ArrowRight class="arrow" />
+        </div>
+      </template>
     </template>
     <template v-else>
-      <div
-        class="call-line-segment label-span arrow-head"
-        :style="{
-          'grid-column': actionSpec.calleeActionIndex,
-          'grid-row': gridRows,
-        }"
-      >
-        <VCallLabel :action-spec="actionSpec" />
-        <ArrowRight class="arrow" />
-      </div>
-      <template v-if="actionSpec.callerActionIndex - actionSpec.calleeActionIndex > 2">
+      <template v-if="actionSpec.callerActionIndex - actionSpec.calleeActionIndex === 1">
         <div
-          class="call-line-segment connecting-span"
+          class="call-line-segment single-span"
           :style="{
-            'grid-column': [actionSpec.calleeActionIndex, actionSpec.callerActionIndex - 1].join(
-              ' / '
-            ),
-            'grid-row': gridRows,
+            ...actionSpec.groupMemberAttributes,
+            ...actionSpec.lifecycleAttributes,
+            ...{
+              'grid-column': actionSpec.calleeActionIndex,
+              'grid-row': gridRows,
+            },
+          }"
+        >
+          <VCallLabel :action-spec="actionSpec" />
+          <ArrowRight class="arrow" />
+        </div>
+      </template>
+      <template v-else>
+        <div
+          class="call-line-segment label-span arrow-head"
+          :style="{
+            ...actionSpec.groupMemberAttributes,
+            ...actionSpec.lifecycleAttributes,
+            ...{
+              'grid-column': actionSpec.calleeActionIndex,
+              'grid-row': gridRows,
+            },
+          }"
+        >
+          <VCallLabel :action-spec="actionSpec" />
+          <ArrowRight class="arrow" />
+        </div>
+        <template v-if="actionSpec.callerActionIndex - actionSpec.calleeActionIndex > 2">
+          <div
+            class="call-line-segment connecting-span"
+            :style="{
+              ...actionSpec.groupMemberAttributes,
+              ...actionSpec.lifecycleAttributes,
+              ...{
+                'grid-column': [
+                  actionSpec.calleeActionIndex + 1,
+                  actionSpec.callerActionIndex - 1,
+                ].join(' / '),
+                'grid-row': gridRows,
+              },
+            }"
+          ></div>
+        </template>
+        <div
+          class="call-line-segment arrow-base"
+          :style="{
+            ...actionSpec.groupMemberAttributes,
+            ...actionSpec.lifecycleAttributes,
+            ...{
+              'grid-column': actionSpec.callerActionIndex - 1,
+              'grid-row': gridRows,
+            },
           }"
         ></div>
       </template>
-      <div
-        class="call-line-segment arrow-base"
-        :style="{ 'grid-column': actionSpec.callerActionIndex - 1, 'grid-row': gridRows }"
-      ></div>
     </template>
 
     <template v-if="showGutter">
@@ -77,8 +148,12 @@
         <div
           class="gutter-container gutter-container-right"
           :style="{
-            'grid-column': Math.max(actionSpec.callerActionIndex, actionSpec.calleeActionIndex) - 1,
-            'grid-row': [actionSpec.index + 2, actionSpec.returnIndex + 2].join(' / '),
+            ...actionSpec.lifecycleAttributes,
+            ...{
+              'grid-column':
+                Math.max(actionSpec.callerActionIndex, actionSpec.calleeActionIndex) - 1,
+              'grid-row': [actionSpec.index + 2, actionSpec.returnIndex + 2].join(' / '),
+            },
           }"
         >
           <div class="gutter"></div>
@@ -88,8 +163,13 @@
         <div
           class="gutter-container gutter-container-left"
           :style="{
-            'grid-column': Math.min(actionSpec.callerActionIndex, actionSpec.calleeActionIndex) - 1,
-            'grid-row': [actionSpec.index + 2, actionSpec.returnIndex + 2].join(' / '),
+            ...actionSpec.groupMemberAttributes,
+            ...actionSpec.lifecycleAttributes,
+            ...{
+              'grid-column':
+                Math.min(actionSpec.callerActionIndex, actionSpec.calleeActionIndex) - 1,
+              'grid-row': [actionSpec.index + 2, actionSpec.returnIndex + 2].join(' / '),
+            },
           }"
         >
           <div class="gutter"></div>
@@ -130,9 +210,7 @@ export default {
         .toLocaleString();
     },
     showGutter(): boolean {
-      return (
-        this.actionSpec.callArrowDirection !== CallDirection.Self && !!this.actionSpec.returnIndex
-      );
+      return !!this.actionSpec.returnIndex;
     },
   },
 };
@@ -143,40 +221,57 @@ export default {
   position: relative;
   padding-top: 4px;
   display: contents;
-
-  > div {
-    margin: 2px 0;
-    padding: 5px 0;
-  }
 }
 
 .call-line-segment {
   border-bottom: 2px solid magenta;
+  z-index: 1;
 }
 
-// Arrow base and head element width can be reduced by a fixed number of pixels to adjust for
-// e.g. the arrow SVGs and the 'lifecycle' boxes.
+.call-line-segment,
+.self-call {
+  padding-top: calc(var(--open-group-count) * 40px + 5px);
+  padding-bottom: 5px;
+}
+
+.single-span {
+  width: calc(100% - ((var(--caller-lifecycle-depth) + var(--callee-lifecycle-depth)) * 4px));
+  position: relative;
+}
+
+.arrow-base {
+  width: calc(100% - (var(--caller-lifecycle-depth) * 4px));
+  position: relative;
+}
+
+.arrow-head {
+  width: calc(100% - ((var(--callee-lifecycle-depth)) * 4px));
+  position: relative;
+}
 
 .call-right {
-  .arrow-head {
-    width: calc(100% - 4px);
-    position: relative;
+  .single-span {
+    left: calc(((var(--caller-lifecycle-depth)) * 4px));
+  }
+
+  .arrow-base {
+    left: calc((var(--caller-lifecycle-depth) * 4px));
   }
 
   .arrow {
-    right: -4px;
+    right: 0px;
     position: absolute;
     bottom: -7px;
   }
 }
 
 .call-left {
-  .arrow-base {
-    width: calc(100%);
+  .single-span {
+    left: calc(((var(--callee-lifecycle-depth)) * 4px));
   }
 
   .arrow-head {
-    position: relative;
+    left: calc((var(--callee-lifecycle-depth) * $sequence-activation-gutter-width));
   }
 
   .arrow {
@@ -192,11 +287,12 @@ export default {
 }
 
 .gutter {
-  width: 8px;
+  width: calc(var(--callee-lifecycle-depth) * 8px);
+  background-color: black;
   border: 1px solid gray;
   position: relative;
   height: calc(100% + 17px);
   top: 21px;
-  left: calc(100% - 4px);
+  left: calc(100% - (var(--callee-lifecycle-depth) * 4px));
 }
 </style>

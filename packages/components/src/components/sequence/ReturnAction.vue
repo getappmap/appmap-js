@@ -8,68 +8,132 @@
       <div
         class="self-return"
         :style="{
-          'grid-column': actionSpec.callerActionIndex,
-          'grid-row': gridRows,
+          ...actionSpec.groupMemberAttributes,
+          ...actionSpec.lifecycleAttributes,
+          ...{
+            'grid-column': actionSpec.callerActionIndex,
+            'grid-row': gridRows,
+          },
         }"
       >
         <VReturnLabel :action-spec="actionSpec" />
       </div>
     </template>
     <template v-else-if="actionSpec.callArrowDirection === 'right'">
-      <div
-        class="return-line-segment label-span arrow-head"
-        :style="{
-          'grid-column': actionSpec.callerActionIndex,
-          'grid-row': gridRows,
-        }"
-      >
-        <VReturnLabel :action-spec="actionSpec" />
-        <ArrowRight class="arrow" />
-      </div>
-      <template v-if="actionSpec.calleeActionIndex - actionSpec.callerActionIndex > 2">
+      <template v-if="actionSpec.calleeActionIndex - actionSpec.callerActionIndex === 1">
         <div
-          class="return-line-segment connecting-span"
+          class="return-line-segment single-span"
           :style="{
-            'grid-column': [
-              actionSpec.callerActionIndex + 1,
-              actionSpec.calleeActionIndex - 1,
-            ].join(' / '),
-            'grid-row': gridRows,
+            ...actionSpec.groupMemberAttributes,
+            ...actionSpec.lifecycleAttributes,
+            ...{
+              'grid-column': actionSpec.callerActionIndex,
+              'grid-row': gridRows,
+            },
+          }"
+        >
+          <VReturnLabel :action-spec="actionSpec" />
+          <ArrowRight class="arrow" />
+        </div>
+      </template>
+      <template v-else>
+        <div
+          class="return-line-segment label-span arrow-head"
+          :style="{
+            ...actionSpec.groupMemberAttributes,
+            ...actionSpec.lifecycleAttributes,
+            ...{
+              'grid-column': actionSpec.callerActionIndex,
+              'grid-row': gridRows,
+            },
+          }"
+        >
+          <VReturnLabel :action-spec="actionSpec" />
+          <ArrowRight class="arrow" />
+        </div>
+        <template v-if="actionSpec.calleeActionIndex - actionSpec.callerActionIndex > 2">
+          <div
+            class="return-line-segment connecting-span"
+            :style="{
+              ...actionSpec.groupMemberAttributes,
+              ...actionSpec.lifecycleAttributes,
+              ...{
+                'grid-column': [
+                  actionSpec.callerActionIndex + 1,
+                  actionSpec.calleeActionIndex - 1,
+                ].join(' / '),
+                'grid-row': gridRows,
+              },
+            }"
+          ></div>
+        </template>
+        <div
+          class="return-line-segment arrow-base"
+          :style="{
+            ...actionSpec.groupMemberAttributes,
+            ...actionSpec.lifecycleAttributes,
+            ...{ 'grid-column': actionSpec.calleeActionIndex - 1, 'grid-row': gridRows },
           }"
         ></div>
       </template>
-      <div
-        class="return-line-segment arrow-base"
-        :style="{ 'grid-column': actionSpec.calleeActionIndex - 1, 'grid-row': gridRows }"
-      ></div>
     </template>
     <template v-else>
-      <div
-        class="return-line-segment arrow-base"
-        :style="{ 'grid-column': actionSpec.calleeActionIndex, 'grid-row': gridRows }"
-      ></div>
-      <template v-if="actionSpec.callerActionIndex - actionSpec.calleeActionIndex > 2">
+      <template v-if="actionSpec.callerActionIndex - actionSpec.calleeActionIndex === 1">
         <div
-          class="return-line-segment connecting-span"
+          class="return-line-segment single-span"
           :style="{
-            'grid-column': [
-              actionSpec.calleeActionIndex + 1,
-              actionSpec.callerActionIndex - 1,
-            ].join(' / '),
-            'grid-row': gridRows,
+            ...actionSpec.groupMemberAttributes,
+            ...actionSpec.lifecycleAttributes,
+            ...{
+              'grid-column': actionSpec.calleeActionIndex,
+              'grid-row': gridRows,
+            },
+          }"
+        >
+          <VReturnLabel :action-spec="actionSpec" />
+          <ArrowRight class="arrow" />
+        </div>
+      </template>
+      <template v-else>
+        <div
+          class="return-line-segment arrow-base"
+          :style="{
+            ...actionSpec.groupMemberAttributes,
+            ...actionSpec.lifecycleAttributes,
+            ...{ 'grid-column': actionSpec.calleeActionIndex, 'grid-row': gridRows },
           }"
         ></div>
+        <template v-if="actionSpec.callerActionIndex - actionSpec.calleeActionIndex > 2">
+          <div
+            class="return-line-segment connecting-span"
+            :style="{
+              ...actionSpec.groupMemberAttributes,
+              ...actionSpec.lifecycleAttributes,
+              ...{
+                'grid-column': [
+                  actionSpec.calleeActionIndex + 1,
+                  actionSpec.callerActionIndex - 1,
+                ].join(' / '),
+                'grid-row': gridRows,
+              },
+            }"
+          ></div>
+        </template>
+        <div
+          class="return-line-segment label-span arrow-head"
+          :style="{
+            ...actionSpec.groupMemberAttributes,
+            ...actionSpec.lifecycleAttributes,
+            ...{
+              'grid-column': actionSpec.callerActionIndex - 1,
+              'grid-row': gridRows,
+            },
+          }"
+        >
+          <VReturnLabel :action-spec="actionSpec" />
+          <ArrowRight class="arrow" />
+        </div>
       </template>
-      <div
-        class="return-line-segment label-span arrow-head"
-        :style="{
-          'grid-column': actionSpec.callerActionIndex - 1,
-          'grid-row': gridRows,
-        }"
-      >
-        <VReturnLabel :action-spec="actionSpec" />
-        <ArrowRight class="arrow" />
-      </div>
     </template>
   </div>
 </template>
@@ -105,24 +169,41 @@ export default {
   position: relative;
   padding-top: 4px;
   display: contents;
-
-  > div {
-    margin: 2px 0;
-    padding: 5px 0;
-  }
 }
 
 .return-line-segment {
   border-bottom: 2px dotted magenta;
+  z-index: 1;
+}
+
+.return-line-segment,
+.self-return {
+  padding-bottom: calc(var(--open-group-count) * 40px + 5px);
+  padding-bottom: 5px;
+}
+
+.single-span {
+  width: calc(100% - ((var(--caller-lifecycle-depth) + var(--callee-lifecycle-depth)) * 4px));
+  position: relative;
+}
+
+.arrow-base {
+  width: calc(100% - (var(--callee-lifecycle-depth) * 4px));
+  position: relative;
+}
+
+.arrow-head {
+  width: calc(100% - ((var(--caller-lifecycle-depth)) * 4px));
+  position: relative;
 }
 
 .return-right {
-  .arrow-base {
-    width: calc(100%);
+  .single-span {
+    left: calc(((var(--caller-lifecycle-depth)) * 4px));
   }
 
   .arrow-head {
-    position: relative;
+    left: calc((var(--caller-lifecycle-depth) * 4px));
   }
 
   .arrow {
@@ -134,13 +215,16 @@ export default {
 }
 
 .return-left {
-  .arrow-head {
-    width: calc(100% - 4px);
-    position: relative;
+  .single-span {
+    left: calc(((var(--callee-lifecycle-depth)) * 4px));
+  }
+
+  .arrow-base {
+    left: calc((var(--callee-lifecycle-depth) * 4px));
   }
 
   .arrow {
-    right: -4px;
+    right: 0px;
     position: absolute;
     bottom: -7px;
   }
