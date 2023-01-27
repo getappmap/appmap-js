@@ -799,6 +799,7 @@ describe('install sub-command', () => {
           .onCall(callIdx++);
       }
 
+      console.debug("will call invokeCommand");
       return invokeCommand(projectDir, evalResults);
     };
 
