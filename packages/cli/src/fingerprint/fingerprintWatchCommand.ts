@@ -1,7 +1,7 @@
 import { Metadata } from '@appland/models';
-import { FSWatcher, watch } from 'chokidar';
-import { removeSync, outputFileSync } from 'fs-extra';
-import { join, resolve } from 'path';
+import { FSWatcher } from 'chokidar';
+import { outputFileSync, removeSync } from 'fs-extra';
+import path, { join, resolve } from 'path';
 import EventAggregator from '../lib/eventAggregator';
 import flattenMetadata from '../lib/flattenMetadata';
 import { intersectMaps } from '../lib/intersectMaps';
@@ -10,7 +10,6 @@ import { verbose } from '../utils';
 import { FingerprintEvent } from './fingerprinter';
 import FingerprintQueue from './fingerprintQueue';
 import Globber from './globber';
-import path from 'path';
 
 export default class FingerprintWatchCommand {
   private pidfilePath: string | undefined;
@@ -169,24 +168,15 @@ export default class FingerprintWatchCommand {
     return basename === 'node_modules' || basename === '.git';
   }
 
-  async execute() {
+  async execute(statDelayMs?: number) {
     this.fpQueue.process().then(() => {
       this.fpQueue.handler.checkVersion = false;
     });
 
     const glob = `${this.directory}/**/*.appmap.json`;
 
-    this.poller = new Globber(glob)
-      .on('add', this.added.bind(this))
-      .on('change', this.changed.bind(this))
-      .on('unlink', this.removed.bind(this));
-
-    const pollReady = new Promise<void>((r) => this.poller?.once('end', r));
-    this.poller.start();
-    await pollReady;
-
-    this.watcher = watch(glob, {
-      ignoreInitial: true,
+    this.watcher = new FSWatcher({
+      ignoreInitial: false,
       ignored: this.ignored.bind(this),
       ignorePermissionErrors: true,
     })
@@ -194,10 +184,17 @@ export default class FingerprintWatchCommand {
       .on('change', this.changed.bind(this))
       .on('unlink', this.removed.bind(this))
       .on('error', this.watcherErrorFunction.bind(this));
-
     const watchReady = new Promise<void>((r) => this.watcher?.once('ready', r));
+    this.watcher.add(glob);
+    await watchReady;
 
-    await Promise.all([pollReady, watchReady]);
+    this.poller = new Globber(glob, { statDelayMs })
+      .on('add', this.added.bind(this))
+      .on('change', this.changed.bind(this))
+      .on('unlink', this.removed.bind(this));
+    const pollReady = new Promise<void>((r) => this.poller?.once('end', r));
+    this.poller.start();
+    await pollReady;
 
     this.ready();
   }
