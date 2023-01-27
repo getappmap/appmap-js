@@ -750,6 +750,7 @@ describe('install sub-command', () => {
 //   });
 
   describe('A JavaScript project', () => {
+    sinon.restore();
     const jsTestE2E = async (
       installerName: string,
       nodeVersion: (command: CommandStruct) => Promise<CommandReturn>,
