@@ -33,7 +33,7 @@
           }"
         >
           <VReturnLabel :action-spec="actionSpec" />
-          <ArrowRight class="arrow" />
+          <Arrow class="arrow" />
         </div>
       </template>
       <template v-else>
@@ -49,7 +49,7 @@
           }"
         >
           <VReturnLabel :action-spec="actionSpec" />
-          <ArrowRight class="arrow" />
+          <Arrow class="arrow" />
         </div>
         <template v-if="actionSpec.calleeActionIndex - actionSpec.callerActionIndex > 2">
           <div
@@ -91,7 +91,7 @@
           }"
         >
           <VReturnLabel :action-spec="actionSpec" />
-          <ArrowRight class="arrow" />
+          <Arrow class="arrow" />
         </div>
       </template>
       <template v-else>
@@ -131,7 +131,7 @@
           }"
         >
           <VReturnLabel :action-spec="actionSpec" />
-          <ArrowRight class="arrow" />
+          <Arrow class="arrow" />
         </div>
       </template>
     </template>
@@ -139,14 +139,14 @@
 </template>
 
 <script lang="ts">
-import ArrowRight from '@/assets/arrow-right.svg';
+import Arrow from '@/assets/sequence-action-arrow.svg';
 import { ActionSpec } from './ActionSpec';
 import VReturnLabel from './ReturnLabel.vue';
 
 export default {
   name: 'v-sequence-return-action',
 
-  components: { ArrowRight, VReturnLabel },
+  components: { Arrow, VReturnLabel },
 
   props: {
     actionSpec: {
@@ -181,6 +181,10 @@ export default {
   padding-bottom: 5px;
   margin-bottom: calc(var(--close-group-count) * 40px);
   padding-top: 5px;
+}
+
+.arrow {
+  fill: $sequence-call-line-color;
 }
 
 .single-span {
