@@ -53,6 +53,6 @@ export default {
 }
 
 .elapsed {
-  color: lightgray;
+  color: $sequence-elapsed-time-color;
 }
 </style>

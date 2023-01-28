@@ -79,6 +79,24 @@ $fa-font-path: '/webfonts';
 
 $overlay: rgba($blue, 0.5);
 
+// Begin sequence diagram
+
+// Elapsed time indication
+$sequence-elapsed-time-color: $gray4;
+
+// Vertical box along a lifeline that indicates 'activation' of an actor.
+$sequence-activation-gutter-width: 4px;
+
+// Lines that indicate call or return from one actor to another.
+$sequence-call-line-width: 2px;
+$sequence-call-line-color: magenta;
+
+// Border around a group element, e.g. a loop.
+$sequence-group-border-width: 2px;
+$sequence-group-border-color: magenta;
+
+// End sequence diagram
+
 //VS Code
 $web-services: #c61c38;
 $vs-code-gray1: #1e1e1e;
