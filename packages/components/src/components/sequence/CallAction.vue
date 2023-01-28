@@ -33,7 +33,7 @@
           }"
         >
           <VCallLabel :action-spec="actionSpec" />
-          <ArrowRight class="arrow" />
+          <Arrow class="arrow" />
         </div>
       </template>
       <template v-else>
@@ -77,7 +77,7 @@
             },
           }"
         >
-          <ArrowRight class="arrow" />
+          <Arrow class="arrow" />
         </div>
       </template>
     </template>
@@ -95,7 +95,7 @@
           }"
         >
           <VCallLabel :action-spec="actionSpec" />
-          <ArrowRight class="arrow" />
+          <Arrow class="arrow" />
         </div>
       </template>
       <template v-else>
@@ -111,7 +111,7 @@
           }"
         >
           <VCallLabel :action-spec="actionSpec" />
-          <ArrowRight class="arrow" />
+          <Arrow class="arrow" />
         </div>
         <template v-if="actionSpec.callerActionIndex - actionSpec.calleeActionIndex > 2">
           <div
@@ -181,14 +181,14 @@
 </template>
 
 <script lang="ts">
-import ArrowRight from '@/assets/arrow-right.svg';
+import Arrow from '@/assets/sequence-action-arrow.svg';
 import { ActionSpec, CallDirection } from './ActionSpec';
 import VCallLabel from './CallLabel.vue';
 
 export default {
   name: 'v-sequence-call-action',
 
-  components: { ArrowRight, VCallLabel },
+  components: { Arrow, VCallLabel },
 
   props: {
     actionSpec: {
@@ -255,6 +255,10 @@ export default {
 .arrow-head {
   width: calc(100% - ((var(--callee-lifecycle-depth)) * $sequence-activation-gutter-width));
   position: relative;
+}
+
+.arrow {
+  fill: $sequence-call-line-color;
 }
 
 .call-right {
