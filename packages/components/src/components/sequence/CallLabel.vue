@@ -1,5 +1,5 @@
 <template>
-  <div class="label">
+  <div class="label" @click="selectEvent">
     <span :class="classes">{{ actionSpec.nodeName }}</span>
     <template v-if="actionSpec.hasElapsed">
       <span class="elapsed">{{ actionSpec.elapsedTimeMs }} ms</span>
@@ -10,6 +10,7 @@
 <script lang="ts">
 import { isFunction } from '@appland/sequence-diagram';
 import { ActionSpec } from './ActionSpec';
+import { SELECT_OBJECT } from '@/store/vsCode';
 
 export default {
   name: 'v-sequence-call-label',
@@ -33,6 +34,17 @@ export default {
       return result;
     },
   },
+  methods: {
+    selectEvent() {
+      if (this.$store) {
+        const eventId = this.actionSpec.action.eventIds[0];
+        if (eventId === undefined) return;
+
+        const event = this.$store.state.appMap.events[eventId - 1];
+        if (event) this.$store.commit(SELECT_OBJECT, event);
+      }
+    },
+  },
 };
 </script>
 
@@ -46,6 +58,11 @@ export default {
   max-width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.label:hover {
+  cursor: pointer;
+  color: $lightblue;
 }
 
 .name.static {
