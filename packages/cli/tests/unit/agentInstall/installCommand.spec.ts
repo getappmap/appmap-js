@@ -774,7 +774,7 @@ describe('install sub-command', () => {
           .callsFake(getYarnWorkspaces)
           .onCall(callIdx++)
           // why must installAgent be here and twice for the yarn test to pass?
-          //.callsFake(installAgent);
+          .callsFake(installAgent)
           .onCall(callIdx++)
           .callsFake(checkCurrentConfig)
           .onCall(callIdx++)
@@ -956,7 +956,7 @@ appmap_dir: tmp/appmap
       };
 
       it('installs as expected', async () => {
-        expect.assertions(14);
+        expect.assertions(15);
         const evalResults = (err: Error | undefined, argv: any, output: string) => {
           expect(err).toBeNull();
 
