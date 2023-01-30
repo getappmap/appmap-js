@@ -106,11 +106,15 @@ export class YarnInstaller extends JavaScriptInstaller {
   }
 
   async installAgent(): Promise<void> {
-    const cmd = new CommandStruct(
-      'yarn',
-      ['add', '--dev', process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE],
-      this.path
-    );
+    let parameters = ['add', '--dev', process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE];
+    const isVersionOne = await this.isYarnVersionOne();
+    if (isVersionOne) {
+      // for yarn1:
+      // when installing into the root workspace must pass -W.
+      // always passing it when installing doesn't hurt
+      parameters.push('-W');
+    }
+    const cmd = new CommandStruct('yarn', parameters, this.path);
 
     await run(cmd);
   }
@@ -134,6 +138,6 @@ export class YarnInstaller extends JavaScriptInstaller {
       throw new UserConfigError(err as string);
     }
 
-    return new Promise(resolve => resolve(isVersionOne));
+    return new Promise((resolve) => resolve(isVersionOne));
   }
 }

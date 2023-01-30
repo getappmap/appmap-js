@@ -1385,7 +1385,12 @@ appmap_dir: tmp/appmap
         })
         .onCall(callIdx++)
         .resolves({
-          stdout: '', // why wasn't '{}' necessary here?
+          stdout: '{}',
+          stderr: '',
+        })
+        .onCall(callIdx++)
+        .resolves({
+          stdout: '3.2.1',
           stderr: '',
         })
         .onCall(callIdx++)
@@ -1411,7 +1416,13 @@ appmap_dir: tmp/appmap
         })
         .onCall(callIdx++)
         .resolves({
-          stdout: '',
+          stdout: '3.2.1',
+          stderr: '',
+        })
+        // third project?
+        .onCall(callIdx++)
+        .resolves({
+          stdout: '3.2.1',
           stderr: '',
         })
         .onCall(callIdx++)
@@ -1419,7 +1430,6 @@ appmap_dir: tmp/appmap
           stdout: '',
           stderr: '',
         })
-        // third project?
         .onCall(callIdx++)
         .resolves({
           stdout: '{"configuration": { "contents": "" }, "errors": []}',
@@ -1432,12 +1442,17 @@ appmap_dir: tmp/appmap
         })
         .onCall(callIdx++)
         .resolves({
-          stdout: '',
+          stdout: '3.2.1',
           stderr: '',
         })
         .onCall(callIdx++)
         .resolves({
-          stdout: '',
+          stdout: '{"configuration": { "contents": "" }, "errors": []}',
+          stderr: '',
+        })
+        .onCall(callIdx++)
+        .resolves({
+          stdout: '3.2.1',
           stderr: '',
         })
         .onCall(callIdx++)
