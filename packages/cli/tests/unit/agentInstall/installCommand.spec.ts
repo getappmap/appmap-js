@@ -767,14 +767,14 @@ describe('install sub-command', () => {
         sinon
           .stub(commandRunner, 'run')
           .onCall(callIdx++)
-          // .callsFake(getYarnVersion)
-          // .onCall(callIdx++)
-          .callsFake(nodeVersion)
+          .callsFake(getYarnVersion)
           .onCall(callIdx++)
+          // .callsFake(nodeVersion);
+          //.onCall(callIdx++)
           .callsFake(getYarnWorkspaces)
           .onCall(callIdx++)
           // why must installAgent be here and twice for the yarn test to pass?
-          .callsFake(installAgent)
+          //.callsFake(installAgent);
           .onCall(callIdx++)
           .callsFake(checkCurrentConfig)
           .onCall(callIdx++)
