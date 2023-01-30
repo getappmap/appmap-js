@@ -29,6 +29,7 @@ const buildLoop = (merge: Merge): Loop => {
       members.reduce<number>((sum, member) => sum + (member.elapsed ? member.elapsed : 0), 0),
     0
   );
+  const eventIds = merge.map((actions) => actions.map((action) => action.eventIds).flat()).flat();
   return {
     nodeType: NodeType.Loop,
     count: merge.length,
@@ -36,6 +37,7 @@ const buildLoop = (merge: Merge): Loop => {
     subtreeDigest: ['loop', digest].join(':'),
     children: merge[0],
     elapsed,
+    eventIds,
   } as Loop;
 };
 
