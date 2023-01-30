@@ -32,5 +32,6 @@ export default {
   max-width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-style: italic;
 }
 </style>
