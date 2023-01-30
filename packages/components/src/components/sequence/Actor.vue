@@ -65,7 +65,6 @@ export default {
       return result;
     },
   },
-  ,
   methods: {
     selectCodeObject() {
       if (this.$store ) {
@@ -97,6 +96,11 @@ export default {
   font-size: 75%;
   font-weight: 700;
   border: 3px solid #6fddd6;
+}
+
+.label-container:hover {
+  cursor: pointer;
+  color: $lightblue;
 }
 
 .sequence-actor-lane-separator {
