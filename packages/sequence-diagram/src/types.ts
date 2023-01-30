@@ -43,6 +43,7 @@ export type Node = {
   elapsed?: number;
   formerName?: string;
   formerResult?: string;
+  eventIds: number[];
 };
 
 export type Loop = Node & {

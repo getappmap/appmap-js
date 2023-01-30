@@ -64,6 +64,7 @@ export default function buildDiagram(
         subtreeDigest: 'undefined',
         children: [],
         elapsed: callee.elapsedTime,
+        eventIds: [callee.id],
       } as ServerRPC;
     } else if (callee?.httpClientRequest && callee?.httpClientResponse) {
       assert(callee.route, 'callee.route');
@@ -78,6 +79,7 @@ export default function buildDiagram(
         subtreeDigest: 'undefined',
         children: [],
         elapsed: callee.elapsedTime,
+        eventIds: [callee.id],
       } as ClientRPC;
     } else if (callee?.sqlQuery) {
       return {
@@ -89,6 +91,7 @@ export default function buildDiagram(
         subtreeDigest: 'undefined',
         children: [],
         elapsed: callee.elapsedTime,
+        eventIds: [callee.id],
       } as Query;
     } else if (callee) {
       return {
@@ -103,6 +106,7 @@ export default function buildDiagram(
         returnValue: buildReturnValue(callee),
         children: [],
         elapsed: callee.elapsedTime,
+        eventIds: [callee.id],
       } as FunctionCall;
     }
   }
