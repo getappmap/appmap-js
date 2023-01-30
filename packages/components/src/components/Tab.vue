@@ -1,6 +1,6 @@
 <template>
   <keep-alive>
-    <v-tab-content v-if="isActive">
+    <v-tab-content v-if="isActive" :class="classes">
       <slot />
     </v-tab-content>
   </keep-alive>
@@ -22,11 +22,16 @@ export default {
       required: true,
     },
     reference: String,
+    allowScroll: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
     return {
       isActive: false,
+      classes: this.allowScroll ? 'tab-content-scroll' : '',
     };
   },
 
@@ -41,5 +46,10 @@ export default {
 <style scoped lang="scss">
 .tab-content {
   height: inherit;
+}
+
+.tab-content.tab-content-scroll {
+  overflow: auto;
+  padding-bottom: 2rem;
 }
 </style>

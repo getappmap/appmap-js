@@ -12,8 +12,9 @@ export const CLEAR_OBJECT_STACK = 'clearObjectStack';
 export const SET_VIEW = 'setView';
 export const SET_FOCUSED_EVENT = 'setFocusedEvent';
 export const VIEW_COMPONENT = 'viewComponent';
+export const VIEW_SEQUENCE = 'viewSequence';
 export const VIEW_FLOW = 'viewFlow';
-export const DEFAULT_VIEW_COMPONENT = VIEW_COMPONENT;
+export const DEFAULT_VIEW = VIEW_COMPONENT;
 export const SET_FILTERED_MAP = 'setFilteredMap';
 
 export function buildStore() {
@@ -21,7 +22,7 @@ export function buildStore() {
     state: {
       appMap: new AppMap(),
       selectionStack: [],
-      currentView: DEFAULT_VIEW_COMPONENT,
+      currentView: DEFAULT_VIEW,
       selectedLabel: null,
       focusedEvent: null,
       filteredAppMap: new AppMap(),
@@ -58,11 +59,9 @@ export function buildStore() {
       },
 
       [SELECT_OBJECT](state, selection) {
-        if (Array.isArray(selection)) {
-          state.selectionStack.push(...selection);
-        } else {
-          state.selectionStack.push(selection);
-        }
+        if (!Array.isArray(selection)) selection = [selection];
+
+        state.selectionStack.push(...selection);
         state.selectedLabel = null;
         state.focusedEvent = null;
       },
