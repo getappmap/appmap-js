@@ -1,10 +1,8 @@
-import { createHash } from 'crypto';
+import sha256 from 'crypto-js/sha256.js';
 import { Action, Loop, NodeType } from './types';
 
 function buildDigest(actions: Action[]): string {
-  const hash = createHash('sha256');
-  actions.forEach((action) => hash.update(action.subtreeDigest));
-  return hash.digest('hex');
+  return sha256(actions.map((action) => action.subtreeDigest).join('\n')).toString();
 }
 
 function countDigests(actions: Action[], windowSize: number): Map<string, number> {

@@ -1,7 +1,7 @@
 import { AppMap, Event } from '@appland/models';
 import { classNameToOpenAPIType } from '@appland/openapi';
 import assert from 'assert';
-import { createHash } from 'crypto';
+import sha256 from 'crypto-js/sha256.js';
 import { merge } from './mergeWindow';
 import { selectEvents } from './selectEvents';
 import Specification from './specification';
@@ -172,15 +172,13 @@ export default function buildDiagram(
   // Combine the digests of children into the parent digest.
   // Do this recursively.
   const buildSubtreeDigests = (node: Action): void => {
-    const hash = createHash('sha256');
-    hash.update(node.digest);
-
+    const hashEntries = [node.digest];
     node.children.forEach((child) => {
       buildSubtreeDigests(child);
 
-      hash.update(child.subtreeDigest);
+      hashEntries.push(child.subtreeDigest);
     });
-    node.subtreeDigest = hash.digest('hex');
+    node.subtreeDigest = sha256(hashEntries.join('\n')).toString();
   };
 
   const detectLoops = (node: Action): void => {
