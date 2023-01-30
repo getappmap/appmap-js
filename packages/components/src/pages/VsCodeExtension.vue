@@ -58,6 +58,19 @@
           <v-diagram-component ref="componentDiagram" :class-map="filteredAppMap.classMap" />
         </v-tab>
 
+        <v-tab
+          name="Sequence Diagram"
+          :is-active="isViewingSequence"
+          :ref="VIEW_SEQUENCE"
+          :allow-scroll="true"
+        >
+          <v-diagram-sequence
+            ref="sequenceDiagram"
+            :app-map="filteredAppMap"
+            :selected-events="selectedEvent"
+          />
+        </v-tab>
+
         <v-tab name="Trace View" :is-active="isViewingFlow" :reference="VIEW_FLOW" :ref="VIEW_FLOW">
           <div class="trace-view">
             <v-trace-filter
@@ -302,6 +315,7 @@ import DiagramGray from '@/assets/diagram-empty.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
+import VDiagramSequence from '../components/DiagramSequence.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
 import VFiltersForm from '../components/FiltersForm.vue';
 import VInstructions from '../components/Instructions.vue';
@@ -317,12 +331,13 @@ import {
   SET_VIEW,
   SET_FILTERED_MAP,
   VIEW_COMPONENT,
+  VIEW_SEQUENCE,
   VIEW_FLOW,
   SELECT_OBJECT,
   SELECT_LABEL,
   POP_OBJECT_STACK,
   CLEAR_OBJECT_STACK,
-  DEFAULT_VIEW_COMPONENT,
+  DEFAULT_VIEW,
 } from '../store/vsCode';
 
 function base64UrlEncode(text) {
@@ -350,6 +365,7 @@ export default {
     VDetailsPanel,
     VDetailsButton,
     VDiagramComponent,
+    VDiagramSequence,
     VDiagramTrace,
     VFiltersForm,
     VInstructions,
@@ -374,6 +390,7 @@ export default {
       version: null,
       versionText: '',
       VIEW_COMPONENT,
+      VIEW_SEQUENCE,
       VIEW_FLOW,
       filters: {
         rootObjects: [],
@@ -427,9 +444,13 @@ export default {
     '$store.getters.selectedObject': {
       handler(selectedObject) {
         if (selectedObject) {
+          /*
+           * TODO: First, let's see how it feels without this. Then we can figure out 
+           * what the right behavior is.
           if (!(selectedObject instanceof Event)) {
             this.setView(VIEW_COMPONENT);
           }
+          */
 
           if (selectedObject instanceof Event) {
             const highlightedIndex = this.highlightedNodes.findIndex((e) => e === selectedObject);
@@ -730,6 +751,10 @@ export default {
       return this.currentView === VIEW_COMPONENT;
     },
 
+    isViewingSequence() {
+      return this.currentView === VIEW_SEQUENCE;
+    },
+
     isViewingFlow() {
       return this.currentView === VIEW_FLOW;
     },
@@ -823,7 +848,7 @@ export default {
     getState() {
       const state = {};
 
-      if (this.currentView !== DEFAULT_VIEW_COMPONENT) {
+      if (this.currentView !== DEFAULT_VIEW) {
         state.currentView = this.currentView;
       }
 

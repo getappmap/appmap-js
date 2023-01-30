@@ -7,7 +7,7 @@ import {
   Diagram,
 } from '@appland/sequence-diagram';
 import assert from 'assert';
-import { ActionSpec, GroupAction } from './ActionSpec';
+import { ActionSpec } from './ActionSpec';
 
 type ActionId = string;
 
@@ -83,6 +83,6 @@ export default class DiagramSpec {
         }
       }
     };
-    diagram.rootActions.forEach((action) => collectActions(action, this.actions));
+    diagram.rootActions.forEach((action) => collectActions(action));
   }
 }

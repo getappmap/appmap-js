@@ -19,25 +19,25 @@ const Template = (args, { argTypes }) => ({
 
 export const Forem = Template.bind({});
 Forem.args = {
-  diagram: forem,
+  serializedDiagram: forem,
 };
 export const CreateApiKey = Template.bind({});
 CreateApiKey.args = {
-  diagram: create_api_key,
+  serializedDiagram: create_api_key,
 };
 export const ListUsers = Template.bind({});
 ListUsers.args = {
-  diagram: list_users,
+  serializedDiagram: list_users,
 };
 export const ListUsersPrefetch = Template.bind({});
 ListUsersPrefetch.args = {
-  diagram: list_users_prefetch,
+  serializedDiagram: list_users_prefetch,
 };
 export const ShowUser = Template.bind({});
 ShowUser.args = {
-  diagram: show_user,
+  serializedDiagram: show_user,
 };
 export const UserNotFound = Template.bind({});
 UserNotFound.args = {
-  diagram: user_not_found,
+  serializedDiagram: user_not_found,
 };
