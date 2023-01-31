@@ -44,6 +44,14 @@ export class ActionSpec {
     this.children = [];
   }
 
+  get gridRows(): string {
+    return [this.index + 2, this.index + 2].join(' / ');
+  }
+
+  get maxGridColumn(): number {
+    return this.diagram.actors.length + 1;
+  }
+
   get groupMemberAttributes(): Record<string, string | number> {
     return {
       '--open-group-count': this.openGroup ? 1 : 0,
