@@ -116,6 +116,47 @@ describe('AppMap', () => {
       const result = JSON.parse(JSON.stringify(httpAppMap));
       expect(result.events).toEqual([httpServerRequest, httpServerResponse]);
     });
+
+    it('successfully serializes and deserializes an AppMap containing empty locations in code objects', () => {
+      const baselineCodeObjects = [
+        {
+          type: 'class',
+          name: '<templates>/Navbar',
+          children: [
+            {
+              type: 'function',
+              name: 'render',
+              static: false,
+              location: '',
+            },
+          ],
+        },
+      ];
+      const expectedCodeObjects = JSON.stringify([
+        {
+          type: 'class',
+          name: '<templates>/Navbar',
+          children: [
+            {
+              type: 'function',
+              name: 'render',
+              static: false,
+            },
+          ],
+        },
+      ]);
+
+      const baselineAppMap = buildAppMap({
+        events: [],
+        metadata: {},
+        classMap: baselineCodeObjects,
+      })
+        .normalize()
+        .build();
+      const reserializedAppMap = buildAppMap(JSON.stringify(baselineAppMap)).normalize().build();
+
+      expect(JSON.stringify(reserializedAppMap.classMap)).toEqual(expectedCodeObjects);
+    });
   });
 
   test('getEvent', () => {
