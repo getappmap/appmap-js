@@ -49,11 +49,16 @@
 
     <div class="main-column main-column--right">
       <v-tabs @activateTab="onChangeTab" ref="tabs">
-        <v-tab name="Dependency Map" :is-active="isViewingComponent" :ref="VIEW_COMPONENT">
+        <v-tab
+          name="Dependency Map"
+          :is-active="isViewingComponent"
+          :reference="VIEW_COMPONENT"
+          :ref="VIEW_COMPONENT"
+        >
           <v-diagram-component ref="componentDiagram" :class-map="filteredAppMap.classMap" />
         </v-tab>
 
-        <v-tab name="Trace View" :is-active="isViewingFlow" :ref="VIEW_FLOW">
+        <v-tab name="Trace View" :is-active="isViewingFlow" :reference="VIEW_FLOW" :ref="VIEW_FLOW">
           <div class="trace-view">
             <v-trace-filter
               ref="traceFilter"
