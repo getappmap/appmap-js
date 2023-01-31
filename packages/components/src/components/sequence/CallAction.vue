@@ -232,8 +232,7 @@ export default {
 .call-line-segment,
 .self-call {
   margin-top: calc(var(--open-group-count) * 40px);
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-top: 18px;
 }
 
 .single-span {
@@ -303,8 +302,8 @@ export default {
   background-color: black;
   border: 1px solid gray;
   position: relative;
-  height: calc(100% + 17px - (var(--open-group-count) + var(--close-group-count)) * 40px);
-  top: calc(var(--open-group-count) * 40px + 21px);
+  height: calc(100% - 6px - (var(--open-group-count) + var(--close-group-count)) * 40px);
+  top: calc(var(--open-group-count) * 40px + 35px);
   left: calc(100% - (var(--callee-lifecycle-depth) * $sequence-activation-gutter-width));
 }
 </style>
