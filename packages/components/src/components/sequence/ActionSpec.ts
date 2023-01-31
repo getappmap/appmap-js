@@ -5,6 +5,7 @@ import {
   Action,
   Actor,
   Diagram,
+  DiffMode,
 } from '@appland/sequence-diagram';
 import assert from 'assert';
 
@@ -50,6 +51,21 @@ export class ActionSpec {
 
   get maxGridColumn(): number {
     return this.diagram.actors.length + 1;
+  }
+
+  get diffClasses(): string[] {
+    const result: string[] = [];
+    if (this.action.diffMode) {
+      result.push('diff');
+    }
+    if (this.action.diffMode === DiffMode.Insert) {
+      result.push('diff-insert');
+    } else if (this.action.diffMode === DiffMode.Delete) {
+      result.push('diff-delete');
+    } else if (this.action.diffMode === DiffMode.Change) {
+      result.push('diff-change');
+    }
+    return result;
   }
 
   get groupMemberAttributes(): Record<string, string | number> {

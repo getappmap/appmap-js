@@ -1,9 +1,12 @@
 <template>
   <div
-    :class="['return', `return-${actionSpec.callArrowDirection}`].join(' ')"
+    :class="containerClasses"
     :data-comment="`${actionSpec.nodeResult} spans from ${actionSpec.calleeActionIndex} to
       ${actionSpec.callerActionIndex}`"
   >
+    <template v-if="actionSpec.action.diffMode">
+      <v-diff-channel :action-spec="actionSpec" />
+    </template>
     <template v-if="actionSpec.callArrowDirection === 'self'">
       <div
         class="self-return"
@@ -142,11 +145,12 @@
 import Arrow from '@/assets/sequence-action-arrow.svg';
 import { ActionSpec } from './ActionSpec';
 import VReturnLabel from './ReturnLabel.vue';
+import VDiffChannel from './DiffChannel.vue';
 
 export default {
   name: 'v-sequence-return-action',
 
-  components: { Arrow, VReturnLabel },
+  components: { Arrow, VReturnLabel, VDiffChannel },
 
   props: {
     actionSpec: {
@@ -157,6 +161,13 @@ export default {
   },
 
   computed: {
+    containerClasses(): string[] {
+      return [
+        'return',
+        `return-${this.actionSpec.callArrowDirection}`,
+        ...this.actionSpec.diffClasses,
+      ];
+    },
     gridRows(): string {
       return [this.actionSpec.index + 2, this.actionSpec.index + 2].join(' / ');
     },
