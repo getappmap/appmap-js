@@ -1023,6 +1023,7 @@ export default {
     resetDiagram() {
       this.clearSelection();
       this.resetFilters();
+      this.$root.$emit('resetDiagram');
 
       this.renderKey += 1;
     },
