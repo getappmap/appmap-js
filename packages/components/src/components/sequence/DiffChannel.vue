@@ -7,9 +7,9 @@
     }"
   >
     <div class="diff-channel-marker">
-      <div class="diff-channel-label">
-        <span>{{ diffRowLabel }}</span>
-      </div>
+      <span class="diff-channel-label">
+        {{ diffRowLabel }}
+      </span>
     </div>
   </div>
 </template>
@@ -62,23 +62,24 @@ export default {
   width: 29px;
   top: 0;
   border-right: 1px solid $gray4;
+  text-align: center;
+  padding-top: 7px;
 
   .diff-channel-label {
     font-size: 9pt;
     color: $gray4;
-    text-align: center;
   }
 }
 
-.call.diff-insert .diff-channel {
+.diff-insert .diff-channel {
   background-color: $sequence-diff-insert-bg-color;
 }
 
-.call.diff-change .diff-channel {
+.diff-change .diff-channel {
   background-color: $sequence-diff-change-bg-color;
 }
 
-.call.diff-delete .diff-channel {
+.diff-delete .diff-channel {
   background-color: $sequence-diff-delete-bg-color;
 }
 </style>

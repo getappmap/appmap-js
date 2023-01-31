@@ -185,7 +185,6 @@
 
 <script lang="ts">
 import Arrow from '@/assets/sequence-action-arrow.svg';
-import { DiffMode } from '@appland/sequence-diagram';
 import { ActionSpec } from './ActionSpec';
 import VCallLabel from './CallLabel.vue';
 import VDiffChannel from './DiffChannel.vue';
@@ -205,18 +204,7 @@ export default {
 
   computed: {
     containerClasses(): string[] {
-      const result = ['call', `call-${this.actionSpec.callArrowDirection}`];
-      if (this.actionSpec.action.diffMode) {
-        result.push('diff');
-      }
-      if (this.actionSpec.action.diffMode === DiffMode.Insert) {
-        result.push('diff-insert');
-      } else if (this.actionSpec.action.diffMode === DiffMode.Delete) {
-        result.push('diff-delete');
-      } else if (this.actionSpec.action.diffMode === DiffMode.Change) {
-        result.push('diff-change');
-      }
-      return result;
+      return ['call', `call-${this.actionSpec.callArrowDirection}`, ...this.actionSpec.diffClasses];
     },
     gridRows(): string {
       return this.actionSpec.gridRows;
@@ -259,8 +247,7 @@ export default {
 }
 
 .call-line-segment,
-.self-call,
-.diff-channel .diff-channel-label {
+.self-call {
   margin-top: calc(var(--open-group-count) * 40px);
   padding-top: 15px;
   padding-bottom: 3px;
