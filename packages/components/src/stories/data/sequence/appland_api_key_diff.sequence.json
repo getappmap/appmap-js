@@ -1,0 +1,734 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:app/models",
+      "name": "models",
+      "order": 1000
+    },
+    {
+      "id": "package:active_support",
+      "name": "active_support",
+      "order": 4000
+    },
+    {
+      "id": "package:actionpack",
+      "name": "actionpack",
+      "order": 5000
+    },
+    {
+      "id": "package:app/controllers/api",
+      "name": "controllers/api",
+      "order": 6000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 9000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "DELETE /api/api_keys",
+      "status": 204,
+      "digest": "52e9e3332f5d9ac0cd2ee710c3ec4c089a37e6d6a28f19f26b77b772a5d23b3a",
+      "subtreeDigest": "unknown",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:actionpack",
+          "name": "process_action",
+          "static": false,
+          "digest": "52bf4f8491768ab1b541fa802b73d40e8ec6ff30bc7a9bdbd65c9a80757f908b",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "actionpack/ActionController::Instrumentation#process_action",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "string"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:actionpack",
+              "callee": "package:active_support",
+              "name": "invoke_before",
+              "static": false,
+              "digest": "e0ba44d4c5ee73f064f8fe67d7cbdf59662adae63c15543df2dc5b455ebed59a",
+              "subtreeDigest": "unknown",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "active_support/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "array"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:active_support",
+                  "callee": "package:actionpack",
+                  "name": "[]",
+                  "static": false,
+                  "digest": "2edc720ea8bfcd09073cb25143329d21c8a14ebcd6e9511fd2c6838aaa7d4fc8",
+                  "subtreeDigest": "unknown",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "actionpack/ActionDispatch::Request::Session#[]",
+                    "raises_exception": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:actionpack",
+                      "callee": "package:actionpack",
+                      "name": "update",
+                      "static": false,
+                      "digest": "fe0dd30b5f90e8ebb62a206d6586ea69cccd469310eb878a5ca2835608d950a5",
+                      "subtreeDigest": "unknown",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "ActionDispatch::Cookies::CookieJar"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.00000400003045797348
+                    },
+                    {
+                      "nodeType": 3,
+                      "caller": "package:actionpack",
+                      "callee": "package:actionpack",
+                      "name": "[]",
+                      "static": false,
+                      "digest": "84c6a1f3c9437297b6413ff9313e1de78d2d500d2eebf6c9e4a0b8263610f718",
+                      "subtreeDigest": "unknown",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                        "raises_exception": false
+                      },
+                      "children": [],
+                      "elapsed": 0.00000200001522898674
+                    }
+                  ],
+                  "elapsed": 0.00022899999748915434
+                },
+                {
+                  "nodeType": 3,
+                  "caller": "package:active_support",
+                  "callee": "package:app/controllers/api",
+                  "name": "authenticate_token",
+                  "static": false,
+                  "digest": "0a902ee2b76cfdb993943ef7f30f4815940a679b068e52b4f34bc04c95ea4a9a",
+                  "subtreeDigest": "unknown",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/controllers/api/API::APIKeysController#authenticate_token",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "string"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/controllers/api",
+                      "callee": "package:app/models",
+                      "name": "authenticate",
+                      "static": true,
+                      "digest": "54259769fc7b554024c267444b7d33beb4d6c5c9acffaa5f02ad25e5c8b6e8bd",
+                      "subtreeDigest": "unknown",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/models/ApiKey.authenticate",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "User::Show"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [
+                        {
+                          "nodeType": 3,
+                          "caller": "package:app/models",
+                          "callee": "package:app/models",
+                          "name": "decode",
+                          "static": true,
+                          "digest": "1f1e7564c92a3ac01d78ec472cdc200372959ac76f770f7f0decffc3d2ef0774",
+                          "subtreeDigest": "unknown",
+                          "stableProperties": {
+                            "event_type": "function",
+                            "id": "app/models/ApiKey.decode",
+                            "raises_exception": false
+                          },
+                          "returnValue": {
+                            "returnValueType": {
+                              "name": "array"
+                            },
+                            "raisesException": false
+                          },
+                          "children": [],
+                          "elapsed": 0.00005700008478015661
+                        },
+                        {
+                          "nodeType": 6,
+                          "caller": "package:app/models",
+                          "callee": "database:Database",
+                          "query": "SELECT * FROM \"api_keys\" WHERE (\"login\" = 'admin')",
+                          "digest": "3ea3b24b1c6c0aa89cc5aa5f4e3dd87c345b0785f8989a375dd7e3d3c858fcfa",
+                          "subtreeDigest": "unknown",
+                          "children": [],
+                          "elapsed": 0.001537
+                        },
+                        {
+                          "nodeType": 3,
+                          "caller": "package:app/models",
+                          "callee": "package:app/models",
+                          "name": "touch",
+                          "static": true,
+                          "digest": "f3cf666b52e1380befb4eb273897281f2ed4b07fb2db6b4667571adb98663f7a",
+                          "subtreeDigest": "unknown",
+                          "stableProperties": {
+                            "event_type": "function",
+                            "id": "app/models/ApiKey.touch",
+                            "raises_exception": false
+                          },
+                          "children": [
+                            {
+                              "nodeType": 6,
+                              "caller": "package:app/models",
+                              "callee": "database:Database",
+                              "query": "SELECT * FROM \"api_keys\" WHERE \"id\" = 2",
+                              "digest": "12bfc2bf5c30c2384d5c78ec8b7357359fecfa6db2a03263a3aafd7ba7c0927f",
+                              "subtreeDigest": "unknown",
+                              "children": [],
+                              "elapsed": 0.001373
+                            },
+                            {
+                              "nodeType": 6,
+                              "caller": "package:app/models",
+                              "callee": "database:Database",
+                              "query": "SAVEPOINT autopoint_1",
+                              "digest": "e2acca958778708cd318075230576c80baf753d686a606ba55fb223a746335ee",
+                              "subtreeDigest": "unknown",
+                              "children": [],
+                              "elapsed": 0.001036
+                            },
+                            {
+                              "nodeType": 6,
+                              "caller": "package:app/models",
+                              "callee": "database:Database",
+                              "query": "UPDATE \"api_keys\" SET \"last_used\" = '2023-01-19 14:39:16.776381+0000' WHERE (\"id\" = 2)",
+                              "digest": "7f898725862ba792fb976f1255613cdf56cf0484e5f01d73e06b17fc602051cc",
+                              "subtreeDigest": "unknown",
+                              "children": [],
+                              "elapsed": 0.00142
+                            },
+                            {
+                              "nodeType": 6,
+                              "caller": "package:app/models",
+                              "callee": "database:Database",
+                              "query": "RELEASE SAVEPOINT autopoint_1",
+                              "digest": "682ac0a00b08652a98b568707671487755467437670b11481dd664a20840d2ed",
+                              "subtreeDigest": "unknown",
+                              "children": [],
+                              "elapsed": 0.000892
+                            }
+                          ],
+                          "elapsed": 0.00546699995175004
+                        },
+                        {
+                          "nodeType": 6,
+                          "caller": "package:app/models",
+                          "callee": "database:Database",
+                          "query": "SELECT * FROM \"users\" WHERE (\"users\".\"login\" = 'admin') LIMIT 1",
+                          "digest": "af9d5f27317d2034635b85f505fb424d4c226edb6f779de28510075e41938693",
+                          "subtreeDigest": "unknown",
+                          "children": [],
+                          "elapsed": 0.000977
+                        }
+                      ],
+                      "elapsed": 0.008759999996982515
+                    }
+                  ],
+                  "elapsed": 0.008887000032700598
+                },
+                {
+                  "nodeType": 3,
+                  "caller": "package:active_support",
+                  "callee": "package:app/controllers/api",
+                  "name": "fail_unauthenticated!",
+                  "static": false,
+                  "digest": "79a21f2db5619a784eee171bffe641b10d82f86ad2edd1f8fa507210cbea7ed2",
+                  "subtreeDigest": "unknown",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/controllers/api/API::APIKeysController#fail_unauthenticated!",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "boolean"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.00000100000761449337
+                }
+              ],
+              "elapsed": 0.0094939999980852
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:actionpack",
+              "callee": "package:app/controllers/api",
+              "name": "destroy",
+              "static": false,
+              "digest": "84a96466b08b9992b2d9fbe73ece830d8074402f3f21221d3e156e97ae3b36a7",
+              "subtreeDigest": "unknown",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/controllers/api/API::APIKeysController#destroy",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "string"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/controllers/api",
+                  "callee": "package:app/models",
+                  "name": "revoke",
+                  "static": true,
+                  "digest": "6d3b7ae5d92bc6738aa0dff9f01e5ba5d1741e364900c3805e4941ce96edb9da",
+                  "subtreeDigest": "unknown",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/models/ApiKey.revoke",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "DAO::ApiKey"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/models",
+                      "callee": "package:app/models",
+                      "name": "decode",
+                      "static": true,
+                      "digest": "1f1e7564c92a3ac01d78ec472cdc200372959ac76f770f7f0decffc3d2ef0774",
+                      "subtreeDigest": "unknown",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/models/ApiKey.decode",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "array"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.00005600007716566324,
+                      "diffMode": 1
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "SELECT * FROM \"api_keys\" WHERE ((\"login\" = 'admin') AND (\"description\" = 'api test')) LIMIT 1",
+                      "digest": "delete:df7a1d3cee7f408a18e90bb80af25cf283ac88cbedf1b2252a6fd360ab144d9c",
+                      "subtreeDigest": "unknown",
+                      "children": [],
+                      "elapsed": 0.001136,
+                      "eventIds": [
+                        85
+                      ],
+                      "diffMode": 2
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "SELECT * FROM \"api_keys\" WHERE (\"login\" = 'admin')",
+                      "digest": "3ea3b24b1c6c0aa89cc5aa5f4e3dd87c345b0785f8989a375dd7e3d3c858fcfa",
+                      "subtreeDigest": "unknown",
+                      "children": [],
+                      "elapsed": 0.001129,
+                      "diffMode": 1
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "SAVEPOINT autopoint_1",
+                      "digest": "e2acca958778708cd318075230576c80baf753d686a606ba55fb223a746335ee",
+                      "subtreeDigest": "unknown",
+                      "children": [],
+                      "elapsed": 0.000961
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "DELETE FROM \"api_keys\" WHERE \"id\" = 2",
+                      "digest": "f13d9776f8963b9f5e49e9d7c4381705d92cef82e995b3ec64a08eba33a4cac6",
+                      "subtreeDigest": "unknown",
+                      "children": [],
+                      "elapsed": 0.001154,
+                      "diffMode": 3,
+                      "formerName": "INSERT INTO \"api_keys\" (\"login\", \"description\") VALUES ('admin', 'api test') RETURNING *"
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "RELEASE SAVEPOINT autopoint_1",
+                      "digest": "682ac0a00b08652a98b568707671487755467437670b11481dd664a20840d2ed",
+                      "subtreeDigest": "unknown",
+                      "children": [],
+                      "elapsed": 0.000882
+                    }
+                  ],
+                  "elapsed": 0.004843999980948865,
+                  "diffMode": 3,
+                  "formerName": "issue",
+                  "formerResult": "string"
+                },
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/controllers/api",
+                  "callee": "package:actionpack",
+                  "name": "render_to_body",
+                  "static": false,
+                  "digest": "95ab32226eb3d0b1f67f05bb165e2f091f2b5aa80bc2f4324ba06759dfff2a5f",
+                  "subtreeDigest": "unknown",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "actionpack/ActionController::Renderers#render_to_body",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "string"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.00007700000423938036,
+                  "diffMode": 1
+                }
+              ],
+              "elapsed": 0.005297999945469201,
+              "diffMode": 3,
+              "formerName": "create",
+              "formerResult": "string"
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:actionpack",
+              "callee": "package:active_support",
+              "name": "invoke_after",
+              "static": false,
+              "digest": "31b0f6c2a4a5b21aa071bc32d3f0a0dd82d4113ef3a1cc3655b1944ab65bddf7",
+              "subtreeDigest": "unknown",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "active_support/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "raises_exception": false
+              },
+              "children": [],
+              "elapsed": 0.00000200001522898674,
+              "diffMode": 1
+            }
+          ],
+          "elapsed": 0.015566000016406178
+        }
+      ],
+      "diffMode": 3,
+      "formerName": "POST /api/api_keys",
+      "formerResult": "201"
+    },
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "DELETE /api/api_keys",
+      "status": 401,
+      "digest": "4f3707852b0368d4717fd2e68a429f246d419fc9aff6847081f2a0300e228b1d",
+      "subtreeDigest": "unknown",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:actionpack",
+          "name": "process_action",
+          "static": false,
+          "digest": "52bf4f8491768ab1b541fa802b73d40e8ec6ff30bc7a9bdbd65c9a80757f908b",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "actionpack/ActionController::Instrumentation#process_action",
+            "raises_exception": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:actionpack",
+              "callee": "package:active_support",
+              "name": "invoke_before",
+              "static": false,
+              "digest": "e0ba44d4c5ee73f064f8fe67d7cbdf59662adae63c15543df2dc5b455ebed59a",
+              "subtreeDigest": "unknown",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "active_support/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "array"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:active_support",
+                  "callee": "package:actionpack",
+                  "name": "[]",
+                  "static": false,
+                  "digest": "2edc720ea8bfcd09073cb25143329d21c8a14ebcd6e9511fd2c6838aaa7d4fc8",
+                  "subtreeDigest": "unknown",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "actionpack/ActionDispatch::Request::Session#[]",
+                    "raises_exception": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:actionpack",
+                      "callee": "package:actionpack",
+                      "name": "update",
+                      "static": false,
+                      "digest": "fe0dd30b5f90e8ebb62a206d6586ea69cccd469310eb878a5ca2835608d950a5",
+                      "subtreeDigest": "unknown",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "ActionDispatch::Cookies::CookieJar"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.00000400003045797348,
+                      "diffMode": 1
+                    },
+                    {
+                      "nodeType": 3,
+                      "caller": "package:actionpack",
+                      "callee": "package:actionpack",
+                      "name": "[]",
+                      "static": false,
+                      "digest": "84c6a1f3c9437297b6413ff9313e1de78d2d500d2eebf6c9e4a0b8263610f718",
+                      "subtreeDigest": "unknown",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                        "raises_exception": false
+                      },
+                      "children": [],
+                      "elapsed": 0.00000300002284348011,
+                      "diffMode": 1
+                    }
+                  ],
+                  "elapsed": 0.0004440000047907233,
+                  "diffMode": 1
+                },
+                {
+                  "nodeType": 3,
+                  "caller": "package:active_support",
+                  "callee": "package:app/controllers/api",
+                  "name": "authenticate_token",
+                  "static": false,
+                  "digest": "0a902ee2b76cfdb993943ef7f30f4815940a679b068e52b4f34bc04c95ea4a9a",
+                  "subtreeDigest": "unknown",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/controllers/api/API::APIKeysController#authenticate_token",
+                    "raises_exception": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/controllers/api",
+                      "callee": "package:app/models",
+                      "name": "authenticate",
+                      "static": true,
+                      "digest": "54259769fc7b554024c267444b7d33beb4d6c5c9acffaa5f02ad25e5c8b6e8bd",
+                      "subtreeDigest": "unknown",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/models/ApiKey.authenticate",
+                        "raises_exception": false
+                      },
+                      "children": [
+                        {
+                          "nodeType": 3,
+                          "caller": "package:app/models",
+                          "callee": "package:app/models",
+                          "name": "decode",
+                          "static": true,
+                          "digest": "1f1e7564c92a3ac01d78ec472cdc200372959ac76f770f7f0decffc3d2ef0774",
+                          "subtreeDigest": "unknown",
+                          "stableProperties": {
+                            "event_type": "function",
+                            "id": "app/models/ApiKey.decode",
+                            "raises_exception": false
+                          },
+                          "returnValue": {
+                            "returnValueType": {
+                              "name": "array"
+                            },
+                            "raisesException": false
+                          },
+                          "children": [],
+                          "elapsed": 0.000057999975979328156,
+                          "diffMode": 1
+                        },
+                        {
+                          "nodeType": 6,
+                          "caller": "package:app/models",
+                          "callee": "database:Database",
+                          "query": "SELECT * FROM \"api_keys\" WHERE (\"login\" = 'admin')",
+                          "digest": "3ea3b24b1c6c0aa89cc5aa5f4e3dd87c345b0785f8989a375dd7e3d3c858fcfa",
+                          "subtreeDigest": "unknown",
+                          "children": [],
+                          "elapsed": 0.001453,
+                          "diffMode": 1
+                        }
+                      ],
+                      "elapsed": 0.0018489999929443002,
+                      "diffMode": 1
+                    }
+                  ],
+                  "elapsed": 0.001984999980777502,
+                  "diffMode": 1
+                },
+                {
+                  "nodeType": 3,
+                  "caller": "package:active_support",
+                  "callee": "package:app/controllers/api",
+                  "name": "fail_unauthenticated!",
+                  "static": false,
+                  "digest": "79a21f2db5619a784eee171bffe641b10d82f86ad2edd1f8fa507210cbea7ed2",
+                  "subtreeDigest": "unknown",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/controllers/api/API::APIKeysController#fail_unauthenticated!",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "string"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/controllers/api",
+                      "callee": "package:actionpack",
+                      "name": "render_to_body",
+                      "static": false,
+                      "digest": "95ab32226eb3d0b1f67f05bb165e2f091f2b5aa80bc2f4324ba06759dfff2a5f",
+                      "subtreeDigest": "unknown",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "actionpack/ActionController::Renderers#render_to_body",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "string"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.00010299996938556433
+                    }
+                  ],
+                  "elapsed": 0.00032400002237409353,
+                  "diffMode": 3,
+                  "formerName": "encode",
+                  "formerResult": "string"
+                }
+              ],
+              "elapsed": 0.0031090000411495566,
+              "diffMode": 1
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:actionpack",
+              "callee": "package:active_support",
+              "name": "invoke_after",
+              "static": false,
+              "digest": "31b0f6c2a4a5b21aa071bc32d3f0a0dd82d4113ef3a1cc3655b1944ab65bddf7",
+              "subtreeDigest": "unknown",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "active_support/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "raises_exception": false
+              },
+              "children": [],
+              "elapsed": 0.00000200001522898674
+            }
+          ],
+          "elapsed": 0.00361799995880574,
+          "diffMode": 1
+        }
+      ],
+      "diffMode": 1
+    }
+  ]
+}
