@@ -178,9 +178,8 @@ export default {
 
 .return-line-segment,
 .self-return {
-  padding-bottom: 5px;
   margin-bottom: calc(var(--close-group-count) * 40px);
-  padding-top: 5px;
+  padding-top: 10px;
 }
 
 .arrow {
