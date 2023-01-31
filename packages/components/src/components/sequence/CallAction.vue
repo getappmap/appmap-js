@@ -1,9 +1,24 @@
 <template>
   <div
-    :class="['call', `call-${actionSpec.callArrowDirection}`].join(' ')"
+    :class="containerClasses"
     :data-comment="`${actionSpec.nodeName} spans from ${actionSpec.callerActionIndex} to
       ${actionSpec.calleeActionIndex}`"
   >
+    <template v-if="actionSpec.action.diffMode">
+      <div
+        class="diff-channel"
+        :style="{
+          'grid-column': [1, maxGridColumn + 1].join(' / '),
+          'grid-row': gridRows,
+        }"
+      >
+        <div class="diff-channel-marker">
+          <div class="diff-channel-label">
+            <span>{{ diffRowLabel }}</span>
+          </div>
+        </div>
+      </div>
+    </template>
     <template v-if="actionSpec.callArrowDirection === 'self'">
       <div
         class="self-call"
@@ -182,6 +197,7 @@
 
 <script lang="ts">
 import Arrow from '@/assets/sequence-action-arrow.svg';
+import { DiffMode } from '@appland/sequence-diagram';
 import { ActionSpec, CallDirection } from './ActionSpec';
 import VCallLabel from './CallLabel.vue';
 
@@ -199,19 +215,46 @@ export default {
   },
 
   computed: {
-    classes(): string[] {
-      return ['sequence-call'];
+    containerClasses(): string[] {
+      const result = ['call', `call-${this.actionSpec.callArrowDirection}`];
+      if (this.actionSpec.action.diffMode) {
+        result.push('diff');
+      }
+      if (this.actionSpec.action.diffMode === DiffMode.Insert) {
+        result.push('diff-insert');
+      } else if (this.actionSpec.action.diffMode === DiffMode.Delete) {
+        result.push('diff-delete');
+      } else if (this.actionSpec.action.diffMode === DiffMode.Change) {
+        result.push('diff-change');
+      }
+      return result;
     },
     gridRows(): string {
       return [this.actionSpec.index + 2, this.actionSpec.index + 2].join(' / ');
     },
-    lastGridColumn(): string {
-      return [this.actionSpec.callerActionIndex, this.actionSpec.calleeActionIndex]
-        .sort()[1]
-        .toLocaleString();
+    firstGridColumn(): number {
+      return [this.actionSpec.callerActionIndex, this.actionSpec.calleeActionIndex].sort()[0];
+    },
+    lastGridColumn(): number {
+      let lastIndex = [
+        this.actionSpec.callerActionIndex,
+        this.actionSpec.calleeActionIndex,
+      ].sort()[1];
+      if (this.actionSpec.callArrowDirection === 'self') lastIndex += 1;
+      return lastIndex;
+    },
+    maxGridColumn(): number {
+      return this.actionSpec.diagram.actors.length + 1;
     },
     showGutter(): boolean {
       return !!this.actionSpec.returnIndex;
+    },
+    diffRowLabel(): string {
+      if (this.actionSpec.action.diffMode === DiffMode.Insert) return '+';
+      else if (this.actionSpec.action.diffMode === DiffMode.Delete) return '-';
+      else if (this.actionSpec.action.diffMode === DiffMode.Change) return '+/-';
+
+      return '';
     },
   },
 };
@@ -224,15 +267,53 @@ export default {
   display: contents;
 }
 
+.diff-channel {
+  margin-left: -30px;
+  margin-right: -100px;
+  position: relative;
+}
+
+.diff-channel-marker {
+  position: absolute;
+  height: 100%;
+  width: 29px;
+  top: 0;
+  border-right: 1px solid $gray4;
+
+  .diff-channel-label {
+    font-size: 9pt;
+    color: $gray4;
+    text-align: center;
+  }
+}
+
+.call.diff-insert .diff-channel {
+  background-color: $sequence-diff-insert-bg-color;
+}
+
+.call.diff-change .diff-channel {
+  background-color: $sequence-diff-change-bg-color;
+}
+
+.call.diff-delete .diff-channel {
+  background-color: $sequence-diff-delete-bg-color;
+}
+
+.call.diff > .gutter-container {
+  background-color: transparent;
+}
+
 .call-line-segment {
   border-bottom: $sequence-call-line-width solid $sequence-call-line-color;
   z-index: 1;
 }
 
 .call-line-segment,
-.self-call {
+.self-call,
+.diff-channel .diff-channel-label {
   margin-top: calc(var(--open-group-count) * 40px);
-  padding-top: 18px;
+  padding-top: 15px;
+  padding-bottom: 3px;
 }
 
 .single-span {

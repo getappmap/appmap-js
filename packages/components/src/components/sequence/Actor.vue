@@ -67,13 +67,14 @@ export default {
   },
   methods: {
     selectCodeObject() {
-      if (this.$store ) {
-        const codeObject = this.$store.state.appMap.classMap.codeObjects.find((co) => co.fqid === this.actor.id);
-        if ( codeObject )
-          this.$store.commit(SELECT_OBJECT, codeObject);
+      if (this.$store) {
+        const codeObject = this.$store.state.appMap.classMap.codeObjects.find(
+          (co) => co.fqid === this.actor.id
+        );
+        if (codeObject) this.$store.commit(SELECT_OBJECT, codeObject);
       }
     },
-  }
+  },
 };
 </script>
 
