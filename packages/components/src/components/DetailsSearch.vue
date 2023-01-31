@@ -12,6 +12,7 @@
           placeholder="search code objects..."
           ref="searchInput"
           v-model="filter"
+          @focus="searchFocused"
         />
       </div>
     </form>
@@ -212,6 +213,10 @@ export default {
       }
 
       return false;
+    },
+
+    searchFocused() {
+      this.$root.$emit('sidebarSearchFocused');
     },
   },
 };
