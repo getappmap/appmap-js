@@ -135,7 +135,7 @@ export default class RuleChecker {
       const stack: string[] = [
         findingEvent.codeObject.location,
         ...findingEvent.ancestors().map((ancestor) => ancestor.codeObject.location),
-      ].filter(Boolean);
+      ].filter(Boolean) as string[];
 
       const hashV1 = new HashV1(
         checkInstance.ruleId,
