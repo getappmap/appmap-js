@@ -5,19 +5,7 @@
       ${actionSpec.calleeActionIndex}`"
   >
     <template v-if="actionSpec.action.diffMode">
-      <div
-        class="diff-channel"
-        :style="{
-          'grid-column': [1, maxGridColumn + 1].join(' / '),
-          'grid-row': gridRows,
-        }"
-      >
-        <div class="diff-channel-marker">
-          <div class="diff-channel-label">
-            <span>{{ diffRowLabel }}</span>
-          </div>
-        </div>
-      </div>
+      <v-diff-channel :action-spec="actionSpec" />
     </template>
     <template v-if="actionSpec.callArrowDirection === 'self'">
       <div
@@ -198,13 +186,14 @@
 <script lang="ts">
 import Arrow from '@/assets/sequence-action-arrow.svg';
 import { DiffMode } from '@appland/sequence-diagram';
-import { ActionSpec, CallDirection } from './ActionSpec';
+import { ActionSpec } from './ActionSpec';
 import VCallLabel from './CallLabel.vue';
+import VDiffChannel from './DiffChannel.vue';
 
 export default {
   name: 'v-sequence-call-action',
 
-  components: { Arrow, VCallLabel },
+  components: { Arrow, VCallLabel, VDiffChannel },
 
   props: {
     actionSpec: {
@@ -230,7 +219,7 @@ export default {
       return result;
     },
     gridRows(): string {
-      return [this.actionSpec.index + 2, this.actionSpec.index + 2].join(' / ');
+      return this.actionSpec.gridRows;
     },
     firstGridColumn(): number {
       return [this.actionSpec.callerActionIndex, this.actionSpec.calleeActionIndex].sort()[0];
@@ -244,17 +233,10 @@ export default {
       return lastIndex;
     },
     maxGridColumn(): number {
-      return this.actionSpec.diagram.actors.length + 1;
+      return this.actionSpec.maxGridColumn;
     },
     showGutter(): boolean {
       return !!this.actionSpec.returnIndex;
-    },
-    diffRowLabel(): string {
-      if (this.actionSpec.action.diffMode === DiffMode.Insert) return '+';
-      else if (this.actionSpec.action.diffMode === DiffMode.Delete) return '-';
-      else if (this.actionSpec.action.diffMode === DiffMode.Change) return '+/-';
-
-      return '';
     },
   },
 };
@@ -265,38 +247,6 @@ export default {
   position: relative;
   padding-top: 4px;
   display: contents;
-}
-
-.diff-channel {
-  margin-left: -30px;
-  margin-right: -100px;
-  position: relative;
-}
-
-.diff-channel-marker {
-  position: absolute;
-  height: 100%;
-  width: 29px;
-  top: 0;
-  border-right: 1px solid $gray4;
-
-  .diff-channel-label {
-    font-size: 9pt;
-    color: $gray4;
-    text-align: center;
-  }
-}
-
-.call.diff-insert .diff-channel {
-  background-color: $sequence-diff-insert-bg-color;
-}
-
-.call.diff-change .diff-channel {
-  background-color: $sequence-diff-change-bg-color;
-}
-
-.call.diff-delete .diff-channel {
-  background-color: $sequence-diff-delete-bg-color;
 }
 
 .call.diff > .gutter-container {
