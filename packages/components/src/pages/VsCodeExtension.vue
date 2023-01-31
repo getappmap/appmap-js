@@ -107,7 +107,7 @@
           </v-popper>
           <v-popper-menu :isHighlight="filtersChanged">
             <template v-slot:icon>
-              <FilterIcon class="control-button__icon" />
+              <FilterIcon class="control-button__icon" @click="openFilterModal" />
             </template>
             <template v-slot:body>
               <div class="filters">
@@ -864,6 +864,10 @@ export default {
       }
 
       return base64UrlEncode(JSON.stringify(state));
+    },
+
+    openFilterModal() {
+      this.$root.$emit('clickFilterButton');
     },
 
     setSelectedObject(fqid) {
