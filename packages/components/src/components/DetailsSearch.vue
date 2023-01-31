@@ -191,6 +191,7 @@ export default {
 
   methods: {
     selectObject(type, object) {
+      this.$root.$emit('selectObjectInSidebar', type);
       if (type === 'labels') {
         this.$store.commit(SELECT_LABEL, object);
       } else {
