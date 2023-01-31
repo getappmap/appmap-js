@@ -95,6 +95,11 @@ $sequence-call-line-color: magenta;
 $sequence-group-border-width: 2px;
 $sequence-group-border-color: magenta;
 
+// Diff background
+$sequence-diff-insert-bg-color: rgba(56, 139, 253, 0.35);
+$sequence-diff-delete-bg-color: rgba(212, 118, 22, 0.35);
+$sequence-diff-change-bg-color: rgba(88, 166, 255, 0.35);
+
 // End sequence diagram
 
 //VS Code

@@ -1,6 +1,10 @@
 <template>
   <div class="label" @click="selectEvent">
-    <span :class="classes">{{ actionSpec.nodeName }}</span>
+    <div :class="nameClasses">
+      <template v-for="text in name">
+        <span :class="text.class">{{ text.text }}</span>
+      </template>
+    </div>
     <template v-if="actionSpec.hasElapsed">
       <span class="elapsed">{{ actionSpec.elapsedTimeMs }} ms</span>
     </template>
@@ -8,9 +12,26 @@
 </template>
 
 <script lang="ts">
-import { isFunction } from '@appland/sequence-diagram';
+import { diffChars } from 'diff';
+import { DiffMode, isFunction } from '@appland/sequence-diagram';
 import { ActionSpec } from './ActionSpec';
 import { SELECT_OBJECT } from '@/store/vsCode';
+
+class LabelFragment {
+  constructor(public text: string, public diffMode?: DiffMode.Insert | DiffMode.Delete) {}
+
+  get class(): string[] {
+    const result = [];
+    if (this.diffMode === DiffMode.Delete) {
+      result.push('delete');
+    } else if (this.diffMode === DiffMode.Insert) {
+      result.push('insert');
+    }
+    return result;
+  }
+}
+
+const ChangedCharsThreshod = 0.25;
 
 export default {
   name: 'v-sequence-call-label',
@@ -26,11 +47,40 @@ export default {
   },
 
   computed: {
-    classes(): string[] {
+    nameClasses(): string[] {
       const result = ['name'];
       if (isFunction(this.actionSpec.action) && this.actionSpec.action.static) {
         result.push('static');
       }
+      return result;
+    },
+    name(): LabelFragment[] {
+      if (!this.actionSpec.action.formerName)
+        return [new LabelFragment(this.actionSpec.nodeName, this.actionSpec.action.diffMode)];
+
+      const result: LabelFragment[] = [];
+
+      const formerLabel = this.actionSpec.action.formerName;
+      const label = this.actionSpec.nodeName;
+      const diff = diffChars(formerLabel, label);
+      const changeCharsCount = diff.reduce(
+        (memo, change) => (change.added || change.removed ? memo + (change.count || 0) : memo),
+        0
+      );
+      if (changeCharsCount / Math.max(formerLabel.length, label.length) < ChangedCharsThreshod) {
+        for (const change of diff) {
+          const text = change.value;
+          if (change.removed) {
+            result.push(new LabelFragment(text, DiffMode.Delete));
+          } else {
+            result.push(new LabelFragment(text, DiffMode.Insert));
+          }
+        }
+      } else {
+        result.push(new LabelFragment(formerLabel, DiffMode.Delete));
+        result.push(new LabelFragment(label, DiffMode.Insert));
+      }
+
       return result;
     },
   },
@@ -58,18 +108,27 @@ export default {
   max-width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  .name {
+    display: inline-block;
+  }
+
+  .name.static {
+    text-decoration: underline;
+  }
+
+  .name > .delete {
+    text-decoration: line-through;
+    color: $gray4;
+  }
+
+  .elapsed {
+    color: $sequence-elapsed-time-color;
+  }
 }
 
 .label:hover {
   cursor: pointer;
   color: $lightblue;
-}
-
-.name.static {
-  text-decoration: underline;
-}
-
-.elapsed {
-  color: $sequence-elapsed-time-color;
 }
 </style>
