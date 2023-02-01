@@ -1,6 +1,6 @@
 {
   "name": "@appland/scanner",
-  "version": "1.75.0",
+  "version": "1.75.1",
   "description": "Analyze AppMaps for code flaws",
   "bin": "built/cli.js",
   "files": [
