@@ -1,5 +1,5 @@
 <template>
-  <div class="sequence-diagram">
+  <div class="sequence-diagram" id="sequence-diagram-ui">
     <template v-for="(actor, index) in actors">
       <VActor
         :actor="actor"
