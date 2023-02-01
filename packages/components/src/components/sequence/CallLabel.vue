@@ -101,17 +101,19 @@ export default {
 
 <style scoped lang="scss">
 // See also: ReturnLabel .label
+$bg-fade: rgba(0, 0, 0, 0.8);
+
 .label {
   display: inline-block;
   font-size: 9pt;
   margin-left: 1em;
   white-space: nowrap;
   max-width: 160px;
-  overflow: hidden;
   text-overflow: ellipsis;
 
   .name {
     display: inline-block;
+    background-color: $bg-fade;
   }
 
   .name.static {
@@ -125,6 +127,7 @@ export default {
 
   .elapsed {
     color: $sequence-elapsed-time-color;
+    background-color: $bg-fade;
   }
 }
 
