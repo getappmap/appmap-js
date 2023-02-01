@@ -244,7 +244,6 @@ export default {
 
 .call-line-segment {
   border-bottom: $sequence-call-line-width solid $sequence-call-line-color;
-  z-index: 1;
 }
 
 .call-line-segment,

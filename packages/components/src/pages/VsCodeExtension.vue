@@ -1403,6 +1403,7 @@ code {
   padding: 0 0 2rem 0;
   width: calc(100% - 4rem);
   word-break: break-word;
+  z-index: 200;
   h1 {
     color: $white;
     font-weight: 800;

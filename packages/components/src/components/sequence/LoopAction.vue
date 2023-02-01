@@ -47,7 +47,7 @@ export default {
 .loop {
   margin: 15px -20px 10px -20px;
   border: 1px solid magenta;
-  z-index: 3;
+  position: relative;
 
   .label {
     padding: 5px;

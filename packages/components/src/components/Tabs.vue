@@ -79,7 +79,7 @@ export default {
     align-items: center;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
-    z-index: 1;
+    z-index: 100;
   }
 
   &__notification {
