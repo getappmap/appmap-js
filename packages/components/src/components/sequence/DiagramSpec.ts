@@ -43,6 +43,8 @@ export default class DiagramSpec {
 
       this.rowCount += 1;
       if (isLoop(action)) {
+        if (action.children.length === 0) return;
+
         spec = new ActionSpec(diagram, action, 'loop', this.actions.length);
       } else {
         if (nodeResult(action)) {
