@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.6.2](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.6.1...@appland/diagrams-v1.6.2) (2023-02-01)
+
+
+### Bug Fixes
+
+* Upgrade @appland/models to v2.0.0 ([68dea5a](https://github.com/getappmap/appmap-js/commit/68dea5a0a0e313d6067acfda99281a0194b2d353))
+
 # [@appland/diagrams-v1.6.1](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.6.0...@appland/diagrams-v1.6.1) (2023-01-05)
 
 
