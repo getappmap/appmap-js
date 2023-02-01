@@ -2,7 +2,7 @@
   <button type="button" @click="download" class="download-button">Download</button>
 </template>
 
-<script lang="ts">
+<script>
 import assert from 'assert';
 import { elementToSVG, inlineResources } from 'dom-to-svg';
 

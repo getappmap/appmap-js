@@ -211,6 +211,7 @@ __metadata:
     "@storybook/builder-webpack5": ^6.5.14
     "@storybook/manager-webpack5": ^6.5.14
     "@storybook/vue": ^6.5.14
+    "@types/assert": ^1.5.6
     "@types/yargs": ^16.0.0
     "@vue/cli-plugin-babel": ~4.5.0
     "@vue/cli-plugin-unit-jest": ~4.5.0
@@ -246,13 +247,15 @@ __metadata:
     rollup: ^2.7.3
     rollup-plugin-babel: ^4.4.0
     rollup-plugin-terser: ^5.3.1
-    rollup-plugin-vue: ^5.1.6
+    rollup-plugin-typescript2: ^0.34.1
+    rollup-plugin-vue: ^5.1.9
     sass: ^1.26.5
     sass-loader: ^8.0.2
     sass-resources-loader: ^2.1.1
     sql-formatter: ^4.0.2
     start-server-and-test: ^1.14.0
     svg-to-vue: ^0.7.0
+    typescript: ^4.9.5
     vue: ^2.7.14
     vue-jest: ^3.0.7
     vue-loader: ^15.7.0
@@ -3953,6 +3956,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rollup/pluginutils@npm:^4.1.2":
+  version: 4.2.1
+  resolution: "@rollup/pluginutils@npm:4.2.1"
+  dependencies:
+    estree-walker: ^2.0.1
+    picomatch: ^2.2.2
+  checksum: 6bc41f22b1a0f1efec3043899e4d3b6b1497b3dea4d94292d8f83b4cf07a1073ecbaedd562a22d11913ff7659f459677b01b09e9598a98936e746780ecc93a12
+  languageName: node
+  linkType: hard
+
 "@semantic-release/changelog@npm:^5.0.1":
   version: 5.0.1
   resolution: "@semantic-release/changelog@npm:5.0.1"
@@ -5576,6 +5589,13 @@ __metadata:
   version: 1.0.1
   resolution: "@tsconfig/recommended@npm:1.0.1"
   checksum: 5f781e6a26277ee86dd0f1d575d18133627908ddf7c78acdcab0e40d0b7f21f4e1462eb8f98b74cda1d05d15fb3629ceea4c622ee031d62e31e7a99281c49294
+  languageName: node
+  linkType: hard
+
+"@types/assert@npm:^1.5.6":
+  version: 1.5.6
+  resolution: "@types/assert@npm:1.5.6"
+  checksum: 035e43ee8e83d3140f55d093da74a80ec1aa9b639e8eb632174a27e5c37b7fd2c0c35d64b4d32d8a24f5f9168ca5761b2553073d1c305871a80f34b728de02b0
   languageName: node
   linkType: hard
 
@@ -14688,7 +14708,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-cache-dir@npm:^3.0.0, find-cache-dir@npm:^3.3.1":
+"find-cache-dir@npm:^3.0.0, find-cache-dir@npm:^3.3.1, find-cache-dir@npm:^3.3.2":
   version: 3.3.2
   resolution: "find-cache-dir@npm:3.3.2"
   dependencies:
@@ -26214,7 +26234,23 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"rollup-plugin-vue@npm:^5.1.6":
+"rollup-plugin-typescript2@npm:^0.34.1":
+  version: 0.34.1
+  resolution: "rollup-plugin-typescript2@npm:0.34.1"
+  dependencies:
+    "@rollup/pluginutils": ^4.1.2
+    find-cache-dir: ^3.3.2
+    fs-extra: ^10.0.0
+    semver: ^7.3.7
+    tslib: ^2.4.0
+  peerDependencies:
+    rollup: ">=1.26.3"
+    typescript: ">=2.4.0"
+  checksum: 107e66b9ab1aaf4b237564e500ea9de9f2d3f0a81be5139dc753fc76bbf00a1a2230eb1ec59145d2dfc4c4da9be8211f1f3e1370007efe1e24ce45a00905e558
+  languageName: node
+  linkType: hard
+
+"rollup-plugin-vue@npm:^5.1.9":
   version: 5.1.9
   resolution: "rollup-plugin-vue@npm:5.1.9"
   dependencies:
@@ -29115,6 +29151,13 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
+"tslib@npm:^2.4.0":
+  version: 2.5.0
+  resolution: "tslib@npm:2.5.0"
+  checksum: ae3ed5f9ce29932d049908ebfdf21b3a003a85653a9a140d614da6b767a93ef94f460e52c3d787f0e4f383546981713f165037dc2274df212ea9f8a4541004e1
+  languageName: node
+  linkType: hard
+
 "tsup@npm:^6.5.0":
   version: 6.5.0
   resolution: "tsup@npm:6.5.0"
@@ -29326,6 +29369,16 @@ typescript@^4.4.2:
   languageName: node
   linkType: hard
 
+"typescript@npm:^4.9.5":
+  version: 4.9.5
+  resolution: "typescript@npm:4.9.5"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: ee000bc26848147ad423b581bd250075662a354d84f0e06eb76d3b892328d8d4440b7487b5a83e851b12b255f55d71835b008a66cbf8f255a11e4400159237db
+  languageName: node
+  linkType: hard
+
 "typescript@patch:typescript@^4.3.5#~builtin<compat/typescript>, typescript@patch:typescript@^4.5.4#~builtin<compat/typescript>":
   version: 4.5.5
   resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=7ad353"
@@ -29343,6 +29396,16 @@ typescript@^4.4.2:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 6bf45caf847062420592e711bc9c28bf5f9a9a7fa8245343b81493e4ededae33f1774009d1234d911422d1646a2c839f44e1a23ecb111b40a60ac2ea4c1482a8
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^4.9.5#~builtin<compat/typescript>":
+  version: 4.9.5
+  resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=7ad353"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 2eee5c37cad4390385db5db5a8e81470e42e8f1401b0358d7390095d6f681b410f2c4a0c496c6ff9ebd775423c7785cdace7bcdad76c7bee283df3d9718c0f20
   languageName: node
   linkType: hard
 

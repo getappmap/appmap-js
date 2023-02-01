@@ -15,6 +15,7 @@
 </template>
 
 <script lang="ts">
+//@ts-nocheck
 import { DiffMode } from '@appland/sequence-diagram';
 import { ActionSpec } from './ActionSpec';
 

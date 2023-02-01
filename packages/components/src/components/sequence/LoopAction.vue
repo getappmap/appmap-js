@@ -11,6 +11,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import { ActionSpec } from './ActionSpec';
 
 export default {
