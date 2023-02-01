@@ -118,7 +118,6 @@ export default {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 10pt;
   color: white;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  contain: paint;
 }
 </style>
