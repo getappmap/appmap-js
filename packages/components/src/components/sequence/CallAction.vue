@@ -184,6 +184,7 @@
 </template>
 
 <script lang="ts">
+//@ts-nocheck
 import Arrow from '@/assets/sequence-action-arrow.svg';
 import { ActionSpec } from './ActionSpec';
 import VCallLabel from './CallLabel.vue';

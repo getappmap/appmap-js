@@ -114,7 +114,7 @@ export class ActionSpec {
     const collectActors = (action: Action): void => {
       actionActors(action)
         .filter(Boolean)
-        .forEach((actor) => actorIds.add(actor.id));
+        .forEach((actor) => actorIds.add(actor!.id));
       action.children.forEach((child) => collectActors(child));
     };
     this.action.children.forEach((child) => collectActors(child));

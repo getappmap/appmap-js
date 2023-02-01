@@ -4,6 +4,7 @@ import alias from '@rollup/plugin-alias';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import image from '@rollup/plugin-image';
+import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
 import minimist from 'minimist';
 import svg from './build/rollup-vue-svg';
@@ -73,6 +74,9 @@ if (!argv.format || argv.format === 'es') {
       }),
       ...baseConfig.plugins.preVue,
       svg(),
+      typescript({
+        tsconfig: 'tsconfig.json',
+      }),
       vue(baseConfig.plugins.vue),
       image({ exclude: ['**/*.svg'] }),
       commonjs(),

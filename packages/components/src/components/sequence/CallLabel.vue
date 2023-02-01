@@ -12,6 +12,7 @@
 </template>
 
 <script lang="ts">
+//@ts-nocheck
 import { diffChars } from 'diff';
 import { DiffMode, isFunction } from '@appland/sequence-diagram';
 import { ActionSpec } from './ActionSpec';

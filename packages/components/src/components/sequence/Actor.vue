@@ -17,7 +17,9 @@
 </template>
 
 <script lang="ts">
+//@ts-nocheck
 import { SELECT_OBJECT } from '@/store/vsCode';
+import { CodeObject } from '@appland/models';
 
 export default {
   name: 'v-sequence-actor',
@@ -69,7 +71,7 @@ export default {
     selectCodeObject() {
       if (this.$store) {
         const codeObject = this.$store.state.appMap.classMap.codeObjects.find(
-          (co) => co.fqid === this.actor.id
+          (co: CodeObject) => co.fqid === this.actor.id
         );
         if (codeObject) this.$store.commit(SELECT_OBJECT, codeObject);
       }
