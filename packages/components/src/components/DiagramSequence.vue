@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import { AppMap, CodeObject, Event } from '@appland/models';
 import {
   buildDiagram,
