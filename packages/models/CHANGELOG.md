@@ -1,3 +1,16 @@
+# [@appland/models-v2.0.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.23.2...@appland/models-v2.0.0) (2023-02-01)
+
+
+### Bug Fixes
+
+* Safely access CodeObject#location to prevent usage of undefined ([a4756a9](https://github.com/getappmap/appmap-js/commit/a4756a90747f2dfa8300050896a8e968b70fab2e))
+
+
+### BREAKING CHANGES
+
+* `CodeObject#location` is now marked as being
+potentially undefined
+
 # [@appland/models-v1.23.2](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.23.1...@appland/models-v1.23.2) (2023-01-25)
 
 
