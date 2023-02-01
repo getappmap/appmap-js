@@ -374,7 +374,7 @@ __metadata:
     jest: ^27.4.7
     js-yaml: ^4.1.0
     lru-cache: ^6.0.0
-    minimatch: ^3.0.4
+    minimatch: ^5.1.2
     nock: ^13.2.2
     octokat: ^0.10.0
     openapi-diff: ^0.23.5
