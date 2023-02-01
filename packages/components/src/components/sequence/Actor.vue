@@ -88,6 +88,7 @@ $min-height: 3rem;
 .sequence-actor {
   position: sticky;
   top: 10px;
+  z-index: 5; // Overlay the swim lane dashed lines
 }
 
 .label-container {
@@ -96,12 +97,13 @@ $min-height: 3rem;
   padding: 3px;
   overflow: hidden;
   text-overflow: ellipsis;
+  overflow: visible;
+
+  min-width: 120px;
+  min-height: 40px;
   max-width: $min-width - 6;
-  max-height: $min-height;
-  width: max-content;
-  overflow: hidden;
-  display: block;
-  white-space: nowrap;
+  width: fit-content;
+
   transform: translateX(-50%);
   position: absolute;
 
