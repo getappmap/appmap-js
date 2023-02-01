@@ -99,7 +99,7 @@ $min-height: 3rem;
   text-overflow: ellipsis;
   overflow: visible;
 
-  min-width: 120px;
+  min-width: 145px;
   min-height: 40px;
   max-width: $min-width - 6;
   width: fit-content;
