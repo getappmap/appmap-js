@@ -123,6 +123,11 @@
               <span>Share</span>
             </button>
           </v-popper>
+
+          <template v-if="showDownload">
+            <v-download-sequence-diagram></v-download-sequence-diagram>
+          </template>
+
           <v-popper-menu :isHighlight="filtersChanged">
             <template v-slot:icon>
               <FilterIcon class="control-button__icon" @click="openFilterModal" />
@@ -317,6 +322,7 @@ import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramSequence from '../components/DiagramSequence.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
+import VDownloadSequenceDiagram from '@/components/sequence/DownloadSequenceDiagram.vue';
 import VFiltersForm from '../components/FiltersForm.vue';
 import VInstructions from '../components/Instructions.vue';
 import VNotification from '../components/Notification.vue';
@@ -367,6 +373,7 @@ export default {
     VDiagramComponent,
     VDiagramSequence,
     VDiagramTrace,
+    VDownloadSequenceDiagram,
     VFiltersForm,
     VInstructions,
     VNotification,
@@ -421,6 +428,7 @@ export default {
       },
       traceFilterValue: '',
       currentTraceFilterIndex: 0,
+      showDownloadButton: false,
       showShareModal: false,
       shareURL: undefined,
     };
@@ -445,7 +453,7 @@ export default {
       handler(selectedObject) {
         if (selectedObject) {
           /*
-           * TODO: First, let's see how it feels without this. Then we can figure out 
+           * TODO: First, let's see how it feels without this. Then we can figure out
            * what the right behavior is.
           if (!(selectedObject instanceof Event)) {
             this.setView(VIEW_COMPONENT);
@@ -757,6 +765,10 @@ export default {
 
     isViewingFlow() {
       return this.currentView === VIEW_FLOW;
+    },
+
+    showDownload() {
+      return this.isViewingSequence;
     },
 
     prevSelectedObject() {
@@ -1548,6 +1560,10 @@ code {
           height: 14px;
           fill: currentColor;
         }
+      }
+
+      .download-button {
+        display: inline-block;
       }
 
       .diagram-instructions {
