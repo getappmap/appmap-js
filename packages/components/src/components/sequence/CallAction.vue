@@ -205,7 +205,13 @@ export default {
 
   computed: {
     containerClasses(): string[] {
-      return ['call', `call-${this.actionSpec.callArrowDirection}`, ...this.actionSpec.diffClasses];
+      const result = [
+        'call',
+        `call-${this.actionSpec.callArrowDirection}`,
+        ...this.actionSpec.diffClasses,
+      ];
+      if (this.actionSpec.index === 0) result.push('first-action');
+      return result;
     },
     gridRows(): string {
       return this.actionSpec.gridRows;
@@ -244,6 +250,13 @@ export default {
 
 .call-line-segment {
   border-bottom: $sequence-call-line-width solid $sequence-call-line-color;
+}
+
+.first-action {
+  .call-line-segment,
+  .diff-channel {
+    margin-top: 50px;
+  }
 }
 
 .call-line-segment,
