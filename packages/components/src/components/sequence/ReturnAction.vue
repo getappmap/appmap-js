@@ -185,7 +185,6 @@ export default {
 
 .return-line-segment {
   border-bottom: $sequence-call-line-width dotted $sequence-call-line-color;
-  z-index: 1;
 }
 
 .return-line-segment,

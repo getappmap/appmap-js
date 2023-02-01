@@ -1,13 +1,15 @@
 <template>
   <div class="lane" :style="inlineStyle">
+    <div class="sequence-actor-lane-separator" />
     <div class="offset">
-      <div class="sequence-actor">
-        <div class="label-container" :class="labelClasses" @click="selectCodeObject">
-          <span class="label"> {{ actor.name }} </span>
+      <div class="on-top">
+        <div class="sequence-actor">
+          <div class="label-container" :class="labelClasses" @click="selectCodeObject">
+            <span class="label"> {{ actor.name }} </span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="sequence-actor-lane-separator" />
   </div>
 </template>
 
@@ -79,8 +81,8 @@ $min-height: 3rem;
 .offset {
   position: relative;
   height: 100%;
-  float: left;
   left: 100%;
+  width: 0;
 }
 
 .sequence-actor {
@@ -92,13 +94,17 @@ $min-height: 3rem;
   margin: 3px 0;
   text-align: center;
   padding: 3px;
-  z-index: 2175666; // Overlay the swim lane dashed lines
   overflow: hidden;
   text-overflow: ellipsis;
-  overflow: visible;
   max-width: $min-width - 6;
-  width: fit-content;
+  max-height: $min-height;
+  width: max-content;
+  overflow: hidden;
+  display: block;
+  white-space: nowrap;
   transform: translateX(-50%);
+  position: absolute;
+
   // These attributes are taken from the component diagram package element.
   background-color: #6fddd6;
   font-family: 'IBM Plex Mono', monospace;
@@ -120,6 +126,14 @@ $min-height: 3rem;
 .lane {
   min-width: $min-width;
   min-height: $min-height;
+  // position: relative;
+}
+
+.on-top {
+  position: absolute;
+  z-index: 1;
+  height: 100%;
+  // width: 100%;
 }
 
 .sequence-actor-lane-separator {
@@ -129,5 +143,6 @@ $min-height: 3rem;
   width: 1px;
   top: 0;
   left: 100%;
+  float: left;
 }
 </style>
