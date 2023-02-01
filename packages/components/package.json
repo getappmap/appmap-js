@@ -28,7 +28,7 @@
   ],
   "dependencies": {
     "@appland/diagrams": "workspace:^1.6.0",
-    "@appland/models": "workspace:^1.23.0",
+    "@appland/models": "workspace:^2.0.0",
     "buffer": "^6.0.3",
     "highlight.js": "^10.7.2",
     "sql-formatter": "^4.0.2",

@@ -79,7 +79,7 @@ __metadata:
   dependencies:
     "@appland/components": "workspace:^2"
     "@appland/diagrams": "workspace:^1"
-    "@appland/models": "workspace:^1.23.2"
+    "@appland/models": "workspace:^2.0.0"
     "@appland/openapi": "workspace:^1"
     "@appland/sequence-diagram": "workspace:^1"
     "@craftamap/esbuild-plugin-html": ^0.4.0
@@ -192,7 +192,7 @@ __metadata:
   resolution: "@appland/components@workspace:packages/components"
   dependencies:
     "@appland/diagrams": "workspace:^1.6.0"
-    "@appland/models": "workspace:^1.23.0"
+    "@appland/models": "workspace:^2.0.0"
     "@babel/core": ^7.13.1
     "@babel/node": ^7.13.0
     "@babel/preset-env": ^7.9.5
@@ -262,7 +262,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/diagrams@workspace:packages/diagrams"
   dependencies:
-    "@appland/models": "workspace:^1.23.0"
+    "@appland/models": "workspace:^2.0.0"
     "@rollup/plugin-commonjs": ^18.1.0
     "@rollup/plugin-node-resolve": ^13.0.0
     "@rollup/plugin-replace": ^2.4.2
@@ -290,7 +290,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@workspace:*, @appland/models@workspace:^1.18.1, @appland/models@workspace:^1.23.0, @appland/models@workspace:^1.23.2, @appland/models@workspace:packages/models":
+"@appland/models@workspace:*, @appland/models@workspace:^2.0.0, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
@@ -315,7 +315,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/openapi@workspace:packages/openapi"
   dependencies:
-    "@appland/models": "workspace:packages/models"
+    "@appland/models": "workspace:^2.0.0"
     "@types/jest": ^27.4.1
     "@types/js-yaml": ^4.0.5
     "@typescript-eslint/eslint-plugin": ^5.7.0
@@ -334,7 +334,7 @@ __metadata:
   resolution: "@appland/scanner@workspace:packages/scanner"
   dependencies:
     "@appland/client": ^1.5.0
-    "@appland/models": "workspace:^1.18.1"
+    "@appland/models": "workspace:^2.0.0"
     "@appland/openapi": "workspace:packages/openapi"
     "@appland/sql-parser": ^1.5.0
     "@semantic-release/changelog": ^6.0.1
