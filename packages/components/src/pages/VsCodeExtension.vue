@@ -49,11 +49,16 @@
 
     <div class="main-column main-column--right">
       <v-tabs @activateTab="onChangeTab" ref="tabs">
-        <v-tab name="Dependency Map" :is-active="isViewingComponent" :ref="VIEW_COMPONENT">
+        <v-tab
+          name="Dependency Map"
+          :is-active="isViewingComponent"
+          :reference="VIEW_COMPONENT"
+          :ref="VIEW_COMPONENT"
+        >
           <v-diagram-component ref="componentDiagram" :class-map="filteredAppMap.classMap" />
         </v-tab>
 
-        <v-tab name="Trace View" :is-active="isViewingFlow" :ref="VIEW_FLOW">
+        <v-tab name="Trace View" :is-active="isViewingFlow" :reference="VIEW_FLOW" :ref="VIEW_FLOW">
           <div class="trace-view">
             <v-trace-filter
               ref="traceFilter"
@@ -107,7 +112,7 @@
           </v-popper>
           <v-popper-menu :isHighlight="filtersChanged">
             <template v-slot:icon>
-              <FilterIcon class="control-button__icon" />
+              <FilterIcon class="control-button__icon" @click="openFilterModal" />
             </template>
             <template v-slot:body>
               <div class="filters">
@@ -866,6 +871,10 @@ export default {
       return base64UrlEncode(JSON.stringify(state));
     },
 
+    openFilterModal() {
+      this.$root.$emit('clickFilterButton');
+    },
+
     setSelectedObject(fqid) {
       const [match, type, object] = fqid.match(/^([a-z]+):(.+)/);
 
@@ -1019,6 +1028,7 @@ export default {
     resetDiagram() {
       this.clearSelection();
       this.resetFilters();
+      this.$root.$emit('resetDiagram');
 
       this.renderKey += 1;
     },

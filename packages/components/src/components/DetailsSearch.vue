@@ -12,6 +12,7 @@
           placeholder="search code objects..."
           ref="searchInput"
           v-model="filter"
+          @focus="searchFocused"
         />
       </div>
     </form>
@@ -190,6 +191,7 @@ export default {
 
   methods: {
     selectObject(type, object) {
+      this.$root.$emit('selectObjectInSidebar', type);
       if (type === 'labels') {
         this.$store.commit(SELECT_LABEL, object);
       } else {
@@ -212,6 +214,10 @@ export default {
       }
 
       return false;
+    },
+
+    searchFocused() {
+      this.$root.$emit('sidebarSearchFocused');
     },
   },
 };

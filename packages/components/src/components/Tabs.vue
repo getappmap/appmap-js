@@ -6,6 +6,7 @@
         :key="tab.name"
         :label="tab.name"
         :is-active="activeTab === tab"
+        :reference="tab.reference"
         @click.native="activateTab(tab)"
       >
       </v-tab-button>

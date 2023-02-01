@@ -21,6 +21,7 @@ export default {
       type: String,
       required: true,
     },
+    reference: String,
   },
 
   data() {
