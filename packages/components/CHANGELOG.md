@@ -1,3 +1,10 @@
+# [@appland/components-v2.27.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.26.0...@appland/components-v2.27.0) (2023-02-01)
+
+
+### Features
+
+* add telemetry to better understand sign in ([7fe4972](https://github.com/getappmap/appmap-js/commit/7fe4972400f379f39b98ea9cff790e43f13d3363))
+
 # [@appland/components-v2.26.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.25.2...@appland/components-v2.26.0) (2023-01-24)
 
 
