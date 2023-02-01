@@ -1,18 +1,13 @@
 <template>
-  <div style="display: contents">
-    <div class="sequence-actor" :style="{ 'grid-column': gridColumn, 'grid-row': row }">
-      <div class="label-container" :style="selectionStyle" @click="selectCodeObject">
-        <span class="label"> {{ actor.name }} </span>
+  <div class="lane" :style="inlineStyle">
+    <div class="offset">
+      <div class="sequence-actor">
+        <div class="label-container" :class="labelClasses" @click="selectCodeObject">
+          <span class="label"> {{ actor.name }} </span>
+        </div>
       </div>
     </div>
-    <template v-if="row > 0 && index > 0">
-      <div
-        class="sequence-actor-lane"
-        :style="{ 'grid-column': gridColumn, 'grid-row-start': row, 'grid-row-end': gridSpan }"
-      >
-        <div class="sequence-actor-lane-separator"></div>
-      </div>
-    </template>
+    <div class="sequence-actor-lane-separator" />
   </div>
 </template>
 
@@ -52,19 +47,16 @@ export default {
     },
   },
   computed: {
-    gridColumn(): number {
-      return this.index + 1;
+    inlineStyle(): { [key: string]: string } {
+      return {
+        'grid-area': `1 / ${this.index + 1} / ${this.height + 2} / auto`,
+      };
     },
-    gridSpan(): number {
-      return this.height + 2;
-    },
-    selectionStyle(): Record<string, string> {
-      const result: Record<string, string> = {};
-      if (this.selectedActor && this.actor === this.selectedActor) {
-        result.border = '3px solid #ff07aa';
-        result.margin = '3px 10px';
-      }
-      return result;
+    labelClasses(): { [key: string]: string } {
+      return {
+        'label-container': true,
+        'label-container--selected': this.actor === this.selectedActor,
+      };
     },
   },
   methods: {
@@ -81,17 +73,32 @@ export default {
 </script>
 
 <style scoped lang="scss">
+$min-width: 160px; // See: CallLabel .label wax-width
+$min-height: 3rem;
+
+.offset {
+  position: relative;
+  height: 100%;
+  float: left;
+  left: 100%;
+}
+
+.sequence-actor {
+  position: sticky;
+  top: 10px;
+}
+
 .label-container {
-  margin: 3px 10px;
+  margin: 3px 0;
   text-align: center;
   padding: 3px;
-  min-width: 160px; // See: CallLabel .label wax-width
-  min-height: 3rem;
-  z-index: 1; // Overlay the swim lane dashed lines
+  z-index: 2175666; // Overlay the swim lane dashed lines
   overflow: hidden;
   text-overflow: ellipsis;
-  left: 50%;
-  position: relative;
+  overflow: visible;
+  max-width: $min-width - 6;
+  width: fit-content;
+  transform: translateX(-50%);
   // These attributes are taken from the component diagram package element.
   background-color: #6fddd6;
   font-family: 'IBM Plex Mono', monospace;
@@ -99,6 +106,10 @@ export default {
   font-size: 75%;
   font-weight: 700;
   border: 3px solid #6fddd6;
+
+  &--selected {
+    border: 3px solid #ff07aa;
+  }
 }
 
 .label-container:hover {
@@ -106,8 +117,17 @@ export default {
   color: $lightblue;
 }
 
+.lane {
+  min-width: $min-width;
+  min-height: $min-height;
+}
+
 .sequence-actor-lane-separator {
   border-left: 1px dashed #6fddd6;
+  position: relative;
   height: 100%;
+  width: 1px;
+  top: 0;
+  left: 100%;
 }
 </style>
