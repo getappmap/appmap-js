@@ -1519,8 +1519,8 @@ code {
         }
 
         &__icon {
-          width: 0.95rem;
-          height: 0.95rem;
+          width: 16px;
+          height: 14px;
           fill: currentColor;
         }
       }
@@ -1538,7 +1538,7 @@ code {
           background-color: $dark-purple;
           border-radius: 0.5rem;
           color: $white;
-          padding: 0.35rem 0.8rem;
+          padding: 0.25rem 0.65rem;
           text-transform: uppercase;
           flex-direction: row-reverse;
           gap: 0.5rem;
