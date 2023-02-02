@@ -1,6 +1,6 @@
 <template>
   <div
-    class="loop"
+    :class="loopClasses"
     :style="{
       'grid-column': gridColumns,
       'grid-row': gridRows,
@@ -39,13 +39,29 @@ export default {
       required: true,
       readonly: true,
     },
+    collapsedActions: {
+      type: Array,
+      required: true,
+    },
   },
+
   data() {
     return {
+      collapsedActionState: this.collapsedActions,
       columnIndexSpan: this.actionSpec.descendantsActorIndexSpan,
     };
   },
+
   computed: {
+    loopClasses(): string[] {
+      const result = ['loop'];
+      const ancestorIndexes = this.actionSpec.ancestorIndexes;
+      if (ancestorIndexes.find((ancestorIndex) => this.collapsedActionState[ancestorIndex]))
+        result.push('loop-collapsed');
+
+      return result;
+    },
+
     gridRows(): string {
       return [this.actionSpec.index + 2, this.actionSpec.returnIndex! + 2].join(' / ');
     },
@@ -99,5 +115,9 @@ export default {
       }
     }
   }
+}
+
+.loop-collapsed {
+  display: none;
 }
 </style>
