@@ -94,12 +94,10 @@ export default {
       if (!(this.$store.getters.selectedObject instanceof CodeObject)) return;
 
       const codeObject = this.$store.getters.selectedObject as CodeObject;
-      console.log(codeObject.fqid);
       const ancestorIds = [
         codeObject.fqid,
         ...(codeObject as any).ancestors().map((ancestor: CodeObject) => ancestor.fqid),
       ];
-      console.log(ancestorIds);
       return this.actors.find((actor) => ancestorIds.indexOf(actor.id) !== -1);
     },
   },
