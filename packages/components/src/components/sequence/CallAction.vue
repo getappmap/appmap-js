@@ -326,6 +326,7 @@ export default {
 
 .gutter-container {
   position: relative;
+  pointer-events: none;
 }
 
 .gutter {

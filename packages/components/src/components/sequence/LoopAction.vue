@@ -65,6 +65,7 @@ export default {
   z-index: 3;
   display: inline-block;
   font-weight: bold;
+  pointer-events: none;
 
   .label-container {
     white-space: nowrap;
