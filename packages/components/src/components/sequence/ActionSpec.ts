@@ -8,6 +8,7 @@ import {
   DiffMode,
 } from '@appland/sequence-diagram';
 import assert from 'assert';
+import DiagramSpec from './DiagramSpec';
 
 export enum CallDirection {
   Self = 'self',
