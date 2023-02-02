@@ -36,7 +36,7 @@ import VNodeTypeDatabaseIcon from '@/assets/node-types/database.svg';
 import VNodeTypeQueryIcon from '@/assets/node-types/query.svg';
 import VNodeTypeExternalServiceIcon from '@/assets/node-types/external-service.svg';
 import VSourceCodeLink from '@/components/SourceCodeLink.vue';
-import { SELECT_OBJECT } from '@/store/vsCode';
+import { SELECT_CODE_OBJECT } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel-header',
@@ -96,7 +96,7 @@ export default {
   methods: {
     selectObject(obj) {
       if (this.$store) {
-        this.$store.commit(SELECT_OBJECT, obj);
+        this.$store.commit(SELECT_CODE_OBJECT, obj);
       }
     },
   },

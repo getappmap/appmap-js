@@ -16,7 +16,7 @@
 import { diffChars } from 'diff';
 import { DiffMode, isFunction } from '@appland/sequence-diagram';
 import { ActionSpec } from './ActionSpec';
-import { SELECT_OBJECT } from '@/store/vsCode';
+import { SELECT_CODE_OBJECT } from '@/store/vsCode';
 
 class LabelFragment {
   constructor(public text: string, public diffMode?: DiffMode.Insert | DiffMode.Delete) {}
@@ -92,7 +92,7 @@ export default {
         if (eventId === undefined) return;
 
         const event = this.$store.state.appMap.events[eventId - 1];
-        if (event) this.$store.commit(SELECT_OBJECT, event);
+        if (event) this.$store.commit(SELECT_CODE_OBJECT, event);
       }
     },
   },

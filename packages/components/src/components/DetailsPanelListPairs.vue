@@ -3,11 +3,11 @@
     <h5>{{ title }}</h5>
     <ul>
       <li v-for="(item, index) in items" :key="index" class="list-pair">
-        <span class="list-pair__object" @click.prevent="selectItem(item.from)">
+        <span class="list-pair__object" @click.prevent="selectCodeObject(item.from)">
           {{ nameOf(item.from) }}
         </span>
         to
-        <span class="list-pair__object" @click.prevent="selectItem(item.to)">
+        <span class="list-pair__object" @click.prevent="selectCodeObject(item.to)">
           {{ nameOf(item.to) }}
         </span>
       </li>
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { SELECT_OBJECT } from '@/store/vsCode';
+import { SELECT_CODE_OBJECT } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel-list-pairs',
@@ -32,9 +32,9 @@ export default {
       const { codeObject } = item;
       return codeObject.prettyName || codeObject.name || codeObject.toString();
     },
-    selectItem(item) {
+    selectCodeObject(item) {
       if (this.$store) {
-        this.$store.commit(SELECT_OBJECT, item);
+        this.$store.commit(SELECT_CODE_OBJECT, item);
       }
     },
   },

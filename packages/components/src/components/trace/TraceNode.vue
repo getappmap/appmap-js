@@ -22,7 +22,7 @@
 
 <script>
 import { Event } from '@appland/models';
-import { CLEAR_OBJECT_STACK, SELECT_OBJECT } from '@/store/vsCode';
+import { CLEAR_SELECTION_STACK, SELECT_CODE_OBJECT } from '@/store/vsCode';
 import NodeConnection from '@/assets/node_connection.svg';
 import VTraceNodeBodyDefault from './TraceNodeBodyDefault.vue';
 import VTraceNodeBodyHttp from './TraceNodeBodyHttp.vue';
@@ -122,8 +122,8 @@ export default {
   methods: {
     selectNode() {
       if (this.$store) {
-        this.$store.commit(CLEAR_OBJECT_STACK);
-        this.$store.commit(SELECT_OBJECT, this.event);
+        this.$store.commit(CLEAR_SELECTION_STACK);
+        this.$store.commit(SELECT_CODE_OBJECT, this.event);
       }
     },
   },

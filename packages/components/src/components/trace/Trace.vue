@@ -5,7 +5,7 @@
       :key="event.id"
       :event="event"
       :selected-events="selectedEvents"
-      :focused-event="focusedEvent"
+      :selected-trace-event="selectedTraceEvent"
       :highlighted-events="highlightedEvents"
       :highlighted-event="highlightedEvent"
       :highlighted-event-index="highlightedEventIndex"
@@ -46,7 +46,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    focusedEvent: {
+    selectedTraceEvent: {
       type: Object,
       default: null,
     },

@@ -5,7 +5,7 @@
 <script>
 import { ComponentDiagram } from '@appland/diagrams';
 import { CodeObject, Event, ClassMap, CodeObjectType } from '@appland/models';
-import { CLEAR_OBJECT_STACK, SELECT_OBJECT } from '@/store/vsCode';
+import { CLEAR_SELECTION_STACK, SELECT_CODE_OBJECT } from '@/store/vsCode';
 
 export default {
   name: 'v-diagram-component',
@@ -119,8 +119,8 @@ export default {
 
     selectObject(object) {
       if (this.$store) {
-        this.$store.commit(CLEAR_OBJECT_STACK);
-        this.$store.commit(SELECT_OBJECT, object);
+        this.$store.commit(CLEAR_SELECTION_STACK);
+        this.$store.commit(SELECT_CODE_OBJECT, object);
       }
     },
   },
