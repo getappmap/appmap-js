@@ -1,3 +1,15 @@
+# [@appland/components-v2.28.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.27.1...@appland/components-v2.28.0) (2023-02-02)
+
+
+### Bug Fixes
+
+* Update [@appland](https://github.com/appland) deps ([fb4d442](https://github.com/getappmap/appmap-js/commit/fb4d442d1570f5fddbb08dfed78c9acfa63db1a0))
+
+
+### Features
+
+* update share icon ([d778b31](https://github.com/getappmap/appmap-js/commit/d778b317bf9b48fae5628aa20d942f341e27ef82))
+
 # [@appland/components-v2.27.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.27.0...@appland/components-v2.27.1) (2023-02-01)
 
 
