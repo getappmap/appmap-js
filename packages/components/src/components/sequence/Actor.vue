@@ -4,7 +4,12 @@
     <div class="offset">
       <div class="on-top">
         <div class="sequence-actor">
-          <div class="label-container" :class="labelClasses" @click="selectCodeObject">
+          <div
+            class="label-container"
+            ref="label_container"
+            :class="labelClasses"
+            @click="selectCodeObject"
+          >
             <span class="label"> {{ actor.name }} </span>
           </div>
         </div>
@@ -69,6 +74,20 @@ export default {
         );
         if (codeObject) this.$store.commit(SELECT_CODE_OBJECT, codeObject);
       }
+    },
+  },
+  watch: {
+    '$store.getters.selectedObject': {
+      handler(selectedObject) {
+        if (selectedObject && selectedObject instanceof CodeObject) {
+          const ancestorFqids = [selectedObject, ...selectedObject.ancestors()].map(
+            (co) => co.fqid
+          );
+          if (ancestorFqids.indexOf(this.actor.id) > -1) {
+            this.$refs.label_container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      },
     },
   },
 };
