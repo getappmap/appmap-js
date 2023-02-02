@@ -15,7 +15,7 @@
 
 <script lang="ts">
 //@ts-nocheck
-import { SELECT_OBJECT } from '@/store/vsCode';
+import { SELECT_CODE_OBJECT } from '@/store/vsCode';
 import { CodeObject } from '@appland/models';
 
 export default {
@@ -67,7 +67,7 @@ export default {
         const codeObject = this.$store.state.appMap.classMap.codeObjects.find(
           (co: CodeObject) => co.fqid === this.actor.id
         );
-        if (codeObject) this.$store.commit(SELECT_OBJECT, codeObject);
+        if (codeObject) this.$store.commit(SELECT_CODE_OBJECT, codeObject);
       }
     },
   },

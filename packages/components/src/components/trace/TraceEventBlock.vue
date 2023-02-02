@@ -12,7 +12,7 @@
       :highlight-color="highlightColor"
       :highlight-style="highlightStyle"
       :highlight-index="event === highlightedEvent ? highlightedEventIndex : 0"
-      :focused="focusedEvent && event && focusedEvent.id === event.id"
+      :focused="selectedTraceEvent && event && selectedTraceEvent.id === event.id"
       @expandChildren="toggleVisibility()"
       @click.native.stop="$emit('clickEvent', event)"
       ref="node"
@@ -22,7 +22,7 @@
       v-if="isExpanded"
       :events="event.children"
       :selected-events="selectedEvents"
-      :focused-event="focusedEvent"
+      :selected-trace-event="selectedTraceEvent"
       :highlighted-events="highlightedEvents"
       :highlighted-event="highlightedEvent"
       :highlighted-event-index="highlightedEventIndex"
@@ -67,7 +67,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    focusedEvent: {
+    selectedTraceEvent: {
       type: Object,
       default: null,
     },
@@ -191,8 +191,8 @@ export default {
     },
     hasFocusedEventInTree() {
       return (
-        this.focusedEvent &&
-        this.focusedEvent
+        this.selectedTraceEvent &&
+        this.selectedTraceEvent
           .ancestors()
           .map((e) => e.id)
           .includes(this.event.id)

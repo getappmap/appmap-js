@@ -49,7 +49,7 @@
 import { CodeObject, AppMap, CodeObjectType } from '@appland/models';
 import SearchIcon from '@/assets/search.svg';
 import toListItem from '@/lib/finding';
-import { SELECT_OBJECT, SELECT_LABEL } from '../store/vsCode';
+import { SELECT_CODE_OBJECT, SELECT_LABEL } from '../store/vsCode';
 
 export default {
   name: 'v-details-search',
@@ -195,7 +195,7 @@ export default {
       if (type === 'labels') {
         this.$store.commit(SELECT_LABEL, object);
       } else {
-        this.$store.commit(SELECT_OBJECT, object);
+        this.$store.commit(SELECT_CODE_OBJECT, object);
       }
     },
 
