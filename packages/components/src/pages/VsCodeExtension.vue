@@ -91,7 +91,7 @@
               ref="diagramFlow"
               :events="filteredAppMap.rootEvents()"
               :selected-events="selectedEvent"
-              :focused-event="focusedEvent"
+              :selected-trace-event="selectedTraceEvent"
               :highlighted-events="new Set(highlightedNodes)"
               :highlighted-event="highlightedEvent"
               :highlighted-event-index="currentTraceFilterIndex + 1"
@@ -339,10 +339,10 @@ import {
   VIEW_COMPONENT,
   VIEW_SEQUENCE,
   VIEW_FLOW,
-  SELECT_OBJECT,
+  SELECT_CODE_OBJECT,
   SELECT_LABEL,
-  POP_OBJECT_STACK,
-  CLEAR_OBJECT_STACK,
+  POP_SELECTION_STACK,
+  CLEAR_SELECTION_STACK,
   DEFAULT_VIEW,
 } from '../store/vsCode';
 
@@ -452,14 +452,6 @@ export default {
     '$store.getters.selectedObject': {
       handler(selectedObject) {
         if (selectedObject) {
-          /*
-           * TODO: First, let's see how it feels without this. Then we can figure out
-           * what the right behavior is.
-          if (!(selectedObject instanceof Event)) {
-            this.setView(VIEW_COMPONENT);
-          }
-          */
-
           if (selectedObject instanceof Event) {
             const highlightedIndex = this.highlightedNodes.findIndex((e) => e === selectedObject);
 
@@ -477,7 +469,7 @@ export default {
         this.$root.$emit('stateChanged', 'selectedObject');
       },
     },
-    '$store.getters.focusedEvent': {
+    '$store.getters.selectedTraceEvent': {
       handler(event) {
         if (event) {
           this.setView(VIEW_FLOW);
@@ -747,8 +739,8 @@ export default {
       return this.$store.getters.selectedLabel;
     },
 
-    focusedEvent() {
-      return this.$store.getters.focusedEvent;
+    selectedTraceEvent() {
+      return this.$store.getters.selectedTraceEvent;
     },
 
     currentView() {
@@ -939,7 +931,7 @@ export default {
         selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
       }
 
-      this.$store.commit(SELECT_OBJECT, selectedObject);
+      this.$store.commit(SELECT_CODE_OBJECT, selectedObject);
     },
 
     setState(serializedState) {
@@ -1002,7 +994,7 @@ export default {
             }
 
             if (selectedObject) {
-              this.$store.commit(SELECT_OBJECT, selectedObject);
+              this.$store.commit(SELECT_CODE_OBJECT, selectedObject);
             }
           } while (false);
         }
@@ -1054,12 +1046,12 @@ export default {
 
     clearSelection() {
       this.currentTraceFilterIndex = 0;
-      this.$store.commit(CLEAR_OBJECT_STACK);
+      this.$store.commit(CLEAR_SELECTION_STACK);
       this.$root.$emit('clearSelection');
     },
 
     goBack() {
-      this.$store.commit(POP_OBJECT_STACK);
+      this.$store.commit(POP_SELECTION_STACK);
     },
 
     resetDiagram() {
@@ -1138,7 +1130,7 @@ export default {
     },
 
     onClickTraceEvent(e) {
-      this.$store.commit(SELECT_OBJECT, e);
+      this.$store.commit(SELECT_CODE_OBJECT, e);
     },
 
     startResizing(event) {
@@ -1363,7 +1355,7 @@ export default {
 
     selectCurrentHighlightedEvent() {
       if (this.highlightedEvent) {
-        this.$store.commit(SELECT_OBJECT, this.highlightedEvent);
+        this.$store.commit(SELECT_CODE_OBJECT, this.highlightedEvent);
       }
     },
   },

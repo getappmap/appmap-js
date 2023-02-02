@@ -3,7 +3,7 @@
     <v-trace
       :events="events"
       :selected-events="selectedEvents"
-      :focused-event="focusedEvent"
+      :selected-trace-event="selectedTraceEvent"
       :highlighted-events="highlightedEvents"
       :highlighted-event="highlightedEvent"
       :highlighted-event-index="highlightedEventIndex"
@@ -22,7 +22,7 @@
 import { Event } from '@appland/models';
 import VTrace from '@/components/trace/Trace.vue';
 import VContainer from '@/components/Container.vue';
-import { VIEW_FLOW, SELECT_OBJECT, CLEAR_OBJECT_STACK } from '@/store/vsCode';
+import { VIEW_FLOW, SELECT_CODE_OBJECT, CLEAR_SELECTION_STACK } from '@/store/vsCode';
 
 export default {
   name: 'v-diagram-trace',
@@ -40,7 +40,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    focusedEvent: {
+    selectedTraceEvent: {
       type: Object,
       default: null,
     },
@@ -68,7 +68,7 @@ export default {
   methods: {
     clearSelection() {
       if (this.$store) {
-        this.$store.commit(CLEAR_OBJECT_STACK);
+        this.$store.commit(CLEAR_SELECTION_STACK);
       }
       this.$refs.container.clearScaleTarget();
     },
@@ -186,7 +186,7 @@ export default {
         /* eslint-enable prefer-destructuring */
 
         if (nextObject) {
-          this.$store.commit(SELECT_OBJECT, nextObject);
+          this.$store.commit(SELECT_CODE_OBJECT, nextObject);
         }
       });
     };

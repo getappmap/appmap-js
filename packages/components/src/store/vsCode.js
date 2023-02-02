@@ -4,13 +4,13 @@ import { AppMap, buildAppMap, fullyQualifiedFunctionName } from '@appland/models
 
 Vue.use(Vuex);
 
-export const SELECT_OBJECT = 'selectObject';
+export const SELECT_CODE_OBJECT = 'selectCodeObject';
 export const SELECT_LABEL = 'selectLabel';
 export const SET_APPMAP_DATA = 'setAppMapData';
-export const POP_OBJECT_STACK = 'popObjectStack';
-export const CLEAR_OBJECT_STACK = 'clearObjectStack';
+export const POP_SELECTION_STACK = 'popSelectionStack';
+export const CLEAR_SELECTION_STACK = 'clearSelectionStack';
 export const SET_VIEW = 'setView';
-export const SET_FOCUSED_EVENT = 'setFocusedEvent';
+export const SET_SELECTED_TRACE_EVENT = 'setSelectedTraceEvent';
 export const VIEW_COMPONENT = 'viewComponent';
 export const VIEW_SEQUENCE = 'viewSequence';
 export const VIEW_FLOW = 'viewFlow';
@@ -24,7 +24,7 @@ export function buildStore() {
       selectionStack: [],
       currentView: DEFAULT_VIEW,
       selectedLabel: null,
-      focusedEvent: null,
+      selectedTraceEvent: null,
       filteredAppMap: new AppMap(),
     },
 
@@ -43,8 +43,8 @@ export function buildStore() {
       selectedLabel(state) {
         return state.selectedLabel;
       },
-      focusedEvent(state) {
-        return state.focusedEvent;
+      selectedTraceEvent(state) {
+        return state.selectedTraceEvent;
       },
     },
 
@@ -58,36 +58,36 @@ export function buildStore() {
         });
       },
 
-      [SELECT_OBJECT](state, selection) {
+      [SELECT_CODE_OBJECT](state, selection) {
         if (!Array.isArray(selection)) selection = [selection];
 
         state.selectionStack.push(...selection);
         state.selectedLabel = null;
-        state.focusedEvent = null;
+        state.selectedTraceEvent = null;
       },
 
-      [POP_OBJECT_STACK](state) {
+      [POP_SELECTION_STACK](state) {
         state.selectionStack.pop();
       },
 
-      [CLEAR_OBJECT_STACK](state) {
+      [CLEAR_SELECTION_STACK](state) {
         state.selectionStack = [];
         state.selectedLabel = null;
-        state.focusedEvent = null;
+        state.selectedTraceEvent = null;
       },
 
       [SELECT_LABEL](state, label) {
         state.selectionStack = [];
         state.selectedLabel = label;
-        state.focusedEvent = null;
+        state.selectedTraceEvent = null;
       },
 
       [SET_VIEW](state, view) {
         state.currentView = view;
       },
 
-      [SET_FOCUSED_EVENT](state, event) {
-        state.focusedEvent = event;
+      [SET_SELECTED_TRACE_EVENT](state, event) {
+        state.selectedTraceEvent = event;
       },
 
       [SET_FILTERED_MAP](state, filteredAppMap) {

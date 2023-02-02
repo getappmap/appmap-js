@@ -6,7 +6,7 @@
         class="list-item"
         v-for="(item, index) in filteredItems"
         :key="index"
-        @click="selectItem(item)"
+        @click="selectCodeObject(item)"
       >
         {{ nameOf(item.object) }}
         <span class="list-item__count" v-if="uniqueItems && item.count > 1">
@@ -15,7 +15,7 @@
         <span
           class="list-item__event-quickview"
           v-if="eventQuickview"
-          @click.stop="focusEvent(item)"
+          @click.stop="selectTraceEvent(item)"
           title="View event in Trace view"
         >
           <EyeIcon />
@@ -28,7 +28,7 @@
 <script>
 import EyeIcon from '@/assets/eye.svg';
 import VDetailsPanelListHeader from '@/components/DetailsPanelListHeader.vue';
-import { SELECT_OBJECT, SET_FOCUSED_EVENT } from '@/store/vsCode';
+import { SELECT_CODE_OBJECT, SET_SELECTED_TRACE_EVENT } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel-list',
@@ -62,14 +62,14 @@ export default {
 
       return item.prettyName || item.name || item.toString();
     },
-    selectItem(item) {
+    selectCodeObject(item) {
       if (this.$store) {
-        this.$store.commit(SELECT_OBJECT, item.object);
+        this.$store.commit(SELECT_CODE_OBJECT, item.object);
       }
     },
-    focusEvent(item) {
+    selectTraceEvent(item) {
       if (this.$store) {
-        this.$store.commit(SET_FOCUSED_EVENT, item.object);
+        this.$store.commit(SET_SELECTED_TRACE_EVENT, item.object);
       }
     },
   },
