@@ -11,14 +11,24 @@
     </template>
     <template v-for="action in diagramSpec.actions">
       <template v-if="action.nodeType === 'call'">
-        <VCallAction :actionSpec="action" :selected-actions="selectedActions" />
+        <VCallAction
+          :actionSpec="action"
+          :selected-actions="selectedActions"
+          :collapsed-actions="collapsedActions"
+        />
       </template>
       <template v-if="action.nodeType === 'return'">
-        <VReturnAction :actionSpec="action" :selected-actions="selectedActions" />
+        <VReturnAction
+          :actionSpec="action"
+          :selected-actions="selectedActions"
+          :collapsed-actions="collapsedActions"
+        />
       </template>
     </template>
     <template v-for="action in diagramSpec.actions">
-      <template v-if="action.nodeType === 'loop'"><VLoopAction :actionSpec="action" /></template>
+      <template v-if="action.nodeType === 'loop'"
+        ><VLoopAction :actionSpec="action" :collapsed-actions="collapsedActions"
+      /></template>
     </template>
   </div>
 </template>
@@ -69,8 +79,12 @@ export default {
       assert(result);
       return result;
     },
-    diagramSpec() {
-      return new DiagramSpec(this.diagram);
+    diagramSpec(): DiagramSpec {
+      const result = new DiagramSpec(this.diagram);
+      this.collapsedActions = [];
+      for (let index = 0; index < result.actions.length; index++)
+        this.$set(this.collapsedActions, index, false);
+      return result;
     },
     actors() {
       return this.diagram.actors;

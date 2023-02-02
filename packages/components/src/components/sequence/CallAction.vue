@@ -19,7 +19,7 @@
           },
         }"
       >
-        <VCallLabel :action-spec="actionSpec" />
+        <VCallLabel :action-spec="actionSpec" :collapsed-actions="collapsedActionState" />
       </div>
     </template>
     <template v-else-if="actionSpec.callArrowDirection === 'right'">
@@ -35,7 +35,7 @@
             },
           }"
         >
-          <VCallLabel :action-spec="actionSpec" />
+          <VCallLabel :action-spec="actionSpec" :collapsed-actions="collapsedActionState" />
           <Arrow class="arrow" />
         </div>
       </template>
@@ -51,7 +51,7 @@
             },
           }"
         >
-          <VCallLabel :action-spec="actionSpec" />
+          <VCallLabel :action-spec="actionSpec" :collapsed-actions="collapsedActionState" />
         </div>
         <template v-if="actionSpec.calleeActionIndex - actionSpec.callerActionIndex > 2">
           <div
@@ -97,7 +97,7 @@
             },
           }"
         >
-          <VCallLabel :action-spec="actionSpec" />
+          <VCallLabel :action-spec="actionSpec" :collapsed-actions="collapsedActionState" />
           <Arrow class="arrow" />
         </div>
       </template>
@@ -113,7 +113,7 @@
             },
           }"
         >
-          <VCallLabel :action-spec="actionSpec" />
+          <VCallLabel :action-spec="actionSpec" :collapsed-actions="collapsedActionState" />
           <Arrow class="arrow" />
         </div>
         <template v-if="actionSpec.callerActionIndex - actionSpec.calleeActionIndex > 2">
@@ -201,6 +201,16 @@ export default {
       required: true,
       readonly: true,
     },
+    collapsedActions: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      collapsedActionState: this.collapsedActions,
+    };
   },
 
   computed: {
@@ -210,7 +220,11 @@ export default {
         `call-${this.actionSpec.callArrowDirection}`,
         ...this.actionSpec.diffClasses,
       ];
+      const ancestorIndexes = this.actionSpec.ancestorIndexes;
+      if (ancestorIndexes.find((ancestorIndex) => this.collapsedActionState[ancestorIndex]))
+        result.push('call-collapsed');
       if (this.actionSpec.index === 0) result.push('first-action');
+
       return result;
     },
     gridRows(): string {
@@ -242,6 +256,10 @@ export default {
   position: relative;
   padding-top: 4px;
   display: contents;
+}
+
+.call-collapsed {
+  display: none;
 }
 
 .call.diff > .gutter-container {

@@ -159,15 +159,32 @@ export default {
       required: true,
       readonly: true,
     },
+    collapsedActions: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      collapsedActionState: this.collapsedActions,
+    };
   },
 
   computed: {
     containerClasses(): string[] {
-      return [
+      const result = [
         'return',
         `return-${this.actionSpec.callArrowDirection}`,
         ...this.actionSpec.diffClasses,
       ];
+      const caller = this.actionSpec.diagramSpec.actions[this.actionSpec.callIndex];
+      const ancestorIndexes = caller.ancestorIndexes;
+      if (ancestorIndexes.find((ancestorIndex) => this.collapsedActionState[ancestorIndex]))
+        result.push('return-collapsed');
+      if (this.actionSpec.index === 0) result.push('first-action');
+
+      return result;
     },
     gridRows(): string {
       return [this.actionSpec.index + 2, this.actionSpec.index + 2].join(' / ');
@@ -181,6 +198,10 @@ export default {
   position: relative;
   padding-top: 4px;
   display: contents;
+}
+
+.return-collapsed {
+  display: none;
 }
 
 .return-line-segment {

@@ -1,5 +1,8 @@
 <template>
   <div class="label">
+    <template v-if="collapseEnabled">
+      <div :class="collapseClasses" @click="collapseOrExpand">{{ collapseExpandIndicator }}</div>
+    </template>
     <div :class="nameClasses">
       <template v-for="text in name">
         <span @click="selectEvent" :class="text.class">{{ text.text }}</span>
@@ -45,9 +48,35 @@ export default {
       required: true,
       readonly: true,
     },
+    collapsedActions: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      collapsedActionState: this.collapsedActions,
+    };
   },
 
   computed: {
+    collapseEnabled(): boolean {
+      if (this.actionSpec.action.children.length === 0) return false;
+
+      return true;
+    },
+    collapsed(): boolean {
+      return this.collapsedActionState[this.actionSpec.index];
+    },
+    collapseExpandIndicator(): string {
+      return this.collapsed ? '[+]' : '[-]';
+    },
+    collapseClasses(): string[] {
+      const result = ['collapse-expand'];
+      result.push(this.collapsed ? 'collapsed' : 'expanded');
+      return result;
+    },
     nameClasses(): string[] {
       const result = ['name'];
       if (isFunction(this.actionSpec.action) && this.actionSpec.action.static) {
@@ -86,6 +115,9 @@ export default {
     },
   },
   methods: {
+    collapseOrExpand() {
+      this.$set(this.collapsedActionState, this.actionSpec.index, !this.collapsed);
+    },
     selectEvent() {
       if (this.$store) {
         const eventId = this.actionSpec.action.eventIds[0];
@@ -111,6 +143,12 @@ $bg-fade: rgba(0, 0, 0, 0.8);
   max-width: 160px;
   text-overflow: ellipsis;
 
+  .collapse-expand {
+    display: inline-block;
+    width: 1.5em;
+    text-align: center;
+  }
+
   .name {
     display: inline-block;
     background-color: $bg-fade;
@@ -131,7 +169,8 @@ $bg-fade: rgba(0, 0, 0, 0.8);
   }
 }
 
-.label:hover {
+.name:hover,
+.collapse-expand:hover {
   cursor: pointer;
   color: $lightblue;
 }

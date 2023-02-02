@@ -14,11 +14,12 @@ type ActionId = string;
 export default class DiagramSpec {
   public actions: ActionSpec[] = [];
   public rowCount = 0;
+  public parentIndex = new Map<number, number>();
 
   constructor(public diagram: Diagram) {
     this.actions = [];
     const lifecycleDepth: Map<ActionId, number> = new Map();
-    const collectActions = (action: Action): void => {
+    const collectActions = (action: Action, parent?: ActionSpec): void => {
       let spec: ActionSpec;
       const [caller, callee] = actionActors(action);
 
@@ -45,13 +46,13 @@ export default class DiagramSpec {
       if (isLoop(action)) {
         if (action.children.length === 0) return;
 
-        spec = new ActionSpec(diagram, action, 'loop', this.actions.length);
+        spec = new ActionSpec(this, action, 'loop', this.actions.length);
       } else {
         if (nodeResult(action)) {
           incrementLifecycleDepth(callee);
         }
         spec = new ActionSpec(
-          diagram,
+          this,
           action,
           'call',
           this.actions.length,
@@ -59,8 +60,9 @@ export default class DiagramSpec {
           actorLifecycleDepth(callee)
         );
       }
+      if (parent) this.parentIndex.set(spec.index, parent.index);
       this.actions.push(spec);
-      action.children.forEach((child) => collectActions(child));
+      action.children.forEach((child) => collectActions(child, spec));
       if (isLoop(action)) {
         const openAction = this.actions[spec.index + 1];
         openAction.openGroup = true;
@@ -71,7 +73,7 @@ export default class DiagramSpec {
         if (nodeResult(action)) {
           this.rowCount += 1;
           const returnSpec = new ActionSpec(
-            diagram,
+            this,
             action,
             'return',
             this.actions.length,
@@ -86,5 +88,14 @@ export default class DiagramSpec {
       }
     };
     diagram.rootActions.forEach((action) => collectActions(action));
+  }
+
+  parentOf(actionSpec: ActionSpec): ActionSpec | undefined {
+    const parentIndex = this.parentIndex.get(actionSpec.index);
+    if (parentIndex === undefined) return;
+
+    const parent = this.actions[parentIndex];
+    assert(parent, `No parent found for action spec ${actionSpec.index}`);
+    return parent;
   }
 }
