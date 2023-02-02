@@ -27,7 +27,7 @@
     "dist/index.js"
   ],
   "dependencies": {
-    "@appland/diagrams": "workspace:^1.6.0",
+    "@appland/diagrams": "workspace:^1.6.2",
     "@appland/models": "workspace:^2.0.0",
     "buffer": "^6.0.3",
     "highlight.js": "^10.7.2",
