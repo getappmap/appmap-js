@@ -21,6 +21,7 @@ export class ActionSpec {
   children?: ActionSpec[];
   callIndex?: number;
   returnIndex?: number;
+  public collapsed = false;
   // Indicates whether this action is the the first, or last, action in a group. In these cases,
   // the action rendering will leave extra space for the group enclosure box.
   public openGroup?: boolean;
@@ -28,7 +29,7 @@ export class ActionSpec {
   public closeGroup?: boolean;
 
   constructor(
-    public diagram: Diagram,
+    public diagramSpec: DiagramSpec,
     public action: Action,
     public nodeType: 'call' | 'return' | 'loop',
     // Index of this action in the array of all ActionSpecs in the diagram. Because the diagram
@@ -43,6 +44,20 @@ export class ActionSpec {
     public calleeLifecycleDepth?: number
   ) {
     this.children = [];
+  }
+
+  get diagram(): Diagram {
+    return this.diagramSpec.diagram;
+  }
+
+  get ancestorIndexes() {
+    const result: number[] = [];
+    let parent = this.diagramSpec.parentOf(this);
+    while (parent) {
+      result.push(parent.index);
+      parent = this.diagramSpec.parentOf(parent);
+    }
+    return result;
   }
 
   get gridRows(): string {
