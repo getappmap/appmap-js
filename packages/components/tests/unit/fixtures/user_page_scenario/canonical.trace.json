@@ -2,28 +2,44 @@
   {
     "kind": "http_server_request",
     "route": "GET /organizations/new",
-    "parameter_names": ["_method", "controller", "action"],
+    "parameter_names": [
+      "_method",
+      "controller",
+      "action"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
         "function": "openssl/OpenSSL::Cipher#decrypt",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
         "function": "openssl/OpenSSL::Cipher#final",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
         "function": "json/JSON::Ext::Parser#parse",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
         "function": "json/JSON::Ext::Parser#parse",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "sql",
@@ -48,9 +64,16 @@
               "normalized_query": "SELECT * FROM \"users\" WHERE (\"id\" = ?) LIMIT ?"
             },
             "analyzed_query": {
-              "actions": ["select"],
-              "tables": ["users"],
-              "columns": ["*", "id"],
+              "actions": [
+                "select"
+              ],
+              "tables": [
+                "users"
+              ],
+              "columns": [
+                "*",
+                "id"
+              ],
               "joinCount": 0
             }
           }
@@ -69,7 +92,10 @@
           {
             "kind": "function",
             "function": "json/JSON::Ext::Parser#parse",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
@@ -91,12 +117,18 @@
       {
         "kind": "function",
         "function": "openssl/Digest::Instance#digest",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
         "function": "json/JSON::Ext::Parser#parse",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",

@@ -2,36 +2,63 @@
   {
     "kind": "http_server_request",
     "route": "GET /:organization_id/:id/component_diagram(.:format)",
-    "parameter_names": ["mapset", "controller", "action", "organization_id", "id"],
+    "parameter_names": [
+      "mapset",
+      "controller",
+      "action",
+      "organization_id",
+      "id"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["provider.authentication"],
+        "labels": [
+          "provider.authentication"
+        ],
         "children": [
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["users"],
-                "columns": ["*", "id"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "users"
+                ],
+                "columns": [
+                  "*",
+                  "id"
+                ],
                 "joinCount": 0
               }
             }
@@ -40,15 +67,29 @@
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["apps", "orgs"],
-            "columns": ["apps.*", "apps.org_id", "apps.slug", "orgs.id", "orgs.slug"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "apps",
+              "orgs"
+            ],
+            "columns": [
+              "apps.*",
+              "apps.org_id",
+              "apps.slug",
+              "orgs.id",
+              "orgs.slug"
+            ],
             "joinCount": 1
           }
         }
@@ -57,8 +98,14 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets_preference_ordered", "scenarios", "users"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets_preference_ordered",
+              "scenarios",
+              "users"
+            ],
             "columns": [
               "*",
               "id",
@@ -81,9 +128,16 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets"],
-            "columns": ["*", "id"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets"
+            ],
+            "columns": [
+              "*",
+              "id"
+            ],
             "joinCount": 0
           }
         }
@@ -92,8 +146,13 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets", "scenarios"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets",
+              "scenarios"
+            ],
             "columns": [
               "mapsets.app_id",
               "mapsets.id",
@@ -110,19 +169,34 @@
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["scenarios"],
-            "columns": ["callee", "caller", "class_invocation_graph", "id"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "scenarios"
+            ],
+            "columns": [
+              "callee",
+              "caller",
+              "class_invocation_graph",
+              "id"
+            ],
             "joinCount": 1
           }
         }
@@ -131,9 +205,16 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["scenarios"],
-            "columns": ["id", "scenarios.metadata"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "scenarios"
+            ],
+            "columns": [
+              "id",
+              "scenarios.metadata"
+            ],
             "joinCount": 0
           }
         }
@@ -142,20 +223,33 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["scenarios"],
-            "columns": ["data", "id"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "scenarios"
+            ],
+            "columns": [
+              "data",
+              "id"
+            ],
             "joinCount": 0
           }
         }
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       }
     ]
   }

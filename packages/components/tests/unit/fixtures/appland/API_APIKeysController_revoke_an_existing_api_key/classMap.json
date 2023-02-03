@@ -22,7 +22,9 @@
           {
             "name": "authenticate",
             "type": "function",
-            "labels": ["provider.authentication"],
+            "labels": [
+              "provider.authentication"
+            ],
             "static": true,
             "location": "app/models/api_key.rb:52"
           },
@@ -95,7 +97,10 @@
                       {
                         "name": "generate",
                         "type": "function",
-                        "labels": ["serialization", "json"],
+                        "labels": [
+                          "serialization",
+                          "json"
+                        ],
                         "static": false,
                         "location": "JSON::Ext::Generator::State#generate"
                       }

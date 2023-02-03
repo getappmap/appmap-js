@@ -5,9 +5,15 @@
       "normalized_query": "INSERT INTO \"users\" (\"login\") VALUES (?) RETURNING *"
     },
     "analyzed_query": {
-      "actions": ["insert"],
-      "tables": ["users"],
-      "columns": ["login"],
+      "actions": [
+        "insert"
+      ],
+      "tables": [
+        "users"
+      ],
+      "columns": [
+        "login"
+      ],
       "joinCount": 0
     }
   },
@@ -37,8 +43,14 @@
               "normalized_query": "SELECT \"apps\".* FROM \"apps2\" WHERE ((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = ?) AND (\"orgs\".\"id\" IS NOT ?)))) AND (\"id\" = ?)) LIMIT ?"
             },
             "analyzed_query": {
-              "actions": ["select"],
-              "tables": ["apps2", "orgs", "users_orgs"],
+              "actions": [
+                "select"
+              ],
+              "tables": [
+                "apps2",
+                "orgs",
+                "users_orgs"
+              ],
               "columns": [
                 "apps.*",
                 "apps.org_id",

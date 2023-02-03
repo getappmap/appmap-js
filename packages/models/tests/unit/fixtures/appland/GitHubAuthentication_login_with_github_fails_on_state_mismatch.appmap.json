@@ -68,73 +68,73 @@
     },
     "fingerprints": [
       {
-        "appmap_digest": "96c3a6575e1297b297da4491fd5107c9b6bb008c3c1a08c8c0647bf39ea449d6",
+        "appmap_digest": "585a3924a7be61548fb2835fe7b0df090683de50aee313f97eb54abb062f83dc",
         "canonicalization_algorithm": "classDependencies",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "96c3a6575e1297b297da4491fd5107c9b6bb008c3c1a08c8c0647bf39ea449d6",
+        "appmap_digest": "585a3924a7be61548fb2835fe7b0df090683de50aee313f97eb54abb062f83dc",
         "canonicalization_algorithm": "classes",
         "digest": "9622278243d545ea6bc89271b1f53eb6c9b17fa34b671706b44e6d1b058d6a27",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "96c3a6575e1297b297da4491fd5107c9b6bb008c3c1a08c8c0647bf39ea449d6",
+        "appmap_digest": "585a3924a7be61548fb2835fe7b0df090683de50aee313f97eb54abb062f83dc",
         "canonicalization_algorithm": "httpClientRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "96c3a6575e1297b297da4491fd5107c9b6bb008c3c1a08c8c0647bf39ea449d6",
+        "appmap_digest": "585a3924a7be61548fb2835fe7b0df090683de50aee313f97eb54abb062f83dc",
         "canonicalization_algorithm": "httpServerRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "96c3a6575e1297b297da4491fd5107c9b6bb008c3c1a08c8c0647bf39ea449d6",
+        "appmap_digest": "585a3924a7be61548fb2835fe7b0df090683de50aee313f97eb54abb062f83dc",
         "canonicalization_algorithm": "info",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "96c3a6575e1297b297da4491fd5107c9b6bb008c3c1a08c8c0647bf39ea449d6",
+        "appmap_digest": "585a3924a7be61548fb2835fe7b0df090683de50aee313f97eb54abb062f83dc",
         "canonicalization_algorithm": "labels",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "96c3a6575e1297b297da4491fd5107c9b6bb008c3c1a08c8c0647bf39ea449d6",
+        "appmap_digest": "585a3924a7be61548fb2835fe7b0df090683de50aee313f97eb54abb062f83dc",
         "canonicalization_algorithm": "packageDependencies",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "96c3a6575e1297b297da4491fd5107c9b6bb008c3c1a08c8c0647bf39ea449d6",
+        "appmap_digest": "585a3924a7be61548fb2835fe7b0df090683de50aee313f97eb54abb062f83dc",
         "canonicalization_algorithm": "packages",
         "digest": "2ea16efd2a25b06c16a8bd1606c1f01cbf5c5f699c564c45d695055af66053ed",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "96c3a6575e1297b297da4491fd5107c9b6bb008c3c1a08c8c0647bf39ea449d6",
+        "appmap_digest": "585a3924a7be61548fb2835fe7b0df090683de50aee313f97eb54abb062f83dc",
         "canonicalization_algorithm": "sqlNormalized",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "96c3a6575e1297b297da4491fd5107c9b6bb008c3c1a08c8c0647bf39ea449d6",
+        "appmap_digest": "585a3924a7be61548fb2835fe7b0df090683de50aee313f97eb54abb062f83dc",
         "canonicalization_algorithm": "sqlTables",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "96c3a6575e1297b297da4491fd5107c9b6bb008c3c1a08c8c0647bf39ea449d6",
+        "appmap_digest": "585a3924a7be61548fb2835fe7b0df090683de50aee313f97eb54abb062f83dc",
         "canonicalization_algorithm": "trace",
         "digest": "bbd5039195cc0d523b02d170b308f8123cd0258a3591be5997136f5ed1f80187",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "96c3a6575e1297b297da4491fd5107c9b6bb008c3c1a08c8c0647bf39ea449d6",
+        "appmap_digest": "585a3924a7be61548fb2835fe7b0df090683de50aee313f97eb54abb062f83dc",
         "canonicalization_algorithm": "update",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"

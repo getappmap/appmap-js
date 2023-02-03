@@ -1,1 +1,9 @@
-["api_keys", "apps", "mapsets", "orgs", "scenarios", "users", "users_orgs"]
+[
+  "api_keys",
+  "apps",
+  "mapsets",
+  "orgs",
+  "scenarios",
+  "users",
+  "users_orgs"
+]

@@ -2,7 +2,9 @@
   {
     "kind": "function",
     "function": "json/JSON::Ext::Generator::State#generate",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -13,17 +15,23 @@
   {
     "kind": "function",
     "function": "json/JSON::Ext::Parser#parse",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
     "function": "json/JSON::Ext::Generator::State#generate",
-    "labels": ["format.json"],
+    "labels": [
+      "format.json"
+    ],
     "children": [
       {
         "kind": "function",
         "function": "json/JSON::Ext::Generator::State#generate",
-        "labels": ["format.json"]
+        "labels": [
+          "format.json"
+        ]
       }
     ]
   },
@@ -36,12 +44,16 @@
   {
     "kind": "function",
     "function": "json/JSON::Ext::Parser#parse",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
     "function": "json/JSON::Ext::Generator::State#generate",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -52,12 +64,16 @@
   {
     "kind": "function",
     "function": "json/JSON::Ext::Parser#parse",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
     "function": "json/JSON::Ext::Generator::State#generate",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -68,12 +84,16 @@
   {
     "kind": "function",
     "function": "json/JSON::Ext::Parser#parse",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
     "function": "json/JSON::Ext::Generator::State#generate",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -84,17 +104,23 @@
   {
     "kind": "function",
     "function": "json/JSON::Ext::Parser#parse",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
     "function": "json/JSON::Ext::Generator::State#generate",
-    "labels": ["format.json"],
+    "labels": [
+      "format.json"
+    ],
     "children": [
       {
         "kind": "function",
         "function": "json/JSON::Ext::Generator::State#generate",
-        "labels": ["format.json"]
+        "labels": [
+          "format.json"
+        ]
       }
     ]
   },
@@ -107,7 +133,9 @@
   {
     "kind": "function",
     "function": "json/JSON::Ext::Parser#parse",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -118,12 +146,16 @@
   {
     "kind": "function",
     "function": "json/JSON::Ext::Parser#parse",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
     "function": "json/JSON::Ext::Generator::State#generate",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -134,17 +166,23 @@
   {
     "kind": "function",
     "function": "json/JSON::Ext::Parser#parse",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
     "function": "json/JSON::Ext::Generator::State#generate",
-    "labels": ["format.json"],
+    "labels": [
+      "format.json"
+    ],
     "children": [
       {
         "kind": "function",
         "function": "json/JSON::Ext::Generator::State#generate",
-        "labels": ["format.json"]
+        "labels": [
+          "format.json"
+        ]
       }
     ]
   },
@@ -157,12 +195,16 @@
   {
     "kind": "function",
     "function": "json/JSON::Ext::Parser#parse",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
     "function": "json/JSON::Ext::Generator::State#generate",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -173,17 +215,23 @@
   {
     "kind": "function",
     "function": "json/JSON::Ext::Parser#parse",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
     "function": "json/JSON::Ext::Generator::State#generate",
-    "labels": ["format.json"],
+    "labels": [
+      "format.json"
+    ],
     "children": [
       {
         "kind": "function",
         "function": "json/JSON::Ext::Generator::State#generate",
-        "labels": ["format.json"]
+        "labels": [
+          "format.json"
+        ]
       }
     ]
   },
@@ -196,7 +244,9 @@
   {
     "kind": "function",
     "function": "json/JSON::Ext::Parser#parse",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -207,6 +257,8 @@
   {
     "kind": "function",
     "function": "json/JSON::Ext::Parser#parse",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   }
 ]

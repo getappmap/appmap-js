@@ -1,1 +1,8 @@
-["apps", "mapsets", "mapsets_preference_ordered", "orgs", "scenarios", "users"]
+[
+  "apps",
+  "mapsets",
+  "mapsets_preference_ordered",
+  "orgs",
+  "scenarios",
+  "users"
+]

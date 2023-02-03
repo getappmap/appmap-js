@@ -1,1 +1,6 @@
-["crypto", "json", "security", "serialization"]
+[
+  "crypto",
+  "json",
+  "security",
+  "serialization"
+]

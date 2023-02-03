@@ -3,9 +3,15 @@
     "kind": "sql",
     "sql": {
       "analyzed_query": {
-        "actions": ["insert"],
-        "tables": ["users"],
-        "columns": ["login"],
+        "actions": [
+          "insert"
+        ],
+        "tables": [
+          "users"
+        ],
+        "columns": [
+          "login"
+        ],
         "joinCount": 0
       }
     }
@@ -14,8 +20,14 @@
     "kind": "sql",
     "sql": {
       "analyzed_query": {
-        "actions": ["select"],
-        "tables": ["apps2", "orgs", "users_orgs"],
+        "actions": [
+          "select"
+        ],
+        "tables": [
+          "apps2",
+          "orgs",
+          "users_orgs"
+        ],
         "columns": [
           "apps.*",
           "apps.org_id",

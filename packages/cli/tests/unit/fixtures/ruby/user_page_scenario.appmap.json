@@ -1445,73 +1445,73 @@
     },
     "fingerprints": [
       {
-        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "appmap_digest": "4b3a8cf42e74ad0ea8968c4ce2839e7399286ba32c010890f2b03e4b4e9a9823",
         "canonicalization_algorithm": "classDependencies",
         "digest": "123a712126f303bbee3204112d808efb229d9a581c7c70ac1307bf8c95c80555",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "appmap_digest": "4b3a8cf42e74ad0ea8968c4ce2839e7399286ba32c010890f2b03e4b4e9a9823",
         "canonicalization_algorithm": "classes",
         "digest": "db03c69ae120bfac6812c1d6b6f0037a86e3477795f3796c7d3a099716f15558",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "appmap_digest": "4b3a8cf42e74ad0ea8968c4ce2839e7399286ba32c010890f2b03e4b4e9a9823",
         "canonicalization_algorithm": "httpClientRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "appmap_digest": "4b3a8cf42e74ad0ea8968c4ce2839e7399286ba32c010890f2b03e4b4e9a9823",
         "canonicalization_algorithm": "httpServerRequests",
         "digest": "48915b366ebe761451283900edd502ed786229f6a2336ba953c8fad0dd40d070",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "appmap_digest": "4b3a8cf42e74ad0ea8968c4ce2839e7399286ba32c010890f2b03e4b4e9a9823",
         "canonicalization_algorithm": "info",
         "digest": "19a3423b0e356861454bfe9f5d70663c65c26bc5cac2345bb87d4feef2db9e5b",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "appmap_digest": "4b3a8cf42e74ad0ea8968c4ce2839e7399286ba32c010890f2b03e4b4e9a9823",
         "canonicalization_algorithm": "labels",
         "digest": "7cacc4134df39c297b9e0bf2b39cab4ad953461415a007fd8bfc5e932e7313fa",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "appmap_digest": "4b3a8cf42e74ad0ea8968c4ce2839e7399286ba32c010890f2b03e4b4e9a9823",
         "canonicalization_algorithm": "packageDependencies",
         "digest": "774c0bfa34cfc801226bb5b56eb149cdf1fbe57fb6a3580cb4ffeb3513448206",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "appmap_digest": "4b3a8cf42e74ad0ea8968c4ce2839e7399286ba32c010890f2b03e4b4e9a9823",
         "canonicalization_algorithm": "packages",
         "digest": "3c5a78bd5145121457a6f79ac33c15ec178880dd4104da892ef942e4945905a1",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "appmap_digest": "4b3a8cf42e74ad0ea8968c4ce2839e7399286ba32c010890f2b03e4b4e9a9823",
         "canonicalization_algorithm": "sqlNormalized",
         "digest": "f42217f94b7cbe624dea39ee0289db56da68ebf9cd0a7bb74f53243d7ecd8a63",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "appmap_digest": "4b3a8cf42e74ad0ea8968c4ce2839e7399286ba32c010890f2b03e4b4e9a9823",
         "canonicalization_algorithm": "sqlTables",
         "digest": "155dfea9984015042d2dbb19f93b1e983a068c6946247866d578c2a40dd9a909",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "appmap_digest": "4b3a8cf42e74ad0ea8968c4ce2839e7399286ba32c010890f2b03e4b4e9a9823",
         "canonicalization_algorithm": "trace",
         "digest": "e81230cac63d25a6dfbf24c113964a661044dd01ed661e3cffeb943b41cfc213",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "4a2f6e28befc256c3cdc3ad05f3e51156e0fb805300f095a74f7719cc2bcb650",
+        "appmap_digest": "4b3a8cf42e74ad0ea8968c4ce2839e7399286ba32c010890f2b03e4b4e9a9823",
         "canonicalization_algorithm": "update",
         "digest": "946548e90661aa50b4a7a99be4c8597ceef291414a8ae3ec065e2e17fc433aaa",
         "fingerprint_algorithm": "sha256"
@@ -1542,7 +1542,10 @@
                         {
                           "name": "generate",
                           "type": "function",
-                          "labels": ["serialization", "json"],
+                          "labels": [
+                            "serialization",
+                            "json"
+                          ],
                           "static": false,
                           "location": "JSON::Ext::Generator::State#generate"
                         }
@@ -1557,7 +1560,10 @@
                     {
                       "name": "parse",
                       "type": "function",
-                      "labels": ["serialization", "json"],
+                      "labels": [
+                        "serialization",
+                        "json"
+                      ],
                       "static": false,
                       "location": "JSON::Ext::Parser#parse"
                     }
@@ -1584,14 +1590,20 @@
                 {
                   "name": "request",
                   "type": "function",
-                  "labels": ["http", "io"],
+                  "labels": [
+                    "http",
+                    "io"
+                  ],
                   "static": false,
                   "location": "/Users/kgilpin/source/appland/appmap-ruby/lib/appmap/hook/method.rb:49"
                 },
                 {
                   "name": "request",
                   "type": "function",
-                  "labels": ["http", "io"],
+                  "labels": [
+                    "http",
+                    "io"
+                  ],
                   "static": false,
                   "location": "/Users/kgilpin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468"
                 }
@@ -1616,21 +1628,30 @@
                 {
                   "name": "decrypt",
                   "type": "function",
-                  "labels": ["security", "crypto"],
+                  "labels": [
+                    "security",
+                    "crypto"
+                  ],
                   "static": false,
                   "location": "OpenSSL::Cipher#decrypt"
                 },
                 {
                   "name": "final",
                   "type": "function",
-                  "labels": ["security", "crypto"],
+                  "labels": [
+                    "security",
+                    "crypto"
+                  ],
                   "static": false,
                   "location": "OpenSSL::Cipher#final"
                 },
                 {
                   "name": "encrypt",
                   "type": "function",
-                  "labels": ["security", "crypto"],
+                  "labels": [
+                    "security",
+                    "crypto"
+                  ],
                   "static": false,
                   "location": "OpenSSL::Cipher#encrypt"
                 }
@@ -1649,7 +1670,10 @@
                 {
                   "name": "digest",
                   "type": "function",
-                  "labels": ["security", "crypto"],
+                  "labels": [
+                    "security",
+                    "crypto"
+                  ],
                   "static": false,
                   "location": "Digest::Instance#digest"
                 }

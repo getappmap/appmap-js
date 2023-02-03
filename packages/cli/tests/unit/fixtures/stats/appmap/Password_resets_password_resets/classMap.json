@@ -18,7 +18,10 @@
                   {
                     "name": "before_setup",
                     "type": "function",
-                    "labels": ["deserialize.safe", "lang.eval.safe"],
+                    "labels": [
+                      "deserialize.safe",
+                      "lang.eval.safe"
+                    ],
                     "static": false,
                     "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/testing/integration.rb:320"
                   }
@@ -37,35 +40,46 @@
                   {
                     "name": "[]",
                     "type": "function",
-                    "labels": ["http.session.read"],
+                    "labels": [
+                      "http.session.read"
+                    ],
                     "static": false,
                     "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:91"
                   },
                   {
                     "name": "[]=",
                     "type": "function",
-                    "labels": ["http.session.write"],
+                    "labels": [
+                      "http.session.write"
+                    ],
                     "static": false,
                     "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:131"
                   },
                   {
                     "name": "delete",
                     "type": "function",
-                    "labels": ["http.session.write"],
+                    "labels": [
+                      "http.session.write"
+                    ],
                     "static": false,
                     "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:165"
                   },
                   {
                     "name": "destroy",
                     "type": "function",
-                    "labels": ["http.session.write"],
+                    "labels": [
+                      "http.session.write"
+                    ],
                     "static": false,
                     "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:79"
                   },
                   {
                     "name": "clear",
                     "type": "function",
-                    "labels": ["http.session.write", "http.session.clear"],
+                    "labels": [
+                      "http.session.write",
+                      "http.session.clear"
+                    ],
                     "static": false,
                     "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:137"
                   }
@@ -84,21 +98,27 @@
                   {
                     "name": "update",
                     "type": "function",
-                    "labels": ["http.session.write"],
+                    "labels": [
+                      "http.session.write"
+                    ],
                     "static": false,
                     "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb:333"
                   },
                   {
                     "name": "[]",
                     "type": "function",
-                    "labels": ["http.session.read"],
+                    "labels": [
+                      "http.session.read"
+                    ],
                     "static": false,
                     "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb:317"
                   },
                   {
                     "name": "[]=",
                     "type": "function",
-                    "labels": ["http.session.write"],
+                    "labels": [
+                      "http.session.write"
+                    ],
                     "static": false,
                     "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb:373"
                   }
@@ -119,14 +139,18 @@
               {
                 "name": "process_action",
                 "type": "function",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "static": false,
                 "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19"
               },
               {
                 "name": "redirect_to",
                 "type": "function",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "static": false,
                 "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:62"
               }
@@ -139,7 +163,9 @@
               {
                 "name": "render_to_body",
                 "type": "function",
-                "labels": ["mvc.render"],
+                "labels": [
+                  "mvc.render"
+                ],
                 "static": false,
                 "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141"
               }
@@ -168,14 +194,18 @@
                   {
                     "name": "invoke_before",
                     "type": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "static": false,
                     "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb:512"
                   },
                   {
                     "name": "invoke_after",
                     "type": "function",
-                    "labels": ["mvc.after_action"],
+                    "labels": [
+                      "mvc.after_action"
+                    ],
                     "static": false,
                     "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb:516"
                   }
@@ -214,7 +244,9 @@
               {
                 "name": "write",
                 "type": "function",
-                "labels": ["log"],
+                "labels": [
+                  "log"
+                ],
                 "static": false,
                 "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/logger/log_device.rb:31"
               }
@@ -239,7 +271,9 @@
               {
                 "name": "records",
                 "type": "function",
-                "labels": ["dao.materialize"],
+                "labels": [
+                  "dao.materialize"
+                ],
                 "static": false,
                 "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activerecord-6.0.4.1/lib/active_record/relation.rb:249"
               }
@@ -260,14 +294,18 @@
           {
             "name": "unpack",
             "type": "function",
-            "labels": ["string.unpack"],
+            "labels": [
+              "string.unpack"
+            ],
             "static": false,
             "location": "<internal:pack>:256"
           },
           {
             "name": "unpack1",
             "type": "function",
-            "labels": ["string.unpack"],
+            "labels": [
+              "string.unpack"
+            ],
             "static": false,
             "location": "<internal:pack>:280"
           }
@@ -284,7 +322,9 @@
               {
                 "name": "load",
                 "type": "function",
-                "labels": ["deserialize.unsafe"],
+                "labels": [
+                  "deserialize.unsafe"
+                ],
                 "static": true,
                 "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/core_ext/marshal.rb:5"
               }
@@ -309,28 +349,36 @@
               {
                 "name": "new",
                 "type": "function",
-                "labels": ["access.public"],
+                "labels": [
+                  "access.public"
+                ],
                 "static": false,
                 "location": "app/controllers/password_resets_controller.rb:7"
               },
               {
                 "name": "create",
                 "type": "function",
-                "labels": ["access.public"],
+                "labels": [
+                  "access.public"
+                ],
                 "static": false,
                 "location": "app/controllers/password_resets_controller.rb:11"
               },
               {
                 "name": "edit",
                 "type": "function",
-                "labels": ["access.public"],
+                "labels": [
+                  "access.public"
+                ],
                 "static": false,
                 "location": "app/controllers/password_resets_controller.rb:25"
               },
               {
                 "name": "update",
                 "type": "function",
-                "labels": ["access.public"],
+                "labels": [
+                  "access.public"
+                ],
                 "static": false,
                 "location": "app/controllers/password_resets_controller.rb:29"
               }
@@ -349,7 +397,9 @@
               {
                 "name": "render",
                 "type": "function",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "static": true,
                 "location": "app/views/password_resets/new.html.erb"
               }
@@ -362,7 +412,9 @@
               {
                 "name": "render",
                 "type": "function",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "static": true,
                 "location": "app/views/layouts/_shim.html.erb"
               }
@@ -375,7 +427,9 @@
               {
                 "name": "render",
                 "type": "function",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "static": true,
                 "location": "app/views/layouts/_header.html.erb"
               }
@@ -388,7 +442,9 @@
               {
                 "name": "render",
                 "type": "function",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "static": true,
                 "location": "app/views/layouts/_footer.html.erb"
               }
@@ -401,7 +457,9 @@
               {
                 "name": "render",
                 "type": "function",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "static": true,
                 "location": "app/views/layouts/mailer.html.erb"
               }
@@ -414,7 +472,9 @@
               {
                 "name": "render",
                 "type": "function",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "static": true,
                 "location": "app/views/layouts/mailer.text.erb"
               }
@@ -427,7 +487,9 @@
               {
                 "name": "render",
                 "type": "function",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "static": true,
                 "location": "app/views/password_resets/edit.html.erb"
               }
@@ -440,7 +502,9 @@
               {
                 "name": "render",
                 "type": "function",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "static": true,
                 "location": "app/views/shared/_error_messages.html.erb"
               }
@@ -471,7 +535,9 @@
               {
                 "name": "logged_in?",
                 "type": "function",
-                "labels": ["security.authentication"],
+                "labels": [
+                  "security.authentication"
+                ],
                 "static": false,
                 "location": "app/helpers/sessions_helper.rb:35"
               },
@@ -508,7 +574,9 @@
               {
                 "name": "new_reset_token",
                 "type": "function",
-                "labels": ["secret"],
+                "labels": [
+                  "secret"
+                ],
                 "static": true,
                 "location": "app/models/user.rb:40"
               },
@@ -575,7 +643,9 @@
               {
                 "name": "find_all",
                 "type": "function",
-                "labels": ["mvc.template.resolver"],
+                "labels": [
+                  "mvc.template.resolver"
+                ],
                 "static": false,
                 "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb:116"
               }
@@ -600,7 +670,9 @@
               {
                 "name": "unmarshaled_deflated",
                 "type": "function",
-                "labels": ["deserialize.safe"],
+                "labels": [
+                  "deserialize.safe"
+                ],
                 "static": true,
                 "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/sprockets-4.0.2/lib/sprockets/encoding_utils.rb:39"
               }
@@ -629,7 +701,10 @@
                   {
                     "name": "parse",
                     "type": "function",
-                    "labels": ["format.json.parse", "deserialize.safe"],
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ],
                     "static": false,
                     "location": "JSON::Ext::Parser#parse"
                   }
@@ -646,7 +721,10 @@
                       {
                         "name": "generate",
                         "type": "function",
-                        "labels": ["format.json.generate", "serialize"],
+                        "labels": [
+                          "format.json.generate",
+                          "serialize"
+                        ],
                         "static": false,
                         "location": "JSON::Ext::Generator::State#generate"
                       }
@@ -675,14 +753,18 @@
               {
                 "name": "encrypt",
                 "type": "function",
-                "labels": ["crypto.encrypt"],
+                "labels": [
+                  "crypto.encrypt"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#encrypt"
               },
               {
                 "name": "key=",
                 "type": "function",
-                "labels": ["crypto.set_key"],
+                "labels": [
+                  "crypto.set_key"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#key="
               },
@@ -695,14 +777,18 @@
               {
                 "name": "iv=",
                 "type": "function",
-                "labels": ["crypto.set_iv"],
+                "labels": [
+                  "crypto.set_iv"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#iv="
               },
               {
                 "name": "auth_data=",
                 "type": "function",
-                "labels": ["crypto.set_auth_data"],
+                "labels": [
+                  "crypto.set_auth_data"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#auth_data="
               },
@@ -715,21 +801,27 @@
               {
                 "name": "final",
                 "type": "function",
-                "labels": ["crypto.final"],
+                "labels": [
+                  "crypto.final"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#final"
               },
               {
                 "name": "decrypt",
                 "type": "function",
-                "labels": ["crypto.decrypt"],
+                "labels": [
+                  "crypto.decrypt"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#decrypt"
               },
               {
                 "name": "auth_tag=",
                 "type": "function",
-                "labels": ["crypto.set_auth_tag"],
+                "labels": [
+                  "crypto.set_auth_tag"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#auth_tag="
               }
@@ -742,7 +834,9 @@
               {
                 "name": "random_bytes",
                 "type": "function",
-                "labels": ["random.secure"],
+                "labels": [
+                  "random.secure"
+                ],
                 "static": true,
                 "location": "OpenSSL::Random.random_bytes"
               }
@@ -763,28 +857,37 @@
           {
             "name": "dump",
             "type": "function",
-            "labels": ["format.yaml.generate", "serialize"],
+            "labels": [
+              "format.yaml.generate",
+              "serialize"
+            ],
             "static": true,
             "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/psych.rb:506"
           },
           {
             "name": "load",
             "type": "function",
-            "labels": ["deserialize.unsafe"],
+            "labels": [
+              "deserialize.unsafe"
+            ],
             "static": true,
             "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/psych.rb:274"
           },
           {
             "name": "parse",
             "type": "function",
-            "labels": ["format.yaml.parse"],
+            "labels": [
+              "format.yaml.parse"
+            ],
             "static": true,
             "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/psych.rb:384"
           },
           {
             "name": "parse_stream",
             "type": "function",
-            "labels": ["format.yaml.parse"],
+            "labels": [
+              "format.yaml.parse"
+            ],
             "static": true,
             "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/psych.rb:448"
           }

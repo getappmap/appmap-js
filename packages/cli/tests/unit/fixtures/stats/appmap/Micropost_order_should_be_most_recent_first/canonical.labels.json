@@ -1,1 +1,6 @@
-["dao.materialize", "log", "mvc.after_action", "mvc.before_action"]
+[
+  "dao.materialize",
+  "log",
+  "mvc.after_action",
+  "mvc.before_action"
+]

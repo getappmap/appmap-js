@@ -2,132 +2,194 @@
   {
     "kind": "http_server_request",
     "route": "GET /password_resets/new",
-    "parameter_names": ["controller", "action"],
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["http.session.write"]
+                "labels": [
+                  "http.session.write"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["access.public"]
+            "labels": [
+              "access.public"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.template.resolver"]
+            "labels": [
+              "mvc.template.resolver"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.render"],
+            "labels": [
+              "mvc.render"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["deserialize.safe"],
+                    "labels": [
+                      "deserialize.safe"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["deserialize.unsafe"]
+                        "labels": [
+                          "deserialize.unsafe"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["security.authentication"]
+                        "labels": [
+                          "security.authentication"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   }
@@ -137,11 +199,15 @@
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -150,147 +216,219 @@
   {
     "kind": "http_server_request",
     "route": "POST /password_resets",
-    "parameter_names": ["password_reset", "controller", "action"],
+    "parameter_names": [
+      "password_reset",
+      "controller",
+      "action"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["http.session.write"]
+                "labels": [
+                  "http.session.write"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["access.public"],
+            "labels": [
+              "access.public"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["select"],
-                    "tables": ["users"],
-                    "columns": ["users.*", "users.email"],
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "users.*",
+                      "users.email"
+                    ],
                     "joinCount": 0
                   }
                 }
               },
               {
                 "kind": "function",
-                "labels": ["mvc.render"],
+                "labels": [
+                  "mvc.render"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["deserialize.safe"],
+                        "labels": [
+                          "deserialize.safe"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["deserialize.unsafe"]
+                            "labels": [
+                              "deserialize.unsafe"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["format.json.parse", "deserialize.safe"]
+                        "labels": [
+                          "format.json.parse",
+                          "deserialize.safe"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["security.authentication"]
+                            "labels": [
+                              "security.authentication"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -302,11 +440,15 @@
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -315,321 +457,462 @@
   {
     "kind": "http_server_request",
     "route": "POST /password_resets",
-    "parameter_names": ["password_reset", "controller", "action"],
+    "parameter_names": [
+      "password_reset",
+      "controller",
+      "action"
+    ],
     "status_code": 302,
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["log"]
-          },
-          {
-            "kind": "function",
-            "labels": ["log"]
-          },
-          {
-            "kind": "function",
-            "labels": ["mvc.before_action"],
-            "children": [
-              {
-                "kind": "function",
-                "labels": ["http.session.write"]
-              },
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.decrypt"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.set_key"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.set_iv"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.set_auth_tag"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.set_auth_data"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.final"]
-              },
-              {
-                "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
-              },
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
-              }
+            "labels": [
+              "log"
             ]
           },
           {
             "kind": "function",
-            "labels": ["access.public"],
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "sql",
-                "sql": {
-                  "analyzed_query": {
-                    "actions": ["select"],
-                    "tables": ["users"],
-                    "columns": ["users.*", "users.email"],
-                    "joinCount": 0
-                  }
-                }
-              },
-              {
-                "kind": "function",
-                "labels": ["secret"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["serialize"]
-                  }
+                "labels": [
+                  "http.session.write"
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["random.secure"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.before_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.before_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.before_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "sql",
-                "sql": {
-                  "analyzed_query": {
-                    "actions": [],
-                    "tables": [],
-                    "columns": [],
-                    "joinCount": 0
-                  }
-                }
-              },
-              {
-                "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "sql",
-                "sql": {
-                  "analyzed_query": {
-                    "actions": ["update"],
-                    "tables": ["users"],
-                    "columns": ["reset_digest", "updated_at", "users.id"],
-                    "joinCount": 0
-                  }
-                }
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.after_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.after_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.after_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "sql",
-                "sql": {
-                  "analyzed_query": {
-                    "actions": [],
-                    "tables": [],
-                    "columns": [],
-                    "joinCount": 0
-                  }
-                }
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.before_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.before_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.before_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "sql",
-                "sql": {
-                  "analyzed_query": {
-                    "actions": [],
-                    "tables": [],
-                    "columns": [],
-                    "joinCount": 0
-                  }
-                }
-              },
-              {
-                "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "sql",
-                "sql": {
-                  "analyzed_query": {
-                    "actions": ["update"],
-                    "tables": ["users"],
-                    "columns": ["reset_sent_at", "updated_at", "users.id"],
-                    "joinCount": 0
-                  }
-                }
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.after_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.after_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.after_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "sql",
-                "sql": {
-                  "analyzed_query": {
-                    "actions": [],
-                    "tables": [],
-                    "columns": [],
-                    "joinCount": 0
-                  }
-                }
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.template.resolver"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.template"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["mvc.template.resolver"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["log"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["log"]
-                  }
+                "labels": [
+                  "string.unpack"
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.template"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["mvc.template.resolver"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["log"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["log"]
-                  }
+                "labels": [
+                  "string.unpack"
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "crypto.decrypt"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "crypto.set_key"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.controller"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["log"]
-                  }
+                "labels": [
+                  "crypto.set_iv"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.set_auth_tag"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.set_auth_data"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.final"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.unpack"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
                 ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "access.public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "users.*",
+                      "users.email"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "secret"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "serialize"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "random.secure"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [],
+                    "tables": [],
+                    "columns": [],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "update"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "reset_digest",
+                      "updated_at",
+                      "users.id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [],
+                    "tables": [],
+                    "columns": [],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [],
+                    "tables": [],
+                    "columns": [],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "update"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "reset_sent_at",
+                      "updated_at",
+                      "users.id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [],
+                    "tables": [],
+                    "columns": [],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -638,115 +921,175 @@
   {
     "kind": "http_server_request",
     "route": "GET /password_resets/{id}/edit",
-    "parameter_names": ["email", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 302,
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["http.session.write"]
+                "labels": [
+                  "http.session.write"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.decrypt"]
+                "labels": [
+                  "crypto.decrypt"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_key"]
+                "labels": [
+                  "crypto.set_key"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_iv"]
+                "labels": [
+                  "crypto.set_iv"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_tag"]
+                "labels": [
+                  "crypto.set_auth_tag"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_data"]
+                "labels": [
+                  "crypto.set_auth_data"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.final"]
+                "labels": [
+                  "crypto.final"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["select"],
-                    "tables": ["users"],
-                    "columns": ["users.*", "users.email"],
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "users.*",
+                      "users.email"
+                    ],
                     "joinCount": 0
                   }
                 }
               },
               {
                 "kind": "function",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -755,115 +1098,175 @@
   {
     "kind": "http_server_request",
     "route": "GET /password_resets/{id}/edit",
-    "parameter_names": ["email", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 302,
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["http.session.write"]
+                "labels": [
+                  "http.session.write"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.decrypt"]
+                "labels": [
+                  "crypto.decrypt"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_key"]
+                "labels": [
+                  "crypto.set_key"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_iv"]
+                "labels": [
+                  "crypto.set_iv"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_tag"]
+                "labels": [
+                  "crypto.set_auth_tag"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_data"]
+                "labels": [
+                  "crypto.set_auth_data"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.final"]
+                "labels": [
+                  "crypto.final"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["select"],
-                    "tables": ["users"],
-                    "columns": ["users.*", "users.email"],
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "users.*",
+                      "users.email"
+                    ],
                     "joinCount": 0
                   }
                 }
               },
               {
                 "kind": "function",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -872,143 +1275,215 @@
   {
     "kind": "http_server_request",
     "route": "GET /password_resets/{id}/edit",
-    "parameter_names": ["email", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 302,
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["http.session.write"]
+                "labels": [
+                  "http.session.write"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.decrypt"]
+                "labels": [
+                  "crypto.decrypt"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_key"]
+                "labels": [
+                  "crypto.set_key"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_iv"]
+                "labels": [
+                  "crypto.set_iv"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_tag"]
+                "labels": [
+                  "crypto.set_auth_tag"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_data"]
+                "labels": [
+                  "crypto.set_auth_data"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.final"]
+                "labels": [
+                  "crypto.final"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["select"],
-                    "tables": ["users"],
-                    "columns": ["users.*", "users.email"],
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "users.*",
+                      "users.email"
+                    ],
                     "joinCount": 0
                   }
                 }
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["deserialize.unsafe"],
+                "labels": [
+                  "deserialize.unsafe"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["format.yaml.parse"],
+                    "labels": [
+                      "format.yaml.parse"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["format.yaml.parse"]
+                        "labels": [
+                          "format.yaml.parse"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["serialize"]
+                "labels": [
+                  "serialize"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -1017,241 +1492,360 @@
   {
     "kind": "http_server_request",
     "route": "GET /password_resets/{id}/edit",
-    "parameter_names": ["email", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["http.session.write"]
+                "labels": [
+                  "http.session.write"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.decrypt"]
+                "labels": [
+                  "crypto.decrypt"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_key"]
+                "labels": [
+                  "crypto.set_key"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_iv"]
+                "labels": [
+                  "crypto.set_iv"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_tag"]
+                "labels": [
+                  "crypto.set_auth_tag"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_data"]
+                "labels": [
+                  "crypto.set_auth_data"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.final"]
+                "labels": [
+                  "crypto.final"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["select"],
-                    "tables": ["users"],
-                    "columns": ["users.*", "users.email"],
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "users.*",
+                      "users.email"
+                    ],
                     "joinCount": 0
                   }
                 }
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["deserialize.unsafe"],
+                "labels": [
+                  "deserialize.unsafe"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["format.yaml.parse"],
+                    "labels": [
+                      "format.yaml.parse"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["format.yaml.parse"]
+                        "labels": [
+                          "format.yaml.parse"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["serialize"]
+                "labels": [
+                  "serialize"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["access.public"]
+            "labels": [
+              "access.public"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.template.resolver"]
+            "labels": [
+              "mvc.template.resolver"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.render"],
+            "labels": [
+              "mvc.render"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["deserialize.safe"],
+                    "labels": [
+                      "deserialize.safe"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["deserialize.unsafe"]
+                        "labels": [
+                          "deserialize.unsafe"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["security.authentication"]
+                        "labels": [
+                          "security.authentication"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   }
@@ -1261,11 +1855,15 @@
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -1274,141 +1872,214 @@
   {
     "kind": "http_server_request",
     "route": "PATCH /password_resets/{id}",
-    "parameter_names": ["email", "user", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "user",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["http.session.write"]
+                "labels": [
+                  "http.session.write"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.decrypt"]
+                "labels": [
+                  "crypto.decrypt"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_key"]
+                "labels": [
+                  "crypto.set_key"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_iv"]
+                "labels": [
+                  "crypto.set_iv"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_tag"]
+                "labels": [
+                  "crypto.set_auth_tag"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_data"]
+                "labels": [
+                  "crypto.set_auth_data"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.final"]
+                "labels": [
+                  "crypto.final"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["select"],
-                    "tables": ["users"],
-                    "columns": ["users.*", "users.email"],
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "users.*",
+                      "users.email"
+                    ],
                     "joinCount": 0
                   }
                 }
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["deserialize.unsafe"],
+                "labels": [
+                  "deserialize.unsafe"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["format.yaml.parse"],
+                    "labels": [
+                      "format.yaml.parse"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["format.yaml.parse"]
+                        "labels": [
+                          "format.yaml.parse"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["serialize"]
+                "labels": [
+                  "serialize"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["access.public"],
+            "labels": [
+              "access.public"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["random.secure"]
+                "labels": [
+                  "random.secure"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"],
+                "labels": [
+                  "mvc.before_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -1423,15 +2094,24 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
                     "sql": {
                       "analyzed_query": {
-                        "actions": ["select"],
-                        "tables": ["users"],
-                        "columns": ["users.email", "users.id"],
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "users"
+                        ],
+                        "columns": [
+                          "users.email",
+                          "users.id"
+                        ],
                         "joinCount": 0
                       }
                     }
@@ -1440,15 +2120,21 @@
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -1463,115 +2149,168 @@
               },
               {
                 "kind": "function",
-                "labels": ["mvc.render"],
+                "labels": [
+                  "mvc.render"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["deserialize.safe"],
+                        "labels": [
+                          "deserialize.safe"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["deserialize.unsafe"]
+                            "labels": [
+                              "deserialize.unsafe"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["format.json.parse", "deserialize.safe"]
+                        "labels": [
+                          "format.json.parse",
+                          "deserialize.safe"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["security.authentication"]
+                            "labels": [
+                              "security.authentication"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -1583,11 +2322,15 @@
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -1596,237 +2339,355 @@
   {
     "kind": "http_server_request",
     "route": "PATCH /password_resets/{id}",
-    "parameter_names": ["email", "user", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "user",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["http.session.write"]
+                "labels": [
+                  "http.session.write"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.decrypt"]
+                "labels": [
+                  "crypto.decrypt"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_key"]
+                "labels": [
+                  "crypto.set_key"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_iv"]
+                "labels": [
+                  "crypto.set_iv"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_tag"]
+                "labels": [
+                  "crypto.set_auth_tag"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_data"]
+                "labels": [
+                  "crypto.set_auth_data"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.final"]
+                "labels": [
+                  "crypto.final"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["select"],
-                    "tables": ["users"],
-                    "columns": ["users.*", "users.email"],
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "users.*",
+                      "users.email"
+                    ],
                     "joinCount": 0
                   }
                 }
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["deserialize.unsafe"],
+                "labels": [
+                  "deserialize.unsafe"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["format.yaml.parse"],
+                    "labels": [
+                      "format.yaml.parse"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["format.yaml.parse"]
+                        "labels": [
+                          "format.yaml.parse"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["serialize"]
+                "labels": [
+                  "serialize"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["access.public"],
+            "labels": [
+              "access.public"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["mvc.render"],
+                "labels": [
+                  "mvc.render"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["deserialize.safe"],
+                        "labels": [
+                          "deserialize.safe"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["deserialize.unsafe"]
+                            "labels": [
+                              "deserialize.unsafe"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["format.json.parse", "deserialize.safe"]
+                        "labels": [
+                          "format.json.parse",
+                          "deserialize.safe"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["security.authentication"]
+                            "labels": [
+                              "security.authentication"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -1838,11 +2699,15 @@
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -1851,141 +2716,214 @@
   {
     "kind": "http_server_request",
     "route": "PATCH /password_resets/{id}",
-    "parameter_names": ["email", "user", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "user",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 302,
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["http.session.write"]
+                "labels": [
+                  "http.session.write"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.decrypt"]
+                "labels": [
+                  "crypto.decrypt"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_key"]
+                "labels": [
+                  "crypto.set_key"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_iv"]
+                "labels": [
+                  "crypto.set_iv"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_tag"]
+                "labels": [
+                  "crypto.set_auth_tag"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.set_auth_data"]
+                "labels": [
+                  "crypto.set_auth_data"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.final"]
+                "labels": [
+                  "crypto.final"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["select"],
-                    "tables": ["users"],
-                    "columns": ["users.*", "users.email"],
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "users.*",
+                      "users.email"
+                    ],
                     "joinCount": 0
                   }
                 }
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["deserialize.unsafe"],
+                "labels": [
+                  "deserialize.unsafe"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["format.yaml.parse"],
+                    "labels": [
+                      "format.yaml.parse"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["format.yaml.parse"]
+                        "labels": [
+                          "format.yaml.parse"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["serialize"]
+                "labels": [
+                  "serialize"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["access.public"],
+            "labels": [
+              "access.public"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["random.secure"]
+                "labels": [
+                  "random.secure"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"],
+                "labels": [
+                  "mvc.before_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -2000,15 +2938,24 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
                     "sql": {
                       "analyzed_query": {
-                        "actions": ["select"],
-                        "tables": ["users"],
-                        "columns": ["users.email", "users.id"],
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "users"
+                        ],
+                        "columns": [
+                          "users.email",
+                          "users.id"
+                        ],
                         "joinCount": 0
                       }
                     }
@@ -2017,54 +2964,82 @@
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["update"],
-                    "tables": ["users"],
-                    "columns": ["password_digest", "updated_at", "users.id"],
+                    "actions": [
+                      "update"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "password_digest",
+                      "updated_at",
+                      "users.id"
+                    ],
                     "joinCount": 0
                   }
                 }
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -2079,29 +3054,42 @@
               },
               {
                 "kind": "function",
-                "labels": ["http.session.write"],
+                "labels": [
+                  "http.session.write"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["http.session.write", "http.session.clear"]
+                    "labels": [
+                      "http.session.write",
+                      "http.session.clear"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["http.session.write"]
+                "labels": [
+                  "http.session.write"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               }
@@ -2109,11 +3097,15 @@
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }

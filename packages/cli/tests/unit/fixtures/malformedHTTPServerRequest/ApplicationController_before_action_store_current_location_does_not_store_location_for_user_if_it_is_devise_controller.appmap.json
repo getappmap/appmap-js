@@ -4496,14 +4496,18 @@
                     {
                       "name": "update",
                       "type": "function",
-                      "labels": ["http.session.write"],
+                      "labels": [
+                        "http.session.write"
+                      ],
                       "static": false,
                       "location": "vendor/bundle/ruby/3.0.0/gems/actionpack-6.1.6/lib/action_dispatch/middleware/cookies.rb:345"
                     },
                     {
                       "name": "[]",
                       "type": "function",
-                      "labels": ["http.session.read"],
+                      "labels": [
+                        "http.session.read"
+                      ],
                       "static": false,
                       "location": "vendor/bundle/ruby/3.0.0/gems/actionpack-6.1.6/lib/action_dispatch/middleware/cookies.rb:329"
                     }
@@ -4524,7 +4528,9 @@
                 {
                   "name": "process_action",
                   "type": "function",
-                  "labels": ["mvc.controller"],
+                  "labels": [
+                    "mvc.controller"
+                  ],
                   "static": false,
                   "location": "vendor/bundle/ruby/3.0.0/gems/actionpack-6.1.6/lib/action_controller/metal/instrumentation.rb:19"
                 }
@@ -4537,7 +4543,9 @@
                 {
                   "name": "render_to_body",
                   "type": "function",
-                  "labels": ["mvc.render"],
+                  "labels": [
+                    "mvc.render"
+                  ],
                   "static": false,
                   "location": "vendor/bundle/ruby/3.0.0/gems/actionpack-6.1.6/lib/action_controller/metal/renderers.rb:141"
                 }
@@ -4562,7 +4570,9 @@
                 {
                   "name": "write",
                   "type": "function",
-                  "labels": ["log"],
+                  "labels": [
+                    "log"
+                  ],
                   "static": false,
                   "location": "/usr/local/lib/ruby/3.0.0/logger/log_device.rb:31"
                 }
@@ -4591,7 +4601,9 @@
                     {
                       "name": "invoke_before",
                       "type": "function",
-                      "labels": ["mvc.before_action"],
+                      "labels": [
+                        "mvc.before_action"
+                      ],
                       "static": false,
                       "location": "vendor/bundle/ruby/3.0.0/gems/activesupport-6.1.6/lib/active_support/callbacks.rb:511"
                     }
@@ -4654,7 +4666,9 @@
                 {
                   "name": "render",
                   "type": "function",
-                  "labels": ["mvc.template"],
+                  "labels": [
+                    "mvc.template"
+                  ],
                   "static": true,
                   "location": "vendor/bundle/ruby/3.0.0/gems/devise-4.8.1/app/views/devise/sessions/new.html.erb"
                 }
@@ -4667,7 +4681,9 @@
                 {
                   "name": "render",
                   "type": "function",
-                  "labels": ["mvc.template"],
+                  "labels": [
+                    "mvc.template"
+                  ],
                   "static": true,
                   "location": "vendor/bundle/ruby/3.0.0/gems/devise-4.8.1/app/views/devise/shared/_links.html.erb"
                 }
@@ -4770,7 +4786,9 @@
                 {
                   "name": "find_all",
                   "type": "function",
-                  "labels": ["mvc.template.resolver"],
+                  "labels": [
+                    "mvc.template.resolver"
+                  ],
                   "static": false,
                   "location": "vendor/bundle/ruby/3.0.0/gems/actionview-6.1.6/lib/action_view/template/resolver.rb:151"
                 }
@@ -4791,7 +4809,9 @@
             {
               "name": "eval",
               "type": "function",
-              "labels": ["lang.eval"],
+              "labels": [
+                "lang.eval"
+              ],
               "static": false,
               "location": "Kernel#eval"
             }
@@ -4814,7 +4834,9 @@
                 {
                   "name": "records",
                   "type": "function",
-                  "labels": ["dao.materialize"],
+                  "labels": [
+                    "dao.materialize"
+                  ],
                   "static": false,
                   "location": "vendor/bundle/ruby/3.0.0/gems/activerecord-6.1.6/lib/active_record/relation.rb:248"
                 }
@@ -4883,7 +4905,10 @@
                         {
                           "name": "generate",
                           "type": "function",
-                          "labels": ["format.json.generate", "serialize"],
+                          "labels": [
+                            "format.json.generate",
+                            "serialize"
+                          ],
                           "static": false,
                           "location": "JSON::Ext::Generator::State#generate"
                         }

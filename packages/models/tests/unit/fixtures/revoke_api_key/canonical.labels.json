@@ -1,1 +1,6 @@
-["json", "provider.authenticate", "security", "serialization"]
+[
+  "json",
+  "provider.authenticate",
+  "security",
+  "serialization"
+]

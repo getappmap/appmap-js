@@ -6,43 +6,72 @@
     "children": [
       {
         "kind": "function",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["provider.authentication"]
+        "labels": [
+          "provider.authentication"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       }
     ]
   }

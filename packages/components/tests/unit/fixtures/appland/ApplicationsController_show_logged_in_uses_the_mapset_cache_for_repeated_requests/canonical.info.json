@@ -2,36 +2,63 @@
   {
     "kind": "http_server_request",
     "route": "GET /:organization_id/:id(.:format)",
-    "parameter_names": ["mapset", "controller", "action", "organization_id", "id"],
+    "parameter_names": [
+      "mapset",
+      "controller",
+      "action",
+      "organization_id",
+      "id"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["provider.authentication"],
+        "labels": [
+          "provider.authentication"
+        ],
         "children": [
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["users"],
-                "columns": ["*", "id"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "users"
+                ],
+                "columns": [
+                  "*",
+                  "id"
+                ],
                 "joinCount": 0
               }
             }
@@ -40,15 +67,29 @@
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["apps", "orgs"],
-            "columns": ["apps.*", "apps.org_id", "apps.slug", "orgs.id", "orgs.slug"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "apps",
+              "orgs"
+            ],
+            "columns": [
+              "apps.*",
+              "apps.org_id",
+              "apps.slug",
+              "orgs.id",
+              "orgs.slug"
+            ],
             "joinCount": 1
           }
         }
@@ -57,8 +98,14 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets_preference_ordered", "scenarios", "users"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets_preference_ordered",
+              "scenarios",
+              "users"
+            ],
             "columns": [
               "*",
               "id",
@@ -81,9 +128,16 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets"],
-            "columns": ["*", "id"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets"
+            ],
+            "columns": [
+              "*",
+              "id"
+            ],
             "joinCount": 0
           }
         }
@@ -92,8 +146,13 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["scenario_processing_errors", "scenarios"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "scenario_processing_errors",
+              "scenarios"
+            ],
             "columns": [
               "*",
               "data",
@@ -110,8 +169,14 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["apps", "orgs", "users"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "apps",
+              "orgs",
+              "users"
+            ],
             "columns": [
               "apps.created_at",
               "apps.id",
@@ -135,8 +200,13 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["scenario_processing_errors", "scenarios"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "scenario_processing_errors",
+              "scenarios"
+            ],
             "columns": [
               "*",
               "data",
@@ -153,8 +223,13 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets", "scenarios"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets",
+              "scenarios"
+            ],
             "columns": [
               "mapsets.app_id",
               "mapsets.id",
@@ -173,9 +248,18 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets", "scenarios"],
-            "columns": ["*", "mapsets.id", "scenarios.mapset_id"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets",
+              "scenarios"
+            ],
+            "columns": [
+              "*",
+              "mapsets.id",
+              "scenarios.mapset_id"
+            ],
             "joinCount": 1
           }
         }
@@ -184,8 +268,13 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets", "scenarios"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets",
+              "scenarios"
+            ],
             "columns": [
               "mapsets.app_id",
               "mapsets.id",
@@ -204,8 +293,13 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets", "scenarios"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets",
+              "scenarios"
+            ],
             "columns": [
               "mapsets.app_id",
               "mapsets.id",
@@ -224,9 +318,17 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["scenarios"],
-            "columns": ["callee", "caller", "class_invocation_graph"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "scenarios"
+            ],
+            "columns": [
+              "callee",
+              "caller",
+              "class_invocation_graph"
+            ],
             "joinCount": 1
           }
         }
@@ -235,9 +337,15 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["scenarios"],
-            "columns": ["scenarios.metadata"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "scenarios"
+            ],
+            "columns": [
+              "scenarios.metadata"
+            ],
             "joinCount": 0
           }
         }
@@ -246,39 +354,64 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["scenarios"],
-            "columns": ["data"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "scenarios"
+            ],
+            "columns": [
+              "data"
+            ],
             "joinCount": 0
           }
         }
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["apps"],
-            "columns": ["*", "id"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "apps"
+            ],
+            "columns": [
+              "*",
+              "id"
+            ],
             "joinCount": 0
           }
         }
       },
       {
         "kind": "function",
-        "labels": ["view"],
+        "labels": [
+          "view"
+        ],
         "children": [
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["orgs"],
-                "columns": ["*", "id"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "orgs"
+                ],
+                "columns": [
+                  "*",
+                  "id"
+                ],
                 "joinCount": 0
               }
             }
@@ -287,9 +420,16 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["mapset_caches"],
-                "columns": ["*", "mapset_id"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "mapset_caches"
+                ],
+                "columns": [
+                  "*",
+                  "mapset_id"
+                ],
                 "joinCount": 0
               }
             }
@@ -298,7 +438,9 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
+                "actions": [
+                  "select"
+                ],
                 "tables": [],
                 "columns": [],
                 "joinCount": 0
@@ -309,9 +451,16 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["insert"],
-                "tables": ["mapset_caches"],
-                "columns": ["mapset_id", "sha_256"],
+                "actions": [
+                  "insert"
+                ],
+                "tables": [
+                  "mapset_caches"
+                ],
+                "columns": [
+                  "mapset_id",
+                  "sha_256"
+                ],
                 "joinCount": 0
               }
             }
@@ -320,8 +469,13 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["scenarios", "sql_queries"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "scenarios",
+                  "sql_queries"
+                ],
                 "columns": [
                   "mapset_id",
                   "scenarios.events_sql_queries",
@@ -334,15 +488,25 @@
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["update"],
-                "tables": ["mapset_caches"],
-                "columns": ["data_model", "id"],
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "mapset_caches"
+                ],
+                "columns": [
+                  "data_model",
+                  "id"
+                ],
                 "joinCount": 0
               }
             }
@@ -351,9 +515,16 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["mapsets"],
-                "columns": ["*", "id"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "mapsets"
+                ],
+                "columns": [
+                  "*",
+                  "id"
+                ],
                 "joinCount": 0
               }
             }
@@ -362,8 +533,12 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["scenarios"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "scenarios"
+                ],
                 "columns": [
                   "events_http_server_requests",
                   "events_http_server_responses",
@@ -377,66 +552,101 @@
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["update"],
-                "tables": ["mapset_caches"],
-                "columns": ["id", "web_resources"],
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "mapset_caches"
+                ],
+                "columns": [
+                  "id",
+                  "web_resources"
+                ],
                 "joinCount": 0
               }
             }
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["select"],
-                    "tables": ["users"],
-                    "columns": ["*", "id"],
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "*",
+                      "id"
+                    ],
                     "joinCount": 0
                   }
                 }
@@ -445,24 +655,44 @@
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["select"],
-                    "tables": ["recording_methods", "scenarios"],
-                    "columns": ["*", "mapset_id", "recording_method", "scenarios.metadata"],
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "recording_methods",
+                      "scenarios"
+                    ],
+                    "columns": [
+                      "*",
+                      "mapset_id",
+                      "recording_method",
+                      "scenarios.metadata"
+                    ],
                     "joinCount": 0
                   }
                 }
               },
               {
                 "kind": "function",
-                "labels": ["serialization", "json"]
+                "labels": [
+                  "serialization",
+                  "json"
+                ]
               },
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["update"],
-                    "tables": ["mapset_caches"],
-                    "columns": ["id", "recording_method_counts"],
+                    "actions": [
+                      "update"
+                    ],
+                    "tables": [
+                      "mapset_caches"
+                    ],
+                    "columns": [
+                      "id",
+                      "recording_method_counts"
+                    ],
                     "joinCount": 0
                   }
                 }
@@ -473,8 +703,14 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["code_objects", "scenario_code_objects", "scenarios"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "code_objects",
+                  "scenario_code_objects",
+                  "scenarios"
+                ],
                 "columns": [
                   "mapset_id",
                   "object_name",
@@ -488,29 +724,46 @@
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["update"],
-                "tables": ["mapset_caches"],
-                "columns": ["code_object_counts", "id"],
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "mapset_caches"
+                ],
+                "columns": [
+                  "code_object_counts",
+                  "id"
+                ],
                 "joinCount": 0
               }
             }
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["key_data_stats", "scenarios"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "key_data_stats",
+                  "scenarios"
+                ],
                 "columns": [
                   "*",
                   "http_server_request.http_server_request",
@@ -525,8 +778,13 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["key_data_stats", "scenarios"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "key_data_stats",
+                  "scenarios"
+                ],
                 "columns": [
                   "*",
                   "mapset_id",
@@ -541,8 +799,14 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["key_data_stats", "messages", "scenarios"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "key_data_stats",
+                  "messages",
+                  "scenarios"
+                ],
                 "columns": [
                   "*",
                   "mapset_id",
@@ -558,90 +822,140 @@
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["update"],
-                "tables": ["mapset_caches"],
-                "columns": ["id", "key_stats_counts"],
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "mapset_caches"
+                ],
+                "columns": [
+                  "id",
+                  "key_stats_counts"
+                ],
                 "joinCount": 0
               }
             }
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["security", "crypto"]
+            "labels": [
+              "security",
+              "crypto"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["security", "crypto"]
+                    "labels": [
+                      "security",
+                      "crypto"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               }
             ]
           }
@@ -652,36 +966,63 @@
   {
     "kind": "http_server_request",
     "route": "GET /:organization_id/:id(.:format)",
-    "parameter_names": ["mapset", "controller", "action", "organization_id", "id"],
+    "parameter_names": [
+      "mapset",
+      "controller",
+      "action",
+      "organization_id",
+      "id"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["provider.authentication"],
+        "labels": [
+          "provider.authentication"
+        ],
         "children": [
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["users"],
-                "columns": ["*", "id"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "users"
+                ],
+                "columns": [
+                  "*",
+                  "id"
+                ],
                 "joinCount": 0
               }
             }
@@ -690,15 +1031,29 @@
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["apps", "orgs"],
-            "columns": ["apps.*", "apps.org_id", "apps.slug", "orgs.id", "orgs.slug"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "apps",
+              "orgs"
+            ],
+            "columns": [
+              "apps.*",
+              "apps.org_id",
+              "apps.slug",
+              "orgs.id",
+              "orgs.slug"
+            ],
             "joinCount": 1
           }
         }
@@ -707,8 +1062,14 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets_preference_ordered", "scenarios", "users"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets_preference_ordered",
+              "scenarios",
+              "users"
+            ],
             "columns": [
               "*",
               "id",
@@ -731,9 +1092,16 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets"],
-            "columns": ["*", "id"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets"
+            ],
+            "columns": [
+              "*",
+              "id"
+            ],
             "joinCount": 0
           }
         }
@@ -742,8 +1110,13 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["scenario_processing_errors", "scenarios"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "scenario_processing_errors",
+              "scenarios"
+            ],
             "columns": [
               "*",
               "data",
@@ -760,8 +1133,14 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["apps", "orgs", "users"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "apps",
+              "orgs",
+              "users"
+            ],
             "columns": [
               "apps.created_at",
               "apps.id",
@@ -785,8 +1164,13 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["scenario_processing_errors", "scenarios"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "scenario_processing_errors",
+              "scenarios"
+            ],
             "columns": [
               "*",
               "data",
@@ -803,8 +1187,13 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets", "scenarios"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets",
+              "scenarios"
+            ],
             "columns": [
               "mapsets.app_id",
               "mapsets.id",
@@ -823,9 +1212,18 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets", "scenarios"],
-            "columns": ["*", "mapsets.id", "scenarios.mapset_id"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets",
+              "scenarios"
+            ],
+            "columns": [
+              "*",
+              "mapsets.id",
+              "scenarios.mapset_id"
+            ],
             "joinCount": 1
           }
         }
@@ -834,8 +1232,13 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets", "scenarios"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets",
+              "scenarios"
+            ],
             "columns": [
               "mapsets.app_id",
               "mapsets.id",
@@ -854,8 +1257,13 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["mapsets", "scenarios"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "mapsets",
+              "scenarios"
+            ],
             "columns": [
               "mapsets.app_id",
               "mapsets.id",
@@ -874,9 +1282,17 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["scenarios"],
-            "columns": ["callee", "caller", "class_invocation_graph"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "scenarios"
+            ],
+            "columns": [
+              "callee",
+              "caller",
+              "class_invocation_graph"
+            ],
             "joinCount": 1
           }
         }
@@ -885,9 +1301,15 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["scenarios"],
-            "columns": ["scenarios.metadata"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "scenarios"
+            ],
+            "columns": [
+              "scenarios.metadata"
+            ],
             "joinCount": 0
           }
         }
@@ -896,39 +1318,64 @@
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["scenarios"],
-            "columns": ["data"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "scenarios"
+            ],
+            "columns": [
+              "data"
+            ],
             "joinCount": 0
           }
         }
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "sql",
         "sql": {
           "analyzed_query": {
-            "actions": ["select"],
-            "tables": ["apps"],
-            "columns": ["*", "id"],
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "apps"
+            ],
+            "columns": [
+              "*",
+              "id"
+            ],
             "joinCount": 0
           }
         }
       },
       {
         "kind": "function",
-        "labels": ["view"],
+        "labels": [
+          "view"
+        ],
         "children": [
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["orgs"],
-                "columns": ["*", "id"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "orgs"
+                ],
+                "columns": [
+                  "*",
+                  "id"
+                ],
                 "joinCount": 0
               }
             }
@@ -937,38 +1384,62 @@
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
-                "tables": ["mapset_caches"],
-                "columns": ["*", "mapset_id"],
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "mapset_caches"
+                ],
+                "columns": [
+                  "*",
+                  "mapset_id"
+                ],
                 "joinCount": 0
               }
             }
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["select"],
+                "actions": [
+                  "select"
+                ],
                 "tables": [],
                 "columns": [],
                 "joinCount": 0
@@ -977,51 +1448,76 @@
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["select"],
-                    "tables": ["users"],
-                    "columns": ["*", "id"],
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "*",
+                      "id"
+                    ],
                     "joinCount": 0
                   }
                 }
@@ -1030,79 +1526,121 @@
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["security", "crypto"]
+            "labels": [
+              "security",
+              "crypto"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["security", "crypto"]
+                    "labels": [
+                      "security",
+                      "crypto"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               }
             ]
           }

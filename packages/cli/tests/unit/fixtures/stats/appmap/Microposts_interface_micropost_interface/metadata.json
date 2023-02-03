@@ -51,73 +51,73 @@
   "test_status": "succeeded",
   "fingerprints": [
     {
-      "appmap_digest": "754cfd190b42e26324a04b64556bb20aeab4ba5490534bbc84d67393dc9c814c",
+      "appmap_digest": "120bc5971ac5f1058ce4c4f6c58e75fd02789af49603737df6d4ec0f35eb7962",
       "canonicalization_algorithm": "classDependencies",
       "digest": "f7a8e15200df864b927c0803cdba959c97a90127c40c2db3ac640b952adc88c5",
       "fingerprint_algorithm": "sha256"
     },
     {
-      "appmap_digest": "754cfd190b42e26324a04b64556bb20aeab4ba5490534bbc84d67393dc9c814c",
+      "appmap_digest": "120bc5971ac5f1058ce4c4f6c58e75fd02789af49603737df6d4ec0f35eb7962",
       "canonicalization_algorithm": "classes",
       "digest": "04ecfad6023212dc7f51f00f9fcab03fec375f99debb0530fe29dd1189346d71",
       "fingerprint_algorithm": "sha256"
     },
     {
-      "appmap_digest": "754cfd190b42e26324a04b64556bb20aeab4ba5490534bbc84d67393dc9c814c",
+      "appmap_digest": "120bc5971ac5f1058ce4c4f6c58e75fd02789af49603737df6d4ec0f35eb7962",
       "canonicalization_algorithm": "httpClientRequests",
       "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "fingerprint_algorithm": "sha256"
     },
     {
-      "appmap_digest": "754cfd190b42e26324a04b64556bb20aeab4ba5490534bbc84d67393dc9c814c",
+      "appmap_digest": "120bc5971ac5f1058ce4c4f6c58e75fd02789af49603737df6d4ec0f35eb7962",
       "canonicalization_algorithm": "httpServerRequests",
       "digest": "130dcd5a9a108f9c77ae6452d94116ad97fd0f1abe8725aa113d271041d2ff80",
       "fingerprint_algorithm": "sha256"
     },
     {
-      "appmap_digest": "754cfd190b42e26324a04b64556bb20aeab4ba5490534bbc84d67393dc9c814c",
+      "appmap_digest": "120bc5971ac5f1058ce4c4f6c58e75fd02789af49603737df6d4ec0f35eb7962",
       "canonicalization_algorithm": "info",
       "digest": "8077d6ccc9ceee75e6deb0fb8552a57c10b014baba2e9e7f62d5cb1e3ecb16f1",
       "fingerprint_algorithm": "sha256"
     },
     {
-      "appmap_digest": "754cfd190b42e26324a04b64556bb20aeab4ba5490534bbc84d67393dc9c814c",
+      "appmap_digest": "120bc5971ac5f1058ce4c4f6c58e75fd02789af49603737df6d4ec0f35eb7962",
       "canonicalization_algorithm": "labels",
       "digest": "9cd41b9623c9f1d3573bec44c51ba8a311213bfc267b454ab33b2bff08296c93",
       "fingerprint_algorithm": "sha256"
     },
     {
-      "appmap_digest": "754cfd190b42e26324a04b64556bb20aeab4ba5490534bbc84d67393dc9c814c",
+      "appmap_digest": "120bc5971ac5f1058ce4c4f6c58e75fd02789af49603737df6d4ec0f35eb7962",
       "canonicalization_algorithm": "packageDependencies",
       "digest": "412b16762fb7d4bc2df4f0d6192213928641cac61f43e0bee07127901695059a",
       "fingerprint_algorithm": "sha256"
     },
     {
-      "appmap_digest": "754cfd190b42e26324a04b64556bb20aeab4ba5490534bbc84d67393dc9c814c",
+      "appmap_digest": "120bc5971ac5f1058ce4c4f6c58e75fd02789af49603737df6d4ec0f35eb7962",
       "canonicalization_algorithm": "packages",
       "digest": "7db5fc428995a670548b92daccf6f4677900450716eb0130a7f17b94aea64fa4",
       "fingerprint_algorithm": "sha256"
     },
     {
-      "appmap_digest": "754cfd190b42e26324a04b64556bb20aeab4ba5490534bbc84d67393dc9c814c",
+      "appmap_digest": "120bc5971ac5f1058ce4c4f6c58e75fd02789af49603737df6d4ec0f35eb7962",
       "canonicalization_algorithm": "sqlNormalized",
       "digest": "b24a8f86910df96198aadc415d6137ba45394c2a9249db15aef7c9b3575bcf0b",
       "fingerprint_algorithm": "sha256"
     },
     {
-      "appmap_digest": "754cfd190b42e26324a04b64556bb20aeab4ba5490534bbc84d67393dc9c814c",
+      "appmap_digest": "120bc5971ac5f1058ce4c4f6c58e75fd02789af49603737df6d4ec0f35eb7962",
       "canonicalization_algorithm": "sqlTables",
       "digest": "deef60c31d31904be212cc1860fd9a8d99ecad612e565e0ce5426248be6e217d",
       "fingerprint_algorithm": "sha256"
     },
     {
-      "appmap_digest": "754cfd190b42e26324a04b64556bb20aeab4ba5490534bbc84d67393dc9c814c",
+      "appmap_digest": "120bc5971ac5f1058ce4c4f6c58e75fd02789af49603737df6d4ec0f35eb7962",
       "canonicalization_algorithm": "trace",
       "digest": "e7b27375ca95cdd46241c682bbb14e0ac0fb522467be8566e425709123716137",
       "fingerprint_algorithm": "sha256"
     },
     {
-      "appmap_digest": "754cfd190b42e26324a04b64556bb20aeab4ba5490534bbc84d67393dc9c814c",
+      "appmap_digest": "120bc5971ac5f1058ce4c4f6c58e75fd02789af49603737df6d4ec0f35eb7962",
       "canonicalization_algorithm": "update",
       "digest": "f2c59f9c4b0e6266f68eb1900fce4a1b26eb38f26f46810c48d9992c66a77179",
       "fingerprint_algorithm": "sha256"

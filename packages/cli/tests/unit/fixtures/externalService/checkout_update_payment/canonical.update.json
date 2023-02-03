@@ -6,384 +6,570 @@
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["log"]
-          },
-          {
-            "kind": "function",
-            "labels": ["log"]
-          },
-          {
-            "kind": "function",
-            "labels": ["log"]
-          },
-          {
-            "kind": "function",
-            "labels": ["log"]
-          },
-          {
-            "kind": "function",
-            "labels": ["mvc.before_action"],
-            "children": [
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["http.session.write"]
-              },
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.decrypt"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.set_key"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.set_iv"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.set_auth_tag"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.set_auth_data"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.final"]
-              },
-              {
-                "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
-              },
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
-              },
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              }
+            "labels": [
+              "log"
             ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["crypto.secure_compare"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["string.unpack"]
-                  }
+                "labels": [
+                  "string.unpack"
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
-              },
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
-              },
-              {
-                "kind": "function",
-                "labels": ["dao.materialize"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["mvc.before_action"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["mvc.after_action"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["log"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["log"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["log"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["log"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["mvc.before_action"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["mvc.after_action"],
-                    "children": [
-                      {
-                        "kind": "function",
-                        "labels": ["dao.materialize"],
-                        "children": [
-                          {
-                            "kind": "function",
-                            "labels": ["log"]
-                          },
-                          {
-                            "kind": "function",
-                            "labels": ["log"]
-                          },
-                          {
-                            "kind": "function",
-                            "labels": ["log"]
-                          },
-                          {
-                            "kind": "function",
-                            "labels": ["log"]
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                "labels": [
+                  "http.session.write"
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["dao.materialize"]
-              },
-              {
-                "kind": "function",
-                "labels": ["dao.materialize"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.secure_compare"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["string.unpack"]
-                  }
+                "labels": [
+                  "string.unpack"
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
-              },
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
-              },
-              {
-                "kind": "function",
-                "labels": ["http.session.write"]
-              },
-              {
-                "kind": "function",
-                "labels": ["dao.materialize"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["log"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["log"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["mvc.before_action"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["mvc.after_action"],
-                    "children": [
-                      {
-                        "kind": "function",
-                        "labels": ["dao.materialize"],
-                        "children": [
-                          {
-                            "kind": "function",
-                            "labels": ["log"]
-                          },
-                          {
-                            "kind": "function",
-                            "labels": ["log"]
-                          },
-                          {
-                            "kind": "function",
-                            "labels": ["log"]
-                          },
-                          {
-                            "kind": "function",
-                            "labels": ["log"]
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                "labels": [
+                  "string.unpack"
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.secure_compare"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["string.unpack"]
-                  }
+                "labels": [
+                  "string.unpack"
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
-              },
-              {
-                "kind": "function",
-                "labels": ["string.unpack"]
-              },
-              {
-                "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
-              },
-              {
-                "kind": "function",
-                "labels": ["crypto.secure_compare"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["string.unpack"]
-                  }
+                "labels": [
+                  "crypto.decrypt"
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "crypto.set_key"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "crypto.set_iv"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "crypto.set_auth_tag"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "crypto.set_auth_data"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["dao.materialize"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["log"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["log"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["mvc.before_action"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["mvc.after_action"],
-                    "children": [
-                      {
-                        "kind": "function",
-                        "labels": ["dao.materialize"],
-                        "children": [
-                          {
-                            "kind": "function",
-                            "labels": ["log"]
-                          },
-                          {
-                            "kind": "function",
-                            "labels": ["log"]
-                          },
-                          {
-                            "kind": "function",
-                            "labels": ["log"]
-                          },
-                          {
-                            "kind": "function",
-                            "labels": ["log"]
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                "labels": [
+                  "crypto.final"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.unpack"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.unpack"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.unpack"
                 ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.secure_compare"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.unpack"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.unpack"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.unpack"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "dao.materialize"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.after_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.after_action"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": [
+                              "log"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "dao.materialize"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "dao.materialize"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.secure_compare"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.unpack"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.unpack"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.unpack"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "dao.materialize"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.after_action"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": [
+                              "log"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.secure_compare"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.unpack"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.unpack"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.unpack"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.secure_compare"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.unpack"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.unpack"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.unpack"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "dao.materialize"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.after_action"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": [
+                              "log"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["delete"],
-                "tables": ["spree_order_mutexes"],
+                "actions": [
+                  "delete"
+                ],
+                "tables": [
+                  "spree_order_mutexes"
+                ],
                 "columns": [
                   "spree_order_mutexes.created_at",
                   "spree_order_mutexes.order_id",
@@ -395,106 +581,161 @@
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["insert"],
-                "tables": ["spree_order_mutexes"],
-                "columns": ["created_at", "id", "order_id", "sample_indicator_id"],
+                "actions": [
+                  "insert"
+                ],
+                "tables": [
+                  "spree_order_mutexes"
+                ],
+                "columns": [
+                  "created_at",
+                  "id",
+                  "order_id",
+                  "sample_indicator_id"
+                ],
                 "joinCount": 0
               }
             }
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["dao.materialize"],
+                "labels": [
+                  "dao.materialize"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"],
+                    "labels": [
+                      "mvc.after_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["dao.materialize"],
+                        "labels": [
+                          "dao.materialize"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -504,43 +745,63 @@
               },
               {
                 "kind": "function",
-                "labels": ["dao.materialize"],
+                "labels": [
+                  "dao.materialize"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"],
+                    "labels": [
+                      "mvc.after_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["dao.materialize"],
+                        "labels": [
+                          "dao.materialize"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -550,208 +811,315 @@
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.secure_compare"],
+                "labels": [
+                  "crypto.secure_compare"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["dao.materialize"],
+                "labels": [
+                  "dao.materialize"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.secure_compare"],
+                "labels": [
+                  "crypto.secure_compare"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["dao.materialize"],
+                "labels": [
+                  "dao.materialize"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["update"],
-                    "tables": ["spree_orders"],
-                    "columns": ["created_by_id", "email", "spree_orders.id", "user_id"],
+                    "actions": [
+                      "update"
+                    ],
+                    "tables": [
+                      "spree_orders"
+                    ],
+                    "columns": [
+                      "created_by_id",
+                      "email",
+                      "spree_orders.id",
+                      "user_id"
+                    ],
                     "joinCount": 0
                   }
                 }
               },
               {
                 "kind": "function",
-                "labels": ["crypto.secure_compare"],
+                "labels": [
+                  "crypto.secure_compare"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["security.authorization"],
+                "labels": [
+                  "security.authorization"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["crypto.secure_compare"],
+                    "labels": [
+                      "crypto.secure_compare"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["string.unpack"]
+                        "labels": [
+                          "string.unpack"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["dao.materialize"],
+                "labels": [
+                  "dao.materialize"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"],
+                    "labels": [
+                      "mvc.after_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["dao.materialize"],
+                        "labels": [
+                          "dao.materialize"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -761,43 +1129,63 @@
               },
               {
                 "kind": "function",
-                "labels": ["dao.materialize"],
+                "labels": [
+                  "dao.materialize"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"],
+                    "labels": [
+                      "mvc.after_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["dao.materialize"],
+                        "labels": [
+                          "dao.materialize"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -807,43 +1195,63 @@
               },
               {
                 "kind": "function",
-                "labels": ["dao.materialize"],
+                "labels": [
+                  "dao.materialize"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"],
+                    "labels": [
+                      "mvc.after_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["dao.materialize"],
+                        "labels": [
+                          "dao.materialize"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -851,31 +1259,45 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"],
+                    "labels": [
+                      "mvc.after_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["dao.materialize"],
+                        "labels": [
+                          "dao.materialize"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -883,39 +1305,57 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"],
+                    "labels": [
+                      "mvc.after_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["dao.materialize"],
+                        "labels": [
+                          "dao.materialize"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -923,43 +1363,63 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["dao.materialize"]
+                    "labels": [
+                      "dao.materialize"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"],
+                    "labels": [
+                      "mvc.after_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["dao.materialize"],
+                        "labels": [
+                          "dao.materialize"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -967,152 +1427,160 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["dao.materialize"]
+                    "labels": [
+                      "dao.materialize"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.secure_compare"],
+                "labels": [
+                  "crypto.secure_compare"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.secure_compare"],
+                "labels": [
+                  "crypto.secure_compare"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["crypto.secure_compare"],
+                "labels": [
+                  "crypto.secure_compare"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["string.unpack"]
+                "labels": [
+                  "string.unpack"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["format.json.parse", "deserialize.safe"]
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["dao.materialize"],
+                "labels": [
+                  "dao.materialize"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "kind": "function",
-            "labels": ["dao.materialize"],
-            "children": [
-              {
-                "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.before_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.after_action"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["dao.materialize"],
-                    "children": [
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      }
+                    "labels": [
+                      "log"
                     ]
                   }
                 ]
@@ -1121,203 +1589,63 @@
           },
           {
             "kind": "function",
-            "labels": ["log"]
-          },
-          {
-            "kind": "function",
-            "labels": ["log"]
-          },
-          {
-            "kind": "function",
-            "labels": ["dao.materialize"],
+            "labels": [
+              "dao.materialize"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.before_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.after_action"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["dao.materialize"],
-                    "children": [
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["dao.materialize"],
-                    "children": [
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      }
-                    ]
-                  }
+                "labels": [
+                  "log"
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.after_action"]
-              }
-            ]
-          },
-          {
-            "kind": "function",
-            "labels": ["dao.materialize"],
-            "children": [
-              {
-                "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.before_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.after_action"],
-                "children": [
-                  {
-                    "kind": "function",
-                    "labels": ["dao.materialize"],
-                    "children": [
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      }
-                    ]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["dao.materialize"],
-                    "children": [
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      },
-                      {
-                        "kind": "function",
-                        "labels": ["log"]
-                      }
-                    ]
-                  }
+                "labels": [
+                  "log"
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
-              }
-            ]
-          },
-          {
-            "kind": "function",
-            "labels": ["dao.materialize"],
-            "children": [
-              {
-                "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "function",
-                "labels": ["log"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.before_action"]
-              },
-              {
-                "kind": "function",
-                "labels": ["mvc.after_action"],
+                "labels": [
+                  "mvc.after_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["dao.materialize"],
+                    "labels": [
+                      "dao.materialize"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   }
@@ -1327,65 +1655,107 @@
           },
           {
             "kind": "function",
-            "labels": ["dao.materialize"],
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "dao.materialize"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"],
+                "labels": [
+                  "mvc.after_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["dao.materialize"],
+                    "labels": [
+                      "dao.materialize"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["dao.materialize"],
+                    "labels": [
+                      "dao.materialize"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   }
@@ -1393,75 +1763,109 @@
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["dao.materialize"],
+            "labels": [
+              "dao.materialize"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"],
+                "labels": [
+                  "mvc.after_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["dao.materialize"],
+                    "labels": [
+                      "dao.materialize"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["dao.materialize"],
+                    "labels": [
+                      "dao.materialize"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   }
@@ -1469,107 +1873,443 @@
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["dao.materialize"],
+            "labels": [
+              "dao.materialize"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
-              }
-            ]
-          },
-          {
-            "kind": "function",
-            "labels": ["mvc.before_action"]
-          },
-          {
-            "kind": "function",
-            "labels": ["mvc.before_action"]
-          },
-          {
-            "kind": "function",
-            "labels": ["mvc.before_action"],
-            "children": [
-              {
-                "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"],
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
-                  },
-                  {
-                    "kind": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "dao.materialize"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"],
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "dao.materialize"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "dao.materialize"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "dao.materialize"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.before_action"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.before_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["mvc.before_action"]
+                                "labels": [
+                                  "mvc.before_action"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["mvc.after_action"],
+                                "labels": [
+                                  "mvc.after_action"
+                                ],
                                 "children": [
                                   {
                                     "kind": "function",
-                                    "labels": ["dao.materialize"],
+                                    "labels": [
+                                      "dao.materialize"
+                                    ],
                                     "children": [
                                       {
                                         "kind": "function",
-                                        "labels": ["log"]
+                                        "labels": [
+                                          "log"
+                                        ]
                                       },
                                       {
                                         "kind": "function",
-                                        "labels": ["log"]
+                                        "labels": [
+                                          "log"
+                                        ]
                                       },
                                       {
                                         "kind": "function",
-                                        "labels": ["log"]
+                                        "labels": [
+                                          "log"
+                                        ]
                                       },
                                       {
                                         "kind": "function",
-                                        "labels": ["log"]
+                                        "labels": [
+                                          "log"
+                                        ]
                                       }
                                     ]
                                   }
@@ -1579,43 +2319,63 @@
                           },
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["mvc.before_action"]
+                                "labels": [
+                                  "mvc.before_action"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["mvc.after_action"],
+                                "labels": [
+                                  "mvc.after_action"
+                                ],
                                 "children": [
                                   {
                                     "kind": "function",
-                                    "labels": ["dao.materialize"],
+                                    "labels": [
+                                      "dao.materialize"
+                                    ],
                                     "children": [
                                       {
                                         "kind": "function",
-                                        "labels": ["log"]
+                                        "labels": [
+                                          "log"
+                                        ]
                                       },
                                       {
                                         "kind": "function",
-                                        "labels": ["log"]
+                                        "labels": [
+                                          "log"
+                                        ]
                                       },
                                       {
                                         "kind": "function",
-                                        "labels": ["log"]
+                                        "labels": [
+                                          "log"
+                                        ]
                                       },
                                       {
                                         "kind": "function",
-                                        "labels": ["log"]
+                                        "labels": [
+                                          "log"
+                                        ]
                                       }
                                     ]
                                   }
@@ -1625,43 +2385,63 @@
                           },
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["mvc.before_action"]
+                                "labels": [
+                                  "mvc.before_action"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["mvc.after_action"],
+                                "labels": [
+                                  "mvc.after_action"
+                                ],
                                 "children": [
                                   {
                                     "kind": "function",
-                                    "labels": ["dao.materialize"],
+                                    "labels": [
+                                      "dao.materialize"
+                                    ],
                                     "children": [
                                       {
                                         "kind": "function",
-                                        "labels": ["log"]
+                                        "labels": [
+                                          "log"
+                                        ]
                                       },
                                       {
                                         "kind": "function",
-                                        "labels": ["log"]
+                                        "labels": [
+                                          "log"
+                                        ]
                                       },
                                       {
                                         "kind": "function",
-                                        "labels": ["log"]
+                                        "labels": [
+                                          "log"
+                                        ]
                                       },
                                       {
                                         "kind": "function",
-                                        "labels": ["log"]
+                                        "labels": [
+                                          "log"
+                                        ]
                                       }
                                     ]
                                   }
@@ -1671,280 +2451,406 @@
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"]
+                        "labels": [
+                          "mvc.after_action"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"],
+                "labels": [
+                  "mvc.before_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"],
+            "labels": [
+              "mvc.after_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"],
+                "labels": [
+                  "mvc.before_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"],
+                        "labels": [
+                          "mvc.before_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"]
+                        "labels": [
+                          "mvc.after_action"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"],
+                        "labels": [
+                          "mvc.before_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["mvc.before_action"],
+                            "labels": [
+                              "mvc.before_action"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["mvc.after_action"]
+                            "labels": [
+                              "mvc.after_action"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["mvc.before_action"]
+                            "labels": [
+                              "mvc.before_action"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["mvc.before_action"],
+                            "labels": [
+                              "mvc.before_action"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["mvc.after_action"]
+                            "labels": [
+                              "mvc.after_action"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["mvc.after_action"]
+                            "labels": [
+                              "mvc.after_action"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"]
+                        "labels": [
+                          "mvc.after_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"]
+                        "labels": [
+                          "mvc.after_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "sql",
                         "sql": {
                           "analyzed_query": {
-                            "actions": ["insert"],
-                            "tables": ["spree_addresses"],
+                            "actions": [
+                              "insert"
+                            ],
+                            "tables": [
+                              "spree_addresses"
+                            ],
                             "columns": [
                               "address1",
                               "address2",
@@ -1968,32 +2874,46 @@
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"]
+                        "labels": [
+                          "mvc.after_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"]
+                        "labels": [
+                          "mvc.after_action"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
                     "sql": {
                       "analyzed_query": {
-                        "actions": ["insert"],
-                        "tables": ["spree_credit_cards"],
+                        "actions": [
+                          "insert"
+                        ],
+                        "tables": [
+                          "spree_credit_cards"
+                        ],
                         "columns": [
                           "address_id",
                           "cc_type",
@@ -2014,50 +2934,72 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"],
+                "labels": [
+                  "mvc.before_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["insert"],
-                    "tables": ["spree_payments"],
+                    "actions": [
+                      "insert"
+                    ],
+                    "tables": [
+                      "spree_payments"
+                    ],
                     "columns": [
                       "amount",
                       "created_at",
@@ -2077,47 +3019,69 @@
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"],
+                "labels": [
+                  "mvc.after_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["dao.materialize"],
+                    "labels": [
+                      "dao.materialize"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"],
+                        "labels": [
+                          "mvc.after_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           }
@@ -2125,31 +3089,45 @@
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"],
+                        "labels": [
+                          "mvc.after_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           }
@@ -2157,31 +3135,45 @@
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"],
+                        "labels": [
+                          "mvc.after_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           }
@@ -2189,31 +3181,45 @@
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"],
+                        "labels": [
+                          "mvc.after_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           }
@@ -2221,31 +3227,45 @@
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"],
+                        "labels": [
+                          "mvc.after_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           }
@@ -2253,31 +3273,45 @@
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"],
+                        "labels": [
+                          "mvc.after_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           }
@@ -2285,31 +3319,45 @@
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"],
+                        "labels": [
+                          "mvc.after_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           }
@@ -2317,31 +3365,45 @@
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"],
+                        "labels": [
+                          "mvc.after_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           }
@@ -2349,31 +3411,45 @@
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"],
+                        "labels": [
+                          "mvc.after_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           }
@@ -2383,65 +3459,95 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["dao.materialize"],
+                    "labels": [
+                      "dao.materialize"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"],
+                        "labels": [
+                          "mvc.after_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           }
@@ -2449,65 +3555,95 @@
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"]
+                        "labels": [
+                          "mvc.after_action"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["dao.materialize"],
+                        "labels": [
+                          "dao.materialize"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["mvc.before_action"]
+                            "labels": [
+                              "mvc.before_action"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["mvc.after_action"],
+                            "labels": [
+                              "mvc.after_action"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["dao.materialize"],
+                                "labels": [
+                                  "dao.materialize"
+                                ],
                                 "children": [
                                   {
                                     "kind": "function",
-                                    "labels": ["log"]
+                                    "labels": [
+                                      "log"
+                                    ]
                                   },
                                   {
                                     "kind": "function",
-                                    "labels": ["log"]
+                                    "labels": [
+                                      "log"
+                                    ]
                                   },
                                   {
                                     "kind": "function",
-                                    "labels": ["log"]
+                                    "labels": [
+                                      "log"
+                                    ]
                                   },
                                   {
                                     "kind": "function",
-                                    "labels": ["log"]
+                                    "labels": [
+                                      "log"
+                                    ]
                                   }
                                 ]
                               }
@@ -2519,81 +3655,123 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
                     "sql": {
                       "analyzed_query": {
-                        "actions": ["update"],
-                        "tables": ["spree_payments"],
-                        "columns": ["spree_payments.id", "state", "updated_at"],
+                        "actions": [
+                          "update"
+                        ],
+                        "tables": [
+                          "spree_payments"
+                        ],
+                        "columns": [
+                          "spree_payments.id",
+                          "state",
+                          "updated_at"
+                        ],
                         "joinCount": 0
                       }
                     }
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
                     "sql": {
                       "analyzed_query": {
-                        "actions": ["insert"],
-                        "tables": ["spree_state_changes"],
+                        "actions": [
+                          "insert"
+                        ],
+                        "tables": [
+                          "spree_state_changes"
+                        ],
                         "columns": [
                           "created_at",
                           "id",
@@ -2611,61 +3789,89 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"],
+                "labels": [
+                  "mvc.after_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["dao.materialize"],
+                    "labels": [
+                      "dao.materialize"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"],
+                        "labels": [
+                          "mvc.after_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           }
@@ -2675,43 +3881,63 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["dao.materialize"],
+                    "labels": [
+                      "dao.materialize"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"],
+                        "labels": [
+                          "mvc.after_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           }
@@ -2721,43 +3947,63 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["dao.materialize"],
+                    "labels": [
+                      "dao.materialize"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"],
+                        "labels": [
+                          "mvc.after_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["dao.materialize"],
+                            "labels": [
+                              "dao.materialize"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           }
@@ -2767,11 +4013,15 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["serialize"]
+                    "labels": [
+                      "serialize"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["serialize"]
+                    "labels": [
+                      "serialize"
+                    ]
                   },
                   {
                     "kind": "http_client_request",
@@ -2780,114 +4030,167 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"]
+                        "labels": [
+                          "mvc.before_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.before_action"],
+                        "labels": [
+                          "mvc.before_action"
+                        ],
                         "children": [
                           {
                             "kind": "function",
-                            "labels": ["mvc.before_action"],
+                            "labels": [
+                              "mvc.before_action"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["mvc.after_action"]
+                            "labels": [
+                              "mvc.after_action"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["mvc.before_action"]
+                            "labels": [
+                              "mvc.before_action"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["mvc.before_action"],
+                            "labels": [
+                              "mvc.before_action"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               },
                               {
                                 "kind": "function",
-                                "labels": ["log"]
+                                "labels": [
+                                  "log"
+                                ]
                               }
                             ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["mvc.after_action"]
+                            "labels": [
+                              "mvc.after_action"
+                            ]
                           },
                           {
                             "kind": "function",
-                            "labels": ["mvc.after_action"]
+                            "labels": [
+                              "mvc.after_action"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"]
+                        "labels": [
+                          "mvc.after_action"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.after_action"]
+                        "labels": [
+                          "mvc.after_action"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
                     "sql": {
                       "analyzed_query": {
-                        "actions": ["update"],
-                        "tables": ["spree_credit_cards"],
+                        "actions": [
+                          "update"
+                        ],
+                        "tables": [
+                          "spree_credit_cards"
+                        ],
                         "columns": [
                           "gateway_customer_profile_id",
                           "gateway_payment_profile_id",
@@ -2900,15 +4203,21 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   }
                 ]
               }
@@ -2916,248 +4225,369 @@
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["update"],
-                "tables": ["spree_orders"],
-                "columns": ["spree_orders.id", "updated_at"],
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "spree_orders"
+                ],
+                "columns": [
+                  "spree_orders.id",
+                  "updated_at"
+                ],
                 "joinCount": 0
               }
             }
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["dao.materialize"],
+            "labels": [
+              "dao.materialize"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"],
+                "labels": [
+                  "mvc.before_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["update"],
-                "tables": ["spree_orders"],
-                "columns": ["spree_orders.id", "state", "updated_at"],
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "spree_orders"
+                ],
+                "columns": [
+                  "spree_orders.id",
+                  "state",
+                  "updated_at"
+                ],
                 "joinCount": 0
               }
             }
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["insert"],
-                "tables": ["spree_state_changes"],
+                "actions": [
+                  "insert"
+                ],
+                "tables": [
+                  "spree_state_changes"
+                ],
                 "columns": [
                   "created_at",
                   "id",
@@ -3176,242 +4606,356 @@
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"],
+                "labels": [
+                  "mvc.before_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.controller"],
+            "labels": [
+              "mvc.controller"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["delete"],
-                "tables": ["spree_order_mutexes"],
-                "columns": ["spree_order_mutexes.id"],
+                "actions": [
+                  "delete"
+                ],
+                "tables": [
+                  "spree_order_mutexes"
+                ],
+                "columns": [
+                  "spree_order_mutexes.id"
+                ],
                 "joinCount": 0
               }
             }
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }

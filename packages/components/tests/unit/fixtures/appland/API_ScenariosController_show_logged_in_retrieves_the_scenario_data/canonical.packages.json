@@ -1,1 +1,5 @@
-["app/controllers", "app/models", "json"]
+[
+  "app/controllers",
+  "app/models",
+  "json"
+]

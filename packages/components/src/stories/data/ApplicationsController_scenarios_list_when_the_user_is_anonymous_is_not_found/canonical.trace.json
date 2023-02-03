@@ -2,18 +2,29 @@
   {
     "kind": "http_server_request",
     "route": "GET /{organization_id}/{id}/scenarios_list",
-    "parameter_names": ["mapset", "page_size", "controller", "action", "organization_id", "id"],
+    "parameter_names": [
+      "mapset",
+      "page_size",
+      "controller",
+      "action",
+      "organization_id",
+      "id"
+    ],
     "status_code": 404,
     "children": [
       {
         "kind": "function",
         "function": "actionpack/ActionController::Instrumentation#process_action",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
@@ -23,12 +34,16 @@
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session"],
+                "labels": [
+                  "http.session"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
-                    "labels": ["http.session"]
+                    "labels": [
+                      "http.session"
+                    ]
                   }
                 ]
               }
@@ -49,7 +64,9 @@
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
@@ -69,12 +86,16 @@
                       {
                         "kind": "function",
                         "function": "app/controllers/CurrentUser#lookup_session_user",
-                        "labels": ["security.authentication"],
+                        "labels": [
+                          "security.authentication"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionpack/ActionDispatch::Request::Session#[]",
-                            "labels": ["http.session"]
+                            "labels": [
+                              "http.session"
+                            ]
                           }
                         ]
                       }
@@ -97,12 +118,16 @@
               {
                 "kind": "function",
                 "function": "app/controllers/WithAuthentication#with_anonymous_user",
-                "labels": ["public"],
+                "labels": [
+                  "public"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "children": [
                       {
                         "kind": "function",
@@ -112,12 +137,16 @@
                           {
                             "kind": "function",
                             "function": "actionpack/ActionDispatch::Request::Session#[]",
-                            "labels": ["http.session"]
+                            "labels": [
+                              "http.session"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "json/JSON::Ext::Parser#parse",
-                            "labels": ["format.json"]
+                            "labels": [
+                              "format.json"
+                            ]
                           },
                           {
                             "kind": "function",
@@ -144,12 +173,16 @@
                           {
                             "kind": "function",
                             "function": "app/controllers/CurrentUser#lookup_session_user",
-                            "labels": ["security.authentication"],
+                            "labels": [
+                              "security.authentication"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
                                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                                "labels": ["http.session"]
+                                "labels": [
+                                  "http.session"
+                                ]
                               }
                             ]
                           }
@@ -200,8 +233,13 @@
                                       "normalized_query": "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"public\" IS ?) AND (\"apps\".\"slug\" = ?) AND (\"orgs\".\"slug\" = ?)) LIMIT ?"
                                     },
                                     "analyzed_query": {
-                                      "actions": ["select"],
-                                      "tables": ["apps", "orgs"],
+                                      "actions": [
+                                        "select"
+                                      ],
+                                      "tables": [
+                                        "apps",
+                                        "orgs"
+                                      ],
                                       "columns": [
                                         "apps.*",
                                         "apps.org_id",
@@ -251,8 +289,14 @@
                                       "normalized_query": "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") INNER JOIN \"users\" ON (\"users\".\"id\" = \"orgs\".\"owner_id\") WHERE ((\"public\" IS ?) AND (\"apps\".\"slug\" = ?) AND (\"users\".\"login\" = ?)) LIMIT ?"
                                     },
                                     "analyzed_query": {
-                                      "actions": ["select"],
-                                      "tables": ["apps", "orgs", "users"],
+                                      "actions": [
+                                        "select"
+                                      ],
+                                      "tables": [
+                                        "apps",
+                                        "orgs",
+                                        "users"
+                                      ],
                                       "columns": [
                                         "apps.*",
                                         "apps.org_id",
@@ -309,17 +353,23 @@
                   {
                     "kind": "function",
                     "function": "app/views/app_views_errors_not_found_html_haml.render",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
@@ -329,12 +379,16 @@
                           {
                             "kind": "function",
                             "function": "app/views/app_views_layouts__standard_head_html_haml.render",
-                            "labels": ["mvc.template"],
+                            "labels": [
+                              "mvc.template"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
                                 "function": "actionview/ActionView::Resolver#find_all",
-                                "labels": ["mvc.template.resolver"]
+                                "labels": [
+                                  "mvc.template.resolver"
+                                ]
                               },
                               {
                                 "kind": "function",
@@ -344,17 +398,23 @@
                                   {
                                     "kind": "function",
                                     "function": "app/views/app_views_layouts__css_head_html_haml.render",
-                                    "labels": ["mvc.template"],
+                                    "labels": [
+                                      "mvc.template"
+                                    ],
                                     "children": [
                                       {
                                         "kind": "function",
                                         "function": "actionview/ActionView::Resolver#find_all",
-                                        "labels": ["mvc.template.resolver"]
+                                        "labels": [
+                                          "mvc.template.resolver"
+                                        ]
                                       },
                                       {
                                         "kind": "function",
                                         "function": "json/JSON::Ext::Parser#parse",
-                                        "labels": ["format.json"]
+                                        "labels": [
+                                          "format.json"
+                                        ]
                                       }
                                     ]
                                   }
@@ -368,12 +428,16 @@
                                   {
                                     "kind": "function",
                                     "function": "app/views/app_views_layouts__js_head_html_haml.render",
-                                    "labels": ["mvc.template"],
+                                    "labels": [
+                                      "mvc.template"
+                                    ],
                                     "children": [
                                       {
                                         "kind": "function",
                                         "function": "actionview/ActionView::Resolver#find_all",
-                                        "labels": ["mvc.template.resolver"]
+                                        "labels": [
+                                          "mvc.template.resolver"
+                                        ]
                                       }
                                     ]
                                   }
@@ -391,12 +455,16 @@
                           {
                             "kind": "function",
                             "function": "app/views/app_views_partials__header_html_haml.render",
-                            "labels": ["mvc.template"],
+                            "labels": [
+                              "mvc.template"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
                                 "function": "actionview/ActionView::Resolver#find_all",
-                                "labels": ["mvc.template.resolver"]
+                                "labels": [
+                                  "mvc.template.resolver"
+                                ]
                               },
                               {
                                 "kind": "function",
@@ -425,17 +493,23 @@
                                   {
                                     "kind": "function",
                                     "function": "app/views/app_views_partials__flash_html_haml.render",
-                                    "labels": ["mvc.template"],
+                                    "labels": [
+                                      "mvc.template"
+                                    ],
                                     "children": [
                                       {
                                         "kind": "function",
                                         "function": "actionview/ActionView::Resolver#find_all",
-                                        "labels": ["mvc.template.resolver"]
+                                        "labels": [
+                                          "mvc.template.resolver"
+                                        ]
                                       },
                                       {
                                         "kind": "function",
                                         "function": "actionpack/ActionDispatch::Request::Session#[]",
-                                        "labels": ["http.session"]
+                                        "labels": [
+                                          "http.session"
+                                        ]
                                       }
                                     ]
                                   }
@@ -448,7 +522,9 @@
                       {
                         "kind": "function",
                         "function": "json/JSON::Ext::Parser#parse",
-                        "labels": ["format.json"]
+                        "labels": [
+                          "format.json"
+                        ]
                       }
                     ]
                   }

@@ -18,14 +18,18 @@
                   {
                     "name": "invoke_before",
                     "type": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "static": false,
                     "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:512"
                   },
                   {
                     "name": "invoke_after",
                     "type": "function",
-                    "labels": ["mvc.after_action"],
+                    "labels": [
+                      "mvc.after_action"
+                    ],
                     "static": false,
                     "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:516"
                   }
@@ -52,7 +56,9 @@
               {
                 "name": "process_action",
                 "type": "function",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "static": false,
                 "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_controller/metal/instrumentation.rb:19"
               }
@@ -75,7 +81,9 @@
                   {
                     "name": "[]",
                     "type": "function",
-                    "labels": ["http.session"],
+                    "labels": [
+                      "http.session"
+                    ],
                     "static": false,
                     "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/request/session.rb:91"
                   }
@@ -94,7 +102,9 @@
                   {
                     "name": "update",
                     "type": "function",
-                    "labels": ["http.session"],
+                    "labels": [
+                      "http.session"
+                    ],
                     "static": false,
                     "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/middleware/cookies.rb:344"
                   }
@@ -147,7 +157,9 @@
           {
             "name": "lookup_session_user",
             "type": "function",
-            "labels": ["security.authentication"],
+            "labels": [
+              "security.authentication"
+            ],
             "static": false,
             "location": "app/controllers/concerns/current_user.rb:41"
           },
@@ -172,7 +184,9 @@
           {
             "name": "with_anonymous_user",
             "type": "function",
-            "labels": ["public"],
+            "labels": [
+              "public"
+            ],
             "static": false,
             "location": "app/controllers/concerns/with_authentication.rb:15"
           }
@@ -343,7 +357,9 @@
                   {
                     "name": "parse",
                     "type": "function",
-                    "labels": ["format.json"],
+                    "labels": [
+                      "format.json"
+                    ],
                     "static": false,
                     "location": "JSON::Ext::Parser#parse"
                   }
@@ -370,7 +386,9 @@
               {
                 "name": "find_all",
                 "type": "function",
-                "labels": ["mvc.template.resolver"],
+                "labels": [
+                  "mvc.template.resolver"
+                ],
                 "static": false,
                 "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb:145"
               }
@@ -391,7 +409,9 @@
           {
             "name": "render",
             "type": "function",
-            "labels": ["mvc.template"],
+            "labels": [
+              "mvc.template"
+            ],
             "static": true,
             "location": "app/views/errors/not_found.html.haml"
           }
@@ -404,7 +424,9 @@
           {
             "name": "render",
             "type": "function",
-            "labels": ["mvc.template"],
+            "labels": [
+              "mvc.template"
+            ],
             "static": true,
             "location": "app/views/layouts/_standard_head.html.haml"
           }
@@ -417,7 +439,9 @@
           {
             "name": "render",
             "type": "function",
-            "labels": ["mvc.template"],
+            "labels": [
+              "mvc.template"
+            ],
             "static": true,
             "location": "app/views/layouts/_css_head.html.haml"
           }
@@ -430,7 +454,9 @@
           {
             "name": "render",
             "type": "function",
-            "labels": ["mvc.template"],
+            "labels": [
+              "mvc.template"
+            ],
             "static": true,
             "location": "app/views/layouts/_js_head.html.haml"
           }
@@ -443,7 +469,9 @@
           {
             "name": "render",
             "type": "function",
-            "labels": ["mvc.template"],
+            "labels": [
+              "mvc.template"
+            ],
             "static": true,
             "location": "app/views/partials/_header.html.haml"
           }
@@ -456,7 +484,9 @@
           {
             "name": "render",
             "type": "function",
-            "labels": ["mvc.template"],
+            "labels": [
+              "mvc.template"
+            ],
             "static": true,
             "location": "app/views/partials/_flash.html.haml"
           }

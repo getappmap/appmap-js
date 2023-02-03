@@ -1,1 +1,6 @@
-["api_keys", "pg_attribute", "pg_type", "users"]
+[
+  "api_keys",
+  "pg_attribute",
+  "pg_type",
+  "users"
+]

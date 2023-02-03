@@ -6,128 +6,205 @@
     "children": [
       {
         "kind": "function",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["provider.authentication"]
+        "labels": [
+          "provider.authentication"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["view"],
+        "labels": [
+          "view"
+        ],
         "children": [
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["insert"],
-                "tables": ["mapset_caches"],
-                "columns": ["mapset_id", "sha_256"],
+                "actions": [
+                  "insert"
+                ],
+                "tables": [
+                  "mapset_caches"
+                ],
+                "columns": [
+                  "mapset_id",
+                  "sha_256"
+                ],
                 "joinCount": 0
               }
             }
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["update"],
-                "tables": ["mapset_caches"],
-                "columns": ["data_model", "id"],
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "mapset_caches"
+                ],
+                "columns": [
+                  "data_model",
+                  "id"
+                ],
                 "joinCount": 0
               }
             }
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["update"],
-                "tables": ["mapset_caches"],
-                "columns": ["id", "web_resources"],
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "mapset_caches"
+                ],
+                "columns": [
+                  "id",
+                  "web_resources"
+                ],
                 "joinCount": 0
               }
             }
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["serialization", "json"]
+                "labels": [
+                  "serialization",
+                  "json"
+                ]
               },
               {
                 "kind": "sql",
                 "sql": {
                   "analyzed_query": {
-                    "actions": ["update"],
-                    "tables": ["mapset_caches"],
-                    "columns": ["id", "recording_method_counts"],
+                    "actions": [
+                      "update"
+                    ],
+                    "tables": [
+                      "mapset_caches"
+                    ],
+                    "columns": [
+                      "id",
+                      "recording_method_counts"
+                    ],
                     "joinCount": 0
                   }
                 }
@@ -136,109 +213,171 @@
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["update"],
-                "tables": ["mapset_caches"],
-                "columns": ["code_object_counts", "id"],
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "mapset_caches"
+                ],
+                "columns": [
+                  "code_object_counts",
+                  "id"
+                ],
                 "joinCount": 0
               }
             }
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["update"],
-                "tables": ["mapset_caches"],
-                "columns": ["id", "key_stats_counts"],
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "mapset_caches"
+                ],
+                "columns": [
+                  "id",
+                  "key_stats_counts"
+                ],
                 "joinCount": 0
               }
             }
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["security", "crypto"]
+            "labels": [
+              "security",
+              "crypto"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["security", "crypto"]
+                    "labels": [
+                      "security",
+                      "crypto"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               }
             ]
           }
@@ -253,171 +392,268 @@
     "children": [
       {
         "kind": "function",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["provider.authentication"]
+        "labels": [
+          "provider.authentication"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["view"],
+        "labels": [
+          "view"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["security", "crypto"]
+            "labels": [
+              "security",
+              "crypto"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["serialization", "json"]
+            "labels": [
+              "serialization",
+              "json"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["security", "crypto"]
+                    "labels": [
+                      "security",
+                      "crypto"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               }
             ]
           },
           {
             "kind": "function",
-            "labels": ["view"]
+            "labels": [
+              "view"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               }
             ]
           }

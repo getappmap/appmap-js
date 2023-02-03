@@ -1,1 +1,6 @@
-["apps", "orgs", "users", "users_orgs"]
+[
+  "apps",
+  "orgs",
+  "users",
+  "users_orgs"
+]

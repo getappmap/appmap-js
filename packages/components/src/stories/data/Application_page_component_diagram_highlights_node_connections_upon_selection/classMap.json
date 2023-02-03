@@ -22,7 +22,9 @@
                       {
                         "name": "generate",
                         "type": "function",
-                        "labels": ["format.json"],
+                        "labels": [
+                          "format.json"
+                        ],
                         "static": false,
                         "location": "JSON::Ext::Generator::State#generate"
                       }
@@ -37,7 +39,9 @@
                   {
                     "name": "parse",
                     "type": "function",
-                    "labels": ["format.json"],
+                    "labels": [
+                      "format.json"
+                    ],
                     "static": false,
                     "location": "JSON::Ext::Parser#parse"
                   }

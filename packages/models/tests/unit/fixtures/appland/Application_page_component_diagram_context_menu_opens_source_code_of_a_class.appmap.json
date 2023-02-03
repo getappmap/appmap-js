@@ -2780,73 +2780,73 @@
     },
     "fingerprints": [
       {
-        "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+        "appmap_digest": "cb123448a07aca250646298b0576c4e326435499a9120e8cdb80ad358720c4e5",
         "canonicalization_algorithm": "classDependencies",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+        "appmap_digest": "cb123448a07aca250646298b0576c4e326435499a9120e8cdb80ad358720c4e5",
         "canonicalization_algorithm": "classes",
         "digest": "5a9de429b6b8313e0785496f671cce49d4e043e6111150f1fe5fe0d2e0f5888b",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+        "appmap_digest": "cb123448a07aca250646298b0576c4e326435499a9120e8cdb80ad358720c4e5",
         "canonicalization_algorithm": "httpClientRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+        "appmap_digest": "cb123448a07aca250646298b0576c4e326435499a9120e8cdb80ad358720c4e5",
         "canonicalization_algorithm": "httpServerRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+        "appmap_digest": "cb123448a07aca250646298b0576c4e326435499a9120e8cdb80ad358720c4e5",
         "canonicalization_algorithm": "info",
         "digest": "7be379a81c1073e0b27a2d6c00cfc4e2b4a96bf3113893f4164fd603ceb8617c",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+        "appmap_digest": "cb123448a07aca250646298b0576c4e326435499a9120e8cdb80ad358720c4e5",
         "canonicalization_algorithm": "labels",
         "digest": "845bf6b8ba4a59becbbdff5a9681cec63a2125e665b32b254a536fe38490e6fb",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+        "appmap_digest": "cb123448a07aca250646298b0576c4e326435499a9120e8cdb80ad358720c4e5",
         "canonicalization_algorithm": "packageDependencies",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+        "appmap_digest": "cb123448a07aca250646298b0576c4e326435499a9120e8cdb80ad358720c4e5",
         "canonicalization_algorithm": "packages",
         "digest": "b60d95619abb8018a77529a7cbc902507e7d7a29b30fc84d7df9b15ce6f3cb8c",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+        "appmap_digest": "cb123448a07aca250646298b0576c4e326435499a9120e8cdb80ad358720c4e5",
         "canonicalization_algorithm": "sqlNormalized",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+        "appmap_digest": "cb123448a07aca250646298b0576c4e326435499a9120e8cdb80ad358720c4e5",
         "canonicalization_algorithm": "sqlTables",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+        "appmap_digest": "cb123448a07aca250646298b0576c4e326435499a9120e8cdb80ad358720c4e5",
         "canonicalization_algorithm": "trace",
         "digest": "24a0768f8dc58110dca7abb94e88fdd44ce50086f0c2f8a7ff085aebc6ce76bd",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+        "appmap_digest": "cb123448a07aca250646298b0576c4e326435499a9120e8cdb80ad358720c4e5",
         "canonicalization_algorithm": "update",
         "digest": "7be379a81c1073e0b27a2d6c00cfc4e2b4a96bf3113893f4164fd603ceb8617c",
         "fingerprint_algorithm": "sha256"
@@ -2877,7 +2877,10 @@
                         {
                           "name": "generate",
                           "type": "function",
-                          "labels": ["serialization", "json"],
+                          "labels": [
+                            "serialization",
+                            "json"
+                          ],
                           "static": false,
                           "location": "JSON::Ext::Generator::State#generate"
                         }
@@ -2892,7 +2895,10 @@
                     {
                       "name": "parse",
                       "type": "function",
-                      "labels": ["serialization", "json"],
+                      "labels": [
+                        "serialization",
+                        "json"
+                      ],
                       "static": false,
                       "location": "JSON::Ext::Parser#parse"
                     }
@@ -2919,14 +2925,20 @@
                 {
                   "name": "request",
                   "type": "function",
-                  "labels": ["http", "io"],
+                  "labels": [
+                    "http",
+                    "io"
+                  ],
                   "static": false,
                   "location": "/Users/kgilpin/tmp/appland/vendor/bundle/ruby/2.6.0/bundler/gems/appmap-ruby-ca633f5ec35e/lib/appmap/hook/method.rb:50"
                 },
                 {
                   "name": "request",
                   "type": "function",
-                  "labels": ["http", "io"],
+                  "labels": [
+                    "http",
+                    "io"
+                  ],
                   "static": false,
                   "location": "/Users/kgilpin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468"
                 }

@@ -636,79 +636,82 @@
     "name": "API::APIKeysController revoke an existing api key",
     "feature": "API::APIKeysController revoke",
     "feature_group": "API API keys",
-    "labels": ["api_keys", "api"],
+    "labels": [
+      "api_keys",
+      "api"
+    ],
     "recorder": {
       "name": "rspec"
     },
     "fingerprints": [
       {
-        "appmap_digest": "62bc74d84ae50c3e12074bbde492efa4319255679d7f09957a135a8d1456e539",
+        "appmap_digest": "6d4ff270d2b91048c75b8e441deab98f9ab00b296c708c5e204b55571a88d78e",
         "canonicalization_algorithm": "classDependencies",
         "digest": "1122a143a6173e05866ee95629372b94c56c54e41024a3b0d02fb2e58ca382e1",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "62bc74d84ae50c3e12074bbde492efa4319255679d7f09957a135a8d1456e539",
+        "appmap_digest": "6d4ff270d2b91048c75b8e441deab98f9ab00b296c708c5e204b55571a88d78e",
         "canonicalization_algorithm": "classes",
         "digest": "9717f0de0c287764b0504895124418e6360e6114c62ea49cef434943127325b1",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "62bc74d84ae50c3e12074bbde492efa4319255679d7f09957a135a8d1456e539",
+        "appmap_digest": "6d4ff270d2b91048c75b8e441deab98f9ab00b296c708c5e204b55571a88d78e",
         "canonicalization_algorithm": "httpClientRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "62bc74d84ae50c3e12074bbde492efa4319255679d7f09957a135a8d1456e539",
+        "appmap_digest": "6d4ff270d2b91048c75b8e441deab98f9ab00b296c708c5e204b55571a88d78e",
         "canonicalization_algorithm": "httpServerRequests",
         "digest": "a11f7966c704cc09de820a3d9a8b0890cff8944090079498a0fd891fd06e9626",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "62bc74d84ae50c3e12074bbde492efa4319255679d7f09957a135a8d1456e539",
+        "appmap_digest": "6d4ff270d2b91048c75b8e441deab98f9ab00b296c708c5e204b55571a88d78e",
         "canonicalization_algorithm": "info",
         "digest": "464335ce01d8bf49b1b7d491e8945e6a341acc290f73b3e6e4e4c5d9ca026b6e",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "62bc74d84ae50c3e12074bbde492efa4319255679d7f09957a135a8d1456e539",
+        "appmap_digest": "6d4ff270d2b91048c75b8e441deab98f9ab00b296c708c5e204b55571a88d78e",
         "canonicalization_algorithm": "labels",
         "digest": "cbe2b872bc3cf917b59bdcde4123086b6ce504508ad7deecb52e6ebbfcc2723e",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "62bc74d84ae50c3e12074bbde492efa4319255679d7f09957a135a8d1456e539",
+        "appmap_digest": "6d4ff270d2b91048c75b8e441deab98f9ab00b296c708c5e204b55571a88d78e",
         "canonicalization_algorithm": "packageDependencies",
         "digest": "3f108b0a9ca874a5bc90a30f48da9b068269e0a91d01d3eb4d2af3fe25cb09f3",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "62bc74d84ae50c3e12074bbde492efa4319255679d7f09957a135a8d1456e539",
+        "appmap_digest": "6d4ff270d2b91048c75b8e441deab98f9ab00b296c708c5e204b55571a88d78e",
         "canonicalization_algorithm": "packages",
         "digest": "174dff39ae750e61f0eac4933a745eb8059c7e2a98a1c94c34f722037c80a468",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "62bc74d84ae50c3e12074bbde492efa4319255679d7f09957a135a8d1456e539",
+        "appmap_digest": "6d4ff270d2b91048c75b8e441deab98f9ab00b296c708c5e204b55571a88d78e",
         "canonicalization_algorithm": "sqlNormalized",
         "digest": "3e2a2e51ceef49123a28b3c6ceba2d11932340072e81ed1f0dddebdc35eeb345",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "62bc74d84ae50c3e12074bbde492efa4319255679d7f09957a135a8d1456e539",
+        "appmap_digest": "6d4ff270d2b91048c75b8e441deab98f9ab00b296c708c5e204b55571a88d78e",
         "canonicalization_algorithm": "sqlTables",
         "digest": "e51dc158c171357be7b1424c172b7a9a33f853d43e7cafb2fd676976e69d52fe",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "62bc74d84ae50c3e12074bbde492efa4319255679d7f09957a135a8d1456e539",
+        "appmap_digest": "6d4ff270d2b91048c75b8e441deab98f9ab00b296c708c5e204b55571a88d78e",
         "canonicalization_algorithm": "trace",
         "digest": "f1b7353d79444cc945b2f960dc0b830b88e75e8c0a9e387baad4113d4b0c9ba1",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "62bc74d84ae50c3e12074bbde492efa4319255679d7f09957a135a8d1456e539",
+        "appmap_digest": "6d4ff270d2b91048c75b8e441deab98f9ab00b296c708c5e204b55571a88d78e",
         "canonicalization_algorithm": "update",
         "digest": "7bf5c5c41ce8561cf8b535bd7fee0b307de013842bf5f735f1e5e195ddbcc707",
         "fingerprint_algorithm": "sha256"
@@ -739,7 +742,9 @@
             {
               "name": "authenticate",
               "type": "function",
-              "labels": ["provider.authentication"],
+              "labels": [
+                "provider.authentication"
+              ],
               "static": true,
               "location": "app/models/api_key.rb:52"
             },
@@ -812,7 +817,10 @@
                         {
                           "name": "generate",
                           "type": "function",
-                          "labels": ["serialization", "json"],
+                          "labels": [
+                            "serialization",
+                            "json"
+                          ],
                           "static": false,
                           "location": "JSON::Ext::Generator::State#generate"
                         }

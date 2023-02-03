@@ -22,7 +22,10 @@
                       {
                         "name": "generate",
                         "type": "function",
-                        "labels": ["serialization", "json"],
+                        "labels": [
+                          "serialization",
+                          "json"
+                        ],
                         "static": false,
                         "location": "JSON::Ext::Generator::State#generate"
                       }
@@ -37,7 +40,10 @@
                   {
                     "name": "parse",
                     "type": "function",
-                    "labels": ["serialization", "json"],
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ],
                     "static": false,
                     "location": "JSON::Ext::Parser#parse"
                   }
@@ -64,14 +70,20 @@
               {
                 "name": "request",
                 "type": "function",
-                "labels": ["http", "io"],
+                "labels": [
+                  "http",
+                  "io"
+                ],
                 "static": false,
                 "location": "/Users/kgilpin/tmp/appland/vendor/bundle/ruby/2.6.0/bundler/gems/appmap-ruby-ca633f5ec35e/lib/appmap/hook/method.rb:50"
               },
               {
                 "name": "request",
                 "type": "function",
-                "labels": ["http", "io"],
+                "labels": [
+                  "http",
+                  "io"
+                ],
                 "static": false,
                 "location": "/Users/kgilpin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468"
               }

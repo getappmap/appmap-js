@@ -1,68 +1,98 @@
 [
   {
     "kind": "function",
-    "labels": ["mvc.before_action"]
+    "labels": [
+      "mvc.before_action"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["mvc.after_action"]
+    "labels": [
+      "mvc.after_action"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["log"]
+    "labels": [
+      "log"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["log"]
+    "labels": [
+      "log"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["log"]
+    "labels": [
+      "log"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["log"]
+    "labels": [
+      "log"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["dao.materialize"],
+    "labels": [
+      "dao.materialize"
+    ],
     "children": [
       {
         "kind": "function",
-        "labels": ["log"]
+        "labels": [
+          "log"
+        ]
       }
     ]
   },
   {
     "kind": "function",
-    "labels": ["dao.materialize"],
+    "labels": [
+      "dao.materialize"
+    ],
     "children": [
       {
         "kind": "function",
-        "labels": ["log"]
+        "labels": [
+          "log"
+        ]
       }
     ]
   },
   {
     "kind": "function",
-    "labels": ["dao.materialize"],
+    "labels": [
+      "dao.materialize"
+    ],
     "children": [
       {
         "kind": "function",
-        "labels": ["log"]
+        "labels": [
+          "log"
+        ]
       }
     ]
   },
   {
     "kind": "function",
-    "labels": ["log"]
+    "labels": [
+      "log"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["mvc.before_action"]
+    "labels": [
+      "mvc.before_action"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["mvc.after_action"]
+    "labels": [
+      "mvc.after_action"
+    ]
   }
 ]

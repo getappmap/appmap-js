@@ -2,32 +2,47 @@
   {
     "kind": "http_server_request",
     "route": "GET /*unmatched_route",
-    "parameter_names": ["controller", "action"],
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["http.session.write"]
+            "labels": [
+              "http.session.write"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -36,253 +51,378 @@
   {
     "kind": "http_server_request",
     "route": null,
-    "parameter_names": ["controller", "action"],
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
-            "labels": ["mvc.render"],
+            "labels": [
+              "mvc.render"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["lang.eval"]
+                    "labels": [
+                      "lang.eval"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["dao.materialize"],
+                    "labels": [
+                      "dao.materialize"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "sql",
                         "sql": {
                           "analyzed_query": {
-                            "actions": ["select"],
-                            "tables": ["settings"],
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "settings"
+                            ],
                             "columns": [
                               "settings.*",
                               "settings.id",
@@ -298,11 +438,15 @@
                   },
                   {
                     "kind": "function",
-                    "labels": ["serialize"]
+                    "labels": [
+                      "serialize"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               }
@@ -310,7 +454,9 @@
           },
           {
             "kind": "function",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }

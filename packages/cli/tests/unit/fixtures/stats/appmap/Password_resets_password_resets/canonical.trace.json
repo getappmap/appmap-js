@@ -2,38 +2,53 @@
   {
     "kind": "http_server_request",
     "route": "GET /password_resets/new",
-    "parameter_names": ["controller", "action"],
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
         "function": "actionpack/ActionController::Instrumentation#process_action",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session.read"],
+                "labels": [
+                  "http.session.read"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
-                    "labels": ["http.session.write"]
+                    "labels": [
+                      "http.session.write"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   }
                 ]
               }
@@ -42,57 +57,79 @@
           {
             "kind": "function",
             "function": "app/controllers/PasswordResetsController#new",
-            "labels": ["access.public"]
+            "labels": [
+              "access.public"
+            ]
           },
           {
             "kind": "function",
             "function": "actionview/ActionView::Resolver#find_all",
-            "labels": ["mvc.template.resolver"]
+            "labels": [
+              "mvc.template.resolver"
+            ]
           },
           {
             "kind": "function",
             "function": "actionpack/ActionController::Renderers#render_to_body",
-            "labels": ["mvc.render"],
+            "labels": [
+              "mvc.render"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "app/views/app_views_password_resets_new_html_erb.render",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionview/ActionView::Resolver#find_all",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionview/ActionView::Resolver#find_all",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionview/ActionView::Resolver#find_all",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionview/ActionView::Resolver#find_all",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionview/ActionView::Resolver#find_all",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -102,56 +139,77 @@
                   {
                     "kind": "function",
                     "function": "sprockets/Sprockets::EncodingUtils.unmarshaled_deflated",
-                    "labels": ["deserialize.safe"],
+                    "labels": [
+                      "deserialize.safe"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "ruby/ActiveSupport::MarshalWithAutoloading.load",
-                        "labels": ["deserialize.unsafe"]
+                        "labels": [
+                          "deserialize.unsafe"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "app/views/app_views_layouts__shim_html_erb.render",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "app/views/app_views_layouts__header_html_erb.render",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "app/helpers/SessionsHelper#logged_in?",
-                        "labels": ["security.authentication"],
+                        "labels": [
+                          "security.authentication"
+                        ],
                         "children": [
                           {
                             "kind": "function",
@@ -161,12 +219,16 @@
                               {
                                 "kind": "function",
                                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                                "labels": ["http.session.read"]
+                                "labels": [
+                                  "http.session.read"
+                                ]
                               },
                               {
                                 "kind": "function",
                                 "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                                "labels": ["http.session.read"]
+                                "labels": [
+                                  "http.session.read"
+                                ]
                               }
                             ]
                           }
@@ -175,29 +237,39 @@
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Request::Session#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "app/views/app_views_layouts__footer_html_erb.render",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   }
@@ -208,12 +280,16 @@
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -222,43 +298,61 @@
   {
     "kind": "http_server_request",
     "route": "POST /password_resets",
-    "parameter_names": ["password_reset", "controller", "action"],
+    "parameter_names": [
+      "password_reset",
+      "controller",
+      "action"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
         "function": "actionpack/ActionController::Instrumentation#process_action",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session.read"],
+                "labels": [
+                  "http.session.read"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
-                    "labels": ["http.session.write"]
+                    "labels": [
+                      "http.session.write"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   }
                 ]
               }
@@ -267,12 +361,16 @@
           {
             "kind": "function",
             "function": "app/controllers/PasswordResetsController#create",
-            "labels": ["access.public"],
+            "labels": [
+              "access.public"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -280,61 +378,88 @@
                   "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
                 },
                 "analyzed_query": {
-                  "actions": ["select"],
-                  "tables": ["users"],
-                  "columns": ["users.*", "users.email"],
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
                   "joinCount": 0
                 }
               },
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session.read"]
+                "labels": [
+                  "http.session.read"
+                ]
               },
               {
                 "kind": "function",
                 "function": "actionpack/ActionController::Renderers#render_to_body",
-                "labels": ["mvc.render"],
+                "labels": [
+                  "mvc.render"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "app/views/app_views_password_resets_new_html_erb.render",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
@@ -344,56 +469,77 @@
                       {
                         "kind": "function",
                         "function": "sprockets/Sprockets::EncodingUtils.unmarshaled_deflated",
-                        "labels": ["deserialize.safe"],
+                        "labels": [
+                          "deserialize.safe"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "ruby/ActiveSupport::MarshalWithAutoloading.load",
-                            "labels": ["deserialize.unsafe"]
+                            "labels": [
+                              "deserialize.unsafe"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "json/JSON::Ext::Parser#parse",
-                        "labels": ["format.json.parse", "deserialize.safe"]
+                        "labels": [
+                          "format.json.parse",
+                          "deserialize.safe"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/app_views_layouts__shim_html_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/app_views_layouts__header_html_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "app/helpers/SessionsHelper#logged_in?",
-                            "labels": ["security.authentication"],
+                            "labels": [
+                              "security.authentication"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
@@ -403,12 +549,16 @@
                                   {
                                     "kind": "function",
                                     "function": "actionpack/ActionDispatch::Request::Session#[]",
-                                    "labels": ["http.session.read"]
+                                    "labels": [
+                                      "http.session.read"
+                                    ]
                                   },
                                   {
                                     "kind": "function",
                                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                                    "labels": ["http.session.read"]
+                                    "labels": [
+                                      "http.session.read"
+                                    ]
                                   }
                                 ]
                               }
@@ -417,24 +567,32 @@
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/app_views_layouts__footer_html_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -447,12 +605,16 @@
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -461,83 +623,117 @@
   {
     "kind": "http_server_request",
     "route": "POST /password_resets",
-    "parameter_names": ["password_reset", "controller", "action"],
+    "parameter_names": [
+      "password_reset",
+      "controller",
+      "action"
+    ],
     "status_code": 302,
     "children": [
       {
         "kind": "function",
         "function": "actionpack/ActionController::Instrumentation#process_action",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session.read"],
+                "labels": [
+                  "http.session.read"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
-                    "labels": ["http.session.write"]
+                    "labels": [
+                      "http.session.write"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#decrypt",
-                    "labels": ["crypto.decrypt"]
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#key=",
-                    "labels": ["crypto.set_key"]
+                    "labels": [
+                      "crypto.set_key"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#iv=",
-                    "labels": ["crypto.set_iv"]
+                    "labels": [
+                      "crypto.set_iv"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_tag=",
-                    "labels": ["crypto.set_auth_tag"]
+                    "labels": [
+                      "crypto.set_auth_tag"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_data=",
-                    "labels": ["crypto.set_auth_data"]
+                    "labels": [
+                      "crypto.set_auth_data"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -547,22 +743,32 @@
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#final",
-                    "labels": ["crypto.final"]
+                    "labels": [
+                      "crypto.final"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   }
                 ]
               }
@@ -571,12 +777,16 @@
           {
             "kind": "function",
             "function": "app/controllers/PasswordResetsController#create",
-            "labels": ["access.public"],
+            "labels": [
+              "access.public"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -584,9 +794,16 @@
                   "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
                 },
                 "analyzed_query": {
-                  "actions": ["select"],
-                  "tables": ["users"],
-                  "columns": ["users.*", "users.email"],
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
                   "joinCount": 0
                 }
               },
@@ -598,12 +815,17 @@
                   {
                     "kind": "function",
                     "function": "app/models/User.new_reset_token",
-                    "labels": ["secret"],
+                    "labels": [
+                      "secret"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "psych/Psych.dump",
-                        "labels": ["format.yaml.generate", "serialize"]
+                        "labels": [
+                          "format.yaml.generate",
+                          "serialize"
+                        ]
                       }
                     ]
                   },
@@ -615,29 +837,39 @@
                       {
                         "kind": "function",
                         "function": "openssl/OpenSSL::Random.random_bytes",
-                        "labels": ["random.secure"]
+                        "labels": [
+                          "random.secure"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -654,7 +886,9 @@
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -662,31 +896,47 @@
                       "normalized_query": "UPDATE \"users\" SET \"reset_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
                     },
                     "analyzed_query": {
-                      "actions": ["update"],
-                      "tables": ["users"],
-                      "columns": ["reset_digest", "updated_at", "users.id"],
+                      "actions": [
+                        "update"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "reset_digest",
+                        "updated_at",
+                        "users.id"
+                      ],
                       "joinCount": 0
                     }
                   },
                   {
                     "kind": "function",
                     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -703,22 +953,30 @@
                   {
                     "kind": "function",
                     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                    "labels": ["mvc.before_action"]
+                    "labels": [
+                      "mvc.before_action"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -735,7 +993,9 @@
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -743,31 +1003,47 @@
                       "normalized_query": "UPDATE \"users\" SET \"updated_at\" = ?, \"reset_sent_at\" = ? WHERE \"users\".\"id\" = ?"
                     },
                     "analyzed_query": {
-                      "actions": ["update"],
-                      "tables": ["users"],
-                      "columns": ["reset_sent_at", "updated_at", "users.id"],
+                      "actions": [
+                        "update"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "reset_sent_at",
+                        "updated_at",
+                        "users.id"
+                      ],
                       "joinCount": 0
                     }
                   },
                   {
                     "kind": "function",
                     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-                    "labels": ["mvc.after_action"]
+                    "labels": [
+                      "mvc.after_action"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -796,49 +1072,67 @@
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/app_views_layouts_mailer_html_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/app_views_layouts_mailer_text_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -847,34 +1141,46 @@
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session.read"]
+                "labels": [
+                  "http.session.read"
+                ]
               },
               {
                 "kind": "function",
                 "function": "actionpack/ActionController::Instrumentation#redirect_to",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               }
@@ -883,12 +1189,16 @@
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -897,83 +1207,118 @@
   {
     "kind": "http_server_request",
     "route": "GET /password_resets/{id}/edit",
-    "parameter_names": ["email", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 302,
     "children": [
       {
         "kind": "function",
         "function": "actionpack/ActionController::Instrumentation#process_action",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session.read"],
+                "labels": [
+                  "http.session.read"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
-                    "labels": ["http.session.write"]
+                    "labels": [
+                      "http.session.write"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#decrypt",
-                    "labels": ["crypto.decrypt"]
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#key=",
-                    "labels": ["crypto.set_key"]
+                    "labels": [
+                      "crypto.set_key"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#iv=",
-                    "labels": ["crypto.set_iv"]
+                    "labels": [
+                      "crypto.set_iv"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_tag=",
-                    "labels": ["crypto.set_auth_tag"]
+                    "labels": [
+                      "crypto.set_auth_tag"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_data=",
-                    "labels": ["crypto.set_auth_data"]
+                    "labels": [
+                      "crypto.set_auth_data"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -983,29 +1328,41 @@
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#final",
-                    "labels": ["crypto.final"]
+                    "labels": [
+                      "crypto.final"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -1013,40 +1370,57 @@
                   "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
                 },
                 "analyzed_query": {
-                  "actions": ["select"],
-                  "tables": ["users"],
-                  "columns": ["users.*", "users.email"],
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
                   "joinCount": 0
                 }
               },
               {
                 "kind": "function",
                 "function": "actionpack/ActionController::Instrumentation#redirect_to",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               }
             ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -1055,83 +1429,118 @@
   {
     "kind": "http_server_request",
     "route": "GET /password_resets/{id}/edit",
-    "parameter_names": ["email", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 302,
     "children": [
       {
         "kind": "function",
         "function": "actionpack/ActionController::Instrumentation#process_action",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session.read"],
+                "labels": [
+                  "http.session.read"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
-                    "labels": ["http.session.write"]
+                    "labels": [
+                      "http.session.write"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#decrypt",
-                    "labels": ["crypto.decrypt"]
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#key=",
-                    "labels": ["crypto.set_key"]
+                    "labels": [
+                      "crypto.set_key"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#iv=",
-                    "labels": ["crypto.set_iv"]
+                    "labels": [
+                      "crypto.set_iv"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_tag=",
-                    "labels": ["crypto.set_auth_tag"]
+                    "labels": [
+                      "crypto.set_auth_tag"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_data=",
-                    "labels": ["crypto.set_auth_data"]
+                    "labels": [
+                      "crypto.set_auth_data"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -1141,29 +1550,41 @@
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#final",
-                    "labels": ["crypto.final"]
+                    "labels": [
+                      "crypto.final"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -1171,40 +1592,57 @@
                   "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
                 },
                 "analyzed_query": {
-                  "actions": ["select"],
-                  "tables": ["users"],
-                  "columns": ["users.*", "users.email"],
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
                   "joinCount": 0
                 }
               },
               {
                 "kind": "function",
                 "function": "actionpack/ActionController::Instrumentation#redirect_to",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               }
             ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -1213,83 +1651,118 @@
   {
     "kind": "http_server_request",
     "route": "GET /password_resets/{id}/edit",
-    "parameter_names": ["email", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 302,
     "children": [
       {
         "kind": "function",
         "function": "actionpack/ActionController::Instrumentation#process_action",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session.read"],
+                "labels": [
+                  "http.session.read"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
-                    "labels": ["http.session.write"]
+                    "labels": [
+                      "http.session.write"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#decrypt",
-                    "labels": ["crypto.decrypt"]
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#key=",
-                    "labels": ["crypto.set_key"]
+                    "labels": [
+                      "crypto.set_key"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#iv=",
-                    "labels": ["crypto.set_iv"]
+                    "labels": [
+                      "crypto.set_iv"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_tag=",
-                    "labels": ["crypto.set_auth_tag"]
+                    "labels": [
+                      "crypto.set_auth_tag"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_data=",
-                    "labels": ["crypto.set_auth_data"]
+                    "labels": [
+                      "crypto.set_auth_data"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -1299,29 +1772,41 @@
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#final",
-                    "labels": ["crypto.final"]
+                    "labels": [
+                      "crypto.final"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -1329,9 +1814,16 @@
                   "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
                 },
                 "analyzed_query": {
-                  "actions": ["select"],
-                  "tables": ["users"],
-                  "columns": ["users.*", "users.email"],
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
                   "joinCount": 0
                 }
               },
@@ -1343,67 +1835,90 @@
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "psych/Psych.load",
-                    "labels": ["deserialize.unsafe"],
+                    "labels": [
+                      "deserialize.unsafe"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "psych/Psych.parse",
-                        "labels": ["format.yaml.parse"],
+                        "labels": [
+                          "format.yaml.parse"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "psych/Psych.parse_stream",
-                            "labels": ["format.yaml.parse"]
+                            "labels": [
+                              "format.yaml.parse"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/String#unpack",
-                        "labels": ["string.unpack"]
+                        "labels": [
+                          "string.unpack"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "psych/Psych.dump",
-                    "labels": ["format.yaml.generate", "serialize"]
+                    "labels": [
+                      "format.yaml.generate",
+                      "serialize"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "actionpack/ActionController::Instrumentation#redirect_to",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               }
             ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -1412,83 +1927,118 @@
   {
     "kind": "http_server_request",
     "route": "GET /password_resets/{id}/edit",
-    "parameter_names": ["email", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
         "function": "actionpack/ActionController::Instrumentation#process_action",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session.read"],
+                "labels": [
+                  "http.session.read"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
-                    "labels": ["http.session.write"]
+                    "labels": [
+                      "http.session.write"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#decrypt",
-                    "labels": ["crypto.decrypt"]
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#key=",
-                    "labels": ["crypto.set_key"]
+                    "labels": [
+                      "crypto.set_key"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#iv=",
-                    "labels": ["crypto.set_iv"]
+                    "labels": [
+                      "crypto.set_iv"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_tag=",
-                    "labels": ["crypto.set_auth_tag"]
+                    "labels": [
+                      "crypto.set_auth_tag"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_data=",
-                    "labels": ["crypto.set_auth_data"]
+                    "labels": [
+                      "crypto.set_auth_data"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -1498,29 +2048,41 @@
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#final",
-                    "labels": ["crypto.final"]
+                    "labels": [
+                      "crypto.final"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -1528,9 +2090,16 @@
                   "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
                 },
                 "analyzed_query": {
-                  "actions": ["select"],
-                  "tables": ["users"],
-                  "columns": ["users.*", "users.email"],
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
                   "joinCount": 0
                 }
               },
@@ -1542,36 +2111,49 @@
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "psych/Psych.load",
-                    "labels": ["deserialize.unsafe"],
+                    "labels": [
+                      "deserialize.unsafe"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "psych/Psych.parse",
-                        "labels": ["format.yaml.parse"],
+                        "labels": [
+                          "format.yaml.parse"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "psych/Psych.parse_stream",
-                            "labels": ["format.yaml.parse"]
+                            "labels": [
+                              "format.yaml.parse"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/String#unpack",
-                        "labels": ["string.unpack"]
+                        "labels": [
+                          "string.unpack"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "psych/Psych.dump",
-                    "labels": ["format.yaml.generate", "serialize"]
+                    "labels": [
+                      "format.yaml.generate",
+                      "serialize"
+                    ]
                   }
                 ]
               },
@@ -1585,74 +2167,102 @@
           {
             "kind": "function",
             "function": "app/controllers/PasswordResetsController#edit",
-            "labels": ["access.public"]
+            "labels": [
+              "access.public"
+            ]
           },
           {
             "kind": "function",
             "function": "actionview/ActionView::Resolver#find_all",
-            "labels": ["mvc.template.resolver"]
+            "labels": [
+              "mvc.template.resolver"
+            ]
           },
           {
             "kind": "function",
             "function": "actionpack/ActionController::Renderers#render_to_body",
-            "labels": ["mvc.render"],
+            "labels": [
+              "mvc.render"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "app/views/app_views_password_resets_edit_html_erb.render",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionview/ActionView::Resolver#find_all",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionview/ActionView::Resolver#find_all",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionview/ActionView::Resolver#find_all",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionview/ActionView::Resolver#find_all",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionview/ActionView::Resolver#find_all",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "app/views/app_views_shared__error_messages_html_erb.render",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -1662,56 +2272,77 @@
                   {
                     "kind": "function",
                     "function": "sprockets/Sprockets::EncodingUtils.unmarshaled_deflated",
-                    "labels": ["deserialize.safe"],
+                    "labels": [
+                      "deserialize.safe"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "ruby/ActiveSupport::MarshalWithAutoloading.load",
-                        "labels": ["deserialize.unsafe"]
+                        "labels": [
+                          "deserialize.unsafe"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "app/views/app_views_layouts__shim_html_erb.render",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "app/views/app_views_layouts__header_html_erb.render",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "app/helpers/SessionsHelper#logged_in?",
-                        "labels": ["security.authentication"],
+                        "labels": [
+                          "security.authentication"
+                        ],
                         "children": [
                           {
                             "kind": "function",
@@ -1721,12 +2352,16 @@
                               {
                                 "kind": "function",
                                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                                "labels": ["http.session.read"]
+                                "labels": [
+                                  "http.session.read"
+                                ]
                               },
                               {
                                 "kind": "function",
                                 "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                                "labels": ["http.session.read"]
+                                "labels": [
+                                  "http.session.read"
+                                ]
                               }
                             ]
                           }
@@ -1735,29 +2370,39 @@
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Request::Session#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "app/views/app_views_layouts__footer_html_erb.render",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   }
@@ -1768,12 +2413,16 @@
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -1782,83 +2431,119 @@
   {
     "kind": "http_server_request",
     "route": "PATCH /password_resets/{id}",
-    "parameter_names": ["email", "user", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "user",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
         "function": "actionpack/ActionController::Instrumentation#process_action",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session.read"],
+                "labels": [
+                  "http.session.read"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
-                    "labels": ["http.session.write"]
+                    "labels": [
+                      "http.session.write"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#decrypt",
-                    "labels": ["crypto.decrypt"]
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#key=",
-                    "labels": ["crypto.set_key"]
+                    "labels": [
+                      "crypto.set_key"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#iv=",
-                    "labels": ["crypto.set_iv"]
+                    "labels": [
+                      "crypto.set_iv"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_tag=",
-                    "labels": ["crypto.set_auth_tag"]
+                    "labels": [
+                      "crypto.set_auth_tag"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_data=",
-                    "labels": ["crypto.set_auth_data"]
+                    "labels": [
+                      "crypto.set_auth_data"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -1868,29 +2553,41 @@
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#final",
-                    "labels": ["crypto.final"]
+                    "labels": [
+                      "crypto.final"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -1898,9 +2595,16 @@
                   "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
                 },
                 "analyzed_query": {
-                  "actions": ["select"],
-                  "tables": ["users"],
-                  "columns": ["users.*", "users.email"],
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
                   "joinCount": 0
                 }
               },
@@ -1912,36 +2616,49 @@
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "psych/Psych.load",
-                    "labels": ["deserialize.unsafe"],
+                    "labels": [
+                      "deserialize.unsafe"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "psych/Psych.parse",
-                        "labels": ["format.yaml.parse"],
+                        "labels": [
+                          "format.yaml.parse"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "psych/Psych.parse_stream",
-                            "labels": ["format.yaml.parse"]
+                            "labels": [
+                              "format.yaml.parse"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/String#unpack",
-                        "labels": ["string.unpack"]
+                        "labels": [
+                          "string.unpack"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "psych/Psych.dump",
-                    "labels": ["format.yaml.generate", "serialize"]
+                    "labels": [
+                      "format.yaml.generate",
+                      "serialize"
+                    ]
                   }
                 ]
               },
@@ -1955,27 +2672,37 @@
           {
             "kind": "function",
             "function": "app/controllers/PasswordResetsController#update",
-            "labels": ["access.public"],
+            "labels": [
+              "access.public"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "openssl/OpenSSL::Random.random_bytes",
-                "labels": ["random.secure"]
+                "labels": [
+                  "random.secure"
+                ]
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                "labels": ["mvc.before_action"],
+                "labels": [
+                  "mvc.before_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -1992,7 +2719,9 @@
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -2000,9 +2729,16 @@
                       "normalized_query": "SELECT ? AS one FROM \"users\" WHERE \"users\".\"email\" = ? AND \"users\".\"id\" != ? LIMIT ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["users"],
-                      "columns": ["users.email", "users.id"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "users.email",
+                        "users.id"
+                      ],
                       "joinCount": 0
                     }
                   }
@@ -2011,17 +2747,23 @@
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -2038,64 +2780,88 @@
               {
                 "kind": "function",
                 "function": "actionpack/ActionController::Renderers#render_to_body",
-                "labels": ["mvc.render"],
+                "labels": [
+                  "mvc.render"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "app/views/app_views_password_resets_edit_html_erb.render",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/app_views_shared__error_messages_html_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
@@ -2105,56 +2871,77 @@
                       {
                         "kind": "function",
                         "function": "sprockets/Sprockets::EncodingUtils.unmarshaled_deflated",
-                        "labels": ["deserialize.safe"],
+                        "labels": [
+                          "deserialize.safe"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "ruby/ActiveSupport::MarshalWithAutoloading.load",
-                            "labels": ["deserialize.unsafe"]
+                            "labels": [
+                              "deserialize.unsafe"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "json/JSON::Ext::Parser#parse",
-                        "labels": ["format.json.parse", "deserialize.safe"]
+                        "labels": [
+                          "format.json.parse",
+                          "deserialize.safe"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/app_views_layouts__shim_html_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/app_views_layouts__header_html_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "app/helpers/SessionsHelper#logged_in?",
-                            "labels": ["security.authentication"],
+                            "labels": [
+                              "security.authentication"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
@@ -2164,12 +2951,16 @@
                                   {
                                     "kind": "function",
                                     "function": "actionpack/ActionDispatch::Request::Session#[]",
-                                    "labels": ["http.session.read"]
+                                    "labels": [
+                                      "http.session.read"
+                                    ]
                                   },
                                   {
                                     "kind": "function",
                                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                                    "labels": ["http.session.read"]
+                                    "labels": [
+                                      "http.session.read"
+                                    ]
                                   }
                                 ]
                               }
@@ -2178,29 +2969,39 @@
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "actionpack/ActionDispatch::Request::Session#[]",
-                        "labels": ["http.session.read"]
+                        "labels": [
+                          "http.session.read"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/app_views_layouts__footer_html_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -2213,12 +3014,16 @@
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -2227,83 +3032,119 @@
   {
     "kind": "http_server_request",
     "route": "PATCH /password_resets/{id}",
-    "parameter_names": ["email", "user", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "user",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
         "function": "actionpack/ActionController::Instrumentation#process_action",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session.read"],
+                "labels": [
+                  "http.session.read"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
-                    "labels": ["http.session.write"]
+                    "labels": [
+                      "http.session.write"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#decrypt",
-                    "labels": ["crypto.decrypt"]
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#key=",
-                    "labels": ["crypto.set_key"]
+                    "labels": [
+                      "crypto.set_key"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#iv=",
-                    "labels": ["crypto.set_iv"]
+                    "labels": [
+                      "crypto.set_iv"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_tag=",
-                    "labels": ["crypto.set_auth_tag"]
+                    "labels": [
+                      "crypto.set_auth_tag"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_data=",
-                    "labels": ["crypto.set_auth_data"]
+                    "labels": [
+                      "crypto.set_auth_data"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -2313,29 +3154,41 @@
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#final",
-                    "labels": ["crypto.final"]
+                    "labels": [
+                      "crypto.final"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -2343,9 +3196,16 @@
                   "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
                 },
                 "analyzed_query": {
-                  "actions": ["select"],
-                  "tables": ["users"],
-                  "columns": ["users.*", "users.email"],
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
                   "joinCount": 0
                 }
               },
@@ -2357,36 +3217,49 @@
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "psych/Psych.load",
-                    "labels": ["deserialize.unsafe"],
+                    "labels": [
+                      "deserialize.unsafe"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "psych/Psych.parse",
-                        "labels": ["format.yaml.parse"],
+                        "labels": [
+                          "format.yaml.parse"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "psych/Psych.parse_stream",
-                            "labels": ["format.yaml.parse"]
+                            "labels": [
+                              "format.yaml.parse"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/String#unpack",
-                        "labels": ["string.unpack"]
+                        "labels": [
+                          "string.unpack"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "psych/Psych.dump",
-                    "labels": ["format.yaml.generate", "serialize"]
+                    "labels": [
+                      "format.yaml.generate",
+                      "serialize"
+                    ]
                   }
                 ]
               },
@@ -2400,69 +3273,95 @@
           {
             "kind": "function",
             "function": "app/controllers/PasswordResetsController#update",
-            "labels": ["access.public"],
+            "labels": [
+              "access.public"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "actionpack/ActionController::Renderers#render_to_body",
-                "labels": ["mvc.render"],
+                "labels": [
+                  "mvc.render"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "app/views/app_views_password_resets_edit_html_erb.render",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/app_views_shared__error_messages_html_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
@@ -2472,56 +3371,77 @@
                       {
                         "kind": "function",
                         "function": "sprockets/Sprockets::EncodingUtils.unmarshaled_deflated",
-                        "labels": ["deserialize.safe"],
+                        "labels": [
+                          "deserialize.safe"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "ruby/ActiveSupport::MarshalWithAutoloading.load",
-                            "labels": ["deserialize.unsafe"]
+                            "labels": [
+                              "deserialize.unsafe"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "json/JSON::Ext::Parser#parse",
-                        "labels": ["format.json.parse", "deserialize.safe"]
+                        "labels": [
+                          "format.json.parse",
+                          "deserialize.safe"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/app_views_layouts__shim_html_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/app_views_layouts__header_html_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "app/helpers/SessionsHelper#logged_in?",
-                            "labels": ["security.authentication"],
+                            "labels": [
+                              "security.authentication"
+                            ],
                             "children": [
                               {
                                 "kind": "function",
@@ -2531,12 +3451,16 @@
                                   {
                                     "kind": "function",
                                     "function": "actionpack/ActionDispatch::Request::Session#[]",
-                                    "labels": ["http.session.read"]
+                                    "labels": [
+                                      "http.session.read"
+                                    ]
                                   },
                                   {
                                     "kind": "function",
                                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                                    "labels": ["http.session.read"]
+                                    "labels": [
+                                      "http.session.read"
+                                    ]
                                   }
                                 ]
                               }
@@ -2545,29 +3469,39 @@
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "actionpack/ActionDispatch::Request::Session#[]",
-                        "labels": ["http.session.read"]
+                        "labels": [
+                          "http.session.read"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/app_views_layouts__footer_html_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       }
@@ -2580,12 +3514,16 @@
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -2594,83 +3532,119 @@
   {
     "kind": "http_server_request",
     "route": "PATCH /password_resets/{id}",
-    "parameter_names": ["email", "user", "controller", "action", "id"],
+    "parameter_names": [
+      "email",
+      "user",
+      "controller",
+      "action",
+      "id"
+    ],
     "status_code": 302,
     "children": [
       {
         "kind": "function",
         "function": "actionpack/ActionController::Instrumentation#process_action",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session.read"],
+                "labels": [
+                  "http.session.read"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
-                    "labels": ["http.session.write"]
+                    "labels": [
+                      "http.session.write"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#decrypt",
-                    "labels": ["crypto.decrypt"]
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#key=",
-                    "labels": ["crypto.set_key"]
+                    "labels": [
+                      "crypto.set_key"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#iv=",
-                    "labels": ["crypto.set_iv"]
+                    "labels": [
+                      "crypto.set_iv"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_tag=",
-                    "labels": ["crypto.set_auth_tag"]
+                    "labels": [
+                      "crypto.set_auth_tag"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#auth_data=",
-                    "labels": ["crypto.set_auth_data"]
+                    "labels": [
+                      "crypto.set_auth_data"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -2680,29 +3654,41 @@
                   {
                     "kind": "function",
                     "function": "openssl/OpenSSL::Cipher#final",
-                    "labels": ["crypto.final"]
+                    "labels": [
+                      "crypto.final"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["format.json.parse", "deserialize.safe"]
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -2710,9 +3696,16 @@
                   "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
                 },
                 "analyzed_query": {
-                  "actions": ["select"],
-                  "tables": ["users"],
-                  "columns": ["users.*", "users.email"],
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
                   "joinCount": 0
                 }
               },
@@ -2724,36 +3717,49 @@
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack1",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "psych/Psych.load",
-                    "labels": ["deserialize.unsafe"],
+                    "labels": [
+                      "deserialize.unsafe"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "psych/Psych.parse",
-                        "labels": ["format.yaml.parse"],
+                        "labels": [
+                          "format.yaml.parse"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "psych/Psych.parse_stream",
-                            "labels": ["format.yaml.parse"]
+                            "labels": [
+                              "format.yaml.parse"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/String#unpack",
-                        "labels": ["string.unpack"]
+                        "labels": [
+                          "string.unpack"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "psych/Psych.dump",
-                    "labels": ["format.yaml.generate", "serialize"]
+                    "labels": [
+                      "format.yaml.generate",
+                      "serialize"
+                    ]
                   }
                 ]
               },
@@ -2767,27 +3773,37 @@
           {
             "kind": "function",
             "function": "app/controllers/PasswordResetsController#update",
-            "labels": ["access.public"],
+            "labels": [
+              "access.public"
+            ],
             "children": [
               {
                 "kind": "function",
                 "function": "openssl/OpenSSL::Random.random_bytes",
-                "labels": ["random.secure"]
+                "labels": [
+                  "random.secure"
+                ]
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                "labels": ["mvc.before_action"],
+                "labels": [
+                  "mvc.before_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -2804,7 +3820,9 @@
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -2812,9 +3830,16 @@
                       "normalized_query": "SELECT ? AS one FROM \"users\" WHERE \"users\".\"email\" = ? AND \"users\".\"id\" != ? LIMIT ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["users"],
-                      "columns": ["users.email", "users.id"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "users.email",
+                        "users.id"
+                      ],
                       "joinCount": 0
                     }
                   }
@@ -2823,32 +3848,44 @@
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                "labels": ["mvc.before_action"]
+                "labels": [
+                  "mvc.before_action"
+                ]
               },
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -2856,31 +3893,47 @@
                   "normalized_query": "UPDATE \"users\" SET \"password_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
                 },
                 "analyzed_query": {
-                  "actions": ["update"],
-                  "tables": ["users"],
-                  "columns": ["password_digest", "updated_at", "users.id"],
+                  "actions": [
+                    "update"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "password_digest",
+                    "updated_at",
+                    "users.id"
+                  ],
                   "joinCount": 0
                 }
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-                "labels": ["mvc.after_action"]
+                "labels": [
+                  "mvc.after_action"
+                ]
               },
               {
                 "kind": "function",
                 "function": "logger/Logger::LogDevice#write",
-                "labels": ["log"]
+                "labels": [
+                  "log"
+                ]
               },
               {
                 "kind": "sql",
@@ -2897,17 +3950,24 @@
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#destroy",
-                "labels": ["http.session.write"],
+                "labels": [
+                  "http.session.write"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Request::Session#clear",
-                    "labels": ["http.session.write", "http.session.clear"]
+                    "labels": [
+                      "http.session.write",
+                      "http.session.clear"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "ruby/String#unpack",
-                    "labels": ["string.unpack"]
+                    "labels": [
+                      "string.unpack"
+                    ]
                   }
                 ]
               },
@@ -2919,24 +3979,32 @@
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Request::Session#[]=",
-                    "labels": ["http.session.write"]
+                    "labels": [
+                      "http.session.write"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Request::Session#[]",
-                "labels": ["http.session.read"]
+                "labels": [
+                  "http.session.read"
+                ]
               },
               {
                 "kind": "function",
                 "function": "actionpack/ActionController::Instrumentation#redirect_to",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "logger/Logger::LogDevice#write",
-                    "labels": ["log"]
+                    "labels": [
+                      "log"
+                    ]
                   }
                 ]
               }
@@ -2945,12 +4013,16 @@
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-            "labels": ["mvc.after_action"]
+            "labels": [
+              "mvc.after_action"
+            ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }

@@ -1,1 +1,3 @@
-["app/controllers/GitHubAuthentication"]
+[
+  "app/controllers/GitHubAuthentication"
+]

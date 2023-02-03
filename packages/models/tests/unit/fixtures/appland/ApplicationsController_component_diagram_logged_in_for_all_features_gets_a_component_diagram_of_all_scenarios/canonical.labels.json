@@ -1,1 +1,7 @@
-["crypto", "json", "provider.authentication", "security", "serialization"]
+[
+  "crypto",
+  "json",
+  "provider.authentication",
+  "security",
+  "serialization"
+]

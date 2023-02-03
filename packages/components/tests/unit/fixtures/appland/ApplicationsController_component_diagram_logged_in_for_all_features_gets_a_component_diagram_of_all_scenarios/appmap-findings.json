@@ -50,73 +50,73 @@
       "feature_group": "Applications",
       "fingerprints": [
         {
-          "appmap_digest": "6a47045f45da51ba7f962c406f1146a527666d4fbcdec9b5d21e2b97559e70b1",
+          "appmap_digest": "ab1936c0f9906f1f92b87d15466cbdf7bcadb14c3bfc5b77654a2e2398575383",
           "canonicalization_algorithm": "classDependencies",
           "digest": "4ff08967d854e525951a386b1f5fb2e2fa7b4a7911b0c20f8981afcb8c307ae4",
           "fingerprint_algorithm": "sha256"
         },
         {
-          "appmap_digest": "6a47045f45da51ba7f962c406f1146a527666d4fbcdec9b5d21e2b97559e70b1",
+          "appmap_digest": "ab1936c0f9906f1f92b87d15466cbdf7bcadb14c3bfc5b77654a2e2398575383",
           "canonicalization_algorithm": "classes",
           "digest": "1e7c04f969a6f9af32e186d012f9ffbadf9e9b85efc59347b664e3a6c5ef0428",
           "fingerprint_algorithm": "sha256"
         },
         {
-          "appmap_digest": "6a47045f45da51ba7f962c406f1146a527666d4fbcdec9b5d21e2b97559e70b1",
+          "appmap_digest": "ab1936c0f9906f1f92b87d15466cbdf7bcadb14c3bfc5b77654a2e2398575383",
           "canonicalization_algorithm": "httpClientRequests",
           "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
           "fingerprint_algorithm": "sha256"
         },
         {
-          "appmap_digest": "6a47045f45da51ba7f962c406f1146a527666d4fbcdec9b5d21e2b97559e70b1",
+          "appmap_digest": "ab1936c0f9906f1f92b87d15466cbdf7bcadb14c3bfc5b77654a2e2398575383",
           "canonicalization_algorithm": "httpServerRequests",
           "digest": "0f0a39041c18df5c16fa1280a51196bb42824540661323179e71b0f109d601b1",
           "fingerprint_algorithm": "sha256"
         },
         {
-          "appmap_digest": "6a47045f45da51ba7f962c406f1146a527666d4fbcdec9b5d21e2b97559e70b1",
+          "appmap_digest": "ab1936c0f9906f1f92b87d15466cbdf7bcadb14c3bfc5b77654a2e2398575383",
           "canonicalization_algorithm": "info",
           "digest": "34bf8a27f5cf44f401b6141562a5573ac3260054a15af89bdd86659b495ad1f8",
           "fingerprint_algorithm": "sha256"
         },
         {
-          "appmap_digest": "6a47045f45da51ba7f962c406f1146a527666d4fbcdec9b5d21e2b97559e70b1",
+          "appmap_digest": "ab1936c0f9906f1f92b87d15466cbdf7bcadb14c3bfc5b77654a2e2398575383",
           "canonicalization_algorithm": "labels",
           "digest": "993564fe7fd95917ce6bb0dc5790bdcf74dc050bfbd2f50fea3357448e797231",
           "fingerprint_algorithm": "sha256"
         },
         {
-          "appmap_digest": "6a47045f45da51ba7f962c406f1146a527666d4fbcdec9b5d21e2b97559e70b1",
+          "appmap_digest": "ab1936c0f9906f1f92b87d15466cbdf7bcadb14c3bfc5b77654a2e2398575383",
           "canonicalization_algorithm": "packageDependencies",
           "digest": "e2c2a67beb1bd48195dd3e6ef79675ed95ba9cfd28918e93495f76c3dfc1f88e",
           "fingerprint_algorithm": "sha256"
         },
         {
-          "appmap_digest": "6a47045f45da51ba7f962c406f1146a527666d4fbcdec9b5d21e2b97559e70b1",
+          "appmap_digest": "ab1936c0f9906f1f92b87d15466cbdf7bcadb14c3bfc5b77654a2e2398575383",
           "canonicalization_algorithm": "packages",
           "digest": "f2a76d399a04e65069a15a29b5a325d53001c958d2ef7303a3bc6054c4f9cdc9",
           "fingerprint_algorithm": "sha256"
         },
         {
-          "appmap_digest": "6a47045f45da51ba7f962c406f1146a527666d4fbcdec9b5d21e2b97559e70b1",
+          "appmap_digest": "ab1936c0f9906f1f92b87d15466cbdf7bcadb14c3bfc5b77654a2e2398575383",
           "canonicalization_algorithm": "sqlNormalized",
           "digest": "39535734d186d20823a00a9d0fee37c6a7ac6a7ed163b28135f3fce0badede76",
           "fingerprint_algorithm": "sha256"
         },
         {
-          "appmap_digest": "6a47045f45da51ba7f962c406f1146a527666d4fbcdec9b5d21e2b97559e70b1",
+          "appmap_digest": "ab1936c0f9906f1f92b87d15466cbdf7bcadb14c3bfc5b77654a2e2398575383",
           "canonicalization_algorithm": "sqlTables",
           "digest": "c156176595c0c13cbddcb643590d7555b72aed2dfc707840cf66d0e4b3983ce3",
           "fingerprint_algorithm": "sha256"
         },
         {
-          "appmap_digest": "6a47045f45da51ba7f962c406f1146a527666d4fbcdec9b5d21e2b97559e70b1",
+          "appmap_digest": "ab1936c0f9906f1f92b87d15466cbdf7bcadb14c3bfc5b77654a2e2398575383",
           "canonicalization_algorithm": "trace",
           "digest": "619219bf0cf2ee02da0207068a7f891ef6743a8592bd4fea535cb217b163e9d3",
           "fingerprint_algorithm": "sha256"
         },
         {
-          "appmap_digest": "6a47045f45da51ba7f962c406f1146a527666d4fbcdec9b5d21e2b97559e70b1",
+          "appmap_digest": "ab1936c0f9906f1f92b87d15466cbdf7bcadb14c3bfc5b77654a2e2398575383",
           "canonicalization_algorithm": "update",
           "digest": "6d1d96eebd8f713a8442f37a0a890c671d6da57ed84d5448c229de9d4278db0a",
           "fingerprint_algorithm": "sha256"
@@ -130,7 +130,10 @@
       "rule": {
         "id": "authz-before-authn",
         "title": "Authorization performed before authentication",
-        "labels": ["security.authorization", "security.authentication"],
+        "labels": [
+          "security.authorization",
+          "security.authentication"
+        ],
         "scope": "http_server_request",
         "impactDomain": "Security",
         "enumerateScope": false,
@@ -155,7 +158,11 @@
         "title": "Deprecated cryptographic algorithm",
         "description": "---\nrule: deprecated-crypto-algorithm\nname: Deprecated crypto algorithm\ntitle: Deprecated cryptographic algorithm\nreferences:\n  A02:2021: https://owasp.org/Top10/A02_2021-Cryptographic_Failures/\nimpactDomain: Security\nlabels:\n  - crypto.encrypt\n  - crypto.decrypt\n  - crypto.digest\nscope: root\n---\n\nEnsure that cryptographic operations do not use deprecated algorithms.\n",
         "url": "https://appland.com/docs/analysis/rules-reference.html#deprecated-crypto-algorithm",
-        "labels": ["crypto.encrypt", "crypto.decrypt", "crypto.digest"],
+        "labels": [
+          "crypto.encrypt",
+          "crypto.decrypt",
+          "crypto.digest"
+        ],
         "scope": "root",
         "enumerateScope": true,
         "impactDomain": "Security",
@@ -176,7 +183,11 @@
       "rule": {
         "id": "deserialization-of-untrusted-data",
         "title": "Deserialization of untrusted data",
-        "labels": ["deserialize.unsafe", "deserialize.safe", "deserialize.sanitize"],
+        "labels": [
+          "deserialize.unsafe",
+          "deserialize.safe",
+          "deserialize.sanitize"
+        ],
         "impactDomain": "Security",
         "enumerateScope": false,
         "scope": "http_server_request",
@@ -200,7 +211,11 @@
       "rule": {
         "id": "exec-of-untrusted-command",
         "title": "Execution of untrusted system command",
-        "labels": ["system.exec", "system.exec.safe", "system.exec.sanitize"],
+        "labels": [
+          "system.exec",
+          "system.exec.safe",
+          "system.exec.sanitize"
+        ],
         "impactDomain": "Security",
         "enumerateScope": false,
         "references": {
@@ -246,7 +261,10 @@
         "id": "logout-without-session-reset",
         "title": "Logout without session reset",
         "scope": "http_server_request",
-        "labels": ["http.session.clear", "security.logout"],
+        "labels": [
+          "http.session.clear",
+          "security.logout"
+        ],
         "impactDomain": "Security",
         "enumerateScope": false,
         "references": {
@@ -314,7 +332,10 @@
       "rule": {
         "id": "secret-in-log",
         "title": "Secret in log",
-        "labels": ["secret", "log"],
+        "labels": [
+          "secret",
+          "log"
+        ],
         "scope": "root",
         "impactDomain": "Security",
         "enumerateScope": true,
@@ -397,7 +418,10 @@
         "title": "Unauthenticated encryption",
         "description": "Ensures that encryption operations use authenticated encryption.",
         "url": "https://appland.com/docs/analysis/rules-reference.html#unauthenticated-encryption",
-        "labels": ["crypto.encrypt", "crypto.set_auth_data"],
+        "labels": [
+          "crypto.encrypt",
+          "crypto.set_auth_data"
+        ],
         "enumerateScope": true,
         "impactDomain": "Security",
         "references": {
@@ -419,14 +443,19 @@
         "title": "Data update performed in GET or HEAD request",
         "scope": "http_server_request",
         "enumerateScope": true,
-        "labels": ["audit"],
+        "labels": [
+          "audit"
+        ],
         "impactDomain": "Maintainability",
         "description": "Finds SQL updates that are performed in an HTTP server `GET` request.",
         "url": "https://appland.com/docs/analysis/rules-reference.html#update-in-get-request"
       },
       "id": "update-in-get-request",
       "options": {
-        "_queryInclude": [{}, {}],
+        "_queryInclude": [
+          {},
+          {}
+        ],
         "_queryExclude": []
       },
       "scope": "http_server_request",
@@ -477,7 +506,9 @@
     "numFindings": 0,
     "appMapMetadata": {
       "labels": [],
-      "apps": ["appland/AppLand"],
+      "apps": [
+        "appland/AppLand"
+      ],
       "clients": [
         {
           "name": "appmap",

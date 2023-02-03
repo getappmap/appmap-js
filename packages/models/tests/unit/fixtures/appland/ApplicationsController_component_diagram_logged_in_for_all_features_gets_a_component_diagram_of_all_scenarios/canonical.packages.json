@@ -1,1 +1,7 @@
-["app/controllers", "app/models", "json", "lib/appland", "openssl"]
+[
+  "app/controllers",
+  "app/models",
+  "json",
+  "lib/appland",
+  "openssl"
+]

@@ -10,7 +10,9 @@
           {
             "name": "issue",
             "type": "function",
-            "labels": ["security"],
+            "labels": [
+              "security"
+            ],
             "static": true,
             "location": "app/models/api_key.rb:28"
           },
@@ -23,7 +25,10 @@
           {
             "name": "authenticate",
             "type": "function",
-            "labels": ["security", "provider.authenticate"],
+            "labels": [
+              "security",
+              "provider.authenticate"
+            ],
             "static": true,
             "location": "app/models/api_key.rb:51"
           },
@@ -42,7 +47,9 @@
           {
             "name": "revoke",
             "type": "function",
-            "labels": ["security"],
+            "labels": [
+              "security"
+            ],
             "static": true,
             "location": "app/models/api_key.rb:40"
           }
@@ -97,7 +104,10 @@
                       {
                         "name": "generate",
                         "type": "function",
-                        "labels": ["serialization", "json"],
+                        "labels": [
+                          "serialization",
+                          "json"
+                        ],
                         "static": false,
                         "location": "JSON::Ext::Generator::State#generate"
                       }

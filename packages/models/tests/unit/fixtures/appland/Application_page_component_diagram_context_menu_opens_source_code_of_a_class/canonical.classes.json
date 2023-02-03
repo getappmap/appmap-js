@@ -1,1 +1,5 @@
-["json/JSON::Ext::Generator::State", "json/JSON::Ext::Parser", "net/http/Net::HTTP"]
+[
+  "json/JSON::Ext::Generator::State",
+  "json/JSON::Ext::Parser",
+  "net/http/Net::HTTP"
+]

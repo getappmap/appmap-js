@@ -2,7 +2,13 @@
   {
     "kind": "http_server_request",
     "route": "GET /:organization_id/:id(.:format)",
-    "parameter_names": ["mapset", "controller", "action", "organization_id", "id"],
+    "parameter_names": [
+      "mapset",
+      "controller",
+      "action",
+      "organization_id",
+      "id"
+    ],
     "status_code": 200,
     "children": [
       {
@@ -13,22 +19,34 @@
       {
         "kind": "function",
         "function": "openssl/OpenSSL::Cipher#decrypt",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
         "function": "openssl/OpenSSL::Cipher#final",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
         "function": "json/JSON::Ext::Parser#parse",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
         "function": "json/JSON::Ext::Parser#parse",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
@@ -48,7 +66,9 @@
               {
                 "kind": "function",
                 "function": "app/controllers/CurrentUser#lookup_session_user",
-                "labels": ["provider.authentication"],
+                "labels": [
+                  "provider.authentication"
+                ],
                 "children": [
                   {
                     "kind": "function",
@@ -61,9 +81,16 @@
                           "normalized_query": "SELECT * FROM \"users\" WHERE (\"id\" = ?) LIMIT ?"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["users"],
-                          "columns": ["*", "id"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "users"
+                          ],
+                          "columns": [
+                            "*",
+                            "id"
+                          ],
                           "joinCount": 0
                         }
                       }
@@ -98,7 +125,10 @@
               {
                 "kind": "function",
                 "function": "json/JSON::Ext::Parser#parse",
-                "labels": ["serialization", "json"]
+                "labels": [
+                  "serialization",
+                  "json"
+                ]
               },
               {
                 "kind": "function",
@@ -150,9 +180,20 @@
                           "normalized_query": "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"apps\".\"slug\" = ?) AND (\"orgs\".\"slug\" = ?)) LIMIT ?"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["apps", "orgs"],
-                          "columns": ["apps.*", "apps.org_id", "apps.slug", "orgs.id", "orgs.slug"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "apps",
+                            "orgs"
+                          ],
+                          "columns": [
+                            "apps.*",
+                            "apps.org_id",
+                            "apps.slug",
+                            "orgs.id",
+                            "orgs.slug"
+                          ],
                           "joinCount": 1
                         }
                       }
@@ -183,8 +224,14 @@
                       "normalized_query": "SELECT *, \"mapsets\".\"name\", \"mapsets\".\"branch\", \"mapsets\".\"commit\", \"mapsets\".\"environment\", \"mapsets\".\"version\", (SELECT \"login\" FROM \"users\" WHERE (\"id\" = \"user_id\")), (SELECT count(*) AS \"scenario_count\" FROM \"scenarios\" WHERE (\"mapset_id\" = \"mapsets\".\"id\")) FROM \"mapsets_preference_ordered\" AS \"mapsets\" WHERE (\"mapsets\".\"app_id\" = ?)"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["mapsets_preference_ordered", "scenarios", "users"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "mapsets_preference_ordered",
+                        "scenarios",
+                        "users"
+                      ],
                       "columns": [
                         "*",
                         "id",
@@ -222,9 +269,16 @@
                   "normalized_query": "SELECT * FROM \"mapsets\" WHERE \"id\" = ?"
                 },
                 "analyzed_query": {
-                  "actions": ["select"],
-                  "tables": ["mapsets"],
-                  "columns": ["*", "id"],
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "mapsets"
+                  ],
+                  "columns": [
+                    "*",
+                    "id"
+                  ],
                   "joinCount": 0
                 }
               }
@@ -251,8 +305,13 @@
                       "normalized_query": "SELECT * FROM \"scenarios\" WHERE ((\"scenarios\".\"mapset_id\" = ?) AND (\"data\" IS ?) AND ((\"scenarios\".\"sha_256\" NOT IN (SELECT \"scenario_processing_errors\".\"sha_256\" FROM \"scenario_processing_errors\" WHERE ((\"version\" = ?) AND (\"scenario_processing_errors\".\"sha_256\" IS NOT ?)))) OR (\"scenarios\".\"sha_256\" IS ?)))"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["scenario_processing_errors", "scenarios"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "scenario_processing_errors",
+                        "scenarios"
+                      ],
                       "columns": [
                         "*",
                         "data",
@@ -294,8 +353,14 @@
                       "normalized_query": "SELECT \"apps\".\"id\", \"apps\".\"name\" AS \"name\", \"orgs\".\"slug\" AS \"org_slug\", \"orgs\".\"name\" AS \"org_name\", \"url\", \"apps\".\"created_at\", \"apps\".\"slug\", \"users\".\"login\" AS \"owner_login\" FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") INNER JOIN \"users\" ON (\"users\".\"id\" = \"orgs\".\"owner_id\") ORDER BY \"name\" OFFSET ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["apps", "orgs", "users"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "apps",
+                        "orgs",
+                        "users"
+                      ],
                       "columns": [
                         "apps.created_at",
                         "apps.id",
@@ -332,8 +397,13 @@
                       "normalized_query": "SELECT * FROM \"scenarios\" WHERE ((\"scenarios\".\"mapset_id\" = ?) AND (\"data\" IS ?) AND ((\"scenarios\".\"sha_256\" NOT IN (SELECT \"scenario_processing_errors\".\"sha_256\" FROM \"scenario_processing_errors\" WHERE ((\"version\" = ?) AND (\"scenario_processing_errors\".\"sha_256\" IS NOT ?)))) OR (\"scenarios\".\"sha_256\" IS ?)))"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["scenario_processing_errors", "scenarios"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "scenario_processing_errors",
+                        "scenarios"
+                      ],
                       "columns": [
                         "*",
                         "data",
@@ -375,8 +445,13 @@
                           "normalized_query": "SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>? AS \"name\", metadata->>? AS \"feature_group\", metadata->>? AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\", \"metadata\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = ?) ORDER BY \"scenarios\".\"created_at\" DESC"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["mapsets", "scenarios"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "mapsets",
+                            "scenarios"
+                          ],
                           "columns": [
                             "mapsets.app_id",
                             "mapsets.id",
@@ -410,9 +485,18 @@
                           "normalized_query": "SELECT count(*) AS \"v\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = ?) LIMIT ?"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["mapsets", "scenarios"],
-                          "columns": ["*", "mapsets.id", "scenarios.mapset_id"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "mapsets",
+                            "scenarios"
+                          ],
+                          "columns": [
+                            "*",
+                            "mapsets.id",
+                            "scenarios.mapset_id"
+                          ],
                           "joinCount": 1
                         }
                       }
@@ -436,8 +520,13 @@
                           "normalized_query": "SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>? AS \"name\", metadata->>? AS \"feature_group\", metadata->>? AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = ?) ORDER BY metadata->>? LIMIT ? OFFSET ?"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["mapsets", "scenarios"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "mapsets",
+                            "scenarios"
+                          ],
                           "columns": [
                             "mapsets.app_id",
                             "mapsets.id",
@@ -471,8 +560,13 @@
                           "normalized_query": "SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>? AS \"name\", metadata->>? AS \"feature_group\", metadata->>? AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = ?) ORDER BY \"scenarios\".\"created_at\" DESC"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["mapsets", "scenarios"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "mapsets",
+                            "scenarios"
+                          ],
                           "columns": [
                             "mapsets.app_id",
                             "mapsets.id",
@@ -499,9 +593,17 @@
                       "normalized_query": "SELECT DISTINCT \"caller\", \"callee\" FROM \"scenarios\", lateral jsonb_to_recordset(class_invocation_graph) as graph(caller q_class, callee q_class) WHERE (? = ?)"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["scenarios"],
-                      "columns": ["callee", "caller", "class_invocation_graph"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "scenarios"
+                      ],
+                      "columns": [
+                        "callee",
+                        "caller",
+                        "class_invocation_graph"
+                      ],
                       "joinCount": 1
                     }
                   },
@@ -528,9 +630,15 @@
                       "normalized_query": "SELECT scenarios.metadata->?->>? AS \"repository_url\", scenarios.metadata->?->>? AS \"commit\" FROM \"scenarios\" WHERE ((scenarios.metadata->?->>? IS NOT ?) AND (scenarios.metadata->?->>? IS NOT ?) AND (? = ?)) LIMIT ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["scenarios"],
-                      "columns": ["scenarios.metadata"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "scenarios"
+                      ],
+                      "columns": [
+                        "scenarios.metadata"
+                      ],
                       "joinCount": 0
                     }
                   },
@@ -545,16 +653,25 @@
                       "normalized_query": "SELECT jsonb_object_agg(compute_code_objects_by_location(data->?)) AS \"code_objects_by_location\" FROM \"scenarios\" WHERE (? = ?) LIMIT ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["scenarios"],
-                      "columns": ["data"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "scenarios"
+                      ],
+                      "columns": [
+                        "data"
+                      ],
                       "joinCount": 0
                     }
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -574,9 +691,16 @@
                       "normalized_query": "SELECT * FROM \"apps\" WHERE \"id\" = ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["apps"],
-                      "columns": ["*", "id"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "apps"
+                      ],
+                      "columns": [
+                        "*",
+                        "id"
+                      ],
                       "joinCount": 0
                     }
                   },
@@ -592,7 +716,9 @@
           {
             "kind": "function",
             "function": "action_view/ActionView::Renderer#render",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
@@ -610,9 +736,16 @@
                           "normalized_query": "SELECT * FROM \"orgs\" WHERE \"id\" = ?"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["orgs"],
-                          "columns": ["*", "id"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "orgs"
+                          ],
+                          "columns": [
+                            "*",
+                            "id"
+                          ],
                           "joinCount": 0
                         }
                       },
@@ -658,9 +791,16 @@
                       "normalized_query": "SELECT * FROM \"mapset_caches\" WHERE (\"mapset_id\" = ?) LIMIT ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["mapset_caches"],
-                      "columns": ["*", "mapset_id"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "mapset_caches"
+                      ],
+                      "columns": [
+                        "*",
+                        "mapset_id"
+                      ],
                       "joinCount": 0
                     }
                   },
@@ -670,7 +810,9 @@
                       "normalized_query": "SELECT mapset_digest(?) AS \"digest\" LIMIT ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
+                      "actions": [
+                        "select"
+                      ],
                       "tables": [],
                       "columns": [],
                       "joinCount": 0
@@ -682,9 +824,16 @@
                       "normalized_query": "INSERT INTO \"mapset_caches\" (\"mapset_id\", \"sha_256\") VALUES (?, ?) RETURNING *"
                     },
                     "analyzed_query": {
-                      "actions": ["insert"],
-                      "tables": ["mapset_caches"],
-                      "columns": ["mapset_id", "sha_256"],
+                      "actions": [
+                        "insert"
+                      ],
+                      "tables": [
+                        "mapset_caches"
+                      ],
+                      "columns": [
+                        "mapset_id",
+                        "sha_256"
+                      ],
                       "joinCount": 0
                     }
                   },
@@ -719,8 +868,13 @@
                                       "normalized_query": "WITH \"sql_queries\" AS (SELECT sql_query.sql_query ->> ?::text AS \"database_type\", COALESCE(sql_query.sql_query ->> ?, sql_query.sql_query ->> ?)::text AS \"sql\" FROM \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_sql_queries, ?::jsonb)) sql_query(id integer, sql_query jsonb) WHERE (\"mapset_id\" = ?)) SELECT DISTINCT \"sql\" FROM \"sql_queries\""
                                     },
                                     "analyzed_query": {
-                                      "actions": ["select"],
-                                      "tables": ["scenarios", "sql_queries"],
+                                      "actions": [
+                                        "select"
+                                      ],
+                                      "tables": [
+                                        "scenarios",
+                                        "sql_queries"
+                                      ],
                                       "columns": [
                                         "mapset_id",
                                         "scenarios.events_sql_queries",
@@ -737,7 +891,10 @@
                           {
                             "kind": "function",
                             "function": "json/JSON::Ext::Generator::State#generate",
-                            "labels": ["serialization", "json"]
+                            "labels": [
+                              "serialization",
+                              "json"
+                            ]
                           },
                           {
                             "kind": "sql",
@@ -745,9 +902,16 @@
                               "normalized_query": "UPDATE \"mapset_caches\" SET \"data_model\" = ?::jsonb WHERE (\"id\" = ?)"
                             },
                             "analyzed_query": {
-                              "actions": ["update"],
-                              "tables": ["mapset_caches"],
-                              "columns": ["data_model", "id"],
+                              "actions": [
+                                "update"
+                              ],
+                              "tables": [
+                                "mapset_caches"
+                              ],
+                              "columns": [
+                                "data_model",
+                                "id"
+                              ],
                               "joinCount": 0
                             }
                           }
@@ -764,9 +928,16 @@
                               "normalized_query": "SELECT * FROM \"mapsets\" WHERE (\"id\" = ?) LIMIT ?"
                             },
                             "analyzed_query": {
-                              "actions": ["select"],
-                              "tables": ["mapsets"],
-                              "columns": ["*", "id"],
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "mapsets"
+                              ],
+                              "columns": [
+                                "*",
+                                "id"
+                              ],
                               "joinCount": 0
                             }
                           },
@@ -776,8 +947,12 @@
                               "normalized_query": "SELECT metadata->>? AS \"name\", \"uuid\", \"events_http_server_requests\", \"events_http_server_responses\" FROM \"scenarios\" WHERE ((\"scenarios\".\"mapset_id\" = ?) AND ((\"events_http_server_requests\" IS NOT ?) OR (\"events_http_server_responses\" IS NOT ?)))"
                             },
                             "analyzed_query": {
-                              "actions": ["select"],
-                              "tables": ["scenarios"],
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "scenarios"
+                              ],
                               "columns": [
                                 "events_http_server_requests",
                                 "events_http_server_responses",
@@ -795,7 +970,10 @@
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Generator::State#generate",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -803,9 +981,16 @@
                       "normalized_query": "UPDATE \"mapset_caches\" SET \"web_resources\" = ?::jsonb WHERE (\"id\" = ?)"
                     },
                     "analyzed_query": {
-                      "actions": ["update"],
-                      "tables": ["mapset_caches"],
-                      "columns": ["id", "web_resources"],
+                      "actions": [
+                        "update"
+                      ],
+                      "tables": [
+                        "mapset_caches"
+                      ],
+                      "columns": [
+                        "id",
+                        "web_resources"
+                      ],
                       "joinCount": 0
                     }
                   }
@@ -831,44 +1016,60 @@
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "action_view/ActionView::Renderer#render",
-                    "labels": ["view"],
+                    "labels": [
+                      "view"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "action_view/ActionView::Renderer#render",
-                        "labels": ["view"]
+                        "labels": [
+                          "view"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "action_view/ActionView::Renderer#render",
-                        "labels": ["view"]
+                        "labels": [
+                          "view"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "action_view/ActionView::Renderer#render",
-                        "labels": ["view"]
+                        "labels": [
+                          "view"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "action_view/ActionView::Renderer#render",
-                        "labels": ["view"]
+                        "labels": [
+                          "view"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "action_view/ActionView::Renderer#render",
-                        "labels": ["view"]
+                        "labels": [
+                          "view"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "action_view/ActionView::Renderer#render",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   }
                 ]
               },
@@ -916,7 +1117,9 @@
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
@@ -934,9 +1137,16 @@
                           "normalized_query": "SELECT * FROM \"users\" WHERE \"id\" = ?"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["users"],
-                          "columns": ["*", "id"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "users"
+                          ],
+                          "columns": [
+                            "*",
+                            "id"
+                          ],
                           "joinCount": 0
                         }
                       }
@@ -968,8 +1178,13 @@
                                   "normalized_query": "WITH \"recording_methods\" AS (SELECT scenarios.metadata->?->>? AS \"recording_method\" FROM \"scenarios\" WHERE ((scenarios.metadata->?->>? IS NOT ?) AND (\"mapset_id\" = ?))) SELECT \"recording_method\", count(*) AS \"num_scenarios\" FROM \"recording_methods\" GROUP BY \"recording_method\""
                                 },
                                 "analyzed_query": {
-                                  "actions": ["select"],
-                                  "tables": ["recording_methods", "scenarios"],
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "recording_methods",
+                                    "scenarios"
+                                  ],
                                   "columns": [
                                     "*",
                                     "mapset_id",
@@ -986,7 +1201,10 @@
                       {
                         "kind": "function",
                         "function": "json/JSON::Ext::Generator::State#generate",
-                        "labels": ["serialization", "json"]
+                        "labels": [
+                          "serialization",
+                          "json"
+                        ]
                       },
                       {
                         "kind": "sql",
@@ -994,9 +1212,16 @@
                           "normalized_query": "UPDATE \"mapset_caches\" SET \"recording_method_counts\" = ?::jsonb WHERE (\"id\" = ?)"
                         },
                         "analyzed_query": {
-                          "actions": ["update"],
-                          "tables": ["mapset_caches"],
-                          "columns": ["id", "recording_method_counts"],
+                          "actions": [
+                            "update"
+                          ],
+                          "tables": [
+                            "mapset_caches"
+                          ],
+                          "columns": [
+                            "id",
+                            "recording_method_counts"
+                          ],
                           "joinCount": 0
                         }
                       }
@@ -1057,8 +1282,14 @@
                                   "normalized_query": "WITH \"code_objects\" AS (SELECT DISTINCT \"type\", \"object_name\" FROM \"scenarios\" INNER JOIN \"scenario_code_objects\" ON (\"scenario_code_objects\".\"scenario_id\" = \"scenarios\".\"id\") WHERE (\"mapset_id\" = ?)) SELECT \"type\", count(\"object_name\") AS \"num_code_objects\" FROM \"code_objects\" GROUP BY \"type\""
                                 },
                                 "analyzed_query": {
-                                  "actions": ["select"],
-                                  "tables": ["code_objects", "scenario_code_objects", "scenarios"],
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "code_objects",
+                                    "scenario_code_objects",
+                                    "scenarios"
+                                  ],
                                   "columns": [
                                     "mapset_id",
                                     "object_name",
@@ -1078,7 +1309,10 @@
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Generator::State#generate",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -1086,9 +1320,16 @@
                       "normalized_query": "UPDATE \"mapset_caches\" SET \"code_object_counts\" = ?::jsonb WHERE (\"id\" = ?)"
                     },
                     "analyzed_query": {
-                      "actions": ["update"],
-                      "tables": ["mapset_caches"],
-                      "columns": ["code_object_counts", "id"],
+                      "actions": [
+                        "update"
+                      ],
+                      "tables": [
+                        "mapset_caches"
+                      ],
+                      "columns": [
+                        "code_object_counts",
+                        "id"
+                      ],
                       "joinCount": 0
                     }
                   }
@@ -1097,7 +1338,9 @@
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               },
               {
                 "kind": "function",
@@ -1130,8 +1373,13 @@
                                   "normalized_query": "WITH \"key_data_stats\" AS (SELECT DISTINCT http_server_request.http_server_request ->> ?::text AS \"request_method\", http_server_request.http_server_request ->> ?::text AS \"path_info\" FROM \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_http_server_requests, ?::jsonb)) http_server_request(id integer, http_server_request jsonb) WHERE (\"mapset_id\" = ?)) SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT ?"
                                 },
                                 "analyzed_query": {
-                                  "actions": ["select"],
-                                  "tables": ["key_data_stats", "scenarios"],
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "key_data_stats",
+                                    "scenarios"
+                                  ],
                                   "columns": [
                                     "*",
                                     "http_server_request.http_server_request",
@@ -1159,8 +1407,13 @@
                                   "normalized_query": "WITH \"key_data_stats\" AS (SELECT DISTINCT sql_query.sql_query ->> ?::text AS \"database_type\", COALESCE(sql_query.sql_query ->> ?, sql_query.sql_query ->> ?)::text AS \"sql\" FROM \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_sql_queries, ?::jsonb)) sql_query(id integer, sql_query jsonb) WHERE (\"mapset_id\" = ?)) SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT ?"
                                 },
                                 "analyzed_query": {
-                                  "actions": ["select"],
-                                  "tables": ["key_data_stats", "scenarios"],
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "key_data_stats",
+                                    "scenarios"
+                                  ],
                                   "columns": [
                                     "*",
                                     "mapset_id",
@@ -1188,8 +1441,14 @@
                                   "normalized_query": "WITH \"key_data_stats\" AS (WITH \"messages\" AS (SELECT array_agg(msg.name) AS \"message_fields\" FROM \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_messages, ?::jsonb)) message(id integer, message jsonb), LATERAL jsonb_to_recordset(message.message) msg(name text) WHERE (\"mapset_id\" = ?) GROUP BY \"message\".\"id\") SELECT DISTINCT \"message_fields\" FROM \"messages\") SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT ?"
                                 },
                                 "analyzed_query": {
-                                  "actions": ["select"],
-                                  "tables": ["key_data_stats", "messages", "scenarios"],
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "key_data_stats",
+                                    "messages",
+                                    "scenarios"
+                                  ],
                                   "columns": [
                                     "*",
                                     "mapset_id",
@@ -1211,7 +1470,10 @@
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Generator::State#generate",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -1219,9 +1481,16 @@
                       "normalized_query": "UPDATE \"mapset_caches\" SET \"key_stats_counts\" = ?::jsonb WHERE (\"id\" = ?)"
                     },
                     "analyzed_query": {
-                      "actions": ["update"],
-                      "tables": ["mapset_caches"],
-                      "columns": ["id", "key_stats_counts"],
+                      "actions": [
+                        "update"
+                      ],
+                      "tables": [
+                        "mapset_caches"
+                      ],
+                      "columns": [
+                        "id",
+                        "key_stats_counts"
+                      ],
                       "joinCount": 0
                     }
                   }
@@ -1230,7 +1499,9 @@
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               },
               {
                 "kind": "function",
@@ -1247,22 +1518,30 @@
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               },
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               },
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               },
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               },
               {
                 "kind": "function",
@@ -1279,7 +1558,10 @@
               {
                 "kind": "function",
                 "function": "json/JSON::Ext::Generator::State#generate",
-                "labels": ["serialization", "json"]
+                "labels": [
+                  "serialization",
+                  "json"
+                ]
               },
               {
                 "kind": "function",
@@ -1289,53 +1571,76 @@
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Generator::State#generate",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "openssl/Digest::Instance#digest",
-                "labels": ["security", "crypto"]
+                "labels": [
+                  "security",
+                  "crypto"
+                ]
               },
               {
                 "kind": "function",
                 "function": "json/JSON::Ext::Parser#parse",
-                "labels": ["serialization", "json"]
+                "labels": [
+                  "serialization",
+                  "json"
+                ]
               },
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "action_view/ActionView::Renderer#render",
-                    "labels": ["view"],
+                    "labels": [
+                      "view"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "openssl/Digest::Instance#digest",
-                        "labels": ["security", "crypto"]
+                        "labels": [
+                          "security",
+                          "crypto"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "json/JSON::Ext::Parser#parse",
-                        "labels": ["serialization", "json"]
+                        "labels": [
+                          "serialization",
+                          "json"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "action_view/ActionView::Renderer#render",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
@@ -1354,7 +1659,9 @@
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
@@ -1371,7 +1678,9 @@
                   {
                     "kind": "function",
                     "function": "action_view/ActionView::Renderer#render",
-                    "labels": ["view"],
+                    "labels": [
+                      "view"
+                    ],
                     "children": [
                       {
                         "kind": "function",
@@ -1398,7 +1707,13 @@
   {
     "kind": "http_server_request",
     "route": "GET /:organization_id/:id(.:format)",
-    "parameter_names": ["mapset", "controller", "action", "organization_id", "id"],
+    "parameter_names": [
+      "mapset",
+      "controller",
+      "action",
+      "organization_id",
+      "id"
+    ],
     "status_code": 200,
     "children": [
       {
@@ -1409,22 +1724,34 @@
       {
         "kind": "function",
         "function": "openssl/OpenSSL::Cipher#decrypt",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
         "function": "openssl/OpenSSL::Cipher#final",
-        "labels": ["security", "crypto"]
+        "labels": [
+          "security",
+          "crypto"
+        ]
       },
       {
         "kind": "function",
         "function": "json/JSON::Ext::Parser#parse",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
         "function": "json/JSON::Ext::Parser#parse",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       },
       {
         "kind": "function",
@@ -1444,7 +1771,9 @@
               {
                 "kind": "function",
                 "function": "app/controllers/CurrentUser#lookup_session_user",
-                "labels": ["provider.authentication"],
+                "labels": [
+                  "provider.authentication"
+                ],
                 "children": [
                   {
                     "kind": "function",
@@ -1457,9 +1786,16 @@
                           "normalized_query": "SELECT * FROM \"users\" WHERE (\"id\" = ?) LIMIT ?"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["users"],
-                          "columns": ["*", "id"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "users"
+                          ],
+                          "columns": [
+                            "*",
+                            "id"
+                          ],
                           "joinCount": 0
                         }
                       }
@@ -1494,7 +1830,10 @@
               {
                 "kind": "function",
                 "function": "json/JSON::Ext::Parser#parse",
-                "labels": ["serialization", "json"]
+                "labels": [
+                  "serialization",
+                  "json"
+                ]
               },
               {
                 "kind": "function",
@@ -1546,9 +1885,20 @@
                           "normalized_query": "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"apps\".\"slug\" = ?) AND (\"orgs\".\"slug\" = ?)) LIMIT ?"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["apps", "orgs"],
-                          "columns": ["apps.*", "apps.org_id", "apps.slug", "orgs.id", "orgs.slug"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "apps",
+                            "orgs"
+                          ],
+                          "columns": [
+                            "apps.*",
+                            "apps.org_id",
+                            "apps.slug",
+                            "orgs.id",
+                            "orgs.slug"
+                          ],
                           "joinCount": 1
                         }
                       }
@@ -1579,8 +1929,14 @@
                       "normalized_query": "SELECT *, \"mapsets\".\"name\", \"mapsets\".\"branch\", \"mapsets\".\"commit\", \"mapsets\".\"environment\", \"mapsets\".\"version\", (SELECT \"login\" FROM \"users\" WHERE (\"id\" = \"user_id\")), (SELECT count(*) AS \"scenario_count\" FROM \"scenarios\" WHERE (\"mapset_id\" = \"mapsets\".\"id\")) FROM \"mapsets_preference_ordered\" AS \"mapsets\" WHERE (\"mapsets\".\"app_id\" = ?)"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["mapsets_preference_ordered", "scenarios", "users"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "mapsets_preference_ordered",
+                        "scenarios",
+                        "users"
+                      ],
                       "columns": [
                         "*",
                         "id",
@@ -1618,9 +1974,16 @@
                   "normalized_query": "SELECT * FROM \"mapsets\" WHERE \"id\" = ?"
                 },
                 "analyzed_query": {
-                  "actions": ["select"],
-                  "tables": ["mapsets"],
-                  "columns": ["*", "id"],
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "mapsets"
+                  ],
+                  "columns": [
+                    "*",
+                    "id"
+                  ],
                   "joinCount": 0
                 }
               }
@@ -1647,8 +2010,13 @@
                       "normalized_query": "SELECT * FROM \"scenarios\" WHERE ((\"scenarios\".\"mapset_id\" = ?) AND (\"data\" IS ?) AND ((\"scenarios\".\"sha_256\" NOT IN (SELECT \"scenario_processing_errors\".\"sha_256\" FROM \"scenario_processing_errors\" WHERE ((\"version\" = ?) AND (\"scenario_processing_errors\".\"sha_256\" IS NOT ?)))) OR (\"scenarios\".\"sha_256\" IS ?)))"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["scenario_processing_errors", "scenarios"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "scenario_processing_errors",
+                        "scenarios"
+                      ],
                       "columns": [
                         "*",
                         "data",
@@ -1690,8 +2058,14 @@
                       "normalized_query": "SELECT \"apps\".\"id\", \"apps\".\"name\" AS \"name\", \"orgs\".\"slug\" AS \"org_slug\", \"orgs\".\"name\" AS \"org_name\", \"url\", \"apps\".\"created_at\", \"apps\".\"slug\", \"users\".\"login\" AS \"owner_login\" FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") INNER JOIN \"users\" ON (\"users\".\"id\" = \"orgs\".\"owner_id\") ORDER BY \"name\" OFFSET ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["apps", "orgs", "users"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "apps",
+                        "orgs",
+                        "users"
+                      ],
                       "columns": [
                         "apps.created_at",
                         "apps.id",
@@ -1728,8 +2102,13 @@
                       "normalized_query": "SELECT * FROM \"scenarios\" WHERE ((\"scenarios\".\"mapset_id\" = ?) AND (\"data\" IS ?) AND ((\"scenarios\".\"sha_256\" NOT IN (SELECT \"scenario_processing_errors\".\"sha_256\" FROM \"scenario_processing_errors\" WHERE ((\"version\" = ?) AND (\"scenario_processing_errors\".\"sha_256\" IS NOT ?)))) OR (\"scenarios\".\"sha_256\" IS ?)))"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["scenario_processing_errors", "scenarios"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "scenario_processing_errors",
+                        "scenarios"
+                      ],
                       "columns": [
                         "*",
                         "data",
@@ -1771,8 +2150,13 @@
                           "normalized_query": "SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>? AS \"name\", metadata->>? AS \"feature_group\", metadata->>? AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\", \"metadata\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = ?) ORDER BY \"scenarios\".\"created_at\" DESC"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["mapsets", "scenarios"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "mapsets",
+                            "scenarios"
+                          ],
                           "columns": [
                             "mapsets.app_id",
                             "mapsets.id",
@@ -1806,9 +2190,18 @@
                           "normalized_query": "SELECT count(*) AS \"v\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = ?) LIMIT ?"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["mapsets", "scenarios"],
-                          "columns": ["*", "mapsets.id", "scenarios.mapset_id"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "mapsets",
+                            "scenarios"
+                          ],
+                          "columns": [
+                            "*",
+                            "mapsets.id",
+                            "scenarios.mapset_id"
+                          ],
                           "joinCount": 1
                         }
                       }
@@ -1832,8 +2225,13 @@
                           "normalized_query": "SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>? AS \"name\", metadata->>? AS \"feature_group\", metadata->>? AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = ?) ORDER BY metadata->>? LIMIT ? OFFSET ?"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["mapsets", "scenarios"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "mapsets",
+                            "scenarios"
+                          ],
                           "columns": [
                             "mapsets.app_id",
                             "mapsets.id",
@@ -1867,8 +2265,13 @@
                           "normalized_query": "SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>? AS \"name\", metadata->>? AS \"feature_group\", metadata->>? AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = ?) ORDER BY \"scenarios\".\"created_at\" DESC"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["mapsets", "scenarios"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "mapsets",
+                            "scenarios"
+                          ],
                           "columns": [
                             "mapsets.app_id",
                             "mapsets.id",
@@ -1895,9 +2298,17 @@
                       "normalized_query": "SELECT DISTINCT \"caller\", \"callee\" FROM \"scenarios\", lateral jsonb_to_recordset(class_invocation_graph) as graph(caller q_class, callee q_class) WHERE (? = ?)"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["scenarios"],
-                      "columns": ["callee", "caller", "class_invocation_graph"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "scenarios"
+                      ],
+                      "columns": [
+                        "callee",
+                        "caller",
+                        "class_invocation_graph"
+                      ],
                       "joinCount": 1
                     }
                   },
@@ -1924,9 +2335,15 @@
                       "normalized_query": "SELECT scenarios.metadata->?->>? AS \"repository_url\", scenarios.metadata->?->>? AS \"commit\" FROM \"scenarios\" WHERE ((scenarios.metadata->?->>? IS NOT ?) AND (scenarios.metadata->?->>? IS NOT ?) AND (? = ?)) LIMIT ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["scenarios"],
-                      "columns": ["scenarios.metadata"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "scenarios"
+                      ],
+                      "columns": [
+                        "scenarios.metadata"
+                      ],
                       "joinCount": 0
                     }
                   },
@@ -1941,16 +2358,25 @@
                       "normalized_query": "SELECT jsonb_object_agg(compute_code_objects_by_location(data->?)) AS \"code_objects_by_location\" FROM \"scenarios\" WHERE (? = ?) LIMIT ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["scenarios"],
-                      "columns": ["data"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "scenarios"
+                      ],
+                      "columns": [
+                        "data"
+                      ],
                       "joinCount": 0
                     }
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -1970,9 +2396,16 @@
                       "normalized_query": "SELECT * FROM \"apps\" WHERE \"id\" = ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["apps"],
-                      "columns": ["*", "id"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "apps"
+                      ],
+                      "columns": [
+                        "*",
+                        "id"
+                      ],
                       "joinCount": 0
                     }
                   },
@@ -1988,7 +2421,9 @@
           {
             "kind": "function",
             "function": "action_view/ActionView::Renderer#render",
-            "labels": ["view"],
+            "labels": [
+              "view"
+            ],
             "children": [
               {
                 "kind": "function",
@@ -2006,9 +2441,16 @@
                           "normalized_query": "SELECT * FROM \"orgs\" WHERE \"id\" = ?"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["orgs"],
-                          "columns": ["*", "id"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "orgs"
+                          ],
+                          "columns": [
+                            "*",
+                            "id"
+                          ],
                           "joinCount": 0
                         }
                       },
@@ -2054,36 +2496,58 @@
                       "normalized_query": "SELECT * FROM \"mapset_caches\" WHERE (\"mapset_id\" = ?) LIMIT ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
-                      "tables": ["mapset_caches"],
-                      "columns": ["*", "mapset_id"],
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "mapset_caches"
+                      ],
+                      "columns": [
+                        "*",
+                        "mapset_id"
+                      ],
                       "joinCount": 0
                     }
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   },
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Parser#parse",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   },
                   {
                     "kind": "sql",
@@ -2091,7 +2555,9 @@
                       "normalized_query": "SELECT mapset_digest(?) AS \"digest\" LIMIT ?"
                     },
                     "analyzed_query": {
-                      "actions": ["select"],
+                      "actions": [
+                        "select"
+                      ],
                       "tables": [],
                       "columns": [],
                       "joinCount": 0
@@ -2124,44 +2590,60 @@
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "action_view/ActionView::Renderer#render",
-                    "labels": ["view"],
+                    "labels": [
+                      "view"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "action_view/ActionView::Renderer#render",
-                        "labels": ["view"]
+                        "labels": [
+                          "view"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "action_view/ActionView::Renderer#render",
-                        "labels": ["view"]
+                        "labels": [
+                          "view"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "action_view/ActionView::Renderer#render",
-                        "labels": ["view"]
+                        "labels": [
+                          "view"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "action_view/ActionView::Renderer#render",
-                        "labels": ["view"]
+                        "labels": [
+                          "view"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "action_view/ActionView::Renderer#render",
-                        "labels": ["view"]
+                        "labels": [
+                          "view"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "action_view/ActionView::Renderer#render",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   }
                 ]
               },
@@ -2209,7 +2691,9 @@
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
@@ -2227,9 +2711,16 @@
                           "normalized_query": "SELECT * FROM \"users\" WHERE \"id\" = ?"
                         },
                         "analyzed_query": {
-                          "actions": ["select"],
-                          "tables": ["users"],
-                          "columns": ["*", "id"],
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "users"
+                          ],
+                          "columns": [
+                            "*",
+                            "id"
+                          ],
                           "joinCount": 0
                         }
                       }
@@ -2272,7 +2763,9 @@
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               },
               {
                 "kind": "function",
@@ -2282,7 +2775,9 @@
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               },
               {
                 "kind": "function",
@@ -2299,22 +2794,30 @@
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               },
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               },
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               },
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"]
+                "labels": [
+                  "view"
+                ]
               },
               {
                 "kind": "function",
@@ -2331,7 +2834,10 @@
               {
                 "kind": "function",
                 "function": "json/JSON::Ext::Generator::State#generate",
-                "labels": ["serialization", "json"]
+                "labels": [
+                  "serialization",
+                  "json"
+                ]
               },
               {
                 "kind": "function",
@@ -2341,53 +2847,76 @@
                   {
                     "kind": "function",
                     "function": "json/JSON::Ext::Generator::State#generate",
-                    "labels": ["serialization", "json"]
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "openssl/Digest::Instance#digest",
-                "labels": ["security", "crypto"]
+                "labels": [
+                  "security",
+                  "crypto"
+                ]
               },
               {
                 "kind": "function",
                 "function": "json/JSON::Ext::Parser#parse",
-                "labels": ["serialization", "json"]
+                "labels": [
+                  "serialization",
+                  "json"
+                ]
               },
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "action_view/ActionView::Renderer#render",
-                    "labels": ["view"],
+                    "labels": [
+                      "view"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "openssl/Digest::Instance#digest",
-                        "labels": ["security", "crypto"]
+                        "labels": [
+                          "security",
+                          "crypto"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "json/JSON::Ext::Parser#parse",
-                        "labels": ["serialization", "json"]
+                        "labels": [
+                          "serialization",
+                          "json"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "action_view/ActionView::Renderer#render",
-                    "labels": ["view"]
+                    "labels": [
+                      "view"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
@@ -2406,7 +2935,9 @@
               {
                 "kind": "function",
                 "function": "action_view/ActionView::Renderer#render",
-                "labels": ["view"],
+                "labels": [
+                  "view"
+                ],
                 "children": [
                   {
                     "kind": "function",
@@ -2423,7 +2954,9 @@
                   {
                     "kind": "function",
                     "function": "action_view/ActionView::Renderer#render",
-                    "labels": ["view"],
+                    "labels": [
+                      "view"
+                    ],
                     "children": [
                       {
                         "kind": "function",

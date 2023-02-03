@@ -1,1 +1,6 @@
-["http", "io", "json", "serialization"]
+[
+  "http",
+  "io",
+  "json",
+  "serialization"
+]

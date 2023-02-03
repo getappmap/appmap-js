@@ -1,1 +1,6 @@
-["app/controllers", "app/models", "json", "openssl"]
+[
+  "app/controllers",
+  "app/models",
+  "json",
+  "openssl"
+]

@@ -34,7 +34,9 @@
           {
             "name": "lookup_session_user",
             "type": "function",
-            "labels": ["provider.authentication"],
+            "labels": [
+              "provider.authentication"
+            ],
             "static": false,
             "location": "app/controllers/concerns/current_user.rb:62"
           },
@@ -75,21 +77,30 @@
               {
                 "name": "decrypt",
                 "type": "function",
-                "labels": ["security", "crypto"],
+                "labels": [
+                  "security",
+                  "crypto"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#decrypt"
               },
               {
                 "name": "final",
                 "type": "function",
-                "labels": ["security", "crypto"],
+                "labels": [
+                  "security",
+                  "crypto"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#final"
               },
               {
                 "name": "encrypt",
                 "type": "function",
-                "labels": ["security", "crypto"],
+                "labels": [
+                  "security",
+                  "crypto"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#encrypt"
               }
@@ -118,7 +129,10 @@
                   {
                     "name": "parse",
                     "type": "function",
-                    "labels": ["serialization", "json"],
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ],
                     "static": false,
                     "location": "JSON::Ext::Parser#parse"
                   }
@@ -135,7 +149,10 @@
                       {
                         "name": "generate",
                         "type": "function",
-                        "labels": ["serialization", "json"],
+                        "labels": [
+                          "serialization",
+                          "json"
+                        ],
                         "static": false,
                         "location": "JSON::Ext::Generator::State#generate"
                       }

@@ -18,14 +18,18 @@
                   {
                     "name": "invoke_before",
                     "type": "function",
-                    "labels": ["mvc.before_action"],
+                    "labels": [
+                      "mvc.before_action"
+                    ],
                     "static": false,
                     "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-6.1.4.1/lib/active_support/callbacks.rb:511"
                   },
                   {
                     "name": "invoke_after",
                     "type": "function",
-                    "labels": ["mvc.after_action"],
+                    "labels": [
+                      "mvc.after_action"
+                    ],
                     "static": false,
                     "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-6.1.4.1/lib/active_support/callbacks.rb:515"
                   }
@@ -40,7 +44,9 @@
               {
                 "name": "secure_compare",
                 "type": "function",
-                "labels": ["crypto.secure_compare"],
+                "labels": [
+                  "crypto.secure_compare"
+                ],
                 "static": true,
                 "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-6.1.4.1/lib/active_support/security_utils.rb:33"
               }
@@ -73,14 +79,18 @@
           {
             "name": "unpack",
             "type": "function",
-            "labels": ["string.unpack"],
+            "labels": [
+              "string.unpack"
+            ],
             "static": false,
             "location": "<internal:pack>:256"
           },
           {
             "name": "unpack1",
             "type": "function",
-            "labels": ["string.unpack"],
+            "labels": [
+              "string.unpack"
+            ],
             "static": false,
             "location": "<internal:pack>:280"
           }
@@ -103,7 +113,9 @@
               {
                 "name": "write",
                 "type": "function",
-                "labels": ["log"],
+                "labels": [
+                  "log"
+                ],
                 "static": false,
                 "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/logger/log_device.rb:31"
               }
@@ -128,14 +140,18 @@
               {
                 "name": "process_action",
                 "type": "function",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "static": false,
                 "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_controller/metal/instrumentation.rb:19"
               },
               {
                 "name": "redirect_to",
                 "type": "function",
-                "labels": ["mvc.controller"],
+                "labels": [
+                  "mvc.controller"
+                ],
                 "static": false,
                 "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_controller/metal/instrumentation.rb:64"
               }
@@ -158,14 +174,18 @@
                   {
                     "name": "[]",
                     "type": "function",
-                    "labels": ["http.session.read"],
+                    "labels": [
+                      "http.session.read"
+                    ],
                     "static": false,
                     "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_dispatch/request/session.rb:91"
                   },
                   {
                     "name": "[]=",
                     "type": "function",
-                    "labels": ["http.session.write"],
+                    "labels": [
+                      "http.session.write"
+                    ],
                     "static": false,
                     "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_dispatch/request/session.rb:131"
                   }
@@ -184,21 +204,27 @@
                   {
                     "name": "update",
                     "type": "function",
-                    "labels": ["http.session.write"],
+                    "labels": [
+                      "http.session.write"
+                    ],
                     "static": false,
                     "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_dispatch/middleware/cookies.rb:345"
                   },
                   {
                     "name": "[]",
                     "type": "function",
-                    "labels": ["http.session.read"],
+                    "labels": [
+                      "http.session.read"
+                    ],
                     "static": false,
                     "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_dispatch/middleware/cookies.rb:329"
                   },
                   {
                     "name": "[]=",
                     "type": "function",
-                    "labels": ["http.session.write"],
+                    "labels": [
+                      "http.session.write"
+                    ],
                     "static": false,
                     "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_dispatch/middleware/cookies.rb:363"
                   }
@@ -225,35 +251,45 @@
               {
                 "name": "decrypt",
                 "type": "function",
-                "labels": ["crypto.decrypt"],
+                "labels": [
+                  "crypto.decrypt"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#decrypt"
               },
               {
                 "name": "key=",
                 "type": "function",
-                "labels": ["crypto.set_key"],
+                "labels": [
+                  "crypto.set_key"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#key="
               },
               {
                 "name": "iv=",
                 "type": "function",
-                "labels": ["crypto.set_iv"],
+                "labels": [
+                  "crypto.set_iv"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#iv="
               },
               {
                 "name": "auth_tag=",
                 "type": "function",
-                "labels": ["crypto.set_auth_tag"],
+                "labels": [
+                  "crypto.set_auth_tag"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#auth_tag="
               },
               {
                 "name": "auth_data=",
                 "type": "function",
-                "labels": ["crypto.set_auth_data"],
+                "labels": [
+                  "crypto.set_auth_data"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#auth_data="
               },
@@ -266,14 +302,18 @@
               {
                 "name": "final",
                 "type": "function",
-                "labels": ["crypto.final"],
+                "labels": [
+                  "crypto.final"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#final"
               },
               {
                 "name": "encrypt",
                 "type": "function",
-                "labels": ["crypto.encrypt"],
+                "labels": [
+                  "crypto.encrypt"
+                ],
                 "static": false,
                 "location": "OpenSSL::Cipher#encrypt"
               },
@@ -292,7 +332,9 @@
               {
                 "name": "random_bytes",
                 "type": "function",
-                "labels": ["random.secure"],
+                "labels": [
+                  "random.secure"
+                ],
                 "static": true,
                 "location": "OpenSSL::Random.random_bytes"
               }
@@ -321,7 +363,10 @@
                   {
                     "name": "parse",
                     "type": "function",
-                    "labels": ["format.json.parse", "deserialize.safe"],
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ],
                     "static": false,
                     "location": "JSON::Ext::Parser#parse"
                   }
@@ -338,7 +383,10 @@
                       {
                         "name": "generate",
                         "type": "function",
-                        "labels": ["format.json.generate", "serialize"],
+                        "labels": [
+                          "format.json.generate",
+                          "serialize"
+                        ],
                         "static": false,
                         "location": "JSON::Ext::Generator::State#generate"
                       }
@@ -481,7 +529,9 @@
               {
                 "name": "records",
                 "type": "function",
-                "labels": ["dao.materialize"],
+                "labels": [
+                  "dao.materialize"
+                ],
                 "static": false,
                 "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activerecord-6.1.4.1/lib/active_record/relation.rb:248"
               }
@@ -914,7 +964,9 @@
               {
                 "name": "authorize!",
                 "type": "function",
-                "labels": ["security.authorization"],
+                "labels": [
+                  "security.authorization"
+                ],
                 "static": false,
                 "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/cancancan-3.3.0/lib/cancan/controller_additions.rb:337"
               }

@@ -2,23 +2,32 @@
   {
     "kind": "http_server_request",
     "route": "GET /*unmatched_route",
-    "parameter_names": ["controller", "action"],
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
         "function": "actionpack/ActionController::Instrumentation#process_action",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
@@ -28,22 +37,30 @@
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
-                "labels": ["http.session.write"]
+                "labels": [
+                  "http.session.write"
+                ]
               },
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                "labels": ["http.session.read"]
+                "labels": [
+                  "http.session.read"
+                ]
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                "labels": ["mvc.before_action"],
+                "labels": [
+                  "mvc.before_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -53,28 +70,36 @@
                       {
                         "kind": "function",
                         "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                        "labels": ["http.session.read"]
+                        "labels": [
+                          "http.session.read"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                "labels": ["http.session.read"]
+                "labels": [
+                  "http.session.read"
+                ]
               }
             ]
           },
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }
@@ -83,23 +108,32 @@
   {
     "kind": "http_server_request",
     "route": null,
-    "parameter_names": ["controller", "action"],
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
     "status_code": 200,
     "children": [
       {
         "kind": "function",
         "function": "actionpack/ActionController::Instrumentation#process_action",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           },
           {
             "kind": "function",
             "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-            "labels": ["mvc.before_action"]
+            "labels": [
+              "mvc.before_action"
+            ]
           },
           {
             "kind": "function",
@@ -109,17 +143,23 @@
               {
                 "kind": "function",
                 "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                "labels": ["http.session.read"]
+                "labels": [
+                  "http.session.read"
+                ]
               },
               {
                 "kind": "function",
                 "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-                "labels": ["mvc.before_action"],
+                "labels": [
+                  "mvc.before_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   },
                   {
                     "kind": "function",
@@ -129,283 +169,393 @@
                       {
                         "kind": "function",
                         "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                        "labels": ["http.session.read"]
+                        "labels": [
+                          "http.session.read"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
                     "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
-                    "labels": ["http.session.read"]
+                    "labels": [
+                      "http.session.read"
+                    ]
                   }
                 ]
               },
               {
                 "kind": "function",
                 "function": "actionpack/ActionController::Renderers#render_to_body",
-                "labels": ["mvc.render"],
+                "labels": [
+                  "mvc.render"
+                ],
                 "children": [
                   {
                     "kind": "function",
                     "function": "app/views/vendor_bundle_ruby_3_0_0_gems_devise_4_8_1_app_views_devise_sessions_new_html_erb.render",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "actionview/ActionView::Resolver#find_all",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "app/views/vendor_bundle_ruby_3_0_0_gems_devise_4_8_1_app_views_devise_shared__links_html_erb.render",
-                        "labels": ["mvc.template"],
+                        "labels": [
+                          "mvc.template"
+                        ],
                         "children": [
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "actionview/ActionView::Resolver#find_all",
-                            "labels": ["mvc.template.resolver"]
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
                           },
                           {
                             "kind": "function",
                             "function": "logger/Logger::LogDevice#write",
-                            "labels": ["log"]
+                            "labels": [
+                              "log"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
                         "function": "ruby/Kernel#eval",
-                        "labels": ["lang.eval"]
+                        "labels": [
+                          "lang.eval"
+                        ]
                       },
                       {
                         "kind": "function",
@@ -447,12 +597,16 @@
                                   {
                                     "kind": "function",
                                     "function": "activerecord/ActiveRecord::Relation#records",
-                                    "labels": ["dao.materialize"],
+                                    "labels": [
+                                      "dao.materialize"
+                                    ],
                                     "children": [
                                       {
                                         "kind": "function",
                                         "function": "logger/Logger::LogDevice#write",
-                                        "labels": ["log"]
+                                        "labels": [
+                                          "log"
+                                        ]
                                       },
                                       {
                                         "kind": "sql",
@@ -460,8 +614,12 @@
                                           "normalized_query": "SELECT \"settings\".* FROM \"settings\" WHERE (thing_type is ? and thing_id is ?) AND \"settings\".\"var\" = $? ORDER BY \"settings\".\"id\" ASC LIMIT $?"
                                         },
                                         "analyzed_query": {
-                                          "actions": ["select"],
-                                          "tables": ["settings"],
+                                          "actions": [
+                                            "select"
+                                          ],
+                                          "tables": [
+                                            "settings"
+                                          ],
                                           "columns": [
                                             "settings.*",
                                             "settings.id",
@@ -498,14 +656,19 @@
                           {
                             "kind": "function",
                             "function": "json/JSON::Ext::Generator::State#generate",
-                            "labels": ["format.json.generate", "serialize"]
+                            "labels": [
+                              "format.json.generate",
+                              "serialize"
+                            ]
                           }
                         ]
                       },
                       {
                         "kind": "function",
                         "function": "logger/Logger::LogDevice#write",
-                        "labels": ["log"]
+                        "labels": [
+                          "log"
+                        ]
                       }
                     ]
                   }
@@ -516,7 +679,9 @@
           {
             "kind": "function",
             "function": "logger/Logger::LogDevice#write",
-            "labels": ["log"]
+            "labels": [
+              "log"
+            ]
           }
         ]
       }

@@ -1,7 +1,9 @@
 [
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -10,15 +12,21 @@
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["format.json"],
+    "labels": [
+      "format.json"
+    ],
     "children": [
       {
         "kind": "function",
-        "labels": ["format.json"]
+        "labels": [
+          "format.json"
+        ]
       }
     ]
   },
@@ -29,11 +37,15 @@
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -42,11 +54,15 @@
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -55,11 +71,15 @@
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -68,15 +88,21 @@
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["format.json"],
+    "labels": [
+      "format.json"
+    ],
     "children": [
       {
         "kind": "function",
-        "labels": ["format.json"]
+        "labels": [
+          "format.json"
+        ]
       }
     ]
   },
@@ -87,7 +113,9 @@
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -96,11 +124,15 @@
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -109,15 +141,21 @@
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["format.json"],
+    "labels": [
+      "format.json"
+    ],
     "children": [
       {
         "kind": "function",
-        "labels": ["format.json"]
+        "labels": [
+          "format.json"
+        ]
       }
     ]
   },
@@ -128,11 +166,15 @@
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -141,15 +183,21 @@
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "function",
-    "labels": ["format.json"],
+    "labels": [
+      "format.json"
+    ],
     "children": [
       {
         "kind": "function",
-        "labels": ["format.json"]
+        "labels": [
+          "format.json"
+        ]
       }
     ]
   },
@@ -160,7 +208,9 @@
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   },
   {
     "kind": "http_client_request",
@@ -169,6 +219,8 @@
   },
   {
     "kind": "function",
-    "labels": ["format.json"]
+    "labels": [
+      "format.json"
+    ]
   }
 ]

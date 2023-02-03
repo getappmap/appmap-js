@@ -6,19 +6,27 @@
     "children": [
       {
         "kind": "function",
-        "labels": ["mvc.controller"],
+        "labels": [
+          "mvc.controller"
+        ],
         "children": [
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["http.session"],
+                "labels": [
+                  "http.session"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["http.session"]
+                    "labels": [
+                      "http.session"
+                    ]
                   }
                 ]
               }
@@ -26,15 +34,21 @@
           },
           {
             "kind": "function",
-            "labels": ["mvc.before_action"],
+            "labels": [
+              "mvc.before_action"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["security.authentication"],
+                "labels": [
+                  "security.authentication"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["http.session"]
+                    "labels": [
+                      "http.session"
+                    ]
                   }
                 ]
               }
@@ -42,27 +56,39 @@
           },
           {
             "kind": "function",
-            "labels": ["public"],
+            "labels": [
+              "public"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["mvc.before_action"],
+                "labels": [
+                  "mvc.before_action"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["http.session"]
+                    "labels": [
+                      "http.session"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["format.json"]
+                    "labels": [
+                      "format.json"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["security.authentication"],
+                    "labels": [
+                      "security.authentication"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["http.session"]
+                        "labels": [
+                          "http.session"
+                        ]
                       }
                     ]
                   }
@@ -72,45 +98,65 @@
           },
           {
             "kind": "function",
-            "labels": ["mvc.template"],
+            "labels": [
+              "mvc.template"
+            ],
             "children": [
               {
                 "kind": "function",
-                "labels": ["mvc.template.resolver"]
+                "labels": [
+                  "mvc.template.resolver"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.template.resolver"]
+                "labels": [
+                  "mvc.template.resolver"
+                ]
               },
               {
                 "kind": "function",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["format.json"]
+                        "labels": [
+                          "format.json"
+                        ]
                       }
                     ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       }
                     ]
                   }
@@ -118,23 +164,33 @@
               },
               {
                 "kind": "function",
-                "labels": ["mvc.template"],
+                "labels": [
+                  "mvc.template"
+                ],
                 "children": [
                   {
                     "kind": "function",
-                    "labels": ["mvc.template.resolver"]
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
                   },
                   {
                     "kind": "function",
-                    "labels": ["mvc.template"],
+                    "labels": [
+                      "mvc.template"
+                    ],
                     "children": [
                       {
                         "kind": "function",
-                        "labels": ["mvc.template.resolver"]
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
                       },
                       {
                         "kind": "function",
-                        "labels": ["http.session"]
+                        "labels": [
+                          "http.session"
+                        ]
                       }
                     ]
                   }
@@ -142,7 +198,9 @@
               },
               {
                 "kind": "function",
-                "labels": ["format.json"]
+                "labels": [
+                  "format.json"
+                ]
               }
             ]
           }

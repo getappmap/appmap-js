@@ -2552,73 +2552,73 @@
     "test_status": "succeeded",
     "fingerprints": [
       {
-        "appmap_digest": "bdfce4bc0a5c0ab2d19f937ff951a497637cbcdd84434262dd2685800295d7b4",
+        "appmap_digest": "1c3a25c03d7f4a30a908c4d8d1f73f5c4b964db1933085cb1c96b406fbde274f",
         "canonicalization_algorithm": "classDependencies",
         "digest": "b3ce8247190ef922d5e51327dee92b676ff1213562489ec43582122c08705851",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bdfce4bc0a5c0ab2d19f937ff951a497637cbcdd84434262dd2685800295d7b4",
+        "appmap_digest": "1c3a25c03d7f4a30a908c4d8d1f73f5c4b964db1933085cb1c96b406fbde274f",
         "canonicalization_algorithm": "classes",
         "digest": "a48d595faba2d61010df776907bc1c99cb242604c914ca3d47be0a19370cb545",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bdfce4bc0a5c0ab2d19f937ff951a497637cbcdd84434262dd2685800295d7b4",
+        "appmap_digest": "1c3a25c03d7f4a30a908c4d8d1f73f5c4b964db1933085cb1c96b406fbde274f",
         "canonicalization_algorithm": "httpClientRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bdfce4bc0a5c0ab2d19f937ff951a497637cbcdd84434262dd2685800295d7b4",
+        "appmap_digest": "1c3a25c03d7f4a30a908c4d8d1f73f5c4b964db1933085cb1c96b406fbde274f",
         "canonicalization_algorithm": "httpServerRequests",
         "digest": "b52d1d9fe4d3104922d40b31c2904cc4c208dcbfb6b207a66451c282c0cb604c",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bdfce4bc0a5c0ab2d19f937ff951a497637cbcdd84434262dd2685800295d7b4",
+        "appmap_digest": "1c3a25c03d7f4a30a908c4d8d1f73f5c4b964db1933085cb1c96b406fbde274f",
         "canonicalization_algorithm": "info",
         "digest": "a050a88af9c6fcb66a8e889a7313acf98ba323026aa9e544219c9979bf8268ff",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bdfce4bc0a5c0ab2d19f937ff951a497637cbcdd84434262dd2685800295d7b4",
+        "appmap_digest": "1c3a25c03d7f4a30a908c4d8d1f73f5c4b964db1933085cb1c96b406fbde274f",
         "canonicalization_algorithm": "labels",
         "digest": "85a7315b0d9d0297d1ca67ece2bd1eef6a0ea26828bd3f366913cf974ba57f1a",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bdfce4bc0a5c0ab2d19f937ff951a497637cbcdd84434262dd2685800295d7b4",
+        "appmap_digest": "1c3a25c03d7f4a30a908c4d8d1f73f5c4b964db1933085cb1c96b406fbde274f",
         "canonicalization_algorithm": "packageDependencies",
         "digest": "e6dad5ce5b8d0b501ae5a8d165be92248803637fc07f1858e4502ba5f7f04487",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bdfce4bc0a5c0ab2d19f937ff951a497637cbcdd84434262dd2685800295d7b4",
+        "appmap_digest": "1c3a25c03d7f4a30a908c4d8d1f73f5c4b964db1933085cb1c96b406fbde274f",
         "canonicalization_algorithm": "packages",
         "digest": "f8e3cac1c0d5f2aae71d8e7121bd57b8c78052a2fb5d28f1e8cad527e275efa6",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bdfce4bc0a5c0ab2d19f937ff951a497637cbcdd84434262dd2685800295d7b4",
+        "appmap_digest": "1c3a25c03d7f4a30a908c4d8d1f73f5c4b964db1933085cb1c96b406fbde274f",
         "canonicalization_algorithm": "sqlNormalized",
         "digest": "0528029084c2200af838a764a787fb92feec5351a825b3335013e73e8b8e4856",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bdfce4bc0a5c0ab2d19f937ff951a497637cbcdd84434262dd2685800295d7b4",
+        "appmap_digest": "1c3a25c03d7f4a30a908c4d8d1f73f5c4b964db1933085cb1c96b406fbde274f",
         "canonicalization_algorithm": "sqlTables",
         "digest": "053854d45c07c8986a600ea2fa9ccbfc46fc48d20b7e028972c8a2e070f71b86",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bdfce4bc0a5c0ab2d19f937ff951a497637cbcdd84434262dd2685800295d7b4",
+        "appmap_digest": "1c3a25c03d7f4a30a908c4d8d1f73f5c4b964db1933085cb1c96b406fbde274f",
         "canonicalization_algorithm": "trace",
         "digest": "58f869917ab10be31103417a36dc88c76dee8814ab7ba9f28762b02930f81061",
         "fingerprint_algorithm": "sha256"
       },
       {
-        "appmap_digest": "bdfce4bc0a5c0ab2d19f937ff951a497637cbcdd84434262dd2685800295d7b4",
+        "appmap_digest": "1c3a25c03d7f4a30a908c4d8d1f73f5c4b964db1933085cb1c96b406fbde274f",
         "canonicalization_algorithm": "update",
         "digest": "1115504770605f6143223de90cfd54bdcfcea4f077130beeb1c393e30324e009",
         "fingerprint_algorithm": "sha256"
@@ -2645,14 +2645,18 @@
                     {
                       "name": "invoke_before",
                       "type": "function",
-                      "labels": ["mvc.before_action"],
+                      "labels": [
+                        "mvc.before_action"
+                      ],
                       "static": false,
                       "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:512"
                     },
                     {
                       "name": "invoke_after",
                       "type": "function",
-                      "labels": ["mvc.after_action"],
+                      "labels": [
+                        "mvc.after_action"
+                      ],
                       "static": false,
                       "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:516"
                     }
@@ -2679,7 +2683,9 @@
                 {
                   "name": "process_action",
                   "type": "function",
-                  "labels": ["mvc.controller"],
+                  "labels": [
+                    "mvc.controller"
+                  ],
                   "static": false,
                   "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_controller/metal/instrumentation.rb:19"
                 }
@@ -2702,7 +2708,9 @@
                     {
                       "name": "[]",
                       "type": "function",
-                      "labels": ["http.session"],
+                      "labels": [
+                        "http.session"
+                      ],
                       "static": false,
                       "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/request/session.rb:91"
                     }
@@ -2721,7 +2729,9 @@
                     {
                       "name": "update",
                       "type": "function",
-                      "labels": ["http.session"],
+                      "labels": [
+                        "http.session"
+                      ],
                       "static": false,
                       "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/middleware/cookies.rb:344"
                     }
@@ -2774,7 +2784,9 @@
             {
               "name": "lookup_session_user",
               "type": "function",
-              "labels": ["security.authentication"],
+              "labels": [
+                "security.authentication"
+              ],
               "static": false,
               "location": "app/controllers/concerns/current_user.rb:41"
             },
@@ -2799,7 +2811,9 @@
             {
               "name": "with_anonymous_user",
               "type": "function",
-              "labels": ["public"],
+              "labels": [
+                "public"
+              ],
               "static": false,
               "location": "app/controllers/concerns/with_authentication.rb:15"
             }
@@ -2970,7 +2984,9 @@
                     {
                       "name": "parse",
                       "type": "function",
-                      "labels": ["format.json"],
+                      "labels": [
+                        "format.json"
+                      ],
                       "static": false,
                       "location": "JSON::Ext::Parser#parse"
                     }
@@ -2997,7 +3013,9 @@
                 {
                   "name": "find_all",
                   "type": "function",
-                  "labels": ["mvc.template.resolver"],
+                  "labels": [
+                    "mvc.template.resolver"
+                  ],
                   "static": false,
                   "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb:145"
                 }
@@ -3018,7 +3036,9 @@
             {
               "name": "render",
               "type": "function",
-              "labels": ["mvc.template"],
+              "labels": [
+                "mvc.template"
+              ],
               "static": true,
               "location": "app/views/errors/not_found.html.haml"
             }
@@ -3031,7 +3051,9 @@
             {
               "name": "render",
               "type": "function",
-              "labels": ["mvc.template"],
+              "labels": [
+                "mvc.template"
+              ],
               "static": true,
               "location": "app/views/layouts/_standard_head.html.haml"
             }
@@ -3044,7 +3066,9 @@
             {
               "name": "render",
               "type": "function",
-              "labels": ["mvc.template"],
+              "labels": [
+                "mvc.template"
+              ],
               "static": true,
               "location": "app/views/layouts/_css_head.html.haml"
             }
@@ -3057,7 +3081,9 @@
             {
               "name": "render",
               "type": "function",
-              "labels": ["mvc.template"],
+              "labels": [
+                "mvc.template"
+              ],
               "static": true,
               "location": "app/views/layouts/_js_head.html.haml"
             }
@@ -3070,7 +3096,9 @@
             {
               "name": "render",
               "type": "function",
-              "labels": ["mvc.template"],
+              "labels": [
+                "mvc.template"
+              ],
               "static": true,
               "location": "app/views/partials/_header.html.haml"
             }
@@ -3083,7 +3111,9 @@
             {
               "name": "render",
               "type": "function",
-              "labels": ["mvc.template"],
+              "labels": [
+                "mvc.template"
+              ],
               "static": true,
               "location": "app/views/partials/_flash.html.haml"
             }

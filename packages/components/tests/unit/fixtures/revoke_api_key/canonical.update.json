@@ -6,15 +6,25 @@
     "children": [
       {
         "kind": "function",
-        "labels": ["security", "provider.authenticate"],
+        "labels": [
+          "security",
+          "provider.authenticate"
+        ],
         "children": [
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["update"],
-                "tables": ["api_keys"],
-                "columns": ["id", "last_used"],
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "api_keys"
+                ],
+                "columns": [
+                  "id",
+                  "last_used"
+                ],
                 "joinCount": 0
               }
             }
@@ -23,15 +33,23 @@
       },
       {
         "kind": "function",
-        "labels": ["security"],
+        "labels": [
+          "security"
+        ],
         "children": [
           {
             "kind": "sql",
             "sql": {
               "analyzed_query": {
-                "actions": ["delete"],
-                "tables": ["api_keys"],
-                "columns": ["id"],
+                "actions": [
+                  "delete"
+                ],
+                "tables": [
+                  "api_keys"
+                ],
+                "columns": [
+                  "id"
+                ],
                 "joinCount": 0
               }
             }
@@ -47,11 +65,17 @@
     "children": [
       {
         "kind": "function",
-        "labels": ["security", "provider.authenticate"]
+        "labels": [
+          "security",
+          "provider.authenticate"
+        ]
       },
       {
         "kind": "function",
-        "labels": ["serialization", "json"]
+        "labels": [
+          "serialization",
+          "json"
+        ]
       }
     ]
   }

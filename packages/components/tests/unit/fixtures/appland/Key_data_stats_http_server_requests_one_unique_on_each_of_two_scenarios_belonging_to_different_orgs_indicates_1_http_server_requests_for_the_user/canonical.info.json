@@ -3,8 +3,14 @@
     "kind": "sql",
     "sql": {
       "analyzed_query": {
-        "actions": ["select"],
-        "tables": ["key_data_stats", "scenarios", "users_orgs"],
+        "actions": [
+          "select"
+        ],
+        "tables": [
+          "key_data_stats",
+          "scenarios",
+          "users_orgs"
+        ],
         "columns": [
           "*",
           "http_server_request.http_server_request",

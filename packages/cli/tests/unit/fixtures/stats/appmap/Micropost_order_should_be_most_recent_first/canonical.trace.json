@@ -2,17 +2,23 @@
   {
     "kind": "function",
     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-    "labels": ["mvc.before_action"]
+    "labels": [
+      "mvc.before_action"
+    ]
   },
   {
     "kind": "function",
     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-    "labels": ["mvc.after_action"]
+    "labels": [
+      "mvc.after_action"
+    ]
   },
   {
     "kind": "function",
     "function": "logger/Logger::LogDevice#write",
-    "labels": ["log"]
+    "labels": [
+      "log"
+    ]
   },
   {
     "kind": "sql",
@@ -29,27 +35,37 @@
   {
     "kind": "function",
     "function": "logger/Logger::LogDevice#write",
-    "labels": ["log"]
+    "labels": [
+      "log"
+    ]
   },
   {
     "kind": "function",
     "function": "logger/Logger::LogDevice#write",
-    "labels": ["log"]
+    "labels": [
+      "log"
+    ]
   },
   {
     "kind": "function",
     "function": "logger/Logger::LogDevice#write",
-    "labels": ["log"]
+    "labels": [
+      "log"
+    ]
   },
   {
     "kind": "function",
     "function": "activerecord/ActiveRecord::Relation#records",
-    "labels": ["dao.materialize"],
+    "labels": [
+      "dao.materialize"
+    ],
     "children": [
       {
         "kind": "function",
         "function": "logger/Logger::LogDevice#write",
-        "labels": ["log"]
+        "labels": [
+          "log"
+        ]
       },
       {
         "kind": "sql",
@@ -57,9 +73,16 @@
           "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
         },
         "analyzed_query": {
-          "actions": ["select"],
-          "tables": ["users"],
-          "columns": ["users.*", "users.id"],
+          "actions": [
+            "select"
+          ],
+          "tables": [
+            "users"
+          ],
+          "columns": [
+            "users.*",
+            "users.id"
+          ],
           "joinCount": 0
         }
       }
@@ -68,12 +91,16 @@
   {
     "kind": "function",
     "function": "activerecord/ActiveRecord::Relation#records",
-    "labels": ["dao.materialize"],
+    "labels": [
+      "dao.materialize"
+    ],
     "children": [
       {
         "kind": "function",
         "function": "logger/Logger::LogDevice#write",
-        "labels": ["log"]
+        "labels": [
+          "log"
+        ]
       },
       {
         "kind": "sql",
@@ -81,9 +108,16 @@
           "normalized_query": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"id\" = ? LIMIT ?"
         },
         "analyzed_query": {
-          "actions": ["select"],
-          "tables": ["microposts"],
-          "columns": ["microposts.*", "microposts.id"],
+          "actions": [
+            "select"
+          ],
+          "tables": [
+            "microposts"
+          ],
+          "columns": [
+            "microposts.*",
+            "microposts.id"
+          ],
           "joinCount": 0
         }
       }
@@ -92,12 +126,16 @@
   {
     "kind": "function",
     "function": "activerecord/ActiveRecord::Relation#records",
-    "labels": ["dao.materialize"],
+    "labels": [
+      "dao.materialize"
+    ],
     "children": [
       {
         "kind": "function",
         "function": "logger/Logger::LogDevice#write",
-        "labels": ["log"]
+        "labels": [
+          "log"
+        ]
       },
       {
         "kind": "sql",
@@ -105,9 +143,16 @@
           "normalized_query": "SELECT \"microposts\".* FROM \"microposts\" ORDER BY \"microposts\".\"created_at\" DESC LIMIT ?"
         },
         "analyzed_query": {
-          "actions": ["select"],
-          "tables": ["microposts"],
-          "columns": ["microposts.*", "microposts.created_at"],
+          "actions": [
+            "select"
+          ],
+          "tables": [
+            "microposts"
+          ],
+          "columns": [
+            "microposts.*",
+            "microposts.created_at"
+          ],
           "joinCount": 0
         }
       }
@@ -116,7 +161,9 @@
   {
     "kind": "function",
     "function": "logger/Logger::LogDevice#write",
-    "labels": ["log"]
+    "labels": [
+      "log"
+    ]
   },
   {
     "kind": "sql",
@@ -133,11 +180,15 @@
   {
     "kind": "function",
     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
-    "labels": ["mvc.before_action"]
+    "labels": [
+      "mvc.before_action"
+    ]
   },
   {
     "kind": "function",
     "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
-    "labels": ["mvc.after_action"]
+    "labels": [
+      "mvc.after_action"
+    ]
   }
 ]

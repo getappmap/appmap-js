@@ -1,1 +1,4 @@
-["json/JSON::Ext::Generator::State", "json/JSON::Ext::Parser"]
+[
+  "json/JSON::Ext::Generator::State",
+  "json/JSON::Ext::Parser"
+]
