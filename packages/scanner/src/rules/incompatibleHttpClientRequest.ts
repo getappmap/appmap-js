@@ -6,6 +6,7 @@ import OpenApiDiff from 'openapi-diff';
 import { OpenAPIV3 } from 'openapi-types';
 import parseRuleDescription from './lib/parseRuleDescription';
 import openapiProvider from './lib/openapiProvider';
+import assert from 'assert';
 
 class Options implements types.IncompatibleHttpClientRequest.Options {
   public schemata: Record<string, string> = {};
@@ -23,7 +24,11 @@ const changeMessage = (change: OpenApiDiff.DiffResult<'breaking'>): string => {
 function build(options: Options): RuleLogic {
   async function matcher(event: Event): Promise<MatchResult[]> {
     const clientFragment = forClientRequest(event);
-    const serverSchema = await openapiProvider(event.httpClientRequest!.url!, options.schemata);
+    assert(event.httpClientRequest);
+    if (!event.httpClientRequest.url) return [];
+
+    const host = new URL(event.httpClientRequest.url).host;
+    const serverSchema = await openapiProvider(host, options.schemata);
     const clientSchema = {
       openapi: '3.0.0',
       info: {
