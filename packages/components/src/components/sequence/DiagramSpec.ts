@@ -13,7 +13,6 @@ type ActionId = string;
 
 export default class DiagramSpec {
   public actions: ActionSpec[] = [];
-  public rowCount = 0;
   public parentIndex = new Map<number, number>();
 
   constructor(public diagram: Diagram) {
@@ -42,7 +41,6 @@ export default class DiagramSpec {
         return lifecycleDepth.get(actor.id) || 0;
       };
 
-      this.rowCount += 1;
       if (isLoop(action)) {
         if (action.children.length === 0) return;
 
@@ -71,7 +69,6 @@ export default class DiagramSpec {
         spec.returnIndex = this.actions.length;
       } else {
         if (nodeResult(action)) {
-          this.rowCount += 1;
           const returnSpec = new ActionSpec(
             this,
             action,
