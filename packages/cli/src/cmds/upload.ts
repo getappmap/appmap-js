@@ -1,14 +1,16 @@
 import { CommandModule } from 'yargs';
 import { AppMap, loadConfiguration, Mapset } from '@appland/client';
 import { listAppMapFiles } from '../utils';
-import { readFile } from 'fs/promises';
+import { readFile, stat } from 'fs/promises';
 import assert from 'assert';
 import UI from './userInteraction';
 import { ValidationError } from './errors';
+import { Stats } from 'fs';
 
 interface Arguments {
   appmapDir: string;
   app?: string;
+  force?: boolean;
 }
 
 type Metadata = {
@@ -16,6 +18,8 @@ type Metadata = {
   branch?: string;
   commit?: string;
 };
+
+const MAX_APPMAP_SIZE = 2 * 1024 * 1024;
 
 function applyOrCheck(data: { [x: string]: string | undefined }, key: string, input?: string) {
   if (!input) return;
@@ -42,7 +46,7 @@ function checkMetadata(current: Metadata, input: unknown) {
   applyOrCheck(current, 'commit', git['commit']);
 }
 
-async function collect(appmapDir: string): Promise<[string[], Metadata]> {
+async function collect(appmapDir: string, force: boolean): Promise<[string[], Metadata]> {
   const metadata: Metadata = {};
   const paths: string[] = [];
 
@@ -50,15 +54,17 @@ async function collect(appmapDir: string): Promise<[string[], Metadata]> {
     paths.push(path);
   });
 
-  for (const path of paths)
+  for (const path of paths) {
     checkMetadata(metadata, JSON.parse(await readFile(path, 'utf-8')).metadata);
+    if (!force) checkSize(await stat(path));
+  }
 
   return [paths, metadata];
 }
 
-export async function handler({ appmapDir, app }: Arguments): Promise<void> {
+export async function handler({ appmapDir, app, force }: Arguments): Promise<void> {
   UI.progress(`Examining AppMaps...`);
-  const [paths, metadata] = await collect(appmapDir);
+  const [paths, metadata] = await collect(appmapDir, !!force);
 
   if (paths.length === 0) throw new Error(`No AppMaps found in ${appmapDir}`);
 
@@ -93,6 +99,18 @@ export async function handler({ appmapDir, app }: Arguments): Promise<void> {
   UI.success(`Created mapset ${url} with ${total} AppMaps`);
 }
 
+function checkSize({ size }: Stats) {
+  if (size > MAX_APPMAP_SIZE)
+    throw new ValidationError(
+      [
+        `File size is ${size / 1024} KiB which is greater than the size limit of ${
+          MAX_APPMAP_SIZE / 1024
+        } KiB.`,
+        'Use --force if you want to upload it anyway.',
+      ].join('\n')
+    );
+}
+
 const command: CommandModule<{}, Arguments> = {
   command: 'upload [appmap-dir]',
   builder: {
@@ -104,6 +122,11 @@ const command: CommandModule<{}, Arguments> = {
       alias: 'a',
       description: 'application name override',
       type: 'string',
+    },
+    force: {
+      alias: 'f',
+      description: 'force uploading oversized files',
+      type: 'boolean',
     },
   },
   describe: 'Upload AppMaps and create a mapset',

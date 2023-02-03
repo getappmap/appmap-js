@@ -6,6 +6,8 @@ import fs from 'node:fs/promises';
 import * as client from '@appland/client';
 import UI_ from '../../../src/cmds/userInteraction';
 import * as utils from '../../../src/utils';
+import { assert } from 'node:console';
+import { Stats } from 'node:fs';
 
 describe('upload command', () => {
   it('uploads appmaps', async () => {
@@ -61,6 +63,36 @@ describe('upload command', () => {
     expect(UI.success).not.toHaveBeenCalled();
     expect(AppMap.create).not.toHaveBeenCalled();
     expect(Mapset.create).not.toHaveBeenCalled();
+  });
+
+  it('skips files that are too large', async () => {
+    expect.assertions(4);
+
+    jest.spyOn(fs, 'stat').mockImplementationOnce(async (path, opts) => {
+      const stat = await fs.stat(path, opts);
+      return { ...stat, size: 128 * 1024 * 1024 } as Stats;
+    });
+
+    await expect(handler({ appmapDir })).rejects.toThrowError();
+
+    expect(UI.success).not.toHaveBeenCalled();
+    expect(AppMap.create).not.toHaveBeenCalled();
+    expect(Mapset.create).not.toHaveBeenCalled();
+  });
+
+  it('can force oversize upload', async () => {
+    expect.assertions(3);
+
+    jest.spyOn(fs, 'stat').mockImplementationOnce(async (path, opts) => {
+      const stat = await fs.stat(path, opts);
+      return { ...stat, size: 128 * 1024 * 1024 } as Stats;
+    });
+
+    await handler({ appmapDir, force: true });
+
+    expect(UI.success).toHaveBeenCalled();
+    expect(AppMap.create).toHaveBeenCalledTimes(3);
+    expect(Mapset.create).toHaveBeenCalled();
   });
 });
 
