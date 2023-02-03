@@ -1,11 +1,11 @@
 <template>
-  <div class="sequence-diagram" id="sequence-diagram-ui">
+  <div class="sequence-diagram" id="sequence-diagram-ui" :key="renderKey">
     <template v-for="(actor, index) in actors">
       <VActor
         :actor="actor"
         :row="1"
         :index="index"
-        :height="diagramSpec.rowCount"
+        :height="diagramSpec.actions.length"
         :selected-actor="selectedActor"
       />
     </template>
@@ -66,8 +66,16 @@ export default {
       type: Array,
     },
   },
+
+  data() {
+    return {
+      renderKey: 0,
+    };
+  },
+
   computed: {
     diagram() {
+      this.renderKey += 1;
       let result: Diagram | undefined;
       if (this.serializedDiagram) {
         result = unparseDiagram(this.serializedDiagram as Diagram);
