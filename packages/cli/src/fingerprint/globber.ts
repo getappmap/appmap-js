@@ -1,13 +1,28 @@
-import { EventEmitter } from 'stream';
-import { Glob, IGlob } from 'glob';
 import { assert } from 'console';
-import { stat } from 'fs/promises';
+import { default as defaultfs } from 'fs';
 import { Stats } from 'fs-extra';
+import { Glob, IGlob } from 'glob';
+import { EventEmitter } from 'stream';
 import { verbose } from '../utils';
 
 class Globber extends EventEmitter {
-  constructor(private pattern: string, public interval = 1000) {
+  private interval: number;
+  private fs: typeof defaultfs;
+  private statDelayMs: number;
+
+  constructor(
+    private pattern: string,
+    {
+      // This is the default for the constructor. Note that the cli has its own default value.
+      statDelayMs = 10,
+      interval = 1000,
+      fs = defaultfs,
+    }: { statDelayMs?: number; interval?: number; fs?: typeof defaultfs } = {}
+  ) {
     super();
+    this.interval = interval;
+    this.fs = fs;
+    this.statDelayMs = statDelayMs;
   }
 
   private currentGlob?: IGlob;
@@ -19,9 +34,8 @@ class Globber extends EventEmitter {
       ignore: ['**/node_modules/**', '**/.git/**'],
       strict: false,
       silent: !verbose(),
-    })
-      .on('end', this.scanEnd.bind(this))
-      .on('match', this.matchFound.bind(this));
+      fs: this.fs,
+    }).on('end', this.scanEnd.bind(this));
   }
 
   private running = false;
@@ -40,7 +54,7 @@ class Globber extends EventEmitter {
   }
 
   timeout?: NodeJS.Timeout;
-  private scanEnd(found: string[]) {
+  private async scanEnd(found: string[]) {
     this.currentGlob = undefined;
 
     const files = new Set(found);
@@ -48,13 +62,21 @@ class Globber extends EventEmitter {
       if (!files.has(f)) this.remove(f);
     }
 
+    for (const file of found) {
+      try {
+        await this.statFile(file);
+        await new Promise((r) => setTimeout(r, this.statDelayMs));
+      } catch (e) {
+        console.warn(e);
+      }
+    }
     this.emit('end');
 
     if (this.running) this.timeout = setTimeout(this.scanNow.bind(this), this.interval);
   }
 
-  private matchFound(file: string) {
-    stat(file).then(
+  private statFile(file: string) {
+    return this.fs.promises.stat(file).then(
       (stat) => this.update(file, stat),
       () => this.remove(file)
     );
@@ -74,10 +96,8 @@ class Globber extends EventEmitter {
   }
 
   private remove(file: string) {
-    {
-      this.mtimes.delete(file);
-      this.emit('unlink', file);
-    }
+    this.mtimes.delete(file);
+    this.emit('unlink', file);
   }
 }
 

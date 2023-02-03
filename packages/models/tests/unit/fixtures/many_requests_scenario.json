@@ -2662,7 +2662,7 @@
           "parent_id": 9,
           "thread_id": 47346401950060,
           "http_server_response": {
-              "status": 200,
+              "status_code": 200,
               "mime_type": "text/html; charset=utf-8"
           }
       },
@@ -5266,7 +5266,7 @@
           "parent_id": 149,
           "thread_id": 47346401950060,
           "http_server_response": {
-              "status": 200,
+              "status_code": 200,
               "mime_type": "text/html; charset=utf-8"
           }
       },
@@ -8598,7 +8598,7 @@
           "parent_id": 289,
           "thread_id": 47346401950060,
           "http_server_response": {
-              "status": 200,
+              "status_code": 200,
               "mime_type": "text/html; charset=utf-8"
           }
       },

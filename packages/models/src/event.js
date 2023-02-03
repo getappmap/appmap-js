@@ -3,6 +3,19 @@ import analyzeSQL, { abstractSqlAstJSON } from './sql/analyze';
 import normalizeSQL from './sql/normalize';
 import HashBuilder from './hashBuilder';
 
+function alias(obj, prop, alias) {
+  if (!obj || typeof obj[prop] === 'undefined' || typeof obj[alias] !== 'undefined') {
+    return;
+  }
+
+  Object.defineProperty(obj, alias, {
+    get() {
+      return this[prop];
+    },
+    enumerable: false,
+  });
+}
+
 // This class supercedes `CallTree` and `CallNode`. Events are stored in a flat
 // array and can also be traversed like a tree via `parent` and `children`.
 export default class Event {
@@ -58,6 +71,14 @@ export default class Event {
     addHiddenProperty(this, 'hash');
     addHiddenProperty(this, 'identityHash');
     addHiddenProperty(this, 'depth');
+
+    // Backward compatibility
+    // `status_code` used to be normalized to `status` during normalization. They can now be used
+    // interchangeably.
+    alias(data.http_server_response, 'status_code', 'status');
+    alias(data.http_server_response, 'status', 'status_code');
+    alias(data.http_client_response, 'status_code', 'status');
+    alias(data.http_client_response, 'status', 'status_code');
 
     // Data must be written last, after our properties are configured.
     Object.assign(this, data);

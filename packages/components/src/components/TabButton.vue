@@ -1,5 +1,5 @@
 <template>
-  <button :class="classes">
+  <button :class="classes" @click="clickTab">
     {{ label }}
   </button>
 </template>
@@ -23,6 +23,13 @@ export default {
       required: true,
     },
     isActive: Boolean,
+    reference: String,
+  },
+
+  methods: {
+    clickTab() {
+      this.$root.$emit('clickTab', this.reference);
+    },
   },
 };
 </script>

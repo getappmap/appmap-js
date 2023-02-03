@@ -1,6 +1,6 @@
 {
   "name": "@appland/components",
-  "version": "2.26.0",
+  "version": "2.28.0",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
@@ -27,8 +27,8 @@
     "dist/index.js"
   ],
   "dependencies": {
-    "@appland/diagrams": "workspace:^1.6.0",
-    "@appland/models": "workspace:^1.23.0",
+    "@appland/diagrams": "workspace:^1.6.2",
+    "@appland/models": "workspace:^2.0.0",
     "@appland/sequence-diagram": "workspace:^",
     "buffer": "^6.0.3",
     "diff": "^5.1.0",

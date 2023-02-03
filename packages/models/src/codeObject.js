@@ -216,8 +216,8 @@ export default class CodeObject {
   classLocations(paths = new Set()) {
     this.children.forEach((child) => child.classLocations(paths));
 
-    if (this.type === CodeObjectType.FUNCTION) {
-      const tokens = this.data.location.split(':', 2);
+    if (this.type === CodeObjectType.FUNCTION && this.location) {
+      const tokens = this.location.split(':', 2);
       paths.add(tokens[0]);
     }
     return paths;

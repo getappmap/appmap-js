@@ -1,3 +1,31 @@
+# [@appland/appmap-v3.64.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.64.2...@appland/appmap-v3.64.3) (2023-02-03)
+
+
+### Bug Fixes
+
+* throttle the globber's stat() calls ([1caf55a](https://github.com/getappmap/appmap-js/commit/1caf55a4d87adc3227df6a8cf416803aa88a1ce2))
+
+# [@appland/appmap-v3.64.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.64.1...@appland/appmap-v3.64.2) (2023-02-01)
+
+
+### Bug Fixes
+
+* Upgrade @appland/models to v2.0.0 ([68dea5a](https://github.com/getappmap/appmap-js/commit/68dea5a0a0e313d6067acfda99281a0194b2d353))
+
+# [@appland/appmap-v3.64.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.64.0...@appland/appmap-v3.64.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* Bump @appland/models to v1.23.2 ([0d269d7](https://github.com/getappmap/appmap-js/commit/0d269d750b23e95eb5f4349f10e5de248578156b))
+
+# [@appland/appmap-v3.64.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.63.1...@appland/appmap-v3.64.0) (2023-01-25)
+
+
+### Features
+
+* Update index version to 1.1.4 ([0fad538](https://github.com/getappmap/appmap-js/commit/0fad5381bb1411288005496c1b624588d0b51109))
+
 # [@appland/appmap-v3.63.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.63.0...@appland/appmap-v3.63.1) (2023-01-24)
 
 

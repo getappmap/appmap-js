@@ -1,3 +1,29 @@
+# [@appland/components-v2.28.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.27.1...@appland/components-v2.28.0) (2023-02-02)
+
+
+### Bug Fixes
+
+* Update [@appland](https://github.com/appland) deps ([fb4d442](https://github.com/getappmap/appmap-js/commit/fb4d442d1570f5fddbb08dfed78c9acfa63db1a0))
+
+
+### Features
+
+* update share icon ([d778b31](https://github.com/getappmap/appmap-js/commit/d778b317bf9b48fae5628aa20d942f341e27ef82))
+
+# [@appland/components-v2.27.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.27.0...@appland/components-v2.27.1) (2023-02-01)
+
+
+### Bug Fixes
+
+* Upgrade @appland/models to v2.0.0 ([68dea5a](https://github.com/getappmap/appmap-js/commit/68dea5a0a0e313d6067acfda99281a0194b2d353))
+
+# [@appland/components-v2.27.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.26.0...@appland/components-v2.27.0) (2023-02-01)
+
+
+### Features
+
+* add telemetry to better understand sign in ([7fe4972](https://github.com/getappmap/appmap-js/commit/7fe4972400f379f39b98ea9cff790e43f13d3363))
+
 # [@appland/components-v2.26.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.25.2...@appland/components-v2.26.0) (2023-01-24)
 
 

@@ -99,7 +99,7 @@ declare module '@appland/models' {
     readonly type: CodeObjectType;
     readonly data: any;
     readonly static: boolean;
-    readonly location: string;
+    readonly location: string | undefined;
     readonly locations: string[];
     readonly packageOf: string;
     readonly classOf: string;

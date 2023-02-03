@@ -49,7 +49,12 @@
 
     <div class="main-column main-column--right">
       <v-tabs @activateTab="onChangeTab" ref="tabs" :activate-first-tab="false">
-        <v-tab name="Dependency Map" :is-active="isViewingComponent" :ref="VIEW_COMPONENT">
+        <v-tab
+          name="Dependency Map"
+          :is-active="isViewingComponent"
+          :reference="VIEW_COMPONENT"
+          :ref="VIEW_COMPONENT"
+        >
           <v-diagram-component ref="componentDiagram" :class-map="filteredAppMap.classMap" />
         </v-tab>
 
@@ -57,6 +62,7 @@
           name="Sequence Diagram"
           :is-active="isViewingSequence"
           :ref="VIEW_SEQUENCE"
+          :reference="VIEW_SEQUENCE"
           :allow-scroll="true"
         >
           <v-diagram-sequence
@@ -66,7 +72,7 @@
           />
         </v-tab>
 
-        <v-tab name="Trace View" :is-active="isViewingFlow" :ref="VIEW_FLOW">
+        <v-tab name="Trace View" :is-active="isViewingFlow" :reference="VIEW_FLOW" :ref="VIEW_FLOW">
           <div class="trace-view">
             <v-trace-filter
               ref="traceFilter"
@@ -149,7 +155,7 @@
 
           <v-popper-menu :isHighlight="filtersChanged">
             <template v-slot:icon>
-              <FilterIcon class="control-button__icon" />
+              <FilterIcon class="control-button__icon" @click="openFilterModal" />
             </template>
             <template v-slot:body>
               <div class="filters">
@@ -813,6 +819,10 @@ export default {
       return base64UrlEncode(JSON.stringify(state));
     },
 
+    openFilterModal() {
+      this.$root.$emit('clickFilterButton');
+    },
+
     setSelectedObject(fqid) {
       const [match, type, object] = fqid.match(/^([a-z]+):(.+)/);
 
@@ -966,6 +976,7 @@ export default {
     resetDiagram() {
       this.clearSelection();
       this.resetFilters();
+      this.$root.$emit('resetDiagram');
 
       this.renderKey += 1;
     },
@@ -1321,8 +1332,8 @@ code {
         }
 
         &__icon {
-          width: 0.95rem;
-          height: 0.95rem;
+          width: 16px;
+          height: 14px;
           fill: currentColor;
         }
       }
@@ -1344,7 +1355,7 @@ code {
           background-color: $dark-purple;
           border-radius: 0.5rem;
           color: $white;
-          padding: 0.35rem 0.8rem;
+          padding: 0.25rem 0.65rem;
           text-transform: uppercase;
           flex-direction: row-reverse;
           gap: 0.5rem;
