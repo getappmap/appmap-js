@@ -302,7 +302,7 @@
 
 <script>
 import { Buffer } from 'buffer';
-import { CodeObjectType, Event, buildAppMap } from '@appland/models';
+import { Event } from '@appland/models';
 import CheckIcon from '@/assets/check.svg';
 import CopyIcon from '@/assets/copy-icon.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
@@ -340,6 +340,7 @@ import {
   CLEAR_SELECTION_STACK,
   DEFAULT_VIEW,
 } from '../store/vsCode';
+import AppMapFilter from '@/lib/appMapFilter';
 
 function base64UrlEncode(text) {
   const buffer = Buffer.from(text, 'utf-8');
@@ -394,33 +395,7 @@ export default {
       VIEW_COMPONENT,
       VIEW_SEQUENCE,
       VIEW_FLOW,
-      filters: {
-        rootObjects: [],
-        declutter: {
-          limitRootEvents: {
-            on: true,
-            default: true,
-          },
-          hideMediaRequests: {
-            on: true,
-            default: true,
-          },
-          hideUnlabeled: {
-            on: false,
-            default: false,
-          },
-          hideElapsedTimeUnder: {
-            on: false,
-            default: false,
-            time: 100,
-          },
-          hideName: {
-            on: false,
-            default: false,
-            names: [],
-          },
-        },
-      },
+      filters: new AppMapFilter(),
       traceFilterValue: '',
       currentTraceFilterIndex: 0,
       showDownloadButton: false,
@@ -509,91 +484,7 @@ export default {
 
     filteredAppMap() {
       const { appMap } = this.$store.state;
-      const { classMap } = appMap;
-      let rootEvents = appMap.rootEvents();
-
-      if (this.filters.declutter.limitRootEvents.on) {
-        rootEvents = rootEvents.filter((e) => e.httpServerRequest);
-      }
-
-      let events = rootEvents.reduce((callTree, rootEvent) => {
-        rootEvent.traverse((e) => callTree.push(e));
-        return callTree;
-      }, []);
-
-      if (this.filters.rootObjects.length) {
-        let eventBranches = [];
-
-        classMap.codeObjects.forEach((codeObject) => {
-          this.filters.rootObjects.forEach((id) => {
-            if (this.codeObjectIsMatched(codeObject, id)) {
-              eventBranches = eventBranches.concat(
-                codeObject.allEvents.map((e) => [e.id, e.linkedEvent.id])
-              );
-            }
-          });
-        });
-
-        if (eventBranches.length) {
-          events = events.filter((e) =>
-            eventBranches.some((branch) => e.id >= branch[0] && e.id <= branch[1])
-          );
-        }
-      }
-
-      if (this.filters.declutter.hideMediaRequests.on) {
-        events = this.filterMediaRequests(events);
-      }
-
-      if (this.filters.declutter.hideUnlabeled.on) {
-        events = events.filter(
-          (e) => e.labels.size > 0 || e.codeObject.type !== CodeObjectType.FUNCTION
-        );
-      }
-
-      if (
-        this.filters.declutter.hideElapsedTimeUnder.on &&
-        this.filters.declutter.hideElapsedTimeUnder.time > 0
-      ) {
-        events = events.filter(
-          (e) =>
-            e.returnEvent &&
-            e.returnEvent.elapsedTime &&
-            e.returnEvent.elapsedTime >= this.filters.declutter.hideElapsedTimeUnder.time / 1000
-        );
-      }
-
-      if (this.filters.declutter.hideName.on && this.filters.declutter.hideName.names.length) {
-        classMap.codeObjects.forEach((codeObject) => {
-          this.filters.declutter.hideName.names.forEach((fqid) => {
-            if (this.codeObjectIsMatched(codeObject, fqid)) {
-              events = events.filter((e) => !codeObject.allEvents.includes(e));
-            }
-          });
-        });
-      }
-
-      const eventIds = new Set(events.filter((e) => e.isCall()).map((e) => e.id));
-
-      if (this.findings && this.findings.length > 0) {
-        this.findings.forEach((finding) => {
-          if (
-            finding.appMapUri &&
-            finding.appMapUri.fragment &&
-            typeof finding.appMapUri.fragment === 'string'
-          ) {
-            finding.appMapUri.fragment = JSON.parse(finding.appMapUri.fragment);
-          }
-        });
-
-        events = this.attachFindingsToEvents(events, this.findings);
-      }
-
-      return buildAppMap({
-        events: events.filter((e) => eventIds.has(e.id) || eventIds.has(e.parent_id)),
-        classMap: classMap.roots.map((c) => ({ ...c.data })),
-        metadata: appMap.metadata,
-      }).build();
+      return this.filters.filter(appMap, this.findings);
     },
 
     rootObjectsSuggestions() {
@@ -1068,45 +959,6 @@ export default {
       );
     },
 
-    attachFindingsToEvents(events, findings) {
-      const eventsHash = events.reduce((map, e) => {
-        map[e.id] = e.callEvent;
-        return map;
-      }, {});
-
-      findings.forEach((finding) => {
-        const traceFilter =
-          finding.appMapUri && finding.appMapUri.fragment && finding.appMapUri.fragment.traceFilter;
-
-        if (traceFilter) {
-          const ids = traceFilter.split(' ').map((idStr) => Number(idStr.split(':')[1]));
-
-          ids.forEach((id) => {
-            const event = eventsHash[id];
-
-            if (event && !this.eventAlreadyHasFinding(event, finding)) {
-              if (event.findings) {
-                event.findings.push(finding);
-              } else {
-                event.findings = [finding];
-              }
-            }
-          });
-        }
-      });
-
-      return events;
-    },
-
-    eventAlreadyHasFinding(event, finding) {
-      return (
-        event.findings &&
-        !!event.findings.find(
-          (attachedFinding) => attachedFinding.finding.hash_v2 === finding.finding.hash_v2
-        )
-      );
-    },
-
     closeShareModal() {
       this.showShareModal = false;
     },
@@ -1186,108 +1038,6 @@ export default {
 
     removeRootObject(index) {
       this.filters.rootObjects.splice(index, 1);
-    },
-
-    filterMediaRequests(events) {
-      const excludedEvents = [];
-      const mediaRegex = [
-        'application/javascript',
-        'application/ecmascript',
-        'audio/.+',
-        'font/.+',
-        'image/.+',
-        'text/javascript',
-        'text/ecmascript',
-        'text/css',
-        'video/.+',
-      ].map((t) => new RegExp(t, 'i'));
-      const mediaFileExtensions = new Set([
-        'aac',
-        'avi',
-        'bmp',
-        'css',
-        'flv',
-        'gif',
-        'htm',
-        'html',
-        'ico',
-        'jpeg',
-        'jpg',
-        'js',
-        'json',
-        'jsonld',
-        'mid',
-        'midi',
-        'mjs',
-        'mov',
-        'mp3',
-        'mp4',
-        'mpeg',
-        'oga',
-        'ogg',
-        'ogv',
-        'ogx',
-        'opus',
-        'otf',
-        'png',
-        'svg',
-        'tif',
-        'tiff',
-        'ts',
-        'ttf',
-        'wav',
-        'weba',
-        'webm',
-        'webp',
-        'woff',
-        'woff2',
-        'xhtml',
-        '3gp',
-        '3g2',
-      ]);
-
-      events.forEach((e) => {
-        if (e.requestMethod === 'GET' && e.requestPath) {
-          const pathExt = e.requestPath.match(/.*\.([\S]*)$/);
-          if (pathExt && mediaFileExtensions.has(pathExt[1])) {
-            excludedEvents.push(e.id);
-          }
-        } else if (e.http_server_response) {
-          let mimeType;
-
-          if (e.http_server_response.headers) {
-            const contentTypeKey = Object.keys(e.http_server_response.headers).filter(
-              (k) => k.toLowerCase() === 'content-type'
-            )[0];
-
-            mimeType = e.http_server_response.headers[contentTypeKey];
-          } else if (e.http_server_response.mime_type) {
-            mimeType = e.http_server_response.mime_type; // 'mime_type' is no longer supported in the AppMap data standard, but we should keep this code for backward compatibility
-          }
-
-          if (mimeType && mediaRegex.some((regex) => regex.test(mimeType))) {
-            excludedEvents.push(e.parent_id);
-          }
-        }
-      });
-
-      return events.filter((e) => !excludedEvents.includes(e.id));
-    },
-
-    codeObjectIsMatched(object, query) {
-      if (query.startsWith('label:')) {
-        const labelRegExp = new RegExp(`^${query.replace('label:', '').replace('*', '.*')}$`, 'ig');
-        return Array.from(object.labels).some((label) => labelRegExp.test(label));
-      }
-      if (query.includes('*')) {
-        const filterRegExp = new RegExp(`^${query.replace('*', '.*')}$`, 'ig');
-        if (filterRegExp.test(object.fqid)) {
-          return true;
-        }
-      } else if (query === object.fqid) {
-        return true;
-      }
-      return false;
     },
 
     prevTraceFilter() {
