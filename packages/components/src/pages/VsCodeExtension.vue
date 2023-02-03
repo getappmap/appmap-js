@@ -1015,6 +1015,7 @@ export default {
       Object.keys(this.filters.declutter).forEach((k) => {
         this.filters.declutter[k].on = this.filters.declutter[k].default;
       });
+      this.filters.declutter.hideElapsedTimeUnder.time = 100;
       this.filters.declutter.hideName.names = [];
     },
 
