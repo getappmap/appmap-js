@@ -30,6 +30,13 @@ export default {
 
   components: { VTabButton },
 
+  props: {
+    activateFirstTab: {
+      type: Boolean,
+      default: true,
+    },
+  },
+
   data() {
     return {
       activeTab: null,
@@ -59,7 +66,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.tabs = this.$children.filter((c) => c.$options.name === 'v-tab');
-      this.activateTab(this.tabs[0]);
+      if (this.activateFirstTab) this.activateTab(this.tabs[0]);
     });
   },
 };

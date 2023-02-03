@@ -1,4 +1,5 @@
 import VVsCodeExtension from '@/pages/VsCodeExtension.vue';
+import { VIEW_SEQUENCE } from '@/store/vsCode';
 import defaultScenario from './data/scenario.json';
 import petClinicScenario from './data/java_scenario.json';
 import diffScenario from './data/diff_base.json';
@@ -42,7 +43,7 @@ export default {
   },
 };
 
-export const extension = (args, { argTypes }) => ({
+const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VVsCodeExtension },
   template: '<v-vs-code-extension v-bind="$props" ref="vsCode" />',
@@ -55,6 +56,13 @@ export const extension = (args, { argTypes }) => ({
     bindResolvePath(this);
   },
 });
+
+export const extension = Template.bind({});
+
+export const extensionWithDefaultSequenceView = Template.bind({});
+extensionWithDefaultSequenceView.args = {
+  defaultView: VIEW_SEQUENCE,
+};
 
 export const extensionWithNotification = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
