@@ -48,7 +48,7 @@
     </div>
 
     <div class="main-column main-column--right">
-      <v-tabs @activateTab="onChangeTab" ref="tabs" :activate-first-tab="false">
+      <v-tabs @activateTab="onChangeTab" ref="tabs" :initial-tab="defaultView">
         <v-tab
           name="Dependency Map"
           :is-active="isViewingComponent"
@@ -750,8 +750,9 @@ export default {
     },
 
     onChangeTab(tab) {
-      // tabs are referenced by their view key
-      const index = Object.values(this.$refs).findIndex((ref) => ref === tab);
+      // 'tab' can be the tab name or the actual tab.
+      let index = Object.values(this.$refs).findIndex((ref) => ref === tab);
+      if (index === -1) index = Object.keys(this.$refs).findIndex((ref) => ref === tab);
       if (index === -1) {
         // There's no ref set up for this tab
         return;
@@ -771,9 +772,7 @@ export default {
     getState() {
       const state = {};
 
-      if (this.currentView !== DEFAULT_VIEW) {
-        state.currentView = this.currentView;
-      }
+      state.currentView = this.currentView;
 
       if (this.selectedObject && this.selectedObject.fqid) {
         state.selectedObject = this.selectedObject.fqid;
@@ -1137,10 +1136,6 @@ export default {
         this.$store.commit(SELECT_CODE_OBJECT, this.highlightedEvent);
       }
     },
-  },
-
-  beforeMount() {
-    this.setView(this.defaultView);
   },
 
   mounted() {
